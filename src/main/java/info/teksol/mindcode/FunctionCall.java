@@ -1,0 +1,44 @@
+package info.teksol.mindcode;
+
+import java.util.List;
+import java.util.Objects;
+
+public class FunctionCall implements AstNode {
+    private final String functionName;
+    private final List<AstNode> params;
+
+    public FunctionCall(String functionName, List<AstNode> params) {
+        this.functionName = functionName;
+        this.params = params;
+    }
+
+    public String getFunctionName() {
+        return functionName;
+    }
+
+    public List<AstNode> getParams() {
+        return params;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FunctionCall functionCall = (FunctionCall) o;
+        return Objects.equals(functionName, functionCall.functionName) &&
+                Objects.equals(params, functionCall.params);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(functionName, params);
+    }
+
+    @Override
+    public String toString() {
+        return "FunctionCall{" +
+                "functionName='" + functionName + '\'' +
+                ", params=" + params +
+                '}';
+    }
+}

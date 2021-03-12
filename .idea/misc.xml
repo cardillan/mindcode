@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ANTLRGenerationPreferences">
+    <option name="perGrammarGenerationSettings">
+      <list>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/java/Hello.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="info.teksol.mindcode" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/java/info/teksol/mindcode/Mindcode.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="info.teksol.mindcode" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="info.teksol.mindcode.grammar" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/src/main/java/info/teksol/mindcode/grammar/Simple.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="" />
+          <option name="pkg" value="info.teksol.mindcode.grammar" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
+      </list>
+    </option>
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="false" project-jdk-name="15" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
