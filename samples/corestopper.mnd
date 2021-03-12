@@ -1,2 +1,2 @@
 CORE = foundation1
-CORE.copper < CORE.itemCapacity
+conveyor1.enabled = CORE.copper < CORE.itemCapacity

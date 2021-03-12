@@ -55,9 +55,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             return visitWhile_statement(ctx.while_statement());
         } else if (ctx.funcall_statement() != null) {
             return visitFuncall_statement(ctx.funcall_statement());
+        } else if (ctx.control_statement() != null) {
+            return visitControl_statement(ctx.control_statement());
         } else {
             throw new MindcodeParseException("Missing expression in " + ctx.getText());
         }
+    }
+
+    @Override
+    public AstNode visitControl_statement(MindcodeParser.Control_statementContext ctx) {
+        return new Control(ctx.target.getText(), ctx.property.getText(), visitRvalue(ctx.value));
     }
 
     @Override

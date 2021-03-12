@@ -3,6 +3,8 @@ package info.teksol.mindcode;
 public interface AstVisitor<T> {
     T visit(AstNode node);
 
+    T visitControl(Control node);
+
     T visitWhileStatement(WhileStatement node);
 
     T visitVarRef(VarRef node);

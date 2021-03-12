@@ -171,4 +171,22 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst("foundation1.copper < foundation1.itemCapacity\nreactor1.cryofluid < 10")
         );
     }
+
+    @Test
+    void parsesControl() {
+        assertEquals(
+                new Seq(
+                        new Control(
+                                "conveyor1",
+                                "enabled",
+                                new BinaryOp(
+                                        new SensorReading("CORE","@copper"),
+                                        "<",
+                                        new SensorReading("CORE","itemCapacity")
+                                )
+                        )
+                ),
+                translateToAst("conveyor1.enabled = CORE.copper < CORE.itemCapacity")
+        );
+    }
 }

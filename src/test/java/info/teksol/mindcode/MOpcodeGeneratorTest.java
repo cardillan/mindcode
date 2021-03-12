@@ -89,4 +89,18 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
                 MOpcodeGenerator.generateFrom((Seq) translateToAst("while true != false {\nprint(\"infinite loop!\")\n}\nprintflush(message1)\n"))
         );
     }
+
+    @Test
+    void convertsControlStatements() {
+        assertEquals(
+                List.of(
+                        new MOpcode("sensor", "tmp0", "foundation1", "@copper"),
+                        new MOpcode("sensor", "tmp1", "tank1", "@water"),
+                        new MOpcode("op", "strictEqual", "tmp2", "tmp0", "tmp1"),
+                        new MOpcode("control", "enabled", "conveyor1", "tmp2"),
+                        new MOpcode("end")
+                ),
+                MOpcodeGenerator.generateFrom((Seq) translateToAst("conveyor1.enabled = foundation1.copper === tank1.water"))
+        );
+    }
 }

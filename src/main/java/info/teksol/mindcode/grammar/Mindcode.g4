@@ -7,9 +7,14 @@ expression_list : expression terminator
                 | terminator
                 ;
 
-expression : rvalue
-           | while_statement
-           | funcall_statement;
+expression : while_statement
+           | funcall_statement
+           | control_statement
+           // | if_statement
+           | rvalue
+           ;
+
+control_statement : target=id DOT property=id ASSIGN value=rvalue;
 
 funcall_statement : name=id LEFT_RBRACKET params_list RIGHT_RBRACKET;
 
@@ -40,7 +45,7 @@ rvalue : lvalue
        | rvalue op=( MUL | DIV | MOD ) rvalue
        | rvalue op=( PLUS | MINUS ) rvalue
        | rvalue op=( LESS | GREATER | LESS_EQUAL | GREATER_EQUAL ) rvalue
-       | rvalue op=( EQUAL | NOT_EQUAL ) rvalue
+       | rvalue op=( STRICT_EQUAL | EQUAL | NOT_EQUAL ) rvalue
        | rvalue op=( OR | AND ) rvalue
        | LEFT_RBRACKET rvalue RIGHT_RBRACKET
        ;

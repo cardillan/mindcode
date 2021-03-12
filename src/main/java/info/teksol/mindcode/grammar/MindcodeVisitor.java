@@ -29,6 +29,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(MindcodeParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#control_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitControl_statement(MindcodeParser.Control_statementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#funcall_statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -7,6 +7,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitBinaryOp((BinaryOp) node);
         } else if (node instanceof BooleanLiteral) {
             return visitBooleanLiteral((BooleanLiteral) node);
+        } else if (node instanceof Control) {
+            return visitControl((Control) node);
         } else if (node instanceof FunctionCall) {
             return visitFunctionCall((FunctionCall) node);
         } else if (node instanceof NoOp) {
@@ -32,6 +34,11 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
         } else {
             throw new AstWalkerException("Unrecognized node type " + node.getClass() + ": " + node);
         }
+    }
+
+    @Override
+    public T visitControl(Control node) {
+        return null;
     }
 
     @Override

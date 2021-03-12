@@ -77,6 +77,11 @@ class MindcodeParserTest extends AbstractParserTest {
     */
 
     @Test
+    void parsesControlStatements() {
+        assertDoesNotThrow(() -> parse("conveyor1.enabled = foundation1.copper < foundation1.itemCapacity\n"));
+    }
+
+    @Test
     void parsesTheEmptyProgram() {
         assertDoesNotThrow(() -> parse(""));
     }

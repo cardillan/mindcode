@@ -54,6 +54,19 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
     }
 
     @Override
+    public Tuple2<Optional<String>, List<MOpcode>> visitControl(Control node) {
+        final Tuple2<Optional<String>, List<MOpcode>> rest = visit(node.getValue());
+        final List<MOpcode> result = new ArrayList<>(rest._2);
+        if (!rest._1.isPresent()) {
+            throw new MindustryConverterException("Expected to find tmp variable from control node, found: " + rest);
+        }
+
+        result.add(new MOpcode("control", node.getProperty(), node.getTarget(), rest._1.get()));
+
+        return new Tuple2<>(Optional.empty(), result);
+    }
+
+    @Override
     public Tuple2<Optional<String>, List<MOpcode>> visitSeq(Seq seq) {
         final Tuple2<Optional<String>, List<MOpcode>> rest = visit(seq.getRest());
         final Tuple2<Optional<String>, List<MOpcode>> last = visit(seq.getLast());

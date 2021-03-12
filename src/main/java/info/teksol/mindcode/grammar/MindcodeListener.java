@@ -38,6 +38,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitExpression(MindcodeParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#control_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterControl_statement(MindcodeParser.Control_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#control_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitControl_statement(MindcodeParser.Control_statementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#funcall_statement}.
 	 * @param ctx the parse tree
 	 */
