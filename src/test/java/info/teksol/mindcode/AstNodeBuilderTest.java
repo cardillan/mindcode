@@ -180,9 +180,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 "conveyor1",
                                 "enabled",
                                 new BinaryOp(
-                                        new SensorReading("CORE","@copper"),
+                                        new SensorReading("CORE", "@copper"),
                                         "<",
-                                        new SensorReading("CORE","itemCapacity")
+                                        new SensorReading("CORE", "itemCapacity")
                                 )
                         )
                 ),
@@ -200,6 +200,63 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("cell2[1] = cell3[0]")
+        );
+    }
+
+    @Test
+    void parsesIfElseExpression() {
+        assertEquals(
+                new Seq(
+                        new VarAssignment(
+                                "value",
+                                new IfExpression(
+                                        new BinaryOp(
+                                                new HeapRead("HEAP", "4"),
+                                                "==",
+                                                new NumericLiteral("0")
+                                        ),
+                                        new BooleanLiteral(false),
+                                        new Seq(
+                                                new HeapWrite("HEAP", "4", new BooleanLiteral(true)),
+                                                new VarAssignment(
+                                                        "n",
+                                                        new BinaryOp(
+                                                                new VarRef("n"),
+                                                                "+",
+                                                                new NumericLiteral("1")
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}")
+        );
+    }
+
+    @Test
+    void parsesIfExpression() {
+        assertEquals(
+                new Seq(
+                        new IfExpression(
+                                new BinaryOp(
+                                        new VarRef("n"),
+                                        ">",
+                                        new NumericLiteral("4")
+                                ),
+                                new HeapWrite(
+                                        "HEAP",
+                                        "2",
+                                        new BinaryOp(
+                                                new HeapRead("HEAP", "2"),
+                                                "+",
+                                                new NumericLiteral("1")
+                                        )
+                                ),
+                                new NoOp()
+                        )
+                ),
+                translateToAst("if n > 4 { HEAP[2] += 1\n}\n}")
         );
     }
 }

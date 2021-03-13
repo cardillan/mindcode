@@ -1,5 +1,9 @@
 HEAP = cell1
 cell1[0] = 0
 while cell1[1] < 1 {
-    cell1[0] += 1
+    cell1[0] += if cell2[0] >= cell3[0] {
+        2 ** 2
+    } else {
+        0
+    }
 }

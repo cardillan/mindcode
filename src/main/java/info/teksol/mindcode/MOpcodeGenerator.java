@@ -71,7 +71,7 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
 
         final List<MOpcode> result = new ArrayList<>(value._2);
         result.add(new MOpcode("write", value._1.get(), node.getCellName(), node.getAddress()));
-        return new Tuple2<>(Optional.empty(), result);
+        return new Tuple2<>(value._1, result);
     }
 
     @Override
@@ -88,6 +88,35 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
     }
 
     @Override
+    public Tuple2<Optional<String>, List<MOpcode>> visitIfExpression(IfExpression node) {
+        final Tuple2<Optional<String>, List<MOpcode>> cond = visit(node.getCondition());
+        final Tuple2<Optional<String>, List<MOpcode>> trueBranch = visit(node.getTrueBranch());
+        final Tuple2<Optional<String>, List<MOpcode>> falseBranch = visit(node.getFalseBranch());
+        if (!cond._1.isPresent()) {
+            throw new MindustryConverterException("Expected to receive a value from the cond branch of an if expression; received " + cond);
+        }
+        if (!trueBranch._1.isPresent()) {
+            throw new MindustryConverterException("Expected to receive a value from the true branch of an if expression; received " + trueBranch);
+        }
+
+        final String tmp = nextTemp();
+        final String elseBranch = nextLabel();
+        final String endBranch = nextLabel();
+
+        final List<MOpcode> result = new ArrayList<>(cond._2);
+        result.add(new MOpcode("jump", elseBranch, "notEqual", cond._1.get(), "true"));
+        result.addAll(trueBranch._2);
+        result.add(new MOpcode("set", tmp, trueBranch._1.get()));
+        result.add(new MOpcode("jump", endBranch, "always"));
+        result.add(new MOpcode("label", elseBranch));
+        result.addAll(falseBranch._2);
+        result.add(new MOpcode("set", tmp, falseBranch._1.orElse("null")));
+        result.add(new MOpcode("label", endBranch));
+
+        return new Tuple2<>(Optional.of(tmp), result);
+    }
+
+    @Override
     public Tuple2<Optional<String>, List<MOpcode>> visitSeq(Seq seq) {
         final Tuple2<Optional<String>, List<MOpcode>> rest = visit(seq.getRest());
         final Tuple2<Optional<String>, List<MOpcode>> last = visit(seq.getLast());
@@ -95,7 +124,7 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         result.addAll(rest._2);
         result.addAll(last._2);
 
-        return new Tuple2<>(Optional.empty(), result);
+        return new Tuple2<>(last._1, result);
     }
 
     @Override
@@ -112,7 +141,7 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         }
 
         result.add(new MOpcode("set", List.of(node.getVarName(), rvalue._1.get())));
-        return new Tuple2<>(Optional.empty(), result);
+        return new Tuple2<>(rvalue._1, result);
     }
 
     @Override
@@ -136,9 +165,6 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         }
 
         final Tuple2<Optional<String>, List<MOpcode>> body = visit(node.getBody());
-        if (body._1.isPresent()) {
-            throw new MindustryConverterException("Expected while body not to return a variable name; found " + body);
-        }
 
         final List<MOpcode> result = new ArrayList<>();
         final String condLabel = nextLabel();
@@ -150,7 +176,7 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         result.add(new MOpcode("jump", List.of(condLabel, "always")));
         result.add(new MOpcode("label", List.of(doneLabel)));
 
-        return new Tuple2<>(Optional.empty(), result);
+        return new Tuple2<>(body._1, result);
     }
 
     @Override
@@ -176,9 +202,18 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
                 handlePrintflush(params, result);
                 break;
 
+            case "ubind":
+                handleUbind(params, result);
+                break;
+
             default:
                 throw new MindustryConverterException("Don't know how to handle function named [" + functionName + "]");
         }
+    }
+
+    private void handleUbind(List<String> params, List<MOpcode> result) {
+        // ubind @poly
+        result.add(new MOpcode("ubind", "@" + params.get(0)));
     }
 
     private void handlePrintflush(List<String> params, List<MOpcode> result) {
@@ -325,6 +360,9 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
 
             case "===":
                 return "strictEqual";
+
+            case "**":
+                return "pow";
 
             default:
                 throw new MindustryConverterException("Failed to translate binary op to word: [" + op + "] is not handled");

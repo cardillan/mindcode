@@ -3,6 +3,8 @@ package info.teksol.mindcode;
 public interface AstVisitor<T> {
     T visit(AstNode node);
 
+    T visitIfExpression(IfExpression node);
+
     T visitHeapRead(HeapRead node);
 
     T visitHeapWrite(HeapWrite node);

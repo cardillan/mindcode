@@ -1,9 +1,7 @@
 package info.teksol.mindcode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MOpcodePeepholeOptimizer {
     private static final Set<String> COMPARISON_OPERATORS = Set.of(
@@ -35,12 +33,15 @@ public class MOpcodePeepholeOptimizer {
     }
 
     private static void collapseAdjacentSets(List<MOpcode> program) {
+        final Map<String, String> replacements = new HashMap<>();
+
         int i = 0;
         while (i < program.size() - 1) {
             final MOpcode here = program.get(i);
             final MOpcode next = program.get(i + 1);
 
             if (isSet(here) && isWrite(next) && here.getArgs().get(0).equals(next.getArgs().get(0))) {
+                replacements.put(next.getArgs().get(0), here.getArgs().get(1));
                 program.remove(i);
                 program.set(
                         i,
@@ -58,6 +59,7 @@ public class MOpcodePeepholeOptimizer {
             }
 
             if (isSet(here) && isPrint(next) && here.getArgs().get(0).equals(next.getArgs().get(0))) {
+                replacements.put(next.getArgs().get(0), here.getArgs().get(1));
                 program.remove(i);
                 program.set(
                         i,
@@ -98,6 +100,7 @@ public class MOpcodePeepholeOptimizer {
 
             if (isOp(here) && isSet(next)) {
                 if (here.getArgs().get(1).equals(next.getArgs().get(1))) {
+                    replacements.put(next.getArgs().get(1), next.getArgs().get(0));
                     program.remove(i);
                     program.set(
                             i,
@@ -118,6 +121,7 @@ public class MOpcodePeepholeOptimizer {
 
             if (isSet(here) && isOp(next)) {
                 if (here.getArgs().get(0).equals(next.getArgs().get(3))) {
+                    replacements.put(next.getArgs().get(3), here.getArgs().get(1));
                     program.remove(i);
                     program.set(
                             i,
@@ -138,6 +142,7 @@ public class MOpcodePeepholeOptimizer {
                 }
 
                 if (here.getArgs().get(0).equals(next.getArgs().get(2))) {
+                    replacements.put(next.getArgs().get(2), here.getArgs().get(1));
                     program.remove(i);
                     program.set(
                             i,
@@ -160,6 +165,7 @@ public class MOpcodePeepholeOptimizer {
 
             if (isSet(here) && isSet(next)) {
                 if (here.getArgs().get(0).equals(next.getArgs().get(1))) {
+                    replacements.put(next.getArgs().get(1), here.getArgs().get(1));
                     program.remove(i);
                     program.set(
                             i,
@@ -179,6 +185,19 @@ public class MOpcodePeepholeOptimizer {
             }
 
             i++;
+        }
+
+        applyReplacements(program, replacements);
+    }
+
+    private static void applyReplacements(List<MOpcode> program, Map<String, String> replacements) {
+        final ListIterator<MOpcode> iterator = program.listIterator();
+        while (iterator.hasNext()) {
+            final MOpcode node = iterator.next();
+            final List<String> newArgs = node.getArgs().stream().map((arg) -> replacements.getOrDefault(arg, arg)).collect(Collectors.toList());
+            if (!newArgs.equals(node.getArgs())) {
+                iterator.set(new MOpcode(node.getOpcode(), newArgs));
+            }
         }
     }
 

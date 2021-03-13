@@ -118,6 +118,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitRvalue(MindcodeParser.RvalueContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#if_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIf_expression(MindcodeParser.If_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#if_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIf_expression(MindcodeParser.If_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#heap_read}.
 	 * @param ctx the parse tree
 	 */

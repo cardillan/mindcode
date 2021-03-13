@@ -111,4 +111,10 @@ class MindcodeParserTest extends AbstractParserTest {
     void parsesHeapAccesses() {
         assertDoesNotThrow(() -> parse("cell1[0] = cell[1] + 1"));
     }
+
+    @Test
+    void parsesIfExpression() {
+        assertDoesNotThrow(() -> parse("value = if HEAP[4] == 0 { false\n} else { true\n}"));
+        assertDoesNotThrow(() -> parse("if false { n += 1\n}\n"));
+    }
 }

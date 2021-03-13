@@ -120,4 +120,31 @@ class MOpcodePeepholeOptimizerTest extends AbstractAstTest {
                 )
         );
     }
+
+
+    @Test
+    void collapsesConditionals() {
+        assertEquals(
+                List.of(
+                        new MOpcode("read", "tmp0", "HEAP", "4"),
+                        new MOpcode("jump", "label0", "notEqual", "tmp0", "0"),
+                        new MOpcode("set", "tmp5", "false"),
+                        new MOpcode("jump", "label1", "always"),
+                        new MOpcode("label", "label0"),
+                        new MOpcode("write", "true", "HEAP", "4"),
+                        new MOpcode("op", "add", "n", "n", "1"),
+                        new MOpcode("set", "tmp5", "n"),
+                        new MOpcode("label", "label1"),
+                        new MOpcode("set", "value", "tmp5"),
+                        new MOpcode("end")
+                ),
+                MOpcodePeepholeOptimizer.optimize(
+                        MOpcodeGenerator.generateFrom(
+                                (Seq) translateToAst(
+                                        "value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}"
+                                )
+                        )
+                )
+        );
+    }
 }

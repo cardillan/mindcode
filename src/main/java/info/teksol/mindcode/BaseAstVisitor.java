@@ -15,6 +15,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitHeapRead((HeapRead) node);
         } else if (node instanceof HeapWrite) {
             return visitHeapWrite((HeapWrite) node);
+        } else if (node instanceof IfExpression) {
+            return visitIfExpression((IfExpression) node);
         } else if (node instanceof NoOp) {
             return visitNoOp((NoOp) node);
         } else if (node instanceof NullLiteral) {
@@ -38,6 +40,11 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
         } else {
             throw new AstWalkerException("Unrecognized node type " + node.getClass() + ": " + node);
         }
+    }
+
+    @Override
+    public T visitIfExpression(IfExpression node) {
+        return null;
     }
 
     @Override

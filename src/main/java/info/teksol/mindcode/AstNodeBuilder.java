@@ -203,6 +203,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             return new HeapRead(ctx.heap_read().target.getText(), ctx.heap_read().addr.getText());
         }
 
+        if (ctx.if_expression() != null) {
+            return visitIf_expression(ctx.if_expression());
+        }
+
         if (ctx.rvalue() != null) {
             switch (ctx.rvalue().size()) {
                 case 1:
@@ -225,6 +229,15 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         }
 
         throw new MindcodeParseException("RValue parsing failed: " + ctx.getText());
+    }
+
+    @Override
+    public AstNode visitIf_expression(MindcodeParser.If_expressionContext ctx) {
+        return new IfExpression(
+                visit(ctx.cond),
+                visit(ctx.true_branch),
+                ctx.false_branch == null ? new NoOp() : visit(ctx.false_branch)
+        );
     }
 
     @Override

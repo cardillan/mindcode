@@ -10,7 +10,6 @@ expression_list : expression terminator
 expression : while_statement
            | funcall_statement
            | control_statement
-           // | if_statement
            | rvalue
            ;
 
@@ -34,6 +33,7 @@ lvalue : id;
 
 rvalue : lvalue
        | assignment
+       | if_expression
        | literal_t
        | bool_t
        | float_t
@@ -50,6 +50,8 @@ rvalue : lvalue
        | rvalue op=( OR | AND ) rvalue
        | LEFT_RBRACKET rvalue RIGHT_RBRACKET
        ;
+
+if_expression : IF cond=rvalue LEFT_CBRACKET ( terminator )? true_branch=block_body RIGHT_CBRACKET ( ELSE LEFT_CBRACKET ( terminator )? false_branch=block_body RIGHT_CBRACKET )?;
 
 heap_read : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
 
@@ -112,6 +114,8 @@ fragment ESCAPED_QUOTE : '\\"';
 LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 
 WHILE : 'while';
+IF : 'if';
+ELSE : 'else';
 
 DOT : '.';
 COMMA : ',';

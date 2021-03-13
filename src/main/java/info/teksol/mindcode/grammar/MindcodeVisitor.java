@@ -77,6 +77,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRvalue(MindcodeParser.RvalueContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#if_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIf_expression(MindcodeParser.If_expressionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#heap_read}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

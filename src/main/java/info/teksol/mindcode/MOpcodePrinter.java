@@ -47,9 +47,18 @@ public class MOpcodePrinter {
                 printRead(opcode, buffer);
                 break;
 
+            case "ubind":
+                printUbind(opcode, buffer);
+                break;
+
             default:
                 throw new MindustryConverterException("Don't know how to convert " + opcode);
         }
+    }
+
+    private static void printUbind(MOpcode opcode, StringBuilder buffer) {
+        buffer.append("ubind ");
+        addArgs(1, buffer, opcode);
     }
 
     private static void printRead(MOpcode opcode, StringBuilder buffer) {
