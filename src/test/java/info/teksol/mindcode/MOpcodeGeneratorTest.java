@@ -141,4 +141,19 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
                 MOpcodeGenerator.generateFrom((Seq) translateToAst("value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}"))
         );
     }
+
+    @Test
+    void convertsFunctionsReturningValues() {
+        assertEquals(
+                List.of(
+                        new MOpcode("set", "tmp0", "9"),
+                        new MOpcode("set", "tmp1", "9"),
+                        new MOpcode("op", "pow", "tmp2", "tmp0", "tmp1"),
+                        new MOpcode("op", "rand", "tmp3", "tmp2"),
+                        new MOpcode("write", "tmp3", "cell1", "0"),
+                        new MOpcode("end")
+                ),
+                MOpcodeGenerator.generateFrom((Seq) translateToAst("cell1[0] = rand(9**9)"))
+        );
+    }
 }

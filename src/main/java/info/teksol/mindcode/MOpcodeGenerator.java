@@ -189,40 +189,58 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         }
 
         params.forEach((param) -> result.addAll(param._2));
-        handleFunctionCall(node.getFunctionName(), params.stream().map(Tuple2::getT1).map(Optional::get).collect(Collectors.toList()), result);
-        return new Tuple2<>(Optional.empty(), result);
+        final Optional<String> tmp = handleFunctionCall(node.getFunctionName(), params.stream().map(Tuple2::getT1).map(Optional::get).collect(Collectors.toList()), result);
+        return new Tuple2<>(tmp, result);
     }
 
-    private void handleFunctionCall(String functionName, List<String> params, List<MOpcode> result) {
+    private Optional<String> handleFunctionCall(String functionName, List<String> params, List<MOpcode> result) {
         switch (functionName) {
             case "print":
-                handlePrint(params, result);
-                break;
+                return handlePrint(params, result);
             case "printflush":
-                handlePrintflush(params, result);
-                break;
+                return handlePrintflush(params, result);
 
             case "ubind":
-                handleUbind(params, result);
-                break;
+                return handleUbind(params, result);
+
+            case "moveTo":
+                return handleMoveTo(params, result);
+
+            case "rand":
+                return handleRand(params, result);
 
             default:
                 throw new MindustryConverterException("Don't know how to handle function named [" + functionName + "]");
         }
     }
 
-    private void handleUbind(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleRand(List<String> params, List<MOpcode> result) {
+        // op rand result 200 0
+        final String tmp = nextTemp();
+        result.add(new MOpcode("op", "rand", tmp, params.get(0)));
+        return Optional.of(tmp);
+    }
+
+    private Optional<String> handleMoveTo(List<String> params, List<MOpcode> result) {
+        // ucontrol move 14 15 0 0 0
+        result.add(new MOpcode("ucontrol", "move", params.get(0), params.get(1)));
+        return Optional.empty();
+    }
+
+    private Optional<String> handleUbind(List<String> params, List<MOpcode> result) {
         // ubind @poly
         result.add(new MOpcode("ubind", "@" + params.get(0)));
+        return Optional.empty();
     }
 
-    private void handlePrintflush(List<String> params, List<MOpcode> result) {
+    private Optional<String> handlePrintflush(List<String> params, List<MOpcode> result) {
         params.forEach((param) -> result.add(new MOpcode("printflush", List.of(param))));
+        return Optional.empty();
     }
 
-
-    private void handlePrint(List<String> params, List<MOpcode> result) {
+    private Optional<String> handlePrint(List<String> params, List<MOpcode> result) {
         params.forEach((param) -> result.add(new MOpcode("print", List.of(param))));
+        return Optional.empty();
     }
 
     @Override
@@ -363,6 +381,14 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
 
             case "**":
                 return "pow";
+
+            case "||":
+            case "or":
+                return "or";
+
+            case "&&":
+            case "and":
+                return "land"; // logical-and
 
             default:
                 throw new MindustryConverterException("Failed to translate binary op to word: [" + op + "] is not handled");

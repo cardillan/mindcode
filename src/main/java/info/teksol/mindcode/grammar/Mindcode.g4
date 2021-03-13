@@ -8,18 +8,11 @@ expression_list : expression terminator
                 ;
 
 expression : while_statement
-           | funcall_statement
            | control_statement
            | rvalue
            ;
 
 control_statement : target=id DOT property=id ASSIGN value=rvalue;
-
-funcall_statement : name=id LEFT_RBRACKET params_list RIGHT_RBRACKET;
-
-params_list : rvalue?
-            | rvalue COMMA params_list
-            ;
 
 while_statement : WHILE rvalue LEFT_CBRACKET crlf? block_body RIGHT_CBRACKET;
 
@@ -34,6 +27,7 @@ lvalue : id;
 rvalue : lvalue
        | assignment
        | if_expression
+       | funcall
        | literal_t
        | bool_t
        | float_t
@@ -50,6 +44,12 @@ rvalue : lvalue
        | rvalue op=( OR | AND ) rvalue
        | LEFT_RBRACKET rvalue RIGHT_RBRACKET
        ;
+
+funcall : name=id LEFT_RBRACKET params_list RIGHT_RBRACKET;
+
+params_list : rvalue?
+            | rvalue COMMA params_list
+            ;
 
 if_expression : IF cond=rvalue LEFT_CBRACKET ( terminator )? true_branch=block_body RIGHT_CBRACKET ( ELSE LEFT_CBRACKET ( terminator )? false_branch=block_body RIGHT_CBRACKET )?;
 

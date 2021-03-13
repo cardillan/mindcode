@@ -53,8 +53,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             return visitRvalue(ctx.rvalue());
         } else if (ctx.while_statement() != null) {
             return visitWhile_statement(ctx.while_statement());
-        } else if (ctx.funcall_statement() != null) {
-            return visitFuncall_statement(ctx.funcall_statement());
         } else if (ctx.control_statement() != null) {
             return visitControl_statement(ctx.control_statement());
         } else {
@@ -68,7 +66,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitFuncall_statement(MindcodeParser.Funcall_statementContext ctx) {
+    public AstNode visitFuncall(MindcodeParser.FuncallContext ctx) {
         final List<AstNode> params = new ArrayList<>();
         visitParams_list(ctx.params_list(), params);
 
@@ -205,6 +203,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
         if (ctx.if_expression() != null) {
             return visitIf_expression(ctx.if_expression());
+        }
+
+        if (ctx.funcall() != null) {
+            return visitFuncall(ctx.funcall());
         }
 
         if (ctx.rvalue() != null) {

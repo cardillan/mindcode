@@ -51,9 +51,19 @@ public class MOpcodePrinter {
                 printUbind(opcode, buffer);
                 break;
 
+            case "ucontrol":
+                printUcontrol(opcode, buffer);
+                break;
+
             default:
                 throw new MindustryConverterException("Don't know how to convert " + opcode);
         }
+    }
+
+    private static void printUcontrol(MOpcode opcode, StringBuilder buffer) {
+        // ucontrol move 14 15 0 0 0
+        buffer.append("ucontrol ");
+        addArgs(6, buffer, opcode);
     }
 
     private static void printUbind(MOpcode opcode, StringBuilder buffer) {

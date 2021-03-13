@@ -259,4 +259,27 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst("if n > 4 { HEAP[2] += 1\n}\n}")
         );
     }
+
+    @Test
+    void parsesExponentiationAssignment() {
+        assertEquals(
+                new Seq(
+                        new HeapWrite(
+                                "cell1",
+                                "0",
+                                new FunctionCall(
+                                        "rand",
+                                        List.of(
+                                                new BinaryOp(
+                                                        new NumericLiteral("9"),
+                                                        "**",
+                                                        new NumericLiteral("9")
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("cell1[0] = rand(9**9)")
+        );
+    }
 }

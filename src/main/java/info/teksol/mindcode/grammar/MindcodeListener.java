@@ -48,26 +48,6 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitControl_statement(MindcodeParser.Control_statementContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#funcall_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterFuncall_statement(MindcodeParser.Funcall_statementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#funcall_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitFuncall_statement(MindcodeParser.Funcall_statementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#params_list}.
-	 * @param ctx the parse tree
-	 */
-	void enterParams_list(MindcodeParser.Params_listContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#params_list}.
-	 * @param ctx the parse tree
-	 */
-	void exitParams_list(MindcodeParser.Params_listContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#while_statement}.
 	 * @param ctx the parse tree
 	 */
@@ -117,6 +97,26 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRvalue(MindcodeParser.RvalueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#funcall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncall(MindcodeParser.FuncallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#funcall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncall(MindcodeParser.FuncallContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#params_list}.
+	 * @param ctx the parse tree
+	 */
+	void enterParams_list(MindcodeParser.Params_listContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#params_list}.
+	 * @param ctx the parse tree
+	 */
+	void exitParams_list(MindcodeParser.Params_listContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#if_expression}.
 	 * @param ctx the parse tree

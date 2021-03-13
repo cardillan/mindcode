@@ -35,18 +35,6 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitControl_statement(MindcodeParser.Control_statementContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#funcall_statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFuncall_statement(MindcodeParser.Funcall_statementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#params_list}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParams_list(MindcodeParser.Params_listContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#while_statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -76,6 +64,18 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRvalue(MindcodeParser.RvalueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#funcall}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncall(MindcodeParser.FuncallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#params_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParams_list(MindcodeParser.Params_listContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#if_expression}.
 	 * @param ctx the parse tree
