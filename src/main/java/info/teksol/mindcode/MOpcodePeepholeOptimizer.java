@@ -13,7 +13,7 @@ public class MOpcodePeepholeOptimizer {
             "greaterThan",
             "greaterThanEq",
             "strictEqual"
-            );
+    );
 
     public static List<MOpcode> optimize(List<MOpcode> program) {
         final ArrayList<MOpcode> optimized = new ArrayList<>(program);
@@ -28,6 +28,23 @@ public class MOpcodePeepholeOptimizer {
         while (i < program.size() - 1) {
             final MOpcode here = program.get(i);
             final MOpcode next = program.get(i + 1);
+
+            if (isSet(here) && isWrite(next) && here.getArgs().get(0).equals(next.getArgs().get(0))) {
+                program.remove(i);
+                program.set(
+                        i,
+                        new MOpcode(
+                                "write",
+                                here.getArgs().get(1),
+                                next.getArgs().get(1),
+                                next.getArgs().get(2)
+                        )
+                );
+
+                // Re-examine the previous node, in case we can now optimize it
+                if (i > 0) i--;
+                continue;
+            }
 
             if (isSet(here) && isPrint(next) && here.getArgs().get(0).equals(next.getArgs().get(0))) {
                 program.remove(i);
@@ -166,6 +183,10 @@ public class MOpcodePeepholeOptimizer {
         }
 
         return COMPARISON_OPERATORS.contains(node.getArgs().get(0));
+    }
+
+    private static boolean isWrite(MOpcode node) {
+        return node.getOpcode().equals("write");
     }
 
     private static boolean isPrint(MOpcode node) {

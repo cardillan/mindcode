@@ -39,9 +39,27 @@ public class MOpcodePrinter {
                 printControl(opcode, buffer);
                 break;
 
+            case "write":
+                printWrite(opcode, buffer);
+                break;
+
+            case "read":
+                printRead(opcode, buffer);
+                break;
+
             default:
                 throw new MindustryConverterException("Don't know how to convert " + opcode);
         }
+    }
+
+    private static void printRead(MOpcode opcode, StringBuilder buffer) {
+        buffer.append("read ");
+        addArgs(3, buffer, opcode);
+    }
+
+    private static void printWrite(MOpcode opcode, StringBuilder buffer) {
+        buffer.append("write ");
+        addArgs(3, buffer, opcode);
     }
 
     private static void printControl(MOpcode opcode, StringBuilder buffer) {

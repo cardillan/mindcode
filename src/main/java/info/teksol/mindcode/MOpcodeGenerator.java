@@ -54,14 +54,35 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitControl(Control node) {
-        final Tuple2<Optional<String>, List<MOpcode>> rest = visit(node.getValue());
-        final List<MOpcode> result = new ArrayList<>(rest._2);
-        if (!rest._1.isPresent()) {
-            throw new MindustryConverterException("Expected to find tmp variable from control node, found: " + rest);
+    public Tuple2<Optional<String>, List<MOpcode>> visitHeapRead(HeapRead node) {
+        final String tmp = nextTemp();
+        return new Tuple2<>(
+                Optional.of(tmp),
+                List.of(new MOpcode("read", tmp, node.getCellName(), node.getAddress()))
+        );
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<MOpcode>> visitHeapWrite(HeapWrite node) {
+        final Tuple2<Optional<String>, List<MOpcode>> value = visit(node.getValue());
+        if (!value._1.isPresent()) {
+            throw new MindustryConverterException("Expected to find tmp variable from heap write node, found: " + value);
         }
 
-        result.add(new MOpcode("control", node.getProperty(), node.getTarget(), rest._1.get()));
+        final List<MOpcode> result = new ArrayList<>(value._2);
+        result.add(new MOpcode("write", value._1.get(), node.getCellName(), node.getAddress()));
+        return new Tuple2<>(Optional.empty(), result);
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<MOpcode>> visitControl(Control node) {
+        final Tuple2<Optional<String>, List<MOpcode>> value = visit(node.getValue());
+        final List<MOpcode> result = new ArrayList<>(value._2);
+        if (!value._1.isPresent()) {
+            throw new MindustryConverterException("Expected to find tmp variable from control node, found: " + value);
+        }
+
+        result.add(new MOpcode("control", node.getProperty(), node.getTarget(), value._1.get()));
 
         return new Tuple2<>(Optional.empty(), result);
     }

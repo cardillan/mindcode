@@ -94,31 +94,65 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitAssignment(MindcodeParser.AssignmentContext ctx) {
+        if (ctx.target != null) {
+            // simple assignment
+            if (ctx.op != null) {
+                // +=, -=, etc...
+                return new VarAssignment(
+                        ctx.target.getText(),
+                        new BinaryOp(
+                                visitLvalue(ctx.lvalue()),
+                                ctx.op.getText().replace("=", ""),
+                                visitRvalue(ctx.rvalue())
+                        )
+                );
+            } else {
+                return new VarAssignment(
+                        ctx.target.getText(),
+                        visitRvalue(ctx.rvalue())
+                );
+            }
+        }
+
+        if (ctx.heap_read() != null) {
+            final AstNode lvalue = visitHeap_read(ctx.heap_read());
+            final AstNode rvalue = visitRvalue(ctx.value);
+            if (ctx.op != null) {
+                // +=, -=, etc...
+                return new HeapWrite(
+                        ctx.heap_read().target.getText(), ctx.heap_read().addr.getText(),
+                        new BinaryOp(
+                                lvalue,
+                                ctx.op.getText().replace("=", ""),
+                                rvalue
+                        )
+                );
+            } else {
+                // simple assignment
+                return new HeapWrite(
+                        ctx.heap_read().target.getText(), ctx.heap_read().addr.getText(),
+                        rvalue
+                );
+            }
+        }
+
+        throw new MindcodeParseException("Expected lvalue in " + ctx.getText());
+    }
+
+    @Override
+    public AstNode visitHeap_read(MindcodeParser.Heap_readContext ctx) {
+        return new HeapRead(ctx.target.getText(), ctx.addr.getText());
+    }
+
+    @Override
     public AstNode visitRvalue(MindcodeParser.RvalueContext ctx) {
         if (ctx.lvalue() != null) {
             return visitLvalue(ctx.lvalue());
         }
 
         if (ctx.assignment() != null) {
-            if (ctx.assignment().lvalue().id() != null) {
-                if (ctx.assignment().op != null) {
-                    return new VarAssignment(
-                            ctx.assignment().lvalue().getText(),
-                            new BinaryOp(
-                                    visitLvalue(ctx.assignment().lvalue()),
-                                    ctx.assignment().op.getText().replace("=", ""),
-                                    visitRvalue(ctx.assignment().rvalue())
-                            )
-                    );
-                } else {
-                    return new VarAssignment(
-                            ctx.assignment().lvalue().getText(),
-                            visitRvalue(ctx.assignment().rvalue())
-                    );
-                }
-            }
-
-            throw new MindcodeParseException("Expected lvalue in " + ctx.assignment().getText());
+            return visitAssignment(ctx.assignment());
         }
 
         if (ctx.literal_t() != null) {
@@ -163,6 +197,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             }
 
             return new SensorReading(ctx.sensor_read().target.getText(), resource.toString());
+        }
+
+        if (ctx.heap_read() != null) {
+            return new HeapRead(ctx.heap_read().target.getText(), ctx.heap_read().addr.getText());
         }
 
         if (ctx.rvalue() != null) {

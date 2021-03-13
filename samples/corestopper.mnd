@@ -1,2 +1,5 @@
-CORE = foundation1
-conveyor1.enabled = CORE.copper < CORE.itemCapacity
+HEAP = cell1
+cell1[0] = 0
+while cell1[1] < 1 {
+    cell1[0] += 1
+}

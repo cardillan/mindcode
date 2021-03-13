@@ -40,6 +40,7 @@ rvalue : lvalue
        | int_t
        | null_t
        | sensor_read
+       | heap_read
        | rvalue op=EXP rvalue
        | op=NOT rvalue
        | rvalue op=( MUL | DIV | MOD ) rvalue
@@ -50,13 +51,20 @@ rvalue : lvalue
        | LEFT_RBRACKET rvalue RIGHT_RBRACKET
        ;
 
+heap_read : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
+
+address : int_t;
+
 sensor_read : target=id DOT resource
             | target=id DOT liquid
             | target=id DOT sensor
             ;
 
-assignment : lvalue ASSIGN rvalue
-           | lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) rvalue;
+assignment : target=lvalue ASSIGN value=rvalue
+           | target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
+           | heap_read ASSIGN value=rvalue
+           | heap_read op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
+           ;
 
 id : ID;
 

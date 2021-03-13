@@ -189,4 +189,17 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst("conveyor1.enabled = CORE.copper < CORE.itemCapacity")
         );
     }
+
+    @Test
+    void parsesHeapAccesses() {
+        assertEquals(
+                new Seq(
+                        new HeapWrite(
+                                "cell2", "1",
+                                new HeapRead("cell3", "0")
+                        )
+                ),
+                translateToAst("cell2[1] = cell3[0]")
+        );
+    }
 }

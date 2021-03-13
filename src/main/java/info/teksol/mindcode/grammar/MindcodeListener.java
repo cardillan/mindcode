@@ -118,6 +118,26 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitRvalue(MindcodeParser.RvalueContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#heap_read}.
+	 * @param ctx the parse tree
+	 */
+	void enterHeap_read(MindcodeParser.Heap_readContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#heap_read}.
+	 * @param ctx the parse tree
+	 */
+	void exitHeap_read(MindcodeParser.Heap_readContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#address}.
+	 * @param ctx the parse tree
+	 */
+	void enterAddress(MindcodeParser.AddressContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#address}.
+	 * @param ctx the parse tree
+	 */
+	void exitAddress(MindcodeParser.AddressContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#sensor_read}.
 	 * @param ctx the parse tree
 	 */

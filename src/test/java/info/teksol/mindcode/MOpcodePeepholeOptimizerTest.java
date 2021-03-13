@@ -97,4 +97,21 @@ class MOpcodePeepholeOptimizerTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void collapsesSetWrite() {
+        assertEquals(
+                List.of(
+                        new MOpcode("write", "4", "cell1", "2"),
+                        new MOpcode("end")
+                ),
+                MOpcodePeepholeOptimizer.optimize(
+                        MOpcodeGenerator.generateFrom(
+                                (Seq) translateToAst(
+                                        "cell1[2] = 4"
+                                )
+                        )
+                )
+        );
+    }
 }

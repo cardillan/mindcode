@@ -103,4 +103,18 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
                 MOpcodeGenerator.generateFrom((Seq) translateToAst("conveyor1.enabled = foundation1.copper === tank1.water"))
         );
     }
+
+    @Test
+    void convertsHeapAccesses() {
+        assertEquals(
+                List.of(
+                        new MOpcode("read", "tmp0", "cell2", "4"),
+                        new MOpcode("sensor", "tmp1", "conveyor1", "enabled"),
+                        new MOpcode("op", "add", "tmp2", "tmp0", "tmp1"),
+                        new MOpcode("write", "tmp2", "cell1", "3"),
+                        new MOpcode("end")
+                ),
+                MOpcodeGenerator.generateFrom((Seq) translateToAst("cell1[3] = cell2[4] + conveyor1.enabled"))
+        );
+    }
 }

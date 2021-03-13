@@ -106,4 +106,9 @@ class MindcodeParserTest extends AbstractParserTest {
         final Tuple2<MindcodeParser.ProgramContext, List<String>> actual = parseWithErrors("while");
         assertEquals(1, actual._2.size(), "Expected at least one syntax error report");
     }
+
+    @Test
+    void parsesHeapAccesses() {
+        assertDoesNotThrow(() -> parse("cell1[0] = cell[1] + 1"));
+    }
 }
