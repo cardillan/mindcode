@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
-
     public static Seq generate(MindcodeParser.ProgramContext program) {
         final AstNodeBuilder builder = new AstNodeBuilder();
         final AstNode node = builder.visit(program);
@@ -146,109 +145,92 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    protected AstNode aggregateResult(AstNode aggregate, AstNode nextResult) {
+        if (nextResult != null) return nextResult;
+        return aggregate;
+    }
+
+    @Override
     public AstNode visitHeap_read(MindcodeParser.Heap_readContext ctx) {
         return new HeapRead(ctx.target.getText(), ctx.addr.getText());
     }
 
     @Override
+    public AstNode visitLiteral_t(MindcodeParser.Literal_tContext ctx) {
+        final String str = ctx.LITERAL().getSymbol().getText();
+        return new StringLiteral(str.substring(1, str.length() - 1).replaceAll("\\\\\"", "\""));
+    }
+
+    @Override
+    public AstNode visitBool_t(MindcodeParser.Bool_tContext ctx) {
+        if (ctx.TRUE() != null) {
+            return new BooleanLiteral(true);
+        } else if (ctx.FALSE() != null) {
+            return new BooleanLiteral(false);
+        } else {
+            throw new MindcodeParseException("Failed to parse bool_t expression: " + ctx.getText());
+        }
+    }
+
+    @Override
+    public AstNode visitFloat_t(MindcodeParser.Float_tContext ctx) {
+        return new NumericLiteral(ctx.FLOAT().getSymbol().getText());
+    }
+
+    @Override
+    public AstNode visitInt_t(MindcodeParser.Int_tContext ctx) {
+        return new NumericLiteral(ctx.INT().getSymbol().getText());
+    }
+
+    @Override
+    public AstNode visitNull_t(MindcodeParser.Null_tContext ctx) {
+        return new NullLiteral();
+    }
+
+    @Override
+    public AstNode visitSensor_read(MindcodeParser.Sensor_readContext ctx) {
+        final String resource;
+        if (ctx.resource() != null) {
+            resource = "@" + ctx.resource().getText();
+        } else if (ctx.liquid() != null) {
+            resource = "@" + ctx.liquid().getText();
+        } else if (ctx.sensor() != null) {
+            resource = "@" + ctx.sensor().getText();
+        } else {
+            throw new MindcodeParseException("Unable to convert sensor reading: " + ctx.getText());
+        }
+
+        final String target;
+        if (ctx.target != null) {
+            target = ctx.target.getText();
+        } else if (ctx.unit != null) {
+            target = ctx.unit.getText();
+        } else {
+            throw new MindcodeParseException("Unable to determine sensor read target in " + ctx.getText());
+        }
+
+        return new SensorReading(target, resource);
+    }
+
+    @Override
     public AstNode visitRvalue(MindcodeParser.RvalueContext ctx) {
-        if (ctx.lvalue() != null) {
-            return visitLvalue(ctx.lvalue());
+        if (ctx.op == null) {
+            return super.visitRvalue(ctx);
         }
 
-        if (ctx.assignment() != null) {
-            return visitAssignment(ctx.assignment());
+        switch (ctx.rvalue().size()) {
+            case 1:
+                return new UnaryOp(ctx.op.getText(), visitRvalue(ctx.rvalue(0)));
+
+            case 2:
+                final AstNode left = visitRvalue(ctx.rvalue(0));
+                final String op = ctx.op.getText();
+                final AstNode right = visitRvalue(ctx.rvalue(1));
+                return new BinaryOp(left, op, right);
+
+            default:
+                throw new MindcodeParseException("Expected 1 or 2 rvalues, found " + ctx.rvalue().size() + " in " + ctx.getText());
         }
-
-        if (ctx.literal_t() != null) {
-            String str = ctx.literal_t().LITERAL().getSymbol().getText();
-            return new StringLiteral(str.substring(1, str.length() - 1).replaceAll("\\\\\"", "\""));
-        }
-
-        if (ctx.bool_t() != null) {
-            if (ctx.bool_t().TRUE() != null) {
-                return new BooleanLiteral(true);
-            } else if (ctx.bool_t().FALSE() != null) {
-                return new BooleanLiteral(false);
-            } else {
-                throw new MindcodeParseException("Failed to parse bool_t expression: " + ctx.getText());
-            }
-        }
-
-        if (ctx.float_t() != null) {
-            return new NumericLiteral(ctx.float_t().FLOAT().getSymbol().getText());
-        }
-
-        if (ctx.int_t() != null) {
-            return new NumericLiteral(ctx.int_t().INT().getSymbol().getText());
-        }
-
-        if (ctx.null_t() != null) {
-            return new NullLiteral();
-        }
-
-        if (ctx.sensor_read() != null) {
-            final String resource;
-            if (ctx.sensor_read().resource() != null) {
-                resource = "@" + ctx.sensor_read().resource().getText();
-            } else if (ctx.sensor_read().liquid() != null) {
-                resource = "@" + ctx.sensor_read().liquid().getText();
-            } else if (ctx.sensor_read().sensor() != null) {
-                resource = "@" + ctx.sensor_read().sensor().getText();
-            } else {
-                throw new MindcodeParseException("Unable to convert sensor reading: " + ctx.sensor_read().getText());
-            }
-
-            final String target;
-            if (ctx.sensor_read().target != null) {
-                target = ctx.sensor_read().target.getText();
-            } else if (ctx.sensor_read().unit != null) {
-                target = ctx.sensor_read().unit.getText();
-            } else {
-                throw new MindcodeParseException("Unable to determine sensor read target in " + ctx.getText());
-            }
-
-            return new SensorReading(target, resource.toString());
-        }
-
-        if (ctx.heap_read() != null) {
-            return new HeapRead(ctx.heap_read().target.getText(), ctx.heap_read().addr.getText());
-        }
-
-        if (ctx.if_expression() != null) {
-            return visitIf_expression(ctx.if_expression());
-        }
-
-        if (ctx.funcall() != null) {
-            return visitFuncall(ctx.funcall());
-        }
-
-        if (ctx.unit_ref() != null) {
-            return visitUnit_ref(ctx.unit_ref());
-        }
-
-        if (ctx.rvalue() != null) {
-            switch (ctx.rvalue().size()) {
-                case 1:
-                    if (ctx.op != null) {
-                        return new UnaryOp(ctx.op.getText(), visitRvalue(ctx.rvalue(0)));
-                    } else {
-                        return visitRvalue(ctx.rvalue(0));
-                    }
-
-                case 2:
-                    return new BinaryOp(
-                            visitRvalue(ctx.rvalue(0)),
-                            ctx.op.getText(),
-                            visitRvalue(ctx.rvalue(1))
-                    );
-
-                default:
-                    throw new MindcodeParseException("Expected 1 or 2 rvalues, found " + ctx.rvalue().size() + " in " + ctx.getText());
-            }
-        }
-
-        throw new MindcodeParseException("RValue parsing failed: " + ctx.getText());
     }
 
     @Override
