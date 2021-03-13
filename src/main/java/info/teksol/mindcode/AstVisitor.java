@@ -3,6 +3,10 @@ package info.teksol.mindcode;
 public interface AstVisitor<T> {
     T visit(AstNode node);
 
+    T visitUnitAssignment(UnitAssignment node);
+
+    T visitUnitRef(UnitRef node);
+
     T visitIfExpression(IfExpression node);
 
     T visitHeapRead(HeapRead node);

@@ -64,7 +64,7 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
         assertEquals(
                 List.of(
                         new MOpcode("sensor", "tmp0", "foundation1", "@copper"),
-                        new MOpcode("sensor", "tmp1", "foundation1", "itemCapacity"),
+                        new MOpcode("sensor", "tmp1", "foundation1", "@itemCapacity"),
                         new MOpcode("op", "lessThan", "tmp2", "tmp0", "tmp1"),
                         new MOpcode("end")
                 ),
@@ -109,7 +109,7 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
         assertEquals(
                 List.of(
                         new MOpcode("read", "tmp0", "cell2", "4"),
-                        new MOpcode("sensor", "tmp1", "conveyor1", "enabled"),
+                        new MOpcode("sensor", "tmp1", "conveyor1", "@enabled"),
                         new MOpcode("op", "add", "tmp2", "tmp0", "tmp1"),
                         new MOpcode("write", "tmp2", "cell1", "3"),
                         new MOpcode("end")
@@ -155,5 +155,25 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
                 ),
                 MOpcodeGenerator.generateFrom((Seq) translateToAst("cell1[0] = rand(9**9)"))
         );
+    }
+
+    @Test
+    void convertsUbindAndControl() {
+        assertEquals(
+                List.of(
+                        new MOpcode("label", "label0"),
+                        new MOpcode("op", "strictEqual", "tmp0", "@unit", "null"),
+                        new MOpcode("jump", "label1", "notEqual", "tmp0", "true"),
+                        new MOpcode("ubind", "@poly"),
+                        new MOpcode("jump", "label0", "always"),
+                        new MOpcode("label", "label1"),
+                        new MOpcode("end")
+                ),
+                MOpcodeGenerator.generateFrom(
+                        (Seq) translateToAst(
+                                "while @unit === null {\n  @unit = ubind(@poly)\n}\n")
+                )
+        );
+
     }
 }

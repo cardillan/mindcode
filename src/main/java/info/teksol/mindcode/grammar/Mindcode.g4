@@ -28,6 +28,7 @@ rvalue : lvalue
        | assignment
        | if_expression
        | funcall
+       | unit_ref
        | literal_t
        | bool_t
        | float_t
@@ -45,6 +46,8 @@ rvalue : lvalue
        | LEFT_RBRACKET rvalue RIGHT_RBRACKET
        ;
 
+unit_ref : AT name=id;
+
 funcall : name=id LEFT_RBRACKET params_list RIGHT_RBRACKET;
 
 params_list : rvalue?
@@ -60,12 +63,16 @@ address : int_t;
 sensor_read : target=id DOT resource
             | target=id DOT liquid
             | target=id DOT sensor
+            | unit=unit_ref DOT resource
+            | unit=unit_ref DOT liquid
+            | unit=unit_ref DOT sensor
             ;
 
 assignment : target=lvalue ASSIGN value=rvalue
            | target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
            | heap_read ASSIGN value=rvalue
            | heap_read op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
+           | unit=unit_ref ASSIGN value=rvalue
            ;
 
 id : ID;
@@ -117,6 +124,7 @@ WHILE : 'while';
 IF : 'if';
 ELSE : 'else';
 
+AT : '@';
 DOT : '.';
 COMMA : ',';
 SEMICOLON : ';';

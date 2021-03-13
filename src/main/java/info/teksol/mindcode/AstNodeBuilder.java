@@ -135,6 +135,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             }
         }
 
+        if (ctx.unit != null) {
+            return new UnitAssignment(
+                    ctx.unit.name.getText(),
+                    visit(ctx.value)
+            );
+        }
+
         throw new MindcodeParseException("Expected lvalue in " + ctx.getText());
     }
 
@@ -181,20 +188,27 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         }
 
         if (ctx.sensor_read() != null) {
-            final StringBuilder resource = new StringBuilder();
+            final String resource;
             if (ctx.sensor_read().resource() != null) {
-                resource.append("@");
-                resource.append(ctx.sensor_read().resource().getText());
+                resource = "@" + ctx.sensor_read().resource().getText();
             } else if (ctx.sensor_read().liquid() != null) {
-                resource.append("@");
-                resource.append(ctx.sensor_read().liquid().getText());
+                resource = "@" + ctx.sensor_read().liquid().getText();
             } else if (ctx.sensor_read().sensor() != null) {
-                resource.append(ctx.sensor_read().sensor().getText());
+                resource = "@" + ctx.sensor_read().sensor().getText();
             } else {
                 throw new MindcodeParseException("Unable to convert sensor reading: " + ctx.sensor_read().getText());
             }
 
-            return new SensorReading(ctx.sensor_read().target.getText(), resource.toString());
+            final String target;
+            if (ctx.sensor_read().target != null) {
+                target = ctx.sensor_read().target.getText();
+            } else if (ctx.sensor_read().unit != null) {
+                target = ctx.sensor_read().unit.getText();
+            } else {
+                throw new MindcodeParseException("Unable to determine sensor read target in " + ctx.getText());
+            }
+
+            return new SensorReading(target, resource.toString());
         }
 
         if (ctx.heap_read() != null) {
@@ -207,6 +221,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
         if (ctx.funcall() != null) {
             return visitFuncall(ctx.funcall());
+        }
+
+        if (ctx.unit_ref() != null) {
+            return visitUnit_ref(ctx.unit_ref());
         }
 
         if (ctx.rvalue() != null) {
@@ -231,6 +249,11 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         }
 
         throw new MindcodeParseException("RValue parsing failed: " + ctx.getText());
+    }
+
+    @Override
+    public AstNode visitUnit_ref(MindcodeParser.Unit_refContext ctx) {
+        return new UnitRef(ctx.name.getText());
     }
 
     @Override

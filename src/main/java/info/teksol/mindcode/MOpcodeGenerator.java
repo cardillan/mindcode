@@ -203,8 +203,8 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
             case "ubind":
                 return handleUbind(params, result);
 
-            case "moveTo":
-                return handleMoveTo(params, result);
+            case "move":
+                return handleMove(params, result);
 
             case "rand":
                 return handleRand(params, result);
@@ -221,7 +221,7 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         return Optional.of(tmp);
     }
 
-    private Optional<String> handleMoveTo(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleMove(List<String> params, List<MOpcode> result) {
         // ucontrol move 14 15 0 0 0
         result.add(new MOpcode("ucontrol", "move", params.get(0), params.get(1)));
         return Optional.empty();
@@ -229,7 +229,7 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
 
     private Optional<String> handleUbind(List<String> params, List<MOpcode> result) {
         // ubind @poly
-        result.add(new MOpcode("ubind", "@" + params.get(0)));
+        result.add(new MOpcode("ubind", params.get(0)));
         return Optional.empty();
     }
 
@@ -267,6 +267,17 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         );
 
         return new Tuple2<>(Optional.of(tmp), result);
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<MOpcode>> visitUnitAssignment(UnitAssignment node) {
+        final Tuple2<Optional<String>, List<MOpcode>> value = visit(node.getValue());
+        return new Tuple2<>(Optional.of("@" + node.getName()), value._2);
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<MOpcode>> visitUnitRef(UnitRef node) {
+        return new Tuple2<>(Optional.of("@" + node.getName()), List.of());
     }
 
     @Override

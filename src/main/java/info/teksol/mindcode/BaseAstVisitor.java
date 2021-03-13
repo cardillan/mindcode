@@ -31,6 +31,10 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitStringLiteral((StringLiteral) node);
         } else if (node instanceof UnaryOp) {
             return visitUnaryOp((UnaryOp) node);
+        } else if (node instanceof UnitAssignment) {
+            return visitUnitAssignment((UnitAssignment) node);
+        } else if (node instanceof UnitRef) {
+            return visitUnitRef((UnitRef) node);
         } else if (node instanceof VarAssignment) {
             return visitVarAssignment((VarAssignment) node);
         } else if (node instanceof VarRef) {
@@ -40,6 +44,16 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
         } else {
             throw new AstWalkerException("Unrecognized node type " + node.getClass() + ": " + node);
         }
+    }
+
+    @Override
+    public T visitUnitAssignment(UnitAssignment node) {
+        return null;
+    }
+
+    @Override
+    public T visitUnitRef(UnitRef node) {
+        return null;
     }
 
     @Override

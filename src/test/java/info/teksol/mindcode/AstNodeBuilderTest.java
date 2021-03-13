@@ -160,7 +160,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new BinaryOp(
                                 new SensorReading("foundation1", "@copper"),
                                 "<",
-                                new SensorReading("foundation1", "itemCapacity")
+                                new SensorReading("foundation1", "@itemCapacity")
                         ),
                         new BinaryOp(
                                 new SensorReading("reactor1", "@cryofluid"),
@@ -182,7 +182,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new BinaryOp(
                                         new SensorReading("CORE", "@copper"),
                                         "<",
-                                        new SensorReading("CORE", "itemCapacity")
+                                        new SensorReading("CORE", "@itemCapacity")
                                 )
                         )
                 ),
@@ -280,6 +280,30 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("cell1[0] = rand(9**9)")
+        );
+    }
+
+    @Test
+    void parsesUnitReferences() {
+        assertEquals(
+                new Seq(
+                        new NoOp(),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new UnitRef("unit"),
+                                        "===",
+                                        new NullLiteral()
+                                ),
+                                new UnitAssignment(
+                                        "unit",
+                                        new FunctionCall(
+                                                "ubind",
+                                                List.of(new VarRef("poly"))
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("while @unit === null {\n  @unit = ubind(poly)\n}\n")
         );
     }
 }

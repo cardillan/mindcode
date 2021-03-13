@@ -117,4 +117,9 @@ class MindcodeParserTest extends AbstractParserTest {
         assertDoesNotThrow(() -> parse("value = if HEAP[4] == 0 { false\n} else { true\n}"));
         assertDoesNotThrow(() -> parse("if false { n += 1\n}\n"));
     }
+
+    @Test
+    void parsesUnitReferences() {
+        assertDoesNotThrow(() -> parse("while @unit == null {\n  @unit = ubind(poly)\n}\n"));
+    }
 }
