@@ -30,16 +30,22 @@ class MOpcodePeepholeOptimizerTest extends AbstractAstTest {
         assertEquals(
                 List.of(
                         new MOpcode("label", "label0"),
-                        new MOpcode("jump", "label1", "greaterThanEq", "n", "0"),
+                        new MOpcode("jump", "label1", "lessThanEq", "n", "0"),
                         new MOpcode("op", "add", "n", "n", "1"),
                         new MOpcode("jump", "label0", "always"),
                         new MOpcode("label", "label1"),
+
+                        new MOpcode("label", "label2"),
+                        new MOpcode("jump", "label3", "notEqual", "n", "null"),
+                        new MOpcode("op", "add", "n", "n", "1"),
+                        new MOpcode("jump", "label2", "always"),
+                        new MOpcode("label", "label3"),
                         new MOpcode("end")
                 ),
                 MOpcodePeepholeOptimizer.optimize(
                         MOpcodeGenerator.generateFrom(
                                 (Seq) translateToAst(
-                                        "while n < 0 {\nn += 1\n}\n"
+                                        "while n > 0 {\nn += 1\n}\nwhile n === null {\nn += 1\n}\n"
                                 )
                         )
                 )

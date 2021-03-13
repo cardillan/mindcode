@@ -2,6 +2,7 @@ package info.teksol.mindcode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class MOpcodePeepholeOptimizer {
@@ -13,6 +14,16 @@ public class MOpcodePeepholeOptimizer {
             "greaterThan",
             "greaterThanEq",
             "strictEqual"
+    );
+
+    private static final Map<String, String> inverses = Map.of(
+            "equal", "notEqual",
+            "notEqual", "equal",
+            "lessThan", "greaterThanEq",
+            "lessThanEq", "greaterThan",
+            "greaterThan", "lessThanEq",
+            "greaterThanEq", "lessThan",
+            "strictEqual", "notEqual"
     );
 
     public static List<MOpcode> optimize(List<MOpcode> program) {
@@ -63,13 +74,17 @@ public class MOpcodePeepholeOptimizer {
 
             if (isOp(here) && isComparison(here) && isJump(next) && next.getArgs().get(1).equals("notEqual")) {
                 if (here.getArgs().get(1).equals(next.getArgs().get(2))) {
+                    if (!inverses.containsKey(here.getArgs().get(0))) {
+                        throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + here.getArgs().get(0) + "]");
+                    }
+
                     program.remove(i);
                     program.set(
                             i,
                             new MOpcode(
                                     "jump",
                                     next.getArgs().get(0),
-                                    invertCondition(here.getArgs().get(0)),
+                                    inverses.get(here.getArgs().get(0)),
                                     here.getArgs().get(2),
                                     here.getArgs().get(3)
                             )
@@ -164,16 +179,6 @@ public class MOpcodePeepholeOptimizer {
             }
 
             i++;
-        }
-    }
-
-    private static String invertCondition(String cond) {
-        switch (cond) {
-            case "lessThan":
-                return "greaterThanEq";
-
-            default:
-                throw new IllegalArgumentException("Don't know how to optimize [" + cond + "] into its reverse");
         }
     }
 
