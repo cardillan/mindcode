@@ -57,9 +57,19 @@ public class MOpcodePrinter {
                 printUcontrol(opcode, buffer);
                 break;
 
+            case "getlink":
+                printGetlink(opcode, buffer);
+                break;
+
             default:
                 throw new GenerationException("Don't know how to convert " + opcode);
         }
+    }
+
+    private static void printGetlink(MOpcode opcode, StringBuilder buffer) {
+        // getlink result 0
+        buffer.append("getlink ");
+        addArgs(2, buffer, opcode);
     }
 
     private static void printUcontrol(MOpcode opcode, StringBuilder buffer) {

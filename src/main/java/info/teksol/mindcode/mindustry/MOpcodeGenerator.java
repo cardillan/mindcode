@@ -213,10 +213,21 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
             case "rand":
                 return handleRand(params, result);
 
+            case "getlink":
+                return handleGetlink(params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
     }
+
+    private Optional<String> handleGetlink(List<String> params, List<MOpcode> result) {
+        // getlink result 0
+        final String tmp = nextTemp();
+        result.add(new MOpcode("getlink", tmp, params.get(0)));
+        return Optional.of(tmp);
+    }
+
 
     private Optional<String> handleRand(List<String> params, List<MOpcode> result) {
         // op rand result 200 0
