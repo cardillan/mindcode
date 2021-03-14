@@ -1,0 +1,7 @@
+n = 0
+reactor = getlink(n)
+while reactor != null {
+    reactor.enabled = (reactor.cryofluid / reactor.liquidCapacity) >= 0.25
+    n += 1
+    reactor = getlink(n)
+}

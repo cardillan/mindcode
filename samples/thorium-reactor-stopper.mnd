@@ -1,0 +1,2 @@
+REACTOR = reactor1
+REACTOR.enabled = (REACTOR.cryofluid / REACTOR.liquidCapacity) >= 0.25

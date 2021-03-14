@@ -7,6 +7,7 @@ import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.mindustry.*;
 import org.antlr.v4.runtime.*;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -15,12 +16,21 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        final StringWriter sw = new StringWriter();
-        try (final FileReader reader = new FileReader(args[0])) {
-            reader.transferTo(sw);
+        for (final String dirname : args) {
+            for (final File file : new File(dirname).listFiles()) {
+                final StringWriter sw = new StringWriter();
+                try (final FileReader reader = new FileReader(file)) {
+                    reader.transferTo(sw);
+                }
+                System.out.println("=====> " + file);
+                compile(sw.toString());
+                System.out.println(file + " <=====");
+            }
         }
+    }
 
-        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sw.toString()));
+    private static void compile(String program) {
+        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         final List<String> errors = new ArrayList<>();
         parser.addErrorListener(new BaseErrorListener() {
@@ -31,10 +41,10 @@ public class Main {
         });
 
         final MindcodeParser.ProgramContext context = parser.program();
-        final Seq program = AstNodeBuilder.generate(context);
+        final Seq prog = AstNodeBuilder.generate(context);
         final List<MOpcode> result = MOpcodeLabelResolver.resolve(
                 MOpcodePeepholeOptimizer.optimize(
-                        MOpcodeGenerator.generateFrom(program)
+                        MOpcodeGenerator.generateFrom(prog)
                 )
         );
 
