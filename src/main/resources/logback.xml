@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <target>System.err</target>
+    </appender>
+
+    <logger name="org.apache.velocity" level="info"/>
+    <logger name="org.eclipse.jetty" level="info"/>
+
+    <root level="debug">
+        <appender-ref ref="STDERR" />
+    </root>
+</configuration>
