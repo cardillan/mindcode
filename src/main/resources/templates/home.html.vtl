@@ -9,25 +9,30 @@
     <h1 class="m-2 text-2xl font-bold">Mindcode: a Mindustry Logic high-level language</h1>
     <p class="m-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic. Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
     <p class="m-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic. Mindcode includes higher-level constructs, such as inline computations, a functional while loop, and "direct" memory access.<p>
-    <p class="m-2 text-lg">Go ahead and try the following samples, then write your own!<p>
-    <nav class="m-2">
-        <ul class="flex space-around">
-            <li><a href="?s=0" class="block text-center py-2 px-4      underline #if($sample == "0")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Bind a poly and move it to the core's location</a>
-            <li><a href="?s=1" class="block text-center py-2 px-4 mx-2 underline #if($sample == "1")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Prevent Thorium reactor blowup when out of cryo</a>
-            <li><a href="?s=2" class="block text-center py-2 px-4 mx-2 underline #if($sample == "2")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Prevent MULTIPLE Thorium reactors from blowing up when any runs out of cryo</a>
-            <li><a href="?s=3" class="block text-center py-2 px-4      underline #if($sample == "3")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Non-sensical demo of Mindcode features</a>
-        </ul>
-    </nav>
+    #if(!$id)
+        <p class="m-2 text-lg">Go ahead and try the following samples, then write your own!<p>
+        <nav class="m-2">
+            <ul class="flex space-around">
+                <li><a href="?s=0" class="block text-center py-2 px-4      underline #if($sample == "0")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Bind a poly and move it to the core's location</a>
+                <li><a href="?s=1" class="block text-center py-2 px-4 mx-2 underline #if($sample == "1")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Prevent Thorium reactor blowup when out of cryo</a>
+                <li><a href="?s=2" class="block text-center py-2 px-4 mx-2 underline #if($sample == "2")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Prevent MULTIPLE Thorium reactors from blowing up when any runs out of cryo</a>
+                <li><a href="?s=3" class="block text-center py-2 px-4      underline #if($sample == "3")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Non-sensical demo of Mindcode features</a>
+            </ul>
+        </nav>
+    #end
 
     <div class="w-full">
-        <form action="/compile" method="post" class="mx-2">
+        <form action="/compile" method="post" class="mx-2" autocomplete="off">
+            #if($id)
+                <input type="hidden" name="id" value="$id">
+            #end
             <div class="grid grid-cols-2 gap-2">
                 <label class="block font-bold" for="source">Mindcode Source Code:</label>
                 <label class="block font-bold">Mindustry Logic:</label>
                 <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">$source_code</textarea>
                 <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">$compiled_code</textarea>
                 <div>
-                    <button class="px-4 py-2 bg-gray-600 text-white my-4" type="submit">Compile</button>
+                    <input type="submit" name="Compile" class="px-4 py-2 bg-gray-600 text-white my-4"/>
                 </div>
                 <div>
                     #if(!$syntax_errors.empty)
