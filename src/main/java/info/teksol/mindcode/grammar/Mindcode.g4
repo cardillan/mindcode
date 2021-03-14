@@ -61,11 +61,7 @@ heap_read : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
 address : int_t;
 
 sensor_read : target=id DOT resource
-            | target=id DOT liquid
-            | target=id DOT sensor
             | unit=unit_ref DOT resource
-            | unit=unit_ref DOT liquid
-            | unit=unit_ref DOT sensor
             ;
 
 assignment : target=lvalue ASSIGN value=rvalue
@@ -98,24 +94,7 @@ terminator : terminator SEMICOLON
 
 crlf : CRLF;
 
-resource : COPPER
-         | LEAD
-         | METAGLASS
-         | GRAPHITE
-         | SAND
-         | COAL
-         | TITANIUM
-         | SCRAP
-         | SILICON
-         | PYRATITE
-         ;
-
-liquid : WATER
-       | SLAG
-       | CRYOFLUID
-       ;
-
-sensor : id;
+resource : id;
 
 fragment ESCAPED_QUOTE : '\\"';
 LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
@@ -143,20 +122,6 @@ MUL : '*';
 DIV : '/';
 MOD : '%';
 EXP : '**';
-
-COPPER : 'copper';
-LEAD : 'lead';
-METAGLASS : 'metaglass';
-GRAPHITE : 'graphite';
-SAND : 'sand';
-COAL : 'coal';
-TITANIUM : 'titanium';
-SCRAP : 'scrap';
-SILICON : 'silicon';
-PYRATITE : 'pyratite';
-WATER : 'water';
-SLAG : 'slag';
-CRYOFLUID : 'cryofluid';
 
 TRUE : 'true';
 FALSE : 'false';

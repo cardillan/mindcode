@@ -166,16 +166,4 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitResource(MindcodeParser.ResourceContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#liquid}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLiquid(MindcodeParser.LiquidContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#sensor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSensor(MindcodeParser.SensorContext ctx);
 }

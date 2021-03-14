@@ -190,17 +190,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitSensor_read(MindcodeParser.Sensor_readContext ctx) {
-        final String resource;
-        if (ctx.resource() != null) {
-            resource = "@" + ctx.resource().getText();
-        } else if (ctx.liquid() != null) {
-            resource = "@" + ctx.liquid().getText();
-        } else if (ctx.sensor() != null) {
-            resource = "@" + ctx.sensor().getText();
-        } else {
-            throw new ParsingException("Unable to convert sensor reading: " + ctx.getText());
-        }
-
         final String target;
         if (ctx.target != null) {
             target = ctx.target.getText();
@@ -210,7 +199,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             throw new ParsingException("Unable to determine sensor read target in " + ctx.getText());
         }
 
-        return new SensorReading(target, resource);
+        return new SensorReading(target, "@" + ctx.resource().getText());
     }
 
     @Override

@@ -267,24 +267,4 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitResource(MindcodeParser.ResourceContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#liquid}.
-	 * @param ctx the parse tree
-	 */
-	void enterLiquid(MindcodeParser.LiquidContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#liquid}.
-	 * @param ctx the parse tree
-	 */
-	void exitLiquid(MindcodeParser.LiquidContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#sensor}.
-	 * @param ctx the parse tree
-	 */
-	void enterSensor(MindcodeParser.SensorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#sensor}.
-	 * @param ctx the parse tree
-	 */
-	void exitSensor(MindcodeParser.SensorContext ctx);
 }
