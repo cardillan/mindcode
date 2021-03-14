@@ -48,8 +48,7 @@ public class Main {
 
         final Server server = new Server();
         final ServerConnector connector = new ServerConnector(server);
-        String port = System.getenv("PORT");
-        if (port == null) port = "8080";
+        final String port = Optional.ofNullable(System.getenv("PORT")).orElse("8080");
         connector.setPort(Integer.parseInt(port));
         server.addConnector(connector);
 
