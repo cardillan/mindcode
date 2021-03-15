@@ -73,6 +73,10 @@ public class HomeController extends HttpServlet {
                 sourceCode = returnSampleSourceCode(id);
                 break;
 
+            case "clean":
+                sourceCode = "";
+                break;
+
             default:
                 try {
                     sourceCode = returnDbSourceCode(id);
