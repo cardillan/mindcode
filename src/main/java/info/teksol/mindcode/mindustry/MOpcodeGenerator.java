@@ -88,7 +88,7 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
 
         result.add(new MOpcode("control", node.getProperty(), node.getTarget(), value._1.get()));
 
-        return new Tuple2<>(Optional.empty(), result);
+        return new Tuple2<>(value._1, result);
     }
 
     @Override

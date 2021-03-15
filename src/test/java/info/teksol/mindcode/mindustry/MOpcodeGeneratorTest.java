@@ -2,8 +2,6 @@ package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.mindustry.MOpcode;
-import info.teksol.mindcode.mindustry.MOpcodeGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -179,5 +177,64 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
                 )
         );
 
+    }
+
+    @Test
+    void convertsReallifeTest1() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new MOpcode("set", "tmp0", "0"),
+                                new MOpcode("set", "n", "tmp0"),
+                                new MOpcode("label", "label2"),
+                                new MOpcode("getlink", "tmp1", "n"),
+                                new MOpcode("set", "reactor", "tmp1"),
+                                new MOpcode("op", "notEqual", "tmp2", "tmp1", "null"),
+                                new MOpcode("jump", "label3", "notEqual", "tmp2", "true"),
+                                new MOpcode("sensor", "tmp3", "reactor", "@liquidCapacity"),
+                                new MOpcode("set", "tmp4", "0"),
+                                new MOpcode("op", "greaterThan", "tmp5", "tmp3", "tmp4"),
+                                new MOpcode("jump", "label0", "notEqual", "tmp5", "true"),
+                                new MOpcode("sensor", "tmp6", "reactor", "@cryofluid"),
+                                new MOpcode("sensor", "tmp7", "reactor", "@liquidCapacity"),
+                                new MOpcode("op", "div", "tmp8", "tmp6", "tmp7"),
+                                new MOpcode("set", "pct_avail", "tmp8"),
+                                new MOpcode("set", "tmp9", "0.25"),
+                                new MOpcode("op", "greaterThanEq", "tmp10", "pct_avail", "tmp9"),
+                                new MOpcode("control", "enabled", "reactor", "tmp10"),
+                                new MOpcode("set", "tmp11", "tmp10"),
+                                new MOpcode("jump", "label1", "always"),
+                                new MOpcode("label", "label0"),
+                                new MOpcode("set", "tmp11", "null"),
+                                new MOpcode("label", "label1"),
+                                new MOpcode("set", "tmp12", "1"),
+                                new MOpcode("op", "add", "tmp13", "n", "tmp12"),
+                                new MOpcode("set", "n", "tmp13"),
+                                new MOpcode("jump", "label2", "always"),
+                                new MOpcode("label", "label3"),
+                                new MOpcode("end")
+                        )
+                ),
+                prettyPrint(MOpcodeGenerator.generateFrom(
+                        (Seq) translateToAst(
+                                "" +
+                                        "n = 0\n" +
+                                        "\n" +
+                                        "while (reactor = getlink(n)) != null {\n" +
+                                        "  if reactor.liquidCapacity > 0 {\n" +
+                                        "    pct_avail = reactor.cryofluid / reactor.liquidCapacity\n" +
+                                        "    reactor.enabled = pct_avail >= 0.25\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  n += 1\n" +
+                                        "}\n" +
+                                        "")
+                        )
+                )
+        );
+    }
+
+    private final String prettyPrint(List<MOpcode> list) {
+        return list.stream().map(Object::toString).reduce("", (s, s2) -> s + "\n" + s2);
     }
 }
