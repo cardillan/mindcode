@@ -27,6 +27,8 @@ public class CompileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final long startAt = System.nanoTime();
+        logger.info("Started POST /compile?id=",request.getParameter("id"));
+
         final String id;
         final String sourceCode = request.getParameter("source").replaceAll("\r\n", "\n");
 

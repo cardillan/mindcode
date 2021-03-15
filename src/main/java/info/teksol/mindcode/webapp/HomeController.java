@@ -55,12 +55,13 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final long startAt = System.nanoTime();
-        final String sourceCode;
+        logger.info("Started GET /?s={}", request.getParameter("s"));
 
         String id = request.getParameter("s");
         if (id == null) id = "";
 
         final long getSourceStartAt = System.nanoTime();
+        final String sourceCode;
         switch (id) {
             case "":
                 sourceCode = returnSampleSourceCode(String.valueOf(RAND.nextInt(samples.size())));
