@@ -2,10 +2,6 @@ package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.mindustry.MOpcode;
-import info.teksol.mindcode.mindustry.MOpcodeGenerator;
-import info.teksol.mindcode.mindustry.MOpcodeLabelResolver;
-import info.teksol.mindcode.mindustry.MOpcodePeepholeOptimizer;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

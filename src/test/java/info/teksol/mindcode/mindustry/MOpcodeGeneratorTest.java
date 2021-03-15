@@ -234,7 +234,4 @@ class MOpcodeGeneratorTest extends AbstractAstTest {
         );
     }
 
-    private final String prettyPrint(List<MOpcode> list) {
-        return list.stream().map(Object::toString).reduce("", (s, s2) -> s + "\n" + s2);
-    }
 }
