@@ -232,9 +232,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "flag":
                 return handleFlag(params, result);
 
+            case "approach":
+                return handleApproach(params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
+    }
+
+    private Optional<String> handleApproach(List<String> params, List<LogicInstruction> result) {
+        // ucontrol approach 1 2 3 0 0
+        result.add(new LogicInstruction("ucontrol", "approach", params.get(0), params.get(1), params.get(2)));
+        return Optional.empty();
     }
 
     private Optional<String> handleFlag(List<String> params, List<LogicInstruction> result) {
