@@ -7,6 +7,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -59,8 +60,10 @@ public class Main {
 
         final GzipHandler gzipHandler = new GzipHandler();
         gzipHandler.setHandler(context);
+        final StatisticsHandler statsHandler = new StatisticsHandler();
+        statsHandler.setHandler(gzipHandler);
 
-        server.setHandler(gzipHandler);
+        server.setHandler(statsHandler);
         server.start();
     }
 }
