@@ -1,0 +1,2 @@
+#!/bin/sh
+exec psql -h localhost -d mindcode_development
