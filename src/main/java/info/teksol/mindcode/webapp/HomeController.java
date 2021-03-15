@@ -60,14 +60,11 @@ public class HomeController extends HttpServlet {
 
         String id = request.getParameter("s");
         if (id == null) id = "";
+        if (id.isEmpty()) id = String.valueOf(RAND.nextInt(samples.size()));
 
         final long getSourceStartAt = System.nanoTime();
         final String sourceCode;
         switch (id) {
-            case "":
-                sourceCode = returnSampleSourceCode(String.valueOf(RAND.nextInt(samples.size())));
-                break;
-
             case "0":
             case "1":
             case "2":
@@ -96,7 +93,7 @@ public class HomeController extends HttpServlet {
         context.put("compiled_code", result._1);
         context.put("syntax_errors", result._2);
         context.put("sample", id);
-        if (id.length() == 36) context.put("id", id); // if it's a UUID
+        context.put("id", id.length() == 36 ? id : null); // if it's a UUID
 
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
