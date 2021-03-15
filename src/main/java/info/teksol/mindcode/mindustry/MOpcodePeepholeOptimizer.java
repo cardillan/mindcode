@@ -24,6 +24,8 @@ public class MOpcodePeepholeOptimizer {
             "strictEqual", "notEqual"
     );
 
+    private static final Set<String> ARITHMETIC_OPS = Set.of("add", "sub", "mul", "div", "exp", "lessThan", "lessThanEq", "greaterThan", "greaterThanEq", "equal", "strictEqual", "notEqual");
+
     public static List<MOpcode> optimize(List<MOpcode> program) {
         final ArrayList<MOpcode> optimized = new ArrayList<>(program);
 
@@ -75,7 +77,7 @@ public class MOpcodePeepholeOptimizer {
             }
 
             if (isOp(here) && isComparison(here) && isJump(next) && next.getArgs().get(1).equals("notEqual")) {
-                if (here.getArgs().get(1).equals(next.getArgs().get(2))) {
+                if (here.getArgs().size() >= 2 && next.getArgs().size() >= 3 && here.getArgs().get(1).equals(next.getArgs().get(2))) {
                     if (!inverses.containsKey(here.getArgs().get(0))) {
                         throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + here.getArgs().get(0) + "]");
                     }
@@ -98,7 +100,7 @@ public class MOpcodePeepholeOptimizer {
                 }
             }
 
-            if (isOp(here) && isSet(next)) {
+            if (isOp(here) && isSet(next) && ARITHMETIC_OPS.contains(here.getArgs().get(0))) {
                 if (here.getArgs().get(1).equals(next.getArgs().get(1))) {
                     replacements.put(next.getArgs().get(1), next.getArgs().get(0));
                     program.remove(i);
@@ -119,7 +121,7 @@ public class MOpcodePeepholeOptimizer {
                 }
             }
 
-            if (isSet(here) && isOp(next)) {
+            if (isSet(here) && isOp(next) && ARITHMETIC_OPS.contains(next.getArgs().get(0))) {
                 if (here.getArgs().get(0).equals(next.getArgs().get(3))) {
                     replacements.put(next.getArgs().get(3), here.getArgs().get(1));
                     program.remove(i);
@@ -141,7 +143,7 @@ public class MOpcodePeepholeOptimizer {
                     continue;
                 }
 
-                if (here.getArgs().get(0).equals(next.getArgs().get(2))) {
+                if (next.getArgs().size() >= 2 && here.getArgs().get(0).equals(next.getArgs().get(2))) {
                     replacements.put(next.getArgs().get(2), here.getArgs().get(1));
                     program.remove(i);
                     program.set(
@@ -164,7 +166,7 @@ public class MOpcodePeepholeOptimizer {
             }
 
             if (isSet(here) && isSet(next)) {
-                if (here.getArgs().get(0).equals(next.getArgs().get(1))) {
+                if (next.getArgs().size() >= 2 && here.getArgs().get(0).equals(next.getArgs().get(1))) {
                     replacements.put(next.getArgs().get(1), here.getArgs().get(1));
                     program.remove(i);
                     program.set(
