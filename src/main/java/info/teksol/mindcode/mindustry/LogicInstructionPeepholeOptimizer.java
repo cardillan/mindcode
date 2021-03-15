@@ -3,7 +3,7 @@ package info.teksol.mindcode.mindustry;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MOpcodePeepholeOptimizer {
+public class LogicInstructionPeepholeOptimizer {
     private static final Set<String> COMPARISON_OPERATORS = Set.of(
             "equal",
             "notEqual",
@@ -26,28 +26,28 @@ public class MOpcodePeepholeOptimizer {
 
     private static final Set<String> ARITHMETIC_OPS = Set.of("add", "sub", "mul", "div", "exp", "lessThan", "lessThanEq", "greaterThan", "greaterThanEq", "equal", "strictEqual", "notEqual");
 
-    public static List<MOpcode> optimize(List<MOpcode> program) {
-        final ArrayList<MOpcode> optimized = new ArrayList<>(program);
+    public static List<LogicInstruction> optimize(List<LogicInstruction> program) {
+        final ArrayList<LogicInstruction> optimized = new ArrayList<>(program);
 
         collapseAdjacentSets(optimized);
 
         return optimized;
     }
 
-    private static void collapseAdjacentSets(List<MOpcode> program) {
+    private static void collapseAdjacentSets(List<LogicInstruction> program) {
         final Map<String, String> replacements = new HashMap<>();
 
         int i = 0;
         while (i < program.size() - 1) {
-            final MOpcode here = program.get(i);
-            final MOpcode next = program.get(i + 1);
+            final LogicInstruction here = program.get(i);
+            final LogicInstruction next = program.get(i + 1);
 
             if (isSet(here) && isWrite(next) && here.getArgs().get(0).equals(next.getArgs().get(0))) {
                 replacements.put(next.getArgs().get(0), here.getArgs().get(1));
                 program.remove(i);
                 program.set(
                         i,
-                        new MOpcode(
+                        new LogicInstruction(
                                 "write",
                                 here.getArgs().get(1),
                                 next.getArgs().get(1),
@@ -55,7 +55,7 @@ public class MOpcodePeepholeOptimizer {
                         )
                 );
 
-                // Re-examine the previous node, in case we can now optimize it
+                // Re-examine the previous instruction, in case we can now optimize it
                 if (i > 0) i--;
                 continue;
             }
@@ -65,13 +65,13 @@ public class MOpcodePeepholeOptimizer {
                 program.remove(i);
                 program.set(
                         i,
-                        new MOpcode(
+                        new LogicInstruction(
                                 "print",
                                 here.getArgs().get(1)
                         )
                 );
 
-                // Re-examine the previous node, in case we can now optimize it
+                // Re-examine the previous instruction, in case we can now optimize it
                 if (i > 0) i--;
                 continue;
             }
@@ -85,7 +85,7 @@ public class MOpcodePeepholeOptimizer {
                     program.remove(i);
                     program.set(
                             i,
-                            new MOpcode(
+                            new LogicInstruction(
                                     "jump",
                                     next.getArgs().get(0),
                                     inverses.get(here.getArgs().get(0)),
@@ -94,7 +94,7 @@ public class MOpcodePeepholeOptimizer {
                             )
                     );
 
-                    // Re-examine the previous node, in case we can now optimize it
+                    // Re-examine the previous instruction, in case we can now optimize it
                     if (i > 0) i--;
                     continue;
                 }
@@ -106,7 +106,7 @@ public class MOpcodePeepholeOptimizer {
                     program.remove(i);
                     program.set(
                             i,
-                            new MOpcode(
+                            new LogicInstruction(
                                     "op",
                                     here.getArgs().get(0),
                                     next.getArgs().get(0),
@@ -115,7 +115,7 @@ public class MOpcodePeepholeOptimizer {
                             )
                     );
 
-                    // Re-examine the previous node, in case we can now optimize it
+                    // Re-examine the previous instruction, in case we can now optimize it
                     if (i > 0) i--;
                     continue;
                 }
@@ -127,7 +127,7 @@ public class MOpcodePeepholeOptimizer {
                     program.remove(i);
                     program.set(
                             i,
-                            new MOpcode(
+                            new LogicInstruction(
                                     "op",
                                     List.of(
                                             next.getArgs().get(0),
@@ -138,7 +138,7 @@ public class MOpcodePeepholeOptimizer {
                             )
                     );
 
-                    // Re-examine the previous node, in case we can now optimize it
+                    // Re-examine the previous instruction, in case we can now optimize it
                     if (i > 0) i--;
                     continue;
                 }
@@ -148,7 +148,7 @@ public class MOpcodePeepholeOptimizer {
                     program.remove(i);
                     program.set(
                             i,
-                            new MOpcode(
+                            new LogicInstruction(
                                     "op",
                                     List.of(
                                             next.getArgs().get(0),
@@ -159,7 +159,7 @@ public class MOpcodePeepholeOptimizer {
                             )
                     );
 
-                    // Re-examine the previous node, in case we can now optimize it
+                    // Re-examine the previous instruction, in case we can now optimize it
                     if (i > 0) i--;
                     continue;
                 }
@@ -171,7 +171,7 @@ public class MOpcodePeepholeOptimizer {
                     program.remove(i);
                     program.set(
                             i,
-                            new MOpcode(
+                            new LogicInstruction(
                                     "set",
                                     List.of(
                                             next.getArgs().get(0),
@@ -180,7 +180,7 @@ public class MOpcodePeepholeOptimizer {
                             )
                     );
 
-                    // Re-examine the previous node, in case we can now optimize it
+                    // Re-examine the previous instruction, in case we can now optimize it
                     if (i > 0) i--;
                     continue;
                 }
@@ -192,42 +192,42 @@ public class MOpcodePeepholeOptimizer {
         applyReplacements(program, replacements);
     }
 
-    private static void applyReplacements(List<MOpcode> program, Map<String, String> replacements) {
-        final ListIterator<MOpcode> iterator = program.listIterator();
+    private static void applyReplacements(List<LogicInstruction> program, Map<String, String> replacements) {
+        final ListIterator<LogicInstruction> iterator = program.listIterator();
         while (iterator.hasNext()) {
-            final MOpcode node = iterator.next();
-            final List<String> newArgs = node.getArgs().stream().map((arg) -> replacements.getOrDefault(arg, arg)).collect(Collectors.toList());
-            if (!newArgs.equals(node.getArgs())) {
-                iterator.set(new MOpcode(node.getOpcode(), newArgs));
+            final LogicInstruction instruction = iterator.next();
+            final List<String> newArgs = instruction.getArgs().stream().map((arg) -> replacements.getOrDefault(arg, arg)).collect(Collectors.toList());
+            if (!newArgs.equals(instruction.getArgs())) {
+                iterator.set(new LogicInstruction(instruction.getOpcode(), newArgs));
             }
         }
     }
 
-    private static boolean isComparison(MOpcode node) {
-        if (!node.getOpcode().equals("op")) {
-            throw new IllegalArgumentException("Only op opcodes can be comparisons");
+    private static boolean isComparison(LogicInstruction instruction) {
+        if (!instruction.getOpcode().equals("op")) {
+            throw new IllegalArgumentException("Only op instructions can be comparisons");
         }
 
-        return COMPARISON_OPERATORS.contains(node.getArgs().get(0));
+        return COMPARISON_OPERATORS.contains(instruction.getArgs().get(0));
     }
 
-    private static boolean isWrite(MOpcode node) {
-        return node.getOpcode().equals("write");
+    private static boolean isWrite(LogicInstruction instruction) {
+        return instruction.getOpcode().equals("write");
     }
 
-    private static boolean isPrint(MOpcode node) {
-        return node.getOpcode().equals("print");
+    private static boolean isPrint(LogicInstruction instruction) {
+        return instruction.getOpcode().equals("print");
     }
 
-    private static boolean isJump(MOpcode node) {
-        return node.getOpcode().equals("jump");
+    private static boolean isJump(LogicInstruction instruction) {
+        return instruction.getOpcode().equals("jump");
     }
 
-    private static boolean isSet(MOpcode node) {
-        return node.getOpcode().equals("set");
+    private static boolean isSet(LogicInstruction instruction) {
+        return instruction.getOpcode().equals("set");
     }
 
-    private static boolean isOp(MOpcode node) {
-        return node.getOpcode().equals("op");
+    private static boolean isOp(LogicInstruction instruction) {
+        return instruction.getOpcode().equals("op");
     }
 }

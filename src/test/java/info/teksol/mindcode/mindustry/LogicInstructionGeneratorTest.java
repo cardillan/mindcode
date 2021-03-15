@@ -1,0 +1,237 @@
+package info.teksol.mindcode.mindustry;
+
+import info.teksol.mindcode.AbstractAstTest;
+import info.teksol.mindcode.ast.Seq;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class LogicInstructionGeneratorTest extends AbstractAstTest {
+    @Test
+    void convertsComplexAssignment() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("set", List.of("tmp0", "2")),
+                        new LogicInstruction("op", List.of("sub", "tmp1", "bar", "tmp0")),
+                        new LogicInstruction("set", List.of("tmp2", "3")),
+                        new LogicInstruction("op", List.of("mul", "tmp3", "tmp1", "tmp2")),
+                        new LogicInstruction("set", List.of("foo", "tmp3")),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("foo = (bar - 2) * 3"))
+        );
+    }
+
+    @Test
+    void convertsWhileLoopAndPrintFunctionCall() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("set", List.of("tmp0", "0")),
+                        new LogicInstruction("set", List.of("n", "tmp0")),
+                        new LogicInstruction("label", List.of("label0")),
+                        new LogicInstruction("set", List.of("tmp1", "5")),
+                        new LogicInstruction("op", List.of("lessThan", "tmp2", "n", "tmp1")),
+                        new LogicInstruction("jump", List.of("label1", "notEqual", "tmp2", "true")),
+                        new LogicInstruction("set", List.of("tmp3", "1")),
+                        new LogicInstruction("op", List.of("add", "tmp4", "n", "tmp3")),
+                        new LogicInstruction("set", List.of("n", "tmp4")),
+                        new LogicInstruction("jump", List.of("label0", "always")),
+                        new LogicInstruction("label", List.of("label1")),
+                        new LogicInstruction("set", List.of("tmp5", "\"n: \"")),
+                        new LogicInstruction("print", List.of("tmp5")),
+                        new LogicInstruction("print", List.of("n")),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = 0\nwhile n < 5 {\nn += 1\n}\nprint(\"n: \", n)"))
+        );
+    }
+
+    @Test
+    void convertsNullAndUnaryOp() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("op", List.of("not", "tmp0", "n")),
+                        new LogicInstruction("set", List.of("n", "tmp0")),
+                        new LogicInstruction("set", List.of("x", "null")),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = not n; x = null"))
+        );
+    }
+
+    @Test
+    void convertsSensorReadings() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("sensor", "tmp0", "foundation1", "@copper"),
+                        new LogicInstruction("sensor", "tmp1", "foundation1", "@itemCapacity"),
+                        new LogicInstruction("op", "lessThan", "tmp2", "tmp0", "tmp1"),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("foundation1.copper < foundation1.itemCapacity"))
+        );
+    }
+
+    @Test
+    void convertsBooleanOperations() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("label", List.of("label0")),
+                        new LogicInstruction("op", List.of("notEqual", "tmp0", "true", "false")),
+                        new LogicInstruction("jump", List.of("label1", "notEqual", "tmp0", "true")),
+                        new LogicInstruction("set", List.of("tmp1", "\"infinite loop!\"")),
+                        new LogicInstruction("print", List.of("tmp1")),
+                        new LogicInstruction("jump", List.of("label0", "always")),
+                        new LogicInstruction("label", List.of("label1")),
+                        new LogicInstruction("printflush", List.of("message1")),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("while true != false {\nprint(\"infinite loop!\")\n}\nprintflush(message1)\n"))
+        );
+    }
+
+    @Test
+    void convertsControlStatements() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("sensor", "tmp0", "foundation1", "@copper"),
+                        new LogicInstruction("sensor", "tmp1", "tank1", "@water"),
+                        new LogicInstruction("op", "strictEqual", "tmp2", "tmp0", "tmp1"),
+                        new LogicInstruction("control", "enabled", "conveyor1", "tmp2"),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("conveyor1.enabled = foundation1.copper === tank1.water"))
+        );
+    }
+
+    @Test
+    void convertsHeapAccesses() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("read", "tmp0", "cell2", "4"),
+                        new LogicInstruction("sensor", "tmp1", "conveyor1", "@enabled"),
+                        new LogicInstruction("op", "add", "tmp2", "tmp0", "tmp1"),
+                        new LogicInstruction("write", "tmp2", "cell1", "3"),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("cell1[3] = cell2[4] + conveyor1.enabled"))
+        );
+    }
+
+    @Test
+    void convertsIfExpression() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("read", "tmp0", "HEAP", "4"),
+                        new LogicInstruction("set", "tmp1", "0"),
+                        new LogicInstruction("op", "equal", "tmp2", "tmp0", "tmp1"),
+                        new LogicInstruction("jump", "label0", "notEqual", "tmp2", "true"),
+                        new LogicInstruction("set", "tmp5", "false"),
+                        new LogicInstruction("jump", "label1", "always"),
+                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("write", "true", "HEAP", "4"),
+                        new LogicInstruction("set", "tmp3", "1"),
+                        new LogicInstruction("op", "add", "tmp4", "n", "tmp3"),
+                        new LogicInstruction("set", "n", "tmp4"),
+                        new LogicInstruction("set", "tmp5", "tmp4"),
+                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("set", "value", "tmp5"),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}"))
+        );
+    }
+
+    @Test
+    void convertsFunctionsReturningValues() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("set", "tmp0", "9"),
+                        new LogicInstruction("set", "tmp1", "9"),
+                        new LogicInstruction("op", "pow", "tmp2", "tmp0", "tmp1"),
+                        new LogicInstruction("op", "rand", "tmp3", "tmp2"),
+                        new LogicInstruction("write", "tmp3", "cell1", "0"),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("cell1[0] = rand(9**9)"))
+        );
+    }
+
+    @Test
+    void convertsUbindAndControl() {
+        assertEquals(
+                List.of(
+                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("op", "strictEqual", "tmp0", "@unit", "null"),
+                        new LogicInstruction("jump", "label1", "notEqual", "tmp0", "true"),
+                        new LogicInstruction("ubind", "@poly"),
+                        new LogicInstruction("jump", "label0", "always"),
+                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateFrom(
+                        (Seq) translateToAst(
+                                "while @unit === null {\n  @unit = ubind(@poly)\n}\n")
+                )
+        );
+
+    }
+
+    @Test
+    void convertsReallifeTest1() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "0"),
+                                new LogicInstruction("set", "n", "tmp0"),
+                                new LogicInstruction("label", "label2"),
+                                new LogicInstruction("getlink", "tmp1", "n"),
+                                new LogicInstruction("set", "reactor", "tmp1"),
+                                new LogicInstruction("op", "notEqual", "tmp2", "tmp1", "null"),
+                                new LogicInstruction("jump", "label3", "notEqual", "tmp2", "true"),
+                                new LogicInstruction("sensor", "tmp3", "reactor", "@liquidCapacity"),
+                                new LogicInstruction("set", "tmp4", "0"),
+                                new LogicInstruction("op", "greaterThan", "tmp5", "tmp3", "tmp4"),
+                                new LogicInstruction("jump", "label0", "notEqual", "tmp5", "true"),
+                                new LogicInstruction("sensor", "tmp6", "reactor", "@cryofluid"),
+                                new LogicInstruction("sensor", "tmp7", "reactor", "@liquidCapacity"),
+                                new LogicInstruction("op", "div", "tmp8", "tmp6", "tmp7"),
+                                new LogicInstruction("set", "pct_avail", "tmp8"),
+                                new LogicInstruction("set", "tmp9", "0.25"),
+                                new LogicInstruction("op", "greaterThanEq", "tmp10", "pct_avail", "tmp9"),
+                                new LogicInstruction("control", "enabled", "reactor", "tmp10"),
+                                new LogicInstruction("set", "tmp11", "tmp10"),
+                                new LogicInstruction("jump", "label1", "always"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp11", "null"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("set", "tmp12", "1"),
+                                new LogicInstruction("op", "add", "tmp13", "n", "tmp12"),
+                                new LogicInstruction("set", "n", "tmp13"),
+                                new LogicInstruction("jump", "label2", "always"),
+                                new LogicInstruction("label", "label3"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(LogicInstructionGenerator.generateFrom(
+                        (Seq) translateToAst(
+                                "" +
+                                        "n = 0\n" +
+                                        "\n" +
+                                        "while (reactor = getlink(n)) != null {\n" +
+                                        "  if reactor.liquidCapacity > 0 {\n" +
+                                        "    pct_avail = reactor.cryofluid / reactor.liquidCapacity\n" +
+                                        "    reactor.enabled = pct_avail >= 0.25\n" +
+                                        "  }\n" +
+                                        "\n" +
+                                        "  n += 1\n" +
+                                        "}\n" +
+                                        "")
+                        )
+                )
+        );
+    }
+
+}

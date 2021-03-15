@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MOpcodePrinter {
+public class LogicInstructionPrinter {
     private static final Map<String, Integer> FN_ARGS;
 
     static {
@@ -29,24 +29,24 @@ public class MOpcodePrinter {
         FN_ARGS = Collections.unmodifiableMap(args);
     }
 
-    public static String toString(List<MOpcode> opcodes) {
+    public static String toString(List<LogicInstruction> instructions) {
         final StringBuilder buffer = new StringBuilder();
-        opcodes.forEach((opcode) -> {
-            if (!FN_ARGS.containsKey(opcode.getOpcode())) {
-                throw new GenerationException("Don't know how many arguments [" + opcode.getOpcode() + "] needs; add it to FN_ARGS");
+        instructions.forEach((instruction) -> {
+            if (!FN_ARGS.containsKey(instruction.getOpcode())) {
+                throw new GenerationException("Don't know how many arguments [" + instruction.getOpcode() + "] needs; add it to FN_ARGS");
             }
-            buffer.append(opcode.getOpcode());
+            buffer.append(instruction.getOpcode());
             buffer.append(" ");
-            addArgs(FN_ARGS.get(opcode.getOpcode()), buffer, opcode);
+            addArgs(FN_ARGS.get(instruction.getOpcode()), buffer, instruction);
         });
 
         return buffer.toString();
     }
 
-    private static void addArgs(int count, StringBuilder buffer, MOpcode opcode) {
+    private static void addArgs(int count, StringBuilder buffer, LogicInstruction instruction) {
         for (int i = 0; i < count; i++) {
-            if (opcode.getArgs().size() > i) {
-                buffer.append(opcode.getArgs().get(i));
+            if (instruction.getArgs().size() > i) {
+                buffer.append(instruction.getArgs().get(i));
             } else {
                 buffer.append("0");
             }

@@ -3,19 +3,19 @@ package info.teksol.mindcode.mindustry;
 import java.util.List;
 import java.util.Objects;
 
-public class MOpcode {
+public class LogicInstruction {
     private final String opcode;
     private final List<String> args;
 
-    public MOpcode(String opcode) {
+    public LogicInstruction(String opcode) {
         this(opcode, List.of());
     }
 
-    public MOpcode(String opcode, String... args) {
+    public LogicInstruction(String opcode, String... args) {
         this(opcode, List.of(args));
     }
 
-    public MOpcode(String opcode, List<String> args) {
+    public LogicInstruction(String opcode, List<String> args) {
         this.opcode = opcode;
         this.args = args;
     }
@@ -33,7 +33,7 @@ public class MOpcode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MOpcode that = (MOpcode) o;
+        LogicInstruction that = (LogicInstruction) o;
         return Objects.equals(opcode, that.opcode) &&
                 Objects.equals(args, that.args);
     }
@@ -45,7 +45,7 @@ public class MOpcode {
 
     @Override
     public String toString() {
-        return "MOpcode{" +
+        return "LogicInstruction{" +
                 "opcode='" + opcode + '\'' +
                 ", args=" + args +
                 '}';

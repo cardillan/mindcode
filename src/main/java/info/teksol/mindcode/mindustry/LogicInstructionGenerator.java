@@ -9,7 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, List<MOpcode>>> {
+/**
+ * Converts from the Mindcode AST into a list of Logic instructions.
+ *
+ * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
+ */
+public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<String>, List<LogicInstruction>>> {
     private int tmp;
     private int label;
 
@@ -50,52 +55,53 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
 
      */
 
-    public static List<MOpcode> generateFrom(Seq program) {
-        final Tuple2<Optional<String>, List<MOpcode>> opcodes = new MOpcodeGenerator().visit(program);
-        final List<MOpcode> result = new ArrayList<>(opcodes._2);
-        result.add(new MOpcode("end"));
+    public static List<LogicInstruction> generateFrom(Seq program) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> instructions =
+                new LogicInstructionGenerator().visit(program);
+        final List<LogicInstruction> result = new ArrayList<>(instructions._2);
+        result.add(new LogicInstruction("end"));
         return result;
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitHeapRead(HeapRead node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitHeapRead(HeapRead node) {
         final String tmp = nextTemp();
         return new Tuple2<>(
                 Optional.of(tmp),
-                List.of(new MOpcode("read", tmp, node.getCellName(), node.getAddress()))
+                List.of(new LogicInstruction("read", tmp, node.getCellName(), node.getAddress()))
         );
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitHeapWrite(HeapWrite node) {
-        final Tuple2<Optional<String>, List<MOpcode>> value = visit(node.getValue());
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitHeapWrite(HeapWrite node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> value = visit(node.getValue());
         if (!value._1.isPresent()) {
             throw new GenerationException("Expected to find tmp variable from heap write node, found: " + value);
         }
 
-        final List<MOpcode> result = new ArrayList<>(value._2);
-        result.add(new MOpcode("write", value._1.get(), node.getCellName(), node.getAddress()));
+        final List<LogicInstruction> result = new ArrayList<>(value._2);
+        result.add(new LogicInstruction("write", value._1.get(), node.getCellName(), node.getAddress()));
         return new Tuple2<>(value._1, result);
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitControl(Control node) {
-        final Tuple2<Optional<String>, List<MOpcode>> value = visit(node.getValue());
-        final List<MOpcode> result = new ArrayList<>(value._2);
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitControl(Control node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> value = visit(node.getValue());
+        final List<LogicInstruction> result = new ArrayList<>(value._2);
         if (!value._1.isPresent()) {
             throw new GenerationException("Expected to find tmp variable from control node, found: " + value);
         }
 
-        result.add(new MOpcode("control", node.getProperty(), node.getTarget(), value._1.get()));
+        result.add(new LogicInstruction("control", node.getProperty(), node.getTarget(), value._1.get()));
 
         return new Tuple2<>(value._1, result);
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitIfExpression(IfExpression node) {
-        final Tuple2<Optional<String>, List<MOpcode>> cond = visit(node.getCondition());
-        final Tuple2<Optional<String>, List<MOpcode>> trueBranch = visit(node.getTrueBranch());
-        final Tuple2<Optional<String>, List<MOpcode>> falseBranch = visit(node.getFalseBranch());
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitIfExpression(IfExpression node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> cond = visit(node.getCondition());
+        final Tuple2<Optional<String>, List<LogicInstruction>> trueBranch = visit(node.getTrueBranch());
+        final Tuple2<Optional<String>, List<LogicInstruction>> falseBranch = visit(node.getFalseBranch());
         if (!cond._1.isPresent()) {
             throw new GenerationException("Expected to receive a value from the cond branch of an if expression; received " + cond);
         }
@@ -107,24 +113,24 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         final String elseBranch = nextLabel();
         final String endBranch = nextLabel();
 
-        final List<MOpcode> result = new ArrayList<>(cond._2);
-        result.add(new MOpcode("jump", elseBranch, "notEqual", cond._1.get(), "true"));
+        final List<LogicInstruction> result = new ArrayList<>(cond._2);
+        result.add(new LogicInstruction("jump", elseBranch, "notEqual", cond._1.get(), "true"));
         result.addAll(trueBranch._2);
-        result.add(new MOpcode("set", tmp, trueBranch._1.get()));
-        result.add(new MOpcode("jump", endBranch, "always"));
-        result.add(new MOpcode("label", elseBranch));
+        result.add(new LogicInstruction("set", tmp, trueBranch._1.get()));
+        result.add(new LogicInstruction("jump", endBranch, "always"));
+        result.add(new LogicInstruction("label", elseBranch));
         result.addAll(falseBranch._2);
-        result.add(new MOpcode("set", tmp, falseBranch._1.orElse("null")));
-        result.add(new MOpcode("label", endBranch));
+        result.add(new LogicInstruction("set", tmp, falseBranch._1.orElse("null")));
+        result.add(new LogicInstruction("label", endBranch));
 
         return new Tuple2<>(Optional.of(tmp), result);
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitSeq(Seq seq) {
-        final Tuple2<Optional<String>, List<MOpcode>> rest = visit(seq.getRest());
-        final Tuple2<Optional<String>, List<MOpcode>> last = visit(seq.getLast());
-        final List<MOpcode> result = new ArrayList<>();
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitSeq(Seq seq) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> rest = visit(seq.getRest());
+        final Tuple2<Optional<String>, List<LogicInstruction>> last = visit(seq.getLast());
+        final List<LogicInstruction> result = new ArrayList<>();
         result.addAll(rest._2);
         result.addAll(last._2);
 
@@ -132,62 +138,62 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitNoOp(NoOp node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitNoOp(NoOp node) {
         return new Tuple2<>(Optional.empty(), List.of());
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitVarAssignment(VarAssignment node) {
-        final Tuple2<Optional<String>, List<MOpcode>> rvalue = visit(node.getRvalue());
-        final List<MOpcode> result = new ArrayList<>(rvalue._2);
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitVarAssignment(VarAssignment node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> rvalue = visit(node.getRvalue());
+        final List<LogicInstruction> result = new ArrayList<>(rvalue._2);
         if (!rvalue._1.isPresent()) {
             throw new GenerationException("Expected a variable name, found none in " + result);
         }
 
-        result.add(new MOpcode("set", List.of(node.getVarName(), rvalue._1.get())));
+        result.add(new LogicInstruction("set", List.of(node.getVarName(), rvalue._1.get())));
         return new Tuple2<>(rvalue._1, result);
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitUnaryOp(UnaryOp node) {
-        final Tuple2<Optional<String>, List<MOpcode>> expression = visit(node.getExpression());
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitUnaryOp(UnaryOp node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> expression = visit(node.getExpression());
         if (!expression._1.isPresent()) {
             throw new GenerationException("Expected to have a variable in " + expression);
         }
 
         final String tmp = nextTemp();
-        final List<MOpcode> result = new ArrayList<>(expression._2);
-        result.add(new MOpcode("op", List.of(translateUnaryOpToCode(node.getOp()), tmp, expression._1.get())));
+        final List<LogicInstruction> result = new ArrayList<>(expression._2);
+        result.add(new LogicInstruction("op", List.of(translateUnaryOpToCode(node.getOp()), tmp, expression._1.get())));
         return new Tuple2<>(Optional.of(tmp), result);
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitWhileStatement(WhileStatement node) {
-        final Tuple2<Optional<String>, List<MOpcode>> cond = visit(node.getCondition());
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitWhileStatement(WhileStatement node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> cond = visit(node.getCondition());
         if (!cond._1.isPresent()) {
             throw new GenerationException("Expected a variable name for the while condition, found none in " + cond);
         }
 
-        final Tuple2<Optional<String>, List<MOpcode>> body = visit(node.getBody());
+        final Tuple2<Optional<String>, List<LogicInstruction>> body = visit(node.getBody());
 
-        final List<MOpcode> result = new ArrayList<>();
+        final List<LogicInstruction> result = new ArrayList<>();
         final String condLabel = nextLabel();
         final String doneLabel = nextLabel();
-        result.add(new MOpcode("label", List.of(condLabel)));
+        result.add(new LogicInstruction("label", List.of(condLabel)));
         result.addAll(cond._2);
-        result.add(new MOpcode("jump", List.of(doneLabel, "notEqual", cond._1.get(), "true")));
+        result.add(new LogicInstruction("jump", List.of(doneLabel, "notEqual", cond._1.get(), "true")));
         result.addAll(body._2);
-        result.add(new MOpcode("jump", List.of(condLabel, "always")));
-        result.add(new MOpcode("label", List.of(doneLabel)));
+        result.add(new LogicInstruction("jump", List.of(condLabel, "always")));
+        result.add(new LogicInstruction("label", List.of(doneLabel)));
 
         return new Tuple2<>(body._1, result);
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitFunctionCall(FunctionCall node) {
-        final List<Tuple2<Optional<String>, List<MOpcode>>> params =
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitFunctionCall(FunctionCall node) {
+        final List<Tuple2<Optional<String>, List<LogicInstruction>>> params =
                 node.getParams().stream().map(this::visit).collect(Collectors.toList());
-        final List<MOpcode> result = new ArrayList<>();
+        final List<LogicInstruction> result = new ArrayList<>();
         if (!params.stream().allMatch((param) -> param._1.isPresent())) {
             throw new GenerationException("Expected all parameters to function calls to return values, found " + params);
         }
@@ -197,10 +203,11 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         return new Tuple2<>(tmp, result);
     }
 
-    private Optional<String> handleFunctionCall(String functionName, List<String> params, List<MOpcode> result) {
+    private Optional<String> handleFunctionCall(String functionName, List<String> params, List<LogicInstruction> result) {
         switch (functionName) {
             case "print":
                 return handlePrint(params, result);
+
             case "printflush":
                 return handlePrintflush(params, result);
 
@@ -230,79 +237,79 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
         }
     }
 
-    private Optional<String> handleFlag(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleFlag(List<String> params, List<LogicInstruction> result) {
         // ucontrol flag FLAG 0 0 0 0
-        result.add(new MOpcode("ucontrol", "flag", params.get(0)));
+        result.add(new LogicInstruction("ucontrol", "flag", params.get(0)));
         return Optional.of(params.get(0));
     }
 
-    private Optional<String> handleItemDrop(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleItemDrop(List<String> params, List<LogicInstruction> result) {
         // ucontrol itemDrop vault1 100 0 0 0
-        result.add(new MOpcode("ucontrol", "itemDrop", params.get(0), params.get(1)));
+        result.add(new LogicInstruction("ucontrol", "itemDrop", params.get(0), params.get(1)));
         return Optional.of("null");
     }
 
-    private Optional<String> handleMine(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleMine(List<String> params, List<LogicInstruction> result) {
         // ucontrol mine 1 2 0 0 0
-        result.add(new MOpcode("ucontrol", "mine", params.get(0), params.get(1)));
+        result.add(new LogicInstruction("ucontrol", "mine", params.get(0), params.get(1)));
         return Optional.of("null");
     }
 
-    private Optional<String> handleGetlink(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleGetlink(List<String> params, List<LogicInstruction> result) {
         // getlink result 0
         final String tmp = nextTemp();
-        result.add(new MOpcode("getlink", tmp, params.get(0)));
+        result.add(new LogicInstruction("getlink", tmp, params.get(0)));
         return Optional.of(tmp);
     }
 
 
-    private Optional<String> handleRand(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleRand(List<String> params, List<LogicInstruction> result) {
         // op rand result 200 0
         final String tmp = nextTemp();
-        result.add(new MOpcode("op", "rand", tmp, params.get(0)));
+        result.add(new LogicInstruction("op", "rand", tmp, params.get(0)));
         return Optional.of(tmp);
     }
 
-    private Optional<String> handleMove(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleMove(List<String> params, List<LogicInstruction> result) {
         // ucontrol move 14 15 0 0 0
-        result.add(new MOpcode("ucontrol", "move", params.get(0), params.get(1)));
+        result.add(new LogicInstruction("ucontrol", "move", params.get(0), params.get(1)));
         return Optional.empty();
     }
 
-    private Optional<String> handleUbind(List<String> params, List<MOpcode> result) {
+    private Optional<String> handleUbind(List<String> params, List<LogicInstruction> result) {
         // ubind @poly
-        result.add(new MOpcode("ubind", params.get(0)));
+        result.add(new LogicInstruction("ubind", params.get(0)));
         return Optional.empty();
     }
 
-    private Optional<String> handlePrintflush(List<String> params, List<MOpcode> result) {
-        params.forEach((param) -> result.add(new MOpcode("printflush", List.of(param))));
+    private Optional<String> handlePrintflush(List<String> params, List<LogicInstruction> result) {
+        params.forEach((param) -> result.add(new LogicInstruction("printflush", List.of(param))));
         return Optional.empty();
     }
 
-    private Optional<String> handlePrint(List<String> params, List<MOpcode> result) {
-        params.forEach((param) -> result.add(new MOpcode("print", List.of(param))));
+    private Optional<String> handlePrint(List<String> params, List<LogicInstruction> result) {
+        params.forEach((param) -> result.add(new LogicInstruction("print", List.of(param))));
         return Optional.empty();
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitBinaryOp(BinaryOp node) {
-        final Tuple2<Optional<String>, List<MOpcode>> left = visit(node.getLeft());
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitBinaryOp(BinaryOp node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> left = visit(node.getLeft());
         if (!left._1.isPresent()) {
             throw new GenerationException("Expected a variable name, found none in " + left);
         }
 
-        final Tuple2<Optional<String>, List<MOpcode>> right = visit(node.getRight());
+        final Tuple2<Optional<String>, List<LogicInstruction>> right = visit(node.getRight());
         if (!right._1.isPresent()) {
             throw new GenerationException("Expected a variable name, found none in " + right);
         }
 
         final String tmp = nextTemp();
-        final List<MOpcode> result = new ArrayList<>();
+        final List<LogicInstruction> result = new ArrayList<>();
         result.addAll(left._2);
         result.addAll(right._2);
         result.add(
-                new MOpcode(
+                new LogicInstruction(
                         "op",
                         List.of(translateBinaryOpToCode(node.getOp()), tmp, left._1.get(), right._1.get())
                 )
@@ -312,34 +319,34 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitUnitAssignment(UnitAssignment node) {
-        final Tuple2<Optional<String>, List<MOpcode>> value = visit(node.getValue());
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitUnitAssignment(UnitAssignment node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> value = visit(node.getValue());
         return new Tuple2<>(Optional.of("@" + node.getName()), value._2);
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitUnitRef(UnitRef node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitUnitRef(UnitRef node) {
         return new Tuple2<>(Optional.of("@" + node.getName()), List.of());
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitSensorReading(SensorReading node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitSensorReading(SensorReading node) {
         final String tmp = nextTemp();
-        return new Tuple2<>(Optional.of(tmp), List.of(new MOpcode("sensor", tmp, node.getTarget(), node.getSensor())));
+        return new Tuple2<>(Optional.of(tmp), List.of(new LogicInstruction("sensor", tmp, node.getTarget(), node.getSensor())));
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitNullLiteral(NullLiteral node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitNullLiteral(NullLiteral node) {
         return new Tuple2<>(Optional.of("null"), List.of());
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitBooleanLiteral(BooleanLiteral node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitBooleanLiteral(BooleanLiteral node) {
         return new Tuple2<>(Optional.of(String.valueOf(node.getValue())), List.of());
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitVarRef(VarRef node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitVarRef(VarRef node) {
         return new Tuple2<>(
                 Optional.of(node.getName()),
                 List.of()
@@ -347,12 +354,12 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitStringLiteral(StringLiteral node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitStringLiteral(StringLiteral node) {
         final String tmp = nextTemp();
         return new Tuple2<>(
                 Optional.of(tmp),
                 List.of(
-                        new MOpcode(
+                        new LogicInstruction(
                                 "set",
                                 List.of(
                                         tmp,
@@ -364,11 +371,11 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
     }
 
     @Override
-    public Tuple2<Optional<String>, List<MOpcode>> visitNumericLiteral(NumericLiteral node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitNumericLiteral(NumericLiteral node) {
         final String tmp = nextTemp();
         return new Tuple2<>(
                 Optional.of(tmp),
-                List.of(new MOpcode("set", List.of(tmp, node.getLiteral()))
+                List.of(new LogicInstruction("set", List.of(tmp, node.getLiteral()))
                 )
         );
     }

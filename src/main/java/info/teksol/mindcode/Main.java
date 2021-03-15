@@ -45,13 +45,13 @@ public class Main {
 
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
-        final List<MOpcode> result = MOpcodeLabelResolver.resolve(
-                MOpcodePeepholeOptimizer.optimize(
-                        MOpcodeGenerator.generateFrom(prog)
+        final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
+                LogicInstructionPeepholeOptimizer.optimize(
+                        LogicInstructionGenerator.generateFrom(prog)
                 )
         );
 
-        final String opcodes = MOpcodePrinter.toString(result);
+        final String opcodes = LogicInstructionPrinter.toString(result);
         System.out.println(opcodes);
         errors.forEach(System.err::println);
     }

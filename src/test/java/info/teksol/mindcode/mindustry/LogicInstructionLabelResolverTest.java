@@ -8,19 +8,19 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MOpcodeLabelResolverTest extends AbstractAstTest {
+class LogicInstructionLabelResolverTest extends AbstractAstTest {
     @Test
     void resolvesAbsoluteAddressesOfLabels() {
         assertEquals(
                 List.of(
-                        new MOpcode("jump", "3", "notEqual", "true", "true"),
-                        new MOpcode("op", "add", "n", "n", "1"),
-                        new MOpcode("jump", "0", "always"),
-                        new MOpcode("end")
+                        new LogicInstruction("jump", "3", "notEqual", "true", "true"),
+                        new LogicInstruction("op", "add", "n", "n", "1"),
+                        new LogicInstruction("jump", "0", "always"),
+                        new LogicInstruction("end")
                 ),
-                MOpcodeLabelResolver.resolve(
-                        MOpcodePeepholeOptimizer.optimize(
-                                MOpcodeGenerator.generateFrom(
+                LogicInstructionLabelResolver.resolve(
+                        LogicInstructionPeepholeOptimizer.optimize(
+                                LogicInstructionGenerator.generateFrom(
                                         (Seq) translateToAst("while true {\nn = n + 1\n}\n")
                                 )
                         )
