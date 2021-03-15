@@ -29,7 +29,7 @@ public class MindcodeParser extends Parser {
 		RULE_while_statement = 4, RULE_block_body = 5, RULE_block_statement_list = 6, 
 		RULE_lvalue = 7, RULE_rvalue = 8, RULE_numeric = 9, RULE_unary_minus = 10, 
 		RULE_unit_ref = 11, RULE_funcall = 12, RULE_params_list = 13, RULE_if_expression = 14, 
-		RULE_heap_read = 15, RULE_address = 16, RULE_sensor_read = 17, RULE_assignment = 18, 
+		RULE_heap_ref = 15, RULE_address = 16, RULE_sensor_read = 17, RULE_assignment = 18, 
 		RULE_id = 19, RULE_literal_t = 20, RULE_float_t = 21, RULE_int_t = 22, 
 		RULE_bool_t = 23, RULE_null_t = 24, RULE_terminator = 25, RULE_crlf = 26, 
 		RULE_resource = 27;
@@ -38,7 +38,7 @@ public class MindcodeParser extends Parser {
 			"program", "expression_list", "expression", "control_statement", "while_statement", 
 			"block_body", "block_statement_list", "lvalue", "rvalue", "numeric", 
 			"unary_minus", "unit_ref", "funcall", "params_list", "if_expression", 
-			"heap_read", "address", "sensor_read", "assignment", "id", "literal_t", 
+			"heap_ref", "address", "sensor_read", "assignment", "id", "literal_t", 
 			"float_t", "int_t", "bool_t", "null_t", "terminator", "crlf", "resource"
 		};
 	}
@@ -689,8 +689,8 @@ public class MindcodeParser extends Parser {
 		public Sensor_readContext sensor_read() {
 			return getRuleContext(Sensor_readContext.class,0);
 		}
-		public Heap_readContext heap_read() {
-			return getRuleContext(Heap_readContext.class,0);
+		public Heap_refContext heap_ref() {
+			return getRuleContext(Heap_refContext.class,0);
 		}
 		public List<RvalueContext> rvalue() {
 			return getRuleContexts(RvalueContext.class);
@@ -817,7 +817,7 @@ public class MindcodeParser extends Parser {
 			case 11:
 				{
 				setState(122);
-				heap_read();
+				heap_ref();
 				}
 				break;
 			case 12:
@@ -1403,7 +1403,7 @@ public class MindcodeParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Heap_readContext extends ParserRuleContext {
+	public static class Heap_refContext extends ParserRuleContext {
 		public IdContext target;
 		public AddressContext addr;
 		public TerminalNode LEFT_SBRACKET() { return getToken(MindcodeParser.LEFT_SBRACKET, 0); }
@@ -1414,37 +1414,37 @@ public class MindcodeParser extends Parser {
 		public AddressContext address() {
 			return getRuleContext(AddressContext.class,0);
 		}
-		public Heap_readContext(ParserRuleContext parent, int invokingState) {
+		public Heap_refContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_heap_read; }
+		@Override public int getRuleIndex() { return RULE_heap_ref; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).enterHeap_read(this);
+			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).enterHeap_ref(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).exitHeap_read(this);
+			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).exitHeap_ref(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeVisitor ) return ((MindcodeVisitor<? extends T>)visitor).visitHeap_read(this);
+			if ( visitor instanceof MindcodeVisitor ) return ((MindcodeVisitor<? extends T>)visitor).visitHeap_ref(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final Heap_readContext heap_read() throws RecognitionException {
-		Heap_readContext _localctx = new Heap_readContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_heap_read);
+	public final Heap_refContext heap_ref() throws RecognitionException {
+		Heap_refContext _localctx = new Heap_refContext(_ctx, getState());
+		enterRule(_localctx, 30, RULE_heap_ref);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(201);
-			((Heap_readContext)_localctx).target = id();
+			((Heap_refContext)_localctx).target = id();
 			setState(202);
 			match(LEFT_SBRACKET);
 			setState(203);
-			((Heap_readContext)_localctx).addr = address();
+			((Heap_refContext)_localctx).addr = address();
 			setState(204);
 			match(RIGHT_SBRACKET);
 			}
@@ -1597,8 +1597,8 @@ public class MindcodeParser extends Parser {
 		public TerminalNode DIV_ASSIGN() { return getToken(MindcodeParser.DIV_ASSIGN, 0); }
 		public TerminalNode MOD_ASSIGN() { return getToken(MindcodeParser.MOD_ASSIGN, 0); }
 		public TerminalNode EXP_ASSIGN() { return getToken(MindcodeParser.EXP_ASSIGN, 0); }
-		public Heap_readContext heap_read() {
-			return getRuleContext(Heap_readContext.class,0);
+		public Heap_refContext heap_ref() {
+			return getRuleContext(Heap_refContext.class,0);
 		}
 		public AssignmentContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1662,7 +1662,7 @@ public class MindcodeParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(226);
-				heap_read();
+				heap_ref();
 				setState(227);
 				match(ASSIGN);
 				setState(228);
@@ -1673,7 +1673,7 @@ public class MindcodeParser extends Parser {
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(230);
-				heap_read();
+				heap_ref();
 				setState(231);
 				((AssignmentContext)_localctx).op = _input.LT(1);
 				_la = _input.LA(1);

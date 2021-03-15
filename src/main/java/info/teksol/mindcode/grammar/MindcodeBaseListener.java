@@ -196,13 +196,13 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterHeap_read(MindcodeParser.Heap_readContext ctx) { }
+	@Override public void enterHeap_ref(MindcodeParser.Heap_refContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitHeap_read(MindcodeParser.Heap_readContext ctx) { }
+	@Override public void exitHeap_ref(MindcodeParser.Heap_refContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

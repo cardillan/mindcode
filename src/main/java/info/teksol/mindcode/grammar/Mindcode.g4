@@ -34,7 +34,7 @@ rvalue : lvalue
        | numeric
        | null_t
        | sensor_read
-       | heap_read
+       | heap_ref
        | rvalue op=EXP rvalue
        | op=NOT rvalue
        | rvalue op=( MUL | DIV | MOD ) rvalue
@@ -63,7 +63,7 @@ params_list : rvalue?
 
 if_expression : IF cond=rvalue LEFT_CBRACKET ( terminator )? true_branch=block_body RIGHT_CBRACKET ( ELSE LEFT_CBRACKET ( terminator )? false_branch=block_body RIGHT_CBRACKET )?;
 
-heap_read : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
+heap_ref : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
 
 address : int_t;
 
@@ -73,8 +73,8 @@ sensor_read : target=id DOT resource
 
 assignment : target=lvalue ASSIGN value=rvalue
            | target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
-           | heap_read ASSIGN value=rvalue
-           | heap_read op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
+           | heap_ref ASSIGN value=rvalue
+           | heap_ref op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
             // TODO: replace flag(FLAG) with @unit.flag = FLAG -- it simply makes more sense
            ;
 

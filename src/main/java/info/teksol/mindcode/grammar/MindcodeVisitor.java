@@ -101,11 +101,11 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIf_expression(MindcodeParser.If_expressionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#heap_read}.
+	 * Visit a parse tree produced by {@link MindcodeParser#heap_ref}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitHeap_read(MindcodeParser.Heap_readContext ctx);
+	T visitHeap_ref(MindcodeParser.Heap_refContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#address}.
 	 * @param ctx the parse tree

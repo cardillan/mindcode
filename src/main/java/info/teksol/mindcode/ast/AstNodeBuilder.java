@@ -113,13 +113,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             }
         }
 
-        if (ctx.heap_read() != null) {
-            final AstNode lvalue = visitHeap_read(ctx.heap_read());
+        if (ctx.heap_ref() != null) {
+            final AstNode lvalue = visitHeap_ref(ctx.heap_ref());
             final AstNode rvalue = visitRvalue(ctx.value);
             if (ctx.op != null) {
                 // +=, -=, etc...
                 return new HeapWrite(
-                        ctx.heap_read().target.getText(), ctx.heap_read().addr.getText(),
+                        ctx.heap_ref().target.getText(), ctx.heap_ref().addr.getText(),
                         new BinaryOp(
                                 lvalue,
                                 ctx.op.getText().replace("=", ""),
@@ -129,7 +129,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             } else {
                 // simple assignment
                 return new HeapWrite(
-                        ctx.heap_read().target.getText(), ctx.heap_read().addr.getText(),
+                        ctx.heap_ref().target.getText(), ctx.heap_ref().addr.getText(),
                         rvalue
                 );
             }
@@ -145,7 +145,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitHeap_read(MindcodeParser.Heap_readContext ctx) {
+    public AstNode visitHeap_ref(MindcodeParser.Heap_refContext ctx) {
         return new HeapRead(ctx.target.getText(), ctx.addr.getText());
     }
 
