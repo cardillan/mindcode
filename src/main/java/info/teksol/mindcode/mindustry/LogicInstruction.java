@@ -20,6 +20,25 @@ public class LogicInstruction {
         this.args = args;
     }
 
+    public boolean isWrite() {
+        return getOpcode().equals("write");
+    }
+
+    public boolean isPrint() {
+        return getOpcode().equals("print");
+    }
+
+    public boolean isJump() {
+        return getOpcode().equals("jump");
+    }
+
+    public boolean isSet() {
+        return getOpcode().equals("set");
+    }
+
+    public boolean isOp() {
+        return getOpcode().equals("op");
+    }
 
     public String getOpcode() {
         return opcode;

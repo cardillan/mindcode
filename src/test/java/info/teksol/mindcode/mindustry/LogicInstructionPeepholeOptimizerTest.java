@@ -76,7 +76,7 @@ class LogicInstructionPeepholeOptimizerTest extends AbstractAstTest {
     void collapsesAdjacentAssignments() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("op", List.of("add", "result", "1", "2")),
+                        new LogicInstruction("op", "add", "result", "1", "2"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionPeepholeOptimizer.optimize(
@@ -93,7 +93,7 @@ class LogicInstructionPeepholeOptimizerTest extends AbstractAstTest {
     void collapsesSimpleAssignments() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("set", List.of("n", "0")),
+                        new LogicInstruction("set", "n", "0"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionPeepholeOptimizer.optimize(

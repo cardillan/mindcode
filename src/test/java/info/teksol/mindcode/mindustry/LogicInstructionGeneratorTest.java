@@ -13,11 +13,11 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     void convertsComplexAssignment() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("set", List.of("tmp0", "2")),
-                        new LogicInstruction("op", List.of("sub", "tmp1", "bar", "tmp0")),
-                        new LogicInstruction("set", List.of("tmp2", "3")),
-                        new LogicInstruction("op", List.of("mul", "tmp3", "tmp1", "tmp2")),
-                        new LogicInstruction("set", List.of("foo", "tmp3")),
+                        new LogicInstruction("set", "tmp0", "2"),
+                        new LogicInstruction("op", "sub", "tmp1", "bar", "tmp0"),
+                        new LogicInstruction("set", "tmp2", "3"),
+                        new LogicInstruction("op", "mul", "tmp3", "tmp1", "tmp2"),
+                        new LogicInstruction("set", "foo", "tmp3"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom((Seq) translateToAst("foo = (bar - 2) * 3"))
@@ -28,20 +28,20 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     void convertsWhileLoopAndPrintFunctionCall() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("set", List.of("tmp0", "0")),
-                        new LogicInstruction("set", List.of("n", "tmp0")),
-                        new LogicInstruction("label", List.of("label0")),
-                        new LogicInstruction("set", List.of("tmp1", "5")),
-                        new LogicInstruction("op", List.of("lessThan", "tmp2", "n", "tmp1")),
-                        new LogicInstruction("jump", List.of("label1", "notEqual", "tmp2", "true")),
-                        new LogicInstruction("set", List.of("tmp3", "1")),
-                        new LogicInstruction("op", List.of("add", "tmp4", "n", "tmp3")),
-                        new LogicInstruction("set", List.of("n", "tmp4")),
-                        new LogicInstruction("jump", List.of("label0", "always")),
-                        new LogicInstruction("label", List.of("label1")),
-                        new LogicInstruction("set", List.of("tmp5", "\"n: \"")),
-                        new LogicInstruction("print", List.of("tmp5")),
-                        new LogicInstruction("print", List.of("n")),
+                        new LogicInstruction("set", "tmp0", "0"),
+                        new LogicInstruction("set", "n", "tmp0"),
+                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("set", "tmp1", "5"),
+                        new LogicInstruction("op", "lessThan", "tmp2", "n", "tmp1"),
+                        new LogicInstruction("jump", "label1", "notEqual", "tmp2", "true"),
+                        new LogicInstruction("set", "tmp3", "1"),
+                        new LogicInstruction("op", "add", "tmp4", "n", "tmp3"),
+                        new LogicInstruction("set", "n", "tmp4"),
+                        new LogicInstruction("jump", "label0", "always"),
+                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("set", "tmp5", "\"n: \""),
+                        new LogicInstruction("print", "tmp5"),
+                        new LogicInstruction("print", "n"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = 0\nwhile n < 5 {\nn += 1\n}\nprint(\"n: \", n)"))
@@ -52,9 +52,9 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     void convertsNullAndUnaryOp() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("op", List.of("not", "tmp0", "n")),
-                        new LogicInstruction("set", List.of("n", "tmp0")),
-                        new LogicInstruction("set", List.of("x", "null")),
+                        new LogicInstruction("op", "not", "tmp0", "n"),
+                        new LogicInstruction("set", "n", "tmp0"),
+                        new LogicInstruction("set", "x", "null"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = not n; x = null"))
@@ -78,14 +78,14 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     void convertsBooleanOperations() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("label", List.of("label0")),
-                        new LogicInstruction("op", List.of("notEqual", "tmp0", "true", "false")),
-                        new LogicInstruction("jump", List.of("label1", "notEqual", "tmp0", "true")),
-                        new LogicInstruction("set", List.of("tmp1", "\"infinite loop!\"")),
-                        new LogicInstruction("print", List.of("tmp1")),
-                        new LogicInstruction("jump", List.of("label0", "always")),
-                        new LogicInstruction("label", List.of("label1")),
-                        new LogicInstruction("printflush", List.of("message1")),
+                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("op", "notEqual", "tmp0", "true", "false"),
+                        new LogicInstruction("jump", "label1", "notEqual", "tmp0", "true"),
+                        new LogicInstruction("set", "tmp1", "\"infinite loop!\""),
+                        new LogicInstruction("print", "tmp1"),
+                        new LogicInstruction("jump", "label0", "always"),
+                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("printflush", "message1"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom((Seq) translateToAst("while true != false {\nprint(\"infinite loop!\")\n}\nprintflush(message1)\n"))
