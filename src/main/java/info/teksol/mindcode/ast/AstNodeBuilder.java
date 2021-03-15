@@ -21,7 +21,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         } else if (ctx.expression() != null) {
             return visit(ctx.expression());
         } else {
-            throw new ParsingException("Failed to parse expression list: " + ctx.getText());
+            return new NoOp();
         }
     }
 

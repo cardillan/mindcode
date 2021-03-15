@@ -9,6 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AstNodeBuilderTest extends AbstractAstTest {
     @Test
+    void parsesTheEmptyProgram() {
+        assertEquals(
+                new Seq(new NoOp()),
+                translateToAst("")
+        );
+    }
+
+    @Test
     void parsesSimpleAssignment() {
         assertEquals(
                 new Seq(
