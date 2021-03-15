@@ -11,49 +11,12 @@ import java.util.stream.Collectors;
 
 /**
  * Converts from the Mindcode AST into a list of Logic instructions.
- *
+ * <p>
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<String>, List<LogicInstruction>>> {
     private int tmp;
     private int label;
-
-    /*
-
-        read result cell1 0
-        write result cell1 0
-        print "frog"
-        printflush message1
-        draw clear r g b 0 0 0
-        draw color r g b a 0 0
-        draw stroke strokewidth 0 0 255 0 0
-        draw line linex liney linex1 liney2 0 0
-        draw rect rectx recty rectw recth 0 0
-        draw lineRect rectx recty rectw recth 0 0
-        draw poly polyx polyy polysides polyradius polyrotation 0
-        draw linePoly polyx polyy polysides polyradius polyrotation 0
-        draw triangle trix0 triy1 trix1 triy1 trix2 triy2
-        draw image imgx imgy @copper imgsize imgrot triy2
-        drawflush display1
-        getlink result 0
-        control enabled block1 yesno 0 0 0
-        control shoot block1 sx sy enableshooting 0
-        control color block1 colr colg colb 0
-        control configure block1 conf 0 0 0
-        sensor result block1 @copper
-        op add result a b
-        op strictEqual result a b
-        op max result a b
-        op angle result a b
-        op noise result a b
-        op rand result 0 0
-        set result setval
-        jump 0 notEqual iszerobased false
-        jump 27 strictEqual x false
-        jump -1 always x false
-        end
-
-     */
 
     public static List<LogicInstruction> generateFrom(Seq program) {
         final Tuple2<Optional<String>, List<LogicInstruction>> instructions =
@@ -229,37 +192,147 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "itemDrop":
                 return handleItemDrop(params, result);
 
+            case "itemTake":
+                return handleItemTake(params, result);
+
             case "flag":
                 return handleFlag(params, result);
 
             case "approach":
                 return handleApproach(params, result);
 
+            case "idle":
+                return handleIdle(params, result);
+
+            case "pathfind":
+                return handlePathfind(params, result);
+
+            case "stop":
+                return handleStop(params, result);
+
+            case "boot":
+                return handleBoost(params, result);
+
+            case "target":
+                return handleTarget(params, result);
+
+            case "targetp":
+                return handleTargetp(params, result);
+
+            case "payDrop":
+                return handlePayDrop(params, result);
+
+            case "payTake":
+                return handlePayTake(params, result);
+
+            case "build":
+                return handleBuild(params, result);
+
+            case "getBlock":
+                return handleGetBlock(params, result);
+
+            case "within":
+                return handleWithin(params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
     }
 
+    private Optional<String> handleWithin(List<String> params, List<LogicInstruction> result) {
+        // ucontrol within x y radius result 0
+        final String tmp = nextTemp();
+        result.add(new LogicInstruction("ucontrol", "within", params.get(0), params.get(1), params.get(2), tmp));
+        return Optional.of(tmp);
+    }
+
+    private Optional<String> handleGetBlock(List<String> params, List<LogicInstruction> result) {
+        // ucontrol getBlock x y resultType resultBuilding 0
+        // TODO: either handle multiple return values, or provide a better abstraction over getBlock
+        result.add(new LogicInstruction("ucontrol", "getBlock", params.get(0), params.get(1), params.get(2), params.get(3)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleBuild(List<String> params, List<LogicInstruction> result) {
+        // ucontrol build x y block rotation config
+        result.add(new LogicInstruction("ucontrol", "build", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handlePayTake(List<String> params, List<LogicInstruction> result) {
+        // ucontrol payTake takeUnits 0 0 0 0
+        result.add(new LogicInstruction("ucontrol", "payTake", params.get(0)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handlePayDrop(List<String> params, List<LogicInstruction> result) {
+        // ucontrol payDrop 0 0 0 0 0
+        result.add(new LogicInstruction("ucontrol", "payDrop"));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleItemTake(List<String> params, List<LogicInstruction> result) {
+        // ucontrol itemTake from item amount 0 0
+        result.add(new LogicInstruction("ucontrol", "itemTake", params.get(0), params.get(1), params.get(2)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleTargetp(List<String> params, List<LogicInstruction> result) {
+        // ucontrol targetp unit shoot 0 0 0
+        result.add(new LogicInstruction("ucontrol", "targetp", params.get(0), params.get(1)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleTarget(List<String> params, List<LogicInstruction> result) {
+        // ucontrol target x y shoot 0 0
+        result.add(new LogicInstruction("ucontrol", "target", params.get(0), params.get(1), params.get(2)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleBoost(List<String> params, List<LogicInstruction> result) {
+        // ucontrol boost enable 0 0 0 0
+        result.add(new LogicInstruction("ucontrol", "boost", params.get(1)));
+        return Optional.of(params.get(1));
+    }
+
+    private Optional<String> handlePathfind(List<String> params, List<LogicInstruction> result) {
+        // ucontrol pathfind 0 0 0 0 0
+        result.add(new LogicInstruction("ucontrol", "pathfind"));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleIdle(List<String> params, List<LogicInstruction> result) {
+        // ucontrol idle 0 0 0 0 0
+        result.add(new LogicInstruction("ucontrol", "idle"));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleStop(List<String> params, List<LogicInstruction> result) {
+        // ucontrol stop 0 0 0 0 0
+        result.add(new LogicInstruction("ucontrol", "stop"));
+        return Optional.of("null");
+    }
+
     private Optional<String> handleApproach(List<String> params, List<LogicInstruction> result) {
-        // ucontrol approach 1 2 3 0 0
+        // ucontrol approach x y radius 0 0
         result.add(new LogicInstruction("ucontrol", "approach", params.get(0), params.get(1), params.get(2)));
-        return Optional.empty();
+        return Optional.of("null");
     }
 
     private Optional<String> handleFlag(List<String> params, List<LogicInstruction> result) {
-        // ucontrol flag FLAG 0 0 0 0
+        // ucontrol flag value 0 0 0 0
         result.add(new LogicInstruction("ucontrol", "flag", params.get(0)));
         return Optional.of(params.get(0));
     }
 
     private Optional<String> handleItemDrop(List<String> params, List<LogicInstruction> result) {
-        // ucontrol itemDrop vault1 100 0 0 0
+        // ucontrol itemDrop to amount 0 0 0
         result.add(new LogicInstruction("ucontrol", "itemDrop", params.get(0), params.get(1)));
         return Optional.of("null");
     }
 
     private Optional<String> handleMine(List<String> params, List<LogicInstruction> result) {
-        // ucontrol mine 1 2 0 0 0
+        // ucontrol mine x y 0 0 0
         result.add(new LogicInstruction("ucontrol", "mine", params.get(0), params.get(1)));
         return Optional.of("null");
     }
@@ -271,7 +344,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
         return Optional.of(tmp);
     }
 
-
     private Optional<String> handleRand(List<String> params, List<LogicInstruction> result) {
         // op rand result 200 0
         final String tmp = nextTemp();
@@ -282,23 +354,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     private Optional<String> handleMove(List<String> params, List<LogicInstruction> result) {
         // ucontrol move 14 15 0 0 0
         result.add(new LogicInstruction("ucontrol", "move", params.get(0), params.get(1)));
-        return Optional.empty();
+        return Optional.of("null");
     }
 
     private Optional<String> handleUbind(List<String> params, List<LogicInstruction> result) {
         // ubind @poly
         result.add(new LogicInstruction("ubind", params.get(0)));
-        return Optional.empty();
+        return Optional.of("null");
     }
 
     private Optional<String> handlePrintflush(List<String> params, List<LogicInstruction> result) {
         params.forEach((param) -> result.add(new LogicInstruction("printflush", List.of(param))));
-        return Optional.empty();
+        return Optional.of("null");
     }
 
     private Optional<String> handlePrint(List<String> params, List<LogicInstruction> result) {
         params.forEach((param) -> result.add(new LogicInstruction("print", List.of(param))));
-        return Optional.empty();
+        return Optional.of(params.get(params.size() - 1));
     }
 
     @Override
@@ -465,12 +537,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     private String nextLabel() {
-        label++;
-        return "label" + (label - 1);
+        return "label" + label++;
     }
 
     private String nextTemp() {
-        tmp++;
-        return "tmp" + (tmp - 1);
+        return "tmp" + tmp++;
     }
 }
