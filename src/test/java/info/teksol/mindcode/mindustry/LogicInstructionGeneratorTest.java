@@ -173,7 +173,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 ),
                 LogicInstructionGenerator.generateFrom(
                         (Seq) translateToAst(
-                                "while @unit === null {\n  @unit = ubind(@poly)\n}\n")
+                                "while @unit === null {\nubind(@poly)\n}\n")
                 )
         );
 
@@ -234,4 +234,30 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
         );
     }
 
+    @Test
+    void convertsUnaryMinus() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "-1"),
+                                new LogicInstruction("op", "mul", "tmp1", "dx", "tmp0"),
+                                new LogicInstruction("set", "dx", "tmp1"),
+                                new LogicInstruction("set", "tmp2", "-1"),
+                                new LogicInstruction("set", "dy", "tmp2"),
+                                new LogicInstruction("set", "tmp3", "2"),
+                                new LogicInstruction("set", "tmp4", "1"),
+                                new LogicInstruction("op", "sub", "tmp5", "tmp3", "tmp4"),
+                                new LogicInstruction("set", "dz", "tmp5"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst(
+                                        "dx *= -1;dy = -1; dz = 2 - 1"
+                                )
+                        )
+                )
+        );
+    }
 }

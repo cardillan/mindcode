@@ -31,8 +31,7 @@ rvalue : lvalue
        | unit_ref
        | literal_t
        | bool_t
-       | float_t
-       | int_t
+       | numeric
        | null_t
        | sensor_read
        | heap_read
@@ -45,6 +44,14 @@ rvalue : lvalue
        | rvalue op=( OR | AND ) rvalue
        | LEFT_RBRACKET rvalue RIGHT_RBRACKET
        ;
+
+numeric : float_t
+        | int_t
+        | unary_minus float_t
+        | unary_minus int_t
+        ;
+
+unary_minus: MINUS;
 
 unit_ref : AT name=id;
 

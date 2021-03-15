@@ -124,6 +124,30 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNumeric(MindcodeParser.NumericContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumeric(MindcodeParser.NumericContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnary_minus(MindcodeParser.Unary_minusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnary_minus(MindcodeParser.Unary_minusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnit_ref(MindcodeParser.Unit_refContext ctx) { }
 	/**
 	 * {@inheritDoc}

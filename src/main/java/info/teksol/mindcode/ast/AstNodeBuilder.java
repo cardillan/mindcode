@@ -135,13 +135,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             }
         }
 
-        if (ctx.unit != null) {
-            return new UnitAssignment(
-                    ctx.unit.name.getText(),
-                    visit(ctx.value)
-            );
-        }
-
         throw new ParsingException("Expected lvalue in " + ctx.getText());
     }
 
@@ -174,13 +167,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitFloat_t(MindcodeParser.Float_tContext ctx) {
-        return new NumericLiteral(ctx.FLOAT().getSymbol().getText());
-    }
-
-    @Override
-    public AstNode visitInt_t(MindcodeParser.Int_tContext ctx) {
-        return new NumericLiteral(ctx.INT().getSymbol().getText());
+    public AstNode visitNumeric(MindcodeParser.NumericContext ctx) {
+        return new NumericLiteral(ctx.getText());
     }
 
     @Override

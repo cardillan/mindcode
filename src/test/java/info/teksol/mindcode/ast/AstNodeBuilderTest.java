@@ -1,15 +1,16 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void parsesSimpleAssignment() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new VarAssignment(
                                 "a",
@@ -23,7 +24,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesUsefulWhileLoop() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new VarAssignment("n", new NumericLiteral("5")),
                         new WhileStatement(
@@ -43,7 +44,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesUnaryOperation() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new UnaryOp("not", new VarRef("ready"))
                 ),
@@ -53,7 +54,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesParenthesis() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new BinaryOp(
                                 new BinaryOp(
@@ -71,7 +72,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void respectsArithmeticOrderOfOperations() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new BinaryOp(
                                 new NumericLiteral("1"),
@@ -89,7 +90,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesComplexConditionalExpression() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new UnaryOp("not",
                                 new BinaryOp(
@@ -121,7 +122,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesFunctionCalls() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new Seq(
                                 new Seq(
@@ -155,7 +156,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesSensorReading() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new BinaryOp(
                                 new SensorReading("foundation1", "@copper"),
@@ -174,7 +175,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesControl() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new Control(
                                 "conveyor1",
@@ -192,7 +193,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesHeapAccesses() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new HeapWrite(
                                 "cell2", "1",
@@ -205,7 +206,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesIfElseExpression() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new VarAssignment(
                                 "value",
@@ -236,7 +237,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesIfExpression() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new IfExpression(
                                 new BinaryOp(
@@ -262,7 +263,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesExponentiationAssignment() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new HeapWrite(
                                 "cell1",
@@ -285,7 +286,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesUnitReferences() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new NoOp(),
                         new WhileStatement(
@@ -294,22 +295,19 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         "===",
                                         new NullLiteral()
                                 ),
-                                new UnitAssignment(
-                                        "unit",
-                                        new FunctionCall(
-                                                "ubind",
-                                                List.of(new VarRef("poly"))
-                                        )
+                                new FunctionCall(
+                                        "ubind",
+                                        List.of(new VarRef("poly"))
                                 )
                         )
                 ),
-                translateToAst("while @unit === null {\n  @unit = ubind(poly)\n}\n")
+                translateToAst("while @unit === null {\nubind(poly)\n}\n")
         );
     }
 
     @Test
     void parsesFlagAssignment() {
-        Assertions.assertEquals(
+        assertEquals(
                 new Seq(
                         new NoOp(),
                         new FunctionCall(
@@ -318,6 +316,34 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("flag(FLAG)")
+        );
+    }
+
+    @Test
+    void parsesUnaryMinus() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new VarAssignment(
+                                        "dx",
+                                        new BinaryOp(
+                                                new VarRef("dx"),
+                                                "*",
+                                                new NumericLiteral("-1")
+                                        )
+                                ),
+                                new VarAssignment("dy", new NumericLiteral("-1"))
+                        ),
+                        new VarAssignment(
+                                "dz",
+                                new BinaryOp(
+                                        new NumericLiteral("2"),
+                                        "-",
+                                        new NumericLiteral("1")
+                                )
+                        )
+                ),
+                translateToAst("dx *= -1;dy = -1; dz = 2 - 1")
         );
     }
 }

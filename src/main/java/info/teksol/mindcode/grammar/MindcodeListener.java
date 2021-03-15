@@ -98,6 +98,26 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitRvalue(MindcodeParser.RvalueContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#numeric}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumeric(MindcodeParser.NumericContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#numeric}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumeric(MindcodeParser.NumericContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#unary_minus}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnary_minus(MindcodeParser.Unary_minusContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#unary_minus}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnary_minus(MindcodeParser.Unary_minusContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#unit_ref}.
 	 * @param ctx the parse tree
 	 */

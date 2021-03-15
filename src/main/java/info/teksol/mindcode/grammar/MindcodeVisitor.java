@@ -65,6 +65,18 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRvalue(MindcodeParser.RvalueContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#numeric}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumeric(MindcodeParser.NumericContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#unary_minus}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnary_minus(MindcodeParser.Unary_minusContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#unit_ref}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
