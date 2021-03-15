@@ -22,4 +22,4 @@ if @unit.itemCapacity > 0 {
     itemDrop(vault1, @unit.totalItems)
 }
 
-printflush()
+printflush(message1)
