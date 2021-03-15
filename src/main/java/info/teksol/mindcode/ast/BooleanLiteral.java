@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 import java.util.Objects;
 
 public class BooleanLiteral implements AstNode {
-private final boolean value;
+    private final boolean value;
 
     public BooleanLiteral(boolean value) {
         this.value = value;

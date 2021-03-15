@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 import java.util.Objects;
 
 public class StringLiteral implements AstNode {
-private final String text;
+    private final String text;
 
     public StringLiteral(String text) {
         this.text = text;
