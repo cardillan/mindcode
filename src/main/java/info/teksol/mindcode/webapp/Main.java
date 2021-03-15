@@ -42,7 +42,7 @@ public class Main {
         velocityEngine.setProperty(VelocityEngine.ENCODING_DEFAULT, "UTF-8");
         velocityEngine.setProperty("resource.loaders", "classpath");
         velocityEngine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
-        velocityEngine.setProperty("resource.loader.classpath.cache", false /* ENV.equals("production") */);
+        velocityEngine.setProperty("resource.loader.classpath.cache", ENV.equals("production"));
         velocityEngine.setProperty("resource.loader.classpath.modificationCheckInterval", -1);
         velocityEngine.init();
 
