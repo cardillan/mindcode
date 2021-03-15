@@ -216,9 +216,36 @@ public class MOpcodeGenerator extends BaseAstVisitor<Tuple2<Optional<String>, Li
             case "getlink":
                 return handleGetlink(params, result);
 
+            case "mine":
+                return handleMine(params, result);
+
+            case "itemDrop":
+                return handleItemDrop(params, result);
+
+            case "flag":
+                return handleFlag(params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
+    }
+
+    private Optional<String> handleFlag(List<String> params, List<MOpcode> result) {
+        // ucontrol flag FLAG 0 0 0 0
+        result.add(new MOpcode("ucontrol", "flag", params.get(0)));
+        return Optional.of(params.get(0));
+    }
+
+    private Optional<String> handleItemDrop(List<String> params, List<MOpcode> result) {
+        // ucontrol itemDrop vault1 100 0 0 0
+        result.add(new MOpcode("ucontrol", "itemDrop", params.get(0), params.get(1)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleMine(List<String> params, List<MOpcode> result) {
+        // ucontrol mine 1 2 0 0 0
+        result.add(new MOpcode("ucontrol", "mine", params.get(0), params.get(1)));
+        return Optional.of("null");
     }
 
     private Optional<String> handleGetlink(List<String> params, List<MOpcode> result) {

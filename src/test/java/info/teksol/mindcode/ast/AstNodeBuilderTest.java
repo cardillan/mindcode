@@ -306,4 +306,18 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst("while @unit === null {\n  @unit = ubind(poly)\n}\n")
         );
     }
+
+    @Test
+    void parsesFlagAssignment() {
+        Assertions.assertEquals(
+                new Seq(
+                        new NoOp(),
+                        new FunctionCall(
+                                "flag",
+                                List.of(new VarRef("FLAG"))
+                        )
+                ),
+                translateToAst("flag(FLAG)")
+        );
+    }
 }

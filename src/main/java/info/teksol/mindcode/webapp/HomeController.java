@@ -48,7 +48,8 @@ public class HomeController extends HttpServlet {
                 engine.getTemplate("samples/1-bind-poly-move-to-core.mnd"),
                 engine.getTemplate("samples/2-thorium-reactor-stopper.mnd"),
                 engine.getTemplate("samples/3-multi-thorium-reactor.mnd"),
-                engine.getTemplate("samples/4-demo.mnd")
+                engine.getTemplate("samples/4-demo.mnd"),
+                engine.getTemplate("samples/5-mining-drone.mnd")
         );
     }
 
@@ -71,6 +72,7 @@ public class HomeController extends HttpServlet {
             case "1":
             case "2":
             case "3":
+            case "4":
                 sourceCode = returnSampleSourceCode(id);
                 break;
 
