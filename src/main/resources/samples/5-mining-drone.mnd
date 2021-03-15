@@ -1,11 +1,11 @@
-DEPOT = vault1
-DEPOT_X = 42
-DEPOT_Y = 28
+CONTAINER = vault1
+CONTAINER_X = 42
+CONTAINER_Y = 28
 
-PATCH_X = 18
+PATCH_X = 16
 PATCH_Y = 17
 
-FLAG = rand(9999)
+FLAG = 12
 
 while @unit == null && @unit.flag == 0 {
     @unit = ubind(@poly)
@@ -14,12 +14,17 @@ while @unit == null && @unit.flag == 0 {
     }
 }
 
-if @unit.itemCapacity > 0 {
-    print("mining")
+if @unit.totalItems < @unit.itemCapacity {
+    print("state: mining")
+    approach(PATCH_X, PATCH_Y, 3)
     mine(PATCH_X, PATCH_Y)
 } else {
-    print("dropping")
+    print("state: dropping")
+    approach(DEPOT_X, DEPOT_Y, 3)
     itemDrop(vault1, @unit.totalItems)
 }
 
+print("\nitemCapacity: ", @unit.itemCapacity)
+print("\ntotalItems: ", @unit.totalItems)
+print("\nfirstItem: ", @unit.firstItem)
 printflush(message1)
