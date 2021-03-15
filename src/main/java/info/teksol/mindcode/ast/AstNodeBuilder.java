@@ -119,7 +119,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             if (ctx.op != null) {
                 // +=, -=, etc...
                 return new HeapWrite(
-                        ctx.heap_ref().target.getText(), ctx.heap_ref().addr.getText(),
+                        ctx.heap_ref().target.getText(),
+                        visit(ctx.heap_ref().address()),
                         new BinaryOp(
                                 lvalue,
                                 ctx.op.getText().replace("=", ""),
@@ -129,7 +130,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             } else {
                 // simple assignment
                 return new HeapWrite(
-                        ctx.heap_ref().target.getText(), ctx.heap_ref().addr.getText(),
+                        ctx.heap_ref().target.getText(),
+                        visit(ctx.heap_ref().address()),
                         rvalue
                 );
             }

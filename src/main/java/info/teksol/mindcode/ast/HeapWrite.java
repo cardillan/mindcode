@@ -4,10 +4,10 @@ import java.util.Objects;
 
 public class HeapWrite implements AstNode {
     private final String cellName;
-    private final String address;
+    private final AstNode address;
     private final AstNode value;
 
-    public HeapWrite(String cellName, String address, AstNode value) {
+    public HeapWrite(String cellName, AstNode address, AstNode value) {
         this.cellName = cellName;
         this.address = address;
         this.value = value;
@@ -17,7 +17,7 @@ public class HeapWrite implements AstNode {
         return cellName;
     }
 
-    public String getAddress() {
+    public AstNode getAddress() {
         return address;
     }
 

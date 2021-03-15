@@ -132,4 +132,9 @@ class MindcodeParserTest extends AbstractParserTest {
     void parsesUnaryMinus() {
         assertDoesNotThrow(() -> parse("-1 * dx"));
     }
+
+    @Test
+    void parsesHeapReferencesWithRvalues() {
+        assertDoesNotThrow(() -> parse("cell1[dx] = 1"));
+    }
 }

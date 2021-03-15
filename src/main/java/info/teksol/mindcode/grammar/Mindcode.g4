@@ -65,7 +65,7 @@ if_expression : IF cond=rvalue LEFT_CBRACKET ( terminator )? true_branch=block_b
 
 heap_ref : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
 
-address : int_t;
+address : rvalue;
 
 sensor_read : target=id DOT resource
             | unit=unit_ref DOT resource

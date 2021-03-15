@@ -196,7 +196,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new HeapWrite(
-                                "cell2", "1",
+                                "cell2",
+                                new NumericLiteral("1"),
                                 new HeapRead("cell3", "0")
                         )
                 ),
@@ -218,7 +219,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         ),
                                         new BooleanLiteral(false),
                                         new Seq(
-                                                new HeapWrite("HEAP", "4", new BooleanLiteral(true)),
+                                                new HeapWrite("HEAP",
+                                                        new NumericLiteral("4"),
+                                                        new BooleanLiteral(true)
+                                                ),
                                                 new VarAssignment(
                                                         "n",
                                                         new BinaryOp(
@@ -247,7 +251,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 ),
                                 new HeapWrite(
                                         "HEAP",
-                                        "2",
+                                        new NumericLiteral("2"),
                                         new BinaryOp(
                                                 new HeapRead("HEAP", "2"),
                                                 "+",
@@ -267,7 +271,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(
                         new HeapWrite(
                                 "cell1",
-                                "0",
+                                new NumericLiteral("0"),
                                 new FunctionCall(
                                         "rand",
                                         List.of(
@@ -344,6 +348,20 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("dx *= -1;dy = -1; dz = 2 - 1")
+        );
+    }
+
+    @Test
+    void parsesHeapReferencesWithRvalues() {
+        assertEquals(
+                new Seq(
+                        new HeapWrite(
+                                "cell1",
+                                new VarRef("dx"),
+                                new NumericLiteral("1")
+                        )
+                ),
+                translateToAst("cell1[dx] = 1")
         );
     }
 }

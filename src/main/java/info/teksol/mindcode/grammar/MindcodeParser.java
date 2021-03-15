@@ -1461,8 +1461,8 @@ public class MindcodeParser extends Parser {
 	}
 
 	public static class AddressContext extends ParserRuleContext {
-		public Int_tContext int_t() {
-			return getRuleContext(Int_tContext.class,0);
+		public RvalueContext rvalue() {
+			return getRuleContext(RvalueContext.class,0);
 		}
 		public AddressContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1490,7 +1490,7 @@ public class MindcodeParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(206);
-			int_t();
+			rvalue(0);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2293,7 +2293,7 @@ public class MindcodeParser extends Parser {
 		"\2\2\2\u00c5\u00c6\3\2\2\2\u00c6\u00c7\5\f\7\2\u00c7\u00c8\7)\2\2\u00c8"+
 		"\u00ca\3\2\2\2\u00c9\u00c1\3\2\2\2\u00c9\u00ca\3\2\2\2\u00ca\37\3\2\2"+
 		"\2\u00cb\u00cc\5(\25\2\u00cc\u00cd\7&\2\2\u00cd\u00ce\5\"\22\2\u00ce\u00cf"+
-		"\7\'\2\2\u00cf!\3\2\2\2\u00d0\u00d1\5.\30\2\u00d1#\3\2\2\2\u00d2\u00d3"+
+		"\7\'\2\2\u00cf!\3\2\2\2\u00d0\u00d1\5\22\n\2\u00d1#\3\2\2\2\u00d2\u00d3"+
 		"\5(\25\2\u00d3\u00d4\7\b\2\2\u00d4\u00d5\58\35\2\u00d5\u00db\3\2\2\2\u00d6"+
 		"\u00d7\5\30\r\2\u00d7\u00d8\7\b\2\2\u00d8\u00d9\58\35\2\u00d9\u00db\3"+
 		"\2\2\2\u00da\u00d2\3\2\2\2\u00da\u00d6\3\2\2\2\u00db%\3\2\2\2\u00dc\u00dd"+

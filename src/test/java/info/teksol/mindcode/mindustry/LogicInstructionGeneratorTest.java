@@ -110,10 +110,11 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     void convertsHeapAccesses() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("read", "tmp0", "cell2", "4"),
-                        new LogicInstruction("sensor", "tmp1", "conveyor1", "@enabled"),
-                        new LogicInstruction("op", "add", "tmp2", "tmp0", "tmp1"),
-                        new LogicInstruction("write", "tmp2", "cell1", "3"),
+                        new LogicInstruction("set", "tmp0", "3"),
+                        new LogicInstruction("read", "tmp1", "cell2", "4"),
+                        new LogicInstruction("sensor", "tmp2", "conveyor1", "@enabled"),
+                        new LogicInstruction("op", "add", "tmp3", "tmp1", "tmp2"),
+                        new LogicInstruction("write", "tmp3", "cell1", "tmp0"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom((Seq) translateToAst("cell1[3] = cell2[4] + conveyor1.enabled"))
@@ -123,39 +124,52 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     @Test
     void convertsIfExpression() {
         assertEquals(
-                List.of(
-                        new LogicInstruction("read", "tmp0", "HEAP", "4"),
-                        new LogicInstruction("set", "tmp1", "0"),
-                        new LogicInstruction("op", "equal", "tmp2", "tmp0", "tmp1"),
-                        new LogicInstruction("jump", "label0", "notEqual", "tmp2", "true"),
-                        new LogicInstruction("set", "tmp5", "false"),
-                        new LogicInstruction("jump", "label1", "always"),
-                        new LogicInstruction("label", "label0"),
-                        new LogicInstruction("write", "true", "HEAP", "4"),
-                        new LogicInstruction("set", "tmp3", "1"),
-                        new LogicInstruction("op", "add", "tmp4", "n", "tmp3"),
-                        new LogicInstruction("set", "n", "tmp4"),
-                        new LogicInstruction("set", "tmp5", "tmp4"),
-                        new LogicInstruction("label", "label1"),
-                        new LogicInstruction("set", "value", "tmp5"),
-                        new LogicInstruction("end")
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("read", "tmp0", "HEAP", "4"),
+                                new LogicInstruction("set", "tmp1", "0"),
+                                new LogicInstruction("op", "equal", "tmp2", "tmp0", "tmp1"),
+                                new LogicInstruction("jump", "label0", "notEqual", "tmp2", "true"),
+                                new LogicInstruction("set", "tmp6", "false"),
+                                new LogicInstruction("jump", "label1", "always"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp3", "4"),
+                                new LogicInstruction("write", "true", "HEAP", "tmp3"),
+                                new LogicInstruction("set", "tmp4", "1"),
+                                new LogicInstruction("op", "add", "tmp5", "n", "tmp4"),
+                                new LogicInstruction("set", "n", "tmp5"),
+                                new LogicInstruction("set", "tmp6", "tmp5"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("set", "value", "tmp6"),
+                                new LogicInstruction("end")
+                        )
                 ),
-                LogicInstructionGenerator.generateFrom((Seq) translateToAst("value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}"))
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst(
+                                        "value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}"
+                                )
+                        )
+                )
         );
     }
 
     @Test
     void convertsFunctionsReturningValues() {
         assertEquals(
-                List.of(
-                        new LogicInstruction("set", "tmp0", "9"),
-                        new LogicInstruction("set", "tmp1", "9"),
-                        new LogicInstruction("op", "pow", "tmp2", "tmp0", "tmp1"),
-                        new LogicInstruction("op", "rand", "tmp3", "tmp2"),
-                        new LogicInstruction("write", "tmp3", "cell1", "0"),
-                        new LogicInstruction("end")
+                prettyPrint(
+
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "0"),
+                                new LogicInstruction("set", "tmp1", "9"),
+                                new LogicInstruction("set", "tmp2", "9"),
+                                new LogicInstruction("op", "pow", "tmp3", "tmp1", "tmp2"),
+                                new LogicInstruction("op", "rand", "tmp4", "tmp3"),
+                                new LogicInstruction("write", "tmp4", "cell1", "tmp0"),
+                                new LogicInstruction("end")
+                        )
                 ),
-                LogicInstructionGenerator.generateFrom((Seq) translateToAst("cell1[0] = rand(9**9)"))
+                prettyPrint(LogicInstructionGenerator.generateFrom((Seq) translateToAst("cell1[0] = rand(9**9)")))
         );
     }
 

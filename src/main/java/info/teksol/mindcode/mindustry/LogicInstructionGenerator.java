@@ -37,13 +37,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
 
     @Override
     public Tuple2<Optional<String>, List<LogicInstruction>> visitHeapWrite(HeapWrite node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> addr = visit(node.getAddress());
         final Tuple2<Optional<String>, List<LogicInstruction>> value = visit(node.getValue());
+        if (!addr._1.isPresent()) {
+            throw new GenerationException("Expected to find tmp variable from heap write address node, found: " + addr);
+        }
         if (!value._1.isPresent()) {
-            throw new GenerationException("Expected to find tmp variable from heap write node, found: " + value);
+            throw new GenerationException("Expected to find tmp variable from heap write value node, found: " + value);
         }
 
-        final List<LogicInstruction> result = new ArrayList<>(value._2);
-        result.add(new LogicInstruction("write", value._1.get(), node.getCellName(), node.getAddress()));
+        final List<LogicInstruction> result = new ArrayList<>(addr._2);
+        result.addAll(value._2);
+        result.add(new LogicInstruction("write", value._1.get(), node.getCellName(), addr._1.get()));
         return new Tuple2<>(value._1, result);
     }
 
