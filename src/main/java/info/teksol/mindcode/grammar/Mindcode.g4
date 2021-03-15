@@ -68,7 +68,6 @@ assignment : target=lvalue ASSIGN value=rvalue
            | target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
            | heap_read ASSIGN value=rvalue
            | heap_read op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
-           | unit=unit_ref ASSIGN value=rvalue
            ;
 
 id : ID;
