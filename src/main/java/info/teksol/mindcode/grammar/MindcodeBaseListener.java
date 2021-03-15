@@ -347,6 +347,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitResource(MindcodeParser.ResourceContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSingle_line_comment(MindcodeParser.Single_line_commentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSingle_line_comment(MindcodeParser.Single_line_commentContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

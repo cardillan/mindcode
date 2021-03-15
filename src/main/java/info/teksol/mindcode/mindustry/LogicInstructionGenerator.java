@@ -53,6 +53,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     @Override
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitComment(Comment node) {
+        return new Tuple2<>(Optional.empty(), List.of(new LogicInstruction("//", node.getText())));
+    }
+
+    @Override
     public Tuple2<Optional<String>, List<LogicInstruction>> visitControl(Control node) {
         final Tuple2<Optional<String>, List<LogicInstruction>> value = visit(node.getValue());
         final List<LogicInstruction> result = new ArrayList<>(value._2);

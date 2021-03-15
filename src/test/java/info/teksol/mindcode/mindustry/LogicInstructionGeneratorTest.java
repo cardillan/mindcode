@@ -274,4 +274,25 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void propagatesComments() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("//", " Remember that we initialized ourselves"),
+                                new LogicInstruction("set", "tmp0", "1"),
+                                new LogicInstruction("set", "a", "tmp0"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst(
+                                        "// Remember that we initialized ourselves\n\na = 1"
+                                )
+                        )
+                )
+        );
+    }
 }

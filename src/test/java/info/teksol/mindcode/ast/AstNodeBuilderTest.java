@@ -364,4 +364,19 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst("cell1[dx] = 1")
         );
     }
+
+    @Test
+    void parsesComments() {
+        assertEquals(
+                new Seq(
+                        // We only remove the leading `//`, because we don't know what kind of formatting
+                        // the end-user applied, so we have to keep the spaces in place
+                        new Comment(" Remember that we initialized ourselves"),
+                        new VarAssignment("wasInitialized",new NumericLiteral("1"))
+                ),
+                translateToAst(
+                        "// Remember that we initialized ourselves\nwasInitialized = 1\n"
+                )
+        );
+    }
 }

@@ -43,6 +43,7 @@ FLOAT=42
 ID=43
 CRLF=44
 WS=45
+SL_COMMENT=46
 'while'=2
 'if'=3
 'else'=4

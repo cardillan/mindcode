@@ -10,6 +10,7 @@ expression_list : expression terminator
 expression : while_statement
            | control_statement
            | rvalue
+           | single_line_comment
            ;
 
 control_statement : target=id DOT property=id ASSIGN value=rvalue;
@@ -102,6 +103,7 @@ terminator : terminator SEMICOLON
 crlf : CRLF;
 
 resource : id;
+single_line_comment : SL_COMMENT;
 
 fragment ESCAPED_QUOTE : '\\"';
 LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
@@ -161,3 +163,4 @@ ID : [a-zA-Z_][a-zA-Z0-9_]*;
 CRLF : '\r'? '\n';
 
 WS : (' ' | '\t')+ -> skip;
+SL_COMMENT : ('//' ~('\r' | '\n')* );

@@ -40,4 +40,6 @@ public interface AstVisitor<T> {
     T visitBinaryOp(BinaryOp node);
 
     T visitSeq(Seq seq);
+
+    T visitComment(Comment node);
 }

@@ -287,4 +287,14 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitResource(MindcodeParser.ResourceContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#single_line_comment}.
+	 * @param ctx the parse tree
+	 */
+	void enterSingle_line_comment(MindcodeParser.Single_line_commentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#single_line_comment}.
+	 * @param ctx the parse tree
+	 */
+	void exitSingle_line_comment(MindcodeParser.Single_line_commentContext ctx);
 }

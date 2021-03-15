@@ -7,6 +7,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitBinaryOp((BinaryOp) node);
         } else if (node instanceof BooleanLiteral) {
             return visitBooleanLiteral((BooleanLiteral) node);
+        } else if (node instanceof Comment) {
+            return visitComment((Comment) node);
         } else if (node instanceof Control) {
             return visitControl((Control) node);
         } else if (node instanceof FunctionCall) {

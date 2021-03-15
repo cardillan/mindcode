@@ -178,4 +178,10 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitResource(MindcodeParser.ResourceContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#single_line_comment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSingle_line_comment(MindcodeParser.Single_line_commentContext ctx);
 }
