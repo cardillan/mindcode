@@ -1,4 +1,11 @@
+# Files which don't need to be shared between developers
+.idea/dictionaries
+.idea/libraries
 .idea/vcs.xml
 .idea/workspace.xml
+
+# PostgreSQL cluster data directory
 db/cluster
+
+# Compiled artifacts
 target
