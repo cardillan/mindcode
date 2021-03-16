@@ -1,4 +1,4 @@
-// Upgrades copper conveyors to titanium ones
+// Upgrades copper conveyors to titanium
 // This script implements a state machine
 // https://en.wikipedia.org/wiki/Finite-state_machine
 
