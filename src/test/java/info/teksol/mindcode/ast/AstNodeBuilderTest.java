@@ -437,4 +437,40 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst("if state == 1 {\nprint(m)\n} else {\nif state == 2 {\nprint(n)\n}\n}\n")
         );
     }
+
+    @Test
+    void parsesMathFuncations() {
+        assertEquals(
+                new Seq(
+                        new VarAssignment(
+                                "x",
+                                new FunctionCall(
+                                        "ceil",
+                                        new FunctionCall(
+                                                "floor",
+                                                new FunctionCall(
+                                                        "sin",
+                                                        new FunctionCall(
+                                                                "log",
+                                                                new FunctionCall(
+                                                                        "cos",
+                                                                        new FunctionCall(
+                                                                                "abs",
+                                                                                new FunctionCall(
+                                                                                        "tan",
+                                                                                        new FunctionCall("rand",
+                                                                                                new NumericLiteral("1")
+                                                                                        )
+                                                                                )
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))))")
+        );
+    }
 }

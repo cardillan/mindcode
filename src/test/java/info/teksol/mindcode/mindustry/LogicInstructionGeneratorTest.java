@@ -326,4 +326,30 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void generatesComplexMathExpression() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "1"),
+                                new LogicInstruction("op", "rand", "tmp1", "tmp0"),
+                                new LogicInstruction("op", "tan", "tmp2", "tmp1"),
+                                new LogicInstruction("op", "abs", "tmp3", "tmp2"),
+                                new LogicInstruction("op", "cos", "tmp4", "tmp3"),
+                                new LogicInstruction("op", "log", "tmp5", "tmp4"),
+                                new LogicInstruction("op", "sin", "tmp6", "tmp5"),
+                                new LogicInstruction("op", "floor", "tmp7", "tmp6"),
+                                new LogicInstruction("op", "ceil", "tmp8", "tmp7"),
+                                new LogicInstruction("set", "x", "tmp8"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))))")
+                        )
+                )
+        );
+    }
 }

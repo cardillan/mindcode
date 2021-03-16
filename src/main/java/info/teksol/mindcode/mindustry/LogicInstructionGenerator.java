@@ -244,9 +244,24 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "within":
                 return handleWithin(params, result);
 
+            case "tan":
+            case "sin":
+            case "cos":
+            case "log":
+            case "abs":
+            case "floor":
+            case "ceil":
+                return handleMath(functionName, params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
+    }
+
+    private Optional<String> handleMath(String functionName, List<String> params, List<LogicInstruction> result) {
+        final String tmp = nextTemp();
+        result.add(new LogicInstruction("op", functionName, tmp, params.get(0)));
+        return Optional.of(tmp);
     }
 
     private Optional<String> handleWithin(List<String> params, List<LogicInstruction> result) {
