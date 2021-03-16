@@ -1,2 +1,2 @@
 #!/bin/sh
-exec git push heroku mainline:master
+exec git push heroku main:master
