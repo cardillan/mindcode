@@ -206,7 +206,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new HeapWrite(
                                 "cell2",
                                 new NumericLiteral("1"),
-                                new HeapRead("cell3", "0")
+                                new HeapRead("cell3", new NumericLiteral("0"))
                         )
                 ),
                 translateToAst("cell2[1] = cell3[0]")
@@ -221,7 +221,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 "value",
                                 new IfExpression(
                                         new BinaryOp(
-                                                new HeapRead("HEAP", "4"),
+                                                new HeapRead("HEAP", new NumericLiteral("4")),
                                                 "==",
                                                 new NumericLiteral("0")
                                         ),
@@ -261,7 +261,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         "HEAP",
                                         new NumericLiteral("2"),
                                         new BinaryOp(
-                                                new HeapRead("HEAP", "2"),
+                                                new HeapRead("HEAP", new NumericLiteral("2")),
                                                 "+",
                                                 new NumericLiteral("1")
                                         )
@@ -471,6 +471,39 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))))")
+        );
+    }
+
+    @Test
+    void parsesAddressCalculationReferences() {
+        assertEquals(
+                new Seq(
+                        new HeapWrite(
+                                "cell1",
+                                new VarRef("ptr"),
+                                new BinaryOp(
+                                        new HeapRead(
+                                                "cell1",
+                                                new BinaryOp(
+                                                        new VarRef("ptr"),
+                                                        "-",
+                                                        new NumericLiteral("1")
+                                                )
+                                        ),
+                                        "+",
+                                        new HeapRead(
+                                                "cell1",
+                                                new BinaryOp(
+                                                        new VarRef("ptr"),
+                                                        "-",
+                                                        new NumericLiteral("2")
+                                                )
+                                        )
+
+                                )
+                        )
+                ),
+                translateToAst("cell1[ptr] = cell1[ptr - 1] + cell1[ptr - 2]")
         );
     }
 }

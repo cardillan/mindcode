@@ -28,11 +28,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
 
     @Override
     public Tuple2<Optional<String>, List<LogicInstruction>> visitHeapRead(HeapRead node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> addr = visit(node.getAddress());
+        if (!addr._1.isPresent()) {
+            throw new GenerationException("Expected to find an rvalue from HeapRead address, found " + node);
+        }
+
         final String tmp = nextTemp();
-        return new Tuple2<>(
-                Optional.of(tmp),
-                List.of(new LogicInstruction("read", tmp, node.getCellName(), node.getAddress()))
-        );
+        final List<LogicInstruction> result = new ArrayList<>(addr._2);
+        result.add(new LogicInstruction("read", tmp, node.getCellName(), addr._1.get()));
+        return new Tuple2<>(Optional.of(tmp), result);
     }
 
     @Override

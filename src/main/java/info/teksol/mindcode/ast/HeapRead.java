@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class HeapRead implements AstNode {
     private final String cellName;
-    private final String address;
+    private final AstNode address;
 
-    public HeapRead(String cellName, String address) {
+    public HeapRead(String cellName, AstNode address) {
         this.cellName = cellName;
         this.address = address;
     }
@@ -15,7 +15,7 @@ public class HeapRead implements AstNode {
         return cellName;
     }
 
-    public String getAddress() {
+    public AstNode getAddress() {
         return address;
     }
 

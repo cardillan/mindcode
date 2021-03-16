@@ -110,8 +110,7 @@ class LogicInstructionPeepholeOptimizerTest extends AbstractAstTest {
     void collapsesSetWrite() {
         assertEquals(
                 List.of(
-                        new LogicInstruction("set", "tmp0", "2"),
-                        new LogicInstruction("write", "4", "cell1", "tmp0"),
+                        new LogicInstruction("write", "4", "cell1", "2"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionPeepholeOptimizer.optimize(
@@ -130,17 +129,16 @@ class LogicInstructionPeepholeOptimizerTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         List.of(
-                                new LogicInstruction("read", "tmp0", "HEAP", "4"),
-                                new LogicInstruction("jump", "label0", "notEqual", "tmp0", "0"),
-                                new LogicInstruction("set", "tmp6", "false"),
+                                new LogicInstruction("read", "tmp1", "HEAP", "4"),
+                                new LogicInstruction("jump", "label0", "notEqual", "tmp1", "0"),
+                                new LogicInstruction("set", "tmp7", "false"),
                                 new LogicInstruction("jump", "label1", "always"),
                                 new LogicInstruction("label", "label0"),
-                                new LogicInstruction("set", "tmp3", "4"),
-                                new LogicInstruction("write", "true", "HEAP", "tmp3"),
+                                new LogicInstruction("write", "true", "HEAP", "4"),
                                 new LogicInstruction("op", "add", "n", "n", "1"),
-                                new LogicInstruction("set", "tmp6", "n"),
+                                new LogicInstruction("set", "tmp7", "n"),
                                 new LogicInstruction("label", "label1"),
-                                new LogicInstruction("set", "value", "tmp6"),
+                                new LogicInstruction("set", "value", "tmp7"),
                                 new LogicInstruction("end")
                         )
                 ),

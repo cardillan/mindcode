@@ -40,6 +40,10 @@ public class LogicInstruction {
         return getOpcode().equals("op");
     }
 
+    public boolean isRead() {
+        return getOpcode().equals("read");
+    }
+
     public String getOpcode() {
         return opcode;
     }

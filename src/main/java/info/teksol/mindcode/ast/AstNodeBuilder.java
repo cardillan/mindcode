@@ -130,7 +130,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             }
         }
 
-        throw new ParsingException("Expected lvalue in " + ctx.getText());
+        throw new ParsingException("Expected lvalue or heap_ref in " + ctx.getText());
     }
 
     @Override
@@ -141,7 +141,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitHeap_ref(MindcodeParser.Heap_refContext ctx) {
-        return new HeapRead(ctx.target.getText(), ctx.addr.getText());
+        return new HeapRead(ctx.target.getText(), visit(ctx.addr));
     }
 
     @Override

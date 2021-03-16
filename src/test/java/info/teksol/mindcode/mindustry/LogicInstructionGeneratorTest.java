@@ -111,10 +111,11 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
         assertEquals(
                 List.of(
                         new LogicInstruction("set", "tmp0", "3"),
-                        new LogicInstruction("read", "tmp1", "cell2", "4"),
-                        new LogicInstruction("sensor", "tmp2", "conveyor1", "@enabled"),
-                        new LogicInstruction("op", "add", "tmp3", "tmp1", "tmp2"),
-                        new LogicInstruction("write", "tmp3", "cell1", "tmp0"),
+                        new LogicInstruction("set", "tmp1", "4"),
+                        new LogicInstruction("read", "tmp2", "cell2", "tmp1"),
+                        new LogicInstruction("sensor", "tmp3", "conveyor1", "@enabled"),
+                        new LogicInstruction("op", "add", "tmp4", "tmp2", "tmp3"),
+                        new LogicInstruction("write", "tmp4", "cell1", "tmp0"),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom((Seq) translateToAst("cell1[3] = cell2[4] + conveyor1.enabled"))
@@ -126,21 +127,22 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         List.of(
-                                new LogicInstruction("read", "tmp0", "HEAP", "4"),
-                                new LogicInstruction("set", "tmp1", "0"),
-                                new LogicInstruction("op", "equal", "tmp2", "tmp0", "tmp1"),
-                                new LogicInstruction("jump", "label0", "notEqual", "tmp2", "true"),
-                                new LogicInstruction("set", "tmp6", "false"),
+                                new LogicInstruction("set","tmp0","4"),
+                                new LogicInstruction("read", "tmp1", "HEAP", "tmp0"),
+                                new LogicInstruction("set", "tmp2", "0"),
+                                new LogicInstruction("op", "equal", "tmp3", "tmp1", "tmp2"),
+                                new LogicInstruction("jump", "label0", "notEqual", "tmp3", "true"),
+                                new LogicInstruction("set", "tmp7", "false"),
                                 new LogicInstruction("jump", "label1", "always"),
                                 new LogicInstruction("label", "label0"),
-                                new LogicInstruction("set", "tmp3", "4"),
-                                new LogicInstruction("write", "true", "HEAP", "tmp3"),
-                                new LogicInstruction("set", "tmp4", "1"),
-                                new LogicInstruction("op", "add", "tmp5", "n", "tmp4"),
-                                new LogicInstruction("set", "n", "tmp5"),
-                                new LogicInstruction("set", "tmp6", "tmp5"),
+                                new LogicInstruction("set", "tmp4", "4"),
+                                new LogicInstruction("write", "true", "HEAP", "tmp4"),
+                                new LogicInstruction("set", "tmp5", "1"),
+                                new LogicInstruction("op", "add", "tmp6", "n", "tmp5"),
+                                new LogicInstruction("set", "n", "tmp6"),
+                                new LogicInstruction("set", "tmp7", "tmp6"),
                                 new LogicInstruction("label", "label1"),
-                                new LogicInstruction("set", "value", "tmp6"),
+                                new LogicInstruction("set", "value", "tmp7"),
                                 new LogicInstruction("end")
                         )
                 ),

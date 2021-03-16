@@ -42,6 +42,24 @@ public class LogicInstructionPeepholeOptimizer {
             final LogicInstruction here = program.get(i);
             final LogicInstruction next = program.get(i + 1);
 
+            if (here.isSet() && (next.isRead() || next.isWrite()) && here.getArgs().get(0).equals(next.getArgs().get(2))) {
+                replacements.put(here.getArgs().get(0), here.getArgs().get(1));
+                program.remove(i);
+                program.set(
+                        i,
+                        new LogicInstruction(
+                                next.getOpcode(),
+                                next.getArgs().get(0),
+                                next.getArgs().get(1),
+                                here.getArgs().get(1)
+                        )
+                );
+
+                // Re-examine the previous instruction, in case we can now optimize it
+                if (i > 0) i--;
+                continue;
+            }
+
             if (here.isSet() && next.isWrite() && here.getArgs().get(0).equals(next.getArgs().get(0))) {
                 replacements.put(next.getArgs().get(0), here.getArgs().get(1));
                 program.remove(i);
