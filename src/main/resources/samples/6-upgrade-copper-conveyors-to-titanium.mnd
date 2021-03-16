@@ -1,0 +1,159 @@
+// Upgrades copper conveyors to titanium ones
+// This script implements a state machine
+// https://en.wikipedia.org/wiki/Finite-state_machine
+
+// This section declares all the states this machine can be in
+ST_UNINITIALIZED = 0
+ST_APPROACHING = 1
+ST_BUILDING = 2
+ST_NEXT = 3
+ST_DONE = 4
+
+// This section declares the addresses within the linked cell/bank
+// into which we will store our internal state machine state
+STATE = 20
+DX = 21
+DY = 22
+SW_X = 23
+SW_Y = 24
+NE_X = 25
+NE_Y = 26
+BUILD_X = 27
+BUILD_Y = 28
+FLAG = 29
+FOUND = 30
+
+RADIUS = 1
+
+// Debugging section -- I would remove this when
+// you are ready to use this script for real
+print("STATE = ", cell1[STATE], " ")
+if cell1[STATE] == ST_UNINITIALIZED {
+    print("uninitialized")
+} else {
+    if cell1[STATE] == ST_APPROACHING {
+        print("approaching")
+    } else {
+        if cell1[STATE] == ST_BUILDING {
+            print("building")
+        } else {
+            if cell1[STATE] == ST_NEXT {
+                print("next")
+            } else {
+                if cell1[STATE] == ST_DONE {
+                    print("done")
+                }
+            }
+        }
+    }
+}
+
+print("\nDX = ", cell1[DX])
+print("\nDY = ", cell1[DY])
+print("\nSW_X = ", cell1[SW_X])
+print("\nSW_Y = ", cell1[SW_Y])
+print("\nNE_X = ", cell1[NE_X])
+print("\nNE_Y = ", cell1[NE_Y])
+print("\nBUILD_X = ", cell1[BUILD_X])
+print("\nBUILD_Y = ", cell1[BUILD_Y])
+print("\nFLAG = ", cell1[FLAG])
+print("\nFOUND = ", cell1[FOUND])
+
+// Beginning of the state machine itself
+// There is a separate `if` per state
+
+// When we are uninitialized, initialize ourselves then
+// proceed with the next state
+if cell1[STATE] == ST_UNINITIALIZED {
+    cell1[STATE] = ST_APPROACHING
+    cell1[DX] = 1
+    cell1[DY] = 1
+    cell1[SW_X] = 50
+    cell1[SW_Y] = 50
+    cell1[NE_X] = 60
+    cell1[NE_Y] = 60
+    cell1[BUILD_X] = cell1[SW_X]
+    cell1[BUILD_Y] = cell1[SW_Y]
+    cell1[FLAG] = rand(1000000) + 1
+}
+
+// Once we know we're initialized, we can look for *the* poly we will take control of
+while !cell1[FOUND] {
+    while @unit === null {
+        ubind(@poly)
+        if @unit.flag == 0 {
+            flag(cell1[FLAG])
+            cell1[FOUND] = true
+        }
+    }
+}
+
+// When we're approaching a given coordinate, this is how we choose to either
+// continue approaching, or if we're ready to upgrade the existing building
+if cell1[STATE] == ST_APPROACHING {
+    if within(cell1[BUILD_X], cell1[BUILD_Y], RADIUS) {
+      cell1[STATE] = ST_BUILDING
+    } else {
+      approach(cell1[BUILD_X], cell1[BUILD_Y], RADIUS)
+    }
+}
+
+// This is where we upgrade the conveyors themselves
+if cell1[STATE] == ST_BUILDING {
+    getBlock(cell1[BUILD_X], cell1[BUILD_Y], b_type, b_building)
+    if b_type == @conveyor {
+        build(cell1[BUILD_X], cell1[BUILD_Y], @titanium-conveyor, b_building.rotation, 0)
+    }
+
+    cell1[STATE] = ST_NEXT
+}
+
+// This is the block of code that determines which cell is the next one
+// This script proceeds southwest to northeast, to make it easier to do math:
+// (0,0) is at the bottom-left in Mindustry.
+if cell1[STATE] == ST_NEXT {
+    cell1[BUILD_X] += cell1[DX]
+
+    if cell1[BUILD_X] > cell1[NE_X] {
+      cell1[DX] *= -1
+      cell1[BUILD_X] = cell1[NE_X]
+      cell1[BUILD_Y] += cell1[DY]
+      cell1[STATE] = ST_APPROACHING
+    }
+
+    if cell1[BUILD_X] < cell1[SW_X] {
+      cell1[DX] *= -1
+      cell1[BUILD_X] = cell1[SW_X]
+      cell1[BUILD_Y] += cell1[DY]
+      cell1[STATE] = ST_APPROACHING
+    }
+
+    if cell1[BUILD_Y] > cell1[NE_Y] {
+      cell1[DY] *= -1
+      cell1[BUILD_Y] = cell1[NE_Y]
+      // Depending on whether you want to make it a one-shot or not, this is how
+      // you'd choose to continue upgrading any newly constructed copper conveyors
+      // cell1[STATE] = ST_APPROACHING
+
+      // Otherwise, this is a one-shot and once we've gone over every cell, we stop
+      cell1[STATE] = ST_DONE
+    }
+
+    if cell1[BUILD_Y] < cell1[SW_Y] {
+      cell1[DY] *= -1
+      cell1[BUILD_Y] = cell1[SW_Y]
+      cell1[STATE] = ST_APPROACHING
+    }
+}
+
+// Yay, we're done!
+if cell1[STATE] == ST_DONE {
+    print("\n\nTerminal State")
+}
+
+// Otherwise, there was an error and we need to debug this
+if cell1[STATE] > ST_DONE {
+    print("\n\nINVALID STATE!")
+}
+
+printflush(message1)

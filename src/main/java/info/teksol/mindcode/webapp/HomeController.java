@@ -49,7 +49,9 @@ public class HomeController extends HttpServlet {
                 engine.getTemplate("samples/2-thorium-reactor-stopper.mnd"),
                 engine.getTemplate("samples/3-multi-thorium-reactor.mnd"),
                 engine.getTemplate("samples/4-demo.mnd"),
-                engine.getTemplate("samples/5-mining-drone.mnd")
+                engine.getTemplate("samples/5-mining-drone.mnd"),
+                engine.getTemplate("samples/6-upgrade-copper-conveyors-to-titanium.mnd"),
+                engine.getTemplate("samples/7-bind-one-unit.mnd")
         );
     }
 
@@ -70,6 +72,8 @@ public class HomeController extends HttpServlet {
             case "2":
             case "3":
             case "4":
+            case "5":
+            case "6":
                 sourceCode = returnSampleSourceCode(id);
                 break;
 
@@ -94,7 +98,9 @@ public class HomeController extends HttpServlet {
         final long renderStartAt = System.nanoTime();
         final VelocityContext context = new VelocityContext(parent);
         context.put("source_code", sourceCode);
+        context.put("source_loc", sourceCode.split("\n").length);
         context.put("compiled_code", result._1);
+        context.put("compiled_loc", result._1.split("\n").length);
         context.put("syntax_errors", result._2);
         context.put("sample", id);
         context.put("id", id.length() == 36 ? id : null); // if it's a UUID

@@ -13,10 +13,11 @@
         <p class="m-2 text-lg">Go ahead and try the following samples, then write your own!<p>
         <nav class="m-2">
             <ul class="flex space-around">
-                <li><a href="?s=0" class="block text-center py-2 px-4      underline #if($sample == "0")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Bind a poly and move it to the core's location</a>
+                <li><a href="?s=6" class="block text-center py-2 px-4      underline #if($sample == "6")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Bind a single poly and move it around</a>
                 <li><a href="?s=1" class="block text-center py-2 px-4 mx-2 underline #if($sample == "1")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Prevent Thorium reactor blowup when out of cryo</a>
                 <li><a href="?s=2" class="block text-center py-2 px-4 mx-2 underline #if($sample == "2")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Prevent MULTIPLE Thorium reactors from blowing up when any runs out of cryo</a>
                 <li><a href="?s=4" class="block text-center py-2 px-4 mx-2 underline #if($sample == "4")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Mine a specific coordinate and drop into a container</a>
+                <li><a href="?s=4" class="block text-center py-2 px-4 mx-2 underline #if($sample == "5")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Upgrade copper conveyors to titanium, over a specific area</a>
                 <li><a href="?s=3" class="block text-center py-2 px-4      underline #if($sample == "3")font-bold bg-indigo-700 text-white#{else}bg-gray-200 #end">Non-sensical demo of Mindcode features</a>
             </ul>
         </nav>
@@ -30,8 +31,14 @@
             <div class="grid grid-cols-2 gap-2">
                 <label class="block font-bold" for="source">Mindcode Source Code:</label>
                 <label class="block font-bold">Mindustry Logic:</label>
-                <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">$source_code</textarea>
-                <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">$compiled_code</textarea>
+                <div>
+                    <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">$source_code</textarea>
+                    <p class="text-center">${source_loc} lines of code</p>
+                </div>
+                <div>
+                    <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">$compiled_code</textarea>
+                    <p class="text-center">${compiled_loc} lines of code</p>
+                </div>
                 <div>
                     <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4"/>
                     <a href="/?s=clean" class="underline mx-2">Start with a new script</a>

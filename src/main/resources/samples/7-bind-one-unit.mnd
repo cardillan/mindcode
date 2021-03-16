@@ -1,0 +1,39 @@
+// Bind a single unit of this type:
+type = @poly
+
+// Mindustry's execution model is that all local variables will
+// stay put between invocations. Memory cells and banks are more
+// permanent forms of storage, as they survive the destruction
+// and recreation of a processor.
+//
+// For illustrative purposes, local variables are sufficient:
+FLAG = floor(rand(10000))
+found = false
+
+// If the unit died, we need to search for a new unit again
+if @unit.dead {
+    found = false
+}
+
+// Then, if we haven't found a unit, look for one until
+// we do find one that satisfies us
+while found == false {
+    while @unit === null {
+        ubind(type)
+        if @unit.flag == 0 {
+            flag(FLAG)
+            found = true
+        }
+    }
+}
+
+// Yay! We found a unit, so let's move the
+// unit around to indicate which one it is
+if found {
+    move(30, 50)
+}
+
+// Debugging information
+print("FLAG: ", FLAG)
+print("\nfound: ", found)
+printflush(message1)
