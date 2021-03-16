@@ -207,8 +207,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitUnit_ref(MindcodeParser.Unit_refContext ctx) {
-        return new UnitRef(ctx.name.getText());
+    public AstNode visitRef(MindcodeParser.RefContext ctx) {
+        return new Ref(ctx.name.getText().substring(1));
     }
 
     @Override

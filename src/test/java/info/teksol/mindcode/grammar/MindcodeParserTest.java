@@ -119,7 +119,7 @@ class MindcodeParserTest extends AbstractParserTest {
     }
 
     @Test
-    void parsesUnitReferences() {
+    void parsesRefs() {
         assertDoesNotThrow(() -> parse("while @unit == null {\nubind(poly)\n}\n"));
     }
 

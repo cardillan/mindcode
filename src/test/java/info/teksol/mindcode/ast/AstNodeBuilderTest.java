@@ -297,13 +297,13 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
-    void parsesUnitReferences() {
+    void parsesRefs() {
         assertEquals(
                 new Seq(
                         new NoOp(),
                         new WhileStatement(
                                 new BinaryOp(
-                                        new UnitRef("unit"),
+                                        new Ref("unit"),
                                         "===",
                                         new NullLiteral()
                                 ),
@@ -385,6 +385,56 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst(
                         "// Remember that we initialized ourselves\nwasInitialized = 1\n"
                 )
+        );
+    }
+
+    @Test
+    void parsesRefsWithDashInThem() {
+        assertEquals(
+                new Seq(
+                        new FunctionCall(
+                                "build",
+                                List.of(
+                                        new VarRef("x"),
+                                        new VarRef("y"),
+                                        new Ref("titanium-conveyor"),
+                                        new NumericLiteral("0"),
+                                        new NumericLiteral("0")
+                                )
+                        )
+                ),
+                translateToAst("build(x, y, @titanium-conveyor, 0, 0)")
+        );
+    }
+
+    @Test
+    void parsesIfElseIf() {
+        assertEquals(
+                new Seq(
+                        new IfExpression(
+                                new BinaryOp(
+                                        new VarRef("state"),
+                                        "==",
+                                        new NumericLiteral("1")),
+                                new FunctionCall(
+                                        "print",
+                                        List.of(new VarRef("m"))),
+                                new IfExpression(
+                                        new BinaryOp(
+                                                new VarRef("state"),
+                                                "==",
+                                                new NumericLiteral("2")
+                                        ),
+                                        new FunctionCall(
+                                                "print",
+                                                List.of(new VarRef("n")
+                                                )
+                                        ),
+                                        new NoOp()
+                                )
+                        )
+                ),
+                translateToAst("if state == 1 {\nprint(m)\n} else {\nif state == 2 {\nprint(n)\n}\n}\n")
         );
     }
 }

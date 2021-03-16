@@ -5,7 +5,7 @@ public interface AstVisitor<T> {
 
     T visitUnitAssignment(UnitAssignment node);
 
-    T visitUnitRef(UnitRef node);
+    T visitRef(Ref node);
 
     T visitIfExpression(IfExpression node);
 

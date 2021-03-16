@@ -294,4 +294,36 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void generatesRefsWithDashInThem() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "1"),
+                                new LogicInstruction("set", "tmp1", "0"),
+                                new LogicInstruction("ucontrol", "build", "x", "y", "@titanium-conveyor", "tmp0", "tmp1"),
+                                new LogicInstruction("ucontrol", "getBlock", "x", "y", "b_type", "b_building"),
+                                new LogicInstruction("op", "equal", "tmp2", "b_type", "@titanium-conveyor"),
+                                new LogicInstruction("jump", "label0", "notEqual", "tmp2", "true"),
+                                new LogicInstruction("set", "tmp3", "1"),
+                                new LogicInstruction("op", "add", "tmp4", "n", "tmp3"),
+                                new LogicInstruction("set", "n", "tmp4"),
+                                new LogicInstruction("set", "tmp5", "tmp4"),
+                                new LogicInstruction("jump", "label1", "always"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp5", "null"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst(
+                                        "build(x, y, @titanium-conveyor, 1, 0)\ngetBlock(x, y, b_type, b_building)\nif b_type == @titanium-conveyor {\nn += 1\n}\n"
+                                )
+                        )
+                )
+        );
+    }
 }

@@ -2,10 +2,10 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class UnitRef implements AstNode {
+public class Ref implements AstNode {
     private final String name;
 
-    public UnitRef(String name) {
+    public Ref(String name) {
         this.name = name;
     }
 
@@ -17,8 +17,8 @@ public class UnitRef implements AstNode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UnitRef unitRef = (UnitRef) o;
-        return Objects.equals(name, unitRef.name);
+        Ref ref = (Ref) o;
+        return Objects.equals(name, ref.name);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class UnitRef implements AstNode {
 
     @Override
     public String toString() {
-        return "UnitRef{" +
+        return "Ref{" +
                 "name='" + name + '\'' +
                 '}';
     }

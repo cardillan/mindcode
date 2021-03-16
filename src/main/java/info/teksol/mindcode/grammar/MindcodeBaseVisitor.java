@@ -94,7 +94,7 @@ public class MindcodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitUnit_ref(MindcodeParser.Unit_refContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRef(MindcodeParser.RefContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -416,7 +416,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     @Override
-    public Tuple2<Optional<String>, List<LogicInstruction>> visitUnitRef(UnitRef node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitRef(Ref node) {
         return new Tuple2<>(Optional.of("@" + node.getName()), List.of());
     }
 

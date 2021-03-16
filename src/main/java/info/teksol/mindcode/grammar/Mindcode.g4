@@ -29,7 +29,7 @@ rvalue : lvalue
        | assignment
        | if_expression
        | funcall
-       | unit_ref
+       | ref
        | literal_t
        | bool_t
        | numeric
@@ -54,7 +54,7 @@ numeric : float_t
 
 unary_minus: MINUS;
 
-unit_ref : AT name=id;
+ref : name=REF;
 
 funcall : name=id LEFT_RBRACKET params_list RIGHT_RBRACKET;
 
@@ -69,7 +69,7 @@ heap_ref : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
 address : rvalue;
 
 sensor_read : target=id DOT resource
-            | unit=unit_ref DOT resource
+            | unit=ref DOT resource
             ;
 
 assignment : target=lvalue ASSIGN value=rvalue
@@ -159,6 +159,7 @@ NULL : 'null';
 INT : [0-9]+;
 FLOAT : [0-9]*'.'[0-9]+;
 ID : [a-zA-Z_][a-zA-Z0-9_]*;
+REF : AT [a-zA-Z_][-a-zA-Z0-9_]*;
 
 CRLF : '\r'? '\n';
 

@@ -35,8 +35,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitUnaryOp((UnaryOp) node);
         } else if (node instanceof UnitAssignment) {
             return visitUnitAssignment((UnitAssignment) node);
-        } else if (node instanceof UnitRef) {
-            return visitUnitRef((UnitRef) node);
+        } else if (node instanceof Ref) {
+            return visitRef((Ref) node);
         } else if (node instanceof VarAssignment) {
             return visitVarAssignment((VarAssignment) node);
         } else if (node instanceof VarRef) {
