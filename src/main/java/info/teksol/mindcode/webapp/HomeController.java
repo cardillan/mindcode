@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -36,7 +37,7 @@ public class HomeController extends HttpServlet {
 
     private final VelocityContext parent;
     private final Template template;
-    private final List<Template> samples;
+    private final Map<String, Template> samples;
     private final DataSource dataSource;
 
     HomeController(VelocityEngine engine, VelocityContext parent, DataSource dataSource) {
@@ -44,14 +45,15 @@ public class HomeController extends HttpServlet {
         this.dataSource = dataSource;
 
         this.template = engine.getTemplate("templates/home.html.vtl");
-        this.samples = List.of(
-                engine.getTemplate("samples/1-bind-poly-move-to-core.mnd"),
-                engine.getTemplate("samples/2-thorium-reactor-stopper.mnd"),
-                engine.getTemplate("samples/3-multi-thorium-reactor.mnd"),
-                engine.getTemplate("samples/4-demo.mnd"),
-                engine.getTemplate("samples/5-mining-drone.mnd"),
-                engine.getTemplate("samples/6-upgrade-copper-conveyors-to-titanium.mnd"),
-                engine.getTemplate("samples/7-bind-one-unit.mnd")
+        this.samples = Map.of(
+                "bind-single-unit", engine.getTemplate("samples/7-bind-one-unit.mnd"),
+                "one-thorium", engine.getTemplate("samples/2-thorium-reactor-stopper.mnd"),
+                "many-thorium", engine.getTemplate("samples/3-multi-thorium-reactor.mnd"),
+                "mine-coord", engine.getTemplate("samples/5-mining-drone.mnd"),
+                "upgrade-conveyors", engine.getTemplate("samples/6-upgrade-copper-conveyors-to-titanium.mnd"),
+                "features-demo", engine.getTemplate("samples/4-demo.mnd")
+
+                // "poly", engine.getTemplate("samples/1-bind-poly-move-to-core.mnd")
         );
     }
 
@@ -60,34 +62,24 @@ public class HomeController extends HttpServlet {
         final long startAt = System.nanoTime();
         logger.info("Started GET /?s={}", request.getParameter("s"));
 
-        String id = request.getParameter("s");
-        if (id == null) id = "";
-        if (id.isEmpty()) id = String.valueOf(RAND.nextInt(samples.size()));
-
         final long getSourceStartAt = System.nanoTime();
+        String id = request.getParameter("s");
+        if (id == null || id.isEmpty()) {
+            final int elem = RAND.nextInt(samples.size());
+            id = samples.keySet().stream().skip(elem).findFirst().get();
+        }
+
         final String sourceCode;
-        switch (id) {
-            case "0":
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-                sourceCode = returnSampleSourceCode(id);
-                break;
-
-            case "clean":
-                sourceCode = "";
-                break;
-
-            default:
-                try {
-                    sourceCode = returnDbSourceCode(id);
-                    break;
-                } catch (SQLException e) {
-                    throw new ServletException(e);
-                }
+        if (samples.containsKey(id)) {
+            sourceCode = returnSampleSourceCode(id);
+        } else if (id.equals("clean")) {
+            sourceCode = "";
+        } else {
+            try {
+                sourceCode = returnDbSourceCode(id);
+            } catch (SQLException e) {
+                throw new ServletException(e);
+            }
         }
         final long getSourceEndAt = System.nanoTime();
 
@@ -132,11 +124,13 @@ public class HomeController extends HttpServlet {
 
     private String returnSampleSourceCode(String id) {
         final StringWriter writer = new StringWriter();
-        samples.get(Integer.valueOf(id)).merge(new VelocityContext(), writer);
+        samples.get(id).merge(new VelocityContext(), writer);
         return writer.toString();
     }
 
     private Tuple2<String, List<String>> compile(String program) {
+        String instructions = "";
+
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         final List<String> errors = new ArrayList<>();
@@ -147,15 +141,20 @@ public class HomeController extends HttpServlet {
             }
         });
 
-        final MindcodeParser.ProgramContext context = parser.program();
-        final Seq prog = AstNodeBuilder.generate(context);
-        final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
-                LogicInstructionPeepholeOptimizer.optimize(
-                        LogicInstructionGenerator.generateFrom(prog)
-                )
-        );
+        try {
+            final MindcodeParser.ProgramContext context = parser.program();
+            final Seq prog = AstNodeBuilder.generate(context);
+            final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
+                    LogicInstructionPeepholeOptimizer.optimize(
+                            LogicInstructionGenerator.generateFrom(prog)
+                    )
+            );
 
-        final String instructions = LogicInstructionPrinter.toString(result);
+            instructions = LogicInstructionPrinter.toString(result);
+        } catch (RuntimeException e) {
+            errors.add(e.getMessage());
+        }
+
         return new Tuple2<>(instructions, errors);
     }
 }
