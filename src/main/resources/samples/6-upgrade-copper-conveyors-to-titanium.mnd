@@ -77,7 +77,8 @@ if cell1[STATE] == ST_UNINITIALIZED {
     cell1[FLAG] = rand(1000000) + 1
 }
 
-// Once we know we're initialized, we can look for *the* poly we will take control of
+// Once we know we're initialized, we can look for *the*
+// poly we will take control of
 while !cell1[FOUND] {
     while @unit === null {
         ubind(@poly)
@@ -88,8 +89,9 @@ while !cell1[FOUND] {
     }
 }
 
-// When we're approaching a given coordinate, this is how we choose to either
-// continue approaching, or if we're ready to upgrade the existing building
+// When we're approaching a given coordinate, this is how we
+// choose to either continue approaching, or if we're ready
+// to upgrade the existing building
 if cell1[STATE] == ST_APPROACHING {
     if within(cell1[BUILD_X], cell1[BUILD_Y], RADIUS) {
       cell1[STATE] = ST_BUILDING
@@ -108,9 +110,12 @@ if cell1[STATE] == ST_BUILDING {
     cell1[STATE] = ST_NEXT
 }
 
-// This is the block of code that determines which cell is the next one
-// This script proceeds southwest to northeast, to make it easier to do math:
-// (0,0) is at the bottom-left in Mindustry.
+// This is the block of code that determines which cell is the
+// next one. This script proceeds southwest to northeast, to make
+// it easier to do math.
+//
+// (0,0) is at the bottom-left in Mindustry, meaning +1 on each
+// side moves up and to the right.
 if cell1[STATE] == ST_NEXT {
     cell1[BUILD_X] += cell1[DX]
 
@@ -131,11 +136,13 @@ if cell1[STATE] == ST_NEXT {
     if cell1[BUILD_Y] > cell1[NE_Y] {
       cell1[DY] *= -1
       cell1[BUILD_Y] = cell1[NE_Y]
-      // Depending on whether you want to make it a one-shot or not, this is how
-      // you'd choose to continue upgrading any newly constructed copper conveyors
+      // Depending on whether you want to make it a one-shot or not,
+      // this is how you'd choose to continue upgrading any newly
+      // constructed copper conveyors
       // cell1[STATE] = ST_APPROACHING
 
-      // Otherwise, this is a one-shot and once we've gone over every cell, we stop
+      // Otherwise, this is a one-shot and once we've gone over every
+      // cell, we stop
       cell1[STATE] = ST_DONE
     }
 
