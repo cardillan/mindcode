@@ -6,6 +6,8 @@ import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.mindustry.*;
 import org.antlr.v4.runtime.*;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
 
 import java.io.File;
 import java.io.FileReader;
@@ -15,24 +17,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Main {
-    public static void main(String[] args) throws IOException {
-        for (final String dirname : args) {
-            final File[] files = new File(dirname).listFiles();
-            Arrays.sort(files);
-            for (final File file : files) {
-                final StringWriter sw = new StringWriter();
-                try (final FileReader reader = new FileReader(file)) {
-                    reader.transferTo(sw);
-                }
-                System.out.println("=====> " + file);
-                compile(sw.toString());
-                System.out.println(file + " <=====");
-            }
+import static org.junit.jupiter.api.Assertions.*;
+
+class SamplesTest {
+    @TestFactory
+    List<DynamicTest> validateSamples() {
+        final List<DynamicTest> result = new ArrayList<>();
+        final String dirname = "src/main/resources/samples";
+        final File[] files = new File(dirname).listFiles();
+        assertNotNull(files);
+        Arrays.sort(files);
+
+        for (final File sample : files) {
+            result.add(DynamicTest.dynamicTest(sample.getName(), null, () -> evaluateSample(sample)));
         }
+
+        return result;
     }
 
-    private static void compile(String program) {
+    void evaluateSample(File sample) throws IOException {
+        final StringWriter sw = new StringWriter();
+        try (final FileReader reader = new FileReader(sample)) {
+            reader.transferTo(sw);
+        }
+        compile(sw.toString());
+    }
+
+    private void compile(String program) {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         final List<String> errors = new ArrayList<>();
@@ -52,7 +63,8 @@ public class Main {
         );
 
         final String opcodes = LogicInstructionPrinter.toString(result);
-        System.out.println(opcodes);
-        errors.forEach(System.err::println);
+        assertFalse(opcodes.isEmpty(), "Failed to generate a Logic program out of:\n" + program);
+        assertTrue(errors.isEmpty(), errors.toString());
     }
+
 }
