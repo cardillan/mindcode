@@ -1,5 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.ParsingException;
+
 import java.util.Objects;
 
 public class VarAssignment implements AstNode {
@@ -7,6 +9,10 @@ public class VarAssignment implements AstNode {
     private final AstNode rvalue;
 
     public VarAssignment(String varName, AstNode rvalue) {
+        if (RESERVED_KEYWORDS.contains(varName)) {
+            throw new ParsingException(varName + " is a reserved keyword, please use a different word");
+        }
+
         this.varName = varName;
         this.rvalue = rvalue;
     }

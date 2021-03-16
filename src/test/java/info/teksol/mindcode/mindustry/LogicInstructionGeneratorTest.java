@@ -128,7 +128,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 prettyPrint(
                         List.of(
                                 new LogicInstruction("set","tmp0","4"),
-                                new LogicInstruction("read", "tmp1", "HEAP", "tmp0"),
+                                new LogicInstruction("read", "tmp1", "heap", "tmp0"),
                                 new LogicInstruction("set", "tmp2", "0"),
                                 new LogicInstruction("op", "equal", "tmp3", "tmp1", "tmp2"),
                                 new LogicInstruction("jump", "label0", "notEqual", "tmp3", "true"),
@@ -136,7 +136,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 new LogicInstruction("jump", "label1", "always"),
                                 new LogicInstruction("label", "label0"),
                                 new LogicInstruction("set", "tmp4", "4"),
-                                new LogicInstruction("write", "true", "HEAP", "tmp4"),
+                                new LogicInstruction("write", "true", "heap", "tmp4"),
                                 new LogicInstruction("set", "tmp5", "1"),
                                 new LogicInstruction("op", "add", "tmp6", "n", "tmp5"),
                                 new LogicInstruction("set", "n", "tmp6"),
@@ -149,7 +149,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
                                 (Seq) translateToAst(
-                                        "value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}"
+                                        "value = if heap[4] == 0 { false\n} else { heap[4] = true\nn += 1\n}"
                                 )
                         )
                 )

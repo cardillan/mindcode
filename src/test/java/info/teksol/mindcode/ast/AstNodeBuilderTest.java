@@ -1,11 +1,13 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
+import info.teksol.mindcode.ParsingException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AstNodeBuilderTest extends AbstractAstTest {
     @Test
@@ -221,13 +223,13 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 "value",
                                 new IfExpression(
                                         new BinaryOp(
-                                                new HeapRead("HEAP", new NumericLiteral("4")),
+                                                new HeapRead("heap", new NumericLiteral("4")),
                                                 "==",
                                                 new NumericLiteral("0")
                                         ),
                                         new BooleanLiteral(false),
                                         new Seq(
-                                                new HeapWrite("HEAP",
+                                                new HeapWrite("heap",
                                                         new NumericLiteral("4"),
                                                         new BooleanLiteral(true)
                                                 ),
@@ -243,7 +245,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("value = if HEAP[4] == 0 { false\n} else { HEAP[4] = true\nn += 1\n}")
+                translateToAst("value = if heap[4] == 0 { false\n} else { heap[4] = true\nn += 1\n}")
         );
     }
 
@@ -258,10 +260,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NumericLiteral("4")
                                 ),
                                 new HeapWrite(
-                                        "HEAP",
+                                        "heap",
                                         new NumericLiteral("2"),
                                         new BinaryOp(
-                                                new HeapRead("HEAP", new NumericLiteral("2")),
+                                                new HeapRead("heap", new NumericLiteral("2")),
                                                 "+",
                                                 new NumericLiteral("1")
                                         )
@@ -269,7 +271,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst("if n > 4 { HEAP[2] += 1\n}\n}")
+                translateToAst("if n > 4 { heap[2] += 1\n}\n}")
         );
     }
 
@@ -505,5 +507,45 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
                 translateToAst("cell1[ptr] = cell1[ptr - 1] + cell1[ptr - 2]")
         );
+    }
+
+    @Test
+    void rejects_STACK_ReservedKeywordsInVarRef() {
+        assertThrows(ParsingException.class, () -> translateToAst("cell1[STACK] = 0"));
+    }
+
+    @Test
+    void rejects_HEAP_ReservedKeywordsInVarRef() {
+        assertThrows(ParsingException.class, () -> translateToAst("cell1[HEAP] = 0"));
+    }
+
+    @Test
+    void rejects_STACK_ReservedKeywordsInHeapWrite() {
+        assertThrows(ParsingException.class, () -> translateToAst("STACK[1] = 0"));
+    }
+
+    @Test
+    void rejects_HEAP_ReservedKeywordsInHeapWrite() {
+        assertThrows(ParsingException.class, () -> translateToAst("HEAP[1] = 0"));
+    }
+
+    @Test
+    void rejects_STACK_ReservedKeywordsInHeapRead() {
+        assertThrows(ParsingException.class, () -> translateToAst("STACK[0]"));
+    }
+
+    @Test
+    void rejects_HEAP_ReservedKeywordsInHeapRead() {
+        assertThrows(ParsingException.class, () -> translateToAst("HEAP[0]"));
+    }
+
+    @Test
+    void rejects_STACK_ReservedKeywordsInVarAssignment() {
+        assertThrows(ParsingException.class, () -> translateToAst("STACK = 0"));
+    }
+
+    @Test
+    void rejects_HEAP_ReservedKeywordsInVarAssignment() {
+        assertThrows(ParsingException.class, () -> translateToAst("HEAP = 0"));
     }
 }

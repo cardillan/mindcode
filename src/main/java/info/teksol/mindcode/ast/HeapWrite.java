@@ -1,5 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.ParsingException;
+
 import java.util.Objects;
 
 public class HeapWrite implements AstNode {
@@ -8,6 +10,10 @@ public class HeapWrite implements AstNode {
     private final AstNode value;
 
     public HeapWrite(String cellName, AstNode address, AstNode value) {
+        if (RESERVED_KEYWORDS.contains(cellName)) {
+            throw new ParsingException(cellName + " is a reserved keyword, please use a different word");
+        }
+
         this.cellName = cellName;
         this.address = address;
         this.value = value;
