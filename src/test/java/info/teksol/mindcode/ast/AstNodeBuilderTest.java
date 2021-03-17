@@ -560,7 +560,17 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         "<=",
                                         new NumericLiteral("17")
                                 ),
-                                new FunctionCall("print", new VarRef("n"))
+                                new Seq(
+                                        new FunctionCall("print", new VarRef("n")),
+                                        new VarAssignment(
+                                                "n",
+                                                new BinaryOp(
+                                                        new VarRef("n"),
+                                                        "+",
+                                                        new NumericLiteral("1")
+                                                )
+                                        )
+                                )
                         )
                 ),
                 translateToAst("for n in 1 .. 17 {\nprint(n)\n}")
@@ -578,7 +588,17 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         "<",
                                         new NumericLiteral("17")
                                 ),
-                                new FunctionCall("print", new VarRef("n"))
+                                new Seq(
+                                        new FunctionCall("print", new VarRef("n")),
+                                        new VarAssignment(
+                                                "n",
+                                                new BinaryOp(
+                                                        new VarRef("n"),
+                                                        "+",
+                                                        new NumericLiteral("1")
+                                                )
+                                        )
+                                )
                         )
                 ),
                 translateToAst("for n in 1 ... 17 {\nprint(n)\n}")

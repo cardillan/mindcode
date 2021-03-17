@@ -307,7 +307,17 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                 new VarAssignment(name.getName(), range.getFirstValue()),
                 new WhileStatement(
                         range.buildLoopExitCondition(name),
-                        body
+                        new Seq(
+                                body,
+                                new VarAssignment(
+                                        name.getName(),
+                                        new BinaryOp(
+                                                name,
+                                                "+",
+                                                new NumericLiteral("1")
+                                        )
+                                )
+                        )
                 )
         );
     }

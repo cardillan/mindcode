@@ -368,6 +368,9 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 new LogicInstruction("op", "lessThanEq", "tmp2", "n", "tmp1"),
                                 new LogicInstruction("jump", "label1", "notEqual", "tmp2", "true"),
                                 new LogicInstruction("print", "n"),
+                                new LogicInstruction("set", "tmp3", "1"),
+                                new LogicInstruction("op", "add", "tmp4", "n", "tmp3"),
+                                new LogicInstruction("set", "n", "tmp4"),
                                 new LogicInstruction("jump", "label0", "always"),
                                 new LogicInstruction("label", "label1"),
                                 new LogicInstruction("end")
@@ -386,16 +389,31 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         List.of(
-
+                                // init
                                 new LogicInstruction("set", "tmp0", "1"),
                                 new LogicInstruction("set", "n", "tmp0"),
+
+                                // cond
                                 new LogicInstruction("label", "label0"),
                                 new LogicInstruction("set", "tmp1", "17"),
                                 new LogicInstruction("op", "lessThan", "tmp2", "n", "tmp1"),
                                 new LogicInstruction("jump", "label1", "notEqual", "tmp2", "true"),
+
+                                // loop body
                                 new LogicInstruction("print", "n"),
+
+                                // increment
+                                new LogicInstruction("set", "tmp3", "1"),
+                                new LogicInstruction("op", "add", "tmp4", "n", "tmp3"),
+                                new LogicInstruction("set", "n", "tmp4"),
+
+                                // loop
                                 new LogicInstruction("jump", "label0", "always"),
+
+                                // trailer
                                 new LogicInstruction("label", "label1"),
+
+                                // rest of program
                                 new LogicInstruction("end")
                         )
                 ),
