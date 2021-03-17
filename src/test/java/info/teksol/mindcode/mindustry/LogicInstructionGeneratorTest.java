@@ -128,7 +128,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 prettyPrint(
                         List.of(
                                 new LogicInstruction("set", "tmp0", "4"),
-                                new LogicInstruction("read", "tmp1", "heap", "tmp0"),
+                                new LogicInstruction("read", "tmp1", "cell1", "tmp0"),
                                 new LogicInstruction("set", "tmp2", "0"),
                                 new LogicInstruction("op", "equal", "tmp3", "tmp1", "tmp2"),
                                 new LogicInstruction("jump", "label0", "notEqual", "tmp3", "true"),
@@ -136,7 +136,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 new LogicInstruction("jump", "label1", "always"),
                                 new LogicInstruction("label", "label0"),
                                 new LogicInstruction("set", "tmp4", "4"),
-                                new LogicInstruction("write", "true", "heap", "tmp4"),
+                                new LogicInstruction("write", "true", "cell1", "tmp4"),
                                 new LogicInstruction("set", "tmp5", "1"),
                                 new LogicInstruction("op", "add", "tmp6", "n", "tmp5"),
                                 new LogicInstruction("set", "n", "tmp6"),
@@ -149,7 +149,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
                                 (Seq) translateToAst(
-                                        "value = if heap[4] == 0 { false\n} else { heap[4] = true\nn += 1\n}"
+                                        "value = if cell1[4] == 0 { false\n} else { cell1[4] = true\nn += 1\n}"
                                 )
                         )
                 )
@@ -442,6 +442,24 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         )
                 )
         );
+    }
 
+    @Test
+    void supportsAssigningAssignmentResults() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "42"),
+                                new LogicInstruction("set", "b", "tmp0"),
+                                new LogicInstruction("set", "a", "tmp0"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("a = b = 42")
+                        )
+                )
+        );
     }
 }

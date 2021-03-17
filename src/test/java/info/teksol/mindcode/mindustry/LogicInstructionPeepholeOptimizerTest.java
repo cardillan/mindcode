@@ -129,12 +129,12 @@ class LogicInstructionPeepholeOptimizerTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         List.of(
-                                new LogicInstruction("read", "tmp1", "heap", "4"),
+                                new LogicInstruction("read", "tmp1", "cell1", "4"),
                                 new LogicInstruction("jump", "label0", "notEqual", "tmp1", "0"),
                                 new LogicInstruction("set", "tmp7", "false"),
                                 new LogicInstruction("jump", "label1", "always"),
                                 new LogicInstruction("label", "label0"),
-                                new LogicInstruction("write", "true", "heap", "4"),
+                                new LogicInstruction("write", "true", "cell1", "4"),
                                 new LogicInstruction("op", "add", "n", "n", "1"),
                                 new LogicInstruction("set", "tmp7", "n"),
                                 new LogicInstruction("label", "label1"),
@@ -146,7 +146,7 @@ class LogicInstructionPeepholeOptimizerTest extends AbstractAstTest {
                         LogicInstructionPeepholeOptimizer.optimize(
                                 LogicInstructionGenerator.generateFrom(
                                         (Seq) translateToAst(
-                                                "value = if heap[4] == 0 { false\n} else { heap[4] = true\nn += 1\n}"
+                                                "value = if cell1[4] == 0 { false\n} else { cell1[4] = true\nn += 1\n}"
                                         )
                                 )
                         )

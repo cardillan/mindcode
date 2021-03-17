@@ -1,12 +1,12 @@
 package info.teksol.mindcode.grammar;
 
-import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.Tuple2;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MindcodeParserTest extends AbstractParserTest {
     @Test
@@ -91,5 +91,20 @@ class MindcodeParserTest extends AbstractParserTest {
     @Test
     void parsesExclusiveIteratorStyleLoop() {
         assertDoesNotThrow(() -> parse("for n in 1 ... 17 {\nprint(n)\n}"));
+    }
+
+    @Test
+    void parsesHeapAllocation() {
+        assertDoesNotThrow(() -> parse("allocate heap in cell4 0 .. 64"));
+    }
+
+    @Test
+    void parsesGlobalReferences() {
+        assertDoesNotThrow(() -> parse("" +
+                        "allocate heap in cell2 14 .. 20\n" +
+                        "$dx += 1\n" +
+                        "$dy = $dx - 4\n"
+                )
+        );
     }
 }

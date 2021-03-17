@@ -61,11 +61,11 @@ Things I'd like to add to Mindcode-the-language:
 * [x] expressions!
     * `move(center_x + radius * sin(@tick), center_y + radius * cos(@tick))` moves a unit in a circle around a specific point
 * [x] if expressions (ternary operator)
-* [ ] auto-allocated global variables
+* [x] auto-allocated global variables
+* [ ] switch / case expression
 * [ ] functions / reusable procedures
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * [ ] improved data types: 2d vector
-* [ ] switch / case expression
 * [ ] further optimize the generated Logic
 
 Things I'd like to add to Mindcode-the-webapp:

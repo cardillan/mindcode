@@ -121,7 +121,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
 
     @Override
     public Tuple2<Optional<String>, List<LogicInstruction>> visitVarAssignment(VarAssignment node) {
-        final Tuple2<Optional<String>, List<LogicInstruction>> rvalue = visit(node.getRvalue());
+        final Tuple2<Optional<String>, List<LogicInstruction>> rvalue = visit(node.getValue());
         final List<LogicInstruction> result = new ArrayList<>(rvalue._2);
         if (!rvalue._1.isPresent()) {
             throw new GenerationException("Expected a variable name, found none in " + result);

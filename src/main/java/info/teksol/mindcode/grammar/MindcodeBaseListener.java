@@ -52,6 +52,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHeap_allocation(MindcodeParser.Heap_allocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHeap_allocation(MindcodeParser.Heap_allocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCStyleLoop(MindcodeParser.CStyleLoopContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -184,13 +196,37 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLvalue(MindcodeParser.LvalueContext ctx) { }
+	@Override public void enterLocalvar(MindcodeParser.LocalvarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLvalue(MindcodeParser.LvalueContext ctx) { }
+	@Override public void exitLocalvar(MindcodeParser.LocalvarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGlobalvar(MindcodeParser.GlobalvarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGlobalvar(MindcodeParser.GlobalvarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterGlobal(MindcodeParser.GlobalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitGlobal(MindcodeParser.GlobalContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

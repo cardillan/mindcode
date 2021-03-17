@@ -38,6 +38,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitExpression(MindcodeParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#heap_allocation}.
+	 * @param ctx the parse tree
+	 */
+	void enterHeap_allocation(MindcodeParser.Heap_allocationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#heap_allocation}.
+	 * @param ctx the parse tree
+	 */
+	void exitHeap_allocation(MindcodeParser.Heap_allocationContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code cStyleLoop}
 	 * labeled alternative in {@link MindcodeParser#for_statement}.
 	 * @param ctx the parse tree
@@ -156,15 +166,39 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitBlock_statement_list(MindcodeParser.Block_statement_listContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#lvalue}.
+	 * Enter a parse tree produced by the {@code localvar}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void enterLvalue(MindcodeParser.LvalueContext ctx);
+	void enterLocalvar(MindcodeParser.LocalvarContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#lvalue}.
+	 * Exit a parse tree produced by the {@code localvar}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 */
-	void exitLvalue(MindcodeParser.LvalueContext ctx);
+	void exitLocalvar(MindcodeParser.LocalvarContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code globalvar}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 */
+	void enterGlobalvar(MindcodeParser.GlobalvarContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code globalvar}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 */
+	void exitGlobalvar(MindcodeParser.GlobalvarContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#global}.
+	 * @param ctx the parse tree
+	 */
+	void enterGlobal(MindcodeParser.GlobalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#global}.
+	 * @param ctx the parse tree
+	 */
+	void exitGlobal(MindcodeParser.GlobalContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#rvalue}.
 	 * @param ctx the parse tree

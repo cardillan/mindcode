@@ -29,6 +29,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(MindcodeParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#heap_allocation}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHeap_allocation(MindcodeParser.Heap_allocationContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code cStyleLoop}
 	 * labeled alternative in {@link MindcodeParser#for_statement}.
 	 * @param ctx the parse tree
@@ -99,11 +105,25 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBlock_statement_list(MindcodeParser.Block_statement_listContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#lvalue}.
+	 * Visit a parse tree produced by the {@code localvar}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLvalue(MindcodeParser.LvalueContext ctx);
+	T visitLocalvar(MindcodeParser.LocalvarContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code globalvar}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGlobalvar(MindcodeParser.GlobalvarContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#global}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGlobal(MindcodeParser.GlobalContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#rvalue}.
 	 * @param ctx the parse tree

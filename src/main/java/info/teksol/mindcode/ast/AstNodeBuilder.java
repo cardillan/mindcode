@@ -5,11 +5,13 @@ import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
+    private Optional<HeapAllocation> allocatedHeap = Optional.empty();
+    private Map<String, Integer> heapAllocations = new HashMap<>();
+
     public static Seq generate(MindcodeParser.ProgramContext program) {
         final AstNodeBuilder builder = new AstNodeBuilder();
         final AstNode node = builder.visit(program);
@@ -82,35 +84,82 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitLvalue(MindcodeParser.LvalueContext ctx) {
-        return new VarRef(ctx.id().ID().getSymbol().getText());
+    public AstNode visitHeap_allocation(MindcodeParser.Heap_allocationContext ctx) {
+        if (allocatedHeap.isPresent()) {
+            throw new ParsingException("Only a single heap may be allocated per script, found 2nd declaration in " + ctx.getText());
+        }
+
+        final HeapAllocation heapAllocation = new HeapAllocation(
+                ((VarRef) visit(ctx.id())).getName(),
+                (Range) visit(ctx.range()));
+        allocatedHeap = Optional.of(heapAllocation);
+        return new NoOp();
+    }
+
+    @Override
+    public AstNode visitGlobalvar(MindcodeParser.GlobalvarContext ctx) {
+        if (!allocatedHeap.isPresent()) {
+            throw new UnallocatedHeapException("Found reference to global variable without a heap allocation. Please allocate a heap at the top of your script. Found " + ctx.getText());
+        }
+
+        final String name = ctx.global().name.getText();
+        final int location;
+        if (heapAllocations.containsKey(name)) {
+            location = heapAllocations.get(name);
+        } else {
+            if (heapAllocations.size() >= allocatedHeap.get().size()) {
+                throw new OutOfHeapSpaceException("increase your heap size or reduce the number of global variables used: " + ctx.getText());
+            }
+
+            location = heapAllocations.size();
+            heapAllocations.put(name, location);
+        }
+
+        return new HeapRead(
+                allocatedHeap.get().getName(),
+                new NumericLiteral(String.valueOf(allocatedHeap.get().getFirst() + location)));
+    }
+
+    @Override
+    public AstNode visitId(MindcodeParser.IdContext ctx) {
+        return new VarRef(ctx.getText());
     }
 
     @Override
     public AstNode visitAssignment(MindcodeParser.AssignmentContext ctx) {
         if (ctx.target != null) {
-            // simple assignment
+            final AstNode target = visit(ctx.target);
+            final AstNode value;
             if (ctx.op != null) {
-                // +=, -=, etc...
-                return new VarAssignment(
-                        ctx.target.getText(),
-                        new BinaryOp(
-                                visitLvalue(ctx.lvalue()),
-                                ctx.op.getText().replace("=", ""),
-                                visitRvalue(ctx.rvalue())
-                        )
+                value = new BinaryOp(
+                        visit(ctx.lvalue()),
+                        ctx.op.getText().replace("=", ""),
+                        visit(ctx.rvalue())
                 );
             } else {
+                value = visit(ctx.rvalue());
+            }
+
+            if (target instanceof VarRef) {
+                // +=, -=, etc...
                 return new VarAssignment(
-                        ctx.target.getText(),
-                        visitRvalue(ctx.rvalue())
+                        ((VarRef) target).getName(),
+                        value
                 );
+            } else if (target instanceof HeapRead) {
+                return new HeapWrite(
+                        ((HeapRead) target).getCellName(),
+                        ((HeapRead) target).getAddress(),
+                        value
+                );
+            } else {
+                throw new ParsingException("parsing failed during assignment at " + ctx.getText());
             }
         }
 
         if (ctx.heap_ref() != null) {
-            final AstNode lvalue = visitHeap_ref(ctx.heap_ref());
-            final AstNode rvalue = visitRvalue(ctx.value);
+            final AstNode lvalue = visit(ctx.heap_ref());
+            final AstNode rvalue = visit(ctx.value);
             if (ctx.op != null) {
                 // +=, -=, etc...
                 return new HeapWrite(

@@ -12,7 +12,10 @@ expression : while_statement
            | control_statement
            | rvalue
            | single_line_comment
+           | heap_allocation
            ;
+
+heap_allocation : ALLOCATE HEAP IN name=id range;
 
 for_statement : FOR init_expr SEMICOLON cond_expr SEMICOLON loop_expr LEFT_CBRACKET crlf? body=block_body RIGHT_CBRACKET    # cStyleLoop
               | FOR name=lvalue IN range LEFT_CBRACKET crlf? body=block_body RIGHT_CBRACKET                                 # rangeStyleLoop
@@ -39,7 +42,11 @@ block_statement_list : expression terminator
                      | block_statement_list expression terminator
                      ;
 
-lvalue : id;
+lvalue : id     # localvar
+       | global # globalvar
+       ;
+
+global : DOLLAR name=id;
 
 rvalue : lvalue
        | assignment
@@ -130,11 +137,14 @@ ELSE : 'else';
 FOR : 'for';
 IN : 'in';
 EXCLUSIVE : 'exclusive';
+ALLOCATE : 'allocate';
+HEAP : 'heap';
 
 AT : '@';
 DOT : '.';
 COMMA : ',';
 SEMICOLON : ';';
+DOLLAR : '$';
 
 ASSIGN : '=';
 PLUS_ASSIGN : '+=';

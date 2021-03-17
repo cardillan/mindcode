@@ -223,13 +223,13 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 "value",
                                 new IfExpression(
                                         new BinaryOp(
-                                                new HeapRead("heap", new NumericLiteral("4")),
+                                                new HeapRead("cell1", new NumericLiteral("4")),
                                                 "==",
                                                 new NumericLiteral("0")
                                         ),
                                         new BooleanLiteral(false),
                                         new Seq(
-                                                new HeapWrite("heap",
+                                                new HeapWrite("cell1",
                                                         new NumericLiteral("4"),
                                                         new BooleanLiteral(true)
                                                 ),
@@ -245,7 +245,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
                 ),
-                translateToAst("value = if heap[4] == 0 { false\n} else { heap[4] = true\nn += 1\n}")
+                translateToAst("value = if cell1[4] == 0 { false\n} else { cell1[4] = true\nn += 1\n}")
         );
     }
 
@@ -260,10 +260,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NumericLiteral("4")
                                 ),
                                 new HeapWrite(
-                                        "heap",
+                                        "cell1",
                                         new NumericLiteral("2"),
                                         new BinaryOp(
-                                                new HeapRead("heap", new NumericLiteral("2")),
+                                                new HeapRead("cell1", new NumericLiteral("2")),
                                                 "+",
                                                 new NumericLiteral("1")
                                         )
@@ -271,7 +271,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst("if n > 4 { heap[2] += 1\n}\n}")
+                translateToAst("if n > 4 { cell1[2] += 1\n}\n}")
         );
     }
 
@@ -624,5 +624,66 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
                 translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1 {\nprint(n)\n}\n")
         );
+    }
+
+    @Test
+    void parsesHeapAllocationWithExclusiveRange() {
+        assertEquals(
+                new Seq(
+                        new NoOp()
+                ),
+                translateToAst("allocate heap in cell2 0 ... 64")
+        );
+    }
+
+    @Test
+    void parsesHeapAllocationWithInclusiveRange() {
+        assertEquals(
+                new Seq(
+                        new NoOp()
+                ),
+                translateToAst("allocate heap in cell2 0 .. 30")
+        );
+    }
+
+    @Test
+    void heapAllocationOnlyAcceptsNumericLiteralForRangeDeclaration() {
+        assertThrows(InvalidHeapAllocationException.class, () -> translateToAst("allocate heap in cell4 n .. k"));
+        assertThrows(InvalidHeapAllocationException.class, () -> translateToAst("allocate heap in cell4 (0+1) .. max_val"));
+    }
+
+    @Test
+    void parsesGlobalReferences() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new NoOp(),
+                                new HeapWrite("cell2", new NumericLiteral("4"), new NumericLiteral("1"))
+                        ),
+                        new HeapWrite(
+                                "cell2",
+                                new NumericLiteral("5"),
+                                new BinaryOp(
+                                        new HeapRead(
+                                                "cell2",
+                                                new NumericLiteral("4")
+                                        ),
+                                        "+",
+                                        new NumericLiteral("42")
+                                )
+                        )
+                ),
+                translateToAst("allocate heap in cell2 4 .. 5\n$dx = 1;$dy = $dx + 42")
+        );
+    }
+
+    @Test
+    void rejectsHeapUsageWhenUnallocated() {
+        assertThrows(UnallocatedHeapException.class, () -> translateToAst("$dx = 1"));
+    }
+
+    @Test
+    void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
+        assertThrows(OutOfHeapSpaceException.class, () -> translateToAst("allocate heap in cell1 0 .. 1\n$dx = $dy = $dz"));
     }
 }
