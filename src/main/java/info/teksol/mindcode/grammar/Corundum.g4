@@ -346,7 +346,7 @@ SEMICOLON : ';';
 CRLF : '\r'? '\n';
 
 REQUIRE : 'require';
-END : 'end';
+END : 'lastValue';
 DEF : 'def';
 RETURN : 'return';
 PIR : 'pir';
@@ -404,7 +404,7 @@ RIGHT_SBRACKET : ']';
 NIL : 'nil';
 
 SL_COMMENT : ('#' ~('\r' | '\n')* '\r'? '\n') -> skip;
-ML_COMMENT : ('=begin' .*? '=end' '\r'? '\n') -> skip;
+ML_COMMENT : ('=begin' .*? '=lastValue' '\r'? '\n') -> skip;
 WS : (' '|'\t')+ -> skip;
 
 INT : [0-9]+;

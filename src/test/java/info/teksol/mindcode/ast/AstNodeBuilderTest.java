@@ -548,4 +548,81 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void rejects_HEAP_ReservedKeywordsInVarAssignment() {
         assertThrows(ParsingException.class, () -> translateToAst("HEAP = 0"));
     }
+
+    @Test
+    void parsesInclusiveIteratorStyleLoop() {
+        assertEquals(
+                new Seq(
+                        new VarAssignment("n", new NumericLiteral("1")),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new VarRef("n"),
+                                        "<=",
+                                        new NumericLiteral("17")
+                                ),
+                                new FunctionCall("print", new VarRef("n"))
+                        )
+                ),
+                translateToAst("for n in 1 .. 17 {\nprint(n)\n}")
+        );
+    }
+
+    @Test
+    void parsesExclusiveIteratorStyleLoop() {
+        assertEquals(
+                new Seq(
+                        new VarAssignment("n", new NumericLiteral("1")),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new VarRef("n"),
+                                        "<",
+                                        new NumericLiteral("17")
+                                ),
+                                new FunctionCall("print", new VarRef("n"))
+                        )
+                ),
+                translateToAst("for n in 1 ... 17 {\nprint(n)\n}")
+        );
+    }
+
+    @Test
+    void parsesCStyleLoop() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new VarAssignment("i", new NumericLiteral("0")),
+                                new VarAssignment("j", new NumericLiteral("-5"))
+                        ),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new VarRef("i"),
+                                        "<",
+                                        new NumericLiteral("5")
+                                ),
+                                new Seq(
+                                        new FunctionCall("print", new VarRef("n")),
+                                        new Seq(
+                                                new VarAssignment(
+                                                        "j",
+                                                        new BinaryOp(
+                                                                new VarRef("j"),
+                                                                "-",
+                                                                new NumericLiteral("1")
+                                                        )
+                                                ),
+                                                new VarAssignment(
+                                                        "i",
+                                                        new BinaryOp(
+                                                                new VarRef("i"),
+                                                                "+",
+                                                                new NumericLiteral("1")
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1 {\nprint(n)\n}\n")
+        );
+    }
 }

@@ -1,12 +1,12 @@
 package info.teksol.mindcode.grammar;
 
+import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.Tuple2;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MindcodeParserTest extends AbstractParserTest {
     @Test
@@ -15,66 +15,6 @@ class MindcodeParserTest extends AbstractParserTest {
         assertDoesNotThrow(() -> parse("foundation1.copper < foundation1.itemCapacity"));
         assertDoesNotThrow(() -> parse("tank1.water < tank1.liquidCapacity"));
     }
-    /*
-        @copper
-        @lead
-        @metaglass
-        @graphite
-        @sand
-        @coal
-        @titanium
-        @scrap
-        @silicon
-        @pyratite
-
-        @water
-        @slag
-        @cryofluid
-
-        totalItems
-        firstItem
-        totalLiquids
-        totalPower
-        itemCapacity
-        liquidCapacity
-        powerCapacity
-        powerNetStored
-        powerNetCapacity
-        powerNetIn
-        powerNetOut
-        ammo
-        ammoCapacity
-        health
-        maxHealth
-        heat
-        efficiency
-        timescale
-        rotation
-        x
-        y
-        shootX
-        shootY
-        size
-        dead
-        range
-        shooting
-        boosting
-        mineX
-        mineY
-        mining
-        team
-        type
-        flag
-        controlled
-        controller
-        commanded
-        name
-        config
-        payloadCount
-        payloadType
-        enabled
-        configure
-    */
 
     @Test
     void parsesControlStatements() {
@@ -136,5 +76,20 @@ class MindcodeParserTest extends AbstractParserTest {
     @Test
     void parsesHeapReferencesWithRvalues() {
         assertDoesNotThrow(() -> parse("cell1[dx] = 1"));
+    }
+
+    @Test
+    void parsesCStyleForLoop() {
+        assertDoesNotThrow(() -> parse("for i = 0, j = 0; i < j ; i += 1 {\nprint(j)\n}\n"));
+    }
+
+    @Test
+    void parsesInclusiveIteratorStyleLoop() {
+        assertDoesNotThrow(() -> parse("for n in 1 .. 17 {\nprint(n)\n}"));
+    }
+
+    @Test
+    void parsesExclusiveIteratorStyleLoop() {
+        assertDoesNotThrow(() -> parse("for n in 1 ... 17 {\nprint(n)\n}"));
     }
 }

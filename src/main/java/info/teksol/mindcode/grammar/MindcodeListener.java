@@ -38,6 +38,84 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitExpression(MindcodeParser.ExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code cStyleLoop}
+	 * labeled alternative in {@link MindcodeParser#for_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterCStyleLoop(MindcodeParser.CStyleLoopContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code cStyleLoop}
+	 * labeled alternative in {@link MindcodeParser#for_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitCStyleLoop(MindcodeParser.CStyleLoopContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code rangeStyleLoop}
+	 * labeled alternative in {@link MindcodeParser#for_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterRangeStyleLoop(MindcodeParser.RangeStyleLoopContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code rangeStyleLoop}
+	 * labeled alternative in {@link MindcodeParser#for_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitRangeStyleLoop(MindcodeParser.RangeStyleLoopContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exclusiveRange}
+	 * labeled alternative in {@link MindcodeParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void enterExclusiveRange(MindcodeParser.ExclusiveRangeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exclusiveRange}
+	 * labeled alternative in {@link MindcodeParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void exitExclusiveRange(MindcodeParser.ExclusiveRangeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code inclusiveRange}
+	 * labeled alternative in {@link MindcodeParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void enterInclusiveRange(MindcodeParser.InclusiveRangeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code inclusiveRange}
+	 * labeled alternative in {@link MindcodeParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void exitInclusiveRange(MindcodeParser.InclusiveRangeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#init_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterInit_expr(MindcodeParser.Init_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#init_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitInit_expr(MindcodeParser.Init_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#cond_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCond_expr(MindcodeParser.Cond_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#cond_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCond_expr(MindcodeParser.Cond_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#loop_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_expr(MindcodeParser.Loop_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#loop_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_expr(MindcodeParser.Loop_exprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#control_statement}.
 	 * @param ctx the parse tree
 	 */

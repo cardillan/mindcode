@@ -127,7 +127,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         List.of(
-                                new LogicInstruction("set","tmp0","4"),
+                                new LogicInstruction("set", "tmp0", "4"),
                                 new LogicInstruction("read", "tmp1", "heap", "tmp0"),
                                 new LogicInstruction("set", "tmp2", "0"),
                                 new LogicInstruction("op", "equal", "tmp3", "tmp1", "tmp2"),
@@ -353,5 +353,95 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         )
                 )
         );
+    }
+
+
+    @Test
+    void parsesInclusiveIteratorStyleLoop() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "1"),
+                                new LogicInstruction("set", "n", "tmp0"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp1", "17"),
+                                new LogicInstruction("op", "lessThanEq", "tmp2", "n", "tmp1"),
+                                new LogicInstruction("jump", "label1", "notEqual", "tmp2", "true"),
+                                new LogicInstruction("print", "n"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("for n in 1 .. 17 {\nprint(n)\n}")
+                        )
+                )
+        );
+    }
+
+    @Test
+    void parsesExclusiveIteratorStyleLoop() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+
+                                new LogicInstruction("set", "tmp0", "1"),
+                                new LogicInstruction("set", "n", "tmp0"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp1", "17"),
+                                new LogicInstruction("op", "lessThan", "tmp2", "n", "tmp1"),
+                                new LogicInstruction("jump", "label1", "notEqual", "tmp2", "true"),
+                                new LogicInstruction("print", "n"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("for n in 1 ... 17 {\nprint(n)\n}")
+                        )
+                )
+        );
+    }
+
+    @Test
+    void generatesCStyleComplexForLoop() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "0"),
+                                new LogicInstruction("set", "i", "tmp0"),
+                                new LogicInstruction("set", "tmp1", "-5"),
+                                new LogicInstruction("set", "j", "tmp1"),
+
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp2", "5"),
+                                new LogicInstruction("op", "lessThan", "tmp3", "i", "tmp2"),
+                                new LogicInstruction("jump", "label1", "notEqual", "tmp3", "true"),
+                                new LogicInstruction("print", "n"),
+
+                                new LogicInstruction("set", "tmp4", "1"),
+                                new LogicInstruction("op", "sub", "tmp5", "j", "tmp4"),
+                                new LogicInstruction("set", "j", "tmp5"),
+
+                                new LogicInstruction("set", "tmp6", "1"),
+                                new LogicInstruction("op", "add", "tmp7", "i", "tmp6"),
+                                new LogicInstruction("set", "i", "tmp7"),
+
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1 {\nprint(n)\n}\n")
+                        )
+                )
+        );
+
     }
 }

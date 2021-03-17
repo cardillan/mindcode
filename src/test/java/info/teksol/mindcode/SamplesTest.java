@@ -35,7 +35,7 @@ class SamplesTest {
         return result;
     }
 
-    void evaluateSample(File sample) throws IOException {
+    private void evaluateSample(File sample) throws IOException {
         final StringWriter sw = new StringWriter();
         try (final FileReader reader = new FileReader(sample)) {
             reader.transferTo(sw);

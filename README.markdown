@@ -54,9 +54,9 @@ emulate an existing test, so that we can prove that your proposal works as inten
 
 Things I'd like to add to Mindcode-the-language:
 
-* [ ] loops
+* [x] loops
     * [x] while
-    * [ ] for -- can use `while` loops until this is really implemented
+    * [x] for
 * [x] expressions!
     * `move(center_x + radius * sin(@tick), center_y + radius * cos(@tick))` moves a unit in a circle around a specific point
 * [x] if expressions (ternary operator)

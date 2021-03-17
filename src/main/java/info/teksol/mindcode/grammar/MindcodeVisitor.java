@@ -29,6 +29,52 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(MindcodeParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code cStyleLoop}
+	 * labeled alternative in {@link MindcodeParser#for_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCStyleLoop(MindcodeParser.CStyleLoopContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code rangeStyleLoop}
+	 * labeled alternative in {@link MindcodeParser#for_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRangeStyleLoop(MindcodeParser.RangeStyleLoopContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exclusiveRange}
+	 * labeled alternative in {@link MindcodeParser#range}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExclusiveRange(MindcodeParser.ExclusiveRangeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code inclusiveRange}
+	 * labeled alternative in {@link MindcodeParser#range}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInclusiveRange(MindcodeParser.InclusiveRangeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#init_expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInit_expr(MindcodeParser.Init_exprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#cond_expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCond_expr(MindcodeParser.Cond_exprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#loop_expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_expr(MindcodeParser.Loop_exprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#control_statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -8,10 +8,26 @@ expression_list : expression terminator
                 ;
 
 expression : while_statement
+           | for_statement
            | control_statement
            | rvalue
            | single_line_comment
            ;
+
+for_statement : FOR init_expr SEMICOLON cond_expr SEMICOLON loop_expr LEFT_CBRACKET crlf? body=block_body RIGHT_CBRACKET    # cStyleLoop
+              | FOR name=lvalue IN range LEFT_CBRACKET crlf? body=block_body RIGHT_CBRACKET                                 # rangeStyleLoop
+              ;
+
+range : firstValue=rvalue DOT DOT DOT lastValue=rvalue # exclusiveRange
+      | firstValue=rvalue DOT DOT lastValue=rvalue     # inclusiveRange
+      ;
+
+init_expr : (assignment (COMMA assignment)*)?;
+cond_expr : rvalue;
+loop_expr : (assignment (COMMA assignment)*)?;
+
+TO : 'to';
+UNTIL : 'until';
 
 control_statement : target=id DOT property=id ASSIGN value=rvalue;
 
@@ -111,6 +127,9 @@ LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 WHILE : 'while';
 IF : 'if';
 ELSE : 'else';
+FOR : 'for';
+IN : 'in';
+EXCLUSIVE : 'exclusive';
 
 AT : '@';
 DOT : '.';

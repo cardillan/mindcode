@@ -25,6 +25,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitNullLiteral((NullLiteral) node);
         } else if (node instanceof NumericLiteral) {
             return visitNumericLiteral((NumericLiteral) node);
+        } else if (node instanceof Ref) {
+            return visitRef((Ref) node);
         } else if (node instanceof Seq) {
             return visitSeq((Seq) node);
         } else if (node instanceof SensorReading) {
@@ -35,8 +37,6 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitUnaryOp((UnaryOp) node);
         } else if (node instanceof UnitAssignment) {
             return visitUnitAssignment((UnitAssignment) node);
-        } else if (node instanceof Ref) {
-            return visitRef((Ref) node);
         } else if (node instanceof VarAssignment) {
             return visitVarAssignment((VarAssignment) node);
         } else if (node instanceof VarRef) {

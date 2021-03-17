@@ -1,12 +1,11 @@
 package info.teksol.mindcode.grammar;
 
+import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.Tuple2;
 import org.antlr.v4.runtime.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public abstract class AbstractParserTest {
     protected MindcodeParser.ProgramContext parse(String program) {
@@ -21,7 +20,9 @@ public abstract class AbstractParserTest {
         });
 
         final MindcodeParser.ProgramContext context = parser.program();
-        assertEquals(0, errors.size(), errors.toString());
+        if (!errors.isEmpty()) {
+            throw new ParsingException(errors.toString());
+        }
         return context;
     }
 

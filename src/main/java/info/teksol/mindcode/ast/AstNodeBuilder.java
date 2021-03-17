@@ -3,9 +3,11 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static Seq generate(MindcodeParser.ProgramContext program) {
@@ -228,6 +230,87 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             return last;
         } else {
             return new Seq(last);
+        }
+    }
+
+    @Override
+    public AstNode visitCStyleLoop(MindcodeParser.CStyleLoopContext ctx) {
+        final AstNode init = visit(ctx.init_expr());
+        final AstNode cond = visit(ctx.cond_expr());
+        final AstNode loop = visit(ctx.loop_expr());
+        final AstNode body = visit(ctx.body);
+        return new Seq(
+                init,
+                new WhileStatement(
+                        cond,
+                        new Seq(body, loop)
+                )
+        );
+    }
+
+    @Override
+    public AstNode visitRangeStyleLoop(MindcodeParser.RangeStyleLoopContext ctx) {
+        final VarRef name = (VarRef) visit(ctx.name);
+        final Range range = (Range) visit(ctx.range());
+        final AstNode body = visit(ctx.body);
+
+        return new Seq(
+                new VarAssignment(name.getName(), range.getFirstValue()),
+                new WhileStatement(
+                        range.buildLoopExitCondition(name),
+                        body
+                )
+        );
+    }
+
+    @Override
+    public AstNode visitInit_expr(MindcodeParser.Init_exprContext ctx) {
+        return buildMultiAssignments(
+                ctx.assignment().stream()
+                        .map(this::visit)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public AstNode visitLoop_expr(MindcodeParser.Loop_exprContext ctx) {
+        return buildMultiAssignments(
+                ctx.assignment().stream()
+                        .map(this::visit)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public AstNode visitInclusiveRange(MindcodeParser.InclusiveRangeContext ctx) {
+        return new InclusiveRange(visit(ctx.firstValue), visit(ctx.lastValue));
+    }
+
+    @Override
+    public AstNode visitExclusiveRange(MindcodeParser.ExclusiveRangeContext ctx) {
+        return new ExclusiveRange(visit(ctx.firstValue), visit(ctx.lastValue));
+    }
+
+    @NotNull
+    private AstNode buildMultiAssignments(List<AstNode> assignments) {
+        switch (assignments.size()) {
+            case 0:
+                return new Seq(new NoOp());
+
+            case 1:
+                return new Seq(assignments.get(0));
+
+            case 2:
+                return new Seq(assignments.get(0), assignments.get(1));
+
+            case 3:
+                return new Seq(assignments.get(0), new Seq(assignments.get(1), assignments.get(2)));
+
+            case 4:
+                return new Seq(new Seq(assignments.get(0), assignments.get(1)), new Seq(assignments.get(2), assignments.get(3)));
+
+            default:
+                throw new ParsingException("Loop expression too complex -- expected 4 or less assignments");
         }
     }
 }
