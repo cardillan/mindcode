@@ -37,6 +37,8 @@ avg = sum / 64
 
 This loop will calculate the average of all 64 cells (0-based index) of `cell1`.
 
+Please note that currently, range iteration loops can only increment the value by 1, and only support increasing values. A range of `60 .. 50` is invalid, but a range of `-1 .. 1` is valid.
+
 ## C-Style Loops
 
 The syntax is similar to C's, except for the absence of parenthesis:

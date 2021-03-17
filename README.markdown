@@ -17,9 +17,10 @@ everyone.
 
 ## Mindcode Syntax
 
-Please look into the `src/main/resources/samples` directory to examine multiple examples of Mindcode. They are currently
-the best way for you to learn how to write Mindcode. If you programmed in any high-level language, you should feel right
-at home.
+Please read the [syntax](https://github.com/francois/mindcode/blob/main/SYNTAX.markdown) document for the high-level
+information. The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus
+always up-to-date with the most-recent version of Mindcode.  If you programmed in any high-level language, you should
+feel right at home.
 
 At the moment, Mindcode is sensitive to newlines. For example, this will be rejected:
 
