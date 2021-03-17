@@ -1,4 +1,4 @@
-package info.teksol.mindcode;
+package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
@@ -26,6 +26,7 @@ class SamplesTest {
         final String dirname = "src/main/resources/samples";
         final File[] files = new File(dirname).listFiles();
         assertNotNull(files);
+        assertTrue(files.length > 0, "Expected to find at least one template; found none");
         Arrays.sort(files);
 
         for (final File sample : files) {
