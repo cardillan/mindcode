@@ -11,6 +11,7 @@ import org.eclipse.jetty.server.handler.StatisticsHandler;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.jetbrains.annotations.NotNull;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -39,13 +40,7 @@ public class Main {
             }
         }
 
-        final VelocityEngine velocityEngine = new VelocityEngine();
-        velocityEngine.setProperty(VelocityEngine.ENCODING_DEFAULT, "UTF-8");
-        velocityEngine.setProperty("resource.loaders", "classpath");
-        velocityEngine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
-        velocityEngine.setProperty("resource.loader.classpath.cache", ENV.equals("production"));
-        velocityEngine.setProperty("resource.loader.classpath.modificationCheckInterval", -1);
-        velocityEngine.init();
+        final VelocityEngine velocityEngine = createEngine(ENV);
 
         final Server server = new Server();
         final ServerConnector connector = new ServerConnector(server);
@@ -65,5 +60,17 @@ public class Main {
 
         server.setHandler(statsHandler);
         server.start();
+    }
+
+    @NotNull
+    static VelocityEngine createEngine(String ENV) {
+        final VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty(VelocityEngine.ENCODING_DEFAULT, "UTF-8");
+        velocityEngine.setProperty("resource.loaders", "classpath");
+        velocityEngine.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+        velocityEngine.setProperty("resource.loader.classpath.cache", ENV.equals("production"));
+        velocityEngine.setProperty("resource.loader.classpath.modificationCheckInterval", -1);
+        velocityEngine.init();
+        return velocityEngine;
     }
 }
