@@ -844,4 +844,18 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void rejects_HEAP_ReservedKeywordsInVarAssignment() {
         assertThrows(ParsingException.class, () -> translateToAst("HEAP = 0"));
     }
+
+    @Test
+    void acceptsSemicolonAsStatementSeparator() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new Assignment(new VarRef("a"), new NumericLiteral("0"))
+                        ),
+                        new Assignment(new VarRef("b"), new NumericLiteral("1"))
+                ),
+                translateToAst("a=0;b=1")
+        );
+    }
+
 }

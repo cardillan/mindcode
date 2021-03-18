@@ -5,7 +5,9 @@ program : expression_list EOF
         ;
 
 expression_list : expression
+                | expression SEMICOLON
                 | expression_list expression
+                | expression_list SEMICOLON expression
                 ;
 
 expression : a_comment                                                                          # comment
