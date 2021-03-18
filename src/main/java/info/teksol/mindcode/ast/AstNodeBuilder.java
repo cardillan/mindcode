@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
+    private int temp;
     private HeapAllocation allocatedHeap;
     private Map<String, Integer> heapAllocations = new HashMap<>();
 
@@ -409,5 +410,56 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitFalse_bool_literal(MindcodeParser.False_bool_literalContext ctx) {
         return new BooleanLiteral(false);
+    }
+
+    @Override
+    public AstNode visitCase_expression(MindcodeParser.Case_expressionContext ctx) {
+        final String tmp = nextTemp();
+        final AstNode elseBranch;
+        if (ctx.case_expr().else_branch != null) {
+            elseBranch = visit(ctx.case_expr().else_branch);
+        } else {
+            elseBranch = new NoOp();
+        }
+
+        final List<CaseAlternative> alternatives = new ArrayList<>();
+        gatherAlternatives(visit(ctx.case_expr().alternative_list()), alternatives);
+
+        return new Seq(
+                new Assignment(new VarRef(tmp), visit(ctx.case_expr().cond)),
+                new CaseExpression(
+                        new VarRef(tmp),
+                        alternatives,
+                        elseBranch
+                )
+        );
+    }
+
+    private void gatherAlternatives(AstNode alternative, List<CaseAlternative> accumulator) {
+        if (alternative instanceof CaseAlternative) {
+            accumulator.add((CaseAlternative) alternative);
+        } else if (alternative instanceof Seq) {
+            final Seq seq = (Seq) alternative;
+            gatherAlternatives(seq.getRest(), accumulator);
+            gatherAlternatives(seq.getLast(), accumulator);
+        }
+    }
+
+    @Override
+    public AstNode visitAlternative_list(MindcodeParser.Alternative_listContext ctx) {
+        if (ctx.alternative_list() != null) {
+            return new Seq(visit(ctx.alternative_list()), visit(ctx.alternative()));
+        } else {
+            return visit(ctx.alternative());
+        }
+    }
+
+    @Override
+    public AstNode visitAlternative(MindcodeParser.AlternativeContext ctx) {
+        return new CaseAlternative(visit(ctx.value), visit(ctx.body));
+    }
+
+    private String nextTemp() {
+        return "ast" + temp++;
     }
 }

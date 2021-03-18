@@ -60,6 +60,53 @@ for x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx
 end
 ```
 
+# Conditionals
+
+Mindcode offers 3 types of conditionals: if/else expressions, the ternary operator and case/when expressions.
+
+## If/Else Expressions
+
+In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For example:
+
+```
+result = if n == 0
+  "ready"
+else
+  "pending"
+end
+```
+
+Depending on the value of `n`, `result` will contain the one of `ready` or `pending`.
+
+## Ternary Operator
+
+The ternary operator (`?:`) is exactly like an if/else expression, except it is more succint. Use it when you need a
+conditional but want to save some space:
+
+```
+result = n == 0 ? "ready " : "pending"
+```
+
+This is the exact same conditional expression as above, except it is written on one line.
+
+## Case/When Expressions
+
+Case/when is another way of writing conditionals. Use case/when when you need to test a value against multiple different
+alternatives:
+
+```
+next_action = case num_enemies
+when 0
+  "chill"
+when 1
+  "alert"
+when 2
+  "vigilant"
+else
+  "nuke-the-place"
+end
+```
+
 # Global variables
 
 In order to use global variables, you need to allocate a heap within a Memory Cell or a Memory Bank. This allocation

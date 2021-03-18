@@ -99,7 +99,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
 
     @Override
     public Tuple2<Optional<String>, List<LogicInstruction>> visitNoOp(NoOp node) {
-        return new Tuple2<>(Optional.empty(), List.of());
+        return new Tuple2<>(Optional.of("null"), List.of());
     }
 
     @Override
@@ -510,6 +510,53 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
         final List<LogicInstruction> result = new ArrayList<>(target._2);
         result.add(new LogicInstruction("sensor", tmp, target._1.get(), "@" + node.getProperty()));
         return new Tuple2<>(Optional.of(tmp), result);
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitCaseExpression(CaseExpression node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> cond = visit(node.getCondition());
+        if (!cond._1.isPresent()) {
+            throw new GenerationException("Expected to find a variable to compare against in " + node);
+        }
+
+        final String condVar = nextTemp();
+        final String resultVar = nextTemp();
+        final String exitLabel = nextLabel();
+
+        final List<LogicInstruction> result = new ArrayList<>(cond._2);
+        result.add(new LogicInstruction("set", condVar, cond._1.get()));
+        for (final CaseAlternative alternative : node.getAlternatives()) {
+            final Tuple2<Optional<String>, List<LogicInstruction>> altValue = visit(alternative.getValue());
+            if (!altValue._1.isPresent()) {
+                throw new GenerationException("Expected to find alternative variable in " + alternative);
+            }
+
+            final Tuple2<Optional<String>, List<LogicInstruction>> body = visit(alternative.getBody());
+            if (!body._1.isPresent()) {
+                throw new GenerationException("Expected to find a body value in " + alternative);
+            }
+
+            final String nextCond = nextLabel();
+
+            result.addAll(altValue._2);
+            result.add(new LogicInstruction("jump", nextCond, "notEqual", condVar, altValue._1.get()));
+            result.addAll(body._2);
+            result.add(new LogicInstruction("set", resultVar, body._1.get()));
+            result.add(new LogicInstruction("jump", exitLabel, "always"));
+            result.add(new LogicInstruction("label", nextCond));
+        }
+
+
+        final Tuple2<Optional<String>, List<LogicInstruction>> elseBranch = visit(node.getElseBranch());
+        if (!elseBranch._1.isPresent()) {
+            throw new GenerationException("Expected else branch to return a value in " + node);
+        }
+
+        result.addAll(elseBranch._2);
+        result.add(new LogicInstruction("set", resultVar, elseBranch._1.get()));
+        result.add(new LogicInstruction("label", exitLabel));
+
+        return new Tuple2<>(Optional.of(resultVar), result);
     }
 
     private String translateUnaryOpToCode(String op) {

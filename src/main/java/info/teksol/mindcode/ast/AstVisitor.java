@@ -42,4 +42,6 @@ public interface AstVisitor<T> {
     T visitComment(Comment node);
 
     T visitPropertyAccess(PropertyAccess node);
+
+    T visitCaseExpression(CaseExpression node);
 }

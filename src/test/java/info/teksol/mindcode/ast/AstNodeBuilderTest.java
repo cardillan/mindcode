@@ -806,6 +806,24 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
+    void parsesCaseWhen() {
+        assertEquals(
+                new Seq(
+                        new Assignment(new VarRef("ast0"), new VarRef("n")),
+                        new CaseExpression(
+                                new VarRef("ast0"),
+                                List.of(
+                                        new CaseAlternative(new NumericLiteral("1"), new Seq(new StringLiteral("1"))),
+                                        new CaseAlternative(new NumericLiteral("2"), new Seq(new StringLiteral("two")))
+                                ),
+                                new Seq(new StringLiteral("otherwise"))
+                        )
+                ),
+                translateToAst("case n\nwhen 1\n\"1\"\nwhen 2\n\"two\"\nelse\n\"otherwise\"end\n")
+        );
+    }
+
+    @Test
     void rejects_STACK_ReservedKeywordsInVarRef() {
         assertThrows(ParsingException.class, () -> translateToAst("cell1[STACK] = 0"));
     }

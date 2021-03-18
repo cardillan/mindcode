@@ -497,4 +497,71 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void generatesCaseWhenElse() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "ast0", "n"),
+                                new LogicInstruction("set", "tmp0", "ast0"),
+                                new LogicInstruction("set", "tmp2", "1"),
+                                new LogicInstruction("jump", "label1", "notEqual", "tmp0", "tmp2"),
+                                new LogicInstruction("set", "tmp3", "\"1\""),
+                                new LogicInstruction("set", "tmp1", "tmp3"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("set", "tmp4", "2"),
+                                new LogicInstruction("jump", "label2", "notEqual", "tmp0", "tmp4"),
+                                new LogicInstruction("set", "tmp5", "\"two\""),
+                                new LogicInstruction("set", "tmp1", "tmp5"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label2"),
+                                new LogicInstruction("set", "tmp6", "\"otherwise\""),
+                                new LogicInstruction("set", "tmp1", "tmp6"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("case n\nwhen 1\n\"1\"\nwhen 2\n\"two\"\nelse\n\"otherwise\"end\n")
+                        )
+                )
+        );
+    }
+
+    @Test
+    void generatesCaseWhen() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "0"),
+                                new LogicInstruction("read", "tmp1", "cell1", "tmp0"),
+                                new LogicInstruction("set", "ast0", "tmp1"),
+                                new LogicInstruction("set", "tmp2", "ast0"),
+                                new LogicInstruction("jump", "label1", "notEqual", "tmp2", "ST_EMPTY"),
+                                new LogicInstruction("set", "tmp6", "0"),
+                                new LogicInstruction("write", "ST_INITIALIZED", "cell1", "tmp6"),
+                                new LogicInstruction("set", "tmp3", "ST_INITIALIZED"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("jump", "label2", "notEqual", "tmp2", "ST_INITIALIZED"),
+                                new LogicInstruction("set", "tmp9", "0"),
+                                new LogicInstruction("write", "ST_DONE", "cell1", "tmp9"),
+                                new LogicInstruction("set", "tmp3", "ST_DONE"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label2"),
+                                new LogicInstruction("set", "tmp3", "null"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("allocate heap in cell1[0..10]\ncase $state\nwhen ST_EMPTY\n$state = ST_INITIALIZED\nwhen ST_INITIALIZED\n$state = ST_DONE\nend\n")
+                        )
+                )
+        );
+    }
 }

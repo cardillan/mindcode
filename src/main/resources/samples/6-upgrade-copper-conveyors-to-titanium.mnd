@@ -15,26 +15,16 @@ RADIUS = 1
 
 // Debugging section -- I would remove this when
 // you are ready to use this script for real
-print("STATE = ", $STATE, " ")
-if $STATE == ST_UNINITIALIZED
-    print("uninitialized")
-else
-    if $STATE == ST_APPROACHING
-        print("approaching")
-    else
-        if $STATE == ST_BUILDING
-            print("building")
-        else
-            if $STATE == ST_NEXT
-                print("next")
-            else
-                if $STATE == ST_DONE
-                    print("done")
-                end
-            end
-        end
+print("STATE = ", $STATE, " ",
+    case $STATE
+    when ST_UNINITIALIZED   "uninitialized"
+    when ST_APPROACHING     "approaching"
+    when ST_BUILDING        "building"
+    when ST_NEXT            "next"
+    when ST_DONE            "done"
+    else                    "ERROR?!?"
     end
-end
+)
 
 print("\nDX = ", $DX)
 print("\nDY = ", $DY)
