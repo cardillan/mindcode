@@ -49,6 +49,10 @@ public class HeapAllocation implements AstNode {
         return (last - first) + 1;
     }
 
+    public AstNode addressOf(int location) {
+        return new NumericLiteral(String.valueOf(getFirst() + location));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

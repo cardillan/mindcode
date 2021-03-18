@@ -13,10 +13,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitControl((Control) node);
         } else if (node instanceof FunctionCall) {
             return visitFunctionCall((FunctionCall) node);
-        } else if (node instanceof HeapRead) {
-            return visitHeapRead((HeapRead) node);
-        } else if (node instanceof HeapWrite) {
-            return visitHeapWrite((HeapWrite) node);
+        } else if (node instanceof HeapAccess) {
+            return visitHeapAccess((HeapAccess) node);
         } else if (node instanceof IfExpression) {
             return visitIfExpression((IfExpression) node);
         } else if (node instanceof NoOp) {
@@ -27,6 +25,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitNumericLiteral((NumericLiteral) node);
         } else if (node instanceof Ref) {
             return visitRef((Ref) node);
+        } else if (node instanceof PropertyAccess) {
+            return visitPropertyAccess((PropertyAccess) node);
         } else if (node instanceof Seq) {
             return visitSeq((Seq) node);
         } else if (node instanceof SensorReading) {
@@ -37,8 +37,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitUnaryOp((UnaryOp) node);
         } else if (node instanceof UnitAssignment) {
             return visitUnitAssignment((UnitAssignment) node);
-        } else if (node instanceof VarAssignment) {
-            return visitVarAssignment((VarAssignment) node);
+        } else if (node instanceof Assignment) {
+            return visitAssignment((Assignment) node);
         } else if (node instanceof VarRef) {
             return visitVarRef((VarRef) node);
         } else if (node instanceof WhileStatement) {

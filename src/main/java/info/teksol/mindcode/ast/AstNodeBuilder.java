@@ -3,13 +3,14 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
-    private Optional<HeapAllocation> allocatedHeap = Optional.empty();
+    private HeapAllocation allocatedHeap;
     private Map<String, Integer> heapAllocations = new HashMap<>();
 
     public static Seq generate(MindcodeParser.ProgramContext program) {
@@ -19,300 +20,318 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitExpression_list(MindcodeParser.Expression_listContext ctx) {
-        if (ctx.expression_list() != null) {
-            return new Seq(visit(ctx.expression_list()), visit(ctx.expression()));
-        } else if (ctx.expression() != null) {
-            return visit(ctx.expression());
-        } else {
-            return new NoOp();
-        }
-    }
-
-    @Override
-    public AstNode visitWhile_statement(MindcodeParser.While_statementContext ctx) {
-        return new WhileStatement(
-                visitRvalue(ctx.rvalue()),
-                visitBlock_body(ctx.block_body())
-        );
-    }
-
-    @Override
-    public AstNode visitBlock_statement_list(MindcodeParser.Block_statement_listContext ctx) {
-        if (ctx.block_statement_list() != null) {
-            return new Seq(
-                    visitBlock_statement_list(ctx.block_statement_list()),
-                    visitExpression(ctx.expression())
-            );
-        } else if (ctx.expression() != null) {
-            return visitExpression(ctx.expression());
-        } else {
-            throw new ParsingException("Failed to understand block statement list in " + ctx.getText());
-        }
-    }
-
-    @Override
-    public AstNode visitSingle_line_comment(MindcodeParser.Single_line_commentContext ctx) {
-        final String text = ctx.getText();
-        return new Comment(text.substring(2));
-    }
-
-    @Override
-    public AstNode visitControl_statement(MindcodeParser.Control_statementContext ctx) {
-        return new Control(ctx.target.getText(), ctx.property.getText(), visitRvalue(ctx.value));
-    }
-
-    @Override
-    public AstNode visitFuncall(MindcodeParser.FuncallContext ctx) {
-        final List<AstNode> params = new ArrayList<>();
-        visitParams_list(ctx.params_list(), params);
-
-        return new FunctionCall(
-                ctx.name.getText(),
-                params
-        );
-    }
-
-    private void visitParams_list(MindcodeParser.Params_listContext ctx, List<AstNode> params) {
-        if (ctx.rvalue() != null) {
-            params.add(visitRvalue(ctx.rvalue()));
-        }
-
-        if (ctx.params_list() != null) {
-            visitParams_list(ctx.params_list(), params);
-        }
-    }
-
-    @Override
-    public AstNode visitHeap_allocation(MindcodeParser.Heap_allocationContext ctx) {
-        if (allocatedHeap.isPresent()) {
-            throw new ParsingException("Only a single heap may be allocated per script, found 2nd declaration in " + ctx.getText());
-        }
-
-        final HeapAllocation heapAllocation = new HeapAllocation(
-                ((VarRef) visit(ctx.id())).getName(),
-                (Range) visit(ctx.range()));
-        allocatedHeap = Optional.of(heapAllocation);
-        return new NoOp();
-    }
-
-    @Override
-    public AstNode visitGlobalvar(MindcodeParser.GlobalvarContext ctx) {
-        if (!allocatedHeap.isPresent()) {
-            throw new UnallocatedHeapException("Found reference to global variable without a heap allocation. Please allocate a heap at the top of your script. Found " + ctx.getText());
-        }
-
-        final String name = ctx.global().name.getText();
-        final int location;
-        if (heapAllocations.containsKey(name)) {
-            location = heapAllocations.get(name);
-        } else {
-            if (heapAllocations.size() >= allocatedHeap.get().size()) {
-                throw new OutOfHeapSpaceException("increase your heap size or reduce the number of global variables used: " + ctx.getText());
-            }
-
-            location = heapAllocations.size();
-            heapAllocations.put(name, location);
-        }
-
-        return new HeapRead(
-                allocatedHeap.get().getName(),
-                new NumericLiteral(String.valueOf(allocatedHeap.get().getFirst() + location)));
-    }
-
-    @Override
-    public AstNode visitId(MindcodeParser.IdContext ctx) {
-        return new VarRef(ctx.getText());
-    }
-
-    @Override
-    public AstNode visitAssignment(MindcodeParser.AssignmentContext ctx) {
-        if (ctx.target != null) {
-            final AstNode target = visit(ctx.target);
-            final AstNode value;
-            if (ctx.op != null) {
-                value = new BinaryOp(
-                        visit(ctx.lvalue()),
-                        ctx.op.getText().replace("=", ""),
-                        visit(ctx.rvalue())
-                );
-            } else {
-                value = visit(ctx.rvalue());
-            }
-
-            if (target instanceof VarRef) {
-                // +=, -=, etc...
-                return new VarAssignment(
-                        ((VarRef) target).getName(),
-                        value
-                );
-            } else if (target instanceof HeapRead) {
-                return new HeapWrite(
-                        ((HeapRead) target).getCellName(),
-                        ((HeapRead) target).getAddress(),
-                        value
-                );
-            } else {
-                throw new ParsingException("parsing failed during assignment at " + ctx.getText());
-            }
-        }
-
-        if (ctx.heap_ref() != null) {
-            final AstNode lvalue = visit(ctx.heap_ref());
-            final AstNode rvalue = visit(ctx.value);
-            if (ctx.op != null) {
-                // +=, -=, etc...
-                return new HeapWrite(
-                        ctx.heap_ref().target.getText(),
-                        visit(ctx.heap_ref().address()),
-                        new BinaryOp(
-                                lvalue,
-                                ctx.op.getText().replace("=", ""),
-                                rvalue
-                        )
-                );
-            } else {
-                // simple assignment
-                return new HeapWrite(
-                        ctx.heap_ref().target.getText(),
-                        visit(ctx.heap_ref().address()),
-                        rvalue
-                );
-            }
-        }
-
-        throw new ParsingException("Expected lvalue or heap_ref in " + ctx.getText());
-    }
-
-    @Override
     protected AstNode aggregateResult(AstNode aggregate, AstNode nextResult) {
         if (nextResult != null) return nextResult;
         return aggregate;
     }
 
     @Override
-    public AstNode visitHeap_ref(MindcodeParser.Heap_refContext ctx) {
-        return new HeapRead(ctx.target.getText(), visit(ctx.addr));
+    public AstNode visitProgram(MindcodeParser.ProgramContext ctx) {
+        final AstNode parent = super.visitProgram(ctx);
+        if (parent == null) return new Seq(new NoOp());
+        return parent;
     }
 
     @Override
-    public AstNode visitLiteral_t(MindcodeParser.Literal_tContext ctx) {
-        final String str = ctx.LITERAL().getSymbol().getText();
-        return new StringLiteral(str.substring(1, str.length() - 1).replaceAll("\\\\\"", "\""));
-    }
-
-    @Override
-    public AstNode visitBool_t(MindcodeParser.Bool_tContext ctx) {
-        if (ctx.TRUE() != null) {
-            return new BooleanLiteral(true);
-        } else if (ctx.FALSE() != null) {
-            return new BooleanLiteral(false);
+    public AstNode visitExpression_list(MindcodeParser.Expression_listContext ctx) {
+        if (ctx.expression_list() != null) {
+            final AstNode rest = visit(ctx.expression_list());
+            final AstNode expr = visit(ctx.expression());
+            return new Seq(rest, expr);
+        } else if (ctx.expression() != null) {
+            final AstNode expr = visit(ctx.expression());
+            if (expr instanceof Seq) return expr;
+            return new Seq(expr);
         } else {
-            throw new ParsingException("Failed to parse bool_t expression: " + ctx.getText());
+            return new NoOp();
         }
     }
 
     @Override
-    public AstNode visitNumeric(MindcodeParser.NumericContext ctx) {
+    public AstNode visitInt_t(MindcodeParser.Int_tContext ctx) {
         return new NumericLiteral(ctx.getText());
     }
 
     @Override
-    public AstNode visitNull_t(MindcodeParser.Null_tContext ctx) {
-        return new NullLiteral();
+    public AstNode visitFloat_t(MindcodeParser.Float_tContext ctx) {
+        return new NumericLiteral(ctx.getText());
     }
 
     @Override
-    public AstNode visitSensor_read(MindcodeParser.Sensor_readContext ctx) {
-        final String target;
-        if (ctx.target != null) {
-            target = ctx.target.getText();
-        } else if (ctx.unit != null) {
-            target = ctx.unit.getText();
-        } else {
-            throw new ParsingException("Unable to determine sensor read target in " + ctx.getText());
-        }
-
-        return new SensorReading(target, "@" + ctx.resource().getText());
+    public AstNode visitLiteral_string(MindcodeParser.Literal_stringContext ctx) {
+        final String str = ctx.getText();
+        return new StringLiteral(str.substring(1, str.length() - 1).replaceAll("\\\\\"", "\""));
     }
 
     @Override
-    public AstNode visitRvalue(MindcodeParser.RvalueContext ctx) {
-        if (ctx.op == null) {
-            return super.visitRvalue(ctx);
-        }
-
-        switch (ctx.rvalue().size()) {
-            case 1:
-                return new UnaryOp(ctx.op.getText(), visitRvalue(ctx.rvalue(0)));
-
-            case 2:
-                final AstNode left = visitRvalue(ctx.rvalue(0));
-                final String op = ctx.op.getText();
-                final AstNode right = visitRvalue(ctx.rvalue(1));
-                return new BinaryOp(left, op, right);
-
-            default:
-                throw new ParsingException("Expected 1 or 2 rvalues, found " + ctx.rvalue().size() + " in " + ctx.getText());
-        }
+    public AstNode visitVar_ref(MindcodeParser.Var_refContext ctx) {
+        return new VarRef(ctx.getText());
     }
 
     @Override
-    public AstNode visitRef(MindcodeParser.RefContext ctx) {
-        return new Ref(ctx.name.getText().substring(1));
-    }
-
-    @Override
-    public AstNode visitIf_expression(MindcodeParser.If_expressionContext ctx) {
-        return new IfExpression(
-                visit(ctx.cond),
-                visit(ctx.true_branch),
-                ctx.false_branch == null ? new NoOp() : visit(ctx.false_branch)
+    public AstNode visitBinop_exp(MindcodeParser.Binop_expContext ctx) {
+        return new BinaryOp(
+                visit(ctx.left),
+                "**",
+                visit(ctx.right)
         );
     }
 
     @Override
-    public AstNode visitProgram(MindcodeParser.ProgramContext ctx) {
-        // flatMap to the rescue!
-        final AstNode last = visitExpression_list(ctx.expression_list());
-        if (last instanceof Seq) {
-            return last;
-        } else {
-            return new Seq(last);
-        }
+    public AstNode visitBinop_mul_div_mod(MindcodeParser.Binop_mul_div_modContext ctx) {
+        return new BinaryOp(
+                visit(ctx.left),
+                ctx.op.getText(),
+                visit(ctx.right)
+        );
     }
 
     @Override
-    public AstNode visitCStyleLoop(MindcodeParser.CStyleLoopContext ctx) {
-        final AstNode init = visit(ctx.init_expr());
-        final AstNode cond = visit(ctx.cond_expr());
-        final AstNode loop = visit(ctx.loop_expr());
-        final AstNode body = visit(ctx.body);
-        return new Seq(
-                init,
-                new WhileStatement(
-                        cond,
-                        new Seq(body, loop)
+    public AstNode visitBinop_plus_minus(MindcodeParser.Binop_plus_minusContext ctx) {
+        return new BinaryOp(
+                visit(ctx.left),
+                ctx.op.getText(),
+                visit(ctx.right)
+        );
+    }
+
+    @Override
+    public AstNode visitNot_expr(MindcodeParser.Not_exprContext ctx) {
+        return new UnaryOp("not", visit(ctx.expression()));
+    }
+
+    @Override
+    public AstNode visitBinop_and(MindcodeParser.Binop_andContext ctx) {
+        return new BinaryOp(
+                visit(ctx.left),
+                "and",
+                visit(ctx.right)
+        );
+    }
+
+    @Override
+    public AstNode visitBinop_or(MindcodeParser.Binop_orContext ctx) {
+        return new BinaryOp(
+                visit(ctx.left),
+                "or",
+                visit(ctx.right)
+        );
+    }
+
+    @Override
+    public AstNode visitBinop_inequality_comparison(MindcodeParser.Binop_inequality_comparisonContext ctx) {
+        return new BinaryOp(
+                visit(ctx.left),
+                ctx.op.getText(),
+                visit(ctx.right)
+        );
+    }
+
+    @Override
+    public AstNode visitBinop_equality_comparison(MindcodeParser.Binop_equality_comparisonContext ctx) {
+        return new BinaryOp(
+                visit(ctx.left),
+                ctx.op.getText(),
+                visit(ctx.right)
+        );
+    }
+
+    @Override
+    public AstNode visitFunction_call(MindcodeParser.Function_callContext ctx) {
+        final String name = ctx.funcall().name.getText();
+        final List<AstNode> params = new ArrayList<>();
+
+        if (ctx.funcall().params != null) {
+            params.add(visit(ctx.funcall().params.arg()));
+            MindcodeParser.Arg_listContext arglist = ctx.funcall().params.arg_list();
+            while (arglist != null) {
+                params.add(visit(arglist.arg()));
+                arglist = arglist.arg_list();
+            }
+        }
+
+        final List<AstNode> result = new ArrayList<>();
+        for (int i = params.size() - 1; i >= 0; i--) {
+            result.add(params.get(i));
+        }
+
+        return new FunctionCall(name, result);
+    }
+
+    @Override
+    public AstNode visitSimple_assign(MindcodeParser.Simple_assignContext ctx) {
+        final AstNode lvalue = visit(ctx.target);
+        final AstNode value = visit(ctx.value);
+        return new Assignment(lvalue, value);
+    }
+
+    @Override
+    public AstNode visitExp_assign(MindcodeParser.Exp_assignContext ctx) {
+        final AstNode target = visit(ctx.target);
+        return new Assignment(
+                target,
+                new BinaryOp(
+                        target,
+                        "**",
+                        visit(ctx.value)
                 )
         );
     }
 
     @Override
-    public AstNode visitRangeStyleLoop(MindcodeParser.RangeStyleLoopContext ctx) {
-        final VarRef name = (VarRef) visit(ctx.name);
-        final Range range = (Range) visit(ctx.range());
-        final AstNode body = visit(ctx.body);
+    public AstNode visitBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx) {
+        final AstNode target = visit(ctx.target);
+        return new Assignment(
+                target,
+                new BinaryOp(
+                        target,
+                        ctx.op.getText().replace("=", ""),
+                        visit(ctx.value)
+                )
+        );
+    }
 
+    @Override
+    public AstNode visitBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx) {
+        final AstNode target = visit(ctx.target);
+        return new Assignment(
+                target,
+                new BinaryOp(
+                        target,
+                        ctx.op.getText().replace("=", ""),
+                        visit(ctx.value)
+                )
+        );
+    }
+
+    @Override
+    public AstNode visitUnary_minus(MindcodeParser.Unary_minusContext ctx) {
+        return new NumericLiteral(ctx.getText());
+    }
+
+    @Override
+    public AstNode visitHeap_ref(MindcodeParser.Heap_refContext ctx) {
+        return new HeapAccess(
+                ctx.name.getText(),
+                visit(ctx.address)
+        );
+    }
+
+    @Override
+    public AstNode visitAllocation(MindcodeParser.AllocationContext ctx) {
+        MindcodeParser.Alloc_listContext alloc_list = ctx.alloc().alloc_list();
+        while (alloc_list != null) {
+            switch (alloc_list.type.getText()) {
+                case "heap":
+                    allocateHeap(alloc_list);
+                    break;
+
+                case "stack":
+                    throw new RuntimeException("TODO");
+            }
+
+            alloc_list = alloc_list.alloc_list();
+        }
+
+        return new NoOp();
+    }
+
+    private void allocateHeap(MindcodeParser.Alloc_listContext ctx) {
+        if (allocatedHeap != null) {
+            throw new HeapAlreadyAllocatedException("Only one heap/stack can be allocated, found a second declaration in " + ctx.getText());
+        }
+
+        final String name = ctx.id().getText();
+        final Range range;
+        if (ctx.alloc_range() != null) {
+            range = (Range) visit(ctx.alloc_range());
+        } else {
+            range = new ExclusiveRange(new NumericLiteral("0"), new NumericLiteral("64"));
+        }
+
+        allocatedHeap = new HeapAllocation(name, range);
+    }
+
+    @Override
+    public AstNode visitInclusive_range(MindcodeParser.Inclusive_rangeContext ctx) {
+        return new InclusiveRange(visit(ctx.start), visit(ctx.end));
+    }
+
+    @Override
+    public AstNode visitExclusive_range(MindcodeParser.Exclusive_rangeContext ctx) {
+        return new ExclusiveRange(visit(ctx.start), visit(ctx.end));
+    }
+
+    @Override
+    public AstNode visitGlobal_ref(MindcodeParser.Global_refContext ctx) {
+        if (allocatedHeap == null) {
+            throw new UnallocatedHeapException("The heap must be allocated before using it in " + ctx.getText());
+        }
+
+        final String name = ctx.name.getText();
+        final int location;
+        if (heapAllocations.containsKey(name)) {
+            location = heapAllocations.get(name);
+        } else {
+            if (heapAllocations.size() >= allocatedHeap.size()) {
+                throw new OutOfHeapSpaceException("Allocated heap is too small! Increase the size of the allocation, or switch to a Memory Bank to give the heap even more space; in " + ctx.getText());
+            }
+
+            location = heapAllocations.size();
+            heapAllocations.put(name, location);
+        }
+
+        return new HeapAccess(allocatedHeap.getName(), allocatedHeap.addressOf(location));
+    }
+
+    @Override
+    public AstNode visitComment(MindcodeParser.CommentContext ctx) {
+        return new Comment(ctx.getText().substring(2).replaceAll("\r?\n", ""));
+    }
+
+    @Override
+    public AstNode visitUnit_ref(MindcodeParser.Unit_refContext ctx) {
+        return new Ref(ctx.ref().getText());
+    }
+
+    @Override
+    public AstNode visitPropaccess(MindcodeParser.PropaccessContext ctx) {
+        final AstNode target;
+        if (ctx.var_ref() != null) {
+            target = visit(ctx.var_ref());
+        } else if (ctx.unit_ref() != null) {
+            target = visit(ctx.unit_ref());
+        } else {
+            throw new ParsingException("Expected var ref or unit ref in " + ctx.getText());
+        }
+
+        return new PropertyAccess(
+                target,
+                ctx.prop.getText()
+        );
+    }
+
+    @Override
+    public AstNode visitRanged_for(MindcodeParser.Ranged_forContext ctx) {
+        final Range range = (Range) visit(ctx.range());
+        final AstNode var = visit(ctx.lvalue());
         return new Seq(
-                new VarAssignment(name.getName(), range.getFirstValue()),
+                new Assignment(
+                        var,
+                        range.getFirstValue()
+                ),
                 new WhileStatement(
-                        range.buildLoopExitCondition(name),
+                        new BinaryOp(
+                                var,
+                                range instanceof InclusiveRange ? "<=" : "<",
+                                range.getLastValue()
+                        ),
                         new Seq(
-                                body,
-                                new VarAssignment(
-                                        name.getName(),
+                                visit(ctx.loop_body()),
+                                new Assignment(
+                                        var,
                                         new BinaryOp(
-                                                name,
+                                                var,
                                                 "+",
                                                 new NumericLiteral("1")
                                         )
@@ -323,53 +342,72 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitInit_expr(MindcodeParser.Init_exprContext ctx) {
-        return buildMultiAssignments(
-                ctx.assignment().stream()
-                        .map(this::visit)
-                        .collect(Collectors.toList())
+    public AstNode visitIterated_for(MindcodeParser.Iterated_forContext ctx) {
+        return new Seq(
+                visit(ctx.init),
+                new WhileStatement(
+                        visit(ctx.cond),
+                        new Seq(
+                                visit(ctx.loop_body()),
+                                visit(ctx.increment)
+                        )
+                )
         );
     }
 
     @Override
-    public AstNode visitLoop_expr(MindcodeParser.Loop_exprContext ctx) {
-        return buildMultiAssignments(
-                ctx.assignment().stream()
-                        .map(this::visit)
-                        .collect(Collectors.toList())
-        );
-    }
-
-    @Override
-    public AstNode visitInclusiveRange(MindcodeParser.InclusiveRangeContext ctx) {
-        return new InclusiveRange(visit(ctx.firstValue), visit(ctx.lastValue));
-    }
-
-    @Override
-    public AstNode visitExclusiveRange(MindcodeParser.ExclusiveRangeContext ctx) {
-        return new ExclusiveRange(visit(ctx.firstValue), visit(ctx.lastValue));
-    }
-
-    @NotNull
-    private AstNode buildMultiAssignments(List<AstNode> assignments) {
-        switch (assignments.size()) {
-            case 0:
-                return new Seq(new NoOp());
-
-            case 1:
-                return new Seq(assignments.get(0));
-
-            case 2:
-                return new Seq(assignments.get(0), assignments.get(1));
-
-            case 3:
-                return new Seq(assignments.get(0), new Seq(assignments.get(1), assignments.get(2)));
-
-            case 4:
-                return new Seq(new Seq(assignments.get(0), assignments.get(1)), new Seq(assignments.get(2), assignments.get(3)));
-
-            default:
-                throw new ParsingException("Loop expression too complex -- expected 4 or less assignments");
+    public AstNode visitIncr_list(MindcodeParser.Incr_listContext ctx) {
+        if (ctx.incr_list() != null) {
+            final AstNode down = visit(ctx.incr_list());
+            return new Seq(down, visit(ctx.expression()));
+        } else {
+            return visit(ctx.expression());
         }
+    }
+
+    @Override
+    public AstNode visitInit_list(MindcodeParser.Init_listContext ctx) {
+        if (ctx.init_list() != null) {
+            final AstNode down = visit(ctx.init_list());
+            return new Seq(down, visit(ctx.expression()));
+        } else {
+            return visit(ctx.expression());
+        }
+    }
+
+    @Override
+    public AstNode visitWhile_expression(MindcodeParser.While_expressionContext ctx) {
+        return new WhileStatement(visit(ctx.cond), visit(ctx.loop_body()));
+    }
+
+    @Override
+    public AstNode visitLiteral_null(MindcodeParser.Literal_nullContext ctx) {
+        return new NullLiteral();
+    }
+
+    @Override
+    public AstNode visitIf_expression(MindcodeParser.If_expressionContext ctx) {
+        final AstNode trailer;
+        if (ctx.if_expr().if_trailer() != null) {
+            trailer = visit(ctx.if_expr().if_trailer());
+        } else {
+            trailer = new NoOp();
+        }
+
+        return new IfExpression(
+                visit(ctx.if_expr().cond),
+                visit(ctx.if_expr().true_branch),
+                trailer
+        );
+    }
+
+    @Override
+    public AstNode visitTrue_bool_literal(MindcodeParser.True_bool_literalContext ctx) {
+        return new BooleanLiteral(true);
+    }
+
+    @Override
+    public AstNode visitFalse_bool_literal(MindcodeParser.False_bool_literalContext ctx) {
+        return new BooleanLiteral(false);
     }
 }

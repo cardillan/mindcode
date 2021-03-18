@@ -19,11 +19,55 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
+    void parsesLiteralInt() {
+        assertEquals(
+                new Seq(
+                        new NumericLiteral("156")
+                ),
+                translateToAst("156")
+
+        );
+    }
+
+    @Test
+    void parsesLiteralFloat() {
+        assertEquals(
+                new Seq(
+                        new NumericLiteral("156.156")
+                ),
+                translateToAst("156.156")
+
+        );
+    }
+
+    @Test
+    void parsesLiteralString() {
+        assertEquals(
+                new Seq(
+                        new StringLiteral("156")
+                ),
+                translateToAst("\"156\"")
+
+        );
+    }
+
+    @Test
+    void parsesVarRef() {
+        assertEquals(
+                new Seq(
+                        new VarRef("a")
+                ),
+                translateToAst("a")
+
+        );
+    }
+
+    @Test
     void parsesSimpleAssignment() {
         assertEquals(
                 new Seq(
-                        new VarAssignment(
-                                "a",
+                        new Assignment(
+                                new VarRef("a"),
                                 new NumericLiteral("1")
                         )
                 ),
@@ -33,22 +77,55 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
-    void parsesUsefulWhileLoop() {
+    void parsesSimpleBinOpPlusMinus() {
         assertEquals(
                 new Seq(
-                        new VarAssignment("n", new NumericLiteral("5")),
-                        new WhileStatement(
-                                new BinaryOp(new VarRef("n"), ">", new NumericLiteral("0")),
-                                new VarAssignment(
-                                        "n",
-                                        new BinaryOp(
-                                                new VarRef("n"),
-                                                "-",
-                                                new NumericLiteral("1")
-                                        )
-                                ))
+                        new BinaryOp(
+                                new BinaryOp(
+                                        new NumericLiteral("1"),
+                                        "+",
+                                        new NumericLiteral("2")
+                                ),
+                                "-",
+                                new NumericLiteral("3")
+                        )
                 ),
-                translateToAst("n = 5\nwhile n > 0 {\nn -= 1\n}\n")
+                translateToAst("1 + 2 - 3")
+
+        );
+    }
+
+    @Test
+    void parsesSimpleBinOpExp() {
+        assertEquals(
+                new Seq(
+                        new BinaryOp(
+                                new NumericLiteral("3.1415"),
+                                "**",
+                                new NumericLiteral("2")
+                        )
+                ),
+                translateToAst("3.1415 ** 2")
+
+        );
+    }
+
+    @Test
+    void parsesSimpleBinOpMulDiv() {
+        assertEquals(
+                new Seq(
+                        new BinaryOp(
+                                new BinaryOp(
+                                        new NumericLiteral("1"),
+                                        "*",
+                                        new NumericLiteral("2")
+                                ),
+                                "/",
+                                new NumericLiteral("3")
+                        )
+                ),
+                translateToAst("1 * 2 / 3")
+
         );
     }
 
@@ -59,24 +136,6 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new UnaryOp("not", new VarRef("ready"))
                 ),
                 translateToAst("not ready")
-        );
-    }
-
-    @Test
-    void parsesParenthesis() {
-        assertEquals(
-                new Seq(
-                        new BinaryOp(
-                                new BinaryOp(
-                                        new NumericLiteral("1"),
-                                        "+",
-                                        new NumericLiteral("2")
-                                ),
-                                "*",
-                                new NumericLiteral("3")
-                        )
-                ),
-                translateToAst("(1 + 2) * 3")
         );
     }
 
@@ -95,6 +154,24 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("1 + 2 * 3")
+        );
+    }
+
+    @Test
+    void parsesParenthesis() {
+        assertEquals(
+                new Seq(
+                        new BinaryOp(
+                                new BinaryOp(
+                                        new NumericLiteral("1"),
+                                        "+",
+                                        new NumericLiteral("2")
+                                ),
+                                "*",
+                                new NumericLiteral("3")
+                        )
+                ),
+                translateToAst("(1 + 2) * 3")
         );
     }
 
@@ -136,16 +213,19 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(
                         new Seq(
                                 new Seq(
-                                        new FunctionCall(
-                                                "print",
-                                                List.of(
-                                                        new StringLiteral("\"a\": "),
-                                                        new VarRef("a")
+                                        new Seq(
+                                                new FunctionCall(
+                                                        "print",
+                                                        List.of(
+                                                                new StringLiteral("\"a\": "),
+                                                                new VarRef("a")
+                                                        )
                                                 )
                                         ),
                                         new FunctionCall("random", List.of())
                                 ),
-                                new FunctionCall("print", List.of(new VarRef("r")))),
+                                new FunctionCall("print", List.of(new VarRef("r")))
+                        ),
                         new FunctionCall(
                                 "print",
                                 List.of(
@@ -158,46 +238,40 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         )
 
-
                 ),
                 translateToAst("print(\"\\\"a\\\": \", a)\nrandom()\nprint(r)\nprint(\"\\nb: \", b / 3.1415)")
+
+
         );
     }
 
     @Test
-    void parsesSensorReading() {
+    void parsesUnaryMinus() {
         assertEquals(
                 new Seq(
-                        new BinaryOp(
-                                new SensorReading("foundation1", "@copper"),
-                                "<",
-                                new SensorReading("foundation1", "@itemCapacity")
+                        new Seq(
+                                new Seq(
+                                        new Assignment(
+                                                new VarRef("dx"),
+                                                new BinaryOp(
+                                                        new VarRef("dx"),
+                                                        "*",
+                                                        new NumericLiteral("-1")
+                                                )
+                                        )
+                                ),
+                                new Assignment(new VarRef("dy"), new NumericLiteral("-1"))
                         ),
-                        new BinaryOp(
-                                new SensorReading("reactor1", "@cryofluid"),
-                                "<",
-                                new NumericLiteral("10")
-                        )
-                ),
-                translateToAst("foundation1.copper < foundation1.itemCapacity\nreactor1.cryofluid < 10")
-        );
-    }
-
-    @Test
-    void parsesControl() {
-        assertEquals(
-                new Seq(
-                        new Control(
-                                "conveyor1",
-                                "enabled",
+                        new Assignment(
+                                new VarRef("dz"),
                                 new BinaryOp(
-                                        new SensorReading("CORE", "@copper"),
-                                        "<",
-                                        new SensorReading("CORE", "@itemCapacity")
+                                        new NumericLiteral("2"),
+                                        "-",
+                                        new NumericLiteral("1")
                                 )
                         )
                 ),
-                translateToAst("conveyor1.enabled = CORE.copper < CORE.itemCapacity")
+                translateToAst("dx *= -1\ndy = -1\ndz = 2 - 1")
         );
     }
 
@@ -205,10 +279,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesHeapAccesses() {
         assertEquals(
                 new Seq(
-                        new HeapWrite(
-                                "cell2",
-                                new NumericLiteral("1"),
-                                new HeapRead("cell3", new NumericLiteral("0"))
+                        new Assignment(
+                                new HeapAccess(
+                                        "cell2",
+                                        new NumericLiteral("1")
+                                ),
+                                new HeapAccess("cell3", new NumericLiteral("0"))
                         )
                 ),
                 translateToAst("cell2[1] = cell3[0]")
@@ -216,72 +292,45 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
-    void parsesIfElseExpression() {
+    void parsesGlobalReferences() {
         assertEquals(
                 new Seq(
-                        new VarAssignment(
-                                "value",
-                                new IfExpression(
-                                        new BinaryOp(
-                                                new HeapRead("cell1", new NumericLiteral("4")),
-                                                "==",
-                                                new NumericLiteral("0")
+                        new Seq(
+                                new Seq(new NoOp(), new NoOp()),
+                                new Assignment(
+                                        new HeapAccess("cell2", new NumericLiteral("4")),
+                                        new NumericLiteral("1")
+                                )
+                        ),
+                        new Assignment(
+                                new HeapAccess(
+                                        "cell2",
+                                        new NumericLiteral("5")
+                                ),
+                                new BinaryOp(
+                                        new HeapAccess(
+                                                "cell2",
+                                                new NumericLiteral("4")
                                         ),
-                                        new BooleanLiteral(false),
-                                        new Seq(
-                                                new HeapWrite("cell1",
-                                                        new NumericLiteral("4"),
-                                                        new BooleanLiteral(true)
-                                                ),
-                                                new VarAssignment(
-                                                        "n",
-                                                        new BinaryOp(
-                                                                new VarRef("n"),
-                                                                "+",
-                                                                new NumericLiteral("1")
-                                                        )
-                                                )
-                                        )
+                                        "+",
+                                        new NumericLiteral("42")
                                 )
                         )
                 ),
-                translateToAst("value = if cell1[4] == 0 { false\n} else { cell1[4] = true\nn += 1\n}")
+                translateToAst("allocate heap in cell2[4..5]\n$dx = 1\n$dy = $dx + 42")
         );
     }
 
-    @Test
-    void parsesIfExpression() {
-        assertEquals(
-                new Seq(
-                        new IfExpression(
-                                new BinaryOp(
-                                        new VarRef("n"),
-                                        ">",
-                                        new NumericLiteral("4")
-                                ),
-                                new HeapWrite(
-                                        "cell1",
-                                        new NumericLiteral("2"),
-                                        new BinaryOp(
-                                                new HeapRead("cell1", new NumericLiteral("2")),
-                                                "+",
-                                                new NumericLiteral("1")
-                                        )
-                                ),
-                                new NoOp()
-                        )
-                ),
-                translateToAst("if n > 4 { cell1[2] += 1\n}\n}")
-        );
-    }
 
     @Test
     void parsesExponentiationAssignment() {
         assertEquals(
                 new Seq(
-                        new HeapWrite(
-                                "cell1",
-                                new NumericLiteral("0"),
+                        new Assignment(
+                                new HeapAccess(
+                                        "cell1",
+                                        new NumericLiteral("0")
+                                ),
                                 new FunctionCall(
                                         "rand",
                                         List.of(
@@ -299,75 +348,14 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
-    void parsesRefs() {
-        assertEquals(
-                new Seq(
-                        new NoOp(),
-                        new WhileStatement(
-                                new BinaryOp(
-                                        new Ref("unit"),
-                                        "===",
-                                        new NullLiteral()
-                                ),
-                                new FunctionCall(
-                                        "ubind",
-                                        List.of(new VarRef("poly"))
-                                )
-                        )
-                ),
-                translateToAst("while @unit === null {\nubind(poly)\n}\n")
-        );
-    }
-
-    @Test
-    void parsesFlagAssignment() {
-        assertEquals(
-                new Seq(
-                        new NoOp(),
-                        new FunctionCall(
-                                "flag",
-                                List.of(new VarRef("FLAG"))
-                        )
-                ),
-                translateToAst("flag(FLAG)")
-        );
-    }
-
-    @Test
-    void parsesUnaryMinus() {
-        assertEquals(
-                new Seq(
-                        new Seq(
-                                new VarAssignment(
-                                        "dx",
-                                        new BinaryOp(
-                                                new VarRef("dx"),
-                                                "*",
-                                                new NumericLiteral("-1")
-                                        )
-                                ),
-                                new VarAssignment("dy", new NumericLiteral("-1"))
-                        ),
-                        new VarAssignment(
-                                "dz",
-                                new BinaryOp(
-                                        new NumericLiteral("2"),
-                                        "-",
-                                        new NumericLiteral("1")
-                                )
-                        )
-                ),
-                translateToAst("dx *= -1;dy = -1; dz = 2 - 1")
-        );
-    }
-
-    @Test
     void parsesHeapReferencesWithRvalues() {
         assertEquals(
                 new Seq(
-                        new HeapWrite(
-                                "cell1",
-                                new VarRef("dx"),
+                        new Assignment(
+                                new HeapAccess(
+                                        "cell1",
+                                        new VarRef("dx")
+                                ),
                                 new NumericLiteral("1")
                         )
                 ),
@@ -379,73 +367,28 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesComments() {
         assertEquals(
                 new Seq(
-                        // We only remove the leading `//`, because we don't know what kind of formatting
-                        // the end-user applied, so we have to keep the spaces in place
-                        new Comment(" Remember that we initialized ourselves"),
-                        new VarAssignment("wasInitialized", new NumericLiteral("1"))
+                        new Seq(
+                                new Seq(
+                                        // We only remove the leading `//`, because we don't know what kind of formatting
+                                        // the end-user applied, so we have to keep the spaces in place
+                                        new Comment(" Remember that we initialized ourselves")
+                                ),
+                                new Comment(" This is required otherwise we'll repeat ourselves")
+                        ),
+                        new Assignment(new VarRef("wasInitialized"), new NumericLiteral("1"))
                 ),
                 translateToAst(
-                        "// Remember that we initialized ourselves\nwasInitialized = 1\n"
+                        "// Remember that we initialized ourselves\n// This is required otherwise we'll repeat ourselves\nwasInitialized = 1\n"
                 )
         );
     }
 
     @Test
-    void parsesRefsWithDashInThem() {
+    void parsesMathFunctions() {
         assertEquals(
                 new Seq(
-                        new FunctionCall(
-                                "build",
-                                List.of(
-                                        new VarRef("x"),
-                                        new VarRef("y"),
-                                        new Ref("titanium-conveyor"),
-                                        new NumericLiteral("0"),
-                                        new NumericLiteral("0")
-                                )
-                        )
-                ),
-                translateToAst("build(x, y, @titanium-conveyor, 0, 0)")
-        );
-    }
-
-    @Test
-    void parsesIfElseIf() {
-        assertEquals(
-                new Seq(
-                        new IfExpression(
-                                new BinaryOp(
-                                        new VarRef("state"),
-                                        "==",
-                                        new NumericLiteral("1")),
-                                new FunctionCall(
-                                        "print",
-                                        List.of(new VarRef("m"))),
-                                new IfExpression(
-                                        new BinaryOp(
-                                                new VarRef("state"),
-                                                "==",
-                                                new NumericLiteral("2")
-                                        ),
-                                        new FunctionCall(
-                                                "print",
-                                                List.of(new VarRef("n")
-                                                )
-                                        ),
-                                        new NoOp()
-                                )
-                        )
-                ),
-                translateToAst("if state == 1 {\nprint(m)\n} else {\nif state == 2 {\nprint(n)\n}\n}\n")
-        );
-    }
-
-    @Test
-    void parsesMathFuncations() {
-        assertEquals(
-                new Seq(
-                        new VarAssignment(
-                                "x",
+                        new Assignment(
+                                new VarRef("x"),
                                 new FunctionCall(
                                         "ceil",
                                         new FunctionCall(
@@ -477,14 +420,49 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
+    void parsesRefsWithDashInThem() {
+        assertEquals(
+                new Seq(
+                        new FunctionCall(
+                                "build",
+                                List.of(
+                                        new VarRef("x"),
+                                        new VarRef("y"),
+                                        new Ref("titanium-conveyor"),
+                                        new NumericLiteral("0"),
+                                        new NumericLiteral("0")
+                                )
+                        )
+                ),
+                translateToAst("build(x, y, @titanium-conveyor, 0, 0)")
+        );
+    }
+
+    @Test
+    void parsesFlagAssignment() {
+        assertEquals(
+                new Seq(
+                        new NoOp(),
+                        new FunctionCall(
+                                "flag",
+                                List.of(new VarRef("FLAG"))
+                        )
+                ),
+                translateToAst("flag(FLAG)")
+        );
+    }
+
+    @Test
     void parsesAddressCalculationReferences() {
         assertEquals(
                 new Seq(
-                        new HeapWrite(
-                                "cell1",
-                                new VarRef("ptr"),
+                        new Assignment(
+                                new HeapAccess(
+                                        "cell1",
+                                        new VarRef("ptr")
+                                ),
                                 new BinaryOp(
-                                        new HeapRead(
+                                        new HeapAccess(
                                                 "cell1",
                                                 new BinaryOp(
                                                         new VarRef("ptr"),
@@ -493,7 +471,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                 )
                                         ),
                                         "+",
-                                        new HeapRead(
+                                        new HeapAccess(
                                                 "cell1",
                                                 new BinaryOp(
                                                         new VarRef("ptr"),
@@ -506,6 +484,324 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("cell1[ptr] = cell1[ptr - 1] + cell1[ptr - 2]")
+        );
+    }
+
+    @Test
+    void parsesHeapAllocationWithExclusiveRange() {
+        assertEquals(
+                new Seq(
+                        new NoOp()
+                ),
+                translateToAst("allocate heap in cell2[ 0 ... 64 ]")
+        );
+    }
+
+    @Test
+    void parsesHeapAllocationWithInclusiveRange() {
+        assertEquals(
+                new Seq(
+                        new NoOp()
+                ),
+                translateToAst("allocate heap in cell2[0 .. 30]")
+        );
+    }
+
+    @Test
+    void rejectsHeapUsageWhenUnallocated() {
+        assertThrows(UnallocatedHeapException.class, () -> translateToAst("$dx = 1"));
+    }
+
+    @Test
+    void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
+        assertThrows(OutOfHeapSpaceException.class, () -> translateToAst("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz"));
+    }
+
+    @Test
+    void parsesPropertyAccesses() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new BinaryOp(
+                                        new PropertyAccess(new VarRef("foundation1"), "copper"),
+                                        "<",
+                                        new PropertyAccess(new VarRef("foundation1"), "itemCapacity")
+                                )
+                        ),
+                        new BinaryOp(
+                                new PropertyAccess(new VarRef("reactor1"), "cryofluid"),
+                                "<",
+                                new NumericLiteral("10")
+                        )
+                ),
+                translateToAst("foundation1.copper < foundation1.itemCapacity\nreactor1.cryofluid < 10")
+        );
+    }
+
+    @Test
+    void parsesWriteToPropertyAccess() {
+        assertEquals(
+                new Seq(
+                        new Assignment(
+                                new PropertyAccess(
+                                        new VarRef("conveyor1"),
+                                        "enabled"
+                                ),
+                                new BinaryOp(
+                                        new PropertyAccess(new VarRef("CORE"), "copper"),
+                                        "<",
+                                        new PropertyAccess(new VarRef("CORE"), "itemCapacity")
+                                )
+                        )
+                ),
+                translateToAst("conveyor1.enabled = CORE.copper < CORE.itemCapacity")
+        );
+    }
+
+    @Test
+    void parsesUsefulWhileLoop() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new Assignment(new VarRef("n"), new NumericLiteral("5"))
+                        ),
+                        new WhileStatement(
+                                new BinaryOp(new VarRef("n"), ">", new NumericLiteral("0")),
+                                new Seq(
+                                        new Assignment(
+                                                new VarRef("n"),
+                                                new BinaryOp(
+                                                        new VarRef("n"),
+                                                        "-",
+                                                        new NumericLiteral("1")
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("n = 5\nwhile n > 0\nn -= 1\nend\n")
+        );
+    }
+
+
+    @Test
+    void parsesInclusiveIteratorStyleLoop() {
+        assertEquals(
+                new Seq(
+                        new Assignment(new VarRef("n"), new NumericLiteral("1")),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new VarRef("n"),
+                                        "<=",
+                                        new NumericLiteral("17")
+                                ),
+                                new Seq(
+                                        new Seq(
+                                                new FunctionCall("print", new VarRef("n"))
+                                        ),
+                                        new Assignment(
+                                                new VarRef("n"),
+                                                new BinaryOp(
+                                                        new VarRef("n"),
+                                                        "+",
+                                                        new NumericLiteral("1")
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("for n in 1 .. 17\nprint(n)\nend\n")
+        );
+    }
+
+    @Test
+    void parsesExclusiveIteratorStyleLoop() {
+        assertEquals(
+                new Seq(
+                        new Assignment(new VarRef("n"), new NumericLiteral("1")),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new VarRef("n"),
+                                        "<",
+                                        new NumericLiteral("17")
+                                ),
+                                new Seq(
+                                        new Seq(
+                                                new FunctionCall("print", new VarRef("n"))
+                                        ),
+                                        new Assignment(
+                                                new VarRef("n"),
+                                                new BinaryOp(
+                                                        new VarRef("n"),
+                                                        "+",
+                                                        new NumericLiteral("1")
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("for n in 1 ... 17\nprint(n)\nend\n")
+        );
+    }
+
+    @Test
+    void parsesCStyleLoop() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new Assignment(new VarRef("i"), new NumericLiteral("0")),
+                                new Assignment(new VarRef("j"), new NumericLiteral("-5"))
+                        ),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new VarRef("i"),
+                                        "<",
+                                        new NumericLiteral("5")
+                                ),
+                                new Seq(
+                                        new Seq(
+                                                new FunctionCall("print", new VarRef("n"))
+                                        ),
+                                        new Seq(
+                                                new Assignment(
+                                                        new VarRef("j"),
+                                                        new BinaryOp(
+                                                                new VarRef("j"),
+                                                                "-",
+                                                                new NumericLiteral("1")
+                                                        )
+                                                ),
+                                                new Assignment(
+                                                        new VarRef("i"),
+                                                        new BinaryOp(
+                                                                new VarRef("i"),
+                                                                "+",
+                                                                new NumericLiteral("1")
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1\nprint(n)\nend\n")
+        );
+    }
+
+    @Test
+    void parsesRefs() {
+        assertEquals(
+                new Seq(
+                        new NoOp(),
+                        new WhileStatement(
+                                new BinaryOp(
+                                        new Ref("unit"),
+                                        "===",
+                                        new NullLiteral()
+                                ),
+                                new Seq(
+                                        new FunctionCall(
+                                                "ubind",
+                                                List.of(new VarRef("poly"))
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("while @unit === null\nubind(poly)\nend")
+        );
+    }
+
+
+    @Test
+    void parsesIfExpression() {
+        assertEquals(
+                new Seq(
+                        new IfExpression(
+                                new BinaryOp(
+                                        new VarRef("n"),
+                                        ">",
+                                        new NumericLiteral("4")
+                                ),
+                                new Seq(
+                                        new Assignment(
+                                                new HeapAccess(
+                                                        "cell1",
+                                                        new NumericLiteral("2")
+                                                ),
+                                                new BinaryOp(
+                                                        new HeapAccess("cell1", new NumericLiteral("2")),
+                                                        "+",
+                                                        new NumericLiteral("1")
+                                                )
+                                        )
+                                ),
+                                new NoOp()
+                        )
+                ),
+                translateToAst("if n > 4 cell1[2] += 1 end")
+        );
+    }
+
+    @Test
+    void parsesIfElseExpression() {
+        assertEquals(
+                new Seq(
+                        new Assignment(
+                                new VarRef("value"),
+                                new IfExpression(
+                                        new BinaryOp(
+                                                new HeapAccess("cell1", new NumericLiteral("4")),
+                                                "==",
+                                                new NumericLiteral("0")
+                                        ),
+                                        new Seq(new BooleanLiteral(false)),
+                                        new Seq(
+                                                new Seq(
+                                                        new Assignment(
+                                                                new HeapAccess(
+                                                                        "cell1",
+                                                                        new NumericLiteral("4")
+                                                                ),
+                                                                new BooleanLiteral(true)
+                                                        )
+                                                ),
+                                                new Assignment(
+                                                        new VarRef("n"),
+                                                        new BinaryOp(
+                                                                new VarRef("n"),
+                                                                "+",
+                                                                new NumericLiteral("1")
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("value = if cell1[4] == 0\nfalse\nelse\ncell1[4] = true\nn += 1\nend\n")
+        );
+    }
+
+    @Test
+    void parsesIfElseIf() {
+        assertEquals(
+                new Seq(
+                        new IfExpression(
+                                new BinaryOp(
+                                        new VarRef("state"),
+                                        "==",
+                                        new NumericLiteral("1")),
+                                new Seq(new FunctionCall(
+                                        "print",
+                                        List.of(new VarRef("m")))),
+                                new Seq(new IfExpression(
+                                        new BinaryOp(
+                                                new VarRef("state"),
+                                                "==",
+                                                new NumericLiteral("2")),
+                                        new Seq(new FunctionCall(
+                                                "print",
+                                                List.of(new VarRef("n")))),
+                                        new NoOp())))),
+                translateToAst("if state == 1\nprint(m)\nelse\nif state == 2\nprint(n)\nend\nend\n")
         );
     }
 
@@ -530,12 +826,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
-    void rejects_STACK_ReservedKeywordsInHeapRead() {
+    void rejects_STACK_ReservedKeywordsInHeapAccess() {
         assertThrows(ParsingException.class, () -> translateToAst("STACK[0]"));
     }
 
     @Test
-    void rejects_HEAP_ReservedKeywordsInHeapRead() {
+    void rejects_HEAP_ReservedKeywordsInHeapAccess() {
         assertThrows(ParsingException.class, () -> translateToAst("HEAP[0]"));
     }
 
@@ -547,163 +843,5 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void rejects_HEAP_ReservedKeywordsInVarAssignment() {
         assertThrows(ParsingException.class, () -> translateToAst("HEAP = 0"));
-    }
-
-    @Test
-    void parsesInclusiveIteratorStyleLoop() {
-        assertEquals(
-                new Seq(
-                        new VarAssignment("n", new NumericLiteral("1")),
-                        new WhileStatement(
-                                new BinaryOp(
-                                        new VarRef("n"),
-                                        "<=",
-                                        new NumericLiteral("17")
-                                ),
-                                new Seq(
-                                        new FunctionCall("print", new VarRef("n")),
-                                        new VarAssignment(
-                                                "n",
-                                                new BinaryOp(
-                                                        new VarRef("n"),
-                                                        "+",
-                                                        new NumericLiteral("1")
-                                                )
-                                        )
-                                )
-                        )
-                ),
-                translateToAst("for n in 1 .. 17 {\nprint(n)\n}")
-        );
-    }
-
-    @Test
-    void parsesExclusiveIteratorStyleLoop() {
-        assertEquals(
-                new Seq(
-                        new VarAssignment("n", new NumericLiteral("1")),
-                        new WhileStatement(
-                                new BinaryOp(
-                                        new VarRef("n"),
-                                        "<",
-                                        new NumericLiteral("17")
-                                ),
-                                new Seq(
-                                        new FunctionCall("print", new VarRef("n")),
-                                        new VarAssignment(
-                                                "n",
-                                                new BinaryOp(
-                                                        new VarRef("n"),
-                                                        "+",
-                                                        new NumericLiteral("1")
-                                                )
-                                        )
-                                )
-                        )
-                ),
-                translateToAst("for n in 1 ... 17 {\nprint(n)\n}")
-        );
-    }
-
-    @Test
-    void parsesCStyleLoop() {
-        assertEquals(
-                new Seq(
-                        new Seq(
-                                new VarAssignment("i", new NumericLiteral("0")),
-                                new VarAssignment("j", new NumericLiteral("-5"))
-                        ),
-                        new WhileStatement(
-                                new BinaryOp(
-                                        new VarRef("i"),
-                                        "<",
-                                        new NumericLiteral("5")
-                                ),
-                                new Seq(
-                                        new FunctionCall("print", new VarRef("n")),
-                                        new Seq(
-                                                new VarAssignment(
-                                                        "j",
-                                                        new BinaryOp(
-                                                                new VarRef("j"),
-                                                                "-",
-                                                                new NumericLiteral("1")
-                                                        )
-                                                ),
-                                                new VarAssignment(
-                                                        "i",
-                                                        new BinaryOp(
-                                                                new VarRef("i"),
-                                                                "+",
-                                                                new NumericLiteral("1")
-                                                        )
-                                                )
-                                        )
-                                )
-                        )
-                ),
-                translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1 {\nprint(n)\n}\n")
-        );
-    }
-
-    @Test
-    void parsesHeapAllocationWithExclusiveRange() {
-        assertEquals(
-                new Seq(
-                        new NoOp()
-                ),
-                translateToAst("allocate heap in cell2 0 ... 64")
-        );
-    }
-
-    @Test
-    void parsesHeapAllocationWithInclusiveRange() {
-        assertEquals(
-                new Seq(
-                        new NoOp()
-                ),
-                translateToAst("allocate heap in cell2 0 .. 30")
-        );
-    }
-
-    @Test
-    void heapAllocationOnlyAcceptsNumericLiteralForRangeDeclaration() {
-        assertThrows(InvalidHeapAllocationException.class, () -> translateToAst("allocate heap in cell4 n .. k"));
-        assertThrows(InvalidHeapAllocationException.class, () -> translateToAst("allocate heap in cell4 (0+1) .. max_val"));
-    }
-
-    @Test
-    void parsesGlobalReferences() {
-        assertEquals(
-                new Seq(
-                        new Seq(
-                                new NoOp(),
-                                new HeapWrite("cell2", new NumericLiteral("4"), new NumericLiteral("1"))
-                        ),
-                        new HeapWrite(
-                                "cell2",
-                                new NumericLiteral("5"),
-                                new BinaryOp(
-                                        new HeapRead(
-                                                "cell2",
-                                                new NumericLiteral("4")
-                                        ),
-                                        "+",
-                                        new NumericLiteral("42")
-                                )
-                        )
-                ),
-                translateToAst("allocate heap in cell2 4 .. 5\n$dx = 1;$dy = $dx + 42")
-        );
-    }
-
-    @Test
-    void rejectsHeapUsageWhenUnallocated() {
-        assertThrows(UnallocatedHeapException.class, () -> translateToAst("$dx = 1"));
-    }
-
-    @Test
-    void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
-        assertThrows(OutOfHeapSpaceException.class, () -> translateToAst("allocate heap in cell1 0 .. 1\n$dx = $dy = $dz"));
     }
 }

@@ -10,6 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MindcodeParserTest extends AbstractParserTest {
     @Test
+    void parsesTheEmptyProgram() {
+        assertDoesNotThrow(() -> parse(""));
+    }
+
+    @Test
     void parsesSensorAccess() {
         assertDoesNotThrow(() -> parse("foundation1.copper < 1000"));
         assertDoesNotThrow(() -> parse("foundation1.copper < foundation1.itemCapacity"));
@@ -18,12 +23,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void parsesControlStatements() {
-        assertDoesNotThrow(() -> parse("conveyor1.enabled = foundation1.copper < foundation1.itemCapacity\n"));
-    }
-
-    @Test
-    void parsesTheEmptyProgram() {
-        assertDoesNotThrow(() -> parse(""));
+        assertDoesNotThrow(() -> parse("conveyor1.enabled = foundation1.copper < foundation1.itemCapacity"));
     }
 
     @Test
@@ -33,12 +33,12 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void parsesAssignmentOfCalculations() {
-        assertDoesNotThrow(() -> parse("foo = bar ** (n - 2)\n"));
+        assertDoesNotThrow(() -> parse("foo = bar ** (n - 2)"));
     }
 
     @Test
     void parsesSimpleWhileLoop() {
-        assertDoesNotThrow(() -> parse("n = 5\nwhile n > 0 {\n  n -= 1\n}\n"));
+        assertDoesNotThrow(() -> parse("n = 5\nwhile n > 0\nn -= 1\nend"));
     }
 
     @Test
@@ -54,13 +54,13 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void parsesIfExpression() {
-        assertDoesNotThrow(() -> parse("value = if HEAP[4] == 0 { false\n} else { true\n}"));
-        assertDoesNotThrow(() -> parse("if false { n += 1\n}\n"));
+        assertDoesNotThrow(() -> parse("value = HEAP[4] == 0 ? false : true"));
+        assertDoesNotThrow(() -> parse("if false\nn += 1\nend"));
     }
 
     @Test
     void parsesRefs() {
-        assertDoesNotThrow(() -> parse("while @unit == null {\nubind(poly)\n}\n"));
+        assertDoesNotThrow(() -> parse("while @unit == null\nubind(poly)\nend\n"));
     }
 
     @Test
@@ -80,28 +80,28 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void parsesCStyleForLoop() {
-        assertDoesNotThrow(() -> parse("for i = 0, j = 0; i < j ; i += 1 {\nprint(j)\n}\n"));
+        assertDoesNotThrow(() -> parse("for i = 0, j = 0; i < j ; i += 1\nprint(j)\nend"));
     }
 
     @Test
     void parsesInclusiveIteratorStyleLoop() {
-        assertDoesNotThrow(() -> parse("for n in 1 .. 17 {\nprint(n)\n}"));
+        assertDoesNotThrow(() -> parse("for n in 1 .. 17\nprint(n)\nend\n"));
     }
 
     @Test
     void parsesExclusiveIteratorStyleLoop() {
-        assertDoesNotThrow(() -> parse("for n in 1 ... 17 {\nprint(n)\n}"));
+        assertDoesNotThrow(() -> parse("for n in 1 ... 17\nprint(n)\nend\n"));
     }
 
     @Test
     void parsesHeapAllocation() {
-        assertDoesNotThrow(() -> parse("allocate heap in cell4 0 .. 64"));
+        assertDoesNotThrow(() -> parse("allocate heap in cell4[0 .. 64]"));
     }
 
     @Test
     void parsesGlobalReferences() {
         assertDoesNotThrow(() -> parse("" +
-                        "allocate heap in cell2 14 .. 20\n" +
+                        "allocate heap in cell2[14 .. 20]\n" +
                         "$dx += 1\n" +
                         "$dy = $dx - 4\n"
                 )

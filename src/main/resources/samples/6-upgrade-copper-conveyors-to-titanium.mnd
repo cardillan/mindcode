@@ -9,32 +9,32 @@ ST_BUILDING = 2
 ST_NEXT = 3
 ST_DONE = 4
 
-allocate heap in cell1 0 ... 16
+allocate heap in cell1[0 ... 16]
 
 RADIUS = 1
 
 // Debugging section -- I would remove this when
 // you are ready to use this script for real
 print("STATE = ", $STATE, " ")
-if $STATE == ST_UNINITIALIZED {
+if $STATE == ST_UNINITIALIZED
     print("uninitialized")
-} else {
-    if $STATE == ST_APPROACHING {
+else
+    if $STATE == ST_APPROACHING
         print("approaching")
-    } else {
-        if $STATE == ST_BUILDING {
+    else
+        if $STATE == ST_BUILDING
             print("building")
-        } else {
-            if $STATE == ST_NEXT {
+        else
+            if $STATE == ST_NEXT
                 print("next")
-            } else {
-                if $STATE == ST_DONE {
+            else
+                if $STATE == ST_DONE
                     print("done")
-                }
-            }
-        }
-    }
-}
+                end
+            end
+        end
+    end
+end
 
 print("\nDX = ", $DX)
 print("\nDY = ", $DY)
@@ -54,7 +54,7 @@ print("\n@unit.y = ", @unit.y)
 
 // When we are uninitialized, initialize ourselves then
 // proceed with the next state
-if $STATE == ST_UNINITIALIZED {
+if $STATE == ST_UNINITIALIZED
     $STATE = ST_APPROACHING
     $DX = 1
     $DY = 1
@@ -65,40 +65,40 @@ if $STATE == ST_UNINITIALIZED {
     $BUILD_X = $SW_X
     $BUILD_Y = $SW_Y
     $FLAG = rand(1000000) + 1
-}
+end
 
 // Once we know we're initialized, we can look for *the*
 // poly we will take control of
-while !$FOUND {
-    while @unit === null {
+while !$FOUND
+    while @unit === null
         ubind(@poly)
-        if @unit.flag == 0 {
+        if @unit.flag == 0
             flag($FLAG)
             $FOUND = true
-        }
-    }
-}
+        end
+    end
+end
 
 // When we're approaching a given coordinate, this is how we
 // choose to either continue approaching, or if we're ready
 // to upgrade the existing building
-if $STATE == ST_APPROACHING {
-    if within($BUILD_X, $BUILD_Y, RADIUS) {
+if $STATE == ST_APPROACHING
+    if within($BUILD_X, $BUILD_Y, RADIUS)
       $STATE = ST_BUILDING
-    } else {
+    else
       approach($BUILD_X, $BUILD_Y, RADIUS)
-    }
-}
+    end
+end
 
 // This is where we upgrade the conveyors themselves
-if $STATE == ST_BUILDING {
+if $STATE == ST_BUILDING
     getBlock($BUILD_X, $BUILD_Y, b_type, b_building)
-    if b_type == @conveyor {
+    if b_type == @conveyor
         build($BUILD_X, $BUILD_Y, @titanium-conveyor, b_building.rotation, 0)
-    }
+    end
 
     $STATE = ST_NEXT
-}
+end
 
 // This is the block of code that determines which cell is the
 // next one. This script proceeds southwest to northeast, to make
@@ -106,24 +106,24 @@ if $STATE == ST_BUILDING {
 //
 // (0,0) is at the bottom-left in Mindustry, meaning +1 on each
 // side moves up and to the right.
-if $STATE == ST_NEXT {
+if $STATE == ST_NEXT
     $BUILD_X += $DX
 
-    if $BUILD_X > $NE_X {
+    if $BUILD_X > $NE_X
       $DX *= -1
       $BUILD_X = $NE_X
       $BUILD_Y += $DY
       $STATE = ST_APPROACHING
-    }
+    end
 
-    if $BUILD_X < $SW_X {
+    if $BUILD_X < $SW_X
       $DX *= -1
       $BUILD_X = $SW_X
       $BUILD_Y += $DY
       $STATE = ST_APPROACHING
-    }
+    end
 
-    if $BUILD_Y > $NE_Y {
+    if $BUILD_Y > $NE_Y
       $DY *= -1
       $BUILD_Y = $NE_Y
       // Depending on whether you want to make it a one-shot or not,
@@ -134,23 +134,23 @@ if $STATE == ST_NEXT {
       // Otherwise, this is a one-shot and once we've gone over every
       // cell, we stop
       $STATE = ST_DONE
-    }
+    end
 
-    if $BUILD_Y < $SW_Y {
+    if $BUILD_Y < $SW_Y
       $DY *= -1
       $BUILD_Y = $SW_Y
       $STATE = ST_APPROACHING
-    }
-}
+    end
+end
 
 // Yay, we're done!
-if $STATE == ST_DONE {
+if $STATE == ST_DONE
     print("\n\nTerminal State")
-}
+end
 
 // Otherwise, there was an error and we need to debug this
-if $STATE > ST_DONE {
+if $STATE > ST_DONE
     print("\n\nINVALID STATE!")
-}
+end
 
 printflush(message1)

@@ -1,196 +1,218 @@
 grammar Mindcode;
 
-program : expression_list;
-
-expression_list : expression terminator
-                | expression_list expression terminator
-                | terminator
-                ;
-
-expression : while_statement
-           | for_statement
-           | control_statement
-           | rvalue
-           | single_line_comment
-           | heap_allocation
-           ;
-
-heap_allocation : ALLOCATE HEAP IN name=id range;
-
-for_statement : FOR init_expr SEMICOLON cond_expr SEMICOLON loop_expr LEFT_CBRACKET crlf? body=block_body RIGHT_CBRACKET    # cStyleLoop
-              | FOR name=lvalue IN range LEFT_CBRACKET crlf? body=block_body RIGHT_CBRACKET                                 # rangeStyleLoop
-              ;
-
-range : firstValue=rvalue DOT DOT DOT lastValue=rvalue # exclusiveRange
-      | firstValue=rvalue DOT DOT lastValue=rvalue     # inclusiveRange
-      ;
-
-init_expr : (assignment (COMMA assignment)*)?;
-cond_expr : rvalue;
-loop_expr : (assignment (COMMA assignment)*)?;
-
-TO : 'to';
-UNTIL : 'until';
-
-control_statement : target=id DOT property=id ASSIGN value=rvalue;
-
-while_statement : WHILE rvalue LEFT_CBRACKET crlf? block_body RIGHT_CBRACKET;
-
-block_body : block_statement_list;
-
-block_statement_list : expression terminator
-                     | block_statement_list expression terminator
-                     ;
-
-lvalue : id     # localvar
-       | global # globalvar
-       ;
-
-global : DOLLAR name=id;
-
-rvalue : lvalue
-       | assignment
-       | if_expression
-       | funcall
-       | ref
-       | literal_t
-       | bool_t
-       | numeric
-       | null_t
-       | sensor_read
-       | heap_ref
-       | rvalue op=EXP rvalue
-       | op=NOT rvalue
-       | rvalue op=( MUL | DIV | MOD ) rvalue
-       | rvalue op=( PLUS | MINUS ) rvalue
-       | rvalue op=( LESS | GREATER | LESS_EQUAL | GREATER_EQUAL ) rvalue
-       | rvalue op=( STRICT_EQUAL | EQUAL | NOT_EQUAL ) rvalue
-       | rvalue op=( OR | AND ) rvalue
-       | LEFT_RBRACKET rvalue RIGHT_RBRACKET
-       ;
-
-numeric : float_t
-        | int_t
-        | unary_minus float_t
-        | unary_minus int_t
+program : expression_list EOF
+        | EOF
         ;
 
-unary_minus: MINUS;
+expression_list : expression
+                | expression_list expression
+                ;
 
-ref : name=REF;
-
-funcall : name=id LEFT_RBRACKET params_list RIGHT_RBRACKET;
-
-params_list : rvalue?
-            | rvalue COMMA params_list
-            ;
-
-if_expression : IF cond=rvalue LEFT_CBRACKET ( terminator )? true_branch=block_body RIGHT_CBRACKET ( ELSE LEFT_CBRACKET ( terminator )? false_branch=block_body RIGHT_CBRACKET )?;
-
-heap_ref : target=id LEFT_SBRACKET addr=address RIGHT_SBRACKET;
-
-address : rvalue;
-
-sensor_read : target=id DOT resource
-            | unit=ref DOT resource
-            ;
-
-assignment : target=lvalue ASSIGN value=rvalue
-           | target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
-           | heap_ref ASSIGN value=rvalue
-           | heap_ref op=( PLUS_ASSIGN | MINUS_ASSIGN | MUL_ASSIGN | DIV_ASSIGN | MOD_ASSIGN | EXP_ASSIGN ) value=rvalue
-            // TODO: replace flag(FLAG) with @unit.flag = FLAG -- it simply makes more sense
+expression : a_comment                                                                          # comment
+           | propaccess                                                                         # property_access
+           | cond=expression QUESTION_MARK true_branch=expression COLON false_branch=expression # ternary_op
+           | case_expr                                                                          # case_expression
+           | if_expr                                                                            # if_expression
+           | funcall                                                                            # function_call
+           | fundecl                                                                            # function_declaration
+           | alloc                                                                              # allocation
+           | assign                                                                             # assignment
+           | lvalue                                                                             # value
+           | while_expression                                                                   # while_loop
+           | for_expression                                                                     # for_loop
+           | left=expression op=EXP right=expression                                            # binop_exp
+           | NOT expression                                                                     # not_expr
+           | left=expression op=( MUL | DIV | MOD ) right=expression                            # binop_mul_div_mod
+           | left=expression op=( PLUS | MINUS ) right=expression                               # binop_plus_minus
+           | left=expression op=( LESS_THAN | LESS_THAN_EQUAL
+                                | GREATER_THAN_EQUAL | GREATER_THAN )
+                                right=expression                                                # binop_inequality_comparison
+           | left=expression op=( NOT_EQUAL | EQUAL | STRICT_EQUAL ) right=expression           # binop_equality_comparison
+           | left=expression AND right=expression                                               # binop_and
+           | left=expression OR right=expression                                                # binop_or
+           | literal_t                                                                          # literal_string
+           | numeric_t                                                                          # literal_numeric
+           | bool_t                                                                             # literal_bool
+           | MINUS numeric_t                                                                    # unary_minus
+           | null_t                                                                             # literal_null
+           | LEFT_RBRACKET expression RIGHT_RBRACKET                                            # parenthesized_expression
            ;
 
-id : ID;
+propaccess : var_ref DOT prop=id
+           | unit_ref DOT prop=id
+           ;
 
-literal_t : LITERAL;
+numeric_t : float_t
+          | int_t
+          ;
 
-float_t : FLOAT;
+alloc : ALLOCATE alloc_list;
 
-int_t : INT;
+alloc_list : type=(HEAP | STACK) IN id alloc_range?
+           | alloc_list COMMA type=(HEAP | STACK) IN id alloc_range?
+           ;
 
-bool_t : TRUE
-       | FALSE
+alloc_range : LEFT_SBRACKET range RIGHT_SBRACKET;
+
+fundecl : DEF id LEFT_RBRACKET arg_decl_list RIGHT_RBRACKET expression_list END
+                     | DEF id expression_list END
+                     ;
+
+arg_decl_list : lvalue
+              | arg_decl_list COMMA lvalue
+              | lvalue ASSIGN expression
+              | arg_decl_list COMMA lvalue ASSIGN expression
+              ;
+
+while_expression : WHILE cond=expression loop_body END;
+
+for_expression : FOR lvalue IN range loop_body END                                                          # ranged_for
+               | FOR init=init_list SEMICOLON cond=expression SEMICOLON increment=incr_list loop_body END   # iterated_for
+               ;
+
+loop_body : loop_body expression_list
+          | loop_body break_st
+          | loop_body continue_st
+          | expression_list
+          | break_st
+          | continue_st
+          ;
+
+continue_st : CONTINUE;
+
+break_st : BREAK;
+
+range : start=int_t DOT DOT end=int_t     # inclusive_range
+      | start=int_t DOT DOT DOT end=int_t # exclusive_range
+      ;
+
+init_list : expression
+          | init_list COMMA expression
+          ;
+
+incr_list : expression
+          | incr_list COMMA expression
+          ;
+
+funcall : name=id LEFT_RBRACKET RIGHT_RBRACKET
+        | name=id LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
+        ;
+
+arg_list : arg
+         | arg_list COMMA arg
+         ;
+
+arg : expression;
+
+if_expr : IF cond=expression true_branch=expression_list if_trailer? END;
+
+if_trailer : ELSE false_branch=expression_list
+           | ELSE IF cond=expression true_branch=expression_list if_trailer
+           ;
+
+case_expr : CASE cond=expression alternative_list? ( ELSE else_branch=expression_list )? END;
+
+alternative_list : alternative
+                 | alternative_list alternative
+                 ;
+
+alternative : WHEN value=expression body=expression_list;
+
+assign : target=lvalue ASSIGN value=expression                             # simple_assign
+       | target=lvalue EXP_ASSIGN value=expression                         # exp_assign
+       | target=lvalue op=( MUL_ASSIGN | DIV_ASSIGN ) value=expression     # binop_mul_div_assign
+       | target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN ) value=expression  # binop_plus_minus_assign
        ;
 
+lvalue : unit_ref
+       | global_ref
+       | heap_ref
+       | var_ref
+       | propaccess
+       ;
+
+heap_ref : name=id LEFT_SBRACKET address=expression RIGHT_SBRACKET;
+global_ref : DOLLAR name=id;
+unit_ref : AT ref;
+var_ref : id;
+
+ref : ID;
+int_t : INT;
+float_t : FLOAT;
+literal_t : LITERAL;
 null_t : NULL;
+bool_t : true_t  # true_bool_literal
+       | false_t # false_bool_literal
+       ;
+true_t : TRUE;
+false_t : FALSE;
+id : ID;
 
-terminator : terminator SEMICOLON
-           | terminator crlf
-           | SEMICOLON
-           | crlf
-           | EOF
-           ;
+a_comment : SL_COMMENT;
 
-crlf : CRLF;
+ALLOCATE : 'allocate';
+BREAK : 'break';
+CASE : 'case';
+CONTINUE : 'continue';
+DEF : 'def';
+ELSE : 'else';
+END : 'end';
+FALSE : 'false';
+FOR : 'for';
+HEAP : 'heap';
+IF : 'if';
+IN : 'in';
+NULL : 'null';
+STACK : 'stack';
+TRUE : 'true';
+WHEN : 'when';
+WHILE : 'while';
 
-resource : id;
-single_line_comment : SL_COMMENT;
+ASSIGN : '=';
+AT : '@';
+COLON : ':';
+COMMA : ',';
+DIV : '/';
+DOLLAR : '$';
+DOT : '.';
+EXP : ('^' | '**');
+MINUS : '-';
+MOD : '%';
+MUL : '*';
+NOT : '!' | 'not';
+PLUS : '+';
+QUESTION_MARK : '?';
+SEMICOLON : ';';
+
+DIV_ASSIGN : '/=';
+EXP_ASSIGN : '^=';
+MINUS_ASSIGN : '-=';
+MUL_ASSIGN : '*=';
+PLUS_ASSIGN : '+=';
+
+LESS_THAN : '<';
+LESS_THAN_EQUAL : '<=';
+NOT_EQUAL  : '!=';
+EQUAL  : '==';
+STRICT_EQUAL  : '===';
+GREATER_THAN_EQUAL  : '>=';
+GREATER_THAN : '>';
+AND : '&&' | 'and';
+OR : '||' | 'or';
+
+LEFT_SBRACKET : '[';
+RIGHT_SBRACKET : ']';
+LEFT_RBRACKET : '(';
+RIGHT_RBRACKET : ')';
+LEFT_CBRACKET : '{';
+RIGHT_CBRACKET : '}';
 
 fragment ESCAPED_QUOTE : '\\"';
 LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 
-WHILE : 'while';
-IF : 'if';
-ELSE : 'else';
-FOR : 'for';
-IN : 'in';
-EXCLUSIVE : 'exclusive';
-ALLOCATE : 'allocate';
-HEAP : 'heap';
+FLOAT : INT DOT INT;
+INT : [0-9][0-9]*;
 
-AT : '@';
-DOT : '.';
-COMMA : ',';
-SEMICOLON : ';';
-DOLLAR : '$';
-
-ASSIGN : '=';
-PLUS_ASSIGN : '+=';
-MINUS_ASSIGN : '-=';
-MUL_ASSIGN : '*=';
-DIV_ASSIGN : '/=';
-MOD_ASSIGN : '%=';
-EXP_ASSIGN : '**=';
-
-PLUS : '+';
-MINUS : '-';
-MUL : '*';
-DIV : '/';
-MOD : '%';
-EXP : '**';
-
-TRUE : 'true';
-FALSE : 'false';
-
-STRICT_EQUAL : '===';
-EQUAL : '==';
-NOT_EQUAL : '!=';
-GREATER : '>';
-LESS : '<';
-LESS_EQUAL : '<=';
-GREATER_EQUAL : '>=';
-
-AND : 'and' | '&&';
-OR : 'or' | '||';
-NOT : 'not' | '!';
-
-LEFT_RBRACKET : '(';
-RIGHT_RBRACKET : ')';
-LEFT_SBRACKET : '[';
-RIGHT_SBRACKET : ']';
-LEFT_CBRACKET : '{';
-RIGHT_CBRACKET : '}';
-
-NULL : 'null';
-
-INT : [0-9]+;
-FLOAT : [0-9]*'.'[0-9]+;
-ID : [a-zA-Z_][a-zA-Z0-9_]*;
-REF : AT [a-zA-Z_][-a-zA-Z0-9_]*;
-
-CRLF : '\r'? '\n';
-
-WS : (' ' | '\t')+ -> skip;
-SL_COMMENT : ('//' ~('\r' | '\n')* );
+ID : [a-zA-Z][-a-zA-Z_0-9]*;
+SL_COMMENT : ('//' ~('\r' | '\n')* '\r'? '\n');
+WS : (' ' | '\t' | '\r' | '\n')+ -> skip;

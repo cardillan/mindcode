@@ -5,15 +5,15 @@ TARGET = foundation1
 
 addr_FLAG = 0
 
-if cell1[addr_FLAG] == 0 {
+if cell1[addr_FLAG] == 0
     cell1[addr_FLAG] = rand(10**10)
-}
+end
 
-while @unit == null && @unit.flag == 0 {
+while @unit == null && @unit.flag == 0
     ubind(@poly)
-    if @unit.flag == 0 {
+    if @unit.flag == 0
         flag(cell1[addr_FLAG])
-    }
-}
+    end
+end
 
 move(CORE.x, CORE.y)

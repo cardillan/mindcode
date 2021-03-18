@@ -9,9 +9,7 @@ public interface AstVisitor<T> {
 
     T visitIfExpression(IfExpression node);
 
-    T visitHeapRead(HeapRead node);
-
-    T visitHeapWrite(HeapWrite node);
+    T visitHeapAccess(HeapAccess node);
 
     T visitControl(Control node);
 
@@ -19,7 +17,7 @@ public interface AstVisitor<T> {
 
     T visitVarRef(VarRef node);
 
-    T visitVarAssignment(VarAssignment node);
+    T visitAssignment(Assignment node);
 
     T visitUnaryOp(UnaryOp node);
 
@@ -42,4 +40,6 @@ public interface AstVisitor<T> {
     T visitSeq(Seq seq);
 
     T visitComment(Comment node);
+
+    T visitPropertyAccess(PropertyAccess node);
 }

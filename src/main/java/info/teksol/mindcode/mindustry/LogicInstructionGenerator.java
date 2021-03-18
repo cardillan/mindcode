@@ -27,33 +27,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     @Override
-    public Tuple2<Optional<String>, List<LogicInstruction>> visitHeapRead(HeapRead node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitHeapAccess(HeapAccess node) {
         final Tuple2<Optional<String>, List<LogicInstruction>> addr = visit(node.getAddress());
         if (!addr._1.isPresent()) {
-            throw new GenerationException("Expected to find an rvalue from HeapRead address, found " + node);
+            throw new GenerationException("Expected to find an rvalue from HeapAccess address, found " + node);
         }
 
         final String tmp = nextTemp();
         final List<LogicInstruction> result = new ArrayList<>(addr._2);
         result.add(new LogicInstruction("read", tmp, node.getCellName(), addr._1.get()));
         return new Tuple2<>(Optional.of(tmp), result);
-    }
-
-    @Override
-    public Tuple2<Optional<String>, List<LogicInstruction>> visitHeapWrite(HeapWrite node) {
-        final Tuple2<Optional<String>, List<LogicInstruction>> addr = visit(node.getAddress());
-        final Tuple2<Optional<String>, List<LogicInstruction>> value = visit(node.getValue());
-        if (!addr._1.isPresent()) {
-            throw new GenerationException("Expected to find tmp variable from heap write address node, found: " + addr);
-        }
-        if (!value._1.isPresent()) {
-            throw new GenerationException("Expected to find tmp variable from heap write value node, found: " + value);
-        }
-
-        final List<LogicInstruction> result = new ArrayList<>(addr._2);
-        result.addAll(value._2);
-        result.add(new LogicInstruction("write", value._1.get(), node.getCellName(), addr._1.get()));
-        return new Tuple2<>(value._1, result);
     }
 
     @Override
@@ -120,14 +103,40 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     @Override
-    public Tuple2<Optional<String>, List<LogicInstruction>> visitVarAssignment(VarAssignment node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitAssignment(Assignment node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> target = visit(node.getVar());
         final Tuple2<Optional<String>, List<LogicInstruction>> rvalue = visit(node.getValue());
         final List<LogicInstruction> result = new ArrayList<>(rvalue._2);
+        if (!target._1.isPresent()) {
+            throw new GenerationException("Expected a target from an assignment, found none in " + target);
+        }
+
         if (!rvalue._1.isPresent()) {
             throw new GenerationException("Expected a variable name, found none in " + result);
         }
 
-        result.add(new LogicInstruction("set", List.of(node.getVarName(), rvalue._1.get())));
+        if (node.getVar() instanceof HeapAccess) {
+            final HeapAccess heapAccess = (HeapAccess) node.getVar();
+            final Tuple2<Optional<String>, List<LogicInstruction>> address = visit(heapAccess.getAddress());
+            if (!address._1.isPresent()) {
+                throw new GenerationException("Expected to find variable from address calculation in " + node);
+            }
+            result.addAll(address._2);
+            result.add(new LogicInstruction("write", rvalue._1.get(), heapAccess.getCellName(), address._1.get()));
+        } else if (node.getVar() instanceof PropertyAccess) {
+            final PropertyAccess propertyAccess = (PropertyAccess) node.getVar();
+            final Tuple2<Optional<String>, List<LogicInstruction>> propTarget = visit(propertyAccess.getTarget());
+            if (!propTarget._1.isPresent()) {
+                throw new GenerationException("Expected to find variable from address calculation in " + node);
+            }
+            result.addAll(propTarget._2);
+            result.add(new LogicInstruction("control", propertyAccess.getProperty(), propTarget._1.get(), rvalue._1.get()));
+        } else if (node.getVar() instanceof VarRef) {
+            result.add(new LogicInstruction("set", List.of(target._1.get(), rvalue._1.get())));
+        } else {
+            throw new GenerationException("Unhandled assignment target in " + node);
+        }
+
         return new Tuple2<>(rvalue._1, result);
     }
 
@@ -488,6 +497,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
                 List.of(new LogicInstruction("set", List.of(tmp, node.getLiteral()))
                 )
         );
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitPropertyAccess(PropertyAccess node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> target = visit(node.getTarget());
+        if (!target._1.isPresent()) {
+            throw new GenerationException("Expected to find a variable from the target in " + node);
+        }
+
+        final String tmp = nextTemp();
+        final List<LogicInstruction> result = new ArrayList<>(target._2);
+        result.add(new LogicInstruction("sensor", tmp, target._1.get(), "@" + node.getProperty()));
+        return new Tuple2<>(Optional.of(tmp), result);
     }
 
     private String translateUnaryOpToCode(String op) {

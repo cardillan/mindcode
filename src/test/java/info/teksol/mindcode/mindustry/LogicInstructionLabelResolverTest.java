@@ -21,7 +21,7 @@ class LogicInstructionLabelResolverTest extends AbstractAstTest {
                 LogicInstructionLabelResolver.resolve(
                         LogicInstructionPeepholeOptimizer.optimize(
                                 LogicInstructionGenerator.generateFrom(
-                                        (Seq) translateToAst("while true {\nn = n + 1\n}\n")
+                                        (Seq) translateToAst("while true\nn = n + 1\nend\n")
                                 )
                         )
                 )

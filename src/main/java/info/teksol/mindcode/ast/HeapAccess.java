@@ -4,11 +4,11 @@ import info.teksol.mindcode.ParsingException;
 
 import java.util.Objects;
 
-public class HeapRead implements AstNode {
+public class HeapAccess implements AstNode {
     private final String cellName;
     private final AstNode address;
 
-    public HeapRead(String cellName, AstNode address) {
+    public HeapAccess(String cellName, AstNode address) {
         if (RESERVED_KEYWORDS.contains(cellName)) {
             throw new ParsingException(cellName + " is a reserved keyword, please use a different word");
         }
@@ -29,9 +29,9 @@ public class HeapRead implements AstNode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HeapRead heapRead = (HeapRead) o;
-        return Objects.equals(cellName, heapRead.cellName) &&
-                Objects.equals(address, heapRead.address);
+        HeapAccess HeapAccess = (HeapAccess) o;
+        return Objects.equals(cellName, HeapAccess.cellName) &&
+                Objects.equals(address, HeapAccess.address);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class HeapRead implements AstNode {
 
     @Override
     public String toString() {
-        return "HeapRead{" +
+        return "HeapAccess{" +
                 "cellName='" + cellName + '\'' +
                 ", address='" + address + '\'' +
                 '}';

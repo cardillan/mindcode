@@ -44,7 +44,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("print", "n"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = 0\nwhile n < 5 {\nn += 1\n}\nprint(\"n: \", n)"))
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = 0\nwhile n < 5\nn += 1\nend\nprint(\"n: \", n)"))
         );
     }
 
@@ -57,7 +57,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("set", "x", "null"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = not n; x = null"))
+                LogicInstructionGenerator.generateFrom((Seq) translateToAst("n = not n\nx = null"))
         );
     }
 
@@ -77,48 +77,66 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     @Test
     void convertsBooleanOperations() {
         assertEquals(
-                List.of(
-                        new LogicInstruction("label", "label0"),
-                        new LogicInstruction("op", "notEqual", "tmp0", "true", "false"),
-                        new LogicInstruction("jump", "label1", "notEqual", "tmp0", "true"),
-                        new LogicInstruction("set", "tmp1", "\"infinite loop!\""),
-                        new LogicInstruction("print", "tmp1"),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
-                        new LogicInstruction("printflush", "message1"),
-                        new LogicInstruction("end")
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("op", "notEqual", "tmp0", "true", "false"),
+                                new LogicInstruction("jump", "label1", "notEqual", "tmp0", "true"),
+                                new LogicInstruction("set", "tmp1", "\"infinite loop!\""),
+                                new LogicInstruction("print", "tmp1"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("printflush", "message1"),
+                                new LogicInstruction("end")
+                        )
                 ),
-                LogicInstructionGenerator.generateFrom((Seq) translateToAst("while true != false {\nprint(\"infinite loop!\")\n}\nprintflush(message1)\n"))
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("while true != false\nprint(\"infinite loop!\")\nend\nprintflush(message1)\n")
+                        )
+                )
         );
     }
 
     @Test
     void convertsControlStatements() {
         assertEquals(
-                List.of(
-                        new LogicInstruction("sensor", "tmp0", "foundation1", "@copper"),
-                        new LogicInstruction("sensor", "tmp1", "tank1", "@water"),
-                        new LogicInstruction("op", "strictEqual", "tmp2", "tmp0", "tmp1"),
-                        new LogicInstruction("control", "enabled", "conveyor1", "tmp2"),
-                        new LogicInstruction("end")
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("sensor", "tmp1", "foundation1", "@copper"),
+                                new LogicInstruction("sensor", "tmp2", "tank1", "@water"),
+                                new LogicInstruction("op", "strictEqual", "tmp3", "tmp1", "tmp2"),
+                                new LogicInstruction("control", "enabled", "conveyor1", "tmp3"),
+                                new LogicInstruction("end")
+                        )
                 ),
-                LogicInstructionGenerator.generateFrom((Seq) translateToAst("conveyor1.enabled = foundation1.copper === tank1.water"))
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("conveyor1.enabled = foundation1.copper === tank1.water")
+                        )
+                )
         );
     }
 
     @Test
     void convertsHeapAccesses() {
         assertEquals(
-                List.of(
-                        new LogicInstruction("set", "tmp0", "3"),
-                        new LogicInstruction("set", "tmp1", "4"),
-                        new LogicInstruction("read", "tmp2", "cell2", "tmp1"),
-                        new LogicInstruction("sensor", "tmp3", "conveyor1", "@enabled"),
-                        new LogicInstruction("op", "add", "tmp4", "tmp2", "tmp3"),
-                        new LogicInstruction("write", "tmp4", "cell1", "tmp0"),
-                        new LogicInstruction("end")
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp2", "4"),
+                                new LogicInstruction("read", "tmp3", "cell2", "tmp2"),
+                                new LogicInstruction("sensor", "tmp4", "conveyor1", "@enabled"),
+                                new LogicInstruction("op", "add", "tmp5", "tmp3", "tmp4"),
+                                new LogicInstruction("set", "tmp6", "3"),
+                                new LogicInstruction("write", "tmp5", "cell1", "tmp6"),
+                                new LogicInstruction("end")
+                        )
                 ),
-                LogicInstructionGenerator.generateFrom((Seq) translateToAst("cell1[3] = cell2[4] + conveyor1.enabled"))
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("cell1[3] = cell2[4] + conveyor1.enabled")
+                        )
+                )
         );
     }
 
@@ -132,24 +150,24 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 new LogicInstruction("set", "tmp2", "0"),
                                 new LogicInstruction("op", "equal", "tmp3", "tmp1", "tmp2"),
                                 new LogicInstruction("jump", "label0", "notEqual", "tmp3", "true"),
-                                new LogicInstruction("set", "tmp7", "false"),
+                                new LogicInstruction("set", "tmp9", "false"),
                                 new LogicInstruction("jump", "label1", "always"),
                                 new LogicInstruction("label", "label0"),
-                                new LogicInstruction("set", "tmp4", "4"),
-                                new LogicInstruction("write", "true", "cell1", "tmp4"),
-                                new LogicInstruction("set", "tmp5", "1"),
-                                new LogicInstruction("op", "add", "tmp6", "n", "tmp5"),
-                                new LogicInstruction("set", "n", "tmp6"),
-                                new LogicInstruction("set", "tmp7", "tmp6"),
+                                new LogicInstruction("set", "tmp6", "4"),
+                                new LogicInstruction("write", "true", "cell1", "tmp6"),
+                                new LogicInstruction("set", "tmp7", "1"),
+                                new LogicInstruction("op", "add", "tmp8", "n", "tmp7"),
+                                new LogicInstruction("set", "n", "tmp8"),
+                                new LogicInstruction("set", "tmp9", "tmp8"),
                                 new LogicInstruction("label", "label1"),
-                                new LogicInstruction("set", "value", "tmp7"),
+                                new LogicInstruction("set", "value", "tmp9"),
                                 new LogicInstruction("end")
                         )
                 ),
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
                                 (Seq) translateToAst(
-                                        "value = if cell1[4] == 0 { false\n} else { cell1[4] = true\nn += 1\n}"
+                                        "value = if cell1[4] == 0\nfalse\nelse\ncell1[4] = true\nn += 1\nend\n"
                                 )
                         )
                 )
@@ -160,14 +178,13 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
     void convertsFunctionsReturningValues() {
         assertEquals(
                 prettyPrint(
-
                         List.of(
-                                new LogicInstruction("set", "tmp0", "0"),
-                                new LogicInstruction("set", "tmp1", "9"),
                                 new LogicInstruction("set", "tmp2", "9"),
-                                new LogicInstruction("op", "pow", "tmp3", "tmp1", "tmp2"),
-                                new LogicInstruction("op", "rand", "tmp4", "tmp3"),
-                                new LogicInstruction("write", "tmp4", "cell1", "tmp0"),
+                                new LogicInstruction("set", "tmp3", "9"),
+                                new LogicInstruction("op", "pow", "tmp4", "tmp2", "tmp3"),
+                                new LogicInstruction("op", "rand", "tmp5", "tmp4"),
+                                new LogicInstruction("set", "tmp6", "0"),
+                                new LogicInstruction("write", "tmp5", "cell1", "tmp6"),
                                 new LogicInstruction("end")
                         )
                 ),
@@ -189,7 +206,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 ),
                 LogicInstructionGenerator.generateFrom(
                         (Seq) translateToAst(
-                                "while @unit === null {\nubind(@poly)\n}\n")
+                                "while @unit === null\nubind(@poly)\nend\n")
                 )
         );
 
@@ -215,17 +232,17 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 new LogicInstruction("sensor", "tmp7", "reactor", "@liquidCapacity"),
                                 new LogicInstruction("op", "div", "tmp8", "tmp6", "tmp7"),
                                 new LogicInstruction("set", "pct_avail", "tmp8"),
-                                new LogicInstruction("set", "tmp9", "0.25"),
-                                new LogicInstruction("op", "greaterThanEq", "tmp10", "pct_avail", "tmp9"),
-                                new LogicInstruction("control", "enabled", "reactor", "tmp10"),
-                                new LogicInstruction("set", "tmp11", "tmp10"),
+                                new LogicInstruction("set", "tmp10", "0.25"),
+                                new LogicInstruction("op", "greaterThanEq", "tmp11", "pct_avail", "tmp10"),
+                                new LogicInstruction("control", "enabled", "reactor", "tmp11"),
+                                new LogicInstruction("set", "tmp12", "tmp11"),
                                 new LogicInstruction("jump", "label1", "always"),
                                 new LogicInstruction("label", "label0"),
-                                new LogicInstruction("set", "tmp11", "null"),
+                                new LogicInstruction("set", "tmp12", "null"),
                                 new LogicInstruction("label", "label1"),
-                                new LogicInstruction("set", "tmp12", "1"),
-                                new LogicInstruction("op", "add", "tmp13", "n", "tmp12"),
-                                new LogicInstruction("set", "n", "tmp13"),
+                                new LogicInstruction("set", "tmp13", "1"),
+                                new LogicInstruction("op", "add", "tmp14", "n", "tmp13"),
+                                new LogicInstruction("set", "n", "tmp14"),
                                 new LogicInstruction("jump", "label2", "always"),
                                 new LogicInstruction("label", "label3"),
                                 new LogicInstruction("end")
@@ -236,14 +253,14 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 "" +
                                         "n = 0\n" +
                                         "\n" +
-                                        "while (reactor = getlink(n)) != null {\n" +
-                                        "  if reactor.liquidCapacity > 0 {\n" +
+                                        "while (reactor = getlink(n)) != null\n" +
+                                        "  if reactor.liquidCapacity > 0\n" +
                                         "    pct_avail = reactor.cryofluid / reactor.liquidCapacity\n" +
                                         "    reactor.enabled = pct_avail >= 0.25\n" +
-                                        "  }\n" +
+                                        "  end\n" +
                                         "\n" +
                                         "  n += 1\n" +
-                                        "}\n" +
+                                        "end\n" +
                                         "")
                         )
                 )
@@ -270,7 +287,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
                                 (Seq) translateToAst(
-                                        "dx *= -1;dy = -1; dz = 2 - 1"
+                                        "dx *= -1\ndy = -1\ndz = 2 - 1"
                                 )
                         )
                 )
@@ -322,7 +339,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
                                 (Seq) translateToAst(
-                                        "build(x, y, @titanium-conveyor, 1, 0)\ngetBlock(x, y, b_type, b_building)\nif b_type == @titanium-conveyor {\nn += 1\n}\n"
+                                        "build(x, y, @titanium-conveyor, 1, 0)\ngetBlock(x, y, b_type, b_building)\nif b_type == @titanium-conveyor\nn += 1\nend\n"
                                 )
                         )
                 )
@@ -378,7 +395,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 ),
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
-                                (Seq) translateToAst("for n in 1 .. 17 {\nprint(n)\n}")
+                                (Seq) translateToAst("for n in 1 .. 17\nprint(n)\nend")
                         )
                 )
         );
@@ -419,7 +436,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 ),
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
-                                (Seq) translateToAst("for n in 1 ... 17 {\nprint(n)\n}")
+                                (Seq) translateToAst("for n in 1 ... 17\nprint(n)\nend\n")
                         )
                 )
         );
@@ -456,7 +473,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 ),
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
-                                (Seq) translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1 {\nprint(n)\n}\n")
+                                (Seq) translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1\nprint(n)\nend\n")
                         )
                 )
         );

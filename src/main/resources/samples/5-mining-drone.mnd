@@ -7,22 +7,22 @@ PATCH_Y = 17
 
 FLAG = 12
 
-while @unit == null && @unit.flag == 0 {
+while @unit == null && @unit.flag == 0
     ubind(@poly)
-    if @unit.flag == 0 {
+    if @unit.flag == 0
         flag(FLAG)
-    }
-}
+    end
+end
 
-if @unit.totalItems < @unit.itemCapacity {
+if @unit.totalItems < @unit.itemCapacity
     print("state: mining")
     approach(PATCH_X, PATCH_Y, 3)
     mine(PATCH_X, PATCH_Y)
-} else {
+else
     print("state: dropping")
     approach(DEPOT_X, DEPOT_Y, 3)
     itemDrop(vault1, @unit.totalItems)
-}
+end
 
 print("\nitemCapacity: ", @unit.itemCapacity)
 print("\ntotalItems: ", @unit.totalItems)

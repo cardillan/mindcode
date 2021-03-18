@@ -11,27 +11,27 @@ FLAG = floor(rand(10000))
 found = false
 
 // If the unit died, we need to search for a new unit again
-if @unit.dead {
+if @unit.dead
     found = false
-}
+end
 
 // Then, if we haven't found a unit, look for one until
 // we do find one that satisfies us
-while found == false {
-    while @unit === null {
+while found == false
+    while @unit === null
         ubind(type)
-        if @unit.flag == 0 {
+        if @unit.flag == 0
             flag(FLAG)
             found = true
-        }
-    }
-}
+        end
+    end
+end
 
 // Yay! We found a unit, so let's move the
 // unit around to indicate which one it is
-if found {
+if found
     move(30, 50)
-}
+end
 
 // Debugging information
 print("FLAG: ", FLAG)
