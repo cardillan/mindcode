@@ -22,22 +22,6 @@ information. The samples in the `src/main/resources/samples` directory are compi
 always up-to-date with the most-recent version of Mindcode.  If you programmed in any high-level language, you should
 feel right at home.
 
-At the moment, Mindcode is sensitive to newlines. For example, this will be rejected:
-
-```
-if a == 1 { print("a was 1") }
-```
-
-The "correct" way to write the above is to space everything out on multiple lines:
-
-```
-if a == 1 {
-  print("a was 1")
-}
-```
-
-This is due to my inexperience in writing ANTLR. This will certainly be fixed at some point.
-
 ## Development
 
 Install Java 11+, Maven 3.6, and then run:
@@ -63,6 +47,9 @@ Things I'd like to add to Mindcode-the-language:
 * [x] if expressions (ternary operator)
 * [x] auto-allocated global variables
 * [x] switch / case expression
+* [x] add support for drawing primitives
+* [ ] add support for uradar
+* [ ] add support for ulocate
 * [ ] functions / reusable procedures
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * [ ] improved data types: 2d vector

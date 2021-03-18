@@ -564,4 +564,32 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void generatesDrawings() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("clear", "r", "g", "b"),
+                                new LogicInstruction("color", "r", "g", "b", "alpha"),
+                                new LogicInstruction("stroke", "width"),
+                                new LogicInstruction("line", "x1", "y1", "x2", "y2"),
+                                new LogicInstruction("rect", "x", "y", "w", "h"),
+                                new LogicInstruction("lineRect", "x", "y", "w", "h"),
+                                new LogicInstruction("poly", "x", "y", "sides", "radius", "rotation"),
+                                new LogicInstruction("linePoly", "x", "y", "sides", "radius", "rotation"),
+                                new LogicInstruction("triangle", "x1", "y1", "x2", "y2", "x3", "y3"),
+                                new LogicInstruction("image", "x", "y", "@copper", "size", "rotation"),
+                                new LogicInstruction("drawflush","display1"),
+        new LogicInstruction("end")
+
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("clear(r, g, b)\ncolor(r, g, b, alpha)\nstroke(width)\nline(x1, y1, x2, y2)\nrect(x, y, w, h)\nlineRect(x, y, w, h)\npoly(x, y, sides, radius, rotation)\nlinePoly(x, y, sides, radius, rotation)\ntriangle(x1, y1, x2, y2, x3, y3)\nimage(x, y, @copper, size, rotation)\ndrawflush(display1)\n")
+                        )
+                )
+        );
+    }
 }

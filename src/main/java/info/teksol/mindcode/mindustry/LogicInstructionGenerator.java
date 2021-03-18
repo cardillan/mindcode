@@ -266,9 +266,87 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "ceil":
                 return handleMath(functionName, params, result);
 
+            case "clear":
+                return handleClear(params, result);
+            case "color":
+                return handleColor(params, result);
+            case "stroke":
+                return handleStroke(params, result);
+            case "line":
+                return handleLine(params, result);
+            case "rect":
+                return handleRect(params, result);
+            case "lineRect":
+                return handleLineRect(params, result);
+            case "poly":
+                return handlePoly(params, result);
+            case "linePoly":
+                return handleLinePoly(params, result);
+            case "triangle":
+                return handleTriangle(params, result);
+            case "image":
+                return handleImage(params, result);
+            case "drawflush":
+                return handleDrawflush(params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
+    }
+
+    private Optional<String> handleDrawflush(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("drawflush", params.get(0)));
+        return Optional.of(params.get(0));
+    }
+
+    private Optional<String> handleImage(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("image", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleTriangle(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("triangle", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleLinePoly(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("linePoly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handlePoly(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("poly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleLineRect(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("lineRect", params.get(0), params.get(1), params.get(2), params.get(3)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleRect(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("rect", params.get(0), params.get(1), params.get(2), params.get(3)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleLine(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("line", params.get(0), params.get(1), params.get(2), params.get(3)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleStroke(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("stroke", params.get(0)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleColor(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("color", params.get(0), params.get(1), params.get(2), params.get(3)));
+        return Optional.of("null");
+    }
+
+    private Optional<String> handleClear(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("clear", params.get(0), params.get(1), params.get(2)));
+        return Optional.of("null");
     }
 
     private Optional<String> handleMath(String functionName, List<String> params, List<LogicInstruction> result) {
