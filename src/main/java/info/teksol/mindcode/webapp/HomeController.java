@@ -51,6 +51,7 @@ public class HomeController extends HttpServlet {
                 "many-thorium", engine.getTemplate("samples/3-multi-thorium-reactor.mnd"),
                 "mine-coord", engine.getTemplate("samples/5-mining-drone.mnd"),
                 "upgrade-conveyors", engine.getTemplate("samples/6-upgrade-copper-conveyors-to-titanium.mnd"),
+                "heal-damaged-building", engine.getTemplate("samples/8-heal-damaged-building.mnd"),
                 "features-demo", engine.getTemplate("samples/4-demo.mnd")
 
                 // "poly", engine.getTemplate("samples/1-bind-poly-move-to-core.mnd")
