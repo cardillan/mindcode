@@ -1,0 +1,145 @@
+Hello to one and all!
+
+I'm back with improvements to Mindcode, a high-level language that compiles down to Mindustry Logic. This post describes a bunch of updates I made to Mindcode.
+
+## Breaking Change
+
+I'm sorry, but I was unsatisfied with having to delimit block start and end. To that end, I changed the syntax to remove`{` and `}`. In your code, search and replace `{` by the empty string, and replace `}` with `end`. This is closer to Ruby, and is more to my liking.
+
+## Improvements:
+
+* Added [syntax documentation](https://github.com/francois/mindcode/blob/main/SYNTAX.markdown)
+* Added full support for drawing, `uradar` and `ulocate`
+* Added support for heaps, meaning auto-allocated global variables
+* Added case / when expressions
+* For loops
+* Added support for the ternary operator, a more compact form of if/else expression: `self = @unit == null ? bind(@unit) : @unit`
+* Added a new sample: [patrol around a building and heal any damaged ones](http://mindcode.herokuapp.com/?s=heal-damaged-building)
+
+## Heaps and Global Variables
+
+Mindcode now supports allocating a specific region of your Memory Cells and Memory Banks to support long-term memory for your scripts. The Mindcode compiler will manage associating a name with a specific memory location in the heap:
+
+```
+// Allocate 4 memory cells (... is exclusive range operator)
+allocate heap in cell1[0...4]
+$flag = rand(10000)
+$state = 0
+$targetx = -1
+$targety = -1
+```
+
+Each of the global variables above, flag, state, targetx and targety, are stored in the cell, each at a different address. Addresses are allocated in a first-come, first-serve basis. `$flag` is stored in `cell1[0]`, state in `cell1[1]` and so on. This is important to know since changing the order of declaration changes the meaning of your heap variables. Mindcode has no memory of what was stored where.
+
+Since Mindcode knows the exact size of the heap, it can tell you if you try to use too many slots in your heap.
+
+## Case / When Expressions
+
+Case / when expressions are merely a quality of life improvement for the script developer. Using nested if/else, it was already possible to write complex decision scripts, but case expressions are simply an easier way to do the same thing:
+
+```
+print("current state: ", $state, ": "
+  case $state
+  when 0 "initializing"
+  when 1 "searching"
+  when 2 "running away"
+  else "invalid state"
+  end
+)
+```
+
+## For loops
+
+If you hadn't noticed, we now have access to two styles of `for` loops. Mindcode calls them the iterated and C-Style version.
+
+### Iterated Loops
+
+Do you know how many times you need to go through a loop? Or do you have a bunch of coordinates you need to visit? Iterated loops are good for you:
+
+```
+ubind(@poly)
+for y in 50 .. 80
+  for x in 50 .. 80
+    while !within(x, y, 2)
+      approach(x, y, 2)
+    end
+
+    // Process this square
+  end
+end
+```
+
+Currently, Mindcode only accepts integers for the range limits. A future version of Mindcode will remove this limitation.
+
+### C-Style Loops
+
+The C-Style loops offers more power, at the cost of more complexity.
+
+```
+for i = 0, j = 0 ; i <= j ; i += 1, j += 2
+  // do something
+end
+```
+
+C-Style for loops have 3 sections:
+
+* the initializer: what initial values should your variables have
+* the condition: when should we stop? Evaluated before the first iteration
+* the incrementer: how should values change between every iteration?
+
+## Ternary Operator
+
+The Ternary Operator is simply a more compact form of an if/else expression. Both are strictly equivalent:
+
+```
+state = @unit == null ? "unbound" : "bound"
+state = if @unit == null "unbound" else "bound" end
+```
+
+## New Sample: heal nearby damaged buildings
+
+I had a lot of fun with this sample! I discovered `@tick` from the announcement post, and used it with `sin` and `cos` to go around a specific point on the map. When the bound unit detects a damaged building, it approaches the damaged building and heals it.
+
+The Mindcode really wasn't difficult to write:
+
+```
+// Patrols around a building and heals any damaged building
+// Since the patrolling ship is close by, repairing will happen faster than usual
+CENTER = foundation1
+
+flag = rand(10000)
+
+while @unit === null
+    ubind(@poly)
+    if @unit.flag == 0
+        flag(flag)
+    end
+end
+
+if ulocate(damaged, dmgx, dmgy, dmgbuilding)
+    print("damaged at ", dmgx, ", ", dmgy)
+    approach(dmgx, dmgy, 5)
+    target(dmgx, dmgy, true)
+else
+    print("patrolling")
+    approach(CENTER.x + 10 * sin(@tick), CENTER.y + 10 * cos(@tick), 2)
+end
+
+printflush(message1)
+```
+
+## Future Improvements
+
+This is not the end! There is still more to come:
+
+* Functions!
+* Better optimizations of the generated code
+* Mindcode-the-webapp should allow you to save and share code snippets & functions with other people, even allowing you to import code from elsewhere.
+
+As I have stated in the original announcement, Mindcode-the-webapp stores scripts to allow me to see how people use the language, and to analyze future direction. I have already seen a few real-life scripts, some even going to 20-30 lines. I'm very happy to see that!
+
+If you want to play around with Mindcode, please visit: http://mindcode.herokuapp.com/
+
+If you want to view the code, I encourage you to visit the repository, on GitHub: https://github.com/francois/mindcode
+
+Enjoy!

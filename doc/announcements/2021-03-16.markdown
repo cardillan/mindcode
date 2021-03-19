@@ -1,0 +1,79 @@
+Hello everyone!
+
+I have been an avid fan of Mindustry for a bit now, and I wanted to like logic, but always found it very opaque. The
+problem with logic, as I see it, is that it is very low-level, closer to assembly than to a "real" programming language.
+
+Let me introduce you to Mindcode, an alternative to Mindustry Logic.
+
+The following code, an extract from the "Bind a single unit of a specified type" sample, illustrates some properties of
+Mindcode that I particularly like:
+
+    type = @poly
+    while found == false {
+        while @unit === null {
+            ubind(type)
+            if @unit.flag == 0 {
+                flag(FLAG)
+                found = true
+            }
+        }
+    }
+
+compiles to:
+
+    set type @poly
+    jump 13 notEqual found false 
+    jump 12 notEqual @unit null 
+    ubind type 
+    sensor tmp2 @unit @flag 
+    jump 10 notEqual tmp2 0 
+    ucontrol flag FLAG 0 0 0 0 
+    set found true 
+    set tmp5 true 
+    jump 11 always 0 0 
+    set tmp5 null 
+    jump 2 always 0 0 
+    jump 1 always 0 0 
+    end 
+
+Mindcode supports many high-level constructs: while loops, inline calculations, the ternary operator, and comments.
+
+Some time ago, I saw a Mindustry Logic script here that ran over a region and upgraded any copper conveyors to titanium
+ones. Well, I wrote a version of that script, in Mindcode. It implements a finite state machine to handle the
+complexity. The Mindcode version is 166 lines, including a dozen or more lines of comments, while the the Mindustry
+Logic version of that script is 241 lines of dense code, with no comments. I encourage you to view the upgrade copper
+conveyors to titanium sample script.
+
+Another sample, this time using a linked memory cell:
+
+    cell1[BUILD_Y] += cell1[DY]
+
+This compiles to:
+
+    read tmp0 cell1 BUILD_Y 
+    read tmp1 cell1 DY 
+    op add tmp2 tmp0 tmp1 
+    write tmp2 cell1 BUILD_Y 
+    end 
+
+In the extract above, `BUILD_Y` and `DY` are constants, defined elsewhere, that indicate the memory location where we store
+our internal state.
+
+Mindcode is free for use, and does not track users. The source code you submit for compilation is kept around, so that I
+can look at the source code and see areas for improvement. The source code also allows me to look at the syntax errors
+that were generated, so that I can fix them.
+
+If you want to contact me, please leave a message here, or put a comment in your Mindcode with my name, francois!
+
+## CAVEATS
+
+Of course, this is the first ever version! Some things that are missing or are not finished at this time are:
+
+* Radar, Unit Radar and Unit Locate are uninplemented
+* Draw and Drawflush are unimplemented
+* Many optimizations are still possible, when generating Mindustry Logic
+* Some form of user manual would be nice!
+
+I intend to keep on working on this, and open-sourcing the code in the coming days. If you're interested, Mindcode is
+implemented in Java 11, using ANTLR4. It was a fun opportunity for me to learn some ANTLR4, as well as walking abstract
+syntax trees. It was a fun exercise!
