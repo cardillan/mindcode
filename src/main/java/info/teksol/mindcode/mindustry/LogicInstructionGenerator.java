@@ -708,19 +708,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     private String translateBinaryOpToCode(String op) {
-        /*
-
-            jump -1 equal x false
-            jump 0 notEqual x false
-            jump 0 lessThan x false
-            jump 0 lessThanEq x false
-            jump 0 greaterThan x false
-            jump 0 greaterThanEq x false
-            jump 0 strictEqual x false
-            jump 0 always x false
-
-        */
-
         switch (op) {
             case "+":
                 return "add";
@@ -765,6 +752,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "&&":
             case "and":
                 return "land"; // logical-and
+
+            case "%":
+                return "mod";
 
             default:
                 throw new GenerationException("Failed to translate binary op to word: [" + op + "] is not handled");

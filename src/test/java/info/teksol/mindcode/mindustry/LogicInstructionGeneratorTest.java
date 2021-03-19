@@ -692,4 +692,27 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void generatesModuloOperator() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "2"),
+                                new LogicInstruction("op", "mod", "tmp1", "@tick", "tmp0"),
+                                new LogicInstruction("set", "tmp2", "0"),
+                                new LogicInstruction("op", "equal", "tmp3", "tmp1", "tmp2"),
+                                new LogicInstruction("set", "running", "tmp3"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "running = @tick % 2 == 0"
+                                )
+                        )
+                )
+        );
+    }
 }

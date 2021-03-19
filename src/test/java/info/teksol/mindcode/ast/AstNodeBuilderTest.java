@@ -895,4 +895,25 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 translateToAst("if some_cond == false\nend()\nend")
         );
     }
+
+    @Test
+    void supportsModuloOperator() {
+        assertEquals(
+                new Seq(
+                        new Assignment(
+                                new VarRef("running"),
+                                new BinaryOp(
+                                        new BinaryOp(
+                                                new Ref("tick"),
+                                                "%",
+                                                new NumericLiteral("2")
+                                        ),
+                                        "==",
+                                        new NumericLiteral("0")
+                                )
+                        )
+                ),
+                translateToAst("running = @tick % 2 == 0")
+        );
+    }
 }
