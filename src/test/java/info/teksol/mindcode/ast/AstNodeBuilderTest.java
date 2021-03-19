@@ -876,4 +876,23 @@ class AstNodeBuilderTest extends AbstractAstTest {
         );
     }
 
+    @Test
+    void supportsCallingTheEndFunction() {
+        assertEquals(
+                new Seq(
+                        new IfExpression(
+                                new BinaryOp(
+                                        new VarRef("some_cond"),
+                                        "==",
+                                        new BooleanLiteral(false)
+                                ),
+                                new Seq(
+                                        new FunctionCall("end")
+                                ),
+                                new NoOp()
+                        )
+                ),
+                translateToAst("if some_cond == false\nend()\nend")
+        );
+    }
 }

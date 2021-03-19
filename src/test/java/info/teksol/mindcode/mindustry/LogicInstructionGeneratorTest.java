@@ -666,4 +666,30 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void generatesEndFromFunctionCall() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("op", "equal", "tmp0", "some_cond", "false"),
+                                new LogicInstruction("jump", "label0", "notEqual", "tmp0", "true"),
+                                new LogicInstruction("end"),
+                                new LogicInstruction("set", "tmp1", "null"),
+                                new LogicInstruction("jump", "label1", "always"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp1", "null"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "if some_cond == false\n  end()\nend"
+                                )
+                        )
+                )
+        );
+    }
 }

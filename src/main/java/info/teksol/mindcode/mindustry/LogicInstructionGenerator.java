@@ -295,9 +295,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "ulocate":
                 return handleULocate(params, result);
 
+            case "end":
+                return handleEnd(params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
+    }
+
+    private Optional<String> handleEnd(List<String> params, List<LogicInstruction> result) {
+        result.add(new LogicInstruction("end"));
+        return Optional.of("null");
     }
 
     private Optional<String> handleULocate(List<String> params, List<LogicInstruction> result) {

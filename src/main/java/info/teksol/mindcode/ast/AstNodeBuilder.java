@@ -139,24 +139,30 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunction_call(MindcodeParser.Function_callContext ctx) {
-        final String name = ctx.funcall().name.getText();
-        final List<AstNode> params = new ArrayList<>();
+        if (ctx.funcall().END() != null) {
+            // The end function is a bit special: because the keyword "end" is also used to
+            // close blocks, the grammar needed to special-case the end function directly.
+            return new FunctionCall("end");
+        } else {
+            final String name = ctx.funcall().name.getText();
+            final List<AstNode> params = new ArrayList<>();
 
-        if (ctx.funcall().params != null) {
-            params.add(visit(ctx.funcall().params.arg()));
-            MindcodeParser.Arg_listContext arglist = ctx.funcall().params.arg_list();
-            while (arglist != null) {
-                params.add(visit(arglist.arg()));
-                arglist = arglist.arg_list();
+            if (ctx.funcall().params != null) {
+                params.add(visit(ctx.funcall().params.arg()));
+                MindcodeParser.Arg_listContext arglist = ctx.funcall().params.arg_list();
+                while (arglist != null) {
+                    params.add(visit(arglist.arg()));
+                    arglist = arglist.arg_list();
+                }
             }
-        }
 
-        final List<AstNode> result = new ArrayList<>();
-        for (int i = params.size() - 1; i >= 0; i--) {
-            result.add(params.get(i));
-        }
+            final List<AstNode> result = new ArrayList<>();
+            for (int i = params.size() - 1; i >= 0; i--) {
+                result.add(params.get(i));
+            }
 
-        return new FunctionCall(name, result);
+            return new FunctionCall(name, result);
+        }
     }
 
     @Override

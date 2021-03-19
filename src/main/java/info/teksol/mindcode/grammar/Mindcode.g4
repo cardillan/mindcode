@@ -96,7 +96,8 @@ incr_list : expression
           | incr_list COMMA expression
           ;
 
-funcall : name=id LEFT_RBRACKET RIGHT_RBRACKET
+funcall : END LEFT_RBRACKET RIGHT_RBRACKET
+        | name=id LEFT_RBRACKET RIGHT_RBRACKET
         | name=id LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
         ;
 
