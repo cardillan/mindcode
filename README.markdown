@@ -48,8 +48,9 @@ Things I'd like to add to Mindcode-the-language:
 * [x] auto-allocated global variables
 * [x] switch / case expression
 * [x] add support for drawing primitives
-* [x] add support for uradar
-* [x] add support for ulocate
+* [x] add support for `uradar`
+* [x] add support for `ulocate`
+* [ ] add support for `end`
 * [ ] functions / reusable procedures
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * [ ] improved data types: 2d vector
