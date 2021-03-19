@@ -37,8 +37,10 @@ public class LogicInstructionPrinter {
                 throw new GenerationException("Don't know how many arguments [" + instruction.getOpcode() + "] needs; add it to FN_ARGS");
             }
             buffer.append(instruction.getOpcode());
-            buffer.append(" ");
-            addArgs(FN_ARGS.get(instruction.getOpcode()), buffer, instruction);
+
+            int count = FN_ARGS.get(instruction.getOpcode());
+            if (count > 0) buffer.append(" ");
+            addArgs(count, buffer, instruction);
         });
 
         return buffer.toString();
@@ -52,7 +54,7 @@ public class LogicInstructionPrinter {
                 buffer.append("0");
             }
 
-            buffer.append(" ");
+            if (i < count - 1) buffer.append(" ");
         }
 
         buffer.append("\n");
