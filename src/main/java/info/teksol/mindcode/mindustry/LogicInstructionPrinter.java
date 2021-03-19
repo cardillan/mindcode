@@ -25,7 +25,8 @@ public class LogicInstructionPrinter {
         args.put("ucontrol", 6);
         args.put("getlink", 2);
         args.put("printflush", 1);
-
+        args.put("uradar", 7);
+        args.put("ulocate", 8);
         FN_ARGS = Collections.unmodifiableMap(args);
     }
 

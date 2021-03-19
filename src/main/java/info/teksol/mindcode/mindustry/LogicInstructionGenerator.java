@@ -289,9 +289,60 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "drawflush":
                 return handleDrawflush(params, result);
 
+            case "uradar":
+                return handleURadar(params, result);
+
+            case "ulocate":
+                return handleULocate(params, result);
+
             default:
                 throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
         }
+    }
+
+    private Optional<String> handleULocate(List<String> params, List<LogicInstruction> result) {
+        /*
+            found = ulocate(ore, @surge-alloy, outx, outy)
+                    ulocate ore core true @surge-alloy outx outy found building
+
+            found = ulocate(building, core, ENEMY, outx, outy, outbuilding)
+                    ulocate building core true @copper outx outy found building
+
+            found = ulocate(spawn, outx, outy, outbuilding)
+                    ulocate spawn core true @copper outx outy found building
+
+            found = ulocate(damaged, outx, outy, outbuilding)
+                    ulocate damaged core true @copper outx outy found building
+        */
+        final String tmp = nextTemp();
+        switch (params.get(0)) {
+            case "ore":
+                result.add(new LogicInstruction("ulocate", "ore", "core", "true", params.get(1), params.get(2), params.get(3), tmp, nextTemp()));
+                break;
+            case "building":
+                result.add(new LogicInstruction("ulocate", "building", params.get(1), params.get(2), "@copper", params.get(3), params.get(4), tmp, params.get(5)));
+                break;
+
+            case "spawn":
+                result.add(new LogicInstruction("ulocate", "spawn", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
+                break;
+
+            case "damaged":
+                result.add(new LogicInstruction("ulocate", "damaged", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
+                break;
+
+            default:
+                throw new GenerationException("Unhandled type of ulocate in " + params);
+        }
+
+        return Optional.of(tmp);
+    }
+
+    private Optional<String> handleURadar(List<String> params, List<LogicInstruction> result) {
+        // uradar enemy attacker ground armor 0 order result
+        final String tmp = nextTemp();
+        result.add(new LogicInstruction("uradar", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
+        return Optional.of(tmp);
     }
 
     private Optional<String> handleDrawflush(List<String> params, List<LogicInstruction> result) {

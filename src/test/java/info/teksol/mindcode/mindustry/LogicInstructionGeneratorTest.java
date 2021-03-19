@@ -580,14 +580,88 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 new LogicInstruction("linePoly", "x", "y", "sides", "radius", "rotation"),
                                 new LogicInstruction("triangle", "x1", "y1", "x2", "y2", "x3", "y3"),
                                 new LogicInstruction("image", "x", "y", "@copper", "size", "rotation"),
-                                new LogicInstruction("drawflush","display1"),
-        new LogicInstruction("end")
-
+                                new LogicInstruction("drawflush", "display1"),
+                                new LogicInstruction("end")
                         )
                 ),
                 prettyPrint(
                         LogicInstructionGenerator.generateFrom(
                                 (Seq) translateToAst("clear(r, g, b)\ncolor(r, g, b, alpha)\nstroke(width)\nline(x1, y1, x2, y2)\nrect(x, y, w, h)\nlineRect(x, y, w, h)\npoly(x, y, sides, radius, rotation)\nlinePoly(x, y, sides, radius, rotation)\ntriangle(x1, y1, x2, y2, x3, y3)\nimage(x, y, @copper, size, rotation)\ndrawflush(display1)\n")
+                        )
+                )
+        );
+    }
+
+    @Test
+    void generatesURadar() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("uradar", "enemy", "ground", "any", "health", "MIN_TO_MAX", "BY_DISTANCE", "tmp0"),
+                                new LogicInstruction("set", "target", "tmp0"),
+                                new LogicInstruction("op", "notEqual", "tmp1", "target", "null"),
+                                new LogicInstruction("jump", "label2", "notEqual", "tmp1", "true"),
+                                new LogicInstruction("sensor", "tmp2", "target", "@x"),
+                                new LogicInstruction("sensor", "tmp3", "target", "@y"),
+                                new LogicInstruction("set", "tmp4", "10"),
+                                new LogicInstruction("ucontrol", "approach", "tmp2", "tmp3", "tmp4"),
+                                new LogicInstruction("sensor", "tmp5", "target", "@x"),
+                                new LogicInstruction("sensor", "tmp6", "target", "@y"),
+                                new LogicInstruction("set", "tmp7", "10"),
+                                new LogicInstruction("ucontrol", "within", "tmp5", "tmp6", "tmp7", "tmp8"),
+                                new LogicInstruction("jump", "label0", "notEqual", "tmp8", "true"),
+                                new LogicInstruction("sensor", "tmp9", "target", "@x"),
+                                new LogicInstruction("sensor", "tmp10", "target", "@y"),
+                                new LogicInstruction("ucontrol", "target", "tmp9", "tmp10", "SHOOT"),
+                                new LogicInstruction("set", "tmp11", "null"),
+                                new LogicInstruction("jump", "label1", "always"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("set", "tmp11", "null"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("set", "tmp12", "tmp11"),
+                                new LogicInstruction("jump", "label3", "always"),
+                                new LogicInstruction("label", "label2"),
+                                new LogicInstruction("set", "tmp12", "null"),
+                                new LogicInstruction("label", "label3"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "target = uradar(enemy, ground, any, health, MIN_TO_MAX, BY_DISTANCE)\n" +
+                                        "if target != null\n" +
+                                        "  approach(target.x, target.y, 10)\n" +
+                                        "  if within(target.x, target.y, 10)\n" +
+                                        "    target(target.x, target.y, SHOOT)\n" +
+                                        "  end\n" +
+                                        "end\n"
+                                )
+                        )
+                )
+        );
+    }
+
+    @Test
+    void generatesULocate() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("ulocate", "ore", "core", "true", "@surge-alloy", "outx", "outy", "tmp0", "tmp1"),
+                                new LogicInstruction("ulocate", "building", "core", "ENEMY", "@copper", "outx", "outy", "tmp2", "outbuilding"),
+                                new LogicInstruction("ulocate", "spawn", "core", "true", "@copper", "outx", "outy", "tmp3", "outbuilding"),
+                                new LogicInstruction("ulocate", "damaged", "core", "true", "@copper", "outx", "outy", "tmp4", "outbuilding"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "ulocate(ore, @surge-alloy, outx, outy)\n" +
+                                        "ulocate(building, core, ENEMY, outx, outy, outbuilding)\n" +
+                                        "ulocate(spawn, outx, outy, outbuilding)\n" +
+                                        "ulocate(damaged, outx, outy, outbuilding)\n"
+                                )
                         )
                 )
         );
