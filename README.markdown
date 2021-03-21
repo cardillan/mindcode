@@ -51,10 +51,10 @@ Things I'd like to add to Mindcode-the-language:
 * [x] add support for `uradar`
 * [x] add support for `ulocate`
 * [x] add support for `end`
-* [ ] functions / reusable procedures
+* [x] functions / reusable procedures
+* [ ] further optimize the generated Logic
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * [ ] improved data types: 2d vector
-* [ ] further optimize the generated Logic
 
 Things I'd like to add to Mindcode-the-webapp:
 
