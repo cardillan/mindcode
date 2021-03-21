@@ -215,6 +215,6 @@ LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 FLOAT : INT DOT INT;
 INT : [0-9][0-9]*;
 
-ID : [a-zA-Z][-a-zA-Z_0-9]*;
+ID : [_a-zA-Z][-a-zA-Z_0-9]*;
 SL_COMMENT : ('//' ~('\r' | '\n')* '\r'? '\n');
 WS : (' ' | '\t' | '\r' | '\n')+ -> skip;
