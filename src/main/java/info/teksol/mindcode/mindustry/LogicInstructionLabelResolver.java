@@ -17,22 +17,45 @@ public class LogicInstructionLabelResolver {
         final List<LogicInstruction> result = new ArrayList<>();
         for (final LogicInstruction instruction : program) {
             if (instruction.getOpcode().equals("label")) continue;
-            if (!instruction.getOpcode().equals("jump")) {
-                result.add(instruction);
-                continue;
-            }
+            switch (instruction.getOpcode()) {
+                case "jump":
+                    final String label = instruction.getArgs().get(0);
+                    if (!addresses.containsKey(label)) {
+                        throw new GenerationException("Unknown jump label target: [" + label + "] was not previously discovered in " + program);
+                    }
 
-            final String label = instruction.getArgs().get(0);
-            if (!addresses.containsKey(label)) {
-                throw new GenerationException("Unknown jump label target: [" + label + "] was not previously discovered in " + program);
-            }
+                    resolveJump(label, instruction, addresses, result);
+                    break;
 
-            final List<String> newArgs = new ArrayList<>(instruction.getArgs().subList(1, instruction.getArgs().size()));
-            newArgs.add(0, addresses.get(label).toString());
-            result.add(new LogicInstruction("jump", newArgs));
+                case "set":
+                    if (addresses.containsKey(instruction.getArgs().get(1))) {
+                        result.add(new LogicInstruction("set", instruction.getArgs().get(0), addresses.get(instruction.getArgs().get(1)).toString()));
+                    } else {
+                        result.add(instruction);
+                    }
+                    break;
+
+                case "write":
+                    if (addresses.containsKey(instruction.getArgs().get(0))) {
+                        result.add(new LogicInstruction("write", addresses.get(instruction.getArgs().get(0)).toString(), instruction.getArgs().get(1), instruction.getArgs().get(2)));
+                    } else {
+                        result.add(instruction);
+                    }
+                    break;
+
+                default:
+                    result.add(instruction);
+                    break;
+            }
         }
 
         return result;
+    }
+
+    private static void resolveJump(String label, LogicInstruction instruction, Map<String, Integer> addresses, List<LogicInstruction> result) {
+        final List<String> newArgs = new ArrayList<>(instruction.getArgs().subList(1, instruction.getArgs().size()));
+        newArgs.add(0, addresses.get(label).toString());
+        result.add(new LogicInstruction("jump", newArgs));
     }
 
     private static Map<String, Integer> calculateAddresses(List<LogicInstruction> program) {

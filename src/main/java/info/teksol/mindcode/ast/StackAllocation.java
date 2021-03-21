@@ -4,12 +4,12 @@ import info.teksol.mindcode.ParsingException;
 
 import java.util.Objects;
 
-public class HeapAllocation {
+public class StackAllocation implements AstNode {
     private final String name;
     private final int first;
     private final int last;
 
-    public HeapAllocation(String name, Range range) {
+    public StackAllocation(String name, Range range) {
         if (
                 !(range.getFirstValue() instanceof NumericLiteral)
                         || !(range.getLastValue() instanceof NumericLiteral)
@@ -31,7 +31,7 @@ public class HeapAllocation {
         this.last = candidate;
     }
 
-    public HeapAllocation(String name, int first, int last) {
+    public StackAllocation(String name, int first, int last) {
         this.name = name;
         this.first = first;
         this.last = last;
@@ -45,19 +45,15 @@ public class HeapAllocation {
         return first;
     }
 
-    public int size() {
-        return (last - first) + 1;
-    }
-
-    public AstNode addressOf(int location) {
-        return new NumericLiteral(String.valueOf(getFirst() + location));
+    public int getLast() {
+        return last;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HeapAllocation that = (HeapAllocation) o;
+        StackAllocation that = (StackAllocation) o;
         return first == that.first &&
                 last == that.last &&
                 Objects.equals(name, that.name);
@@ -70,7 +66,7 @@ public class HeapAllocation {
 
     @Override
     public String toString() {
-        return "HeapAllocation{" +
+        return "StackAllocation{" +
                 "name='" + name + '\'' +
                 ", first=" + first +
                 ", last=" + last +

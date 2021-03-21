@@ -9,6 +9,10 @@ public class NumericLiteral implements AstNode {
         this.literal = literal;
     }
 
+    public NumericLiteral(int last) {
+        this.literal = String.valueOf(last);
+    }
+
     public String getLiteral() {
         return literal;
     }

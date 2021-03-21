@@ -56,14 +56,12 @@ alloc_list : type=(HEAP | STACK) IN id alloc_range?
 
 alloc_range : LEFT_SBRACKET range RIGHT_SBRACKET;
 
-fundecl : DEF id LEFT_RBRACKET arg_decl_list RIGHT_RBRACKET expression_list END
-                     | DEF id expression_list END
-                     ;
+fundecl : DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
+        | DEF name=id body=expression_list END
+        ;
 
 arg_decl_list : lvalue
               | arg_decl_list COMMA lvalue
-              | lvalue ASSIGN expression
-              | arg_decl_list COMMA lvalue ASSIGN expression
               ;
 
 while_expression : WHILE cond=expression loop_body END;

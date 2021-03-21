@@ -565,7 +565,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new Seq(
                                 new Assignment(new VarRef("n"), new NumericLiteral("5"))
                         ),
-                        new WhileStatement(
+                        new WhileExpression(
                                 new BinaryOp(new VarRef("n"), ">", new NumericLiteral("0")),
                                 new Seq(
                                         new Assignment(
@@ -589,7 +589,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Assignment(new VarRef("n"), new NumericLiteral("1")),
-                        new WhileStatement(
+                        new WhileExpression(
                                 new BinaryOp(
                                         new VarRef("n"),
                                         "<=",
@@ -619,7 +619,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Assignment(new VarRef("n"), new NumericLiteral("1")),
-                        new WhileStatement(
+                        new WhileExpression(
                                 new BinaryOp(
                                         new VarRef("n"),
                                         "<",
@@ -652,7 +652,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new Assignment(new VarRef("i"), new NumericLiteral("0")),
                                 new Assignment(new VarRef("j"), new NumericLiteral("-5"))
                         ),
-                        new WhileStatement(
+                        new WhileExpression(
                                 new BinaryOp(
                                         new VarRef("i"),
                                         "<",
@@ -692,7 +692,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new NoOp(),
-                        new WhileStatement(
+                        new WhileExpression(
                                 new BinaryOp(
                                         new Ref("unit"),
                                         "===",
@@ -914,6 +914,169 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("running = @tick % 2 == 0")
+        );
+    }
+
+    @Test
+    void supportsDeclaringAStack() {
+        assertEquals(
+                new Seq(new StackAllocation("cell1", 0, 63)),
+                translateToAst("allocate stack in cell1[0...64]")
+        );
+    }
+
+    @Test
+    void rejectsDualStackAllocation() {
+        assertThrows(StackAlreadyAllocatedException.class, () ->
+                translateToAst("allocate stack in cell1[0...64], stack in cell2[0...512]")
+        );
+    }
+
+    @Test
+    void supportFunctionDeclarations() {
+        assertEquals(
+                prettyPrint(
+                        new Seq(
+                                new FunctionDeclaration(
+                                        "delay",
+                                        List.of(),
+                                        new Seq(
+                                                new Seq(
+                                                        new Seq(
+                                                                new Assignment(
+                                                                        new VarRef("n"), new NumericLiteral("0")
+                                                                )
+                                                        ),
+                                                        new Assignment(
+                                                                new VarRef("deadline"),
+                                                                new BinaryOp(
+                                                                        new Ref("tick"),
+                                                                        "+",
+                                                                        new NumericLiteral("60")
+                                                                )
+                                                        )
+                                                ),
+                                                new WhileExpression(
+                                                        new BinaryOp(
+                                                                new Ref("tick"),
+                                                                "<",
+                                                                new VarRef("deadline")
+                                                        ),
+                                                        new Seq(
+                                                                new Assignment(
+                                                                        new VarRef("n"),
+                                                                        new BinaryOp(new VarRef("n"),
+                                                                                "+",
+                                                                                new NumericLiteral("1")
+                                                                        )
+                                                                )
+                                                        )
+                                                )
+                                        )
+                                )
+                        )
+                ),
+                prettyPrint(
+                        translateToAst("" +
+                                "def delay\n" +
+                                "  n = 0\n" +
+                                "  deadline = @tick + 60\n" +
+                                "  while @tick < deadline\n" +
+                                "    n += 1\n" +
+                                "  end\n" +
+                                "end\n" +
+                                "")
+                )
+        );
+    }
+
+    @Test
+    void supportsCallingDeclaredFunctions() {
+        assertEquals(
+                prettyPrint(
+                        new Seq(
+                                new Seq(
+                                        new FunctionDeclaration(
+                                                "foo",
+                                                List.of(),
+                                                new Seq(
+                                                        new Assignment(new VarRef("n"),
+                                                                new BinaryOp(new VarRef("n"), "+", new NumericLiteral("1"))
+                                                        )
+                                                )
+                                        )
+                                ),
+                                new FunctionCall("foo")
+                        )
+                ),
+                prettyPrint(
+                        translateToAst("" +
+                                "def foo\n" +
+                                "n=n+1\n" +
+                                "end\n" +
+                                "foo()\n"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void supportsDeclaringFunctionsThatAcceptParameters() {
+        assertEquals(
+                prettyPrint(
+                        new Seq(
+                                new Seq(
+                                        new FunctionDeclaration(
+                                                "foo",
+                                                List.of(new VarRef("s")),
+                                                new Seq(
+                                                        new BinaryOp(new VarRef("s"), "+", new NumericLiteral("1"))
+                                                )
+                                        )
+                                ),
+                                new FunctionCall("foo", new NumericLiteral("1"))
+                        )
+                ),
+                prettyPrint(
+                        translateToAst("" +
+                                "def foo(s)\n" +
+                                "  s + 1\n" +
+                                "end\n" +
+                                "foo(1)\n"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void supportsDeclaringFunctionsWithInitializers() {
+        assertEquals(
+                prettyPrint(
+                        new Seq(
+                                new Seq(
+                                        new FunctionDeclaration(
+                                                "foo",
+                                                List.of(new VarRef("s"), new VarRef("r")),
+                                                new Seq(
+                                                        new BinaryOp(
+                                                                new BinaryOp(new VarRef("s"), "+", new NumericLiteral("1")),
+                                                                "+",
+                                                                new VarRef("r")
+                                                        )
+                                                )
+                                        )
+                                ),
+                                new FunctionCall("foo", new NumericLiteral("1"), new NumericLiteral("6"))
+                        )
+                ),
+                prettyPrint(
+                        translateToAst("" +
+                                "def foo(s, r)\n" +
+                                "  s + 1 + r\n" +
+                                "end\n" +
+                                "foo(1, 6)\n"
+                        )
+                )
         );
     }
 }

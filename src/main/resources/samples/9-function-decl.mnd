@@ -1,0 +1,29 @@
+// demo script of function calling
+allocate heap in cell1[0 ... 16], stack in cell1[16 ... 64]
+
+def delay(n, count)
+  _x = 0
+  deadline = @tick + n * count
+  while @tick < deadline
+    _x += 1
+  end
+end
+
+ubind(@poly)
+
+if $x == 0
+    $x = 80
+end
+
+while @unit != null
+  print($x)
+  printflush(message1)
+
+  if $x > 120
+    $x = 80
+  else
+    delay(1, 15)
+    move($x, 100, 2)
+    $x += 1
+  end
+end

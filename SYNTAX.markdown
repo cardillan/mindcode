@@ -1,3 +1,71 @@
+# Functions
+
+You may call any Mindustry-provided functions:
+
+* Unit Locate => `ulocate(...)`
+* Unit Bind => `ubind(...)`
+* Unit Radar => `uradar(...)`
+* log, tan, sin, etc. => `log(...)`, `tan(...)`, `sin(...)`
+* Control, Move => `move(...)`
+* Control, Approach => `approach(...)`
+* Control, Shoot => `shoot(...)`
+* and so on
+
+## Custom Functions
+
+You may declare your own functions using the `def` keyword:
+
+```
+allocate stack in cell1
+
+def delay(n, fps)
+  _x = 0
+  deadline = @tick + n * fps
+  while @tick < deadline
+    _x += 1
+  end
+end
+```
+
+This function will prevent the caller from proceeding until the right number of frames have passed. Calling your own
+functions is done in the same way as any other function:
+
+```
+delay(1, 60) // stops execution for 1 second, if your framerate is 60 fps
+```
+
+A function may call other function(s), and nothing prevents recursive functions:
+
+```
+allocate stack in bank1[0...512]
+
+def fib(n)
+  if n <= 0
+    0
+  else
+    case n
+    when 1
+      1
+    else
+      fib(n - 1) + fib(n - 2)
+    end
+  end
+end
+
+fib(1) // 0
+fib(2) // 1
+fib(3) // 1
+fib(4) // 2
+fib(5) // 3
+fib(6) // 5
+fib(7) // 8
+fib(8) // 13
+// and so on...
+```
+
+As you may have noticed, allocating a stack in a Memory Cell or Memory Bank is required in order to handle custom
+functions.
+
 # Loops
 
 You have access to 3 styles of loops: [while loops](#while-loops), [range iteration loops](#range-iteration-loops), and

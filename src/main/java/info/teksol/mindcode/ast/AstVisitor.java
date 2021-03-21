@@ -13,15 +13,13 @@ public interface AstVisitor<T> {
 
     T visitControl(Control node);
 
-    T visitWhileStatement(WhileStatement node);
+    T visitWhileStatement(WhileExpression node);
 
     T visitVarRef(VarRef node);
 
     T visitAssignment(Assignment node);
 
     T visitUnaryOp(UnaryOp node);
-
-    T visitSensorReading(SensorReading node);
 
     T visitStringLiteral(StringLiteral node);
 
@@ -44,4 +42,8 @@ public interface AstVisitor<T> {
     T visitPropertyAccess(PropertyAccess node);
 
     T visitCaseExpression(CaseExpression node);
+
+    T visitFunctionDeclaration(FunctionDeclaration node);
+
+    T visitStackAllocation(StackAllocation node);
 }

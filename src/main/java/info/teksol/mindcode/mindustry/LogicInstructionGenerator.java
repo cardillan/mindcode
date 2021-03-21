@@ -16,12 +16,50 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     private int tmp;
     private int label;
 
+    private StackAllocation allocatedStack;
+    private Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
+    private Map<String, String> functionLabels = new HashMap<>();
+
     public static List<LogicInstruction> generateFrom(Seq program) {
-        final Tuple2<Optional<String>, List<LogicInstruction>> instructions =
-                new LogicInstructionGenerator().visit(program);
+        LogicInstructionGenerator generator = new LogicInstructionGenerator();
+        final Tuple2<Optional<String>, List<LogicInstruction>> instructions = generator.start(program);
         final List<LogicInstruction> result = new ArrayList<>(instructions._2);
-        result.add(new LogicInstruction("end"));
         return result;
+    }
+
+    private Tuple2<Optional<String>, List<LogicInstruction>> start(Seq program) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> target = visit(program);
+        appendFunctionDeclarations(target._2);
+        return target;
+    }
+
+    private void appendFunctionDeclarations(List<LogicInstruction> result) {
+        // TODO: pass parameters through local variables? This would save a ton of instructions when going through the stack
+
+        result.add(new LogicInstruction("end"));
+        for (Map.Entry<String, FunctionDeclaration> pair : declaredFunctions.entrySet()) {
+            final String label = functionLabels.get(pair.getKey());
+            result.add(new LogicInstruction("label", label));
+            // caller pushes arguments left-to-right
+            // we have to pop right-to-left, hence the reverse iteration here
+            final ListIterator<AstNode> iterator = pair.getValue().getParams().listIterator(pair.getValue().getParams().size());
+            while (iterator.hasPrevious()) {
+                final AstNode var = iterator.previous();
+                final String param = nextTemp();
+                popValueFromStack(param, result);
+                final Tuple2<Optional<String>, List<LogicInstruction>> assignParam = visit(new Assignment(var, new VarRef(param)));
+                result.addAll(assignParam._2);
+            }
+
+            final Tuple2<Optional<String>, List<LogicInstruction>> body = visit(pair.getValue().getBody());
+            result.addAll(body._2);
+            final String returnAddress = nextTemp();
+            popValueFromStack(returnAddress, result);
+            pushValueOnStack(body._1.orElse("null"), result);
+            result.add(new LogicInstruction("set", "@counter", returnAddress));
+            result.add(new LogicInstruction("end"));
+        }
+
     }
 
     @Override
@@ -152,7 +190,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     @Override
-    public Tuple2<Optional<String>, List<LogicInstruction>> visitWhileStatement(WhileStatement node) {
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitWhileStatement(WhileExpression node) {
         final Tuple2<Optional<String>, List<LogicInstruction>> cond = visit(node.getCondition());
         if (!cond._1.isPresent()) {
             throw new GenerationException("Expected a variable name for the while condition, found none in " + cond);
@@ -297,8 +335,78 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
                 return handleEnd(params, result);
 
             default:
-                throw new GenerationException("Don't know how to handle function named [" + functionName + "]");
+                if (declaredFunctions.containsKey(functionName)) {
+                    return handleInternalFunctionCall(functionName, params, result);
+                } else {
+                    throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
+                }
         }
+    }
+
+    private Optional<String> handleInternalFunctionCall(String functionName, List<String> params, List<LogicInstruction> result) {
+        // TODO: assert number of parameters matches expected number from declared function
+        // This might require declaring functions before they are used. Otherwise, this would become a runtime exception.
+        // It would be preferable to have functions declared early, so that the compiler can check number of parameters.
+        final String returnLabel = nextLabel();
+
+        pushValueOnStack(returnLabel, result);
+        for (final String param : params) {
+            pushValueOnStack(param, result);
+        }
+        result.add(new LogicInstruction("set", "@counter", functionLabels.get(functionName))); // actually call function
+        result.add(new LogicInstruction("label", returnLabel)); // where the function must return
+
+        final String returnValue = nextTemp();
+        popValueFromStack(returnValue, result);
+
+        return Optional.of(returnValue);
+    }
+
+    private void pushValueOnStack(String value, List<LogicInstruction> result) {
+        final String stackPointer = nextTemp();
+        Tuple2<Optional<String>, List<LogicInstruction>> push;
+
+        push = visit(
+                new Seq(
+                        new Seq(
+                                new Assignment(new VarRef(stackPointer), new HeapAccess(stackName(), new NumericLiteral(stackTop()))),
+                                new Assignment(new VarRef(stackPointer), new BinaryOp(new VarRef(stackPointer), "-", new NumericLiteral(1)))
+                        ), // if we checked for stack overflows, this is where we'd do it
+                        new Seq(
+                                new Assignment(new HeapAccess(stackName(), new VarRef(stackPointer)), new VarRef(value)),
+                                new Assignment(new HeapAccess(stackName(), new NumericLiteral(stackTop())), new VarRef(stackPointer))
+                        )
+                )
+        );
+
+        result.addAll(push._2);
+    }
+
+    private void popValueFromStack(String value, List<LogicInstruction> result) {
+        final String stackPointer = nextTemp();
+        Tuple2<Optional<String>, List<LogicInstruction>> pop;
+        pop = visit(
+                new Seq(
+                        new Seq(
+                                new Assignment(new VarRef(stackPointer), new HeapAccess(stackName(), new NumericLiteral(stackTop()))),
+                                new Assignment(new VarRef(value), new HeapAccess(stackName(), new VarRef(stackPointer)))
+                        ), // if we checked for stack underflow, this is where we'd do it
+                        new Seq(
+                                new Assignment(new VarRef(stackPointer), new BinaryOp(new VarRef(stackPointer), "+", new NumericLiteral(1))),
+                                new Assignment(new HeapAccess(stackName(), new NumericLiteral(stackTop())), new VarRef(stackPointer))
+                        )
+                )
+        );
+
+        result.addAll(pop._2);
+    }
+
+    private int stackTop() {
+        return allocatedStack.getLast();
+    }
+
+    private String stackName() {
+        return allocatedStack.getName();
     }
 
     private Optional<String> handleEnd(List<String> params, List<LogicInstruction> result) {
@@ -600,12 +708,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     @Override
-    public Tuple2<Optional<String>, List<LogicInstruction>> visitSensorReading(SensorReading node) {
-        final String tmp = nextTemp();
-        return new Tuple2<>(Optional.of(tmp), List.of(new LogicInstruction("sensor", tmp, node.getTarget(), node.getSensor())));
-    }
-
-    @Override
     public Tuple2<Optional<String>, List<LogicInstruction>> visitNullLiteral(NullLiteral node) {
         return new Tuple2<>(Optional.of("null"), List.of());
     }
@@ -708,6 +810,34 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
         result.add(new LogicInstruction("label", exitLabel));
 
         return new Tuple2<>(Optional.of(resultVar), result);
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitFunctionDeclaration(FunctionDeclaration node) {
+        if (allocatedStack == null) {
+            throw new MissingStackException("Cannot declare functions when no stack was allocated");
+        }
+
+        declaredFunctions.put(node.getName(), node);
+        functionLabels.put(node.getName(), nextLabel());
+        return new Tuple2<>(Optional.of("null"), List.of());
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitStackAllocation(StackAllocation node) {
+        if (allocatedStack != null) {
+            throw new DuplicateStackAllocationException("Found a a 2nd stack allocation in " + node);
+        }
+
+        allocatedStack = node;
+        return visit(
+                new Assignment(
+                        new HeapAccess(
+                                node.getName(),
+                                new NumericLiteral(node.getLast())),
+                        new NumericLiteral(node.getLast())
+                )
+        );
     }
 
     private String translateUnaryOpToCode(String op) {

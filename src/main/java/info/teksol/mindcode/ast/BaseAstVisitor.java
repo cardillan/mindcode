@@ -15,6 +15,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitControl((Control) node);
         } else if (node instanceof FunctionCall) {
             return visitFunctionCall((FunctionCall) node);
+        } else if (node instanceof FunctionDeclaration) {
+            return visitFunctionDeclaration((FunctionDeclaration) node);
         } else if (node instanceof HeapAccess) {
             return visitHeapAccess((HeapAccess) node);
         } else if (node instanceof IfExpression) {
@@ -31,8 +33,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitPropertyAccess((PropertyAccess) node);
         } else if (node instanceof Seq) {
             return visitSeq((Seq) node);
-        } else if (node instanceof SensorReading) {
-            return visitSensorReading((SensorReading) node);
+        } else if (node instanceof StackAllocation) {
+            return visitStackAllocation((StackAllocation) node);
         } else if (node instanceof StringLiteral) {
             return visitStringLiteral((StringLiteral) node);
         } else if (node instanceof UnaryOp) {
@@ -43,8 +45,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitAssignment((Assignment) node);
         } else if (node instanceof VarRef) {
             return visitVarRef((VarRef) node);
-        } else if (node instanceof WhileStatement) {
-            return visitWhileStatement((WhileStatement) node);
+        } else if (node instanceof WhileExpression) {
+            return visitWhileStatement((WhileExpression) node);
         } else {
             throw new AstWalkerException("Unrecognized node type " + node.getClass() + ": " + node);
         }

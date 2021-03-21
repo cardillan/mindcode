@@ -716,4 +716,483 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void refusesToDeclareFunctionsWhenNoStackAround() {
+        assertThrows(MissingStackException.class, () ->
+                LogicInstructionGenerator.generateFrom(
+                        (Seq) translateToAst("" +
+                                "def foo\n0\nend\n\n\nfoo()\n"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void generatesCodeForFunctionCallingAndReturn() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                // setup stack
+                                new LogicInstruction("set", "tmp2", "63"),
+                                new LogicInstruction("set", "tmp3", "63"),
+                                new LogicInstruction("write", "tmp2", "cell1", "tmp3"),
+
+                                // push return address on stack
+                                new LogicInstruction("set", "tmp5", "63"),
+                                new LogicInstruction("read", "tmp6", "cell1", "tmp5"), // read stack pointer
+                                new LogicInstruction("set", "tmp4", "tmp6"),
+                                new LogicInstruction("set", "tmp7", "1"),
+                                new LogicInstruction("op", "sub", "tmp8", "tmp4", "tmp7"), // calculate new stack pointer
+                                new LogicInstruction("set", "tmp4", "tmp8"),
+                                new LogicInstruction("write", "label1", "cell1", "tmp4"), // write value on stack, at stack pointer
+                                new LogicInstruction("set", "tmp12", "63"),
+                                new LogicInstruction("write", "tmp4", "cell1", "tmp12"), // update stack pointer itself
+
+                                // jump to function
+                                new LogicInstruction("set", "@counter", "label0"),
+
+                                // return label
+                                new LogicInstruction("label", "label1"),
+
+                                // pop return value from stack
+                                new LogicInstruction("set", "tmp15", "63"),
+                                new LogicInstruction("read", "tmp16", "cell1", "tmp15"), // read stack pointer
+                                new LogicInstruction("set", "tmp14", "tmp16"),
+                                new LogicInstruction("read", "tmp17", "cell1", "tmp14"), // read value on stack, at stack pointer
+                                new LogicInstruction("set", "tmp13", "tmp17"),
+                                new LogicInstruction("set", "tmp18", "1"),
+                                new LogicInstruction("op", "add", "tmp19", "tmp14", "tmp18"), // calculate new stack pointer
+                                new LogicInstruction("set", "tmp14", "tmp19"),
+                                new LogicInstruction("set", "tmp22", "63"),
+                                new LogicInstruction("write", "tmp14", "cell1", "tmp22"), // update stack pointer itself
+
+                                // continue rest of main script
+                                new LogicInstruction("set", "x", "tmp13"),
+                                new LogicInstruction("print", "x"),
+                                new LogicInstruction("printflush", "message1"),
+
+                                // end of main script
+                                new LogicInstruction("end"),
+
+                                // start of function foo
+                                new LogicInstruction("label", "label0"),
+
+                                // no parameters to pop
+                                new LogicInstruction("set", "tmp23", "0"),
+
+                                // pop return address
+                                new LogicInstruction("set", "tmp26", "63"),
+                                new LogicInstruction("read", "tmp27", "cell1", "tmp26"),
+                                new LogicInstruction("set", "tmp25", "tmp27"),
+                                new LogicInstruction("read", "tmp28", "cell1", "tmp25"),
+                                new LogicInstruction("set", "tmp24", "tmp28"),
+                                new LogicInstruction("set", "tmp29", "1"),
+                                new LogicInstruction("op", "add", "tmp30, tmp25", "tmp29"),
+                                new LogicInstruction("set", "tmp25", "tmp30"),
+                                new LogicInstruction("set", "tmp33", "63"),
+                                new LogicInstruction("write", "tmp25", "cell1", "tmp33"),
+
+                                // push return value
+                                new LogicInstruction("set", "tmp35", "63"),
+                                new LogicInstruction("read", "tmp36", "cell1", "tmp35"),
+                                new LogicInstruction("set", "tmp34", "tmp36"),
+                                new LogicInstruction("set", "tmp37", "1"),
+                                new LogicInstruction("op", "sub", "tmp38, tmp34", "tmp37"),
+                                new LogicInstruction("set", "tmp34", "tmp38"),
+                                new LogicInstruction("write", "tmp23", "cell1", "tmp34"),
+                                new LogicInstruction("set", "tmp42", "63"),
+                                new LogicInstruction("write", "tmp34", "cell1", "tmp42"),
+
+                                // jump to return address
+                                new LogicInstruction("set", "@counter", "tmp24"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "allocate stack in cell1\ndef foo\n0\nend\n\n\nx = foo()\nprint(x)\nprintflush(message1)\n"
+                                )
+                        )
+                )
+        );
+    }
+
+    @Test
+    void passesParametersToFunction() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                // setup stack
+                                new LogicInstruction("set", "tmp2", "63"),
+                                new LogicInstruction("set", "tmp3", "63"),
+                                new LogicInstruction("write", "tmp2", "cell1", "tmp3"),
+
+                                // push return address on stack
+                                new LogicInstruction("set", "tmp4", "4"),
+                                new LogicInstruction("set", "boo", "tmp4"),
+                                new LogicInstruction("set", "tmp5", "2"),
+
+                                // push return address on stack
+                                new LogicInstruction("set", "tmp7", "63"),
+                                new LogicInstruction("read", "tmp8", "cell1", "tmp7"),
+                                new LogicInstruction("set", "tmp6", "tmp8"),
+                                new LogicInstruction("set", "tmp9", "1"),
+                                new LogicInstruction("op", "sub", "tmp10", "tmp6", "tmp9"),
+                                new LogicInstruction("set", "tmp6", "tmp10"),
+                                new LogicInstruction("write", "label1", "cell1", "tmp6"),
+                                new LogicInstruction("set", "tmp14", "63"),
+                                new LogicInstruction("write", "tmp6", "cell1", "tmp14"),
+
+                                // push n on stack
+                                new LogicInstruction("set", "tmp16", "63"),
+                                new LogicInstruction("read", "tmp17", "cell1", "tmp16"),
+                                new LogicInstruction("set", "tmp15", "tmp17"),
+                                new LogicInstruction("set", "tmp18", "1"),
+                                new LogicInstruction("op", "sub", "tmp19", "tmp15", "tmp18"),
+                                new LogicInstruction("set", "tmp15", "tmp19"),
+                                new LogicInstruction("write", "tmp5", "cell1", "tmp15"),
+                                new LogicInstruction("set", "tmp23", "63"),
+                                new LogicInstruction("write", "tmp15", "cell1", "tmp23"),
+
+                                // push r on stack
+                                new LogicInstruction("set", "tmp25", "63"),
+                                new LogicInstruction("read", "tmp26", "cell1", "tmp25"),
+                                new LogicInstruction("set", "tmp24", "tmp26"),
+                                new LogicInstruction("set", "tmp27", "1"),
+                                new LogicInstruction("op", "sub", "tmp28", "tmp24", "tmp27"),
+                                new LogicInstruction("set", "tmp24", "tmp28"),
+                                new LogicInstruction("write", "boo", "cell1", "tmp24"),
+                                new LogicInstruction("set", "tmp32", "63"),
+                                new LogicInstruction("write", "tmp24", "cell1", "tmp32"),
+
+                                // jump to function
+                                new LogicInstruction("set", "@counter", "label0"),
+
+                                // function return address
+                                new LogicInstruction("label", "label1"),
+
+                                // pop return value from stack
+                                new LogicInstruction("set", "tmp35", "63"),
+                                new LogicInstruction("read", "tmp36", "cell1", "tmp35"),
+                                new LogicInstruction("set", "tmp34", "tmp36"),
+                                new LogicInstruction("read", "tmp37", "cell1", "tmp34"),
+                                new LogicInstruction("set", "tmp33", "tmp37"),
+                                new LogicInstruction("set", "tmp38", "1"),
+                                new LogicInstruction("op", "add", "tmp39", "tmp34", "tmp38"),
+                                new LogicInstruction("set", "tmp34", "tmp39"),
+                                new LogicInstruction("set", "tmp42", "63"),
+                                new LogicInstruction("write", "tmp34", "cell1", "tmp42"),
+
+                                // continue main body
+                                new LogicInstruction("set", "x", "tmp33"),
+                                new LogicInstruction("print", "x"),
+                                new LogicInstruction("printflush", "message1"),
+                                new LogicInstruction("end"),
+
+                                // function foo
+                                new LogicInstruction("label", "label0"),
+
+                                // pop r
+                                new LogicInstruction("set", "tmp45", "63"),
+                                new LogicInstruction("read", "tmp46", "cell1", "tmp45"),
+                                new LogicInstruction("set", "tmp44", "tmp46"),
+                                new LogicInstruction("read", "tmp47", "cell1", "tmp44"),
+                                new LogicInstruction("set", "tmp43", "tmp47"),
+                                new LogicInstruction("set", "tmp48", "1"),
+                                new LogicInstruction("op", "add", "tmp49", "tmp44", "tmp48"),
+                                new LogicInstruction("set", "tmp44", "tmp49"),
+                                new LogicInstruction("set", "tmp52", "63"),
+                                new LogicInstruction("write", "tmp44", "cell1", "tmp52"),
+                                new LogicInstruction("set", "r", "tmp43"),
+
+                                // pop n
+                                new LogicInstruction("set", "tmp55", "63"),
+                                new LogicInstruction("read", "tmp56", "cell1", "tmp55"),
+                                new LogicInstruction("set", "tmp54", "tmp56"),
+                                new LogicInstruction("read", "tmp57", "cell1", "tmp54"),
+                                new LogicInstruction("set", "tmp53", "tmp57"),
+                                new LogicInstruction("set", "tmp58", "1"),
+                                new LogicInstruction("op", "add", "tmp59", "tmp54", "tmp58"),
+                                new LogicInstruction("set", "tmp54", "tmp59"),
+                                new LogicInstruction("set", "tmp62", "63"),
+                                new LogicInstruction("write", "tmp54", "cell1", "tmp62"),
+                                new LogicInstruction("set", "n", "tmp53"),
+
+                                // execute function body
+                                new LogicInstruction("set", "tmp63", "2"),
+                                new LogicInstruction("op", "pow", "tmp64", "n", "r"),
+                                new LogicInstruction("op", "mul", "tmp65", "tmp63", "tmp64"),
+
+                                // pop return address from stack
+                                new LogicInstruction("set", "tmp68", "63"),
+                                new LogicInstruction("read", "tmp69", "cell1", "tmp68"),
+                                new LogicInstruction("set", "tmp67", "tmp69"),
+                                new LogicInstruction("read", "tmp70", "cell1", "tmp67"),
+                                new LogicInstruction("set", "tmp66", "tmp70"),
+                                new LogicInstruction("set", "tmp71", "1"),
+                                new LogicInstruction("op", "add", "tmp72", "tmp67", "tmp71"),
+                                new LogicInstruction("set", "tmp67", "tmp72"),
+                                new LogicInstruction("set", "tmp75", "63"),
+                                new LogicInstruction("write", "tmp67", "cell1", "tmp75"),
+
+                                // push return value on stack
+                                new LogicInstruction("set", "tmp77", "63"),
+                                new LogicInstruction("read", "tmp78", "cell1", "tmp77"),
+                                new LogicInstruction("set", "tmp76", "tmp78"),
+                                new LogicInstruction("set", "tmp79", "1"),
+                                new LogicInstruction("op", "sub", "tmp80", "tmp76", "tmp79"),
+                                new LogicInstruction("set", "tmp76", "tmp80"),
+                                new LogicInstruction("write", "tmp65", "cell1", "tmp76"),
+                                new LogicInstruction("set", "tmp84", "63"),
+                                new LogicInstruction("write", "tmp76", "cell1", "tmp84"),
+
+                                // jump back to caller
+                                new LogicInstruction("set", "@counter", "tmp66"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "allocate stack in cell1\ndef foo(n, r)\n2 * (n ** r)\nend\n\n\nboo = 4\nx = foo(2, boo)\nprint(x)\nprintflush(message1)\n"
+                                )
+                        )
+                )
+        );
+    }
+
+    @Test
+    void functionsCanCallOtherFunctions() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                // setup stack
+                                new LogicInstruction("set", "tmp2", "63"),
+                                new LogicInstruction("set", "tmp3", "63"),
+                                new LogicInstruction("write", "tmp2", "cell1", "tmp3"),
+
+                                // prepare parameters
+                                new LogicInstruction("set", "tmp4", "8"),
+                                new LogicInstruction("set", "boo", "tmp4"),
+                                new LogicInstruction("set", "tmp5", "7"),
+
+                                // push return address
+                                new LogicInstruction("set", "tmp7", "63"),
+                                new LogicInstruction("read", "tmp8", "cell1", "tmp7"),
+                                new LogicInstruction("set", "tmp6", "tmp8"),
+                                new LogicInstruction("set", "tmp9", "1"),
+                                new LogicInstruction("op", "sub", "tmp10", "tmp6", "tmp9"),
+                                new LogicInstruction("set", "tmp6", "tmp10"),
+                                new LogicInstruction("write", "label2", "cell1", "tmp6"),
+                                new LogicInstruction("set", "tmp14", "63"),
+                                new LogicInstruction("write", "tmp6", "cell1", "tmp14"),
+
+                                // push n
+                                new LogicInstruction("set", "tmp16", "63"),
+                                new LogicInstruction("read", "tmp17", "cell1", "tmp16"),
+                                new LogicInstruction("set", "tmp15", "tmp17"),
+                                new LogicInstruction("set", "tmp18", "1"),
+                                new LogicInstruction("op", "sub", "tmp19", "tmp15", "tmp18"),
+                                new LogicInstruction("set", "tmp15", "tmp19"),
+                                new LogicInstruction("write", "tmp5", "cell1", "tmp15"),
+                                new LogicInstruction("set", "tmp23", "63"),
+                                new LogicInstruction("write", "tmp15", "cell1", "tmp23"),
+
+                                // push r
+                                new LogicInstruction("set", "tmp25", "63"),
+                                new LogicInstruction("read", "tmp26", "cell1", "tmp25"),
+                                new LogicInstruction("set", "tmp24", "tmp26"),
+                                new LogicInstruction("set", "tmp27", "1"),
+                                new LogicInstruction("op", "sub", "tmp28", "tmp24", "tmp27"),
+                                new LogicInstruction("set", "tmp24", "tmp28"),
+                                new LogicInstruction("write", "boo", "cell1", "tmp24"),
+                                new LogicInstruction("set", "tmp32", "63"),
+                                new LogicInstruction("write", "tmp24", "cell1", "tmp32"),
+
+                                // jump to function
+                                new LogicInstruction("set", "@counter", "label0"),
+
+                                // return address
+                                new LogicInstruction("label", "label2"),
+
+                                // pop return value from stack
+                                new LogicInstruction("set", "tmp35", "63"),
+                                new LogicInstruction("read", "tmp36", "cell1", "tmp35"),
+                                new LogicInstruction("set", "tmp34", "tmp36"),
+                                new LogicInstruction("read", "tmp37", "cell1", "tmp34"),
+                                new LogicInstruction("set", "tmp33", "tmp37"),
+                                new LogicInstruction("set", "tmp38", "1"),
+                                new LogicInstruction("op", "add", "tmp39", "tmp34", "tmp38"),
+                                new LogicInstruction("set", "tmp34", "tmp39"),
+                                new LogicInstruction("set", "tmp42", "63"),
+                                new LogicInstruction("write", "tmp34", "cell1", "tmp42"),
+
+                                // rest of main body
+                                new LogicInstruction("set", "x", "tmp33"),
+                                new LogicInstruction("print", "x"),
+                                new LogicInstruction("printflush", "message1"),
+                                new LogicInstruction("end"),
+
+                                // def bar
+                                new LogicInstruction("label", "label1"),
+
+                                // pop bar.x
+                                new LogicInstruction("set", "tmp45", "63"),
+                                new LogicInstruction("read", "tmp46", "cell1", "tmp45"),
+                                new LogicInstruction("set", "tmp44", "tmp46"),
+                                new LogicInstruction("read", "tmp47", "cell1", "tmp44"),
+                                new LogicInstruction("set", "tmp43", "tmp47"),
+                                new LogicInstruction("set", "tmp48", "1"),
+                                new LogicInstruction("op", "add", "tmp49", "tmp44", "tmp48"),
+                                new LogicInstruction("set", "tmp44", "tmp49"),
+                                new LogicInstruction("set", "tmp52", "63"),
+                                new LogicInstruction("write", "tmp44", "cell1", "tmp52"),
+                                new LogicInstruction("set", "x", "tmp43"),
+
+                                // function body
+                                new LogicInstruction("set", "tmp53", "2"),
+                                new LogicInstruction("op", "mul", "tmp54", "tmp53", "x"),
+
+                                // pop return address
+                                new LogicInstruction("set", "tmp57", "63"),
+                                new LogicInstruction("read", "tmp58", "cell1", "tmp57"),
+                                new LogicInstruction("set", "tmp56", "tmp58"),
+                                new LogicInstruction("read", "tmp59", "cell1", "tmp56"),
+                                new LogicInstruction("set", "tmp55", "tmp59"),
+                                new LogicInstruction("set", "tmp60", "1"),
+                                new LogicInstruction("op", "add", "tmp61", "tmp56", "tmp60"),
+                                new LogicInstruction("set", "tmp56", "tmp61"),
+                                new LogicInstruction("set", "tmp64", "63"),
+                                new LogicInstruction("write", "tmp56", "cell1", "tmp64"),
+
+                                // push return value
+                                new LogicInstruction("set", "tmp66", "63"),
+                                new LogicInstruction("read", "tmp67", "cell1", "tmp66"),
+                                new LogicInstruction("set", "tmp65", "tmp67"),
+                                new LogicInstruction("set", "tmp68", "1"),
+                                new LogicInstruction("op", "sub", "tmp69", "tmp65", "tmp68"),
+                                new LogicInstruction("set", "tmp65", "tmp69"),
+                                new LogicInstruction("write", "tmp54", "cell1", "tmp65"),
+                                new LogicInstruction("set", "tmp73", "63"),
+                                new LogicInstruction("write", "tmp65", "cell1", "tmp73"),
+
+                                // return
+                                new LogicInstruction("set", "@counter", "tmp55"),
+                                new LogicInstruction("end"),
+
+                                // def foo
+                                new LogicInstruction("label", "label0"),
+
+                                // pop foo.r
+                                new LogicInstruction("set", "tmp76", "63"),
+                                new LogicInstruction("read", "tmp77", "cell1", "tmp76"),
+                                new LogicInstruction("set", "tmp75", "tmp77"),
+                                new LogicInstruction("read", "tmp78", "cell1", "tmp75"),
+                                new LogicInstruction("set", "tmp74", "tmp78"),
+                                new LogicInstruction("set", "tmp79", "1"),
+                                new LogicInstruction("op", "add", "tmp80", "tmp75", "tmp79"),
+                                new LogicInstruction("set", "tmp75", "tmp80"),
+                                new LogicInstruction("set", "tmp83", "63"),
+                                new LogicInstruction("write", "tmp75", "cell1", "tmp83"),
+                                new LogicInstruction("set", "r", "tmp74"),
+
+                                // pop foo.n
+                                new LogicInstruction("set", "tmp86", "63"),
+                                new LogicInstruction("read", "tmp87", "cell1", "tmp86"),
+                                new LogicInstruction("set", "tmp85", "tmp87"),
+                                new LogicInstruction("read", "tmp88", "cell1", "tmp85"),
+                                new LogicInstruction("set", "tmp84", "tmp88"),
+                                new LogicInstruction("set", "tmp89", "1"),
+                                new LogicInstruction("op", "add", "tmp90", "tmp85", "tmp89"),
+                                new LogicInstruction("set", "tmp85", "tmp90"),
+                                new LogicInstruction("set", "tmp93", "63"),
+                                new LogicInstruction("write", "tmp85", "cell1", "tmp93"),
+                                new LogicInstruction("set", "n", "tmp84"),
+
+                                // function body
+                                new LogicInstruction("set", "tmp94", "2"),
+
+                                // push return address
+                                new LogicInstruction("set", "tmp96", "63"),
+                                new LogicInstruction("read", "tmp97", "cell1", "tmp96"),
+                                new LogicInstruction("set", "tmp95", "tmp97"),
+                                new LogicInstruction("set", "tmp98", "1"),
+                                new LogicInstruction("op", "sub", "tmp99", "tmp95", "tmp98"),
+                                new LogicInstruction("set", "tmp95", "tmp99"),
+                                new LogicInstruction("write", "label3", "cell1", "tmp95"),
+                                new LogicInstruction("set", "tmp103", "63"),
+                                new LogicInstruction("write", "tmp95", "cell1", "tmp103"),
+
+                                // push bar.x
+                                new LogicInstruction("set", "tmp105", "63"),
+                                new LogicInstruction("read", "tmp106", "cell1", "tmp105"),
+                                new LogicInstruction("set", "tmp104", "tmp106"),
+                                new LogicInstruction("set", "tmp107", "1"),
+                                new LogicInstruction("op", "sub", "tmp108", "tmp104", "tmp107"),
+                                new LogicInstruction("set", "tmp104", "tmp108"),
+                                new LogicInstruction("write", "r", "cell1", "tmp104"),
+                                new LogicInstruction("set", "tmp112", "63"),
+                                new LogicInstruction("write", "tmp104", "cell1", "tmp112"),
+
+                                // jump to subroutine
+                                new LogicInstruction("set", "@counter", "label1"),
+
+                                // return address
+                                new LogicInstruction("label", "label3"),
+
+                                // pop return value from stack
+                                new LogicInstruction("set", "tmp115", "63"),
+                                new LogicInstruction("read", "tmp116", "cell1", "tmp115"),
+                                new LogicInstruction("set", "tmp114", "tmp116"),
+                                new LogicInstruction("read", "tmp117", "cell1", "tmp114"),
+                                new LogicInstruction("set", "tmp113", "tmp117"),
+                                new LogicInstruction("set", "tmp118", "1"),
+                                new LogicInstruction("op", "add", "tmp119", "tmp114", "tmp118"),
+                                new LogicInstruction("set", "tmp114", "tmp119"),
+                                new LogicInstruction("set", "tmp122", "63"),
+                                new LogicInstruction("write", "tmp114", "cell1", "tmp122"),
+
+                                // function body
+                                new LogicInstruction("op", "pow", "tmp123", "n", "tmp113"),
+                                new LogicInstruction("op", "mul", "tmp124", "tmp94", "tmp123"),
+
+                                // pop return address
+                                new LogicInstruction("set", "tmp127", "63"),
+                                new LogicInstruction("read", "tmp128", "cell1", "tmp127"),
+                                new LogicInstruction("set", "tmp126", "tmp128"),
+                                new LogicInstruction("read", "tmp129", "cell1", "tmp126"),
+                                new LogicInstruction("set", "tmp125", "tmp129"),
+                                new LogicInstruction("set", "tmp130", "1"),
+                                new LogicInstruction("op", "add", "tmp131", "tmp126", "tmp130"),
+                                new LogicInstruction("set", "tmp126", "tmp131"),
+                                new LogicInstruction("set", "tmp134", "63"),
+                                new LogicInstruction("write", "tmp126", "cell1", "tmp134"),
+
+                                // push return value
+                                new LogicInstruction("set", "tmp136", "63"),
+                                new LogicInstruction("read", "tmp137", "cell1", "tmp136"),
+                                new LogicInstruction("set", "tmp135", "tmp137"),
+                                new LogicInstruction("set", "tmp138", "1"),
+                                new LogicInstruction("op", "sub", "tmp139", "tmp135", "tmp138"),
+                                new LogicInstruction("set", "tmp135", "tmp139"),
+                                new LogicInstruction("write", "tmp124", "cell1", "tmp135"),
+                                new LogicInstruction("set", "tmp143", "63"),
+                                new LogicInstruction("write", "tmp135", "cell1", "tmp143"),
+
+                                // return
+                                new LogicInstruction("set", "@counter", "tmp125"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "allocate stack in cell1\ndef foo(n, r)\n2 * (n ** bar(r))\nend\n\ndef bar(x)\n2 * x\nend\n\n\nboo = 8\nx = foo(7, boo)\nprint(x)\nprintflush(message1)\n"
+                                )
+                        )
+                )
+        );
+    }
 }

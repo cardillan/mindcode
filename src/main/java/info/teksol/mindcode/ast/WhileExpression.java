@@ -2,11 +2,11 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class WhileStatement implements AstNode {
+public class WhileExpression implements AstNode {
     private final AstNode condition;
     private final AstNode body;
 
-    public WhileStatement(AstNode condition, AstNode body) {
+    public WhileExpression(AstNode condition, AstNode body) {
         this.condition = condition;
         this.body = body;
     }
@@ -23,7 +23,7 @@ public class WhileStatement implements AstNode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WhileStatement that = (WhileStatement) o;
+        WhileExpression that = (WhileExpression) o;
         return Objects.equals(condition, that.condition) &&
                 Objects.equals(body, that.body);
     }
@@ -35,7 +35,7 @@ public class WhileStatement implements AstNode {
 
     @Override
     public String toString() {
-        return "WhileStatement{" +
+        return "WhileExpression{" +
                 "condition=" + condition +
                 ", body=" + body +
                 '}';

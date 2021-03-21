@@ -13,6 +13,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     private int temp;
     private HeapAllocation allocatedHeap;
     private Map<String, Integer> heapAllocations = new HashMap<>();
+    private StackAllocation allocatedStack;
 
     public static Seq generate(MindcodeParser.ProgramContext program) {
         final AstNodeBuilder builder = new AstNodeBuilder();
@@ -234,13 +235,34 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                     break;
 
                 case "stack":
-                    throw new RuntimeException("TODO");
+                    allocateStack(alloc_list);
+                    break;
             }
 
             alloc_list = alloc_list.alloc_list();
         }
 
-        return new NoOp();
+        if (allocatedStack != null) {
+            return allocatedStack;
+        } else {
+            return new NoOp();
+        }
+    }
+
+    private void allocateStack(MindcodeParser.Alloc_listContext ctx) {
+        if (allocatedStack != null) {
+            throw new StackAlreadyAllocatedException("Only one stack can be allocated, found a second declaration in " + ctx.getText());
+        }
+
+        final String name = ctx.id().getText();
+        final Range range;
+        if (ctx.alloc_range() != null) {
+            range = (Range) visit(ctx.alloc_range());
+        } else {
+            range = new ExclusiveRange(new NumericLiteral("0"), new NumericLiteral("64"));
+        }
+
+        allocatedStack = new StackAllocation(name, range);
     }
 
     private void allocateHeap(MindcodeParser.Alloc_listContext ctx) {
@@ -327,7 +349,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                         var,
                         range.getFirstValue()
                 ),
-                new WhileStatement(
+                new WhileExpression(
                         new BinaryOp(
                                 var,
                                 range instanceof InclusiveRange ? "<=" : "<",
@@ -352,7 +374,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public AstNode visitIterated_for(MindcodeParser.Iterated_forContext ctx) {
         return new Seq(
                 visit(ctx.init),
-                new WhileStatement(
+                new WhileExpression(
                         visit(ctx.cond),
                         new Seq(
                                 visit(ctx.loop_body()),
@@ -384,7 +406,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitWhile_expression(MindcodeParser.While_expressionContext ctx) {
-        return new WhileStatement(visit(ctx.cond), visit(ctx.loop_body()));
+        return new WhileExpression(visit(ctx.cond), visit(ctx.loop_body()));
     }
 
     @Override
@@ -463,6 +485,49 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitAlternative(MindcodeParser.AlternativeContext ctx) {
         return new CaseAlternative(visit(ctx.value), visit(ctx.body));
+    }
+
+    @Override
+    public AstNode visitFunction_declaration(MindcodeParser.Function_declarationContext ctx) {
+        final AstNode args;
+        if (ctx.fundecl().args == null) {
+            args = new NoOp();
+        } else {
+            args = visit(ctx.fundecl().args);
+        }
+
+        final List<AstNode> params = new ArrayList<>();
+        gatherArgs(args, params);
+        return new FunctionDeclaration(
+                ctx.fundecl().name.getText(),
+                params,
+                visit(ctx.fundecl().body)
+        );
+    }
+
+    private void gatherArgs(AstNode arg, List<AstNode> accumulator) {
+        if (arg instanceof Seq) {
+            final Seq seq = (Seq) arg;
+            gatherArgs(seq.getRest(), accumulator);
+            gatherArgs(seq.getLast(), accumulator);
+        } else if (arg instanceof NoOp) {
+            // ignore
+        } else {
+            accumulator.add(arg);
+        }
+    }
+
+    @Override
+    public AstNode visitArg_decl_list(MindcodeParser.Arg_decl_listContext ctx) {
+        final AstNode rest;
+        if (ctx.arg_decl_list() != null) {
+            rest = visit(ctx.arg_decl_list());
+        } else {
+            rest = new NoOp();
+        }
+
+        final AstNode last = visit(ctx.lvalue());
+        return new Seq(rest, last);
     }
 
     private String nextTemp() {
