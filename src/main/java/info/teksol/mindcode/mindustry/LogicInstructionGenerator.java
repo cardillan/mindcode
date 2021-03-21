@@ -4,9 +4,7 @@ import info.teksol.mindcode.GenerationException;
 import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.ast.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -325,17 +323,33 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
         final String tmp = nextTemp();
         switch (params.get(0)) {
             case "ore":
+                if (params.size() < 4) {
+                    throw new InsufficientArgumentsException("ulocate(ore) requires 4 arguments, received " + params.size());
+                }
+
                 result.add(new LogicInstruction("ulocate", "ore", "core", "true", params.get(1), params.get(2), params.get(3), tmp, nextTemp()));
                 break;
             case "building":
+                if (params.size() < 6) {
+                    throw new InsufficientArgumentsException("ulocate(building) requires 6 arguments, received " + params.size());
+                }
+
                 result.add(new LogicInstruction("ulocate", "building", params.get(1), params.get(2), "@copper", params.get(3), params.get(4), tmp, params.get(5)));
                 break;
 
             case "spawn":
+                if (params.size() < 4) {
+                    throw new InsufficientArgumentsException("ulocate(spawn) requires 4 arguments, received " + params.size());
+                }
+
                 result.add(new LogicInstruction("ulocate", "spawn", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
                 break;
 
             case "damaged":
+                if (params.size() < 4) {
+                    throw new InsufficientArgumentsException("ulocate(damaged) requires 4 arguments, received " + params.size());
+                }
+
                 result.add(new LogicInstruction("ulocate", "damaged", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
                 break;
 
