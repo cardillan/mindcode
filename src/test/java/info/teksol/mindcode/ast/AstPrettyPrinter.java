@@ -1,5 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.MindcodeException;
+
 public class AstPrettyPrinter extends BaseAstVisitor<String> {
     private final StringBuilder buffer = new StringBuilder();
 
@@ -43,11 +45,27 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitControl(Control node) {
-        buffer.append(node.getTarget());
+        visit(node.getTarget());
         buffer.append(".");
         buffer.append(node.getProperty());
-        buffer.append(" = ");
-        visit(node.getValue());
+        switch (node.getParams().size()) {
+            case 0:
+                throw new MindcodeException("Unexpected Control AST node with no parameters");
+
+            case 1:
+                buffer.append(" = ");
+                visit(node.getParams().get(0));
+                break;
+
+            default:
+                buffer.append("(");
+                for (int i = 0; i < node.getParams().size(); i++) {
+                    if (i > 0) buffer.append(", ");
+                    visit(node.getParams().get(i));
+                }
+                buffer.append(")");
+                break;
+        }
         return null;
     }
 

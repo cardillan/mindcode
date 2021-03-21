@@ -77,4 +77,25 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void realLifeScripts2() {
+        assertDoesNotThrow(() ->
+                LogicInstructionPrinter.toString(
+                        LogicInstructionLabelResolver.resolve(
+                                LogicInstructionGenerator.generateFrom(
+                                        (Seq) translateToAst(
+                                                "leader = getlink(0)\n" +
+                                                        "count = 1\n" +
+                                                        "while count < @links\n" +
+                                                        "  turret = getlink(count)\n" +
+                                                        "  turret.shoot(leader.shootX, leader.shootY, leader.shooting)\n" +
+                                                        "  count = count + 1\n" +
+                                                        "end"
+                                        )
+                                )
+                        )
+                )
+        );
+    }
 }

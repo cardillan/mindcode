@@ -1079,4 +1079,26 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void supportsControllingBuildingsThroughPropAccessFunctionCalls() {
+        assertEquals(
+                prettyPrint(
+                        new Seq(
+                                new Control(
+                                        new VarRef("turret"),
+                                        "shoot",
+                                        List.of(
+                                                new PropertyAccess(new VarRef("leader"), "shootX"),
+                                                new PropertyAccess(new VarRef("leader"), "shootY"),
+                                                new PropertyAccess(new VarRef("leader"), "shooting")
+                                        )
+                                )
+                        )
+                ),
+                prettyPrint(
+                        translateToAst("turret.shoot(leader.shootX, leader.shootY, leader.shooting)\n")
+                )
+        );
+    }
 }

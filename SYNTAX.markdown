@@ -6,10 +6,18 @@ You may call any Mindustry-provided functions:
 * Unit Bind => `ubind(...)`
 * Unit Radar => `uradar(...)`
 * log, tan, sin, etc. => `log(...)`, `tan(...)`, `sin(...)`
-* Control, Move => `move(...)`
-* Control, Approach => `approach(...)`
-* Control, Shoot => `shoot(...)`
+* Unit Control, move => `move(...)`
+* Unit Control, approach => `approach(...)`
+* Unit Control, shoot => `shoot(...)`
+* Control, shoot => `building.shoot(x, y, shoot)`
+* Control, color => `building.color(r, g, b)`
 * and so on
+
+There is a special case for Control with a single parameter. Mindcode accepts the following shortcut:
+
+```
+building.enabled = boolean
+```
 
 ## Custom Functions
 

@@ -81,19 +81,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     @Override
-    public Tuple2<Optional<String>, List<LogicInstruction>> visitControl(Control node) {
-        final Tuple2<Optional<String>, List<LogicInstruction>> value = visit(node.getValue());
-        final List<LogicInstruction> result = new ArrayList<>(value._2);
-        if (!value._1.isPresent()) {
-            throw new GenerationException("Expected to find tmp variable from control node, found: " + value);
-        }
-
-        result.add(new LogicInstruction("control", node.getProperty(), node.getTarget(), value._1.get()));
-
-        return new Tuple2<>(value._1, result);
-    }
-
-    @Override
     public Tuple2<Optional<String>, List<LogicInstruction>> visitIfExpression(IfExpression node) {
         final Tuple2<Optional<String>, List<LogicInstruction>> cond = visit(node.getCondition());
         final Tuple2<Optional<String>, List<LogicInstruction>> trueBranch = visit(node.getTrueBranch());
@@ -838,6 +825,31 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
                         new NumericLiteral(node.getLast())
                 )
         );
+    }
+
+    @Override
+    public Tuple2<Optional<String>, List<LogicInstruction>> visitControl(Control node) {
+        final Tuple2<Optional<String>, List<LogicInstruction>> target = visit(node.getTarget());
+        final List<LogicInstruction> result = new ArrayList<>(target._2);
+        if (!target._1.isPresent()) {
+            throw new GenerationException("Expected to find a variable from " + node);
+        }
+
+        final List<String> args = new ArrayList<>();
+        args.add(node.getProperty());
+        args.add(target._1.get());
+        for (final AstNode param : node.getParams()) {
+            final Tuple2<Optional<String>, List<LogicInstruction>> arg = visit(param);
+            if (!arg._1.isPresent()) {
+                throw new GenerationException("Expected to find return value from " + param);
+            }
+
+            result.addAll(arg._2);
+            args.add(arg._1.get());
+        }
+
+        result.add(new LogicInstruction("control", args));
+        return new Tuple2<>(Optional.of("null"), result);
     }
 
     private String translateUnaryOpToCode(String op) {

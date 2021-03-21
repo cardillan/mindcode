@@ -1195,4 +1195,31 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void generatesMultiParameterControlInstruction() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("sensor", "tmp0", "leader", "@shootX"),
+                                new LogicInstruction("sensor", "tmp1", "leader", "@shootY"),
+                                new LogicInstruction("sensor", "tmp2", "leader", "@shooting"),
+                                new LogicInstruction("control", "shoot","turret",  "tmp0", "tmp1", "tmp2"),
+                                new LogicInstruction("set", "tmp3", "14"),
+                                new LogicInstruction("set", "tmp4", "15"),
+                                new LogicInstruction("set", "tmp5", "16"),
+                                new LogicInstruction("control", "color","turret", "tmp3", "tmp4", "tmp5"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "turret.shoot(leader.shootX, leader.shootY, leader.shooting)\nturret.color(14, 15, 16)\n"
+                                )
+                        )
+
+                )
+        );
+    }
 }

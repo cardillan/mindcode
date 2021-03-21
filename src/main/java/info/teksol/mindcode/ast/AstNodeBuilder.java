@@ -140,29 +140,42 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitFunction_call(MindcodeParser.Function_callContext ctx) {
+        final List<AstNode> params = new ArrayList<>();
+
+        if (ctx.funcall().params != null) {
+            final AstNode nodes;
+            if (ctx.funcall().params.arg_list() != null) {
+                nodes = visit(ctx.funcall().params.arg_list());
+            } else {
+                nodes = new NoOp();
+            }
+
+            gatherArgs(new Seq(nodes, visit(ctx.funcall().params.arg())), params);
+        }
+
         if (ctx.funcall().END() != null) {
             // The end function is a bit special: because the keyword "end" is also used to
             // close blocks, the grammar needed to special-case the end function directly.
             return new FunctionCall("end");
+        } else if (ctx.funcall().obj != null) {
+            final AstNode target;
+            if (ctx.funcall().obj.unit_ref() != null) {
+                target = visit(ctx.funcall().obj.unit_ref());
+            } else if (ctx.funcall().obj.var_ref() != null) {
+                target = visit(ctx.funcall().obj.var_ref());
+            } else {
+                throw new ParsingException("Failed to parse function call on a property access at " + ctx.getText());
+            }
+
+
+            return new Control(
+                    target,
+                    ctx.funcall().obj.prop.getText(),
+                    params
+            );
         } else {
             final String name = ctx.funcall().name.getText();
-            final List<AstNode> params = new ArrayList<>();
-
-            if (ctx.funcall().params != null) {
-                params.add(visit(ctx.funcall().params.arg()));
-                MindcodeParser.Arg_listContext arglist = ctx.funcall().params.arg_list();
-                while (arglist != null) {
-                    params.add(visit(arglist.arg()));
-                    arglist = arglist.arg_list();
-                }
-            }
-
-            final List<AstNode> result = new ArrayList<>();
-            for (int i = params.size() - 1; i >= 0; i--) {
-                result.add(params.get(i));
-            }
-
-            return new FunctionCall(name, result);
+            return new FunctionCall(name, params);
         }
     }
 
@@ -528,6 +541,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
         final AstNode last = visit(ctx.lvalue());
         return new Seq(rest, last);
+    }
+
+    @Override
+    public AstNode visitArg_list(MindcodeParser.Arg_listContext ctx) {
+        if (ctx.arg_list() != null) {
+            return new Seq(visit(ctx.arg_list()), visit(ctx.arg()));
+        } else {
+            final AstNode last = visit(ctx.arg());
+            return new Seq(last);
+        }
     }
 
     private String nextTemp() {

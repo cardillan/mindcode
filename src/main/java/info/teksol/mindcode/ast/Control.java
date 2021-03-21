@@ -1,19 +1,20 @@
 package info.teksol.mindcode.ast;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Control implements AstNode {
-    private final String target;
+    private final AstNode target;
     private final String property;
-    private final AstNode value;
+    private final List<AstNode> params;
 
-    public Control(String target, String property, AstNode value) {
+    public Control(AstNode target, String property, List<AstNode> params) {
         this.target = target;
         this.property = property;
-        this.value = value;
+        this.params = params;
     }
 
-    public String getTarget() {
+    public AstNode getTarget() {
         return target;
     }
 
@@ -21,8 +22,8 @@ public class Control implements AstNode {
         return property;
     }
 
-    public AstNode getValue() {
-        return value;
+    public List<AstNode> getParams() {
+        return params;
     }
 
     @Override
@@ -32,20 +33,20 @@ public class Control implements AstNode {
         Control control = (Control) o;
         return Objects.equals(target, control.target) &&
                 Objects.equals(property, control.property) &&
-                Objects.equals(value, control.value);
+                Objects.equals(params, control.params);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(target, property, value);
+        return Objects.hash(target, property, params);
     }
 
     @Override
     public String toString() {
         return "Control{" +
-                "target='" + target + '\'' +
+                "target=" + target +
                 ", property='" + property + '\'' +
-                ", value=" + value +
+                ", params=" + params +
                 '}';
     }
 }

@@ -97,6 +97,7 @@ incr_list : expression
 funcall : END LEFT_RBRACKET RIGHT_RBRACKET
         | name=id LEFT_RBRACKET RIGHT_RBRACKET
         | name=id LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
+        | obj=propaccess LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
         ;
 
 arg_list : arg
