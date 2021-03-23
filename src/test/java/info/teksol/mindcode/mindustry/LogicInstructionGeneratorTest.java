@@ -571,16 +571,16 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         List.of(
-                                new LogicInstruction("clear", "r", "g", "b"),
-                                new LogicInstruction("color", "r", "g", "b", "alpha"),
-                                new LogicInstruction("stroke", "width"),
-                                new LogicInstruction("line", "x1", "y1", "x2", "y2"),
-                                new LogicInstruction("rect", "x", "y", "w", "h"),
-                                new LogicInstruction("lineRect", "x", "y", "w", "h"),
-                                new LogicInstruction("poly", "x", "y", "sides", "radius", "rotation"),
-                                new LogicInstruction("linePoly", "x", "y", "sides", "radius", "rotation"),
-                                new LogicInstruction("triangle", "x1", "y1", "x2", "y2", "x3", "y3"),
-                                new LogicInstruction("image", "x", "y", "@copper", "size", "rotation"),
+                                new LogicInstruction("draw", "clear", "r", "g", "b"),
+                                new LogicInstruction("draw", "color", "r", "g", "b", "alpha"),
+                                new LogicInstruction("draw", "stroke", "width"),
+                                new LogicInstruction("draw", "line", "x1", "y1", "x2", "y2"),
+                                new LogicInstruction("draw", "rect", "x", "y", "w", "h"),
+                                new LogicInstruction("draw", "lineRect", "x", "y", "w", "h"),
+                                new LogicInstruction("draw", "poly", "x", "y", "sides", "radius", "rotation"),
+                                new LogicInstruction("draw", "linePoly", "x", "y", "sides", "radius", "rotation"),
+                                new LogicInstruction("draw", "triangle", "x1", "y1", "x2", "y2", "x3", "y3"),
+                                new LogicInstruction("draw", "image", "x", "y", "@copper", "size", "rotation"),
                                 new LogicInstruction("drawflush", "display1"),
                                 new LogicInstruction("end")
                         )
@@ -1204,11 +1204,11 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                                 new LogicInstruction("sensor", "tmp0", "leader", "@shootX"),
                                 new LogicInstruction("sensor", "tmp1", "leader", "@shootY"),
                                 new LogicInstruction("sensor", "tmp2", "leader", "@shooting"),
-                                new LogicInstruction("control", "shoot","turret",  "tmp0", "tmp1", "tmp2"),
+                                new LogicInstruction("control", "shoot", "turret", "tmp0", "tmp1", "tmp2"),
                                 new LogicInstruction("set", "tmp3", "14"),
                                 new LogicInstruction("set", "tmp4", "15"),
                                 new LogicInstruction("set", "tmp5", "16"),
-                                new LogicInstruction("control", "color","turret", "tmp3", "tmp4", "tmp5"),
+                                new LogicInstruction("control", "color", "turret", "tmp3", "tmp4", "tmp5"),
                                 new LogicInstruction("end")
                         )
                 ),
