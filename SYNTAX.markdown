@@ -198,12 +198,13 @@ exclusive range). If you declare more global variables than you have allocated, 
 `OutOfHeapSpaceException`. In that case, allocate more space for the heap in your cell, or switch to a Memory Bank and
 allocate more space to your heap.
 
-Once your heap is allocated, you can use global variables:
+Once your heap is allocated, you can use global variables. Global variables are identified by the `$` (dollar-sign)
+prefix:
 
 ```
 allocate heap in cell4[32 ... 64]
 
-$dx = 1
+$dx = 1 // this is a global variable assignment
 $dy = 1
 $ne_x = 90
 $ne_y = 90
