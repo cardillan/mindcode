@@ -185,6 +185,12 @@ end
 
 # Global variables
 
+Global variables are marked with the prefix `$`, for example:
+```
+// $… is a global variable:
+$x = 1
+```
+
 In order to use global variables, you need to allocate a heap within a Memory Cell or a Memory Bank. This allocation
 tells the Mindcode compiler where to store its global variables. A heap is simply a region of memory. The heap is
 allocated using the following Mindcode:
