@@ -142,7 +142,8 @@ Mindcode offers 3 types of conditionals: if/else expressions, the ternary operat
 
 ## If/Else Expressions
 
-In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For example:
+In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For
+example:
 
 ```
 result = if n == 0
@@ -243,7 +244,29 @@ $targety = 80
 $flag = rand(10000)
 ```
 
+then all addresses in the heap would be reallocated. `$targetx` would be stored in memory cell 61, rather than `$flag`.
+To fix this issue, you can either always reset your heap to all zeroes on startup, or destroy and re-create your Memory
+Cell/Memory Bank.
 
-then all addresses in the heap would be reallocated.
-`$targetx` would be stored in memory cell 61, rather than `$flag`. To fix this issue, you can either always
-reset your heap to all zeroes on startup, or destroy and re-create your Memory Cell/Memory Bank.
+## Heap and stack indirection
+
+When you build your Mindcode scripts, the actual Memory Cell and Memory Bank that you use may be different than the ones
+you use when playing the game. To that end, you also have the option of referencing your heap and stack through the use
+of a variable, like this:
+
+```
+HEAPPTR = cell3
+allocate heap in HEAPPTR
+$dx = 0
+```
+
+This will translate to:
+
+```
+set HEAPPTR cell3
+write 0 HEAPPTR 0
+```
+
+Since the very first instruction of the Logic code will be the global variable assignment, you can easily change the
+actual cell or bank your will use, without having to do a global search & replace within the Logic code. This introduces
+more avenues for code sharing.

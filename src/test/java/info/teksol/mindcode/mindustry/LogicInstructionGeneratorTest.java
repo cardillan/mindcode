@@ -1222,4 +1222,124 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void canIndirectlyReferenceHeap() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "HEAPPTR", "cell1"),
+                                new LogicInstruction("set", "tmp2", "0"),
+                                new LogicInstruction("set", "tmp3", "0"),
+                                new LogicInstruction("write", "tmp2", "HEAPPTR", "tmp3"), // write $dx
+                                new LogicInstruction("set", "tmp6", "1"),
+                                new LogicInstruction("read", "tmp7", "HEAPPTR", "tmp6"), // read $dy
+                                new LogicInstruction("set", "tmp8", "0"),
+                                new LogicInstruction("read", "tmp9", "HEAPPTR", "tmp8"), // read $dx
+                                new LogicInstruction("op", "add", "tmp10", "tmp7", "tmp9"), // tmp10 = $dx + $dy
+                                new LogicInstruction("set", "tmp11", "1"),
+                                new LogicInstruction("write", "tmp10", "HEAPPTR", "tmp11"), // set $dy
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "set HEAPPTR = cell1\nallocate heap in HEAPPTR[0...4]\n$dx = 0\n\n$dy += $dx"
+                                )
+                        )
+
+                )
+        );
+    }
+
+    @Test
+    void canIndirectlyReferenceStack() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "STACKPTR", "cell1"),
+                                new LogicInstruction("set", "HEAPPTR", "cell2"),
+
+                                new LogicInstruction("set", "tmp2", "63"), // init stack
+                                new LogicInstruction("set", "tmp3", "63"),
+                                new LogicInstruction("write", "tmp2", "STACKPTR", "tmp3"),
+
+                                new LogicInstruction("set", "tmp7", "63"), // push return address on stack
+                                new LogicInstruction("read", "tmp8", "STACKPTR", "tmp7"),
+                                new LogicInstruction("set", "tmp6", "tmp8"),
+                                new LogicInstruction("set", "tmp9", "1"),
+                                new LogicInstruction("op", "sub", "tmp10", "tmp6", "tmp9"),
+                                new LogicInstruction("set", "tmp6", "tmp10"),
+                                new LogicInstruction("write", "label1", "STACKPTR", "tmp6"),
+                                new LogicInstruction("set", "tmp14", "63"),
+                                new LogicInstruction("write", "tmp6", "STACKPTR", "tmp14"),
+
+                                new LogicInstruction("set", "@counter", "label0"), // invoke function
+
+                                new LogicInstruction("label", "label1"),
+
+                                new LogicInstruction("set", "tmp17", "63"), // pop return value from stack
+                                new LogicInstruction("read", "tmp18", "STACKPTR", "tmp17"),
+                                new LogicInstruction("set", "tmp16", "tmp18"),
+                                new LogicInstruction("read", "tmp19", "STACKPTR", "tmp16"),
+                                new LogicInstruction("set", "tmp15", "tmp19"),
+                                new LogicInstruction("set", "tmp20", "1"),
+                                new LogicInstruction("op", "add", "tmp21", "tmp16", "tmp20"),
+                                new LogicInstruction("set", "tmp16", "tmp21"),
+                                new LogicInstruction("set", "tmp24", "63"),
+                                new LogicInstruction("write", "tmp16", "STACKPTR", "tmp24"),
+
+                                new LogicInstruction("set", "tmp25", "0"), // write $dx
+                                new LogicInstruction("write", "tmp15", "HEAPPTR", "tmp25"),
+
+                                new LogicInstruction("end"), // end of main function body
+
+                                new LogicInstruction("label", "label0"), // start of delay function
+
+                                new LogicInstruction("set", "tmp26", "0"), // return value
+
+                                new LogicInstruction("set", "tmp29", "63"), // pop return address from stack
+                                new LogicInstruction("read", "tmp30", "STACKPTR", "tmp29"),
+                                new LogicInstruction("set", "tmp28", "tmp30"),
+                                new LogicInstruction("read", "tmp31", "STACKPTR", "tmp28"),
+                                new LogicInstruction("set", "tmp27", "tmp31"),
+                                new LogicInstruction("set", "tmp32", "1"),
+                                new LogicInstruction("op", "add", "tmp33, tmp28", "tmp32"),
+                                new LogicInstruction("set", "tmp28", "tmp33"),
+                                new LogicInstruction("set", "tmp36", "63"),
+                                new LogicInstruction("write", "tmp28", "STACKPTR", "tmp36"),
+
+                                new LogicInstruction("set", "tmp38", "63"), // push return value on stack
+                                new LogicInstruction("read", "tmp39", "STACKPTR", "tmp38"),
+                                new LogicInstruction("set", "tmp37", "tmp39"),
+                                new LogicInstruction("set", "tmp40", "1"),
+                                new LogicInstruction("op", "sub", "tmp41", "tmp37", "tmp40"),
+                                new LogicInstruction("set", "tmp37", "tmp41"),
+                                new LogicInstruction("write", "tmp26", "STACKPTR", "tmp37"),
+                                new LogicInstruction("set", "tmp45", "63"),
+                                new LogicInstruction("write", "tmp37", "STACKPTR", "tmp45"),
+
+                                new LogicInstruction("set", "@counter", "tmp27"), // jump back to caller
+                                new LogicInstruction("end")
+
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "set STACKPTR = cell1\n" +
+                                        "set HEAPPTR = cell2\n" +
+                                        "allocate heap in HEAPPTR[0...16], stack in STACKPTR\n" +
+                                        "def delay\n" +
+                                        "0\n" +
+                                        "end\n" +
+                                        "\n" +
+                                        "$dx = delay()\n"
+                                )
+                        )
+
+                )
+        );
+    }
 }
