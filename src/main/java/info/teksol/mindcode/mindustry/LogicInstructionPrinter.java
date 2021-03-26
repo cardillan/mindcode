@@ -19,7 +19,7 @@ public class LogicInstructionPrinter {
         args.put("end", 0);
         args.put("sensor", 3);
         args.put("control", 6);
-        args.put("draw", 6);
+        args.put("draw", 7);
         args.put("write", 3);
         args.put("read", 3);
         args.put("drawflush", 1);

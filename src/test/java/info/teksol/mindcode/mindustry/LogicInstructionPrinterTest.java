@@ -5,6 +5,7 @@ import info.teksol.mindcode.ast.Seq;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionPrinterTest extends AbstractAstTest {
@@ -92,6 +93,35 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                                                         "  turret.shoot(leader.shootX, leader.shootY, leader.shooting)\n" +
                                                         "  count = count + 1\n" +
                                                         "end"
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+    @Test
+    void correctlyDrawsTriangles() {
+        assertEquals(
+                "set tmp0 20\n" +
+                        "op sub tmp1 x tmp0\n" +
+                        "set tmp2 20\n" +
+                        "op sub tmp3 y tmp2\n" +
+                        "set tmp4 20\n" +
+                        "op add tmp5 x tmp4\n" +
+                        "set tmp6 20\n" +
+                        "op sub tmp7 y tmp6\n" +
+                        "set tmp8 20\n" +
+                        "op add tmp9 x tmp8\n" +
+                        "set tmp10 20\n" +
+                        "op sub tmp11 y tmp10\n" +
+                        "draw triangle tmp1 tmp3 tmp5 tmp7 tmp9 tmp11\n" +
+                        "end\n",
+                LogicInstructionPrinter.toString(
+                        LogicInstructionLabelResolver.resolve(
+                                LogicInstructionGenerator.generateFrom(
+                                        (Seq) translateToAst(
+                                                "triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)"
                                         )
                                 )
                         )
