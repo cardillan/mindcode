@@ -129,7 +129,6 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
 
     @Test
     void reallifeScripts() {
-
         assertEquals(
                 "set STORAGE nucleus1\n" +
                         "set MSG message1\n" +
@@ -154,32 +153,32 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "op equal tmp10 type @plastanium-conveyor\n" +
                         "op or tmp11 tmp9 tmp10\n" +
                         "jump 45 notEqual tmp11 true\n" +
-                        "sensor tmp12 building @firstItem\n" +
-                        "set resource tmp12\n" +
-                        "op notEqual tmp13 resource null\n" +
-                        "jump 42 notEqual tmp13 true\n" +
-                        "sensor tmp14 nucleus1 @resource\n" +
-                        "set level tmp14\n" +
-                        "op lessThan tmp16 level capacity\n" +
-                        "control enabled building tmp16 0 0 0\n" +
-                        "set tmp17 \"\\n\"\n" +
-                        "set tmp18 \": \"\n" +
-                        "set tmp19 \" @ \"\n" +
-                        "print tmp17\n" +
-                        "print n\n" +
+                        "sensor tmp13 building @firstItem\n" +
+                        "set resource tmp13\n" +
+                        "op notEqual tmp14 resource null\n" +
+                        "jump 42 notEqual tmp14 true\n" +
+                        "sensor tmp16 nucleus1 @resource\n" +
+                        "set level tmp16\n" +
+                        "op lessThan tmp17 level capacity\n" +
+                        "control enabled building tmp17 0 0 0\n" +
+                        "set tmp18 \"\\n\"\n" +
+                        "set tmp19 \": \"\n" +
+                        "set tmp20 \" @ \"\n" +
                         "print tmp18\n" +
-                        "print resource\n" +
+                        "print n\n" +
                         "print tmp19\n" +
+                        "print resource\n" +
+                        "print tmp20\n" +
                         "print level\n" +
-                        "set tmp20 level\n" +
+                        "set tmp15 level\n" +
                         "jump 43 always 0 0\n" +
-                        "set tmp20 null\n" +
-                        "set tmp21 tmp20\n" +
+                        "set tmp15 null\n" +
+                        "set tmp12 tmp15\n" +
                         "jump 46 always 0 0\n" +
-                        "set tmp21 null\n" +
-                        "set tmp22 1\n" +
-                        "op add tmp23 n tmp22\n" +
-                        "set n tmp23\n" +
+                        "set tmp12 null\n" +
+                        "set tmp21 1\n" +
+                        "op add tmp22 n tmp21\n" +
+                        "set n tmp22\n" +
                         "jump 11 always 0 0\n" +
                         "printflush MSG\n" +
                         "end\n",

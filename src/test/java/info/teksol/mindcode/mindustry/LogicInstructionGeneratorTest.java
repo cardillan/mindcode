@@ -1,19 +1,13 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class LogicInstructionGeneratorTest extends AbstractAstTest {
-    private Set<String> registered = new HashSet<>();
-    private Map<String, String> expectedToActual = new TreeMap<>();
-    private Map<String, String> actualToExpected = new TreeMap<>();
-
+class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void convertsComplexAssignment() {
         assertLogicInstructionListMatches(
@@ -205,15 +199,15 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 List.of(
                         new LogicInstruction("set", match(0), "0"),
                         new LogicInstruction("set", "n", match(0)),
-                        new LogicInstruction("label", "label2"),
+                        new LogicInstruction("label", match(1002)),
                         new LogicInstruction("getlink", match(1), "n"),
                         new LogicInstruction("set", "reactor", match(1)),
                         new LogicInstruction("op", "notEqual", match(2), match(1), "null"),
-                        new LogicInstruction("jump", "label3", "notEqual", match(2), "true"),
+                        new LogicInstruction("jump", match(1003), "notEqual", match(2), "true"),
                         new LogicInstruction("sensor", match(3), "reactor", "@liquidCapacity"),
                         new LogicInstruction("set", match(4), "0"),
                         new LogicInstruction("op", "greaterThan", match(5), match(3), match(4)),
-                        new LogicInstruction("jump", "label0", "notEqual", match(5), "true"),
+                        new LogicInstruction("jump", match(1000), "notEqual", match(5), "true"),
                         new LogicInstruction("sensor", match(6), "reactor", "@cryofluid"),
                         new LogicInstruction("sensor", match(7), "reactor", "@liquidCapacity"),
                         new LogicInstruction("op", "div", match(8), match(6), match(7)),
@@ -222,15 +216,15 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("op", "greaterThanEq", match(11), "pct_avail", match(10)),
                         new LogicInstruction("control", "enabled", "reactor", match(11)),
                         new LogicInstruction("set", match(12), match(11)),
-                        new LogicInstruction("jump", "label1", "always"),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("jump", match(1001), "always"),
+                        new LogicInstruction("label", match(1000)),
                         new LogicInstruction("set", match(12), "null"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", match(1001)),
                         new LogicInstruction("set", match(13), "1"),
                         new LogicInstruction("op", "add", match(14), "n", match(13)),
                         new LogicInstruction("set", "n", match(14)),
-                        new LogicInstruction("jump", "label2", "always"),
-                        new LogicInstruction("label", "label3"),
+                        new LogicInstruction("jump", match(1002), "always"),
+                        new LogicInstruction("label", match(1003)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom(
@@ -455,22 +449,21 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
         assertLogicInstructionListMatches(
                 List.of(
                         new LogicInstruction("set", "ast0", "n"),
-                        new LogicInstruction("set", match(0), "ast0"),
                         new LogicInstruction("set", match(2), "1"),
-                        new LogicInstruction("jump", "label1", "notEqual", match(0), match(2)),
+                        new LogicInstruction("jump", match(1001), "notEqual", match(0), match(2)),
                         new LogicInstruction("set", match(3), "\"1\""),
                         new LogicInstruction("set", match(1), match(3)),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("jump", match(1000), "always"),
+                        new LogicInstruction("label", match(1001)),
                         new LogicInstruction("set", match(4), "2"),
-                        new LogicInstruction("jump", "label2", "notEqual", match(0), match(4)),
+                        new LogicInstruction("jump", match(1002), "notEqual", match(0), match(4)),
                         new LogicInstruction("set", match(5), "\"two\""),
                         new LogicInstruction("set", match(1), match(5)),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label2"),
+                        new LogicInstruction("jump", match(1000), "always"),
+                        new LogicInstruction("label", match(1002)),
                         new LogicInstruction("set", match(6), "\"otherwise\""),
                         new LogicInstruction("set", match(1), match(6)),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", match(1000)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom(
@@ -486,21 +479,20 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("set", match(0), "0"),
                         new LogicInstruction("read", match(1), "cell1", match(0)),
                         new LogicInstruction("set", "ast0", match(1)),
-                        new LogicInstruction("set", match(2), "ast0"),
-                        new LogicInstruction("jump", "label1", "notEqual", match(2), "ST_EMPTY"),
+                        new LogicInstruction("jump", match(1001), "notEqual", match(2), "ST_EMPTY"),
                         new LogicInstruction("set", match(6), "0"),
                         new LogicInstruction("write", "ST_INITIALIZED", "cell1", match(6)),
                         new LogicInstruction("set", match(3), "ST_INITIALIZED"),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
-                        new LogicInstruction("jump", "label2", "notEqual", match(2), "ST_INITIALIZED"),
+                        new LogicInstruction("jump", match(1000), "always"),
+                        new LogicInstruction("label", match(1001)),
+                        new LogicInstruction("jump", match(1002), "notEqual", match(2), "ST_INITIALIZED"),
                         new LogicInstruction("set", match(9), "0"),
                         new LogicInstruction("write", "ST_DONE", "cell1", match(9)),
                         new LogicInstruction("set", match(3), "ST_DONE"),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label2"),
+                        new LogicInstruction("jump", match(1000), "always"),
+                        new LogicInstruction("label", match(1002)),
                         new LogicInstruction("set", match(3), "null"),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", match(1000)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom(
@@ -539,7 +531,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("uradar", "enemy", "ground", "any", "health", "MIN_TO_MAX", "BY_DISTANCE", match(0)),
                         new LogicInstruction("set", "target", match(0)),
                         new LogicInstruction("op", "notEqual", match(1), "target", "null"),
-                        new LogicInstruction("jump", "label2", "notEqual", match(1), "true"),
+                        new LogicInstruction("jump", match(1002), "notEqual", match(1), "true"),
                         new LogicInstruction("sensor", match(2), "target", "@x"),
                         new LogicInstruction("sensor", match(3), "target", "@y"),
                         new LogicInstruction("set", match(4), "10"),
@@ -548,20 +540,20 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("sensor", match(6), "target", "@y"),
                         new LogicInstruction("set", match(7), "10"),
                         new LogicInstruction("ucontrol", "within", match(5), match(6), match(7), match(8)),
-                        new LogicInstruction("jump", "label0", "notEqual", match(8), "true"),
+                        new LogicInstruction("jump", match(1000), "notEqual", match(8), "true"),
                         new LogicInstruction("sensor", match(9), "target", "@x"),
                         new LogicInstruction("sensor", match(10), "target", "@y"),
                         new LogicInstruction("ucontrol", "target", match(9), match(10), "SHOOT"),
                         new LogicInstruction("set", match(11), "null"),
-                        new LogicInstruction("jump", "label1", "always"),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("jump", match(1001), "always"),
+                        new LogicInstruction("label", match(1000)),
                         new LogicInstruction("set", match(11), "null"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", match(1001)),
                         new LogicInstruction("set", match(12), match(11)),
-                        new LogicInstruction("jump", "label3", "always"),
-                        new LogicInstruction("label", "label2"),
+                        new LogicInstruction("jump", match(1003), "always"),
+                        new LogicInstruction("label", match(1002)),
                         new LogicInstruction("set", match(12), "null"),
-                        new LogicInstruction("label", "label3"),
+                        new LogicInstruction("label", match(1003)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateFrom(
@@ -667,15 +659,15 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("set", match(7), "1"),
                         new LogicInstruction("op", "sub", match(8), match(4), match(7)), // calculate new stack pointer
                         new LogicInstruction("set", match(4), match(8)),
-                        new LogicInstruction("write", "label1", "cell1", match(4)), // write value on stack, at stack pointer
+                        new LogicInstruction("write", match(1001), "cell1", match(4)), // write value on stack, at stack pointer
                         new LogicInstruction("set", match(12), "63"),
                         new LogicInstruction("write", match(4), "cell1", match(12)), // update stack pointer itself
 
                         // jump to function
-                        new LogicInstruction("set", "@counter", "label0"),
+                        new LogicInstruction("set", "@counter", match(1000)),
 
                         // return label
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", match(1001)),
 
                         // pop return value from stack
                         new LogicInstruction("set", match(15), "63"),
@@ -698,7 +690,7 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                         new LogicInstruction("end"),
 
                         // start of function foo
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", match(1000)),
 
                         // no parameters to pop
                         new LogicInstruction("set", match(23), "0"),
@@ -1241,19 +1233,15 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
 
     @Test
     void supportsTheSqrtFunction() {
-        assertEquals(
-                prettyPrint(
-                        List.of(
-                                new LogicInstruction("set", "tmp0", "2"),
-                                new LogicInstruction("op", "sqrt", "tmp1", "tmp0"),
-                                new LogicInstruction("end")
-                        )
+        assertLogicInstructionListMatches(
+                List.of(
+                        new LogicInstruction("set", match(0), "2"),
+                        new LogicInstruction("op", "sqrt", match(1), match(0)),
+                        new LogicInstruction("end")
                 ),
-                prettyPrint(
-                        LogicInstructionGenerator.generateFrom(
-                                (Seq) translateToAst("" +
-                                        "sqrt(2)"
-                                )
+                LogicInstructionGenerator.generateFrom(
+                        (Seq) translateToAst("" +
+                                "sqrt(2)"
                         )
 
                 )
@@ -1262,35 +1250,30 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
 
     @Test
     void supportsLogiclessCaseWhen() {
-        assertEquals(
-                prettyPrint(
-                        List.of(
-                                new LogicInstruction("set", "tmp0", "2"),
-                                new LogicInstruction("op", "rand", "tmp1", "tmp0"),
-                                new LogicInstruction("op", "floor", "tmp2", "tmp1"),
-                                new LogicInstruction("set", "ast0", "tmp2"),
-                                new LogicInstruction("set", "tmp3", "ast0"),
-                                new LogicInstruction("set", "tmp5", "0"),
-                                new LogicInstruction("jump", "label1", "notEqual", "tmp3", "tmp5"),
-                                new LogicInstruction("set", "tmp6", "1000"),
-                                new LogicInstruction("set", "tmp4", "tmp6"),
-                                new LogicInstruction("jump", "label0", "always"),
-                                new LogicInstruction("label", "label1"),
-                                new LogicInstruction("set", "tmp7", "1"),
-                                new LogicInstruction("jump", "label2", "notEqual", "tmp3", "tmp7"),
-                                new LogicInstruction("set", "tmp4", "null"),
-                                new LogicInstruction("jump", "label0", "always"),
-                                new LogicInstruction("label", "label2"),
-                                new LogicInstruction("set", "tmp4", "null"),
-                                new LogicInstruction("label", "label0"),
-                                new LogicInstruction("end")
-                        )
+        assertLogicInstructionListMatches(
+                List.of(
+                        new LogicInstruction("set", match(0), "2"),
+                        new LogicInstruction("op", "rand", match(1), match(0)),
+                        new LogicInstruction("op", "floor", match(2), match(1)),
+                        new LogicInstruction("set", "ast0", match(2)),
+                        new LogicInstruction("set", match(5), "0"),
+                        new LogicInstruction("jump", match(1001), "notEqual", match(3), match(5)),
+                        new LogicInstruction("set", match(6), "1000"),
+                        new LogicInstruction("set", match(4), match(6)),
+                        new LogicInstruction("jump", match(1000), "always"),
+                        new LogicInstruction("label", match(1001)),
+                        new LogicInstruction("set", match(7), "1"),
+                        new LogicInstruction("jump", match(1002), "notEqual", match(3), match(7)),
+                        new LogicInstruction("set", match(4), "null"),
+                        new LogicInstruction("jump", match(1000), "always"),
+                        new LogicInstruction("label", match(1002)),
+                        new LogicInstruction("set", match(4), "null"),
+                        new LogicInstruction("label", match(1000)),
+                        new LogicInstruction("end")
                 ),
-                prettyPrint(
-                        LogicInstructionGenerator.generateFrom(
-                                (Seq) translateToAst("" +
-                                        "case floor(rand(2))\nwhen 0\n  1000\nwhen 1\n  // no op\nend"
-                                )
+                LogicInstructionGenerator.generateFrom(
+                        (Seq) translateToAst("" +
+                                "case floor(rand(2))\nwhen 0\n  1000\nwhen 1\n  // no op\nend"
                         )
 
                 )
@@ -1299,22 +1282,17 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
 
     @Test
     void supportsMinMaxFunctions() {
-        assertEquals(
-                prettyPrint(
-                        List.of(
-
-                                new LogicInstruction("set", "tmp0", "2"),
-                                new LogicInstruction("op", "max", "tmp1", "y", "tmp0"),
-                                new LogicInstruction("op", "min", "tmp2", "x", "tmp1"),
-                                new LogicInstruction("set", "r", "tmp2"),
-                                new LogicInstruction("end")
-                        )
+        assertLogicInstructionListMatches(
+                List.of(
+                        new LogicInstruction("set", match(0), "2"),
+                        new LogicInstruction("op", "max", match(1), "y", match(0)),
+                        new LogicInstruction("op", "min", match(2), "x", match(1)),
+                        new LogicInstruction("set", "r", match(2)),
+                        new LogicInstruction("end")
                 ),
-                prettyPrint(
-                        LogicInstructionGenerator.generateFrom(
-                                (Seq) translateToAst("" +
-                                        "r = min(x, max(y, 2))"
-                                )
+                LogicInstructionGenerator.generateFrom(
+                        (Seq) translateToAst("" +
+                                "r = min(x, max(y, 2))"
                         )
 
                 )
@@ -1323,99 +1301,24 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
 
     @Test
     void supportsBitwiseAndOrXorAndShiftLeftOrRight() {
-        assertEquals(
-                prettyPrint(
-                        List.of(
-                                new LogicInstruction("set", "tmp0", "9842"),
-                                new LogicInstruction("set", "tmp1", "1"),
-                                new LogicInstruction("op", "and", "tmp2", "tmp0", "tmp1"),
-                                new LogicInstruction("set", "tmp3", "1"),
-                                new LogicInstruction("set", "tmp4", "4"),
-                                new LogicInstruction("op", "shl", "tmp5", "tmp3", "tmp4"),
-                                new LogicInstruction("op", "xor", "tmp6", "tmp2", "tmp5"),
-                                new LogicInstruction("set", "tmp7", "1"),
-                                new LogicInstruction("op", "shr", "tmp8", "y", "tmp7"),
-                                new LogicInstruction("op", "or", "tmp9", "tmp6", "tmp8"),
-                                new LogicInstruction("end")
-                        )
+        assertLogicInstructionListMatches(
+                List.of(
+                        new LogicInstruction("set", match(0), "9842"),
+                        new LogicInstruction("set", match(1), "1"),
+                        new LogicInstruction("op", "and", match(2), match(0), match(1)),
+                        new LogicInstruction("set", match(3), "1"),
+                        new LogicInstruction("set", match(4), "4"),
+                        new LogicInstruction("op", "shl", match(5), match(3), match(4)),
+                        new LogicInstruction("op", "xor", match(6), match(2), match(5)),
+                        new LogicInstruction("set", match(7), "1"),
+                        new LogicInstruction("op", "shr", match(8), "y", match(7)),
+                        new LogicInstruction("op", "or", match(9), match(6), match(8)),
+                        new LogicInstruction("end")
 
                 ),
-                prettyPrint(
-                        LogicInstructionGenerator.generateFrom(
-                                (Seq) translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1\n")
-                        )
+                LogicInstructionGenerator.generateFrom(
+                        (Seq) translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1\n")
                 )
         );
-    }
-
-    private String match(int id) {
-        String key = "___" + id;
-        registered.add(key);
-        return key;
-    }
-
-    private void assertLogicInstructionListMatches(List<LogicInstruction> expected, List<LogicInstruction> actual) {
-        if (actual.size() != expected.size()) {
-            assertEquals(prettyPrint(expected), prettyPrint(actual));
-        }
-
-        for (int i = 0; i < expected.size(); i++) {
-            final LogicInstruction left = expected.get(i);
-            final LogicInstruction right = actual.get(i);
-            if (left.getOpcode().equals(right.getOpcode())) {
-                if (matchArgs(left, right)) {
-                    continue;
-                } else {
-                    assertEquals(
-                            prettyPrint(expected),
-                            prettyPrint(actual),
-                            "Expected\n" + left + "\nbut found\n" + right + "\non row index " + i + "\n" +
-                                    "expected->actual: " + expectedToActual + "\n" +
-                                    "actual->expected: " + actualToExpected + "\n"
-                    );
-                }
-            }
-
-            assertEquals(prettyPrint(expected), prettyPrint(actual), "Failed to match instruction at index " + i);
-        }
-
-        if (!expectedToActual.keySet().containsAll(registered) && registered.containsAll(expectedToActual.keySet())) {
-            assertEquals(prettyPrint(expected), prettyPrint(actual), "Expected all value holes to be used but some were not");
-        }
-    }
-
-    private boolean matchArgs(LogicInstruction left, LogicInstruction right) {
-        if (left.getArgs().size() != right.getArgs().size()) {
-            return false;
-        }
-
-        for (int i = 0; i < left.getArgs().size(); i++) {
-            final String a = left.getArgs().get(i);
-            final String b = right.getArgs().get(i);
-            if (a.startsWith("___")) {
-                if (expectedToActual.containsKey(a)) {
-                    // we mapped this hole to a value before -- check that we reference the same value again
-                    if (expectedToActual.get(a).equals(b)) {
-                        continue;
-                    }
-                } else if (actualToExpected.containsKey(b)) {
-                    // we reversed mapped this value before -- check that it still references the same value
-                    if (actualToExpected.get(b).equals(a)) {
-                        continue;
-                    }
-                } else {
-                    // this is a new mapping
-                    expectedToActual.put(a, b);
-                    actualToExpected.put(b, a);
-                    continue;
-                }
-            } else {
-                if (a.equals(b)) continue;
-            }
-
-            return false;
-        }
-
-        return expectedToActual.keySet().containsAll(actualToExpected.values()) && actualToExpected.keySet().containsAll(expectedToActual.values());
     }
 }
