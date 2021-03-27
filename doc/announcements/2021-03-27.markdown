@@ -1,0 +1,119 @@
+Good afternoon everyone! I'm back, with more Mindcode goodness :)
+
+Since the [announcement post](https://www.reddit.com/r/Mindustry/comments/m60qli/mindcode_a_higher_level_language_that_compiles/),
+ Mindcode has grown quite a bit. It now features functions, boasts less bugs, has more support for Mindustry Logic
+functions, global variables and more.
+
+Today, I want to share with you a schematic that I found pretty cool to build, and showcases how easy it is to code with
+Mindcode vs Mindustry Logic. I suspect graphing the level of resources in containers has been done before, but I still
+think the implementation is cool.
+
+First of all, here is the Mindcode script:
+
+    // move previous values left
+    for n in 0 ... 40
+      cell1[n] = cell1[n + 1]
+    end
+
+    // delay by 1/2 a sec (0.5 s)
+    // this depends on your framerate -- if less than 60 fps,
+    // the delay will be longer than 0.5s
+    deadline = @tick + 30
+    while @tick < deadline
+      n += 1
+    end
+
+    // calculate the new value -- the rightmost one
+    // change this line to graph another level
+    cell1[39] = tank1.cryofluid / tank1.liquidCapacity
+
+    // draw the graph
+
+    // clear the display
+    clear(0, 0, 0)
+
+    // set the foreground color to cryofluid
+    color(62, 207, 240, 255)
+
+    // draw the bar graph
+    for n in 0 ... 40
+      rect(2 * n, 0, 2, 80 * cell1[n])
+    end
+
+    drawflush(display1)
+
+Some notable quality of life improvements over Mindustry Logic: for loops and inline calculations `(80 * cell1[n])`.
+These make writing scripts so much easier.
+
+The above script compiles down to Mindustry Logic like this:
+
+    // for n in 0 ... 40
+    set n 0
+    jump 7 greaterThanEq n 40
+    op add tmp5 n 1
+    read tmp6 cell1 tmp5
+    write tmp6 cell1 n
+    op add n n 1
+    jump 1 always 0 0
+
+    // delay by 0.5s
+    op add deadline @tick 30
+    jump 11 greaterThanEq @tick deadline
+    op add n n 1
+    jump 8 always 0 0
+
+    // calculate the new value
+    sensor tmp16 tank1 @cryofluid
+    sensor tmp17 tank1 @liquidCapacity
+    op div tmp18 tmp16 tmp17
+
+    // write the value to the rightmost cell
+    write tmp18 cell1 39
+
+    // clear the display
+    set tmp20 0
+    set tmp21 0
+    set tmp22 0
+    draw clear tmp20 tmp21 tmp22 0 0 0
+
+    // set the foreground color
+    set tmp23 62
+    set tmp24 207
+    set tmp25 240
+    set tmp26 255
+    draw color tmp23 tmp24 tmp25 tmp26 0 0
+
+    // draw the bars
+    set n 0
+    jump 35 greaterThanEq n 40
+    op mul tmp31 2 n
+    set tmp32 0
+    set tmp33 2
+    set tmp34 80
+    read tmp35 cell1 n
+    op mul tmp36 tmp34 tmp35
+    draw rect tmp31 tmp32 tmp33 tmp36 0 0
+    op add n n 1
+    jump 25 always 0 0
+
+    // paste onto the display
+    drawflush display1
+    end
+
+Notice how `80 * cell1[n]` was compiled:
+
+    set tmp34 80
+    read tmp35 cell1 n
+    op mul tmp36 tmp34 tmp35
+
+I feel like it is much easier to write the former rather than the latter.
+
+Anyway, I wanted to let the community know that Mindcode is alive and well. If you want to play around with Mindcode, I
+invite you to visit the [web version](https://mindcode.herokuapp.com/), or [compile your own
+version](https://github.com/francois/mindcode). Mindcode is written in Java 11.
+
+If you want to get the cryofluid schematic for your enjoyment, here it is:
+
+    bXNjaAF4nAHpARb+AAYABAIABG5hbWUADFRhbmsgJiBHcmFwaAALZGVzY3JpcHRpb24AAAQAC2xpcXVpZC10YW5rAA1sb2dpYy1kaXNwbGF5AA9taWNyby1wcm9jZXNzb3IAC21lbW9yeS1jZWxsAAAABAAAAQABAAEBAAQAAQABAgADAAMOAAABYnicdVJbbsMgEMRVI1WcYo9gwI/0L1LVG/QCyKaNG4IdTBr5jj1T0jVgB1XtH7szO8wyZIQ8fI/KgYGcfp6PA9TwYZV0yr7tpXk9IVDktB9Ati2441Big1Fk+KqCRmnNPEAvtnMq7ZplzvghL89A6oucRshhlW1RTXdGwc51zQFEdMLYLysBXth/iG9T8VGZsbezH1aBk+bAYNfYqX/X565N0XpBdXdC6EUOsuncNOu33ZenbBeZmX5fFPthU/FM50fEFg9XhzNLzhzPrZUXaLSSNlIDKcKQjgqo+FoUwPN6rUrgxZ1YAS/LqNzrsBJOh7FAD7RFfU1alP9EfTzreUYw4JhhvEjwuzshYDUnCtjm64dAzST7RaiKRE8IXq1qXLwkiAfZwE7+RpIubpLEO6tglOMeQxoHLSdGlWkpIeSRPC0tkt2uZOMdkQwh2vTGSfw8lmGVkY1P/na9XX8AcmHwzQMDAAQAAwADh9TMiw==
+
+Happy scriptin'!
