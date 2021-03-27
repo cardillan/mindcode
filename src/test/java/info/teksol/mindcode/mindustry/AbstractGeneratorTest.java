@@ -11,13 +11,13 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     private Map<String, String> expectedToActual = new TreeMap<>();
     private Map<String, String> actualToExpected = new TreeMap<>();
 
-    protected String match(int id) {
+    protected String var(int id) {
         String key = "___" + id;
         registered.add(key);
         return key;
     }
 
-    protected void assertLogicInstructionListMatches(List<LogicInstruction> expected, List<LogicInstruction> actual) {
+    protected void assertLogicInstructionsMatch(List<LogicInstruction> expected, List<LogicInstruction> actual) {
         if (actual.size() != expected.size()) {
             assertEquals(prettyPrint(expected), prettyPrint(actual), "Expected to have same size, found " +
                     expected.size() + " in expected vs " + actual.size() + " in actual");
@@ -40,7 +40,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
                 }
             }
 
-            assertEquals(prettyPrint(expected), prettyPrint(actual), "Failed to match instruction at index " + i);
+            assertEquals(prettyPrint(expected), prettyPrint(actual), "Failed to var instruction at index " + i);
         }
 
         if (!expectedToActual.keySet().containsAll(registered) && registered.containsAll(expectedToActual.keySet())) {

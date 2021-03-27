@@ -44,6 +44,10 @@ public class LogicInstruction {
         return getOpcode().equals("read");
     }
 
+    public boolean isUControl() {
+        return getOpcode().equals("ucontrol");
+    }
+
     public String getOpcode() {
         return opcode;
     }

@@ -12,7 +12,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertDoesNotThrow(() ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateFrom(
+                                LogicInstructionGenerator.generateAndOptimize(
                                         (Seq) translateToAst("" +
                                                 "target = uradar(enemy, ground, any, health, MIN_TO_MAX, BY_DISTANCE)\n" +
                                                 "if target != null\n" +
@@ -33,7 +33,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertDoesNotThrow(() ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateFrom(
+                                LogicInstructionGenerator.generateAndOptimize(
                                         (Seq) translateToAst("" +
                                                 "ulocate(ore, @surge-alloy, outx, outy)\n" +
                                                 "ulocate(building, core, ENEMY, outx, outy, outbuilding)\n" +
@@ -52,7 +52,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertThrows(InsufficientArgumentsException.class, () ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateFrom(
+                                LogicInstructionGenerator.generateAndOptimize(
                                         (Seq) translateToAst(
                                                 "flag = 33548\n" +
                                                         "\n" +
@@ -82,7 +82,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertDoesNotThrow(() ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateFrom(
+                                LogicInstructionGenerator.generateAndOptimize(
                                         (Seq) translateToAst(
                                                 "leader = getlink(0)\n" +
                                                         "count = 1\n" +
@@ -101,23 +101,17 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
     @Test
     void correctlyDrawsTriangles() {
         assertEquals(
-                "set tmp0 20\n" +
-                        "op sub tmp1 x tmp0\n" +
-                        "set tmp2 20\n" +
-                        "op sub tmp3 y tmp2\n" +
-                        "set tmp4 20\n" +
-                        "op add tmp5 x tmp4\n" +
-                        "set tmp6 20\n" +
-                        "op sub tmp7 y tmp6\n" +
-                        "set tmp8 20\n" +
-                        "op add tmp9 x tmp8\n" +
-                        "set tmp10 20\n" +
-                        "op sub tmp11 y tmp10\n" +
+                "op sub tmp1 x 20\n" +
+                        "op sub tmp3 y 20\n" +
+                        "op add tmp5 x 20\n" +
+                        "op sub tmp7 y 20\n" +
+                        "op add tmp9 x 20\n" +
+                        "op sub tmp11 y 20\n" +
                         "draw triangle tmp1 tmp3 tmp5 tmp7 tmp9 tmp11\n" +
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateFrom(
+                                LogicInstructionGenerator.generateAndOptimize(
                                         (Seq) translateToAst(
                                                 "triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)"
                                         )
@@ -184,7 +178,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateFrom(
+                                LogicInstructionGenerator.generate(
                                         (Seq) translateToAst(
                                                 "STORAGE = nucleus1\n" +
                                                         "MSG = message1\n" +

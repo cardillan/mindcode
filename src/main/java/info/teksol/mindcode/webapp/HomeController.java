@@ -7,7 +7,6 @@ import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
-import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
 import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -35,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeController extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-    private static final Logger perflogger = LoggerFactory.getLogger(HomeController.class.getName() + ".perf");
+    private static final Logger performanceLogger = LoggerFactory.getLogger(HomeController.class.getName() + ".perf");
     private static final Random RAND = new Random(System.currentTimeMillis());
 
     private final VelocityContext parent;
@@ -106,7 +105,7 @@ public class HomeController extends HttpServlet {
         template.merge(context, response.getWriter());
         final long renderEndAt = System.nanoTime();
 
-        perflogger.info("controller=home duration={}µs getsource={}µs compile={}µs render={}µs",
+        performanceLogger.info("controller=home duration={}µs getsource={}µs compile={}µs render={}µs",
                 TimeUnit.NANOSECONDS.toMicros(renderEndAt - startAt),
                 TimeUnit.NANOSECONDS.toMicros(getSourceEndAt - getSourceStartAt),
                 TimeUnit.NANOSECONDS.toMicros(compileEndAt - compileStartAt),
@@ -148,9 +147,7 @@ public class HomeController extends HttpServlet {
         try {
             final MindcodeParser.ProgramContext context = parser.program();
             final Seq prog = AstNodeBuilder.generate(context);
-            final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
-                    LogicInstructionGenerator.generateFrom(prog)
-            );
+            final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(prog);
 
             instructions = LogicInstructionPrinter.toString(result);
         } catch (RuntimeException e) {

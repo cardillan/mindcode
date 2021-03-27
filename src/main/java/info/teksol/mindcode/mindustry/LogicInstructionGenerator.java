@@ -21,31 +21,41 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
     private Map<String, String> functionLabels = new HashMap<>();
 
-    public LogicInstructionGenerator(LogicInstructionPipeline pipeline) {
+    LogicInstructionGenerator(LogicInstructionPipeline pipeline) {
         this.pipeline = pipeline;
     }
 
-    public static List<LogicInstruction> generateFrom(Seq program) {
-        final List<LogicInstruction> result = new ArrayList<>();
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(new LogicInstructionPipeline() {
-            @Override
-            public void emit(LogicInstruction instruction) {
-                result.add(instruction);
-            }
+    public static List<LogicInstruction> generateAndOptimize(Seq program) {
+        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
+        final LogicInstructionPipeline pipeline = new CollapseSetSequences(new ImproveConditionalJumps(terminus));
 
-            @Override
-            public void flush() {
-
-            }
-        });
-
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
-        return result;
+        pipeline.flush();
+
+        return terminus.getResult();
+    }
+
+    public static void generateInto(LogicInstructionPipeline pipeline, Seq program) {
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
+        generator.start(program);
+        pipeline.flush();
+    }
+
+    public static List<LogicInstruction> generate(Seq program) {
+        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
+
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(terminus);
+        generator.start(program);
+        terminus.flush();
+
+        return terminus.getResult();
     }
 
     private void start(Seq program) {
         visit(program);
         appendFunctionDeclarations();
+        pipeline.flush();
     }
 
     private void appendFunctionDeclarations() {

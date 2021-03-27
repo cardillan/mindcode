@@ -61,7 +61,7 @@ class SamplesTest {
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
         final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
-                LogicInstructionGenerator.generateFrom(prog)
+                LogicInstructionGenerator.generateAndOptimize(prog)
         );
 
         final String opcodes = LogicInstructionPrinter.toString(result);
