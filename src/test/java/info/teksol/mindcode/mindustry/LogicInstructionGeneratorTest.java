@@ -1363,4 +1363,41 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void supportsLogiclessCaseWhen() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "2"),
+                                new LogicInstruction("op", "rand", "tmp1", "tmp0"),
+                                new LogicInstruction("op", "floor", "tmp2", "tmp1"),
+                                new LogicInstruction("set", "ast0", "tmp2"),
+                                new LogicInstruction("set", "tmp3", "ast0"),
+                                new LogicInstruction("set", "tmp5", "0"),
+                                new LogicInstruction("jump", "label1", "notEqual", "tmp3", "tmp5"),
+                                new LogicInstruction("set", "tmp6", "1000"),
+                                new LogicInstruction("set", "tmp4", "tmp6"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label1"),
+                                new LogicInstruction("set", "tmp7", "1"),
+                                new LogicInstruction("jump", "label2", "notEqual", "tmp3", "tmp7"),
+                                new LogicInstruction("set", "tmp4", "null"),
+                                new LogicInstruction("jump", "label0", "always"),
+                                new LogicInstruction("label", "label2"),
+                                new LogicInstruction("set", "tmp4", "null"),
+                                new LogicInstruction("label", "label0"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "case floor(rand(2))\nwhen 0\n  1000\nwhen 1\n  // no op\nend"
+                                )
+                        )
+
+                )
+        );
+    }
 }

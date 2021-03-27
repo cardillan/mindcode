@@ -52,6 +52,7 @@ Things I'd like to add to Mindcode-the-language:
 * [x] add support for `ulocate`
 * [x] add support for `end`
 * [x] functions / reusable procedures
+* [ ] skip comments when determining the return value of expressions (case/when, if/else, etc.)
 * [ ] further optimize the generated Logic
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * [ ] improved data types: 2d vector
