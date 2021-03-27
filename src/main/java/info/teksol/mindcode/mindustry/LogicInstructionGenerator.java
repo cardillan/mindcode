@@ -321,6 +321,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "end":
                 return handleEnd(params, result);
 
+            case "sqrt":
+                return handleSqrt(params, result);
+
             default:
                 if (declaredFunctions.containsKey(functionName)) {
                     return handleInternalFunctionCall(functionName, params, result);
@@ -328,6 +331,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
                     throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
                 }
         }
+    }
+
+    private Optional<String> handleSqrt(List<String> params, List<LogicInstruction> result) {
+        final String tmp = nextTemp();
+        result.add(new LogicInstruction("op", "sqrt", tmp, params.get(0)));
+        return Optional.of(tmp);
     }
 
     private Optional<String> handleInternalFunctionCall(String functionName, List<String> params, List<LogicInstruction> result) {
@@ -468,52 +477,52 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
     }
 
     private Optional<String> handleImage(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","image", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        result.add(new LogicInstruction("draw", "image", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
         return Optional.of("null");
     }
 
     private Optional<String> handleTriangle(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","triangle", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5)));
+        result.add(new LogicInstruction("draw", "triangle", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5)));
         return Optional.of("null");
     }
 
     private Optional<String> handleLinePoly(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","linePoly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        result.add(new LogicInstruction("draw", "linePoly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
         return Optional.of("null");
     }
 
     private Optional<String> handlePoly(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","poly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        result.add(new LogicInstruction("draw", "poly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
         return Optional.of("null");
     }
 
     private Optional<String> handleLineRect(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","lineRect", params.get(0), params.get(1), params.get(2), params.get(3)));
+        result.add(new LogicInstruction("draw", "lineRect", params.get(0), params.get(1), params.get(2), params.get(3)));
         return Optional.of("null");
     }
 
     private Optional<String> handleRect(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","rect", params.get(0), params.get(1), params.get(2), params.get(3)));
+        result.add(new LogicInstruction("draw", "rect", params.get(0), params.get(1), params.get(2), params.get(3)));
         return Optional.of("null");
     }
 
     private Optional<String> handleLine(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","line", params.get(0), params.get(1), params.get(2), params.get(3)));
+        result.add(new LogicInstruction("draw", "line", params.get(0), params.get(1), params.get(2), params.get(3)));
         return Optional.of("null");
     }
 
     private Optional<String> handleStroke(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","stroke", params.get(0)));
+        result.add(new LogicInstruction("draw", "stroke", params.get(0)));
         return Optional.of("null");
     }
 
     private Optional<String> handleColor(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","color", params.get(0), params.get(1), params.get(2), params.get(3)));
+        result.add(new LogicInstruction("draw", "color", params.get(0), params.get(1), params.get(2), params.get(3)));
         return Optional.of("null");
     }
 
     private Optional<String> handleClear(List<String> params, List<LogicInstruction> result) {
-        result.add(new LogicInstruction("draw","clear", params.get(0), params.get(1), params.get(2)));
+        result.add(new LogicInstruction("draw", "clear", params.get(0), params.get(1), params.get(2)));
         return Optional.of("null");
     }
 

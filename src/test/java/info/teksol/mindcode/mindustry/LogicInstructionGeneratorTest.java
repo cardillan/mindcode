@@ -1342,4 +1342,25 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void supportsTheSqrtFunction() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "2"),
+                                new LogicInstruction("op", "sqrt", "tmp1", "tmp0"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "sqrt(2)"
+                                )
+                        )
+
+                )
+        );
+    }
 }
