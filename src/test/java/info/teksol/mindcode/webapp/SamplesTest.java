@@ -4,7 +4,10 @@ import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import info.teksol.mindcode.mindustry.*;
+import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
+import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
 import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -58,9 +61,7 @@ class SamplesTest {
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
         final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
-                LogicInstructionPeepholeOptimizer.optimize(
-                        LogicInstructionGenerator.generateFrom(prog)
-                )
+                LogicInstructionGenerator.generateFrom(prog)
         );
 
         final String opcodes = LogicInstructionPrinter.toString(result);

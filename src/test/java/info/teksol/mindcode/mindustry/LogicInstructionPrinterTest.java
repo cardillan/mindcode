@@ -4,9 +4,7 @@ import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LogicInstructionPrinterTest extends AbstractAstTest {
     @Test
@@ -122,6 +120,94 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                                 LogicInstructionGenerator.generateFrom(
                                         (Seq) translateToAst(
                                                 "triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)"
+                                        )
+                                )
+                        )
+                )
+        );
+    }
+
+    @Test
+    void reallifeScripts() {
+
+        assertEquals(
+                "set STORAGE nucleus1\n" +
+                        "set MSG message1\n" +
+                        "sensor tmp0 STORAGE @itemCapacity\n" +
+                        "set capacity tmp0\n" +
+                        "set tmp1 \"capacity: \"\n" +
+                        "set tmp2 \"\\n\"\n" +
+                        "print tmp1\n" +
+                        "print capacity\n" +
+                        "print tmp2\n" +
+                        "set tmp3 0\n" +
+                        "set n tmp3\n" +
+                        "op lessThan tmp4 n @links\n" +
+                        "jump 50 notEqual tmp4 true\n" +
+                        "getlink tmp5 n\n" +
+                        "set building tmp5\n" +
+                        "sensor tmp6 building @type\n" +
+                        "set type tmp6\n" +
+                        "op equal tmp7 type @conveyor\n" +
+                        "op equal tmp8 type @titanium-conveyor\n" +
+                        "op or tmp9 tmp7 tmp8\n" +
+                        "op equal tmp10 type @plastanium-conveyor\n" +
+                        "op or tmp11 tmp9 tmp10\n" +
+                        "jump 45 notEqual tmp11 true\n" +
+                        "sensor tmp12 building @firstItem\n" +
+                        "set resource tmp12\n" +
+                        "op notEqual tmp13 resource null\n" +
+                        "jump 42 notEqual tmp13 true\n" +
+                        "sensor tmp14 nucleus1 @resource\n" +
+                        "set level tmp14\n" +
+                        "op lessThan tmp16 level capacity\n" +
+                        "control enabled building tmp16 0 0 0\n" +
+                        "set tmp17 \"\\n\"\n" +
+                        "set tmp18 \": \"\n" +
+                        "set tmp19 \" @ \"\n" +
+                        "print tmp17\n" +
+                        "print n\n" +
+                        "print tmp18\n" +
+                        "print resource\n" +
+                        "print tmp19\n" +
+                        "print level\n" +
+                        "set tmp20 level\n" +
+                        "jump 43 always 0 0\n" +
+                        "set tmp20 null\n" +
+                        "set tmp21 tmp20\n" +
+                        "jump 46 always 0 0\n" +
+                        "set tmp21 null\n" +
+                        "set tmp22 1\n" +
+                        "op add tmp23 n tmp22\n" +
+                        "set n tmp23\n" +
+                        "jump 11 always 0 0\n" +
+                        "printflush MSG\n" +
+                        "end\n",
+                LogicInstructionPrinter.toString(
+                        LogicInstructionLabelResolver.resolve(
+                                LogicInstructionGenerator.generateFrom(
+                                        (Seq) translateToAst(
+                                                "STORAGE = nucleus1\n" +
+                                                        "MSG = message1\n" +
+                                                        "capacity = STORAGE.itemCapacity\n" +
+                                                        "\n" +
+                                                        "print(\"capacity: \", capacity, \"\\n\")\n" +
+                                                        "\n" +
+                                                        "for n = 0 ; n < @links ; n += 1\n" +
+                                                        "  building = getlink(n)\n" +
+                                                        "  type = building.type\n" +
+                                                        "  if type == @conveyor\n" +
+                                                        "     || type == @titanium-conveyor\n" +
+                                                        "     || type == @plastanium-conveyor\n" +
+                                                        "    resource = building.firstItem\n" +
+                                                        "    if resource != null\n" +
+                                                        "      level = nucleus1.resource\n" +
+                                                        "      building.enabled = level < capacity\n" +
+                                                        "      print(\"\\n\", n, \": \", resource, \" @ \", level)\n" +
+                                                        "    end\n" +
+                                                        "  end\n" +
+                                                        "end\n" +
+                                                        "printflush(MSG)\n"
                                         )
                                 )
                         )
