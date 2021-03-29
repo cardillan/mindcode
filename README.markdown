@@ -22,6 +22,12 @@ information. The samples in the `src/main/resources/samples` directory are compi
 always up-to-date with the most-recent version of Mindcode.  If you programmed in any high-level language, you should
 feel right at home.
 
+[@schittli](https://github.com/schittli) kindly contributed a VS Code syntax highlighter.
+
+![screenshot of Visual Studio Code, with Mindcode syntax highlighting](https://user-images.githubusercontent.com/8282673/112750180-43947a00-8fc7-11eb-8a22-83be7624753e.png)
+
+Download the extension from the [Visual Studio marketplace](https://marketplace.visualstudio.com/items?itemName=TomSchi.mindcode).
+
 ## Development
 
 Install Java 11+, Maven 3.6, and then run:
