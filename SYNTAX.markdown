@@ -184,6 +184,27 @@ else
 end
 ```
 
+## Comparison Operators
+
+Mindustry Logic offers us many comparison operators, namely:
+
+* the classic `<`, `<=`, `>=`, and `>` operators, for comparing numeric values
+* `==` and `!=` for equal and not equal, respectively
+* `&&`, `and`, `||`, and `or`, to implement complex conditionals: `reactor1.thorium > 0 and (reactor1.cryofluid /
+  reactor1.liquidCapacity) < 0.25`
+* `===` for "strict equality". In Mindustry, the value `0` is equivalent to `false` and `null`. By using `===`, you
+  force Mindustry Logic to check for the exact value, instead of type-casting the value before checking if the values
+  are equal. This is very useful for `null` checks:
+
+```
+ubind(@poly)
+if @unit === null
+  // no unit bound, try an alternative
+else
+  // a unit was bound, we can proceed
+end
+```
+
 # Global variables
 
 In order to use global variables, you need to allocate a heap within a Memory Cell or a Memory Bank. This allocation
