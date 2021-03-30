@@ -11,11 +11,6 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitUnitAssignment(UnitAssignment node) {
-        return null;
-    }
-
-    @Override
     public String visitRef(Ref node) {
         buffer.append("@");
         buffer.append(node.getName());
