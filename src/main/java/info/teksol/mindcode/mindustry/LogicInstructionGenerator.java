@@ -27,7 +27,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     public static List<LogicInstruction> generateAndOptimize(Seq program) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        final LogicInstructionPipeline pipeline = new CollapseSetSequences(new ImproveConditionalJumps(terminus));
+        final LogicInstructionPipeline pipeline =
+                new OptimizeSetThenWrite(
+                        new OptimizeReadThenSet(
+                                new ImproveConditionalJumps(terminus)
+
+                        )
+                );
 
         LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
@@ -36,13 +42,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return terminus.getResult();
     }
 
-    public static void generateInto(LogicInstructionPipeline pipeline, Seq program) {
+    static void generateInto(LogicInstructionPipeline pipeline, Seq program) {
         LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
         pipeline.flush();
     }
 
-    public static List<LogicInstruction> generate(Seq program) {
+    static List<LogicInstruction> generate(Seq program) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
 
         LogicInstructionGenerator generator = new LogicInstructionGenerator(terminus);
@@ -52,7 +58,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return terminus.getResult();
     }
 
-    private void start(Seq program) {
+    void start(Seq program) {
         visit(program);
         appendFunctionDeclarations();
         pipeline.flush();

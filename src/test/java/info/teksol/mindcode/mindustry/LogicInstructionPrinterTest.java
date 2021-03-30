@@ -101,17 +101,23 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
     @Test
     void correctlyDrawsTriangles() {
         assertEquals(
-                "op sub tmp1 x 20\n" +
-                        "op sub tmp3 y 20\n" +
-                        "op add tmp5 x 20\n" +
-                        "op sub tmp7 y 20\n" +
-                        "op add tmp9 x 20\n" +
-                        "op sub tmp11 y 20\n" +
+                "set tmp0 20\n" +
+                        "op sub tmp1 x tmp0\n" +
+                        "set tmp2 20\n" +
+                        "op sub tmp3 y tmp2\n" +
+                        "set tmp4 20\n" +
+                        "op add tmp5 x tmp4\n" +
+                        "set tmp6 20\n" +
+                        "op sub tmp7 y tmp6\n" +
+                        "set tmp8 20\n" +
+                        "op add tmp9 x tmp8\n" +
+                        "set tmp10 20\n" +
+                        "op sub tmp11 y tmp10\n" +
                         "draw triangle tmp1 tmp3 tmp5 tmp7 tmp9 tmp11\n" +
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateAndOptimize(
+                                LogicInstructionGenerator.generate(
                                         (Seq) translateToAst(
                                                 "triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)"
                                         )
