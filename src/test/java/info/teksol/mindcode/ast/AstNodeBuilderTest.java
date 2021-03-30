@@ -1101,4 +1101,38 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void supportsBitwiseAndOrXorShiftLeftAndShiftRight() {
+        assertEquals(
+                prettyPrint(
+                        new Seq(
+                                new BinaryOp(
+                                        new BinaryOp(
+                                                new BinaryOp(
+                                                        new NumericLiteral("9842"),
+                                                        "&",
+                                                        new NumericLiteral("1")
+                                                ),
+                                                "^",
+                                                new BinaryOp(
+                                                        new NumericLiteral("1"),
+                                                        "<<",
+                                                        new NumericLiteral("4")
+                                                )
+                                        ),
+                                        "|",
+                                        new BinaryOp(
+                                                new VarRef("y"),
+                                                ">>",
+                                                new NumericLiteral("1")
+                                        )
+                                )
+                        )
+                ),
+                prettyPrint(
+                        translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1\n")
+                )
+        );
+    }
 }

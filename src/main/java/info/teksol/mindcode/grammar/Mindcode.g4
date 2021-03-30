@@ -26,10 +26,12 @@ expression : a_comment                                                          
            | NOT expression                                                                     # not_expr
            | left=expression op=( MUL | DIV | MOD ) right=expression                            # binop_mul_div_mod
            | left=expression op=( PLUS | MINUS ) right=expression                               # binop_plus_minus
+           | left=expression op=( SHIFT_LEFT | SHIFT_RIGHT ) right=expression                   # binop_shift
            | left=expression op=( LESS_THAN | LESS_THAN_EQUAL
                                 | GREATER_THAN_EQUAL | GREATER_THAN )
                                 right=expression                                                # binop_inequality_comparison
            | left=expression op=( NOT_EQUAL | EQUAL | STRICT_EQUAL ) right=expression           # binop_equality_comparison
+           | left=expression op=( BITWISE_AND | BITWISE_OR | BITWISE_XOR ) right=expression     # binop_bitwise_op
            | left=expression AND right=expression                                               # binop_and
            | left=expression OR right=expression                                                # binop_or
            | literal_t                                                                          # literal_string
@@ -177,7 +179,7 @@ COMMA : ',';
 DIV : '/';
 DOLLAR : '$';
 DOT : '.';
-EXP : ('^' | '**');
+EXP : '**';
 MINUS : '-';
 MOD : '%';
 MUL : '*';
@@ -187,7 +189,7 @@ QUESTION_MARK : '?';
 SEMICOLON : ';';
 
 DIV_ASSIGN : '/=';
-EXP_ASSIGN : '^=';
+EXP_ASSIGN : '**=';
 MINUS_ASSIGN : '-=';
 MUL_ASSIGN : '*=';
 PLUS_ASSIGN : '+=';
@@ -201,6 +203,12 @@ GREATER_THAN_EQUAL  : '>=';
 GREATER_THAN : '>';
 AND : '&&' | 'and';
 OR : '||' | 'or';
+
+SHIFT_LEFT : '<<';
+SHIFT_RIGHT : '>>';
+BITWISE_AND : '&';
+BITWISE_OR : '|';
+BITWISE_XOR : '^';
 
 LEFT_SBRACKET : '[';
 RIGHT_SBRACKET : ']';

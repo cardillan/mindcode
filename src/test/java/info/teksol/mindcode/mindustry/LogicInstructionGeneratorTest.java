@@ -1424,4 +1424,31 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void supportsBitwiseAndOrXorAndShiftLeftOrRight() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+                                new LogicInstruction("set", "tmp0", "9842"),
+                                new LogicInstruction("set", "tmp1", "1"),
+                                new LogicInstruction("op", "and", "tmp2", "tmp0", "tmp1"),
+                                new LogicInstruction("set", "tmp3", "1"),
+                                new LogicInstruction("set", "tmp4", "4"),
+                                new LogicInstruction("op", "shl", "tmp5", "tmp3", "tmp4"),
+                                new LogicInstruction("op", "xor", "tmp6", "tmp2", "tmp5"),
+                                new LogicInstruction("set", "tmp7", "1"),
+                                new LogicInstruction("op", "shr", "tmp8", "y", "tmp7"),
+                                new LogicInstruction("op", "or", "tmp9", "tmp6", "tmp8"),
+                                new LogicInstruction("end")
+                        )
+
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1\n")
+                        )
+                )
+        );
+    }
 }

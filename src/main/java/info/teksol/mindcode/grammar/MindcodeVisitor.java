@@ -79,6 +79,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNot_expr(MindcodeParser.Not_exprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code binop_bitwise_op}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinop_bitwise_op(MindcodeParser.Binop_bitwise_opContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code literal_null}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -190,6 +197,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBinop_exp(MindcodeParser.Binop_expContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code binop_shift}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinop_shift(MindcodeParser.Binop_shiftContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code binop_and}
 	 * labeled alternative in {@link MindcodeParser#expression}.

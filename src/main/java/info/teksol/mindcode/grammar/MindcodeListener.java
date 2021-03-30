@@ -124,6 +124,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitNot_expr(MindcodeParser.Not_exprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code binop_bitwise_op}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinop_bitwise_op(MindcodeParser.Binop_bitwise_opContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code binop_bitwise_op}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinop_bitwise_op(MindcodeParser.Binop_bitwise_opContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code literal_null}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -315,6 +327,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinop_exp(MindcodeParser.Binop_expContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code binop_shift}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinop_shift(MindcodeParser.Binop_shiftContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code binop_shift}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinop_shift(MindcodeParser.Binop_shiftContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code binop_and}
 	 * labeled alternative in {@link MindcodeParser#expression}.

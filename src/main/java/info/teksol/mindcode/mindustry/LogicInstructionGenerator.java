@@ -939,6 +939,21 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "%":
                 return "mod";
 
+            case "<<":
+                return "shl";
+
+            case ">>":
+                return "shr";
+
+            case "&":
+                return "and";
+
+            case "|":
+                return "or";
+
+            case "^":
+                return "xor";
+
             default:
                 throw new GenerationException("Failed to translate binary op to word: [" + op + "] is not handled");
         }
