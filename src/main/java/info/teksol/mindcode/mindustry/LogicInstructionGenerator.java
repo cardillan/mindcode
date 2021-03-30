@@ -324,6 +324,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
             case "sqrt":
                 return handleSqrt(params, result);
 
+            case "min":
+                return handleMin(params, result);
+
+            case "max":
+                return handleMax(params, result);
+
             default:
                 if (declaredFunctions.containsKey(functionName)) {
                     return handleInternalFunctionCall(functionName, params, result);
@@ -331,6 +337,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<Tuple2<Optional<St
                     throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
                 }
         }
+    }
+
+    private Optional<String> handleMax(List<String> params, List<LogicInstruction> result) {
+        final String tmp = nextTemp();
+        result.add(new LogicInstruction("op", "max", tmp, params.get(0), params.get(1)));
+        return Optional.of(tmp);
+    }
+
+    private Optional<String> handleMin(List<String> params, List<LogicInstruction> result) {
+        final String tmp = nextTemp();
+        result.add(new LogicInstruction("op", "min", tmp, params.get(0), params.get(1)));
+        return Optional.of(tmp);
     }
 
     private Optional<String> handleSqrt(List<String> params, List<LogicInstruction> result) {

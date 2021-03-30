@@ -1400,4 +1400,28 @@ class LogicInstructionGeneratorTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void supportsMinMaxFunctions() {
+        assertEquals(
+                prettyPrint(
+                        List.of(
+
+                                new LogicInstruction("set", "tmp0", "2"),
+                                new LogicInstruction("op", "max", "tmp1", "y", "tmp0"),
+                                new LogicInstruction("op", "min", "tmp2", "x", "tmp1"),
+                                new LogicInstruction("set", "r", "tmp2"),
+                                new LogicInstruction("end")
+                        )
+                ),
+                prettyPrint(
+                        LogicInstructionGenerator.generateFrom(
+                                (Seq) translateToAst("" +
+                                        "r = min(x, max(y, 2))"
+                                )
+                        )
+
+                )
+        );
+    }
 }
