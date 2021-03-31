@@ -7,6 +7,7 @@ import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
 import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -147,8 +148,9 @@ public class HomeController extends HttpServlet {
         try {
             final MindcodeParser.ProgramContext context = parser.program();
             final Seq prog = AstNodeBuilder.generate(context);
-            final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(prog);
 
+            List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(prog);
+            result = LogicInstructionLabelResolver.resolve(result);
             instructions = LogicInstructionPrinter.toString(result);
         } catch (RuntimeException e) {
             errors.add(e.getMessage());
