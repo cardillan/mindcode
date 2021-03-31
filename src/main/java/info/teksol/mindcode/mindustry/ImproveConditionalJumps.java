@@ -42,9 +42,12 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
 
     @Override
     public void flush() {
-        if (previous == null) return;
-        next.emit(previous);
-        previous = null;
+        if (previous != null) {
+            next.emit(previous);
+            previous = null;
+        }
+
+        next.flush();
     }
 
     private void handleJump(LogicInstruction instruction) {

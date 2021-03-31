@@ -48,6 +48,10 @@ public class LogicInstruction {
         return getOpcode().equals("ucontrol");
     }
 
+    public boolean isLabel() {
+        return getOpcode().equals("label");
+    }
+
     public String getOpcode() {
         return opcode;
     }

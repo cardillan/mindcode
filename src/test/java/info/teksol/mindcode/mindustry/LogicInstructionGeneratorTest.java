@@ -195,7 +195,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void convertsReallifeTest1() {
-               assertLogicInstructionsMatch(
+        assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("set", var(0), "0"),
                         new LogicInstruction("set", "n", var(0)),
