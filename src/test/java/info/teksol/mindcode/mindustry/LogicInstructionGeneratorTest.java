@@ -1321,4 +1321,23 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void allocateStackInNonStandardWayProducesCorrectCode() {
+        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
+        // not the start of heap is respected. Everything else superfluous.
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "40"),
+                        new LogicInstruction("set", var(1), "40"),
+                        new LogicInstruction("write", var(0), "cell3", var(1)),
+                        new LogicInstruction("set", var(2), "99"),
+                        new LogicInstruction("set", var(3), "41"),
+                        new LogicInstruction("write", var(2), "cell3", var(3))
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("allocate stack in cell3[0..40], heap in cell3[41...64]\ndef foo(n)\n2*n\nend\n\n$x = 99\nprint(foo(1) + foo(2))\n")
+                ).subList(0, 6)
+        );
+    }
 }
