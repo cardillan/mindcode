@@ -32,7 +32,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
                     continue;
                 } else {
                     assertEquals(
-                            prettyPrint(expected),
+                            prettyPrint(replaceVarsIn(expected)),
                             prettyPrint(actual),
                             "Expected\n" + left + "\nbut found\n" + right + "\non row index " + i + "\n" +
                                     "expected->actual: " + expectedToActual + "\n" +
@@ -47,6 +47,22 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         if (!expectedToActual.keySet().containsAll(registered) && registered.containsAll(expectedToActual.keySet())) {
             assertEquals(prettyPrint(expected), prettyPrint(actual), "Expected all value holes to be used but some were not");
         }
+    }
+
+    private List<LogicInstruction> replaceVarsIn(List<LogicInstruction> expected) {
+        final List<LogicInstruction> result = new ArrayList<>(expected);
+        for (int i = 0; i < result.size(); i++) {
+            final LogicInstruction instruction = result.get(i);
+            final List<String> newArgs = new ArrayList<>(instruction.getArgs());
+            for (int j = 0; j < newArgs.size(); j++) {
+                newArgs.set(j, expectedToActual.getOrDefault(newArgs.get(j), newArgs.get(j)));
+            }
+
+            if (!newArgs.equals(instruction.getArgs())) {
+                result.set(i, new LogicInstruction(instruction.getOpcode(), newArgs));
+            }
+        }
+        return result;
     }
 
     private boolean matchArgs(LogicInstruction left, LogicInstruction right) {

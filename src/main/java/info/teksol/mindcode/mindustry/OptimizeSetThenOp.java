@@ -1,10 +1,10 @@
 package info.teksol.mindcode.mindustry;
 
-public class OptimizeSetThenOp implements LogicInstructionPipeline {
+class OptimizeSetThenOp implements LogicInstructionPipeline {
     private final LogicInstructionPipeline next;
     private State state;
 
-    public OptimizeSetThenOp(LogicInstructionPipeline next) {
+    OptimizeSetThenOp(LogicInstructionPipeline next) {
         this.next = next;
         this.state = new EmptyState();
     }
@@ -51,6 +51,11 @@ public class OptimizeSetThenOp implements LogicInstructionPipeline {
 
         @Override
         public State emit(LogicInstruction instruction) {
+            if (instruction.isSet()) {
+                next.emit(set);
+                return new ExpectOp(instruction);
+            }
+
             if (!instruction.isOp()) {
                 next.emit(set);
                 next.emit(instruction);

@@ -27,13 +27,16 @@ public class DeadCodeEliminator implements LogicInstructionPipeline {
             analyzeDataflow();
         } while (removeUselessWrites());
 
-        program.forEach(next::emit);
+        for (LogicInstruction instruction : program) {
+            next.emit(instruction);
+        }
         program.clear();
     }
 
     private void analyzeDataflow() {
         reads.clear();
         writes.clear();
+        reads.add("@counter"); // instruction pointer is *always* read -- and our implementation of call/return depends on this
         program.forEach(this::examineInstruction);
     }
 

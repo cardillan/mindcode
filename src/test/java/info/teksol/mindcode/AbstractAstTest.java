@@ -14,7 +14,7 @@ public class AbstractAstTest extends AbstractParserTest {
     }
 
     protected final String prettyPrint(List<LogicInstruction> list) {
-        return list.stream().map(Object::toString).reduce("", (s, s2) -> s + "\n" + s2);
+        return list.stream().map(Object::toString).reduce("", (s, s2) -> s + "\n" + s2).strip();
     }
 
     protected String prettyPrint(AstNode node) {

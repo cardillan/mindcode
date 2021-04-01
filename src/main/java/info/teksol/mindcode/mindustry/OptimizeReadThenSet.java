@@ -46,12 +46,17 @@ class OptimizeReadThenSet implements LogicInstructionPipeline {
     private final class ExpectSet implements State {
         private final LogicInstruction read;
 
-        public ExpectSet(LogicInstruction read) {
+        ExpectSet(LogicInstruction read) {
             this.read = read;
         }
 
         @Override
         public State emit(LogicInstruction instruction) {
+            if (instruction.isRead()) {
+                next.emit(read);
+                return new ExpectSet(instruction);
+            }
+
             if (!instruction.isSet()) {
                 next.emit(read);
                 next.emit(instruction);
