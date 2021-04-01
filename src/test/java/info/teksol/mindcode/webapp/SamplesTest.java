@@ -12,10 +12,7 @@ import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,10 +41,10 @@ class SamplesTest {
         try (final FileReader reader = new FileReader(sample)) {
             reader.transferTo(sw);
         }
-        compile(sw.toString());
+        compile(sw.toString(), sample);
     }
 
-    private void compile(String program) {
+    private void compile(String program, File source) throws IOException {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         final List<String> errors = new ArrayList<>();
@@ -60,13 +57,35 @@ class SamplesTest {
 
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
+        List<LogicInstruction> unoptimized = LogicInstructionGenerator.generateUnoptimized(prog);
+        List<LogicInstruction> optimized = LogicInstructionGenerator.generateAndOptimize(prog);
+
+        final File tmp = new File("tmp", "samples");
+        if (!tmp.exists()) assertTrue(tmp.mkdirs());
+
+        final File unoptimizedTarget = new File(tmp, source.getName() + "-unoptimized.txt");
+        final File optimizedTarget = new File(tmp, source.getName() + "-optimized.txt");
+        final File diffTarget = new File(tmp, source.getName() + ".patch");
+
+        try (final Writer w = new FileWriter(unoptimizedTarget)) {
+            w.write(LogicInstructionPrinter.toString(unoptimized));
+        }
+
+        try (final Writer w = new FileWriter(optimizedTarget)) {
+            w.write(LogicInstructionPrinter.toString(optimized));
+        }
+
+        final Process diff = new ProcessBuilder()
+                .command("diff", "-u", unoptimizedTarget.getAbsolutePath(), optimizedTarget.getAbsolutePath())
+                .redirectOutput(diffTarget)
+                .start();
+
         final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
-                LogicInstructionGenerator.generateAndOptimize(prog)
+                optimized
         );
 
         final String opcodes = LogicInstructionPrinter.toString(result);
-        assertFalse(opcodes.isEmpty(), "Failed to generate a Logic program out of:\n" + program);
+        assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + program);
         assertTrue(errors.isEmpty(), errors.toString());
     }
-
 }
