@@ -35,8 +35,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                                                 new OptimizeOpThenSet(
                                                         new OptimizeSetThenOp(
                                                                 new OptimizeSetThenSet(
-                                                                        new ImproveConditionalJumps(
-                                                                                terminus
+                                                                        new OptimizeSetThenPrint(
+                                                                                new ImproveConditionalJumps(
+                                                                                        terminus
+                                                                                )
                                                                         )
                                                                 )
                                                         )
