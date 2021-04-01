@@ -47,6 +47,8 @@ class OptimizeSetThenWrite implements LogicInstructionPipeline {
     }
 
     private final class ExpectWrite implements State {
+        // It is critical that this be a LinkedHashMap, otherwise we would emit set instructions in a different order
+        // than the original order in the source code, with disastrous consequences.
         private final Map<String, String> sets = new LinkedHashMap<>();
 
         ExpectWrite(LogicInstruction set) {
@@ -59,7 +61,6 @@ class OptimizeSetThenWrite implements LogicInstructionPipeline {
                 sets.put(instruction.getArgs().get(0), instruction.getArgs().get(1));
                 return this;
             } else if (instruction.isWrite()) {
-
                 if (sets.containsKey(instruction.getArgs().get(0))) {
                     final String value = instruction.getArgs().get(0);
                     instruction = new LogicInstruction(instruction.getOpcode(), sets.get(value), instruction.getArgs().get(1), instruction.getArgs().get(2));

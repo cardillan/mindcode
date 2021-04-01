@@ -117,7 +117,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generate(
+                                LogicInstructionGenerator.generateUnoptimized(
                                         (Seq) translateToAst(
                                                 "triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)"
                                         )
@@ -184,7 +184,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generate(
+                                LogicInstructionGenerator.generateUnoptimized(
                                         (Seq) translateToAst(
                                                 "STORAGE = nucleus1\n" +
                                                         "MSG = message1\n" +

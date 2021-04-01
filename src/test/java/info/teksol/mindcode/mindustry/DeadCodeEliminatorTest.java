@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 class DeadCodeEliminatorTest extends AbstractGeneratorTest {
-    private final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private final LogicInstructionPipeline sut = new DeadCodeEliminator(terminus);
 
     @Test
@@ -136,19 +135,19 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
         );
     }
 
-@Test
+    @Test
     void completelyRemovesDeadcode() {
-    LogicInstructionGenerator.generateInto(sut,
-            (Seq) translateToAst("" +
-                    "n = 1\nn = 1\n"
-            )
-    );
+        LogicInstructionGenerator.generateInto(sut,
+                (Seq) translateToAst("" +
+                        "n = 1\nn = 1\n"
+                )
+        );
 
-    assertLogicInstructionsMatch(
-            List.of(
-                    new LogicInstruction("end")
-            ),
-            terminus.getResult()
-    );
-}
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
 }

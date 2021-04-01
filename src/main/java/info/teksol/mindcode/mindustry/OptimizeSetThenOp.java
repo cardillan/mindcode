@@ -84,7 +84,7 @@ public class OptimizeSetThenOp implements LogicInstructionPipeline {
                                         instruction.getArgs().get(1),
                                         set.getArgs().get(1),
                                         instruction.getArgs().get(3)
-                                        )
+                                )
                         );
                         return new EmptyState();
                     } else if (instruction.getArgs().get(3).equals(set.getArgs().get(0))) {
@@ -113,7 +113,8 @@ public class OptimizeSetThenOp implements LogicInstructionPipeline {
 
         @Override
         public State flush() {
-            return null;
+            next.emit(set);
+            return new EmptyState();
         }
     }
 }

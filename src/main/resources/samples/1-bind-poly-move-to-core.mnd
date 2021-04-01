@@ -16,4 +16,4 @@ while @unit == null && @unit.flag == 0
     end
 end
 
-move(CORE.x, CORE.y)
+move(TARGET.x, TARGET.y)

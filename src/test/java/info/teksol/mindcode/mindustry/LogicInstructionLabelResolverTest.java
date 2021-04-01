@@ -23,7 +23,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 ),
                 prettyPrint(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generate(
+                                LogicInstructionGenerator.generateUnoptimized(
                                         (Seq) translateToAst("while true\nn = n + 1\nend\n")
                                 )
                         )
@@ -83,7 +83,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         new LogicInstruction("end")
                 ),
                 LogicInstructionLabelResolver.resolve(
-                        LogicInstructionGenerator.generate(
+                        LogicInstructionGenerator.generateUnoptimized(
                                 (Seq) translateToAst("allocate stack in cell1\n\ndef bar\n1\nend\n\nbar()")
                         )
                 )

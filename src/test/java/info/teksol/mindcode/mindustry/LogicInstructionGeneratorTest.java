@@ -19,7 +19,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "foo", var(3)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate((Seq) translateToAst("foo = (bar - 2) * 3"))
+                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("foo = (bar - 2) * 3"))
         );
     }
 
@@ -43,7 +43,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("print", "n"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate((Seq) translateToAst("n = 0\nwhile n < 5\nn += 1\nend\nprint(\"n: \", n)"))
+                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("n = 0\nwhile n < 5\nn += 1\nend\nprint(\"n: \", n)"))
         );
     }
 
@@ -56,7 +56,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "x", "null"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate((Seq) translateToAst("n = not n\nx = null"))
+                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("n = not n\nx = null"))
         );
     }
 
@@ -69,7 +69,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("op", "lessThan", var(2), var(0), var(1)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate((Seq) translateToAst("foundation1.copper < foundation1.itemCapacity"))
+                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("foundation1.copper < foundation1.itemCapacity"))
         );
     }
 
@@ -87,7 +87,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("printflush", "message1"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("while true != false\nprint(\"infinite loop!\")\nend\nprintflush(message1)\n")
                 )
         );
@@ -103,7 +103,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("control", "enabled", "conveyor1", var(3)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("conveyor1.enabled = foundation1.copper === tank1.water")
                 )
         );
@@ -121,7 +121,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("write", var(5), "cell1", var(6)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("cell1[3] = cell2[4] + conveyor1.enabled")
                 )
         );
@@ -149,7 +149,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "value", var(9)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst(
                                 "value = if cell1[4] == 0\nfalse\nelse\ncell1[4] = true\nn += 1\nend\n"
                         )
@@ -169,7 +169,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("write", var(5), "cell1", var(6)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate((Seq) translateToAst("cell1[0] = rand(9**9)"))
+                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("cell1[0] = rand(9**9)"))
         );
     }
 
@@ -185,7 +185,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", "label1"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst(
                                 "while @unit === null\nubind(@poly)\nend\n")
                 )
@@ -227,7 +227,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", var(1003)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst(
                                 "" +
                                         "n = 0\n" +
@@ -261,7 +261,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "dz", var(5)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst(
                                 "dx *= -1\ndy = -1\ndz = 2 - 1"
                         )
@@ -277,7 +277,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "a", var(0)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst(
                                 "// Remember that we initialized ourselves\n\na = 1"
                         )
@@ -305,7 +305,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", "label1"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst(
                                 "build(x, y, @titanium-conveyor, 1, 0)\ngetBlock(x, y, b_type, b_building)\nif b_type == @titanium-conveyor\nn += 1\nend\n"
                         )
@@ -329,7 +329,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "x", var(8)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("x = ceil(floor(sin(log(cos(abs(tan(rand(1))))))))")
                 )
         );
@@ -353,7 +353,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", "label1"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("for n in 1 .. 17\nprint(n)\nend")
                 )
         );
@@ -390,7 +390,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         // rest of program
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("for n in 1 ... 17\nprint(n)\nend\n")
                 )
         );
@@ -423,7 +423,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", "label1"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1\nprint(n)\nend\n")
                 )
         );
@@ -438,7 +438,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "a", var(0)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("a = b = 42")
                 )
         );
@@ -466,7 +466,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", var(1000)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("case n\nwhen 1\n\"1\"\nwhen 2\n\"two\"\nelse\n\"otherwise\"end\n")
                 )
         );
@@ -495,7 +495,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", var(1000)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("allocate heap in cell1[0..10]\ncase $state\nwhen ST_EMPTY\n$state = ST_INITIALIZED\nwhen ST_INITIALIZED\n$state = ST_DONE\nend\n")
                 )
         );
@@ -518,7 +518,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("drawflush", "display1"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("clear(r, g, b)\ncolor(r, g, b, alpha)\nstroke(width)\nline(x1, y1, x2, y2)\nrect(x, y, w, h)\nlineRect(x, y, w, h)\npoly(x, y, sides, radius, rotation)\nlinePoly(x, y, sides, radius, rotation)\ntriangle(x1, y1, x2, y2, x3, y3)\nimage(x, y, @copper, size, rotation)\ndrawflush(display1)\n")
                 )
         );
@@ -556,7 +556,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", var(1003)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "target = uradar(enemy, ground, any, health, MIN_TO_MAX, BY_DISTANCE)\n" +
                                 "if target != null\n" +
@@ -580,7 +580,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("ulocate", "damaged", "core", "true", "@copper", "outx", "outy", var(4), "outbuilding"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "ulocate(ore, @surge-alloy, outx, outy)\n" +
                                 "ulocate(building, core, ENEMY, outx, outy, outbuilding)\n" +
@@ -605,7 +605,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", "label1"),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "if some_cond == false\n  end()\nend"
                         )
@@ -624,7 +624,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "running", var(3)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "running = @tick % 2 == 0"
                         )
@@ -635,7 +635,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void refusesToDeclareFunctionsWhenNoStackAround() {
         assertThrows(MissingStackException.class, () ->
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "def foo\n0\nend\n\n\nfoo()\n"
                         )
@@ -689,7 +689,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         // end of main script
                         new LogicInstruction("end"),
 
-                        // generate of function foo
+                        // generateUnoptimized of function foo
                         new LogicInstruction("label", var(1000)),
 
                         // no parameters to pop
@@ -722,7 +722,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "@counter", var(24)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "allocate stack in cell1\ndef foo\n0\nend\n\n\nx = foo()\nprint(x)\nprintflush(message1)\n"
                         )
@@ -862,7 +862,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "@counter", var(66)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "allocate stack in cell1\ndef foo(n, r)\n2 * (n ** r)\nend\n\n\nboo = 4\nx = foo(2, boo)\nprint(x)\nprintflush(message1)\n"
                         )
@@ -1091,7 +1091,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "@counter", var(125)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "allocate stack in cell1\ndef foo(n, r)\n2 * (n ** bar(r))\nend\n\ndef bar(x)\n2 * x\nend\n\n\nboo = 8\nx = foo(7, boo)\nprint(x)\nprintflush(message1)\n"
                         )
@@ -1113,7 +1113,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("control", "color", "turret", var(3), var(4), var(5)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "turret.shoot(leader.shootX, leader.shootY, leader.shooting)\nturret.color(14, 15, 16)\n"
                         )
@@ -1138,7 +1138,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("write", var(10), "HEAPPTR", var(11)), // set $dy
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "set HEAPPTR = cell1\nallocate heap in HEAPPTR[0...4]\n$dx = 0\n\n$dy += $dx"
                         )
@@ -1187,7 +1187,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
                         new LogicInstruction("end"), // end of main function body
 
-                        new LogicInstruction("label", "label0"), // generate of delay function
+                        new LogicInstruction("label", "label0"), // generateUnoptimized of delay function
 
                         new LogicInstruction("set", var(26), "0"), // return value
 
@@ -1216,7 +1216,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("end")
 
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "set STACKPTR = cell1\n" +
                                 "set HEAPPTR = cell2\n" +
@@ -1239,7 +1239,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("op", "sqrt", var(1), var(0)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "sqrt(2)"
                         )
@@ -1271,7 +1271,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("label", var(1000)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "case floor(rand(2))\nwhen 0\n  1000\nwhen 1\n  // no op\nend"
                         )
@@ -1290,7 +1290,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "r", var(2)),
                         new LogicInstruction("end")
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
                                 "r = min(x, max(y, 2))"
                         )
@@ -1316,7 +1316,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("end")
 
                 ),
-                LogicInstructionGenerator.generate(
+                LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1\n")
                 )
         );

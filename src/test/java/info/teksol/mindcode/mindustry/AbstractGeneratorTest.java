@@ -7,6 +7,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
+    protected final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private Set<String> registered = new HashSet<>();
     private Map<String, String> expectedToActual = new TreeMap<>();
     private Map<String, String> actualToExpected = new TreeMap<>();

@@ -30,9 +30,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final LogicInstructionPipeline pipeline =
                 new DeadCodeEliminator(
                         new OptimizeSetThenWrite(
-                                new OptimizeReadThenSet(
-                                        new ImproveConditionalJumps(
-                                                terminus
+                                new OptimizeSetThenRead(
+                                        new OptimizeReadThenSet(
+                                                new OptimizeOpThenSet(
+                                                        new OptimizeSetThenOp(
+                                                                new ImproveConditionalJumps(
+                                                                        terminus
+                                                                )
+                                                        )
+                                                )
                                         )
                                 )
 
@@ -52,7 +58,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         pipeline.flush();
     }
 
-    static List<LogicInstruction> generate(Seq program) {
+    public static List<LogicInstruction> generateUnoptimized(Seq program) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
 
         LogicInstructionGenerator generator = new LogicInstructionGenerator(terminus);

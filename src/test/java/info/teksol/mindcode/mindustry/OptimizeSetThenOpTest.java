@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 class OptimizeSetThenOpTest extends AbstractGeneratorTest {
-    private final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private final LogicInstructionPipeline sut = new OptimizeSetThenOp(terminus);
 
     @Test
