@@ -11,8 +11,7 @@ class OptimizeSetThenWriteTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesSetThenWriteValueOut() {
-        new LogicInstructionGenerator(pipeline).start((Seq) translateToAst("cell1[42] = 36"));
-        pipeline.flush();
+        LogicInstructionGenerator.generateInto(pipeline, (Seq) translateToAst("cell1[42] = 36"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -25,7 +24,7 @@ class OptimizeSetThenWriteTest extends AbstractGeneratorTest {
 
     @Test
     void leavesUnrelatedSetAlone() {
-        new LogicInstructionGenerator(pipeline).start((Seq) translateToAst("n = 41\ncell1[42] = 36"));
+        LogicInstructionGenerator.generateInto(pipeline, (Seq) translateToAst("n = 41\ncell1[42] = 36"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(

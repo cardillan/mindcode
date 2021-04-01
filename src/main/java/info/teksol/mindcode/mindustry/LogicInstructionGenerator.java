@@ -30,7 +30,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final LogicInstructionPipeline pipeline =
                 new OptimizeSetThenWrite(
                         new OptimizeReadThenSet(
-                                new ImproveConditionalJumps(terminus)
+                                new ImproveConditionalJumps(
+                                        new DeadCodeEliminator(terminus)
+                                )
 
                         )
                 );
@@ -61,7 +63,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     void start(Seq program) {
         visit(program);
         appendFunctionDeclarations();
-        pipeline.flush();
     }
 
     private void appendFunctionDeclarations() {

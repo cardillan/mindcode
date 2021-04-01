@@ -11,9 +11,7 @@ class OptimizeReadThenSetTest extends AbstractGeneratorTest {
 
     @Test
     void improvesReadThenSet() {
-        final LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
-        generator.start((Seq) translateToAst("boo = cell1[0]"));
-        pipeline.flush();
+        LogicInstructionGenerator.generateInto(pipeline, (Seq) translateToAst("boo = cell1[0]"));
 
         assertLogicInstructionsMatch(
                 List.of(
