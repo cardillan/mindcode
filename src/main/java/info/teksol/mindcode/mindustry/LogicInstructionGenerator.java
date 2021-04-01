@@ -28,10 +28,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public static List<LogicInstruction> generateAndOptimize(Seq program) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final LogicInstructionPipeline pipeline =
-                new OptimizeSetThenWrite(
-                        new OptimizeReadThenSet(
-                                new ImproveConditionalJumps(
-                                        new DeadCodeEliminator(terminus)
+                new DeadCodeEliminator(
+                        new OptimizeSetThenWrite(
+                                new OptimizeReadThenSet(
+                                        new ImproveConditionalJumps(
+                                                terminus
+                                        )
                                 )
 
                         )
