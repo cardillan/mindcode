@@ -79,4 +79,50 @@ class OptimizeSetThenPrintTest extends AbstractGeneratorTest {
                 terminus.getResult()
         );
     }
+
+    @Test
+    void correctlyOptimizesPrintPipelines() {
+        LogicInstructionGenerator.generateInto(
+                sut,
+                (Seq) translateToAst(
+                        "print(\"damaged at \", dmgx, \", \", dmgy)\n"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("print", "\"damaged at \""),
+                        new LogicInstruction("print", "dmgx"),
+                        new LogicInstruction("print", "\", \""),
+                        new LogicInstruction("print", "dmgy"),
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
+
+    @Test
+    void correctlyLeavesMultipleSetsOnSameTargetAlone() {
+        LogicInstructionGenerator.generateInto(
+                sut,
+                (Seq) translateToAst(
+                        "x = 1\nprint(\"damaged at \", dmgx)\nx = 2\nprint(\", \", dmgy)\n"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "1"),
+                        new LogicInstruction("set", "x", var(0)),
+                        new LogicInstruction("set", var(1), "2"),
+                        new LogicInstruction("print", "\"damaged at \""),
+                        new LogicInstruction("print", "dmgx"),
+                        new LogicInstruction("set", "x", var(1)),
+                        new LogicInstruction("print", "\", \""),
+                        new LogicInstruction("print", "dmgy"),
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
 }
