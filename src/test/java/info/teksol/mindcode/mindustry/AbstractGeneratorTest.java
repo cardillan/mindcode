@@ -19,12 +19,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     protected void assertLogicInstructionsMatch(List<LogicInstruction> expected, List<LogicInstruction> actual) {
-        if (actual.size() != expected.size()) {
-            assertEquals(prettyPrint(expected), prettyPrint(actual), "Expected to have same size, found " +
-                    expected.size() + " in expected vs " + actual.size() + " in actual");
-        }
-
-        for (int i = 0; i < expected.size(); i++) {
+        for (int i = 0; i < expected.size() && i < actual.size(); i++) {
             final LogicInstruction left = expected.get(i);
             final LogicInstruction right = actual.get(i);
             if (left.getOpcode().equals(right.getOpcode())) {
@@ -41,11 +36,17 @@ public class AbstractGeneratorTest extends AbstractAstTest {
                 }
             }
 
-            assertEquals(prettyPrint(expected), prettyPrint(actual), "Failed to var instruction at index " + i);
+            assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual), "Failed to var instruction at index " + i);
+        }
+
+        if (actual.size() != expected.size()) {
+            assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual),
+                    "Expected to have same size, found " + expected.size() + " in expected " +
+                            "vs " + actual.size() + " in actual");
         }
 
         if (!expectedToActual.keySet().containsAll(registered) && registered.containsAll(expectedToActual.keySet())) {
-            assertEquals(prettyPrint(expected), prettyPrint(actual), "Expected all value holes to be used but some were not");
+            assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual), "Expected all value holes to be used but some were not");
         }
     }
 

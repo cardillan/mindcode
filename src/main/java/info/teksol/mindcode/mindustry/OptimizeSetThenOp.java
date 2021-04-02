@@ -29,7 +29,12 @@ class OptimizeSetThenOp implements LogicInstructionPipeline {
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isSet()) {
-                return new ExpectOp(instruction);
+                if (!instruction.getArgs().get(0).startsWith(LogicInstructionGenerator.TMP_PREFIX)) {
+                    next.emit(instruction);
+                    return this;
+                } else {
+                    return new ExpectOp(instruction);
+                }
             } else {
                 next.emit(instruction);
                 return this;
@@ -52,8 +57,14 @@ class OptimizeSetThenOp implements LogicInstructionPipeline {
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isSet()) {
-                next.emit(set);
-                return new ExpectOp(instruction);
+                if (!instruction.getArgs().get(0).startsWith(LogicInstructionGenerator.TMP_PREFIX)) {
+                    next.emit(set);
+                    next.emit(instruction);
+                    return new EmptyState();
+                } else {
+                    next.emit(set);
+                    return new ExpectOp(instruction);
+                }
             }
 
             if (!instruction.isOp()) {

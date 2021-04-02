@@ -29,7 +29,12 @@ public class OptimizeSetThenRead implements LogicInstructionPipeline {
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isSet()) {
-                return new ExpectRead(instruction);
+                if (!instruction.getArgs().get(0).startsWith(LogicInstructionGenerator.TMP_PREFIX)) {
+                    next.emit(instruction);
+                    return this;
+                } else {
+                    return new ExpectRead(instruction);
+                }
             }
 
             next.emit(instruction);
@@ -52,8 +57,14 @@ public class OptimizeSetThenRead implements LogicInstructionPipeline {
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isSet()) {
-                next.emit(set);
-                return new ExpectRead(instruction);
+                if (!instruction.getArgs().get(0).startsWith(LogicInstructionGenerator.TMP_PREFIX)) {
+                    next.emit(set);
+                    next.emit(instruction);
+                    return new EmptyState();
+                } else {
+                    next.emit(set);
+                    return new ExpectRead(instruction);
+                }
             }
 
             if (!instruction.isRead()) {

@@ -86,26 +86,4 @@ class OptimizeSetThenOpTest extends AbstractGeneratorTest {
                 terminus.getResult()
         );
     }
-
-    @Test
-    void optimizeSetThenOpWithBinaryOpBoth() {
-        LogicInstructionGenerator.generateInto(sut,
-                (Seq) translateToAst(
-                        "x = 41\ny = 72\npos = x + y"
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        new LogicInstruction("set", var(0), "41"),
-                        new LogicInstruction("set", "x", var(0)),
-                        new LogicInstruction("set", var(1), "72"),
-                        new LogicInstruction("set", "y", var(1)),
-                        new LogicInstruction("op", "add", var(2), "x", "y"),
-                        new LogicInstruction("set", "pos", var(2)),
-                        new LogicInstruction("end")
-                ),
-                terminus.getResult()
-        );
-    }
 }

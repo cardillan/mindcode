@@ -99,4 +99,47 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void optimizeSetThenOpWithBinaryOpBoth() {
+        final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
+                (Seq) translateToAst(
+                        "x = 41\ny = 72\npos = x + y\nmove(40, pos)\n"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "x", "41"),
+                        new LogicInstruction("set", "y", "72"),
+                        new LogicInstruction("op", "add", "pos", "x", "y"),
+                        new LogicInstruction("set", var(3), "40"),
+                        new LogicInstruction("ucontrol", "move", var(3), "pos"),
+                        new LogicInstruction("end")
+                ),
+                result
+        );
+    }
+
+    @Test
+    void setThenReadPrefersUserSpecifiedNames() {
+        final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
+                (Seq) translateToAst(
+                        "" +
+                                "addr_FLAG = 0\n" +
+                                "conveyor1.enabled = cell1[addr_FLAG] == 0\n"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "addr_FLAG", "0"),
+                        new LogicInstruction("read", var(0), "cell1", "addr_FLAG"),
+                        new LogicInstruction("op", "equal", var(1), var(0), "0"),
+                        new LogicInstruction("control", "enabled", "conveyor1", var(1)),
+                        new LogicInstruction("end")
+                ),
+                result
+        );
+    }
 }

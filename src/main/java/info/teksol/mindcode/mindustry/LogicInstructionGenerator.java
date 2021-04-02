@@ -12,11 +12,10 @@ import java.util.stream.Collectors;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<String> {
+    public static final String TMP_PREFIX = "__tmp";
     private final LogicInstructionPipeline pipeline;
-
     private int tmp;
     private int label;
-
     private StackAllocation allocatedStack;
     private Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
     private Map<String, String> functionLabels = new HashMap<>();
@@ -884,10 +883,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private String nextLabel() {
-        return "label" + label++;
+        return "__label" + label++;
     }
 
     private String nextTemp() {
-        return "tmp" + tmp++;
+        return TMP_PREFIX + this.tmp++;
     }
 }

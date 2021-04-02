@@ -5,27 +5,21 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
     @Test
     void resolvesAbsoluteAddressesOfLabels() {
-        assertEquals(
-                prettyPrint(
-                        List.of(
-                                new LogicInstruction("jump", "5", "notEqual", "true", "true"),
-                                new LogicInstruction("set", "tmp0", "1"),
-                                new LogicInstruction("op", "add", "tmp1", "n", "tmp0"),
-                                new LogicInstruction("set", "n", "tmp1"),
-                                new LogicInstruction("jump", "0", "always"),
-                                new LogicInstruction("end")
-                        )
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("jump", "5", "notEqual", "true", "true"),
+                        new LogicInstruction("set", var(0), "1"),
+                        new LogicInstruction("op", "add", var(1), "n", var(0)),
+                        new LogicInstruction("set", "n", var(1)),
+                        new LogicInstruction("jump", "0", "always"),
+                        new LogicInstruction("end")
                 ),
-                prettyPrint(
-                        LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateUnoptimized(
-                                        (Seq) translateToAst("while true\nn = n + 1\nend\n")
-                                )
+                LogicInstructionLabelResolver.resolve(
+                        LogicInstructionGenerator.generateUnoptimized(
+                                (Seq) translateToAst("while true\nn = n + 1\nend\n")
                         )
                 )
         );

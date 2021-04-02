@@ -29,15 +29,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 List.of(
                         new LogicInstruction("set", var(0), "0"),
                         new LogicInstruction("set", "n", var(0)),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("set", var(1), "5"),
                         new LogicInstruction("op", "lessThan", var(2), "n", var(1)),
-                        new LogicInstruction("jump", "label1", "notEqual", var(2), "true"),
+                        new LogicInstruction("jump", var(1001), "notEqual", var(2), "true"),
                         new LogicInstruction("set", var(3), "1"),
                         new LogicInstruction("op", "add", var(4), "n", var(3)),
                         new LogicInstruction("set", "n", var(4)),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("jump", var(1000), "always"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("set", var(5), "\"n: \""),
                         new LogicInstruction("print", var(5)),
                         new LogicInstruction("print", "n"),
@@ -77,13 +77,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void convertsBooleanOperations() {
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("op", "notEqual", var(0), "true", "false"),
-                        new LogicInstruction("jump", "label1", "notEqual", var(0), "true"),
+                        new LogicInstruction("jump", var(1001), "notEqual", var(0), "true"),
                         new LogicInstruction("set", var(1), "\"infinite loop!\""),
                         new LogicInstruction("print", var(1)),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("jump", var(1000), "always"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("printflush", "message1"),
                         new LogicInstruction("end")
                 ),
@@ -135,17 +135,17 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("read", var(1), "cell1", var(0)),
                         new LogicInstruction("set", var(2), "0"),
                         new LogicInstruction("op", "equal", var(3), var(1), var(2)),
-                        new LogicInstruction("jump", "label0", "notEqual", var(3), "true"),
+                        new LogicInstruction("jump", var(1000), "notEqual", var(3), "true"),
                         new LogicInstruction("set", var(9), "false"),
-                        new LogicInstruction("jump", "label1", "always"),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("set", var(6), "4"),
                         new LogicInstruction("write", "true", "cell1", var(6)),
                         new LogicInstruction("set", var(7), "1"),
                         new LogicInstruction("op", "add", var(8), "n", var(7)),
                         new LogicInstruction("set", "n", var(8)),
                         new LogicInstruction("set", var(9), var(8)),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("set", "value", var(9)),
                         new LogicInstruction("end")
                 ),
@@ -177,12 +177,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void convertsUbindAndControl() {
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("op", "strictEqual", var(0), "@unit", "null"),
-                        new LogicInstruction("jump", "label1", "notEqual", var(0), "true"),
+                        new LogicInstruction("jump", var(1001), "notEqual", var(0), "true"),
                         new LogicInstruction("ubind", "@poly"),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("jump", var(1000), "always"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateUnoptimized(
@@ -294,15 +294,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("ucontrol", "build", "x", "y", "@titanium-conveyor", var(0), var(1)),
                         new LogicInstruction("ucontrol", "getBlock", "x", "y", "b_type", "b_building"),
                         new LogicInstruction("op", "equal", var(2), "b_type", "@titanium-conveyor"),
-                        new LogicInstruction("jump", "label0", "notEqual", var(2), "true"),
+                        new LogicInstruction("jump", var(1000), "notEqual", var(2), "true"),
                         new LogicInstruction("set", var(3), "1"),
                         new LogicInstruction("op", "add", var(4), "n", var(3)),
                         new LogicInstruction("set", "n", var(4)),
                         new LogicInstruction("set", var(5), var(4)),
-                        new LogicInstruction("jump", "label1", "always"),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("set", var(5), "null"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateUnoptimized(
@@ -341,16 +341,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 List.of(
                         new LogicInstruction("set", var(0), "1"),
                         new LogicInstruction("set", "n", var(0)),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("set", var(1), "17"),
                         new LogicInstruction("op", "lessThanEq", var(2), "n", var(1)),
-                        new LogicInstruction("jump", "label1", "notEqual", var(2), "true"),
+                        new LogicInstruction("jump", var(1001), "notEqual", var(2), "true"),
                         new LogicInstruction("print", "n"),
                         new LogicInstruction("set", var(3), "1"),
                         new LogicInstruction("op", "add", var(4), "n", var(3)),
                         new LogicInstruction("set", "n", var(4)),
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("jump", var(1000), "always"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateUnoptimized(
@@ -368,10 +368,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "n", var(0)),
 
                         // cond
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("set", var(1), "17"),
                         new LogicInstruction("op", "lessThan", var(2), "n", var(1)),
-                        new LogicInstruction("jump", "label1", "notEqual", var(2), "true"),
+                        new LogicInstruction("jump", var(1001), "notEqual", var(2), "true"),
 
                         // loop body
                         new LogicInstruction("print", "n"),
@@ -382,10 +382,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "n", var(4)),
 
                         // loop
-                        new LogicInstruction("jump", "label0", "always"),
+                        new LogicInstruction("jump", var(1000), "always"),
 
                         // trailer
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", var(1001)),
 
                         // rest of program
                         new LogicInstruction("end")
@@ -405,10 +405,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", var(1), "-5"),
                         new LogicInstruction("set", "j", var(1)),
 
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("set", var(2), "5"),
                         new LogicInstruction("op", "lessThan", var(3), "i", var(2)),
-                        new LogicInstruction("jump", "label1", "notEqual", var(3), "true"),
+                        new LogicInstruction("jump", var(1001), "notEqual", var(3), "true"),
                         new LogicInstruction("print", "n"),
 
                         new LogicInstruction("set", var(4), "1"),
@@ -419,8 +419,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("op", "add", var(7), "i", var(6)),
                         new LogicInstruction("set", "i", var(7)),
 
-                        new LogicInstruction("jump", "label0", "always"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("jump", var(1000), "always"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateUnoptimized(
@@ -596,13 +596,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("op", "equal", var(0), "some_cond", "false"),
-                        new LogicInstruction("jump", "label0", "notEqual", var(0), "true"),
+                        new LogicInstruction("jump", var(1000), "notEqual", var(0), "true"),
                         new LogicInstruction("end"),
                         new LogicInstruction("set", var(1), "null"),
-                        new LogicInstruction("jump", "label1", "always"),
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
                         new LogicInstruction("set", var(1), "null"),
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", var(1001)),
                         new LogicInstruction("end")
                 ),
                 LogicInstructionGenerator.generateUnoptimized(
@@ -751,7 +751,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", var(9), "1"),
                         new LogicInstruction("op", "sub", var(10), var(6), var(9)),
                         new LogicInstruction("set", var(6), var(10)),
-                        new LogicInstruction("write", "label1", "cell1", var(6)),
+                        new LogicInstruction("write", var(1001), "cell1", var(6)),
                         new LogicInstruction("set", var(14), "63"),
                         new LogicInstruction("write", var(6), "cell1", var(14)),
 
@@ -778,10 +778,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("write", var(24), "cell1", var(32)),
 
                         // jump to function
-                        new LogicInstruction("set", "@counter", "label0"),
+                        new LogicInstruction("set", "@counter", var(1000)),
 
                         // function return address
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", var(1001)),
 
                         // pop return value from stack
                         new LogicInstruction("set", var(35), "63"),
@@ -802,7 +802,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("end"),
 
                         // function foo
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
 
                         // pop r
                         new LogicInstruction("set", var(45), "63"),
@@ -891,7 +891,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", var(9), "1"),
                         new LogicInstruction("op", "sub", var(10), var(6), var(9)),
                         new LogicInstruction("set", var(6), var(10)),
-                        new LogicInstruction("write", "label2", "cell1", var(6)),
+                        new LogicInstruction("write", var(1002), "cell1", var(6)),
                         new LogicInstruction("set", var(14), "63"),
                         new LogicInstruction("write", var(6), "cell1", var(14)),
 
@@ -918,10 +918,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("write", var(24), "cell1", var(32)),
 
                         // jump to function
-                        new LogicInstruction("set", "@counter", "label0"),
+                        new LogicInstruction("set", "@counter", var(1000)),
 
                         // return address
-                        new LogicInstruction("label", "label2"),
+                        new LogicInstruction("label", var(1002)),
 
                         // pop return value from stack
                         new LogicInstruction("set", var(35), "63"),
@@ -942,7 +942,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("end"),
 
                         // def bar
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", var(1001)),
 
                         // pop bar.x
                         new LogicInstruction("set", var(45), "63"),
@@ -989,7 +989,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("end"),
 
                         // def foo
-                        new LogicInstruction("label", "label0"),
+                        new LogicInstruction("label", var(1000)),
 
                         // pop foo.r
                         new LogicInstruction("set", var(76), "63"),
@@ -1027,7 +1027,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", var(98), "1"),
                         new LogicInstruction("op", "sub", var(99), var(95), var(98)),
                         new LogicInstruction("set", var(95), var(99)),
-                        new LogicInstruction("write", "label3", "cell1", var(95)),
+                        new LogicInstruction("write", var(1003), "cell1", var(95)),
                         new LogicInstruction("set", var(103), "63"),
                         new LogicInstruction("write", var(95), "cell1", var(103)),
 
@@ -1043,10 +1043,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("write", var(104), "cell1", var(112)),
 
                         // jump to subroutine
-                        new LogicInstruction("set", "@counter", "label1"),
+                        new LogicInstruction("set", "@counter", var(1001)),
 
                         // return address
-                        new LogicInstruction("label", "label3"),
+                        new LogicInstruction("label", var(1003)),
 
                         // pop return value from stack
                         new LogicInstruction("set", var(115), "63"),
@@ -1163,13 +1163,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", var(9), "1"),
                         new LogicInstruction("op", "sub", var(10), var(6), var(9)),
                         new LogicInstruction("set", var(6), var(10)),
-                        new LogicInstruction("write", "label1", "STACKPTR", var(6)),
+                        new LogicInstruction("write", var(1001), "STACKPTR", var(6)),
                         new LogicInstruction("set", var(14), "63"),
                         new LogicInstruction("write", var(6), "STACKPTR", var(14)),
 
-                        new LogicInstruction("set", "@counter", "label0"), // invoke function
+                        new LogicInstruction("set", "@counter", var(1000)), // invoke function
 
-                        new LogicInstruction("label", "label1"),
+                        new LogicInstruction("label", var(1001)),
 
                         new LogicInstruction("set", var(17), "63"), // pop return value from stack
                         new LogicInstruction("read", var(18), "STACKPTR", var(17)),
@@ -1187,7 +1187,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
                         new LogicInstruction("end"), // end of main function body
 
-                        new LogicInstruction("label", "label0"), // generateUnoptimized of delay function
+                        new LogicInstruction("label", var(1000)), // generateUnoptimized of delay function
 
                         new LogicInstruction("set", var(26), "0"), // return value
 

@@ -101,19 +101,19 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
     @Test
     void correctlyDrawsTriangles() {
         assertEquals(
-                "set tmp0 20\n" +
-                        "op sub tmp1 x tmp0\n" +
-                        "set tmp2 20\n" +
-                        "op sub tmp3 y tmp2\n" +
-                        "set tmp4 20\n" +
-                        "op add tmp5 x tmp4\n" +
-                        "set tmp6 20\n" +
-                        "op sub tmp7 y tmp6\n" +
-                        "set tmp8 20\n" +
-                        "op add tmp9 x tmp8\n" +
-                        "set tmp10 20\n" +
-                        "op sub tmp11 y tmp10\n" +
-                        "draw triangle tmp1 tmp3 tmp5 tmp7 tmp9 tmp11\n" +
+                "set __tmp0 20\n" +
+                        "op sub __tmp1 x __tmp0\n" +
+                        "set __tmp2 20\n" +
+                        "op sub __tmp3 y __tmp2\n" +
+                        "set __tmp4 20\n" +
+                        "op add __tmp5 x __tmp4\n" +
+                        "set __tmp6 20\n" +
+                        "op sub __tmp7 y __tmp6\n" +
+                        "set __tmp8 20\n" +
+                        "op add __tmp9 x __tmp8\n" +
+                        "set __tmp10 20\n" +
+                        "op sub __tmp11 y __tmp10\n" +
+                        "draw triangle __tmp1 __tmp3 __tmp5 __tmp7 __tmp9 __tmp11\n" +
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
@@ -132,53 +132,53 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertEquals(
                 "set STORAGE nucleus1\n" +
                         "set MSG message1\n" +
-                        "sensor tmp0 STORAGE @itemCapacity\n" +
-                        "set capacity tmp0\n" +
-                        "set tmp1 \"capacity: \"\n" +
-                        "set tmp2 \"\\n\"\n" +
-                        "print tmp1\n" +
+                        "sensor __tmp0 STORAGE @itemCapacity\n" +
+                        "set capacity __tmp0\n" +
+                        "set __tmp1 \"capacity: \"\n" +
+                        "set __tmp2 \"\\n\"\n" +
+                        "print __tmp1\n" +
                         "print capacity\n" +
-                        "print tmp2\n" +
-                        "set tmp3 0\n" +
-                        "set n tmp3\n" +
-                        "op lessThan tmp4 n @links\n" +
-                        "jump 50 notEqual tmp4 true\n" +
-                        "getlink tmp5 n\n" +
-                        "set building tmp5\n" +
-                        "sensor tmp6 building @type\n" +
-                        "set type tmp6\n" +
-                        "op equal tmp7 type @conveyor\n" +
-                        "op equal tmp8 type @titanium-conveyor\n" +
-                        "op or tmp9 tmp7 tmp8\n" +
-                        "op equal tmp10 type @plastanium-conveyor\n" +
-                        "op or tmp11 tmp9 tmp10\n" +
-                        "jump 45 notEqual tmp11 true\n" +
-                        "sensor tmp13 building @firstItem\n" +
-                        "set resource tmp13\n" +
-                        "op notEqual tmp14 resource null\n" +
-                        "jump 42 notEqual tmp14 true\n" +
-                        "sensor tmp16 nucleus1 @resource\n" +
-                        "set level tmp16\n" +
-                        "op lessThan tmp17 level capacity\n" +
-                        "control enabled building tmp17 0 0 0\n" +
-                        "set tmp18 \"\\n\"\n" +
-                        "set tmp19 \": \"\n" +
-                        "set tmp20 \" @ \"\n" +
-                        "print tmp18\n" +
+                        "print __tmp2\n" +
+                        "set __tmp3 0\n" +
+                        "set n __tmp3\n" +
+                        "op lessThan __tmp4 n @links\n" +
+                        "jump 50 notEqual __tmp4 true\n" +
+                        "getlink __tmp5 n\n" +
+                        "set building __tmp5\n" +
+                        "sensor __tmp6 building @type\n" +
+                        "set type __tmp6\n" +
+                        "op equal __tmp7 type @conveyor\n" +
+                        "op equal __tmp8 type @titanium-conveyor\n" +
+                        "op or __tmp9 __tmp7 __tmp8\n" +
+                        "op equal __tmp10 type @plastanium-conveyor\n" +
+                        "op or __tmp11 __tmp9 __tmp10\n" +
+                        "jump 45 notEqual __tmp11 true\n" +
+                        "sensor __tmp13 building @firstItem\n" +
+                        "set resource __tmp13\n" +
+                        "op notEqual __tmp14 resource null\n" +
+                        "jump 42 notEqual __tmp14 true\n" +
+                        "sensor __tmp16 nucleus1 @resource\n" +
+                        "set level __tmp16\n" +
+                        "op lessThan __tmp17 level capacity\n" +
+                        "control enabled building __tmp17 0 0 0\n" +
+                        "set __tmp18 \"\\n\"\n" +
+                        "set __tmp19 \": \"\n" +
+                        "set __tmp20 \" @ \"\n" +
+                        "print __tmp18\n" +
                         "print n\n" +
-                        "print tmp19\n" +
+                        "print __tmp19\n" +
                         "print resource\n" +
-                        "print tmp20\n" +
+                        "print __tmp20\n" +
                         "print level\n" +
-                        "set tmp15 level\n" +
+                        "set __tmp15 level\n" +
                         "jump 43 always 0 0\n" +
-                        "set tmp15 null\n" +
-                        "set tmp12 tmp15\n" +
+                        "set __tmp15 null\n" +
+                        "set __tmp12 __tmp15\n" +
                         "jump 46 always 0 0\n" +
-                        "set tmp12 null\n" +
-                        "set tmp21 1\n" +
-                        "op add tmp22 n tmp21\n" +
-                        "set n tmp22\n" +
+                        "set __tmp12 null\n" +
+                        "set __tmp21 1\n" +
+                        "op add __tmp22 n __tmp21\n" +
+                        "set n __tmp22\n" +
                         "jump 11 always 0 0\n" +
                         "printflush MSG\n" +
                         "end\n",
