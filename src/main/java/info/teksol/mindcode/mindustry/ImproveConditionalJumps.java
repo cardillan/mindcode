@@ -83,6 +83,7 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
             return;
         }
 
+        if (previous != null) next.emit(previous);
         previous = instruction;
     }
 
