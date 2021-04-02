@@ -21,35 +21,39 @@ public class LogicInstruction {
     }
 
     public boolean isWrite() {
-        return getOpcode().equals("write");
+        return opcode.equals("write");
     }
 
     public boolean isPrint() {
-        return getOpcode().equals("print");
+        return opcode.equals("print");
     }
 
     public boolean isJump() {
-        return getOpcode().equals("jump");
+        return opcode.equals("jump");
     }
 
     public boolean isSet() {
-        return getOpcode().equals("set");
+        return opcode.equals("set");
     }
 
     public boolean isOp() {
-        return getOpcode().equals("op");
+        return opcode.equals("op");
     }
 
     public boolean isRead() {
-        return getOpcode().equals("read");
+        return opcode.equals("read");
     }
 
     public boolean isUControl() {
-        return getOpcode().equals("ucontrol");
+        return opcode.equals("ucontrol");
     }
 
     public boolean isLabel() {
-        return getOpcode().equals("label");
+        return opcode.equals("label");
+    }
+
+    public boolean isGetlink() {
+        return opcode.equals("getlink");
     }
 
     public String getOpcode() {
