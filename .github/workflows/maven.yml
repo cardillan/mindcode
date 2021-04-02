@@ -1,0 +1,32 @@
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 11
+    - name: Cache
+      uses: actions/cache@v2.1.4
+      with:
+        # A list of files, directories, and wildcard patterns to cache and restore
+        path: ~/.m2
+        # An explicit key for restoring and saving the cache
+        key: maven-v1
+        # An ordered list of keys to use for restoring the cache if no cache hit occurred for key
+        # restore-keys: # optional
+        # The chunk size used to split up large files during upload, in bytes
+        # upload-chunk-size: # optional
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml

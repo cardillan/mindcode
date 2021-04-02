@@ -36,12 +36,12 @@
                             <goal>run</goal>
                         </goals>
                         <configuration>
-                            <tasks>
+                            <target>
                                 <delete>
                                     <fileset dir="${project.basedir}/tmp" includes="*.txt" />
                                     <fileset dir="${project.basedir}/tmp" includes="*.patch" />
                                 </delete>
-                            </tasks>
+                            </target>
                         </configuration>
                     </execution>
                 </executions>
