@@ -194,4 +194,60 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 result
         );
     }
+
+    @Test
+    void regressionTest1() {
+        // https://github.com/francois/mindcode/issues/13
+        final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
+                (Seq) translateToAst(
+                        "" +
+                                "// Source\n" +
+                                "HEAPPTR = cell3\n" +
+                                "allocate heap in HEAPPTR\n" +
+                                "$a = 1\n" +
+                                "$b = 2\n" +
+                                "$c = 3\n"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "HEAPPTR", "cell3"),
+                        new LogicInstruction("write", "1", "HEAPPTR", "0"),
+                        new LogicInstruction("write", "2", "HEAPPTR", "1"),
+                        new LogicInstruction("write", "3", "HEAPPTR", "2"),
+                        new LogicInstruction("end")
+                ),
+                result
+        );
+    }
+
+    @Test
+    void regressionTest2() {
+        // https://github.com/francois/mindcode/issues/13
+        final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
+                (Seq) translateToAst(
+                        "" +
+                                "HEAPPTR = cell3\n" +
+                                "allocate heap in HEAPPTR\n" +
+                                "print($a)\n" +
+                                "$a = 1\n" +
+                                "$b = 2\n" +
+                                "$c = 3\n"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "HEAPPTR", "cell3"),
+                        new LogicInstruction("read", var(0), "HEAPPTR", "0"),
+                        new LogicInstruction("print", var(0)),
+                        new LogicInstruction("write", "1", "HEAPPTR", "0"),
+                        new LogicInstruction("write", "2", "HEAPPTR", "1"),
+                        new LogicInstruction("write", "3", "HEAPPTR", "2"),
+                        new LogicInstruction("end")
+                ),
+                result
+        );
+    }
 }

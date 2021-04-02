@@ -57,7 +57,8 @@ class OptimizeSetThenWriteTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("write", "17", "cell14", "21"),
+                        new LogicInstruction("set", "RAM", "cell14"),
+                        new LogicInstruction("write", "17", "RAM", "21"),
                         new LogicInstruction("end")
                 ),
                 terminus.getResult()
