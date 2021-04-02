@@ -6,7 +6,7 @@ public class PropertyAccess implements AstNode {
     private final AstNode target;
     private final String property;
 
-    public PropertyAccess(AstNode target, String property) {
+    PropertyAccess(AstNode target, String property) {
         this.target = target;
         this.property = property;
     }

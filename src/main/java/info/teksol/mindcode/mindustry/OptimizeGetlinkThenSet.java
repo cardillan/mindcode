@@ -1,10 +1,10 @@
 package info.teksol.mindcode.mindustry;
 
-public class OptimizeGetlinkThenSet implements LogicInstructionPipeline {
+class OptimizeGetlinkThenSet implements LogicInstructionPipeline {
     private final LogicInstructionPipeline next;
     private State state = new EmptyState();
 
-    public OptimizeGetlinkThenSet(LogicInstructionPipeline next) {
+    OptimizeGetlinkThenSet(LogicInstructionPipeline next) {
         this.next = next;
     }
 

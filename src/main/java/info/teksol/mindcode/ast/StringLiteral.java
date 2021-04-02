@@ -5,7 +5,7 @@ import java.util.Objects;
 public class StringLiteral implements AstNode {
     private final String text;
 
-    public StringLiteral(String text) {
+    StringLiteral(String text) {
         this.text = text;
     }
 

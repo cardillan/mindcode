@@ -1,7 +1,5 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.GenerationException;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

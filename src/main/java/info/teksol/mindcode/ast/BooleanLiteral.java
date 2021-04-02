@@ -5,7 +5,7 @@ import java.util.Objects;
 public class BooleanLiteral implements AstNode {
     private final boolean value;
 
-    public BooleanLiteral(boolean value) {
+    BooleanLiteral(boolean value) {
         this.value = value;
     }
 

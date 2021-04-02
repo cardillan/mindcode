@@ -1,11 +1,10 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.GenerationException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class DeadCodeEliminator implements LogicInstructionPipeline {
+class DeadCodeEliminator implements LogicInstructionPipeline {
     private final LogicInstructionPipeline next;
 
     private final List<LogicInstruction> program = new ArrayList<>();

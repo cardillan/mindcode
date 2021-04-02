@@ -4,10 +4,7 @@ import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     private int temp;
@@ -255,11 +252,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             alloc_list = alloc_list.alloc_list();
         }
 
-        if (allocatedStack != null) {
-            return allocatedStack;
-        } else {
-            return new NoOp();
-        }
+        return Objects.requireNonNullElseGet(allocatedStack, NoOp::new);
     }
 
     private void allocateStack(MindcodeParser.Alloc_listContext ctx) {

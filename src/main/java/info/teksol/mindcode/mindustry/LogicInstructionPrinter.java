@@ -1,7 +1,6 @@
 package info.teksol.mindcode.mindustry;
 
 import edu.emory.mathcs.backport.java.util.Collections;
-import info.teksol.mindcode.GenerationException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +29,12 @@ public class LogicInstructionPrinter {
         args.put("uradar", 7);
         args.put("label", 1);
         args.put("ulocate", 8);
-        FN_ARGS = Collections.unmodifiableMap(args);
+
+        // This only serves to satisfy the compiler
+        // In the generated, optimized code, this assignment should be elided
+        @SuppressWarnings("unchecked") final Map<String, Integer> tmp = Collections.unmodifiableMap(args);
+
+        FN_ARGS = tmp;
     }
 
     public static String toString(List<LogicInstruction> instructions) {

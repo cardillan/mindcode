@@ -9,7 +9,7 @@ public class HeapAllocation {
     private final int first;
     private final int last;
 
-    public HeapAllocation(String name, Range range) {
+    HeapAllocation(String name, Range range) {
         if (
                 !(range.getFirstValue() instanceof NumericLiteral)
                         || !(range.getLastValue() instanceof NumericLiteral)
@@ -41,7 +41,7 @@ public class HeapAllocation {
         return name;
     }
 
-    public int getFirst() {
+    int getFirst() {
         return first;
     }
 
@@ -49,7 +49,7 @@ public class HeapAllocation {
         return (last - first) + 1;
     }
 
-    public AstNode addressOf(int location) {
+    AstNode addressOf(int location) {
         return new NumericLiteral(String.valueOf(getFirst() + location));
     }
 

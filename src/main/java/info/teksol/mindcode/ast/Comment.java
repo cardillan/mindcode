@@ -5,11 +5,11 @@ import java.util.Objects;
 public class Comment implements AstNode {
     private final String text;
 
-    public Comment(String text) {
+    Comment(String text) {
         this.text = text;
     }
 
-    public String getText() {
+    String getText() {
         return text;
     }
 

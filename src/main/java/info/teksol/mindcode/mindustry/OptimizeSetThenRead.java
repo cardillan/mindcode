@@ -1,6 +1,6 @@
 package info.teksol.mindcode.mindustry;
 
-public class OptimizeSetThenRead implements LogicInstructionPipeline {
+class OptimizeSetThenRead implements LogicInstructionPipeline {
     private final LogicInstructionPipeline next;
     private State state;
 

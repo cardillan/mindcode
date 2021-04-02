@@ -8,7 +8,7 @@ public class CaseExpression implements AstNode {
     private final List<CaseAlternative> alternatives;
     private final AstNode elseBranch;
 
-    public CaseExpression(AstNode condition, List<CaseAlternative> alternatives, AstNode elseBranch) {
+    CaseExpression(AstNode condition, List<CaseAlternative> alternatives, AstNode elseBranch) {
         this.condition = condition;
         this.alternatives = alternatives;
         this.elseBranch = elseBranch;

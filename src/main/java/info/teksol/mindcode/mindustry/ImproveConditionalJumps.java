@@ -25,7 +25,7 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
     private final LogicInstructionPipeline next;
     private LogicInstruction previous;
 
-    public ImproveConditionalJumps(LogicInstructionPipeline next) {
+    ImproveConditionalJumps(LogicInstructionPipeline next) {
         this.next = next;
     }
 

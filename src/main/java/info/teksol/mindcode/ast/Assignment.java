@@ -7,10 +7,6 @@ public class Assignment implements AstNode {
     private final AstNode value;
 
     public Assignment(AstNode var, AstNode value) {
-//        if (RESERVED_KEYWORDS.contains(var)) {
-//            throw new ParsingException(var + " is a reserved keyword, please use a different word");
-//        }
-
         this.var = var;
         this.value = value;
     }

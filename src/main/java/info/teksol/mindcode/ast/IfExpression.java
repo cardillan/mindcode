@@ -7,7 +7,7 @@ public class IfExpression implements AstNode {
     private final AstNode trueBranch;
     private final AstNode falseBranch;
 
-    public IfExpression(AstNode condition, AstNode trueBranch, AstNode falseBranch) {
+    IfExpression(AstNode condition, AstNode trueBranch, AstNode falseBranch) {
         this.condition = condition;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;

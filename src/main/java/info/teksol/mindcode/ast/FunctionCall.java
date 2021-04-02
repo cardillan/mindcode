@@ -7,11 +7,11 @@ public class FunctionCall implements AstNode {
     private final String functionName;
     private final List<AstNode> params;
 
-    public FunctionCall(String functionName, AstNode... params) {
+    FunctionCall(String functionName, AstNode... params) {
         this(functionName, List.of(params));
     }
 
-    public FunctionCall(String functionName, List<AstNode> params) {
+    FunctionCall(String functionName, List<AstNode> params) {
         this.functionName = functionName;
         this.params = params;
     }

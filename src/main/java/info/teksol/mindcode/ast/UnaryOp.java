@@ -6,7 +6,7 @@ public class UnaryOp implements AstNode {
     private final String op;
     private final AstNode expression;
 
-    public UnaryOp(String op, AstNode expression) {
+    UnaryOp(String op, AstNode expression) {
         this.op = op;
         this.expression = expression;
     }

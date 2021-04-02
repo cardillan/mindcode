@@ -5,7 +5,7 @@ import java.util.Objects;
 public class NumericLiteral implements AstNode {
     private final String literal;
 
-    public NumericLiteral(String literal) {
+    NumericLiteral(String literal) {
         this.literal = literal;
     }
 

@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Ref implements AstNode {
     private final String name;
 
-    public Ref(String name) {
+    Ref(String name) {
         this.name = name;
     }
 

@@ -1,6 +1,5 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.GenerationException;
 import info.teksol.mindcode.ast.*;
 
 import java.util.*;
@@ -12,7 +11,8 @@ import java.util.stream.Collectors;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<String> {
-    public static final String TMP_PREFIX = "__tmp";
+    static final String TMP_PREFIX = "__tmp";
+
     private final LogicInstructionPipeline pipeline;
     private int tmp;
     private int label;
@@ -73,7 +73,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return terminus.getResult();
     }
 
-    void start(Seq program) {
+    private void start(Seq program) {
         visit(program);
         appendFunctionDeclarations();
     }
@@ -92,7 +92,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 final AstNode var = iterator.previous();
                 final String param = nextTemp();
                 popValueFromStack(param);
-                final String assignParam = visit(new Assignment(var, new VarRef(param)));
+                visit(new Assignment(var, new VarRef(param)));
             }
 
             final String body = visit(pair.getValue().getBody());
@@ -239,13 +239,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 return handleApproach(params);
 
             case "idle":
-                return handleIdle(params);
+                return handleIdle();
 
             case "pathfind":
-                return handlePathfind(params);
+                return handlePathfind();
 
             case "stop":
-                return handleStop(params);
+                return handleStop();
 
             case "boot":
                 return handleBoost(params);
@@ -257,7 +257,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 return handleTargetp(params);
 
             case "payDrop":
-                return handlePayDrop(params);
+                return handlePayDrop();
 
             case "payTake":
                 return handlePayTake(params);
@@ -282,24 +282,33 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
             case "clear":
                 return handleClear(params);
+
             case "color":
                 return handleColor(params);
+
             case "stroke":
                 return handleStroke(params);
+
             case "line":
                 return handleLine(params);
             case "rect":
                 return handleRect(params);
+
             case "lineRect":
                 return handleLineRect(params);
+
             case "poly":
                 return handlePoly(params);
+
             case "linePoly":
                 return handleLinePoly(params);
+
             case "triangle":
                 return handleTriangle(params);
+
             case "image":
                 return handleImage(params);
+
             case "drawflush":
                 return handleDrawflush(params);
 
@@ -310,7 +319,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 return handleULocate(params);
 
             case "end":
-                return handleEnd(params);
+                return handleEnd();
 
             case "sqrt":
                 return handleSqrt(params);
@@ -406,7 +415,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return allocatedStack.getName();
     }
 
-    private String handleEnd(List<String> params) {
+    private String handleEnd() {
         pipeline.emit(new LogicInstruction("end"));
         return "null";
     }
@@ -559,7 +568,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return "null";
     }
 
-    private String handlePayDrop(List<String> params) {
+    private String handlePayDrop() {
         // ucontrol payDrop 0 0 0 0 0
         pipeline.emit(new LogicInstruction("ucontrol", "payDrop"));
         return "null";
@@ -589,19 +598,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return params.get(1);
     }
 
-    private String handlePathfind(List<String> params) {
+    private String handlePathfind() {
         // ucontrol pathfind 0 0 0 0 0
         pipeline.emit(new LogicInstruction("ucontrol", "pathfind"));
         return "null";
     }
 
-    private String handleIdle(List<String> params) {
+    private String handleIdle() {
         // ucontrol idle 0 0 0 0 0
         pipeline.emit(new LogicInstruction("ucontrol", "idle"));
         return "null";
     }
 
-    private String handleStop(List<String> params) {
+    private String handleStop() {
         // ucontrol stop 0 0 0 0 0
         pipeline.emit(new LogicInstruction("ucontrol", "stop"));
         return "null";
@@ -673,7 +682,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String right = visit(node.getRight());
 
         final String tmp = nextTemp();
-        final List<LogicInstruction> result = new ArrayList<>();
         pipeline.emit(
                 new LogicInstruction(
                         "op",

@@ -3,7 +3,7 @@ package info.teksol.mindcode.mindustry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptimizeOpThenSet implements LogicInstructionPipeline {
+class OptimizeOpThenSet implements LogicInstructionPipeline {
     private final LogicInstructionPipeline next;
     private State state;
 

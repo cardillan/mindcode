@@ -9,7 +9,7 @@ public class StackAllocation implements AstNode {
     private final int first;
     private final int last;
 
-    public StackAllocation(String name, Range range) {
+    StackAllocation(String name, Range range) {
         if (
                 !(range.getFirstValue() instanceof NumericLiteral)
                         || !(range.getLastValue() instanceof NumericLiteral)
@@ -31,7 +31,7 @@ public class StackAllocation implements AstNode {
         this.last = candidate;
     }
 
-    public StackAllocation(String name, int first, int last) {
+    StackAllocation(String name, int first, int last) {
         this.name = name;
         this.first = first;
         this.last = last;
@@ -41,7 +41,7 @@ public class StackAllocation implements AstNode {
         return name;
     }
 
-    public int getFirst() {
+    int getFirst() {
         return first;
     }
 

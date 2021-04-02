@@ -6,16 +6,16 @@ public abstract class Range implements AstNode {
     private final AstNode firstValue;
     private final AstNode lastValue;
 
-    public Range(AstNode firstValue, AstNode lastValue) {
+    Range(AstNode firstValue, AstNode lastValue) {
         this.firstValue = firstValue;
         this.lastValue = lastValue;
     }
 
-    public AstNode getFirstValue() {
+    AstNode getFirstValue() {
         return firstValue;
     }
 
-    public AstNode getLastValue() {
+    AstNode getLastValue() {
         return lastValue;
     }
 

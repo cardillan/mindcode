@@ -6,7 +6,7 @@ public class CaseAlternative implements AstNode {
     private final AstNode value;
     private final AstNode body;
 
-    public CaseAlternative(AstNode value, AstNode body) {
+    CaseAlternative(AstNode value, AstNode body) {
         this.value = value;
         this.body = body;
     }

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.ast;
 
 public class ExclusiveRange extends Range {
-    public ExclusiveRange(AstNode firstValue, AstNode lastValue) {
+    ExclusiveRange(AstNode firstValue, AstNode lastValue) {
         super(firstValue, lastValue);
     }
 

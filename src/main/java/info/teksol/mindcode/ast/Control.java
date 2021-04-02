@@ -8,7 +8,7 @@ public class Control implements AstNode {
     private final String property;
     private final List<AstNode> params;
 
-    public Control(AstNode target, String property, List<AstNode> params) {
+    Control(AstNode target, String property, List<AstNode> params) {
         this.target = target;
         this.property = property;
         this.params = params;

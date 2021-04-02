@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class FunctionDeclaration implements AstNode {
-    final String name;
-    final List<AstNode> params;
-    final AstNode body;
+    private final String name;
+    private final List<AstNode> params;
+    private final AstNode body;
 
-    public FunctionDeclaration(String name, List<AstNode> params, AstNode body) {
+    FunctionDeclaration(String name, List<AstNode> params, AstNode body) {
         this.name = name;
         this.params = params;
         this.body = body;

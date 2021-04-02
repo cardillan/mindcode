@@ -6,7 +6,7 @@ public class WhileExpression implements AstNode {
     private final AstNode condition;
     private final AstNode body;
 
-    public WhileExpression(AstNode condition, AstNode body) {
+    WhileExpression(AstNode condition, AstNode body) {
         this.condition = condition;
         this.body = body;
     }
