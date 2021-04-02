@@ -28,16 +28,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final LogicInstructionPipeline pipeline =
                 new DeadCodeEliminator(
-                        new OptimizeSetThenWrite(
-                                new OptimizeReadThenSet(
-                                        new OptimizeSetThenRead(
-                                                new OptimizeOpThenSet(
-                                                        new OptimizeSetThenOp(
-                                                                new OptimizeSetThenSet(
-                                                                        new OptimizeSetThenPrint(
-                                                                                new OptimizeGetlinkThenSet(
-                                                                                        new ImproveConditionalJumps(
-                                                                                                terminus
+                        new OptimizeSensorThenSet(
+                                new OptimizeSetThenWrite(
+                                        new OptimizeReadThenSet(
+                                                new OptimizeSetThenRead(
+                                                        new OptimizeOpThenSet(
+                                                                new OptimizeSetThenOp(
+                                                                        new OptimizeSetThenSet(
+                                                                                new OptimizeSetThenPrint(
+                                                                                        new OptimizeGetlinkThenSet(
+                                                                                                new ImproveConditionalJumps(
+                                                                                                        terminus
+                                                                                                )
                                                                                         )
                                                                                 )
                                                                         )

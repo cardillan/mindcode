@@ -158,17 +158,37 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("sensor", var(0), "reconstructor1", "@silicon"),
-                        new LogicInstruction("set", "silicon", var(0)),
-                        new LogicInstruction("sensor", var(1), "reconstructor1", "@graphite"),
-                        new LogicInstruction("set", "graphite", var(1)),
-                        new LogicInstruction("sensor", var(2), "reconstructor1", "@itemCapacity"),
-                        new LogicInstruction("set", "capacity", var(2)),
+                        new LogicInstruction("sensor", "silicon", "reconstructor1", "@silicon"),
+                        new LogicInstruction("sensor", "graphite", "reconstructor1", "@graphite"),
+                        new LogicInstruction("sensor", "capacity", "reconstructor1", "@itemCapacity"),
                         new LogicInstruction("op", "lessThan", var(3), "silicon", "capacity"),
                         new LogicInstruction("op", "lessThan", var(4), "graphite", "capacity"),
                         new LogicInstruction("op", "or", var(5), var(3), var(4)),
                         new LogicInstruction("op", "not", var(6), var(5)),
                         new LogicInstruction("control", "enabled", "conveyor1", var(6)),
+                        new LogicInstruction("end")
+                ),
+                result
+        );
+    }
+
+    @Test
+    void reallifeScripts2() {
+        final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
+                (Seq) translateToAst(
+                        "" +
+                                "level = nucleus1.resource\n" +
+                                "print(level)\n" +
+                                "building.enabled = level < capacity"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("sensor", "level", "nucleus1", "@resource"),
+                        new LogicInstruction("print", "level"),
+                        new LogicInstruction("op", "lessThan", var(0), "level", "capacity"),
+                        new LogicInstruction("control", "enabled", "building", var(0)),
                         new LogicInstruction("end")
                 ),
                 result

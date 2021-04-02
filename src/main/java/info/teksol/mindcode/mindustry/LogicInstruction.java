@@ -56,6 +56,10 @@ public class LogicInstruction {
         return opcode.equals("getlink");
     }
 
+    public boolean isSensor() {
+        return opcode.equals("sensor");
+    }
+
     public String getOpcode() {
         return opcode;
     }
