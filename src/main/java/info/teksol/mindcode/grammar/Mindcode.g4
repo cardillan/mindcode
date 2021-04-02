@@ -24,7 +24,7 @@ expression : a_comment                                                          
            | for_expression                                                                     # for_loop
            | left=expression op=EXP right=expression                                            # binop_exp
            | NOT expression                                                                     # not_expr
-           | left=expression op=( MUL | DIV | MOD ) right=expression                            # binop_mul_div_mod
+           | left=expression op=( MUL | DIV | IDIV | MOD ) right=expression                     # binop_mul_div_mod
            | left=expression op=( PLUS | MINUS ) right=expression                               # binop_plus_minus
            | left=expression op=( SHIFT_LEFT | SHIFT_RIGHT ) right=expression                   # binop_shift
            | left=expression op=( LESS_THAN | LESS_THAN_EQUAL
@@ -177,6 +177,7 @@ AT : '@';
 COLON : ':';
 COMMA : ',';
 DIV : '/';
+IDIV : '\\';
 DOLLAR : '$';
 DOT : '.';
 EXP : '**';

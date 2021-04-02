@@ -291,3 +291,37 @@ write 0 HEAPPTR 0
 Since the very first instruction of the Logic code will be the global variable assignment, you can easily change the
 actual cell or bank your will use, without having to do a global search & replace within the Logic code. This introduces
 more avenues for code sharing.
+
+# Unary and Binary operators
+
+Most operators do the expected: `+`, `-`, `*`, `/`, and they respect priority of operation, meaning we multiply and
+divide, then add and substract. Add to this operator `\`, which stands for integer division. For example:
+
+```
+3 / 2 // returns 1.5
+3 \ 2 // returns 1
+```
+
+Otherwise, the full list of operators is as follows:
+
+* `+`: Addition
+* `-`: Substraction
+* `*`: Multiplication
+* `/`: Floating point division
+* `\\`: Integer division
+* `%`: Modulo
+* `==`: Equality
+* `!=`: Inequality (does not equal)
+* `<`: Less than (4 < 2 is true, while 2 < 4 is false)
+* `<=`: Less than or equal (4 <= 4 is true, while 5 <= 4 is false)
+* `>=`: Greater than or equal
+* `>`:  Greater than
+* `===`: Strict equality -- use to compare with `null`
+* `**`: Exponentiation (`2**4` is `2 * 2 * 2 * 2`, or 16)
+* `||`, `or`: boolean or
+* `&&`, `and`: boolean and (`reactor1.thorium > 0 and reactor1.cryofluid <= 10`)
+* `<<`: Left-shift ( `1 << 2` is easier to read in binary: `0b0001 << 2` becomes `0b0100`)
+* `>>`: Right-shift
+* `&`: Binary and, useful for flags
+* `|`: Binary or, useful for flags
+* `^`: Binary [xor (exclusive-or)](https://en.wikipedia.org/wiki/Exclusive_or)

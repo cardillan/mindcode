@@ -873,6 +873,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             case "/":
                 return "div";
 
+            case "\\":
+                return "idiv";
+
             case "==":
                 return "equal";
 

@@ -1343,8 +1343,6 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesVectorLengthAndAngleCalls() {
-        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
-        // not the start of heap is respected. Everything else superfluous.
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("set", var(0), "4"),
@@ -1365,8 +1363,6 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesLog10Call() {
-        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
-        // not the start of heap is respected. Everything else superfluous.
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("set", var(0), "405"),
@@ -1382,8 +1378,6 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesNoiseCall() {
-        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
-        // not the start of heap is respected. Everything else superfluous.
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("set", var(0), "4"),
@@ -1394,6 +1388,22 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 ),
                 LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("n = noise(4, 8)\n")
+                )
+        );
+    }
+
+    @Test
+    void generatesIntegerDivision() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "4"),
+                        new LogicInstruction("set", var(1), "8"),
+                        new LogicInstruction("op", "idiv", var(2), var(0), var(1)),
+                        new LogicInstruction("set", "n", var(2)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("n = 4 \\ 8\n")
                 )
         );
     }
