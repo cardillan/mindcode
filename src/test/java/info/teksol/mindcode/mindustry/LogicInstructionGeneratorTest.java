@@ -1340,4 +1340,61 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 ).subList(0, 6)
         );
     }
+
+    @Test
+    void generatesVectorLengthAndAngleCalls() {
+        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
+        // not the start of heap is respected. Everything else superfluous.
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "4"),
+                        new LogicInstruction("set", var(1), "8"),
+                        new LogicInstruction("op", "len", var(2), var(0), var(1)),
+                        new LogicInstruction("set", "length", var(2)),
+                        new LogicInstruction("set", var(3), "4"),
+                        new LogicInstruction("set", var(4), "8"),
+                        new LogicInstruction("op", "angle", var(5), var(3), var(4)),
+                        new LogicInstruction("set", "angle", var(5)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("length = len(4, 8)\nangle = angle(4, 8)\n")
+                )
+        );
+    }
+
+    @Test
+    void generatesLog10Call() {
+        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
+        // not the start of heap is respected. Everything else superfluous.
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "405"),
+                        new LogicInstruction("op", "log10", var(1), var(0)),
+                        new LogicInstruction("set", "l", var(1)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("l = log10(405)\n")
+                )
+        );
+    }
+
+    @Test
+    void generatesNoiseCall() {
+        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
+        // not the start of heap is respected. Everything else superfluous.
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "4"),
+                        new LogicInstruction("set", var(1), "8"),
+                        new LogicInstruction("op", "noise", var(2), var(0), var(1)),
+                        new LogicInstruction("set", "n", var(2)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("n = noise(4, 8)\n")
+                )
+        );
+    }
 }

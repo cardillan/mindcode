@@ -330,6 +330,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             case "max":
                 return handleMax(params);
 
+            case "len":
+                return handleLen(params);
+
+            case "angle":
+                return handleAngle(params);
+
+            case "log10":
+                return handleLog10(params);
+
+            case "noise":
+                return handleNoise(params);
+
             default:
                 if (declaredFunctions.containsKey(functionName)) {
                     return handleInternalFunctionCall(functionName, params);
@@ -337,6 +349,30 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                     throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
                 }
         }
+    }
+
+    private String handleNoise(List<String> params) {
+        final String tmp = nextTemp();
+        pipeline.emit(new LogicInstruction("op", "noise", tmp, params.get(0), params.get(1)));
+        return tmp;
+    }
+
+    private String handleLog10(List<String> params) {
+        final String tmp = nextTemp();
+        pipeline.emit(new LogicInstruction("op", "log10", tmp, params.get(0)));
+        return tmp;
+    }
+
+    private String handleAngle(List<String> params) {
+        final String tmp = nextTemp();
+        pipeline.emit(new LogicInstruction("op", "angle", tmp, params.get(0), params.get(1)));
+        return tmp;
+    }
+
+    private String handleLen(List<String> params) {
+        final String tmp = nextTemp();
+        pipeline.emit(new LogicInstruction("op", "len", tmp, params.get(0), params.get(1)));
+        return tmp;
     }
 
     private String handleMax(List<String> params) {
