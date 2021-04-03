@@ -91,14 +91,6 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
                 visitSensor(instruction);
                 break;
 
-            case "label":
-                visitLabel(instruction);
-                break;
-
-            case "end":
-                visitEnd(instruction);
-                break;
-
             case "ubind":
                 visitUbind(instruction);
                 break;
@@ -125,6 +117,11 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
 
             case "uradar":
                 visitUradar(instruction);
+                break;
+
+            case "label":
+            case "end":
+                // These don't have useful args
                 break;
 
             default:
@@ -337,9 +334,32 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
                 visitUcontrolItemTake(instruction);
                 break;
 
+            case "payTake":
+                visitUcontrolPayTake(instruction);
+                break;
+
+            case "boost":
+                visitUcontrolBoost(instruction);
+                break;
+
+            case "payDrop":
+            case "pathfind":
+            case "idle":
+            case "stop":
+                // These ucontrol don't have any arguments, hence they have nothing to read or write
+                break;
+
             default:
                 throw new GenerationException("Unknown ucontrol opcode [" + instruction.getArgs().get(0) + "]");
         }
+    }
+
+    private void visitUcontrolBoost(LogicInstruction instruction) {
+        reads.add(instruction.getArgs().get(1));
+    }
+
+    private void visitUcontrolPayTake(LogicInstruction instruction) {
+        reads.add(instruction.getArgs().get(1));
     }
 
     private void visitTargetp(LogicInstruction instruction) {
@@ -413,11 +433,4 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
         reads.add(instruction.getArgs().get(3));
     }
 
-    private void visitLabel(LogicInstruction instruction) {
-        // NOP
-    }
-
-    private void visitEnd(LogicInstruction instruction) {
-        // NOP
-    }
 }

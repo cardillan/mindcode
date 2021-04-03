@@ -249,7 +249,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             case "stop":
                 return handleStop();
 
-            case "boot":
+            case "boost":
                 return handleBoost(params);
 
             case "target":
@@ -632,8 +632,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     private String handleBoost(List<String> params) {
         // ucontrol boost enable 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "boost", params.get(1)));
-        return params.get(1);
+        pipeline.emit(new LogicInstruction("ucontrol", "boost", params.get(0)));
+        return params.get(0);
     }
 
     private String handlePathfind() {

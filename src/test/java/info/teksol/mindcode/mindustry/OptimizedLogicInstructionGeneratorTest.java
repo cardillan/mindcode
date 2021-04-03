@@ -8,7 +8,7 @@ import java.util.List;
 
 class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
-    void correctlyOptimizesFunctionCallAndReturn() throws IOException {
+    void correctlyOptimizesFunctionCallAndReturn() {
        /* VERY USEFUL FOR DEBUGGING PURPOSES -- the two files can be compared using the diff(1)
         try (final Writer w = new FileWriter("unoptimized.txt")) {
             w.write(
@@ -245,6 +245,39 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("write", "1", "HEAPPTR", "0"),
                         new LogicInstruction("write", "2", "HEAPPTR", "1"),
                         new LogicInstruction("write", "3", "HEAPPTR", "2"),
+                        new LogicInstruction("end")
+                ),
+                result
+        );
+    }
+
+    @Test
+    void regressionTest3() {
+        // https://github.com/francois/mindcode/issues/15
+
+        final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
+                (Seq) translateToAst("" +
+                        "desired = @dagger\n" +
+                        "boosting = false\n" +
+                        "payTake(desired)\n" +
+                        "payDrop()\n" +
+                        "boost(boosting)\n" +
+                        "pathfind()\n" +
+                        "idle()\n" +
+                        "stop()"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "desired", "@dagger"),
+                        new LogicInstruction("set", "boosting", "false"),
+                        new LogicInstruction("ucontrol", "payTake", "desired"),
+                        new LogicInstruction("ucontrol", "payDrop"),
+                        new LogicInstruction("ucontrol", "boost", "boosting"),
+                        new LogicInstruction("ucontrol", "pathfind"),
+                        new LogicInstruction("ucontrol", "idle"),
+                        new LogicInstruction("ucontrol", "stop"),
                         new LogicInstruction("end")
                 ),
                 result
