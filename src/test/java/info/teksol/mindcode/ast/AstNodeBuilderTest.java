@@ -1135,4 +1135,24 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void correctlyParsesElsif() {
+        assertEquals(
+                new Seq(
+                        new IfExpression(
+                                new BooleanLiteral(false),
+                                new Seq(new NumericLiteral(1)),
+                                new IfExpression(
+                                        new BooleanLiteral(true),
+                                        new Seq(new NumericLiteral(2)),
+                                        new Seq(new NumericLiteral(3))
+                                )
+                        )
+                ),
+                translateToAst(
+                        "if false 1 elsif true 2 else 3 end"
+                )
+        );
+    }
 }

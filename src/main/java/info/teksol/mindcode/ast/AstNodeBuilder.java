@@ -437,6 +437,27 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitIf_trailer(MindcodeParser.If_trailerContext ctx) {
+        if (ctx.ELSIF() != null) {
+            final AstNode trailer;
+            if (ctx.if_trailer() != null) {
+                trailer = visit(ctx.if_trailer());
+            } else {
+                trailer = new NoOp();
+            }
+
+            return new IfExpression(
+                    visit(ctx.cond),
+                    visit(ctx.true_branch),
+                    trailer);
+        } else if (ctx.ELSE() != null) {
+            return visit(ctx.false_branch);
+        } else {
+            throw new ParsingException("Unhandled if/elsif/else; neither ELSIF nor ELSE were true in " + ctx.getText());
+        }
+    }
+
+    @Override
     public AstNode visitTrue_bool_literal(MindcodeParser.True_bool_literalContext ctx) {
         return new BooleanLiteral(true);
     }

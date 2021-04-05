@@ -111,6 +111,7 @@ arg : expression;
 if_expr : IF cond=expression true_branch=expression_list if_trailer? END;
 
 if_trailer : ELSE false_branch=expression_list
+           | ELSIF cond=expression true_branch=expression_list if_trailer
            | ELSE IF cond=expression true_branch=expression_list if_trailer
            ;
 
@@ -160,6 +161,7 @@ CASE : 'case';
 CONTINUE : 'continue';
 DEF : 'def';
 ELSE : 'else';
+ELSIF : 'elsif';
 END : 'end';
 FALSE : 'false';
 FOR : 'for';
