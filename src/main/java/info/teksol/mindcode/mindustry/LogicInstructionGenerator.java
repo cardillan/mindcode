@@ -29,10 +29,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final LogicInstructionPipeline pipeline =
                 new DeadCodeEliminator(
                         new OptimizeSensorThenSet(
-                                new OptimizeSetThenWrite(
-                                        new OptimizeReadThenSet(
-                                                new OptimizeSetThenRead(
-                                                        new OptimizeOpThenSet(
+                                new OptimizeOpThenSet(
+                                        new OptimizeSetThenWrite(
+                                                new OptimizeReadThenSet(
+                                                        new OptimizeSetThenRead(
                                                                 new OptimizeSetThenOp(
                                                                         new OptimizeSetThenSet(
                                                                                 new OptimizeSetThenPrint(
@@ -48,7 +48,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                                                 )
                                         )
                                 )
-
                         )
                 );
 
