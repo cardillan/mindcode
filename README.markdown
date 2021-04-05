@@ -61,9 +61,15 @@ Things I'd like to add to Mindcode-the-language:
 * [x] further optimize the generated Logic
 * [x] optimize getlink / set
 * [x] optimize sensor / set
-* [ ] warn developers when trying to pass in/return values that are non-numeric to/from functions
+* [ ] warn developers when the generated code goes over 1000 Mindustry instructions
+* [ ] #16 direct sensor access. We can't do `resource = @silicon ; CONTAINER.resource`. This tries to call `sensor
+  result CONTAINER @resource`, which doesn't make any sense.
+* [ ] #17 `break`, `next` and `continue`, to better control iteration
+* [ ] #17 `if` operator: `break if some_cond` is equivalent to `if some_cond break end`. It's just a less verbose way of doing it.
+* [ ] #19 inline functions, meaning functions that are inlined at the call-site
 * [ ] skip comments when determining the return value of expressions (case/when, if/else, etc.)
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
+* [ ] warn developers when trying to pass in/return values that are non-numeric to/from functions
 * [ ] improved data types: 2d vector
 * [ ] add support for passing non-numerics into/out of functions
 
