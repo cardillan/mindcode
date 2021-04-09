@@ -30,13 +30,34 @@ Download the extension from the [Visual Studio marketplace](https://marketplace.
 
 ## Development
 
-Install Java 11+, Maven 3.6, and then run:
+There are two options for getting Mindcode up and running on your own machine. Using Docker, or running it natively:
+
+### With Docker & Docker Compose
+
+```sh
+docker-compose up --build
+```
+It can take a few minutes to download and compile all the required parts the first time you run this, but subsequent
+runs will be be a lot faster.
+
+The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
+
+### Native installation
+
+1. Install Java 11+, Maven 3.6, and PostgreSQL
+2. Create a database in PostgreSQL named `mindcode_development`
+3. Set an environment vairable with the PostgreSQL connection parameters:
+```sh
+export JDBC_DATABASE_URL='jdbc:postgresql://localhost/mindcode_development?user=POSTGRES_USER&password=POSTGRES_PASSWORD'
+```
+
+Then run:
 
 ```sh
 mvn clean compile exec:java
 ```
 
-This will start the Mindcode UI on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
+The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
 
 The compiler was written in a Test-Driven Development fashion. If you can, please look in `src/main/test` and attempt to
 emulate an existing test, so that we can prove that your proposal works as intended.
