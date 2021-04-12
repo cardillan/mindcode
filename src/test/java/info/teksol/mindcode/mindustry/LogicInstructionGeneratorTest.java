@@ -1469,4 +1469,51 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void correctlyParsesIndirectPropertyReference() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "resource", "@silicon"),
+                        new LogicInstruction("sensor", var(0), "vault1", "resource"),
+                        new LogicInstruction("sensor", var(1), "vault1", "@itemCapacity"),
+                        new LogicInstruction("op", "lessThan", var(2), var(0), var(1)),
+                        new LogicInstruction("jump", var(1000), "notEqual", var(2), "true"),
+                        new LogicInstruction("set", "foo", "true"),
+                        new LogicInstruction("set", var(3), "true"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("set", var(3), "null"),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst(
+                                "" +
+                                        "resource = @silicon\n" +
+                                        "if vault1.sensor(resource) < vault1.itemCapacity\n" +
+                                        "  foo = true\n" +
+                                        "end\n"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void correctlyParsesDirectIndirectPropertyReference() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("sensor", var(0), "vault1", "@graphite"),
+                        new LogicInstruction("sensor", var(1), "vault1", "@itemCapacity"),
+                        new LogicInstruction("op", "lessThan", var(2), var(0), var(1)),
+                        new LogicInstruction("control", "enabled", "conveyor1", var(2)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst(
+                                "conveyor1.enabled = vault1.sensor(@graphite) < vault1.sensor(@itemCapacity)"
+                        )
+                )
+        );
+    }
 }

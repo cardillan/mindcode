@@ -10,7 +10,8 @@ expression_list : expression
                 | expression_list SEMICOLON expression
                 ;
 
-expression : propaccess                                                                         # property_access
+expression : indirectpropaccess                                                                 # indirect_prop_access
+           | propaccess                                                                         # property_access
            | cond=expression QUESTION_MARK true_branch=expression COLON false_branch=expression # ternary_op
            | case_expr                                                                          # case_expression
            | if_expr                                                                            # if_expression
@@ -40,6 +41,8 @@ expression : propaccess                                                         
            | null_t                                                                             # literal_null
            | LEFT_RBRACKET expression RIGHT_RBRACKET                                            # parenthesized_expression
            ;
+
+indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
 
 propaccess : var_ref DOT prop=id
            | unit_ref DOT prop=id
@@ -166,6 +169,7 @@ HEAP : 'heap';
 IF : 'if';
 IN : 'in';
 NULL : 'null';
+SENSOR : 'sensor';
 STACK : 'stack';
 TRUE : 'true';
 WHEN : 'when';

@@ -158,7 +158,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         } else if (node.getVar() instanceof PropertyAccess) {
             final PropertyAccess propertyAccess = (PropertyAccess) node.getVar();
             final String propTarget = visit(propertyAccess.getTarget());
-            pipeline.emit(new LogicInstruction("control", propertyAccess.getProperty(), propTarget, rvalue));
+            String prop = visit(propertyAccess.getProperty());
+            if (prop.startsWith("@")) prop = prop.replaceFirst("@", "");
+            pipeline.emit(new LogicInstruction("control", prop, propTarget, rvalue));
         } else if (node.getVar() instanceof VarRef) {
             final String target = visit(node.getVar());
             pipeline.emit(new LogicInstruction("set", List.of(target, rvalue)));
@@ -769,8 +771,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitPropertyAccess(PropertyAccess node) {
         final String target = visit(node.getTarget());
+        final String prop = visit(node.getProperty());
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("sensor", tmp, target, "@" + node.getProperty()));
+        pipeline.emit(new LogicInstruction("sensor", tmp, target, prop));
         return tmp;
     }
 

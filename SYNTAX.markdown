@@ -74,6 +74,52 @@ fib(8) // 13
 As you may have noticed, allocating a stack in a Memory Cell or Memory Bank is required in order to handle custom
 functions.
 
+# Sensors
+
+You may sense any property using the following syntax:
+
+```
+conveyor1.enabled = vault1.sensor(@thorium) < vault1.sensor(@itemCapacity)
+reactor1.enabled = reactor1.sensor(@cryofluid) < reactor1.sensor(@liquidCapacity)
+```
+
+This syntax allows us to sense values using an "indirect" reference, where the property we want to query is stored in a
+variable:
+
+```
+resource = @silicon
+conveyor1.enabled = vault1.sensor(resource) < vault1.sensor(@itemCapacity)
+```
+
+This will compile down to:
+
+```
+set resource @silicon
+sensor __tmp0 vault1 resource
+sensor __tmp1 vault1 @itemCapacity
+op lessThan __tmp2 __tmp0 __tmp1
+control enabled conveyor1 __tmp2
+```
+
+Mindcode also offers a shortcut syntax for the regular case where the sensor directly references the property it wants:
+
+```
+leader = cyclone3
+
+// regular sensor
+lx = leader.sensor(@shootX)
+ly = leader.sensor(@shootY)
+ls = leader.sensor(@shooting)
+
+// shortcut sensor
+lx = leader.shootX
+ly = leader.shootY
+ls = leader.shooting
+
+cyclone1.shoot(lx, ly, ls)
+cyclone2.shoot(lx, ly, ls)
+```
+
 # Loops
 
 You have access to 3 styles of loops: [while loops](#while-loops), [range iteration loops](#range-iteration-loops), and

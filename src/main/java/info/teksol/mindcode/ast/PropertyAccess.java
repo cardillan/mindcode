@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class PropertyAccess implements AstNode {
     private final AstNode target;
-    private final String property;
+    private final AstNode property;
 
-    PropertyAccess(AstNode target, String property) {
+    PropertyAccess(AstNode target, AstNode property) {
         this.target = target;
         this.property = property;
     }
@@ -15,7 +15,7 @@ public class PropertyAccess implements AstNode {
         return target;
     }
 
-    public String getProperty() {
+    public AstNode getProperty() {
         return property;
     }
 

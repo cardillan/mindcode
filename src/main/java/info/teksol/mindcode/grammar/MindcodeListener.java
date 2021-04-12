@@ -112,6 +112,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitLiteral_string(MindcodeParser.Literal_stringContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code indirect_prop_access}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndirect_prop_access(MindcodeParser.Indirect_prop_accessContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code indirect_prop_access}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndirect_prop_access(MindcodeParser.Indirect_prop_accessContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code not_expr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -351,6 +363,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinop_or(MindcodeParser.Binop_orContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#indirectpropaccess}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#indirectpropaccess}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#propaccess}.
 	 * @param ctx the parse tree

@@ -515,13 +515,13 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(
                         new Seq(
                                 new BinaryOp(
-                                        new PropertyAccess(new VarRef("foundation1"), "copper"),
+                                        new PropertyAccess(new VarRef("foundation1"), new Ref("copper")),
                                         "<",
-                                        new PropertyAccess(new VarRef("foundation1"), "itemCapacity")
+                                        new PropertyAccess(new VarRef("foundation1"), new Ref("itemCapacity"))
                                 )
                         ),
                         new BinaryOp(
-                                new PropertyAccess(new VarRef("reactor1"), "cryofluid"),
+                                new PropertyAccess(new VarRef("reactor1"), new Ref("cryofluid")),
                                 "<",
                                 new NumericLiteral("10")
                         )
@@ -535,14 +535,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Assignment(
-                                new PropertyAccess(
-                                        new VarRef("conveyor1"),
-                                        "enabled"
-                                ),
+                                new PropertyAccess(new VarRef("conveyor1"), new Ref("enabled")),
                                 new BinaryOp(
-                                        new PropertyAccess(new VarRef("CORE"), "copper"),
+                                        new PropertyAccess(new VarRef("CORE"), new Ref("copper")),
                                         "<",
-                                        new PropertyAccess(new VarRef("CORE"), "itemCapacity")
+                                        new PropertyAccess(new VarRef("CORE"), new Ref("itemCapacity"))
                                 )
                         )
                 ),
@@ -1081,9 +1078,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new VarRef("turret"),
                                         "shoot",
                                         List.of(
-                                                new PropertyAccess(new VarRef("leader"), "shootX"),
-                                                new PropertyAccess(new VarRef("leader"), "shootY"),
-                                                new PropertyAccess(new VarRef("leader"), "shooting")
+                                                new PropertyAccess(new VarRef("leader"), new Ref("shootX")),
+                                                new PropertyAccess(new VarRef("leader"), new Ref("shootY")),
+                                                new PropertyAccess(new VarRef("leader"), new Ref("shooting"))
                                         )
                                 )
                         )
@@ -1144,6 +1141,35 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 ),
                 translateToAst(
                         "if false 1 elsif true 2 else 3 end"
+                )
+        );
+    }
+
+    @Test
+    void correctlyParsesIndirectPropertyReference() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new Assignment(new VarRef("resource"), new Ref("silicon"))
+                        ),
+                        new IfExpression(
+                                new BinaryOp(
+                                        new PropertyAccess(new VarRef("vault1"), new VarRef("resource")),
+                                        "<",
+                                        new PropertyAccess(new VarRef("vault1"), new Ref("itemCapacity"))
+                                ),
+                                new Seq(
+                                        new FunctionCall("harvest", new VarRef("vault1"), new VarRef("resource"))
+                                ),
+                                new NoOp()
+                        )
+                ),
+                translateToAst(
+                        "" +
+                                "resource = @silicon\n" +
+                                "if vault1.sensor(resource) < vault1.itemCapacity\n" +
+                                "  harvest(vault1, resource)\n" +
+                                "end\n"
                 )
         );
     }

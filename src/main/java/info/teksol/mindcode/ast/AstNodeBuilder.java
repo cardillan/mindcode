@@ -335,10 +335,12 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             throw new ParsingException("Expected var ref or unit ref in " + ctx.getText());
         }
 
-        return new PropertyAccess(
-                target,
-                ctx.prop.getText()
-        );
+        return new PropertyAccess(target, new Ref(ctx.prop.getText()));
+    }
+
+    @Override
+    public AstNode visitIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx) {
+        return new PropertyAccess(visit(ctx.target), visit(ctx.expr));
     }
 
     @Override

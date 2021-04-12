@@ -72,6 +72,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral_string(MindcodeParser.Literal_stringContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code indirect_prop_access}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndirect_prop_access(MindcodeParser.Indirect_prop_accessContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code not_expr}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -211,6 +218,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBinop_or(MindcodeParser.Binop_orContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#indirectpropaccess}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#propaccess}.
 	 * @param ctx the parse tree

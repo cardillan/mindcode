@@ -124,6 +124,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterIndirect_prop_access(MindcodeParser.Indirect_prop_accessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndirect_prop_access(MindcodeParser.Indirect_prop_accessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterNot_expr(MindcodeParser.Not_exprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -359,6 +371,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBinop_or(MindcodeParser.Binop_orContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitIndirectpropaccess(MindcodeParser.IndirectpropaccessContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
