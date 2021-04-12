@@ -177,13 +177,6 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenthesized_expression(MindcodeParser.Parenthesized_expressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code comment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComment(MindcodeParser.CommentContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code ternary_op}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -492,10 +485,4 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitId(MindcodeParser.IdContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#a_comment}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitA_comment(MindcodeParser.A_commentContext ctx);
 }

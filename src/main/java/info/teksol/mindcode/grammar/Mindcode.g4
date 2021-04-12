@@ -10,8 +10,7 @@ expression_list : expression
                 | expression_list SEMICOLON expression
                 ;
 
-expression : a_comment                                                                          # comment
-           | propaccess                                                                         # property_access
+expression : propaccess                                                                         # property_access
            | cond=expression QUESTION_MARK true_branch=expression COLON false_branch=expression # ternary_op
            | case_expr                                                                          # case_expression
            | if_expr                                                                            # if_expression
@@ -108,11 +107,11 @@ arg_list : arg
 
 arg : expression;
 
-if_expr : IF cond=expression true_branch=expression_list if_trailer? END;
+if_expr : IF cond=expression true_branch=expression_list? if_trailer? END;
 
-if_trailer : ELSE false_branch=expression_list
-           | ELSIF cond=expression true_branch=expression_list if_trailer
-           | ELSE IF cond=expression true_branch=expression_list if_trailer
+if_trailer : ELSE false_branch=expression_list?
+           | ELSIF cond=expression true_branch=expression_list? if_trailer
+           | ELSE IF cond=expression true_branch=expression_list? if_trailer
            ;
 
 case_expr : CASE cond=expression alternative_list? ( ELSE else_branch=expression_list )? END;
@@ -121,7 +120,7 @@ alternative_list : alternative
                  | alternative_list alternative
                  ;
 
-alternative : WHEN value=expression body=expression_list;
+alternative : WHEN value=expression body=expression_list?;
 
 assign : target=lvalue ASSIGN value=expression                             # simple_assign
        | target=lvalue EXP_ASSIGN value=expression                         # exp_assign
@@ -152,8 +151,6 @@ bool_t : true_t  # true_bool_literal
 true_t : TRUE;
 false_t : FALSE;
 id : ID;
-
-a_comment : SL_COMMENT;
 
 ALLOCATE : 'allocate';
 BREAK : 'break';
@@ -227,5 +224,5 @@ FLOAT : INT DOT INT;
 INT : [0-9][0-9]*;
 
 ID : [_a-zA-Z][-a-zA-Z_0-9]*;
-SL_COMMENT : ('//' ~('\r' | '\n')* '\r'? '\n');
+SL_COMMENT : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;
 WS : (' ' | '\t' | '\r' | '\n')+ -> skip;

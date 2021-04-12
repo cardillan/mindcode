@@ -320,11 +320,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitComment(MindcodeParser.CommentContext ctx) {
-        return new Comment(ctx.getText().substring(2).replaceAll("\r?\n", ""));
-    }
-
-    @Override
     public AstNode visitUnit_ref(MindcodeParser.Unit_refContext ctx) {
         return new Ref(ctx.ref().getText());
     }
@@ -431,7 +426,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
         return new IfExpression(
                 visit(ctx.if_expr().cond),
-                visit(ctx.if_expr().true_branch),
+                ctx.if_expr().true_branch == null ? new Seq(new NoOp()) : visit(ctx.if_expr().true_branch),
                 trailer
         );
     }
@@ -448,10 +443,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
             return new IfExpression(
                     visit(ctx.cond),
-                    visit(ctx.true_branch),
+                    ctx.true_branch == null ? new Seq(new NoOp()) : visit(ctx.true_branch),
                     trailer);
         } else if (ctx.ELSE() != null) {
-            return visit(ctx.false_branch);
+            return ctx.false_branch == null ? new Seq(new NoOp()) : visit(ctx.false_branch);
         } else {
             throw new ParsingException("Unhandled if/elsif/else; neither ELSIF nor ELSE were true in " + ctx.getText());
         }
@@ -511,7 +506,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitAlternative(MindcodeParser.AlternativeContext ctx) {
-        return new CaseAlternative(visit(ctx.value), visit(ctx.body));
+        return new CaseAlternative(visit(ctx.value), ctx.body == null ? new Seq(new NoOp()) : visit(ctx.body));
     }
 
     @Override

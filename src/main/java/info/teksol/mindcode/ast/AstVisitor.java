@@ -35,8 +35,6 @@ public interface AstVisitor<T> {
 
     T visitSeq(Seq seq);
 
-    T visitComment(Comment node);
-
     T visitPropertyAccess(PropertyAccess node);
 
     T visitCaseExpression(CaseExpression node);

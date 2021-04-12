@@ -292,18 +292,6 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitParenthesized_expression(MindcodeParser.Parenthesized_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code comment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterComment(MindcodeParser.CommentContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code comment}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitComment(MindcodeParser.CommentContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code ternary_op}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -823,14 +811,4 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitId(MindcodeParser.IdContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#a_comment}.
-	 * @param ctx the parse tree
-	 */
-	void enterA_comment(MindcodeParser.A_commentContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#a_comment}.
-	 * @param ctx the parse tree
-	 */
-	void exitA_comment(MindcodeParser.A_commentContext ctx);
 }

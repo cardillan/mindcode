@@ -1407,4 +1407,66 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void generatesCorrectCodeWhenCaseBranchIsCommentedOut() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "ast0", "n"),
+                        new LogicInstruction("set", var(1), "2"),
+                        new LogicInstruction("jump", var(1001), "notEqual", "ast0", var(1)),
+                        new LogicInstruction("print", "n"),
+                        new LogicInstruction("set", var(0), "n"),
+                        new LogicInstruction("jump", var(1000), "always"),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("set", var(0), "null"),
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("" +
+                                "case n\n" +
+                                "// when 1\n" +
+                                "when 2\n" +
+                                "print(n)\n" +
+                                "end\n")
+                )
+        );
+    }
+
+    @Test
+    void generatesCorrectCodeWhenIfExpressionHasCommentedOutSections() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("jump", var(1000), "notEqual", "n", "true"),
+                        new LogicInstruction("set", var(0), "null"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("set", var(1), "1"),
+                        new LogicInstruction("set", var(0), var(1)),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("jump", var(1002), "notEqual", "m", "true"),
+                        new LogicInstruction("set", var(3), "1"),
+                        new LogicInstruction("set", var(2), var(3)),
+                        new LogicInstruction("jump", var(1003), "always"),
+                        new LogicInstruction("label", var(1002)),
+                        new LogicInstruction("set", var(2), "null"),
+                        new LogicInstruction("label", var(1003)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("" +
+                                "if n\n" +
+                                "// no op\n" +
+                                "else\n" +
+                                "1\n" +
+                                "end\n" +
+                                "if m\n" +
+                                "1\n" +
+                                "else\n" +
+                                "// 2\n" +
+                                "end\n")
+                )
+        );
+    }
 }

@@ -115,11 +115,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitComment(Comment node) {
-        return "null";
-    }
-
-    @Override
     public String visitIfExpression(IfExpression node) {
         final String cond = visit(node.getCondition());
 

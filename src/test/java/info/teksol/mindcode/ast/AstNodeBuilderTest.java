@@ -367,14 +367,6 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesComments() {
         assertEquals(
                 new Seq(
-                        new Seq(
-                                new Seq(
-                                        // We only remove the leading `//`, because we don't know what kind of formatting
-                                        // the end-user applied, so we have to keep the spaces in place
-                                        new Comment(" Remember that we initialized ourselves")
-                                ),
-                                new Comment(" This is required otherwise we'll repeat ourselves")
-                        ),
                         new Assignment(new VarRef("wasInitialized"), new NumericLiteral("1"))
                 ),
                 translateToAst(

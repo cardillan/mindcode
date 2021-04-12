@@ -161,14 +161,6 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitComment(Comment node) {
-        buffer.append("//");
-        buffer.append(node.getText());
-        buffer.append("\n");
-        return null;
-    }
-
-    @Override
     public String visitPropertyAccess(PropertyAccess node) {
         visit(node.getTarget());
         buffer.append(".");
