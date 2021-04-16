@@ -1,0 +1,69 @@
+<#-- @ftlvariable name="model" type="info.teksol.mindcode.webapp.HomePageData" -->
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mindcode: a Mindustry Logic high-level language</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="m-4">
+    <h1 class="m-2 text-2xl font-bold">Mindcode: a Mindustry Logic high-level language</h1>
+    <p class="m-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic. Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
+    <p class="m-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic. Mindcode includes higher-level constructs, such as inline computations, a functional while loop, and "direct" memory access.<p>
+    <#if model.id??>
+        <p class="m-2 text-lg">Go ahead and try the following samples, then write your own!<p>
+        <nav class="my-2">
+            <ul class="flex space-around">
+                <li><a href="?s=bind-single-unit"       class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "bind-single-unit"     >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Bind a single poly and move it around</a>
+                <li><a href="?s=one-thorium"            class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "one-thorium"          >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Prevent Thorium reactor blowup when out of cryo</a>
+                <li><a href="?s=heal-damaged-building"  class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "heal-damaged-building">font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Patrol around a building and heal damaged ones</a>
+                <li><a href="?s=many-thorium"           class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "many-thorium"         >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Prevent MULTIPLE Thorium reactors from blowing up when any runs out of cryo</a>
+                <li><a href="?s=mine-coord"             class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "mine-coord"           >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Mine a specific coordinate and drop into a container</a>
+                <li><a href="?s=upgrade-conveyors"      class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "upgrade-conveyors"    >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Upgrade copper conveyors to titanium, over a specific area</a>
+            </ul>
+        </nav>
+    </#if>
+
+    <div class="w-full">
+        <form action="/compile" method="post" class="mx-2" autocomplete="off">
+            <#if model.id??>
+            <#else>
+                <input type="hidden" name="id" value="$id">
+            </#if>
+            <div class="grid grid-cols-2 gap-2">
+                <label class="block font-bold" for="source">Mindcode Source Code:</label>
+                <label class="block font-bold">Mindustry Logic:</label>
+                <div>
+                    <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">${model.source}</textarea>
+                    <p class="text-center">${model.sourceLoc} lines of code</p>
+                </div>
+                <div>
+                    <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full">${model.compiled}</textarea>
+                    <p class="text-center">${model.compiledLoc} lines of code</p>
+                </div>
+                <div>
+                    <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4"/>
+                    <a href="/?s=clean" class="underline mx-2">Start with a new script</a>
+                </div>
+                <div>
+                    <#list model.syntaxErrors>
+                        <label class="mt-4 block font-bold">Syntax Errors:</label>
+                        <ul class="list-disc list-inside">
+                            <#items as error>
+                                <li class="text-red-700">${error}</li>
+                            </#items>
+                        </ul>
+                    </#list>
+                </div>
+            </div>
+        </form>
+        <p>At heart, I am a Rubyist. Mindcode bears striking resemblances to Ruby. Don't be surprised!</p>
+    </div>
+    <footer class="mt-8 text-xs text-center border border-t-2 border-l-0 border-r-0 border-b-0 border-gray-700">
+        <div class="mt-8 grid grid-cols-2 gap-4">
+            <p><b class="font-bold">PRIVACY POLICY</b>: This website does not track its users. The Mindcode you submit for compilation will be kept, for later analysis. Except for the source code and the time it was submitted, no other information will be kept.</p>
+            <p>My name is François and I build web applications for a living. You can find me on <a class="underline text-blue-500" href="https://github.com/francois">GitHub</a> and on <a class="underline text-blue-500" href="https://twitter.com/fbeausoleil">Twitter</a>.</p>
+        </div>
+    </footer>
+</body>
+</html>
