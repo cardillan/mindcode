@@ -1,11 +1,22 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>info.teksol.mindcode</groupId>
+        <artifactId>mindcode</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
     <groupId>info.teksol.mindcode</groupId>
     <artifactId>mindcode-compiler</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>mindcode-compiler</name>
+    <description>The Mindcode to Mindustry Logic compiler</description>
 
     <properties>
+        <java.version>11</java.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
