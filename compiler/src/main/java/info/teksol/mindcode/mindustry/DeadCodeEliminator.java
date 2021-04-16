@@ -1,7 +1,5 @@
 package info.teksol.mindcode.mindustry;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 class DeadCodeEliminator implements LogicInstructionPipeline {
@@ -42,7 +40,6 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
     /**
      * @return true if we need to do another round of dataflow analysis.
      */
-    @NotNull
     private boolean removeUselessWrites() {
         final Set<String> uselessWrites = new HashSet<>(writes.keySet());
         uselessWrites.removeAll(reads);
