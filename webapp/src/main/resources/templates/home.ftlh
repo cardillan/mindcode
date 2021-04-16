@@ -10,7 +10,7 @@
     <h1 class="m-2 text-2xl font-bold">Mindcode: a Mindustry Logic high-level language</h1>
     <p class="m-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic. Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
     <p class="m-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic. Mindcode includes higher-level constructs, such as inline computations, a functional while loop, and "direct" memory access.<p>
-    <#if model.id??>
+    <#if !model.sample??>
         <p class="m-2 text-lg">Go ahead and try the following samples, then write your own!<p>
         <nav class="my-2">
             <ul class="flex space-around">
@@ -27,8 +27,7 @@
     <div class="w-full">
         <form action="/compile" method="post" class="mx-2" autocomplete="off">
             <#if model.id??>
-            <#else>
-                <input type="hidden" name="id" value="$id">
+                <input type="hidden" name="id" value="${model.id}">
             </#if>
             <div class="grid grid-cols-2 gap-2">
                 <label class="block font-bold" for="source">Mindcode Source Code:</label>

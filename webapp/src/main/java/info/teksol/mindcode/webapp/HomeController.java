@@ -12,8 +12,10 @@ import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
 import org.antlr.v4.runtime.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -70,18 +73,50 @@ public class HomeController {
     }
 
     private final Random random = new Random();
+    @Autowired
+    private SourceRepository sourceRepository;
+
+    @PostMapping("/compile")
+    public String postCompile(@RequestParam(required = false) String id,
+                              @RequestParam String source) {
+        Source sourceDto;
+        if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
+            final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
+            final Source newSource = dto
+                    .map(sdto -> sdto.withSource(source))
+                    .orElseGet(() -> new Source(source, Instant.now()));
+            sourceDto = sourceRepository.save(newSource);
+        } else {
+            sourceDto = sourceRepository.save(new Source(source, Instant.now()));
+        }
+
+        return "redirect:/?s=" + sourceDto.getId().toString();
+    }
 
     @GetMapping
     public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id) {
         final String sampleName;
+        final String sourceCode;
         if (samples.containsKey(id)) {
             sampleName = id;
+            sourceCode = samples.get(sampleName);
+        } else if (id != null && id.equals("clean")) {
+            sampleName = "";
+            sourceCode = "";
+        } else if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
+            sampleName = "";
+            final Optional<Source> source = sourceRepository.findById(UUID.fromString(id));
+            if (source.isPresent()) {
+                sourceCode = source.get().getSource();
+            } else {
+                sourceCode = "// 404 Not Found";
+            }
         } else {
             final int skipCount = random.nextInt(samples.size());
             sampleName = samples.keySet().stream().skip(skipCount).findFirst().get();
+            sourceCode = samples.get(sampleName);
         }
 
-        final String sourceCode = samples.get(sampleName);
         final long start = System.nanoTime();
         final Tuple2<String, List<String>> result = compile(sourceCode);
         final long end = System.nanoTime();

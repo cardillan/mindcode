@@ -7,9 +7,7 @@
         <target>System.err</target>
     </appender>
 
-    <logger name="org.apache.velocity" level="warn"/>
-    <logger name="org.eclipse.jetty" level="warn"/>
-    <logger name="com.zaxxer.hikari" level="info"/>
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"/>
 
     <root level="info">
         <appender-ref ref="STDERR" />

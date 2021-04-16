@@ -1,4 +1,5 @@
 # Files which don't need to be shared between developers
+.idea/dataSources*
 .idea/dictionaries
 .idea/libraries
 .idea/vcs.xml
