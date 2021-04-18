@@ -29,9 +29,16 @@
 
 <#macro footer>
 <footer class="mt-8 text-xs text-center border border-t-2 border-l-0 border-r-0 border-b-0 border-gray-700">
-    <div class="mt-8 grid grid-cols-2 gap-4">
-        <p><b class="font-bold">PRIVACY POLICY</b>: This website does not track its users. The Mindcode you submit for compilation is kept for later analysis. If you register, we will also remember your username and a strongly-hashed version of your password. Other than those, no other information is kept about you or your actions on the site.</p>
-        <p>My name is François and I build web applications for a living. You can find me on <a class="underline text-blue-500" href="https://github.com/francois">GitHub</a> and on <a class="underline text-blue-500" href="https://twitter.com/fbeausoleil">Twitter</a>.</p>
+    <div class="mt-8 flex justify-between">
+        <p class="mr-4 flex-grow"><b class="font-bold">PRIVACY POLICY</b>: This website does not track its users. The Mindcode you submit for compilation is kept for later analysis. If you register, we will also remember your username and a strongly-hashed version of your password. Other than those, no other information is kept about you or your actions on the site.</p>
+        <p class="<#if model.loggedIn>mx-4<#else>ml-4</#if>flex-grow">My name is François and I build web applications for a living. You can find me on <a class="underline text-blue-500" href="https://github.com/francois">GitHub</a> and on <a class="underline text-blue-500" href="https://twitter.com/fbeausoleil">Twitter</a>.</p>
+        <#if model.loggedIn>
+            <div class="ml-4 flex-shrink">
+                <form method="post" action="/logout">
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white my-4">Logout</button>
+                </form>
+            </div>
+        </#if>
     </div>
 </footer>
 </body>

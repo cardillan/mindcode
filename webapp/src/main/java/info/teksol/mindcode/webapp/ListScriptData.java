@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ListScriptData {
     private final List<Script> scripts;
-private final String query;
+    private final String query;
 
     public ListScriptData(List<Script> scripts, String query) {
         this.scripts = scripts;
@@ -17,5 +17,9 @@ private final String query;
 
     public String getQuery() {
         return query;
+    }
+
+    public boolean isLoggedIn() {
+        return true;
     }
 }

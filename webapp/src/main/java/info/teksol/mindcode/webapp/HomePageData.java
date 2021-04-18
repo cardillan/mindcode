@@ -48,4 +48,8 @@ public class HomePageData {
     public List<String> getSyntaxErrors() {
         return syntaxErrors;
     }
+
+    public boolean isLoggedIn() {
+        return false;
+    }
 }

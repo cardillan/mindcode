@@ -37,17 +37,6 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <verbose>false</verbose>
-                    <failOnError>false</failOnError>
-                    <followSymLinks>false</followSymLinks>
-                    <directory>${project.basedir}/tmp/samples</directory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.0.1</version>
                 <executions>

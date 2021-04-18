@@ -20,4 +20,8 @@ public class EditScriptData extends NewScriptData {
     public List<ScriptVersion> getVersionHistory() {
         return versionHistory;
     }
+
+    public boolean isLoggedIn() {
+        return true;
+    }
 }

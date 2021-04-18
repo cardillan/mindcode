@@ -15,10 +15,10 @@ public class DbMigrator {
         template.execute("ALTER TABLE public.sources ALTER COLUMN id SET DEFAULT gen_random_uuid()");
 
         template.execute("CREATE TABLE IF NOT EXISTS public.users (\n" +
-                "  id            uuid primary key                  default gen_random_uuid(),\n" +
-                "  username      text                     not null unique check(username ~ '^[a-zA-Z][A-Za-z0-9]+$'),\n" +
-                "  password_hash text                     not null,\n" +
-                "  registered_at timestamp with time zone not null default current_timestamp\n" +
+                "  id              uuid primary key                  default gen_random_uuid(),\n" +
+                "  username        text                     not null unique check (username ~ '^[a-zA-Z][A-Za-z0-9]+$'),\n" +
+                "  hashed_password text                     not null,\n" +
+                "  registered_at   timestamp with time zone not null default current_timestamp\n" +
                 ")");
 
         template.execute("CREATE TABLE IF NOT EXISTS public.scripts (\n" +
@@ -56,9 +56,5 @@ public class DbMigrator {
                 "  script_id     uuid                     not null references public.scripts on update cascade on delete cascade,\n" +
                 "  added_at      timestamp with time zone not null default current_timestamp\n" +
                 ")");
-
-        template.execute("INSERT INTO public.users(id, username, password_hash, registered_at) \n" +
-                "VALUES ('" + USER_ID + "'::uuid, 'francois', 'somepwdhash', '2021-04-17T12:21-04'::timestamp with time zone) \n" +
-                "ON CONFLICT DO NOTHING");
     }
 }

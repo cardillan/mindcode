@@ -1,7 +1,6 @@
 package info.teksol.mindcode.webapp;
 
 import java.util.List;
-import java.util.UUID;
 
 public class NewScriptData {
     private final String name;
@@ -42,5 +41,9 @@ public class NewScriptData {
 
     public List<String> getSyntaxErrors() {
         return syntaxErrors;
+    }
+
+    public boolean isLoggedIn() {
+        return true;
     }
 }
