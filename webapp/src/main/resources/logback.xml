@@ -8,6 +8,7 @@
     </appender>
 
     <logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug"/>
+    <logger name="org.springframework.web" level="debug"/>
 
     <root level="info">
         <appender-ref ref="STDERR" />
