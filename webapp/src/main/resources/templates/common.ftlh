@@ -17,12 +17,12 @@
 </h1>
 </#macro>
 
-<#macro link href>
-<a class="underline text-blue-500" href="${href}"><#nested></a>
+<#macro link href title="">
+<a class="underline text-blue-500" title="${title}" href="${href}"><#nested></a>
 </#macro>
 
-<#macro submit name="" value="" class="">
-<button type="submit" class="px-4 py-2 bg-gray-600 text-white my-4 ${class}" <#if name??>name="${name}"</#if> <#if value??>value="${value}"</#if>>
+<#macro submit name="" value="" class="" title="">
+<button type="submit" class="px-4 py-2 bg-gray-600 text-white my-4 ${class}" <#if title??>title="${title}"</#if> <#if name??>name="${name}"</#if> <#if value??>value="${value}"</#if>>
     <#nested>
 </button>
 </#macro>

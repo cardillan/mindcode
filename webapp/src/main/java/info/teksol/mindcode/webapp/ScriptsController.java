@@ -9,19 +9,32 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.security.SecureRandom;
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 
 import static info.teksol.mindcode.webapp.CompilerFacade.compile;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @Controller
 @RequestMapping(value = "/scripts")
 public class ScriptsController {
+    private static final String slugSource = "abcdefghijklmnopqrstuvwxyz0123456789";
+    private static SecureRandom random = new SecureRandom();
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    private static String generateVersionSlug() {
+        final StringBuilder buffer = new StringBuilder();
+        buffer.append("sv_");
+        for (int i = 0; i < 16; i++) {
+            int index = random.nextInt(slugSource.length());
+            buffer.append(slugSource.charAt(index));
+        }
+
+        return buffer.toString();
+    }
 
     @GetMapping
     public ModelAndView listScripts(@RequestParam(required = false, name = "q") String query, HttpSession session) {
@@ -90,6 +103,20 @@ public class ScriptsController {
     public ModelAndView editScript(@PathVariable(value = "id") UUID id, HttpSession session) {
         final User user = authenticate(session);
 
+        final List<ScriptVersion> versionHistory = jdbcTemplate.query(
+                "SELECT id, version, name, source, version_slug, committed_at\n" +
+                        "FROM script_versions\n" +
+                        "WHERE script_id = ?\n" +
+                        "ORDER BY version DESC",
+                (rs, rowNum) -> new ScriptVersion(
+                        rs.getLong("id"),
+                        rs.getInt("version"),
+                        rs.getString("name"),
+                        rs.getString("source"),
+                        rs.getString("version_slug"),
+                        rs.getTimestamp("committed_at").toInstant()),
+                id);
+
         final EditScriptData data = jdbcTemplate.queryForObject(
                 "SELECT\n" +
                         "  scripts.name\n" +
@@ -109,7 +136,7 @@ public class ScriptsController {
                             compiled._1,
                             compiled._1.split("\n").length,
                             compiled._2,
-                            List.of()
+                            versionHistory
                     );
                 },
                 user.getId(), id
@@ -124,6 +151,38 @@ public class ScriptsController {
         );
     }
 
+    @PostMapping("/{id}/version/{slug}/rollback")
+    public String rollbackScript(@PathVariable(value = "id") UUID id,
+                                 @PathVariable(value = "slug") String slug,
+                                 HttpSession session) {
+        final User user = authenticate(session);
+
+        int affectedRows;
+
+        // In order to never lose work, commit the current version and then rollback
+        affectedRows = jdbcTemplate.update("INSERT INTO script_versions(script_id, name, source, version_slug, version)\n" +
+                        "  SELECT scripts.id, scripts.name, scripts.source, ?, (SELECT coalesce(max(version), 0) FROM script_versions WHERE script_id = ?::uuid) + 1\n" +
+                        "  FROM scripts\n" +
+                        "  WHERE id = ?::uuid" +
+                        "    AND author_id = ?::uuid",
+                generateVersionSlug(), id, id, user.getId());
+        if (affectedRows == 0) throw new ResponseStatusException(NOT_FOUND, "No script with this ID");
+
+        affectedRows = jdbcTemplate.update(
+                "UPDATE scripts\n" +
+                        "SET name = v.name, source = v.source\n" +
+                        "FROM script_versions AS v\n" +
+                        "WHERE v.script_id = scripts.id\n" +
+                        "  AND v.version_slug = ?\n" +
+                        "  AND v.script_id = ?\n" +
+                        "  AND scripts.id = ?\n" +
+                        "  AND scripts.author_id = ?",
+                slug, id, id, user.getId());
+        if (affectedRows == 0) throw new ResponseStatusException(NOT_FOUND, "No script with this ID");
+
+        return "redirect:/scripts/" + id + "/edit";
+    }
+
     @PostMapping("/{id}")
     public String putScript(@PathVariable(value = "id") UUID id,
                             @RequestParam("script[name]") String name,
@@ -132,12 +191,39 @@ public class ScriptsController {
                             HttpSession session) {
         final User user = authenticate(session);
 
-        final int affectedRows = jdbcTemplate.update(
-                "UPDATE scripts SET name = ?, source = ? \n" +
-                        "WHERE author_id = ?::uuid AND id = ?::uuid",
-                name, source, user.getId(), id);
-        if (affectedRows == 0) throw new ResponseStatusException(NOT_FOUND, "No script with this ID");
-        return "redirect:/scripts/" + id.toString() + "/edit";
+        final int affectedRows;
+        switch (action) {
+            case "compile":
+                affectedRows = jdbcTemplate.update(
+                        "UPDATE scripts SET name = ?, source = ? \n" +
+                                "WHERE author_id = ?::uuid AND id = ?::uuid",
+                        name, source, user.getId(), id);
+                if (affectedRows == 0) throw new ResponseStatusException(NOT_FOUND, "No script with this ID");
+                return "redirect:/scripts/" + id.toString() + "/edit";
+
+            case "commit":
+                affectedRows = jdbcTemplate.update(
+                        "UPDATE scripts SET name = ?, source = ? \n" +
+                                "WHERE author_id = ?::uuid AND id = ?::uuid",
+                        name, source, user.getId(), id);
+                if (affectedRows == 0) throw new ResponseStatusException(NOT_FOUND, "No script with this ID");
+
+                final String versionSlug = generateVersionSlug();
+                jdbcTemplate.update("INSERT INTO script_versions(script_id, name, source, version_slug, version)\n" +
+                                "    VALUES (?::uuid, ?, ?, ?, (SELECT coalesce(max(version), 0) FROM script_versions WHERE script_id = ?::uuid) + 1)",
+                        id, name, source, versionSlug, id);
+                return "redirect:/scripts/" + id.toString() + "/edit";
+
+            case "delete":
+                jdbcTemplate.update(
+                        "DELETE FROM scripts WHERE author_id = ?::uuid AND id = ?::uuid",
+                        user.getId(), id);
+                return "redirect:/scripts";
+
+            default:
+                throw new ResponseStatusException(BAD_REQUEST, "Don't understand this action");
+        }
+
     }
 
     private User authenticate(HttpSession session) {

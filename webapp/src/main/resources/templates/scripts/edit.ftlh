@@ -30,6 +30,7 @@
                 <@com.submit name="action" value="commit">Save and commit</@com.submit>
                 or
                 <@com.link href="/scripts">back to list</@com.link>
+                <@com.submit name="action" value="delete" class="float-right bg-red-700 text-xs mt-5">Delete this script</@com.submit>
             </p>
         </div>
         <div>
@@ -45,17 +46,19 @@
     </div>
 </form>
 
+<#if model.versionHistory.empty == false>
 <h4 class="block font-bold">Version History</h4>
+<p>To prevent you losing work, rolling back to a previous version will commit the current version. This is the safest way to preserve your work. If you wish to preserve the version you rolled back to, make sure you commit it again!</p>
 <ol class="list-inside list-decimal">
     <#list model.versionHistory as version>
-        <li>
-            Rollback to
-            <@com.link href="#">
-                <time datetime="${version.committedAt}" title="${version.committedAt}">N minutes old</time>
-            </@com.link>
-            version
+        <li class="my-1">
+            <form method="post" action="/scripts/${model.id}/version/${version.slug}/rollback" class="inline">
+                <button type="submit" class="px-2 bg-indigo-500 text-white underline" title="${version.source?truncate(200)}">Rollback to version ${version.version}</button>:
+                <span class="font-semibold">${version.name} <time datetime="${version.committedAt}" title="${version.committedAt}" class="font-light text-xs">${version.committedAt?datetime.iso?string["HH:mm:ss"]}</time>
+            </form>
         </li>
     </#list>
 </ol>
+</#if>
 
 <@com.footer/>
