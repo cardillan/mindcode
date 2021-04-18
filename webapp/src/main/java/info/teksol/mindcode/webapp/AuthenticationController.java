@@ -27,7 +27,7 @@ public class AuthenticationController {
         return new ModelAndView(
                 "register",
                 "model",
-                Map.of("username", "", "password", "")
+                new AuthData("", "")
         );
     }
 
@@ -52,7 +52,7 @@ public class AuthenticationController {
         return new ModelAndView(
                 "login",
                 "model",
-                Map.of("username", "", "password", "")
+                new AuthData("", "")
         );
     }
 

@@ -24,4 +24,8 @@ public class AuthData {
     public String getPassword() {
         return password;
     }
+
+    public boolean isLoggedIn() {
+        return false;
+    }
 }
