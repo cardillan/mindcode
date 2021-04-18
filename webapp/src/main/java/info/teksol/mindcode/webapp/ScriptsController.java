@@ -21,7 +21,8 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping(value = "/scripts")
 public class ScriptsController {
     private static final String slugSource = "abcdefghijklmnopqrstuvwxyz0123456789";
-    private static SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -46,7 +47,7 @@ public class ScriptsController {
                 .replaceFirst("^", "%")
                 .replaceFirst("$", "%");
         final List<Script> scripts = jdbcTemplate.query(
-                "SELECT scripts.id, name, published, recorded_at, username AS author_name\n" +
+                "SELECT scripts.id, name, recorded_at, username AS author_name\n" +
                         "FROM scripts\n" +
                         "  JOIN users ON users.id = scripts.author_id\n" +
                         "WHERE author_id = ?::uuid AND (name || source ilike ?)\n" +
@@ -56,7 +57,6 @@ public class ScriptsController {
                         rs.getString("name"),
                         null,
                         rs.getString("author_name"),
-                        rs.getBoolean("published"),
                         rs.getTimestamp("recorded_at").toInstant()
                 ),
                 user.getId(), query

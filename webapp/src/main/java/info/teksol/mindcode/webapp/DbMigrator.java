@@ -56,5 +56,8 @@ public class DbMigrator {
                 "  script_id     uuid                     not null references public.scripts on update cascade on delete cascade,\n" +
                 "  added_at      timestamp with time zone not null default current_timestamp\n" +
                 ")");
+
+        template.execute("ALTER TABLE public.scripts DROP COLUMN IF EXISTS published");
+        template.execute("ALTER TABLE public.script_versions ADD COLUMN IF NOT EXISTS published boolean not null default false");
     }
 }
