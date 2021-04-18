@@ -285,4 +285,29 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 result
         );
     }
+
+    @Test
+    void regressionTest4() {
+        // https://github.com/francois/mindcode/issues/23
+        final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
+                (Seq) translateToAst("" +
+                        "x = 1\n" +
+                        "print(\"\\nx: \", x)\n" +
+                        "print(\"\\nx+x: \", x+x)")
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", "x", "1"),
+                        new LogicInstruction("set", var(2), "\"\\nx+x: \""),
+                        new LogicInstruction("print", "\"\\nx: \""),
+                        new LogicInstruction("print", "x"),
+                        new LogicInstruction("op", "add", var(3), "x", "x"),
+                        new LogicInstruction("print", var(2)),
+                        new LogicInstruction("print", var(3)),
+                        new LogicInstruction("end")
+                ),
+                result
+        );
+    }
 }

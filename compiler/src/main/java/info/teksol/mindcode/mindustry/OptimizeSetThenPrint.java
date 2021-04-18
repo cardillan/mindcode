@@ -34,7 +34,14 @@ class OptimizeSetThenPrint implements LogicInstructionPipeline {
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isSet()) {
-                return new ExpectPrint(instruction);
+                // Due to problems, the only set then print we will optimize are static strings
+                // Anything else is left as-is
+                if (instruction.getArgs().get(1).startsWith("\"")) {
+                    return new ExpectPrint(instruction);
+                } else {
+                    next.emit(instruction);
+                    return this;
+                }
             } else {
                 next.emit(instruction);
                 return this;
@@ -76,9 +83,15 @@ class OptimizeSetThenPrint implements LogicInstructionPipeline {
                     prints.forEach(next::emit);
                     next.emit(instruction);
                     return new EmptyState();
-                } else {
-                    this.sets.put(instruction.getArgs().get(0), instruction.getArgs().get(1));
+                } else if (instruction.getArgs().get(1).startsWith("\"")) {
+                    sets.put(instruction.getArgs().get(0), instruction.getArgs().get(1));
                     return this;
+                } else {
+                    // this was a set, but not for a static string -- flush everything
+                    sets.forEach((k, v) -> next.emit(new LogicInstruction("set", k, v)));
+                    prints.forEach(next::emit);
+                    next.emit(instruction);
+                    return new EmptyState();
                 }
             }
 

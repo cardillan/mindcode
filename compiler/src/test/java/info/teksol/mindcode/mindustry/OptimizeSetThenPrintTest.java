@@ -114,9 +114,9 @@ class OptimizeSetThenPrintTest extends AbstractGeneratorTest {
                 List.of(
                         new LogicInstruction("set", var(0), "1"),
                         new LogicInstruction("set", "x", var(0)),
-                        new LogicInstruction("set", var(1), "2"),
                         new LogicInstruction("print", "\"damaged at \""),
                         new LogicInstruction("print", "dmgx"),
+                        new LogicInstruction("set", var(1), "2"),
                         new LogicInstruction("set", "x", var(1)),
                         new LogicInstruction("print", "\", \""),
                         new LogicInstruction("print", "dmgy"),
