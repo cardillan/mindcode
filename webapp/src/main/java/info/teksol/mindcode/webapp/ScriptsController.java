@@ -122,7 +122,7 @@ public class ScriptsController {
                         "  scripts.name\n" +
                         ", scripts.source\n" +
                         "FROM scripts\n" +
-                        "WHERE (author_id = ?::uuid OR published)\n" +
+                        "WHERE (author_id = ?::uuid)\n" +
                         "  AND id = ?::uuid",
                 (rs, rowNum) -> {
                     final String source = rs.getString("source");
