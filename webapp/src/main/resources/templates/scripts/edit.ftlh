@@ -46,7 +46,7 @@
     </div>
 </form>
 
-<#if model.versionHistory.empty == false>
+<#if model.versionHistory?size > 0>
 <h4 class="block font-bold">Version History</h4>
 <p>To prevent you losing work, rolling back to a previous version will commit the current version. This is the safest way to preserve your work. If you wish to preserve the version you rolled back to, make sure you commit it again!</p>
 <ol class="list-inside list-decimal">
