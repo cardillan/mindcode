@@ -13,7 +13,6 @@
     <thead>
         <tr>
             <th class="text-left border-b border-gray-500">Name</th>
-            <th class="text-left border-b border-gray-500">State</th>
             <th class="text-left border-b border-gray-500">Recorded At</th>
         </tr>
     </thead>
@@ -25,12 +24,11 @@
                         ${script.name}
                     </@com.link>
                 </td>
-                <td class="text-left p-1">${script.published?string("Public", "Private")}</td>
                 <td class="text-left p-1">${script.recordedAt}</td>
             </tr>
         <#else>
             <tr>
-                <td colspan="3">
+                <td colspan="2">
                     <#if model.query == "">
                         You have no scripts.
                         <@com.link href="/scripts/new">Write a script</@com.link>
