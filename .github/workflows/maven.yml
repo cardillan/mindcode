@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Pre-deployment CI
 
 on:
   push:
@@ -8,15 +8,36 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up JDK
       uses: actions/setup-java@v1
       with:
         java-version: 11
+
+    # Use preinstalled PostgreSQL
+    - name: Start PostgreSQL on Ubuntu
+      run: |
+        sudo systemctl start postgresql.service
+        pg_isready
+
+    - name: Setup DB
+      run: |
+        sudo -u postgres psql --command="CREATE USER mindcode PASSWORD 'mindcode'" --command="\du"
+        sudo -u postgres createdb --owner=mindcode mindcode_test
+        PGPASSWORD=mindcode psql --username=mindcode --host=localhost --list
+
+    - name: Confirm DB accessible
+      run: |
+        PGPASSWORD=mindcode psql --dbname postgresql://mindcode:@127.0.0.1:5432/mindcode_test --command "SELECT version()"
+        rm webapp/src/test/resources/application.properties
+        echo >> webapp/src/test/resources/application.properties "spring.datasource.url=jdbc:postgresql://localhost:5432/mindcode_test"
+        echo >> webapp/src/test/resources/application.properties "spring.datasource.username=mindcode"
+        echo >> webapp/src/test/resources/application.properties "spring.datasource.password=mindcode"
+
     - name: Cache
       uses: actions/cache@v2.1.4
       with:
@@ -28,5 +49,6 @@ jobs:
         # restore-keys: # optional
         # The chunk size used to split up large files during upload, in bytes
         # upload-chunk-size: # optional
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
