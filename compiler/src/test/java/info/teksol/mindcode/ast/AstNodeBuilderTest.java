@@ -1173,4 +1173,25 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void correctlyReadsTernaryOperator() {
+        assertEquals(
+                new Seq(
+                        new FunctionCall(
+                                "print",
+                                new StringLiteral("\\nsm.enabled: "),
+                                new IfExpression(
+                                        new PropertyAccess(
+                                                new VarRef("smelter1"),
+                                                new Ref("enabled")
+                                        ),
+                                        new StringLiteral("true"),
+                                        new StringLiteral("false")
+                                )
+                        )
+                ),
+                translateToAst("print(\"\\nsm.enabled: \", smelter1.enabled ? \"true\" : \"false\")")
+        );
+    }
 }

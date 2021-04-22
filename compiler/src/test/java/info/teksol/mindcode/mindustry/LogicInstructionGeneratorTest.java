@@ -1516,4 +1516,30 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void correctlyGeneratesTernaryOperatorLogic() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "\"\\nsm.enabled: \""),
+                        new LogicInstruction("sensor", var(1), "smelter1", "@enabled"),
+                        new LogicInstruction("jump", var(1000), "notEqual", var(1), "true"),
+                        new LogicInstruction("set", var(3), "\"true\""),
+                        new LogicInstruction("set", var(2), var(3)),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("set", var(4), "\"false\""),
+                        new LogicInstruction("set", var(2), var(4)),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("print", var(0)),
+                        new LogicInstruction("print", var(2)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst(
+                                "print(\"\\nsm.enabled: \", smelter1.enabled ? \"true\" : \"false\")"
+                        )
+                )
+        );
+    }
 }

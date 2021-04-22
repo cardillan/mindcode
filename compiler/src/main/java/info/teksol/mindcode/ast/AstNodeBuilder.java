@@ -164,7 +164,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                 throw new ParsingException("Failed to parse function call on a property access at " + ctx.getText());
             }
 
-
             return new Control(
                     target,
                     ctx.funcall().obj.prop.getText(),
@@ -415,6 +414,15 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitLiteral_null(MindcodeParser.Literal_nullContext ctx) {
         return new NullLiteral();
+    }
+
+    @Override
+    public AstNode visitTernary_op(MindcodeParser.Ternary_opContext ctx) {
+        return new IfExpression(
+                visit(ctx.cond),
+                visit(ctx.true_branch),
+                visit(ctx.false_branch)
+        );
     }
 
     @Override
