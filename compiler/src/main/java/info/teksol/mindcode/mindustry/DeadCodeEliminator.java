@@ -116,14 +116,30 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
                 visitUradar(instruction);
                 break;
 
+            case "draw":
+                visitDraw(instruction);
+                break;
+
+            case "drawflush":
+                visitDrawflush(instruction);
+                break;
+
             case "label":
             case "end":
                 // These don't have useful args
                 break;
 
             default:
-                throw new GenerationException("Unvisitd opcode [" + instruction.getOpcode() + "]");
+                throw new GenerationException("Unvisited opcode [" + instruction.getOpcode() + "]");
         }
+    }
+
+    private void visitDrawflush(LogicInstruction instruction) {
+        reads.add(instruction.getArgs().get(0));
+    }
+
+    private void visitDraw(LogicInstruction instruction) {
+        reads.addAll(instruction.getArgs().subList(1, instruction.getArgs().size()));
     }
 
     private void visitUradar(LogicInstruction instruction) {

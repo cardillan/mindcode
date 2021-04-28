@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void correctlyOptimizesFunctionCallAndReturn() {
@@ -309,5 +311,48 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 ),
                 result
         );
+    }
+
+    @Test
+    void regressionTest5() {
+        // Fix "Unvisited opcode: draw" and "drawflush"
+        // We don't actually care about the generated code, only that it doesn't raise
+        // Otherwise, this spec would be at the mercy of any improvements in the peephole optimizer
+        assertDoesNotThrow(() -> {
+            LogicInstructionGenerator.generateAndOptimize(
+                    (Seq) translateToAst("" +
+                            "// move previous values left\n" +
+                            "for n in 0 ... 40\n" +
+                            "  cell1[n] = cell1[n + 1]\n" +
+                            "end\n" +
+                            "\n" +
+                            "// delay by 1/2 a sec (0.5 s)\n" +
+                            "// this depends on your framerate -- if less than 60 fps,\n" +
+                            "// the delay will be longer than 0.5s\n" +
+                            "deadline = @tick + 30\n" +
+                            "while @tick < deadline\n" +
+                            "  n += 1\n" +
+                            "end\n" +
+                            "\n" +
+                            "// calculate the new value -- the rightmost one\n" +
+                            "// change this line to graph another level\n" +
+                            "cell1[39] = tank1.cryofluid / tank1.liquidCapacity\n" +
+                            "\n" +
+                            "// draw the graph\n" +
+                            "\n" +
+                            "// clear the display\n" +
+                            "clear(0, 0, 0)\n" +
+                            "\n" +
+                            "// set the foreground color to cryofluid\n" +
+                            "color(62, 207, 240, 255)\n" +
+                            "\n" +
+                            "// draw the bar graph\n" +
+                            "for n in 0 ... 40\n" +
+                            "  rect(2 * n, 0, 2, 80 * cell1[n])\n" +
+                            "end\n" +
+                            "\n" +
+                            "drawflush(display1)")
+            );
+        });
     }
 }
