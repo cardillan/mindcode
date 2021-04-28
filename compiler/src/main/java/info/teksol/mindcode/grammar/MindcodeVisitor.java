@@ -1,4 +1,4 @@
-// Generated from /Users/francois/Projects/mindcode/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
+// Generated from /Users/francois/Projects/mindcode/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -498,4 +498,16 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitId(MindcodeParser.IdContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#decimal_int}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDecimal_int(MindcodeParser.Decimal_intContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#hex_int}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHex_int(MindcodeParser.Hex_intContext ctx);
 }

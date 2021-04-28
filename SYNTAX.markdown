@@ -371,3 +371,18 @@ Otherwise, the full list of operators is as follows:
 * `&`: Binary and, useful for flags
 * `|`: Binary or, useful for flags
 * `^`: Binary [xor (exclusive-or)](https://en.wikipedia.org/wiki/Exclusive_or)
+
+
+# Literals
+
+Mindustry supports the classic decimal notation for integers and floats:
+
+* 1
+* 3.14159
+* -35
+* -9381.355
+
+Mindustry also supports hexadecimal representation for integers:
+
+* 0x35
+* 0xf1

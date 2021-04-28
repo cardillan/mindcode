@@ -43,6 +43,16 @@
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="utf-8" />
+          <option name="pkg" value="info.teksol.mindcode.grammar" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
       </list>
     </option>
   </component>

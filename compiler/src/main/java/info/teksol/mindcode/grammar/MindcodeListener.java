@@ -1,4 +1,4 @@
-// Generated from /Users/francois/Projects/mindcode/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
+// Generated from /Users/francois/Projects/mindcode/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -833,4 +833,24 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitId(MindcodeParser.IdContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#decimal_int}.
+	 * @param ctx the parse tree
+	 */
+	void enterDecimal_int(MindcodeParser.Decimal_intContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#decimal_int}.
+	 * @param ctx the parse tree
+	 */
+	void exitDecimal_int(MindcodeParser.Decimal_intContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#hex_int}.
+	 * @param ctx the parse tree
+	 */
+	void enterHex_int(MindcodeParser.Hex_intContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#hex_int}.
+	 * @param ctx the parse tree
+	 */
+	void exitHex_int(MindcodeParser.Hex_intContext ctx);
 }

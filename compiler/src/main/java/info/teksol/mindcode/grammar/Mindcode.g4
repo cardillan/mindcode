@@ -144,7 +144,7 @@ unit_ref : AT ref;
 var_ref : id;
 
 ref : ID;
-int_t : INT;
+int_t : decimal_int | hex_int;
 float_t : FLOAT;
 literal_t : LITERAL;
 null_t : NULL;
@@ -154,6 +154,9 @@ bool_t : true_t  # true_bool_literal
 true_t : TRUE;
 false_t : FALSE;
 id : ID;
+
+decimal_int : INT;
+hex_int : HEXINT;
 
 ALLOCATE : 'allocate';
 BREAK : 'break';
@@ -226,6 +229,7 @@ LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 
 FLOAT : INT DOT INT;
 INT : [0-9][0-9]*;
+HEXINT : '0' [xX] [a-f0-9]+;
 
 ID : [_a-zA-Z][-a-zA-Z_0-9]*;
 SL_COMMENT : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;
