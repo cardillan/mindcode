@@ -17,8 +17,6 @@ services:
   mindcode-web:
     build:
       context: .
-    environment:
-      JDBC_DATABASE_URL: jdbc:postgresql://mindcode-db/mindcode_development?user=postgres&password=pg_password
 
     depends_on:
       - mindcode-db

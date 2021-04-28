@@ -46,15 +46,18 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 
 1. Install Java 11+, Maven 3.6, and PostgreSQL
 2. Create a database in PostgreSQL named `mindcode_development`
-3. Set an environment variable with the PostgreSQL connection parameters:
+3. Set environment variables with the PostgreSQL connection parameters:
 ```sh
-export JDBC_DATABASE_URL='jdbc:postgresql://localhost/mindcode_development?user=POSTGRES_USER&password=POSTGRES_PASSWORD'
+export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/mindcode_development
+export SPRING_DATASOURCE_USERNAME=postgres_username
+export SPRING_DATASOURCE_PASSWORD=postgres_password
 ```
 
 Then run:
 
 ```sh
-mvn clean compile exec:java
+./mvnw install
+java -classpath $( find webapp -type f -name '*.jar' | tr '\n' ':' ) info.teksol.mindcode.webapp.WebappApplication
 ```
 
 The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
