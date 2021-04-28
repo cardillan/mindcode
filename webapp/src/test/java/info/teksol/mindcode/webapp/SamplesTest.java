@@ -20,6 +20,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SamplesTest {
+    private static final boolean onWindowsPlatform = System.getProperty("os.name").toLowerCase().contains("win");
+
     @TestFactory
     List<DynamicTest> validateSamples() {
         final List<DynamicTest> result = new ArrayList<>();
@@ -75,8 +77,11 @@ class SamplesTest {
             w.write(LogicInstructionPrinter.toString(optimized));
         }
 
-        final Process diff = new ProcessBuilder()
-                .command("diff", "-u", unoptimizedTarget.getAbsolutePath(), optimizedTarget.getAbsolutePath())
+        // Async run a diff process between the unoptimized and optimized versions
+        // This helps developers determine what optimizations were actually applied
+        // We don't need to wait for this process: the files can be diffed in the background, and we can continue on our merry way
+        new ProcessBuilder()
+                .command(onWindowsPlatform ? "fc.exe" : "diff", "-u", unoptimizedTarget.getAbsolutePath(), optimizedTarget.getAbsolutePath())
                 .redirectOutput(diffTarget)
                 .start();
 
