@@ -66,8 +66,7 @@ export SPRING_DATASOURCE_PASSWORD=postgres_password
 Then run:
 
 ```sh
-./mvnw install
-java -classpath $( find webapp -type f -name '*.jar' | tr '\n' ':' ) info.teksol.mindcode.webapp.WebappApplication
+bin/run-local
 ```
 
 The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
