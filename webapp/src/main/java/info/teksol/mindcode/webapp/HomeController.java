@@ -71,7 +71,8 @@ public class HomeController {
 
     @PostMapping("/compile")
     public String postCompile(@RequestParam(required = false) String id,
-                              @RequestParam String source) {
+                              @RequestParam String source,
+                              @RequestParam(required = false) boolean enableOptimization) {
         Source sourceDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -83,11 +84,14 @@ public class HomeController {
             sourceDto = sourceRepository.save(new Source(source, Instant.now()));
         }
 
-        return "redirect:/?s=" + sourceDto.getId().toString();
+        return "redirect:/?optimization=" + enableOptimization + "&s=" + sourceDto.getId().toString();
     }
 
     @GetMapping
-    public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id) {
+    public ModelAndView getHomePage(
+        @RequestParam(name = "s", defaultValue = "") String id,
+        @RequestParam(name = "optimization", defaultValue = "true") boolean enableOptimization
+    ) {
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {
@@ -111,7 +115,7 @@ public class HomeController {
         }
 
         final long start = System.nanoTime();
-        final Tuple2<String, List<String>> result = compile(sourceCode);
+        final Tuple2<String, List<String>> result = compile(sourceCode, enableOptimization);
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}µs", TimeUnit.NANOSECONDS.toMicros(end - start));
 
@@ -127,7 +131,8 @@ public class HomeController {
                         sourceCode.split("\n").length,
                         compiledCode,
                         compiledCode.split("\n").length,
-                        syntaxErrors)
+                        syntaxErrors,
+                        enableOptimization)
         );
     }
 

@@ -40,6 +40,14 @@
             <div>
                 <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4"/>
                 <@com.link href="/?s=clean">Start with a new script</@com.link>
+                <label>
+                    <#if model.enableOptimization>
+                        <input type="checkbox" name="enableOptimization" checked>
+                    <#else>
+                        <input type="checkbox" name="enableOptimization">
+                    </#if>
+                    Enable optimization
+                </label>
             </div>
             <div>
                 <#list model.syntaxErrors>
