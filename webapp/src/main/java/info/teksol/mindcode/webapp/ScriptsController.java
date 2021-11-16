@@ -126,7 +126,7 @@ public class ScriptsController {
                         "  AND id = ?::uuid",
                 (rs, rowNum) -> {
                     final String source = rs.getString("source");
-                    final Tuple2<String, List<String>> compiled = compile(source);
+                    final Tuple2<String, List<String>> compiled = compile(source, true);
 
                     return new EditScriptData(
                             id,

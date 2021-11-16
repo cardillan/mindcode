@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompilerFacade {
-    static Tuple2<String, List<String>> compile(String sourceCode) {
+    static Tuple2<String, List<String>> compile(String sourceCode, boolean enableOptimization) {
         String instructions = "";
 
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceCode));
@@ -32,7 +32,12 @@ public class CompilerFacade {
             final MindcodeParser.ProgramContext context = parser.program();
             final Seq prog = AstNodeBuilder.generate(context);
 
-            List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(prog);
+            List<LogicInstruction> result;
+            if (enableOptimization) {
+                result = LogicInstructionGenerator.generateAndOptimize(prog);
+            } else {
+                result = LogicInstructionGenerator.generateUnoptimized(prog);
+            }
             result = LogicInstructionLabelResolver.resolve(result);
             instructions = LogicInstructionPrinter.toString(result);
         } catch (RuntimeException e) {

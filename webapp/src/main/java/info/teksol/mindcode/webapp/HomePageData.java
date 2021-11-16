@@ -10,8 +10,9 @@ public class HomePageData {
     private final String compiled;
     private final int compiledLoc;
     private final List<String> syntaxErrors;
+    private final boolean enableOptimization;
 
-    HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc, List<String> syntaxErrors) {
+    HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc, List<String> syntaxErrors, boolean enableOptimization) {
         this.id = id;
         this.sample = sample;
         this.source = source;
@@ -19,6 +20,7 @@ public class HomePageData {
         this.compiled = compiled;
         this.compiledLoc = compiledLoc;
         this.syntaxErrors = syntaxErrors;
+        this.enableOptimization = enableOptimization;
     }
 
     public String getId() {
@@ -47,6 +49,10 @@ public class HomePageData {
 
     public List<String> getSyntaxErrors() {
         return syntaxErrors;
+    }
+
+    public boolean getEnableOptimization() {
+        return enableOptimization;
     }
 
     public boolean isLoggedIn() {
