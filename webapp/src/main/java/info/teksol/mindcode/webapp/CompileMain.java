@@ -1,14 +1,11 @@
 package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.Tuple2;
-import java.nio.file.*;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import static info.teksol.mindcode.webapp.CompilerFacade.compile;
