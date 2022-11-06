@@ -84,9 +84,16 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
                 visitUcontrol(instruction);
                 break;
 
+            case "wait":
+                visitWait(instruction);
+                break;
+
             case "sensor":
                 visitSensor(instruction);
                 break;
+
+            case "radar":
+                visitRadar(instruction);
 
             case "ubind":
                 visitUbind(instruction);
@@ -272,6 +279,17 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
         reads.add(instruction.getArgs().get(2));
     }
 
+    private void visitRadar(LogicInstruction instruction) {
+        // radar prop1 prop2 prop3 sortby target order out
+        reads.add(instruction.getArgs().get(0));
+        reads.add(instruction.getArgs().get(1));
+        reads.add(instruction.getArgs().get(2));
+        reads.add(instruction.getArgs().get(3));
+        reads.add(instruction.getArgs().get(4));
+        reads.add(instruction.getArgs().get(5));
+        addWrite(instruction, 6);
+    }
+
     private void visitSet(LogicInstruction instruction) {
         addWrite(instruction, 0);
         reads.add(instruction.getArgs().get(1));
@@ -298,6 +316,10 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
         addWrite(instruction, 1);
         if (instruction.getArgs().size() > 2) reads.add(instruction.getArgs().get(2));
         if (instruction.getArgs().size() > 3) reads.add(instruction.getArgs().get(3));
+    }
+
+    private void visitWait(LogicInstruction instruction) {
+        reads.add(instruction.getArgs().get(0));
     }
 
     private void visitUcontrol(LogicInstruction instruction) {

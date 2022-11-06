@@ -592,6 +592,51 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void generatesRadar() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "1"),
+                        new LogicInstruction("radar", "enemy", "any", "any", "distance", "salvo1", var(0), var(1)),
+                        new LogicInstruction("set", "out", var(1)),
+                        new LogicInstruction("set", var(2), "1"),
+                        new LogicInstruction("radar", "ally", "flying", "any", "health", "lancer1", var(2), var(3)),
+                        new LogicInstruction("set", "out", var(3)),
+                        new LogicInstruction("set", "src", "salvo1"),
+                        new LogicInstruction("set", var(4), "1"),
+                        new LogicInstruction("radar", "enemy", "any", "any", "distance", "src", var(4), var(5)),
+                        new LogicInstruction("set", "out", var(5)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("" +
+                                "out = radar(enemy, any, any, distance, salvo1, 1)\n" +
+                                "out = radar(ally, flying, any, health, lancer1, 1)\n" +
+                                "src = salvo1\n" +
+                                "out = radar(enemy, any, any, distance, src, 1, out)\n"
+                        )
+                )
+        );  
+    }
+
+    @Test
+    void generatesWait() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("set", var(0), "1"),
+                        new LogicInstruction("wait", var(0)),
+                        new LogicInstruction("set", var(1), "0.001"),
+                        new LogicInstruction("wait", var(1)),
+                        new LogicInstruction("set", var(2), "1000"),
+                        new LogicInstruction("wait", var(2)),
+                        new LogicInstruction("end")
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("wait(1)\nwait(0.001)\nwait(1000)")
+                )
+        );  
+    }
+
+    @Test
     void generatesEndFromFunctionCall() {
         assertLogicInstructionsMatch(
                 List.of(

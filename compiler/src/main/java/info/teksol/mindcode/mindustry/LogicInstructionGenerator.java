@@ -209,6 +209,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             case "printflush":
                 return handlePrintflush(params);
 
+            case "wait":
+                return handleWait(params);
+
             case "ubind":
                 return handleUbind(params);
 
@@ -220,6 +223,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
             case "getlink":
                 return handleGetlink(params);
+
+            case "radar":
+                return handleRadar(params);
 
             case "mine":
                 return handleMine(params);
@@ -681,6 +687,37 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return tmp;
     }
 
+    private boolean isRadarSearchProperty(String prop) {
+        return List.of("attacker", "enemy", "ally", "player", "flying", "ground", "boss", "any").contains(prop);
+    }
+    private boolean isRadarSortbyOption(String sortby) {
+        return List.of("distance", "health", "shield", "armor", "maxHealth").contains(sortby);
+    }
+
+    private String handleRadar(List<String> params) {
+        // radar prop1 prop2 prop3 sortby target order out
+        final String tmp = nextTemp();
+        final String prop1 = params.get(0);
+        final String prop2 = params.get(1);
+        final String prop3 = params.get(2);
+        final String sortby = params.get(3);
+        // Radar search properties should be hardcoded and can't be indirectly referenced. (Last test: v7.0.1.)
+        if (!isRadarSearchProperty(prop1)) {
+            throw new GenerationException("Invalid radar search property [" + prop1 + "]");
+        }
+        if (!isRadarSearchProperty(prop2)) {
+            throw new GenerationException("Invalid radar search property [" + prop2 + "]");
+        }
+        if (!isRadarSearchProperty(prop3)) {
+            throw new GenerationException("Invalid radar search property [" + prop3 + "]");
+        }
+        if (!isRadarSortbyOption(sortby)) {
+            throw new GenerationException("Invalid radar sort option [" + sortby + "]");
+        }
+        pipeline.emit(new LogicInstruction("radar", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
+        return tmp;
+    }
+
     private String handleRand(List<String> params) {
         // op rand result 200 0
         final String tmp = nextTemp();
@@ -708,6 +745,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private String handlePrint(List<String> params) {
         params.forEach((param) -> pipeline.emit(new LogicInstruction("print", List.of(param))));
         return params.get(params.size() - 1);
+    }
+
+    private String handleWait(List<String> params) {
+        pipeline.emit(new LogicInstruction("wait", params.get(0)));
+        return "null";
     }
 
     @Override

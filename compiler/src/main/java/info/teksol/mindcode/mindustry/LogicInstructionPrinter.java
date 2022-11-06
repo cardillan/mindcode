@@ -17,10 +17,12 @@ public class LogicInstructionPrinter {
         args.put("print", 1);
         args.put("end", 0);
         args.put("sensor", 3);
+        args.put("radar", 7);
         args.put("control", 6);
         args.put("draw", 7);
         args.put("write", 3);
         args.put("read", 3);
+        args.put("wait", 1);
         args.put("drawflush", 1);
         args.put("ubind", 1);
         args.put("ucontrol", 6);
