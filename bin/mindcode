@@ -1,0 +1,4 @@
+#!/bin/sh
+
+jar=$( find "$MINDCODE_PATH/webapp" -type f -name '*.jar' | tr '\n' ':' )
+exec java -classpath $jar info.teksol.mindcode.webapp.CompileMain $@
