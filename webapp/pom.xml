@@ -22,7 +22,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>2.4.5</spring.version>
+        <spring.version>2.5.12</spring.version>
     </properties>
 
     <dependencyManagement>
