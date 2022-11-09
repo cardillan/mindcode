@@ -25,16 +25,16 @@ public class CompileMain {
         final String compiledCode = result._1;
         final List<String> syntaxErrors = result._2;
 
-        if (!syntaxErrors.isEmpty()) {
+        if (syntaxErrors.isEmpty()) {
+            // No errors? Print the compiled code.
+            System.out.println(compiledCode);
+            return true;
+        } else {
             // Print errors to stderr.
             for (int i = 0; i < syntaxErrors.size(); i++) {
                 System.err.println(syntaxErrors.get(i));
             }
             return false;
-        } else {
-            // No errors? Print the compiled code.
-            System.out.println(compiledCode);
-            return true;
         }
     }
 
