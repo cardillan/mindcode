@@ -31,8 +31,8 @@ public class CompileMain {
             return true;
         } else {
             // Print errors to stderr.
-            for (int i = 0; i < syntaxErrors.size(); i++) {
-                System.err.println(syntaxErrors.get(i));
+            for (String err : syntaxErrors) {
+                System.err.println(err);
             }
             return false;
         }
@@ -50,21 +50,21 @@ public class CompileMain {
             }
         }
 
+        String contents = "";
+
         if (filename == null) {
             // No filenames? Read directly from stdin.
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String contents = "";
             String line = null;
             while ((line = br.readLine()) != null) {
                 contents += line + "\n";
             }
-            compileMindcode(contents, optimise);
-
         } else {
-            String contents = readFile(filename);
-            if (!compileMindcode(contents, optimise)) {
-                System.exit(1);
-            }
+            contents = readFile(filename);
+        }
+
+        if (!compileMindcode(contents, optimise)) {
+            System.exit(1);
         }
     }
 }
