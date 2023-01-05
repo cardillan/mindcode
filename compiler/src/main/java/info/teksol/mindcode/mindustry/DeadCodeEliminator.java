@@ -260,7 +260,8 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
     }
 
     private void visitGetlink(LogicInstruction instruction) {
-        reads.add(instruction.getArgs().get(0));
+        addWrite(instruction, 0);
+        reads.add(instruction.getArgs().get(1));
     }
 
     private void visitControl(LogicInstruction instruction) {
