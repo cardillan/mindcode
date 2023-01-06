@@ -28,17 +28,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final LogicInstructionPipeline pipeline =
                 new DeadCodeEliminator(
-                        new OptimizeSensorThenSet(
-                                new OptimizeOpThenSet(
-                                        new OptimizeSetThenWrite(
-                                                new OptimizeReadThenSet(
-                                                        new OptimizeSetThenRead(
-                                                                new OptimizeSetThenOp(
-                                                                        new OptimizeSetThenSet(
-                                                                                new OptimizeSetThenPrint(
-                                                                                        new OptimizeGetlinkThenSet(
-                                                                                                new ImproveConditionalJumps(
-                                                                                                        terminus
+                        new SingleStepJumpEliminator(
+                            new OptimizeSensorThenSet(
+                                    new OptimizeOpThenSet(
+                                            new OptimizeSetThenWrite(
+                                                    new OptimizeReadThenSet(
+                                                            new OptimizeSetThenRead(
+                                                                    new OptimizeSetThenOp(
+                                                                            new OptimizeSetThenSet(
+                                                                                    new OptimizeSetThenPrint(
+                                                                                            new OptimizeGetlinkThenSet(
+                                                                                                    new ImproveConditionalJumps(
+                                                                                                                terminus
+                                                                                                        )                                                                                                                
                                                                                                 )
                                                                                         )
                                                                                 )
