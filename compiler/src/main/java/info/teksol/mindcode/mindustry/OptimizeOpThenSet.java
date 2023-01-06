@@ -57,8 +57,12 @@ class OptimizeOpThenSet implements LogicInstructionPipeline {
         public State emit(LogicInstruction instruction) {
             if (!instruction.isSet()) {
                 next.emit(op);
-                next.emit(instruction);
-                return new EmptyState();
+                if (instruction.isOp()) {
+                    return new ExpectSet(instruction);
+                } else {
+                    next.emit(instruction);
+                    return new EmptyState();
+                }
             }
 
             if (!instruction.getArgs().get(1).equals(op.getArgs().get(1))) {
