@@ -54,4 +54,27 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
                 terminus.getResult()
         );
     }
+    
+    @Test
+    void keepsIsolatedJumps() {
+        LogicInstructionGenerator.generateInto(
+                sut,
+                (Seq) translateToAst(
+                        "if x print(a) else print(b) end"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("jump", var(1000), "notEqual", "x", "true"),
+                        new LogicInstruction("print", "a"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("print", "b"),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
 }
