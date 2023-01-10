@@ -30,6 +30,25 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void removesAlwaysFalseJump() {
+        LogicInstructionGenerator.generateInto(
+                sut,
+                (Seq) translateToAst(
+                        "if true 1 end"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
+
+    @Test
     void removesTwoJumps() {
         LogicInstructionGenerator.generateInto(
                 sut,

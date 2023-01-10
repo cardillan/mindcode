@@ -3,19 +3,21 @@ package info.teksol.mindcode.mindustry;
 import java.util.ArrayList;
 import java.util.List;
 
-// Remove jumps (both conditional and unconditional) that target the next instruction.
-// Technivally, if we have a sequence
-//   0: jump 2 ...
-//   1: jump 2 ...
-//   2: ...
-// we could eliminate both jumps. This class will only remove the second jump, because before that removal the first
-// one doesn't target the next instruction. However, such structures probably only arise in some degenerate cases,
-// such as "if a if b end end"
-// (If the sequence is 0: jump 1, 1: jum 2, both jumps will be eliminated.)
+// 1. Remove jumps (both conditional and unconditional) that target the next instruction.
+//    Technivally, if we have a sequence
+//      0: jump 2 ...
+//      1: jump 2 ...
+//      2: ...
+//    we could eliminate both jumps. This class will only remove the second jump, because before that removal the first
+//    one doesn't target the next instruction. However, such structures probably only arise in some degenerate cases,
+//    such as "if a if b end end"
+//    (If the sequence is 0: jump 1, 1: jump 2, both jumps will be eliminated.)
+//
+// 2. Removes jumps with "notEqual true true" condition (always false jumps)
 class SingleStepJumpEliminator implements LogicInstructionPipeline {
     private final LogicInstructionPipeline next;
     private State state;
-
+    
     SingleStepJumpEliminator(LogicInstructionPipeline next) {
         this.next = next;
         this.state = new EmptyState();
@@ -41,7 +43,12 @@ class SingleStepJumpEliminator implements LogicInstructionPipeline {
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isJump()) {
-                return new ExpectLabel(instruction);
+                if (isAlwaysFalseJump(instruction)) {
+                    // Just skip the instruction and do nothing
+                    return this;
+                } else {
+                    return new ExpectLabel(instruction);
+                }
             } else {
                 next.emit(instruction);
                 return this;
@@ -51,6 +58,11 @@ class SingleStepJumpEliminator implements LogicInstructionPipeline {
         @Override
         public State flush() {
             return this;
+        }
+        
+        private boolean isAlwaysFalseJump(LogicInstruction instruction) {
+            List<String> args = instruction.getArgs();
+            return args.get(1).equals("notEqual") && args.get(2).equals("true") && args.get(3).equals("true");
         }
     }
 
