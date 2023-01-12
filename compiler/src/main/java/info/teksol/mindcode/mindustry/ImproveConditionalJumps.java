@@ -61,6 +61,12 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
             return;
         }
 
+        // Do not remove previous instruction if it sets user defined variable
+        if (!previous.getArgs().get(1).startsWith(LogicInstructionGenerator.TMP_PREFIX)) {
+            flushNext(instruction);
+            return;
+        }
+
         if (!inverses.containsKey(previous.getArgs().get(0))) {
             throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + previous.getArgs().get(0) + "]");
         }
