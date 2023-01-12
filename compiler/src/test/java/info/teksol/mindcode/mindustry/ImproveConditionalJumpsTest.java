@@ -87,4 +87,40 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
         );
     }
 
+    @Test
+    void preservesUserVariables() {
+        // We need our own pipeline for this test
+        final LogicInstructionPipeline customPipeline = 
+                new DeadCodeEliminator(
+                        new OptimizeOpThenSet(
+                                new ImproveConditionalJumps(terminus)
+                        )
+                );
+
+    
+        LogicInstructionGenerator.generateInto(
+                customPipeline,
+                (Seq) translateToAst(
+                        "alive = @unit.dead === 0\n" +
+                                "if alive\n" +
+                                "  print(alive)\n" +
+                                "end"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("sensor", var(0), "@unit", "@dead"),
+                        new LogicInstruction("set", var(1), "0"),
+                        new LogicInstruction("op", "strictEqual", "alive", var(0), var(1)),
+                        new LogicInstruction("jump", var(1000), "notEqual", "alive", "true"),
+                        new LogicInstruction("print", "alive"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
 }
