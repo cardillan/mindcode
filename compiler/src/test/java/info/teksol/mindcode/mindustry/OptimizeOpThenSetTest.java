@@ -26,6 +26,25 @@ class OptimizeOpThenSetTest extends AbstractGeneratorTest {
                 terminus.getResult()
         );
     }
+    
+    @Test
+    void optimizesOpOpThenSet() {
+        LogicInstructionGenerator.generateInto(
+                sut,
+                (Seq) translateToAst(
+                        "state = min(max(state, MIN), MAX)"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("op", "max", var(0), "state", "MIN"),
+                        new LogicInstruction("op", "min", "state", var(0), "MAX"),
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
 
     @Test
     void optimizesOpThenSetFromBinaryOp() {
