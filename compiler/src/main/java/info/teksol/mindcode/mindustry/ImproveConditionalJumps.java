@@ -17,8 +17,7 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
             "lessThan", "greaterThanEq",
             "lessThanEq", "greaterThan",
             "greaterThan", "lessThanEq",
-            "greaterThanEq", "lessThan",
-            "strictEqual", "notEqual"
+            "greaterThanEq", "lessThan"
     );
     private static final Set<String> COMPARISON_OPERATORS = inverses.keySet();
     private final LogicInstructionPipeline next;

@@ -57,7 +57,7 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
                                 "  n += 1\n" +
                                 "end\n" +
                                 "\n" +
-                                "while n === null\n" +
+                                "while n == null\n" +
                                 "  n += 1\n" +
                                 "end\n"
                 )
