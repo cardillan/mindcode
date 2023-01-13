@@ -3,16 +3,14 @@ package info.teksol.mindcode.mindustry;
 import java.util.Map;
 import java.util.Set;
 
+// Turns the following sequence of instructions:
+//    op <comparison> __tmpX A B
+//    jump label notEqual __tmpX true
+//
+// into
+//    jump label <inverse of comparison> A B
+//
 public class ImproveConditionalJumps implements LogicInstructionPipeline {
-    private static final Set<String> COMPARISON_OPERATORS = Set.of(
-            "equal",
-            "notEqual",
-            "lessThan",
-            "lessThanEq",
-            "greaterThan",
-            "greaterThanEq",
-            "strictEqual"
-    );
     private static final Map<String, String> inverses = Map.of(
             "equal", "notEqual",
             "notEqual", "equal",
@@ -22,83 +20,112 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
             "greaterThanEq", "lessThan",
             "strictEqual", "notEqual"
     );
+    private static final Set<String> COMPARISON_OPERATORS = inverses.keySet();
     private final LogicInstructionPipeline next;
-    private LogicInstruction previous;
+    private State state;
 
     ImproveConditionalJumps(LogicInstructionPipeline next) {
         this.next = next;
+        this.state = new EmptyState();
     }
 
     @Override
     public void emit(LogicInstruction instruction) {
-        if (instruction.isJump()) {
-            handleJump(instruction);
-        } else if (instruction.isOp()) {
-            handleOp(instruction);
-        } else {
-            flushNext(instruction);
-        }
+        state = state.emit(instruction);
     }
 
     @Override
     public void flush() {
-        if (previous != null) {
-            next.emit(previous);
-            previous = null;
-        }
-
+        state = state.flush();
         next.flush();
     }
 
-    private void handleJump(LogicInstruction instruction) {
-        if (previous == null) {
-            flushNext(instruction);
-            return;
-        }
+    private interface State {
+        State emit(LogicInstruction instruction);
 
-        if (!instruction.getArgs().get(1).equals("notEqual")) {
-            flushNext(instruction);
-            return;
-        }
-
-        // Do not remove previous instruction if it sets user defined variable
-        if (!previous.getArgs().get(1).startsWith(LogicInstructionGenerator.TMP_PREFIX)) {
-            flushNext(instruction);
-            return;
-        }
-
-        if (!inverses.containsKey(previous.getArgs().get(0))) {
-            throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + previous.getArgs().get(0) + "]");
-        }
-
-        next.emit(
-                new LogicInstruction(
-                        "jump",
-                        instruction.getArgs().get(0),
-                        inverses.get(previous.getArgs().get(0)),
-                        previous.getArgs().get(2),
-                        previous.getArgs().get(3)
-                )
-        );
-        previous = null;
+        State flush();
     }
 
-    private void handleOp(LogicInstruction instruction) {
-        if (!isComparisonOperator(instruction)) {
-            flushNext(instruction);
-            return;
+    private final class EmptyState implements State {
+
+        @Override
+        public State emit(LogicInstruction instruction) {
+            if (instruction.isOp() && isComparisonOperatorToTmp(instruction)) {
+                return new ExpectJump(instruction);
+            } else {
+                next.emit(instruction);
+                return this;
+            }
         }
 
-        if (previous != null) next.emit(previous);
-        previous = instruction;
+        @Override
+        public State flush() {
+            return this;
+        }
     }
 
-    private void flushNext(LogicInstruction instruction) {
-        flush();
-        next.emit(instruction);
-    }
+    private final class ExpectJump implements State {
+        private final LogicInstruction op;
 
-    private boolean isComparisonOperator(LogicInstruction instruction) {
-        return COMPARISON_OPERATORS.contains(instruction.getArgs().get(0));
+        ExpectJump(LogicInstruction op) {
+            this.op = op;
+        }
+
+        @Override
+        public State emit(LogicInstruction instruction) {
+            if (instruction.isOp()) {
+                if (!isComparisonOperatorToTmp(instruction)) {
+                    next.emit(op);
+                    next.emit(instruction);
+                    return new EmptyState();
+                } else {
+                    next.emit(op);
+                    return new ExpectJump(instruction);
+                }
+            }
+
+            if (!instruction.isJump()) {
+                next.emit(op);
+                next.emit(instruction);
+                return new EmptyState();
+            }
+            
+            boolean merge = instruction.getArgs().get(1).equals("notEqual") &&
+                    instruction.getArgs().get(2).equals(op.getArgs().get(1)) &&
+                    instruction.getArgs().get(3).equals("true");
+            
+            if (!merge) {
+                next.emit(op);
+                next.emit(instruction);
+                return new EmptyState();
+            }
+            
+            if (!inverses.containsKey(op.getArgs().get(0))) {
+                throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + op.getArgs().get(0) + "]");
+            }
+            
+            next.emit(
+                    new LogicInstruction(
+                            "jump",
+                            instruction.getArgs().get(0),
+                            inverses.get(op.getArgs().get(0)),
+                            op.getArgs().get(2),
+                            op.getArgs().get(3)
+                    )
+            );
+            return new EmptyState();
+        }
+
+        @Override
+        public State flush() {
+            next.emit(op);
+            return new EmptyState();
+        }
+
+    }
+    
+    private boolean isComparisonOperatorToTmp(LogicInstruction instruction) {
+        return COMPARISON_OPERATORS.contains(instruction.getArgs().get(0)) &&
+                instruction.getArgs().get(1).startsWith(LogicInstructionGenerator.TMP_PREFIX);
     }
 }
