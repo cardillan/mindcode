@@ -1,4 +1,4 @@
-package info.teksol.mindcode.webapp;
+package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.Tuple2;
 import java.io.BufferedReader;
@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.List;
 
-import static info.teksol.mindcode.webapp.CompilerFacade.compile;
+import static info.teksol.mindcode.mindustry.CompilerFacade.compile;
 
 public class CompileMain {
     static private String readFile(String filename) throws IOException {

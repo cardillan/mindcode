@@ -1,21 +1,17 @@
-package info.teksol.mindcode.webapp;
+package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import info.teksol.mindcode.mindustry.LogicInstruction;
-import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
-import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
-import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
 import org.antlr.v4.runtime.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CompilerFacade {
-    static Tuple2<String, List<String>> compile(String sourceCode, boolean enableOptimization) {
+    public static Tuple2<String, List<String>> compile(String sourceCode, boolean enableOptimization) {
         String instructions = "";
 
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceCode));

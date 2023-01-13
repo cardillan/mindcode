@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 
-import static info.teksol.mindcode.webapp.CompilerFacade.compile;
+import static info.teksol.mindcode.mindustry.CompilerFacade.compile;
 import static org.springframework.http.HttpStatus.*;
 
 @Controller
