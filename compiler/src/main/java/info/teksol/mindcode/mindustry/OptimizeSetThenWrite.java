@@ -20,6 +20,7 @@ class OptimizeSetThenWrite implements LogicInstructionPipeline {
     @Override
     public void flush() {
         state = state.flush();
+        next.flush();
     }
 
     private interface State {
@@ -66,7 +67,6 @@ class OptimizeSetThenWrite implements LogicInstructionPipeline {
 
         @Override
         public State flush() {
-            next.flush();
             return this;
         }
     }

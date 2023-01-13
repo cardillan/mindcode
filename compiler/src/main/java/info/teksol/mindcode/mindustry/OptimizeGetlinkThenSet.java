@@ -16,6 +16,7 @@ class OptimizeGetlinkThenSet implements LogicInstructionPipeline {
     @Override
     public void flush() {
         state = state.flush();
+        next.flush();
     }
 
     private interface State {
