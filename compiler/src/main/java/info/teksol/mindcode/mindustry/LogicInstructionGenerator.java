@@ -26,37 +26,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     public static List<LogicInstruction> generateAndOptimize(Seq program) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        final LogicInstructionPipeline pipeline =
-                new DeadCodeEliminator(
-                        new SingleStepJumpEliminator(
-                                new OptimizeSensorThenSet(
-                                        new OptimizeOpThenSet(
-                                                new OptimizeSetThenWrite(
-                                                        new OptimizeReadThenSet(
-                                                                new OptimizeSetThenRead(
-                                                                        new OptimizeSetThenOp(
-                                                                                new OptimizeSetThenSet(
-                                                                                        new OptimizeSetThenPrint(
-                                                                                                new OptimizeGetlinkThenSet(
-                                                                                                        new ImproveConditionalJumps(
-                                                                                                                    terminus
-                                                                                                        )                                                                                                                
-                                                                                                )
-                                                                                        )
-                                                                                )
-                                                                        )
-                                                                )
-                                                        )
-                                                )
-                                        )
-                                )
-                        )
-                );
-
+        LogicInstructionPipeline pipeline = Optimisation.createCompletePipeline(terminus);
         LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
         pipeline.flush();
-
+        
         return terminus.getResult();
     }
 
