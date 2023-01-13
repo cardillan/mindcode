@@ -113,8 +113,7 @@ arg : expression;
 if_expr : IF cond=expression true_branch=expression_list? if_trailer? END;
 
 if_trailer : ELSE false_branch=expression_list?
-           | ELSIF cond=expression true_branch=expression_list? if_trailer
-           | ELSE IF cond=expression true_branch=expression_list? if_trailer
+           | ELSIF cond=expression true_branch=expression_list? if_trailer?
            ;
 
 case_expr : CASE cond=expression alternative_list? ( ELSE else_branch=expression_list )? END;
