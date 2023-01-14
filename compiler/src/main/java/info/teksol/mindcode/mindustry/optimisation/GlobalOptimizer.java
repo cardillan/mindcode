@@ -24,6 +24,7 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     public void flush() {
         optimizeProgram();
         program.forEach(next::emit);
+        program.clear();
         next.flush();
     }
     
