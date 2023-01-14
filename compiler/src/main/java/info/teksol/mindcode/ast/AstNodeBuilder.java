@@ -7,6 +7,8 @@ import info.teksol.mindcode.grammar.MindcodeParser;
 import java.util.*;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
+    public static final String AST_PREFIX = "__ast";
+
     private int temp;
     private HeapAllocation allocatedHeap;
     private Map<String, Integer> heapAllocations = new HashMap<>();
@@ -583,6 +585,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     private String nextTemp() {
-        return "ast" + temp++;
+        return AST_PREFIX + temp++;
     }
 }
