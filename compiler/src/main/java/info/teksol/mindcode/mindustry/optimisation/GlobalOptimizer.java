@@ -5,6 +5,7 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 // Base class for global optimizers. Consumes the netire program before performing optimizations on it.
 // Contains helper method to navigate and manipulate the program.
@@ -49,4 +50,18 @@ abstract class GlobalOptimizer extends BaseOptimizer {
         return result < 0 ? null : program.get(result);
     }
     
+    // Return list of instructions matching predicate
+    protected List<LogicInstruction> findInstructions(Predicate<LogicInstruction> matcher) {
+        return program.stream().filter(matcher).collect(Collectors.toList());
+    }
+
+    // Return the number of instructions matching predicate
+    protected int countInstructions(Predicate<LogicInstruction> matcher) {
+        return (int) program.stream().filter(matcher).count();
+    }
+    
+    protected void replaceInstruction(LogicInstruction original, LogicInstruction replaced) {
+        int index = program.indexOf(original);
+        program.set(index, replaced);
+    }
 }

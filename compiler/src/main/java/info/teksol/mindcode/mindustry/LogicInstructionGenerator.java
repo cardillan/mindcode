@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<String> {
-    static final String TMP_PREFIX = "__tmp";
+    public static final String TMP_PREFIX = "__tmp";
 
     private final LogicInstructionPipeline pipeline;
     private int tmp;

@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.mindustry.optimisation.ConditionalJumpsNormalizer;
 import info.teksol.mindcode.mindustry.optimisation.InaccesibleCodeEliminator;
+import info.teksol.mindcode.mindustry.optimisation.InputTempEliminator;
 import info.teksol.mindcode.mindustry.optimisation.PropagateJumpTargets;
 import java.util.EnumSet;
 import java.util.function.Function;
@@ -14,13 +15,9 @@ public enum Optimisation {
     SINGLE_STEP_JUMP_ELIMINATION        (next -> new SingleStepJumpEliminator(next)),
     SENSOR_THEN_SET_OPTIMIZATION        (next -> new OptimizeSensorThenSet(next)),
     OP_THEN_SET_OPTIMIZATION            (next -> new OptimizeOpThenSet(next)),
-    SET_THEN_WRITE_OPTIMIZATION         (next -> new OptimizeSetThenWrite(next)),
     READ_THEN_SET_OPTIMIZATION          (next -> new OptimizeReadThenSet(next)),
-    SET_THEN_READ_OPTIMIZATION          (next -> new OptimizeSetThenRead(next)),
-    SET_THEN_OP_OPTIMIZATION            (next -> new OptimizeSetThenOp(next)),
-    SET_THEN_SET_OPTIMIZATION           (next -> new OptimizeSetThenSet(next)),
-    SET_THEN_PRINT_OPTIMIZATION         (next -> new OptimizeSetThenPrint(next)),
     GETLINK_THEN_SET_OPTIMIZATION       (next -> new OptimizeGetlinkThenSet(next)),
+    INPUT_TEMPS_ELIMINATION             (next -> new InputTempEliminator(next)),
     CONDITIONAL_JUMPS_IMPROVEMENT       (next -> new ImproveConditionalJumps(next)),
     JUMP_TARGET_PROPAGATION             (next -> new PropagateJumpTargets(next)),
     INACCESSIBLE_CODE_ELIMINATION       (next -> new InaccesibleCodeEliminator(next)),
