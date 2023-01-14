@@ -1,12 +1,17 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
+import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 class DeadCodeEliminatorTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline sut = new DeadCodeEliminator(terminus);
+    private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus,
+            Optimisation.DEAD_CODE_ELIMINATION);
 
     @Test
     void removesDeadSetsInIfExpression() {

@@ -1,11 +1,6 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.optimisation.CaseExpressionOptimizer;
-import info.teksol.mindcode.mindustry.optimisation.ConditionalJumpsNormalizer;
-import info.teksol.mindcode.mindustry.optimisation.InaccesibleCodeEliminator;
-import info.teksol.mindcode.mindustry.optimisation.InputTempEliminator;
-import info.teksol.mindcode.mindustry.optimisation.OutputTempEliminator;
-import info.teksol.mindcode.mindustry.optimisation.PropagateJumpTargets;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.EnumSet;
 import java.util.function.Function;
 

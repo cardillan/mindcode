@@ -16,7 +16,7 @@ import java.util.Set;
 //
 // Jump retargeting can move targets forward or backward over long distances; therefore the optimizer is global.
 // No instructions are removed or added except a label at the start of the program.
-public class PropagateJumpTargets extends GlobalOptimizer {
+class PropagateJumpTargets extends GlobalOptimizer {
     private static final String FIRST_LABEL = "__start__";
     private static final Set<String> EXCLUDED_ARGS = Set.of("@time", "@tick", "@counter");
     private boolean startLabelUsed = false;

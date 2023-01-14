@@ -5,7 +5,6 @@ import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
 import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.Optimisation;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 

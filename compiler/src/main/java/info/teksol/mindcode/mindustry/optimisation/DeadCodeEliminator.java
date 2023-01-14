@@ -1,34 +1,22 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.*;
 
-class DeadCodeEliminator implements LogicInstructionPipeline {
-    private final LogicInstructionPipeline next;
-
-    private final List<LogicInstruction> program = new ArrayList<>();
+class DeadCodeEliminator extends GlobalOptimizer {
     private final Set<String> reads = new HashSet<>();
     private final Map<String, List<LogicInstruction>> writes = new HashMap<>();
 
     DeadCodeEliminator(LogicInstructionPipeline next) {
-        this.next = next;
+        super(next);
     }
 
     @Override
-    public void emit(LogicInstruction instruction) {
-        program.add(instruction);
-    }
-
-    @Override
-    public void flush() {
+    protected void optimizeProgram() {
         do {
             analyzeDataflow();
         } while (removeUselessWrites());
-
-        for (LogicInstruction instruction : program) {
-            next.emit(instruction);
-        }
-        next.flush();
-        program.clear();
     }
 
     private void analyzeDataflow() {
@@ -138,7 +126,7 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
                 break;
 
             default:
-                throw new GenerationException("Unvisited opcode [" + instruction.getOpcode() + "]");
+                throw new OptimizationException("Unvisited opcode [" + instruction.getOpcode() + "]");
         }
     }
 
@@ -387,7 +375,7 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
                 break;
 
             default:
-                throw new GenerationException("Unknown ucontrol opcode [" + instruction.getArgs().get(0) + "]");
+                throw new OptimizationException("Unknown ucontrol opcode [" + instruction.getArgs().get(0) + "]");
         }
     }
 

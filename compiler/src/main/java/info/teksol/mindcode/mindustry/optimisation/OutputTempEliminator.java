@@ -18,7 +18,7 @@ import java.util.List;
 // An additional check could try to verify that the __tmp variable is passed into an output argument of the
 // instruction. However, Mindcode compiler shouldn't generate code that would met all of the above conditions
 // while using the __tmp variable as an input argument of the instruction.
-public class OutputTempEliminator extends GlobalOptimizer {
+class OutputTempEliminator extends GlobalOptimizer {
     public OutputTempEliminator(LogicInstructionPipeline next) {
         super(next);
     }

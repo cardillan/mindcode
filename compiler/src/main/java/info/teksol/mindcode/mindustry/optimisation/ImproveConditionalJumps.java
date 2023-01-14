@@ -1,5 +1,8 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +18,7 @@ import java.util.Set;
 // 2. var1 and var2 are identical
 // 3. var1 is a __tmp variable
 // 4. <comparison> has an inverse
-public class ImproveConditionalJumps implements LogicInstructionPipeline {
+public class ImproveConditionalJumps extends PipelinedOptimizer {
     private static final Map<String, String> inverses = Map.of(
             "equal", "notEqual",
             "notEqual", "equal",
@@ -25,29 +28,14 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
             "greaterThanEq", "lessThan"
     );
     private static final Set<String> COMPARISON_OPERATORS = inverses.keySet();
-    private final LogicInstructionPipeline next;
-    private State state;
 
     ImproveConditionalJumps(LogicInstructionPipeline next) {
-        this.next = next;
-        this.state = new EmptyState();
+        super(next);
     }
 
     @Override
-    public void emit(LogicInstruction instruction) {
-        state = state.emit(instruction);
-    }
-
-    @Override
-    public void flush() {
-        state = state.flush();
-        next.flush();
-    }
-
-    private interface State {
-        State emit(LogicInstruction instruction);
-
-        State flush();
+    protected State initialState() {
+        return new EmptyState();
     }
 
     private final class EmptyState implements State {
