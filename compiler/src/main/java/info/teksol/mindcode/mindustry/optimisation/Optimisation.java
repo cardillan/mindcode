@@ -16,6 +16,7 @@ public enum Optimisation {
     OUTPUT_TEMPS_ELIMINATION            (next -> new OutputTempEliminator(next)),
     CASE_EXPRESSION_OPTIMIZATION        (next -> new CaseExpressionOptimizer(next)),
     CONDITIONAL_JUMPS_IMPROVEMENT       (next -> new ImproveConditionalJumps(next)),
+    PRINT_TEXT_MERGING                  (next -> new PrintMerger(next)),
     JUMP_TARGET_PROPAGATION             (next -> new PropagateJumpTargets(next)),
     // This optimizer can create additional single step jumps; therefore is bundled with its eliminator
     INACCESSIBLE_CODE_ELIMINATION       (next -> new InaccesibleCodeEliminator(new SingleStepJumpEliminator(next))),
