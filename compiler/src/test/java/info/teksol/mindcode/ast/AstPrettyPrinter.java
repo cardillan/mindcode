@@ -175,13 +175,13 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         buffer.append("\n");
         for (int i = 0; i < node.getAlternatives().size() - 1; i++) {
             buffer.append("when ");
-            visit(node.getAlternatives().get(i));
+            visit(node.getAlternatives().get(i).getValue());
             buffer.append("\n");
             visit(node.getAlternatives().get(i).getBody());
         }
         if (!node.getAlternatives().isEmpty()) {
             buffer.append("when ");
-            visit(node.getAlternatives().get(node.getAlternatives().size() - 1));
+            visit(node.getAlternatives().get(node.getAlternatives().size() - 1).getValue());
             buffer.append("\n");
             visit(node.getAlternatives().get(node.getAlternatives().size() - 1).getBody());
         }
