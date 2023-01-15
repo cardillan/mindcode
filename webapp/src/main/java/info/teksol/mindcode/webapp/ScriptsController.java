@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.Tuple2;
+import info.teksol.mindcode.mindustry.CompilerOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -126,16 +126,16 @@ public class ScriptsController {
                         "  AND id = ?::uuid",
                 (rs, rowNum) -> {
                     final String source = rs.getString("source");
-                    final Tuple2<String, List<String>> compiled = compile(source, true);
+                    final CompilerOutput compiled = compile(source, true);
 
                     return new EditScriptData(
                             id,
                             rs.getString("name"),
                             source,
                             source.split("\n").length,
-                            compiled._1,
-                            compiled._1.split("\n").length,
-                            compiled._2,
+                            compiled.getInstructions(),
+                            compiled.getInstructions().split("\n").length,
+                            compiled.getErrors(),
                             versionHistory
                     );
                 },

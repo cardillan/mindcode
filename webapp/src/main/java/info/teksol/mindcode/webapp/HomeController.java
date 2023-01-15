@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.Tuple2;
+import info.teksol.mindcode.mindustry.CompilerOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,12 +115,12 @@ public class HomeController {
         }
 
         final long start = System.nanoTime();
-        final Tuple2<String, List<String>> result = compile(sourceCode, enableOptimization);
+        final CompilerOutput result = compile(sourceCode, enableOptimization);
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}µs", TimeUnit.NANOSECONDS.toMicros(end - start));
 
-        final String compiledCode = result._1;
-        final List<String> syntaxErrors = result._2;
+        final String compiledCode = result.getInstructions();
+        final List<String> syntaxErrors = result.getErrors();
         return new ModelAndView(
                 "home",
                 "model",

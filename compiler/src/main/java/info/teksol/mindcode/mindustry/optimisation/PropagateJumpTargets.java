@@ -27,6 +27,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
     
     @Override
     protected void optimizeProgram() {
+        int count = 0;
         program.add(0, new LogicInstruction("label", FIRST_LABEL));
         for (int index = 0; index < program.size(); index++) {
             LogicInstruction instruction = program.get(index);
@@ -36,6 +37,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
                     startLabelUsed |= label.equals(FIRST_LABEL);
                     // Update target of the original jump
                     program.set(index, replaceArg(instruction, 0, label));
+                    count++;
                 }
             }
         }
@@ -43,6 +45,10 @@ class PropagateJumpTargets extends GlobalOptimizer {
         if (!startLabelUsed) {
             // Keep start label only if used -- easier on some unit tests
             program.remove(0);
+        }
+
+        if (count > 0) {
+            emitMessage("%6d instructions updated by %s.", count, getClass().getSimpleName());
         }
     }
 

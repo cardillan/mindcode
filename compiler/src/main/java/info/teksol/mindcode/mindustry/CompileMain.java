@@ -1,12 +1,10 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.Tuple2;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.util.List;
 
 import static info.teksol.mindcode.mindustry.CompilerFacade.compile;
 
@@ -20,20 +18,16 @@ public class CompileMain {
     }
 
     static private boolean compileMindcode(String contents, boolean optimise) {
-        final Tuple2<String, List<String>> result = compile(contents, optimise);
+        final CompilerOutput result = compile(contents, optimise);
 
-        final String compiledCode = result._1;
-        final List<String> syntaxErrors = result._2;
-
-        if (syntaxErrors.isEmpty()) {
-            // No errors? Print the compiled code.
-            System.out.println(compiledCode);
+        if (result.getErrors().isEmpty()) {
+            // No errors? Print the compiled code and any messages.
+            System.out.println(result.getInstructions());
+            result.getMessages().forEach(System.err::println);
             return true;
         } else {
             // Print errors to stderr.
-            for (String err : syntaxErrors) {
-                System.err.println(err);
-            }
+            result.getErrors().forEach(System.err::println);
             return false;
         }
     }

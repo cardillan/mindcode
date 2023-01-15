@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 // Contains helper method to navigate and manipulate the program.
 abstract class GlobalOptimizer extends BaseOptimizer {
     protected final List<LogicInstruction> program = new ArrayList<>();
+    private int original;
+    private int emitted;
     
     public GlobalOptimizer(LogicInstructionPipeline next) {
         super(next);
@@ -24,13 +26,24 @@ abstract class GlobalOptimizer extends BaseOptimizer {
 
     @Override
     public final void flush() {
+        original = (int) program.stream().filter(ix -> !ix.isLabel()).count();
         optimizeProgram();
+        emitted = (int) program.stream().filter(ix -> !ix.isLabel()).count();
+
+        generateFinalMessages();
+        
         program.forEach(this::emitToNext);
         program.clear();
         super.flush();
     }
     
     protected abstract void optimizeProgram();
+
+    protected void generateFinalMessages() {
+        if (emitted != original) {
+            emitMessage("%6d instructions eliminated by %s.", original - emitted, getClass().getSimpleName());
+        }
+    }
 
     // Starting at index, finds first instruction matching predicate.
     // Returns the index or -1 if not found.

@@ -1,12 +1,27 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 class DeadCodeEliminator extends GlobalOptimizer {
+    private static final Set<String> CONSTANT_NAMES = Set.of("true", "false", "null");
+    private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
+            "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode", 
+            "disassembler", "display", "distributor", "dome", "door", "drill", "driver", "duo", "extractor", "factory",
+            "foreshadow", "foundation", "fuse", "gate", "generator", "hail", "incinerator", "junction", "kiln", "lancer",
+            "meltdown", "melter", "mender", "message", "mine", "mixer", "node", "nucleus", "panel", "parallax", "point",
+            "press", "processor", "projector", "pulverizer", "reactor", "reconstructor", "ripple", "router", "salvo",
+            "scatter", "scorch", "segment", "separator", "shard", "smelter", "sorter", "spectre", "swarmer", "switch",
+            "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
+
     private final Set<String> reads = new HashSet<>();
     private final Map<String, List<LogicInstruction>> writes = new HashMap<>();
+    private final Set<String> eliminations = new HashSet<>();
 
     DeadCodeEliminator(LogicInstructionPipeline next) {
         super(next);
@@ -19,6 +34,37 @@ class DeadCodeEliminator extends GlobalOptimizer {
         } while (removeUselessWrites());
     }
 
+    @Override
+    protected void generateFinalMessages() {
+        super.generateFinalMessages();
+        
+        String eliminated = eliminations.stream()
+                .filter(s -> !s.startsWith(LogicInstructionGenerator.TMP_PREFIX))
+                .sorted()
+                .collect(Collectors.joining(", "));
+        
+        String uninitialized = reads.stream()
+                .filter(s -> !writes.containsKey(s) && s.matches("[a-zA-Z].*") && 
+                        !CONSTANT_NAMES.contains(s) && !isBlockName(s))
+                .sorted()
+                .collect(Collectors.joining(", "));
+        
+        if (!eliminated.isEmpty()) {
+            emitMessage("       list of unused variables: %s.", eliminated);
+        }
+        
+        if (!uninitialized.isEmpty()) {
+            emitMessage("       list of uninitialized variables: %s.", uninitialized);
+        }
+    }
+    
+    private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
+    
+    private boolean isBlockName(String name) {
+        Matcher matcher = BLOCK_NAME_PATTERN.matcher(name);
+        return matcher.find() && BLOCK_NAMES.contains(matcher.group(1));
+    }
+    
     private void analyzeDataflow() {
         reads.clear();
         writes.clear();
@@ -37,6 +83,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
             program.removeAll(deadInstructions);
         }
 
+        eliminations.addAll(uselessWrites);
         return !uselessWrites.isEmpty();
     }
 
@@ -218,7 +265,6 @@ class DeadCodeEliminator extends GlobalOptimizer {
             found = ulocate(building, core, ENEMY, outx, outy, outbuilding)
                     ulocate building core true @copper outx outy found building
          */
-        reads.add(instruction.getArgs().get(1));
         reads.add(instruction.getArgs().get(2));
         addWrite(instruction, 4);
         addWrite(instruction, 5);
@@ -254,7 +300,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
     }
 
     private void visitControl(LogicInstruction instruction) {
-        reads.addAll(instruction.getArgs());
+        reads.addAll(instruction.getArgs().subList(1, instruction.getArgs().size()));
     }
 
     private void visitUbind(LogicInstruction instruction) {

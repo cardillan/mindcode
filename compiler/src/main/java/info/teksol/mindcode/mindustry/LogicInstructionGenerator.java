@@ -4,6 +4,7 @@ import info.teksol.mindcode.mindustry.optimisation.Optimisation;
 import info.teksol.mindcode.ast.*;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -25,14 +26,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         this.pipeline = pipeline;
     }
 
-    public static List<LogicInstruction> generateAndOptimize(Seq program) {
+    public static List<LogicInstruction> generateAndOptimize(Seq program, Consumer<String> messageConsumer) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        LogicInstructionPipeline pipeline = Optimisation.createCompletePipeline(terminus);
+        LogicInstructionPipeline pipeline = Optimisation.createCompletePipeline(terminus, messageConsumer);
         LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
         pipeline.flush();
         
         return terminus.getResult();
+    }
+
+    public static List<LogicInstruction> generateAndOptimize(Seq program) {
+        return generateAndOptimize(program, s -> {});
     }
 
     public static void generateInto(LogicInstructionPipeline pipeline, Seq program) {
