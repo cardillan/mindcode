@@ -28,7 +28,7 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
             if (instruction.isJump()) {
                 return new ExpectLabel(instruction);
             } else {
-                next.emit(instruction);
+                emitToNext(instruction);
                 return this;
             }
         }
@@ -61,22 +61,22 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
             }
             
             if (!isJumpToNext) {
-                next.emit(jump);
+                emitToNext(jump);
             }
-            labels.forEach(next::emit);
+            labels.forEach(SingleStepJumpEliminator.this::emitToNext);
             
             if (instruction.isJump()) {
                 return new ExpectLabel(instruction);
             } else {
-                next.emit(instruction);
+                emitToNext(instruction);
                 return new EmptyState();
             }
         }
 
         @Override
         public State flush() {
-            next.emit(jump);
-            labels.forEach(next::emit);
+            emitToNext(jump);
+            labels.forEach(SingleStepJumpEliminator.this::emitToNext);
             return new EmptyState();
         }
     }

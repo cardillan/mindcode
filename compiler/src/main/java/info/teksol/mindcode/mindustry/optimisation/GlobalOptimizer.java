@@ -18,16 +18,16 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     }
 
     @Override
-    public void emit(LogicInstruction instruction) {
+    public final void emit(LogicInstruction instruction) {
         program.add(instruction);
     }
 
     @Override
-    public void flush() {
+    public final void flush() {
         optimizeProgram();
-        program.forEach(next::emit);
+        program.forEach(this::emitToNext);
         program.clear();
-        next.flush();
+        super.flush();
     }
     
     protected abstract void optimizeProgram();

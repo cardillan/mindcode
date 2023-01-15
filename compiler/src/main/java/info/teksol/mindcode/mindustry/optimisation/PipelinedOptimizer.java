@@ -15,14 +15,14 @@ abstract class PipelinedOptimizer extends BaseOptimizer {
     protected abstract State initialState();
 
     @Override
-    public void emit(LogicInstruction instruction) {
+    public final void emit(LogicInstruction instruction) {
         state = state.emit(instruction);
     }
 
     @Override
-    public void flush() {
+    public final void flush() {
         state = state.flush();
-        next.flush();
+        super.flush();
     }
 
     protected interface State {

@@ -7,10 +7,19 @@ import java.util.List;
 
 // Base class for optimizers. Contains helper functions for manipulating instructions.
 abstract class BaseOptimizer implements LogicInstructionPipeline {
-    protected final LogicInstructionPipeline next;
+    private final LogicInstructionPipeline next;
 
     public BaseOptimizer(LogicInstructionPipeline next) {
         this.next = next;
+    }
+    
+    protected void emitToNext(LogicInstruction instruction) {
+        next.emit(instruction);
+    }
+
+    @Override
+    public void flush() {
+        next.flush();
     }
 
     // Creates a new instruction with argument at given index set to a new value

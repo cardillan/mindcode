@@ -22,12 +22,12 @@ class ConditionalJumpsNormalizer extends PipelinedOptimizer {
         public State emit(LogicInstruction instruction) {
             if (instruction.isJump()) {
                 if (effectivelyUnconditional(instruction)) {
-                    emit(new LogicInstruction(instruction.getOpcode(), instruction.getArgs().get(0), "always"));
+                    emitToNext(new LogicInstruction(instruction.getOpcode(), instruction.getArgs().get(0), "always"));
                 } else if (!alwaysFalse(instruction)) {
-                    next.emit(instruction);
+                    emitToNext(instruction);
                 }
             } else {
-                next.emit(instruction);
+                emitToNext(instruction);
             }
             return this;
         }
