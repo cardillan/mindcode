@@ -1,146 +1,127 @@
-// Upgrades copper conveyors to titanium
-// This script implements a state machine
-// https://en.wikipedia.org/wiki/Finite-state_machine
+// Initialize variables first; these can be changed in the compiled code 
+MEMORY = cell1
+UNIT = @poly
 
-// This section declares all the states this machine can be in
-ST_UNINITIALIZED = 0
-ST_APPROACHING = 1
-ST_BUILDING = 2
-ST_NEXT = 3
-ST_DONE = 4
+// Coordinates of the map area to process
+// By default an entire map is converted
+SW_X = 0
+SW_Y = 0
+NE_X = @mapw
+NE_Y = @maph
 
-allocate heap in cell1[0 ... 16]
+// Setting to true restores copper conveyors (useful for testing)
+DOWNGRADE = false
 
-RADIUS = 1
+// Upgrading is done in stripes of given width -- faster processing
+// (Could be even wider, the build radius is about 20 blocks or so)
+WIDTH = 10
 
-// Debugging section -- I would remove this when
-// you are ready to use this script for real
-print("STATE = ", $STATE, " ",
-    case $STATE
-    when ST_UNINITIALIZED   "uninitialized"
-    when ST_APPROACHING     "approaching"
-    when ST_BUILDING        "building"
-    when ST_NEXT            "next"
-    when ST_DONE            "done"
-    else                    "ERROR?!?"
-    end
-)
+// How close unit needs to get to the desired position before upgrading
+RADIUS = 10
 
-print("\nDX = ", $DX)
-print("\nDY = ", $DY)
-print("\nSW_X = ", $SW_X)
-print("\nSW_Y = ", $SW_Y)
-print("\nNE_X = ", $NE_X)
-print("\nNE_Y = ", $NE_Y)
-print("\nBUILD_X = ", $BUILD_X)
-print("\nBUILD_Y = ", $BUILD_Y)
-print("\nFLAG = ", $FLAG)
-print("\nFOUND = ", $FOUND)
-print("\n@unit.x = ", @unit.x)
-print("\n@unit.y = ", @unit.y)
+// Count the total number of upgraded blocks
+TOTAL = 0
 
-// Beginning of the state machine itself
-// There is a separate `if` per state
+allocate heap in MEMORY[0 ... 16]
 
-// When we are uninitialized, initialize ourselves then
-// proceed with the next state
-if $STATE == ST_UNINITIALIZED
-    $STATE = ST_APPROACHING
-    $DX = 1
-    $DY = 1
-    $SW_X = 50
-    $SW_Y = 50
-    $NE_X = 60
-    $NE_Y = 60
-    $BUILD_X = $SW_X
-    $BUILD_Y = $SW_Y
-    $FLAG = rand(1000000) + 1
+// If a memory cell is attached, the progress can be restored from it
+if $INITIALIZED 
+    x = limit($X, SW_X, NE_X)
+    y = limit($Y, SW_Y, NE_Y)
+    dx = $DX == 1 ? 1 : -1
+    dy = $DY > 0 ? WIDTH : -WIDTH
+    TOTAL = $TOTAL
+else
+    $INITIALIZED = true
+    x = $X = SW_X
+    y = $Y = SW_Y
+    dx = 1
+    dy = WIDTH
 end
 
-// Once we know we're initialized, we can look for *the*
-// poly we will take control of
-while !$FOUND
-    while @unit === null
-        ubind(@poly)
-        if @unit.flag == 0
-            flag($FLAG)
-            $FOUND = true
+if DOWNGRADE
+    oldType = @titanium-conveyor
+    newType = @conveyor
+else
+    oldType = @conveyor
+    newType = @titanium-conveyor
+end
+
+// It is possible to pause/stop the processing by attaching a switch and activating it
+while switch1.enabled == false
+
+    // If we don't have an active unit, summon a new one
+    if @unit.dead !== 0 or @unit.controller != @this
+        findUnit()
+    end
+    
+    // Position the unit to the middle of the band
+    ypos = limit(y + WIDTH \ 2, SW_Y, NE_Y)
+    do 
+        move(x, ypos)
+    loop while not within(x, ypos, RADIUS)
+
+    // Upgrade all blocks in the band
+    for yrep in y .. min(NE_Y, y + WIDTH - 1)
+        replace(x, yrep, oldType, newType)
+    end
+    $TOTAL = TOTAL
+    
+    printf("Position: $x, $ypos\n")
+    printf("Upgrades: $TOTAL")
+    printflush(message1)
+    
+    // Move to next position
+    x += dx
+    if x > NE_X || x < SW_X
+        dx *= -1
+        y += dy
+        x = limit(x, SW_X, NE_X)
+        $DX = dx
+
+        if y > NE_Y || y < SW_Y
+            dy *= -1
+            y = limit(y, SW_Y, NE_Y)
+            $DY = dy
+        end
+        $Y = y
+    end
+    
+    $X = x
+end
+
+inline def findUnit()
+    // Keep looking for unit until one is found
+    while true
+        ubind(UNIT)
+        if @unit == null
+            printf("No unit of type $UNIT found.")
+            printflush(message1)
+        elsif @unit.controlled != 0
+            printf("Looking for a free $UNIT...")
+            printflush(message1)
+        else
+            flag(1)		// Mark unit as active
+            break
         end
     end
 end
 
-// When we're approaching a given coordinate, this is how we
-// choose to either continue approaching, or if we're ready
-// to upgrade the existing building
-if $STATE == ST_APPROACHING
-    if within($BUILD_X, $BUILD_Y, RADIUS)
-      $STATE = ST_BUILDING
-    else
-      approach($BUILD_X, $BUILD_Y, RADIUS)
-    end
+// Returns value of n limited to range min .. max
+inline def limit(n, min, max)
+    min(max(n, min), max)
 end
 
-// This is where we upgrade the conveyors themselves
-if $STATE == ST_BUILDING
-    getBlock($BUILD_X, $BUILD_Y, b_type, b_building)
-    if b_type == @conveyor
-        build($BUILD_X, $BUILD_Y, @titanium-conveyor, b_building.rotation, 0)
-    end
-
-    $STATE = ST_NEXT
-end
-
-// This is the block of code that determines which cell is the
-// next one. This script proceeds southwest to northeast, to make
-// it easier to do math.
-//
-// (0,0) is at the bottom-left in Mindustry, meaning +1 on each
-// side moves up and to the right.
-if $STATE == ST_NEXT
-    $BUILD_X += $DX
-
-    if $BUILD_X > $NE_X
-      $DX *= -1
-      $BUILD_X = $NE_X
-      $BUILD_Y += $DY
-      $STATE = ST_APPROACHING
-    end
-
-    if $BUILD_X < $SW_X
-      $DX *= -1
-      $BUILD_X = $SW_X
-      $BUILD_Y += $DY
-      $STATE = ST_APPROACHING
-    end
-
-    if $BUILD_Y > $NE_Y
-      $DY *= -1
-      $BUILD_Y = $NE_Y
-      // Depending on whether you want to make it a one-shot or not,
-      // this is how you'd choose to continue upgrading any newly
-      // constructed copper conveyors
-      // cell1[STATE = ST_APPROACHING
-
-      // Otherwise, this is a one-shot and once we've gone over every
-      // cell, we stop
-      $STATE = ST_DONE
-    end
-
-    if $BUILD_Y < $SW_Y
-      $DY *= -1
-      $BUILD_Y = $SW_Y
-      $STATE = ST_APPROACHING
+// If a block of type oldType is found at position, replaces it with newType
+inline def replace(x, y, oldType, newType)
+    getBlock(x, y, b_type, b_building)
+    
+    if b_type == oldType
+        build(x, y, newType, b_building.rotation, 0)
+        // If the processor is too fast, we need to wait until the block is built
+        do
+            getBlock(x, y, b_type, b_building)
+        loop while b_type != newType
+        TOTAL += 1
     end
 end
-
-// Yay, we're done!
-if $STATE == ST_DONE
-    print("\n\nTerminal State")
-end
-
-// Otherwise, there was an error and we need to debug this
-if $STATE > ST_DONE
-    print("\n\nINVALID STATE!")
-end
-
-printflush(message1)

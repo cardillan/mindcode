@@ -9,11 +9,14 @@ if cell1[addr_FLAG] == 0
     cell1[addr_FLAG] = rand(10**10)
 end
 
-while @unit == null && @unit.flag == 0
+while @unit == null
+    print("Searching available unit...")
+	printflush(message1)
     ubind(@poly)
-    if @unit.flag == 0
-        flag(cell1[addr_FLAG])
-    end
+end
+
+if @unit.flag == 0
+    flag(cell1[addr_FLAG])
 end
 
 move(TARGET.x, TARGET.y)

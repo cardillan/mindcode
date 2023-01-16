@@ -11,6 +11,7 @@ FLAG = floor(rand(10000))
 found = false
 
 // If the unit died, we need to search for a new unit again
+// (this doesn't handle situations where unit was taken over by a player)
 if @unit.dead
     found = false
 end

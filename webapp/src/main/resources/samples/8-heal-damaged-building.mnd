@@ -1,23 +1,38 @@
 // Patrols around a building and heals any damaged building
 // Since the patrolling ship is close by, repairing will happen faster than usual
 CENTER = foundation1
+UNIT = @poly
 
-flag = rand(10000)
-
-while @unit === null
-    ubind(@poly)
-    if @unit.flag == 0
-        flag(flag)
-    end
+// Find a unit if we don't have one
+if @unit.dead !== 0 or @unit.controller != @this
+    findUnit()
 end
 
 if ulocate(damaged, dmgx, dmgy, dmgbuilding)
-    print("damaged at ", dmgx, ", ", dmgy)
+    printf("Damaged at $dmgx, $dmgy\n")
     approach(dmgx, dmgy, 5)
     target(dmgx, dmgy, true)
 else
-    print("patrolling")
+    print("Patrolling")
     approach(CENTER.x + 10 * sin(@tick), CENTER.y + 10 * cos(@tick), 2)
 end
 
 printflush(message1)
+
+inline def findUnit()
+    // Keep looking for unit until one is found
+    while true
+        ubind(UNIT)
+        if @unit == null
+            printf("No unit of type $UNIT found.")
+            printflush(message1)
+        elsif @unit.controlled != 0
+            printf("Looking for a free $UNIT...")
+            printflush(message1)
+        else
+            flag(1)		// Mark unit as active
+            break
+        end
+    end
+end
+
