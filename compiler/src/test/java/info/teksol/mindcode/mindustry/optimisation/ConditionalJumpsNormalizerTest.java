@@ -8,6 +8,8 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static info.teksol.mindcode.mindustry.Opcode.*;
+
 public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
             Optimisation.CONDITIONAL_JUMPS_NORMALIZATION);
@@ -26,15 +28,15 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "always"),
-                        new LogicInstruction("set", var(1), "\"Here\""),
-                        new LogicInstruction("print", var(1)),
-                        new LogicInstruction("set", var(0), var(1)),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("set", var(0), "null"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(JUMP, var(1000), "always"),
+                        new LogicInstruction(SET, var(1), "\"Here\""),
+                        new LogicInstruction(PRINT, var(1)),
+                        new LogicInstruction(SET, var(0), var(1)),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, var(0), "null"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -51,13 +53,13 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", var(1), "1"),
-                        new LogicInstruction("set", var(0), var(1)),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("set", var(0), "null"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, var(1), "1"),
+                        new LogicInstruction(SET, var(0), var(1)),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, var(0), "null"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );

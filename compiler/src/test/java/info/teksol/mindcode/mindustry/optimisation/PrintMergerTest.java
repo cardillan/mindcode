@@ -8,6 +8,8 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static info.teksol.mindcode.mindustry.Opcode.*;
+
 public class PrintMergerTest  extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus, 
             Optimisation.INPUT_TEMPS_ELIMINATION,
@@ -26,8 +28,8 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("print", "\"ab\""),
-                        new LogicInstruction("end")
+                        new LogicInstruction(PRINT, "\"ab\""),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -46,8 +48,8 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("print", "\"abc\""),
-                        new LogicInstruction("end")
+                        new LogicInstruction(PRINT, "\"abc\""),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -67,10 +69,10 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("print", "\"a\""),
-                        new LogicInstruction("print", "x"),
-                        new LogicInstruction("print", "\"cd\""),
-                        new LogicInstruction("end")
+                        new LogicInstruction(PRINT, "\"a\""),
+                        new LogicInstruction(PRINT, "x"),
+                        new LogicInstruction(PRINT, "\"cd\""),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -91,16 +93,16 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("print", "\"a\""),
-                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
-                        new LogicInstruction("print", "x"),
-                        new LogicInstruction("set", var(1), "x"),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("set", var(1), "null"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("print", "\"b\""),
-                        new LogicInstruction("end")
+                        new LogicInstruction(PRINT, "\"a\""),
+                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        new LogicInstruction(PRINT, "x"),
+                        new LogicInstruction(SET, var(1), "x"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, var(1), "null"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(PRINT, "\"b\""),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -118,13 +120,13 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("print", "\"Rate: \""),
-                        new LogicInstruction("print", "rate"),
-                        new LogicInstruction("op", "sub", var(0), "@time", "start"),
-                        new LogicInstruction("print", "\" items/sec\\nElapsed: \""),
-                        new LogicInstruction("print", var(0)),
-                        new LogicInstruction("print", "\" ms\""),
-                        new LogicInstruction("end")
+                        new LogicInstruction(PRINT, "\"Rate: \""),
+                        new LogicInstruction(PRINT, "rate"),
+                        new LogicInstruction(OP, "sub", var(0), "@time", "start"),
+                        new LogicInstruction(PRINT, "\" items/sec\\nElapsed: \""),
+                        new LogicInstruction(PRINT, var(0)),
+                        new LogicInstruction(PRINT, "\" ms\""),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );

@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.Opcode;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
     @Override
     protected void optimizeProgram() {
         int count = 0;
-        program.add(0, new LogicInstruction("label", FIRST_LABEL));
+        program.add(0, new LogicInstruction(Opcode.LABEL, FIRST_LABEL));
         for (int index = 0; index < program.size(); index++) {
             LogicInstruction instruction = program.get(index);
             if (instruction.isJump()) {

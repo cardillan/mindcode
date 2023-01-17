@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static info.teksol.mindcode.mindustry.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
@@ -38,61 +39,61 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("write", "48", "cell1", "48"),
-                        new LogicInstruction("read", var(3), "cell1", "48"),
-                        new LogicInstruction("op", "sub", var(3), var(3), "1"),
-                        new LogicInstruction("write", var(1001), "cell1", var(3)),
-                        new LogicInstruction("write", var(3), "cell1", "48"),
-                        new LogicInstruction("read", var(9), "cell1", "48"),
-                        new LogicInstruction("op", "sub", var(9), var(9), "1"),
-                        new LogicInstruction("write", "4", "cell1", var(9)),
-                        new LogicInstruction("write", var(9), "cell1", "48"),
-                        new LogicInstruction("set", "@counter", var(1000)),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("read", var(16), "cell1", "48"),
-                        new LogicInstruction("read", var(15), "cell1", var(16)),
-                        new LogicInstruction("op", "add", var(16), var(16), "1"),
-                        new LogicInstruction("write", var(16), "cell1", "48"),
-                        new LogicInstruction("read", var(24), "cell1", "48"),
-                        new LogicInstruction("op", "sub", var(24), var(24), "1"),
-                        new LogicInstruction("write", var(1002), "cell1", var(24)),
-                        new LogicInstruction("write", var(24), "cell1", "48"),
-                        new LogicInstruction("read", var(30), "cell1", "48"),
-                        new LogicInstruction("op", "sub", var(30), var(30), "1"),
-                        new LogicInstruction("write", "5", "cell1", var(30)),
-                        new LogicInstruction("write", var(30), "cell1", "48"),
-                        new LogicInstruction("set", "@counter", var(1000)),
-                        new LogicInstruction("label", var(1002)),
-                        new LogicInstruction("read", var(37), "cell1", "48"),
-                        new LogicInstruction("read", var(36), "cell1", var(37)),
-                        new LogicInstruction("op", "add", var(37), var(37), "1"),
-                        new LogicInstruction("write", var(37), "cell1", "48"),
-                        new LogicInstruction("op", "add", var(44), var(15), var(36)),
-                        new LogicInstruction("write", var(44), "cell2", "3"),
-                        new LogicInstruction("read", var(47), "cell2", "3"),
-                        new LogicInstruction("op", "add", var(49), var(47), "1"),
-                        new LogicInstruction("write", var(49), "cell2", "4"),
+                        new LogicInstruction(WRITE, "48", "cell1", "48"),
+                        new LogicInstruction(READ, var(3), "cell1", "48"),
+                        new LogicInstruction(OP, "sub", var(3), var(3), "1"),
+                        new LogicInstruction(WRITE, var(1001), "cell1", var(3)),
+                        new LogicInstruction(WRITE, var(3), "cell1", "48"),
+                        new LogicInstruction(READ, var(9), "cell1", "48"),
+                        new LogicInstruction(OP, "sub", var(9), var(9), "1"),
+                        new LogicInstruction(WRITE, "4", "cell1", var(9)),
+                        new LogicInstruction(WRITE, var(9), "cell1", "48"),
+                        new LogicInstruction(SET, "@counter", var(1000)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(READ, var(16), "cell1", "48"),
+                        new LogicInstruction(READ, var(15), "cell1", var(16)),
+                        new LogicInstruction(OP, "add", var(16), var(16), "1"),
+                        new LogicInstruction(WRITE, var(16), "cell1", "48"),
+                        new LogicInstruction(READ, var(24), "cell1", "48"),
+                        new LogicInstruction(OP, "sub", var(24), var(24), "1"),
+                        new LogicInstruction(WRITE, var(1002), "cell1", var(24)),
+                        new LogicInstruction(WRITE, var(24), "cell1", "48"),
+                        new LogicInstruction(READ, var(30), "cell1", "48"),
+                        new LogicInstruction(OP, "sub", var(30), var(30), "1"),
+                        new LogicInstruction(WRITE, "5", "cell1", var(30)),
+                        new LogicInstruction(WRITE, var(30), "cell1", "48"),
+                        new LogicInstruction(SET, "@counter", var(1000)),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(READ, var(37), "cell1", "48"),
+                        new LogicInstruction(READ, var(36), "cell1", var(37)),
+                        new LogicInstruction(OP, "add", var(37), var(37), "1"),
+                        new LogicInstruction(WRITE, var(37), "cell1", "48"),
+                        new LogicInstruction(OP, "add", var(44), var(15), var(36)),
+                        new LogicInstruction(WRITE, var(44), "cell2", "3"),
+                        new LogicInstruction(READ, var(47), "cell2", "3"),
+                        new LogicInstruction(OP, "add", var(49), var(47), "1"),
+                        new LogicInstruction(WRITE, var(49), "cell2", "4"),
 
-                        new LogicInstruction("end"),
+                        new LogicInstruction(END),
 
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("read", var(52), "cell1", "48"),
-                        new LogicInstruction("read", var(51), "cell1", var(52)),
-                        new LogicInstruction("op", "add", var(52), var(52), "1"),
-                        new LogicInstruction("write", var(52), "cell1", "48"),
-                        new LogicInstruction("set", "n", var(51)),
-                        new LogicInstruction("op", "mul", var(60), "2", "n"),
-                        new LogicInstruction("read", var(62), "cell1", "48"),
-                        new LogicInstruction("read", var(61), "cell1", var(62)),
-                        new LogicInstruction("op", "add", var(62), var(62), "1"),
-                        new LogicInstruction("write", var(62), "cell1", "48"),
-                        new LogicInstruction("read", var(69), "cell1", "48"),
-                        new LogicInstruction("op", "sub", var(69), var(69), "1"),
-                        new LogicInstruction("write", var(60), "cell1", var(69)),
-                        new LogicInstruction("write", var(69), "cell1", "48"),
-                        new LogicInstruction("set", "@counter", var(61)),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(READ, var(52), "cell1", "48"),
+                        new LogicInstruction(READ, var(51), "cell1", var(52)),
+                        new LogicInstruction(OP, "add", var(52), var(52), "1"),
+                        new LogicInstruction(WRITE, var(52), "cell1", "48"),
+                        new LogicInstruction(SET, "n", var(51)),
+                        new LogicInstruction(OP, "mul", var(60), "2", "n"),
+                        new LogicInstruction(READ, var(62), "cell1", "48"),
+                        new LogicInstruction(READ, var(61), "cell1", var(62)),
+                        new LogicInstruction(OP, "add", var(62), var(62), "1"),
+                        new LogicInstruction(WRITE, var(62), "cell1", "48"),
+                        new LogicInstruction(READ, var(69), "cell1", "48"),
+                        new LogicInstruction(OP, "sub", var(69), var(69), "1"),
+                        new LogicInstruction(WRITE, var(60), "cell1", var(69)),
+                        new LogicInstruction(WRITE, var(69), "cell1", "48"),
+                        new LogicInstruction(SET, "@counter", var(61)),
 
-                        new LogicInstruction("end")
+                        new LogicInstruction(END)
                 ),
                 LogicInstructionGenerator.generateAndOptimize(
                         (Seq) translateToAst(
@@ -112,11 +113,11 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "41"),
-                        new LogicInstruction("set", "y", "72"),
-                        new LogicInstruction("op", "add", "pos", "x", "y"),
-                        new LogicInstruction("ucontrol", "move", "40", "pos"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "x", "41"),
+                        new LogicInstruction(SET, "y", "72"),
+                        new LogicInstruction(OP, "add", "pos", "x", "y"),
+                        new LogicInstruction(UCONTROL, "move", "40", "pos"),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -134,11 +135,11 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "addr_FLAG", "0"),
-                        new LogicInstruction("read", var(0), "cell1", "addr_FLAG"),
-                        new LogicInstruction("op", "equal", var(1), var(0), "0"),
-                        new LogicInstruction("control", "enabled", "conveyor1", var(1)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "addr_FLAG", "0"),
+                        new LogicInstruction(READ, var(0), "cell1", "addr_FLAG"),
+                        new LogicInstruction(OP, "equal", var(1), var(0), "0"),
+                        new LogicInstruction(CONTROL, "enabled", "conveyor1", var(1)),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -159,15 +160,15 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("sensor", "silicon", "reconstructor1", "@silicon"),
-                        new LogicInstruction("sensor", "graphite", "reconstructor1", "@graphite"),
-                        new LogicInstruction("sensor", "capacity", "reconstructor1", "@itemCapacity"),
-                        new LogicInstruction("op", "lessThan", var(3), "silicon", "capacity"),
-                        new LogicInstruction("op", "lessThan", var(4), "graphite", "capacity"),
-                        new LogicInstruction("op", "or", var(5), var(3), var(4)),
-                        new LogicInstruction("op", "not", var(6), var(5)),
-                        new LogicInstruction("control", "enabled", "conveyor1", var(6)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SENSOR, "silicon", "reconstructor1", "@silicon"),
+                        new LogicInstruction(SENSOR, "graphite", "reconstructor1", "@graphite"),
+                        new LogicInstruction(SENSOR, "capacity", "reconstructor1", "@itemCapacity"),
+                        new LogicInstruction(OP, "lessThan", var(3), "silicon", "capacity"),
+                        new LogicInstruction(OP, "lessThan", var(4), "graphite", "capacity"),
+                        new LogicInstruction(OP, "or", var(5), var(3), var(4)),
+                        new LogicInstruction(OP, "not", var(6), var(5)),
+                        new LogicInstruction(CONTROL, "enabled", "conveyor1", var(6)),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -186,11 +187,11 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("sensor", "level", "nucleus1", "@resource"),
-                        new LogicInstruction("print", "level"),
-                        new LogicInstruction("op", "lessThan", var(0), "level", "capacity"),
-                        new LogicInstruction("control", "enabled", "building", var(0)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SENSOR, "level", "nucleus1", "@resource"),
+                        new LogicInstruction(PRINT, "level"),
+                        new LogicInstruction(OP, "lessThan", var(0), "level", "capacity"),
+                        new LogicInstruction(CONTROL, "enabled", "building", var(0)),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -213,11 +214,11 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "HEAPPTR", "cell3"),
-                        new LogicInstruction("write", "1", "HEAPPTR", "0"),
-                        new LogicInstruction("write", "2", "HEAPPTR", "1"),
-                        new LogicInstruction("write", "3", "HEAPPTR", "2"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "HEAPPTR", "cell3"),
+                        new LogicInstruction(WRITE, "1", "HEAPPTR", "0"),
+                        new LogicInstruction(WRITE, "2", "HEAPPTR", "1"),
+                        new LogicInstruction(WRITE, "3", "HEAPPTR", "2"),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -240,13 +241,13 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "HEAPPTR", "cell3"),
-                        new LogicInstruction("read", var(0), "HEAPPTR", "0"),
-                        new LogicInstruction("print", var(0)),
-                        new LogicInstruction("write", "1", "HEAPPTR", "0"),
-                        new LogicInstruction("write", "2", "HEAPPTR", "1"),
-                        new LogicInstruction("write", "3", "HEAPPTR", "2"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "HEAPPTR", "cell3"),
+                        new LogicInstruction(READ, var(0), "HEAPPTR", "0"),
+                        new LogicInstruction(PRINT, var(0)),
+                        new LogicInstruction(WRITE, "1", "HEAPPTR", "0"),
+                        new LogicInstruction(WRITE, "2", "HEAPPTR", "1"),
+                        new LogicInstruction(WRITE, "3", "HEAPPTR", "2"),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -271,15 +272,15 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "desired", "@dagger"),
-                        new LogicInstruction("set", "boosting", "false"),
-                        new LogicInstruction("ucontrol", "payTake", "desired"),
-                        new LogicInstruction("ucontrol", "payDrop"),
-                        new LogicInstruction("ucontrol", "boost", "boosting"),
-                        new LogicInstruction("ucontrol", "pathfind"),
-                        new LogicInstruction("ucontrol", "idle"),
-                        new LogicInstruction("ucontrol", "stop"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "desired", "@dagger"),
+                        new LogicInstruction(SET, "boosting", "false"),
+                        new LogicInstruction(UCONTROL, "payTake", "desired"),
+                        new LogicInstruction(UCONTROL, "payDrop"),
+                        new LogicInstruction(UCONTROL, "boost", "boosting"),
+                        new LogicInstruction(UCONTROL, "pathfind"),
+                        new LogicInstruction(UCONTROL, "idle"),
+                        new LogicInstruction(UCONTROL, "stop"),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -297,13 +298,13 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "1"),
-                        new LogicInstruction("print", "\"\\nx: \""),
-                        new LogicInstruction("print", "x"),
-                        new LogicInstruction("op", "add", var(3), "x", "x"),
-                        new LogicInstruction("print", "\"\\nx+x: \""),
-                        new LogicInstruction("print", var(3)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "x", "1"),
+                        new LogicInstruction(PRINT, "\"\\nx: \""),
+                        new LogicInstruction(PRINT, "x"),
+                        new LogicInstruction(OP, "add", var(3), "x", "x"),
+                        new LogicInstruction(PRINT, "\"\\nx+x: \""),
+                        new LogicInstruction(PRINT, var(3)),
+                        new LogicInstruction(END)
                 ),
                 result
         );
@@ -365,12 +366,12 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "TestVar", "0xf"),
-                        new LogicInstruction("op", "not", "Result", "TestVar"),
-                        new LogicInstruction("print", "TestVar"),
-                        new LogicInstruction("print", "\"\\n\""),
-                        new LogicInstruction("print", "Result"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "TestVar", "0xf"),
+                        new LogicInstruction(OP, "not", "Result", "TestVar"),
+                        new LogicInstruction(PRINT, "TestVar"),
+                        new LogicInstruction(PRINT, "\"\\n\""),
+                        new LogicInstruction(PRINT, "Result"),
+                        new LogicInstruction(END)
                 ),
                 result
         );

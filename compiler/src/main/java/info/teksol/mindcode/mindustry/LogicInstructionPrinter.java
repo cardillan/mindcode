@@ -6,35 +6,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static info.teksol.mindcode.mindustry.Opcode.*;
+
 public class LogicInstructionPrinter {
-    private static final Map<String, Integer> FN_ARGS;
+    private static final Map<Opcode, Integer> FN_ARGS;
 
     static {
-        Map<String, Integer> args = new HashMap<>();
-        args.put("set", 2);
-        args.put("op", 4);
-        args.put("jump", 4);
-        args.put("print", 1);
-        args.put("end", 0);
-        args.put("sensor", 3);
-        args.put("radar", 7);
-        args.put("control", 6);
-        args.put("draw", 7);
-        args.put("write", 3);
-        args.put("read", 3);
-        args.put("wait", 1);
-        args.put("drawflush", 1);
-        args.put("ubind", 1);
-        args.put("ucontrol", 6);
-        args.put("getlink", 2);
-        args.put("printflush", 1);
-        args.put("uradar", 7);
-        args.put("label", 1);
-        args.put("ulocate", 8);
+        Map<Opcode, Integer> args = new HashMap<>();
+        args.put(SET, 2);
+        args.put(OP, 4);
+        args.put(JUMP, 4);
+        args.put(PRINT, 1);
+        args.put(END, 0);
+        args.put(SENSOR, 3);
+        args.put(RADAR, 7);
+        args.put(CONTROL, 6);
+        args.put(DRAW, 7);
+        args.put(WRITE, 3);
+        args.put(READ, 3);
+        args.put(WAIT, 1);
+        args.put(DRAWFLUSH, 1);
+        args.put(UBIND, 1);
+        args.put(UCONTROL, 6);
+        args.put(GETLINK, 2);
+        args.put(PRINTFLUSH, 1);
+        args.put(URADAR, 7);
+        args.put(LABEL, 1);
+        args.put(ULOCATE, 8);
 
         // This only serves to satisfy the compiler
         // In the generated, optimized code, this assignment should be elided
-        @SuppressWarnings("unchecked") final Map<String, Integer> tmp = Collections.unmodifiableMap(args);
+        @SuppressWarnings("unchecked") final Map<Opcode, Integer> tmp = Collections.unmodifiableMap(args);
 
         FN_ARGS = tmp;
     }
@@ -45,7 +47,7 @@ public class LogicInstructionPrinter {
             if (!FN_ARGS.containsKey(instruction.getOpcode())) {
                 throw new GenerationException("Don't know how many arguments [" + instruction.getOpcode() + "] needs; add it to FN_ARGS");
             }
-            buffer.append(instruction.getOpcode());
+            buffer.append(instruction.getOpcode().getOpcode());
             addArgs(FN_ARGS.get(instruction.getOpcode()), buffer, instruction);
         });
 

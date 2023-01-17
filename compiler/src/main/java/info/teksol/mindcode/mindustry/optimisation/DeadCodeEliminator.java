@@ -96,79 +96,79 @@ class DeadCodeEliminator extends GlobalOptimizer {
 
     private void examineInstruction(LogicInstruction instruction) {
         switch (instruction.getOpcode()) {
-            case "set":
+            case SET:
                 visitSet(instruction);
                 break;
 
-            case "write":
+            case WRITE:
                 visitWrite(instruction);
                 break;
 
-            case "read":
+            case READ:
                 visitRead(instruction);
                 break;
 
-            case "jump":
+            case JUMP:
                 visitJump(instruction);
                 break;
 
-            case "op":
+            case OP:
                 visitOp(instruction);
                 break;
 
-            case "ucontrol":
+            case UCONTROL:
                 visitUcontrol(instruction);
                 break;
 
-            case "wait":
+            case WAIT:
                 visitWait(instruction);
                 break;
 
-            case "sensor":
+            case SENSOR:
                 visitSensor(instruction);
                 break;
 
-            case "radar":
+            case RADAR:
                 visitRadar(instruction);
 
-            case "ubind":
+            case UBIND:
                 visitUbind(instruction);
                 break;
 
-            case "control":
+            case CONTROL:
                 visitControl(instruction);
                 break;
 
-            case "getlink":
+            case GETLINK:
                 visitGetlink(instruction);
                 break;
 
-            case "print":
+            case PRINT:
                 visitPrint(instruction);
                 break;
 
-            case "printflush":
+            case PRINTFLUSH:
                 visitPrintflush(instruction);
                 break;
 
-            case "ulocate":
+            case ULOCATE:
                 visitUlocate(instruction);
                 break;
 
-            case "uradar":
+            case URADAR:
                 visitUradar(instruction);
                 break;
 
-            case "draw":
+            case DRAW:
                 visitDraw(instruction);
                 break;
 
-            case "drawflush":
+            case DRAWFLUSH:
                 visitDrawflush(instruction);
                 break;
 
-            case "label":
-            case "end":
+            case LABEL:
+            case END:
                 // These don't have useful args
                 break;
 

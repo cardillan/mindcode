@@ -8,21 +8,23 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static info.teksol.mindcode.mindustry.Opcode.*;
+
 public class InputTempEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus,
             Optimisation.INPUT_TEMPS_ELIMINATION);
 
     @Test
     void optimizesBasicCase() {
-        pipeline.emit(new LogicInstruction("set", "__tmp0", "0"));
-        pipeline.emit(new LogicInstruction("draw", "color", "__tmp0", "__tmp0", "__tmp0", "255"));
-        pipeline.emit(new LogicInstruction("end"));
+        pipeline.emit(new LogicInstruction(SET, "__tmp0", "0"));
+        pipeline.emit(new LogicInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"));
+        pipeline.emit(new LogicInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("draw", "color", "0", "0", "0", "255"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(DRAW, "color", "0", "0", "0", "255"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -30,16 +32,16 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresNontemporaryVariables() {
-        pipeline.emit(new LogicInstruction("set", "C", "0"));
-        pipeline.emit(new LogicInstruction("draw", "color", "C", "C", "C", "255"));
-        pipeline.emit(new LogicInstruction("end"));
+        pipeline.emit(new LogicInstruction(SET, "C", "0"));
+        pipeline.emit(new LogicInstruction(DRAW, "color", "C", "C", "C", "255"));
+        pipeline.emit(new LogicInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "C", "0"),
-                        new LogicInstruction("draw", "color", "C", "C", "C", "255"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "C", "0"),
+                        new LogicInstruction(DRAW, "color", "C", "C", "C", "255"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -47,18 +49,18 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresVariablesWithMultipleUsage() {
-        pipeline.emit(new LogicInstruction("set", "__tmp0", "0"));
-        pipeline.emit(new LogicInstruction("set", "__tmp0", "1"));
-        pipeline.emit(new LogicInstruction("draw", "color", "__tmp0", "__tmp0", "__tmp0", "255"));
-        pipeline.emit(new LogicInstruction("end"));
+        pipeline.emit(new LogicInstruction(SET, "__tmp0", "0"));
+        pipeline.emit(new LogicInstruction(SET, "__tmp0", "1"));
+        pipeline.emit(new LogicInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"));
+        pipeline.emit(new LogicInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "__tmp0", "0"),
-                        new LogicInstruction("set", "__tmp0", "1"),
-                        new LogicInstruction("draw", "color", "__tmp0", "__tmp0", "__tmp0", "255"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "__tmp0", "0"),
+                        new LogicInstruction(SET, "__tmp0", "1"),
+                        new LogicInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -66,16 +68,16 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresInstructionsInWrongOrder() {
-        pipeline.emit(new LogicInstruction("draw", "color", "__tmp0", "__tmp0", "__tmp0", "255"));
-        pipeline.emit(new LogicInstruction("set", "__tmp0", "0"));
-        pipeline.emit(new LogicInstruction("end"));
+        pipeline.emit(new LogicInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"));
+        pipeline.emit(new LogicInstruction(SET, "__tmp0", "0"));
+        pipeline.emit(new LogicInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("draw", "color", "__tmp0", "__tmp0", "__tmp0", "255"),
-                        new LogicInstruction("set", "__tmp0", "0"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"),
+                        new LogicInstruction(SET, "__tmp0", "0"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -99,20 +101,20 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("draw", "color", "255", "80", "80", "255"),
-                        new LogicInstruction("draw", "rect", "x", "y3", "14", "8"),
-                        new LogicInstruction("draw", "color", "0", "0", "0", "255"),
-                        new LogicInstruction("op", "add", var(7), "x", "2"),
-                        new LogicInstruction("op", "add", var(9), "y", "5"),
-                        new LogicInstruction("draw", "rect", var(7), var(9), "8", "4"),
-                        new LogicInstruction("draw", "rect", "x12", "y3", "2", "2"),
-                        new LogicInstruction("op", "add", var(11), "y", "9"),
-                        new LogicInstruction("draw", "rect", "x12", var(11), "2", "2"),
-                        new LogicInstruction("draw", "color", "255", "80", "80", "255"),
-                        new LogicInstruction("op", "add", var(13), "x", "4"),
-                        new LogicInstruction("op", "add", var(15), "y", "6"),
-                        new LogicInstruction("draw", "rect", var(13), var(15), "2", "2"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(DRAW, "color", "255", "80", "80", "255"),
+                        new LogicInstruction(DRAW, "rect", "x", "y3", "14", "8"),
+                        new LogicInstruction(DRAW, "color", "0", "0", "0", "255"),
+                        new LogicInstruction(OP, "add", var(7), "x", "2"),
+                        new LogicInstruction(OP, "add", var(9), "y", "5"),
+                        new LogicInstruction(DRAW, "rect", var(7), var(9), "8", "4"),
+                        new LogicInstruction(DRAW, "rect", "x12", "y3", "2", "2"),
+                        new LogicInstruction(OP, "add", var(11), "y", "9"),
+                        new LogicInstruction(DRAW, "rect", "x12", var(11), "2", "2"),
+                        new LogicInstruction(DRAW, "color", "255", "80", "80", "255"),
+                        new LogicInstruction(OP, "add", var(13), "x", "4"),
+                        new LogicInstruction(OP, "add", var(15), "y", "6"),
+                        new LogicInstruction(DRAW, "rect", var(13), var(15), "2", "2"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -131,8 +133,8 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("write", "36", "cell1", "42"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(WRITE, "36", "cell1", "42"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -149,9 +151,9 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "RAM", "cell14"),
-                        new LogicInstruction("write", "17", "RAM", "21"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "RAM", "cell14"),
+                        new LogicInstruction(WRITE, "17", "RAM", "21"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -170,9 +172,9 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("read", var(0), "cell1", "14"),
-                        new LogicInstruction("set", "foo", var(0)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(READ, var(0), "cell1", "14"),
+                        new LogicInstruction(SET, "foo", var(0)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -189,13 +191,13 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("read", var(0), "cell2", "0"),
-                        new LogicInstruction("op", "add", var(1), "@thisx", var(0)),
-                        new LogicInstruction("set", "targetx", var(1)),
-                        new LogicInstruction("read", var(2), "cell2", "1"),
-                        new LogicInstruction("op", "add", var(3), "@thisy", var(2)),
-                        new LogicInstruction("set", "targety", var(3)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(READ, var(0), "cell2", "0"),
+                        new LogicInstruction(OP, "add", var(1), "@thisx", var(0)),
+                        new LogicInstruction(SET, "targetx", var(1)),
+                        new LogicInstruction(READ, var(2), "cell2", "1"),
+                        new LogicInstruction(OP, "add", var(3), "@thisy", var(2)),
+                        new LogicInstruction(SET, "targety", var(3)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -212,8 +214,8 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "bar", "foo"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "bar", "foo"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -221,14 +223,14 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesSetThenReadWithDifferingValues() {
-        pipeline.emit(new LogicInstruction("set", "x", "1"));
-        pipeline.emit(new LogicInstruction("read", "__tmp0", "cell2", "14"));
+        pipeline.emit(new LogicInstruction(SET, "x", "1"));
+        pipeline.emit(new LogicInstruction(READ, "__tmp0", "cell2", "14"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "1"),
-                        new LogicInstruction("read", var(0), "cell2", "14")
+                        new LogicInstruction(SET, "x", "1"),
+                        new LogicInstruction(READ, var(0), "cell2", "14")
                 ),
                 terminus.getResult()
         );
@@ -247,10 +249,10 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("op", "rand", var(1), "10000"),
-                        new LogicInstruction("op", "floor", var(2), var(1)),
-                        new LogicInstruction("set", "FLAG", var(2)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(OP, "rand", var(1), "10000"),
+                        new LogicInstruction(OP, "floor", var(2), var(1)),
+                        new LogicInstruction(SET, "FLAG", var(2)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -267,10 +269,10 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "r", "2"),
-                        new LogicInstruction("op", "rand", var(1), "500"),
-                        new LogicInstruction("set", "p", var(1)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "r", "2"),
+                        new LogicInstruction(OP, "rand", var(1), "500"),
+                        new LogicInstruction(SET, "p", var(1)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -287,10 +289,10 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "41"),
-                        new LogicInstruction("op", "add", var(2), "70", "x"),
-                        new LogicInstruction("set", "pos", var(2)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "x", "41"),
+                        new LogicInstruction(OP, "add", var(2), "70", "x"),
+                        new LogicInstruction(SET, "pos", var(2)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -307,10 +309,10 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "41"),
-                        new LogicInstruction("op", "add", var(2), "x", "70"),
-                        new LogicInstruction("set", "pos", var(2)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "x", "41"),
+                        new LogicInstruction(OP, "add", var(2), "x", "70"),
+                        new LogicInstruction(SET, "pos", var(2)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -329,9 +331,9 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "a", "1"),
-                        new LogicInstruction("set", "b", "a"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "a", "1"),
+                        new LogicInstruction(SET, "b", "a"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -348,9 +350,9 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "a", "1"),
-                        new LogicInstruction("set", "b", "2"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "a", "1"),
+                        new LogicInstruction(SET, "b", "2"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -358,14 +360,14 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void consecutiveSetsWithNoRelationshipAreLeftAlone() {
-        pipeline.emit(new LogicInstruction("set", "x", "10"));
-        pipeline.emit(new LogicInstruction("set", "y", "4"));
+        pipeline.emit(new LogicInstruction(SET, "x", "10"));
+        pipeline.emit(new LogicInstruction(SET, "y", "4"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "10"),
-                        new LogicInstruction("set", "y", "4")
+                        new LogicInstruction(SET, "x", "10"),
+                        new LogicInstruction(SET, "y", "4")
                 ),
                 terminus.getResult()
         );
@@ -384,9 +386,9 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("print", "\"a: \""),
-                        new LogicInstruction("print", "a"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(PRINT, "\"a: \""),
+                        new LogicInstruction(PRINT, "a"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -403,9 +405,9 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("read", var(1), "cell4", "10"),
-                        new LogicInstruction("set", "a", var(1)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(READ, var(1), "cell4", "10"),
+                        new LogicInstruction(SET, "a", var(1)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -422,9 +424,9 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "1"),
-                        new LogicInstruction("print", "y"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "x", "1"),
+                        new LogicInstruction(PRINT, "y"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -441,11 +443,11 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("print", "\"damaged at \""),
-                        new LogicInstruction("print", "dmgx"),
-                        new LogicInstruction("print", "\", \""),
-                        new LogicInstruction("print", "dmgy"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(PRINT, "\"damaged at \""),
+                        new LogicInstruction(PRINT, "dmgx"),
+                        new LogicInstruction(PRINT, "\", \""),
+                        new LogicInstruction(PRINT, "dmgy"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -462,13 +464,13 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "x", "1"),
-                        new LogicInstruction("print", "\"damaged at \""),
-                        new LogicInstruction("print", "dmgx"),
-                        new LogicInstruction("set", "x", "2"),
-                        new LogicInstruction("print", "\", \""),
-                        new LogicInstruction("print", "dmgy"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, "x", "1"),
+                        new LogicInstruction(PRINT, "\"damaged at \""),
+                        new LogicInstruction(PRINT, "dmgx"),
+                        new LogicInstruction(SET, "x", "2"),
+                        new LogicInstruction(PRINT, "\", \""),
+                        new LogicInstruction(PRINT, "dmgy"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -483,14 +485,14 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
-                        new LogicInstruction("print", "x"),
-                        new LogicInstruction("set", var(0), "x"),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("set", var(0), "null"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        new LogicInstruction(PRINT, "x"),
+                        new LogicInstruction(SET, var(0), "x"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, var(0), "null"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );

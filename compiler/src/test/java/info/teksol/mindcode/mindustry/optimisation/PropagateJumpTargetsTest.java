@@ -8,6 +8,8 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static info.teksol.mindcode.mindustry.Opcode.*;
+
 public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
             Optimisation.DEAD_CODE_ELIMINATION,
@@ -34,18 +36,18 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("label", "__start__"),
-                        new LogicInstruction("jump", "__start__", "equal", "a", "false"),
-                        new LogicInstruction("jump", var(1002), "equal", "b", "false"),
-                        new LogicInstruction("print", "b"),
-                        new LogicInstruction("jump", var(1003), "always"),
-                        new LogicInstruction("label", var(1002)),
-                        new LogicInstruction("label", var(1003)),
-                        new LogicInstruction("print", "a"),
-                        new LogicInstruction("jump", "__start__", "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(LABEL, "__start__"),
+                        new LogicInstruction(JUMP, "__start__", "equal", "a", "false"),
+                        new LogicInstruction(JUMP, var(1002), "equal", "b", "false"),
+                        new LogicInstruction(PRINT, "b"),
+                        new LogicInstruction(JUMP, var(1003), "always"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(PRINT, "a"),
+                        new LogicInstruction(JUMP, "__start__", "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -69,18 +71,18 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("jump", var(1001), "notEqual", "c", "null"),
-                        new LogicInstruction("getlink", "c", "1"),
-                        new LogicInstruction("jump", var(1001), "notEqual", "c", "null"),
-                        new LogicInstruction("print", "\"Not found\""),
-                        new LogicInstruction("jump", var(1000), "always"),
-                        new LogicInstruction("label", var(1002)),
-                        new LogicInstruction("label", var(1003)),
-                        new LogicInstruction("jump", var(1000), "always"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("print", "\"Done\""),
-                        new LogicInstruction("end")
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(JUMP, var(1001), "notEqual", "c", "null"),
+                        new LogicInstruction(GETLINK, "c", "1"),
+                        new LogicInstruction(JUMP, var(1001), "notEqual", "c", "null"),
+                        new LogicInstruction(PRINT, "\"Not found\""),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(PRINT, "\"Done\""),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -104,18 +106,18 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("jump", var(1001), "greaterThanEq", "@time", "wait"),
-                        new LogicInstruction("op", "add", "n", "n", "1"),
-                        new LogicInstruction("jump", var(1000), "greaterThanEq", "@time", "wait"),
-                        new LogicInstruction("print", "\"Waiting\""),
-                        new LogicInstruction("jump", var(1000), "always"),
-                        new LogicInstruction("label", var(1002)),
-                        new LogicInstruction("label", var(1003)),
-                        new LogicInstruction("jump", var(1000), "always"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("print", "\"Done\""),
-                        new LogicInstruction("end")
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(JUMP, var(1001), "greaterThanEq", "@time", "wait"),
+                        new LogicInstruction(OP, "add", "n", "n", "1"),
+                        new LogicInstruction(JUMP, var(1000), "greaterThanEq", "@time", "wait"),
+                        new LogicInstruction(PRINT, "\"Waiting\""),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(PRINT, "\"Done\""),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );

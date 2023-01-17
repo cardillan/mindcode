@@ -7,6 +7,8 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static info.teksol.mindcode.mindustry.Opcode.*;
+
 /**
  * Converts from the Mindcode AST into a list of Logic instructions.
  * <p>
@@ -16,8 +18,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public static final String TMP_PREFIX = "__tmp";
 
     private final LogicInstructionPipeline pipeline;
-    private int tmp;
-    private int label;
+    private int tmpIndex;
+    private int labelIndex;
     private StackAllocation allocatedStack;
     private Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
     private Map<String, String> functionLabels = new HashMap<>();
@@ -65,10 +67,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private void appendFunctionDeclarations() {
         // TODO: pass parameters through local variables? This would save a ton of instructions when going through the stack
 
-        pipeline.emit(new LogicInstruction("end"));
+        pipeline.emit(new LogicInstruction(END));
         for (Map.Entry<String, FunctionDeclaration> pair : declaredFunctions.entrySet()) {
             final String label = functionLabels.get(pair.getKey());
-            pipeline.emit(new LogicInstruction("label", label));
+            pipeline.emit(new LogicInstruction(Opcode.LABEL, label));
             // caller pushes arguments left-to-right
             // we have to pop right-to-left, hence the reverse iteration here
             final ListIterator<AstNode> iterator = pair.getValue().getParams().listIterator(pair.getValue().getParams().size());
@@ -83,8 +85,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             final String returnAddress = nextTemp();
             popValueFromStack(returnAddress);
             pushValueOnStack(body);
-            pipeline.emit(new LogicInstruction("set", "@counter", returnAddress));
-            pipeline.emit(new LogicInstruction("end"));
+            pipeline.emit(new LogicInstruction(SET, "@counter", returnAddress));
+            pipeline.emit(new LogicInstruction(END));
         }
 
     }
@@ -93,7 +95,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public String visitHeapAccess(HeapAccess node) {
         final String addr = visit(node.getAddress());
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("read", tmp, node.getCellName(), addr));
+        pipeline.emit(new LogicInstruction(READ, tmp, node.getCellName(), addr));
         return tmp;
     }
 
@@ -105,16 +107,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String elseBranch = nextLabel();
         final String endBranch = nextLabel();
 
-        pipeline.emit(new LogicInstruction("jump", elseBranch, "equal", cond, "false"));
+        pipeline.emit(new LogicInstruction(JUMP, elseBranch, "equal", cond, "false"));
 
         final String trueBranch = visit(node.getTrueBranch());
-        pipeline.emit(new LogicInstruction("set", tmp, trueBranch));
-        pipeline.emit(new LogicInstruction("jump", endBranch, "always"));
+        pipeline.emit(new LogicInstruction(SET, tmp, trueBranch));
+        pipeline.emit(new LogicInstruction(JUMP, endBranch, "always"));
 
-        pipeline.emit(new LogicInstruction("label", elseBranch));
+        pipeline.emit(new LogicInstruction(LABEL, elseBranch));
         final String falseBranch = visit(node.getFalseBranch());
-        pipeline.emit(new LogicInstruction("set", tmp, falseBranch));
-        pipeline.emit(new LogicInstruction("label", endBranch));
+        pipeline.emit(new LogicInstruction(SET, tmp, falseBranch));
+        pipeline.emit(new LogicInstruction(LABEL, endBranch));
 
         return tmp;
     }
@@ -137,16 +139,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         if (node.getVar() instanceof HeapAccess) {
             final HeapAccess heapAccess = (HeapAccess) node.getVar();
             final String address = visit(heapAccess.getAddress());
-            pipeline.emit(new LogicInstruction("write", rvalue, heapAccess.getCellName(), address));
+            pipeline.emit(new LogicInstruction(Opcode.WRITE, rvalue, heapAccess.getCellName(), address));
         } else if (node.getVar() instanceof PropertyAccess) {
             final PropertyAccess propertyAccess = (PropertyAccess) node.getVar();
             final String propTarget = visit(propertyAccess.getTarget());
             String prop = visit(propertyAccess.getProperty());
             if (prop.startsWith("@")) prop = prop.replaceFirst("@", "");
-            pipeline.emit(new LogicInstruction("control", prop, propTarget, rvalue));
+            pipeline.emit(new LogicInstruction(Opcode.CONTROL, prop, propTarget, rvalue));
         } else if (node.getVar() instanceof VarRef) {
             final String target = visit(node.getVar());
-            pipeline.emit(new LogicInstruction("set", List.of(target, rvalue)));
+            pipeline.emit(new LogicInstruction(Opcode.SET, List.of(target, rvalue)));
         } else {
             throw new GenerationException("Unhandled assignment target in " + node);
         }
@@ -159,7 +161,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String expression = visit(node.getExpression());
 
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", List.of(translateUnaryOpToCode(node.getOp()), tmp, expression)));
+        pipeline.emit(new LogicInstruction(OP, List.of(translateUnaryOpToCode(node.getOp()), tmp, expression)));
         return tmp;
     }
 
@@ -168,12 +170,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
         final String condLabel = nextLabel();
         final String doneLabel = nextLabel();
-        pipeline.emit(new LogicInstruction("label", List.of(condLabel)));
+        pipeline.emit(new LogicInstruction(LABEL, List.of(condLabel)));
         final String cond = visit(node.getCondition());
-        pipeline.emit(new LogicInstruction("jump", List.of(doneLabel, "equal", cond, "false")));
+        pipeline.emit(new LogicInstruction(JUMP, List.of(doneLabel, "equal", cond, "false")));
         visit(node.getBody());
-        pipeline.emit(new LogicInstruction("jump", List.of(condLabel, "always")));
-        pipeline.emit(new LogicInstruction("label", List.of(doneLabel)));
+        pipeline.emit(new LogicInstruction(JUMP, List.of(condLabel, "always")));
+        pipeline.emit(new LogicInstruction(LABEL, List.of(doneLabel)));
 
         return "null";
     }
@@ -340,43 +342,43 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     private String handleNoise(List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "noise", tmp, params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(OP, "noise", tmp, params.get(0), params.get(1)));
         return tmp;
     }
 
     private String handleLog10(List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "log10", tmp, params.get(0)));
+        pipeline.emit(new LogicInstruction(OP, "log10", tmp, params.get(0)));
         return tmp;
     }
 
     private String handleAngle(List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "angle", tmp, params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(OP, "angle", tmp, params.get(0), params.get(1)));
         return tmp;
     }
 
     private String handleLen(List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "len", tmp, params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(OP, "len", tmp, params.get(0), params.get(1)));
         return tmp;
     }
 
     private String handleMax(List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "max", tmp, params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(OP, "max", tmp, params.get(0), params.get(1)));
         return tmp;
     }
 
     private String handleMin(List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "min", tmp, params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(OP, "min", tmp, params.get(0), params.get(1)));
         return tmp;
     }
 
     private String handleSqrt(List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "sqrt", tmp, params.get(0)));
+        pipeline.emit(new LogicInstruction(OP, "sqrt", tmp, params.get(0)));
         return tmp;
     }
 
@@ -390,8 +392,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         for (final String param : params) {
             pushValueOnStack(param);
         }
-        pipeline.emit(new LogicInstruction("set", "@counter", functionLabels.get(functionName))); // actually call function
-        pipeline.emit(new LogicInstruction("label", returnLabel)); // where the function must return
+        pipeline.emit(new LogicInstruction(SET, "@counter", functionLabels.get(functionName))); // actually call function
+        pipeline.emit(new LogicInstruction(LABEL, returnLabel)); // where the function must return
 
         final String returnValue = nextTemp();
         popValueFromStack(returnValue);
@@ -439,7 +441,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private String handleEnd() {
-        pipeline.emit(new LogicInstruction("end"));
+        pipeline.emit(new LogicInstruction(END));
         return "null";
     }
 
@@ -464,14 +466,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                     throw new InsufficientArgumentsException("ulocate(ore) requires 4 arguments, received " + params.size());
                 }
 
-                pipeline.emit(new LogicInstruction("ulocate", "ore", "core", "true", params.get(1), params.get(2), params.get(3), tmp, nextTemp()));
+                pipeline.emit(new LogicInstruction(ULOCATE, "ore", "core", "true", params.get(1), params.get(2), params.get(3), tmp, nextTemp()));
                 break;
             case "building":
                 if (params.size() < 6) {
                     throw new InsufficientArgumentsException("ulocate(building) requires 6 arguments, received " + params.size());
                 }
 
-                pipeline.emit(new LogicInstruction("ulocate", "building", params.get(1), params.get(2), "@copper", params.get(3), params.get(4), tmp, params.get(5)));
+                pipeline.emit(new LogicInstruction(ULOCATE, "building", params.get(1), params.get(2), "@copper", params.get(3), params.get(4), tmp, params.get(5)));
                 break;
 
             case "spawn":
@@ -479,7 +481,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                     throw new InsufficientArgumentsException("ulocate(spawn) requires 4 arguments, received " + params.size());
                 }
 
-                pipeline.emit(new LogicInstruction("ulocate", "spawn", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
+                pipeline.emit(new LogicInstruction(ULOCATE, "spawn", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
                 break;
 
             case "damaged":
@@ -487,7 +489,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                     throw new InsufficientArgumentsException("ulocate(damaged) requires 4 arguments, received " + params.size());
                 }
 
-                pipeline.emit(new LogicInstruction("ulocate", "damaged", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
+                pipeline.emit(new LogicInstruction(ULOCATE, "damaged", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
                 break;
 
             default:
@@ -500,173 +502,173 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private String handleURadar(List<String> params) {
         // uradar enemy attacker ground armor 0 order result
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("uradar", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
+        pipeline.emit(new LogicInstruction(URADAR, params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
         return tmp;
     }
 
     private String handleDrawflush(List<String> params) {
-        pipeline.emit(new LogicInstruction("drawflush", params.get(0)));
+        pipeline.emit(new LogicInstruction(DRAWFLUSH, params.get(0)));
         return params.get(0);
     }
 
     private String handleImage(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "image", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        pipeline.emit(new LogicInstruction(DRAW, "image", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
         return "null";
     }
 
     private String handleTriangle(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "triangle", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5)));
+        pipeline.emit(new LogicInstruction(DRAW, "triangle", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5)));
         return "null";
     }
 
     private String handleLinePoly(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "linePoly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        pipeline.emit(new LogicInstruction(DRAW, "linePoly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
         return "null";
     }
 
     private String handlePoly(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "poly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        pipeline.emit(new LogicInstruction(DRAW, "poly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
         return "null";
     }
 
     private String handleLineRect(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "lineRect", params.get(0), params.get(1), params.get(2), params.get(3)));
+        pipeline.emit(new LogicInstruction(DRAW, "lineRect", params.get(0), params.get(1), params.get(2), params.get(3)));
         return "null";
     }
 
     private String handleRect(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "rect", params.get(0), params.get(1), params.get(2), params.get(3)));
+        pipeline.emit(new LogicInstruction(DRAW, "rect", params.get(0), params.get(1), params.get(2), params.get(3)));
         return "null";
     }
 
     private String handleLine(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "line", params.get(0), params.get(1), params.get(2), params.get(3)));
+        pipeline.emit(new LogicInstruction(DRAW, "line", params.get(0), params.get(1), params.get(2), params.get(3)));
         return "null";
     }
 
     private String handleStroke(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "stroke", params.get(0)));
+        pipeline.emit(new LogicInstruction(DRAW, "stroke", params.get(0)));
         return "null";
     }
 
     private String handleColor(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "color", params.get(0), params.get(1), params.get(2), params.get(3)));
+        pipeline.emit(new LogicInstruction(DRAW, "color", params.get(0), params.get(1), params.get(2), params.get(3)));
         return "null";
     }
 
     private String handleClear(List<String> params) {
-        pipeline.emit(new LogicInstruction("draw", "clear", params.get(0), params.get(1), params.get(2)));
+        pipeline.emit(new LogicInstruction(DRAW, "clear", params.get(0), params.get(1), params.get(2)));
         return "null";
     }
 
     private String handleMath(String functionName, List<String> params) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", functionName, tmp, params.get(0)));
+        pipeline.emit(new LogicInstruction(OP, functionName, tmp, params.get(0)));
         return tmp;
     }
 
     private String handleWithin(List<String> params) {
         // ucontrol within x y radius result 0
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("ucontrol", "within", params.get(0), params.get(1), params.get(2), tmp));
+        pipeline.emit(new LogicInstruction(UCONTROL, "within", params.get(0), params.get(1), params.get(2), tmp));
         return tmp;
     }
 
     private String handleGetBlock(List<String> params) {
         // ucontrol getBlock x y resultType resultBuilding 0
         // TODO: either handle multiple return values, or provide a better abstraction over getBlock
-        pipeline.emit(new LogicInstruction("ucontrol", "getBlock", params.get(0), params.get(1), params.get(2), params.get(3)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "getBlock", params.get(0), params.get(1), params.get(2), params.get(3)));
         return "null";
     }
 
     private String handleBuild(List<String> params) {
         // ucontrol build x y block rotation config
-        pipeline.emit(new LogicInstruction("ucontrol", "build", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "build", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
         return "null";
     }
 
     private String handlePayTake(List<String> params) {
         // ucontrol payTake takeUnits 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "payTake", params.get(0)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "payTake", params.get(0)));
         return "null";
     }
 
     private String handlePayDrop() {
         // ucontrol payDrop 0 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "payDrop"));
+        pipeline.emit(new LogicInstruction(UCONTROL, "payDrop"));
         return "null";
     }
 
     private String handleItemTake(List<String> params) {
         // ucontrol itemTake from item amount 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "itemTake", params.get(0), params.get(1), params.get(2)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "itemTake", params.get(0), params.get(1), params.get(2)));
         return "null";
     }
 
     private String handleTargetp(List<String> params) {
         // ucontrol targetp unit shoot 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "targetp", params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "targetp", params.get(0), params.get(1)));
         return "null";
     }
 
     private String handleTarget(List<String> params) {
         // ucontrol target x y shoot 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "target", params.get(0), params.get(1), params.get(2)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "target", params.get(0), params.get(1), params.get(2)));
         return "null";
     }
 
     private String handleBoost(List<String> params) {
         // ucontrol boost enable 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "boost", params.get(0)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "boost", params.get(0)));
         return params.get(0);
     }
 
     private String handlePathfind() {
         // ucontrol pathfind 0 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "pathfind"));
+        pipeline.emit(new LogicInstruction(UCONTROL, "pathfind"));
         return "null";
     }
 
     private String handleIdle() {
         // ucontrol idle 0 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "idle"));
+        pipeline.emit(new LogicInstruction(UCONTROL, "idle"));
         return "null";
     }
 
     private String handleStop() {
         // ucontrol stop 0 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "stop"));
+        pipeline.emit(new LogicInstruction(UCONTROL, "stop"));
         return "null";
     }
 
     private String handleApproach(List<String> params) {
         // ucontrol approach x y radius 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "approach", params.get(0), params.get(1), params.get(2)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "approach", params.get(0), params.get(1), params.get(2)));
         return "null";
     }
 
     private String handleFlag(List<String> params) {
         // ucontrol flag value 0 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "flag", params.get(0)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "flag", params.get(0)));
         return params.get(0);
     }
 
     private String handleItemDrop(List<String> params) {
         // ucontrol itemDrop to amount 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "itemDrop", params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "itemDrop", params.get(0), params.get(1)));
         return "null";
     }
 
     private String handleMine(List<String> params) {
         // ucontrol mine x y 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "mine", params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "mine", params.get(0), params.get(1)));
         return "null";
     }
 
     private String handleGetlink(List<String> params) {
         // getlink result 0
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("getlink", tmp, params.get(0)));
+        pipeline.emit(new LogicInstruction(GETLINK, tmp, params.get(0)));
         return tmp;
     }
 
@@ -697,41 +699,41 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         if (!isRadarSortbyOption(sortby)) {
             throw new GenerationException("Invalid radar sort option [" + sortby + "]");
         }
-        pipeline.emit(new LogicInstruction("radar", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
+        pipeline.emit(new LogicInstruction(RADAR, params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
         return tmp;
     }
 
     private String handleRand(List<String> params) {
         // op rand result 200 0
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("op", "rand", tmp, params.get(0)));
+        pipeline.emit(new LogicInstruction(OP, "rand", tmp, params.get(0)));
         return tmp;
     }
 
     private String handleMove(List<String> params) {
         // ucontrol move 14 15 0 0 0
-        pipeline.emit(new LogicInstruction("ucontrol", "move", params.get(0), params.get(1)));
+        pipeline.emit(new LogicInstruction(UCONTROL, "move", params.get(0), params.get(1)));
         return "null";
     }
 
     private String handleUbind(List<String> params) {
         // ubind @poly
-        pipeline.emit(new LogicInstruction("ubind", params.get(0)));
+        pipeline.emit(new LogicInstruction(UBIND, params.get(0)));
         return "null";
     }
 
     private String handlePrintflush(List<String> params) {
-        params.forEach((param) -> pipeline.emit(new LogicInstruction("printflush", List.of(param))));
+        params.forEach((param) -> pipeline.emit(new LogicInstruction(PRINTFLUSH, List.of(param))));
         return "null";
     }
 
     private String handlePrint(List<String> params) {
-        params.forEach((param) -> pipeline.emit(new LogicInstruction("print", List.of(param))));
+        params.forEach((param) -> pipeline.emit(new LogicInstruction(PRINT, List.of(param))));
         return params.get(params.size() - 1);
     }
 
     private String handleWait(List<String> params) {
-        pipeline.emit(new LogicInstruction("wait", params.get(0)));
+        pipeline.emit(new LogicInstruction(WAIT, params.get(0)));
         return "null";
     }
 
@@ -743,7 +745,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String tmp = nextTemp();
         pipeline.emit(
                 new LogicInstruction(
-                        "op",
+                        OP,
                         List.of(translateBinaryOpToCode(node.getOp()), tmp, left, right)
                 )
         );
@@ -776,7 +778,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String tmp = nextTemp();
         pipeline.emit(
                 new LogicInstruction(
-                        "set",
+                        SET,
                         List.of(
                                 tmp,
                                 "\"" + node.getText().replaceAll("\"", "\\\"") + "\""
@@ -789,7 +791,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("set", List.of(tmp, node.getLiteral())));
+        pipeline.emit(new LogicInstruction(SET, List.of(tmp, node.getLiteral())));
         return tmp;
     }
 
@@ -798,7 +800,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String target = visit(node.getTarget());
         final String prop = visit(node.getProperty());
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction("sensor", tmp, target, prop));
+        pipeline.emit(new LogicInstruction(SENSOR, tmp, target, prop));
         return tmp;
     }
 
@@ -812,18 +814,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             final String nextCond = nextLabel();
 
             final String whenValue = visit(alternative.getValue());
-            pipeline.emit(new LogicInstruction("jump", nextCond, "notEqual", caseValue, whenValue));
+            pipeline.emit(new LogicInstruction(JUMP, nextCond, "notEqual", caseValue, whenValue));
 
             final String body = visit(alternative.getBody());
-            pipeline.emit(new LogicInstruction("set", resultVar, body));
-            pipeline.emit(new LogicInstruction("jump", exitLabel, "always"));
+            pipeline.emit(new LogicInstruction(SET, resultVar, body));
+            pipeline.emit(new LogicInstruction(JUMP, exitLabel, "always"));
 
-            pipeline.emit(new LogicInstruction("label", nextCond));
+            pipeline.emit(new LogicInstruction(LABEL, nextCond));
         }
 
         final String elseBranch = visit(node.getElseBranch());
-        pipeline.emit(new LogicInstruction("set", resultVar, elseBranch));
-        pipeline.emit(new LogicInstruction("label", exitLabel));
+        pipeline.emit(new LogicInstruction(SET, resultVar, elseBranch));
+        pipeline.emit(new LogicInstruction(LABEL, exitLabel));
 
         return resultVar;
     }
@@ -868,7 +870,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             args.add(arg);
         }
 
-        pipeline.emit(new LogicInstruction("control", args));
+        pipeline.emit(new LogicInstruction(CONTROL, args));
         return "null";
     }
 
@@ -956,10 +958,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private String nextLabel() {
-        return "__label" + label++;
+        return "__label" + labelIndex++;
     }
 
     private String nextTemp() {
-        return TMP_PREFIX + this.tmp++;
+        return TMP_PREFIX + this.tmpIndex++;
     }
 }

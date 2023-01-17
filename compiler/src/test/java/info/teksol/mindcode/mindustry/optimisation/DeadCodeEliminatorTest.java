@@ -8,6 +8,7 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import static info.teksol.mindcode.mindustry.Opcode.*;
 
 class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus,
@@ -21,14 +22,14 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", var(0), "3"),
-                        new LogicInstruction("op", "equal", var(1), "x", var(0)),
-                        new LogicInstruction("jump", var(1000), "equal", var(1), "false"),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("end"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, var(0), "3"),
+                        new LogicInstruction(OP, "equal", var(1), "x", var(0)),
+                        new LogicInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(END),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -42,20 +43,20 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", var(0), "3"),
-                        new LogicInstruction("op", "equal", var(1), "x", var(0)),
-                        new LogicInstruction("jump", var(1000), "equal", var(1), "false"),
-                        new LogicInstruction("set", var(3), "1"),
-                        new LogicInstruction("set", var(2), var(3)),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("set", var(4), "41"),
-                        new LogicInstruction("set", var(2), var(4)),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("set", "n", var(2)),
-                        new LogicInstruction("set", var(5), "73"),
-                        new LogicInstruction("ucontrol", "move", var(5), "n"),
-                        new LogicInstruction("end")
+                        new LogicInstruction(SET, var(0), "3"),
+                        new LogicInstruction(OP, "equal", var(1), "x", var(0)),
+                        new LogicInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                        new LogicInstruction(SET, var(3), "1"),
+                        new LogicInstruction(SET, var(2), var(3)),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, var(4), "41"),
+                        new LogicInstruction(SET, var(2), var(4)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(SET, "n", var(2)),
+                        new LogicInstruction(SET, var(5), "73"),
+                        new LogicInstruction(UCONTROL, "move", var(5), "n"),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -77,29 +78,29 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("uradar", "enemy", "ground", "any", "health", "MIN_TO_MAX", "BY_DISTANCE", var(0)),
-                        new LogicInstruction("set", "target", var(0)),
-                        new LogicInstruction("op", "notEqual", var(1), "target", "null"),
-                        new LogicInstruction("jump", var(1000), "equal", var(1), "false"),
-                        new LogicInstruction("sensor", var(3), "target", "@x"),
-                        new LogicInstruction("sensor", var(4), "target", "@y"),
-                        new LogicInstruction("set", var(5), "10"),
-                        new LogicInstruction("ucontrol", "approach", var(3), var(4), var(5)),
-                        new LogicInstruction("sensor", var(6), "target", "@x"),
-                        new LogicInstruction("sensor", var(7), "target", "@y"),
-                        new LogicInstruction("set", var(8), "10"),
-                        new LogicInstruction("ucontrol", "within", var(6), var(7), var(8), var(9)),
-                        new LogicInstruction("jump", var(1002), "equal", var(9), "false"),
-                        new LogicInstruction("sensor", var(11), "target", "@x"),
-                        new LogicInstruction("sensor", var(12), "target", "@y"),
-                        new LogicInstruction("ucontrol", "target", var(11), var(12), "SHOOT"),
-                        new LogicInstruction("jump", var(1003), "always"),
-                        new LogicInstruction("label", var(1002)),
-                        new LogicInstruction("label", var(1003)),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(URADAR, "enemy", "ground", "any", "health", "MIN_TO_MAX", "BY_DISTANCE", var(0)),
+                        new LogicInstruction(SET, "target", var(0)),
+                        new LogicInstruction(OP, "notEqual", var(1), "target", "null"),
+                        new LogicInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                        new LogicInstruction(SENSOR, var(3), "target", "@x"),
+                        new LogicInstruction(SENSOR, var(4), "target", "@y"),
+                        new LogicInstruction(SET, var(5), "10"),
+                        new LogicInstruction(UCONTROL, "approach", var(3), var(4), var(5)),
+                        new LogicInstruction(SENSOR, var(6), "target", "@x"),
+                        new LogicInstruction(SENSOR, var(7), "target", "@y"),
+                        new LogicInstruction(SET, var(8), "10"),
+                        new LogicInstruction(UCONTROL, "within", var(6), var(7), var(8), var(9)),
+                        new LogicInstruction(JUMP, var(1002), "equal", var(9), "false"),
+                        new LogicInstruction(SENSOR, var(11), "target", "@x"),
+                        new LogicInstruction(SENSOR, var(12), "target", "@y"),
+                        new LogicInstruction(UCONTROL, "target", var(11), var(12), "SHOOT"),
+                        new LogicInstruction(JUMP, var(1003), "always"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -122,19 +123,19 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("ulocate", "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                        new LogicInstruction("set", var(5), "4"),
-                        new LogicInstruction("ucontrol", "approach", "outx", "outy", var(5)),
-                        new LogicInstruction("ulocate", "building", "core", "ENEMY", "@copper", "outx", "outy", var(2), "outbuilding"),
-                        new LogicInstruction("set", var(6), "4"),
-                        new LogicInstruction("ucontrol", "approach", "outx", "outy", var(6)),
-                        new LogicInstruction("ulocate", "spawn", "core", "true", "@copper", "outx", "outy", var(3), "outbuilding"),
-                        new LogicInstruction("set", var(7), "4"),
-                        new LogicInstruction("ucontrol", "approach", "outx", "outy", var(7)),
-                        new LogicInstruction("ulocate", "damaged", "core", "true", "@copper", "outx", "outy", var(4), "outbuilding"),
-                        new LogicInstruction("set", var(8), "4"),
-                        new LogicInstruction("ucontrol", "approach", "outx", "outy", var(8)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
+                        new LogicInstruction(SET, var(5), "4"),
+                        new LogicInstruction(UCONTROL, "approach", "outx", "outy", var(5)),
+                        new LogicInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(2), "outbuilding"),
+                        new LogicInstruction(SET, var(6), "4"),
+                        new LogicInstruction(UCONTROL, "approach", "outx", "outy", var(6)),
+                        new LogicInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", var(3), "outbuilding"),
+                        new LogicInstruction(SET, var(7), "4"),
+                        new LogicInstruction(UCONTROL, "approach", "outx", "outy", var(7)),
+                        new LogicInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", var(4), "outbuilding"),
+                        new LogicInstruction(SET, var(8), "4"),
+                        new LogicInstruction(UCONTROL, "approach", "outx", "outy", var(8)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -150,7 +151,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("end")
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );

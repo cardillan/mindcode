@@ -8,6 +8,7 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import static info.teksol.mindcode.mindustry.Opcode.*;
 
 class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
@@ -26,10 +27,10 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -46,13 +47,13 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
-                        new LogicInstruction("jump", var(1002), "equal", "y", "false"),
-                        new LogicInstruction("label", var(1002)),
-                        new LogicInstruction("label", var(1003)),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        new LogicInstruction(JUMP, var(1002), "equal", "y", "false"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -69,13 +70,13 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
-                        new LogicInstruction("print", "a"),
-                        new LogicInstruction("jump", var(1001), "always"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("print", "b"),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
+                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        new LogicInstruction(PRINT, "a"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(PRINT, "b"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(END)
                 ),
                 terminus.getResult()
         );

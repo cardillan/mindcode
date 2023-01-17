@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.Opcode;
 import java.util.Map;
 import java.util.Set;
 
@@ -94,7 +95,7 @@ public class ImproveConditionalJumps extends PipelinedOptimizer {
 
                 emitToNext(
                         new LogicInstruction(
-                                "jump",
+                                Opcode.JUMP,
                                 instruction.getArgs().get(0),
                                 inverses.get(op.getArgs().get(0)),
                                 op.getArgs().get(2),
