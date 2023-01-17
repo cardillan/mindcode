@@ -4,12 +4,17 @@ import java.util.Map;
 import java.util.Set;
 
 // Turns the following sequence of instructions:
-//    op <comparison> __tmpX A B
-//    jump label notEqual __tmpX true
+//    op <comparison> var1 A B
+//    jump label notEqual var2 true
 //
 // into
 //    jump label <inverse of comparison> A B
 //
+// Requirements:
+// 1. jump is a notEqual comparison to true
+// 2. var1 and var2 are identical
+// 3. var1 is a __tmp variable
+// 4. <comparison> has an inverse
 public class ImproveConditionalJumps implements LogicInstructionPipeline {
     private static final Map<String, String> inverses = Map.of(
             "equal", "notEqual",
@@ -83,37 +88,39 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
                 }
             }
 
-            if (!instruction.isJump()) {
+            // Not a conditional jump
+            if (!instruction.isJump() || !instruction.getArgs().get(1).equals("notEqual")) {
                 next.emit(op);
                 next.emit(instruction);
                 return new EmptyState();
             }
+
+            // Other preconditions for the optimisation
+            boolean isSameVariable = instruction.getArgs().get(2).equals(op.getArgs().get(1));
+            boolean jumpComparesToTrue = instruction.getArgs().get(3).equals("true");
             
-            boolean merge = instruction.getArgs().get(1).equals("notEqual") &&
-                    instruction.getArgs().get(2).equals(op.getArgs().get(1)) &&
-                    instruction.getArgs().get(3).equals("true");
-            
-            if (!merge) {
-                next.emit(op);
-                next.emit(instruction);
+            if (isSameVariable && jumpComparesToTrue) {
+                if (!inverses.containsKey(op.getArgs().get(0))) {
+                    throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + op.getArgs().get(0) + "]");
+                }
+
+                next.emit(
+                        new LogicInstruction(
+                                "jump",
+                                instruction.getArgs().get(0),
+                                inverses.get(op.getArgs().get(0)),
+                                op.getArgs().get(2),
+                                op.getArgs().get(3)
+                        )
+                );
                 return new EmptyState();
-            }
+            } 
             
-            if (!inverses.containsKey(op.getArgs().get(0))) {
-                throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + op.getArgs().get(0) + "]");
-            }
-            
-            next.emit(
-                    new LogicInstruction(
-                            "jump",
-                            instruction.getArgs().get(0),
-                            inverses.get(op.getArgs().get(0)),
-                            op.getArgs().get(2),
-                            op.getArgs().get(3)
-                    )
-            );
+            next.emit(op);
+            next.emit(instruction);
             return new EmptyState();
         }
+
 
         @Override
         public State flush() {
