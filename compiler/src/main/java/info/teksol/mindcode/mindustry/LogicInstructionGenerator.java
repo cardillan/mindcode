@@ -502,7 +502,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private String handleURadar(List<String> params) {
         // uradar enemy attacker ground armor 0 order result
         final String tmp = nextTemp();
-        pipeline.emit(new LogicInstruction(URADAR, params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
+        pipeline.emit(new LogicInstruction(URADAR, params.get(0), params.get(1), params.get(2), params.get(3), "0", params.get(4), tmp));
         return tmp;
     }
 

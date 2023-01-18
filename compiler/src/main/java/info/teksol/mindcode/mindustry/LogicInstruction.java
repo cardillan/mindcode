@@ -11,15 +11,18 @@ public class LogicInstruction {
 
     public LogicInstruction(Opcode opcode) {
         this(opcode, List.of());
+        validate();
     }
 
     public LogicInstruction(Opcode opcode, String... args) {
         this(opcode, List.of(args));
+        validate();
     }
 
     public LogicInstruction(Opcode opcode, List<String> args) {
         this.opcode = opcode;
         this.args = List.copyOf(args);
+        validate();
     }
     
     public boolean isWrite() {
@@ -94,5 +97,24 @@ public class LogicInstruction {
                 "opcode='" + opcode + '\'' +
                 ", args=" + args +
                 '}';
+    }
+    
+    /**
+     * Validates the instruction arguments (their count and applicability to argument types)
+     * against argument list of the instruction's Opcode.
+     */
+    private void validate() {
+        if (args.size() > opcode.getArgumentCount()) {
+            throw new GenerationException("Too many arguments of instruction " + opcode +
+                    " (expected " + opcode.getArgumentCount() + "). " + toString());
+        }
+
+        List<ArgumentType> argumentTypes = opcode.getArgumentTypes();
+        for (int i = 0; i < args.size(); i++) {
+            if (!argumentTypes.get(i).isCompatible(args.get(i))) {
+                throw new GenerationException("Argument " + args.get(i) + " not compatible with argument type " 
+                        + argumentTypes.get(i) + ". " + toString());
+            }
+        }
     }
 }

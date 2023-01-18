@@ -529,7 +529,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void generatesURadar() {
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(URADAR, "enemy", "ground", "any", "health", "MIN_TO_MAX", "BY_DISTANCE", var(0)),
+                        new LogicInstruction(URADAR, "enemy", "ground", "any", "health", "0", "MIN_TO_MAX", var(0)),
                         new LogicInstruction(SET, "target", var(0)),
                         new LogicInstruction(OP, "notEqual", var(1), "target", "null"),
                         new LogicInstruction(JUMP, var(1002), "equal", var(1), "false"),
@@ -559,7 +559,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 ),
                 LogicInstructionGenerator.generateUnoptimized(
                         (Seq) translateToAst("" +
-                                "target = uradar(enemy, ground, any, health, MIN_TO_MAX, BY_DISTANCE)\n" +
+                                "target = uradar(enemy, ground, any, health, MIN_TO_MAX)\n" +
                                 "if target != null\n" +
                                 "  approach(target.x, target.y, 10)\n" +
                                 "  if within(target.x, target.y, 10)\n" +
