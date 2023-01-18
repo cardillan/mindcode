@@ -118,6 +118,23 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
         );
     }
 
+    @Test
+    void ignoresWrongArgumentType() {
+        pipeline.emit(new LogicInstruction(SENSOR, "__tmp1", "vault1", "__tmp0"));
+        pipeline.emit(new LogicInstruction(SET, "result", "__tmp0"));
+        pipeline.emit(new LogicInstruction(END));
+        pipeline.flush();
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(SENSOR, "__tmp1", "vault1", "__tmp0"),
+                        new LogicInstruction(SET, "result", "__tmp0"),
+                        new LogicInstruction(END)
+                ),
+                terminus.getResult()
+        );
+    }
+
     // Taken from OptimizeGetlinkThenSetTest
     
     @Test

@@ -90,7 +90,7 @@ public class ImproveConditionalJumps extends PipelinedOptimizer {
             
             if (isSameVariable && jumpComparesToFalse) {
                 if (!inverses.containsKey(op.getArgs().get(0))) {
-                    throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + op.getArgs().get(0) + "]");
+                    throw new OptimizationException("Unknown operation passed-in; can't find the inverse of [" + op.getArgs().get(0) + "]");
                 }
 
                 emitToNext(

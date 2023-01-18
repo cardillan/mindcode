@@ -2,6 +2,8 @@ package info.teksol.mindcode.mindustry;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static info.teksol.mindcode.mindustry.Opcode.*;
 
@@ -77,6 +79,13 @@ public class LogicInstruction {
         return args;
     }
 
+    /**
+     * @return stream of instruction arguments together with type information
+     */
+    public Stream<TypedArgument> getTypedArguments() {
+        return opcode.getTypedArguments(args);
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,17 +113,17 @@ public class LogicInstruction {
      * against argument list of the instruction's Opcode.
      */
     private void validate() {
-        if (args.size() > opcode.getArgumentCount()) {
+        if (args.size() > opcode.getTotalArguments()) {
             throw new GenerationException("Too many arguments of instruction " + opcode +
-                    " (expected " + opcode.getArgumentCount() + "). " + toString());
+                    " (expected " + opcode.getTotalArguments() + "). " + toString());
         }
-
-        List<ArgumentType> argumentTypes = opcode.getArgumentTypes();
-        for (int i = 0; i < args.size(); i++) {
-            if (!argumentTypes.get(i).isCompatible(args.get(i))) {
-                throw new GenerationException("Argument " + args.get(i) + " not compatible with argument type " 
-                        + argumentTypes.get(i) + ". " + toString());
-            }
+        
+        Optional<TypedArgument> wrongArgument = getTypedArguments()
+                .filter(a -> !a.getArgumentType().isCompatible(a.getValue())).findAny();
+        
+        if (wrongArgument.isPresent()) {
+            throw new GenerationException("Argument " + wrongArgument.get().getValue() + 
+                    " not compatible with argument type " + wrongArgument.get().getArgumentType() + ". " + toString());
         }
     }
 }

@@ -156,4 +156,45 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
                 terminus.getResult()
         );
     }
+
+    @Test
+    void removesUnusedUlocate() {
+        LogicInstructionGenerator.generateInto(sut,
+                (Seq) translateToAst("" +
+                        "ulocate(ore, @surge-alloy, outx, outy)\n" +
+                        "ulocate(ore, @surge-alloy, x, y)\n" +
+                        "approach(outx, outy, 4)"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
+                        new LogicInstruction(SET, var(5), "4"),
+                        new LogicInstruction(UCONTROL, "approach", "outx", "outy", var(5)),
+                        new LogicInstruction(END)
+                ),
+                terminus.getResult()
+        );
+    }
+
+    @Test
+    void preventsEliminationOfPartiallyUsedUlocate() {
+        LogicInstructionGenerator.generateInto(sut,
+                (Seq) translateToAst("" +
+                        "found = ulocate(building, core, ENEMY, outx, outy, outbuilding)\n" +
+                        "print(found)"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(0), "outbuilding"),
+                        new LogicInstruction(SET, "found", var(0)),
+                        new LogicInstruction(PRINT, "found"),
+                        new LogicInstruction(END)
+                ),
+                terminus.getResult()
+        );
+    }
 }

@@ -84,6 +84,23 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void ignoresWrongArgumentType() {
+        pipeline.emit(new LogicInstruction(SET, "__tmp0", "0"));
+        pipeline.emit(new LogicInstruction(GETLINK, "__tmp0", "3"));
+        pipeline.emit(new LogicInstruction(END));
+        pipeline.flush();
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(SET, "__tmp0", "0"),
+                        new LogicInstruction(GETLINK, "__tmp0", "3"),
+                        new LogicInstruction(END)
+                ),
+                terminus.getResult()
+        );
+    }
+
+    @Test
     void optimizesDrawingCode() {
         LogicInstructionGenerator.generateInto(
                 pipeline,

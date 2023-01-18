@@ -82,7 +82,7 @@ abstract class GlobalOptimizer extends BaseOptimizer {
             }
         }
         
-        throw new IllegalStateException("Instruction to be replaced not found in program." +
+        throw new OptimizationException("Instruction to be replaced not found in program." +
                 "\nOriginal instruction: " + original +
                 "\nReplacement instruction: " + replaced);
     }

@@ -14,10 +14,7 @@ import java.util.List;
 //    it sets (produces) the __tmp variable in question.
 // 3. The set instruction immediatelly follows the instruction producing the __tmp variable 
 //    (the check is based on absolute instruction sequence in the program, not on the actual program flow).
-// 
-// An additional check could try to verify that the __tmp variable is passed into an output argument of the
-// instruction. However, Mindcode compiler shouldn't generate code that would met all of the above conditions
-// while using the __tmp variable as an input argument of the instruction.
+// 4. All arguments of the other instruction referencing the __tmp variable are output ones.
 class OutputTempEliminator extends GlobalOptimizer {
     public OutputTempEliminator(LogicInstructionPipeline next) {
         super(next);
@@ -41,6 +38,12 @@ class OutputTempEliminator extends GlobalOptimizer {
             List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg1));
             // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
             if (list.size() != 2 || list.get(0) != previous) continue;
+
+            // Make sure all arg0 arguments of the other instruction are input
+            boolean replacesOutputArg = previous.getTypedArguments()
+                    .filter(t -> t.getValue().equals(arg1))
+                    .allMatch(t -> t.getArgumentType().isOutput());
+            if (!replacesOutputArg) continue;
 
             // The current instruction merely transfers a value from the output argument of the previous instruction
             // Replacing instruction argument by value

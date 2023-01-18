@@ -71,7 +71,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
     private String evaluateJumpRedirection(LogicInstruction firstJump, String label) {
         int target = findInstructionIndex(0, ix -> ix.isLabel() && ix.getArgs().get(0).equals(label));
         if (target < 0) {
-            throw new IllegalStateException("Could not find label " + label);
+            throw new OptimizationException("Could not find label " + label);
         }
 
         // Find next real instruction

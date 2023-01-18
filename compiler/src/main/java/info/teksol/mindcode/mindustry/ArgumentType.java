@@ -19,7 +19,7 @@ public enum ArgumentType {
                     "@dead", "@range", "@rotation", "@x", "@y", "@size", "@shootX", "@shootY", "@shooting", "@boosting",
                     "@mineX", "@mineY", "@mining", "@payloadCount", "@payloadType", "@controlled", "@controller", "@team",
                     "@type", "@flag", "@name", "@config", "@enabled", "@configure"),             
-    OPERATION       ("add", "sub", "mul", "div", "idiv", "mod", "pow", "equal", "notEqual", "equal", "notEqual ", 
+    OPERATION       ("add", "sub", "mul", "div", "idiv", "mod", "pow", "equal", "notEqual",
                     "lessThan", "lessThanEq", "greaterThan", "greaterThanEq", "strictEqual", "land", "or", "and", "xor",
                     "shl", "shr", "not", "max", "min", "angle", "len", "noise", "abs", "log", "log10", "sin", "cos",
                     "tan", "floor", "ceil", "sqrt", "rand"),
@@ -36,7 +36,7 @@ public enum ArgumentType {
     GROUP           ("core", "storage", "generator", "turret", "factory", "repair", "rally", "battery", "resupply", "reactor"),
     ORE             (true, "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal", "@titanium", "@thorium", "@scrap",
                     "@silicon", "@plastanium", "@phase-fabric", "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite"),
-    ZERO            ("0"),
+    UNUSED,
     ;
     
     private final boolean input;
@@ -62,10 +62,16 @@ public enum ArgumentType {
         this.permissibleValues = List.of(permissibleValues);
     }
 
+    /**
+     * @return true if this argument can read a variable
+     */
     public boolean isInput() {
         return input;
     }
     
+    /**
+     * @return true if this argument can write to a variable
+     */
     public boolean isOutput() {
         return this == OUTPUT;
     }
@@ -85,7 +91,7 @@ public enum ArgumentType {
      * @return true if the argument is compatible with this argument type
      */
     public boolean isCompatible(String argument) {
-        if (isInput() || isOutput()) {
+        if (isInput() || isOutput() || this == UNUSED) {
             return true;
         } else {
             return permissibleValues.contains(argument);

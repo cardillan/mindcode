@@ -7,7 +7,7 @@ public class LogicInstructionPrinter {
         final StringBuilder buffer = new StringBuilder();
         instructions.forEach((instruction) -> {
             buffer.append(instruction.getOpcode().getOpcode());
-            addArgs(instruction.getOpcode().getArgumentCount(), buffer, instruction);
+            addArgs(instruction.getOpcode().getNumArgsForPrint(), buffer, instruction);
         });
 
         return buffer.toString();

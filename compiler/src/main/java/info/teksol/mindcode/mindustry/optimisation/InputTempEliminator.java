@@ -15,10 +15,7 @@ import java.util.List;
 //    (this can happen when this optimizer is run without dead code removal)
 // 3. The set instruction precedes the instruction using the __tmp variable (the check is based on absolute
 //    instruction sequence in the program, not on the actual program flow).
-// 
-// An additional check could try to verify that the __tmp variable is passed into an input argument of the
-// instruction. However, Mindcode compiler shouldn't generate code that would met all of the above conditions
-// while using the __tmp variable as an output argument of the instruction.
+// 4. All arguments of the other instruction referencing the __tmp variable are input ones.
 class InputTempEliminator extends GlobalOptimizer {
     public InputTempEliminator(LogicInstructionPipeline next) {
         super(next);
@@ -43,6 +40,12 @@ class InputTempEliminator extends GlobalOptimizer {
             // The other is also an op set to the same variable
             if (other.isSet() && other.getArgs().get(0).equals(arg0)) continue;
             
+            // Make sure all arg0 arguments of the other instruction are input
+            boolean replacesInputArg = other.getTypedArguments()
+                    .filter(t -> t.getValue().equals(arg0))
+                    .allMatch(t -> t.getArgumentType().isInput());
+            if (!replacesInputArg) continue;
+
             // The first instruction merely transfers a value to the input argument of the other instruction
             // Replacing instruction argument by value
             String arg1 = instruction.getArgs().get(1);
