@@ -1,4 +1,4 @@
-// Generated from /Users/francois/Projects/mindcode/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
+// Generated from Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

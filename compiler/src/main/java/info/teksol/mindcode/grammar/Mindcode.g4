@@ -12,7 +12,7 @@ expression_list : expression
 
 expression : indirectpropaccess                                                                 # indirect_prop_access
            | propaccess                                                                         # property_access
-           | cond=expression QUESTION_MARK true_branch=expression COLON false_branch=expression # ternary_op
+           | cond=expression QUESTION_MARK (true_branch=expression COLON false_branch=expression) # ternary_op
            | case_expr                                                                          # case_expression
            | if_expr                                                                            # if_expression
            | funcall                                                                            # function_call

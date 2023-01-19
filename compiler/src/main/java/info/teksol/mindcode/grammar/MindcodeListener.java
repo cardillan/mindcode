@@ -1,4 +1,4 @@
-// Generated from /Users/francois/Projects/mindcode/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
+// Generated from Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -304,18 +304,6 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitParenthesized_expression(MindcodeParser.Parenthesized_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code ternary_op}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterTernary_op(MindcodeParser.Ternary_opContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code ternary_op}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitTernary_op(MindcodeParser.Ternary_opContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code binop_exp}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -339,6 +327,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinop_shift(MindcodeParser.Binop_shiftContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code ternary_op}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterTernary_op(MindcodeParser.Ternary_opContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code ternary_op}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitTernary_op(MindcodeParser.Ternary_opContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code binop_and}
 	 * labeled alternative in {@link MindcodeParser#expression}.

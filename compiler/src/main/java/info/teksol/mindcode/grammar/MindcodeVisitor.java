@@ -1,4 +1,4 @@
-// Generated from /Users/francois/Projects/mindcode/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
+// Generated from Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -184,13 +184,6 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenthesized_expression(MindcodeParser.Parenthesized_expressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ternary_op}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTernary_op(MindcodeParser.Ternary_opContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code binop_exp}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -204,6 +197,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBinop_shift(MindcodeParser.Binop_shiftContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ternary_op}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTernary_op(MindcodeParser.Ternary_opContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code binop_and}
 	 * labeled alternative in {@link MindcodeParser#expression}.

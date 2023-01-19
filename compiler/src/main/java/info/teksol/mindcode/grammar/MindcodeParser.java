@@ -1,4 +1,4 @@
-// Generated from /Users/francois/Projects/mindcode/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
+// Generated from Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -826,33 +826,6 @@ public class MindcodeParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class Ternary_opContext extends ExpressionContext {
-		public ExpressionContext cond;
-		public ExpressionContext true_branch;
-		public ExpressionContext false_branch;
-		public TerminalNode QUESTION_MARK() { return getToken(MindcodeParser.QUESTION_MARK, 0); }
-		public TerminalNode COLON() { return getToken(MindcodeParser.COLON, 0); }
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public Ternary_opContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).enterTernary_op(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).exitTernary_op(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof MindcodeVisitor ) return ((MindcodeVisitor<? extends T>)visitor).visitTernary_op(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class Binop_expContext extends ExpressionContext {
 		public ExpressionContext left;
 		public Token op;
@@ -903,6 +876,33 @@ public class MindcodeParser extends Parser {
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
 			if ( visitor instanceof MindcodeVisitor ) return ((MindcodeVisitor<? extends T>)visitor).visitBinop_shift(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class Ternary_opContext extends ExpressionContext {
+		public ExpressionContext cond;
+		public ExpressionContext true_branch;
+		public ExpressionContext false_branch;
+		public TerminalNode QUESTION_MARK() { return getToken(MindcodeParser.QUESTION_MARK, 0); }
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public TerminalNode COLON() { return getToken(MindcodeParser.COLON, 0); }
+		public Ternary_opContext(ExpressionContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).enterTernary_op(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MindcodeListener ) ((MindcodeListener)listener).exitTernary_op(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof MindcodeVisitor ) return ((MindcodeVisitor<? extends T>)visitor).visitTernary_op(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1162,42 +1162,25 @@ public class MindcodeParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 					case 1:
 						{
-						_localctx = new Ternary_opContext(new ExpressionContext(_parentctx, _parentState));
-						((Ternary_opContext)_localctx).cond = _prevctx;
+						_localctx = new Binop_expContext(new ExpressionContext(_parentctx, _parentState));
+						((Binop_expContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
 						setState(137);
-						if (!(precpred(_ctx, 26))) throw new FailedPredicateException(this, "precpred(_ctx, 26)");
+						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
 						setState(138);
-						match(QUESTION_MARK);
+						((Binop_expContext)_localctx).op = match(EXP);
 						setState(139);
-						((Ternary_opContext)_localctx).true_branch = expression(0);
-						setState(140);
-						match(COLON);
-						setState(141);
-						((Ternary_opContext)_localctx).false_branch = expression(27);
+						((Binop_expContext)_localctx).right = expression(17);
 						}
 						break;
 					case 2:
 						{
-						_localctx = new Binop_expContext(new ExpressionContext(_parentctx, _parentState));
-						((Binop_expContext)_localctx).left = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(143);
-						if (!(precpred(_ctx, 16))) throw new FailedPredicateException(this, "precpred(_ctx, 16)");
-						setState(144);
-						((Binop_expContext)_localctx).op = match(EXP);
-						setState(145);
-						((Binop_expContext)_localctx).right = expression(17);
-						}
-						break;
-					case 3:
-						{
 						_localctx = new Binop_mul_div_modContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_mul_div_modContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(146);
+						setState(140);
 						if (!(precpred(_ctx, 14))) throw new FailedPredicateException(this, "precpred(_ctx, 14)");
-						setState(147);
+						setState(141);
 						((Binop_mul_div_modContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << DIV) | (1L << IDIV) | (1L << MOD) | (1L << MUL))) != 0)) ) {
@@ -1208,18 +1191,18 @@ public class MindcodeParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(148);
+						setState(142);
 						((Binop_mul_div_modContext)_localctx).right = expression(15);
 						}
 						break;
-					case 4:
+					case 3:
 						{
 						_localctx = new Binop_plus_minusContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_plus_minusContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(149);
+						setState(143);
 						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
-						setState(150);
+						setState(144);
 						((Binop_plus_minusContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==MINUS || _la==PLUS) ) {
@@ -1230,18 +1213,18 @@ public class MindcodeParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(151);
+						setState(145);
 						((Binop_plus_minusContext)_localctx).right = expression(14);
 						}
 						break;
-					case 5:
+					case 4:
 						{
 						_localctx = new Binop_shiftContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_shiftContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(152);
+						setState(146);
 						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
-						setState(153);
+						setState(147);
 						((Binop_shiftContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !(_la==SHIFT_LEFT || _la==SHIFT_RIGHT) ) {
@@ -1252,18 +1235,18 @@ public class MindcodeParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(154);
+						setState(148);
 						((Binop_shiftContext)_localctx).right = expression(13);
 						}
 						break;
-					case 6:
+					case 5:
 						{
 						_localctx = new Binop_inequality_comparisonContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_inequality_comparisonContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(155);
+						setState(149);
 						if (!(precpred(_ctx, 11))) throw new FailedPredicateException(this, "precpred(_ctx, 11)");
-						setState(156);
+						setState(150);
 						((Binop_inequality_comparisonContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LESS_THAN) | (1L << LESS_THAN_EQUAL) | (1L << GREATER_THAN_EQUAL) | (1L << GREATER_THAN))) != 0)) ) {
@@ -1274,18 +1257,18 @@ public class MindcodeParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(157);
+						setState(151);
 						((Binop_inequality_comparisonContext)_localctx).right = expression(12);
 						}
 						break;
-					case 7:
+					case 6:
 						{
 						_localctx = new Binop_equality_comparisonContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_equality_comparisonContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(158);
+						setState(152);
 						if (!(precpred(_ctx, 10))) throw new FailedPredicateException(this, "precpred(_ctx, 10)");
-						setState(159);
+						setState(153);
 						((Binop_equality_comparisonContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NOT_EQUAL) | (1L << EQUAL) | (1L << STRICT_EQUAL))) != 0)) ) {
@@ -1296,18 +1279,18 @@ public class MindcodeParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(160);
+						setState(154);
 						((Binop_equality_comparisonContext)_localctx).right = expression(11);
 						}
 						break;
-					case 8:
+					case 7:
 						{
 						_localctx = new Binop_bitwise_opContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_bitwise_opContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(161);
+						setState(155);
 						if (!(precpred(_ctx, 9))) throw new FailedPredicateException(this, "precpred(_ctx, 9)");
-						setState(162);
+						setState(156);
 						((Binop_bitwise_opContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << BITWISE_AND) | (1L << BITWISE_OR) | (1L << BITWISE_XOR))) != 0)) ) {
@@ -1318,34 +1301,53 @@ public class MindcodeParser extends Parser {
 							_errHandler.reportMatch(this);
 							consume();
 						}
-						setState(163);
+						setState(157);
 						((Binop_bitwise_opContext)_localctx).right = expression(10);
 						}
 						break;
-					case 9:
+					case 8:
 						{
 						_localctx = new Binop_andContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_andContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(164);
+						setState(158);
 						if (!(precpred(_ctx, 8))) throw new FailedPredicateException(this, "precpred(_ctx, 8)");
-						setState(165);
+						setState(159);
 						match(AND);
-						setState(166);
+						setState(160);
 						((Binop_andContext)_localctx).right = expression(9);
 						}
 						break;
-					case 10:
+					case 9:
 						{
 						_localctx = new Binop_orContext(new ExpressionContext(_parentctx, _parentState));
 						((Binop_orContext)_localctx).left = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expression);
-						setState(167);
+						setState(161);
 						if (!(precpred(_ctx, 7))) throw new FailedPredicateException(this, "precpred(_ctx, 7)");
-						setState(168);
+						setState(162);
 						match(OR);
-						setState(169);
+						setState(163);
 						((Binop_orContext)_localctx).right = expression(8);
+						}
+						break;
+					case 10:
+						{
+						_localctx = new Ternary_opContext(new ExpressionContext(_parentctx, _parentState));
+						((Ternary_opContext)_localctx).cond = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expression);
+						setState(164);
+						if (!(precpred(_ctx, 26))) throw new FailedPredicateException(this, "precpred(_ctx, 26)");
+						setState(165);
+						match(QUESTION_MARK);
+						{
+						setState(166);
+						((Ternary_opContext)_localctx).true_branch = expression(0);
+						setState(167);
+						match(COLON);
+						setState(168);
+						((Ternary_opContext)_localctx).false_branch = expression(0);
+						}
 						}
 						break;
 					}
@@ -4381,25 +4383,25 @@ public class MindcodeParser extends Parser {
 	private boolean expression_sempred(ExpressionContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 2:
-			return precpred(_ctx, 26);
-		case 3:
 			return precpred(_ctx, 16);
-		case 4:
+		case 3:
 			return precpred(_ctx, 14);
-		case 5:
+		case 4:
 			return precpred(_ctx, 13);
-		case 6:
+		case 5:
 			return precpred(_ctx, 12);
-		case 7:
+		case 6:
 			return precpred(_ctx, 11);
-		case 8:
+		case 7:
 			return precpred(_ctx, 10);
-		case 9:
+		case 8:
 			return precpred(_ctx, 9);
-		case 10:
+		case 9:
 			return precpred(_ctx, 8);
-		case 11:
+		case 10:
 			return precpred(_ctx, 7);
+		case 11:
+			return precpred(_ctx, 26);
 		}
 		return true;
 	}
@@ -4519,19 +4521,19 @@ public class MindcodeParser extends Parser {
 		"\3\2\2\2\u0089y\3\2\2\2\u0089z\3\2\2\2\u0089{\3\2\2\2\u0089|\3\2\2\2\u0089"+
 		"}\3\2\2\2\u0089\177\3\2\2\2\u0089\u0080\3\2\2\2\u0089\u0081\3\2\2\2\u0089"+
 		"\u0082\3\2\2\2\u0089\u0084\3\2\2\2\u0089\u0085\3\2\2\2\u008a\u00ae\3\2"+
-		"\2\2\u008b\u008c\f\34\2\2\u008c\u008d\7$\2\2\u008d\u008e\5\6\4\2\u008e"+
-		"\u008f\7\30\2\2\u008f\u0090\5\6\4\35\u0090\u00ad\3\2\2\2\u0091\u0092\f"+
-		"\22\2\2\u0092\u0093\7\36\2\2\u0093\u00ad\5\6\4\23\u0094\u0095\f\20\2\2"+
-		"\u0095\u0096\t\2\2\2\u0096\u00ad\5\6\4\21\u0097\u0098\f\17\2\2\u0098\u0099"+
-		"\t\3\2\2\u0099\u00ad\5\6\4\20\u009a\u009b\f\16\2\2\u009b\u009c\t\4\2\2"+
-		"\u009c\u00ad\5\6\4\17\u009d\u009e\f\r\2\2\u009e\u009f\t\5\2\2\u009f\u00ad"+
-		"\5\6\4\16\u00a0\u00a1\f\f\2\2\u00a1\u00a2\t\6\2\2\u00a2\u00ad\5\6\4\r"+
-		"\u00a3\u00a4\f\13\2\2\u00a4\u00a5\t\7\2\2\u00a5\u00ad\5\6\4\f\u00a6\u00a7"+
-		"\f\n\2\2\u00a7\u00a8\7\62\2\2\u00a8\u00ad\5\6\4\13\u00a9\u00aa\f\t\2\2"+
-		"\u00aa\u00ab\7\63\2\2\u00ab\u00ad\5\6\4\n\u00ac\u008b\3\2\2\2\u00ac\u0091"+
-		"\3\2\2\2\u00ac\u0094\3\2\2\2\u00ac\u0097\3\2\2\2\u00ac\u009a\3\2\2\2\u00ac"+
-		"\u009d\3\2\2\2\u00ac\u00a0\3\2\2\2\u00ac\u00a3\3\2\2\2\u00ac\u00a6\3\2"+
-		"\2\2\u00ac\u00a9\3\2\2\2\u00ad\u00b0\3\2\2\2\u00ae\u00ac\3\2\2\2\u00ae"+
+		"\2\2\u008b\u008c\f\22\2\2\u008c\u008d\7\36\2\2\u008d\u00ad\5\6\4\23\u008e"+
+		"\u008f\f\20\2\2\u008f\u0090\t\2\2\2\u0090\u00ad\5\6\4\21\u0091\u0092\f"+
+		"\17\2\2\u0092\u0093\t\3\2\2\u0093\u00ad\5\6\4\20\u0094\u0095\f\16\2\2"+
+		"\u0095\u0096\t\4\2\2\u0096\u00ad\5\6\4\17\u0097\u0098\f\r\2\2\u0098\u0099"+
+		"\t\5\2\2\u0099\u00ad\5\6\4\16\u009a\u009b\f\f\2\2\u009b\u009c\t\6\2\2"+
+		"\u009c\u00ad\5\6\4\r\u009d\u009e\f\13\2\2\u009e\u009f\t\7\2\2\u009f\u00ad"+
+		"\5\6\4\f\u00a0\u00a1\f\n\2\2\u00a1\u00a2\7\62\2\2\u00a2\u00ad\5\6\4\13"+
+		"\u00a3\u00a4\f\t\2\2\u00a4\u00a5\7\63\2\2\u00a5\u00ad\5\6\4\n\u00a6\u00a7"+
+		"\f\34\2\2\u00a7\u00a8\7$\2\2\u00a8\u00a9\5\6\4\2\u00a9\u00aa\7\30\2\2"+
+		"\u00aa\u00ab\5\6\4\2\u00ab\u00ad\3\2\2\2\u00ac\u008b\3\2\2\2\u00ac\u008e"+
+		"\3\2\2\2\u00ac\u0091\3\2\2\2\u00ac\u0094\3\2\2\2\u00ac\u0097\3\2\2\2\u00ac"+
+		"\u009a\3\2\2\2\u00ac\u009d\3\2\2\2\u00ac\u00a0\3\2\2\2\u00ac\u00a3\3\2"+
+		"\2\2\u00ac\u00a6\3\2\2\2\u00ad\u00b0\3\2\2\2\u00ae\u00ac\3\2\2\2\u00ae"+
 		"\u00af\3\2\2\2\u00af\7\3\2\2\2\u00b0\u00ae\3\2\2\2\u00b1\u00b2\5B\"\2"+
 		"\u00b2\u00b3\7\35\2\2\u00b3\u00b4\7\21\2\2\u00b4\u00b5\7;\2\2\u00b5\u00b6"+
 		"\5\6\4\2\u00b6\u00b7\7<\2\2\u00b7\t\3\2\2\2\u00b8\u00b9\5B\"\2\u00b9\u00ba"+

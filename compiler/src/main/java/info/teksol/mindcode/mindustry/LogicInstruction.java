@@ -113,9 +113,10 @@ public class LogicInstruction {
      * against argument list of the instruction's Opcode.
      */
     private void validate() {
-        if (args.size() > opcode.getTotalArguments()) {
+        int expectedArgs = opcode.getArgumentTypes(args).size();
+        if (args.size() > expectedArgs) {
             throw new GenerationException("Too many arguments of instruction " + opcode +
-                    " (expected " + opcode.getTotalArguments() + "). " + toString());
+                    " (expected " + expectedArgs + "). " + toString());
         }
         
         Optional<TypedArgument> wrongArgument = getTypedArguments()

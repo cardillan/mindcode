@@ -1,4 +1,4 @@
-// Generated from /Users/francois/Projects/mindcode/compiler/src/main/java/info/teksol/mindcode/grammar/Mindcode.g4 by ANTLR 4.9.1
+// Generated from Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -316,18 +316,6 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTernary_op(MindcodeParser.Ternary_opContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTernary_op(MindcodeParser.Ternary_opContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterBinop_exp(MindcodeParser.Binop_expContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -347,6 +335,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBinop_shift(MindcodeParser.Binop_shiftContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterTernary_op(MindcodeParser.Ternary_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTernary_op(MindcodeParser.Ternary_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

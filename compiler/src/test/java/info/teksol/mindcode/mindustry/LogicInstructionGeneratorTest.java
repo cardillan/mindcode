@@ -1588,4 +1588,36 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void correctlyHandlesNestedTernaryOperators() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(OP, "greaterThan", var(0), "b", "c"),
+                        new LogicInstruction(JUMP, var(1005), "equal", var(0), "false"),
+                        new LogicInstruction(SET, var(2), "1"),
+                        new LogicInstruction(SET, var(1), var(2)),
+                        new LogicInstruction(JUMP, var(1013), "always"),
+                        new LogicInstruction(LABEL, var(1005)),
+                        new LogicInstruction(OP, "greaterThan", var(3), "d", "e"),
+                        new LogicInstruction(JUMP, var(1010), "equal", var(3), "false"),
+                        new LogicInstruction(SET, var(5), "2"),
+                        new LogicInstruction(SET, var(4), var(5)),
+                        new LogicInstruction(JUMP, var(1012), "always"),
+                        new LogicInstruction(LABEL, var(1010)),
+                        new LogicInstruction(SET, var(6), "3"),
+                        new LogicInstruction(SET, var(4), var(6)),
+                        new LogicInstruction(LABEL, var(1012)),
+                        new LogicInstruction(SET, var(1), var(4)),
+                        new LogicInstruction(LABEL, var(1013)),
+                        new LogicInstruction(SET, "a", var(1)),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst(
+                                "a = (b > c) ? 1 : (d > e) ? 2 : 3"
+                        )
+                )
+        );
+    }
 }
