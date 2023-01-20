@@ -1682,4 +1682,32 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void correctlyHandlesBitwiseOpPriority() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(OP, "and", var(0), "c", "d"),
+                        new LogicInstruction(OP, "or", "a", "b", var(0)),
+                        new LogicInstruction(OP, "not", var(1), "f"),
+                        new LogicInstruction(OP, "and", "e", var(1), "g"),
+                        new LogicInstruction(OP, "and", var(2), "h", "31"),
+                        new LogicInstruction(OP, "equal", "g", var(2), "15"),
+                        new LogicInstruction(OP, "and", var(3), "y", "15"),
+                        new LogicInstruction(OP, "and", var(4), "z", "7"),
+                        new LogicInstruction(OP, "land", "x", var(3), var(4)),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateAndOptimize(
+                        (Seq) translateToAst("" +
+                                "a = b | c & d\n" +
+                                "e = ~f & g\n" +
+                                "g = h & 31 == 15\n" +
+                                "x = y & 15 and z & 7"
+                        ),
+                        Set.of(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        message -> {}
+                )
+        );
+    }
 }

@@ -160,18 +160,6 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBinop_bitwise_op(MindcodeParser.Binop_bitwise_opContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBinop_bitwise_op(MindcodeParser.Binop_bitwise_opContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLiteral_null(MindcodeParser.Literal_nullContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -215,6 +203,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValue(MindcodeParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBinop_bitwise_or(MindcodeParser.Binop_bitwise_orContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBinop_bitwise_or(MindcodeParser.Binop_bitwise_orContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -395,6 +395,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBinop_or(MindcodeParser.Binop_orContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBinop_bitwise_and(MindcodeParser.Binop_bitwise_andContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBinop_bitwise_and(MindcodeParser.Binop_bitwise_andContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

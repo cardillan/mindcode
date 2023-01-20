@@ -28,7 +28,8 @@ expression : MINUS numeric_t                                                    
            | left=expression op=( MUL | DIV | IDIV | MOD ) right=expression                     # binop_mul_div_mod
            | left=expression op=( PLUS | MINUS ) right=expression                               # binop_plus_minus
            | left=expression op=( SHIFT_LEFT | SHIFT_RIGHT ) right=expression                   # binop_shift
-           | left=expression op=( BITWISE_AND | BITWISE_OR | BITWISE_XOR ) right=expression     # binop_bitwise_op
+           | left=expression BITWISE_AND right=expression                                       # binop_bitwise_and
+           | left=expression op=( BITWISE_OR | BITWISE_XOR ) right=expression                   # binop_bitwise_or
            | left=expression op=( LESS_THAN | LESS_THAN_EQUAL
                                 | GREATER_THAN_EQUAL | GREATER_THAN )
                                 right=expression                                                # binop_inequality_comparison
