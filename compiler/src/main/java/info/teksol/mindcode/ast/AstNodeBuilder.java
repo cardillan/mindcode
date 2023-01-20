@@ -70,6 +70,11 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitLiteral_minus(MindcodeParser.Literal_minusContext ctx) {
+        return new NumericLiteral(ctx.getText());
+    }
+
+    @Override
     public AstNode visitBinop_exp(MindcodeParser.Binop_expContext ctx) {
         return new BinaryOp(
                 visit(ctx.left),
@@ -233,7 +238,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitUnary_minus(MindcodeParser.Unary_minusContext ctx) {
-        return new NumericLiteral(ctx.getText());
+        return new BinaryOp(
+                new NumericLiteral("-1"),
+                "*",
+                visit(ctx.expression()));
     }
 
     @Override

@@ -172,6 +172,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitLiteral_null(MindcodeParser.Literal_nullContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code literal_minus}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteral_minus(MindcodeParser.Literal_minusContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code literal_minus}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteral_minus(MindcodeParser.Literal_minusContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code for_loop}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

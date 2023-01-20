@@ -10,7 +10,7 @@ expression_list : expression
                 | expression_list SEMICOLON expression
                 ;
 
-expression : MINUS numeric_t                                                                    # unary_minus
+expression : MINUS numeric_t                                                                    # literal_minus
            | indirectpropaccess                                                                 # indirect_prop_access
            | propaccess                                                                         # property_access
            | case_expr                                                                          # case_expression
@@ -24,6 +24,7 @@ expression : MINUS numeric_t                                                    
            | NOT expression                                                                     # not_expr
            | BITWISE_NOT expression                                                             # bitwise_not_expr
            | left=expression op=EXP right=expression                                            # binop_exp
+           | MINUS expression                                                                   # unary_minus
            | left=expression op=( MUL | DIV | IDIV | MOD ) right=expression                     # binop_mul_div_mod
            | left=expression op=( PLUS | MINUS ) right=expression                               # binop_plus_minus
            | left=expression op=( SHIFT_LEFT | SHIFT_RIGHT ) right=expression                   # binop_shift

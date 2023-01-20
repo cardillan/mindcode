@@ -107,6 +107,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral_null(MindcodeParser.Literal_nullContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code literal_minus}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLiteral_minus(MindcodeParser.Literal_minusContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code for_loop}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

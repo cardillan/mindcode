@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.mindustry.Opcode.*;
+import info.teksol.mindcode.mindustry.optimisation.Optimisation;
+import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
@@ -1621,6 +1623,62 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         (Seq) translateToAst(
                                 "a = (b > c) ? 1 : (d > e) ? 2 : 3"
                         )
+                )
+        );
+    }
+
+    @Test
+    void correctlyHandlesUnaryLiteralMinusExpressions() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(SET, "a", "-7"),
+                        new LogicInstruction(OP, "mul", "b", "-1", "a"),
+                        new LogicInstruction(OP, "mul", "c", "-5", "b"),
+                        new LogicInstruction(OP, "mul", var(0), "-1", "c"),
+                        new LogicInstruction(OP, "mul", "d", "2", var(0)),
+                        new LogicInstruction(OP, "pow", var(1), "d", "2"),
+                        new LogicInstruction(OP, "mul", "e", "-1", var(1)),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateAndOptimize(
+                        (Seq) translateToAst("" +
+                                "a = -7\n" +
+                                "b = -a\n" +
+                                "c = -5 * b\n" +
+                                "d = 2 * -c\n" +
+                                "e = -d ** 2"
+                        ),
+                        Set.of(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        message -> {}
+                )
+        );
+    }
+
+    @Test
+    void correctlyHandlesTernaryOpPriority() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(OP, "greaterThan", var(0), "b", "c"),
+                        new LogicInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                        new LogicInstruction(SET, var(1), "b"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, var(1), "c"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(SET, "a", var(1)),
+                        new LogicInstruction(OP, "mul", var(2), "e", "f"),
+                        new LogicInstruction(SET, "e", var(2)),
+                        new LogicInstruction(OP, "mul", var(3), "-1", var(2)),
+                        new LogicInstruction(OP, "add", "d", "d", var(3)),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateAndOptimize(
+                        (Seq) translateToAst("" +
+                                "a = b > c ? b : c\n" +
+                                "d += -e *= f"
+                        ),
+                        Set.of(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        message -> {}
                 )
         );
     }
