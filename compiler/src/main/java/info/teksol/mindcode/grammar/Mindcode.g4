@@ -10,35 +10,36 @@ expression_list : expression
                 | expression_list SEMICOLON expression
                 ;
 
-expression : indirectpropaccess                                                                 # indirect_prop_access
+expression : MINUS numeric_t                                                                    # unary_minus
+           | indirectpropaccess                                                                 # indirect_prop_access
            | propaccess                                                                         # property_access
-           | cond=expression QUESTION_MARK (true_branch=expression COLON false_branch=expression) # ternary_op
            | case_expr                                                                          # case_expression
            | if_expr                                                                            # if_expression
            | funcall                                                                            # function_call
            | fundecl                                                                            # function_declaration
            | alloc                                                                              # allocation
-           | assign                                                                             # assignment
            | lvalue                                                                             # value
            | while_expression                                                                   # while_loop
            | for_expression                                                                     # for_loop
-           | left=expression op=EXP right=expression                                            # binop_exp
            | NOT expression                                                                     # not_expr
            | BITWISE_NOT expression                                                             # bitwise_not_expr
+           | left=expression op=EXP right=expression                                            # binop_exp
            | left=expression op=( MUL | DIV | IDIV | MOD ) right=expression                     # binop_mul_div_mod
            | left=expression op=( PLUS | MINUS ) right=expression                               # binop_plus_minus
            | left=expression op=( SHIFT_LEFT | SHIFT_RIGHT ) right=expression                   # binop_shift
+           | left=expression op=( BITWISE_AND | BITWISE_OR | BITWISE_XOR ) right=expression     # binop_bitwise_op
            | left=expression op=( LESS_THAN | LESS_THAN_EQUAL
                                 | GREATER_THAN_EQUAL | GREATER_THAN )
                                 right=expression                                                # binop_inequality_comparison
            | left=expression op=( NOT_EQUAL | EQUAL | STRICT_EQUAL ) right=expression           # binop_equality_comparison
-           | left=expression op=( BITWISE_AND | BITWISE_OR | BITWISE_XOR ) right=expression     # binop_bitwise_op
            | left=expression AND right=expression                                               # binop_and
            | left=expression OR right=expression                                                # binop_or
+           | <assoc=right> cond=expression QUESTION_MARK
+								(true_branch=expression COLON false_branch=expression)          # ternary_op
+           | assign                                                                             # assignment
            | literal_t                                                                          # literal_string
            | numeric_t                                                                          # literal_numeric
            | bool_t                                                                             # literal_bool
-           | MINUS numeric_t                                                                    # unary_minus
            | null_t                                                                             # literal_null
            | LEFT_RBRACKET expression RIGHT_RBRACKET                                            # parenthesized_expression
            ;
@@ -125,10 +126,10 @@ alternative_list : alternative
 
 alternative : WHEN value=expression body=expression_list?;
 
-assign : target=lvalue ASSIGN value=expression                             # simple_assign
-       | target=lvalue EXP_ASSIGN value=expression                         # exp_assign
-       | target=lvalue op=( MUL_ASSIGN | DIV_ASSIGN ) value=expression     # binop_mul_div_assign
-       | target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN ) value=expression  # binop_plus_minus_assign
+assign : <assoc=right> target=lvalue ASSIGN value=expression                             # simple_assign
+       | <assoc=right> target=lvalue EXP_ASSIGN value=expression                         # exp_assign
+       | <assoc=right> target=lvalue op=( MUL_ASSIGN | DIV_ASSIGN ) value=expression     # binop_mul_div_assign
+       | <assoc=right> target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN ) value=expression  # binop_plus_minus_assign
        ;
 
 lvalue : unit_ref
