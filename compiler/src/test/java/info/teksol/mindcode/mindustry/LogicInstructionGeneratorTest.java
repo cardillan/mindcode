@@ -39,6 +39,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(SET, var(3), "1"),
                         new LogicInstruction(OP, "add", var(4), "n", var(3)),
                         new LogicInstruction(SET, "n", var(4)),
+                        new LogicInstruction(LABEL, var(1010)),
                         new LogicInstruction(JUMP, var(1000), "always"),
                         new LogicInstruction(LABEL, var(1001)),
                         new LogicInstruction(SET, var(5), "\"n: \""),
@@ -89,6 +90,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(JUMP, var(1001), "equal", var(0), "false"),
                         new LogicInstruction(SET, var(1), "\"infinite loop!\""),
                         new LogicInstruction(PRINT, var(1)),
+                        new LogicInstruction(LABEL, var(1010)),
                         new LogicInstruction(JUMP, var(1000), "always"),
                         new LogicInstruction(LABEL, var(1001)),
                         new LogicInstruction(PRINTFLUSH, "message1"),
@@ -188,6 +190,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(OP, "strictEqual", var(0), "@unit", "null"),
                         new LogicInstruction(JUMP, var(1001), "equal", var(0), "false"),
                         new LogicInstruction(UBIND, "@poly"),
+                        new LogicInstruction(LABEL, var(1010)),
                         new LogicInstruction(JUMP, var(1000), "always"),
                         new LogicInstruction(LABEL, var(1001)),
                         new LogicInstruction(END)
@@ -230,6 +233,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(SET, var(13), "1"),
                         new LogicInstruction(OP, "add", var(14), "n", var(13)),
                         new LogicInstruction(SET, "n", var(14)),
+                        new LogicInstruction(LABEL, var(1010)),
                         new LogicInstruction(JUMP, var(1002), "always"),
                         new LogicInstruction(LABEL, var(1003)),
                         new LogicInstruction(END)
@@ -353,6 +357,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(OP, "lessThanEq", var(2), "n", var(1)),
                         new LogicInstruction(JUMP, var(1001), "equal", var(2), "false"),
                         new LogicInstruction(PRINT, "n"),
+                        new LogicInstruction(LABEL, var(1010)),
                         new LogicInstruction(SET, var(3), "1"),
                         new LogicInstruction(OP, "add", var(4), "n", var(3)),
                         new LogicInstruction(SET, "n", var(4)),
@@ -382,6 +387,9 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
                         // loop body
                         new LogicInstruction(PRINT, "n"),
+
+                        // continue label
+                        new LogicInstruction(LABEL, var(1010)),
 
                         // increment
                         new LogicInstruction(SET, var(3), "1"),
@@ -417,6 +425,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(OP, "lessThan", var(3), "i", var(2)),
                         new LogicInstruction(JUMP, var(1001), "equal", var(3), "false"),
                         new LogicInstruction(PRINT, "n"),
+
+                        new LogicInstruction(LABEL, var(1010)),
 
                         new LogicInstruction(SET, var(4), "1"),
                         new LogicInstruction(OP, "sub", var(5), "j", var(4)),
@@ -1707,6 +1717,109 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         ),
                         Set.of(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
                         message -> {}
+                )
+        );
+    }
+
+    @Test
+    void correctlyHandlesBreakContinue() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(JUMP, var(1002), "equal", "a", "false"),
+                        new LogicInstruction(JUMP, var(1003), "equal", "b", "false"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(JUMP, var(1004), "always"),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(JUMP, var(1005), "equal", "c", "false"),
+                        new LogicInstruction(JUMP, var(1002), "always"),
+                        new LogicInstruction(JUMP, var(1006), "always"),
+                        new LogicInstruction(LABEL, var(1005)),
+                        new LogicInstruction(LABEL, var(1006)),
+                        new LogicInstruction(LABEL, var(1004)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(PRINT, "\"End\""),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateAndOptimize(
+                        (Seq) translateToAst("" +
+                                "while a\n" +
+                                "  if b\n" +
+                                "    continue\n" +
+                                "  elsif c\n" +
+                                "    break\n" +
+                                "  end\n" +
+                                "end\n" +
+                                "print(\"End\")"
+                        ),
+                        Set.of(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        message -> {}
+                )
+        );
+    }
+
+    @Test
+    void correctlyHandlesNestedLoopBreaks() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(LABEL, var(0)),
+                        new LogicInstruction(JUMP, var(1), "equal", "a", "false"),
+                        new LogicInstruction(PRINT, "a"),
+                        new LogicInstruction(LABEL, var(2)),
+                        new LogicInstruction(JUMP, var(3), "equal", "b", "false"),
+                        new LogicInstruction(PRINT, "b"),
+                        new LogicInstruction(JUMP, var(4), "equal", "c", "false"),
+                        new LogicInstruction(PRINT, "c"),
+                        new LogicInstruction(JUMP, var(3), "always"),
+                        new LogicInstruction(JUMP, var(5), "always"),
+                        new LogicInstruction(LABEL, var(4)),
+                        new LogicInstruction(LABEL, var(5)),
+                        new LogicInstruction(PRINT, "d"),
+                        new LogicInstruction(JUMP, var(3), "always"),
+                        new LogicInstruction(LABEL, var(10)),
+                        new LogicInstruction(JUMP, var(2), "always"),
+                        new LogicInstruction(LABEL, var(3)),
+                        new LogicInstruction(PRINT, "e"),
+                        new LogicInstruction(JUMP, var(1), "always"),
+                        new LogicInstruction(LABEL, var(11)),
+                        new LogicInstruction(JUMP, var(0), "always"),
+                        new LogicInstruction(LABEL, var(1)),
+                        new LogicInstruction(PRINT, "f"),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateAndOptimize(
+                        (Seq) translateToAst("" +
+                                "while a\n" +
+                                "  print(a)\n" +
+                                "  while b\n" +
+                                "    print(b)\n" +
+                                "    if c\n" +
+                                "      print(c)\n" +
+                                "      break\n" +
+                                "    end\n" +
+                                "    print(d)\n" +
+                                "    break\n" +
+                                "  end\n" +
+                                "  print(e)\n" +
+                                "  break\n" +
+                                "end\n" +
+                                "print(f)"
+                        ),
+                        Set.of(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        message -> {}
+                )
+        );
+    }
+
+    @Test
+    void refusesBreaksOutsideLoop() {
+        assertThrows(GenerationException.class, () ->
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("" +
+                                "while a\n  print(a)\nend\nbreak"
+                        )
                 )
         );
     }

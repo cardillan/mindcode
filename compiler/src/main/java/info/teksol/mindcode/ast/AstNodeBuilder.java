@@ -75,6 +75,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitBreak_exp(MindcodeParser.Break_expContext ctx) {
+        return new BreakStatement();
+    }
+
+    @Override
+    public AstNode visitContinue_exp(MindcodeParser.Continue_expContext ctx) {
+        return new ContinueStatement();
+    }
+
+    @Override
     public AstNode visitBinop_exp(MindcodeParser.Binop_expContext ctx) {
         return new BinaryOp(
                 visit(ctx.left),
@@ -375,15 +385,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                                 range instanceof InclusiveRange ? "<=" : "<",
                                 range.getLastValue()
                         ),
-                        new Seq(
-                                visit(ctx.loop_body()),
-                                new Assignment(
+                        visit(ctx.loop_body()),
+                        new Assignment(
+                                var,
+                                new BinaryOp(
                                         var,
-                                        new BinaryOp(
-                                                var,
-                                                "+",
-                                                new NumericLiteral("1")
-                                        )
+                                        "+",
+                                        new NumericLiteral("1")
                                 )
                         )
                 )
@@ -396,10 +404,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                 visit(ctx.init),
                 new WhileExpression(
                         visit(ctx.cond),
-                        new Seq(
-                                visit(ctx.loop_body()),
-                                visit(ctx.increment)
-                        )
+                        visit(ctx.loop_body()),
+                        visit(ctx.increment)
                 )
         );
     }
@@ -426,7 +432,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitWhile_expression(MindcodeParser.While_expressionContext ctx) {
-        return new WhileExpression(visit(ctx.cond), visit(ctx.loop_body()));
+        return new WhileExpression(visit(ctx.cond), visit(ctx.loop_body()), new NoOp());
     }
 
     @Override

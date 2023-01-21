@@ -42,4 +42,8 @@ public interface AstVisitor<T> {
     T visitFunctionDeclaration(FunctionDeclaration node);
 
     T visitStackAllocation(StackAllocation node);
+
+    T visitBreakStatement(BreakStatement node);
+
+    T visitContinueStatement(ContinueStatement node);
 }

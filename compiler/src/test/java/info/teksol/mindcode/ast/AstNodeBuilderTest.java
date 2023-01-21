@@ -567,7 +567,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                         new NumericLiteral("1")
                                                 )
                                         )
-                                )
+                                ),
+                                new NoOp()
                         )
                 ),
                 translateToAst("n = 5\nwhile n > 0\nn -= 1\nend\n")
@@ -587,16 +588,14 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NumericLiteral("17")
                                 ),
                                 new Seq(
-                                        new Seq(
-                                                new FunctionCall("print", new VarRef("n"))
-                                        ),
-                                        new Assignment(
+                                        new FunctionCall("print", new VarRef("n"))
+                                ),
+                                new Assignment(
+                                        new VarRef("n"),
+                                        new BinaryOp(
                                                 new VarRef("n"),
-                                                new BinaryOp(
-                                                        new VarRef("n"),
-                                                        "+",
-                                                        new NumericLiteral("1")
-                                                )
+                                                "+",
+                                                new NumericLiteral("1")
                                         )
                                 )
                         )
@@ -617,16 +616,14 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NumericLiteral("17")
                                 ),
                                 new Seq(
-                                        new Seq(
-                                                new FunctionCall("print", new VarRef("n"))
-                                        ),
-                                        new Assignment(
+                                        new FunctionCall("print", new VarRef("n"))
+                                ),
+                                new Assignment(
+                                        new VarRef("n"),
+                                        new BinaryOp(
                                                 new VarRef("n"),
-                                                new BinaryOp(
-                                                        new VarRef("n"),
-                                                        "+",
-                                                        new NumericLiteral("1")
-                                                )
+                                                "+",
+                                                new NumericLiteral("1")
                                         )
                                 )
                         )
@@ -650,25 +647,23 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new NumericLiteral("5")
                                 ),
                                 new Seq(
-                                        new Seq(
-                                                new FunctionCall("print", new VarRef("n"))
-                                        ),
-                                        new Seq(
-                                                new Assignment(
+                                        new FunctionCall("print", new VarRef("n"))
+                                ),
+                                new Seq(
+                                        new Assignment(
+                                                new VarRef("j"),
+                                                new BinaryOp(
                                                         new VarRef("j"),
-                                                        new BinaryOp(
-                                                                new VarRef("j"),
-                                                                "-",
-                                                                new NumericLiteral("1")
-                                                        )
-                                                ),
-                                                new Assignment(
+                                                        "-",
+                                                        new NumericLiteral("1")
+                                                )
+                                        ),
+                                        new Assignment(
+                                                new VarRef("i"),
+                                                new BinaryOp(
                                                         new VarRef("i"),
-                                                        new BinaryOp(
-                                                                new VarRef("i"),
-                                                                "+",
-                                                                new NumericLiteral("1")
-                                                        )
+                                                        "+",
+                                                        new NumericLiteral("1")
                                                 )
                                         )
                                 )
@@ -694,7 +689,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                 "ubind",
                                                 List.of(new VarRef("poly"))
                                         )
-                                )
+                                ),
+                                new NoOp()
                         )
                 ),
                 translateToAst("while @unit === null\nubind(poly)\nend")
@@ -961,7 +957,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                                                 new NumericLiteral("1")
                                                                         )
                                                                 )
-                                                        )
+                                                        ),
+                                                        new NoOp()
                                                 )
                                         )
                                 )
@@ -1194,6 +1191,43 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 translateToAst("print(\"\\nsm.enabled: \", smelter1.enabled ? \"true\" : \"false\")")
+        );
+    }
+
+    @Test
+    void correctlyParsesBreakContinue() {
+        assertEquals(
+                new Seq(
+                        new Seq(
+                                new WhileExpression(
+                                        new VarRef("a"),
+                                        new Seq(
+                                                new IfExpression(
+                                                        new VarRef("b"),
+                                                        new Seq(new ContinueStatement()),
+                                                        new IfExpression(
+                                                                new VarRef("c"),
+                                                                new Seq(new BreakStatement()),
+                                                                new NoOp()
+                                                        )
+                                                )
+                                        ),
+                                        new NoOp()
+                                )
+                        ),
+                        new FunctionCall("print", new StringLiteral("End"))
+                ),
+
+                translateToAst("" +
+                        "while a\n" +
+                        "  if b\n" +
+                        "    continue\n" +
+                        "  elsif c\n" +
+                        "    break\n" +
+                        "  end\n" +
+                        "end\n" +
+                        "print(\"End\")"
+                )
         );
     }
 }

@@ -76,6 +76,7 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
                         new LogicInstruction(SET, var(2), "1"),
                         new LogicInstruction(OP, "add", var(3), "n", var(2)),
                         new LogicInstruction(SET, "n", var(3)),
+                        new LogicInstruction(LABEL, var(1010)),
                         new LogicInstruction(JUMP, var(1000), "always"),
                         new LogicInstruction(LABEL, var(1001)),
 
@@ -84,6 +85,7 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
                         new LogicInstruction(SET, var(5), "1"),
                         new LogicInstruction(OP, "add", var(6), "n", var(5)),
                         new LogicInstruction(SET, "n", var(6)),
+                        new LogicInstruction(LABEL, var(1011)),
                         new LogicInstruction(JUMP, var(1002), "always"),
                         new LogicInstruction(LABEL, var(1003)),
                         new LogicInstruction(END)

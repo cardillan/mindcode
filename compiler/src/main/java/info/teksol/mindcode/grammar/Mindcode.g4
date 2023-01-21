@@ -44,6 +44,8 @@ expression : MINUS numeric_t                                                    
            | bool_t                                                                             # literal_bool
            | null_t                                                                             # literal_null
            | LEFT_RBRACKET expression RIGHT_RBRACKET                                            # parenthesized_expression
+           | break_st                                                                           # break_exp
+           | continue_st                                                                        # continue_exp
            ;
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
@@ -79,11 +81,7 @@ for_expression : FOR lvalue IN range loop_body END                              
                ;
 
 loop_body : loop_body expression_list
-          | loop_body break_st
-          | loop_body continue_st
           | expression_list
-          | break_st
-          | continue_st
           ;
 
 continue_st : CONTINUE;

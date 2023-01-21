@@ -223,4 +223,16 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         buffer.append("]");
         return null;
     }
+
+    @Override
+    public String visitBreakStatement(BreakStatement node) {
+        buffer.append("break\n");
+        return null;
+    }
+
+    @Override
+    public String visitContinueStatement(ContinueStatement node) {
+        buffer.append("continue\n");
+        return null;
+    }
 }

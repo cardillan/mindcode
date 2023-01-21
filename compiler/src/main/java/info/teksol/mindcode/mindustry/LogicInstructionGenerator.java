@@ -21,8 +21,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private int tmpIndex;
     private int labelIndex;
     private StackAllocation allocatedStack;
-    private Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
-    private Map<String, String> functionLabels = new HashMap<>();
+    private final Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
+    private final Map<String, String> functionLabels = new HashMap<>();
+    private final Deque<String> breakStack = new ArrayDeque<>();
+    private final Deque<String> continueStack = new ArrayDeque<>();
 
     LogicInstructionGenerator(LogicInstructionPipeline pipeline) {
         this.pipeline = pipeline;
@@ -167,16 +169,22 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitWhileStatement(WhileExpression node) {
-
-        final String condLabel = nextLabel();
+        final String beginLabel = nextLabel();
+        final String continueLabel = nextLabel();
         final String doneLabel = nextLabel();
-        pipeline.emit(new LogicInstruction(LABEL, List.of(condLabel)));
+        // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
+        continueStack.push(continueLabel);
+        breakStack.push(doneLabel);
+        pipeline.emit(new LogicInstruction(LABEL, List.of(beginLabel)));
         final String cond = visit(node.getCondition());
         pipeline.emit(new LogicInstruction(JUMP, List.of(doneLabel, "equal", cond, "false")));
         visit(node.getBody());
-        pipeline.emit(new LogicInstruction(JUMP, List.of(condLabel, "always")));
+        pipeline.emit(new LogicInstruction(LABEL, List.of(continueLabel)));
+        visit(node.getUpdate());
+        pipeline.emit(new LogicInstruction(JUMP, List.of(beginLabel, "always")));
         pipeline.emit(new LogicInstruction(LABEL, List.of(doneLabel)));
-
+        continueStack.pop();
+        breakStack.pop();
         return "null";
     }
 
@@ -856,6 +864,26 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                         new NumericLiteral(node.getLast())
                 )
         );
+    }
+
+    @Override
+    public String visitBreakStatement(BreakStatement node) {
+        String label = breakStack.peek();
+        if (label == null) {
+            throw new GenerationException("Break statement outside of a while/for statement.");
+        }
+        pipeline.emit(new LogicInstruction(JUMP, label, "always"));
+        return "null";
+    }
+
+    @Override
+    public String visitContinueStatement(ContinueStatement node) {
+        String label = continueStack.peek();
+        if (label == null) {
+            throw new GenerationException("Continue statement outside of a while/for statement.");
+        }
+        pipeline.emit(new LogicInstruction(JUMP, label, "always"));
+        return "null";
     }
 
     @Override
