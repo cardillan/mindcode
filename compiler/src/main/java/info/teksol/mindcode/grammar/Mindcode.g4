@@ -12,10 +12,10 @@ expression_list : expression
 
 expression : MINUS numeric_t                                                                    # literal_minus
            | indirectpropaccess                                                                 # indirect_prop_access
-           | propaccess                                                                         # property_access
            | case_expr                                                                          # case_expression
            | if_expr                                                                            # if_expression
            | funcall                                                                            # function_call
+           | propaccess                                                                         # property_access
            | fundecl                                                                            # function_declaration
            | alloc                                                                              # allocation
            | lvalue                                                                             # value

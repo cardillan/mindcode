@@ -1104,38 +1104,38 @@ public class MindcodeParser extends Parser {
 				break;
 			case 3:
 				{
-				_localctx = new Property_accessContext(_localctx);
+				_localctx = new Case_expressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(115);
-				propaccess();
+				case_expr();
 				}
 				break;
 			case 4:
 				{
-				_localctx = new Case_expressionContext(_localctx);
+				_localctx = new If_expressionContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(116);
-				case_expr();
+				if_expr();
 				}
 				break;
 			case 5:
 				{
-				_localctx = new If_expressionContext(_localctx);
+				_localctx = new Function_callContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(117);
-				if_expr();
+				funcall();
 				}
 				break;
 			case 6:
 				{
-				_localctx = new Function_callContext(_localctx);
+				_localctx = new Property_accessContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 				setState(118);
-				funcall();
+				propaccess();
 				}
 				break;
 			case 7:
@@ -4596,8 +4596,8 @@ public class MindcodeParser extends Parser {
 		"\b\3\1\2af\5\6\4\2bc\5\6\4\2cd\7&\2\2df\3\2\2\2e`\3\2\2\2eb\3\2\2\2fn"+
 		"\3\2\2\2gh\f\4\2\2hm\5\6\4\2ij\f\3\2\2jk\7&\2\2km\5\6\4\2lg\3\2\2\2li"+
 		"\3\2\2\2mp\3\2\2\2nl\3\2\2\2no\3\2\2\2o\5\3\2\2\2pn\3\2\2\2qr\b\4\1\2"+
-		"rs\7\37\2\2s\u0090\5\f\7\2t\u0090\5\b\5\2u\u0090\5\n\6\2v\u0090\5\62\32"+
-		"\2w\u0090\5.\30\2x\u0090\5(\25\2y\u0090\5\24\13\2z\u0090\5\16\b\2{\u0090"+
+		"rs\7\37\2\2s\u0090\5\f\7\2t\u0090\5\b\5\2u\u0090\5\62\32\2v\u0090\5.\30"+
+		"\2w\u0090\5(\25\2x\u0090\5\n\6\2y\u0090\5\24\13\2z\u0090\5\16\b\2{\u0090"+
 		"\5:\36\2|\u0090\5\30\r\2}\u0090\5\32\16\2~\177\7\"\2\2\177\u0090\5\6\4"+
 		"\30\u0080\u0081\7#\2\2\u0081\u0090\5\6\4\27\u0082\u0083\7\37\2\2\u0083"+
 		"\u0090\5\6\4\25\u0084\u0090\58\35\2\u0085\u0090\5J&\2\u0086\u0090\5\f"+
