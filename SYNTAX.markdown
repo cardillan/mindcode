@@ -11,12 +11,17 @@ You may call any Mindustry-provided functions:
 * Unit Control, shoot => `shoot(...)`
 * Control, shoot => `building.shoot(x, y, shoot)`
 * Control, color => `building.color(r, g, b)`
+* End => `end()`
 * and so on
 
 There is a special case for Control with a single parameter. Mindcode accepts the following shortcut:
 
 ```
 building.enabled = boolean
+```
+which is equivalent to 
+```
+building.enabled(boolean)
 ```
 
 ## Custom Functions
@@ -182,6 +187,20 @@ for x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx
 end
 ```
 
+## Break and continue
+
+You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop, `continue` skips the rest of the current iteration):
+
+```
+while not within(x, y, 6)
+  approach(x, y, 4)
+  if @unit.dead == 1
+    break
+  end
+  ...
+end
+```
+
 # Conditionals
 
 Mindcode offers 3 types of conditionals: if/else expressions, the ternary operator and case/when expressions.
@@ -201,16 +220,42 @@ end
 
 Depending on the value of `n`, `result` will contain the one of `ready` or `pending`.
 
+To handle more than two alternatives, you can use `elsif` as an alternative to nested `if` statements:
+
+```
+text = if n > 0
+  "positive"
+elsif n < 0
+  "negative"
+else
+  "zero"
+end
+```
+is equivalent to
+
+```
+text = if n > 0
+  "positive"
+else
+  if n < 0
+    "negative"
+  else
+    "zero"
+  end
+end
+```
+
+
 ## Ternary Operator
 
 The ternary operator (`?:`) is exactly like an if/else expression, except it is more succint. Use it when you need a
 conditional but want to save some space:
 
 ```
-result = n == 0 ? "ready " : "pending"
+result = n == 0 ? "ready" : "pending"
 ```
 
-This is the exact same conditional expression as above, except it is written on one line.
+This is the exact same conditional expression as the first if statement above, except it is written on one line.
 
 ## Case/When Expressions
 
@@ -238,18 +283,24 @@ Mindustry Logic offers us many comparison operators, namely:
 * `==` and `!=` for equal and not equal, respectively
 * `&&`, `and`, `||`, and `or`, to implement complex conditionals: `reactor1.thorium > 0 and (reactor1.cryofluid /
   reactor1.liquidCapacity) < 0.25`
+* '!' and `not` for neagting boolean expressions
 * `===` for "strict equality". In Mindustry, the value `0` is equivalent to `false` and `null`. By using `===`, you
   force Mindustry Logic to check for the exact value, instead of type-casting the value before checking if the values
-  are equal. This is very useful for `null` checks:
+  are equal. This is very useful for checks where the distinction between `0` and `null` is important:
 
 ```
-ubind(@poly)
-if @unit === null
-  // no unit bound, try an alternative
-else
-  // a unit was bound, we can proceed
+// Bind new units until a living one is found
+while not (@unit.dead === 0)
+  ubind(@poly)
 end
 ```
+
+`@unit.dead` can take one of three values:
+* `null` if no unit is bound,
+* `0` if the unit is not dead,
+* `1` if the unit is dead.
+
+Using `===` allows us to distinguish the cases when no unit is bound and when a unit is bound and not dead.
 
 # Global variables
 
@@ -348,30 +399,22 @@ divide, then add and substract. Add to this operator `\`, which stands for integ
 3 \ 2 // returns 1
 ```
 
-Otherwise, the full list of operators is as follows:
+Otherwise, the full list of operators in the order of precedence is as follows:
 
-* `+`: Addition
-* `-`: Substraction
-* `*`: Multiplication
-* `/`: Floating point division
-* `\\`: Integer division
-* `%`: Modulo
-* `==`: Equality
-* `!=`: Inequality (does not equal)
-* `<`: Less than (4 < 2 is true, while 2 < 4 is false)
-* `<=`: Less than or equal (4 <= 4 is true, while 5 <= 4 is false)
-* `>=`: Greater than or equal
-* `>`:  Greater than
-* `===`: Strict equality -- use to compare with `null`
-* `**`: Exponentiation (`2**4` is `2 * 2 * 2 * 2`, or 16)
-* `||`, `or`: boolean or
-* `&&`, `and`: boolean and (`reactor1.thorium > 0 and reactor1.cryofluid <= 10`)
-* `<<`: Left-shift ( `1 << 2` is easier to read in binary: `0b0001 << 2` becomes `0b0100`)
-* `>>`: Right-shift
-* `&`: Binary and, useful for flags
-* `|`: Binary or, useful for flags
-* `^`: Binary [xor (exclusive-or)](https://en.wikipedia.org/wiki/Exclusive_or)
-
+1. `!`, `not`: boolean negation,  `~`: binary negation
+2. `**`: exponentiation (`2**4` is `2 * 2 * 2 * 2`, or 16)
+3. `-`: unary minus (negates the value of the following expression)
+4. `*`: multiplication,  `/`: floating point division,  `\`: integer division,  `%`: modulo
+5. `+`: addition,  `-`: subtraction
+6. `<<`: left-shift,  `>>`: Right-shift (`1 << 2` is easier to read in binary: `0b0001 << 2` becomes `0b0100`)
+7. `&`: binary and (useful for flags)
+8. `|`: binary or (useful for flags),  `^`: binary [xor (exclusive-or)](https://en.wikipedia.org/wiki/Exclusive_or)
+9. `<`: less than,  `<=`: less than or equal,  `>=`: greater than or equal,  `>`:  greater than
+10. `==`: equality,  `!=`: inequality (does not equal),  `===`: strict equality -- use when values can be `null`
+11. `&&`, `and`: boolean and (`reactor1.thorium > 0 and reactor1.cryofluid <= 10`)
+12. `||`, `or`: boolean or
+13. `? :`: ternary operator
+14. `=`, `/=`, `**=`, `-=`, `+=`, `*=`: assignments (the compound operators combine arithemtic operation with assignment, 'x += 1' is equivalent to 'x = x + 1')
 
 # Literals
 
