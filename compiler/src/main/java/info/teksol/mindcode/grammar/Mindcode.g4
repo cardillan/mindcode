@@ -33,7 +33,8 @@ expression : MINUS numeric_t                                                    
            | left=expression op=( LESS_THAN | LESS_THAN_EQUAL
                                 | GREATER_THAN_EQUAL | GREATER_THAN )
                                 right=expression                                                # binop_inequality_comparison
-           | left=expression op=( NOT_EQUAL | EQUAL | STRICT_EQUAL ) right=expression           # binop_equality_comparison
+           | left=expression op=( NOT_EQUAL | EQUAL 
+                                | STRICT_NOT_EQUAL | STRICT_EQUAL ) right=expression            # binop_equality_comparison
            | left=expression AND right=expression                                               # binop_and
            | left=expression OR right=expression                                                # binop_or
            | <assoc=right> cond=expression QUESTION_MARK
@@ -208,6 +209,7 @@ LESS_THAN_EQUAL : '<=';
 NOT_EQUAL  : '!=';
 EQUAL  : '==';
 STRICT_EQUAL  : '===';
+STRICT_NOT_EQUAL  : '!==';
 GREATER_THAN_EQUAL  : '>=';
 GREATER_THAN : '>';
 AND : '&&' | 'and';

@@ -23,11 +23,12 @@ public class MindcodeParser extends Parser {
 		IDIV=25, DOLLAR=26, DOT=27, EXP=28, MINUS=29, MOD=30, MUL=31, NOT=32, 
 		BITWISE_NOT=33, PLUS=34, QUESTION_MARK=35, SEMICOLON=36, DIV_ASSIGN=37, 
 		EXP_ASSIGN=38, MINUS_ASSIGN=39, MUL_ASSIGN=40, PLUS_ASSIGN=41, LESS_THAN=42, 
-		LESS_THAN_EQUAL=43, NOT_EQUAL=44, EQUAL=45, STRICT_EQUAL=46, GREATER_THAN_EQUAL=47, 
-		GREATER_THAN=48, AND=49, OR=50, SHIFT_LEFT=51, SHIFT_RIGHT=52, BITWISE_AND=53, 
-		BITWISE_OR=54, BITWISE_XOR=55, LEFT_SBRACKET=56, RIGHT_SBRACKET=57, LEFT_RBRACKET=58, 
-		RIGHT_RBRACKET=59, LEFT_CBRACKET=60, RIGHT_CBRACKET=61, LITERAL=62, FLOAT=63, 
-		INT=64, HEXINT=65, ID=66, SL_COMMENT=67, WS=68;
+		LESS_THAN_EQUAL=43, NOT_EQUAL=44, EQUAL=45, STRICT_EQUAL=46, STRICT_NOT_EQUAL=47, 
+		GREATER_THAN_EQUAL=48, GREATER_THAN=49, AND=50, OR=51, SHIFT_LEFT=52, 
+		SHIFT_RIGHT=53, BITWISE_AND=54, BITWISE_OR=55, BITWISE_XOR=56, LEFT_SBRACKET=57, 
+		RIGHT_SBRACKET=58, LEFT_RBRACKET=59, RIGHT_RBRACKET=60, LEFT_CBRACKET=61, 
+		RIGHT_CBRACKET=62, LITERAL=63, FLOAT=64, INT=65, HEXINT=66, ID=67, SL_COMMENT=68, 
+		WS=69;
 	public static final int
 		RULE_program = 0, RULE_expression_list = 1, RULE_expression = 2, RULE_indirectpropaccess = 3, 
 		RULE_propaccess = 4, RULE_numeric_t = 5, RULE_alloc = 6, RULE_alloc_list = 7, 
@@ -62,8 +63,9 @@ public class MindcodeParser extends Parser {
 			"'sensor'", "'stack'", "'true'", "'when'", "'while'", "'='", "'@'", "':'", 
 			"','", "'/'", "'\\'", "'$'", "'.'", "'**'", "'-'", "'%'", "'*'", null, 
 			"'~'", "'+'", "'?'", "';'", "'/='", "'**='", "'-='", "'*='", "'+='", 
-			"'<'", "'<='", "'!='", "'=='", "'==='", "'>='", "'>'", null, null, "'<<'", 
-			"'>>'", "'&'", "'|'", "'^'", "'['", "']'", "'('", "')'", "'{'", "'}'"
+			"'<'", "'<='", "'!='", "'=='", "'==='", "'!=='", "'>='", "'>'", null, 
+			null, "'<<'", "'>>'", "'&'", "'|'", "'^'", "'['", "']'", "'('", "')'", 
+			"'{'", "'}'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -75,9 +77,9 @@ public class MindcodeParser extends Parser {
 			"DOLLAR", "DOT", "EXP", "MINUS", "MOD", "MUL", "NOT", "BITWISE_NOT", 
 			"PLUS", "QUESTION_MARK", "SEMICOLON", "DIV_ASSIGN", "EXP_ASSIGN", "MINUS_ASSIGN", 
 			"MUL_ASSIGN", "PLUS_ASSIGN", "LESS_THAN", "LESS_THAN_EQUAL", "NOT_EQUAL", 
-			"EQUAL", "STRICT_EQUAL", "GREATER_THAN_EQUAL", "GREATER_THAN", "AND", 
-			"OR", "SHIFT_LEFT", "SHIFT_RIGHT", "BITWISE_AND", "BITWISE_OR", "BITWISE_XOR", 
-			"LEFT_SBRACKET", "RIGHT_SBRACKET", "LEFT_RBRACKET", "RIGHT_RBRACKET", 
+			"EQUAL", "STRICT_EQUAL", "STRICT_NOT_EQUAL", "GREATER_THAN_EQUAL", "GREATER_THAN", 
+			"AND", "OR", "SHIFT_LEFT", "SHIFT_RIGHT", "BITWISE_AND", "BITWISE_OR", 
+			"BITWISE_XOR", "LEFT_SBRACKET", "RIGHT_SBRACKET", "LEFT_RBRACKET", "RIGHT_RBRACKET", 
 			"LEFT_CBRACKET", "RIGHT_CBRACKET", "LITERAL", "FLOAT", "INT", "HEXINT", 
 			"ID", "SL_COMMENT", "WS"
 		};
@@ -354,6 +356,7 @@ public class MindcodeParser extends Parser {
 		}
 		public TerminalNode NOT_EQUAL() { return getToken(MindcodeParser.NOT_EQUAL, 0); }
 		public TerminalNode EQUAL() { return getToken(MindcodeParser.EQUAL, 0); }
+		public TerminalNode STRICT_NOT_EQUAL() { return getToken(MindcodeParser.STRICT_NOT_EQUAL, 0); }
 		public TerminalNode STRICT_EQUAL() { return getToken(MindcodeParser.STRICT_EQUAL, 0); }
 		public Binop_equality_comparisonContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
@@ -1451,7 +1454,7 @@ public class MindcodeParser extends Parser {
 						setState(165);
 						((Binop_equality_comparisonContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NOT_EQUAL) | (1L << EQUAL) | (1L << STRICT_EQUAL))) != 0)) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NOT_EQUAL) | (1L << EQUAL) | (1L << STRICT_EQUAL) | (1L << STRICT_NOT_EQUAL))) != 0)) ) {
 							((Binop_equality_comparisonContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -4545,7 +4548,7 @@ public class MindcodeParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3F\u01df\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3G\u01df\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -4581,7 +4584,7 @@ public class MindcodeParser extends Parser {
 		"$\3$\5$\u01c9\n$\3%\3%\3&\3&\3\'\3\'\3(\3(\5(\u01d3\n(\3)\3)\3*\3*\3+"+
 		"\3+\3,\3,\3-\3-\3-\2\13\4\6\20\26\34$&*\64.\2\4\6\b\n\f\16\20\22\24\26"+
 		"\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVX\2\13\4\2\32\33 !\4"+
-		"\2\37\37$$\3\2\65\66\3\289\4\2,-\61\62\3\2.\60\4\2\r\r\22\22\4\2\'\'*"+
+		"\2\37\37$$\3\2\66\67\3\29:\4\2,-\62\63\3\2.\61\4\2\r\r\22\22\4\2\'\'*"+
 		"*\4\2))++\2\u01f9\2^\3\2\2\2\4e\3\2\2\2\6\u008f\3\2\2\2\b\u00ba\3\2\2"+
 		"\2\n\u00c9\3\2\2\2\f\u00cd\3\2\2\2\16\u00cf\3\2\2\2\20\u00d2\3\2\2\2\22"+
 		"\u00e6\3\2\2\2\24\u00f7\3\2\2\2\26\u00f9\3\2\2\2\30\u0104\3\2\2\2\32\u0119"+
@@ -4601,8 +4604,8 @@ public class MindcodeParser extends Parser {
 		"\5:\36\2|\u0090\5\30\r\2}\u0090\5\32\16\2~\177\7\"\2\2\177\u0090\5\6\4"+
 		"\30\u0080\u0081\7#\2\2\u0081\u0090\5\6\4\27\u0082\u0083\7\37\2\2\u0083"+
 		"\u0090\5\6\4\25\u0084\u0090\58\35\2\u0085\u0090\5J&\2\u0086\u0090\5\f"+
-		"\7\2\u0087\u0090\5N(\2\u0088\u0090\5L\'\2\u0089\u008a\7<\2\2\u008a\u008b"+
-		"\5\6\4\2\u008b\u008c\7=\2\2\u008c\u0090\3\2\2\2\u008d\u0090\5 \21\2\u008e"+
+		"\7\2\u0087\u0090\5N(\2\u0088\u0090\5L\'\2\u0089\u008a\7=\2\2\u008a\u008b"+
+		"\5\6\4\2\u008b\u008c\7>\2\2\u008c\u0090\3\2\2\2\u008d\u0090\5 \21\2\u008e"+
 		"\u0090\5\36\20\2\u008fq\3\2\2\2\u008ft\3\2\2\2\u008fu\3\2\2\2\u008fv\3"+
 		"\2\2\2\u008fw\3\2\2\2\u008fx\3\2\2\2\u008fy\3\2\2\2\u008fz\3\2\2\2\u008f"+
 		"{\3\2\2\2\u008f|\3\2\2\2\u008f}\3\2\2\2\u008f~\3\2\2\2\u008f\u0080\3\2"+
@@ -4613,19 +4616,19 @@ public class MindcodeParser extends Parser {
 		"\f\24\2\2\u0095\u0096\t\2\2\2\u0096\u00b6\5\6\4\25\u0097\u0098\f\23\2"+
 		"\2\u0098\u0099\t\3\2\2\u0099\u00b6\5\6\4\24\u009a\u009b\f\22\2\2\u009b"+
 		"\u009c\t\4\2\2\u009c\u00b6\5\6\4\23\u009d\u009e\f\21\2\2\u009e\u009f\7"+
-		"\67\2\2\u009f\u00b6\5\6\4\22\u00a0\u00a1\f\20\2\2\u00a1\u00a2\t\5\2\2"+
-		"\u00a2\u00b6\5\6\4\21\u00a3\u00a4\f\17\2\2\u00a4\u00a5\t\6\2\2\u00a5\u00b6"+
-		"\5\6\4\20\u00a6\u00a7\f\16\2\2\u00a7\u00a8\t\7\2\2\u00a8\u00b6\5\6\4\17"+
-		"\u00a9\u00aa\f\r\2\2\u00aa\u00ab\7\63\2\2\u00ab\u00b6\5\6\4\16\u00ac\u00ad"+
-		"\f\f\2\2\u00ad\u00ae\7\64\2\2\u00ae\u00b6\5\6\4\r\u00af\u00b0\f\13\2\2"+
+		"8\2\2\u009f\u00b6\5\6\4\22\u00a0\u00a1\f\20\2\2\u00a1\u00a2\t\5\2\2\u00a2"+
+		"\u00b6\5\6\4\21\u00a3\u00a4\f\17\2\2\u00a4\u00a5\t\6\2\2\u00a5\u00b6\5"+
+		"\6\4\20\u00a6\u00a7\f\16\2\2\u00a7\u00a8\t\7\2\2\u00a8\u00b6\5\6\4\17"+
+		"\u00a9\u00aa\f\r\2\2\u00aa\u00ab\7\64\2\2\u00ab\u00b6\5\6\4\16\u00ac\u00ad"+
+		"\f\f\2\2\u00ad\u00ae\7\65\2\2\u00ae\u00b6\5\6\4\r\u00af\u00b0\f\13\2\2"+
 		"\u00b0\u00b1\7%\2\2\u00b1\u00b2\5\6\4\2\u00b2\u00b3\7\30\2\2\u00b3\u00b4"+
 		"\5\6\4\2\u00b4\u00b6\3\2\2\2\u00b5\u0091\3\2\2\2\u00b5\u0094\3\2\2\2\u00b5"+
 		"\u0097\3\2\2\2\u00b5\u009a\3\2\2\2\u00b5\u009d\3\2\2\2\u00b5\u00a0\3\2"+
 		"\2\2\u00b5\u00a3\3\2\2\2\u00b5\u00a6\3\2\2\2\u00b5\u00a9\3\2\2\2\u00b5"+
 		"\u00ac\3\2\2\2\u00b5\u00af\3\2\2\2\u00b6\u00b9\3\2\2\2\u00b7\u00b5\3\2"+
 		"\2\2\u00b7\u00b8\3\2\2\2\u00b8\7\3\2\2\2\u00b9\u00b7\3\2\2\2\u00ba\u00bb"+
-		"\5B\"\2\u00bb\u00bc\7\35\2\2\u00bc\u00bd\7\21\2\2\u00bd\u00be\7<\2\2\u00be"+
-		"\u00bf\5\6\4\2\u00bf\u00c0\7=\2\2\u00c0\t\3\2\2\2\u00c1\u00c2\5B\"\2\u00c2"+
+		"\5B\"\2\u00bb\u00bc\7\35\2\2\u00bc\u00bd\7\21\2\2\u00bd\u00be\7=\2\2\u00be"+
+		"\u00bf\5\6\4\2\u00bf\u00c0\7>\2\2\u00c0\t\3\2\2\2\u00c1\u00c2\5B\"\2\u00c2"+
 		"\u00c3\7\35\2\2\u00c3\u00c4\5T+\2\u00c4\u00ca\3\2\2\2\u00c5\u00c6\5@!"+
 		"\2\u00c6\u00c7\7\35\2\2\u00c7\u00c8\5T+\2\u00c8\u00ca\3\2\2\2\u00c9\u00c1"+
 		"\3\2\2\2\u00c9\u00c5\3\2\2\2\u00ca\13\3\2\2\2\u00cb\u00ce\5H%\2\u00cc"+
@@ -4637,9 +4640,9 @@ public class MindcodeParser extends Parser {
 		"\7\17\2\2\u00dd\u00df\5T+\2\u00de\u00e0\5\22\n\2\u00df\u00de\3\2\2\2\u00df"+
 		"\u00e0\3\2\2\2\u00e0\u00e2\3\2\2\2\u00e1\u00d9\3\2\2\2\u00e2\u00e5\3\2"+
 		"\2\2\u00e3\u00e1\3\2\2\2\u00e3\u00e4\3\2\2\2\u00e4\21\3\2\2\2\u00e5\u00e3"+
-		"\3\2\2\2\u00e6\u00e7\7:\2\2\u00e7\u00e8\5\"\22\2\u00e8\u00e9\7;\2\2\u00e9"+
-		"\23\3\2\2\2\u00ea\u00eb\7\7\2\2\u00eb\u00ec\5T+\2\u00ec\u00ed\7<\2\2\u00ed"+
-		"\u00ee\5\26\f\2\u00ee\u00ef\7=\2\2\u00ef\u00f0\5\4\3\2\u00f0\u00f1\7\n"+
+		"\3\2\2\2\u00e6\u00e7\7;\2\2\u00e7\u00e8\5\"\22\2\u00e8\u00e9\7<\2\2\u00e9"+
+		"\23\3\2\2\2\u00ea\u00eb\7\7\2\2\u00eb\u00ec\5T+\2\u00ec\u00ed\7=\2\2\u00ed"+
+		"\u00ee\5\26\f\2\u00ee\u00ef\7>\2\2\u00ef\u00f0\5\4\3\2\u00f0\u00f1\7\n"+
 		"\2\2\u00f1\u00f8\3\2\2\2\u00f2\u00f3\7\7\2\2\u00f3\u00f4\5T+\2\u00f4\u00f5"+
 		"\5\4\3\2\u00f5\u00f6\7\n\2\2\u00f6\u00f8\3\2\2\2\u00f7\u00ea\3\2\2\2\u00f7"+
 		"\u00f2\3\2\2\2\u00f8\25\3\2\2\2\u00f9\u00fa\b\f\1\2\u00fa\u00fb\5:\36"+
@@ -4667,11 +4670,11 @@ public class MindcodeParser extends Parser {
 		"\2\2\2\u0141\u0142\b\24\1\2\u0142\u0143\5\6\4\2\u0143\u0149\3\2\2\2\u0144"+
 		"\u0145\f\3\2\2\u0145\u0146\7\31\2\2\u0146\u0148\5\6\4\2\u0147\u0144\3"+
 		"\2\2\2\u0148\u014b\3\2\2\2\u0149\u0147\3\2\2\2\u0149\u014a\3\2\2\2\u014a"+
-		"\'\3\2\2\2\u014b\u0149\3\2\2\2\u014c\u014d\7\n\2\2\u014d\u014e\7<\2\2"+
-		"\u014e\u015e\7=\2\2\u014f\u0150\5T+\2\u0150\u0151\7<\2\2\u0151\u0152\7"+
-		"=\2\2\u0152\u015e\3\2\2\2\u0153\u0154\5T+\2\u0154\u0155\7<\2\2\u0155\u0156"+
-		"\5*\26\2\u0156\u0157\7=\2\2\u0157\u015e\3\2\2\2\u0158\u0159\5\n\6\2\u0159"+
-		"\u015a\7<\2\2\u015a\u015b\5*\26\2\u015b\u015c\7=\2\2\u015c\u015e\3\2\2"+
+		"\'\3\2\2\2\u014b\u0149\3\2\2\2\u014c\u014d\7\n\2\2\u014d\u014e\7=\2\2"+
+		"\u014e\u015e\7>\2\2\u014f\u0150\5T+\2\u0150\u0151\7=\2\2\u0151\u0152\7"+
+		">\2\2\u0152\u015e\3\2\2\2\u0153\u0154\5T+\2\u0154\u0155\7=\2\2\u0155\u0156"+
+		"\5*\26\2\u0156\u0157\7>\2\2\u0157\u015e\3\2\2\2\u0158\u0159\5\n\6\2\u0159"+
+		"\u015a\7=\2\2\u015a\u015b\5*\26\2\u015b\u015c\7>\2\2\u015c\u015e\3\2\2"+
 		"\2\u015d\u014c\3\2\2\2\u015d\u014f\3\2\2\2\u015d\u0153\3\2\2\2\u015d\u0158"+
 		"\3\2\2\2\u015e)\3\2\2\2\u015f\u0160\b\26\1\2\u0160\u0161\5,\27\2\u0161"+
 		"\u0167\3\2\2\2\u0162\u0163\f\3\2\2\u0163\u0164\7\31\2\2\u0164\u0166\5"+
@@ -4703,17 +4706,17 @@ public class MindcodeParser extends Parser {
 		"\u01b0\u01b6\5@!\2\u01b1\u01b6\5> \2\u01b2\u01b6\5<\37\2\u01b3\u01b6\5"+
 		"B\"\2\u01b4\u01b6\5\n\6\2\u01b5\u01b0\3\2\2\2\u01b5\u01b1\3\2\2\2\u01b5"+
 		"\u01b2\3\2\2\2\u01b5\u01b3\3\2\2\2\u01b5\u01b4\3\2\2\2\u01b6;\3\2\2\2"+
-		"\u01b7\u01b8\5T+\2\u01b8\u01b9\7:\2\2\u01b9\u01ba\5\6\4\2\u01ba\u01bb"+
-		"\7;\2\2\u01bb=\3\2\2\2\u01bc\u01bd\7\34\2\2\u01bd\u01be\5T+\2\u01be?\3"+
+		"\u01b7\u01b8\5T+\2\u01b8\u01b9\7;\2\2\u01b9\u01ba\5\6\4\2\u01ba\u01bb"+
+		"\7<\2\2\u01bb=\3\2\2\2\u01bc\u01bd\7\34\2\2\u01bd\u01be\5T+\2\u01be?\3"+
 		"\2\2\2\u01bf\u01c0\7\27\2\2\u01c0\u01c1\5D#\2\u01c1A\3\2\2\2\u01c2\u01c3"+
-		"\5T+\2\u01c3C\3\2\2\2\u01c4\u01c5\7D\2\2\u01c5E\3\2\2\2\u01c6\u01c9\5"+
+		"\5T+\2\u01c3C\3\2\2\2\u01c4\u01c5\7E\2\2\u01c5E\3\2\2\2\u01c6\u01c9\5"+
 		"V,\2\u01c7\u01c9\5X-\2\u01c8\u01c6\3\2\2\2\u01c8\u01c7\3\2\2\2\u01c9G"+
-		"\3\2\2\2\u01ca\u01cb\7A\2\2\u01cbI\3\2\2\2\u01cc\u01cd\7@\2\2\u01cdK\3"+
+		"\3\2\2\2\u01ca\u01cb\7B\2\2\u01cbI\3\2\2\2\u01cc\u01cd\7A\2\2\u01cdK\3"+
 		"\2\2\2\u01ce\u01cf\7\20\2\2\u01cfM\3\2\2\2\u01d0\u01d3\5P)\2\u01d1\u01d3"+
 		"\5R*\2\u01d2\u01d0\3\2\2\2\u01d2\u01d1\3\2\2\2\u01d3O\3\2\2\2\u01d4\u01d5"+
 		"\7\23\2\2\u01d5Q\3\2\2\2\u01d6\u01d7\7\13\2\2\u01d7S\3\2\2\2\u01d8\u01d9"+
-		"\7D\2\2\u01d9U\3\2\2\2\u01da\u01db\7B\2\2\u01dbW\3\2\2\2\u01dc\u01dd\7"+
-		"C\2\2\u01ddY\3\2\2\2%^eln\u008f\u00b5\u00b7\u00c9\u00cd\u00d7\u00df\u00e3"+
+		"\7E\2\2\u01d9U\3\2\2\2\u01da\u01db\7C\2\2\u01dbW\3\2\2\2\u01dc\u01dd\7"+
+		"D\2\2\u01ddY\3\2\2\2%^eln\u008f\u00b5\u00b7\u00c9\u00cd\u00d7\u00df\u00e3"+
 		"\u00f7\u0101\u0119\u0122\u0134\u013e\u0149\u015d\u0167\u016f\u0172\u0178"+
 		"\u017d\u0180\u0182\u0187\u018b\u0196\u019c\u01ae\u01b5\u01c8\u01d2";
 	public static final ATN _ATN =

@@ -1,3 +1,4 @@
+
 # Functions
 
 You may call any Mindustry-provided functions:
@@ -248,7 +249,7 @@ end
 
 ## Ternary Operator
 
-The ternary operator (`?:`) is exactly like an if/else expression, except it is more succint. Use it when you need a
+The ternary operator (`?:`) is exactly like an if/else expression, except it is more succinct. Use it when you need a
 conditional but want to save some space:
 
 ```
@@ -283,11 +284,9 @@ Mindustry Logic offers us many comparison operators, namely:
 * `==` and `!=` for equal and not equal, respectively
 * `&&`, `and`, `||`, and `or`, to implement complex conditionals: `reactor1.thorium > 0 and (reactor1.cryofluid /
   reactor1.liquidCapacity) < 0.25`
-* '!' and `not` for neagting boolean expressions
-* `===` for "strict equality". In Mindustry, the value `0` is equivalent to `false` and `null`. By using `===`, you
-  force Mindustry Logic to check for the exact value, instead of type-casting the value before checking if the values
-  are equal. This is very useful for checks where the distinction between `0` and `null` is important:
-
+* `!` and `not` for negating boolean expressions
+* `===` and `!==` for "strict equality" and "strict non-equality". When using the non-strict comparison in Mindustry -- `==` or `!=`, the value `0` is equal to `false` and `null`. By using `===` or `!==`, you  force Mindustry Logic to check for the exact value, instead of type-casting the value before checking if the values are equal. This is very useful for checks where the distinction between `0` and `null` is important, such as:
+* 
 ```
 // Bind new units until a living one is found
 while not (@unit.dead === 0)
@@ -295,12 +294,12 @@ while not (@unit.dead === 0)
 end
 ```
 
-`@unit.dead` can take one of three values:
+`@unit.dead` can take one of these values:
 * `null` if no unit is bound,
 * `0` if the unit is not dead,
 * `1` if the unit is dead.
 
-Using `===` allows us to distinguish the cases when no unit is bound and when a unit is bound and not dead.
+Using `===` allows us to distinguish the `null` and `0` values, ie. the cases where no unit is bound and where a unit is bound and not dead.
 
 # Global variables
 

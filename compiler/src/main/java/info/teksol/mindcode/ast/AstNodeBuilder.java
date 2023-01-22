@@ -153,11 +153,23 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBinop_equality_comparison(MindcodeParser.Binop_equality_comparisonContext ctx) {
-        return new BinaryOp(
-                visit(ctx.left),
-                ctx.op.getText(),
-                visit(ctx.right)
-        );
+        if (ctx.op.getText().equals("!==")) {
+            return new BinaryOp(
+                    new BinaryOp(
+                            visit(ctx.left),
+                            "===",
+                            visit(ctx.right)
+                    ),
+                    "==",
+                    new BooleanLiteral(false)
+            );
+        } else {
+            return new BinaryOp(
+                    visit(ctx.left),
+                    ctx.op.getText(),
+                    visit(ctx.right)
+            );
+        }
     }
 
     @Override

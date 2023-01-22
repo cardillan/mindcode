@@ -1722,6 +1722,25 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void correctlyHandlesStrictNotEqual() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(SENSOR, var(0), "@unit", "@dead"),
+                        new LogicInstruction(OP, "strictEqual", var(1), var(0), "null"),
+                        new LogicInstruction(OP, "equal", var(2), var(1), "false"),
+                        new LogicInstruction(SET, "a", var(2)),
+                        new LogicInstruction(PRINT, "a"),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst(
+                                "a = @unit.dead !== null\nprint(a)"
+                        )
+                )
+        );
+    }
+
+    @Test
     void correctlyHandlesBreakContinue() {
         assertLogicInstructionsMatch(
                 List.of(

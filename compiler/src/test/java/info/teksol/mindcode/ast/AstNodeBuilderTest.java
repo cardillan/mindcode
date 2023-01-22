@@ -1195,6 +1195,27 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
+    void correctlyParsesStrictNotEqual() {
+        assertEquals(
+                new Seq(
+                        new Assignment(
+                                new VarRef("a"),
+                                new BinaryOp(
+                                        new BinaryOp(
+                                                new Ref("unit"),
+                                                "===",
+                                                new NullLiteral()
+                                        ),
+                                        "==",
+                                        new BooleanLiteral(false)
+                                )
+                        )
+                ),
+                translateToAst("a = @unit !== null")
+        );
+    }
+
+    @Test
     void correctlyParsesBreakContinue() {
         assertEquals(
                 new Seq(
