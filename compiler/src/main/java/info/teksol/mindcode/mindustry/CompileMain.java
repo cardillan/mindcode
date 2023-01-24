@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static info.teksol.mindcode.mindustry.CompilerFacade.compile;
@@ -38,17 +37,16 @@ public class CompileMain {
     }
     
     static public void main(String[] args) throws IOException {
-        Set<Optimisation> optimisations = Collections.emptySet();
         List<String> filenames = new ArrayList<>();
-        boolean printParseTree = false;
+        CompileProfile profile = CompileProfile.noOptimizations();
 
         for (String arg : args) {
             if ("-?".equals(arg)) {
                 showHelp(0);
             } else if (arg.equals("-p")) {
-                printParseTree = true;
+                profile.setPrintParseTree(true);
             } else if (arg.startsWith("-o")) {
-                optimisations = selectOptimisation(arg.substring(2));
+                selectOptimisation(profile, arg.substring(2));
             } else if (arg.startsWith("-")) {
                 showHelp(2);
             } else {
@@ -62,7 +60,7 @@ public class CompileMain {
         
         String contents = filenames.isEmpty() ? readStdin() : readFile(filenames.get(0));
 
-        final CompilerOutput result = compile(contents, optimisations, printParseTree);
+        final CompilerOutput result = compile(contents, profile);
 
         if (result.getErrors().isEmpty()) {
             // No errors? Print the compiled code and any messages.
@@ -87,10 +85,11 @@ public class CompileMain {
         }
     }
     
-    static private Set<Optimisation> selectOptimisation(String flags) {
+    static private void selectOptimisation(CompileProfile profile, String flags) {
         if (flags.isEmpty()) {
             // -o alone activates all
-            return EnumSet.allOf(Optimisation.class);
+            profile.setOptimisations(EnumSet.allOf(Optimisation.class));
+            return;
         }
         
         EnumSet<Optimisation> result = EnumSet.noneOf(Optimisation.class);
@@ -104,8 +103,8 @@ public class CompileMain {
                 result.add(optimizer);
             }
         }
-        
-        return negate ? EnumSet.complementOf(result) : result;
+
+        profile.setOptimisations(negate ? EnumSet.complementOf(result) : result);
     }
     
     static private final String[] HELP = new String[] {

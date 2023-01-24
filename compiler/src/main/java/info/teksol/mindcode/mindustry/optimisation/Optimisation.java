@@ -1,9 +1,9 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.mindustry.CompileProfile;
 import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -78,16 +78,16 @@ public enum Optimisation {
     }
     
     public static LogicInstructionPipeline createCompletePipeline(LogicInstructionPipeline terminus) {
-        return createPipelineOf(terminus, EnumSet.allOf(Optimisation.class), s -> {});
+        return createPipelineForProfile(terminus, CompileProfile.fullOptimizations(), s -> {});
     }
     
-    public static LogicInstructionPipeline createPipelineOf(LogicInstructionPipeline terminus,
-            Set<Optimisation> optimisations, Consumer<String> messageRecipient) {
+    public static LogicInstructionPipeline createPipelineForProfile(LogicInstructionPipeline terminus,
+            CompileProfile profile, Consumer<String> messageRecipient) {
         LogicInstructionPipeline pipeline = new InstructionCounter(terminus, messageRecipient,
                 "%6d instructions after optimizations.");
         Optimisation[] values = values();
         for (int i = values.length - 1; i >= 0; i--) {
-            if (optimisations.contains(values[i])) {
+            if (profile.getOptimisations().contains(values[i])) {
                 BaseOptimizer optimizer = values[i].createInstance(pipeline);
                 optimizer.setMessagesRecipient(messageRecipient);
                 pipeline = optimizer;

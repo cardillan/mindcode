@@ -30,10 +30,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         this.pipeline = pipeline;
     }
 
-    public static List<LogicInstruction> generateAndOptimize(Seq program, Set<Optimisation> optimisations, 
+    public static List<LogicInstruction> generateAndOptimize(Seq program, CompileProfile profile,
             Consumer<String> messageConsumer) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus, optimisations, messageConsumer);
+        LogicInstructionPipeline pipeline = Optimisation.createPipelineForProfile(terminus, profile, messageConsumer);
         LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
         pipeline.flush();
@@ -42,7 +42,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     public static List<LogicInstruction> generateAndOptimize(Seq program) {
-        return generateAndOptimize(program, EnumSet.allOf(Optimisation.class), s -> {});
+        return generateAndOptimize(program, CompileProfile.fullOptimizations(), s -> {});
     }
 
     public static void generateInto(LogicInstructionPipeline pipeline, Seq program) {

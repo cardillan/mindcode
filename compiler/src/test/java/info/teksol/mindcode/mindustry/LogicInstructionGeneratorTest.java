@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.mindustry.Opcode.*;
+
 import info.teksol.mindcode.mindustry.optimisation.Optimisation;
-import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
@@ -1658,7 +1659,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "d = 2 * -c\n" +
                                 "e = -d ** 2"
                         ),
-                        Set.of(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        new CompileProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1687,7 +1688,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "a = b > c ? b : c\n" +
                                 "d += -e *= f"
                         ),
-                        Set.of(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        new CompileProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1715,7 +1716,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "g = h & 31 == 15\n" +
                                 "x = y & 15 and z & 7"
                         ),
-                        Set.of(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        new CompileProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1773,7 +1774,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(\"End\")"
                         ),
-                        Set.of(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1826,7 +1827,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(f)"
                         ),
-                        Set.of(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
