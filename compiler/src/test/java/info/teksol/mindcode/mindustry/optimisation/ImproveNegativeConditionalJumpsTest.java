@@ -5,12 +5,12 @@ import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
 import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import static info.teksol.mindcode.mindustry.Opcode.*;
 
-class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
+class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus,
             Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT);
     

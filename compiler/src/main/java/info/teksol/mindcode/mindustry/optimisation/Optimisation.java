@@ -11,8 +11,8 @@ import java.util.function.Function;
 // compiler, makes optimizations and passes them onto the next optimizer.
 public enum Optimisation {
     CONDITIONAL_JUMPS_NORMALIZATION     ('n', next -> new ConditionalJumpsNormalizer(next),
-            "replaces conditional, always false jumps with unconditional ones (improves subsequent optimalisations)"),
-    
+            "replaces always true conditional jumps with unconditional ones, removes always false jumps"),
+
     DEAD_CODE_ELIMINATION               ('d', next -> new DeadCodeEliminator(next),
             "eliminates writes to compiler or user defined variables that are not used"),
     
@@ -28,9 +28,13 @@ public enum Optimisation {
     CASE_EXPRESSION_OPTIMIZATION        ('c', next -> new CaseExpressionOptimizer(next),
             "eliminates temporary variables created to execute case expressions"),
     
-    CONDITIONAL_JUMPS_IMPROVEMENT       ('j', next -> new ImproveConditionalJumps(next),
-            "merges a negation of a boolean condition into the following jump"),
+    CONDITIONAL_JUMPS_IMPROVEMENT       ('j', next -> new ImproveNegativeConditionalJumps(next),
+            "merges an op instruction producing a boolean expression into the following conditional jump"),
     
+    JUMP_OVER_JUMP_ELIMINATION          ('q',
+            next -> new JumpOverJumpEliminator(new ImprovePositiveConditionalJumps(next)),
+            "simplifies sequences of intertwined jumps"),
+
     PRINT_TEXT_MERGING                  ('p', next -> new PrintMerger(next),
             "merges consecutive print statenents outputting text literals"),
     
@@ -38,7 +42,8 @@ public enum Optimisation {
             "speeds up execution by eliminating chained jumps"),
     
     // This optimizer can create additional single step jumps; therefore is bundled with its eliminator
-    INACCESSIBLE_CODE_ELIMINATION       ('e', next -> new InaccesibleCodeEliminator(new SingleStepJumpEliminator(next)),
+    INACCESSIBLE_CODE_ELIMINATION       ('e',
+            next -> new InaccesibleCodeEliminator(new SingleStepJumpEliminator(next)),
             "eliminates instructions made inaccessible by optimizations or false conditions"),
     ;
     

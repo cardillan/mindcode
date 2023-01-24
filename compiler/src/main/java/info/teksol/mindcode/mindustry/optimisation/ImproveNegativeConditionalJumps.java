@@ -4,8 +4,6 @@ import info.teksol.mindcode.mindustry.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.Opcode;
-import java.util.Map;
-import java.util.Set;
 
 // Turns the following sequence of instructions:
 //    op <comparison> var1 A B
@@ -19,18 +17,9 @@ import java.util.Set;
 // 2. var1 and var2 are identical
 // 3. var1 is a __tmp variable
 // 4. <comparison> has an inverse
-public class ImproveConditionalJumps extends PipelinedOptimizer {
-    private static final Map<String, String> inverses = Map.of(
-            "equal", "notEqual",
-            "notEqual", "equal",
-            "lessThan", "greaterThanEq",
-            "lessThanEq", "greaterThan",
-            "greaterThan", "lessThanEq",
-            "greaterThanEq", "lessThan"
-    );
-    private static final Set<String> COMPARISON_OPERATORS = inverses.keySet();
+public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
 
-    ImproveConditionalJumps(LogicInstructionPipeline next) {
+    ImproveNegativeConditionalJumps(LogicInstructionPipeline next) {
         super(next);
     }
 
@@ -89,7 +78,7 @@ public class ImproveConditionalJumps extends PipelinedOptimizer {
             boolean jumpComparesToFalse = instruction.getArgs().get(3).equals("false");
             
             if (isSameVariable && jumpComparesToFalse) {
-                if (!inverses.containsKey(op.getArgs().get(0))) {
+                if (!hasInverse(op.getArgs().get(0))) {
                     throw new OptimizationException("Unknown operation passed-in; can't find the inverse of [" + op.getArgs().get(0) + "]");
                 }
 
@@ -97,7 +86,7 @@ public class ImproveConditionalJumps extends PipelinedOptimizer {
                         new LogicInstruction(
                                 Opcode.JUMP,
                                 instruction.getArgs().get(0),
-                                inverses.get(op.getArgs().get(0)),
+                                getInverse(op.getArgs().get(0)),
                                 op.getArgs().get(2),
                                 op.getArgs().get(3)
                         )
@@ -120,7 +109,7 @@ public class ImproveConditionalJumps extends PipelinedOptimizer {
     }
     
     private boolean isComparisonOperatorToTmp(LogicInstruction instruction) {
-        return COMPARISON_OPERATORS.contains(instruction.getArgs().get(0)) &&
+        return hasInverse(instruction.getArgs().get(0)) &&
                 instruction.getArgs().get(1).startsWith(LogicInstructionGenerator.TMP_PREFIX);
     }
 }
