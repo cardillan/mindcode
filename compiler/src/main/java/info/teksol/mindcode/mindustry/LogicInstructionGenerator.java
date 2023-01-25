@@ -8,6 +8,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.mindustry.Opcode.*;
+import info.teksol.mindcode.mindustry.optimisation.DebugPrinter;
+import info.teksol.mindcode.mindustry.optimisation.DiffDebugPrinter;
+import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
 
 /**
  * Converts from the Mindcode AST into a list of Logic instructions.
@@ -33,10 +36,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public static List<LogicInstruction> generateAndOptimize(Seq program, CompileProfile profile,
             Consumer<String> messageConsumer) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        LogicInstructionPipeline pipeline = Optimisation.createPipelineForProfile(terminus, profile, messageConsumer);
+        final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 
+                ? new NullDebugPrinter() : new DiffDebugPrinter(profile.getDebugLevel());
+        LogicInstructionPipeline pipeline = Optimisation.createPipelineForProfile(terminus, profile, debugPrinter, messageConsumer);
         LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
         pipeline.flush();
+
+        debugPrinter.print(messageConsumer);
         
         return terminus.getResult();
     }

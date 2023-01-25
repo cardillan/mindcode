@@ -27,7 +27,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
     }
     
     @Override
-    protected void optimizeProgram() {
+    protected boolean optimizeProgram() {
         int count = 0;
         program.add(0, new LogicInstruction(Opcode.LABEL, FIRST_LABEL));
         for (int index = 0; index < program.size(); index++) {
@@ -51,6 +51,8 @@ class PropagateJumpTargets extends GlobalOptimizer {
         if (count > 0) {
             emitMessage("%6d instructions updated by %s.", count, getClass().getSimpleName());
         }
+
+        return false;
     }
 
     // Determines the final target of given jump

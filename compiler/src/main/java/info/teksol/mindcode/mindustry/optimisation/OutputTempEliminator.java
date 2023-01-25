@@ -21,7 +21,7 @@ class OutputTempEliminator extends GlobalOptimizer {
     }
 
     @Override
-    protected void optimizeProgram() {
+    protected boolean optimizeProgram() {
         // Cannot uswe iterations due to modifications of the the underlying list in the loop
         for (int index  = 1; index < program.size(); index++)  {
             LogicInstruction current = program.get(index);
@@ -52,5 +52,7 @@ class OutputTempEliminator extends GlobalOptimizer {
             program.remove(index);
             index--;
         }
+
+        return false;
     }
 }

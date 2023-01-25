@@ -21,7 +21,7 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
     }
 
     @Override
-    protected void optimizeProgram() {
+    protected boolean optimizeProgram() {
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
             LogicInstruction instruction = it.next();
             if (!instruction.isSet()) continue;
@@ -42,6 +42,8 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
             list.stream().skip(1).forEach(ix -> replaceInstruction(ix, replaceAllArgs(ix, arg0, arg1)));
             it.remove();
         }
+
+        return false;
     }
     
     private boolean isStandardCaseWhenInstruction(LogicInstruction ix, String ast) {

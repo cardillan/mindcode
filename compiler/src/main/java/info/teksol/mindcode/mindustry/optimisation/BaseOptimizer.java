@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 // Base class for optimizers. Contains helper functions for manipulating instructions.
-abstract class BaseOptimizer implements LogicInstructionPipeline {
+abstract class BaseOptimizer implements Optimizer {
     private final LogicInstructionPipeline next;
+    private final String name = getClass().getSimpleName();
+    protected DebugPrinter debugPrinter = new NullDebugPrinter();
     private Consumer<String> messagesRecipient = s -> {};
 
     public BaseOptimizer(LogicInstructionPipeline next) {
@@ -22,6 +24,19 @@ abstract class BaseOptimizer implements LogicInstructionPipeline {
     @Override
     public void flush() {
         next.flush();
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setDebugPrinter(DebugPrinter debugPrinter) {
+        this.debugPrinter = debugPrinter;
+        if (next instanceof Optimizer) {
+            ((Optimizer)next).setDebugPrinter(debugPrinter);
+        }
     }
 
     void setMessagesRecipient(Consumer<String> messagesRecipient) {

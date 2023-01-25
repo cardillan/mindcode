@@ -22,7 +22,7 @@ class InputTempEliminator extends GlobalOptimizer {
     }
 
     @Override
-    protected void optimizeProgram() {
+    protected boolean optimizeProgram() {
         // Cannot uswe iterations due to modifications of the the underlying list in the loop
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
             LogicInstruction instruction = it.next();
@@ -52,5 +52,7 @@ class InputTempEliminator extends GlobalOptimizer {
             replaceInstruction(other, replaceAllArgs(other, arg0, arg1));
             it.remove();
         }
+
+        return false;
     }
 }

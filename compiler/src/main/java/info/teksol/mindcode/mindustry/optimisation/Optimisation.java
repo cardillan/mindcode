@@ -77,23 +77,22 @@ public enum Optimisation {
         return null;
     }
     
-    public static LogicInstructionPipeline createCompletePipeline(LogicInstructionPipeline terminus) {
-        return createPipelineForProfile(terminus, CompileProfile.fullOptimizations(), s -> {});
-    }
-    
     public static LogicInstructionPipeline createPipelineForProfile(LogicInstructionPipeline terminus,
-            CompileProfile profile, Consumer<String> messageRecipient) {
+            CompileProfile profile, DebugPrinter debugPrinter, Consumer<String> messageRecipient) {
         LogicInstructionPipeline pipeline = new InstructionCounter(terminus, messageRecipient,
-                "%6d instructions after optimizations.");
+                "%6d instructions after optimizations.", new NullDebugPrinter());
+
         Optimisation[] values = values();
         for (int i = values.length - 1; i >= 0; i--) {
             if (profile.getOptimisations().contains(values[i])) {
                 BaseOptimizer optimizer = values[i].createInstance(pipeline);
                 optimizer.setMessagesRecipient(messageRecipient);
+                optimizer.setDebugPrinter(debugPrinter);
                 pipeline = optimizer;
             }
         }
-        return new InstructionCounter(pipeline, messageRecipient, "%6d instructions before optimizations.");
+        return new InstructionCounter(pipeline, messageRecipient, "%6d instructions before optimizations.",
+                debugPrinter);
     }
     
     public static LogicInstructionPipeline createPipelineOf(LogicInstructionPipeline terminus, Optimisation... optimisation) {
@@ -108,16 +107,19 @@ public enum Optimisation {
         return pipeline;
     }
     
-    private static class InstructionCounter implements LogicInstructionPipeline {
+    private static class InstructionCounter implements Optimizer {
         private final LogicInstructionPipeline next;
         private final Consumer<String> messageRecipient;
         private final String message;
+        private final DebugPrinter debugPrinter;
         private int count = 0;
 
-        public InstructionCounter(LogicInstructionPipeline next, Consumer<String> messageRecipient, String message) {
+        public InstructionCounter(LogicInstructionPipeline next, Consumer<String> messageRecipient, String message,
+                DebugPrinter debugPrinter) {
             this.next = next;
             this.messageRecipient = messageRecipient;
             this.message = message;
+            this.debugPrinter = debugPrinter;
         }
 
         @Override
@@ -125,6 +127,7 @@ public enum Optimisation {
             if (!instruction.isLabel()) {
                 count++;
             }
+            debugPrinter.instructionEmmited(this, instruction);
             next.emit(instruction);
         }
 
@@ -132,6 +135,16 @@ public enum Optimisation {
         public void flush() {
             messageRecipient.accept(String.format(message, count));
             next.flush();
+        }
+
+        @Override
+        public String getName() {
+            return "InstructionCounter";
+        }
+
+        @Override
+        public void setDebugPrinter(DebugPrinter debugPrinter) {
+            // Do nothing - our debugPrinter is immutable
         }
     }
 }

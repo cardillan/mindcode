@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 // Contains helper method to navigate and manipulate the program.
 abstract class GlobalOptimizer extends BaseOptimizer {
     protected final List<LogicInstruction> program = new ArrayList<>();
+    private int iterations = 0;
     private int original;
     private int emitted;
     
@@ -27,7 +28,13 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     @Override
     public final void flush() {
         original = (int) program.stream().filter(ix -> !ix.isLabel()).count();
-        optimizeProgram();
+
+        boolean repeat = true;
+        while (repeat) {
+            repeat = optimizeProgram();
+            debugPrinter.iterationFinished(this, ++iterations, program);
+        }
+
         emitted = (int) program.stream().filter(ix -> !ix.isLabel()).count();
 
         generateFinalMessages();
@@ -36,12 +43,21 @@ abstract class GlobalOptimizer extends BaseOptimizer {
         program.clear();
         super.flush();
     }
-    
-    protected abstract void optimizeProgram();
+
+    /**
+     * Performs one iteration of the optimization. Return true to run another iteration, false when done.
+     * @return true to re-run the optimization
+     */
+    protected abstract boolean optimizeProgram();
 
     protected void generateFinalMessages() {
         if (emitted != original) {
-            emitMessage("%6d instructions eliminated by %s.", original - emitted, getClass().getSimpleName());
+            if (iterations > 1) {
+                emitMessage("%6d instructions eliminated by %s (%d iterations).", original - emitted,
+                        getClass().getSimpleName(), iterations - 1);
+            } else {
+                emitMessage("%6d instructions eliminated by %s.", original - emitted, getClass().getSimpleName());
+            }
         }
     }
 

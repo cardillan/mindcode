@@ -47,6 +47,8 @@ public class CompileMain {
                 profile.setPrintParseTree(true);
             } else if (arg.startsWith("-o")) {
                 selectOptimisation(profile, arg.substring(2));
+            } else if (arg.startsWith("-d")) {
+                selectDebugLevel(profile, arg.substring(2));
             } else if (arg.startsWith("-")) {
                 showHelp(2);
             } else {
@@ -107,14 +109,31 @@ public class CompileMain {
         profile.setOptimisations(negate ? EnumSet.complementOf(result) : result);
     }
     
+    static private void selectDebugLevel(CompileProfile profile, String option) {
+        switch(option) {
+            case "0": profile.setDebugLevel(0); break;
+            case "1": profile.setDebugLevel(1); break;
+            case "2": profile.setDebugLevel(2); break;
+            case "3": profile.setDebugLevel(3); break;
+            default: showHelp(2);
+        }
+    }
+
     static private final String[] HELP = new String[] {
-        "Usage: mindcode.bat [-p] [-oflags] [input file] [output file] [log file]",
+        "Usage: mindcode.bat [-p] [-dLevel] [-oFlags] [input file] [output file] [log file]",
             "  when input file is not given, input is read from stdin",
             "  when output file is not given, output is written to stdout",
             "  when log file is not given, messages are written to stderr",
             "",
             "-p: prints parse tree into log file",
-            "-oflags: specifies which optimisers to use.",
+            "",
+            "-dLevel: controls output of debug messages. Possible level values:",
+            "  0: no debug output",
+            "  1: output modifications made by all optimizers",
+            "  2: output modifications made by individual optimizers",
+            "  3: output modifications made by individual optimizers and iterations",
+            "",
+            "-oFlags: specifies which optimisers to use.",
             "  When no flags are given (-o), all optimisers are active",
             "  otherwise -o is followed by characters representing desired optimisers.",
             "",

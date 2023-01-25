@@ -24,6 +24,7 @@ abstract class PipelinedOptimizer extends BaseOptimizer {
 
     @Override
     protected void emitToNext(LogicInstruction instruction) {
+        debugPrinter.instructionEmmited(this, instruction);
         emitted++;
         super.emitToNext(instruction);
     }

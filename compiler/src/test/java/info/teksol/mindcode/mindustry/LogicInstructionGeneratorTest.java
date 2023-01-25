@@ -1,14 +1,11 @@
 package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.mindustry.optimisation.Optimisation;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static info.teksol.mindcode.mindustry.Opcode.*;
-
-import info.teksol.mindcode.mindustry.optimisation.Optimisation;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {

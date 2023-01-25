@@ -28,10 +28,9 @@ class DeadCodeEliminator extends GlobalOptimizer {
     }
 
     @Override
-    protected void optimizeProgram() {
-        do {
-            analyzeDataflow();
-        } while (removeUselessWrites());
+    protected boolean optimizeProgram() {
+        analyzeDataflow();
+        return removeUselessWrites();
     }
 
     @Override

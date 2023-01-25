@@ -26,10 +26,9 @@ class InaccesibleCodeEliminator extends GlobalOptimizer {
     }
 
     @Override
-    protected void optimizeProgram() {
-        do {
-            findActiveLabels();
-        } while (removeInaccessibleInstructions());
+    protected boolean optimizeProgram() {
+        findActiveLabels();
+        return removeInaccessibleInstructions();
     }
     
     private void findActiveLabels() {
