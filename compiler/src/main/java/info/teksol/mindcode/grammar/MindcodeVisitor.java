@@ -414,6 +414,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAlternative(MindcodeParser.AlternativeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#when_value_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhen_value_list(MindcodeParser.When_value_listContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code simple_assign}
 	 * labeled alternative in {@link MindcodeParser#assign}.
 	 * @param ctx the parse tree

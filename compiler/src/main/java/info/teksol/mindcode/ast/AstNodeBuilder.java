@@ -552,7 +552,32 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitAlternative(MindcodeParser.AlternativeContext ctx) {
-        return new CaseAlternative(visit(ctx.value), ctx.body == null ? new Seq(new NoOp()) : visit(ctx.body));
+        final List<AstNode> values = new ArrayList<>();
+
+        if (ctx.values != null) {
+            final AstNode nodes;
+            if (ctx.values.when_value_list() != null) {
+                nodes = visit(ctx.values.when_value_list());
+            } else {
+                nodes = new NoOp();
+            }
+
+            gatherAlternativeValues(new Seq(nodes, visit(ctx.values.expression())), values);
+        }
+
+        return new CaseAlternative(values, ctx.body == null ? new Seq(new NoOp()) : visit(ctx.body));
+    }
+
+    private void gatherAlternativeValues(AstNode arg, List<AstNode> accumulator) {
+        if (arg instanceof Seq) {
+            final Seq seq = (Seq) arg;
+            gatherArgs(seq.getRest(), accumulator);
+            gatherArgs(seq.getLast(), accumulator);
+        } else if (arg instanceof NoOp) {
+            // ignore
+        } else {
+            accumulator.add(arg);
+        }
     }
 
     @Override
@@ -604,6 +629,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             return new Seq(visit(ctx.arg_list()), visit(ctx.arg()));
         } else {
             final AstNode last = visit(ctx.arg());
+            return new Seq(last);
+        }
+    }
+
+    @Override
+    public AstNode visitWhen_value_list(MindcodeParser.When_value_listContext ctx) {
+        if (ctx.when_value_list()!= null) {
+            return new Seq(visit(ctx.when_value_list()), visit(ctx.expression()));
+        } else {
+            final AstNode last = visit(ctx.expression());
             return new Seq(last);
         }
     }

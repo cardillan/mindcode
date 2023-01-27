@@ -1,18 +1,24 @@
 package info.teksol.mindcode.ast;
 
+import java.util.List;
 import java.util.Objects;
 
 public class CaseAlternative implements AstNode {
-    private final AstNode value;
+    private final List<AstNode> values;
     private final AstNode body;
 
     CaseAlternative(AstNode value, AstNode body) {
-        this.value = value;
+        this.values = List.of(value);
         this.body = body;
     }
 
-    public AstNode getValue() {
-        return value;
+    CaseAlternative(List<AstNode> values, AstNode body) {
+        this.values = values;
+        this.body = body;
+    }
+
+    public List<AstNode> getValues() {
+        return values;
     }
 
     public AstNode getBody() {
@@ -24,19 +30,19 @@ public class CaseAlternative implements AstNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CaseAlternative that = (CaseAlternative) o;
-        return Objects.equals(value, that.value) &&
+        return Objects.equals(values, that.values) &&
                 Objects.equals(body, that.body);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, body);
+        return Objects.hash(values, body);
     }
 
     @Override
     public String toString() {
         return "CaseAlternative{" +
-                "value=" + value +
+                "values=" + values +
                 ", body=" + body +
                 '}';
     }

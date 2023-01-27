@@ -38,7 +38,7 @@ expression : MINUS numeric_t                                                    
            | left=expression AND right=expression                                               # binop_and
            | left=expression OR right=expression                                                # binop_or
            | <assoc=right> cond=expression QUESTION_MARK
-								(true_branch=expression COLON false_branch=expression)          # ternary_op
+                                (true_branch=expression COLON false_branch=expression)          # ternary_op
            | assign                                                                             # assignment
            | literal_t                                                                          # literal_string
            | numeric_t                                                                          # literal_numeric
@@ -125,7 +125,11 @@ alternative_list : alternative
                  | alternative_list alternative
                  ;
 
-alternative : WHEN value=expression body=expression_list?;
+alternative : WHEN values=when_value_list body=expression_list?;
+
+when_value_list : expression
+                | when_value_list COMMA expression
+                ;
 
 assign : <assoc=right> target=lvalue ASSIGN value=expression                             # simple_assign
        | <assoc=right> target=lvalue EXP_ASSIGN value=expression                         # exp_assign

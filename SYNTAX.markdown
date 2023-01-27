@@ -260,21 +260,21 @@ This is the exact same conditional expression as the first if statement above, e
 
 ## Case/When Expressions
 
-Case/when is another way of writing conditionals. Use case/when when you need to test a value against multiple different
-alternatives:
+Case/when is another way of writing conditionals. Use case/when when you need to test a value against multiple different alternatives:
 
 ```
 next_action = case num_enemies
-when 0
-  "chill"
-when 1
-  "alert"
-when 2
-  "vigilant"
-else
-  "nuke-the-place"
+  when 0
+    "chill"
+  when 1, 2
+    "alert"
+  when 3, 4, 5
+    "vigilant"
+  else
+    "nuke-the-place"
 end
 ```
+Multiple comma-separated alternatives can be listed after each `when` keyword. If several `when` branches list the same value, the behavior is undefined.
 
 ## Comparison Operators
 

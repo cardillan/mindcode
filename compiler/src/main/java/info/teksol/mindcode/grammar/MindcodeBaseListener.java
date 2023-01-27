@@ -748,6 +748,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterWhen_value_list(MindcodeParser.When_value_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhen_value_list(MindcodeParser.When_value_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSimple_assign(MindcodeParser.Simple_assignContext ctx) { }
 	/**
 	 * {@inheritDoc}

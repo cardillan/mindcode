@@ -827,10 +827,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String caseValue = visit(node.getCondition());
         for (final CaseAlternative alternative : node.getAlternatives()) {
             final String nextCond = nextLabel();
-
-            final String whenValue = visit(alternative.getValue());
+            final int whenValues = alternative.getValues().size();
+            final String bodyLabel = whenValues > 1 ? nextLabel() : null;
+            for (int i = 0; i < whenValues - 1; i++) {
+                final String whenValue = visit(alternative.getValues().get(i));
+                pipeline.emit(new LogicInstruction(JUMP, bodyLabel, "equal", caseValue, whenValue));
+            }
+            final String whenValue = visit(alternative.getValues().get(whenValues - 1));
             pipeline.emit(new LogicInstruction(JUMP, nextCond, "notEqual", caseValue, whenValue));
-
+            if (whenValues > 1) {
+                pipeline.emit(new LogicInstruction(LABEL, bodyLabel));
+            }
             final String body = visit(alternative.getBody());
             pipeline.emit(new LogicInstruction(SET, resultVar, body));
             pipeline.emit(new LogicInstruction(JUMP, exitLabel, "always"));

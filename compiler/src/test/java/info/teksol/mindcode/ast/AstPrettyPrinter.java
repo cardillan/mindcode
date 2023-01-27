@@ -173,17 +173,15 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         buffer.append("case ");
         visit(node.getCondition());
         buffer.append("\n");
-        for (int i = 0; i < node.getAlternatives().size() - 1; i++) {
+        for (int i = 0; i < node.getAlternatives().size(); i++) {
             buffer.append("when ");
-            visit(node.getAlternatives().get(i).getValue());
+            visit(node.getAlternatives().get(i).getValues().get(0));
+            for (int j = 1; j < node.getAlternatives().get(i).getValues().size(); j++) {
+                buffer.append(", ");
+                visit(node.getAlternatives().get(i).getValues().get(j));
+            }
             buffer.append("\n");
             visit(node.getAlternatives().get(i).getBody());
-        }
-        if (!node.getAlternatives().isEmpty()) {
-            buffer.append("when ");
-            visit(node.getAlternatives().get(node.getAlternatives().size() - 1).getValue());
-            buffer.append("\n");
-            visit(node.getAlternatives().get(node.getAlternatives().size() - 1).getBody());
         }
         buffer.append("else\n");
         visit(node.getElseBranch());

@@ -517,6 +517,50 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void generatesCaseWhenMultiple() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(SET, var(100), "n"),
+
+                        // First alternative
+                        new LogicInstruction(SET, var(1), "1"),
+                        new LogicInstruction(JUMP, var(1002), "equal", var(100), var(1)),
+                        new LogicInstruction(SET, var(2), "2"),
+                        new LogicInstruction(JUMP, var(1002), "equal", var(100), var(2)),
+                        new LogicInstruction(SET, var(3), "3"),
+                        new LogicInstruction(JUMP, var(1001), "notEqual", var(100), var(3)),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(SET, var(4), "\"Few\""),
+                        new LogicInstruction(SET, var(0), var(4)),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+
+                        // Second alternative
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(SET, var(5), "4"),
+                        new LogicInstruction(JUMP, var(1004), "equal", var(100), var(5)),
+                        new LogicInstruction(SET, var(6), "5"),
+                        new LogicInstruction(JUMP, var(1004), "equal", var(100), var(6)),
+                        new LogicInstruction(SET, var(7), "6"),
+                        new LogicInstruction(JUMP, var(1003), "notEqual", var(100), var(7)),
+                        new LogicInstruction(LABEL, var(1004)),
+                        new LogicInstruction(SET, var(8), "\"Several\""),
+                        new LogicInstruction(SET, var(0), var(8)),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+
+                        /// Else branch
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(SET, var(9), "\"Many\""),
+                        new LogicInstruction(SET, var(0), var(9)),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("case n\nwhen 1, 2, 3\n\"Few\"\nwhen 4,5,6\n\"Several\"\nelse\n\"Many\"end\n")
+                )
+        );
+    }
+
+    @Test
     void generatesDrawings() {
         assertLogicInstructionsMatch(
                 List.of(
