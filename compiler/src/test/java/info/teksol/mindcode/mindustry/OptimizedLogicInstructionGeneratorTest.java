@@ -166,7 +166,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(OP, "lessThan", var(3), "silicon", "capacity"),
                         new LogicInstruction(OP, "lessThan", var(4), "graphite", "capacity"),
                         new LogicInstruction(OP, "or", var(5), var(3), var(4)),
-                        new LogicInstruction(OP, "not", var(6), var(5)),
+                        new LogicInstruction(OP, "equal", var(6), var(5), "false"),
                         new LogicInstruction(CONTROL, "enabled", "conveyor1", var(6)),
                         new LogicInstruction(END)
                 ),
@@ -359,7 +359,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         final List<LogicInstruction> result = LogicInstructionGenerator.generateAndOptimize(
                 (Seq) translateToAst("" +
                         "TestVar = 0xf\n" +
-                        "Result = !TestVar\n" +
+                        "Result = ~TestVar\n" +
                         "print(TestVar, \"\\n\", Result)\n"
                 )
         );

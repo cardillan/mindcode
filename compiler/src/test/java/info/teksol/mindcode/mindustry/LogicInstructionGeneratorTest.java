@@ -52,12 +52,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void convertsNullAndUnaryOp() {
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(OP, "not", var(0), "n"),
-                        new LogicInstruction(SET, "n", var(0)),
+                        new LogicInstruction(OP, "not", var(0), "a"),
+                        new LogicInstruction(SET, "a", var(0)),
+                        new LogicInstruction(OP, "equal", var(1), "b", "false"),
+                        new LogicInstruction(SET, "b", var(1)),
+                        new LogicInstruction(OP, "equal", var(2), "c", "false"),
+                        new LogicInstruction(SET, "c", var(2)),
                         new LogicInstruction(SET, "x", "null"),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("n = not n\nx = null"))
+                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("a = ~a\nb = !b\nc = not c\nx = null"))
         );
     }
 

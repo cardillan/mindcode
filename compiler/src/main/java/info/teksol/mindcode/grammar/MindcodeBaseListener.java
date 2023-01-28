@@ -100,6 +100,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBitwise_not_expr(MindcodeParser.Bitwise_not_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBitwise_not_expr(MindcodeParser.Bitwise_not_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterProperty_access(MindcodeParser.Property_accessContext ctx) { }
 	/**
 	 * {@inheritDoc}

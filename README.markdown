@@ -15,6 +15,11 @@ the "Edit" button in the Logic UI. Select "Import from Clipboard". Mindustry is 
 the lookout for "invalid" nodes in the Logic, and if you can, please report them so that Mindcode can be improved for
 everyone.
 
+### Recent changes of `not` and `!` operators
+
+Recently, the meaning of `not` and `!` operators  was changed from **bitwise negation** to **boolean negation**. 
+Bitwise negation can be performed using the new `~` operator.
+
 ## Mindcode Syntax
 
 Please read the [syntax](https://github.com/francois/mindcode/blob/main/SYNTAX.markdown) document for the high-level

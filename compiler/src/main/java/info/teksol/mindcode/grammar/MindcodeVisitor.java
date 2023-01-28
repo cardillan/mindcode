@@ -58,6 +58,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnary_minus(MindcodeParser.Unary_minusContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code bitwise_not_expr}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBitwise_not_expr(MindcodeParser.Bitwise_not_exprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code property_access}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

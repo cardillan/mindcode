@@ -88,6 +88,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitUnary_minus(MindcodeParser.Unary_minusContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code bitwise_not_expr}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterBitwise_not_expr(MindcodeParser.Bitwise_not_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code bitwise_not_expr}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitBitwise_not_expr(MindcodeParser.Bitwise_not_exprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code property_access}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

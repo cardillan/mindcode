@@ -133,7 +133,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesUnaryOperation() {
         assertEquals(
                 new Seq(
-                        new UnaryOp("not", new VarRef("ready"))
+                        new BinaryOp(new VarRef("ready"), "==", new BooleanLiteral(false))
                 ),
                 translateToAst("not ready")
         );
@@ -179,7 +179,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesComplexConditionalExpression() {
         assertEquals(
                 new Seq(
-                        new UnaryOp("not",
+                        new BinaryOp(
                                 new BinaryOp(
                                         new BinaryOp(
                                                 new VarRef("a"),
@@ -200,7 +200,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                         new NumericLiteral("5")
                                                 )
                                         )
-                                )
+                                ),
+                                "==",
+                                new BooleanLiteral(false)
                         )
                 ),
                 translateToAst("not (a < b and c > (4 * r > 5))")

@@ -24,6 +24,7 @@ expression : indirectpropaccess                                                 
            | for_expression                                                                     # for_loop
            | left=expression op=EXP right=expression                                            # binop_exp
            | NOT expression                                                                     # not_expr
+           | BITWISE_NOT expression                                                             # bitwise_not_expr
            | left=expression op=( MUL | DIV | IDIV | MOD ) right=expression                     # binop_mul_div_mod
            | left=expression op=( PLUS | MINUS ) right=expression                               # binop_plus_minus
            | left=expression op=( SHIFT_LEFT | SHIFT_RIGHT ) right=expression                   # binop_shift
@@ -190,6 +191,7 @@ MINUS : '-';
 MOD : '%';
 MUL : '*';
 NOT : '!' | 'not';
+BITWISE_NOT : '~';
 PLUS : '+';
 QUESTION_MARK : '?';
 SEMICOLON : ';';
