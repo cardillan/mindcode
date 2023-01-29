@@ -1225,10 +1225,10 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new Seq(
                                                 new IfExpression(
                                                         new VarRef("b"),
-                                                        new Seq(new ContinueStatement()),
+                                                        new Seq(new ContinueStatement(null)),
                                                         new IfExpression(
                                                                 new VarRef("c"),
-                                                                new Seq(new BreakStatement()),
+                                                                new Seq(new BreakStatement(null)),
                                                                 new NoOp()
                                                         )
                                                 )

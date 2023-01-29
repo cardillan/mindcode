@@ -1884,4 +1884,49 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void correctlyHandlesBreakAndContinueWithLabel() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(JUMP, var(1002), "equal", "a", "false"),
+                        new LogicInstruction(PRINT, "\"In outer\""),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(JUMP, var(1005), "equal", "b", "false"),
+                        new LogicInstruction(PRINT, "\"In inner\""),
+                        new LogicInstruction(JUMP, var(1002), "always"),        // break loop Outer
+                        new LogicInstruction(PRINT, "\"After break\""),
+                        new LogicInstruction(JUMP, var(1004), "always"),        // continue loop Inner
+                        new LogicInstruction(LABEL, var(1004)),
+                        new LogicInstruction(JUMP, var(1003), "always"),
+                        new LogicInstruction(LABEL, var(1005)),
+                        new LogicInstruction(PRINT, "\"After inner\""),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(JUMP, var(1000), "always"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(PRINT, "\"After outer\""),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateAndOptimize(
+                        (Seq) translateToAst("" +
+                                "Outer:\n" +
+                                "while a\n" +
+                                "  print(\"In outer\")\n" +
+                                "  Inner:\n" +
+                                "  while b\n" +
+                                "    print(\"In inner\")\n" +
+                                "    break Outer\n" +
+                                "    print(\"After break\")\n" +
+                                "    continue Inner\n" +
+                                "  end\n" +
+                                "  print(\"After inner\")\n" +
+                                "end\n" +
+                                "print(\"After outer\")"
+                        ),
+                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        message -> {}
+                )
+        );
+    }
 }

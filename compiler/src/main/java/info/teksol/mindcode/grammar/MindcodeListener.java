@@ -760,6 +760,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitLvalue(MindcodeParser.LvalueContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#loop_label}.
+	 * @param ctx the parse tree
+	 */
+	void enterLoop_label(MindcodeParser.Loop_labelContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#loop_label}.
+	 * @param ctx the parse tree
+	 */
+	void exitLoop_label(MindcodeParser.Loop_labelContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#heap_ref}.
 	 * @param ctx the parse tree
 	 */

@@ -41,8 +41,8 @@ def delay(n, fps)
 end
 ```
 
-This function will prevent the caller from proceeding until the right number of frames have passed. Calling your own
-functions is done in the same way as any other function:
+This function will prevent the caller from proceeding until the right number of frames have passed.
+Calling your own functions is done in the same way as any other function:
 
 ```
 delay(1, 60) // stops execution for 1 second, if your framerate is 60 fps
@@ -190,7 +190,8 @@ end
 
 ## Break and continue
 
-You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop, `continue` skips the rest of the current iteration):
+You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop,
+`continue` skips the rest of the current iteration):
 
 ```
 while not within(x, y, 6)
@@ -201,6 +202,51 @@ while not within(x, y, 6)
   ...
 end
 ```
+
+### Using labels with break or continue
+
+An unlabeled `break` statement exits the innermost `for` or `while` statement, however a labeled `break` can exit from an outer statement.
+It is necessary to mark the outer statement with a label, and then use the `break loop <label>` syntax, as shown here:
+
+```
+MainLoop:
+for i in 1 .. 10
+  for j in 5 .. 20
+    if i > j
+      break MainLoop
+    end
+  end
+end
+```
+Similarly, `continue MainLoop` skips the rest of the current iteration of the main loop. Every loop in Mindcode can be marked with a label,
+and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
+
+
+Note: usually, a `break` or `continue` statement will be the last statements in a block of code (typically in an `if` statement).
+It doesn't make sense to put additional statements or expressions after a `break` or `continue`, since that code would never get executed
+and will be removed by the optimizer. If you do put additional statements there, the compiler will mistake them for a label:
+
+```
+while true
+  break
+  print("This never gets printed")
+end
+```
+
+The compiler will say:
+> 
+> Undefined label print
+> 
+
+If you insist on putting additional statement after a `break` or `continue`, use semicolon to separate the two statements:
+
+```
+while true
+  break;
+  print("This never gets printed")
+end
+```
+
 
 # Conditionals
 

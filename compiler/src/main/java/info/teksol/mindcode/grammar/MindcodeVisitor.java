@@ -454,6 +454,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLvalue(MindcodeParser.LvalueContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#loop_label}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLoop_label(MindcodeParser.Loop_labelContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#heap_ref}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

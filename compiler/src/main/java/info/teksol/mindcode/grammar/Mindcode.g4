@@ -75,19 +75,20 @@ arg_decl_list : lvalue
               | arg_decl_list COMMA lvalue
               ;
 
-while_expression : WHILE cond=expression loop_body END;
+while_expression : ( label=loop_label COLON )? WHILE cond=expression loop_body END;
 
-for_expression : FOR lvalue IN range loop_body END                                                          # ranged_for
-               | FOR init=init_list SEMICOLON cond=expression SEMICOLON increment=incr_list loop_body END   # iterated_for
+for_expression : ( label=loop_label COLON )? FOR lvalue IN range loop_body END                  # ranged_for
+               | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
+                                             SEMICOLON increment=incr_list loop_body END        # iterated_for
                ;
 
 loop_body : loop_body expression_list
           | expression_list
           ;
 
-continue_st : CONTINUE;
+continue_st : CONTINUE ( label=loop_label )? ;
 
-break_st : BREAK;
+break_st : BREAK ( label=loop_label )? ;
 
 range : start=int_t DOT DOT end=int_t     # inclusive_range
       | start=int_t DOT DOT DOT end=int_t # exclusive_range
@@ -144,6 +145,8 @@ lvalue : unit_ref
        | propaccess
        ;
 
+loop_label : ID;
+
 heap_ref : name=id LEFT_SBRACKET address=expression RIGHT_SBRACKET;
 global_ref : DOLLAR name=id;
 unit_ref : AT ref;
@@ -177,6 +180,7 @@ FOR : 'for';
 HEAP : 'heap';
 IF : 'if';
 IN : 'in';
+LOOP : 'loop';
 NULL : 'null';
 SENSOR : 'sensor';
 STACK : 'stack';

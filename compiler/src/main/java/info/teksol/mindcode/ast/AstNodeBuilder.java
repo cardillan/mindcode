@@ -76,12 +76,14 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBreak_exp(MindcodeParser.Break_expContext ctx) {
-        return new BreakStatement();
+        String label = ctx.break_st().label == null ? null : ctx.break_st().label.getText();
+        return new BreakStatement(label);
     }
 
     @Override
     public AstNode visitContinue_exp(MindcodeParser.Continue_expContext ctx) {
-        return new ContinueStatement();
+        String label = ctx.continue_st().label == null ? null : ctx.continue_st().label.getText();
+        return new ContinueStatement(label);
     }
 
     @Override
@@ -384,6 +386,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitRanged_for(MindcodeParser.Ranged_forContext ctx) {
+        String label = ctx.label == null ? null : ctx.label.getText();
         final Range range = (Range) visit(ctx.range());
         final AstNode var = visit(ctx.lvalue());
         return new Seq(
@@ -392,6 +395,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                         range.getFirstValue()
                 ),
                 new WhileExpression(
+                        label,
                         new BinaryOp(
                                 var,
                                 range instanceof InclusiveRange ? "<=" : "<",
@@ -412,9 +416,11 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitIterated_for(MindcodeParser.Iterated_forContext ctx) {
+        String label = ctx.label == null ? null : ctx.label.getText();
         return new Seq(
                 visit(ctx.init),
                 new WhileExpression(
+                        label,
                         visit(ctx.cond),
                         visit(ctx.loop_body()),
                         visit(ctx.increment)
@@ -444,7 +450,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitWhile_expression(MindcodeParser.While_expressionContext ctx) {
-        return new WhileExpression(visit(ctx.cond), visit(ctx.loop_body()), new NoOp());
+        String label = ctx.label == null ? null : ctx.label.getText();
+        return new WhileExpression(label, visit(ctx.cond), visit(ctx.loop_body()), new NoOp());
     }
 
     @Override

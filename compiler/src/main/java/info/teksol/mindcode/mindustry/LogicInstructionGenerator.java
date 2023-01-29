@@ -26,8 +26,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private StackAllocation allocatedStack;
     private final Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
     private final Map<String, String> functionLabels = new HashMap<>();
-    private final Deque<String> breakStack = new ArrayDeque<>();
-    private final Deque<String> continueStack = new ArrayDeque<>();
+    private final LoopStack loopStack = new LoopStack();
 
     LogicInstructionGenerator(LogicInstructionPipeline pipeline) {
         this.pipeline = pipeline;
@@ -180,8 +179,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String continueLabel = nextLabel();
         final String doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
-        continueStack.push(continueLabel);
-        breakStack.push(doneLabel);
+        loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
         pipeline.emit(new LogicInstruction(LABEL, List.of(beginLabel)));
         final String cond = visit(node.getCondition());
         pipeline.emit(new LogicInstruction(JUMP, List.of(doneLabel, "equal", cond, "false")));
@@ -190,8 +188,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         visit(node.getUpdate());
         pipeline.emit(new LogicInstruction(JUMP, List.of(beginLabel, "always")));
         pipeline.emit(new LogicInstruction(LABEL, List.of(doneLabel)));
-        continueStack.pop();
-        breakStack.pop();
+        loopStack.exitLoop(node.getLabel());
         return "null";
     }
 
@@ -882,20 +879,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitBreakStatement(BreakStatement node) {
-        String label = breakStack.peek();
-        if (label == null) {
-            throw new GenerationException("Break statement outside of a while/for statement.");
-        }
+        final String label = loopStack.getBreakLabel(node.getLabel());
         pipeline.emit(new LogicInstruction(JUMP, label, "always"));
         return "null";
     }
 
     @Override
     public String visitContinueStatement(ContinueStatement node) {
-        String label = continueStack.peek();
-        if (label == null) {
-            throw new GenerationException("Continue statement outside of a while/for statement.");
-        }
+        final String label = loopStack.getContinueLabel(node.getLabel());
         pipeline.emit(new LogicInstruction(JUMP, label, "always"));
         return "null";
     }
