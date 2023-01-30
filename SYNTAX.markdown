@@ -128,8 +128,8 @@ cyclone2.shoot(lx, ly, ls)
 
 # Loops
 
-You have access to 3 styles of loops: [while loops](#while-loops), [range iteration loops](#range-iteration-loops), and
-[C-style loops](#c-style-loops).
+You have access to several styles of loops: [while loops](#while-loops), [do-while loops](#do-while-loops),
+[range iteration loops](#range-iteration-loops), and [C-style loops](#c-style-loops).
 
 ## While Loops
 
@@ -140,6 +140,20 @@ while @unit === null
   ubind(@poly)
 end
 ```
+
+## Do-While Loops
+
+Similar to while loops, except the condition is placed at the end of the loop. Do-while loops therefore always execute at least once:
+
+```
+n = @links
+do
+  n -= 1
+  block = getlink(n)
+  print(block)
+loop while n > 0
+```
+
 
 ## Range Iteration Loops
 
@@ -320,7 +334,7 @@ next_action = case num_enemies
     "nuke-the-place"
 end
 ```
-Multiple comma-separated alternatives can be listed after each `when` keyword. If several `when` branches list the same value, the behavior is undefined.
+Multiple comma-separated alternatives can be listed after each `when` keyword. If several `when` branches match the same value, the behavior is undefined.
 
 ## Comparison Operators
 
@@ -328,10 +342,9 @@ Mindustry Logic offers us many comparison operators, namely:
 
 * the classic `<`, `<=`, `>=`, and `>` operators, for comparing numeric values
 * `==` and `!=` for equal and not equal, respectively
-* `&&`, `and`, `||`, and `or`, to implement complex conditionals: `reactor1.thorium > 0 and (reactor1.cryofluid /
-  reactor1.liquidCapacity) < 0.25`
+* `&&`, `and`, `||`, and `or`, to implement complex conditionals: `reactor1.thorium > 0 and (reactor1.cryofluid / reactor1.liquidCapacity) < 0.25`
 * `!` and `not` for negating boolean expressions
-* `===` and `!==` for "strict equality" and "strict non-equality". When using the non-strict comparison in Mindustry -- `==` or `!=`, the value `0` is equal to `false` and `null`. By using `===` or `!==`, you  force Mindustry Logic to check for the exact value, instead of type-casting the value before checking if the values are equal. This is very useful for checks where the distinction between `0` and `null` is important, such as:
+* `===` for "strict equality". When using the non-strict comparison in Mindustry -- `==` or `!=`, the value `0` is equal to `false` and `null`. By using `===`, you  force Mindustry Logic to check for the exact value, instead of type-casting the value before checking if the values are equal. This is very useful for checks where the distinction between `0` and `null` is important, such as:
 * 
 ```
 // Bind new units until a living one is found
@@ -346,6 +359,8 @@ end
 * `1` if the unit is dead.
 
 Using `===` allows us to distinguish the `null` and `0` values, ie. the cases where no unit is bound and where a unit is bound and not dead.
+
+While Mindustry Logic doesn't support a strict non-equality operator, Mindcode provides `!==`. It's realized as a negation of `===` behind the scenes.
 
 # Global variables
 

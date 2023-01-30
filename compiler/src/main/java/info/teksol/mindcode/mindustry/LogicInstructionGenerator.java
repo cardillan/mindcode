@@ -193,6 +193,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitDoWhileStatement(DoWhileExpression node) {
+        final String beginLabel = nextLabel();
+        final String continueLabel = nextLabel();
+        final String doneLabel = nextLabel();
+        // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
+        loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        pipeline.emit(new LogicInstruction(LABEL, beginLabel));
+        visit(node.getBody());
+        pipeline.emit(new LogicInstruction(LABEL, continueLabel));
+        final String cond = visit(node.getCondition());
+        pipeline.emit(new LogicInstruction(JUMP, beginLabel, "notEqual", cond, "false"));
+        pipeline.emit(new LogicInstruction(LABEL, doneLabel));
+        loopStack.exitLoop(node.getLabel());
+        return "null";
+    }
+
+    @Override
     public String visitFunctionCall(FunctionCall node) {
         final List<String> params = node.getParams().stream().map(this::visit).collect(Collectors.toList());
         return handleFunctionCall(node.getFunctionName(), params);

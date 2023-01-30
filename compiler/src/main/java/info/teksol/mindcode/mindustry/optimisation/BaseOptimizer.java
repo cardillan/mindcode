@@ -49,8 +49,12 @@ abstract class BaseOptimizer implements Optimizer {
         }
     }
 
-    void setMessagesRecipient(Consumer<String> messagesRecipient) {
+    @Override
+    public void setMessagesRecipient(Consumer<String> messagesRecipient) {
         this.messagesRecipient = messagesRecipient;
+        if (next instanceof Optimizer) {
+            ((Optimizer)next).setMessagesRecipient(messagesRecipient);
+        }
     }
 
     protected void emitMessage(String fornat, Object... args) {

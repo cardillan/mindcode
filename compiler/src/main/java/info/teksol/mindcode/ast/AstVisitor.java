@@ -11,6 +11,8 @@ public interface AstVisitor<T> {
 
     T visitControl(Control node);
 
+    T visitDoWhileStatement(DoWhileExpression node);
+
     T visitWhileStatement(WhileExpression node);
 
     T visitVarRef(VarRef node);

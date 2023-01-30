@@ -455,6 +455,12 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitDo_while_expression(MindcodeParser.Do_while_expressionContext ctx) {
+        String label = ctx.label == null ? null : ctx.label.getText();
+        return new DoWhileExpression(label, visit(ctx.loop_body()), visit(ctx.cond));
+    }
+
+    @Override
     public AstNode visitLiteral_null(MindcodeParser.Literal_nullContext ctx) {
         return new NullLiteral();
     }

@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.mindustry.Opcode.*;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,6 +22,7 @@ public class DiffDebugPrinterTest {
         }
 
         @Override public void setDebugPrinter(DebugPrinter debugPrinter) { }
+        @Override public void setMessagesRecipient(Consumer<String> messagesRecipient) { }
         @Override public void emit(LogicInstruction instruction) { }
         @Override public void flush() { }
     };

@@ -149,7 +149,12 @@ public enum Optimisation {
 
         @Override
         public void setDebugPrinter(DebugPrinter debugPrinter) {
-            // Do nothing - our debugPrinter is immutable
+            // Do nothing - debugPrinter is set in constructor
+        }
+
+        @Override
+        public void setMessagesRecipient(Consumer<String> messagesRecipient) {
+            // Do nothing - messageRecipient is set in constructor
         }
     }
 }

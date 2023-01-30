@@ -232,6 +232,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitFunction_declaration(MindcodeParser.Function_declarationContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code do_while_loop}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterDo_while_loop(MindcodeParser.Do_while_loopContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code do_while_loop}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitDo_while_loop(MindcodeParser.Do_while_loopContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code allocation}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -513,6 +525,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitWhile_expression(MindcodeParser.While_expressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#do_while_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterDo_while_expression(MindcodeParser.Do_while_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#do_while_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitDo_while_expression(MindcodeParser.Do_while_expressionContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code ranged_for}
 	 * labeled alternative in {@link MindcodeParser#for_expression}.

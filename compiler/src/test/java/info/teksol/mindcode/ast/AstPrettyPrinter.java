@@ -66,11 +66,21 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitWhileStatement(WhileExpression node) {
-        buffer.append(" while ");
+        buffer.append("while ");
         visit(node.getCondition());
         buffer.append("\n");
         visit(node.getBody());
         buffer.append("end\n");
+        return null;
+    }
+
+    @Override
+    public String visitDoWhileStatement(DoWhileExpression node) {
+        buffer.append("do \n");
+        visit(node.getBody());
+        buffer.append("\nloop while ");
+        visit(node.getCondition());
+        buffer.append("\n");
         return null;
     }
 

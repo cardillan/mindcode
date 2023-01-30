@@ -1929,4 +1929,95 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void generatesDoWhileLoop() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(SET, var(0), "\"Blocks:\""),
+                        new LogicInstruction(PRINT, var(0)),
+                        new LogicInstruction(SET, "n", "@links"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, var(1), "1"),
+                        new LogicInstruction(OP, "sub", var(2), "n", var(1)),
+                        new LogicInstruction(SET, "n", var(2)),
+                        new LogicInstruction(GETLINK, var(3), "n"),
+                        new LogicInstruction(SET, "block", var(3)),
+                        new LogicInstruction(SET, var(4), "\"\\n\""),
+                        new LogicInstruction(PRINT, var(4)),
+                        new LogicInstruction(PRINT, "block"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(SET, var(5), "0"),
+                        new LogicInstruction(OP, "greaterThan", var(6), "n", var(5)),
+                        new LogicInstruction(JUMP, var(1000), "notEqual", var(6), "false"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(PRINTFLUSH, "message1"),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("" +
+                                "print(\"Blocks:\")\n" +
+                                "n = @links\n" +
+                                "do\n" +
+                                "  n -= 1\n" +
+                                "  block = getlink(n)\n" +
+                                "  print(\"\\n\", block)\n" +
+                                "loop while n > 0\n" +
+                                "printflush(message1)\n"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void generatesDoWhileLoopWithBreakAndContinue() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(PRINT, "\"Blocks:\""),
+                        new LogicInstruction(SET, "n", "@links"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(OP, "sub", var(2), "n", "1"),
+                        new LogicInstruction(SET, "n", var(2)),
+                        new LogicInstruction(GETLINK, var(3), "n"),
+                        new LogicInstruction(SET, "block", var(3)),
+                        new LogicInstruction(SENSOR, var(4), "block", "@type"),
+                        new LogicInstruction(JUMP, var(1001), "equal", var(4), "@sorter"),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(LABEL, var(1004)),
+                        new LogicInstruction(PRINT, "\"\\n\""),
+                        new LogicInstruction(PRINT, "block"),
+                        new LogicInstruction(SENSOR, var(8), "block", "@type"),
+                        new LogicInstruction(JUMP, var(1002), "equal", var(8), "@unloader"),
+                        new LogicInstruction(LABEL, var(1005)),
+                        new LogicInstruction(LABEL, var(1006)),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(JUMP, var(1000), "greaterThan", "n", "0"),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(PRINTFLUSH, "message1"),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateAndOptimize(
+                        (Seq) translateToAst("" +
+                                "print(\"Blocks:\")\n" +
+                                "n = @links\n" +
+                                "MainLoop:\n" +
+                                "do\n" +
+                                "  n = n - 1\n" +
+                                "  block = getlink(n)\n" +
+                                "  if block.type == @sorter\n" +
+                                "    continue MainLoop\n" +
+                                "  end\n" +
+                                "  print(\"\\n\", block)\n" +
+                                "  if block.type == @unloader\n" +
+                                "    break MainLoop\n" +
+                                "  end\n" +
+                                "loop while n > 0\n" +
+                                "printflush(message1)"
+                        ),
+                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
+                                Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.JUMP_OVER_JUMP_ELIMINATION),
+                        message -> {}
+                )
+        );
+    }
 }

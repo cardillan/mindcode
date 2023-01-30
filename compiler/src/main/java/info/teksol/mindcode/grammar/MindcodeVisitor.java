@@ -142,6 +142,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunction_declaration(MindcodeParser.Function_declarationContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code do_while_loop}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDo_while_loop(MindcodeParser.Do_while_loopContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code allocation}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -307,6 +314,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitWhile_expression(MindcodeParser.While_expressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#do_while_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDo_while_expression(MindcodeParser.Do_while_expressionContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code ranged_for}
 	 * labeled alternative in {@link MindcodeParser#for_expression}.

@@ -20,6 +20,7 @@ expression : MINUS numeric_t                                                    
            | alloc                                                                              # allocation
            | lvalue                                                                             # value
            | while_expression                                                                   # while_loop
+           | do_while_expression                                                                # do_while_loop
            | for_expression                                                                     # for_loop
            | NOT expression                                                                     # not_expr
            | BITWISE_NOT expression                                                             # bitwise_not_expr
@@ -76,6 +77,8 @@ arg_decl_list : lvalue
               ;
 
 while_expression : ( label=loop_label COLON )? WHILE cond=expression loop_body END;
+
+do_while_expression : ( label=loop_label COLON )? DO loop_body LOOP WHILE cond=expression;
 
 for_expression : ( label=loop_label COLON )? FOR lvalue IN range loop_body END                  # ranged_for
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
@@ -180,6 +183,7 @@ FOR : 'for';
 HEAP : 'heap';
 IF : 'if';
 IN : 'in';
+DO : 'do';
 LOOP : 'loop';
 NULL : 'null';
 SENSOR : 'sensor';

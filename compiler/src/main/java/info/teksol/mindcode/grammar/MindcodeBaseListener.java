@@ -244,6 +244,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDo_while_loop(MindcodeParser.Do_while_loopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDo_while_loop(MindcodeParser.Do_while_loopContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAllocation(MindcodeParser.AllocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -539,6 +551,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitWhile_expression(MindcodeParser.While_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDo_while_expression(MindcodeParser.Do_while_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDo_while_expression(MindcodeParser.Do_while_expressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
