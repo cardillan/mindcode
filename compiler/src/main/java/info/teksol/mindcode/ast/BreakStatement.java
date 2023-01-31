@@ -25,6 +25,6 @@ public class BreakStatement implements AstNode {
 
     @Override
     public String toString() {
-        return "Break{" + (label == null ? "" : "label=" + label) + "}";
+        return "Break{" + (label == null ? "" : "label='" + label) + "'}";
     }
 }

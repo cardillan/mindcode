@@ -9,6 +9,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitBooleanLiteral((BooleanLiteral) node);
         } else if (node instanceof BreakStatement) {
             return visitBreakStatement((BreakStatement) node);
+        } else if (node instanceof CaseAlternative) {
+            return visitCaseAlternative((CaseAlternative) node);
         } else if (node instanceof CaseExpression) {
             return visitCaseExpression((CaseExpression) node);
         } else if (node instanceof ContinueStatement) {

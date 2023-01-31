@@ -867,6 +867,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitCaseAlternative(CaseAlternative node) {
+        // Case alternatives are handled in visitCaseExpression
+        return null;
+    }
+
+    @Override
     public String visitFunctionDeclaration(FunctionDeclaration node) {
         if (allocatedStack == null) {
             throw new MissingStackException("Cannot declare functions when no stack was allocated");

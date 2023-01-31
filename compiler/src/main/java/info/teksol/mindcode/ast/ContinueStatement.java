@@ -25,6 +25,6 @@ public class ContinueStatement implements AstNode {
 
     @Override
     public String toString() {
-        return "Continue{" + (label == null ? "" : "label=" + label) + "}";
+        return "Continue{" + (label == null ? "" : "label='" + label) + "'}";
     }
 }

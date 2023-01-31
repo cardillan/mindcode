@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class CompileProfile {
     private Set<Optimisation> optimisations = EnumSet.allOf(Optimisation.class);
-    private boolean printParseTree = false;
+    private int parseTreeLevel = 0;
     private int debugLevel = 0;
 
     private CompileProfile(Set<Optimisation> optimisations) {
@@ -33,12 +33,12 @@ public class CompileProfile {
         this.optimisations = optimisations;
     }
 
-    public boolean isPrintParseTree() {
-        return printParseTree;
+    public int getParseTreeLevel() {
+        return parseTreeLevel;
     }
 
-    public void setPrintParseTree(boolean printParseTree) {
-        this.printParseTree = printParseTree;
+    public void setParseTreeLevel(int parseTreeLevel) {
+        this.parseTreeLevel = parseTreeLevel;
     }
 
     public int getDebugLevel() {

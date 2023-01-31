@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.grammar.MindcodeLexer;
@@ -31,9 +32,9 @@ public class CompilerFacade {
         try {
             final MindcodeParser.ProgramContext context = parser.program();
             final Seq prog = AstNodeBuilder.generate(context);
-            if (profile.isPrintParseTree()) {
+            if (profile.getParseTreeLevel() > 0) {
                 messages.add("Parse tree:");
-                messages.add(prog.toString());
+                messages.add(AstIndentedPrinter.printIndented(prog, profile.getParseTreeLevel()));
                 messages.add("");
             }
 

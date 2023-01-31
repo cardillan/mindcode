@@ -200,6 +200,12 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitCaseAlternative(CaseAlternative node) {
+        // Case alternatives are handled in visitCaseExpression
+        return null;
+    }
+
+    @Override
     public String visitFunctionDeclaration(FunctionDeclaration node) {
         buffer.append("def ");
         buffer.append(node.getName());

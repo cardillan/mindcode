@@ -41,10 +41,10 @@ public class CompileMain {
         CompileProfile profile = CompileProfile.noOptimizations();
 
         for (String arg : args) {
-            if ("-?".equals(arg)) {
+            if ("-?".equals(arg) || "--help".equals(arg)) {
                 showHelp(0);
-            } else if (arg.equals("-p")) {
-                profile.setPrintParseTree(true);
+            } else if (arg.startsWith("-p")) {
+                selectPrintLevel(profile, arg.substring(2));
             } else if (arg.startsWith("-o")) {
                 selectOptimisation(profile, arg.substring(2));
             } else if (arg.startsWith("-d")) {
@@ -119,13 +119,26 @@ public class CompileMain {
         }
     }
 
+    static private void selectPrintLevel(CompileProfile profile, String option) {
+        switch(option) {
+            case "0": profile.setParseTreeLevel(0); break;
+            case "":
+            case "1": profile.setParseTreeLevel(1); break;
+            case "2": profile.setParseTreeLevel(2); break;
+            default: showHelp(2);
+        }
+    }
+
     static private final String[] HELP = new String[] {
-        "Usage: mindcode.bat [-p] [-dLevel] [-oFlags] [input file] [output file] [log file]",
+        "Usage: mindcode.bat [-p[Level]] [-dLevel] [-oFlags] [input file] [output file] [log file]",
             "  when input file is not given, input is read from stdin",
             "  when output file is not given, output is written to stdout",
             "  when log file is not given, messages are written to stderr",
             "",
-            "-p: prints parse tree into log file",
+            "-pLevel: activates parse tree printing into the log file. Possible level values:",
+            "  0: no parse tree printing",
+            "  1: print parse tree, linearize nested Seq objects [default when no level given]",
+            "  2: print parse tree with full indenting",
             "",
             "-dLevel: controls output of debug messages. Possible level values:",
             "  0: no debug output",
