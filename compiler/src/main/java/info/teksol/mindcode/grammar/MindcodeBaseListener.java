@@ -592,6 +592,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFor_each(MindcodeParser.For_eachContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFor_each(MindcodeParser.For_eachContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLoop_body(MindcodeParser.Loop_bodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -599,6 +611,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLoop_body(MindcodeParser.Loop_bodyContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLoop_value_list(MindcodeParser.Loop_value_listContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLoop_value_list(MindcodeParser.Loop_value_listContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

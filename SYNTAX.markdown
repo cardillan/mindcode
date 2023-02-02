@@ -1,4 +1,5 @@
 
+
 # Functions
 
 You may call any Mindustry-provided functions:
@@ -129,7 +130,7 @@ cyclone2.shoot(lx, ly, ls)
 # Loops
 
 You have access to several styles of loops: [while loops](#while-loops), [do-while loops](#do-while-loops),
-[range iteration loops](#range-iteration-loops), and [C-style loops](#c-style-loops).
+[range iteration loops](#range-iteration-loops), [list iteration loops](#list-iteration-loops), and [C-style loops](#c-style-loops).
 
 ## While Loops
 
@@ -157,7 +158,7 @@ loop while n > 0
 
 ## Range Iteration Loops
 
-Loop over a defined collection of values, in an inclusive or exclusive fashion. The `..` range operator indicates an
+Loop over a range of values, in an inclusive or exclusive fashion. The `..` range operator indicates an
 inclusive range:
 
 ```
@@ -184,6 +185,34 @@ This loop will calculate the average of all 64 cells (0-based index) of `cell1`.
 Please note that currently, range iteration loops can only increment the value
 by 1, and only support increasing values. A range of `60 .. 50` is invalid, but
 a range of `-1 .. 1` is valid.
+
+## List Iteration Loops
+
+Loop over a fixed collection of values or expressions:
+
+```
+for u in (@mono, @poly, @mega)
+  ubind(u)
+  if @unit != null
+    break
+  end
+end
+print(u)
+printflush(message1)
+```
+
+Tries to bind a mono, poly or mega, in this order, ending the loop when successfully binding one.
+
+The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic doesn't support arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated right before the loop utilizing the expression is executed. This loop
+
+```
+a = 0
+for a in (a + 1, a + 1, a + 1)
+  print(a, "\n")
+end
+printflush(message1)
+```
+prints values 1, 2, 3 (at the beginning of each iteration the loop variable -- `a` in this case -- is set to the value of the next expression in the list).
 
 ## C-Style Loops
 

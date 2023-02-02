@@ -2020,4 +2020,29 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void convertsForEachAndPrintFunctionCall() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction(SET, var(0), var(1003)),
+                        new LogicInstruction(SET, "a", "@mono"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1003)),
+                        new LogicInstruction(SET, var(0), var(1004)),
+                        new LogicInstruction(SET, "a", "@poly"),
+                        new LogicInstruction(JUMP, var(1001), "always"),
+                        new LogicInstruction(LABEL, var(1004)),
+                        new LogicInstruction(SET, var(0), var(1002)),
+                        new LogicInstruction(SET, "a", "@mega"),
+                        new LogicInstruction(LABEL, var(1001)),
+                        new LogicInstruction(PRINT, "a"),
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(SET, "@counter", var(0)),
+                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateUnoptimized((Seq) translateToAst("for a in (@mono, @poly, @mega)\nprint(a)\nend"))
+        );
+    }
 }

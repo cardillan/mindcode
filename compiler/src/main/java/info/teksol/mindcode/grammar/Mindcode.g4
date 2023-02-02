@@ -39,7 +39,7 @@ expression : MINUS numeric_t                                                    
            | left=expression AND right=expression                                               # binop_and
            | left=expression OR right=expression                                                # binop_or
            | <assoc=right> cond=expression QUESTION_MARK
-                                (true_branch=expression COLON false_branch=expression)          # ternary_op
+								(true_branch=expression COLON false_branch=expression)          # ternary_op
            | assign                                                                             # assignment
            | literal_t                                                                          # literal_string
            | numeric_t                                                                          # literal_numeric
@@ -82,13 +82,19 @@ do_while_expression : ( label=loop_label COLON )? DO loop_body LOOP WHILE cond=e
 
 for_expression : ( label=loop_label COLON )? FOR lvalue IN range loop_body END                  # ranged_for
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
-                                             SEMICOLON increment=incr_list loop_body END        # iterated_for
+                            SEMICOLON increment=incr_list loop_body END                         # iterated_for
+               | ( label=loop_label COLON )? FOR lvalue IN
+                            LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET loop_body END   # for_each
                ;
 
 loop_body : loop_body expression_list
           | expression_list
           ;
 
+loop_value_list : expression
+                | loop_value_list COMMA expression
+                ;
+				
 continue_st : CONTINUE ( label=loop_label )? ;
 
 break_st : BREAK ( label=loop_label )? ;

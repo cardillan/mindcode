@@ -633,6 +633,30 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
+    void parsesForEachLoop() {
+        assertEquals(
+                new Seq(
+                        new ForEachExpression(
+                                null,
+                                new VarRef("a"),
+                                List.of(
+                                        new Ref("mono"),
+                                        new Ref("poly"),
+                                        new Ref("mega")
+                                ),
+                                new Seq(
+                                        new FunctionCall(
+                                                "print",
+                                                List.of(new VarRef("a"))
+                                        )
+                                )
+                        )
+                ),
+                translateToAst("for a in (@mono, @poly, @mega)\nprint(a)\nend")
+        );
+    }
+
+    @Test
     void parsesCStyleLoop() {
         assertEquals(
                 new Seq(

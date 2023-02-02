@@ -65,7 +65,28 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitForEachStatement(ForEachExpression node) {
+        if (node.getLabel() != null) {
+            buffer.append(node.getLabel()).append(": ");
+        }
+        buffer.append("for ").append(node.getVariable()).append(" in (");
+        if (!node.getValues().isEmpty()) {
+            visit(node.getValues().get(0));
+            for (int i = 1; i < node.getValues().size(); i++) {
+                buffer.append(", ").append(node.getValues().get(i));
+            }
+        }
+        buffer.append("\n");
+        visit(node.getBody());
+        buffer.append("end\n");
+        return null;
+    }
+
+    @Override
     public String visitWhileStatement(WhileExpression node) {
+        if (node.getLabel() != null) {
+            buffer.append(node.getLabel()).append(": ");
+        }
         buffer.append("while ");
         visit(node.getCondition());
         buffer.append("\n");

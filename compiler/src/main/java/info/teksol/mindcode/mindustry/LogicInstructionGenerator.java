@@ -174,6 +174,49 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitForEachStatement(ForEachExpression node) {
+        List<AstNode> values = node.getValues();
+        if (values.isEmpty()) {
+            // Empty list -- nothing to do
+            return null;
+        }
+
+        final String variable = visit(node.getVariable());
+        final String contLabel = nextLabel();
+        final String bodyLabel = nextLabel();
+        final String exitLabel = nextLabel();
+        final String iterator = nextTemp();        // Holds instruction address of the next iteration
+
+        loopStack.enterLoop(node.getLabel(), exitLabel, contLabel);
+
+        // All but the last value
+        for (int i = 0; i < values.size() - 1; i++) {
+            String nextValueLabel = nextLabel();
+            // Setting the iterator first. It is possible to use continue in the value expression,
+            // in which case the next iteration is performed.
+            pipeline.emit(new LogicInstruction(SET, iterator, nextValueLabel));
+            pipeline.emit(new LogicInstruction(SET, variable, visit(values.get(i))));
+            pipeline.emit(new LogicInstruction(JUMP, bodyLabel, "always"));
+            pipeline.emit(new LogicInstruction(LABEL, nextValueLabel));
+        }
+
+        // Last value
+        pipeline.emit(new LogicInstruction(SET, iterator, exitLabel));
+        pipeline.emit(new LogicInstruction(SET, variable, visit(values.get(values.size() - 1))));
+
+        pipeline.emit(new LogicInstruction(LABEL, bodyLabel));
+        visit(node.getBody());
+
+        // Label for continue statements
+        pipeline.emit(new LogicInstruction(LABEL, contLabel));
+        pipeline.emit(new LogicInstruction(SET, "@counter", iterator));
+        pipeline.emit(new LogicInstruction(LABEL, exitLabel));
+        loopStack.exitLoop(node.getLabel());
+
+        return "null";
+    }
+
+    @Override
     public String visitWhileStatement(WhileExpression node) {
         final String beginLabel = nextLabel();
         final String continueLabel = nextLabel();

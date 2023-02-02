@@ -13,6 +13,8 @@ public interface AstVisitor<T> {
 
     T visitDoWhileStatement(DoWhileExpression node);
 
+    T visitForEachStatement(ForEachExpression node);
+
     T visitWhileStatement(WhileExpression node);
 
     T visitVarRef(VarRef node);
