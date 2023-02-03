@@ -182,9 +182,17 @@ avg = sum / 64
 
 This loop will calculate the average of all 64 cells (0-based index) of `cell1`.
 
+It is also possible to use expressions to specify the ranges:
+
+```
+for n in firstIndex + 1 .. lastIndex - 1
+  sum += cell1[n]
+end
+```
+
 Please note that currently, range iteration loops can only increment the value
-by 1, and only support increasing values. A range of `60 .. 50` is invalid, but
-a range of `-1 .. 1` is valid.
+by 1, and only support increasing values. If the start value is greater than
+end value,  the loop body won't get executed at all.
 
 ## List Iteration Loops
 

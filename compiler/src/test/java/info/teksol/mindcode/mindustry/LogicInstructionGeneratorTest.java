@@ -410,6 +410,43 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void parsesRangeExpressionLoop() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        // init
+                        new LogicInstruction(SET, "n", "a"),
+
+                        // cond
+                        new LogicInstruction(LABEL, var(1000)),
+                        new LogicInstruction(OP, "lessThan", var(0), "n", "b"),
+                        new LogicInstruction(JUMP, var(1001), "equal", var(0), "false"),
+
+                        // loop body
+                        new LogicInstruction(PRINT, "n"),
+
+                        // continue label
+                        new LogicInstruction(LABEL, var(1010)),
+
+                        // increment
+                        new LogicInstruction(SET, var(1), "1"),
+                        new LogicInstruction(OP, "add", var(2), "n", var(1)),
+                        new LogicInstruction(SET, "n", var(2)),
+
+                        // loop
+                        new LogicInstruction(JUMP, var(1000), "always"),
+
+                        // trailer
+                        new LogicInstruction(LABEL, var(1001)),
+
+                        // rest of program
+                        new LogicInstruction(END)
+                ),
+                LogicInstructionGenerator.generateUnoptimized(
+                        (Seq) translateToAst("for n in a ... b\nprint(n)\nend\n")
+                )
+        );
+    }
+    @Test
     void generatesCStyleComplexForLoop() {
         assertLogicInstructionsMatch(
                 List.of(

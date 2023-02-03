@@ -339,6 +339,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitInclusive_range_exp(MindcodeParser.Inclusive_range_expContext ctx) {
+        return new InclusiveRange(visit(ctx.start), visit(ctx.end));
+    }
+
+    @Override
+    public AstNode visitExclusive_range_exp(MindcodeParser.Exclusive_range_expContext ctx) {
+        return new ExclusiveRange(visit(ctx.start), visit(ctx.end));
+    }
+
+    @Override
     public AstNode visitGlobal_ref(MindcodeParser.Global_refContext ctx) {
         if (allocatedHeap == null) {
             throw new UnallocatedHeapException("The heap must be allocated before using it in " + ctx.getText());
@@ -387,7 +397,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitRanged_for(MindcodeParser.Ranged_forContext ctx) {
         String label = ctx.label == null ? null : ctx.label.getText();
-        final Range range = (Range) visit(ctx.range());
+        final Range range = (Range) visit(ctx.range_expression());
         final AstNode var = visit(ctx.lvalue());
         return new Seq(
                 new Assignment(

@@ -380,6 +380,20 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExclusive_range(MindcodeParser.Exclusive_rangeContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code inclusive_range_exp}
+	 * labeled alternative in {@link MindcodeParser#range_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInclusive_range_exp(MindcodeParser.Inclusive_range_expContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code exclusive_range_exp}
+	 * labeled alternative in {@link MindcodeParser#range_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExclusive_range_exp(MindcodeParser.Exclusive_range_expContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#init_list}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

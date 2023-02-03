@@ -80,10 +80,10 @@ while_expression : ( label=loop_label COLON )? WHILE cond=expression loop_body E
 
 do_while_expression : ( label=loop_label COLON )? DO loop_body LOOP WHILE cond=expression;
 
-for_expression : ( label=loop_label COLON )? FOR lvalue IN range loop_body END                  # ranged_for
+for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression loop_body END       # ranged_for
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
                             SEMICOLON increment=incr_list loop_body END                         # iterated_for
-               | ( label=loop_label COLON )? FOR lvalue IN
+               | ( label=loop_label COLON )? FOR lvalue IN      
                             LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET loop_body END   # for_each
                ;
 
@@ -102,6 +102,10 @@ break_st : BREAK ( label=loop_label )? ;
 range : start=int_t DOT DOT end=int_t     # inclusive_range
       | start=int_t DOT DOT DOT end=int_t # exclusive_range
       ;
+
+range_expression : start=expression DOT DOT end=expression     # inclusive_range_exp
+                 | start=expression DOT DOT DOT end=expression # exclusive_range_exp
+                 ;
 
 init_list : expression
           | init_list COMMA expression
@@ -181,6 +185,7 @@ BREAK : 'break';
 CASE : 'case';
 CONTINUE : 'continue';
 DEF : 'def';
+DO : 'do';
 ELSE : 'else';
 ELSIF : 'elsif';
 END : 'end';
@@ -189,7 +194,6 @@ FOR : 'for';
 HEAP : 'heap';
 IF : 'if';
 IN : 'in';
-DO : 'do';
 LOOP : 'loop';
 NULL : 'null';
 SENSOR : 'sensor';

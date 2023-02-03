@@ -636,6 +636,30 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitExclusive_range(MindcodeParser.Exclusive_rangeContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code inclusive_range_exp}
+	 * labeled alternative in {@link MindcodeParser#range_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterInclusive_range_exp(MindcodeParser.Inclusive_range_expContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code inclusive_range_exp}
+	 * labeled alternative in {@link MindcodeParser#range_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitInclusive_range_exp(MindcodeParser.Inclusive_range_expContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code exclusive_range_exp}
+	 * labeled alternative in {@link MindcodeParser#range_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExclusive_range_exp(MindcodeParser.Exclusive_range_expContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code exclusive_range_exp}
+	 * labeled alternative in {@link MindcodeParser#range_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExclusive_range_exp(MindcodeParser.Exclusive_range_expContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#init_list}.
 	 * @param ctx the parse tree
 	 */
