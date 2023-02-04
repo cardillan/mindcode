@@ -139,10 +139,14 @@ alternative_list : alternative
                  | alternative_list alternative
                  ;
 
-alternative : WHEN values=when_value_list body=expression_list?;
+alternative : WHEN values=when_value_list THEN? body=expression_list?;
 
-when_value_list : expression
-                | when_value_list COMMA expression
+when_expression : expression
+                | range_expression
+                ;
+
+when_value_list : when_expression
+                | when_value_list COMMA when_expression
                 ;
 
 assign : <assoc=right> target=lvalue ASSIGN value=expression                             # simple_assign
@@ -198,6 +202,7 @@ LOOP : 'loop';
 NULL : 'null';
 SENSOR : 'sensor';
 STACK : 'stack';
+THEN : 'then';
 TRUE : 'true';
 WHEN : 'when';
 WHILE : 'while';

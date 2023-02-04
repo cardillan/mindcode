@@ -227,6 +227,12 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitRange(Range node) {
+        // Ranges are handled elsewhere
+        return null;
+    }
+
+    @Override
     public String visitFunctionDeclaration(FunctionDeclaration node) {
         buffer.append("def ");
         buffer.append(node.getName());

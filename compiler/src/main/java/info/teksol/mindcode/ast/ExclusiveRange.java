@@ -6,11 +6,7 @@ public class ExclusiveRange extends Range {
     }
 
     @Override
-    public AstNode buildLoopExitCondition(AstNode name) {
-        return new BinaryOp(
-                name,
-                "<",
-                getLastValue()
-        );
+    public String maxValueComparison() {
+        return "<";
     }
 }

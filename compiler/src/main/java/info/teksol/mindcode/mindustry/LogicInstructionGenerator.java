@@ -883,23 +883,40 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
         final String caseValue = visit(node.getCondition());
         for (final CaseAlternative alternative : node.getAlternatives()) {
-            final String nextCond = nextLabel();
-            final int whenValues = alternative.getValues().size();
-            final String bodyLabel = whenValues > 1 ? nextLabel() : null;
-            for (int i = 0; i < whenValues - 1; i++) {
-                final String whenValue = visit(alternative.getValues().get(i));
-                pipeline.emit(new LogicInstruction(JUMP, bodyLabel, "equal", caseValue, whenValue));
+            final String nextAlt = nextLabel();         // Next alternative
+            final String bodyLabel = nextLabel();       // Body of this alternative
+
+            // Each mathing value, including the last one, causes a jump to the when body
+            // At the end of the list is a jump to the next alternative (next "when" branch)
+            // JumpOverJumpEliminator will improve the generated code
+            for (AstNode value : alternative.getValues()) {
+                if (value instanceof Range) {
+                    // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
+                    String nextExp = nextLabel();       // Next value in when list
+                    Range range = (Range) value;
+                    final String minValue = visit(range.getFirstValue());
+                    pipeline.emit(new LogicInstruction(JUMP, nextExp, translateBinaryOpToCode("<"), caseValue, minValue));
+                    // The max value is only evaluated when the min value lets us through
+                    final String maxValue = visit(range.getLastValue());
+                    pipeline.emit(new LogicInstruction(JUMP, bodyLabel, translateBinaryOpToCode(range.maxValueComparison()), caseValue, maxValue));
+                    pipeline.emit(new LogicInstruction(LABEL, nextExp));
+                }
+                else {
+                    final String whenValue = visit(value);
+                    pipeline.emit(new LogicInstruction(JUMP, bodyLabel, "equal", caseValue, whenValue));
+                }
             }
-            final String whenValue = visit(alternative.getValues().get(whenValues - 1));
-            pipeline.emit(new LogicInstruction(JUMP, nextCond, "notEqual", caseValue, whenValue));
-            if (whenValues > 1) {
-                pipeline.emit(new LogicInstruction(LABEL, bodyLabel));
-            }
+
+            // No match in the when value list: skip to the next alternative
+            pipeline.emit(new LogicInstruction(JUMP, nextAlt, "always"));
+
+            // Body of the alternative
+            pipeline.emit(new LogicInstruction(LABEL, bodyLabel));
             final String body = visit(alternative.getBody());
             pipeline.emit(new LogicInstruction(SET, resultVar, body));
             pipeline.emit(new LogicInstruction(JUMP, exitLabel, "always"));
 
-            pipeline.emit(new LogicInstruction(LABEL, nextCond));
+            pipeline.emit(new LogicInstruction(LABEL, nextAlt));
         }
 
         final String elseBranch = visit(node.getElseBranch());
@@ -912,6 +929,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitCaseAlternative(CaseAlternative node) {
         // Case alternatives are handled in visitCaseExpression
+        return null;
+    }
+
+    @Override
+    public String visitRange(Range node) {
+        // Ranges are handled elsewhere
         return null;
     }
 

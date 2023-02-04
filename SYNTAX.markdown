@@ -220,6 +220,7 @@ for a in (a + 1, a + 1, a + 1)
 end
 printflush(message1)
 ```
+
 prints values 1, 2, 3 (at the beginning of each iteration the loop variable -- `a` in this case -- is set to the value of the next expression in the list).
 
 ## C-Style Loops
@@ -353,7 +354,7 @@ conditional but want to save some space:
 result = n == 0 ? "ready" : "pending"
 ```
 
-This is the exact same conditional expression as the first if statement above, except it is written on one line.
+This is the exact same conditional expression as the first `if` statement above, except it is written on one line.
 
 ## Case/When Expressions
 
@@ -371,7 +372,68 @@ next_action = case num_enemies
     "nuke-the-place"
 end
 ```
-Multiple comma-separated alternatives can be listed after each `when` keyword. If several `when` branches match the same value, the behavior is undefined.
+
+Multiple comma-separated expressions can be listed after each `when` keyword.
+It is also possible to use range expressions, and even mix them with normal expression like this:
+
+```
+text = case number
+  when 0, 1, 2**3 .. 2**5, 42, -115 then
+    "A number I like"
+  when 10**5 .. 10**9 then
+    "A very big number"
+  else
+    "An ugly number"
+end
+```
+
+**Then keyword**
+
+The `then` keyword at the end of the list of when expressions is optional.
+Using it helps to avoid a bug that can happen when you put a superfluous comma at the end of the when expression list:
+
+```
+case block.type
+    when @conduit, @pulse-conduit, @plated-conduit,
+        block.enabled = intake
+    when @overdrive-projector, @overdrive-dome
+        block.enabled = boost
+end
+```
+
+The comma after the `@plated-conduit` is not meant to be there.
+Because of that, the compiler treats the next expression as if it was another one of the `when` values.
+Rearranging the code might help to understand the meaning of this code snippet:
+
+```
+case block.type
+    when @conduit, @pulse-conduit, @plated-conduit, block.enabled = intake
+        // Do nothing
+    when @overdrive-projector, @overdrive-dome
+        block.enabled = boost
+end
+```
+
+The resulting effect is that when the block is some kind of a conduit, nothing happens.
+When it is something different, the `block.enabled = intake` expression is evaluated,
+changing wrong block's state.
+
+If the keyword `then` is used, the compiler will complain about the superfluous comma:
+
+```
+case block.type
+    when @conduit, @pulse-conduit, @plated-conduit, then
+        block.enabled = intake
+    when @overdrive-projector, @overdrive-dome then
+        block.enabled = boost
+end
+```
+
+**Additional considerations:**
+
+* Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case expression. Do not use expressions with side effects (such as a function call that would modify some global variable). 
+* Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, but the behavior might change in the future.
+
 
 ## Comparison Operators
 
@@ -382,7 +444,7 @@ Mindustry Logic offers us many comparison operators, namely:
 * `&&`, `and`, `||`, and `or`, to implement complex conditionals: `reactor1.thorium > 0 and (reactor1.cryofluid / reactor1.liquidCapacity) < 0.25`
 * `!` and `not` for negating boolean expressions
 * `===` for "strict equality". When using the non-strict comparison in Mindustry -- `==` or `!=`, the value `0` is equal to `false` and `null`. By using `===`, you  force Mindustry Logic to check for the exact value, instead of type-casting the value before checking if the values are equal. This is very useful for checks where the distinction between `0` and `null` is important, such as:
-* 
+ 
 ```
 // Bind new units until a living one is found
 while not (@unit.dead === 0)

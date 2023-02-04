@@ -612,7 +612,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
                 nodes = new NoOp();
             }
 
-            gatherValues(new Seq(nodes, visit(values.expression())), result);
+            gatherValues(new Seq(nodes, visit(values.when_expression())), result);
         }
 
         return result;
@@ -696,9 +696,9 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitWhen_value_list(MindcodeParser.When_value_listContext ctx) {
         if (ctx.when_value_list()!= null) {
-            return new Seq(visit(ctx.when_value_list()), visit(ctx.expression()));
+            return new Seq(visit(ctx.when_value_list()), visit(ctx.when_expression()));
         } else {
-            final AstNode last = visit(ctx.expression());
+            final AstNode last = visit(ctx.when_expression());
             return new Seq(last);
         }
     }

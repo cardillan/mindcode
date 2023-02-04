@@ -6,11 +6,7 @@ public class InclusiveRange extends Range {
     }
 
     @Override
-    public BinaryOp buildLoopExitCondition(AstNode name) {
-        return new BinaryOp(
-                name,
-                "<=",
-                getLastValue()
-        );
+    public String maxValueComparison() {
+        return "<=";
     }
 }

@@ -11,11 +11,11 @@ public abstract class Range implements AstNode {
         this.lastValue = lastValue;
     }
 
-    AstNode getFirstValue() {
+    public AstNode getFirstValue() {
         return firstValue;
     }
 
-    AstNode getLastValue() {
+    public AstNode getLastValue() {
         return lastValue;
     }
 
@@ -41,5 +41,13 @@ public abstract class Range implements AstNode {
                 '}';
     }
 
-    public abstract AstNode buildLoopExitCondition(AstNode name);
+    public BinaryOp buildLoopExitCondition(AstNode name) {
+        return new BinaryOp(
+                name,
+                maxValueComparison(),
+                getLastValue()
+        );
+    }
+
+    public abstract String maxValueComparison();
 }

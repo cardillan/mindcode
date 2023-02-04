@@ -117,8 +117,6 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
         return null;
     }
 
-
-
     @Override
     public String visitWhileStatement(WhileExpression node) {
         open("WhileExpression{");
@@ -256,6 +254,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
         print("values="); visitList(node.getValues()); newLine(",");
         print("body="); visit(node.getBody());
         close("}");
+        return null;
+    }
+
+    @Override
+    public String visitRange(Range node) {
+        print(node);
         return null;
     }
 

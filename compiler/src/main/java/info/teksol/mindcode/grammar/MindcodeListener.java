@@ -760,6 +760,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitAlternative(MindcodeParser.AlternativeContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#when_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhen_expression(MindcodeParser.When_expressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#when_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhen_expression(MindcodeParser.When_expressionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#when_value_list}.
 	 * @param ctx the parse tree
 	 */

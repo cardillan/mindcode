@@ -45,6 +45,8 @@ public interface AstVisitor<T> {
 
     T visitCaseAlternative(CaseAlternative node);
 
+    T visitRange(Range node);
+
     T visitFunctionDeclaration(FunctionDeclaration node);
 
     T visitStackAllocation(StackAllocation node);

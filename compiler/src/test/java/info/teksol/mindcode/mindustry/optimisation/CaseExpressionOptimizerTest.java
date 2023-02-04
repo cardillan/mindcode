@@ -13,6 +13,7 @@ import static info.teksol.mindcode.mindustry.Opcode.*;
 public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus,
             Optimisation.OUTPUT_TEMPS_ELIMINATION,
+            Optimisation.JUMP_OVER_JUMP_ELIMINATION,
             Optimisation.CASE_EXPRESSION_OPTIMIZATION
     );
     
@@ -33,13 +34,15 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction(JUMP, var(1001), "notEqual", "UNIT", "@poly"),
+                        new LogicInstruction(LABEL, var(1002)),
                         new LogicInstruction(SET, var(0), "1"),
                         new LogicInstruction(JUMP, var(1000), "always"),
                         new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(JUMP, var(1002), "notEqual", "UNIT", "@mega"),
+                        new LogicInstruction(JUMP, var(1003), "notEqual", "UNIT", "@mega"),
+                        new LogicInstruction(LABEL, var(1004)),
                         new LogicInstruction(SET, var(0), "2"),
                         new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(LABEL, var(1003)),
                         new LogicInstruction(SET, var(0), "3"),
                         new LogicInstruction(LABEL, var(1000)),
                         new LogicInstruction(SET, "x", var(0)),
@@ -68,13 +71,15 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
                 List.of(
                         new LogicInstruction(SENSOR, var(0), "vault1", "@firstItem"),
                         new LogicInstruction(JUMP, var(1001), "notEqual", var(0), "@lead"),
+                        new LogicInstruction(LABEL, var(1002)),
                         new LogicInstruction(SET, var(1), "1"),
                         new LogicInstruction(JUMP, var(1000), "always"),
                         new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(JUMP, var(1002), "notEqual", var(0), "@coal"),
+                        new LogicInstruction(JUMP, var(1003), "notEqual", var(0), "@coal"),
+                        new LogicInstruction(LABEL, var(1004)),
                         new LogicInstruction(SET, var(1), "2"),
                         new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1002)),
+                        new LogicInstruction(LABEL, var(1003)),
                         new LogicInstruction(SET, var(1), "3"),
                         new LogicInstruction(LABEL, var(1000)),
                         new LogicInstruction(SET, "x", var(1)),
@@ -91,8 +96,8 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
         List.of(
                 new LogicInstruction(SENSOR, "var", "vault1", "@firstItem"),
                 new LogicInstruction(SET, "__ast0", "var"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "__ast0", "@lead"),
-                new LogicInstruction(JUMP, "label1", "notEqual", "__ast0", "@coal"),
+                new LogicInstruction(JUMP, "label0", "equal", "__ast0", "@lead"),
+                new LogicInstruction(JUMP, "label1", "equal", "__ast0", "@coal"),
                 new LogicInstruction(END)
         ).forEach(pipeline::emit);
         pipeline.flush();
@@ -100,8 +105,8 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction(SENSOR, "var", "vault1", "@firstItem"),
-                        new LogicInstruction(JUMP, "label0", "notEqual", "var", "@lead"),
-                        new LogicInstruction(JUMP, "label1", "notEqual", "var", "@coal"),
+                        new LogicInstruction(JUMP, "label0", "equal", "var", "@lead"),
+                        new LogicInstruction(JUMP, "label1", "equal", "var", "@coal"),
                         new LogicInstruction(END)
                 ),
                 terminus.getResult()

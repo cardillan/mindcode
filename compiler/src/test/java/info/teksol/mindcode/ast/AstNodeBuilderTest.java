@@ -835,6 +835,31 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
+    void parsesCaseWhenMultipleWithRange() {
+        assertEquals(
+                new Seq(
+                        new Assignment(new VarRef("__ast0"), new VarRef("n")),
+                        new CaseExpression(
+                                new VarRef("__ast0"),
+                                List.of(
+                                        new CaseAlternative(
+                                                List.of(
+                                                        new InclusiveRange(new NumericLiteral("0"), new NumericLiteral("4")),
+                                                        new InclusiveRange(new NumericLiteral("6"), new NumericLiteral("8")),
+                                                        new NumericLiteral("10"),
+                                                        new NumericLiteral("12")
+                                                ),
+                                                new Seq(new StringLiteral("A number I like"))
+                                        )
+                                ),
+                                new NoOp()
+                        )
+                ),
+                translateToAst("case n when 0 .. 4, 6 .. 8, 10, 12 \"A number I like\" end")
+        );
+    }
+
+    @Test
     void rejects_STACK_ReservedKeywordsInVarRef() {
         assertThrows(ParsingException.class, () -> translateToAst("cell1[STACK] = 0"));
     }
