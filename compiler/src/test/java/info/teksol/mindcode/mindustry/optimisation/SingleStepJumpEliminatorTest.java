@@ -10,7 +10,8 @@ import java.util.List;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
+    private final LogicInstructionPipeline sut = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+            terminus,
             Optimisation.CONDITIONAL_JUMPS_NORMALIZATION,
             Optimisation.DEAD_CODE_ELIMINATION,
             Optimisation.SINGLE_STEP_JUMP_ELIMINATION);

@@ -2,8 +2,6 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -11,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
+    private final LogicInstructionPipeline sut = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+            terminus,
             Optimisation.CONDITIONAL_JUMPS_NORMALIZATION);
 
     @Test

@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 public class InputTempEliminatorTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus,
+    private final LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+            terminus,
             Optimisation.INPUT_TEMPS_ELIMINATION);
 
     @Test

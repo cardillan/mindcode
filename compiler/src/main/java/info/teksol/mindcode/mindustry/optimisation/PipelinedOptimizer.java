@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 
 // Base class for pipeline-operating optimizers
 // Derived classes only implement states and provide an initial state
@@ -10,8 +11,8 @@ abstract class PipelinedOptimizer extends BaseOptimizer {
     private int received = 0;
     private int emitted = 0;
 
-    public PipelinedOptimizer(LogicInstructionPipeline next) {
-        super(next);
+    public PipelinedOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
     
     protected abstract State initialState();

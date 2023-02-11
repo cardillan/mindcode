@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
+    private final LogicInstructionPipeline sut = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+            terminus,
             Optimisation.DEAD_CODE_ELIMINATION,
             Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT,
             Optimisation.JUMP_TARGET_PROPAGATION,

@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.HashSet;
 import java.util.List;
@@ -22,8 +23,8 @@ class PropagateJumpTargets extends GlobalOptimizer {
     private static final Set<String> EXCLUDED_ARGS = Set.of("@time", "@tick", "@counter");
     private boolean startLabelUsed = false;
     
-    public PropagateJumpTargets(LogicInstructionPipeline next) {
-        super(next);
+    public PropagateJumpTargets(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
     
     @Override

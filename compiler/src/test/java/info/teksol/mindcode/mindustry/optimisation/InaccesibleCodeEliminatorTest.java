@@ -10,7 +10,8 @@ import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
     // Sequences of jumps are not generated without dead code elimination
-    private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
+    private final LogicInstructionPipeline sut = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+            terminus,
             Optimisation.CONDITIONAL_JUMPS_NORMALIZATION,
             Optimisation.DEAD_CODE_ELIMINATION,
             Optimisation.SINGLE_STEP_JUMP_ELIMINATION,

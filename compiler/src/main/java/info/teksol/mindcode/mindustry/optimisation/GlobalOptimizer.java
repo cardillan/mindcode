@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -16,8 +17,8 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     private int original;
     private int emitted;
     
-    public GlobalOptimizer(LogicInstructionPipeline next) {
-        super(next);
+    public GlobalOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
 
     @Override

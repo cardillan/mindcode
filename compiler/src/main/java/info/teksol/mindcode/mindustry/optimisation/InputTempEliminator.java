@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,8 +18,8 @@ import java.util.List;
 //    instruction sequence in the program, not on the actual program flow).
 // 4. All arguments of the other instruction referencing the __tmp variable are input ones.
 class InputTempEliminator extends GlobalOptimizer {
-    public InputTempEliminator(LogicInstructionPipeline next) {
-        super(next);
+    public InputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
 
     @Override

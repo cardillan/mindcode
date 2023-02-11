@@ -9,7 +9,7 @@ import info.teksol.mindcode.mindustry.logic.Opcode;
 import info.teksol.mindcode.mindustry.optimisation.DebugPrinter;
 import info.teksol.mindcode.mindustry.optimisation.DiffDebugPrinter;
 import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
-import info.teksol.mindcode.mindustry.optimisation.Optimisation;
+import info.teksol.mindcode.mindustry.optimisation.OptimisationPipeline;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -45,7 +45,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 
                 ? new NullDebugPrinter() : new DiffDebugPrinter(profile.getDebugLevel());
-        LogicInstructionPipeline pipeline = Optimisation.createPipelineForProfile(terminus, profile, debugPrinter, messageConsumer);
+        LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineForProfile(instructionProcessor,
+                terminus, profile, debugPrinter, messageConsumer);
         LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor, pipeline);
         generator.start(program);
         pipeline.flush();

@@ -2,13 +2,12 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.instructions.BaseInstructionProcessor;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 
 // Base class for optimizers. Contains helper functions for manipulating instructions.
 abstract class BaseOptimizer implements Optimizer {
@@ -21,12 +20,14 @@ abstract class BaseOptimizer implements Optimizer {
             "greaterThanEq", "lessThan"
     );
 
+    private final InstructionProcessor instructionProcessor;
     private final LogicInstructionPipeline next;
     private final String name = getClass().getSimpleName();
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
     private Consumer<String> messagesRecipient = s -> {};
 
-    public BaseOptimizer(LogicInstructionPipeline next) {
+    public BaseOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        this.instructionProcessor = instructionProcessor;
         this.next = next;
     }
     
@@ -64,6 +65,14 @@ abstract class BaseOptimizer implements Optimizer {
         messagesRecipient.accept(String.format(fornat, args));
     }
     
+    protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
+        return instructionProcessor.createInstruction(opcode, args);
+    }
+
+    protected final LogicInstruction createInstruction(Opcode opcode, List<String> args) {
+        return instructionProcessor.createInstruction(opcode, args);
+    }
+
     // Creates a new instruction with argument at given index set to a new value
     protected LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String arg) {
         if (instruction.getArgs().get(argIndex).equals(arg)) {
@@ -89,15 +98,5 @@ abstract class BaseOptimizer implements Optimizer {
 
     protected String getInverse(String comparison) {
         return INVERSES.get(comparison);
-    }
-
-    private static final InstructionProcessor INSTRUCTION_FACTORY = new BaseInstructionProcessor();
-
-    protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
-        return INSTRUCTION_FACTORY.createInstruction(opcode, args);
-    }
-
-    protected final LogicInstruction createInstruction(Opcode opcode, List<String> args) {
-        return INSTRUCTION_FACTORY.createInstruction(opcode, args);
     }
 }

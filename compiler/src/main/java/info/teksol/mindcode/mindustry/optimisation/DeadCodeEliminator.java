@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,8 +24,8 @@ class DeadCodeEliminator extends GlobalOptimizer {
     private final Map<String, List<LogicInstruction>> writes = new HashMap<>();
     private final Set<String> eliminations = new HashSet<>();
 
-    DeadCodeEliminator(LogicInstructionPipeline next) {
-        super(next);
+    DeadCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
 
     @Override

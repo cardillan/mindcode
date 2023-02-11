@@ -3,7 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.function.Consumer;
 
-public interface Optimizer extends LogicInstructionPipeline{
+public interface Optimizer extends LogicInstructionPipeline {
 
     String getName();
 

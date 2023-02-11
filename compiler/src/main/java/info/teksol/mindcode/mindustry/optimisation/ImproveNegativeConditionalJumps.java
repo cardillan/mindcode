@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 
 // Turns the following sequence of instructions:
@@ -19,8 +20,8 @@ import info.teksol.mindcode.mindustry.logic.Opcode;
 // 4. <comparison> has an inverse
 public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
 
-    ImproveNegativeConditionalJumps(LogicInstructionPipeline next) {
-        super(next);
+    ImproveNegativeConditionalJumps(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
 
     @Override

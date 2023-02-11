@@ -3,7 +3,6 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus,
+    private final LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+            terminus,
             Optimisation.OUTPUT_TEMPS_ELIMINATION,
             Optimisation.JUMP_OVER_JUMP_ELIMINATION,
             Optimisation.CASE_EXPRESSION_OPTIMIZATION

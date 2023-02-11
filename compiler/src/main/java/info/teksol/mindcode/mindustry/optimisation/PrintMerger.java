@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,8 @@ import java.util.List;
 // print "%"
 //
 class PrintMerger extends PipelinedOptimizer {
-    public PrintMerger(LogicInstructionPipeline next) {
-        super(next);
+    public PrintMerger(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
     
     @Override

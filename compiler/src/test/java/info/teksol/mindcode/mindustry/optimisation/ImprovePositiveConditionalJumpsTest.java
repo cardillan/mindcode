@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 class ImprovePositiveConditionalJumpsTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline pipeline = new ImprovePositiveConditionalJumps(terminus);
+    private final LogicInstructionPipeline pipeline = new ImprovePositiveConditionalJumps(getInstructionProcessor(), terminus);
     
     @Test
     void optimizesMinimalSequence() {

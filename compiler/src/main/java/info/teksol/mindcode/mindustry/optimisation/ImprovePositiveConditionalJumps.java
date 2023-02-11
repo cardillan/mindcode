@@ -4,6 +4,7 @@ import info.teksol.mindcode.mindustry.logic.ArgumentType;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 
 // Turns the following sequence of instructions:
@@ -19,8 +20,8 @@ import info.teksol.mindcode.mindustry.logic.Opcode;
 // 3. var1 is a __tmp variable
 public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
-    ImprovePositiveConditionalJumps(LogicInstructionPipeline next) {
-        super(next);
+    ImprovePositiveConditionalJumps(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
 
     @Override

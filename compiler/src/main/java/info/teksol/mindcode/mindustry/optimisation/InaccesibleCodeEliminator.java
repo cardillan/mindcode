@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -21,8 +22,8 @@ import java.util.stream.Collectors;
 class InaccesibleCodeEliminator extends GlobalOptimizer {
     private Set<String> activeLabels = new HashSet<>();
 
-    public InaccesibleCodeEliminator(LogicInstructionPipeline next) {
-        super(next);
+    public InaccesibleCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
 
     @Override

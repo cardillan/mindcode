@@ -10,15 +10,16 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline pipeline = new JumpOverJumpEliminator(terminus);
+    private final LogicInstructionPipeline pipeline = new JumpOverJumpEliminator(getInstructionProcessor(), terminus);
 
     @Test
     void optimizesBreakInWhileLoop() {
-        final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus,
-            Optimisation.DEAD_CODE_ELIMINATION,
-            Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
-            Optimisation.INPUT_TEMPS_ELIMINATION,
-            Optimisation.JUMP_OVER_JUMP_ELIMINATION
+        final LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+                terminus,
+                Optimisation.DEAD_CODE_ELIMINATION,
+                Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
+                Optimisation.INPUT_TEMPS_ELIMINATION,
+                Optimisation.JUMP_OVER_JUMP_ELIMINATION
         );
 
         generateInto(

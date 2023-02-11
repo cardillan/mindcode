@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline pipeline = Optimisation.createPipelineOf(terminus,
+    private final LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+            terminus,
             Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT);
     
     @Test
@@ -94,7 +95,8 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
 
     @Test
     void preservesUserVariables() {
-        final LogicInstructionPipeline customPipeline = Optimisation.createPipelineOf(terminus,
+        final LogicInstructionPipeline customPipeline = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+                terminus,
                 Optimisation.DEAD_CODE_ELIMINATION,
                 Optimisation.OUTPUT_TEMPS_ELIMINATION,
                 Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT
@@ -128,7 +130,8 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
 
     @Test
     void preservesStrictEqualConditions() {
-        final LogicInstructionPipeline customPipeline = Optimisation.createPipelineOf(terminus,
+        final LogicInstructionPipeline customPipeline = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),
+                terminus,
                 Optimisation.DEAD_CODE_ELIMINATION,
                 Optimisation.OUTPUT_TEMPS_ELIMINATION,
                 Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT

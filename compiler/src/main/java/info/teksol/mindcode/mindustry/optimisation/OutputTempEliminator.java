@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.List;
 
 // Generic optimizer to remove all assignments to temporary variables that carry over the output value
@@ -16,8 +17,8 @@ import java.util.List;
 //    (the check is based on absolute instruction sequence in the program, not on the actual program flow).
 // 4. All arguments of the other instruction referencing the __tmp variable are output ones.
 class OutputTempEliminator extends GlobalOptimizer {
-    public OutputTempEliminator(LogicInstructionPipeline next) {
-        super(next);
+    public OutputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
     }
 
     @Override
