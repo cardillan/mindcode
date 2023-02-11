@@ -2,8 +2,6 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -21,7 +19,7 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
     @Test
     void propagatesThroughUnconditionalTargets() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "" +
@@ -36,18 +34,18 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(LABEL, "__start__"),
-                        new LogicInstruction(JUMP, "__start__", "equal", "a", "false"),
-                        new LogicInstruction(JUMP, var(1002), "equal", "b", "false"),
-                        new LogicInstruction(PRINT, "b"),
-                        new LogicInstruction(JUMP, var(1003), "always"),
-                        new LogicInstruction(LABEL, var(1002)),
-                        new LogicInstruction(LABEL, var(1003)),
-                        new LogicInstruction(PRINT, "a"),
-                        new LogicInstruction(JUMP, "__start__", "always"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(END)
+                        createInstruction(LABEL, "__start__"),
+                        createInstruction(JUMP, "__start__", "equal", "a", "false"),
+                        createInstruction(JUMP, var(1002), "equal", "b", "false"),
+                        createInstruction(PRINT, "b"),
+                        createInstruction(JUMP, var(1003), "always"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(PRINT, "a"),
+                        createInstruction(JUMP, "__start__", "always"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -55,7 +53,7 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
     
     @Test
     void propagatesThroughConditionalTargets() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "" +
@@ -71,19 +69,19 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(JUMP, var(1001), "notEqual", "c", "null"),
-                        new LogicInstruction(GETLINK, "c", "1"),
-                        new LogicInstruction(JUMP, var(1001), "notEqual", "c", "null"),
-                        new LogicInstruction(PRINT, "\"Not found\""),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1002)),
-                        new LogicInstruction(LABEL, var(1003)),
-                        new LogicInstruction(LABEL, var(1010)),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(PRINT, "\"Done\""),
-                        new LogicInstruction(END)
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(JUMP, var(1001), "notEqual", "c", "null"),
+                        createInstruction(GETLINK, "c", "1"),
+                        createInstruction(JUMP, var(1001), "notEqual", "c", "null"),
+                        createInstruction(PRINT, "\"Not found\""),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(LABEL, var(1010)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(PRINT, "\"Done\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -91,7 +89,7 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
     
     @Test
     void ignoresVolatileVariables() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "" +
@@ -107,19 +105,19 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(JUMP, var(1001), "greaterThanEq", "@time", "wait"),
-                        new LogicInstruction(OP, "add", "n", "n", "1"),
-                        new LogicInstruction(JUMP, var(1000), "greaterThanEq", "@time", "wait"),
-                        new LogicInstruction(PRINT, "\"Waiting\""),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1002)),
-                        new LogicInstruction(LABEL, var(1003)),
-                        new LogicInstruction(LABEL, var(1010)),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(PRINT, "\"Done\""),
-                        new LogicInstruction(END)
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(JUMP, var(1001), "greaterThanEq", "@time", "wait"),
+                        createInstruction(OP, "add", "n", "n", "1"),
+                        createInstruction(JUMP, var(1000), "greaterThanEq", "@time", "wait"),
+                        createInstruction(PRINT, "\"Waiting\""),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(LABEL, var(1010)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(PRINT, "\"Done\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );

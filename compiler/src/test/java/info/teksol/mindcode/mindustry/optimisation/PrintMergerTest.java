@@ -2,8 +2,6 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,7 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
     @Test
     void mergesTwoPrints() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "print(\"a\")\n" +
@@ -28,8 +26,8 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(PRINT, "\"ab\""),
-                        new LogicInstruction(END)
+                        createInstruction(PRINT, "\"ab\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -37,7 +35,7 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
     @Test
     void mergesThreePrints() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "print(\"a\")\n" +
@@ -48,8 +46,8 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(PRINT, "\"abc\""),
-                        new LogicInstruction(END)
+                        createInstruction(PRINT, "\"abc\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -57,7 +55,7 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
     @Test
     void handlesInterleavedPrints() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "print(\"a\")\n" +
@@ -69,10 +67,10 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(PRINT, "\"a\""),
-                        new LogicInstruction(PRINT, "x"),
-                        new LogicInstruction(PRINT, "\"cd\""),
-                        new LogicInstruction(END)
+                        createInstruction(PRINT, "\"a\""),
+                        createInstruction(PRINT, "x"),
+                        createInstruction(PRINT, "\"cd\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -80,7 +78,7 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
     
     @Test
     void skipsJumps() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "print(\"a\")\n" +
@@ -93,16 +91,16 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(PRINT, "\"a\""),
-                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
-                        new LogicInstruction(PRINT, "x"),
-                        new LogicInstruction(SET, var(1), "x"),
-                        new LogicInstruction(JUMP, var(1001), "always"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(SET, var(1), "null"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(PRINT, "\"b\""),
-                        new LogicInstruction(END)
+                        createInstruction(PRINT, "\"a\""),
+                        createInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        createInstruction(PRINT, "x"),
+                        createInstruction(SET, var(1), "x"),
+                        createInstruction(JUMP, var(1001), "always"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, var(1), "null"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(PRINT, "\"b\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -110,7 +108,7 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
     @Test
     void mergesAcrossInstructions() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "print(\"Rate: \", rate, \" items/sec\", \"\\n\")\n" +
@@ -120,13 +118,13 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(PRINT, "\"Rate: \""),
-                        new LogicInstruction(PRINT, "rate"),
-                        new LogicInstruction(OP, "sub", var(0), "@time", "start"),
-                        new LogicInstruction(PRINT, "\" items/sec\\nElapsed: \""),
-                        new LogicInstruction(PRINT, var(0)),
-                        new LogicInstruction(PRINT, "\" ms\""),
-                        new LogicInstruction(END)
+                        createInstruction(PRINT, "\"Rate: \""),
+                        createInstruction(PRINT, "rate"),
+                        createInstruction(OP, "sub", var(0), "@time", "start"),
+                        createInstruction(PRINT, "\" items/sec\\nElapsed: \""),
+                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "\" ms\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );

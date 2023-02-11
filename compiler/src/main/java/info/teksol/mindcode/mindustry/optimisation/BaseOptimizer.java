@@ -2,10 +2,13 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.instructions.BaseInstructionProcessor;
+import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 
 // Base class for optimizers. Contains helper functions for manipulating instructions.
 abstract class BaseOptimizer implements Optimizer {
@@ -69,7 +72,7 @@ abstract class BaseOptimizer implements Optimizer {
         else {
             List<String> newArgs = new ArrayList<>(instruction.getArgs());
             newArgs.set(argIndex, arg);
-            return new LogicInstruction(instruction.getOpcode(), newArgs);
+            return createInstruction(instruction.getOpcode(), newArgs);
         }
     }
     
@@ -77,7 +80,7 @@ abstract class BaseOptimizer implements Optimizer {
     protected LogicInstruction replaceAllArgs(LogicInstruction instruction, String oldArg, String newArg) {
         List<String> args = new ArrayList<>(instruction.getArgs());
         args.replaceAll(arg -> arg.equals(oldArg) ? newArg : arg);
-        return new LogicInstruction(instruction.getOpcode(), args);
+        return createInstruction(instruction.getOpcode(), args);
     }
 
     protected boolean hasInverse(String comparison) {
@@ -86,5 +89,15 @@ abstract class BaseOptimizer implements Optimizer {
 
     protected String getInverse(String comparison) {
         return INVERSES.get(comparison);
+    }
+
+    private static final InstructionProcessor INSTRUCTION_FACTORY = new BaseInstructionProcessor();
+
+    protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
+        return INSTRUCTION_FACTORY.createInstruction(opcode, args);
+    }
+
+    protected final LogicInstruction createInstruction(Opcode opcode, List<String> args) {
+        return INSTRUCTION_FACTORY.createInstruction(opcode, args);
     }
 }

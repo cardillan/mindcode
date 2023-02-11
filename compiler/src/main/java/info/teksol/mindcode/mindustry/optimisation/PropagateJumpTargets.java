@@ -29,7 +29,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         int count = 0;
-        program.add(0, new LogicInstruction(Opcode.LABEL, FIRST_LABEL));
+        program.add(0, createInstruction(Opcode.LABEL, FIRST_LABEL));
         for (int index = 0; index < program.size(); index++) {
             LogicInstruction instruction = program.get(index);
             if (instruction.isJump()) {

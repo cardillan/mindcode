@@ -2,16 +2,63 @@ package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.AbstractAstTest;
+import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.instructions.BaseInstructionProcessor;
+import info.teksol.mindcode.mindustry.logic.Opcode;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
+
 public class AbstractGeneratorTest extends AbstractAstTest {
+    // Static instances; too expensive to be created for each test
+    protected static final InstructionProcessor BASE_INSTRUCTION_FACTORY = new BaseInstructionProcessor();
+
     protected final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-    private Set<String> registered = new HashSet<>();
-    private Map<String, String> expectedToActual = new TreeMap<>();
-    private Map<String, String> actualToExpected = new TreeMap<>();
+    private final Set<String> registered = new HashSet<>();
+    private final Map<String, String> expectedToActual = new TreeMap<>();
+    private final Map<String, String> actualToExpected = new TreeMap<>();
+
+    // Instruction factory selection
+    private InstructionProcessor instructionProcessor = BASE_INSTRUCTION_FACTORY;
+
+    protected void setInstructionProcessor(InstructionProcessor instructionProcessor) {
+        this.instructionProcessor = instructionProcessor;
+    }
+
+    protected InstructionProcessor getInstructionProcessor() {
+        return instructionProcessor;
+    }
+
+    // Instruction creation
+    protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
+        return instructionProcessor.createInstruction(opcode, args);
+    }
+
+    protected final LogicInstruction createInstruction(Opcode opcode, List<String> args) {
+        return instructionProcessor.createInstruction(opcode, args);
+    }
+
+    // Program compilation
+    protected List<LogicInstruction> generateAndOptimize(Seq program, CompilerProfile profile, Consumer<String> messageConsumer) {
+        return LogicInstructionGenerator.generateAndOptimize(instructionProcessor, program, profile, messageConsumer);
+    }
+
+    protected List<LogicInstruction> generateAndOptimize(Seq program) {
+        return LogicInstructionGenerator.generateAndOptimize(instructionProcessor, program);
+    }
+
+    protected void generateInto(LogicInstructionPipeline pipeline, Seq program) {
+        LogicInstructionGenerator.generateInto(instructionProcessor, pipeline, program);
+    }
+
+    protected List<LogicInstruction> generateUnoptimized(Seq program) {
+        return LogicInstructionGenerator.generateUnoptimized(instructionProcessor, program);
+    }
 
     protected String var(int id) {
         String key = "___" + id;
@@ -61,7 +108,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             }
 
             if (!newArgs.equals(instruction.getArgs())) {
-                result.set(i, new LogicInstruction(instruction.getOpcode(), newArgs));
+                result.set(i, createInstruction(instruction.getOpcode(), newArgs));
             }
         }
         return result;

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,11 +8,13 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
+
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Assertions;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DiffDebugPrinterTest {
+public class DiffDebugPrinterTest extends AbstractGeneratorTest {
     private final DiffDebugPrinter printer = new DiffDebugPrinter(1);
     private final List<String> messages = new ArrayList<>();
 
@@ -30,11 +33,11 @@ public class DiffDebugPrinterTest {
     @Test
     void skipsEmptyIterations() {
         List<LogicInstruction> program = new ArrayList<>();
-        program.add(new LogicInstruction(SET, "a", "1"));
-        program.add(new LogicInstruction(SET, "b", "2"));
-        program.add(new LogicInstruction(OP, "add", "c", "a", "b"));
-        program.add(new LogicInstruction(PRINT, "c"));
-        program.add(new LogicInstruction(END));
+        program.add(createInstruction(SET, "a", "1"));
+        program.add(createInstruction(SET, "b", "2"));
+        program.add(createInstruction(OP, "add", "c", "a", "b"));
+        program.add(createInstruction(PRINT, "c"));
+        program.add(createInstruction(END));
 
         printer.iterationFinished(optimiser, 1, program);
         printer.iterationFinished(optimiser, 2, program);
@@ -46,11 +49,11 @@ public class DiffDebugPrinterTest {
     @Test
     void identifiesRemovedInstructions() {
         List<LogicInstruction> program = new ArrayList<>();
-        program.add(new LogicInstruction(SET, "a", "1"));
-        program.add(new LogicInstruction(SET, "b", "2"));
-        program.add(new LogicInstruction(OP, "add", "c", "a", "b"));
-        program.add(new LogicInstruction(PRINT, "c"));
-        program.add(new LogicInstruction(END));
+        program.add(createInstruction(SET, "a", "1"));
+        program.add(createInstruction(SET, "b", "2"));
+        program.add(createInstruction(OP, "add", "c", "a", "b"));
+        program.add(createInstruction(PRINT, "c"));
+        program.add(createInstruction(END));
 
         printer.iterationFinished(optimiser, 1, program);
         program.remove(3);
@@ -70,13 +73,13 @@ public class DiffDebugPrinterTest {
     @Test
     void identifiesAddedInstructions() {
         List<LogicInstruction> program = new ArrayList<>();
-        program.add(new LogicInstruction(SET, "a", "1"));
-        program.add(new LogicInstruction(SET, "b", "2"));
-        program.add(new LogicInstruction(OP, "add", "c", "a", "b"));
-        program.add(new LogicInstruction(END));
+        program.add(createInstruction(SET, "a", "1"));
+        program.add(createInstruction(SET, "b", "2"));
+        program.add(createInstruction(OP, "add", "c", "a", "b"));
+        program.add(createInstruction(END));
 
         printer.iterationFinished(optimiser, 1, program);
-        program.add(3, new LogicInstruction(PRINT, "c"));
+        program.add(3, createInstruction(PRINT, "c"));
         printer.iterationFinished(optimiser, 2, program);
         printer.print(messages::add);
 
@@ -93,11 +96,11 @@ public class DiffDebugPrinterTest {
     @Test
     void identifiesSwappedInstructions() {
         List<LogicInstruction> program = new ArrayList<>();
-        program.add(new LogicInstruction(SET, "a", "1"));
-        program.add(new LogicInstruction(SET, "b", "2"));
-        program.add(new LogicInstruction(OP, "add", "c", "a", "b"));
-        program.add(new LogicInstruction(PRINT, "c"));
-        program.add(new LogicInstruction(END));
+        program.add(createInstruction(SET, "a", "1"));
+        program.add(createInstruction(SET, "b", "2"));
+        program.add(createInstruction(OP, "add", "c", "a", "b"));
+        program.add(createInstruction(PRINT, "c"));
+        program.add(createInstruction(END));
 
         printer.iterationFinished(optimiser, 1, program);
         Collections.swap(program, 0, 1);

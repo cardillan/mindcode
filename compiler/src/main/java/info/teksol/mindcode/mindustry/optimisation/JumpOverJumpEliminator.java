@@ -105,7 +105,7 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
 
             if (isJumpOverJump) {
                 emitToNext(
-                        new LogicInstruction(
+                        createInstruction(
                                 Opcode.JUMP,
                                 unconditionalJump.getArgs().get(0),
                                 getInverse(conditionalJump.getArgs().get(1)),

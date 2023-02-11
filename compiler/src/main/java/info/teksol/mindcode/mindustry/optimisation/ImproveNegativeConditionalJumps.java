@@ -83,7 +83,7 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
                 }
 
                 emitToNext(
-                        new LogicInstruction(
+                        createInstruction(
                                 Opcode.JUMP,
                                 instruction.getArgs().get(0),
                                 getInverse(op.getArgs().get(0)),

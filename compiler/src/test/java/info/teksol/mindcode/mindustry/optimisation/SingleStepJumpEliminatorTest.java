@@ -2,12 +2,11 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
@@ -18,7 +17,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void removesSingleJump() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "if x 1 end"
@@ -27,10 +26,10 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(END)
+                        createInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -38,7 +37,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void removesTwoJumps() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "if x if y 1 end end"
@@ -47,13 +46,13 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
-                        new LogicInstruction(JUMP, var(1002), "equal", "y", "false"),
-                        new LogicInstruction(LABEL, var(1002)),
-                        new LogicInstruction(LABEL, var(1003)),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(END)
+                        createInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        createInstruction(JUMP, var(1002), "equal", "y", "false"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -61,7 +60,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void keepsIsolatedJumps() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "if x print(a) else print(b) end"
@@ -70,13 +69,13 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(JUMP, var(1000), "equal", "x", "false"),
-                        new LogicInstruction(PRINT, "a"),
-                        new LogicInstruction(JUMP, var(1001), "always"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(PRINT, "b"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(END)
+                        createInstruction(JUMP, var(1000), "equal", "x", "false"),
+                        createInstruction(PRINT, "a"),
+                        createInstruction(JUMP, var(1001), "always"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(PRINT, "b"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );

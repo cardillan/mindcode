@@ -1,20 +1,19 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.generator.InsufficientArgumentsException;
-import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LogicInstructionPrinterTest extends AbstractAstTest {
+class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void printsURadarAndUControl() {
         assertDoesNotThrow(() ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateAndOptimize(
+                                getInstructionProcessor(),
+                                generateAndOptimize(
                                         (Seq) translateToAst("" +
                                                 "target = uradar(enemy, ground, any, health, MIN_TO_MAX, BY_DISTANCE)\n" +
                                                 "if target != null\n" +
@@ -35,7 +34,8 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertDoesNotThrow(() ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateAndOptimize(
+                                getInstructionProcessor(),
+                                generateAndOptimize(
                                         (Seq) translateToAst("" +
                                                 "ulocate(ore, @surge-alloy, outx, outy)\n" +
                                                 "ulocate(building, core, ENEMY, outx, outy, outbuilding)\n" +
@@ -54,7 +54,8 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertThrows(InsufficientArgumentsException.class, () ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateAndOptimize(
+                                getInstructionProcessor(),
+                                generateAndOptimize(
                                         (Seq) translateToAst(
                                                 "flag = 33548\n" +
                                                         "\n" +
@@ -84,7 +85,8 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
         assertDoesNotThrow(() ->
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateAndOptimize(
+                                getInstructionProcessor(),
+                                generateAndOptimize(
                                         (Seq) translateToAst(
                                                 "leader = getlink(0)\n" +
                                                         "count = 1\n" +
@@ -119,7 +121,8 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateUnoptimized(
+                                getInstructionProcessor(),
+                                generateUnoptimized(
                                         (Seq) translateToAst(
                                                 "triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)"
                                         )
@@ -186,7 +189,8 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "end\n",
                 LogicInstructionPrinter.toString(
                         LogicInstructionLabelResolver.resolve(
-                                LogicInstructionGenerator.generateUnoptimized(
+                                getInstructionProcessor(),
+                                generateUnoptimized(
                                         (Seq) translateToAst(
                                                 "STORAGE = nucleus1\n" +
                                                         "MSG = message1\n" +

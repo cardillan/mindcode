@@ -103,7 +103,7 @@ class PrintMerger extends PipelinedOptimizer {
             String str1 = first.getArgs().get(0);
             String str2 = second.getArgs().get(0);
             if (str1.startsWith("\"") && str1.endsWith("\"") && str2.startsWith("\"") && str2.endsWith("\"")) {
-                return new LogicInstruction(first.getOpcode(), str1.substring(0, str1.length() - 1) + str2.substring(1));
+                return createInstruction(first.getOpcode(), str1.substring(0, str1.length() - 1) + str2.substring(1));
             }
             
             return null;

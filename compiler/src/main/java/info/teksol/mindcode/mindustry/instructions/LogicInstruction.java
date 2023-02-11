@@ -12,17 +12,17 @@ public class LogicInstruction {
     private final Opcode opcode;
     private final List<String> args;
 
-    public LogicInstruction(Opcode opcode) {
+    LogicInstruction(Opcode opcode) {
         this(opcode, List.of());
         validate();
     }
 
-    public LogicInstruction(Opcode opcode, String... args) {
+    LogicInstruction(Opcode opcode, String... args) {
         this(opcode, List.of(args));
         validate();
     }
 
-    public LogicInstruction(Opcode opcode, List<String> args) {
+    LogicInstruction(Opcode opcode, List<String> args) {
         this.opcode = opcode;
         this.args = List.copyOf(args);
         validate();

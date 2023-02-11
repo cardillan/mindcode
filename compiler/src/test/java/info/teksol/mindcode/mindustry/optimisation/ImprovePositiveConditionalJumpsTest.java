@@ -14,20 +14,20 @@ class ImprovePositiveConditionalJumpsTest extends AbstractGeneratorTest {
     @Test
     void optimizesMinimalSequence() {
         List.of(
-                new LogicInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "__tmp0", "false"),
-                new LogicInstruction(PRINT, "\"Not equal\""),
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(END)
+                createInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
+                createInstruction(JUMP, "label0", "notEqual", "__tmp0", "false"),
+                createInstruction(PRINT, "\"Not equal\""),
+                createInstruction(LABEL, "label0"),
+                createInstruction(END)
         ).forEach(pipeline::emit);
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                new LogicInstruction(JUMP, "label0", "strictEqual", "a", "b"),
-                new LogicInstruction(PRINT, "\"Not equal\""),
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(END)
+                createInstruction(JUMP, "label0", "strictEqual", "a", "b"),
+                createInstruction(PRINT, "\"Not equal\""),
+                createInstruction(LABEL, "label0"),
+                createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -36,11 +36,11 @@ class ImprovePositiveConditionalJumpsTest extends AbstractGeneratorTest {
     @Test
     void ignoresUserVariables() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(OP, "strictEqual", "c", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "c", "false"),
-                new LogicInstruction(PRINT, "\"Not equal\""),
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(END)
+                createInstruction(OP, "strictEqual", "c", "a", "b"),
+                createInstruction(JUMP, "label0", "notEqual", "c", "false"),
+                createInstruction(PRINT, "\"Not equal\""),
+                createInstruction(LABEL, "label0"),
+                createInstruction(END)
         );
 
         sequence.forEach(pipeline::emit);
@@ -52,11 +52,11 @@ class ImprovePositiveConditionalJumpsTest extends AbstractGeneratorTest {
     @Test
     void ignoresDifferentVariables() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "__tmp1", "false"),
-                new LogicInstruction(PRINT, "\"Not equal\""),
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(END)
+                createInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
+                createInstruction(JUMP, "label0", "notEqual", "__tmp1", "false"),
+                createInstruction(PRINT, "\"Not equal\""),
+                createInstruction(LABEL, "label0"),
+                createInstruction(END)
         );
 
         sequence.forEach(pipeline::emit);
@@ -68,11 +68,11 @@ class ImprovePositiveConditionalJumpsTest extends AbstractGeneratorTest {
     @Test
     void ignoresWrongConditions() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "equal", "__tmp0", "false"),
-                new LogicInstruction(PRINT, "\"Not equal\""),
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(END)
+                createInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
+                createInstruction(JUMP, "label0", "equal", "__tmp0", "false"),
+                createInstruction(PRINT, "\"Not equal\""),
+                createInstruction(LABEL, "label0"),
+                createInstruction(END)
         );
 
         sequence.forEach(pipeline::emit);
@@ -84,11 +84,11 @@ class ImprovePositiveConditionalJumpsTest extends AbstractGeneratorTest {
     @Test
     void ignoresWrongOrder() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(JUMP, "label0", "notEqual", "__tmp0", "false"),
-                new LogicInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
-                new LogicInstruction(PRINT, "\"Not equal\""),
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(END)
+                createInstruction(JUMP, "label0", "notEqual", "__tmp0", "false"),
+                createInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
+                createInstruction(PRINT, "\"Not equal\""),
+                createInstruction(LABEL, "label0"),
+                createInstruction(END)
         );
 
         sequence.forEach(pipeline::emit);

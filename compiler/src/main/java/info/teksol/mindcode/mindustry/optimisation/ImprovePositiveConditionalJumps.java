@@ -79,7 +79,7 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
             
             if (isSameVariable && jumpComparesToFalse) {
                 emitToNext(
-                        new LogicInstruction(
+                        createInstruction(
                                 Opcode.JUMP,
                                 instruction.getArgs().get(0),
                                 op.getArgs().get(0),

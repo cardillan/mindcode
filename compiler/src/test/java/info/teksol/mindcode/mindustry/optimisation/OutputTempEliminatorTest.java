@@ -16,15 +16,15 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesBasicCase() {
-        pipeline.emit(new LogicInstruction(SENSOR, "__tmp0", "vault1", "@silicon"));
-        pipeline.emit(new LogicInstruction(SET, "result", "__tmp0"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(SENSOR, "__tmp0", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(SET, "result", "__tmp0"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "result", "vault1", "@silicon"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, "result", "vault1", "@silicon"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -32,16 +32,16 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresNontemporaryVariables() {
-        pipeline.emit(new LogicInstruction(SENSOR, "var", "vault1", "@silicon"));
-        pipeline.emit(new LogicInstruction(SET, "result", "var"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(SENSOR, "var", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(SET, "result", "var"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "var", "vault1", "@silicon"),
-                        new LogicInstruction(SET, "result", "var"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, "var", "vault1", "@silicon"),
+                        createInstruction(SET, "result", "var"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -49,18 +49,18 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresVariablesWithMultipleUsage() {
-        pipeline.emit(new LogicInstruction(SENSOR, "__tmp0", "vault1", "@silicon"));
-        pipeline.emit(new LogicInstruction(SET, "result", "__tmp0"));
-        pipeline.emit(new LogicInstruction(SET, "another", "__tmp0"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(SENSOR, "__tmp0", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(SET, "result", "__tmp0"));
+        pipeline.emit(createInstruction(SET, "another", "__tmp0"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "__tmp0", "vault1", "@silicon"),
-                        new LogicInstruction(SET, "result", "__tmp0"),
-                        new LogicInstruction(SET, "another", "__tmp0"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, "__tmp0", "vault1", "@silicon"),
+                        createInstruction(SET, "result", "__tmp0"),
+                        createInstruction(SET, "another", "__tmp0"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -68,18 +68,18 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresInstructionsInWrongOrder() {
-        pipeline.emit(new LogicInstruction(PRINT, "1"));
-        pipeline.emit(new LogicInstruction(SET, "result", "__tmp0"));
-        pipeline.emit(new LogicInstruction(SENSOR, "__tmp0", "vault1", "@silicon"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(PRINT, "1"));
+        pipeline.emit(createInstruction(SET, "result", "__tmp0"));
+        pipeline.emit(createInstruction(SENSOR, "__tmp0", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(PRINT, "1"),
-                        new LogicInstruction(SET, "result", "__tmp0"),
-                        new LogicInstruction(SENSOR, "__tmp0", "vault1", "@silicon"),
-                        new LogicInstruction(END)
+                        createInstruction(PRINT, "1"),
+                        createInstruction(SET, "result", "__tmp0"),
+                        createInstruction(SENSOR, "__tmp0", "vault1", "@silicon"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -87,15 +87,15 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void mergesTwoSets() {
-        pipeline.emit(new LogicInstruction(SET, "__tmp0", "x"));
-        pipeline.emit(new LogicInstruction(SET, "y", "__tmp0"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(SET, "__tmp0", "x"));
+        pipeline.emit(createInstruction(SET, "y", "__tmp0"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SET, "y", "x"),
-                        new LogicInstruction(END)
+                        createInstruction(SET, "y", "x"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -103,16 +103,16 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresIncompatibleSets() {
-        pipeline.emit(new LogicInstruction(SET, "__tmp0", "x"));
-        pipeline.emit(new LogicInstruction(SET, "__tmp0", "y"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(SET, "__tmp0", "x"));
+        pipeline.emit(createInstruction(SET, "__tmp0", "y"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SET, "__tmp0", "x"),
-                        new LogicInstruction(SET, "__tmp0", "y"),
-                        new LogicInstruction(END)
+                        createInstruction(SET, "__tmp0", "x"),
+                        createInstruction(SET, "__tmp0", "y"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -120,16 +120,16 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresWrongArgumentType() {
-        pipeline.emit(new LogicInstruction(SENSOR, "__tmp1", "vault1", "__tmp0"));
-        pipeline.emit(new LogicInstruction(SET, "result", "__tmp0"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(SENSOR, "__tmp1", "vault1", "__tmp0"));
+        pipeline.emit(createInstruction(SET, "result", "__tmp0"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "__tmp1", "vault1", "__tmp0"),
-                        new LogicInstruction(SET, "result", "__tmp0"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, "__tmp1", "vault1", "__tmp0"),
+                        createInstruction(SET, "result", "__tmp0"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -139,7 +139,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesGetlinkFollowedBySet() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "target = getlink(0)"
@@ -148,9 +148,9 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SET, var(0), "0"),
-                        new LogicInstruction(GETLINK, "target", var(0)),
-                        new LogicInstruction(END)
+                        createInstruction(SET, var(0), "0"),
+                        createInstruction(GETLINK, "target", var(0)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -158,14 +158,14 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesGetlinkFollowedBySetForDifferentStuffAlone() {
-        pipeline.emit(new LogicInstruction(GETLINK, "a", "0"));
-        pipeline.emit(new LogicInstruction(SET, "b", "1"));
+        pipeline.emit(createInstruction(GETLINK, "a", "0"));
+        pipeline.emit(createInstruction(SET, "b", "1"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(GETLINK, "a", "0"),
-                        new LogicInstruction(SET, "b", "1")
+                        createInstruction(GETLINK, "a", "0"),
+                        createInstruction(SET, "b", "1")
                 ),
                 terminus.getResult()
         );
@@ -173,16 +173,16 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesGetlinkFollowedByGetlinkAlone() {
-        pipeline.emit(new LogicInstruction(GETLINK, "a", "0"));
-        pipeline.emit(new LogicInstruction(GETLINK, "b", "1"));
-        pipeline.emit(new LogicInstruction(READ, "c", "cell1", "1"));
+        pipeline.emit(createInstruction(GETLINK, "a", "0"));
+        pipeline.emit(createInstruction(GETLINK, "b", "1"));
+        pipeline.emit(createInstruction(READ, "c", "cell1", "1"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(GETLINK, "a", "0"),
-                        new LogicInstruction(GETLINK, "b", "1"),
-                        new LogicInstruction(READ, "c", "cell1", "1")
+                        createInstruction(GETLINK, "a", "0"),
+                        createInstruction(GETLINK, "b", "1"),
+                        createInstruction(READ, "c", "cell1", "1")
                 ),
                 terminus.getResult()
         );
@@ -190,12 +190,12 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void terminalGetlinkIsEmitted() {
-        pipeline.emit(new LogicInstruction(GETLINK, "a", "0"));
+        pipeline.emit(createInstruction(GETLINK, "a", "0"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(GETLINK, "a", "0")
+                        createInstruction(GETLINK, "a", "0")
                 ),
                 terminus.getResult()
         );
@@ -205,7 +205,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesOpThenSet() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "r = rand(100)"
@@ -214,9 +214,9 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SET, var(0), "100"),
-                        new LogicInstruction(OP, "rand", "r", var(0)),
-                        new LogicInstruction(END)
+                        createInstruction(SET, var(0), "100"),
+                        createInstruction(OP, "rand", "r", var(0)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -224,7 +224,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesOpOpThenSet() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "state = min(max(state, MIN), MAX)"
@@ -233,9 +233,9 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(OP, "max", var(0), "state", "MIN"),
-                        new LogicInstruction(OP, "min", "state", var(0), "MAX"),
-                        new LogicInstruction(END)
+                        createInstruction(OP, "max", var(0), "state", "MIN"),
+                        createInstruction(OP, "min", "state", var(0), "MAX"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -243,7 +243,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesOpThenSetFromBinaryOp() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "remaining = capacity - current"
@@ -252,8 +252,8 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(OP, "sub", "remaining", "capacity", "current"),
-                        new LogicInstruction(END)
+                        createInstruction(OP, "sub", "remaining", "capacity", "current"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -263,13 +263,13 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void improvesReadThenSet() {
-        LogicInstructionGenerator.generateInto(pipeline, (Seq) translateToAst("boo = cell1[0]"));
+        generateInto(pipeline, (Seq) translateToAst("boo = cell1[0]"));
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SET, var(0), "0"),
-                        new LogicInstruction(READ, "boo", "cell1", var(0)),
-                        new LogicInstruction(END)
+                        createInstruction(SET, var(0), "0"),
+                        createInstruction(READ, "boo", "cell1", var(0)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -277,16 +277,16 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesReadThenSetButOtherValueAlone() {
-        pipeline.emit(new LogicInstruction(READ, "__tmp0", "cell1", "14"));
-        pipeline.emit(new LogicInstruction(SET, "__tmp2", "14"));
-        pipeline.emit(new LogicInstruction(END));
+        pipeline.emit(createInstruction(READ, "__tmp0", "cell1", "14"));
+        pipeline.emit(createInstruction(SET, "__tmp2", "14"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(READ, "__tmp0", "cell1", "14"),
-                        new LogicInstruction(SET, "__tmp2", "14"),
-                        new LogicInstruction(END)
+                        createInstruction(READ, "__tmp0", "cell1", "14"),
+                        createInstruction(SET, "__tmp2", "14"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -296,7 +296,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesSensorThenSet() {
-        LogicInstructionGenerator.generateInto(pipeline,
+        generateInto(pipeline,
                 (Seq) translateToAst(
                         "numsilicon = STORAGE.silicon"
                 )
@@ -304,8 +304,8 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "numsilicon", "STORAGE", "@silicon"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, "numsilicon", "STORAGE", "@silicon"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -313,7 +313,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void supportsConsecutiveSensors() {
-        LogicInstructionGenerator.generateInto(pipeline,
+        generateInto(pipeline,
                 (Seq) translateToAst(
                         "numgraphite = container1.graphite\nnumcoal = container1.coal"
                 )
@@ -321,9 +321,9 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "numgraphite", "container1", "@graphite"),
-                        new LogicInstruction(SENSOR, "numcoal", "container1", "@coal"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, "numgraphite", "container1", "@graphite"),
+                        createInstruction(SENSOR, "numcoal", "container1", "@coal"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -331,14 +331,14 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesSensorThenSetWithUnrelatedAlone() {
-        pipeline.emit(new LogicInstruction(SENSOR, "numsil", "vault1", "@silicon"));
-        pipeline.emit(new LogicInstruction(SET, "n", "1"));
+        pipeline.emit(createInstruction(SENSOR, "numsil", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(SET, "n", "1"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "numsil", "vault1", "@silicon"),
-                        new LogicInstruction(SET, "n", "1")
+                        createInstruction(SENSOR, "numsil", "vault1", "@silicon"),
+                        createInstruction(SET, "n", "1")
                 ),
                 terminus.getResult()
         );
@@ -346,14 +346,14 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesSensorNonSetAlone() {
-        pipeline.emit(new LogicInstruction(SENSOR, "numsil", "vault1", "@silicon"));
-        pipeline.emit(new LogicInstruction(PRINT, "numsil"));
+        pipeline.emit(createInstruction(SENSOR, "numsil", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(PRINT, "numsil"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "numsil", "vault1", "@silicon"),
-                        new LogicInstruction(PRINT, "numsil")
+                        createInstruction(SENSOR, "numsil", "vault1", "@silicon"),
+                        createInstruction(PRINT, "numsil")
                 ),
                 terminus.getResult()
         );
@@ -361,14 +361,14 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void consecutiveSensorsOptimizeCorrectly() {
-        pipeline.emit(new LogicInstruction(SENSOR, "a", "vault1", "@silicon"));
-        pipeline.emit(new LogicInstruction(SENSOR, "b", "conveyor1", "@enabled"));
+        pipeline.emit(createInstruction(SENSOR, "a", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(SENSOR, "b", "conveyor1", "@enabled"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "a", "vault1", "@silicon"),
-                        new LogicInstruction(SENSOR, "b", "conveyor1", "@enabled")
+                        createInstruction(SENSOR, "a", "vault1", "@silicon"),
+                        createInstruction(SENSOR, "b", "conveyor1", "@enabled")
                 ),
                 terminus.getResult()
         );
@@ -376,12 +376,12 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesSingleSensorAlone() {
-        pipeline.emit(new LogicInstruction(SENSOR, "numsil", "vault1", "@silicon"));
+        pipeline.emit(createInstruction(SENSOR, "numsil", "vault1", "@silicon"));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "numsil", "vault1", "@silicon")
+                        createInstruction(SENSOR, "numsil", "vault1", "@silicon")
                 ),
                 terminus.getResult()
         );

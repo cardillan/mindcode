@@ -16,7 +16,7 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
     @Test
     void normalizesConditionalJump() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "" +
@@ -28,15 +28,15 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(SET, var(1), "\"Here\""),
-                        new LogicInstruction(PRINT, var(1)),
-                        new LogicInstruction(SET, var(0), var(1)),
-                        new LogicInstruction(JUMP, var(1001), "always"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(SET, var(0), "null"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(END)
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(SET, var(1), "\"Here\""),
+                        createInstruction(PRINT, var(1)),
+                        createInstruction(SET, var(0), var(1)),
+                        createInstruction(JUMP, var(1001), "always"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, var(0), "null"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -44,7 +44,7 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
     @Test
     void removesAlwaysFalseJump() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 sut,
                 (Seq) translateToAst(
                         "if true 1 end"
@@ -53,13 +53,13 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SET, var(1), "1"),
-                        new LogicInstruction(SET, var(0), var(1)),
-                        new LogicInstruction(JUMP, var(1001), "always"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(SET, var(0), "null"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(END)
+                        createInstruction(SET, var(1), "1"),
+                        createInstruction(SET, var(0), var(1)),
+                        createInstruction(JUMP, var(1001), "always"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, var(0), "null"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );

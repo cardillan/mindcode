@@ -8,6 +8,7 @@ import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
 import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
+import info.teksol.mindcode.mindustry.instructions.BaseInstructionProcessor;
 import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -59,8 +60,9 @@ class SamplesTest {
 
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
-        List<LogicInstruction> unoptimized = LogicInstructionGenerator.generateUnoptimized(prog);
-        List<LogicInstruction> optimized = LogicInstructionGenerator.generateAndOptimize(prog);
+        BaseInstructionProcessor instructionProcessor = new BaseInstructionProcessor();
+        List<LogicInstruction> unoptimized = LogicInstructionGenerator.generateUnoptimized(instructionProcessor, prog);
+        List<LogicInstruction> optimized = LogicInstructionGenerator.generateAndOptimize(instructionProcessor, prog);
 
         final File tmp = new File("tmp", "samples");
         if (!tmp.exists()) assertTrue(tmp.mkdirs());
@@ -85,9 +87,7 @@ class SamplesTest {
                 .redirectOutput(diffTarget)
                 .start();
 
-        final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(
-                optimized
-        );
+        final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(instructionProcessor, optimized);
 
         final String opcodes = LogicInstructionPrinter.toString(result);
         assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + program);

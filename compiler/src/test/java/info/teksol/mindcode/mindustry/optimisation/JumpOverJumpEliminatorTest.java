@@ -3,7 +3,6 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,7 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
             Optimisation.JUMP_OVER_JUMP_ELIMINATION
         );
 
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst(
                         "" +
@@ -38,18 +37,18 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(JUMP, var(1001), "equal", "true", "false"),
-                        new LogicInstruction(PRINT, "\"In loop\""),
-                        new LogicInstruction(SENSOR, var(0), "@unit", "@dead"),
-                        new LogicInstruction(JUMP, var(1001), "strictEqual", var(0), "0"),
-                        new LogicInstruction(LABEL, var(1002)),
-                        new LogicInstruction(LABEL, var(1003)),
-                        new LogicInstruction(LABEL, var(1010)),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(PRINT, "\"Out of loop\""),
-                        new LogicInstruction(END)
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(JUMP, var(1001), "equal", "true", "false"),
+                        createInstruction(PRINT, "\"In loop\""),
+                        createInstruction(SENSOR, var(0), "@unit", "@dead"),
+                        createInstruction(JUMP, var(1001), "strictEqual", var(0), "0"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(LABEL, var(1010)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(PRINT, "\"Out of loop\""),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -58,20 +57,20 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     @Test
     void optimizesMinimalSequence() {
         List.of(
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(JUMP, "label1", "equal", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "always"),
-                new LogicInstruction(LABEL, "label1"),
-                new LogicInstruction(END)
+                createInstruction(LABEL, "label0"),
+                createInstruction(JUMP, "label1", "equal", "a", "b"),
+                createInstruction(JUMP, "label0", "always"),
+                createInstruction(LABEL, "label1"),
+                createInstruction(END)
         ).forEach(pipeline::emit);
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "a", "b"),
-                new LogicInstruction(LABEL, "label1"),
-                new LogicInstruction(END)
+                createInstruction(LABEL, "label0"),
+                createInstruction(JUMP, "label0", "notEqual", "a", "b"),
+                createInstruction(LABEL, "label1"),
+                createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -80,11 +79,11 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     @Test
     void ignoresStrictEqual() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(JUMP, "label1", "strictEqual", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "always"),
-                new LogicInstruction(LABEL, "label1"),
-                new LogicInstruction(END)
+                createInstruction(LABEL, "label0"),
+                createInstruction(JUMP, "label1", "strictEqual", "a", "b"),
+                createInstruction(JUMP, "label0", "always"),
+                createInstruction(LABEL, "label1"),
+                createInstruction(END)
         );
 
         sequence.forEach(pipeline::emit);
@@ -96,12 +95,12 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     @Test
     void ignoresDistantJumps() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(JUMP, "label1", "strictEqual", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "always"),
-                new LogicInstruction(PRINT, "a"),
-                new LogicInstruction(LABEL, "label1"),
-                new LogicInstruction(END)
+                createInstruction(LABEL, "label0"),
+                createInstruction(JUMP, "label1", "strictEqual", "a", "b"),
+                createInstruction(JUMP, "label0", "always"),
+                createInstruction(PRINT, "a"),
+                createInstruction(LABEL, "label1"),
+                createInstruction(END)
         );
 
         sequence.forEach(pipeline::emit);
@@ -113,11 +112,11 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     @Test
     void ignoresConditionalJumps() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(LABEL, "label0"),
-                new LogicInstruction(JUMP, "label1", "equal", "a", "b"),
-                new LogicInstruction(JUMP, "label0", "equal", "c", "d"),
-                new LogicInstruction(LABEL, "label1"),
-                new LogicInstruction(END)
+                createInstruction(LABEL, "label0"),
+                createInstruction(JUMP, "label1", "equal", "a", "b"),
+                createInstruction(JUMP, "label0", "equal", "c", "d"),
+                createInstruction(LABEL, "label1"),
+                createInstruction(END)
         );
 
         sequence.forEach(pipeline::emit);

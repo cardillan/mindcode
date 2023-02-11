@@ -19,7 +19,7 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesCaseWithVariable() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "x = case UNIT\n" +
@@ -33,21 +33,21 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(JUMP, var(1001), "notEqual", "UNIT", "@poly"),
-                        new LogicInstruction(LABEL, var(1002)),
-                        new LogicInstruction(SET, var(0), "1"),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(JUMP, var(1003), "notEqual", "UNIT", "@mega"),
-                        new LogicInstruction(LABEL, var(1004)),
-                        new LogicInstruction(SET, var(0), "2"),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1003)),
-                        new LogicInstruction(SET, var(0), "3"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(SET, "x", var(0)),
-                        new LogicInstruction(PRINT, "x"),
-                        new LogicInstruction(END)
+                        createInstruction(JUMP, var(1001), "notEqual", "UNIT", "@poly"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(SET, var(0), "1"),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(JUMP, var(1003), "notEqual", "UNIT", "@mega"),
+                        createInstruction(LABEL, var(1004)),
+                        createInstruction(SET, var(0), "2"),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(SET, var(0), "3"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, "x", var(0)),
+                        createInstruction(PRINT, "x"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -55,7 +55,7 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesCaseWithExpression() {
-        LogicInstructionGenerator.generateInto(
+        generateInto(
                 pipeline,
                 (Seq) translateToAst("" +
                         "x = case vault1.firstItem\n" +
@@ -69,22 +69,22 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, var(0), "vault1", "@firstItem"),
-                        new LogicInstruction(JUMP, var(1001), "notEqual", var(0), "@lead"),
-                        new LogicInstruction(LABEL, var(1002)),
-                        new LogicInstruction(SET, var(1), "1"),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1001)),
-                        new LogicInstruction(JUMP, var(1003), "notEqual", var(0), "@coal"),
-                        new LogicInstruction(LABEL, var(1004)),
-                        new LogicInstruction(SET, var(1), "2"),
-                        new LogicInstruction(JUMP, var(1000), "always"),
-                        new LogicInstruction(LABEL, var(1003)),
-                        new LogicInstruction(SET, var(1), "3"),
-                        new LogicInstruction(LABEL, var(1000)),
-                        new LogicInstruction(SET, "x", var(1)),
-                        new LogicInstruction(PRINT, "x"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, var(0), "vault1", "@firstItem"),
+                        createInstruction(JUMP, var(1001), "notEqual", var(0), "@lead"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(SET, var(1), "1"),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(JUMP, var(1003), "notEqual", var(0), "@coal"),
+                        createInstruction(LABEL, var(1004)),
+                        createInstruction(SET, var(1), "2"),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(SET, var(1), "3"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, "x", var(1)),
+                        createInstruction(PRINT, "x"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -94,20 +94,20 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     @Test
     void optimizesMinimalSequence() {
         List.of(
-                new LogicInstruction(SENSOR, "var", "vault1", "@firstItem"),
-                new LogicInstruction(SET, "__ast0", "var"),
-                new LogicInstruction(JUMP, "label0", "equal", "__ast0", "@lead"),
-                new LogicInstruction(JUMP, "label1", "equal", "__ast0", "@coal"),
-                new LogicInstruction(END)
+                createInstruction(SENSOR, "var", "vault1", "@firstItem"),
+                createInstruction(SET, "__ast0", "var"),
+                createInstruction(JUMP, "label0", "equal", "__ast0", "@lead"),
+                createInstruction(JUMP, "label1", "equal", "__ast0", "@coal"),
+                createInstruction(END)
         ).forEach(pipeline::emit);
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction(SENSOR, "var", "vault1", "@firstItem"),
-                        new LogicInstruction(JUMP, "label0", "equal", "var", "@lead"),
-                        new LogicInstruction(JUMP, "label1", "equal", "var", "@coal"),
-                        new LogicInstruction(END)
+                        createInstruction(SENSOR, "var", "vault1", "@firstItem"),
+                        createInstruction(JUMP, "label0", "equal", "var", "@lead"),
+                        createInstruction(JUMP, "label1", "equal", "var", "@coal"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
@@ -116,10 +116,10 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     @Test
     void ignoresNonAstVariables() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(SENSOR, "var", "vault1", "@firstItem"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "var", "@lead"),
-                new LogicInstruction(JUMP, "label1", "notEqual", "var", "@coal"),
-                new LogicInstruction(END)
+                createInstruction(SENSOR, "var", "vault1", "@firstItem"),
+                createInstruction(JUMP, "label0", "notEqual", "var", "@lead"),
+                createInstruction(JUMP, "label1", "notEqual", "var", "@coal"),
+                createInstruction(END)
         );
           
         sequence.forEach(pipeline::emit);
@@ -131,11 +131,11 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     @Test
     void ignoresNonAstJumps() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(SENSOR, "var", "vault1", "@firstItem"),
-                new LogicInstruction(SET, "__ast0", "var"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "__ast0", "@lead"),
-                new LogicInstruction(JUMP, "label1", "notEqual", "@coal", "__ast0"),
-                new LogicInstruction(END)
+                createInstruction(SENSOR, "var", "vault1", "@firstItem"),
+                createInstruction(SET, "__ast0", "var"),
+                createInstruction(JUMP, "label0", "notEqual", "__ast0", "@lead"),
+                createInstruction(JUMP, "label1", "notEqual", "@coal", "__ast0"),
+                createInstruction(END)
         );
           
         sequence.forEach(pipeline::emit);
@@ -147,11 +147,11 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     @Test
     void ignoresWrongOrder() {
         List<LogicInstruction> sequence = List.of(
-                new LogicInstruction(SENSOR, "var", "vault1", "@firstItem"),
-                new LogicInstruction(JUMP, "label0", "notEqual", "__ast0", "@lead"),
-                new LogicInstruction(SET, "__ast0", "var"),
-                new LogicInstruction(JUMP, "label1", "notEqual", "__ast0", "@coal"),
-                new LogicInstruction(END)
+                createInstruction(SENSOR, "var", "vault1", "@firstItem"),
+                createInstruction(JUMP, "label0", "notEqual", "__ast0", "@lead"),
+                createInstruction(SET, "__ast0", "var"),
+                createInstruction(JUMP, "label1", "notEqual", "__ast0", "@coal"),
+                createInstruction(END)
         );
           
         sequence.forEach(pipeline::emit);
