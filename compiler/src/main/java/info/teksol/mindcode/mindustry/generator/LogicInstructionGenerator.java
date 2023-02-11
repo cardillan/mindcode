@@ -4,6 +4,8 @@ import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.mindustry.AccumulatingLogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.CompilerProfile;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.functions.BaseFunctionMapper;
+import info.teksol.mindcode.mindustry.functions.FunctionMapper;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import info.teksol.mindcode.mindustry.optimisation.DebugPrinter;
@@ -27,6 +29,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public static final String TMP_PREFIX = "__tmp";
 
     private final InstructionProcessor instructionProcessor;
+    private final FunctionMapper functionMapper;
     private final LogicInstructionPipeline pipeline;
     private int tmpIndex;
     private int labelIndex;
@@ -35,8 +38,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private final Map<String, String> functionLabels = new HashMap<>();
     private final LoopStack loopStack = new LoopStack();
 
-    LogicInstructionGenerator(InstructionProcessor instructionProcessor, LogicInstructionPipeline pipeline) {
+    LogicInstructionGenerator(InstructionProcessor instructionProcessor, FunctionMapper functionMapper, LogicInstructionPipeline pipeline) {
         this.instructionProcessor = instructionProcessor;
+        this.functionMapper = functionMapper;
         this.pipeline = pipeline;
     }
 
@@ -47,7 +51,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 ? new NullDebugPrinter() : new DiffDebugPrinter(profile.getDebugLevel());
         LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineForProfile(instructionProcessor,
                 terminus, profile, debugPrinter, messageConsumer);
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor, pipeline);
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+                new BaseFunctionMapper(instructionProcessor), pipeline);
         generator.start(program);
         pipeline.flush();
 
@@ -61,7 +66,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     public static void generateInto(InstructionProcessor instructionProcessor, LogicInstructionPipeline pipeline, Seq program) {
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor, pipeline);
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+                new BaseFunctionMapper(instructionProcessor), pipeline);
         generator.start(program);
         pipeline.flush();
     }
@@ -69,7 +75,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public static List<LogicInstruction> generateUnoptimized(InstructionProcessor instructionProcessor, Seq program) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
 
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor, terminus);
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+                new BaseFunctionMapper(instructionProcessor), terminus);
         generator.start(program);
         terminus.flush();
 
@@ -276,199 +283,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private String handleFunctionCall(String functionName, List<String> params) {
-        switch (functionName) {
-            case "print":
-                return handlePrint(params);
+        String output = functionMapper.handleFunction(pipeline, functionName, params, () -> nextTemp());
 
-            case "printflush":
-                return handlePrintflush(params);
-
-            case "wait":
-                return handleWait(params);
-
-            case "ubind":
-                return handleUbind(params);
-
-            case "move":
-                return handleMove(params);
-
-            case "rand":
-                return handleRand(params);
-
-            case "getlink":
-                return handleGetlink(params);
-
-            case "radar":
-                return handleRadar(params);
-
-            case "mine":
-                return handleMine(params);
-
-            case "itemDrop":
-                return handleItemDrop(params);
-
-            case "itemTake":
-                return handleItemTake(params);
-
-            case "flag":
-                return handleFlag(params);
-
-            case "approach":
-                return handleApproach(params);
-
-            case "idle":
-                return handleIdle();
-
-            case "pathfind":
-                return handlePathfind();
-
-            case "stop":
-                return handleStop();
-
-            case "boost":
-                return handleBoost(params);
-
-            case "target":
-                return handleTarget(params);
-
-            case "targetp":
-                return handleTargetp(params);
-
-            case "payDrop":
-                return handlePayDrop();
-
-            case "payTake":
-                return handlePayTake(params);
-
-            case "build":
-                return handleBuild(params);
-
-            case "getBlock":
-                return handleGetBlock(params);
-
-            case "within":
-                return handleWithin(params);
-
-            case "tan":
-            case "sin":
-            case "cos":
-            case "log":
-            case "abs":
-            case "floor":
-            case "ceil":
-                return handleMath(functionName, params);
-
-            case "clear":
-                return handleClear(params);
-
-            case "color":
-                return handleColor(params);
-
-            case "stroke":
-                return handleStroke(params);
-
-            case "line":
-                return handleLine(params);
-            case "rect":
-                return handleRect(params);
-
-            case "lineRect":
-                return handleLineRect(params);
-
-            case "poly":
-                return handlePoly(params);
-
-            case "linePoly":
-                return handleLinePoly(params);
-
-            case "triangle":
-                return handleTriangle(params);
-
-            case "image":
-                return handleImage(params);
-
-            case "drawflush":
-                return handleDrawflush(params);
-
-            case "uradar":
-                return handleURadar(params);
-
-            case "ulocate":
-                return handleULocate(params);
-
-            case "end":
-                return handleEnd();
-
-            case "sqrt":
-                return handleSqrt(params);
-
-            case "min":
-                return handleMin(params);
-
-            case "max":
-                return handleMax(params);
-
-            case "len":
-                return handleLen(params);
-
-            case "angle":
-                return handleAngle(params);
-
-            case "log10":
-                return handleLog10(params);
-
-            case "noise":
-                return handleNoise(params);
-
-            default:
-                if (declaredFunctions.containsKey(functionName)) {
-                    return handleInternalFunctionCall(functionName, params);
-                } else {
-                    throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
-                }
+        if (output != null) {
+            return output;
         }
-    }
 
-    private String handleNoise(List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "noise", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
-
-    private String handleLog10(List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "log10", tmp, params.get(0)));
-        return tmp;
-    }
-
-    private String handleAngle(List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "angle", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
-
-    private String handleLen(List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "len", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
-
-    private String handleMax(List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "max", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
-
-    private String handleMin(List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "min", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
-
-    private String handleSqrt(List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "sqrt", tmp, params.get(0)));
-        return tmp;
+        if (declaredFunctions.containsKey(functionName)) {
+            return handleInternalFunctionCall(functionName, params);
+        } else {
+            throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
+        }
     }
 
     private String handleInternalFunctionCall(String functionName, List<String> params) {
@@ -527,303 +352,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     private String stackName() {
         return allocatedStack.getName();
-    }
-
-    private String handleEnd() {
-        pipeline.emit(createInstruction(END));
-        return "null";
-    }
-
-    private String handleULocate(List<String> params) {
-        /*
-            found = ulocate(ore, @surge-alloy, outx, outy)
-                    ulocate ore core true @surge-alloy outx outy found building
-
-            found = ulocate(building, core, ENEMY, outx, outy, outbuilding)
-                    ulocate building core true @copper outx outy found building
-
-            found = ulocate(spawn, outx, outy, outbuilding)
-                    ulocate spawn core true @copper outx outy found building
-
-            found = ulocate(damaged, outx, outy, outbuilding)
-                    ulocate damaged core true @copper outx outy found building
-        */
-        final String tmp = nextTemp();
-        switch (params.get(0)) {
-            case "ore":
-                if (params.size() < 4) {
-                    throw new InsufficientArgumentsException("ulocate(ore) requires 4 arguments, received " + params.size());
-                }
-
-                pipeline.emit(createInstruction(ULOCATE, "ore", "core", "true", params.get(1), params.get(2), params.get(3), tmp, nextTemp()));
-                break;
-            case "building":
-                if (params.size() < 6) {
-                    throw new InsufficientArgumentsException("ulocate(building) requires 6 arguments, received " + params.size());
-                }
-
-                pipeline.emit(createInstruction(ULOCATE, "building", params.get(1), params.get(2), "@copper", params.get(3), params.get(4), tmp, params.get(5)));
-                break;
-
-            case "spawn":
-                if (params.size() < 4) {
-                    throw new InsufficientArgumentsException("ulocate(spawn) requires 4 arguments, received " + params.size());
-                }
-
-                pipeline.emit(createInstruction(ULOCATE, "spawn", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
-                break;
-
-            case "damaged":
-                if (params.size() < 4) {
-                    throw new InsufficientArgumentsException("ulocate(damaged) requires 4 arguments, received " + params.size());
-                }
-
-                pipeline.emit(createInstruction(ULOCATE, "damaged", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
-                break;
-
-            default:
-                throw new GenerationException("Unhandled type of ulocate in " + params);
-        }
-
-        return tmp;
-    }
-
-    private String handleURadar(List<String> params) {
-        // uradar enemy attacker ground armor 0 order result
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(URADAR, params.get(0), params.get(1), params.get(2), params.get(3), "0", params.get(4), tmp));
-        return tmp;
-    }
-
-    private String handleDrawflush(List<String> params) {
-        pipeline.emit(createInstruction(DRAWFLUSH, params.get(0)));
-        return params.get(0);
-    }
-
-    private String handleImage(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "image", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handleTriangle(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "triangle", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5)));
-        return "null";
-    }
-
-    private String handleLinePoly(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "linePoly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handlePoly(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "poly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handleLineRect(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "lineRect", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleRect(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "rect", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleLine(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "line", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleStroke(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "stroke", params.get(0)));
-        return "null";
-    }
-
-    private String handleColor(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "color", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleClear(List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "clear", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleMath(String functionName, List<String> params) {
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, functionName, tmp, params.get(0)));
-        return tmp;
-    }
-
-    private String handleWithin(List<String> params) {
-        // ucontrol within x y radius result 0
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(UCONTROL, "within", params.get(0), params.get(1), params.get(2), tmp));
-        return tmp;
-    }
-
-    private String handleGetBlock(List<String> params) {
-        // ucontrol getBlock x y resultType resultBuilding 0
-        // TODO: either handle multiple return values, or provide a better abstraction over getBlock
-        pipeline.emit(createInstruction(UCONTROL, "getBlock", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleBuild(List<String> params) {
-        // ucontrol build x y block rotation config
-        pipeline.emit(createInstruction(UCONTROL, "build", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handlePayTake(List<String> params) {
-        // ucontrol payTake takeUnits 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "payTake", params.get(0)));
-        return "null";
-    }
-
-    private String handlePayDrop() {
-        // ucontrol payDrop 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "payDrop"));
-        return "null";
-    }
-
-    private String handleItemTake(List<String> params) {
-        // ucontrol itemTake from item amount 0 0
-        pipeline.emit(createInstruction(UCONTROL, "itemTake", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleTargetp(List<String> params) {
-        // ucontrol targetp unit shoot 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "targetp", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleTarget(List<String> params) {
-        // ucontrol target x y shoot 0 0
-        pipeline.emit(createInstruction(UCONTROL, "target", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleBoost(List<String> params) {
-        // ucontrol boost enable 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "boost", params.get(0)));
-        return params.get(0);
-    }
-
-    private String handlePathfind() {
-        // ucontrol pathfind 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "pathfind"));
-        return "null";
-    }
-
-    private String handleIdle() {
-        // ucontrol idle 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "idle"));
-        return "null";
-    }
-
-    private String handleStop() {
-        // ucontrol stop 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "stop"));
-        return "null";
-    }
-
-    private String handleApproach(List<String> params) {
-        // ucontrol approach x y radius 0 0
-        pipeline.emit(createInstruction(UCONTROL, "approach", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleFlag(List<String> params) {
-        // ucontrol flag value 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "flag", params.get(0)));
-        return params.get(0);
-    }
-
-    private String handleItemDrop(List<String> params) {
-        // ucontrol itemDrop to amount 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "itemDrop", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleMine(List<String> params) {
-        // ucontrol mine x y 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "mine", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleGetlink(List<String> params) {
-        // getlink result 0
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(GETLINK, tmp, params.get(0)));
-        return tmp;
-    }
-
-    private boolean isRadarSearchProperty(String prop) {
-        return List.of("attacker", "enemy", "ally", "player", "flying", "ground", "boss", "any").contains(prop);
-    }
-    private boolean isRadarSortbyOption(String sortby) {
-        return List.of("distance", "health", "shield", "armor", "maxHealth").contains(sortby);
-    }
-
-    private String handleRadar(List<String> params) {
-        // radar prop1 prop2 prop3 sortby target order out
-        final String tmp = nextTemp();
-        final String prop1 = params.get(0);
-        final String prop2 = params.get(1);
-        final String prop3 = params.get(2);
-        final String sortby = params.get(3);
-        // Radar search properties should be hardcoded and can't be indirectly referenced. (Last test: v7.0.1.)
-        if (!isRadarSearchProperty(prop1)) {
-            throw new GenerationException("Invalid radar search property [" + prop1 + "]");
-        }
-        if (!isRadarSearchProperty(prop2)) {
-            throw new GenerationException("Invalid radar search property [" + prop2 + "]");
-        }
-        if (!isRadarSearchProperty(prop3)) {
-            throw new GenerationException("Invalid radar search property [" + prop3 + "]");
-        }
-        if (!isRadarSortbyOption(sortby)) {
-            throw new GenerationException("Invalid radar sort option [" + sortby + "]");
-        }
-        pipeline.emit(createInstruction(RADAR, params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
-        return tmp;
-    }
-
-    private String handleRand(List<String> params) {
-        // op rand result 200 0
-        final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, "rand", tmp, params.get(0)));
-        return tmp;
-    }
-
-    private String handleMove(List<String> params) {
-        // ucontrol move 14 15 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "move", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleUbind(List<String> params) {
-        // ubind @poly
-        pipeline.emit(createInstruction(UBIND, params.get(0)));
-        return "null";
-    }
-
-    private String handlePrintflush(List<String> params) {
-        params.forEach((param) -> pipeline.emit(createInstruction(PRINTFLUSH, List.of(param))));
-        return "null";
-    }
-
-    private String handlePrint(List<String> params) {
-        params.forEach((param) -> pipeline.emit(createInstruction(PRINT, List.of(param))));
-        return params.get(params.size() - 1);
-    }
-
-    private String handleWait(List<String> params) {
-        pipeline.emit(createInstruction(WAIT, params.get(0)));
-        return "null";
     }
 
     @Override
