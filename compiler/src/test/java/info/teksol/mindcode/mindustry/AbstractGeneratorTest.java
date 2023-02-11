@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.AbstractAstTest;
 
 import java.util.*;

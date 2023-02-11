@@ -1,8 +1,8 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.Opcode;
+import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.ArrayList;
 import java.util.List;
 

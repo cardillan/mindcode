@@ -1,7 +1,7 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
-import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.Iterator;
 import java.util.List;

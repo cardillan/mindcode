@@ -1,6 +1,6 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

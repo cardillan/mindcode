@@ -1,11 +1,13 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.ast.Seq;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static info.teksol.mindcode.mindustry.Opcode.*;
+import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
     @Test

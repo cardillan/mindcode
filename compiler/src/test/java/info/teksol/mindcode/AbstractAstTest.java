@@ -4,7 +4,7 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.AstPrettyPrinter;
 import info.teksol.mindcode.grammar.AbstractParserTest;
-import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 
 import java.util.List;
 

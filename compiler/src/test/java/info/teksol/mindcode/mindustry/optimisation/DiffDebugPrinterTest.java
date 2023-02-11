@@ -1,12 +1,12 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import static info.teksol.mindcode.mindustry.Opcode.*;
+import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertEquals;

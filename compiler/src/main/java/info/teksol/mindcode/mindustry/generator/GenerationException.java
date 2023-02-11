@@ -1,8 +1,8 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.generator;
 
 import info.teksol.mindcode.MindcodeException;
 
-class GenerationException extends MindcodeException {
+public class GenerationException extends MindcodeException {
     GenerationException(String message) {
         super(message);
     }

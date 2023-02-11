@@ -1,4 +1,4 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.logic;
 
 import java.util.List;
 

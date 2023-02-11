@@ -1,5 +1,7 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
@@ -12,10 +14,10 @@ import org.antlr.v4.runtime.*;
 
 public class CompilerFacade {
     public static CompilerOutput compile(String sourceCode, boolean enableOptimization) {
-        return compile(sourceCode, enableOptimization ? CompileProfile.fullOptimizations() : CompileProfile.noOptimizations());
+        return compile(sourceCode, enableOptimization ? CompilerProfile.fullOptimizations() : CompilerProfile.noOptimizations());
     }
     
-    public static CompilerOutput compile(String sourceCode, CompileProfile profile) {
+    public static CompilerOutput compile(String sourceCode, CompilerProfile profile) {
         String instructions = "";
 
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceCode));

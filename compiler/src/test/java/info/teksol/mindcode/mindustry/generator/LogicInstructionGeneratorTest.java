@@ -1,11 +1,14 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.generator;
 
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
+import info.teksol.mindcode.mindustry.CompilerProfile;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.optimisation.Optimisation;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import static info.teksol.mindcode.mindustry.Opcode.*;
+import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
@@ -1769,8 +1772,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesUnaryLiteralMinusExpressions() {
-        assertLogicInstructionsMatch(
-                List.of(
+        assertLogicInstructionsMatch(List.of(
                         new LogicInstruction(SET, "a", "-7"),
                         new LogicInstruction(OP, "mul", "b", "-1", "a"),
                         new LogicInstruction(OP, "mul", "c", "-5", "b"),
@@ -1780,15 +1782,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(OP, "mul", "e", "-1", var(1)),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateAndOptimize(
-                        (Seq) translateToAst("" +
+                LogicInstructionGenerator.generateAndOptimize((Seq) translateToAst("" +
                                 "a = -7\n" +
                                 "b = -a\n" +
                                 "c = -5 * b\n" +
                                 "d = 2 * -c\n" +
                                 "e = -d ** 2"
                         ),
-                        new CompileProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        new CompilerProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1796,8 +1797,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesTernaryOpPriority() {
-        assertLogicInstructionsMatch(
-                List.of(
+        assertLogicInstructionsMatch(List.of(
                         new LogicInstruction(OP, "greaterThan", var(0), "b", "c"),
                         new LogicInstruction(JUMP, var(1000), "equal", var(0), "false"),
                         new LogicInstruction(SET, var(1), "b"),
@@ -1812,12 +1812,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(OP, "add", "d", "d", var(3)),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateAndOptimize(
-                        (Seq) translateToAst("" +
+                LogicInstructionGenerator.generateAndOptimize((Seq) translateToAst("" +
                                 "a = b > c ? b : c\n" +
                                 "d += -e *= f"
                         ),
-                        new CompileProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        new CompilerProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1825,8 +1824,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesBitwiseOpPriority() {
-        assertLogicInstructionsMatch(
-                List.of(
+        assertLogicInstructionsMatch(List.of(
                         new LogicInstruction(OP, "and", var(0), "c", "d"),
                         new LogicInstruction(OP, "or", "a", "b", var(0)),
                         new LogicInstruction(OP, "not", var(1), "f"),
@@ -1838,14 +1836,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(OP, "land", "x", var(3), var(4)),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateAndOptimize(
-                        (Seq) translateToAst("" +
+                LogicInstructionGenerator.generateAndOptimize((Seq) translateToAst("" +
                                 "a = b | c & d\n" +
                                 "e = ~f & g\n" +
                                 "g = h & 31 == 15\n" +
                                 "x = y & 15 and z & 7"
                         ),
-                        new CompileProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
+                        new CompilerProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1872,8 +1869,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesBreakContinue() {
-        assertLogicInstructionsMatch(
-                List.of(
+        assertLogicInstructionsMatch(List.of(
                         new LogicInstruction(LABEL, var(1000)),
                         new LogicInstruction(JUMP, var(1002), "equal", "a", "false"),
                         new LogicInstruction(JUMP, var(1003), "equal", "b", "false"),
@@ -1892,8 +1888,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(PRINT, "\"End\""),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateAndOptimize(
-                        (Seq) translateToAst("" +
+                LogicInstructionGenerator.generateAndOptimize((Seq) translateToAst("" +
                                 "while a\n" +
                                 "  if b\n" +
                                 "    continue\n" +
@@ -1903,7 +1898,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(\"End\")"
                         ),
-                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1911,8 +1906,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesNestedLoopBreaks() {
-        assertLogicInstructionsMatch(
-                List.of(
+        assertLogicInstructionsMatch(List.of(
                         new LogicInstruction(LABEL, var(0)),
                         new LogicInstruction(JUMP, var(1), "equal", "a", "false"),
                         new LogicInstruction(PRINT, "a"),
@@ -1938,8 +1932,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(PRINT, "f"),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateAndOptimize(
-                        (Seq) translateToAst("" +
+                LogicInstructionGenerator.generateAndOptimize((Seq) translateToAst("" +
                                 "while a\n" +
                                 "  print(a)\n" +
                                 "  while b\n" +
@@ -1956,7 +1949,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(f)"
                         ),
-                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -1975,8 +1968,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesBreakAndContinueWithLabel() {
-        assertLogicInstructionsMatch(
-                List.of(
+        assertLogicInstructionsMatch(List.of(
                         new LogicInstruction(LABEL, var(1000)),
                         new LogicInstruction(JUMP, var(1002), "equal", "a", "false"),
                         new LogicInstruction(PRINT, "\"In outer\""),
@@ -1996,8 +1988,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(PRINT, "\"After outer\""),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateAndOptimize(
-                        (Seq) translateToAst("" +
+                LogicInstructionGenerator.generateAndOptimize((Seq) translateToAst("" +
                                 "Outer:\n" +
                                 "while a\n" +
                                 "  print(\"In outer\")\n" +
@@ -2012,7 +2003,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(\"After outer\")"
                         ),
-                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
+                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
                         message -> {}
                 )
         );
@@ -2059,8 +2050,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesDoWhileLoopWithBreakAndContinue() {
-        assertLogicInstructionsMatch(
-                List.of(
+        assertLogicInstructionsMatch(List.of(
                         new LogicInstruction(PRINT, "\"Blocks:\""),
                         new LogicInstruction(SET, "n", "@links"),
                         new LogicInstruction(LABEL, var(1000)),
@@ -2084,8 +2074,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction(PRINTFLUSH, "message1"),
                         new LogicInstruction(END)
                 ),
-                LogicInstructionGenerator.generateAndOptimize(
-                        (Seq) translateToAst("" +
+                LogicInstructionGenerator.generateAndOptimize((Seq) translateToAst("" +
                                 "print(\"Blocks:\")\n" +
                                 "n = @links\n" +
                                 "MainLoop:\n" +
@@ -2102,7 +2091,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "loop while n > 0\n" +
                                 "printflush(message1)"
                         ),
-                        new CompileProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
+                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
                                 Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.JUMP_OVER_JUMP_ELIMINATION),
                         message -> {}
                 )

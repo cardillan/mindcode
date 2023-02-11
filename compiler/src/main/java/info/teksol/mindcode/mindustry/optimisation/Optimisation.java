@@ -1,7 +1,7 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.CompileProfile;
-import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.CompilerProfile;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.EnumSet;
 import java.util.function.Consumer;
@@ -83,7 +83,7 @@ public enum Optimisation {
     }
     
     public static LogicInstructionPipeline createPipelineForProfile(LogicInstructionPipeline terminus,
-            CompileProfile profile, DebugPrinter debugPrinter, Consumer<String> messageRecipient) {
+            CompilerProfile profile, DebugPrinter debugPrinter, Consumer<String> messageRecipient) {
         LogicInstructionPipeline pipeline = new InstructionCounter(terminus, messageRecipient,
                 "%6d instructions after optimizations.", new NullDebugPrinter());
 

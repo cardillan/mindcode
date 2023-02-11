@@ -1,5 +1,7 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
+import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,7 @@ public class LogicInstructionLabelResolver {
                 case JUMP:
                     final String label = instruction.getArgs().get(0);
                     if (!addresses.containsKey(label)) {
-                        throw new GenerationException("Unknown jump label target: [" + label + "] was not previously discovered in " + program);
+                        throw new CompilerException("Unknown jump label target: [" + label + "] was not previously discovered in " + program);
                     }
 
                     resolveJump(label, instruction, addresses, result);
@@ -72,7 +74,7 @@ public class LogicInstructionLabelResolver {
 
             final String label = instruction.getArgs().get(0);
             if (result.containsKey(label)) {
-                throw new GenerationException("Duplicate label detected: [" + label + "] reused at least twice in " + program);
+                throw new CompilerException("Duplicate label detected: [" + label + "] reused at least twice in " + program);
             }
 
             result.put(label, instructionPointer);

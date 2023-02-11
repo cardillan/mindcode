@@ -1,7 +1,7 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.LogicInstruction;
-import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
+import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.*;
 import java.util.regex.Matcher;

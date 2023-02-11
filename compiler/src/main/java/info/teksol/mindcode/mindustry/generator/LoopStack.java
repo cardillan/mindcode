@@ -1,4 +1,4 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.generator;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

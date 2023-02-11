@@ -38,7 +38,7 @@ public class CompileMain {
     
     static public void main(String[] args) throws IOException {
         List<String> filenames = new ArrayList<>();
-        CompileProfile profile = CompileProfile.noOptimizations();
+        CompilerProfile profile = CompilerProfile.noOptimizations();
 
         for (String arg : args) {
             if ("-?".equals(arg) || "--help".equals(arg)) {
@@ -87,7 +87,7 @@ public class CompileMain {
         }
     }
     
-    static private void selectOptimisation(CompileProfile profile, String flags) {
+    static private void selectOptimisation(CompilerProfile profile, String flags) {
         if (flags.isEmpty()) {
             // -o alone activates all
             profile.setOptimisations(EnumSet.allOf(Optimisation.class));
@@ -109,7 +109,7 @@ public class CompileMain {
         profile.setOptimisations(negate ? EnumSet.complementOf(result) : result);
     }
     
-    static private void selectDebugLevel(CompileProfile profile, String option) {
+    static private void selectDebugLevel(CompilerProfile profile, String option) {
         switch(option) {
             case "0": profile.setDebugLevel(0); break;
             case "1": profile.setDebugLevel(1); break;
@@ -119,7 +119,7 @@ public class CompileMain {
         }
     }
 
-    static private void selectPrintLevel(CompileProfile profile, String option) {
+    static private void selectPrintLevel(CompilerProfile profile, String option) {
         switch(option) {
             case "0": profile.setParseTreeLevel(0); break;
             case "":

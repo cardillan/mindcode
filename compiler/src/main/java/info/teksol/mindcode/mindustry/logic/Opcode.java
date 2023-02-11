@@ -1,4 +1,4 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.logic;
 
 import java.util.List;
 import java.util.Map;
@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static info.teksol.mindcode.mindustry.ArgumentType.*;
-import static info.teksol.mindcode.mindustry.MindustryVersion.*;
+import static info.teksol.mindcode.mindustry.logic.ArgumentType.*;
+import static info.teksol.mindcode.mindustry.logic.ProcessorVersion.*;
 
 /**
  * Defines instruction opcodes and all information about instruction arguments for given opcode.
@@ -89,25 +89,25 @@ public enum Opcode {
     private final int totalInputs;
     private final int totalOutputs;
     private final int additionalArgumentForPrint;
-    private final MindustryVersion mindustryVersion;
+    private final ProcessorVersion mindustryVersion;
 
-    private Opcode(MindustryVersion mindustryVersion, String code, ArgumentType... argumentTypes) {
+    private Opcode(ProcessorVersion mindustryVersion, String code, ArgumentType... argumentTypes) {
         this(mindustryVersion, code, Map.of("", new OpcodeVariant("", argumentTypes)), 0);
     }
 
-    private Opcode(MindustryVersion mindustryVersion, String code, List<OpcodeVariant> variants) {
+    private Opcode(ProcessorVersion mindustryVersion, String code, List<OpcodeVariant> variants) {
         this(mindustryVersion, code, convertOpcodeVariants(variants), 0);
     }
 
-    private Opcode(MindustryVersion mindustryVersion, String code, List<OpcodeVariant> variants, int additionalArgumentForPrint) {
+    private Opcode(ProcessorVersion mindustryVersion, String code, List<OpcodeVariant> variants, int additionalArgumentForPrint) {
         this(mindustryVersion, code, convertOpcodeVariants(variants), additionalArgumentForPrint);
     }
 
-    private Opcode(MindustryVersion mindustryVersion, String code, Map<String, OpcodeVariant> argumentTypeMap) {
+    private Opcode(ProcessorVersion mindustryVersion, String code, Map<String, OpcodeVariant> argumentTypeMap) {
         this(mindustryVersion, code, argumentTypeMap, 0);
     }
 
-    private Opcode(MindustryVersion mindustryVersion, String code, Map<String, OpcodeVariant> argumentTypeMap,
+    private Opcode(ProcessorVersion mindustryVersion, String code, Map<String, OpcodeVariant> argumentTypeMap,
             int additionalArgumentForPrint) {
         this.mindustryVersion = mindustryVersion;
         this.opcode = code;

@@ -2,13 +2,13 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
-import info.teksol.mindcode.mindustry.LogicInstruction;
-import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
+import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import static info.teksol.mindcode.mindustry.Opcode.*;
+import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus,

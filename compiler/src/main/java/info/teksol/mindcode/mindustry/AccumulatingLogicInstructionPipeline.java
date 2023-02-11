@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import java.util.ArrayList;
 import java.util.List;
 

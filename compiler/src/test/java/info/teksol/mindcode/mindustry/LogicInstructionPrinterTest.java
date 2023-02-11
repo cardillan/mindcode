@@ -1,5 +1,7 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.generator.InsufficientArgumentsException;
 import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
 import org.junit.jupiter.api.Test;

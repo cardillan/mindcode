@@ -1,13 +1,19 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.generator;
 
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.optimisation.Optimisation;
 import info.teksol.mindcode.ast.*;
+import info.teksol.mindcode.mindustry.AccumulatingLogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.CompilerProfile;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.logic.Opcode;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.mindustry.Opcode.*;
+import static info.teksol.mindcode.mindustry.logic.Opcode.*;
+
 import info.teksol.mindcode.mindustry.optimisation.DebugPrinter;
 import info.teksol.mindcode.mindustry.optimisation.DiffDebugPrinter;
 import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
@@ -32,7 +38,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         this.pipeline = pipeline;
     }
 
-    public static List<LogicInstruction> generateAndOptimize(Seq program, CompileProfile profile,
+    public static List<LogicInstruction> generateAndOptimize(Seq program, CompilerProfile profile,
             Consumer<String> messageConsumer) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 
@@ -48,7 +54,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     public static List<LogicInstruction> generateAndOptimize(Seq program) {
-        return generateAndOptimize(program, CompileProfile.fullOptimizations(), s -> {});
+        return generateAndOptimize(program, CompilerProfile.fullOptimizations(), s -> {});
     }
 
     public static void generateInto(LogicInstructionPipeline pipeline, Seq program) {

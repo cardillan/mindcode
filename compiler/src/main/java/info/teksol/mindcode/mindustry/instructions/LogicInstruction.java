@@ -1,11 +1,12 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.instructions;
 
+import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static info.teksol.mindcode.mindustry.Opcode.*;
+import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
 public class LogicInstruction {
     private final Opcode opcode;
@@ -115,7 +116,7 @@ public class LogicInstruction {
     private void validate() {
         int expectedArgs = opcode.getArgumentTypes(args).size();
         if (args.size() > expectedArgs) {
-            throw new GenerationException("Too many arguments of instruction " + opcode +
+            throw new InvalidInstructionException("Too many arguments of instruction " + opcode +
                     " (expected " + expectedArgs + "). " + toString());
         }
         
@@ -123,7 +124,7 @@ public class LogicInstruction {
                 .filter(a -> !a.getArgumentType().isCompatible(a.getValue())).findAny();
         
         if (wrongArgument.isPresent()) {
-            throw new GenerationException("Argument " + wrongArgument.get().getValue() + 
+            throw new InvalidInstructionException("Argument " + wrongArgument.get().getValue() + 
                     " not compatible with argument type " + wrongArgument.get().getArgumentType() + ". " + toString());
         }
     }

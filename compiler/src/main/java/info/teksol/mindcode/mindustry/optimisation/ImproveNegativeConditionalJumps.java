@@ -1,9 +1,9 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.LogicInstruction;
-import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
+import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.Opcode;
+import info.teksol.mindcode.mindustry.logic.Opcode;
 
 // Turns the following sequence of instructions:
 //    op <comparison> var1 A B
