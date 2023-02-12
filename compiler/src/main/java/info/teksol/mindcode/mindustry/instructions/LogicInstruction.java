@@ -3,8 +3,6 @@ package info.teksol.mindcode.mindustry.instructions;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
@@ -12,20 +10,9 @@ public class LogicInstruction {
     private final Opcode opcode;
     private final List<String> args;
 
-    LogicInstruction(Opcode opcode) {
-        this(opcode, List.of());
-        validate();
-    }
-
-    LogicInstruction(Opcode opcode, String... args) {
-        this(opcode, List.of(args));
-        validate();
-    }
-
     LogicInstruction(Opcode opcode, List<String> args) {
         this.opcode = opcode;
         this.args = List.copyOf(args);
-        validate();
     }
     
     public boolean isWrite() {
@@ -80,13 +67,10 @@ public class LogicInstruction {
         return args;
     }
 
-    /**
-     * @return stream of instruction arguments together with type information
-     */
-    public Stream<TypedArgument> getTypedArguments() {
-        return opcode.getTypedArguments(args);
+    public String getArg(int index) {
+        return args.get(index);
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,25 +91,5 @@ public class LogicInstruction {
                 "opcode='" + opcode + '\'' +
                 ", args=" + args +
                 '}';
-    }
-    
-    /**
-     * Validates the instruction arguments (their count and applicability to argument types)
-     * against argument list of the instruction's Opcode.
-     */
-    private void validate() {
-        int expectedArgs = opcode.getArgumentTypes(args).size();
-        if (args.size() > expectedArgs) {
-            throw new InvalidInstructionException("Too many arguments of instruction " + opcode +
-                    " (expected " + expectedArgs + "). " + toString());
-        }
-        
-        Optional<TypedArgument> wrongArgument = getTypedArguments()
-                .filter(a -> !a.getArgumentType().isCompatible(a.getValue())).findAny();
-        
-        if (wrongArgument.isPresent()) {
-            throw new InvalidInstructionException("Argument " + wrongArgument.get().getValue() + 
-                    " not compatible with argument type " + wrongArgument.get().getArgumentType() + ". " + toString());
-        }
     }
 }

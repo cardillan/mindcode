@@ -26,13 +26,9 @@ import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<String> {
-    public static final String TMP_PREFIX = "__tmp";
-
     private final InstructionProcessor instructionProcessor;
     private final FunctionMapper functionMapper;
     private final LogicInstructionPipeline pipeline;
-    private int tmpIndex;
-    private int labelIndex;
     private StackAllocation allocatedStack;
     private final Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
     private final Map<String, String> functionLabels = new HashMap<>();
@@ -180,7 +176,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             pipeline.emit(createInstruction(Opcode.CONTROL, prop, propTarget, rvalue));
         } else if (node.getVar() instanceof VarRef) {
             final String target = visit(node.getVar());
-            pipeline.emit(createInstruction(Opcode.SET, List.of(target, rvalue)));
+            pipeline.emit(createInstruction(Opcode.SET, target, rvalue));
         } else {
             throw new GenerationException("Unhandled assignment target in " + node);
         }
@@ -193,7 +189,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String expression = visit(node.getExpression());
 
         final String tmp = nextTemp();
-        pipeline.emit(createInstruction(OP, List.of(translateUnaryOpToCode(node.getOp()), tmp, expression)));
+        pipeline.emit(createInstruction(OP, translateUnaryOpToCode(node.getOp()), tmp, expression));
         return tmp;
     }
 
@@ -247,14 +243,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
-        pipeline.emit(createInstruction(LABEL, List.of(beginLabel)));
+        pipeline.emit(createInstruction(LABEL, beginLabel));
         final String cond = visit(node.getCondition());
-        pipeline.emit(createInstruction(JUMP, List.of(doneLabel, "equal", cond, "false")));
+        pipeline.emit(createInstruction(JUMP, doneLabel, "equal", cond, "false"));
         visit(node.getBody());
-        pipeline.emit(createInstruction(LABEL, List.of(continueLabel)));
+        pipeline.emit(createInstruction(LABEL, continueLabel));
         visit(node.getUpdate());
-        pipeline.emit(createInstruction(JUMP, List.of(beginLabel, "always")));
-        pipeline.emit(createInstruction(LABEL, List.of(doneLabel)));
+        pipeline.emit(createInstruction(JUMP, beginLabel, "always"));
+        pipeline.emit(createInstruction(LABEL, doneLabel));
         loopStack.exitLoop(node.getLabel());
         return "null";
     }
@@ -283,7 +279,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private String handleFunctionCall(String functionName, List<String> params) {
-        String output = functionMapper.handleFunction(pipeline, functionName, params, () -> nextTemp());
+        String output = functionMapper.handleFunction(pipeline, functionName, params);
 
         if (output != null) {
             return output;
@@ -360,13 +356,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String right = visit(node.getRight());
 
         final String tmp = nextTemp();
-        pipeline.emit(
-                createInstruction(
-                        OP,
-                        List.of(translateBinaryOpToCode(node.getOp()), tmp, left, right)
-                )
-        );
-
+        pipeline.emit(createInstruction(OP, translateBinaryOpToCode(node.getOp()), tmp, left, right));
         return tmp;
     }
 
@@ -393,22 +383,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitStringLiteral(StringLiteral node) {
         final String tmp = nextTemp();
-        pipeline.emit(
-                createInstruction(
-                        SET,
-                        List.of(
-                                tmp,
-                                "\"" + node.getText().replaceAll("\"", "\\\"") + "\""
-                        )
-                )
-        );
+        pipeline.emit(createInstruction(SET, tmp, "\"" + node.getText().replaceAll("\"", "\\\"") + "\""));
         return tmp;
     }
 
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
         final String tmp = nextTemp();
-        pipeline.emit(createInstruction(SET, List.of(tmp, node.getLiteral())));
+        pipeline.emit(createInstruction(SET, tmp, node.getLiteral()));
         return tmp;
     }
 
@@ -527,6 +509,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitControl(Control node) {
+        // TODO: version-specific function mapping
         final String target = visit(node.getTarget());
 
         final List<String> args = new ArrayList<>();
@@ -625,10 +608,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private String nextLabel() {
-        return "__label" + labelIndex++;
+        return instructionProcessor.nextLabel();
     }
 
     private String nextTemp() {
-        return TMP_PREFIX + this.tmpIndex++;
+        return instructionProcessor.nextTemp();
     }
 }

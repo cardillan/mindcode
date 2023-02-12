@@ -1,22 +1,22 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
-import info.teksol.mindcode.mindustry.instructions.BaseInstructionProcessor;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessorFactory;
+import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.Opcode;
-
+import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
+import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import java.util.*;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
-
 public class AbstractGeneratorTest extends AbstractAstTest {
-    // Static instances; too expensive to be created for each test
-    protected static final InstructionProcessor BASE_INSTRUCTION_FACTORY = new BaseInstructionProcessor();
+    private InstructionProcessor instructionProcessor =
+            InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
 
     protected final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private final Set<String> registered = new HashSet<>();
@@ -24,8 +24,6 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     private final Map<String, String> actualToExpected = new TreeMap<>();
 
     // Instruction factory selection
-    private InstructionProcessor instructionProcessor = BASE_INSTRUCTION_FACTORY;
-
     protected void setInstructionProcessor(InstructionProcessor instructionProcessor) {
         this.instructionProcessor = instructionProcessor;
     }
@@ -103,9 +101,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         for (int i = 0; i < result.size(); i++) {
             final LogicInstruction instruction = result.get(i);
             final List<String> newArgs = new ArrayList<>(instruction.getArgs());
-            for (int j = 0; j < newArgs.size(); j++) {
-                newArgs.set(j, expectedToActual.getOrDefault(newArgs.get(j), newArgs.get(j)));
-            }
+            newArgs.replaceAll(arg -> expectedToActual.getOrDefault(arg, arg));
 
             if (!newArgs.equals(instruction.getArgs())) {
                 result.set(i, createInstruction(instruction.getOpcode(), newArgs));

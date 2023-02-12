@@ -1,7 +1,6 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.List;
@@ -30,18 +29,18 @@ class OutputTempEliminator extends GlobalOptimizer {
 
             String arg1 = current.getArgs().get(1);
             // Not an assignment from a temp variable
-            if (!arg1.startsWith(LogicInstructionGenerator.TMP_PREFIX)) continue;
+            if (!arg1.startsWith(instructionProcessor.getTempPrefix())) continue;
             
             LogicInstruction previous = program.get(index - 1);
-            // Previous instruction a set producing a different variable
+            // Previous instruction is a set producing a different variable
             if (previous.isSet() && !previous.getArgs().get(0).equals(arg1)) continue;
             
             List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg1));
             // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
             if (list.size() != 2 || list.get(0) != previous) continue;
 
-            // Make sure all arg0 arguments of the other instruction are input
-            boolean replacesOutputArg = previous.getTypedArguments()
+            // Make sure all arg0 arguments of the other instruction are output
+            boolean replacesOutputArg = instructionProcessor.getTypedArguments(previous)
                     .filter(t -> t.getValue().equals(arg1))
                     .allMatch(t -> t.getArgumentType().isOutput());
             if (!replacesOutputArg) continue;

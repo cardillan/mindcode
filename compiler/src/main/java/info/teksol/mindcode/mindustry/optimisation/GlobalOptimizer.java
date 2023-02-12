@@ -62,10 +62,10 @@ abstract class GlobalOptimizer extends BaseOptimizer {
         }
     }
 
-    // Starting at index, finds first instruction matching predicate.
+    // Starting at given index, finds first instruction matching predicate.
     // Returns the index or -1 if not found.
-    protected int findInstructionIndex(int index, Predicate<LogicInstruction> matcher) {
-        for (int i = index; i < program.size(); i++) {
+    protected int findInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
+        for (int i = startIndex; i < program.size(); i++) {
             LogicInstruction instruction = program.get(i);
             if (matcher.test(instruction)) {
                 return i;
@@ -75,9 +75,9 @@ abstract class GlobalOptimizer extends BaseOptimizer {
         return -1;
     }
     
-    // Starting at index, find first instruction matching predicate. Return null if not found.
-    protected LogicInstruction findInstruction(int index, Predicate<LogicInstruction> matcher) {
-        int result = findInstructionIndex(index, matcher);
+    // Starting at given index, find first instruction matching predicate. Return null if not found.
+    protected LogicInstruction findInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
+        int result = findInstructionIndex(startIndex, matcher);
         return result < 0 ? null : program.get(result);
     }
     

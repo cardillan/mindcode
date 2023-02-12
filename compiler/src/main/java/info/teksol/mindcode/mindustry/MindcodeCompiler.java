@@ -54,7 +54,7 @@ public class MindcodeCompiler implements Compiler {
                 result = LogicInstructionGenerator.generateAndOptimize(instructionProcessor, prog, profile, messages::add);
             }
             result = LogicInstructionLabelResolver.resolve(instructionProcessor, result);
-            instructions = LogicInstructionPrinter.toString(result);
+            instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
         } catch (RuntimeException e) {
             errors.add(e.getMessage());
         }

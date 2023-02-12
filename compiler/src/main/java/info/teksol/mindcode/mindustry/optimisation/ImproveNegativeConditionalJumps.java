@@ -1,7 +1,6 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
@@ -111,6 +110,6 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
     
     private boolean isComparisonOperatorToTmp(LogicInstruction instruction) {
         return hasInverse(instruction.getArgs().get(0)) &&
-                instruction.getArgs().get(1).startsWith(LogicInstructionGenerator.TMP_PREFIX);
+                instruction.getArgs().get(1).startsWith(instructionProcessor.getTempPrefix());
     }
 }

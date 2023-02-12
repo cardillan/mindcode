@@ -1,12 +1,134 @@
 package info.teksol.mindcode.mindustry.instructions;
 
+import info.teksol.mindcode.mindustry.logic.ArgumentType;
 import info.teksol.mindcode.mindustry.logic.Opcode;
+import info.teksol.mindcode.mindustry.logic.TypedArgument;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface InstructionProcessor {
 
+    String nextLabel();
+
+    String nextTemp();
+
+    /**
+     * Creates and validates a new LogicInstruction.
+     *
+     * @param opcode opcode of the instruction
+     * @param arguments arguments of the instruction
+     * @return a new, validated instance of LogicInstruction
+     */
     LogicInstruction createInstruction(Opcode opcode, String... arguments);
 
+    /**
+     * Creates and validates a new LogicInstruction.
+     *
+     * @param opcode opcode of the instruction
+     * @param arguments arguments of the instruction
+     * @return a new, validated instance of LogicInstruction
+     */
     LogicInstruction createInstruction(Opcode opcode, List<String> arguments);
 
+    /**
+     * Returns a logic instruction with an argument set to the  given value.
+     * If the instruction is modified, a new version of it is created, otherwise the current instance is returned.
+     *
+     * @param instruction instruction to modify
+     * @param argIndex index of an argument to set
+     * @param value new value for the argument
+     * @return a modified instruction
+     */
+    LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String value);
+
+    /**
+     * Returns a logic instruction with all arguments equal to a specific value replaced by a new value.
+     * More than one argument of the instruction can be modified. A new instruction is always created.
+     *
+     * @param instruction instruction to modify
+     * @param oldArg value of arguments to find
+     * @param newArg new value for the arguments equal to the old value
+     * @return a modified instruction
+     */
+    LogicInstruction replaceAllArgs(LogicInstruction instruction, String oldArg, String newArg);
+
+    /**
+     * Returns list of argument types based on instruction opcode and instruction variant. The variant
+     * of the instruction is determined by inspecting its arguments.
+     *
+     * @param instruction instruction to process
+     * @return list of types of given arguments
+     */
+    List<ArgumentType> getArgumentTypes(LogicInstruction instruction);
+
+    /**
+     * Determines the number of input arguments to the instruction.
+     *
+     * @param instruction instruction to process
+     * @return number of input arguments
+     */
+    int getTotalInputs(LogicInstruction instruction);
+
+    /**
+     * Determines the number of output arguments to the instruction.
+     *
+     * @param instruction instruction to process
+     * @return number of output arguments
+     */
+    int getTotalOutputs(LogicInstruction instruction);
+
+    /**
+     * Determines the number of arguments needed to print the instruction
+     *
+     * @param instruction instruction to process
+     * @return number total printable arguments
+     */
+    int getPrintArgumentCount(LogicInstruction instruction);
+
+    /**
+     * Determines the types of arguments based on instruction variant and returns values of arguments
+     * which are input in the particular instruction variant.
+     *
+     * @param instruction instruction to process
+     * @return list of argument values assigned to input arguments
+     */
+    List<String> getInputValues(LogicInstruction instruction);
+
+    /**
+     * Determines the types of arguments based on instruction variant and returns values of arguments
+     * which are output in the particular instruction variant.
+     *
+     * @param instruction instruction to process
+     * @return list of argument values assigned to output arguments
+     */
+    List<String> getOutputValues(LogicInstruction instruction);
+
+    /**
+     * Assigns types to instruction arguments. Types depend on the opcode and instruction variant. The variant
+     * of the instruction is determined by inspecting its arguments.
+     *
+     * @param instruction instruction to process
+     * @return list of typed arguments
+     */
+    Stream<TypedArgument> getTypedArguments(LogicInstruction instruction);
+
+    /**
+     * Returns true if the given value is allowed to be used in place of the given argument.
+     * For input and output arguments, anything is permissible at the moment (it could be a variable name, a literal,
+     * or in some cases a @constant), but it might be possible to implement more specific checks in the future.
+     * For other arguments, only concrete, version-specific values are permissible.
+     * 
+     * @param type type of the argument
+     * @param value value assigned to the argument
+     * @return true if the value is valid for given argument type
+     */
+    boolean isValid(ArgumentType type, String value);
+
+    default String getLabelPrefix() {
+        return "__label";
+    }
+
+    default String getTempPrefix() {
+        return "__tmp";
+    }
 }

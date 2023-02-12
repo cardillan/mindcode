@@ -1,7 +1,6 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.Iterator;
@@ -31,7 +30,7 @@ class InputTempEliminator extends GlobalOptimizer {
             
             String arg0 = instruction.getArgs().get(0);
             // Not an assignment to a temp variable
-            if (!arg0.startsWith(LogicInstructionGenerator.TMP_PREFIX)) continue;
+            if (!arg0.startsWith(instructionProcessor.getTempPrefix())) continue;
 
             List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg0));
             // Not exactly two instructions, or this instruction does not come first
@@ -42,7 +41,7 @@ class InputTempEliminator extends GlobalOptimizer {
             if (other.isSet() && other.getArgs().get(0).equals(arg0)) continue;
             
             // Make sure all arg0 arguments of the other instruction are input
-            boolean replacesInputArg = other.getTypedArguments()
+            boolean replacesInputArg = instructionProcessor.getTypedArguments(other)
                     .filter(t -> t.getValue().equals(arg0))
                     .allMatch(t -> t.getArgumentType().isInput());
             if (!replacesInputArg) continue;

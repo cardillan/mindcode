@@ -2,7 +2,6 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.logic.ArgumentType;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
@@ -106,7 +105,7 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
     }
     
     private boolean isComparisonOperatorToTmp(LogicInstruction instruction) {
-        return ArgumentType.CONDITION.isCompatible(instruction.getArgs().get(0)) &&
-                instruction.getArgs().get(1).startsWith(LogicInstructionGenerator.TMP_PREFIX);
+        return instructionProcessor.isValid(ArgumentType.CONDITION, instruction.getArgs().get(0)) &&
+                instruction.getArgs().get(1).startsWith(instructionProcessor.getTempPrefix());
     }
 }

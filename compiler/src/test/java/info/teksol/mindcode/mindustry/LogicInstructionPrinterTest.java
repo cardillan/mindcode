@@ -10,7 +10,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void printsURadarAndUControl() {
         assertDoesNotThrow(() ->
-                LogicInstructionPrinter.toString(
+                LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
                                 getInstructionProcessor(),
                                 generateAndOptimize(
@@ -32,7 +32,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void printsULocate() {
         assertDoesNotThrow(() ->
-                LogicInstructionPrinter.toString(
+                LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
                                 getInstructionProcessor(),
                                 generateAndOptimize(
@@ -52,7 +52,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void realLifeScripts1() {
         assertThrows(InsufficientArgumentsException.class, () ->
-                LogicInstructionPrinter.toString(
+                LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
                                 getInstructionProcessor(),
                                 generateAndOptimize(
@@ -83,7 +83,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void realLifeScripts2() {
         assertDoesNotThrow(() ->
-                LogicInstructionPrinter.toString(
+                LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
                                 getInstructionProcessor(),
                                 generateAndOptimize(
@@ -119,7 +119,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         "op sub __tmp11 y __tmp10\n" +
                         "draw triangle __tmp1 __tmp3 __tmp5 __tmp7 __tmp9 __tmp11\n" +
                         "end\n",
-                LogicInstructionPrinter.toString(
+                LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
                                 getInstructionProcessor(),
                                 generateUnoptimized(
@@ -187,7 +187,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         "jump 11 always 0 0\n" +
                         "printflush MSG\n" +
                         "end\n",
-                LogicInstructionPrinter.toString(
+                LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
                                 getInstructionProcessor(),
                                 generateUnoptimized(

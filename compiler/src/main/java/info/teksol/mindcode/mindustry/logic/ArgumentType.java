@@ -1,100 +1,187 @@
 package info.teksol.mindcode.mindustry.logic;
 
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
+
+import static info.teksol.mindcode.mindustry.logic.ProcessorVersion.*;
 
 public enum ArgumentType {
-    INPUT           (true),
-    BLOCK           (true),
-    LABEL           (true),
-    OUTPUT,
-    DRAW            ("clear", "color", "stroke", "line", "rect", "lineRect", "poly", "linePoly", "triangle", "image"),
-    BLOCK_CONTROL   ("enabled", "shoot", "shootp", "configure", "color"),
-    RADAR           ("any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
-    SORT            ("distance", "health", "shield", "armor", "maxHealth"),
-    SENSOR          (true, "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal", "@titanium", "@thorium", "@scrap",
-                    "@silicon", "@plastanium", "@phase-fabric", "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite",
-                    "@water", "@slag", "@oil", "@cryofluid", "@totalItems", "@firstItem", "@itemCapacity", "@totalLiquids",
-                    "@liquidCapacity", "@totalPower", "@powerCapacity", "@powerNetStored", "@powerNetCapacity", "@powerNetIn",
-                    "@powerNetOut", "@ammo", "@ammoCapacity", "@health", "@maxHealth", "@heat", "@efficiency", "@timescale",
-                    "@dead", "@range", "@rotation", "@x", "@y", "@size", "@shootX", "@shootY", "@shooting", "@boosting",
-                    "@mineX", "@mineY", "@mining", "@payloadCount", "@payloadType", "@controlled", "@controller", "@team",
-                    "@type", "@flag", "@name", "@config", "@enabled", "@configure"),             
-    OPERATION       ("add", "sub", "mul", "div", "idiv", "mod", "pow", "equal", "notEqual",
-                    "lessThan", "lessThanEq", "greaterThan", "greaterThanEq", "strictEqual", "land", "or", "and", "xor",
-                    "shl", "shr", "not", "max", "min", "angle", "len", "noise", "abs", "log", "log10", "sin", "cos",
-                    "tan", "floor", "ceil", "sqrt", "rand"),
-    CONDITION       ("equal", "notEqual", "lessThan", "lessThanEq", "greaterThan", "greaterThanEq", "strictEqual", "always"),
-    UNIT            (true, "@dagger", "@mace", "@fortress", "@scepter", "@reign",
+    /** Non-specific input argument. Accepts literals and variables */
+    INPUT           (Flags.INPUT),
+
+    /** Input argument accepting blocks (buildings). */
+    BLOCK           (Flags.INPUT),
+
+    /** A label pseudo-argument. */
+    LABEL           (Flags.INPUT),
+
+    /** Output argument. Sets a value of a variable in argument list. */
+    OUTPUT          (Flags.OUTPUT),
+
+    /** Output argument. Maps to the return value of a function. */
+    RESULT          (Flags.OUTPUT),
+
+    /** Selector for the DRAW instruction. */
+    DRAW            (Flags.SELECTOR),
+
+    /** Selector for the CONTROL instruction. */
+    BLOCK_CONTROL   (Flags.SELECTOR),
+
+    /** A const argument. Specifies properties of units searchable by radar. */
+    RADAR           (Flags.CONST, "any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
+
+    /** A const argument. Specifies property to sort radar outputs by. */
+    SORT            (Flags.CONST, "distance", "health", "shield", "armor", "maxHealth"),
+    
+    /** Input argument accepting property id. */
+    SENSOR          (Flags.INPUT,
+            allVersions(
+                    "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
+                    "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
+                    "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite",
+                    "@water", "@slag", "@oil", "@cryofluid",
+                    "@totalItems", "@firstItem", "@totalLiquids", "@totalPower", "@itemCapacity", "@liquidCapacity",
+                    "@powerCapacity", "@powerNetStored", "@powerNetCapacity", "@powerNetIn", "@powerNetOut",
+                    "@ammo", "@ammoCapacity", "@health", "@maxHealth", "@heat", "@efficiency", "@timescale", "@rotation",
+                    "@x", "@y", "@shootX", "@shootY", "@size", "@dead", "@range", "@shooting", "@boosting",
+                    "@mineX", "@mineY", "@mining", "@team", "@type", "@flag", "@controlled", "@controller",
+                    "@name", "@payloadCount", "@payloadType", "@enabled", "@config"),
+            specificVersion(V6,
+                    "@commanded", "@configure"),
+            specificVersion(V7,
+                    "@beryllium", "@tungsten", "@oxide", "@carbide",
+                    "@neoplasm", "@arkycite", "@ozone", "@hydrogen", "@nitrogen", "@cyanogen",
+                    "@progress", "@speed", "@color")
+    ),
+
+    /** Selector for the OP instruction. */
+    OPERATION       (Flags.SELECTOR),
+
+    /** Selector for the JUMP instruction. */
+    CONDITION       (Flags.SELECTOR),
+
+    /** Input argument accepting unit type. */
+    UNIT            (Flags.INPUT,
+            allVersions(
+                    "@dagger", "@mace", "@fortress", "@scepter", "@reign",
                     "@nova", "@pulsar", "@quasar", "@vela", "@corvus", 
                     "@crawler", "@atrax", "@spiroct", "@arkyid", "@toxopid",
                     "@flare", "@horizon", "@zenith", "@antumbra", "@eclipse",
                     "@mono", "@poly", "@mega", "@quad", "@oct",
                     "@risso", "@minke", "@bryde", "@sei", "@omura"),
-    UNIT_CONTROL    ("idle", "stop", "move", "approach", "boost", "pathfind", "target", "targetp",
-                    "itemDrop", "itemTake", "payDrop", "payTake", "mine", "flag", "build", "getBlock", "within"),
-    LOCATE          ("ore", "building", "spawn", "damaged"),
-    GROUP           ("core", "storage", "generator", "turret", "factory", "repair", "rally", "battery", "resupply", "reactor"),
-    ORE             (true, "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal", "@titanium", "@thorium", "@scrap",
-                    "@silicon", "@plastanium", "@phase-fabric", "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite"),
-    UNUSED,
+            specificVersion(V7,
+                    "@retusa")  // TODO Add other V7 units
+    ),
+
+    /** Selector for the UCONTROL instruction. */
+    UNIT_CONTROL    (Flags.SELECTOR),
+
+    /** Selector for the ULOCATE instruction. */
+    LOCATE          (Flags.SELECTOR),
+
+    /** A const argument. Specifies group of buildings to locate. */
+    GROUP           (Flags.CONST, "core", "storage", "generator", "turret", "factory", "repair", "rally", "battery", "resupply", "reactor"),
+
+    /** Input argument accepting ore type. */
+    ORE             (Flags.INPUT,
+            allVersions(
+                    "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
+                    "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
+                    "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite"),
+            specificVersion(V7,
+                    "@beryllium", "@tungsten", "@oxide", "@carbide", "@fissile-matter", "@dormant-cyst")
+    ),
+
+    /**
+     * A const argument. Specifies lookup category. The entire instruction is only available in V7;
+     * the argument keywords therefore aren't version specific.
+     */
+    LOOKUP          (Flags.CONST, "block", "unit", "item", "liquid"),
+
+    /** An unused input argument. Ignored by given opcode variant. */
+    UNUSED          (Flags.UNUSED),
+
+    // TODO: might not be necessary, needs investigation
+    /** An unused output argument. Ignored by given opcode variant, output in some other opcode variant. */
+    UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
     ;
     
-    private final boolean input;
-    private final List<String> permissibleValues;
+    private final int flags;
+    private final List<ArgumentValues> allowedValues;
 
-    private ArgumentType() {
-        this.input = false;
-        this.permissibleValues = List.of();
+    private ArgumentType(int flags) {
+        this.flags = flags;
+        this.allowedValues = List.of();
     }
 
-    private ArgumentType(boolean input) {
-        this.input = input;
-        this.permissibleValues = List.of();
-    }
-
-    private ArgumentType(boolean input, String... permissibleValues) {
-        this.input = input;
-        this.permissibleValues = List.of(permissibleValues);
+    private ArgumentType(int flags, String... keywords) {
+        this.flags = flags;
+        this.allowedValues = List.of(allVersions(keywords));
     }
     
-    private ArgumentType(String... permissibleValues) {
-        this.input = false;
-        this.permissibleValues = List.of(permissibleValues);
+    private ArgumentType(int flags, ArgumentValues... keywords) {
+        this.flags = flags;
+        this.allowedValues = List.of(keywords);
+    }
+
+    /**
+     * @return true if this argument type determines the variant of the instruction
+     */
+    public boolean isSelector() {
+        return (flags & Flags.SELECTOR) != 0;
     }
 
     /**
      * @return true if this argument can read a variable
      */
     public boolean isInput() {
-        return input;
+        return (flags & Flags.INPUT) != 0;
     }
     
     /**
      * @return true if this argument can write to a variable
      */
     public boolean isOutput() {
-        return this == OUTPUT;
+        return (flags & Flags.OUTPUT) != 0;
     }
 
-    public List<String> getPermissibleValues() {
-        return permissibleValues;
+    public List<ArgumentValues> getAllowedValues() {
+        return allowedValues;
     }
-    
-    /**
-     * Checks that the argument is permissible for given argument type. For input and output argument, anything
-     * is permissible at the moment (it could be a variable name, a literal, or in some cases a @constant), but 
-     * it might be possible to implement more specific checks in the future (including the number of arguments 
-     * depending on the configuration of the instruction).
-     * For keyword (ie. neither input, nor output) arguments only values from the list are permissible.
-     * 
-     * @param argument an argument to check
-     * @return true if the argument is compatible with this argument type
-     */
-    public boolean isCompatible(String argument) {
-        if (isInput() || isOutput() || this == UNUSED) {
-            return true;
-        } else {
-            return permissibleValues.contains(argument);
+
+    private static ArgumentValues allVersions(String... keywords) {
+        return new ArgumentValues(Set.copyOf(EnumSet.allOf(ProcessorVersion.class)), Set.of(keywords));
+    }
+
+    private static ArgumentValues specificVersion(ProcessorVersion version, String... keywords) {
+        return new ArgumentValues(Set.of(version), Set.of(keywords));
+    }
+
+    public static class ArgumentValues {
+        public final Set<ProcessorVersion> versions;
+        public final Set<String> values;
+
+        private ArgumentValues(Set<ProcessorVersion> versions, Set<String> keywords) {
+            this.versions = versions;
+            this.values = keywords;
         }
+    }
+
+    private static final class Flags {
+        // Constant argument (cannot use a variable).
+        private static final int CONST      = 0;
+
+        // Input argument (can use a variable).
+        private static final int INPUT      = 1;
+
+        // Output argument (must use a variable for output value).
+        private static final int OUTPUT     = 2;
+
+        // Opcode-selecting argument. Possible values are given by existing opcode variants for given version.
+        private static final int SELECTOR   = 4;
+
+        // Unused argument. Doesn't map to Mindcode functions.
+        private static final int UNUSED   = 8;
     }
 }

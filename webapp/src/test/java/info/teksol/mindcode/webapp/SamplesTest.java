@@ -8,7 +8,10 @@ import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
 import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
-import info.teksol.mindcode.mindustry.instructions.BaseInstructionProcessor;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessorFactory;
+import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
+import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -60,7 +63,8 @@ class SamplesTest {
 
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
-        BaseInstructionProcessor instructionProcessor = new BaseInstructionProcessor();
+        InstructionProcessor instructionProcessor =
+                InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
         List<LogicInstruction> unoptimized = LogicInstructionGenerator.generateUnoptimized(instructionProcessor, prog);
         List<LogicInstruction> optimized = LogicInstructionGenerator.generateAndOptimize(instructionProcessor, prog);
 
@@ -72,11 +76,11 @@ class SamplesTest {
         final File diffTarget = new File(tmp, source.getName() + ".patch");
 
         try (final Writer w = new FileWriter(unoptimizedTarget)) {
-            w.write(LogicInstructionPrinter.toString(unoptimized));
+            w.write(LogicInstructionPrinter.toString(instructionProcessor, unoptimized));
         }
 
         try (final Writer w = new FileWriter(optimizedTarget)) {
-            w.write(LogicInstructionPrinter.toString(optimized));
+            w.write(LogicInstructionPrinter.toString(instructionProcessor, optimized));
         }
 
         // Async run a diff process between the unoptimized and optimized versions
@@ -89,7 +93,7 @@ class SamplesTest {
 
         final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(instructionProcessor, optimized);
 
-        final String opcodes = LogicInstructionPrinter.toString(result);
+        final String opcodes = LogicInstructionPrinter.toString(instructionProcessor, result);
         assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + program);
         assertTrue(errors.isEmpty(), errors.toString());
     }

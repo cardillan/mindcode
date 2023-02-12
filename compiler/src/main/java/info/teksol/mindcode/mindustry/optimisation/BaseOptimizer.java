@@ -4,13 +4,12 @@ import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 // Base class for optimizers. Contains helper functions for manipulating instructions.
 abstract class BaseOptimizer implements Optimizer {
+    // TODO: move to instructionProcessor
     private static final Map<String, String> INVERSES = Map.of(
             "equal", "notEqual",
             "notEqual", "equal",
@@ -20,7 +19,7 @@ abstract class BaseOptimizer implements Optimizer {
             "greaterThanEq", "lessThan"
     );
 
-    private final InstructionProcessor instructionProcessor;
+    protected final InstructionProcessor instructionProcessor;
     private final LogicInstructionPipeline next;
     private final String name = getClass().getSimpleName();
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
@@ -69,27 +68,12 @@ abstract class BaseOptimizer implements Optimizer {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    protected final LogicInstruction createInstruction(Opcode opcode, List<String> args) {
-        return instructionProcessor.createInstruction(opcode, args);
-    }
-
-    // Creates a new instruction with argument at given index set to a new value
-    protected LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String arg) {
-        if (instruction.getArgs().get(argIndex).equals(arg)) {
-            return instruction;
-        }
-        else {
-            List<String> newArgs = new ArrayList<>(instruction.getArgs());
-            newArgs.set(argIndex, arg);
-            return createInstruction(instruction.getOpcode(), newArgs);
-        }
+    protected LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String value) {
+        return instructionProcessor.replaceArg(instruction, argIndex, value);
     }
     
-    // Creates a new instruction with all occurences of oldArg replaced newArg in the argument list
     protected LogicInstruction replaceAllArgs(LogicInstruction instruction, String oldArg, String newArg) {
-        List<String> args = new ArrayList<>(instruction.getArgs());
-        args.replaceAll(arg -> arg.equals(oldArg) ? newArg : arg);
-        return createInstruction(instruction.getOpcode(), args);
+        return instructionProcessor.replaceAllArgs(instruction, oldArg, newArg);
     }
 
     protected boolean hasInverse(String comparison) {

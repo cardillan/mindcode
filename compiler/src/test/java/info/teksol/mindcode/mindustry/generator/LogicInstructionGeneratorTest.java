@@ -3,6 +3,9 @@ package info.teksol.mindcode.mindustry.generator;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
 import info.teksol.mindcode.mindustry.CompilerProfile;
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessorFactory;
+import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
+import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.mindcode.mindustry.optimisation.Optimisation;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -763,6 +766,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesWait() {
+        setInstructionProcessor(InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR));
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "1"),

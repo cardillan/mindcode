@@ -1,14 +1,15 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import java.util.List;
 
 public class LogicInstructionPrinter {
-    public static String toString(List<LogicInstruction> instructions) {
+    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         final StringBuilder buffer = new StringBuilder();
         instructions.forEach((instruction) -> {
             buffer.append(instruction.getOpcode().getOpcode());
-            addArgs(instruction.getOpcode().getNumArgsForPrint(), buffer, instruction);
+            addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
         });
 
         return buffer.toString();
@@ -18,7 +19,7 @@ public class LogicInstructionPrinter {
         for (int i = 0; i < count; i++) {
             buffer.append(" ");
             if (instruction.getArgs().size() > i) {
-                buffer.append(instruction.getArgs().get(i));
+                buffer.append(instruction.getArg(i));
             } else {
                 buffer.append("0");
             }

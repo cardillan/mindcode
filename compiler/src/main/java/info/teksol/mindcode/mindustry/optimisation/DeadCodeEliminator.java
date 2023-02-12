@@ -1,7 +1,6 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.*;
@@ -10,6 +9,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class DeadCodeEliminator extends GlobalOptimizer {
+    // TODO: move these to some metadata class
     private static final Set<String> CONSTANT_NAMES = Set.of("true", "false", "null");
     private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
             "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode", 
@@ -39,7 +39,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         super.generateFinalMessages();
         
         String eliminated = eliminations.stream()
-                .filter(s -> !s.startsWith(LogicInstructionGenerator.TMP_PREFIX))
+                .filter(s -> !s.startsWith(instructionProcessor.getTempPrefix()))
                 .sorted()
                 .collect(Collectors.joining(", "));
         
@@ -83,7 +83,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
             // Instruction with at most one output argument are removed immediatelly
             // Other instructions are inspected further to find out they're fully unused
             writes.get(key).stream()
-                    .filter(ix -> ix.getOpcode().getTotalOutputs() < 2 || allWritesUnread(ix))
+                    .filter(ix -> instructionProcessor.getTotalOutputs(ix) < 2 || allWritesUnread(ix))
                     .forEach(program::remove);
         }
 
@@ -96,7 +96,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
      * @return true if all output arguments of the instruction are unread
      */
     private boolean allWritesUnread(LogicInstruction instruction) {
-        return instruction.getTypedArguments()
+        return instructionProcessor.getTypedArguments(instruction)
                 .filter(t -> t.getArgumentType().isOutput())
                 .noneMatch(t -> reads.contains(t.getValue()));
     }
@@ -108,7 +108,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
     }
 
     private void examineInstruction(LogicInstruction instruction) {
-        reads.addAll(instruction.getOpcode().getInputValues(instruction.getArgs()));
-        instruction.getOpcode().getOutputValues(instruction.getArgs()).forEach(v -> addWrite(instruction, v));
+        reads.addAll(instructionProcessor.getInputValues(instruction));
+        instructionProcessor.getOutputValues(instruction).forEach(v -> addWrite(instruction, v));
     }
 }
