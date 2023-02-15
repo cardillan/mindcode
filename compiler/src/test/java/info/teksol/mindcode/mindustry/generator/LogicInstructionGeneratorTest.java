@@ -306,22 +306,22 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, var(0), "1"),
                         createInstruction(SET, var(1), "0"),
                         createInstruction(UCONTROL, "build", "x", "y", "@titanium-conveyor", var(0), var(1)),
-                        createInstruction(UCONTROL, "getBlock", "x", "y", "b_type", "b_building"),
-                        createInstruction(OP, "equal", var(2), "b_type", "@titanium-conveyor"),
-                        createInstruction(JUMP, var(1000), "equal", var(2), "false"),
-                        createInstruction(SET, var(3), "1"),
-                        createInstruction(OP, "add", var(4), "n", var(3)),
-                        createInstruction(SET, "n", var(4)),
-                        createInstruction(SET, var(5), var(4)),
+                        createInstruction(UCONTROL, "getBlock", "x", "y", "b_type", "b_building", "b_floor"),
+                        createInstruction(OP, "equal", var(3), "b_type", "@titanium-conveyor"),
+                        createInstruction(JUMP, var(1000), "equal", var(3), "false"),
+                        createInstruction(SET, var(4), "1"),
+                        createInstruction(OP, "add", var(5), "n", var(4)),
+                        createInstruction(SET, "n", var(5)),
+                        createInstruction(SET, var(6), var(5)),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(5), "null"),
+                        createInstruction(SET, var(6), "null"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst(
-                                "build(x, y, @titanium-conveyor, 1, 0)\ngetBlock(x, y, b_type, b_building)\nif b_type == @titanium-conveyor\nn += 1\nend\n"
+                                "build(x, y, @titanium-conveyor, 1, 0)\ngetBlock(x, y, b_type, b_building, b_floor)\nif b_type == @titanium-conveyor\nn += 1\nend\n"
                         )
                 )
         );

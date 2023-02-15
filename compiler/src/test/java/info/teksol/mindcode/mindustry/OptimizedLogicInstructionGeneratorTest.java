@@ -265,7 +265,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         "payTake(desired)\n" +
                         "payDrop()\n" +
                         "boost(boosting)\n" +
-                        "pathfind()\n" +
+//                        "pathfind()\n" +    // pathfind no longer supported in V7
                         "idle()\n" +
                         "stop()"
                 )
@@ -278,7 +278,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(UCONTROL, "payTake", "desired"),
                         createInstruction(UCONTROL, "payDrop"),
                         createInstruction(UCONTROL, "boost", "boosting"),
-                        createInstruction(UCONTROL, "pathfind"),
+//                        createInstruction(UCONTROL, "pathfind"),    // pathfind no longer supported in V7
                         createInstruction(UCONTROL, "idle"),
                         createInstruction(UCONTROL, "stop"),
                         createInstruction(END)

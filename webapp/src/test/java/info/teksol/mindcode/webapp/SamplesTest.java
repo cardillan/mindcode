@@ -64,7 +64,7 @@ class SamplesTest {
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
         InstructionProcessor instructionProcessor =
-                InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
+                InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
         List<LogicInstruction> unoptimized = LogicInstructionGenerator.generateUnoptimized(instructionProcessor, prog);
         List<LogicInstruction> optimized = LogicInstructionGenerator.generateAndOptimize(instructionProcessor, prog);
 

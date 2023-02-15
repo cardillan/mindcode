@@ -19,7 +19,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     void rejectsIncompatibleInstructions() {
         assertThrows(GenerationException.class, () ->
-                createInstruction(WAIT, "50")
+                createInstruction(UCONTROL, "pathfind")
         );
     }
 

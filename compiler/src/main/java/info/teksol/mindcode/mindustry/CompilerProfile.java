@@ -1,10 +1,14 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
+import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.mindcode.mindustry.optimisation.Optimisation;
 import java.util.EnumSet;
 import java.util.Set;
 
 public class CompilerProfile {
+    private ProcessorVersion processorVersion = ProcessorVersion.V7;
+    private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
     private Set<Optimisation> optimisations = EnumSet.allOf(Optimisation.class);
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
@@ -25,12 +29,25 @@ public class CompilerProfile {
         return new CompilerProfile(EnumSet.noneOf(Optimisation.class));
     }
 
+    public ProcessorVersion getProcessorVersion() {
+        return processorVersion;
+    }
+
+    public ProcessorEdition getProcessorEdition() {
+        return processorEdition;
+    }
+
+    public void setProcessorVersionEdition(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
+        this.processorVersion = processorVersion;
+        this.processorEdition = processorEdition;
+    }
+
     public Set<Optimisation> getOptimisations() {
         return optimisations;
     }
 
     public void setOptimisations(Set<Optimisation> optimisations) {
-        this.optimisations = optimisations;
+        this.optimisations = Set.copyOf(optimisations);
     }
 
     public int getParseTreeLevel() {

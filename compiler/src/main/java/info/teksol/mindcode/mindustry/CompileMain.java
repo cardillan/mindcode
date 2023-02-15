@@ -1,6 +1,8 @@
 package info.teksol.mindcode.mindustry;
 
 import edu.emory.mathcs.backport.java.util.Collections;
+import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
+import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.mindcode.mindustry.optimisation.Optimisation;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -43,6 +45,8 @@ public class CompileMain {
         for (String arg : args) {
             if ("-?".equals(arg) || "--help".equals(arg)) {
                 showHelp(0);
+            } else if (arg.startsWith("-v")) {
+                selectVersion(profile, arg.substring(2));
             } else if (arg.startsWith("-p")) {
                 selectPrintLevel(profile, arg.substring(2));
             } else if (arg.startsWith("-o")) {
@@ -109,6 +113,16 @@ public class CompileMain {
         profile.setOptimisations(negate ? EnumSet.complementOf(result) : result);
     }
     
+    static private void selectVersion(CompilerProfile profile, String option) {
+        switch(option.toUpperCase()) {
+            case "6":  profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR); break;
+            case "7":  profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR); break;
+            case "7S": profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR); break;
+            case "7W": profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR); break;
+            default:   showHelp(2);
+        }
+    }
+
     static private void selectDebugLevel(CompilerProfile profile, String option) {
         switch(option) {
             case "0": profile.setDebugLevel(0); break;
@@ -130,10 +144,16 @@ public class CompileMain {
     }
 
     static private final String[] HELP = new String[] {
-        "Usage: mindcode.bat [-p[Level]] [-dLevel] [-oFlags] [input file] [output file] [log file]",
+        "Usage: mindcode [-vVersionEdition] [-p[Level]] [-dLevel] [-oFlags] [input file] [output file] [log file]",
             "  when input file is not given, input is read from stdin",
             "  when output file is not given, output is written to stdout",
             "  when log file is not given, messages are written to stderr",
+            "",
+            "-vLogicVersion: selects target Mindustry Logic version:",
+            "  6:  Mindustry Logic 6",
+            "  7:  Mindustry Logic 7, standard processor (default)",
+            "  7s: Mindustry Logic 7, standard processor",
+            "  7w: Mindustry Logic 7, world processor",
             "",
             "-pLevel: activates parse tree printing into the log file. Possible level values:",
             "  0: no parse tree printing",

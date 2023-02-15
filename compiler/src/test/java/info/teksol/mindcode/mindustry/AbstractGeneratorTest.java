@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
     private InstructionProcessor instructionProcessor =
-            InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
+            InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
 
     protected final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private final Set<String> registered = new HashSet<>();
