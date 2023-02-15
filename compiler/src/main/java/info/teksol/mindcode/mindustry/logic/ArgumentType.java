@@ -202,7 +202,7 @@ public enum ArgumentType {
         // Opcode-selecting argument. Possible values are given by existing opcode variants for given version.
         private static final int SELECTOR   = 4;
 
-        // Defines name of a function. Must be a selector.
+        // Defines name of a function(or property). Must be a selector.
         private static final int FUNCTION   = 8;
 
         // Unused argument. Doesn't map to Mindcode functions.

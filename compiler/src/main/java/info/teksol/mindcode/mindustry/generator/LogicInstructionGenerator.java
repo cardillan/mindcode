@@ -509,19 +509,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitControl(Control node) {
-        // TODO: version-specific function mapping
         final String target = visit(node.getTarget());
-
-        final List<String> args = new ArrayList<>();
-        args.add(node.getProperty());
-        args.add(target);
-        for (final AstNode param : node.getParams()) {
-            final String arg = visit(param);
-            args.add(arg);
-        }
-
-        pipeline.emit(createInstruction(CONTROL, args));
-        return "null";
+        final List<String> args = node.getParams().stream().map(this::visit).collect(Collectors.toList());
+        return functionMapper.handleProperty(pipeline, node.getProperty(), target, args);
     }
 
     private String translateUnaryOpToCode(String op) {

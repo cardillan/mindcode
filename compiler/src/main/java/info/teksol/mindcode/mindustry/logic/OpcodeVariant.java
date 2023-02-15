@@ -53,4 +53,10 @@ public class OpcodeVariant {
         FUNC,       // Mapping to function
         PROP;       // Mapping to property access (block.method(arguments)
     }
+
+    @Override
+    public String toString() {
+        return "OpcodeVariant{" + "versionFrom=" + versionFrom + ", versionTo=" + versionTo + ", edition=" + edition
+                + ", functionMapping=" + functionMapping + ", opcode=" + opcode + ", arguments=" + arguments + '}';
+    }
 }

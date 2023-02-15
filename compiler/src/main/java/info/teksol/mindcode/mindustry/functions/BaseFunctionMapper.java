@@ -21,20 +21,35 @@ public class BaseFunctionMapper implements FunctionMapper {
     private final InstructionProcessor instructionProcessor;
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
+    private final Map<String, PropertyHandler> propertyMap;
     private final Map<String, FunctionHandler> functionMap;
 
     public BaseFunctionMapper(InstructionProcessor InstructionProcessor) {
         this.instructionProcessor = InstructionProcessor;
         processorVersion = instructionProcessor.getProcessorVersion();
         processorEdition = instructionProcessor.getProcessorEdition();
+        propertyMap = buildPropertyMap();
         functionMap = buildFunctionMap();
     }
 
     @Override
-    public String handleFunction(LogicInstructionPipeline pipeline, String functionName, List<String> params) {
+    public String handleProperty(LogicInstructionPipeline pipeline, String propertyName, String target, List<String> params) {
+        PropertyHandler handler = propertyMap.get(propertyName);
+        return handler == null ? null : handler.handleProperty(pipeline, target, params);
+    }
 
+    @Override
+    public String handleFunction(LogicInstructionPipeline pipeline, String functionName, List<String> params) {
         FunctionHandler handler = functionMap.get(functionName);
         return handler == null ? null : handler.handleFunction(pipeline, params);
+    }
+
+    private Map<String, PropertyHandler> buildPropertyMap() {
+        return instructionProcessor.getOpcodeVariants().stream()
+                .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.PROP)
+                .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
+                .map(this::createPropertyHandler)
+                .collect(Collectors.toMap(PropertyHandler::getProperty, f -> f));
     }
 
     private Map<String, FunctionHandler> buildFunctionMap() {
@@ -48,6 +63,25 @@ public class BaseFunctionMapper implements FunctionMapper {
         return functionGroups.values().stream()
                 .map(this::collapseFunctions)
                 .collect(Collectors.toMap(FunctionHandler::getName, f -> f));
+    }
+
+    private PropertyHandler createPropertyHandler(OpcodeVariant opcodeVariant) {
+        final Opcode opcode = opcodeVariant.getOpcode();
+        List<NamedArgument> arguments = opcodeVariant.getArguments();
+        int selectorIndex = findFirstIndex(arguments, a -> a.getType().isSelector());
+        int blockIndex = findFirstIndex(arguments, a -> a.getType() == ArgumentType.BLOCK);
+        final int outputs = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isOutput).count();
+        final int unused  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isUnused).count();
+
+        // As of now, we only support instructions with selector and block at the front
+        if (selectorIndex != 0 || blockIndex != 1 || outputs != 0 || unused != 0) {
+            throw new InvalidMetadataException("Unsupported property configuration in " + opcodeVariant);
+        }
+
+        // Number of function parameters: subtract two for selector and block (aka property and target)
+        int numArgs = arguments.size() - 2;
+
+        return new PropertyHandler(arguments.get(0).getName(), opcode, numArgs);
     }
 
     private FunctionHandler createFunctionHandler(OpcodeVariant opcodeVariant) {
@@ -127,6 +161,42 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
         return instructionProcessor.createInstruction(opcode, args);
+    }
+
+    private class PropertyHandler {
+        private final int numArgs;
+        private final String property;
+        private final Opcode opcode;
+
+        public PropertyHandler(String property, Opcode opcode, int numArgs) {
+            this.property = property;
+            this.opcode = opcode;
+            this.numArgs = numArgs;
+        }
+
+        public String getProperty() {
+            return property;
+        }
+
+        public Opcode getOpcode() {
+            return opcode;
+        }
+
+        protected void checkArguments(List<String> params) {
+            if (params.size() != numArgs) {
+                throw new WrongNumberOfParametersException("Function '" + property + "': wrong number of parameters (expected "
+                        + numArgs + ", found " + params.size() + ")");
+            }
+        }
+
+        protected String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params) {
+            checkArguments(params);
+            List<String> args = new ArrayList<>(params);
+            args.add(0, property);
+            args.add(1, target);
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            return "null";
+        }
     }
 
     private interface SelectorFunction {
