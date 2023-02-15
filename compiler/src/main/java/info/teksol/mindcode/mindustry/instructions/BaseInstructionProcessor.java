@@ -14,12 +14,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static info.teksol.mindcode.mindustry.logic.ArgumentType.UNUSED;
+import static info.teksol.util.CollectionUtils.*;
 
 public class BaseInstructionProcessor implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
@@ -32,7 +31,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private int tmpIndex = 0;
     private int labelIndex = 0;
 
-    BaseInstructionProcessor(ProcessorVersion processorVersion, ProcessorEdition processorEdition,
+    // Protected to allow a subclass to use this constructor in unit tests
+    protected BaseInstructionProcessor(ProcessorVersion processorVersion, ProcessorEdition processorEdition,
             List<OpcodeVariant> opcodeVariants) {
         this.processorVersion = processorVersion;
         this.processorEdition = processorEdition;
@@ -56,6 +56,21 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public String nextTemp() {
         return getTempPrefix() + tmpIndex++;
+    }
+
+    @Override
+    public ProcessorVersion getProcessorVersion() {
+        return processorVersion;
+    }
+
+    @Override
+    public ProcessorEdition getProcessorEdition() {
+        return processorEdition;
+    }
+
+    @Override
+    public List<OpcodeVariant> getOpcodeVariants() {
+        return opcodeVariants;
     }
 
     @Override
@@ -115,7 +130,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return getTypedArguments(instruction)
                 .filter(a -> a.getArgumentType().isInput())
                 .map(TypedArgument::getValue)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -123,7 +138,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return getTypedArguments(instruction)
                 .filter(a -> a.getArgumentType().isOutput())
                 .map(TypedArgument::getValue)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Override
@@ -136,11 +151,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public boolean isValid(ArgumentType type, String value) {
-        if (type.isInput() || type.isOutput() || type == UNUSED) {
-            return true;
-        } else {
+        if (type.restrictValues()) {
             Set<String> values = validArgumentValues.get(type);
-            return values == null || values.contains(value);
+            return values.contains(value);
+        } else {
+            return true;
         }
     }
 
@@ -216,20 +231,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         }
     }
 
-    private <E> int findFirstIndex(List<E> list, Predicate<E> criteria) {
-        for (int i = 0; i < list.size(); i++) {
-            if (criteria.test(list.get(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
     private Map<ArgumentType, Set<String>> createAllowedArgumentValuesMap() {
         Map<ArgumentType, Set<String>> map = new HashMap<>();
         for (ArgumentType type : ArgumentType.values()) {
             Set<String> allowedValues = createAllowedValues(type);
-            if (allowedValues != null) {
+            if (!allowedValues.isEmpty()) {
                 map.put(type, allowedValues);
             }
         }

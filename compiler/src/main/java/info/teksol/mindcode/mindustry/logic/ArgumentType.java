@@ -23,10 +23,10 @@ public enum ArgumentType {
     RESULT          (Flags.OUTPUT),
 
     /** Selector for the DRAW instruction. */
-    DRAW            (Flags.SELECTOR),
+    DRAW            (Flags.SELECTOR | Flags.FUNCTION),
 
     /** Selector for the CONTROL instruction. */
-    BLOCK_CONTROL   (Flags.SELECTOR),
+    BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION),
 
     /** A const argument. Specifies properties of units searchable by radar. */
     RADAR           (Flags.CONST, "any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
@@ -56,7 +56,7 @@ public enum ArgumentType {
     ),
 
     /** Selector for the OP instruction. */
-    OPERATION       (Flags.SELECTOR),
+    OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
 
     /** Selector for the JUMP instruction. */
     CONDITION       (Flags.SELECTOR),
@@ -75,9 +75,9 @@ public enum ArgumentType {
     ),
 
     /** Selector for the UCONTROL instruction. */
-    UNIT_CONTROL    (Flags.SELECTOR),
+    UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION),
 
-    /** Selector for the ULOCATE instruction. */
+    /** Selector for the ULOCATE instruction. No Flags.FUNCTION! */
     LOCATE          (Flags.SELECTOR),
 
     /** A const argument. Specifies group of buildings to locate. */
@@ -126,10 +126,10 @@ public enum ArgumentType {
     }
 
     /**
-     * @return true if this argument type determines the variant of the instruction
+     * @return true if this argument type determines the name of the function
      */
-    public boolean isSelector() {
-        return (flags & Flags.SELECTOR) != 0;
+    public boolean isFunctionName() {
+        return (flags & Flags.FUNCTION) != 0;
     }
 
     /**
@@ -144,6 +144,27 @@ public enum ArgumentType {
      */
     public boolean isOutput() {
         return (flags & Flags.OUTPUT) != 0;
+    }
+
+    /**
+     * @return true if this argument type determines the variant of the instruction
+     */
+    public boolean isSelector() {
+        return (flags & Flags.SELECTOR) != 0;
+    }
+
+    /**
+     * @return true if this argument can write to a variable
+     */
+    public boolean isUnused() {
+        return (flags & Flags.UNUSED) != 0;
+    }
+
+    /**
+     * @return true if the value of this argument must be one from the allowed values list
+     */
+    public boolean restrictValues() {
+        return (flags & (Flags.INPUT | Flags.OUTPUT | Flags.UNUSED)) == 0;
     }
 
     public List<ArgumentValues> getAllowedValues() {
@@ -181,7 +202,10 @@ public enum ArgumentType {
         // Opcode-selecting argument. Possible values are given by existing opcode variants for given version.
         private static final int SELECTOR   = 4;
 
+        // Defines name of a function. Must be a selector.
+        private static final int FUNCTION   = 8;
+
         // Unused argument. Doesn't map to Mindcode functions.
-        private static final int UNUSED   = 8;
+        private static final int UNUSED     = 16;
     }
 }

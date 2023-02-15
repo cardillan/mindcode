@@ -10,7 +10,7 @@ public class OpcodeVariant {
     private final Opcode opcode;
     private final List<NamedArgument> arguments;
 
-    OpcodeVariant(ProcessorVersion versionFrom, ProcessorVersion versionTo, ProcessorEdition edition,
+    public OpcodeVariant(ProcessorVersion versionFrom, ProcessorVersion versionTo, ProcessorEdition edition,
             FunctionMapping functionMapping, Opcode opcode, NamedArgument... arguments) {
         this.versionFrom = versionFrom;
         this.versionTo = versionTo;

@@ -1,6 +1,6 @@
 package info.teksol.mindcode.mindustry;
 
-import info.teksol.mindcode.mindustry.functions.InsufficientArgumentsException;
+import info.teksol.mindcode.mindustry.functions.WrongNumberOfParametersException;
 import info.teksol.mindcode.ast.Seq;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +15,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                 getInstructionProcessor(),
                                 generateAndOptimize(
                                         (Seq) translateToAst("" +
-                                                "target = uradar(enemy, ground, any, health, MIN_TO_MAX, BY_DISTANCE)\n" +
+                                                "target = uradar(enemy, ground, any, health, MIN_TO_MAX)\n" +
                                                 "if target != null\n" +
                                                 "  approach(target.x, target.y, 10)\n" +
                                                 "  if within(target.x, target.y, 10)\n" +
@@ -51,7 +51,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
 
     @Test
     void realLifeScripts1() {
-        assertThrows(InsufficientArgumentsException.class, () ->
+        assertThrows(WrongNumberOfParametersException.class, () ->
                 LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
                                 getInstructionProcessor(),
@@ -71,7 +71,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                                         "  itemTake(container1, @silicon, @unit.itemCapacity - @unit.totalItems)\n" +
                                                         "else\n" +
                                                         "  approach(found.x, found.y, 5)\n" +
-                                                        "  itemDrop(found, @unit.totalItems)\n" +
+                                                        "  itemDrop(found, @silicon, @unit.totalItems)\n" +
                                                         "end\n"
                                         )
                                 )

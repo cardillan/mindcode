@@ -5,6 +5,6 @@ public enum ProcessorEdition {
     WORLD_PROCESSOR,
     ;
 
-    static final ProcessorEdition S = ProcessorEdition.STANDARD_PROCESSOR;
-    static final ProcessorEdition W = ProcessorEdition.WORLD_PROCESSOR;
+    public static final ProcessorEdition S = ProcessorEdition.STANDARD_PROCESSOR;
+    public static final ProcessorEdition W = ProcessorEdition.WORLD_PROCESSOR;
 }

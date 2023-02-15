@@ -1,513 +1,342 @@
 package info.teksol.mindcode.mindustry.functions;
 
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.generator.GenerationException;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
+import info.teksol.mindcode.mindustry.logic.ArgumentType;
+import info.teksol.mindcode.mindustry.logic.NamedArgument;
 import info.teksol.mindcode.mindustry.logic.Opcode;
+import info.teksol.mindcode.mindustry.logic.OpcodeVariant;
+import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
+import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.mindustry.logic.Opcode.*;
+import static info.teksol.util.CollectionUtils.*;
 
 public class BaseFunctionMapper implements FunctionMapper {
     private final InstructionProcessor instructionProcessor;
+    private final ProcessorVersion processorVersion;
+    private final ProcessorEdition processorEdition;
+    private final Map<String, FunctionHandler> functionMap;
 
     public BaseFunctionMapper(InstructionProcessor InstructionProcessor) {
         this.instructionProcessor = InstructionProcessor;
+        processorVersion = instructionProcessor.getProcessorVersion();
+        processorEdition = instructionProcessor.getProcessorEdition();
+        functionMap = buildFunctionMap();
+    }
+
+    @Override
+    public String handleFunction(LogicInstructionPipeline pipeline, String functionName, List<String> params) {
+
+        FunctionHandler handler = functionMap.get(functionName);
+        return handler == null ? null : handler.handleFunction(pipeline, params);
+    }
+
+    private Map<String, FunctionHandler> buildFunctionMap() {
+        Map<String, List<FunctionHandler>> functionGroups = instructionProcessor.getOpcodeVariants().stream()
+                .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.FUNC)
+                .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
+                .map(this::createFunctionHandler)
+                .collect(Collectors.groupingBy(FunctionHandler::getName));
+
+        // Create MultiplexedFunctionHandler for functions with identical names
+        return functionGroups.values().stream()
+                .map(this::collapseFunctions)
+                .collect(Collectors.toMap(FunctionHandler::getName, f -> f));
+    }
+
+    private FunctionHandler createFunctionHandler(OpcodeVariant opcodeVariant) {
+        final Opcode opcode = opcodeVariant.getOpcode();
+
+        // Handle special cases
+        switch(opcode) {
+            case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcode, 1);
+            case STOP:      return new ZeroResultsFunctionHandler("stopProcessor", opcode, 0);
+        }
+
+        List<NamedArgument> arguments = opcodeVariant.getArguments();
+        Optional<NamedArgument> selector = arguments.stream().filter(a -> a.getType().isFunctionName()).findFirst();
+        String name = selector.isPresent() ? selector.get().getName() : opcode.toString();
+        final int inputs  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isInput).count();
+        final int outputs = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isOutput).count();
+        final int unused  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isUnused).count();
+        final int results = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType.RESULT::equals).count();
+
+        if (outputs == 1 && results == 0) {
+            // If there is exactly one output, it must be marked as a result
+            throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
+        }
+
+        // Number of function parameters: selectors and results are not in parameter list
+        int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0);
+
+        if (unused == 0 && results == 0 && inputs == numArgs) {
+            // All arguments are input
+            return selector.isEmpty()
+                    ? new ZeroResultsFunctionHandler(name, opcode, numArgs)
+                    : new ZeroResultsSelectorFunctionHandler(name, opcode, selector.get().getName(), numArgs);
+        } else if (unused == 0 && outputs == 1 && inputs == numArgs) {
+            int resultIndex = findFirstIndex(arguments, a -> a.getType().isOutput());
+            return selector.isEmpty()
+                    ? new SingleResultFunctionHandler(name, opcode, numArgs, resultIndex)
+                    : new SingleResultSelectorFunctionHandler(name, opcode, selector.get().getName(), numArgs, resultIndex);
+        } else {
+            if (results > 1) {
+                throw new InvalidMetadataException("Too many RESULT arguments in opcode " + opcodeVariant);
+            }
+
+            int optional = 0;
+            for (int i = arguments.size() - 1; i >= 0; i--) {
+                ArgumentType type = arguments.get(i).getType();
+                if (!type.isOutput() || !type.isUnused()) {
+                    break;
+                }
+                if (type.isOutput() && type != ArgumentType.RESULT) {
+                    optional++;
+                }
+            }
+
+            // Unused arguments and result aren't passed as parameters to the function
+            numArgs -= unused;
+            int minArgs = numArgs - optional;
+            return new ComplexFunctionHandler(name, opcode, minArgs, numArgs, results > 0, arguments);
+        }
+    }
+
+    private FunctionHandler collapseFunctions(List<FunctionHandler> functions) {
+        if (functions.size() == 1) {
+            return functions.get(0);
+        } else {
+            if (functions.stream().anyMatch(fn -> !(fn instanceof SelectorFunction))) {
+                throw new InvalidMetadataException("Multiplexed function " + functions.get(0).getName() + " has a non-selector based variant.");
+            }
+            
+            Map<String, FunctionHandler> keywordMap = functions.stream()
+                    .collect(Collectors.toMap(f -> ((SelectorFunction) f).getKeyword(), f -> f));
+            
+            String name = functions.get(0).getName();
+            Opcode opcode = functions.get(0).opcode;
+            return new MultiplexedFunctionHandler(keywordMap, name, opcode);
+        }
     }
 
     protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    @Override
-    public String handleFunction(LogicInstructionPipeline pipeline, String functionName, List<String> params) {
-        switch (functionName) {
-            case "print":
-                return handlePrint(pipeline, params);
+    private interface SelectorFunction {
+        String getKeyword();
+    }
 
-            case "printflush":
-                return handlePrintflush(pipeline, params);
+    private abstract class FunctionHandler {
+        private final int minArgs;
+        private final int numArgs;
+        private final String name;
+        private final Opcode opcode;
 
-            case "wait":
-                return handleWait(pipeline, params);
+        public FunctionHandler(String name, Opcode opcode, int numArgs) {
+            this(name, opcode, numArgs, numArgs);
+        }
 
-            case "ubind":
-                return handleUbind(pipeline, params);
+        public FunctionHandler(String name, Opcode opcode, int minArgs, int numArgs) {
+            if (minArgs > numArgs) {
+                throw new InvalidMetadataException("Minimum number of arguments greater than total.");
+            }
+            this.name = name;
+            this.opcode = opcode;
+            this.minArgs = minArgs;
+            this.numArgs = numArgs;
+        }
 
-            case "move":
-                return handleMove(pipeline, params);
+        public String getName() {
+            return name;
+        }
 
-            case "rand":
-                return handleRand(pipeline, params);
+        public Opcode getOpcode() {
+            return opcode;
+        }
 
-            case "getlink":
-                return handleGetlink(pipeline, params);
+        protected void checkArguments(List<String> params) {
+            if (params.size() < minArgs || params.size() > numArgs) {
+                String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
+                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of parameters (expected "
+                        + args + ", found " + params.size() + ")");
+            }
+        }
 
-            case "radar":
-                return handleRadar(pipeline, params);
+        protected abstract String handleFunction(LogicInstructionPipeline pipeline, List<String> params);
+    }
 
-            case "mine":
-                return handleMine(pipeline, params);
+    // No return value: all parameters passed in in given order
+    private class ZeroResultsFunctionHandler extends FunctionHandler {
+        public ZeroResultsFunctionHandler(String name, Opcode opcode, int numArgs) {
+            super(name, opcode, numArgs);
+        }
 
-            case "itemDrop":
-                return handleItemDrop(pipeline, params);
-
-            case "itemTake":
-                return handleItemTake(pipeline, params);
-
-            case "flag":
-                return handleFlag(pipeline, params);
-
-            case "approach":
-                return handleApproach(pipeline, params);
-
-            case "idle":
-                return handleIdle(pipeline);
-
-            case "pathfind":
-                return handlePathfind(pipeline);
-
-            case "stop":
-                return handleStop(pipeline);
-
-            case "boost":
-                return handleBoost(pipeline, params);
-
-            case "target":
-                return handleTarget(pipeline, params);
-
-            case "targetp":
-                return handleTargetp(pipeline, params);
-
-            case "payDrop":
-                return handlePayDrop(pipeline);
-
-            case "payTake":
-                return handlePayTake(pipeline, params);
-
-            case "build":
-                return handleBuild(pipeline, params);
-
-            case "getBlock":
-                return handleGetBlock(pipeline, params);
-
-            case "within":
-                return handleWithin(pipeline, params);
-
-            case "tan":
-            case "sin":
-            case "cos":
-            case "log":
-            case "abs":
-            case "floor":
-            case "ceil":
-                return handleMath(pipeline, functionName, params);
-
-            case "clear":
-                return handleClear(pipeline, params);
-
-            case "color":
-                return handleColor(pipeline, params);
-
-            case "stroke":
-                return handleStroke(pipeline, params);
-
-            case "line":
-                return handleLine(pipeline, params);
-            case "rect":
-                return handleRect(pipeline, params);
-
-            case "lineRect":
-                return handleLineRect(pipeline, params);
-
-            case "poly":
-                return handlePoly(pipeline, params);
-
-            case "linePoly":
-                return handleLinePoly(pipeline, params);
-
-            case "triangle":
-                return handleTriangle(pipeline, params);
-
-            case "image":
-                return handleImage(pipeline, params);
-
-            case "drawflush":
-                return handleDrawflush(pipeline, params);
-
-            case "uradar":
-                return handleURadar(pipeline, params);
-
-            case "ulocate":
-                return handleULocate(pipeline, params);
-
-            case "end":
-                return handleEnd(pipeline);
-
-            case "sqrt":
-                return handleSqrt(pipeline, params);
-
-            case "min":
-                return handleMin(pipeline, params);
-
-            case "max":
-                return handleMax(pipeline, params);
-
-            case "len":
-                return handleLen(pipeline, params);
-
-            case "angle":
-                return handleAngle(pipeline, params);
-
-            case "log10":
-                return handleLog10(pipeline, params);
-
-            case "noise":
-                return handleNoise(pipeline, params);
-
-            default:
-                return null;
+        @Override
+        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            checkArguments(params);
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), params));
+            return "null";
         }
     }
 
-    private String handleNoise(LogicInstructionPipeline pipeline, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "noise", tmp, params.get(0), params.get(1)));
-        return tmp;
+    // No return value: all parameters passed in in given order
+    private class ZeroResultsSelectorFunctionHandler extends FunctionHandler implements SelectorFunction {
+        private final String keyword;
+
+        public ZeroResultsSelectorFunctionHandler(String name, Opcode opcode, String keyword, int numArgs) {
+            super(name, opcode, numArgs);
+            this.keyword = keyword;
+        }
+
+        @Override
+        public String getKeyword() {
+            return keyword;
+        }
+
+        @Override
+        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            checkArguments(params);
+            List<String> args = new ArrayList<>(params);
+            args.add(0, keyword);
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            return "null";
+        }
     }
 
-    private String handleLog10(LogicInstructionPipeline pipeline, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "log10", tmp, params.get(0)));
-        return tmp;
+    // Single return value: all other parameters passed in in given order, result inserted into arg list at proper position
+    private class SingleResultFunctionHandler extends FunctionHandler {
+        private final int resultPosition;
+
+        private SingleResultFunctionHandler(String name, Opcode opcode, int numArgs, int resultPosition) {
+            super(name, opcode, numArgs);
+            this.resultPosition = resultPosition;
+        }
+
+        @Override
+        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            checkArguments(params);
+            String tmp = instructionProcessor.nextTemp();
+            List<String> args = new ArrayList<>(params);
+            args.add(resultPosition, tmp);
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            return tmp;
+        }
     }
 
-    private String handleAngle(LogicInstructionPipeline pipeline, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "angle", tmp, params.get(0), params.get(1)));
-        return tmp;
+    // Single return value: all other parameters passed in in given order, result inserted into arg list at proper position
+    private class SingleResultSelectorFunctionHandler extends FunctionHandler implements SelectorFunction {
+        private final String keyword;
+        private final int resultPosition;
+
+        private SingleResultSelectorFunctionHandler(String name, Opcode opcode, String keyword, int numArgs, int resultPosition) {
+            super(name, opcode, numArgs);
+            this.keyword = keyword;
+            this.resultPosition = resultPosition;
+        }
+
+        @Override
+        public String getKeyword() {
+            return keyword;
+        }
+
+        @Override
+        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            checkArguments(params);
+            String tmp = instructionProcessor.nextTemp();
+            List<String> args = new ArrayList<>(params);
+            args.add(0, keyword);
+            args.add(resultPosition, tmp);
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            return tmp;
+        }
     }
 
-    private String handleLen(LogicInstructionPipeline pipeline, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "len", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
+    // More than one return value, or unused/const parameters: parameter mapping based on NamedArgument list
+    private class ComplexFunctionHandler extends FunctionHandler implements SelectorFunction {
+        private final Optional<String> keyword;
+        private final boolean hasResult;
+        private final List<NamedArgument> instructionArgs;
 
-    private String handleMax(LogicInstructionPipeline pipeline, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "max", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
+        public ComplexFunctionHandler(String name, Opcode opcode, int minArgs, int numArgs, boolean hasResult, List<NamedArgument> instructionArgs) {
+            super(name, opcode, minArgs, numArgs);
+            this.keyword = instructionArgs.stream().filter(a -> a.getType().isSelector()).map(NamedArgument::getName).findFirst();
+            this.hasResult = hasResult;
+            this.instructionArgs = instructionArgs;
+        }
 
-    private String handleMin(LogicInstructionPipeline pipeline, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "min", tmp, params.get(0), params.get(1)));
-        return tmp;
-    }
+        @Override
+        public String getKeyword() {
+            if (keyword.isEmpty()) {
+                throw new InvalidMetadataException("No keyword selector for function " + getName());
+            }
+            return keyword.get();
+        }
 
-    private String handleSqrt(LogicInstructionPipeline pipeline, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "sqrt", tmp, params.get(0)));
-        return tmp;
-    }
+        @Override
+        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            checkArguments(params);
 
-    private String handleEnd(LogicInstructionPipeline pipeline) {
-        pipeline.emit(createInstruction(END));
-        return "null";
-    }
+            String tmp = hasResult ? instructionProcessor.nextTemp() : "null";
+            List<String> args = new ArrayList<>();
+            int paramIndex = 0;
 
-    private String handleULocate(LogicInstructionPipeline pipeline, List<String> params) {
-        /*
-            found = ulocate(ore, @surge-alloy, outx, outy)
-                    ulocate ore core true @surge-alloy outx outy found building
-
-            found = ulocate(building, core, ENEMY, outx, outy, outbuilding)
-                    ulocate building core true @copper outx outy found building
-
-            found = ulocate(spawn, outx, outy, outbuilding)
-                    ulocate spawn core true @copper outx outy found building
-
-            found = ulocate(damaged, outx, outy, outbuilding)
-                    ulocate damaged core true @copper outx outy found building
-        */
-        
-        String tmp = instructionProcessor.nextTemp();
-        switch (params.get(0)) {
-            case "ore":
-                if (params.size() < 4) {
-                    throw new InsufficientArgumentsException("ulocate(ore) requires 4 arguments, received " + params.size());
+            for (NamedArgument a : instructionArgs) {
+                if (a.getType() == ArgumentType.RESULT) {
+                    args.add(tmp);
+                } else if (a.getType().isSelector()  && !a.getType().isFunctionName()) {
+                    // Selector that IS NOT a function name is taken from the parameter list
+                    args.add(params.get(paramIndex++));
+                } else if (a.getType().isSelector() || a.getType().isUnused()) {
+                    // Selector that IS a function name isn't in a parameter list and must be filled in
+                    // Generate new temporary variable for unused outputs (may not be necessary)
+                    args.add(a.getType().isOutput() ? instructionProcessor.nextTemp() : a.getName());
+                } else {
+                    // Optional arguments are always output; generate temporary variable for them
+                    args.add(paramIndex < params.size() ? params.get(paramIndex++) : instructionProcessor.nextTemp());
                 }
+            }
 
-                pipeline.emit(createInstruction(ULOCATE, "ore", "core", "true", params.get(1), params.get(2), params.get(3), tmp, instructionProcessor.nextTemp()));
-                break;
-            case "building":
-                if (params.size() < 6) {
-                    throw new InsufficientArgumentsException("ulocate(building) requires 6 arguments, received " + params.size());
-                }
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            return tmp;
+        }
+    }
 
-                pipeline.emit(createInstruction(ULOCATE, "building", params.get(1), params.get(2), "@copper", params.get(3), params.get(4), tmp, params.get(5)));
-                break;
+    // Chooses a function handler based on the first parameter value
+    private class MultiplexedFunctionHandler extends FunctionHandler {
+        private final Map<String, FunctionHandler> functions;
 
-            case "spawn":
-                if (params.size() < 4) {
-                    throw new InsufficientArgumentsException("ulocate(spawn) requires 4 arguments, received " + params.size());
-                }
-
-                pipeline.emit(createInstruction(ULOCATE, "spawn", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
-                break;
-
-            case "damaged":
-                if (params.size() < 4) {
-                    throw new InsufficientArgumentsException("ulocate(damaged) requires 4 arguments, received " + params.size());
-                }
-
-                pipeline.emit(createInstruction(ULOCATE, "damaged", "core", "true", "@copper", params.get(1), params.get(2), tmp, params.get(3)));
-                break;
-
-            default:
-                throw new GenerationException("Unhandled type of ulocate in " + params);
+        public MultiplexedFunctionHandler(Map<String, FunctionHandler> functions, String name, Opcode opcode) {
+            super(name, opcode, 0);
+            this.functions = functions;
         }
 
-        return tmp;
-    }
-
-    private String handleURadar(LogicInstructionPipeline pipeline, List<String> params) {
-        // uradar enemy attacker ground armor 0 order result
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(URADAR, params.get(0), params.get(1), params.get(2), params.get(3), "0", params.get(4), tmp));
-        return tmp;
-    }
-
-    private String handleDrawflush(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAWFLUSH, params.get(0)));
-        return params.get(0);
-    }
-
-    private String handleImage(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "image", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handleTriangle(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "triangle", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5)));
-        return "null";
-    }
-
-    private String handleLinePoly(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "linePoly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handlePoly(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "poly", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handleLineRect(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "lineRect", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleRect(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "rect", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleLine(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "line", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleStroke(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "stroke", params.get(0)));
-        return "null";
-    }
-
-    private String handleColor(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "color", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleClear(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(DRAW, "clear", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleMath(LogicInstructionPipeline pipeline, String functionName, List<String> params) {
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, functionName, tmp, params.get(0)));
-        return tmp;
-    }
-
-    private String handleWithin(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol within x y radius result 0
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(UCONTROL, "within", params.get(0), params.get(1), params.get(2), tmp));
-        return tmp;
-    }
-
-    private String handleGetBlock(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol getBlock x y resultType resultBuilding 0
-        // TODO: either handle multiple return values, or provide a better abstraction over getBlock
-        pipeline.emit(createInstruction(UCONTROL, "getBlock", params.get(0), params.get(1), params.get(2), params.get(3)));
-        return "null";
-    }
-
-    private String handleBuild(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol build x y block rotation config
-        pipeline.emit(createInstruction(UCONTROL, "build", params.get(0), params.get(1), params.get(2), params.get(3), params.get(4)));
-        return "null";
-    }
-
-    private String handlePayTake(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol payTake takeUnits 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "payTake", params.get(0)));
-        return "null";
-    }
-
-    private String handlePayDrop(LogicInstructionPipeline pipeline) {
-        // ucontrol payDrop 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "payDrop"));
-        return "null";
-    }
-
-    private String handleItemTake(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol itemTake from item amount 0 0
-        pipeline.emit(createInstruction(UCONTROL, "itemTake", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleTargetp(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol targetp unit shoot 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "targetp", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleTarget(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol target x y shoot 0 0
-        pipeline.emit(createInstruction(UCONTROL, "target", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleBoost(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol boost enable 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "boost", params.get(0)));
-        return params.get(0);
-    }
-
-    private String handlePathfind(LogicInstructionPipeline pipeline) {
-        // ucontrol pathfind 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "pathfind"));
-        return "null";
-    }
-
-    private String handleIdle(LogicInstructionPipeline pipeline) {
-        // ucontrol idle 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "idle"));
-        return "null";
-    }
-
-    private String handleStop(LogicInstructionPipeline pipeline) {
-        // ucontrol stop 0 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "stop"));
-        return "null";
-    }
-
-    private String handleApproach(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol approach x y radius 0 0
-        pipeline.emit(createInstruction(UCONTROL, "approach", params.get(0), params.get(1), params.get(2)));
-        return "null";
-    }
-
-    private String handleFlag(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol flag value 0 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "flag", params.get(0)));
-        return params.get(0);
-    }
-
-    private String handleItemDrop(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol itemDrop to amount 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "itemDrop", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleMine(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol mine x y 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "mine", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleGetlink(LogicInstructionPipeline pipeline, List<String> params) {
-        // getlink result 0
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(GETLINK, tmp, params.get(0)));
-        return tmp;
-    }
-
-    private boolean isRadarSearchProperty(String prop) {
-        return List.of("attacker", "enemy", "ally", "player", "flying", "ground", "boss", "any").contains(prop);
-    }
-    private boolean isRadarSortbyOption(String sortby) {
-        return List.of("distance", "health", "shield", "armor", "maxHealth").contains(sortby);
-    }
-
-    private String handleRadar(LogicInstructionPipeline pipeline, List<String> params) {
-        // radar prop1 prop2 prop3 sortby target order out
-        String tmp = instructionProcessor.nextTemp();
-        final String prop1 = params.get(0);
-        final String prop2 = params.get(1);
-        final String prop3 = params.get(2);
-        final String sortby = params.get(3);
-        // Radar search properties should be hardcoded and can't be indirectly referenced. (Last test: v7.0.1.)
-        if (!isRadarSearchProperty(prop1)) {
-            throw new GenerationException("Invalid radar search property [" + prop1 + "]");
+        @Override
+        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            FunctionHandler handler = functions.get(params.get(0));
+            if (handler == null) {
+                throw new UnhandledFunctionVariantException("Unhandled type of " + getOpcode() + " in " + params);
+            }
+            return handler.handleFunction(pipeline, params);
         }
-        if (!isRadarSearchProperty(prop2)) {
-            throw new GenerationException("Invalid radar search property [" + prop2 + "]");
+    }
+
+    // Handles the print function
+    private class PrintFunctionHandler extends FunctionHandler {
+        public PrintFunctionHandler(String name, Opcode opcode, int numArgs) {
+            super(name, opcode, numArgs);
         }
-        if (!isRadarSearchProperty(prop3)) {
-            throw new GenerationException("Invalid radar search property [" + prop3 + "]");
+
+        @Override
+        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            params.forEach((param) -> pipeline.emit(createInstruction(Opcode.PRINT, param)));
+            return params.get(params.size() - 1);
         }
-        if (!isRadarSortbyOption(sortby)) {
-            throw new GenerationException("Invalid radar sort option [" + sortby + "]");
-        }
-        pipeline.emit(createInstruction(RADAR, params.get(0), params.get(1), params.get(2), params.get(3), params.get(4), params.get(5), tmp));
-        return tmp;
-    }
-
-    private String handleRand(LogicInstructionPipeline pipeline, List<String> params) {
-        // op rand result 200 0
-        String tmp = instructionProcessor.nextTemp();
-        pipeline.emit(createInstruction(OP, "rand", tmp, params.get(0)));
-        return tmp;
-    }
-
-    private String handleMove(LogicInstructionPipeline pipeline, List<String> params) {
-        // ucontrol move 14 15 0 0 0
-        pipeline.emit(createInstruction(UCONTROL, "move", params.get(0), params.get(1)));
-        return "null";
-    }
-
-    private String handleUbind(LogicInstructionPipeline pipeline, List<String> params) {
-        // ubind @poly
-        pipeline.emit(createInstruction(UBIND, params.get(0)));
-        return "null";
-    }
-
-    private String handlePrintflush(LogicInstructionPipeline pipeline, List<String> params) {
-        params.forEach((param) -> pipeline.emit(createInstruction(PRINTFLUSH, param)));
-        return "null";
-    }
-
-    private String handlePrint(LogicInstructionPipeline pipeline, List<String> params) {
-        params.forEach((param) -> pipeline.emit(createInstruction(PRINT, param)));
-        return params.get(params.size() - 1);
-    }
-
-    private String handleWait(LogicInstructionPipeline pipeline, List<String> params) {
-        pipeline.emit(createInstruction(WAIT, params.get(0)));
-        return "null";
     }
 }

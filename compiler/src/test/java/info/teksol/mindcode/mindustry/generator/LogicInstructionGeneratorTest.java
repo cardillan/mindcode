@@ -758,7 +758,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "out = radar(enemy, any, any, distance, salvo1, 1)\n" +
                                 "out = radar(ally, flying, any, health, lancer1, 1)\n" +
                                 "src = salvo1\n" +
-                                "out = radar(enemy, any, any, distance, src, 1, out)\n"
+                                "out = radar(enemy, any, any, distance, src, 1)\n"
                         )
                 )
         );  

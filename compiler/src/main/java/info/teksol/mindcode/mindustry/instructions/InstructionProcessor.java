@@ -2,15 +2,27 @@ package info.teksol.mindcode.mindustry.instructions;
 
 import info.teksol.mindcode.mindustry.logic.ArgumentType;
 import info.teksol.mindcode.mindustry.logic.Opcode;
+import info.teksol.mindcode.mindustry.logic.OpcodeVariant;
+import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
+import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.mindcode.mindustry.logic.TypedArgument;
 import java.util.List;
 import java.util.stream.Stream;
 
 public interface InstructionProcessor {
 
+    ProcessorVersion getProcessorVersion();
+
+    ProcessorEdition getProcessorEdition();
+
     String nextLabel();
 
     String nextTemp();
+
+    /**
+     * @return the list of opcode variants available to this instruction processor.
+     */
+    List<OpcodeVariant> getOpcodeVariants();
 
     /**
      * Creates and validates a new LogicInstruction.
@@ -108,7 +120,7 @@ public interface InstructionProcessor {
      * of the instruction is determined by inspecting its arguments.
      *
      * @param instruction instruction to process
-     * @return list of typed arguments
+     * @return stream of typed arguments
      */
     Stream<TypedArgument> getTypedArguments(LogicInstruction instruction);
 

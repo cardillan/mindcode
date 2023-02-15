@@ -16,9 +16,9 @@ public class MindustryOpcodeVariants {
     }
 
     public static List<OpcodeVariant> getSpecificOpcodeVariants(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
-        return List.copyOf(data.variants.stream()
+        return data.variants.stream()
                 .filter(o -> o.isAvailableIn(processorVersion, processorEdition))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toUnmodifiableList());
     }
 
     ///////////////////////////////////////////////////////////////
@@ -163,83 +163,83 @@ public class MindustryOpcodeVariants {
         return List.copyOf(list);
     }
 
-    private NamedArgument bctrl(String name) {
+    public static NamedArgument bctrl(String name) {
         return new NamedArgument(ArgumentType.BLOCK_CONTROL, name);
     }
 
-    private NamedArgument block(String name) {
+    public static NamedArgument block(String name) {
         return new NamedArgument(ArgumentType.BLOCK, name);
     }
 
-    private NamedArgument cond(String name) {
+    public static NamedArgument cond(String name) {
         return new NamedArgument(ArgumentType.CONDITION, name);
     }
 
-    private NamedArgument draw(String name) {
+    public static NamedArgument draw(String name) {
         return new NamedArgument(ArgumentType.DRAW, name);
     }
 
-    private NamedArgument group(String name) {
+    public static NamedArgument group(String name) {
         return new NamedArgument(ArgumentType.GROUP, name);
     }
 
-    private NamedArgument in(String name) {
+    public static NamedArgument in(String name) {
         return new NamedArgument(ArgumentType.INPUT, name);
     }
 
-    private NamedArgument label(String name) {
+    public static NamedArgument label(String name) {
         return new NamedArgument(ArgumentType.LABEL, name);
     }
 
-    private NamedArgument locate(String name) {
+    public static NamedArgument locate(String name) {
         return new NamedArgument(ArgumentType.LOCATE, name);
     }
 
-    private NamedArgument lookup(String name) {
+    public static NamedArgument lookup(String name) {
         return new NamedArgument(ArgumentType.LOOKUP, name);
     }
 
-    private NamedArgument op(String name) {
+    public static NamedArgument op(String name) {
         return new NamedArgument(ArgumentType.OPERATION, name);
     }
 
-    private NamedArgument ore(String name) {
+    public static NamedArgument ore(String name) {
         return new NamedArgument(ArgumentType.ORE, name);
     }
 
-    private NamedArgument out(String name) {
+    public static NamedArgument out(String name) {
         return new NamedArgument(ArgumentType.OUTPUT, name);
     }
 
-    private NamedArgument radar(String name) {
+    public static NamedArgument radar(String name) {
         return new NamedArgument(ArgumentType.RADAR, name);
     }
 
-    private NamedArgument res(String name) {
+    public static NamedArgument res(String name) {
         return new NamedArgument(ArgumentType.RESULT, name);
     }
 
-    private NamedArgument sensor(String name) {
+    public static NamedArgument sensor(String name) {
         return new NamedArgument(ArgumentType.SENSOR, name);
     }
 
-    private NamedArgument sort(String name) {
+    public static NamedArgument sort(String name) {
         return new NamedArgument(ArgumentType.SORT, name);
     }
 
-    private NamedArgument uctrl(String name) {
+    public static NamedArgument uctrl(String name) {
         return new NamedArgument(ArgumentType.UNIT_CONTROL, name);
     }
 
-    private NamedArgument unit(String name) {
+    public static NamedArgument unit(String name) {
         return new NamedArgument(ArgumentType.UNIT, name);
     }
 
-    private NamedArgument unused(String name) {
+    public static NamedArgument unused(String name) {
         return new NamedArgument(ArgumentType.UNUSED, name);
     }
 
-    private NamedArgument unusedOut(String name) {
+    public static NamedArgument unusedOut(String name) {
         return new NamedArgument(ArgumentType.UNUSED_OUTPUT, name);
     }
 }

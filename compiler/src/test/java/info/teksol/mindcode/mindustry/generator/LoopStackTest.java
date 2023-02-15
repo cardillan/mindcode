@@ -1,7 +1,5 @@
 package info.teksol.mindcode.mindustry.generator;
 
-import info.teksol.mindcode.mindustry.generator.GenerationException;
-import info.teksol.mindcode.mindustry.generator.LoopStack;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

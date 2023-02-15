@@ -23,7 +23,7 @@ while @unit != null
     $x = 80
   else
     delay(1, 15)
-    move($x, 100, 2)
+    move($x, 100)
     $x += 1
   end
 end
