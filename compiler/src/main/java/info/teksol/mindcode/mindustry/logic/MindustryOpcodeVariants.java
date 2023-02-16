@@ -158,6 +158,66 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7, S, FUNC, Opcode.ULOCATE, locate("spawn"),    unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), res("found"), out("building"));
         add(list, V6, V7, S, FUNC, Opcode.ULOCATE, locate("damaged"),  unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), res("found"), out("building"));
 
+        add(list, V7, V7, W, FUNC, Opcode.GETBLOCK, layer("layer"), res("result"), in("x"), in("y"));
+
+        add(list, V7, V7, W, FUNC, Opcode.SETBLOCK, layerset("floor"), in("to"), in("x"), in("y"));
+        add(list, V7, V7, W, FUNC, Opcode.SETBLOCK, layerset("ore"),  ore("to"), in("x"), in("y"));
+        add(list, V7, V7, W, FUNC, Opcode.SETBLOCK, layerset("block"), in("to"), in("x"), in("y"), in("team"), in("rotation"));
+
+        add(list, V7, V7, W, FUNC, Opcode.SPAWN, unit("unit"), in("x"), in("y"), in("rotation"), in("team"), res("result"));
+
+        add(list, V7, V7, W, FUNC, Opcode.STATUS, clear("false"), status("status"), in("unit"), in("duration"));
+        add(list, V7, V7, W, FUNC, Opcode.STATUS, clear("true"),  status("status"), in("unit"));
+
+        add(list, V7, V7, W, FUNC, Opcode.SPAWNWAWE, in("x"),  in("y"), in("natural"));
+
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("currentWaveTime"),       in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("waveTimer"),             in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("waves"),                 in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("wave"),                  in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("waveSpacing"),           in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("waveSending"),           in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("attackMode"),            in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("enemyCoreBuildRadius"),  in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("dropZoneRadius"),        in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("unitCap"),               in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("mapArea"),               unused("0"), in("x"), in("y"), in("width"), in("height"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("lighting"),              in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("ambientLight"),          in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("solarMultiplier"),       in("value"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("buildSpeed"),            in("value"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("unitBuildSpeed"),        in("value"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("unitCost"),              in("value"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("unitDamage"),            in("value"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("blockHealth"),           in("value"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("blockDamage"),           in("value"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("rtsMinWeight"),          in("value"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("rtsMinSquad"),           in("value"), in("team"));
+
+        add(list, V7, V7, W, FUNC, Opcode.MESSAGE,   message("notify"));
+        add(list, V7, V7, W, FUNC, Opcode.MESSAGE,   message("mission"));
+        add(list, V7, V7, W, FUNC, Opcode.MESSAGE,   message("announce"), in("duration"));
+        add(list, V7, V7, W, FUNC, Opcode.MESSAGE,   message("toast"),    in("duration"));
+
+        add(list, V7, V7, W, FUNC, Opcode.CUTSCENE,  cutscene("pan"),  in("x"), in("y"), in("speed"), unused("0"));
+        add(list, V7, V7, W, FUNC, Opcode.CUTSCENE,  cutscene("zoom"), in("level"));
+        add(list, V7, V7, W, FUNC, Opcode.CUTSCENE,  cutscene("stop"));
+
+        add(list, V7, V7, W, FUNC, Opcode.EXPLOSION, in("team"), in("x"), in("y"), in("radius"), in("damage"), in("air"), in("ground"), in("pierce"));
+        add(list, V7, V7, W, FUNC, Opcode.SETRATE, in("ipt"));
+
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("unitCount"),   res("result"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("playerCount"), res("result"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("coreCount"),   res("result"), in("team"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("buildCount"),  res("result"), in("team"), unused("0"), in("type"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("unit"),        res("result"), in("team"), in("#"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("player"),      res("result"), in("team"), in("#"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("core"),        res("result"), in("team"), in("#"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("build"),       res("result"), in("team"), in("#"), in("type"));
+
+        add(list, V7, V7, W, FUNC, Opcode.GETFLAG, res("result"), in("flag"));
+        add(list, V7, V7, W, FUNC, Opcode.SETFLAG, in("flag"), in("value"));
+
         add(list, V6, V7, S, NONE, Opcode.LABEL, label("label"));
 
         return List.copyOf(list);
@@ -171,12 +231,24 @@ public class MindustryOpcodeVariants {
         return new NamedArgument(ArgumentType.BLOCK, name);
     }
 
+    public static NamedArgument clear(String name) {
+        return new NamedArgument(ArgumentType.CLEAR, name);
+    }
+
     public static NamedArgument cond(String name) {
         return new NamedArgument(ArgumentType.CONDITION, name);
     }
 
+    public static NamedArgument cutscene(String name) {
+        return new NamedArgument(ArgumentType.CUTSCENE, name);
+    }
+
     public static NamedArgument draw(String name) {
         return new NamedArgument(ArgumentType.DRAW, name);
+    }
+
+    public static NamedArgument fetch(String name) {
+        return new NamedArgument(ArgumentType.FETCH, name);
     }
 
     public static NamedArgument group(String name) {
@@ -191,12 +263,24 @@ public class MindustryOpcodeVariants {
         return new NamedArgument(ArgumentType.LABEL, name);
     }
 
+    public static NamedArgument layer(String name) {
+        return new NamedArgument(ArgumentType.LAYER, name);
+    }
+
+    public static NamedArgument layerset(String name) {
+        return new NamedArgument(ArgumentType.LAYER_SET, name);
+    }
+
     public static NamedArgument locate(String name) {
         return new NamedArgument(ArgumentType.LOCATE, name);
     }
 
     public static NamedArgument lookup(String name) {
         return new NamedArgument(ArgumentType.LOOKUP, name);
+    }
+
+    public static NamedArgument message(String name) {
+        return new NamedArgument(ArgumentType.MESSAGE, name);
     }
 
     public static NamedArgument op(String name) {
@@ -219,12 +303,20 @@ public class MindustryOpcodeVariants {
         return new NamedArgument(ArgumentType.RESULT, name);
     }
 
+    public static NamedArgument rule(String name) {
+        return new NamedArgument(ArgumentType.RULE, name);
+    }
+
     public static NamedArgument sensor(String name) {
         return new NamedArgument(ArgumentType.SENSOR, name);
     }
 
     public static NamedArgument sort(String name) {
         return new NamedArgument(ArgumentType.SORT, name);
+    }
+
+    public static NamedArgument status(String name) {
+        return new NamedArgument(ArgumentType.STATUS, name);
     }
 
     public static NamedArgument uctrl(String name) {

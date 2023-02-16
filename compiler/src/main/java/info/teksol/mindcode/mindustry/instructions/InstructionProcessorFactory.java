@@ -17,6 +17,6 @@ public class InstructionProcessorFactory {
             List<OpcodeVariant> opcodeVariants) {
         return new BaseInstructionProcessor(version, edition, opcodeVariants);
     }
-
+    
     private InstructionProcessorFactory() { }
 }

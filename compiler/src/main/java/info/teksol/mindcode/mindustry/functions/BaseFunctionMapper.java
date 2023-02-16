@@ -1,6 +1,7 @@
 package info.teksol.mindcode.mindustry.functions;
 
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.generator.GenerationException;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.ArgumentType;
@@ -13,19 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static info.teksol.util.CollectionUtils.*;
 
 public class BaseFunctionMapper implements FunctionMapper {
     private final InstructionProcessor instructionProcessor;
+    private final Consumer<String> messageConsumer;
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final Map<String, PropertyHandler> propertyMap;
     private final Map<String, FunctionHandler> functionMap;
 
-    public BaseFunctionMapper(InstructionProcessor InstructionProcessor) {
+    BaseFunctionMapper(InstructionProcessor InstructionProcessor, Consumer<String> messageConsumer) {
         this.instructionProcessor = InstructionProcessor;
+        this.messageConsumer = messageConsumer;
+
         processorVersion = instructionProcessor.getProcessorVersion();
         processorEdition = instructionProcessor.getProcessorEdition();
         propertyMap = buildPropertyMap();
@@ -45,28 +50,34 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private Map<String, PropertyHandler> buildPropertyMap() {
-        return instructionProcessor.getOpcodeVariants().stream()
+        Map<String, PropertyHandler> map = instructionProcessor.getOpcodeVariants().stream()
                 .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.PROP)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
                 .map(this::createPropertyHandler)
-                .collect(Collectors.toMap(PropertyHandler::getProperty, f -> f));
+                .collect(Collectors.toMap(BasicPropertyHandler::getName, f -> f));
+
+        // V6 backwards compatibility
+        if (map.containsKey("config")) {
+            map.put("configure", new DeprecatedPropertyHandler("configure", map.get("config")));
+        }
+
+        return map;
     }
 
     private Map<String, FunctionHandler> buildFunctionMap() {
-        Map<String, List<FunctionHandler>> functionGroups = instructionProcessor.getOpcodeVariants().stream()
+        Map<String, List<AbstractFunctionHandler>> functionGroups = instructionProcessor.getOpcodeVariants().stream()
                 .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.FUNC)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
                 .map(this::createFunctionHandler)
-                .collect(Collectors.groupingBy(FunctionHandler::getName));
+                .collect(Collectors.groupingBy(AbstractFunctionHandler::getName));
 
         // Create MultiplexedFunctionHandler for functions with identical names
         return functionGroups.values().stream()
                 .map(this::collapseFunctions)
-                .collect(Collectors.toMap(FunctionHandler::getName, f -> f));
+                .collect(Collectors.toMap(AbstractFunctionHandler::getName, f -> f));
     }
 
-    private PropertyHandler createPropertyHandler(OpcodeVariant opcodeVariant) {
-        final Opcode opcode = opcodeVariant.getOpcode();
+    private BasicPropertyHandler createPropertyHandler(OpcodeVariant opcodeVariant) {
         List<NamedArgument> arguments = opcodeVariant.getArguments();
         int selectorIndex = findFirstIndex(arguments, a -> a.getType().isSelector());
         int blockIndex = findFirstIndex(arguments, a -> a.getType() == ArgumentType.BLOCK);
@@ -81,25 +92,25 @@ public class BaseFunctionMapper implements FunctionMapper {
         // Number of function parameters: subtract two for selector and block (aka property and target)
         int numArgs = arguments.size() - 2;
 
-        return new PropertyHandler(arguments.get(0).getName(), opcode, numArgs);
+        return new BasicPropertyHandler(arguments.get(0).getName(), opcodeVariant, numArgs);
     }
 
-    private FunctionHandler createFunctionHandler(OpcodeVariant opcodeVariant) {
+    private AbstractFunctionHandler createFunctionHandler(OpcodeVariant opcodeVariant) {
         final Opcode opcode = opcodeVariant.getOpcode();
 
         // Handle special cases
         switch(opcode) {
-            case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcode, 1);
-            case STOP:      return new ZeroResultsFunctionHandler("stopProcessor", opcode, 0);
+            case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcodeVariant, 1);
         }
 
         List<NamedArgument> arguments = opcodeVariant.getArguments();
         Optional<NamedArgument> selector = arguments.stream().filter(a -> a.getType().isFunctionName()).findFirst();
-        String name = selector.isPresent() ? selector.get().getName() : opcode.toString();
+        String name = functionName(opcodeVariant, selector);
         final int inputs  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isInput).count();
         final int outputs = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isOutput).count();
         final int unused  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isUnused).count();
         final int results = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType.RESULT::equals).count();
+        final int selectorIndex = findFirstIndex(arguments, a -> a.getType().isFunctionName());
 
         if (outputs == 1 && results == 0) {
             // If there is exactly one output, it must be marked as a result
@@ -109,25 +120,29 @@ public class BaseFunctionMapper implements FunctionMapper {
         // Number of function parameters: selectors and results are not in parameter list
         int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0);
 
-        if (unused == 0 && results == 0 && inputs == numArgs) {
-            // All arguments are input
+        if (unused == 0 && selectorIndex <= 0 && results == 0 && inputs == numArgs) {
+            // Selector, if preset, is the first argument; all other arguments are input
             return selector.isEmpty()
-                    ? new ZeroResultsFunctionHandler(name, opcode, numArgs)
-                    : new ZeroResultsSelectorFunctionHandler(name, opcode, selector.get().getName(), numArgs);
-        } else if (unused == 0 && outputs == 1 && inputs == numArgs) {
+                    ? new ZeroResultsFunctionHandler(name, opcodeVariant, numArgs)
+                    : new ZeroResultsSelectorFunctionHandler(name, opcodeVariant, selector.get().getName(), numArgs);
+        } else if (unused == 0 && selectorIndex <= 0 && outputs == 1 && inputs == numArgs) {
+            // Selector, if preset, is the first argument. Then exactly one output argument - it must be of type RESULT (checked above)
+
             int resultIndex = findFirstIndex(arguments, a -> a.getType().isOutput());
             return selector.isEmpty()
-                    ? new SingleResultFunctionHandler(name, opcode, numArgs, resultIndex)
-                    : new SingleResultSelectorFunctionHandler(name, opcode, selector.get().getName(), numArgs, resultIndex);
+                    ? new SingleResultFunctionHandler(name, opcodeVariant, numArgs, resultIndex)
+                    : new SingleResultSelectorFunctionHandler(name, opcodeVariant, selector.get().getName(), numArgs, resultIndex);
         } else {
             if (results > 1) {
-                throw new InvalidMetadataException("Too many RESULT arguments in opcode " + opcodeVariant);
+                throw new InvalidMetadataException("more than one RESULT arguments in opcode " + opcodeVariant);
             }
 
+            // Optional parameters are output arguments at the end of the argument list
+            // Result doesn't count, as it is not in the parameter list.
             int optional = 0;
             for (int i = arguments.size() - 1; i >= 0; i--) {
                 ArgumentType type = arguments.get(i).getType();
-                if (!type.isOutput() || !type.isUnused()) {
+                if (!type.isOutput() && !type.isUnused()) {
                     break;
                 }
                 if (type.isOutput() && type != ArgumentType.RESULT) {
@@ -135,27 +150,44 @@ public class BaseFunctionMapper implements FunctionMapper {
                 }
             }
 
-            // Unused arguments and result aren't passed as parameters to the function
             numArgs -= unused;
             int minArgs = numArgs - optional;
-            return new ComplexFunctionHandler(name, opcode, minArgs, numArgs, results > 0, arguments);
+            return new ComplexFunctionHandler(name, opcodeVariant, minArgs, numArgs, results > 0);
         }
     }
 
-    private FunctionHandler collapseFunctions(List<FunctionHandler> functions) {
+    private String functionName(OpcodeVariant opcodeVariant, Optional<NamedArgument> selector) {
+        switch (opcodeVariant.getOpcode()) {
+            case STOP:
+                return "stopProcessor";
+
+            case STATUS:
+                switch (opcodeVariant.getArguments().get(0).getName()) {
+                    case "true":    return "clearStatus";
+                    case "false":   return "applyStatus";
+                    default:        throw new GenerationException("Don't know function name of " + opcodeVariant);
+                }
+
+            default:
+                return selector.isPresent() ? selector.get().getName() : opcodeVariant.getOpcode().toString();
+        }
+    }
+
+    private AbstractFunctionHandler collapseFunctions(List<AbstractFunctionHandler> functions) {
         if (functions.size() == 1) {
             return functions.get(0);
         } else {
             if (functions.stream().anyMatch(fn -> !(fn instanceof SelectorFunction))) {
-                throw new InvalidMetadataException("Multiplexed function " + functions.get(0).getName() + " has a non-selector based variant.");
+                throw new InvalidMetadataException("Function name collision; " + functions.get(0).getName() + " maps to:\n"
+                        + functions.stream().map(f -> f.opcodeVariant.toString()).collect(Collectors.joining("\n")));
             }
             
-            Map<String, FunctionHandler> keywordMap = functions.stream()
+            Map<String, AbstractFunctionHandler> keywordMap = functions.stream()
                     .collect(Collectors.toMap(f -> ((SelectorFunction) f).getKeyword(), f -> f));
             
             String name = functions.get(0).getName();
-            Opcode opcode = functions.get(0).opcode;
-            return new MultiplexedFunctionHandler(keywordMap, name, opcode);
+            OpcodeVariant opcodeVariant = functions.get(0).opcodeVariant;
+            return new MultiplexedFunctionHandler(keywordMap, name, opcodeVariant);
         }
     }
 
@@ -163,72 +195,134 @@ public class BaseFunctionMapper implements FunctionMapper {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    private class PropertyHandler {
-        private final int numArgs;
-        private final String property;
-        private final Opcode opcode;
+    private interface PropertyHandler {
+        String getName();
+        OpcodeVariant getOpcodeVariant();
+        String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params);
 
-        public PropertyHandler(String property, Opcode opcode, int numArgs) {
-            this.property = property;
-            this.opcode = opcode;
-            this.numArgs = numArgs;
-        }
-
-        public String getProperty() {
-            return property;
-        }
-
-        public Opcode getOpcode() {
-            return opcode;
-        }
-
-        protected void checkArguments(List<String> params) {
-            if (params.size() != numArgs) {
-                throw new WrongNumberOfParametersException("Function '" + property + "': wrong number of parameters (expected "
-                        + numArgs + ", found " + params.size() + ")");
-            }
-        }
-
-        protected String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params) {
-            checkArguments(params);
-            List<String> args = new ArrayList<>(params);
-            args.add(0, property);
-            args.add(1, target);
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
-            return "null";
+        default Opcode getOpcode() {
+            return getOpcodeVariant().getOpcode();
         }
     }
 
-    private interface SelectorFunction {
-        String getKeyword();
-    }
-
-    private abstract class FunctionHandler {
-        private final int minArgs;
-        private final int numArgs;
+    private class BasicPropertyHandler implements PropertyHandler {
+        protected final OpcodeVariant opcodeVariant;
         private final String name;
-        private final Opcode opcode;
+        private final int numArgs;
 
-        public FunctionHandler(String name, Opcode opcode, int numArgs) {
-            this(name, opcode, numArgs, numArgs);
-        }
-
-        public FunctionHandler(String name, Opcode opcode, int minArgs, int numArgs) {
-            if (minArgs > numArgs) {
-                throw new InvalidMetadataException("Minimum number of arguments greater than total.");
-            }
+        BasicPropertyHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
             this.name = name;
-            this.opcode = opcode;
-            this.minArgs = minArgs;
+            this.opcodeVariant = opcodeVariant;
             this.numArgs = numArgs;
         }
 
+        @Override
         public String getName() {
             return name;
         }
 
-        public Opcode getOpcode() {
-            return opcode;
+        @Override
+        public OpcodeVariant getOpcodeVariant() {
+            return opcodeVariant;
+        }
+
+        protected void checkArguments(List<String> params) {
+            if (params.size() != numArgs) {
+                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of parameters (expected "
+                        + numArgs + ", found " + params.size() + ")");
+            }
+        }
+
+        @Override
+        public String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params) {
+            checkArguments(params);
+            List<String> args = new ArrayList<>(params);
+            args.add(0, name);
+            args.add(1, target);
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            return "null";
+        }
+
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + "{" + "opcodeVariant=" + opcodeVariant + ", name=" + name + ", numArgs=" + numArgs + '}';
+        }
+    }
+
+    private class DeprecatedPropertyHandler implements PropertyHandler {
+        private final PropertyHandler replacement;
+        private final String deprecated;
+        private boolean warningEmitted = false;
+
+        DeprecatedPropertyHandler(String deprecated, PropertyHandler replacement) {
+            this.deprecated = deprecated;
+            this.replacement = replacement;
+        }
+
+        @Override
+        public String getName() {
+            return replacement.getName();
+        }
+
+        @Override
+        public OpcodeVariant getOpcodeVariant() {
+            return replacement.getOpcodeVariant();
+        }
+
+        @Override
+        public String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params) {
+            if (!warningEmitted) {
+                messageConsumer.accept("Function '" + deprecated + "' is no longer supported in Mindustry Logic version " +
+                        processorVersion + "; using '" + replacement.getName() + "' instead.");
+                warningEmitted = true;
+            }
+            return replacement.handleProperty(pipeline, target, params);
+        }
+    }
+
+    private interface FunctionHandler {
+        String getName();
+        OpcodeVariant getOpcodeVariant();
+        String handleFunction(LogicInstructionPipeline pipeline, List<String> params);
+
+        default Opcode getOpcode() {
+            return getOpcodeVariant().getOpcode();
+        }
+    }
+
+    private interface SelectorFunction extends FunctionHandler {
+        String getKeyword();
+    }
+
+    private abstract class AbstractFunctionHandler implements FunctionHandler {
+        protected final OpcodeVariant opcodeVariant;
+        private final String name;
+        private final int minArgs;
+        private final int numArgs;
+
+        AbstractFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
+            this(name, opcodeVariant, numArgs, numArgs);
+        }
+
+        AbstractFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs) {
+            if (minArgs > numArgs) {
+                throw new InvalidMetadataException("Minimum number of arguments greater than total.");
+            }
+            this.name = name;
+            this.opcodeVariant = opcodeVariant;
+            this.minArgs = minArgs;
+            this.numArgs = numArgs;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public OpcodeVariant getOpcodeVariant() {
+            return opcodeVariant;
         }
 
         protected void checkArguments(List<String> params) {
@@ -239,17 +333,20 @@ public class BaseFunctionMapper implements FunctionMapper {
             }
         }
 
-        protected abstract String handleFunction(LogicInstructionPipeline pipeline, List<String> params);
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + "{" + "opcodeVariant=" + opcodeVariant + ", name=" + name + ", numArgs=" + numArgs + '}';
+        }
     }
 
     // No return value: all parameters passed in in given order
-    private class ZeroResultsFunctionHandler extends FunctionHandler {
-        public ZeroResultsFunctionHandler(String name, Opcode opcode, int numArgs) {
-            super(name, opcode, numArgs);
+    private class ZeroResultsFunctionHandler extends AbstractFunctionHandler {
+        public ZeroResultsFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
+            super(name, opcodeVariant, numArgs);
         }
 
         @Override
-        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
             checkArguments(params);
             pipeline.emit(instructionProcessor.createInstruction(getOpcode(), params));
             return "null";
@@ -257,11 +354,11 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     // No return value: all parameters passed in in given order
-    private class ZeroResultsSelectorFunctionHandler extends FunctionHandler implements SelectorFunction {
+    private class ZeroResultsSelectorFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
         private final String keyword;
 
-        public ZeroResultsSelectorFunctionHandler(String name, Opcode opcode, String keyword, int numArgs) {
-            super(name, opcode, numArgs);
+        ZeroResultsSelectorFunctionHandler(String name, OpcodeVariant opcodeVariant, String keyword, int numArgs) {
+            super(name, opcodeVariant, numArgs);
             this.keyword = keyword;
         }
 
@@ -271,7 +368,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
             checkArguments(params);
             List<String> args = new ArrayList<>(params);
             args.add(0, keyword);
@@ -281,16 +378,16 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     // Single return value: all other parameters passed in in given order, result inserted into arg list at proper position
-    private class SingleResultFunctionHandler extends FunctionHandler {
+    private class SingleResultFunctionHandler extends AbstractFunctionHandler {
         private final int resultPosition;
 
-        private SingleResultFunctionHandler(String name, Opcode opcode, int numArgs, int resultPosition) {
-            super(name, opcode, numArgs);
+        SingleResultFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs, int resultPosition) {
+            super(name, opcodeVariant, numArgs);
             this.resultPosition = resultPosition;
         }
 
         @Override
-        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
             checkArguments(params);
             String tmp = instructionProcessor.nextTemp();
             List<String> args = new ArrayList<>(params);
@@ -301,12 +398,12 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     // Single return value: all other parameters passed in in given order, result inserted into arg list at proper position
-    private class SingleResultSelectorFunctionHandler extends FunctionHandler implements SelectorFunction {
+    private class SingleResultSelectorFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
         private final String keyword;
         private final int resultPosition;
 
-        private SingleResultSelectorFunctionHandler(String name, Opcode opcode, String keyword, int numArgs, int resultPosition) {
-            super(name, opcode, numArgs);
+        SingleResultSelectorFunctionHandler(String name, OpcodeVariant opcodeVariant, String keyword, int numArgs, int resultPosition) {
+            super(name, opcodeVariant, numArgs);
             this.keyword = keyword;
             this.resultPosition = resultPosition;
         }
@@ -317,7 +414,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
             checkArguments(params);
             String tmp = instructionProcessor.nextTemp();
             List<String> args = new ArrayList<>(params);
@@ -329,16 +426,14 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     // More than one return value, or unused/const parameters: parameter mapping based on NamedArgument list
-    private class ComplexFunctionHandler extends FunctionHandler implements SelectorFunction {
+    private class ComplexFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
         private final Optional<String> keyword;
         private final boolean hasResult;
-        private final List<NamedArgument> instructionArgs;
 
-        public ComplexFunctionHandler(String name, Opcode opcode, int minArgs, int numArgs, boolean hasResult, List<NamedArgument> instructionArgs) {
-            super(name, opcode, minArgs, numArgs);
-            this.keyword = instructionArgs.stream().filter(a -> a.getType().isSelector()).map(NamedArgument::getName).findFirst();
+        ComplexFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs, boolean hasResult) {
+            super(name, opcodeVariant, minArgs, numArgs);
+            this.keyword = opcodeVariant.getArguments().stream().filter(a -> a.getType().isSelector()).map(NamedArgument::getName).findFirst();
             this.hasResult = hasResult;
-            this.instructionArgs = instructionArgs;
         }
 
         @Override
@@ -350,14 +445,14 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
             checkArguments(params);
 
             String tmp = hasResult ? instructionProcessor.nextTemp() : "null";
             List<String> args = new ArrayList<>();
             int paramIndex = 0;
 
-            for (NamedArgument a : instructionArgs) {
+            for (NamedArgument a : opcodeVariant.getArguments()) {
                 if (a.getType() == ArgumentType.RESULT) {
                     args.add(tmp);
                 } else if (a.getType().isSelector()  && !a.getType().isFunctionName()) {
@@ -379,17 +474,17 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     // Chooses a function handler based on the first parameter value
-    private class MultiplexedFunctionHandler extends FunctionHandler {
-        private final Map<String, FunctionHandler> functions;
+    private class MultiplexedFunctionHandler extends AbstractFunctionHandler {
+        private final Map<String, AbstractFunctionHandler> functions;
 
-        public MultiplexedFunctionHandler(Map<String, FunctionHandler> functions, String name, Opcode opcode) {
-            super(name, opcode, 0);
+        MultiplexedFunctionHandler(Map<String, AbstractFunctionHandler> functions, String name, OpcodeVariant opcodeVariant) {
+            super(name, opcodeVariant, 0);
             this.functions = functions;
         }
 
         @Override
-        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
-            FunctionHandler handler = functions.get(params.get(0));
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            AbstractFunctionHandler handler = functions.get(params.get(0));
             if (handler == null) {
                 throw new UnhandledFunctionVariantException("Unhandled type of " + getOpcode() + " in " + params);
             }
@@ -398,13 +493,13 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     // Handles the print function
-    private class PrintFunctionHandler extends FunctionHandler {
-        public PrintFunctionHandler(String name, Opcode opcode, int numArgs) {
-            super(name, opcode, numArgs);
+    private class PrintFunctionHandler extends AbstractFunctionHandler {
+        PrintFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
+            super(name, opcodeVariant, numArgs);
         }
 
         @Override
-        protected String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
             params.forEach((param) -> pipeline.emit(createInstruction(Opcode.PRINT, param)));
             return params.get(params.size() - 1);
         }

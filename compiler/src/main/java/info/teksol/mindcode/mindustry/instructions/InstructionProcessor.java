@@ -7,6 +7,7 @@ import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
 import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.mindcode.mindustry.logic.TypedArgument;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public interface InstructionProcessor {
@@ -135,6 +136,50 @@ public interface InstructionProcessor {
      * @return true if the value is valid for given argument type
      */
     boolean isValid(ArgumentType type, String value);
+
+    /**
+     * Translates unary Mindcode operator to Mindustry Logic representation.
+     *
+     * @param op Mindcode operator
+     * @return equivalent Mindustry Logic operation
+     */
+    String translateUnaryOpToCode(String op);
+
+    /**
+     * Translates binary Mindcode operator to Mindustry Logic representation.
+     *
+     * @param op Mindcode operator
+     * @return equivalent Mindustry Logic operation
+     */
+    String translateBinaryOpToCode(String op);
+
+    /**
+     * Returns true if the operation (in Mindustry opcode, ie. lessThan, notEqual etc.) has an inverse.
+     *
+     * @param comparison operation to inspect
+     * @return true if there exist an inverse operation
+     */
+    boolean hasInverse(String comparison);
+
+    /**
+     * Returns the inverse of given operation (in Mindustry opcode, rg. lessThan ==> greaterThanEq).
+     *
+     * @param comparison operation to invert
+     * @return inverse of the given operation (null if it doesn't exist)
+     */
+    public String getInverse(String comparison);
+
+    /**
+     * Returns the set of Mindustry Logic constant names (true, false, null, possibly others).
+     * @return the set of constant names
+     */
+    Set<String> getConstantNames();
+
+    /**
+     * Returns the set of possible Mindustry Logic block names (switch, cell, projector etc.).
+     * @return the set of block names
+     */
+    Set<String> getBlockNames();
 
     default String getLabelPrefix() {
         return "__label";

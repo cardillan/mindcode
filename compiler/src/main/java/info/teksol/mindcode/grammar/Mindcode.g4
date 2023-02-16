@@ -39,7 +39,7 @@ expression : MINUS numeric_t                                                    
            | left=expression AND right=expression                                               # binop_and
            | left=expression OR right=expression                                                # binop_or
            | <assoc=right> cond=expression QUESTION_MARK
-								(true_branch=expression COLON false_branch=expression)          # ternary_op
+                                (true_branch=expression COLON false_branch=expression)          # ternary_op
            | assign                                                                             # assignment
            | literal_t                                                                          # literal_string
            | numeric_t                                                                          # literal_numeric

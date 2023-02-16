@@ -9,17 +9,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class DeadCodeEliminator extends GlobalOptimizer {
-    // TODO: move these to some metadata class
-    private static final Set<String> CONSTANT_NAMES = Set.of("true", "false", "null");
-    private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
-            "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode", 
-            "disassembler", "display", "distributor", "dome", "door", "drill", "driver", "duo", "extractor", "factory",
-            "foreshadow", "foundation", "fuse", "gate", "generator", "hail", "incinerator", "junction", "kiln", "lancer",
-            "meltdown", "melter", "mender", "message", "mine", "mixer", "node", "nucleus", "panel", "parallax", "point",
-            "press", "processor", "projector", "pulverizer", "reactor", "reconstructor", "ripple", "router", "salvo",
-            "scatter", "scorch", "segment", "separator", "shard", "smelter", "sorter", "spectre", "swarmer", "switch",
-            "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
-
     private final Set<String> reads = new HashSet<>();
     private final Map<String, List<LogicInstruction>> writes = new HashMap<>();
     private final Set<String> eliminations = new HashSet<>();
@@ -45,7 +34,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         
         String uninitialized = reads.stream()
                 .filter(s -> !writes.containsKey(s) && s.matches("[a-zA-Z].*") && 
-                        !CONSTANT_NAMES.contains(s) && !isBlockName(s))
+                        !instructionProcessor.getConstantNames().contains(s) && !isBlockName(s))
                 .sorted()
                 .collect(Collectors.joining(", "));
         
@@ -62,7 +51,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
     
     private boolean isBlockName(String name) {
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(name);
-        return matcher.find() && BLOCK_NAMES.contains(matcher.group(1));
+        return matcher.find() && instructionProcessor.getBlockNames().contains(matcher.group(1));
     }
     
     private void analyzeDataflow() {

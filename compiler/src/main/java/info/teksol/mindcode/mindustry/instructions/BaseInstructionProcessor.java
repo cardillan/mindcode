@@ -258,4 +258,100 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                     .collect(Collectors.toUnmodifiableSet());
         }
     }
+
+    // These structures are static for now. Can be made version dependent if needed in the future.
+    private static final Map<String, String> UNARY_OPERATORS = Map.of(
+            "not",  "not",
+            "!",    "not"
+    );
+
+    private static final Map<String, String> BINARY_OPERATORS = createBinaryOperatorsMap();
+
+    private static Map<String, String> createBinaryOperatorsMap() {
+        Map<String, String> map = new HashMap<>();
+        map.put("+",    "add");
+        map.put("-",    "sub");
+        map.put("*",    "mul");
+        map.put("/",    "div");
+        map.put("\\",   "idiv");
+        map.put("==",   "equal");
+        map.put("!=",   "notEqual");
+        map.put("<",    "lessThan");
+        map.put("<=",   "lessThanEq");
+        map.put(">=",   "greaterThanEq");
+        map.put(">",    "greaterThan");
+        map.put("===",  "strictEqual");
+        map.put("**",   "pow");
+        map.put("||",   "or");
+        map.put("or",   "or");
+        map.put("&&",   "land");  // logical-and
+        map.put("and",  "land");  // logical-and
+        map.put("%",    "mod");
+        map.put("<<",   "shl");
+        map.put(">>",   "shr");
+        map.put("&",    "and");
+        map.put("|",    "or");
+        map.put("^",    "xor");
+        return Map.copyOf(map);
+    }
+
+    private static final Map<String, String> INVERSES = Map.of(
+            "equal", "notEqual",
+            "notEqual", "equal",
+            "lessThan", "greaterThanEq",
+            "lessThanEq", "greaterThan",
+            "greaterThan", "lessThanEq",
+            "greaterThanEq", "lessThan"
+    );
+
+    private static final Set<String> CONSTANT_NAMES = Set.of("true", "false", "null");
+
+    private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
+            "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode",
+            "disassembler", "display", "distributor", "dome", "door", "drill", "driver", "duo", "extractor", "factory",
+            "foreshadow", "foundation", "fuse", "gate", "generator", "hail", "incinerator", "junction", "kiln", "lancer",
+            "meltdown", "melter", "mender", "message", "mine", "mixer", "node", "nucleus", "panel", "parallax", "point",
+            "press", "processor", "projector", "pulverizer", "reactor", "reconstructor", "ripple", "router", "salvo",
+            "scatter", "scorch", "segment", "separator", "shard", "smelter", "sorter", "spectre", "swarmer", "switch",
+            "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
+
+    @Override
+    public String translateUnaryOpToCode(String op) {
+        String translated = UNARY_OPERATORS.get(op);
+        if (translated == null) {
+            throw new GenerationException("Failed to translate unary operator to Mindustry representation: [" + op + "] is not handled");
+        } else {
+            return translated;
+        }
+    }
+
+    @Override
+    public String translateBinaryOpToCode(String op) {
+        String translated = BINARY_OPERATORS.get(op);
+        if (translated == null) {
+            throw new GenerationException("Failed to translate binary operator to Mindustry representation: [" + op + "] is not handled");
+        } else {
+            return translated;
+        }
+    }
+
+    @Override
+    public boolean hasInverse(String comparison) {
+        return INVERSES.containsKey(comparison);
+    }
+
+    @Override
+    public String getInverse(String comparison) {
+        return INVERSES.get(comparison);
+    }
+
+    @Override
+    public Set<String> getConstantNames() {
+        return CONSTANT_NAMES;
+    }
+
+    @Override
+    public Set<String> getBlockNames() {
+        return BLOCK_NAMES;
+    }
 }

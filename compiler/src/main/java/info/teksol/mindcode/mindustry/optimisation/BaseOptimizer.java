@@ -4,21 +4,10 @@ import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
-import java.util.Map;
 import java.util.function.Consumer;
 
 // Base class for optimizers. Contains helper functions for manipulating instructions.
 abstract class BaseOptimizer implements Optimizer {
-    // TODO: move to instructionProcessor
-    private static final Map<String, String> INVERSES = Map.of(
-            "equal", "notEqual",
-            "notEqual", "equal",
-            "lessThan", "greaterThanEq",
-            "lessThanEq", "greaterThan",
-            "greaterThan", "lessThanEq",
-            "greaterThanEq", "lessThan"
-    );
-
     protected final InstructionProcessor instructionProcessor;
     private final LogicInstructionPipeline next;
     private final String name = getClass().getSimpleName();
@@ -77,10 +66,10 @@ abstract class BaseOptimizer implements Optimizer {
     }
 
     protected boolean hasInverse(String comparison) {
-        return INVERSES.containsKey(comparison);
-    }
+        return instructionProcessor.hasInverse(comparison);
+}
 
     protected String getInverse(String comparison) {
-        return INVERSES.get(comparison);
+        return instructionProcessor.getInverse(comparison);
     }
 }

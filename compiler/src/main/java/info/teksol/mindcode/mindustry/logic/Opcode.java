@@ -5,24 +5,43 @@ public enum Opcode {
     WRITE           ("write"),
     DRAW            ("draw"),
     PRINT           ("print"),
+
     DRAWFLUSH       ("drawflush"),
     PRINTFLUSH      ("printflush"),
     GETLINK         ("getlink"),
     CONTROL         ("control", 1),
     RADAR           ("radar"),
     SENSOR          ("sensor"),
+
     SET             ("set"),
-    END             ("end"),
     OP              ("op"),
+    LOOKUP          ("lookup"),
+    PACKCOLOR       ("packcolor"),
+
+    WAIT            ("wait"),
+    STOP            ("stop"),
+    END             ("end"),
     JUMP            ("jump"),
+
     UBIND           ("ubind"),
     UCONTROL        ("ucontrol"),
     URADAR          ("uradar"),
     ULOCATE         ("ulocate"),
-    LOOKUP          ("lookup"),
-    PACKCOLOR       ("packcolor"),
-    WAIT            ("wait"),
-    STOP            ("stop"),
+
+    GETBLOCK        ("getblock"),
+    SETBLOCK        ("setblock"),
+    SPAWN           ("spawn"),
+    STATUS          ("status"),
+    SPAWNWAWE       ("spawnwawe"),
+    SETRULE         ("setrule"),
+    MESSAGE         ("message"),
+    CUTSCENE        ("cutscene"),
+    EXPLOSION       ("explosion"),
+    SETRATE         ("setrate"),
+    FETCH           ("fetch"),
+    GETFLAG         ("getflag"),
+    SETFLAG         ("setflag"),
+
     LABEL           ("label"),
     ;
     

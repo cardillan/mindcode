@@ -69,9 +69,14 @@ public enum ArgumentType {
                     "@crawler", "@atrax", "@spiroct", "@arkyid", "@toxopid",
                     "@flare", "@horizon", "@zenith", "@antumbra", "@eclipse",
                     "@mono", "@poly", "@mega", "@quad", "@oct",
-                    "@risso", "@minke", "@bryde", "@sei", "@omura"),
+                    "@risso", "@minke", "@bryde", "@sei", "@omura",
+                    "@alpha", "@beta", "@gamma"),
             specificVersion(V7,
-                    "@retusa")  // TODO Add other V7 units
+                    "@retusa", "@oxynoe", "@cyerce", "@aegires", "@navanax",
+                    "@stell", "@locus", "@precept", "@vanquish", "@conquer",
+                    "@merui", "@cleroi", "@anthicus", "@tecta", "@collaris",
+                    "@elude", "@avert", "@obviate", "@quell", "@disrupt",
+                    "@evoke", "@incite", "@emanate")
     ),
 
     /** Selector for the UCONTROL instruction. */
@@ -98,6 +103,31 @@ public enum ArgumentType {
      * the argument keywords therefore aren't version specific.
      */
     LOOKUP          (Flags.CONST, "block", "unit", "item", "liquid"),
+
+    /** Layer in getBlock instruction. */
+    LAYER           (Flags.CONST, "floor", "ore", "block", "building"),
+
+    /** Settable layer in SETBLOCK instruction */
+    LAYER_SET       (Flags.SELECTOR),
+
+    /** True/false to set/clear status in STATUS instruction. */
+    CLEAR           (Flags.SELECTOR | Flags.FUNCTION),
+
+    /** Unit status in STATUS instruction. */
+    STATUS          (Flags.CONST, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
+            "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
+
+    /** Game rule in SETRULE instruction */
+    RULE            (Flags.SELECTOR),
+
+    /** Type of message in MESSAGE instruction */
+    MESSAGE         (Flags.SELECTOR),
+
+    /** Type of cut scene in CUTSCENE instruction */
+    CUTSCENE        (Flags.SELECTOR),
+
+    /** Item to fetch in Type of cut scene in FETCH instruction */
+    FETCH           (Flags.SELECTOR),
 
     /** An unused input argument. Ignored by given opcode variant. */
     UNUSED          (Flags.UNUSED),
@@ -190,22 +220,22 @@ public enum ArgumentType {
     }
 
     private static final class Flags {
-        // Constant argument (cannot use a variable).
+        /** Constant argument (cannot use a variable). */
         private static final int CONST      = 0;
 
-        // Input argument (can use a variable).
+        /** Input argument (can use a variable). */
         private static final int INPUT      = 1;
 
-        // Output argument (must use a variable for output value).
+        /** Output argument (must use a variable for output value). */
         private static final int OUTPUT     = 2;
 
-        // Opcode-selecting argument. Possible values are given by existing opcode variants for given version.
+        /**  Opcode-selecting argument. Possible values are given by existing opcode variants for given version. */
         private static final int SELECTOR   = 4;
 
-        // Defines name of a function(or property). Must be a selector.
+        /** Defines name of a function(or property). Must be a selector. */
         private static final int FUNCTION   = 8;
 
-        // Unused argument. Doesn't map to Mindcode functions.
+        /** Unused argument. Doesn't map to Mindcode functions. */
         private static final int UNUSED     = 16;
     }
 }

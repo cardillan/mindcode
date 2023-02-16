@@ -36,7 +36,7 @@ public class LoopStack {
 
     private String getLabel(String loopLabel, Deque<String> stack, Map<String, String> map, String statement) {
         if (stack.isEmpty()) {
-            throw new GenerationException(statement + " statement outside of a while/for loop.");
+            throw new GenerationException(statement + " statement outside of a do/while/for loop.");
         }
 
         if (loopLabel == null) {

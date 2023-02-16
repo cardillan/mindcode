@@ -4,8 +4,8 @@ import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.mindustry.AccumulatingLogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.CompilerProfile;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.functions.BaseFunctionMapper;
 import info.teksol.mindcode.mindustry.functions.FunctionMapper;
+import info.teksol.mindcode.mindustry.functions.FunctionMapperFactory;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import info.teksol.mindcode.mindustry.optimisation.DebugPrinter;
@@ -26,6 +26,8 @@ import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<String> {
+    // The version-dependent functionality is encapsulated in InstructionProcessor and FunctionMapper.
+    // If future Mindustry versions offer more capabilities, even LogicInstructionGenerator might be made version dependent.
     private final InstructionProcessor instructionProcessor;
     private final FunctionMapper functionMapper;
     private final LogicInstructionPipeline pipeline;
@@ -40,6 +42,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         this.pipeline = pipeline;
     }
 
+    // TODO: move static methods to MindcodeCompiler; generate all code through it
     public static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program,
             CompilerProfile profile, Consumer<String> messageConsumer) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
@@ -48,7 +51,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineForProfile(instructionProcessor,
                 terminus, profile, debugPrinter, messageConsumer);
         LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                new BaseFunctionMapper(instructionProcessor), pipeline);
+                FunctionMapperFactory.getFunctionMapper(instructionProcessor, messageConsumer), pipeline);
         generator.start(program);
         pipeline.flush();
 
@@ -63,7 +66,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     public static void generateInto(InstructionProcessor instructionProcessor, LogicInstructionPipeline pipeline, Seq program) {
         LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                new BaseFunctionMapper(instructionProcessor), pipeline);
+                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
         generator.start(program);
         pipeline.flush();
     }
@@ -72,19 +75,27 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
 
         LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                new BaseFunctionMapper(instructionProcessor), terminus);
+                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), terminus);
         generator.start(program);
         terminus.flush();
 
         return terminus.getResult();
     }
 
-    protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
+    private LogicInstruction createInstruction(Opcode opcode, String... args) {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    protected final LogicInstruction createInstruction(Opcode opcode, List<String> args) {
+    private LogicInstruction createInstruction(Opcode opcode, List<String> args) {
         return instructionProcessor.createInstruction(opcode, args);
+    }
+
+    private String translateUnaryOpToCode(String op) {
+        return instructionProcessor.translateUnaryOpToCode(op);
+    }
+
+    private String translateBinaryOpToCode(String op) {
+        return instructionProcessor.translateBinaryOpToCode(op);
     }
 
     private void start(Seq program) {
@@ -512,89 +523,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String target = visit(node.getTarget());
         final List<String> args = node.getParams().stream().map(this::visit).collect(Collectors.toList());
         return functionMapper.handleProperty(pipeline, node.getProperty(), target, args);
-    }
-
-    private String translateUnaryOpToCode(String op) {
-        switch (op) {
-            case "not":
-            case "!":
-                return "not";
-
-            default:
-                throw new GenerationException("Could not optimize unary op [" + op + "]");
-        }
-    }
-
-    private String translateBinaryOpToCode(String op) {
-        switch (op) {
-            case "+":
-                return "add";
-
-            case "-":
-                return "sub";
-
-            case "*":
-                return "mul";
-
-            case "/":
-                return "div";
-
-            case "\\":
-                return "idiv";
-
-            case "==":
-                return "equal";
-
-            case "!=":
-                return "notEqual";
-
-            case "<":
-                return "lessThan";
-
-            case "<=":
-                return "lessThanEq";
-
-            case ">=":
-                return "greaterThanEq";
-
-            case ">":
-                return "greaterThan";
-
-            case "===":
-                return "strictEqual";
-
-            case "**":
-                return "pow";
-
-            case "||":
-            case "or":
-                return "or";
-
-            case "&&":
-            case "and":
-                return "land"; // logical-and
-
-            case "%":
-                return "mod";
-
-            case "<<":
-                return "shl";
-
-            case ">>":
-                return "shr";
-
-            case "&":
-                return "and";
-
-            case "|":
-                return "or";
-
-            case "^":
-                return "xor";
-
-            default:
-                throw new GenerationException("Failed to translate binary op to word: [" + op + "] is not handled");
-        }
     }
 
     private String nextLabel() {

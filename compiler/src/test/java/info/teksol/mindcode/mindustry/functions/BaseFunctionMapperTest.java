@@ -24,7 +24,7 @@ public class BaseFunctionMapperTest extends AbstractGeneratorTest {
         InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6,
                 ProcessorEdition.STANDARD_PROCESSOR, opcodeVariants);
 
-        return new BaseFunctionMapper(instructionProcessor);
+        return new BaseFunctionMapper(instructionProcessor, s -> {});
     }
 
     @Test
