@@ -2,7 +2,6 @@ package info.teksol.mindcode.mindustry.generator;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
-import info.teksol.mindcode.mindustry.CompilerProfile;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
 import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
@@ -1792,8 +1791,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "d = 2 * -c\n" +
                                 "e = -d ** 2"
                         ),
-                        new CompilerProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
-                        message -> {}
+                        Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION
                 )
         );
     }
@@ -1819,8 +1817,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "a = b > c ? b : c\n" +
                                 "d += -e *= f"
                         ),
-                        new CompilerProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
-                        message -> {}
+                        Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION
                 )
         );
     }
@@ -1845,8 +1842,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "g = h & 31 == 15\n" +
                                 "x = y & 15 and z & 7"
                         ),
-                        new CompilerProfile(Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION),
-                        message -> {}
+                        Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.OUTPUT_TEMPS_ELIMINATION
                 )
         );
     }
@@ -1901,8 +1897,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(\"End\")"
                         ),
-                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
-                        message -> {}
+                        Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION
                 )
         );
     }
@@ -1952,8 +1947,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(f)"
                         ),
-                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
-                        message -> {}
+                        Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION
                 )
         );
     }
@@ -2006,8 +2000,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "end\n" +
                                 "print(\"After outer\")"
                         ),
-                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION),
-                        message -> {}
+                        Optimisation.DEAD_CODE_ELIMINATION, Optimisation.INPUT_TEMPS_ELIMINATION
                 )
         );
     }
@@ -2094,9 +2087,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 "loop while n > 0\n" +
                                 "printflush(message1)"
                         ),
-                        new CompilerProfile(Optimisation.DEAD_CODE_ELIMINATION, Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
-                                Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.JUMP_OVER_JUMP_ELIMINATION),
-                        message -> {}
+                        Optimisation.DEAD_CODE_ELIMINATION, Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
+                        Optimisation.INPUT_TEMPS_ELIMINATION, Optimisation.JUMP_OVER_JUMP_ELIMINATION
                 )
         );
     }

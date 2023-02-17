@@ -1,19 +1,11 @@
 package info.teksol.mindcode.mindustry.generator;
 
 import info.teksol.mindcode.ast.*;
-import info.teksol.mindcode.mindustry.AccumulatingLogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.CompilerProfile;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.functions.FunctionMapper;
-import info.teksol.mindcode.mindustry.functions.FunctionMapperFactory;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.Opcode;
-import info.teksol.mindcode.mindustry.optimisation.DebugPrinter;
-import info.teksol.mindcode.mindustry.optimisation.DiffDebugPrinter;
-import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
-import info.teksol.mindcode.mindustry.optimisation.OptimisationPipeline;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
@@ -36,57 +28,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private final Map<String, String> functionLabels = new HashMap<>();
     private final LoopStack loopStack = new LoopStack();
 
-    LogicInstructionGenerator(InstructionProcessor instructionProcessor, FunctionMapper functionMapper, LogicInstructionPipeline pipeline) {
+    public LogicInstructionGenerator(InstructionProcessor instructionProcessor, FunctionMapper functionMapper,
+            LogicInstructionPipeline pipeline) {
         this.instructionProcessor = instructionProcessor;
         this.functionMapper = functionMapper;
         this.pipeline = pipeline;
     }
 
-    // TODO: move static methods to MindcodeCompiler; generate all code through it
-    public static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program,
-            CompilerProfile profile, Consumer<String> messageConsumer) {
-        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 
-                ? new NullDebugPrinter() : new DiffDebugPrinter(profile.getDebugLevel());
-        LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineForProfile(instructionProcessor,
-                terminus, profile, debugPrinter, messageConsumer);
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, messageConsumer), pipeline);
-        generator.start(program);
-        pipeline.flush();
-
-        debugPrinter.print(messageConsumer);
-        
-        return terminus.getResult();
-    }
-
-    public static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program) {
-        return generateAndOptimize(instructionProcessor, program, CompilerProfile.fullOptimizations(), s -> {});
-    }
-
-    public static void generateInto(InstructionProcessor instructionProcessor, LogicInstructionPipeline pipeline, Seq program) {
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
-        generator.start(program);
-        pipeline.flush();
-    }
-
-    public static List<LogicInstruction> generateUnoptimized(InstructionProcessor instructionProcessor, Seq program) {
-        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), terminus);
-        generator.start(program);
-        terminus.flush();
-
-        return terminus.getResult();
-    }
-
     private LogicInstruction createInstruction(Opcode opcode, String... args) {
-        return instructionProcessor.createInstruction(opcode, args);
-    }
-
-    private LogicInstruction createInstruction(Opcode opcode, List<String> args) {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
@@ -98,7 +47,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return instructionProcessor.translateBinaryOpToCode(op);
     }
 
-    private void start(Seq program) {
+    public void start(Seq program) {
         visit(program);
         appendFunctionDeclarations();
     }

@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.mindustry.functions.FunctionMapperFactory;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessorFactory;
@@ -9,8 +10,10 @@ import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
 import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
+import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
+import info.teksol.mindcode.mindustry.optimisation.Optimisation;
+import info.teksol.mindcode.mindustry.optimisation.OptimisationPipeline;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -41,21 +44,34 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    // Program compilation
-    protected List<LogicInstruction> generateAndOptimize(Seq program, CompilerProfile profile, Consumer<String> messageConsumer) {
-        return LogicInstructionGenerator.generateAndOptimize(instructionProcessor, program, profile, messageConsumer);
+    public static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
+        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
+        LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineForProfile(instructionProcessor,
+                terminus, profile, new NullDebugPrinter(), s -> {});
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
+        generator.start(program);
+        pipeline.flush();
+        return terminus.getResult();
+    }
+
+    protected List<LogicInstruction> generateAndOptimize(Seq program, Optimisation... optimisations) {
+        return generateAndOptimize(instructionProcessor, program, new CompilerProfile(optimisations));
     }
 
     protected List<LogicInstruction> generateAndOptimize(Seq program) {
-        return LogicInstructionGenerator.generateAndOptimize(instructionProcessor, program);
-    }
-
-    protected void generateInto(LogicInstructionPipeline pipeline, Seq program) {
-        LogicInstructionGenerator.generateInto(instructionProcessor, pipeline, program);
+        return generateAndOptimize(instructionProcessor, program, CompilerProfile.fullOptimizations());
     }
 
     protected List<LogicInstruction> generateUnoptimized(Seq program) {
-        return LogicInstructionGenerator.generateUnoptimized(instructionProcessor, program);
+        return generateAndOptimize(instructionProcessor, program, CompilerProfile.noOptimizations());
+    }
+
+    protected void generateInto(LogicInstructionPipeline pipeline, Seq program) {
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
+        generator.start(program);
+        pipeline.flush();
     }
 
     protected String var(int id) {

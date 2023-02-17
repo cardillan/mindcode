@@ -4,14 +4,20 @@ import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
+import info.teksol.mindcode.mindustry.AccumulatingLogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.CompilerProfile;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
+import info.teksol.mindcode.mindustry.functions.FunctionMapperFactory;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
 import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
+import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
+import info.teksol.mindcode.mindustry.optimisation.OptimisationPipeline;
 import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -25,6 +31,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SamplesTest {
     private static final boolean onWindowsPlatform = System.getProperty("os.name").toLowerCase().contains("win");
+
+    private final InstructionProcessor instructionProcessor =
+            InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
+
+    private static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
+        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
+        LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineForProfile(instructionProcessor,
+                terminus, profile, new NullDebugPrinter(), s -> {});
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
+        generator.start(program);
+        pipeline.flush();
+        return terminus.getResult();
+    }
+
+    private  List<LogicInstruction> generateAndOptimize(Seq program) {
+        return generateAndOptimize(instructionProcessor, program, CompilerProfile.fullOptimizations());
+    }
+
+    private  List<LogicInstruction> generateUnoptimized(Seq program) {
+        return generateAndOptimize(instructionProcessor, program, CompilerProfile.noOptimizations());
+    }
 
     @TestFactory
     List<DynamicTest> validateSamples() {
@@ -63,10 +91,8 @@ class SamplesTest {
 
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq prog = AstNodeBuilder.generate(context);
-        InstructionProcessor instructionProcessor =
-                InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
-        List<LogicInstruction> unoptimized = LogicInstructionGenerator.generateUnoptimized(instructionProcessor, prog);
-        List<LogicInstruction> optimized = LogicInstructionGenerator.generateAndOptimize(instructionProcessor, prog);
+        List<LogicInstruction> unoptimized = generateUnoptimized(prog);
+        List<LogicInstruction> optimized = generateAndOptimize(prog);
 
         final File tmp = new File("tmp", "samples");
         if (!tmp.exists()) assertTrue(tmp.mkdirs());

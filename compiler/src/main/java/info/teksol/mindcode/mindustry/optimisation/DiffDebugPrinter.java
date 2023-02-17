@@ -185,30 +185,23 @@ public class DiffDebugPrinter implements DebugPrinter {
     // Class holding program version and information about the optimizer and iteration which produced it.
     static class ProgramVersion {
         private final Optimizer optimizer;
-        private final int iteration;
         private final List<LogicInstruction> program;
         private String title;
 
         ProgramVersion(Optimizer optimizer) {
             this.optimizer = optimizer;
-            this.iteration = 0;
             this.program = new ArrayList<>();
             this.title = optimizer.getName();
         }
 
         ProgramVersion(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
             this.optimizer = optimizer;
-            this.iteration = iteration;
             this.program = List.copyOf(program);
             this.title = optimizer.getName() + ", iteration " + iteration;
         }
 
         Optimizer getOptimizer() {
             return optimizer;
-        }
-
-        int getIteration() {
-            return iteration;
         }
 
         List<LogicInstruction> getProgram() {

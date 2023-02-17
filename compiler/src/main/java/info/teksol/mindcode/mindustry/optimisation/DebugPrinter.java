@@ -13,7 +13,7 @@ public interface DebugPrinter {
     /**
      * Called by pipelined optimizers whenever an instruction is emitted.
      *
-     * @param optimizername instance of the optimizer
+     * @param optimizer instance of the optimizer
      * @param instruction the emitted instruction
      */
     void instructionEmmited(Optimizer optimizer, LogicInstruction instruction);
@@ -21,7 +21,7 @@ public interface DebugPrinter {
     /**
      * Called by global optimizers at the end of each iteration performed.
      *
-     * @param optimizerName instance of the optimizer
+     * @param optimizer instance of the optimizer
      * @param iteration number of the performed iteration
      * @param program state of the program after the iteration was performed
      */
