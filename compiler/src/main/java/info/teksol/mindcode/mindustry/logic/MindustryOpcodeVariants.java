@@ -35,8 +35,8 @@ public class MindustryOpcodeVariants {
 
     private List<OpcodeVariant> initialize() {
         List<OpcodeVariant> list = new ArrayList<>();
-        add(list, V6, V7, S, NONE, Opcode.READ,       out("result"), block("memory"), in("at"));
-        add(list, V6, V7, S, NONE, Opcode.WRITE,      in("value"),   block("memory"), in("at"));
+        add(list, V6, V7, S, NONE, Opcode.READ,       out("result"), block("cell1"), in("at"));
+        add(list, V6, V7, S, NONE, Opcode.WRITE,      in("value"),   block("cell1"), in("at"));
 
         add(list, V6, V7, S, FUNC, Opcode.DRAW,       draw("clear"),    in("r"), in("g"), in("b"));
         add(list, V6, V7, S, FUNC, Opcode.DRAW,       draw("color"),    in("r"), in("g"), in("b"), in("a"));
@@ -52,21 +52,21 @@ public class MindustryOpcodeVariants {
 
         add(list, V6, V7, S, FUNC, Opcode.PRINT,      in("what"));
 
-        add(list, V6, V7, S, FUNC, Opcode.DRAWFLUSH,  block("to"));
-        add(list, V6, V7, S, FUNC, Opcode.PRINTFLUSH, block("to"));
+        add(list, V6, V7, S, BOTH, Opcode.DRAWFLUSH,  block("display1"));
+        add(list, V6, V7, S, BOTH, Opcode.PRINTFLUSH, block("message1"));
 
-        add(list, V6, V7, S, FUNC, Opcode.GETLINK,    res("block"), in("link#"));
+        add(list, V6, V7, S, FUNC, Opcode.GETLINK,    res("block"), in("linkNum"));
 
-        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("enabled"),   block("of"), in("to"));
-        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("shoot"),     block("of"), in("x"),    in("y"), in("shoot"));
-        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("shootp"),    block("of"), in("unit"), in("shoot"));
-        add(list, V6, V6, S, PROP, Opcode.CONTROL,    bctrl("configure"), block("of"), in("to"));
-        add(list, V7, V7, S, PROP, Opcode.CONTROL,    bctrl("config"),    block("of"), in("to"));
-        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("color"),     block("of"), in("r"), in("g"), in("b"));
+        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("enabled"),   block("block"), in("value"));
+        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("shoot"),     block("block"), in("x"),    in("y"), in("shoot"));
+        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("shootp"),    block("block"), in("unit"), in("shoot"));
+        add(list, V6, V6, S, PROP, Opcode.CONTROL,    bctrl("configure"), block("block"), in("value"));
+        add(list, V7, V7, S, PROP, Opcode.CONTROL,    bctrl("config"),    block("block"), in("value"));
+        add(list, V6, V7, S, PROP, Opcode.CONTROL,    bctrl("color"),     block("block"), in("r"), in("g"), in("b"));
 
-        add(list, V6, V7, S, FUNC, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), sort("sort"), block("turret"), in("order"), res("result"));
+        add(list, V6, V7, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), sort("sort"), block("turret"), in("order"), res("result"));
 
-        add(list, V6, V7, S, FUNC, Opcode.SENSOR,     res("result"),      block("in"), sensor("data"));
+        add(list, V6, V7, S, FUNC, Opcode.SENSOR,     res("result"),      block("object"), sensor("property"));
 
         add(list, V6, V7, S, NONE, Opcode.SET,        out("result"),      block("value"));
 
@@ -110,7 +110,7 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7, S, FUNC, Opcode.OP,         op("acos"),         res("result"),  in("a"));
         add(list, V7, V7, S, FUNC, Opcode.OP,         op("atan"),         res("result"),  in("a"));
 
-        add(list, V7, V7, S, FUNC, Opcode.LOOKUP,     lookup("lookup"), res("result"), in("#"));
+        add(list, V7, V7, S, FUNC, Opcode.LOOKUP,     lookup("type"), res("result"), in("index"));
 
         add(list, V7, V7, S, FUNC, Opcode.PACKCOLOR,  res("result"), in("r"), in("g"), in("b"), in("a"));
 
@@ -151,9 +151,9 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7, S, FUNC, Opcode.UCONTROL,   uctrl("within"),    in("x"), in("y"), in("radius"), res("result"));
         add(list, V7, V7, S, FUNC, Opcode.UCONTROL,   uctrl("unbind"));
 
-        add(list, V6, V7, S, FUNC, Opcode.URADAR, radar("attr1"), radar("attr1"), radar("attr1"), sort("sort"), unused("0"), in("order"), res("result"));
+        add(list, V6, V7, S, FUNC, Opcode.URADAR, radar("attr1"), radar("attr2"), radar("attr3"), sort("sort"), unused("0"), in("order"), res("result"));
 
-        add(list, V6, V7, S, FUNC, Opcode.ULOCATE, locate("ore"),      unused("core"), unused("true"), ore("ore"), out("outx"), out("outy"), res("found"), unusedOut("building"));
+        add(list, V6, V7, S, FUNC, Opcode.ULOCATE, locate("ore"),      unused("core"), unused("true"), ore("oreType"), out("outx"), out("outy"), res("found"), unusedOut("building"));
         add(list, V6, V7, S, FUNC, Opcode.ULOCATE, locate("building"), group("group"), in("enemy"), unused("@copper"), out("outx"), out("outy"), res("found"), out("building"));
         add(list, V6, V7, S, FUNC, Opcode.ULOCATE, locate("spawn"),    unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), res("found"), out("building"));
         add(list, V6, V7, S, FUNC, Opcode.ULOCATE, locate("damaged"),  unused("core"), unused("true"), unused("@copper"), out("outx"), out("outy"), res("found"), out("building"));
@@ -169,7 +169,7 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7, W, FUNC, Opcode.STATUS, clear("false"), status("status"), in("unit"), in("duration"));
         add(list, V7, V7, W, FUNC, Opcode.STATUS, clear("true"),  status("status"), in("unit"));
 
-        add(list, V7, V7, W, FUNC, Opcode.SPAWNWAWE, in("x"),  in("y"), in("natural"));
+        add(list, V7, V7, W, FUNC, Opcode.SPAWNWAVE, in("x"),  in("y"), in("natural"));
 
         add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("currentWaveTime"),       in("value"));
         add(list, V7, V7, W, FUNC, Opcode.SETRULE,   rule("waveTimer"),             in("value"));
@@ -199,7 +199,7 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7, W, FUNC, Opcode.MESSAGE,   message("announce"), in("duration"));
         add(list, V7, V7, W, FUNC, Opcode.MESSAGE,   message("toast"),    in("duration"));
 
-        add(list, V7, V7, W, FUNC, Opcode.CUTSCENE,  cutscene("pan"),  in("x"), in("y"), in("speed"), unused("0"));
+        add(list, V7, V7, W, FUNC, Opcode.CUTSCENE,  cutscene("pan"),  in("x"), in("y"), in("speed"));
         add(list, V7, V7, W, FUNC, Opcode.CUTSCENE,  cutscene("zoom"), in("level"));
         add(list, V7, V7, W, FUNC, Opcode.CUTSCENE,  cutscene("stop"));
 
@@ -210,10 +210,10 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("playerCount"), res("result"), in("team"));
         add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("coreCount"),   res("result"), in("team"));
         add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("buildCount"),  res("result"), in("team"), unused("0"), in("type"));
-        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("unit"),        res("result"), in("team"), in("#"));
-        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("player"),      res("result"), in("team"), in("#"));
-        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("core"),        res("result"), in("team"), in("#"));
-        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("build"),       res("result"), in("team"), in("#"), in("type"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("unit"),        res("result"), in("team"), in("index"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("player"),      res("result"), in("team"), in("index"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("core"),        res("result"), in("team"), in("index"));
+        add(list, V7, V7, W, FUNC, Opcode.FETCH, fetch("build"),       res("result"), in("team"), in("index"), in("type"));
 
         add(list, V7, V7, W, FUNC, Opcode.GETFLAG, res("result"), in("flag"));
         add(list, V7, V7, W, FUNC, Opcode.SETFLAG, in("flag"), in("value"));

@@ -86,8 +86,12 @@ public enum ArgumentType {
     LOCATE          (Flags.SELECTOR),
 
     /** A const argument. Specifies group of buildings to locate. */
-    GROUP           (Flags.CONST, "core", "storage", "generator", "turret", "factory", "repair", "rally", "battery", "resupply", "reactor"),
-
+    GROUP           (Flags.CONST,
+            allVersions(
+                    "core", "storage", "generator", "turret", "factory", "repair", "battery", "reactor"),
+            specificVersion(V6,
+                    "rally", "resupply")
+    ),
     /** Input argument accepting ore type. */
     ORE             (Flags.INPUT,
             allVersions(
@@ -163,12 +167,19 @@ public enum ArgumentType {
     }
 
     /**
+     * @return true if this argument is a constant value from a list, but not a selector.
+     */
+    public boolean isConst() {
+        return flags == Flags.CONST;
+    }
+    
+    /**
      * @return true if this argument can read a variable
      */
     public boolean isInput() {
         return (flags & Flags.INPUT) != 0;
     }
-    
+
     /**
      * @return true if this argument can write to a variable
      */

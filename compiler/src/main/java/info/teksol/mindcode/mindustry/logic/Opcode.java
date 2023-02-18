@@ -1,60 +1,63 @@
 package info.teksol.mindcode.mindustry.logic;
 
 public enum Opcode {
-    READ            ("read"),
-    WRITE           ("write"),
-    DRAW            ("draw"),
-    PRINT           ("print"),
+    READ            ("read",            "Read a number from a linked memory cell."),
+    WRITE           ("write",           "Write a number to a linked memory cell."),
+    DRAW            ("draw",            "Add an operation to the drawing buffer. Does not display anything until drawflush is used."),
+    PRINT           ("print",           "Add text to the print buffer. Does not display anything until printflush is used."),
 
-    DRAWFLUSH       ("drawflush"),
-    PRINTFLUSH      ("printflush"),
-    GETLINK         ("getlink"),
-    CONTROL         ("control", 1),
-    RADAR           ("radar"),
-    SENSOR          ("sensor"),
+    DRAWFLUSH       ("drawflush",       "Flush queued Draw operations to a display."),
+    PRINTFLUSH      ("printflush",      "Flush queued Print operations to a message block."),
+    GETLINK         ("getlink",         "Get a processor link by index. Starts at 0."),
+    CONTROL         ("control",         "Control a building.", 1),
+    RADAR           ("radar",           "Locate units around a building with range."),
+    SENSOR          ("sensor",          "Get data from a building or unit."),
 
-    SET             ("set"),
-    OP              ("op"),
-    LOOKUP          ("lookup"),
-    PACKCOLOR       ("packcolor"),
+    SET             ("set",             "Set a variable."),
+    OP              ("op",              "Perform an operation on 1-2 variables."),
+    LOOKUP          ("lookup",          "Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount."),
+    PACKCOLOR       ("packcolor",       "Pack [0, 1] RGBA components into a single number for drawing or rule-setting."),
 
-    WAIT            ("wait"),
-    STOP            ("stop"),
-    END             ("end"),
-    JUMP            ("jump"),
+    WAIT            ("wait",            "Wait a certain number of seconds."),
+    STOP            ("stop",            "Halt execution of this processor."),
+    END             ("end",             "Jump to the top of the instruction stack."),
+    JUMP            ("jump",            "Conditionally jump to another statement."),
 
-    UBIND           ("ubind"),
-    UCONTROL        ("ucontrol"),
-    URADAR          ("uradar"),
-    ULOCATE         ("ulocate"),
+    UBIND           ("ubind",           "Bind to the next unit of a type, and store it in @unit."),
+    UCONTROL        ("ucontrol",        "Control the currently bound unit."),
+    URADAR          ("uradar",          "Locate units around the currently bound unit."),
+    ULOCATE         ("ulocate",         "Locate a specific type of position/building anywhere on the map. Requires a bound unit."),
 
-    GETBLOCK        ("getblock"),
-    SETBLOCK        ("setblock"),
-    SPAWN           ("spawn"),
-    STATUS          ("status"),
-    SPAWNWAWE       ("spawnwawe"),
-    SETRULE         ("setrule"),
-    MESSAGE         ("message"),
-    CUTSCENE        ("cutscene"),
-    EXPLOSION       ("explosion"),
-    SETRATE         ("setrate"),
-    FETCH           ("fetch"),
-    GETFLAG         ("getflag"),
-    SETFLAG         ("setflag"),
+    GETBLOCK        ("getblock",        "Get tile data at any location."),
+    SETBLOCK        ("setblock",        "Set tile data at any location."),
+    SPAWN           ("spawn",           "Spawn unit at a location."),
+    STATUS          ("status",          "Apply or clear a status effect from a unit."),
+    SPAWNWAVE       ("spawnwave",       "Spawn a wave."),
+    SETRULE         ("setrule",         "Set a game rule."),
+    MESSAGE         ("message",         "Display a message on the screen from the text buffer. Will wait until the previous message finishes."),
+    CUTSCENE        ("cutscene",        "Manipulate the player camera.", 1),
+    EXPLOSION       ("explosion",       "Create an explosion at a location."),
+    SETRATE         ("setrate",         "Set processor execution speed in instructions/tick."),
+    FETCH           ("fetch",           "Lookup units, cores, players or buildings by index. Indices start at 0 and end at their returned count."),
+    GETFLAG         ("getflag",         "Set a global flag that can be read by all processors."),
+    SETFLAG         ("setflag",         "Check if a global flag is set."),
 
-    LABEL           ("label"),
+    LABEL           ("label",           "Virtual instruction."),
     ;
     
     private final String opcode;
+    private final String description;
     private final int additionalPrintArguments;
 
-    private Opcode(String opcode) {
+    private Opcode(String opcode, String description) {
         this.opcode = opcode;
+        this.description = description;
         this.additionalPrintArguments = 0;
     }
     
-    private Opcode(String opcode, int additionalPrintArguments) {
+    private Opcode(String opcode, String description, int additionalPrintArguments) {
         this.opcode = opcode;
+        this.description = description;
         this.additionalPrintArguments = additionalPrintArguments;
     }
 
@@ -65,7 +68,11 @@ public enum Opcode {
     public String getOpcode() {
         return opcode;
     }
-    
+
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public String toString() {
         return opcode;

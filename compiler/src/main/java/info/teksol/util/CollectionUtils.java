@@ -14,4 +14,8 @@ public class CollectionUtils {
         return -1;
     }
 
+    public static <E> E removeFirstMatching(List<? extends E> list, Predicate<E> criteria) {
+        int index = findFirstIndex(list, criteria);
+        return index < 0 ? null : list.remove(index);
+    }
 }

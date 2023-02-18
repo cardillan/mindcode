@@ -10,8 +10,16 @@ public class LogicInstructionPrinter {
         instructions.forEach((instruction) -> {
             buffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+            buffer.append("\n");
         });
 
+        return buffer.toString();
+    }
+
+    public static String toString(InstructionProcessor instructionProcessor, LogicInstruction instruction) {
+        final StringBuilder buffer = new StringBuilder();
+        buffer.append(instruction.getOpcode().getOpcode());
+        addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
         return buffer.toString();
     }
 
@@ -24,7 +32,5 @@ public class LogicInstructionPrinter {
                 buffer.append("0");
             }
         }
-
-        buffer.append("\n");
     }
 }

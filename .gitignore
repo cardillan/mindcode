@@ -9,5 +9,6 @@
 db/cluster
 
 # Compiled artifacts
+Instruction_Samples_*.txt
 target
 tmp

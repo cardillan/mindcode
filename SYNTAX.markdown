@@ -26,6 +26,17 @@ which is equivalent to
 building.enabled(boolean)
 ```
 
+Mindcode currently supports targeting Mindustry versions 6 and 7. Web application always targets version 7 processors,
+while command-line vesion of the compiler allows to select version 6 for better backwards compatibility.
+The differences are minuscule, though, most of the code generated for version 7 will run on version 6 as well.
+
+All supported functions and their respective Mindustry instruction counterparts can be found in the function reference.
+Please note that the reference serves just to document all existing functions and the way they are compiled to Mindustry Logic,
+but it does not aim to describe the behavior of the functions/instructions.
+
+* [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
+* [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
+
 ## Custom Functions
 
 You may declare your own functions using the `def` keyword:

@@ -79,6 +79,18 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {
+        return new LogicInstruction(opcodeVariant.getOpcode(),
+                opcodeVariant.getArguments().stream().map(NamedArgument::getName).collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public LogicInstruction createInstructionUnchecked(Opcode opcode, List<String> arguments) {
+        return new LogicInstruction(opcode, arguments);
+    }
+
+    @Override
     public LogicInstruction createInstruction(Opcode opcode, String... arguments) {
         return createInstruction(opcode, List.of(arguments));
     }

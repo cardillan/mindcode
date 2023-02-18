@@ -22,7 +22,7 @@ Bitwise negation can be performed using the new `~` operator.
 
 ## Mindcode Syntax
 
-Please read the [syntax](https://github.com/francois/mindcode/blob/main/SYNTAX.markdown) document for the high-level
+Please read the [syntax](SYNTAX.markdown) document for the high-level
 information. The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus
 always up-to-date with the most-recent version of Mindcode.  If you programmed in any high-level language, you should
 feel right at home.

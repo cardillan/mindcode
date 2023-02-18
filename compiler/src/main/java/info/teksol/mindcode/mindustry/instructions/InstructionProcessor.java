@@ -44,6 +44,15 @@ public interface InstructionProcessor {
     LogicInstruction createInstruction(Opcode opcode, List<String> arguments);
 
     /**
+     * Creates a sample logic instruction from given opcode variant.
+     *
+     * @param opcodeVariant opcode variant to use
+     * @return instruction having all arguments set to opcode variant defaults
+     */
+    LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
+    LogicInstruction createInstructionUnchecked(Opcode opcode, List<String> arguments);
+
+    /**
      * Returns a logic instruction with an argument set to the  given value.
      * If the instruction is modified, a new version of it is created, otherwise the current instance is returned.
      *
