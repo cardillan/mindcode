@@ -2,11 +2,12 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class PropertyAccess implements AstNode {
+public class PropertyAccess extends BaseAstNode {
     private final AstNode target;
     private final AstNode property;
 
     PropertyAccess(AstNode target, AstNode property) {
+        super(target, property);
         this.target = target;
         this.property = property;
     }

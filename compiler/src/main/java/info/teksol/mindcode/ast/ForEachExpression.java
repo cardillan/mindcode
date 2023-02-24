@@ -3,13 +3,14 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class ForEachExpression implements AstNode {
+public class ForEachExpression extends BaseAstNode {
     private final String label;
     private final AstNode variable;
     private final List<AstNode> values;
     private final AstNode body;
 
     ForEachExpression(String label, AstNode variable, List<AstNode> values, AstNode body) {
+        super(values, variable, body);
         this.label = label;
         this.variable = variable;
         this.values = values;

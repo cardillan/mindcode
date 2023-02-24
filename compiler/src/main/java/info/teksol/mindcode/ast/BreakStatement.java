@@ -2,10 +2,10 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class BreakStatement implements AstNode {
+public class BreakStatement extends BaseAstNode {
     private final String label;
 
-    public BreakStatement(String label) {
+    BreakStatement(String label) {
         this.label = label;
     }
 

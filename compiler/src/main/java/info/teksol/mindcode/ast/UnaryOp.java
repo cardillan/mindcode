@@ -2,11 +2,12 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class UnaryOp implements AstNode {
+public class UnaryOp extends BaseAstNode {
     private final String op;
     private final AstNode expression;
 
     UnaryOp(String op, AstNode expression) {
+        super(expression);
         this.op = op;
         this.expression = expression;
     }

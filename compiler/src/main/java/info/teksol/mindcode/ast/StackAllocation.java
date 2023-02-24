@@ -4,7 +4,7 @@ import info.teksol.mindcode.ParsingException;
 
 import java.util.Objects;
 
-public class StackAllocation implements AstNode {
+public class StackAllocation extends BaseAstNode {
     private final String name;
     private final int first;
     private final int last;

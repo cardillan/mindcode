@@ -4,11 +4,13 @@ import info.teksol.mindcode.ParsingException;
 
 import java.util.Objects;
 
-public class HeapAccess implements AstNode {
+public class HeapAccess extends BaseAstNode {
     private final String cellName;
     private final AstNode address;
 
     public HeapAccess(String cellName, AstNode address) {
+        super(address);
+
         if (RESERVED_KEYWORDS.contains(cellName)) {
             throw new ParsingException(cellName + " is a reserved keyword, please use a different word");
         }

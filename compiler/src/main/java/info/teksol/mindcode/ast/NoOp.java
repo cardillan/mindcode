@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-public class NoOp implements AstNode {
+public class NoOp extends BaseAstNode {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof NoOp;

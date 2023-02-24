@@ -3,12 +3,13 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class FunctionDeclaration implements AstNode {
+public class FunctionDeclaration extends BaseAstNode {
     private final String name;
     private final List<AstNode> params;
     private final AstNode body;
 
     FunctionDeclaration(String name, List<AstNode> params, AstNode body) {
+        super(params, body);
         this.name = name;
         this.params = params;
         this.body = body;

@@ -4,7 +4,7 @@ import info.teksol.mindcode.ParsingException;
 
 import java.util.Objects;
 
-public class VarRef implements AstNode {
+public class VarRef extends BaseAstNode {
     private final String name;
 
     public VarRef(String name) {

@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-public class NullLiteral implements AstNode {
+public class NullLiteral extends BaseAstNode {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof NullLiteral;

@@ -1,13 +1,15 @@
 package info.teksol.mindcode.ast;
 
+import java.util.List;
 import java.util.Objects;
 
-public class BinaryOp implements AstNode {
+public class BinaryOp extends BaseAstNode {
     private final AstNode left;
     private final String op;
     private final AstNode right;
 
     public BinaryOp(AstNode left, String op, AstNode right) {
+        super(left, right);
         this.left = left;
         this.op = op;
         this.right = right;
@@ -23,6 +25,11 @@ public class BinaryOp implements AstNode {
 
     public AstNode getRight() {
         return right;
+    }
+
+    @Override
+    public List<AstNode> getChildren() {
+        return List.of(left, right);
     }
 
     @Override

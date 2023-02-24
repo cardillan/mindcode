@@ -3,12 +3,13 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class Control implements AstNode {
+public class Control extends BaseAstNode {
     private final AstNode target;
     private final String property;
     private final List<AstNode> params;
 
     Control(AstNode target, String property, List<AstNode> params) {
+        super(params, target);
         this.target = target;
         this.property = property;
         this.params = params;

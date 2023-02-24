@@ -2,16 +2,13 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class DoWhileExpression implements AstNode {
+public class DoWhileExpression extends BaseAstNode {
     private final String label;
     private final AstNode body;
     private final AstNode condition;
 
-    DoWhileExpression(AstNode body, AstNode condition) {
-        this(null, body, condition);
-    }
-
     DoWhileExpression(String label, AstNode body, AstNode condition) {
+        super(body, condition);
         this.label = label;
         this.body = body;
         this.condition = condition;

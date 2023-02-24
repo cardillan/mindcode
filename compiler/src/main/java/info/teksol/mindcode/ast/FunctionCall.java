@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class FunctionCall implements AstNode {
+public class FunctionCall extends BaseAstNode {
     private final String functionName;
     private final List<AstNode> params;
 
@@ -12,6 +12,7 @@ public class FunctionCall implements AstNode {
     }
 
     FunctionCall(String functionName, List<AstNode> params) {
+        super(params);
         this.functionName = functionName;
         this.params = params;
     }

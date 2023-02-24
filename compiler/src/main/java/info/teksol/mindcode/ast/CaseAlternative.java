@@ -3,16 +3,18 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class CaseAlternative implements AstNode {
+public class CaseAlternative extends BaseAstNode {
     private final List<AstNode> values;
     private final AstNode body;
 
     CaseAlternative(AstNode value, AstNode body) {
+        super(value, body);
         this.values = List.of(value);
         this.body = body;
     }
 
     CaseAlternative(List<AstNode> values, AstNode body) {
+        super(values, body);
         this.values = values;
         this.body = body;
     }

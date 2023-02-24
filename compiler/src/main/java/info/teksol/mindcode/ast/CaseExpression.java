@@ -3,12 +3,13 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class CaseExpression implements AstNode {
+public class CaseExpression extends BaseAstNode {
     private final AstNode condition;
     private final List<CaseAlternative> alternatives;
     private final AstNode elseBranch;
 
     CaseExpression(AstNode condition, List<CaseAlternative> alternatives, AstNode elseBranch) {
+        super(alternatives, condition, elseBranch);
         this.condition = condition;
         this.alternatives = alternatives;
         this.elseBranch = elseBranch;

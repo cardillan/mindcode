@@ -2,11 +2,12 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public abstract class Range implements AstNode {
+public abstract class Range extends BaseAstNode {
     private final AstNode firstValue;
     private final AstNode lastValue;
 
     Range(AstNode firstValue, AstNode lastValue) {
+        super(firstValue, lastValue);
         this.firstValue = firstValue;
         this.lastValue = lastValue;
     }

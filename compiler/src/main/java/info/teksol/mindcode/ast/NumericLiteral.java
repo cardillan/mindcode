@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class NumericLiteral implements AstNode {
+public class NumericLiteral extends BaseAstNode {
     private final String literal;
 
     NumericLiteral(String literal) {

@@ -2,16 +2,18 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class Seq implements AstNode {
+public class Seq extends BaseAstNode {
     private final AstNode rest;
     private final AstNode last;
 
     public Seq(AstNode last) {
+        super(last);
         this.rest = new NoOp();
         this.last = last;
     }
 
     public Seq(AstNode rest, AstNode last) {
+        super(rest, last);
         this.rest = rest;
         this.last = last;
     }

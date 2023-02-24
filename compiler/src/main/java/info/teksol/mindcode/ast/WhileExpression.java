@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class WhileExpression implements AstNode {
+public class WhileExpression extends BaseAstNode {
     private final String label;
     private final AstNode condition;
     private final AstNode body;
@@ -13,6 +13,7 @@ public class WhileExpression implements AstNode {
     }
 
     WhileExpression(String label, AstNode condition, AstNode body, AstNode update) {
+        super(condition, body);
         this.label = label;
         this.condition = condition;
         this.body = body;

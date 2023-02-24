@@ -2,10 +2,10 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class ContinueStatement implements AstNode {
+public class ContinueStatement extends BaseAstNode {
     private final String label;
 
-    public ContinueStatement(String label) {
+    ContinueStatement(String label) {
         this.label = label;
     }
 

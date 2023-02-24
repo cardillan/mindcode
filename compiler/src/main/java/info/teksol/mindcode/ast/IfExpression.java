@@ -2,12 +2,13 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class IfExpression implements AstNode {
+public class IfExpression extends BaseAstNode {
     private final AstNode condition;
     private final AstNode trueBranch;
     private final AstNode falseBranch;
 
     IfExpression(AstNode condition, AstNode trueBranch, AstNode falseBranch) {
+        super(condition, trueBranch, falseBranch);
         this.condition = condition;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;

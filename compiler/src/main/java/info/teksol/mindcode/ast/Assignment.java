@@ -2,11 +2,12 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class Assignment implements AstNode {
+public class Assignment extends BaseAstNode {
     private final AstNode var;
     private final AstNode value;
 
     public Assignment(AstNode var, AstNode value) {
+        super(var, value);
         this.var = var;
         this.value = value;
     }

@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class Ref implements AstNode {
+public class Ref extends BaseAstNode {
     private final String name;
 
     Ref(String name) {
