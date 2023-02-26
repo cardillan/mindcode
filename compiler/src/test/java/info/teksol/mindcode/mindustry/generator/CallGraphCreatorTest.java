@@ -11,7 +11,8 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void handlesFunctionlessProgram() {
         Assertions.assertDoesNotThrow(() -> {
             CallGraph graph = CallGraphCreator.createFunctionGraph(
-                    (Seq) translateToAst("a = 10")
+                    (Seq) translateToAst("a = 10"),
+                    getInstructionProcessor()
             );
 
         });
@@ -21,7 +22,8 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     void handlesBuiltinFunctions() {
         Assertions.assertDoesNotThrow(() -> {
             CallGraph graph = CallGraphCreator.createFunctionGraph(
-                    (Seq) translateToAst("print(a)")
+                    (Seq) translateToAst("print(a)"),
+                    getInstructionProcessor()
             );
 
         });
@@ -33,14 +35,15 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 (Seq) translateToAst(""
                         + "def a  a() end "
                         + "a()"
-                )
+                ),
+                getInstructionProcessor()
         );
 
         CallGraph.Function function = graph.getFunction("a");
 
         Assertions.assertTrue(function.isUsed());
         Assertions.assertTrue(function.isRecursive());
-        Assertions.assertTrue(function.isCallRecursive("a"));
+        Assertions.assertTrue(function.isRecursiveCall("a"));
     }
 
     @Test
@@ -50,18 +53,19 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         + "def a  b() end "
                         + "def b  a() end "
                         + "a()"
-                )
+                ),
+                getInstructionProcessor()
         );
 
         CallGraph.Function funA = graph.getFunction("a");
         Assertions.assertTrue(funA.isUsed());
         Assertions.assertTrue(funA.isRecursive());
-        Assertions.assertTrue(funA.isCallRecursive("b"));
+        Assertions.assertTrue(funA.isRecursiveCall("b"));
 
         CallGraph.Function funB = graph.getFunction("b");
         Assertions.assertTrue(funB.isUsed());
         Assertions.assertTrue(funB.isRecursive());
-        Assertions.assertTrue(funB.isCallRecursive("a"));
+        Assertions.assertTrue(funB.isRecursiveCall("a"));
     }
 
     @Test
@@ -72,16 +76,35 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                         + "def b  b() end "
                         + "def c  x=10 end "
                         + "a()"
-                )
+                ),
+                getInstructionProcessor()
         );
 
         CallGraph.Function funA = graph.getFunction("a");
         Assertions.assertTrue(funA.isRecursive());
-        Assertions.assertFalse(funA.isCallRecursive("b"));
-        Assertions.assertFalse(funA.isCallRecursive("c"));
+        Assertions.assertFalse(funA.isRecursiveCall("b"));
+        Assertions.assertFalse(funA.isRecursiveCall("c"));
 
         CallGraph.Function funB = graph.getFunction("b");
         Assertions.assertTrue(funB.isUsed());
         Assertions.assertTrue(funB.isRecursive());
+    }
+
+    @Test
+    void detectsIndirectCalls() {
+        CallGraph graph = CallGraphCreator.createFunctionGraph(
+                (Seq) translateToAst(""
+                        + "def a(n) n + 1       end "
+                        + "def b(n) a(n) + 1    end "
+                        + "def c(n) a(n) + b(n) end "
+                        + "print(c(1))"
+                ),
+                getInstructionProcessor()
+        );
+
+        CallGraph.Function funC = graph.getFunction("c");
+        Assertions.assertFalse(funC.isRecursive());
+        Assertions.assertTrue (funC.isRepeatedCall("a"));
+        Assertions.assertFalse(funC.isRepeatedCall("b"));
     }
 }

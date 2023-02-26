@@ -109,7 +109,6 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
     }
     
     private boolean isComparisonOperatorToTmp(LogicInstruction instruction) {
-        return hasInverse(instruction.getArgs().get(0)) &&
-                instruction.getArgs().get(1).startsWith(instructionProcessor.getTempPrefix());
+        return hasInverse(instruction.getArg(0)) && isTemporary(instruction.getArg(1));
     }
 }

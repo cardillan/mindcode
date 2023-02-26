@@ -23,7 +23,7 @@ public class LogicInstructionLabelResolver {
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
         final Map<String, String> addresses = calculateAddresses(program);
-        return resolveAddresses(program, addresses);
+        return resolveAddresses(resolveVirtualnstructions(program), addresses);
     }
 
     private LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String value) {
@@ -39,7 +39,6 @@ public class LogicInstructionLabelResolver {
     private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program, Map<String, String> addresses) {
         final List<LogicInstruction> result = new ArrayList<>();
         for (final LogicInstruction instruction : program) {
-            if (instruction.isLabel()) continue;
             switch (instruction.getOpcode()) {
                 case JUMP:
                     final String label = instruction.getArg(0);
@@ -67,22 +66,32 @@ public class LogicInstructionLabelResolver {
         return result;
     }
 
+    private List<LogicInstruction> resolveVirtualnstructions(List<LogicInstruction> program) {
+        final List<LogicInstruction> result = new ArrayList<>();
+        for (final LogicInstruction instruction : program) {
+            if (instruction.getOpcode().isVirtual()) {
+                result.addAll(instructionProcessor.resolve(instruction));
+            } else {
+                result.add(instruction);
+            }
+        }
+        return result;
+    }
+
     private Map<String, String> calculateAddresses(List<LogicInstruction> program) {
         final Map<String, String> result = new HashMap<>();
         int instructionPointer = 0;
         for (int i = 0; i < program.size(); i++) {
             final LogicInstruction instruction = program.get(i);
-            if (!instruction.isLabel()) {
-                instructionPointer++;
-                continue;
-            }
+            instructionPointer += instructionProcessor.getRealSize(instruction);
+            if (instruction.isLabel()) {
+                final String label = instruction.getArg(0);
+                if (result.containsKey(label)) {
+                    throw new CompilerException("Duplicate label detected: [" + label + "] reused at least twice in " + program);
+                }
 
-            final String label = instruction.getArg(0);
-            if (result.containsKey(label)) {
-                throw new CompilerException("Duplicate label detected: [" + label + "] reused at least twice in " + program);
+                result.put(label, String.valueOf(instructionPointer));
             }
-
-            result.put(label, String.valueOf(instructionPointer));
         }
 
         return result;

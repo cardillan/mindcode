@@ -218,7 +218,12 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7, W, FUNC, Opcode.GETFLAG, res("result"), in("flag"));
         add(list, V7, V7, W, FUNC, Opcode.SETFLAG, in("flag"), in("value"));
 
-        add(list, V6, V7, S, NONE, Opcode.LABEL, label("label"));
+        // Virtual instructions
+        add(list, V6, V7, S, NONE, Opcode.LABEL,  label("label"));
+        add(list, V6, V7, S, NONE, Opcode.PUSH,   block("memory"), out("value"));
+        add(list, V6, V7, S, NONE, Opcode.POP,    block("memory"), out("value"));
+        add(list, V6, V7, S, NONE, Opcode.CALL,   block("memory"), label("callAddr"), label("retAddr"));
+        add(list, V6, V7, S, NONE, Opcode.RETURN, block("memory"));
 
         return List.copyOf(list);
     }

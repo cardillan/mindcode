@@ -65,6 +65,10 @@ abstract class BaseOptimizer implements Optimizer {
         return instructionProcessor.replaceAllArgs(instruction, oldArg, newArg);
     }
 
+    public boolean isTemporary(String varRef) {
+        return instructionProcessor.isTemporary(varRef);
+    }
+
     protected boolean hasInverse(String comparison) {
         return instructionProcessor.hasInverse(comparison);
 }

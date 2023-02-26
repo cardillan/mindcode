@@ -68,12 +68,12 @@ alloc_list : type=(HEAP | STACK) IN id alloc_range?
 
 alloc_range : LEFT_SBRACKET range RIGHT_SBRACKET;
 
-fundecl : DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
-        | DEF name=id body=expression_list END
+fundecl : ( inline = INLINE)? DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
+        | ( inline = INLINE)? DEF name=id body=expression_list END
         ;
 
-arg_decl_list : lvalue
-              | arg_decl_list COMMA lvalue
+arg_decl_list : var_ref
+              | arg_decl_list COMMA var_ref
               ;
 
 while_expression : ( label=loop_label COLON )? WHILE cond=expression loop_body END;
@@ -198,6 +198,7 @@ FOR : 'for';
 HEAP : 'heap';
 IF : 'if';
 IN : 'in';
+INLINE : 'inline';
 LOOP : 'loop';
 NULL : 'null';
 SENSOR : 'sensor';

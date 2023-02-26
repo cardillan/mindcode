@@ -44,6 +44,7 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
         assertTrue(new File(".." + File.separatorChar + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         List<LogicInstruction> instructions = processor.getOpcodeVariants().stream()
+                .filter(v -> !v.getOpcode().isVirtual())
                 .flatMap(v -> createOpcodeSamples(processor, v).stream())
                 .collect(Collectors.toList());
 

@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.ast.Seq;
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -10,17 +11,25 @@ import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
+
     @Test
-    void correctlyOptimizesFunctionCallAndReturn() {
-       /* VERY USEFUL FOR DEBUGGING PURPOSES -- the two files can be compared using the diff(1)
+    void correctlyOptimizesFunctionCallAndReturn() throws IOException {
+        String code = ""
+                + "allocate stack in cell1[33..48], heap in cell2[3...7] "
+                + "def fn(n) "
+                + "    fn(n - 1) "
+                + "    2 * n "
+                + "end "
+                + " "
+                + "$x = fn(4) + fn(5) "
+                + "$y = $x + 1" ;
+
+        /* VERY USEFUL FOR DEBUGGING PURPOSES -- the two files can be compared using the diff(1)
         try (final Writer w = new FileWriter("unoptimized.txt")) {
             w.write(
                     LogicInstructionPrinter.toString(
-                            generateUnoptimized(
-                                    (Seq) translateToAst(
-                                            "allocate stack in cell1[33..48], heap in cell2[3...7]\ndef fn(n)\n2 * n\nend\n\n$x = fn(4) + fn(5)\n$y = $x + 1\n"
-                                    )
-                            )
+                            getInstructionProcessor(),
+                            generateUnoptimized((Seq) translateToAst(code))
                     )
             );
         }
@@ -28,79 +37,43 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         try (final Writer w = new FileWriter("optimized.txt")) {
             w.write(
                     LogicInstructionPrinter.toString(
-                            generateAndOptimize(
-                                    (Seq) translateToAst(
-                                            "allocate stack in cell1[33..48], heap in cell2[3...7]\ndef fn(n)\n2 * n\nend\n\n$x = fn(4) + fn(5)\n$y = $x + 1\n"
-                                    )
-                            )
+                            getInstructionProcessor(),
+                            generateAndOptimize((Seq) translateToAst(code))
                     )
             );
         }
-        */
+                 */
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(WRITE, "48", "cell1", "48"),
-                        createInstruction(READ, var(3), "cell1", "48"),
-                        createInstruction(OP, "sub", var(3), var(3), "1"),
-                        createInstruction(WRITE, var(1001), "cell1", var(3)),
-                        createInstruction(WRITE, var(3), "cell1", "48"),
-                        createInstruction(READ, var(9), "cell1", "48"),
-                        createInstruction(OP, "sub", var(9), var(9), "1"),
-                        createInstruction(WRITE, "4", "cell1", var(9)),
-                        createInstruction(WRITE, var(9), "cell1", "48"),
-                        createInstruction(SET, "@counter", var(1000)),
+                        createInstruction(SET, "__sp", "48"),
+                        createInstruction(SET, "__fn0n", "4"),
+                        createInstruction(CALL, "cell1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(READ, var(16), "cell1", "48"),
-                        createInstruction(READ, var(15), "cell1", var(16)),
-                        createInstruction(OP, "add", var(16), var(16), "1"),
-                        createInstruction(WRITE, var(16), "cell1", "48"),
-                        createInstruction(READ, var(24), "cell1", "48"),
-                        createInstruction(OP, "sub", var(24), var(24), "1"),
-                        createInstruction(WRITE, var(1002), "cell1", var(24)),
-                        createInstruction(WRITE, var(24), "cell1", "48"),
-                        createInstruction(READ, var(30), "cell1", "48"),
-                        createInstruction(OP, "sub", var(30), var(30), "1"),
-                        createInstruction(WRITE, "5", "cell1", var(30)),
-                        createInstruction(WRITE, var(30), "cell1", "48"),
-                        createInstruction(SET, "@counter", var(1000)),
+                        createInstruction(SET, "__retval1", "__fn0retval"),
+                        createInstruction(SET, "__fn0n", "5"),
+                        createInstruction(CALL, "cell1", var(1000), var(1002)),
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(READ, var(37), "cell1", "48"),
-                        createInstruction(READ, var(36), "cell1", var(37)),
-                        createInstruction(OP, "add", var(37), var(37), "1"),
-                        createInstruction(WRITE, var(37), "cell1", "48"),
-                        createInstruction(OP, "add", var(44), var(15), var(36)),
-                        createInstruction(WRITE, var(44), "cell2", "3"),
-                        createInstruction(READ, var(47), "cell2", "3"),
-                        createInstruction(OP, "add", var(49), var(47), "1"),
-                        createInstruction(WRITE, var(49), "cell2", "4"),
-
+                        createInstruction(SET, "__retval3", "__fn0retval"),
+                        createInstruction(OP, "add", var(4), "__retval1", "__retval3"),
+                        createInstruction(WRITE, var(4), "cell2", "3"),
+                        createInstruction(READ, var(7), "cell2", "3"),
+                        createInstruction(OP, "add", var(9), var(7), "1"),
+                        createInstruction(WRITE, var(9), "cell2", "4"),
                         createInstruction(END),
-
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(READ, var(52), "cell1", "48"),
-                        createInstruction(READ, var(51), "cell1", var(52)),
-                        createInstruction(OP, "add", var(52), var(52), "1"),
-                        createInstruction(WRITE, var(52), "cell1", "48"),
-                        createInstruction(SET, "n", var(51)),
-                        createInstruction(OP, "mul", var(60), "2", "n"),
-                        createInstruction(READ, var(62), "cell1", "48"),
-                        createInstruction(READ, var(61), "cell1", var(62)),
-                        createInstruction(OP, "add", var(62), var(62), "1"),
-                        createInstruction(WRITE, var(62), "cell1", "48"),
-                        createInstruction(READ, var(69), "cell1", "48"),
-                        createInstruction(OP, "sub", var(69), var(69), "1"),
-                        createInstruction(WRITE, var(60), "cell1", var(69)),
-                        createInstruction(WRITE, var(69), "cell1", "48"),
-                        createInstruction(SET, "@counter", var(61)),
-
-                        createInstruction(END)
+                        createInstruction(OP, "sub", var(12), "__fn0n", "1"),
+                        createInstruction(PUSH, "cell1", "__fn0n"),
+                        createInstruction(PUSH, "cell1", var(12)),
+                        createInstruction(SET, "__fn0n", var(12)),
+                        createInstruction(CALL, "cell1", var(1000), var(1003)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(POP, "cell1", var(12)),
+                        createInstruction(POP, "cell1", "__fn0n"),
+                        createInstruction(OP, "mul", "__fn0retval", "2", "__fn0n"),
+                        createInstruction(RETURN, "cell1")
                 ),
-                generateAndOptimize(
-                        (Seq) translateToAst(
-                                "allocate stack in cell1[33..48], heap in cell2[3...7]\ndef fn(n)\n2 * n\nend\n\n$x = fn(4) + fn(5)\n$y = $x + 1\n"
-                        )
-                )
+                generateAndOptimize((Seq) translateToAst(code))
         );
     }
 
@@ -278,7 +251,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(UCONTROL, "payTake", "desired"),
                         createInstruction(UCONTROL, "payDrop"),
                         createInstruction(UCONTROL, "boost", "boosting"),
-//                        createInstruction(UCONTROL, "pathfind"),    // pathfind no longer supported in V7
+                        //                        createInstruction(UCONTROL, "pathfind"),    // pathfind no longer supported in V7
                         createInstruction(UCONTROL, "idle"),
                         createInstruction(UCONTROL, "stop"),
                         createInstruction(END)

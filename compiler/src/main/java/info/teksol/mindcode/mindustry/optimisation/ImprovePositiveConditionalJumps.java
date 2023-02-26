@@ -105,7 +105,7 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
     }
     
     private boolean isComparisonOperatorToTmp(LogicInstruction instruction) {
-        return instructionProcessor.isValid(ArgumentType.CONDITION, instruction.getArgs().get(0)) &&
-                instruction.getArgs().get(1).startsWith(instructionProcessor.getTempPrefix());
+        return instructionProcessor.isValid(ArgumentType.CONDITION, instruction.getArg(0)) &&
+                isTemporary(instruction.getArg(1));
     }
 }

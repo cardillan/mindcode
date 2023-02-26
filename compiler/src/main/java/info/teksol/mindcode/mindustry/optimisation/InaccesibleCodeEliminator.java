@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // Removes instructions that became inaccessible.
 // There are several ways to obrain inaccessible instructions:
@@ -34,18 +35,20 @@ class InaccesibleCodeEliminator extends GlobalOptimizer {
     
     private void findActiveLabels() {
         activeLabels = program.stream()
-                .map(this::extractLabelReference)
+                .flatMap(this::extractLabelReference)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
     
-    private String extractLabelReference(LogicInstruction instruction) {
+    private Stream<String> extractLabelReference(LogicInstruction instruction) {
         if (instruction.isJump()) {
-            return instruction.getArgs().get(0);
+            return Stream.of(instruction.getArg(0));
         } else if (instruction.isSet()) {
-            return instruction.getArgs().get(1);
+            return Stream.of(instruction.getArg(1));
         } else if (instruction.isWrite()) {
-            return instruction.getArgs().get(1);
+            return Stream.of(instruction.getArg(1));
+        } else if (instruction.isCall()) {
+            return Stream.of(instruction.getArg(1), instruction.getArg(2));
         }
         
         return null;
@@ -60,6 +63,8 @@ class InaccesibleCodeEliminator extends GlobalOptimizer {
             if (accessible) {
                 // Unconditional jump makes the next instruction inaccessible
                 if (instruction.isJump() && instruction.getArgs().get(1).equals("always")) {
+                    accessible = false;
+                } else if (instruction.isReturn()) {
                     accessible = false;
                 } else if (instruction.isEnd()) {
                     accessible = false;
@@ -79,5 +84,5 @@ class InaccesibleCodeEliminator extends GlobalOptimizer {
 
         return modified;
     }
-    
+
 }

@@ -47,6 +47,8 @@ public class CompileMain {
                 showHelp(0);
             } else if (arg.startsWith("-v")) {
                 selectVersion(profile, arg.substring(2));
+            } else if (arg.equals("-c")) {
+                profile.setPrintFinalCode(true);
             } else if (arg.startsWith("-p")) {
                 selectPrintLevel(profile, arg.substring(2));
             } else if (arg.startsWith("-o")) {
@@ -144,16 +146,18 @@ public class CompileMain {
     }
 
     static private final String[] HELP = new String[] {
-        "Usage: mindcode [-vVersionEdition] [-p[Level]] [-dLevel] [-oFlags] [input file] [output file] [log file]",
+        "Usage: mindcode [-vVersionEdition] [-c] [-p[Level]] [-dLevel] [-oFlags] [input file] [output file] [log file]",
             "  when input file is not given, input is read from stdin",
             "  when output file is not given, output is written to stdout",
             "  when log file is not given, messages are written to stderr",
             "",
-            "-vLogicVersion: selects target Mindustry Logic version:",
+            "-vVersionEdition: selects target processor version and edition:",
             "  6:  Mindustry Logic 6",
             "  7:  Mindustry Logic 7, standard processor (default)",
             "  7s: Mindustry Logic 7, standard processor",
             "  7w: Mindustry Logic 7, world processor",
+            "",
+            "-c: print compiled code with virtual instructions",
             "",
             "-pLevel: activates parse tree printing into the log file. Possible level values:",
             "  0: no parse tree printing",
@@ -169,7 +173,6 @@ public class CompileMain {
             "-oFlags: specifies which optimisers to use.",
             "  When no flags are given (-o), all optimisers are active",
             "  otherwise -o is followed by characters representing desired optimisers.",
-            "",
             "Available optimisers are:"
     };
     

@@ -59,6 +59,26 @@ public class LogicInstruction {
         return opcode == END;
     }
 
+    public boolean isPush() {
+        return opcode == PUSH;
+    }
+
+    public boolean isPop() {
+        return opcode == POP;
+    }
+
+    public boolean isPushOrPop() {
+        return opcode == PUSH || opcode == POP;
+    }
+
+    public boolean isCall() {
+        return opcode == CALL;
+    }
+
+    public boolean isReturn() {
+        return opcode == RETURN;
+    }
+
     public Opcode getOpcode() {
         return opcode;
     }

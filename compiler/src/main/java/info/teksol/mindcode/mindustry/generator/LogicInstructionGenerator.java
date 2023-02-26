@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.generator;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.functions.FunctionMapper;
+import info.teksol.mindcode.mindustry.functions.WrongNumberOfParametersException;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.*;
@@ -18,15 +19,29 @@ import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<String> {
+    private static final String RETURN_ADDRESS = "retaddr";
+    private static final String RETURN_VALUE = "retval";
+
     // The version-dependent functionality is encapsulated in InstructionProcessor and FunctionMapper.
-    // If future Mindustry versions offer more capabilities, even LogicInstructionGenerator might be made version dependent.
+    // If future Mindustry versions offer more capabilities (such as native stack support),
+    // even LogicInstructionGenerator might be made version dependent.
     private final InstructionProcessor instructionProcessor;
     private final FunctionMapper functionMapper;
     private final LogicInstructionPipeline pipeline;
-    private StackAllocation allocatedStack;
-    private final Map<String, FunctionDeclaration> declaredFunctions = new HashMap<>();
-    private final Map<String, String> functionLabels = new HashMap<>();
     private final LoopStack loopStack = new LoopStack();
+
+    // Contains the infromation about functions built from the program to support code generation
+    private CallGraph callGraph;
+
+    // Local context of the function being compiled
+    // Only used by recursive functions, but maintained for all functions (simpler code)
+    private LocalContext localContext = new LocalContext();
+
+    // Function definition being presently compiled (not updated for inline functions)
+    private CallGraph.Function currentFunction; 
+
+    // Prefix for local variables (depends on function being processed)
+    private String localPrefix = "";
 
     public LogicInstructionGenerator(InstructionProcessor instructionProcessor, FunctionMapper functionMapper,
             LogicInstructionPipeline pipeline) {
@@ -48,36 +63,217 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     public void start(Seq program) {
+        callGraph = CallGraphCreator.createFunctionGraph(program, instructionProcessor);
+        currentFunction = callGraph.getMain();
+        appendStackAllocation();
         visit(program);
         appendFunctionDeclarations();
     }
 
-    private void appendFunctionDeclarations() {
-        // TODO: pass parameters through local variables? This would save a ton of instructions when going through the stack
+    private String nextLabel() {
+        return instructionProcessor.nextLabel();
+    }
 
-        pipeline.emit(createInstruction(END));
-        for (Map.Entry<String, FunctionDeclaration> pair : declaredFunctions.entrySet()) {
-            final String label = functionLabels.get(pair.getKey());
-            pipeline.emit(createInstruction(Opcode.LABEL, label));
-            // caller pushes arguments left-to-right
-            // we have to pop right-to-left, hence the reverse iteration here
-            final ListIterator<AstNode> iterator = pair.getValue().getParams().listIterator(pair.getValue().getParams().size());
-            while (iterator.hasPrevious()) {
-                final AstNode var = iterator.previous();
-                final String param = nextTemp();
-                popValueFromStack(param);
-                visit(new Assignment(var, new VarRef(param)));
+    private String nextTemp() {
+        return localContext.registerVariable(instructionProcessor.nextTemp());
+    }
+
+    private String nextReturnValue() {
+        return localContext.registerVariable(instructionProcessor.nextReturnValue());
+    }
+
+    private void appendStackAllocation() {
+        if (callGraph.containsRecursiveFunction()) {
+            if (callGraph.getAllocatedStack() == null) {
+                throw new MissingStackException("Cannot declare functions when no stack was allocated");
             }
 
-            final String body = visit(pair.getValue().getBody());
-            final String returnAddress = nextTemp();
-            popValueFromStack(returnAddress);
-            pushValueOnStack(body);
-            pipeline.emit(createInstruction(SET, "@counter", returnAddress));
+            // Initialize stack pointer variable
+            pipeline.emit(
+                    createInstruction(SET,
+                            instructionProcessor.getStackPointer(),
+                            String.valueOf(callGraph.getAllocatedStack().getLast())
+                    )
+            );
+        }
+    }
+
+    private void appendFunctionDeclarations() {
+        pipeline.emit(createInstruction(END));
+
+        for (CallGraph.Function function : callGraph.getFunctions()) {
+            if (function.isInline() || !function.isUsed()) {
+                continue;
+            }
+
+            currentFunction = function;
+            localPrefix = function.getLocalPrefix();
+            localContext = new LocalContext();
+            pipeline.emit(createInstruction(Opcode.LABEL, function.getLabel()));
+
+            if (function.isRecursive()) {
+                appendRecursiveFunctionDeclaration(function);
+            } else {
+                appendStacklessFunctionDeclaration(function);
+            }
+
             pipeline.emit(createInstruction(END));
+            localPrefix = "";
+            currentFunction = callGraph.getMain();
         }
 
     }
+
+    private void appendRecursiveFunctionDeclaration(CallGraph.Function function) {
+        // Register all parameters for stack storage
+        function.getParams().stream().map(this::visitVarRef).forEach(localContext::registerVariable);
+
+        // Function parameters and return address are set up at the call site
+        final String body = visit(function.getBody());
+        pipeline.emit(createInstruction(SET, localPrefix + RETURN_VALUE, body));
+        pipeline.emit(createInstruction(RETURN, stackName()));
+    }
+
+    private void appendStacklessFunctionDeclaration(CallGraph.Function function) {
+        // Function parameters and return address are set up at the call site
+        final String body = visit(function.getBody());
+        pipeline.emit(createInstruction(SET, localPrefix + RETURN_VALUE, body));
+        pipeline.emit(createInstruction(SET, "@counter", localPrefix + RETURN_ADDRESS));
+    }
+
+    @Override
+    public String visitFunctionCall(FunctionCall node) {
+        final List<String> params = node.getParams().stream().map(this::visit).collect(Collectors.toList());
+        return handleFunctionCall(node.getFunctionName(), params);
+    }
+
+    private String handleFunctionCall(String functionName, List<String> params) {
+        String output = functionMapper.handleFunction(pipeline, functionName, params);
+        if (output != null) {
+            return output;
+        } else if (callGraph.containsFunction(functionName)) {
+            return handleUserFunctionCall(functionName, params);
+        } else {
+            throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
+        }
+    }
+
+    private String handleUserFunctionCall(String functionName, List<String> params) {
+        CallGraph.Function function = callGraph.getFunction(functionName);
+        if (params.size() != function.getParamCount()) {
+            throw new WrongNumberOfParametersException("Function '" + functionName + "': wrong number of parameters (expected "
+                    + function.getParamCount() + ", found " + params.size() + ")");
+        }
+
+        // Switching to new function prefix -- save/restore old one
+        String previousPrefix = localPrefix;
+        try {
+            localPrefix = function.isInline() ? instructionProcessor.nextLocalPrefix() : function.getLocalPrefix();
+
+            if (function.isInline()) {
+                return handleInlineFunctionCall(function, params);
+            } else if (!function.isRecursive()) {
+                return handleStacklessFunctionCall(function, params);
+            } else {
+                return handleRecursiveFunctionCall(function, params);
+            }
+        }
+        finally {
+            localPrefix = previousPrefix;
+        }
+    }
+
+    private String handleInlineFunctionCall(CallGraph.Function function, List<String> paramValues) {
+        // Switching to inline function context -- save/restore old one
+        final CallGraph.Function previousFunction = currentFunction;
+        final LocalContext previousContext = localContext;
+        try {
+            currentFunction = function;
+            localContext = new LocalContext();
+            setupFunctionParameters(function, paramValues);
+            return visit(function.getBody());
+        }
+        finally {
+            localContext = previousContext;
+            currentFunction = previousFunction;
+        }
+    }
+
+    private String handleStacklessFunctionCall(CallGraph.Function function, List<String> paramValues) {
+        setupFunctionParameters(function, paramValues);
+
+        final String returnLabel = nextLabel();
+        pipeline.emit(createInstruction(SET, localPrefix + RETURN_ADDRESS, returnLabel));
+
+         // Stackless function call (could be a jump as well, but this lets us distinguish call and jump easily in the code)
+        pipeline.emit(createInstruction(SET, "@counter", function.getLabel()));
+        pipeline.emit(createInstruction(LABEL, returnLabel)); // where the function must return
+
+        return passReturnValue(function);
+    }
+
+    private String handleRecursiveFunctionCall(CallGraph.Function function, List<String> paramValues) {
+        boolean useStack = currentFunction.isRecursiveCall(function.getName());
+        List<String> variables = useStack ? new ArrayList(localContext.getVariables()) : List.of();
+
+        if (useStack) {
+            // Store all local varables (both user defined and temporary) on the stack
+            variables.forEach(v -> pipeline.emit(createInstruction(PUSH, stackName(), v)));
+        }
+
+        setupFunctionParameters(function, paramValues);
+
+         // Recursive function call (stores return variable on stack)
+        final String returnLabel = nextLabel();
+        pipeline.emit(createInstruction(CALL, stackName(), function.getLabel(), returnLabel));
+        pipeline.emit(createInstruction(LABEL, returnLabel)); // where the function must return
+
+        if (useStack) {
+            // Restore all local varables (both user defined and temporary) from the stack
+            Collections.reverse(variables);
+            variables.forEach(v -> pipeline.emit(createInstruction(POP, stackName(), v)));
+        }
+
+        return passReturnValue(function);
+    }
+
+    private void setupFunctionParameters(CallGraph.Function function, List<String> paramValues) {
+        // Setup variables representing function parameters with values from this call
+        List<VarRef> paramsRefs = function.getParams();
+        for (int i = 0; i < paramValues.size(); i++) {
+            // Visiting paramRefs (which are VarRefs) decorated them with localPrefix
+            // paramValues were visited in caller's context
+            pipeline.emit(createInstruction(SET, visit(paramsRefs.get(i)), paramValues.get(i)));
+        }
+    }
+
+    private String passReturnValue(CallGraph.Function function) {
+        if (currentFunction.isRepeatedCall(function.getName())) {
+            // Copy default return variable to new temp, for the function is called multiple times
+            // and we must not overwrite result of previous call(s) with this one
+            //
+            // Allocate 'return value' type temp variable for it, so that it won't be eliminated;
+            // this is easier than ensuring optimizers do not eliminate normal temporary variables
+            // that received return values from functions.
+            //
+            // TODO: optimizer to remove resultVariable when not needed (not used across same function calls)
+            //       will be complicated; the optimizer would need to utilize the call graph
+            final String resultVariable = nextReturnValue();
+            pipeline.emit(createInstruction(SET, resultVariable, localPrefix + RETURN_VALUE));
+            return resultVariable;
+        } else {
+            // Use the function return value directly - there's only one place where it is produced
+            // within this funcion's call tree
+            return localPrefix + RETURN_VALUE;
+        }
+    }
+
+    private String stackName() {
+        return callGraph.getAllocatedStack().getName();
+    }
+
+
+
 
     @Override
     public String visitHeapAccess(HeapAccess node) {
@@ -129,6 +325,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             final String address = visit(heapAccess.getAddress());
             pipeline.emit(createInstruction(Opcode.WRITE, rvalue, heapAccess.getCellName(), address));
         } else if (node.getVar() instanceof PropertyAccess) {
+            // TODO: delegate this to function mapper (would ensure the property is valid)
             final PropertyAccess propertyAccess = (PropertyAccess) node.getVar();
             final String propTarget = visit(propertyAccess.getTarget());
             String prop = visit(propertyAccess.getProperty());
@@ -233,84 +430,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitFunctionCall(FunctionCall node) {
-        final List<String> params = node.getParams().stream().map(this::visit).collect(Collectors.toList());
-        return handleFunctionCall(node.getFunctionName(), params);
-    }
-
-    private String handleFunctionCall(String functionName, List<String> params) {
-        String output = functionMapper.handleFunction(pipeline, functionName, params);
-
-        if (output != null) {
-            return output;
-        }
-
-        if (declaredFunctions.containsKey(functionName)) {
-            return handleInternalFunctionCall(functionName, params);
-        } else {
-            throw new UndeclaredFunctionException("Don't know how to handle function named [" + functionName + "]");
-        }
-    }
-
-    private String handleInternalFunctionCall(String functionName, List<String> params) {
-        // TODO: assert number of parameters matches expected number from declared function
-        // This might require declaring functions before they are used. Otherwise, this would become a runtime exception.
-        // It would be preferable to have functions declared early, so that the compiler can check number of parameters.
-        final String returnLabel = nextLabel();
-
-        pushValueOnStack(returnLabel);
-        for (final String param : params) {
-            pushValueOnStack(param);
-        }
-        pipeline.emit(createInstruction(SET, "@counter", functionLabels.get(functionName))); // actually call function
-        pipeline.emit(createInstruction(LABEL, returnLabel)); // where the function must return
-
-        final String returnValue = nextTemp();
-        popValueFromStack(returnValue);
-        return returnValue;
-    }
-
-    private void pushValueOnStack(String value) {
-        final String stackPointer = nextTemp();
-        visit(
-                new Seq(
-                        new Seq(
-                                new Assignment(new VarRef(stackPointer), new HeapAccess(stackName(), new NumericLiteral(stackTop()))),
-                                new Assignment(new VarRef(stackPointer), new BinaryOp(new VarRef(stackPointer), "-", new NumericLiteral(1)))
-                        ), // if we checked for stack overflows, this is where we'd do it
-                        new Seq(
-                                new Assignment(new HeapAccess(stackName(), new VarRef(stackPointer)), new VarRef(value)),
-                                new Assignment(new HeapAccess(stackName(), new NumericLiteral(stackTop())), new VarRef(stackPointer))
-                        )
-                )
-        );
-    }
-
-    private void popValueFromStack(String value) {
-        final String stackPointer = nextTemp();
-        visit(
-                new Seq(
-                        new Seq(
-                                new Assignment(new VarRef(stackPointer), new HeapAccess(stackName(), new NumericLiteral(stackTop()))),
-                                new Assignment(new VarRef(value), new HeapAccess(stackName(), new VarRef(stackPointer)))
-                        ), // if we checked for stack underflow, this is where we'd do it
-                        new Seq(
-                                new Assignment(new VarRef(stackPointer), new BinaryOp(new VarRef(stackPointer), "+", new NumericLiteral(1))),
-                                new Assignment(new HeapAccess(stackName(), new NumericLiteral(stackTop())), new VarRef(stackPointer))
-                        )
-                )
-        );
-    }
-
-    private int stackTop() {
-        return allocatedStack.getLast();
-    }
-
-    private String stackName() {
-        return allocatedStack.getName();
-    }
-
-    @Override
     public String visitBinaryOp(BinaryOp node) {
         final String left = visit(node.getLeft());
         final String right = visit(node.getRight());
@@ -337,7 +456,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitVarRef(VarRef node) {
-        return node.getName();
+        return localContext.registerVariable(localPrefix + node.getName());
     }
 
     @Override
@@ -427,30 +546,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitFunctionDeclaration(FunctionDeclaration node) {
-        if (allocatedStack == null) {
-            throw new MissingStackException("Cannot declare functions when no stack was allocated");
-        }
-
-        declaredFunctions.put(node.getName(), node);
-        functionLabels.put(node.getName(), nextLabel());
+        // Do nothing - function definitions are procesed by CallGraphCreator
         return "null";
     }
 
     @Override
     public String visitStackAllocation(StackAllocation node) {
-        if (allocatedStack != null) {
-            throw new DuplicateStackAllocationException("Found a a 2nd stack allocation in " + node);
-        }
-
-        allocatedStack = node;
-        return visit(
-                new Assignment(
-                        new HeapAccess(
-                                node.getName(),
-                                new NumericLiteral(node.getLast())),
-                        new NumericLiteral(node.getLast())
-                )
-        );
+        // Do nothing - stack allocations are procesed by CallGraphCreator
+        return "null";
     }
 
     @Override
@@ -474,11 +577,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return functionMapper.handleProperty(pipeline, node.getProperty(), target, args);
     }
 
-    private String nextLabel() {
-        return instructionProcessor.nextLabel();
-    }
+    private class LocalContext {
+        private final Set<String> variables = new LinkedHashSet<>();
 
-    private String nextTemp() {
-        return instructionProcessor.nextTemp();
+        String registerVariable(String name) {
+            variables.add(name);
+            return name;
+        }
+
+        List<String> getVariables() {
+            return List.copyOf(variables);
+        }
     }
 }

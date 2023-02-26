@@ -16,6 +16,9 @@ import java.util.List;
 // 3. The set instruction precedes the instruction using the __tmp variable (the check is based on absolute
 //    instruction sequence in the program, not on the actual program flow).
 // 4. All arguments of the other instruction referencing the __tmp variable are input ones.
+//
+// Push and pop instructions are ignored by the above algorithm. Push/pop instructions of any eliminated variables
+// are removed by the StackUsageOptimizer later on.
 class InputTempEliminator extends GlobalOptimizer {
     public InputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);
@@ -23,16 +26,16 @@ class InputTempEliminator extends GlobalOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        // Cannot uswe iterations due to modifications of the the underlying list in the loop
+        // Cannot use iterations due to modifications of the the underlying list in the loop
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
             LogicInstruction instruction = it.next();
             if (!instruction.isSet()) continue;
             
             String arg0 = instruction.getArgs().get(0);
             // Not an assignment to a temp variable
-            if (!arg0.startsWith(instructionProcessor.getTempPrefix())) continue;
+            if (!isTemporary(arg0)) continue;
 
-            List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg0));
+            List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg0) && !ix.isPushOrPop());
             // Not exactly two instructions, or this instruction does not come first
             if (list.size() != 2 || list.get(0) != instruction) continue;
             

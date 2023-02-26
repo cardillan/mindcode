@@ -136,7 +136,6 @@ public enum ArgumentType {
     /** An unused input argument. Ignored by given opcode variant. */
     UNUSED          (Flags.UNUSED),
 
-    // TODO: might not be necessary, needs investigation
     /** An unused output argument. Ignored by given opcode variant, output in some other opcode variant. */
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
     ;

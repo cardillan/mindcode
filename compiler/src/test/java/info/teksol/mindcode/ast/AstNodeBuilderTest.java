@@ -973,7 +973,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         new Seq(
-                                new FunctionDeclaration(
+                                new FunctionDeclaration(false,
                                         "delay",
                                         List.of(),
                                         new Seq(
@@ -1033,7 +1033,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(
                                 new Seq(
-                                        new FunctionDeclaration(
+                                        new FunctionDeclaration(false,
                                                 "foo",
                                                 List.of(),
                                                 new Seq(
@@ -1063,7 +1063,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(
                                 new Seq(
-                                        new FunctionDeclaration(
+                                        new FunctionDeclaration(false,
                                                 "foo",
                                                 List.of(new VarRef("s")),
                                                 new Seq(
@@ -1091,7 +1091,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(
                                 new Seq(
-                                        new FunctionDeclaration(
+                                        new FunctionDeclaration(false,
                                                 "foo",
                                                 List.of(new VarRef("s"), new VarRef("r")),
                                                 new Seq(

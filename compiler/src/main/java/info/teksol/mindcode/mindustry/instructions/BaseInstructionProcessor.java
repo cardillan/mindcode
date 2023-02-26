@@ -18,6 +18,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static info.teksol.mindcode.mindustry.logic.Opcode.CALL;
+import static info.teksol.mindcode.mindustry.logic.Opcode.LABEL;
+import static info.teksol.mindcode.mindustry.logic.Opcode.POP;
+import static info.teksol.mindcode.mindustry.logic.Opcode.PUSH;
+import static info.teksol.mindcode.mindustry.logic.Opcode.RETURN;
 import static info.teksol.util.CollectionUtils.*;
 
 public class BaseInstructionProcessor implements InstructionProcessor {
@@ -30,6 +35,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private final Map<ArgumentType, Set<String>> validArgumentValues;
     private int tmpIndex = 0;
     private int labelIndex = 0;
+    private int functionIndex = 0;
 
     // Protected to allow a subclass to use this constructor in unit tests
     protected BaseInstructionProcessor(ProcessorVersion processorVersion, ProcessorEdition processorEdition,
@@ -59,6 +65,16 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public String nextReturnValue() {
+        return getRetValPrefix() + tmpIndex++;
+    }
+
+    @Override
+    public String nextLocalPrefix() {
+        return getLocalPrefix() + functionIndex++;
+    }
+
+    @Override
     public ProcessorVersion getProcessorVersion() {
         return processorVersion;
     }
@@ -71,6 +87,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public List<OpcodeVariant> getOpcodeVariants() {
         return opcodeVariants;
+    }
+
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, String... arguments) {
+        return createInstruction(opcode, List.of(arguments));
     }
 
     @Override
@@ -91,8 +112,77 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public LogicInstruction createInstruction(Opcode opcode, String... arguments) {
-        return createInstruction(opcode, List.of(arguments));
+    public List<LogicInstruction> resolve(LogicInstruction virtualInstruction) {
+        switch (virtualInstruction.getOpcode()) {
+            case LABEL:
+                return List.of();
+
+            case PUSH: {
+                String memory = virtualInstruction.getArg(0);
+                String value = virtualInstruction.getArg(1);
+                return List.of(
+                        createInstruction(Opcode.WRITE, value, memory, getStackPointer()),
+                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1")
+                );
+            }
+
+            case POP: {
+                String memory = virtualInstruction.getArg(0);
+                String varRef = virtualInstruction.getArg(1);
+                return List.of(
+                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
+                        createInstruction(Opcode.READ, varRef, memory, getStackPointer())
+                );
+            }
+
+            case CALL: {
+                String memory = virtualInstruction.getArg(0);
+                String callAddr = virtualInstruction.getArg(1);
+                String retAddr = virtualInstruction.getArg(2);
+                return List.of(
+                        createInstruction(Opcode.WRITE, retAddr, memory, getStackPointer()),
+                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
+                        createInstruction(Opcode.SET, "@counter", callAddr)
+                );
+            }
+
+            case RETURN: {
+                String memory = virtualInstruction.getArg(0);
+                String retAddr = nextTemp();
+                return List.of(
+                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
+                        createInstruction(Opcode.READ, retAddr, memory, getStackPointer()),
+                        createInstruction(Opcode.SET, "@counter", retAddr)
+                );
+            }
+
+            default:
+                throw new GenerationException("Don't know how to resolve instruction " + virtualInstruction);
+        }
+    }
+
+    @Override
+    public int getRealSize(LogicInstruction instruction) {
+        switch (instruction.getOpcode()) {
+            case LABEL:
+                return 0;
+
+            case PUSH:
+            case POP:
+                return 2;
+
+            case CALL:
+            case RETURN:
+                return 3;
+
+            default:
+                return 1;
+        }
+    }
+
+    @Override
+    public boolean isTemporary(String varRef) {
+        return varRef.startsWith(getTempPrefix());
     }
 
     @Override
@@ -149,6 +239,14 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     public List<String> getOutputValues(LogicInstruction instruction) {
         return getTypedArguments(instruction)
                 .filter(a -> a.getArgumentType().isOutput())
+                .map(TypedArgument::getValue)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    @Override
+    public List<String> getInputOutputValues(LogicInstruction instruction) {
+        return getTypedArguments(instruction)
+                .filter(a -> a.getArgumentType().isInput()|| a.getArgumentType().isOutput())
                 .map(TypedArgument::getValue)
                 .collect(Collectors.toUnmodifiableList());
     }

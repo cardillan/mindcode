@@ -42,23 +42,41 @@ public enum Opcode {
     GETFLAG         ("getflag",         "Set a global flag that can be read by all processors."),
     SETFLAG         ("setflag",         "Check if a global flag is set."),
 
-    LABEL           ("label",           "Virtual instruction."),
+    LABEL           ("label",           0),
+    PUSH            ("push",            2),
+    POP             ("pop",             2),
+    CALL            ("call",            3),
+    RETURN          ("return",          3),
     ;
     
     private final String opcode;
     private final String description;
     private final int additionalPrintArguments;
+    private final boolean virtual;
+    private final int size;
 
     private Opcode(String opcode, String description) {
         this.opcode = opcode;
         this.description = description;
         this.additionalPrintArguments = 0;
+        this.virtual = false;
+        this.size = 1;
     }
     
     private Opcode(String opcode, String description, int additionalPrintArguments) {
         this.opcode = opcode;
         this.description = description;
         this.additionalPrintArguments = additionalPrintArguments;
+        this.virtual = false;
+        this.size = 1;
+    }
+
+    private Opcode(String opcode, int size) {
+        this.opcode = opcode;
+        this.description = "Virtual instruction.";
+        this.additionalPrintArguments = 0;
+        this.virtual = true;
+        this.size = size;
     }
 
     public int getAdditionalPrintArguments() {
@@ -71,6 +89,14 @@ public enum Opcode {
 
     public String getDescription() {
         return description;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isVirtual() {
+        return virtual;
     }
 
     @Override

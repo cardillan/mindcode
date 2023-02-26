@@ -14,7 +14,7 @@ public class StackAllocation extends BaseAstNode {
                 !(range.getFirstValue() instanceof NumericLiteral)
                         || !(range.getLastValue() instanceof NumericLiteral)
                 ) {
-            throw new InvalidHeapAllocationException("Heap declarations must use numeric literals; received " + range);
+            throw new InvalidHeapAllocationException("Stack declarations must use numeric literals; received " + range);
         }
 
         int candidate = Integer.valueOf(((NumericLiteral) range.getLastValue()).getLiteral());

@@ -53,12 +53,21 @@ public class MindcodeCompiler implements Compiler {
                 result = optimize(result);
             }
 
+            if (profile.isPrintFinalCode()) {
+                messages.add("\nFinal code before resolving virtual instructions:\n");
+                messages.add(LogicInstructionPrinter.toString(instructionProcessor, result));
+            }
+
             // 4: Resolve symbolic labels
             result = LogicInstructionLabelResolver.resolve(instructionProcessor, result);
 
             // 5: Convert to final output
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
         } catch (RuntimeException e) {
+            if (profile.getDebugLevel() > 0) {
+                // TODO: use specific command line argument to obtain stack trace
+                e.printStackTrace();
+            }
             errors.add(e.getMessage());
         }
 

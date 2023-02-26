@@ -15,6 +15,9 @@ import java.util.List;
 // 3. The set instruction immediatelly follows the instruction producing the __tmp variable 
 //    (the check is based on absolute instruction sequence in the program, not on the actual program flow).
 // 4. All arguments of the other instruction referencing the __tmp variable are output ones.
+//
+// Push and pop instructions are ignored by the above algorithm. Push/pop instructions of any eliminated variables
+// are removed by the StackUsageOptimizer later on.
 class OutputTempEliminator extends GlobalOptimizer {
     public OutputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);
@@ -22,20 +25,20 @@ class OutputTempEliminator extends GlobalOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        // Cannot uswe iterations due to modifications of the the underlying list in the loop
+        // Cannot use iterations due to modifications of the the underlying list in the loop
         for (int index  = 1; index < program.size(); index++)  {
             LogicInstruction current = program.get(index);
             if (!current.isSet()) continue;
 
             String arg1 = current.getArgs().get(1);
             // Not an assignment from a temp variable
-            if (!arg1.startsWith(instructionProcessor.getTempPrefix())) continue;
+            if (!isTemporary(arg1)) continue;
             
             LogicInstruction previous = program.get(index - 1);
             // Previous instruction is a set producing a different variable
             if (previous.isSet() && !previous.getArgs().get(0).equals(arg1)) continue;
             
-            List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg1));
+            List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg1) && !ix.isPushOrPop());
             // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
             if (list.size() != 2 || list.get(0) != previous) continue;
 

@@ -4,22 +4,28 @@ import java.util.List;
 import java.util.Objects;
 
 public class FunctionDeclaration extends BaseAstNode {
+    private final boolean inline;
     private final String name;
-    private final List<AstNode> params;
+    private final List<VarRef> params;
     private final AstNode body;
 
-    FunctionDeclaration(String name, List<AstNode> params, AstNode body) {
-        super(params, body);
+    public FunctionDeclaration(boolean inline, String name, List<VarRef> params, AstNode body) {
+        super(body);
+        this.inline = inline;
         this.name = name;
         this.params = params;
         this.body = body;
+    }
+
+    public boolean isInline() {
+        return inline;
     }
 
     public String getName() {
         return name;
     }
 
-    public List<AstNode> getParams() {
+    public List<VarRef> getParams() {
         return params;
     }
 

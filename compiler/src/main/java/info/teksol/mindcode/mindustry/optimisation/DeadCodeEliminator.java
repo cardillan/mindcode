@@ -28,7 +28,8 @@ class DeadCodeEliminator extends GlobalOptimizer {
         super.generateFinalMessages();
         
         String eliminated = eliminations.stream()
-                .filter(s -> !s.startsWith(instructionProcessor.getTempPrefix()))
+                .filter(s -> !isTemporary(s))
+                .filter(s -> !s.startsWith(instructionProcessor.getRetValPrefix()))
                 .sorted()
                 .collect(Collectors.joining(", "));
         
@@ -58,7 +59,8 @@ class DeadCodeEliminator extends GlobalOptimizer {
         reads.clear();
         writes.clear();
         reads.add("@counter"); // instruction pointer is *always* read -- and our implementation of call/return depends on this
-        program.forEach(this::examineInstruction);
+        reads.add(instructionProcessor.getStackPointer()); // ditto for stack pointer
+        program.stream().filter(ix -> !ix.isPushOrPop()).forEach(this::examineInstruction);
     }
 
     /**

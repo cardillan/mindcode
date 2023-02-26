@@ -42,6 +42,9 @@ public enum Optimisation {
     INACCESSIBLE_CODE_ELIMINATION       ('e',
             (inst, next) -> new InaccesibleCodeEliminator(inst, new SingleStepJumpEliminator(inst, next)),
             "eliminates instructions made inaccessible by optimizations or false conditions"),
+
+    STACK_USAGE_OPTIMIZATION            ('k', (inst, next) -> new StackUsageOptimizer(inst, next),
+            "optimizes variable storage on stack"),
     ;
     
     private final BiFunction<InstructionProcessor, LogicInstructionPipeline, ? extends BaseOptimizer> instanceCreator;

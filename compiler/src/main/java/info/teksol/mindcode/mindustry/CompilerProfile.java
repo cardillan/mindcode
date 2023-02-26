@@ -10,6 +10,7 @@ public class CompilerProfile {
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
     private Set<Optimisation> optimisations = EnumSet.allOf(Optimisation.class);
+    private boolean printFinalCode = false;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
 
@@ -48,6 +49,14 @@ public class CompilerProfile {
 
     public void setOptimisations(Set<Optimisation> optimisations) {
         this.optimisations = Set.copyOf(optimisations);
+    }
+
+    public boolean isPrintFinalCode() {
+        return printFinalCode;
+    }
+
+    public void setPrintFinalCode(boolean printFinalCode) {
+        this.printFinalCode = printFinalCode;
     }
 
     public int getParseTreeLevel() {

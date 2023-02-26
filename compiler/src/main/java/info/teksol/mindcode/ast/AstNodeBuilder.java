@@ -5,6 +5,7 @@ import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static final String AST_PREFIX = "__ast";
@@ -642,8 +643,9 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         final List<AstNode> params = new ArrayList<>();
         gatherArgs(args, params);
         return new FunctionDeclaration(
+                ctx.fundecl().inline != null,
                 ctx.fundecl().name.getText(),
-                params,
+                params.stream().map(a -> (VarRef)a).collect(Collectors.toUnmodifiableList()),
                 visit(ctx.fundecl().body)
         );
     }
@@ -669,7 +671,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             rest = new NoOp();
         }
 
-        final AstNode last = visit(ctx.lvalue());
+        final AstNode last = visit(ctx.var_ref());
         return new Seq(rest, last);
     }
 
