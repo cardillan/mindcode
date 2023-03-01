@@ -65,13 +65,7 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
                 emitToNext(jump);
             }
             labels.forEach(SingleStepJumpEliminator.this::emitToNext);
-            
-            if (instruction.isJump()) {
-                return new ExpectLabel(instruction);
-            } else {
-                emitToNext(instruction);
-                return new EmptyState();
-            }
+            return new EmptyState().emit(instruction);
         }
 
         @Override

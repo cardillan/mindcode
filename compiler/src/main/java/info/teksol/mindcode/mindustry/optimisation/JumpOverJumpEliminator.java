@@ -69,8 +69,7 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
                 return new ExpectLabel(conditionalJump, instruction);
             } else {
                 emitToNext(conditionalJump);
-                emitToNext(instruction);
-                return new EmptyState();
+                return new EmptyState().emit(instruction);
             }
         }
 
@@ -120,13 +119,7 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
             }
 
             labels.forEach(JumpOverJumpEliminator.this::emitToNext);
-
-            if (instruction.isJump() && hasInverse(instruction.getArgs().get(1))) {
-                return new ExpectJump(instruction);
-            } else {
-                emitToNext(instruction);
-                return new EmptyState();
-            }
+            return new EmptyState().emit(instruction);
         }
 
         @Override
