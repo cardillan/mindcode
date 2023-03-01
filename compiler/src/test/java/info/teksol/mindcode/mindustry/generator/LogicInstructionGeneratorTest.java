@@ -166,6 +166,23 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void convertsMainMemoryVariable() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, "memory", "cell1"),
+                        createInstruction(SET, var(2), "9"),
+                        createInstruction(SET, var(3), "9"),
+                        createInstruction(OP, "pow", var(4), var(2), var(3)),
+                        createInstruction(OP, "rand", var(5), var(4)),
+                        createInstruction(SET, var(6), "0"),
+                        createInstruction(WRITE, var(5), "memory", var(6)),
+                        createInstruction(END)
+                ),
+                generateUnoptimized((Seq) translateToAst("memory = cell1 memory[0] = rand(9**9)"))
+        );
+    }
+
+    @Test
     void convertsFunctionsReturningValues() {
         assertLogicInstructionsMatch(
                 List.of(
@@ -1400,7 +1417,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1001)),
                         createInstruction(PRINT, "a"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, "@counter", var(0)),
+                        createInstruction(GOTO, var(0)),
                         createInstruction(LABEL, var(1002)),
                         createInstruction(END)
                 ),

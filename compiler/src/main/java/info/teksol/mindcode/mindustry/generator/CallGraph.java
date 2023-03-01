@@ -151,7 +151,7 @@ public final class CallGraph {
 
     private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, Function function) {
         function.setLabel(instructionProcessor.nextLabel());
-        function.setLocalPrefix(instructionProcessor.nextLocalPrefix());
+        function.setLocalPrefix(instructionProcessor.nextLocalPrefix(function.getName()));
     }
 
     private final List<String> callStack = new ArrayList<>();

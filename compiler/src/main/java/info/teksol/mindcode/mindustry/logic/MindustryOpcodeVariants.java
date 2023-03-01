@@ -66,7 +66,7 @@ public class MindustryOpcodeVariants {
 
         add(list, V6, V7, S, BOTH, Opcode.RADAR,      radar("attr1"), radar("attr2"), radar("attr3"), sort("sort"), block("turret"), in("order"), res("result"));
 
-        add(list, V6, V7, S, FUNC, Opcode.SENSOR,     res("result"),      block("object"), sensor("property"));
+        add(list, V6, V7, S, PROP, Opcode.SENSOR,     res("result"),      block("object"), sensor("property"));
 
         add(list, V6, V7, S, NONE, Opcode.SET,        out("result"),      block("value"));
 
@@ -224,6 +224,7 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7, S, NONE, Opcode.POP,    block("memory"), out("value"));
         add(list, V6, V7, S, NONE, Opcode.CALL,   block("memory"), label("callAddr"), label("retAddr"));
         add(list, V6, V7, S, NONE, Opcode.RETURN, block("memory"));
+        add(list, V6, V7, S, NONE, Opcode.GOTO,   in("address"));
 
         return List.copyOf(list);
     }

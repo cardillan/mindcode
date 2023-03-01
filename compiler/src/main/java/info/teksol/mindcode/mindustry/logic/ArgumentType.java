@@ -187,6 +187,13 @@ public enum ArgumentType {
     }
 
     /**
+     * @return true if this argument can read or write to a variable
+     */
+    public boolean isInputOrOutput() {
+        return (flags & (Flags.INPUT + Flags.OUTPUT)) != 0;
+    }
+
+    /**
      * @return true if this argument type determines the variant of the instruction
      */
     public boolean isSelector() {

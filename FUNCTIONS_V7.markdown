@@ -1,7 +1,7 @@
 # Function reference for Minustry V7
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the instruction they encapsulate, so that functions with similar logic are listed together. The Mindcode source listed in the **Function call** column is compiled to the instruction in the **Generated instruction** column. 
-
+ 
  In some cases, a single instruction can be generated in more than one way (eg. the `radar` instruction, which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter). Both ways are identical. Additionally, some functions have optional parameters, which are marked by a question mark (eg. `building?`). Only output parameters are optional, and you may omit them if you don't need the value they return. When omitted, the optional parameter is replaced by an unused temporary variable. Mindcode allows you to omit all optional argument, but in this case the entire instruction will be considered useless and may be removed by the optimizer. 
 # Micro Processor, Logic Processor and Hyper Processor
 
@@ -65,10 +65,13 @@ Control a building.
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`block.enabled(value)`|`control enabled block value 0 0 0`|
+|`block.enabled = value`|`control enabled block value 0 0 0`|
 |`block.shoot(x, y, shoot)`|`control shoot block x y shoot 0`|
 |`block.shootp(unit, shoot)`|`control shootp block unit shoot 0 0`|
 |`block.configure(value)`<br/>Deprecated. Use `config` instead.|`control config block value 0 0 0`|
 |`block.config(value)`|`control config block value 0 0 0`|
+|`block.configure = value`<br/>Deprecated. Use `config` instead.|`control config block value 0 0 0`|
+|`block.config = value`|`control config block value 0 0 0`|
 |`block.color(r, g, b)`|`control color block r g b 0`|
 
 ## Instruction `radar`
@@ -86,7 +89,7 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = sensor(object, property)`|`sensor result object property`|
+|`result = object.sensor(property)`|`sensor result object property`|
 
 ## Instruction `op`
 

@@ -18,11 +18,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import static info.teksol.util.CollectionUtils.findFirstIndex;
-
+import java.util.stream.Stream;
 
 public class BaseFunctionMapper implements FunctionMapper {
     private final InstructionProcessor instructionProcessor;
@@ -62,20 +59,46 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     @Override
     public List<FunctionSample> generateSamples() {
-        return sampleGenerators.stream().map(
-                s -> new FunctionSample(
-                        instructionProcessor.getOpcodeVariants().indexOf(s.getOpcodeVariant()),
-                        s.getName(),
-                        s.generateSampleCall(),
-                        s.generateSampleInstruction(),
-                        s.getOpcodeVariant().getEdition(),
-                        s.getNote()
+        return Stream.concat(
+                sampleGenerators.stream().map(
+                        s -> new FunctionSample(
+                                instructionProcessor.getOpcodeVariants().indexOf(s.getOpcodeVariant()),
+                                s.getName(),
+                                s.generateSampleCall(),
+                                s.generateSampleInstruction(),
+                                s.getOpcodeVariant().getEdition(),
+                                s.getNote()
+                        )
+                ),
+                sampleGenerators.stream().filter(s -> s.generateSecondarySampleCall() != null).map(
+                        s -> new FunctionSample(
+                                instructionProcessor.getOpcodeVariants().indexOf(s.getOpcodeVariant()),
+                                s.getName(),
+                                s.generateSecondarySampleCall(),
+                                s.generateSampleInstruction(),
+                                s.getOpcodeVariant().getEdition(),
+                                s.getNote()
+                        )
                 )
         ).collect(Collectors.toList());
     }
 
-    protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
+    private LogicInstruction createInstruction(Opcode opcode, String... args) {
         return instructionProcessor.createInstruction(opcode, args);
+    }
+
+    private String stripLocalPrefix(String value) {
+        // The argument is not a variable. If there was a local prefix added, we need to strip it.
+        if (value.startsWith(instructionProcessor.getLocalPrefix())) {
+            int startIndex = value.indexOf('_', instructionProcessor.getLocalPrefix().length());
+            return startIndex >= 0 ? value.substring(startIndex + 1) : value;
+        } else {
+            return value;
+        }
+    }
+
+    private static String joinNamedArguments(List<NamedArgument> arguments) {
+        return arguments.stream().map(NamedArgument::getName).collect(Collectors.joining(", "));
     }
 
     private interface SampleGenerator {
@@ -86,6 +109,10 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         default String getNote() {
             return "";
+        }
+
+        default String generateSecondarySampleCall() {
+            return null;
         }
 
         default void register(Consumer<SampleGenerator> registry) {
@@ -135,22 +162,22 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     private PropertyHandler createPropertyHandler(OpcodeVariant opcodeVariant) {
         List<NamedArgument> arguments = opcodeVariant.getArguments();
-        int selectorIndex = findFirstIndex(arguments, a -> a.getType().isSelector());
-        int blockIndex = findFirstIndex(arguments, a -> a.getType() == ArgumentType.BLOCK);
+        Optional<NamedArgument> selector = arguments.stream().filter(a -> a.getType().isFunctionName()).findFirst();
         final int outputs = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isOutput).count();
         final int results = (int) arguments.stream().map(NamedArgument::getType).filter(a -> a == ArgumentType.RESULT).count();
         final int unused  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isUnused).count();
 
-        // As of now, we only support instructions with selector and block at the front
-        if (selectorIndex == 0 && blockIndex == 1 && outputs == 0 && unused == 0) {
-            // Number of function parameters: subtract two for selector and block (aka property and target)
-            int numArgs = arguments.size() - 2;
-            return new SimplePropertyHandler(arguments.get(0).getName(), opcodeVariant, numArgs);
-        } else {
-            Optional<NamedArgument> selector = arguments.stream().filter(a -> a.getType().isFunctionName()).findFirst();
-            String name = selector.isPresent() ? selector.get().getName() : opcodeVariant.getOpcode().toString();
-            return new ComplexPropertyHandler(name, opcodeVariant, outputs, results > 0);
+        if (results > 1) {
+            throw new InvalidMetadataException("More than one RESULT arguments in opcode " + opcodeVariant);
+        } else if (outputs == 1 && results == 0) {
+            // If there is exactly one output, it must be marked as a result
+            throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
         }
+
+        // Subtract one more for target
+        int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0) - unused - 1;
+        String name = selector.isPresent() ? selector.get().getName() : opcodeVariant.getOpcode().toString();
+        return new StandardPropertyHandler(name, opcodeVariant, numArgs, results > 0);
     }
 
     private abstract class AbstractPropertyHandler implements PropertyHandler {
@@ -192,35 +219,10 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
     }
 
-    private class SimplePropertyHandler extends AbstractPropertyHandler {
-        SimplePropertyHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
-            super(name, opcodeVariant, numArgs);
-        }
-
-        @Override
-        public String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params) {
-            checkArguments(params);
-            List<String> args = new ArrayList<>(params);
-            args.add(0, name);
-            args.add(1, target);
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
-            return "null";
-        }
-
-        @Override
-        public String generateSampleCall() {
-            List<NamedArgument> arguments = new ArrayList<>(getOpcodeVariant().getArguments());
-            NamedArgument blockArgument = CollectionUtils.removeFirstMatching(arguments, a -> a.getType() == ArgumentType.BLOCK);
-            CollectionUtils.removeFirstMatching(arguments, a -> a.getType().isSelector());
-            return blockArgument.getName() + "." + getName() + "(" + joinNamedArguments(arguments) + ")";
-        }
-    }
-
-    // More than one return value, or unused/const parameters: parameter mapping based on NamedArgument list
-    private class ComplexPropertyHandler extends AbstractPropertyHandler  {
+    private class StandardPropertyHandler extends AbstractPropertyHandler  {
         private final boolean hasResult;
 
-        ComplexPropertyHandler(String name, OpcodeVariant opcodeVariant, int numArgs, boolean hasResult) {
+        StandardPropertyHandler(String name, OpcodeVariant opcodeVariant, int numArgs, boolean hasResult) {
             super(name, opcodeVariant, numArgs);
             this.hasResult = hasResult;
         }
@@ -237,17 +239,21 @@ public class BaseFunctionMapper implements FunctionMapper {
                 if (a.getType() == ArgumentType.RESULT) {
                     args.add(tmp);
                 } else if (a.getType() == ArgumentType.BLOCK) {
+                    // No stripping: it is either a block name - already unprefixed, or a regular variable.
                     args.add(target);
                 } else if (a.getType().isSelector()  && !a.getType().isFunctionName()) {
                     // Selector that IS NOT a function name is taken from the parameter list
-                    args.add(params.get(paramIndex++));
+                    args.add(stripLocalPrefix(params.get(paramIndex++)));
                 } else if (a.getType().isSelector() || a.getType().isUnused()) {
                     // Selector that IS a function name isn't in a parameter list and must be filled in
                     // Generate new temporary variable for unused outputs (may not be necessary)
                     args.add(a.getType().isOutput() ? instructionProcessor.nextTemp() : a.getName());
-                } else {
+                } else if (a.getType().isInputOrOutput()) {
                     // Optional arguments are always output; generate temporary variable for them
-                    args.add(params.get(paramIndex++));
+                    args.add(paramIndex < params.size() ? params.get(paramIndex++) : instructionProcessor.nextTemp());
+                } else {
+                    // Not a variable - strip prefix
+                    args.add(stripLocalPrefix(params.get(paramIndex++)));
                 }
             }
 
@@ -275,6 +281,18 @@ public class BaseFunctionMapper implements FunctionMapper {
 
             str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");
             return str.toString();
+        }
+
+        @Override
+        public String generateSecondarySampleCall() {
+            List<NamedArgument> args = new ArrayList<>(getOpcodeVariant().getArguments());
+            NamedArgument blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.getType() == ArgumentType.BLOCK);
+            CollectionUtils.removeFirstMatching(args, a -> a.getType().isSelector());
+            if (args.size() == 1 && args.get(0).getType() == ArgumentType.INPUT) {
+                return blockArgument.getName() + "." + getName() + " = " + args.get(0).getName();
+            } else {
+                return null;
+            }
         }
 
         @Override
@@ -314,6 +332,18 @@ public class BaseFunctionMapper implements FunctionMapper {
             NamedArgument blockArgument = CollectionUtils.removeFirstMatching(arguments, a -> a.getType() == ArgumentType.BLOCK);
             CollectionUtils.removeFirstMatching(arguments, a -> a.getType().isSelector());
             return blockArgument.getName() + "." + deprecated + "(" + joinNamedArguments(arguments) + ")";
+        }
+
+        @Override
+        public String generateSecondarySampleCall() {
+            List<NamedArgument> args = new ArrayList<>(getOpcodeVariant().getArguments());
+            NamedArgument blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.getType() == ArgumentType.BLOCK);
+            CollectionUtils.removeFirstMatching(args, a -> a.getType().isSelector());
+            if (args.size() == 1 && args.get(0).getType() == ArgumentType.INPUT) {
+                return blockArgument.getName() + "." + deprecated + " = " + args.get(0).getName();
+            } else {
+                return null;
+            }
         }
 
         @Override
@@ -366,54 +396,35 @@ public class BaseFunctionMapper implements FunctionMapper {
         List<NamedArgument> arguments = opcodeVariant.getArguments();
         Optional<NamedArgument> selector = arguments.stream().filter(a -> a.getType().isFunctionName()).findFirst();
         String name = functionName(opcodeVariant, selector);
-        final int inputs  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isInput).count();
         final int outputs = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isOutput).count();
-        final int unused  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isUnused).count();
         final int results = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType.RESULT::equals).count();
-        final int selectorIndex = findFirstIndex(arguments, a -> a.getType().isFunctionName());
+        final int unused  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isUnused).count();
 
-        if (outputs == 1 && results == 0) {
+        if (results > 1) {
+            throw new InvalidMetadataException("More than one RESULT arguments in opcode " + opcodeVariant);
+        } else if (outputs == 1 && results == 0) {
             // If there is exactly one output, it must be marked as a result
             throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
         }
 
         // Number of function parameters: selectors and results are not in parameter list
-        int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0);
+        int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0) - unused;
 
-        if (unused == 0 && selectorIndex <= 0 && results == 0 && inputs == numArgs) {
-            // Selector, if preset, is the first argument; all other arguments are input
-            return selector.isEmpty()
-                    ? new ZeroResultsFunctionHandler(name, opcodeVariant, numArgs)
-                    : new ZeroResultsSelectorFunctionHandler(name, opcodeVariant, selector.get().getName(), numArgs);
-        } else if (unused == 0 && selectorIndex <= 0 && outputs == 1 && inputs == numArgs) {
-            // Selector, if preset, is the first argument. Then exactly one output argument - it must be of type RESULT (checked above)
-
-            int resultIndex = findFirstIndex(arguments, a -> a.getType().isOutput());
-            return selector.isEmpty()
-                    ? new SingleResultFunctionHandler(name, opcodeVariant, numArgs, resultIndex)
-                    : new SingleResultSelectorFunctionHandler(name, opcodeVariant, selector.get().getName(), numArgs, resultIndex);
-        } else {
-            if (results > 1) {
-                throw new InvalidMetadataException("more than one RESULT arguments in opcode " + opcodeVariant);
+        // Optional parameters are output arguments at the end of the argument list
+        int optional = 0;
+        for (int i = arguments.size() - 1; i >= 0; i--) {
+            ArgumentType type = arguments.get(i).getType();
+            if (!type.isOutput() && !type.isUnused()) {
+                break;
             }
-
-            // Optional parameters are output arguments at the end of the argument list
-            int optional = 0;
-            for (int i = arguments.size() - 1; i >= 0; i--) {
-                ArgumentType type = arguments.get(i).getType();
-                if (!type.isOutput() && !type.isUnused()) {
-                    break;
-                }
-                // Result and unused do not count, as they're not in the parameter list.
-                if (type.isOutput() && type != ArgumentType.RESULT && !type.isUnused()) {
-                    optional++;
-                }
+            // Result and unused do not count, as they're not in the parameter list.
+            if (type.isOutput() && type != ArgumentType.RESULT && !type.isUnused()) {
+                optional++;
             }
-
-            numArgs -= unused;
-            int minArgs = numArgs - optional;
-            return new ComplexFunctionHandler(name, opcodeVariant, minArgs, numArgs, results > 0);
         }
+
+        int minArgs = numArgs - optional;
+        return new StandardFunctionHandler(name, opcodeVariant, minArgs, numArgs, results > 0);
     }
 
     private String functionName(OpcodeVariant opcodeVariant, Optional<NamedArgument> selector) {
@@ -438,8 +449,9 @@ public class BaseFunctionMapper implements FunctionMapper {
             return functions.get(0);
         } else {
             if (functions.stream().anyMatch(fn -> !(fn instanceof SelectorFunction))) {
-                throw new InvalidMetadataException("Function name collision; " + functions.get(0).getName() + " maps to:\n"
-                        + functions.stream().map(f -> f.getOpcodeVariant().toString()).collect(Collectors.joining("\n")));
+                throw new InvalidMetadataException("Function name collision; " + functions.get(0).getName() + " maps to:"
+                        + System.lineSeparator()
+                        + functions.stream().map(f -> f.getOpcodeVariant().toString()).collect(Collectors.joining(System.lineSeparator())));
             }
 
             Map<String, FunctionHandler> keywordMap = functions.stream()
@@ -500,123 +512,11 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
     }
 
-    // No return value: all parameters passed in in given order
-    private class ZeroResultsFunctionHandler extends AbstractFunctionHandler {
-        public ZeroResultsFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
-            super(name, opcodeVariant, numArgs);
-        }
-
-        @Override
-        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
-            checkArguments(params);
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), params));
-            return "null";
-        }
-
-        @Override
-        public String generateSampleCall() {
-            return getName() + "(" + joinNamedArguments(getOpcodeVariant().getArguments()) + ")";
-        }
-    }
-
-    // No return value: selector plus all parameters passed in in given order
-    private class ZeroResultsSelectorFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
-        private final String keyword;
-
-        ZeroResultsSelectorFunctionHandler(String name, OpcodeVariant opcodeVariant, String keyword, int numArgs) {
-            super(name, opcodeVariant, numArgs);
-            this.keyword = keyword;
-        }
-
-        @Override
-        public String getKeyword() {
-            return keyword;
-        }
-
-        @Override
-        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
-            checkArguments(params);
-            List<String> args = new ArrayList<>(params);
-            args.add(0, keyword);
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
-            return "null";
-        }
-
-        @Override
-        public String generateSampleCall() {
-            return getName() + "(" + joinNamedArguments(getOpcodeVariant().getArguments(), a -> !a.getType().isSelector()) + ")";
-        }
-    }
-
-    // Single return value: all other parameters passed in in given order, result inserted into arg list at proper position
-    private class SingleResultFunctionHandler extends AbstractFunctionHandler {
-        private final int resultPosition;
-
-        SingleResultFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs, int resultPosition) {
-            super(name, opcodeVariant, numArgs);
-            this.resultPosition = resultPosition;
-        }
-
-        @Override
-        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
-            checkArguments(params);
-            String tmp = instructionProcessor.nextTemp();
-            List<String> args = new ArrayList<>(params);
-            args.add(resultPosition, tmp);
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
-            return tmp;
-        }
-
-        @Override
-        public String generateSampleCall() {
-            List<NamedArgument> arguments = new ArrayList<>(getOpcodeVariant().getArguments());
-            NamedArgument result = CollectionUtils.removeFirstMatching(arguments, a -> a.getType() == ArgumentType.RESULT);
-            return result.getName() + " = " + getName() + "(" + joinNamedArguments(arguments) + ")";
-        }
-    }
-
-    // Single return value: selector plus all other parameters passed in in given order, result inserted into arg list at proper position
-    private class SingleResultSelectorFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
-        private final String keyword;
-        private final int resultPosition;
-
-        SingleResultSelectorFunctionHandler(String name, OpcodeVariant opcodeVariant, String keyword, int numArgs, int resultPosition) {
-            super(name, opcodeVariant, numArgs);
-            this.keyword = keyword;
-            this.resultPosition = resultPosition;
-        }
-
-        @Override
-        public String getKeyword() {
-            return keyword;
-        }
-
-        @Override
-        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
-            checkArguments(params);
-            String tmp = instructionProcessor.nextTemp();
-            List<String> args = new ArrayList<>(params);
-            args.add(0, keyword);
-            args.add(resultPosition, tmp);
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
-            return tmp;
-        }
-
-        @Override
-        public String generateSampleCall() {
-            List<NamedArgument> arguments = new ArrayList<>(getOpcodeVariant().getArguments());
-            NamedArgument result = CollectionUtils.removeFirstMatching(arguments, a -> a.getType() == ArgumentType.RESULT);
-            CollectionUtils.removeFirstMatching(arguments, a -> a.getType().isSelector());
-            return result.getName() + " = " + getName() + "(" + joinNamedArguments(arguments) + ")";
-        }
-    }
-
-    // More than one return value, or unused/const parameters: parameter mapping based on NamedArgument list
-    private class ComplexFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
+    private class StandardFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
         private final Optional<String> keyword;
         private final boolean hasResult;
 
-        ComplexFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs, boolean hasResult) {
+        StandardFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs, boolean hasResult) {
             super(name, opcodeVariant, minArgs, numArgs);
             this.keyword = opcodeVariant.getArguments().stream().filter(a -> a.getType().isSelector()).map(NamedArgument::getName).findFirst();
             this.hasResult = hasResult;
@@ -643,14 +543,17 @@ public class BaseFunctionMapper implements FunctionMapper {
                     args.add(tmp);
                 } else if (a.getType().isSelector()  && !a.getType().isFunctionName()) {
                     // Selector that IS NOT a function name is taken from the parameter list
-                    args.add(params.get(paramIndex++));
+                    args.add(stripLocalPrefix(params.get(paramIndex++)));
                 } else if (a.getType().isSelector() || a.getType().isUnused()) {
                     // Selector that IS a function name isn't in a parameter list and must be filled in
                     // Generate new temporary variable for unused outputs (may not be necessary)
                     args.add(a.getType().isOutput() ? instructionProcessor.nextTemp() : a.getName());
-                } else {
+                } else if (a.getType().isInputOrOutput()) {
                     // Optional arguments are always output; generate temporary variable for them
                     args.add(paramIndex < params.size() ? params.get(paramIndex++) : instructionProcessor.nextTemp());
+                } else {
+                    // Not a variable - strip prefix
+                    args.add(stripLocalPrefix(params.get(paramIndex++)));
                 }
             }
 
@@ -734,13 +637,5 @@ public class BaseFunctionMapper implements FunctionMapper {
         public String generateSampleCall() {
             return getName() + "(" + joinNamedArguments(getOpcodeVariant().getArguments()) + ")";
         }
-    }
-
-    private static String joinNamedArguments(List<NamedArgument> arguments) {
-        return arguments.stream().map(NamedArgument::getName).collect(Collectors.joining(", "));
-    }
-
-    private static String joinNamedArguments(List<NamedArgument> arguments, Predicate<NamedArgument> filter) {
-        return arguments.stream().filter(filter).map(NamedArgument::getName).collect(Collectors.joining(", "));
     }
 }

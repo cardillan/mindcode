@@ -1,11 +1,10 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 class DeadCodeEliminator extends GlobalOptimizer {
@@ -28,15 +27,22 @@ class DeadCodeEliminator extends GlobalOptimizer {
         super.generateFinalMessages();
         
         String eliminated = eliminations.stream()
-                .filter(s -> !isTemporary(s))
-                .filter(s -> !s.startsWith(instructionProcessor.getRetValPrefix()))
+                .filter(s -> !isTemporary(s)
+                        && !s.startsWith(instructionProcessor.getRetValPrefix())
+                        && !isFunctionReturnVariable(s))
+                .map(this::resolveVaribleName)
                 .sorted()
+                .distinct()
                 .collect(Collectors.joining(", "));
         
         String uninitialized = reads.stream()
-                .filter(s -> !writes.containsKey(s) && s.matches("[a-zA-Z].*") && 
-                        !instructionProcessor.getConstantNames().contains(s) && !isBlockName(s))
+                .filter(s -> !writes.containsKey(s)
+                        && (s.matches("(__fn\\d+_|[a-zA-Z].*)") || isLocalVariable(s))
+                        && !instructionProcessor.getConstantNames().contains(s)
+                        && !instructionProcessor.isBlockName(s))
+                .map(this::resolveVaribleName)
                 .sorted()
+                .distinct()
                 .collect(Collectors.joining(", "));
         
         if (!eliminated.isEmpty()) {
@@ -47,14 +53,20 @@ class DeadCodeEliminator extends GlobalOptimizer {
             emitMessage("       list of uninitialized variables: %s.", uninitialized);
         }
     }
-    
-    private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
-    
-    private boolean isBlockName(String name) {
-        Matcher matcher = BLOCK_NAME_PATTERN.matcher(name);
-        return matcher.find() && instructionProcessor.getBlockNames().contains(matcher.group(1));
+
+    private boolean isLocalVariable(String id) {
+        return id.matches(instructionProcessor.getLocalPrefix() + "\\d+_.*");
     }
-    
+
+    private boolean isFunctionReturnVariable(String id) {
+        return id.matches(instructionProcessor.getLocalPrefix() + "\\d+retval");
+    }
+
+    private String resolveVaribleName(String id) {
+        Tuple2<String, String> parsed = instructionProcessor.parseVariable(id);
+        return parsed.getT1() == null ? id : parsed.getT1() + "." + parsed.getT2();
+    }
+
     private void analyzeDataflow() {
         reads.clear();
         writes.clear();

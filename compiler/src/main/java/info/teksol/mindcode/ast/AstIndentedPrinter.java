@@ -80,9 +80,10 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitHeapAccess(HeapAccess node) {
-        buffer.append("HeapAccess{")
-                .append("cellName='").append(node.getCellName()).append('\'')
-                .append(", address='").append(node.getAddress()).append("'}");
+        open("HeapAccess{");
+        print("cellName="); visit(node.getCellName()); newLine(",");
+        print("address="); visit(node.getAddress());
+        close("}");
         return null;
     }
 

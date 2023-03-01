@@ -282,10 +282,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Assignment(
-                                new HeapAccess(
-                                        "cell2",
-                                        new NumericLiteral("1")
-                                ),
+                                new HeapAccess("cell2", new NumericLiteral("1")),
                                 new HeapAccess("cell3", new NumericLiteral("0"))
                         )
                 ),
@@ -305,15 +302,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 )
                         ),
                         new Assignment(
-                                new HeapAccess(
-                                        "cell2",
-                                        new NumericLiteral("5")
-                                ),
+                                new HeapAccess("cell2", new NumericLiteral("5")),
                                 new BinaryOp(
-                                        new HeapAccess(
-                                                "cell2",
-                                                new NumericLiteral("4")
-                                        ),
+                                        new HeapAccess("cell2", new NumericLiteral("4")),
                                         "+",
                                         new NumericLiteral("42")
                                 )
@@ -329,10 +320,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Assignment(
-                                new HeapAccess(
-                                        "cell1",
-                                        new NumericLiteral("0")
-                                ),
+                                new HeapAccess("cell1" ,new NumericLiteral("0")),
                                 new FunctionCall(
                                         "rand",
                                         List.of(
@@ -354,10 +342,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Assignment(
-                                new HeapAccess(
-                                        "cell1",
-                                        new VarRef("dx")
-                                ),
+                                new HeapAccess("cell1", new VarRef("dx")),
                                 new NumericLiteral("1")
                         )
                 ),
@@ -451,10 +436,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Assignment(
-                                new HeapAccess(
-                                        "cell1",
-                                        new VarRef("ptr")
-                                ),
+                                new HeapAccess("cell1", new VarRef("ptr")),
                                 new BinaryOp(
                                         new HeapAccess(
                                                 "cell1",
@@ -734,10 +716,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 ),
                                 new Seq(
                                         new Assignment(
-                                                new HeapAccess(
-                                                        "cell1",
-                                                        new NumericLiteral("2")
-                                                ),
+                                                new HeapAccess("cell1", new NumericLiteral("2")),
                                                 new BinaryOp(
                                                         new HeapAccess("cell1", new NumericLiteral("2")),
                                                         "+",
@@ -768,10 +747,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                         new Seq(
                                                 new Seq(
                                                         new Assignment(
-                                                                new HeapAccess(
-                                                                        "cell1",
-                                                                        new NumericLiteral("4")
-                                                                ),
+                                                                new HeapAccess("cell1", new NumericLiteral("4")),
                                                                 new BooleanLiteral(true)
                                                         )
                                                 ),

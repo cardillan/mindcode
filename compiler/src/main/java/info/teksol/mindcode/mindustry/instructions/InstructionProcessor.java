@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry.instructions;
 
+import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.mindustry.logic.ArgumentType;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import info.teksol.mindcode.mindustry.logic.OpcodeVariant;
@@ -22,7 +23,9 @@ public interface InstructionProcessor {
 
     String nextReturnValue();
 
-    String nextLocalPrefix();
+    String nextLocalPrefix(String functionName);
+
+    Tuple2<String, String> parseVariable(String id);
 
     /**
      * @return the list of opcode variants available to this instruction processor.
@@ -46,6 +49,26 @@ public interface InstructionProcessor {
      * @return a new, validated instance of LogicInstruction
      */
     LogicInstruction createInstruction(Opcode opcode, List<String> arguments);
+
+    /**
+     * Creates and validates a new LogicInstruction with a marker.
+     *
+     * @param marker marker for the instruction
+     * @param opcode opcode of the instruction
+     * @param arguments arguments of the instruction
+     * @return a new, validated instance of LogicInstruction
+     */
+    LogicInstruction createInstruction(String marker, Opcode opcode, String... arguments);
+
+    /**
+     * Creates and validates a new LogicInstruction with a marker.
+     *
+     * @param marker marker for the instruction
+     * @param opcode opcode of the instruction
+     * @param arguments arguments of the instruction
+     * @return a new, validated instance of LogicInstruction
+     */
+    LogicInstruction createInstruction(String marker, Opcode opcode, List<String> arguments);
 
     /**
      * Creates a sample logic instruction from given opcode variant.
@@ -236,6 +259,23 @@ public interface InstructionProcessor {
      * @return the set of block names
      */
     Set<String> getBlockNames();
+
+    /**
+     * Determines whether the identifier could be a block name (such as switch1, cell2, projector3 etc.).
+     *
+     * @param identifier identifier to check
+     * @return true if it conforms to Mindustry Logic block name
+     */
+    boolean isBlockName(String identifier);
+
+    /**
+     * Determines whether the identifier denotes a main (global) variable. Such identifiers are either all-caps
+     * identifiers, or possible block names.
+     *
+     * @param identifier identifier to check
+     * @return true if the identifier denotes a main variable
+     */
+    boolean isGlobalName(String identifier);
 
     default String getLabelPrefix() {
         return "__label";

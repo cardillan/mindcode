@@ -1,6 +1,7 @@
 package info.teksol.mindcode.mindustry.instructions;
 
 import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.mindustry.generator.GenerationException;
 import info.teksol.mindcode.mindustry.logic.ArgumentType;
 import info.teksol.mindcode.mindustry.logic.NamedArgument;
@@ -14,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -33,6 +36,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
     private final Map<ArgumentType, Set<String>> validArgumentValues;
+    private final Map<String, String> functionByPrefix = new HashMap<>();
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int functionIndex = 0;
@@ -70,8 +74,20 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public String nextLocalPrefix() {
-        return getLocalPrefix() + functionIndex++;
+    public String nextLocalPrefix(String functionName) {
+        String prefix = getLocalPrefix() + functionIndex++;
+        functionByPrefix.put(prefix, functionName);
+        return prefix;
+    }
+
+    @Override
+    public Tuple2<String, String> parseVariable(String id) {
+        if (id.startsWith(getLocalPrefix())) {
+            int index = id.indexOf('_', getLocalPrefix().length());
+            return new Tuple2<>(functionByPrefix.get(id.substring(0, index)), id.substring(index + 1));
+        } else {
+            return new Tuple2<>(null, id);
+        }
     }
 
     @Override
@@ -97,6 +113,16 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public LogicInstruction createInstruction(Opcode opcode, List<String> arguments) {
         return validate(new LogicInstruction(opcode, arguments));
+    }
+
+    @Override
+    public LogicInstruction createInstruction(String marker, Opcode opcode, String... arguments) {
+        return createInstruction(marker, opcode, List.of(arguments));
+    }
+
+    @Override
+    public LogicInstruction createInstruction(String marker, Opcode opcode, List<String> arguments) {
+        return validate(new LogicInstruction(marker, opcode, arguments));
     }
 
     @Override
@@ -156,6 +182,12 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 );
             }
 
+            case GOTO: {
+                return List.of(
+                        createInstruction(Opcode.SET, "@counter", virtualInstruction.getArg(0))
+                );
+            }
+
             default:
                 throw new GenerationException("Don't know how to resolve instruction " + virtualInstruction);
         }
@@ -163,21 +195,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public int getRealSize(LogicInstruction instruction) {
-        switch (instruction.getOpcode()) {
-            case LABEL:
-                return 0;
-
-            case PUSH:
-            case POP:
-                return 2;
-
-            case CALL:
-            case RETURN:
-                return 3;
-
-            default:
-                return 1;
-        }
+        return instruction.getOpcode().getSize();
     }
 
     @Override
@@ -246,7 +264,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public List<String> getInputOutputValues(LogicInstruction instruction) {
         return getTypedArguments(instruction)
-                .filter(a -> a.getArgumentType().isInput()|| a.getArgumentType().isOutput())
+                .filter(a -> a.getArgumentType().isInputOrOutput())
                 .map(TypedArgument::getValue)
                 .collect(Collectors.toUnmodifiableList());
     }
@@ -367,6 +385,19 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                     .flatMap(v -> v.values.stream())
                     .collect(Collectors.toUnmodifiableSet());
         }
+    }
+
+    private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
+
+    @Override
+    public boolean isBlockName(String identifier) {
+        Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
+        return matcher.find() && getBlockNames().contains(matcher.group(1));
+    }
+
+    @Override
+    public boolean isGlobalName(String identifier) {
+        return identifier.equals(identifier.toUpperCase()) || isBlockName(identifier);
     }
 
     // These structures are static for now. Can be made version dependent if needed in the future.

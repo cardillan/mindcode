@@ -47,6 +47,7 @@ public enum Opcode {
     POP             ("pop",             2),
     CALL            ("call",            3),
     RETURN          ("return",          3),
+    GOTO            ("goto",            1),
     ;
     
     private final String opcode;

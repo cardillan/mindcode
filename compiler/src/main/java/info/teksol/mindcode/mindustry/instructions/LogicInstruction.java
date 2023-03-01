@@ -10,11 +10,22 @@ public class LogicInstruction {
     private final Opcode opcode;
     private final List<String> args;
 
+    // Used to mark instructions that belong together -- provides additional information to optimizers.
+    // Marker is not considered by hashCode or equals!!
+    private final String marker;
+
     LogicInstruction(Opcode opcode, List<String> args) {
         this.opcode = opcode;
         this.args = List.copyOf(args);
+        this.marker = null;
     }
     
+    LogicInstruction(String marker, Opcode opcode, List<String> args) {
+        this.opcode = opcode;
+        this.args = List.copyOf(args);
+        this.marker = marker;
+    }
+
     public boolean isWrite() {
         return opcode == WRITE;
     }
@@ -79,6 +90,10 @@ public class LogicInstruction {
         return opcode == RETURN;
     }
 
+    public boolean isGoto() {
+        return opcode == GOTO;
+    }
+
     public Opcode getOpcode() {
         return opcode;
     }
@@ -89,6 +104,14 @@ public class LogicInstruction {
 
     public String getArg(int index) {
         return args.get(index);
+    }
+
+    public String getMarker() {
+        return marker;
+    }
+
+    public boolean matchesMarker(String marker) {
+        return this.marker!= null && this.marker.equals(marker);
     }
 
     @Override
