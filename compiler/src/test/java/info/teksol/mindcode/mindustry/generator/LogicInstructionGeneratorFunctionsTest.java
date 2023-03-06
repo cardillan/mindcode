@@ -20,7 +20,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 List.of(
                         createInstruction(SET, var(0), "3"),
                         createInstruction(SET, "__fn0_n", var(0)),
-                        createInstruction(PRINT, "__fn0_n"),
+                        createInstruction(SET, var(1), "__fn0_n"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(PRINT, var(1)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -55,6 +57,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(SET, "__fn0retval", "__fn0_n"),
+                        createInstruction(LABEL, var(1003)),
                         createInstruction(SET, "@counter", "__fn0retaddr"),
                         createInstruction(END)
                 ),
@@ -76,10 +79,14 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 List.of(
                         createInstruction(SET, var(0), "3"),
                         createInstruction(SET, "__fn0_n", var(0)),
-                        createInstruction(PRINT, "__fn0_n"),
-                        createInstruction(SET, var(1), "4"),
-                        createInstruction(SET, "__fn1_n", var(1)),
-                        createInstruction(PRINT, "__fn1_n"),
+                        createInstruction(SET, var(1), "__fn0_n"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(PRINT, var(1)),
+                        createInstruction(SET, var(2), "4"),
+                        createInstruction(SET, "__fn1_n", var(2)),
+                        createInstruction(SET, var(3), "__fn1_n"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(PRINT, var(3)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -114,6 +121,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(POP, "bank1", "__fn0_n"),
                         createInstruction(SET, var(2), "__fn0retval"),
                         createInstruction(SET, "__fn0retval", var(2)),
+                        createInstruction(LABEL, var(1003)),
                         createInstruction(RETURN, "bank1"),
                         createInstruction(END)
                 ),
@@ -156,6 +164,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(3), "__fn1retval"),
                         createInstruction(OP, "sub", var(4), var(2), var(3)),
                         createInstruction(SET, "__fn0retval", var(4)),
+                        createInstruction(LABEL, var(1005)),
                         createInstruction(RETURN, "bank1"),
                         createInstruction(END),
                         // def bar
@@ -172,6 +181,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(6), "__fn0retval"),
                         createInstruction(OP, "add", var(7), var(5), var(6)),
                         createInstruction(SET, "__fn1retval", var(7)),
+                        createInstruction(LABEL, var(1006)),
                         createInstruction(RETURN, "bank1"),
                         createInstruction(END)
                 ),
@@ -198,7 +208,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(2), "2"),
                         createInstruction(OP, "pow", var(3), "__fn0_n", "__fn0_r"),
                         createInstruction(OP, "mul", var(4), var(2), var(3)),
-                        createInstruction(SET, "x", var(4)),
+                        createInstruction(SET, var(5), var(4)),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, "x", var(5)),
                         createInstruction(PRINT, "x"),
                         createInstruction(PRINTFLUSH, "message1"),
                         createInstruction(END)
@@ -223,15 +235,21 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 List.of(
                         createInstruction(SET, var(0), "4"),
                         createInstruction(SET, "__fn0_n", var(0)),
-                        createInstruction(SET, var(1), "1"),
+                        createInstruction(SET, var(2), "1"),
                         createInstruction(SET, "__fn1_n", "__fn0_n"),
-                        createInstruction(SET, var(2), "2"),
+                        createInstruction(SET, var(4), "2"),
                         createInstruction(SET, "__fn2_n", "__fn1_n"),
-                        createInstruction(SET, var(3), "3"),
-                        createInstruction(OP, "pow", var(4), var(3), "__fn2_n"),
-                        createInstruction(OP, "mul", var(5), var(2), var(4)),
-                        createInstruction(OP, "add", var(6), var(1), var(5)),
-                        createInstruction(PRINT, var(6)),
+                        createInstruction(SET, var(6), "3"),
+                        createInstruction(OP, "pow", var(7), var(6), "__fn2_n"),
+                        createInstruction(SET, var(5), var(7)),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(OP, "mul", var(8), var(4), var(5)),
+                        createInstruction(SET, var(3), var(8)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(OP, "add", var(9), var(2), var(3)),
+                        createInstruction(SET, var(1), var(9)),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(PRINT, var(1)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -289,6 +307,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(LABEL, var(1007)),
                         createInstruction(OP, "mul", var(9), var(8), "__fn2retval"),
                         createInstruction(SET, "__fn0retval", var(9)),
+                        createInstruction(LABEL, var(1009)),
                         createInstruction(SET, "@counter", "__fn0retaddr"),
                         createInstruction(END),
                         // def foo
@@ -301,6 +320,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(LABEL, var(1008)),
                         createInstruction(OP, "add", var(11), var(10), "__fn0retval"),
                         createInstruction(SET, "__fn1retval", var(11)),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "@counter", "__fn1retaddr"),
                         createInstruction(END),
                         // def baz
@@ -308,6 +328,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(12), "3"),
                         createInstruction(OP, "pow", var(13), var(12), "__fn2_n"),
                         createInstruction(SET, "__fn2retval", var(13)),
+                        createInstruction(LABEL, var(1011)),
                         createInstruction(SET, "@counter", "__fn2retaddr"),
                         createInstruction(END)
                 ),
@@ -347,6 +368,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(LABEL, var(1002)),
                         createInstruction(SET, var(3), "__fn0retval"),
                         createInstruction(SET, "__fn0retval", var(3)),
+                        createInstruction(LABEL, var(1003)),
                         createInstruction(RETURN, "STACKPTR"),
                         createInstruction(END)
                 ),
@@ -371,15 +393,21 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 List.of(
                         createInstruction(SET, var(0), "4"),
                         createInstruction(SET, "__fn0_n", var(0)),
-                        createInstruction(SET, var(1), "1"),
-                        createInstruction(OP, "add", var(2), "__fn0_n", var(1)),
-                        createInstruction(SET, "__fn1_n", var(2)),
-                        createInstruction(SET, var(3), "1"),
-                        createInstruction(OP, "add", var(4), "__fn1_n", var(3)),
-                        createInstruction(SET, "__fn2_n", var(4)),
+                        createInstruction(SET, var(2), "1"),
+                        createInstruction(OP, "add", var(3), "__fn0_n", var(2)),
+                        createInstruction(SET, var(1), var(3)),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, "__fn1_n", var(1)),
                         createInstruction(SET, var(5), "1"),
-                        createInstruction(OP, "add", var(6), "__fn2_n", var(5)),
-                        createInstruction(PRINT, var(6)),
+                        createInstruction(OP, "add", var(6), "__fn1_n", var(5)),
+                        createInstruction(SET, var(4), var(6)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(SET, "__fn2_n", var(4)),
+                        createInstruction(SET, var(8), "1"),
+                        createInstruction(OP, "add", var(9), "__fn2_n", var(8)),
+                        createInstruction(SET, var(7), var(9)),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(PRINT, var(7)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -418,6 +446,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(4), "1"),
                         createInstruction(OP, "add", var(5), "__fn0_n", var(4)),
                         createInstruction(SET, "__fn0retval", var(5)),
+                        createInstruction(LABEL, var(1004)),
                         createInstruction(SET, "@counter", "__fn0retaddr"),
                         createInstruction(END)
                 ),
@@ -462,6 +491,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(POP, "bank1", "__fn0_n"),
                         createInstruction(SET, var(6), "__fn0retval"),
                         createInstruction(SET, "__fn0retval", var(6)),
+                        createInstruction(LABEL, var(1005)),
                         createInstruction(RETURN, "bank1"),
                         createInstruction(END)
                 ),
@@ -517,6 +547,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(4), var(11)),
                         createInstruction(LABEL, var(1003)),
                         createInstruction(SET, "__fn0retval", var(4)),
+                        createInstruction(LABEL, var(1006)),
                         createInstruction(RETURN, "bank1"),
                         createInstruction(END)
                 ),
@@ -550,6 +581,8 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         // call bar (inline - creates __fn1_n)
                         createInstruction(SET, "__fn1_n", "__fn0_n"),
                         createInstruction(PRINT, "__fn1_n"),
+                        createInstruction(SET, var(9), "__fn1_n"),
+                        createInstruction(LABEL, var(1004)),
                         createInstruction(SET, var(2), "1"),
                         createInstruction(OP, "sub", var(3), "__fn0_n", var(2)),
                         createInstruction(PUSH, "bank1", "__fn0_n"),
@@ -559,6 +592,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(POP, "bank1", "__fn0_n"),
                         createInstruction(SET, var(4), "__fn0retval"),
                         createInstruction(SET, "__fn0retval", var(4)),
+                        createInstruction(LABEL, var(1003)),
                         createInstruction(RETURN, "bank1"),
                         createInstruction(END)
                 ),
@@ -592,6 +626,8 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(5), "1"),
                         createInstruction(RADAR, "enemy", "boss", "any", "distance", "lancer1", var(5), var(6)),
                         createInstruction(PRINT, var(6)),
+                        createInstruction(SET, var(0), var(6)),
+                        createInstruction(LABEL, var(1000)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -608,12 +644,255 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     }
 
     @Test
+    void handlesInlineReturn() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, var(0), "0"),
+                        createInstruction(SET, "__fn0_n", var(0)),
+                        createInstruction(SET, var(2), "2"),
+                        createInstruction(OP, "mod", var(3), "__fn0_n", var(2)),
+                        createInstruction(SET, var(4), "1"),
+                        createInstruction(OP, "equal", var(5), var(3), var(4)),
+                        createInstruction(JUMP, var(1001), "equal", var(5), "false"),
+                        createInstruction(SET, var(7), "\"odd\""),
+                        createInstruction(SET, var(1), var(7)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(SET, var(6), "null"),
+                        createInstruction(JUMP, var(1002), "always"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(SET, var(8), "\"even\""),
+                        createInstruction(SET, var(1), var(8)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(SET, var(6), "null"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(SET, var(1), var(6)),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(PRINT, var(1)),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "def a(n) "
+                                + "    if n % 2 == 1 "
+                                + "        return \"odd\" "
+                                + "    else "
+                                + "        return \"even\" "
+                                + "    end "
+                                + "end "
+                                + "print(a(0))"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void handlesStacklessReturn() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, var(0), "0"),
+                        createInstruction(SET, "__fn0_n", var(0)),
+                        createInstruction(SET, "__fn0retaddr", var(1001)),
+                        createInstruction(SET, "@counter", var(1000)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(SET, var(1), "__fn0retval"),
+                        createInstruction(PRINT, var(1)),
+                        createInstruction(SET, var(2), "1"),
+                        createInstruction(SET, "__fn0_n", var(2)),
+                        createInstruction(SET, "__fn0retaddr", var(1002)),
+                        createInstruction(SET, "@counter", var(1000)),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(SET, var(3), "__fn0retval"),
+                        createInstruction(PRINT, var(3)),
+                        createInstruction(END),
+                        // def a
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, var(4), "2"),
+                        createInstruction(OP, "mod", var(5), "__fn0_n", var(4)),
+                        createInstruction(SET, var(6), "1"),
+                        createInstruction(OP, "equal", var(7), var(5), var(6)),
+                        createInstruction(JUMP, var(1004), "equal", var(7), "false"),
+                        createInstruction(SET, var(9), "\"odd\""),
+                        createInstruction(SET, "__fn0retval", var(9)),
+                        createInstruction(JUMP, var(1003), "always"),
+                        createInstruction(SET, var(8), "null"),
+                        createInstruction(JUMP, var(1005), "always"),
+                        createInstruction(LABEL, var(1004)),
+                        createInstruction(SET, var(10), "\"even\""),
+                        createInstruction(SET, "__fn0retval", var(10)),
+                        createInstruction(JUMP, var(1003), "always"),
+                        createInstruction(SET, var(8), "null"),
+                        createInstruction(LABEL, var(1005)),
+                        createInstruction(SET, "__fn0retval", var(8)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(SET, "@counter", "__fn0retaddr"),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "def a(n) "
+                                + "    if n % 2 == 1 "
+                                + "        return \"odd\" "
+                                + "    else "
+                                + "        return \"even\" "
+                                + "    end "
+                                + "end "
+                                + "print(a(0))"
+                                + "print(a(1))"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void handlesRecursiveReturn() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, "__sp", "511"),
+                        // call gdc
+                        createInstruction(SET, var(0), "115"),
+                        createInstruction(SET, var(1), "78"),
+                        createInstruction(SET, "__fn0_a", var(0)),
+                        createInstruction(SET, "__fn0_b", var(1)),
+                        createInstruction(CALL, "bank1", var(1000), var(1001)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(SET, var(2), "__fn0retval"),
+                        createInstruction(PRINT, var(2)),
+                        createInstruction(END),
+                        // def gdc
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, var(3), "0"),
+                        createInstruction(OP, "equal", var(4), "__fn0_b", var(3)),
+                        createInstruction(JUMP, var(1003), "equal", var(4), "false"),
+                        // return a
+                        createInstruction(SET, "__fn0retval", "__fn0_a"),
+                        createInstruction(JUMP, var(1002), "always"),
+                        createInstruction(SET, var(5), "null"),
+                        createInstruction(JUMP, var(1004), "always"),
+                        createInstruction(LABEL, var(1003)),
+                        // call gdc
+                        createInstruction(OP, "mod", var(6), "__fn0_a", "__fn0_b"),
+                        createInstruction(PUSH, "bank1", "__fn0_a"),
+                        createInstruction(PUSH, "bank1", "__fn0_b"),
+                        createInstruction(SET, "__fn0_a", "__fn0_b"),
+                        createInstruction(SET, "__fn0_b", var(6)),
+                        createInstruction(CALL, "bank1", var(1000), var(1005)),
+                        createInstruction(LABEL, var(1005)),
+                        createInstruction(POP, "bank1", "__fn0_b"),
+                        createInstruction(POP, "bank1", "__fn0_a"),
+                        createInstruction(SET, var(7), "__fn0retval"),
+                        // return gdc(...)
+                        createInstruction(SET, "__fn0retval", var(7)),
+                        createInstruction(JUMP, var(1002), "always"),
+                        createInstruction(SET, var(5), "null"),
+                        createInstruction(LABEL, var(1004)),
+                        createInstruction(SET, "__fn0retval", var(5)),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(RETURN, "bank1"),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "allocate stack in bank1[0...512] "
+                                + "def gdc(a,b) "
+                                + "    if b == 0 "
+                                + "        return a "
+                                + "    else "
+                                + "        return gdc(b, a % b) "
+                                + "    end "
+                                + "end "
+                                + "print(gdc(115, 78))"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void handlesNestedInlineReturn() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, var(0), "4"),
+                        createInstruction(SET, "__fn0_n", var(0)),
+                        createInstruction(SET, var(2), "1"),
+                        createInstruction(SET, "__fn1_n", "__fn0_n"),
+                        createInstruction(SET, var(4), "2"),
+                        createInstruction(SET, "__fn2_n", "__fn1_n"),
+                        createInstruction(SET, var(6), "3"),
+                        createInstruction(OP, "pow", var(7), var(6), "__fn2_n"),
+                        createInstruction(SET, var(5), var(7)),
+                        createInstruction(JUMP, var(1002), "always"),
+                        createInstruction(SET, var(5), "null"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(OP, "mul", var(8), var(4), var(5)),
+                        createInstruction(SET, var(3), var(8)),
+                        createInstruction(JUMP, var(1001), "always"),
+                        createInstruction(SET, var(3), "null"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(OP, "add", var(9), var(2), var(3)),
+                        createInstruction(SET, var(1), var(9)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(SET, var(1), "null"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(PRINT, var(1)),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "def foo(n) return 1 + bar(n) end "
+                                + "def bar(n) return 2 * baz(n) end "
+                                + "def baz(n) return 3 ** n end "
+                                + "print(foo(4))"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void handlesNestedFunctionCallsInlineWithReturn() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, var(0), "4"),
+                        createInstruction(SET, "__fn0_n", var(0)),
+                        createInstruction(SET, var(2), "1"),
+                        createInstruction(OP, "add", var(3), "__fn0_n", var(2)),
+                        createInstruction(SET, var(1), var(3)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(SET, var(1), "null"),
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, "__fn1_n", var(1)),
+                        createInstruction(SET, var(5), "1"),
+                        createInstruction(OP, "add", var(6), "__fn1_n", var(5)),
+                        createInstruction(SET, var(4), var(6)),
+                        createInstruction(JUMP, var(1001), "always"),
+                        createInstruction(SET, var(4), "null"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(SET, "__fn2_n", var(4)),
+                        createInstruction(SET, var(8), "1"),
+                        createInstruction(OP, "add", var(9), "__fn2_n", var(8)),
+                        createInstruction(SET, var(7), var(9)),
+                        createInstruction(JUMP, var(1002), "always"),
+                        createInstruction(SET, var(7), "null"),
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(PRINT, var(7)),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "inline def a(n) return n + 1 end "
+                                + "print(a(a(a(4))))"
+                        )
+                )
+        );
+    }
+
+    @Test
     void accessesMainVariables() {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "7"),
                         createInstruction(SET, "__fn0_x", var(0)),
                         createInstruction(SET, "X", "__fn0_x"),
+                        createInstruction(SET, var(1), "__fn0_x"),
+                        createInstruction(LABEL, var(1000)),
                         createInstruction(PRINT, "X"),
                         createInstruction(END)),
                 generateUnoptimized(

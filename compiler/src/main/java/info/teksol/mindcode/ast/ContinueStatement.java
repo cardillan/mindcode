@@ -25,6 +25,6 @@ public class ContinueStatement extends BaseAstNode {
 
     @Override
     public String toString() {
-        return "Continue{" + (label == null ? "" : "label='" + label) + "'}";
+        return "ContinueStatement{" + (label == null ? "" : "label='" + label + '\'') + '}';
     }
 }

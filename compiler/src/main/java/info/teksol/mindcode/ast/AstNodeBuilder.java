@@ -88,6 +88,12 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitReturn_exp(MindcodeParser.Return_expContext ctx) {
+        AstNode retval = ctx.return_st().retval == null ? new NullLiteral() : visit(ctx.return_st().retval);
+        return new ReturnStatement(retval);
+    }
+
+    @Override
     public AstNode visitBinop_exp(MindcodeParser.Binop_expContext ctx) {
         return new BinaryOp(
                 visit(ctx.left),

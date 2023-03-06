@@ -291,4 +291,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
         print(node);
         return null;
     }
+
+    @Override
+    public String visitReturnStatement(ReturnStatement node) {
+        open("ReturnStatement{");
+        print("retval="); visit(node.getRetval());
+        close("}");
+        return null;
+    }
 }

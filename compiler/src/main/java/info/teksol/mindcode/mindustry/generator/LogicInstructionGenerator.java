@@ -29,6 +29,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private final FunctionMapper functionMapper;
     private final LogicInstructionPipeline pipeline;
     private final LoopStack loopStack = new LoopStack();
+    private final ReturnStack returnStack = new ReturnStack();
 
     // Contains the infromation about functions built from the program to support code generation
     private CallGraph callGraph;
@@ -151,6 +152,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             localPrefix = function.getLocalPrefix();
             functionContext = new LocalContext();
             pipeline.emit(createInstruction(Opcode.LABEL, function.getLabel()));
+            returnStack.enterFunction(nextLabel(), localPrefix + RETURN_VALUE);
 
             if (function.isRecursive()) {
                 appendRecursiveFunctionDeclaration(function);
@@ -160,6 +162,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
             pipeline.emit(createInstruction(END));
             localPrefix = "";
+            returnStack.exitFunction();
             currentFunction = callGraph.getMain();
         }
 
@@ -172,6 +175,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Function parameters and return address are set up at the call site
         final String body = visit(function.getBody());
         pipeline.emit(createInstruction(SET, localPrefix + RETURN_VALUE, body));
+        pipeline.emit(createInstruction(LABEL, returnStack.getReturnLabel()));
         pipeline.emit(createInstruction(RETURN, stackName()));
     }
 
@@ -179,6 +183,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Function parameters and return address are set up at the call site
         final String body = visit(function.getBody());
         pipeline.emit(createInstruction(SET, localPrefix + RETURN_VALUE, body));
+        pipeline.emit(createInstruction(LABEL, returnStack.getReturnLabel()));
         pipeline.emit(createInstruction(SET, "@counter", localPrefix + RETURN_ADDRESS));
     }
 
@@ -237,7 +242,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             currentFunction = function;
             functionContext = new LocalContext();
             setupFunctionParameters(function, paramValues);
-            return visit(function.getBody());
+
+            // Retval gets registered in nodeContext, but we don't mind -- inline fucntions do not use stack
+            final String returnValue = nextTemp();
+            final String returnLabel = nextLabel();
+            returnStack.enterFunction(returnLabel, returnValue);
+            String result = visit(function.getBody());
+            pipeline.emit(createInstruction(SET, returnValue, result));
+            pipeline.emit(createInstruction(LABEL, returnLabel));
+            returnStack.exitFunction();
+            return returnValue;
         } finally {
             functionContext = previousContext;
             currentFunction = previousFunction;
@@ -633,6 +647,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitContinueStatement(ContinueStatement node) {
         final String label = loopStack.getContinueLabel(node.getLabel());
+        pipeline.emit(createInstruction(JUMP, label, "always"));
+        return "null";
+    }
+
+    @Override
+    public String visitReturnStatement(ReturnStatement node) {
+        final String retval = returnStack.getReturnValue();
+        final String label = returnStack.getReturnLabel();
+        final String expression = visit(node.getRetval());
+        pipeline.emit(createInstruction(SET, retval, expression));
         pipeline.emit(createInstruction(JUMP, label, "always"));
         return "null";
     }

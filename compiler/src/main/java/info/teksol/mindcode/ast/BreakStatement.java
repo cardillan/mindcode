@@ -25,6 +25,6 @@ public class BreakStatement extends BaseAstNode {
 
     @Override
     public String toString() {
-        return "Break{" + (label == null ? "" : "label='" + label) + "'}";
+        return "BreakStatement{" + (label == null ? "" : "label='" + label + '\'') + '}';
     }
 }

@@ -152,7 +152,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                 "                    op='===',\n" +
                 "                    right=NumericLiteral{literal='0'}\n" +
                 "                },\n" +
-                "                trueBranch=Seq{rest=NoOp{}, last=Break{'}},\n" +
+                "                trueBranch=Seq{rest=NoOp{}, last=BreakStatement{}},\n" +
                 "                falseBranch=NoOp{}\n" +
                 "            }\n" +
                 "        ]\n" +

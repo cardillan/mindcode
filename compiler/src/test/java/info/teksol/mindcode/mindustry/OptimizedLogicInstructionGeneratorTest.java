@@ -22,7 +22,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 + "end "
                 + " "
                 + "$x = fn(4) + fn(5) "
-                + "$y = $x + 1" ;
+                + "$y = $x + 1";
 
         /* VERY USEFUL FOR DEBUGGING PURPOSES -- the two files can be compared using the diff(1)
         try (final Writer w = new FileWriter("unoptimized.txt")) {
@@ -42,7 +42,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                     )
             );
         }
-                 */
+         */
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -50,12 +50,12 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "__fn0_n", "4"),
                         createInstruction(CALL, "cell1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(SET, "__retval1", "__fn0retval"),
+                        createInstruction(SET, var(1), "__fn0retval"),
                         createInstruction(SET, "__fn0_n", "5"),
                         createInstruction(CALL, "cell1", var(1000), var(1002)),
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(SET, "__retval3", "__fn0retval"),
-                        createInstruction(OP, "add", var(4), "__retval1", "__retval3"),
+                        createInstruction(SET, var(3), "__fn0retval"),
+                        createInstruction(OP, "add", var(4), var(1), var(3)),
                         createInstruction(WRITE, var(4), "cell2", "3"),
                         createInstruction(READ, var(7), "cell2", "3"),
                         createInstruction(OP, "add", var(9), var(7), "1"),
@@ -65,10 +65,11 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "sub", var(12), "__fn0_n", "1"),
                         createInstruction(PUSH, "cell1", "__fn0_n"),
                         createInstruction(SET, "__fn0_n", var(12)),
-                        createInstruction(CALL, "cell1", var(1000), var(1003)),
-                        createInstruction(LABEL, var(1003)),
+                        createInstruction(CALL, "cell1", var(1000), var(1004)),
+                        createInstruction(LABEL, var(1004)),
                         createInstruction(POP, "cell1", "__fn0_n"),
                         createInstruction(OP, "mul", "__fn0retval", "2", "__fn0_n"),
+                        createInstruction(LABEL, var(1003)),
                         createInstruction(RETURN, "cell1")
                 ),
                 generateAndOptimize((Seq) translateToAst(code))
@@ -99,9 +100,9 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void setThenReadPrefersUserSpecifiedNames() {
         final List<LogicInstruction> result = generateAndOptimize(
                 (Seq) translateToAst(
-                        "" +
-                                "addr_FLAG = 0\n" +
-                                "conveyor1.enabled = cell1[addr_FLAG] == 0\n"
+                        ""
+                        + "addr_FLAG = 0\n"
+                        + "conveyor1.enabled = cell1[addr_FLAG] == 0\n"
                 )
         );
 
@@ -121,12 +122,12 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void reallifeScripts() {
         final List<LogicInstruction> result = generateAndOptimize(
                 (Seq) translateToAst(
-                        "" +
-                                "silicon = reconstructor1.silicon\n" +
-                                "graphite = reconstructor1.graphite\n" +
-                                "capacity = reconstructor1.itemCapacity\n" +
-                                "\n" +
-                                "conveyor1.enabled = !( silicon < capacity || graphite < capacity )\n"
+                        ""
+                        + "silicon = reconstructor1.silicon\n"
+                        + "graphite = reconstructor1.graphite\n"
+                        + "capacity = reconstructor1.itemCapacity\n"
+                        + "\n"
+                        + "conveyor1.enabled = !( silicon < capacity || graphite < capacity )\n"
                 )
         );
 
@@ -150,10 +151,10 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void reallifeScripts2() {
         final List<LogicInstruction> result = generateAndOptimize(
                 (Seq) translateToAst(
-                        "" +
-                                "level = nucleus1.resource\n" +
-                                "print(level)\n" +
-                                "building.enabled = level < capacity"
+                        ""
+                        + "level = nucleus1.resource\n"
+                        + "print(level)\n"
+                        + "building.enabled = level < capacity"
                 )
         );
 
@@ -174,13 +175,13 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         // https://github.com/francois/mindcode/issues/13
         final List<LogicInstruction> result = generateAndOptimize(
                 (Seq) translateToAst(
-                        "" +
-                                "// Source\n" +
-                                "HEAPPTR = cell3\n" +
-                                "allocate heap in HEAPPTR\n" +
-                                "$a = 1\n" +
-                                "$b = 2\n" +
-                                "$c = 3\n"
+                        ""
+                        + "// Source\n"
+                        + "HEAPPTR = cell3\n"
+                        + "allocate heap in HEAPPTR\n"
+                        + "$a = 1\n"
+                        + "$b = 2\n"
+                        + "$c = 3\n"
                 )
         );
 
@@ -201,13 +202,13 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         // https://github.com/francois/mindcode/issues/13
         final List<LogicInstruction> result = generateAndOptimize(
                 (Seq) translateToAst(
-                        "" +
-                                "HEAPPTR = cell3\n" +
-                                "allocate heap in HEAPPTR\n" +
-                                "print($a)\n" +
-                                "$a = 1\n" +
-                                "$b = 2\n" +
-                                "$c = 3\n"
+                        ""
+                        + "HEAPPTR = cell3\n"
+                        + "allocate heap in HEAPPTR\n"
+                        + "print($a)\n"
+                        + "$a = 1\n"
+                        + "$b = 2\n"
+                        + "$c = 3\n"
                 )
         );
 
@@ -230,15 +231,15 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         // https://github.com/francois/mindcode/issues/15
 
         final List<LogicInstruction> result = generateAndOptimize(
-                (Seq) translateToAst("" +
-                        "desired = @dagger\n" +
-                        "boosting = false\n" +
-                        "payTake(desired)\n" +
-                        "payDrop()\n" +
-                        "boost(boosting)\n" +
-//                        "pathfind()\n" +    // pathfind no longer supported in V7
-                        "idle()\n" +
-                        "stop()"
+                (Seq) translateToAst(""
+                        + "desired = @dagger\n"
+                        + "boosting = false\n"
+                        + "payTake(desired)\n"
+                        + "payDrop()\n"
+                        + "boost(boosting)\n"
+                        + //                        "pathfind()\n" +    // pathfind no longer supported in V7
+                        "idle()\n"
+                        + "stop()"
                 )
         );
 
@@ -262,10 +263,10 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void regressionTest4() {
         // https://github.com/francois/mindcode/issues/23
         final List<LogicInstruction> result = generateAndOptimize(
-                (Seq) translateToAst("" +
-                        "x = 1\n" +
-                        "print(\"\\nx: \", x)\n" +
-                        "print(\"\\nx+x: \", x+x)")
+                (Seq) translateToAst(""
+                        + "x = 1\n"
+                        + "print(\"\\nx: \", x)\n"
+                        + "print(\"\\nx+x: \", x+x)")
         );
 
         assertLogicInstructionsMatch(
@@ -289,38 +290,38 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         // Otherwise, this spec would be at the mercy of any improvements in the peephole optimizer
         assertDoesNotThrow(() -> {
             generateAndOptimize(
-                    (Seq) translateToAst("" +
-                            "// move previous values left\n" +
-                            "for n in 0 ... 40\n" +
-                            "  cell1[n] = cell1[n + 1]\n" +
-                            "end\n" +
-                            "\n" +
-                            "// delay by 1/2 a sec (0.5 s)\n" +
-                            "// this depends on your framerate -- if less than 60 fps,\n" +
-                            "// the delay will be longer than 0.5s\n" +
-                            "deadline = @tick + 30\n" +
-                            "while @tick < deadline\n" +
-                            "  n += 1\n" +
-                            "end\n" +
-                            "\n" +
-                            "// calculate the new value -- the rightmost one\n" +
-                            "// change this line to graph another level\n" +
-                            "cell1[39] = tank1.cryofluid / tank1.liquidCapacity\n" +
-                            "\n" +
-                            "// draw the graph\n" +
-                            "\n" +
-                            "// clear the display\n" +
-                            "clear(0, 0, 0)\n" +
-                            "\n" +
-                            "// set the foreground color to cryofluid\n" +
-                            "color(62, 207, 240, 255)\n" +
-                            "\n" +
-                            "// draw the bar graph\n" +
-                            "for n in 0 ... 40\n" +
-                            "  rect(2 * n, 0, 2, 80 * cell1[n])\n" +
-                            "end\n" +
-                            "\n" +
-                            "drawflush(display1)")
+                    (Seq) translateToAst(""
+                            + "// move previous values left\n"
+                            + "for n in 0 ... 40\n"
+                            + "  cell1[n] = cell1[n + 1]\n"
+                            + "end\n"
+                            + "\n"
+                            + "// delay by 1/2 a sec (0.5 s)\n"
+                            + "// this depends on your framerate -- if less than 60 fps,\n"
+                            + "// the delay will be longer than 0.5s\n"
+                            + "deadline = @tick + 30\n"
+                            + "while @tick < deadline\n"
+                            + "  n += 1\n"
+                            + "end\n"
+                            + "\n"
+                            + "// calculate the new value -- the rightmost one\n"
+                            + "// change this line to graph another level\n"
+                            + "cell1[39] = tank1.cryofluid / tank1.liquidCapacity\n"
+                            + "\n"
+                            + "// draw the graph\n"
+                            + "\n"
+                            + "// clear the display\n"
+                            + "clear(0, 0, 0)\n"
+                            + "\n"
+                            + "// set the foreground color to cryofluid\n"
+                            + "color(62, 207, 240, 255)\n"
+                            + "\n"
+                            + "// draw the bar graph\n"
+                            + "for n in 0 ... 40\n"
+                            + "  rect(2 * n, 0, 2, 80 * cell1[n])\n"
+                            + "end\n"
+                            + "\n"
+                            + "drawflush(display1)")
             );
         });
     }
@@ -329,10 +330,10 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void regressionTest6() {
         // https://github.com/francois/mindcode/issues/32
         final List<LogicInstruction> result = generateAndOptimize(
-                (Seq) translateToAst("" +
-                        "TestVar = 0xf\n" +
-                        "Result = ~TestVar\n" +
-                        "print(TestVar, \"\\n\", Result)\n"
+                (Seq) translateToAst(""
+                        + "TestVar = 0xf\n"
+                        + "Result = ~TestVar\n"
+                        + "print(TestVar, \"\\n\", Result)\n"
                 )
         );
 

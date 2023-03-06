@@ -54,4 +54,6 @@ public interface AstVisitor<T> {
     T visitBreakStatement(BreakStatement node);
 
     T visitContinueStatement(ContinueStatement node);
+
+    T visitReturnStatement(ReturnStatement node);
 }

@@ -93,7 +93,9 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(SET, var(3), "\"Done\""),
                         createInstruction(PRINT, var(3)),
                         createInstruction(END),
-                        createInstruction(LABEL, var(1000))
+                        // det a -- removed
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1005))
                 ),
                 terminus.getResult()
         );
@@ -115,9 +117,12 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         + "  print(\"End\") "
                         + "end "
                         + "testa(0) "
+                        + "testa(0) "
                         + "if false "
                         + "  testb(1) "
+                        + "  testb(1) "
                         + "end "
+                        + "testc(2) "
                         + "testc(2) "
                         + "printflush(message1)"
                 )
@@ -125,13 +130,43 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(1), "\"Start\""),
-                        createInstruction(PRINT, var(1)),
-                        createInstruction(LABEL, "__label0"),
-                        createInstruction(LABEL, "__label1"),
-                        createInstruction(SET, var(2), "\"End\""),
-                        createInstruction(PRINT, var(2)),
+                        // call testa (2x)
+                        createInstruction(SET, "__fn2retaddr", var(1003)),
+                        createInstruction(SET, "@counter", var(1002)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(SET, "__fn2retaddr", var(1004)),
+                        createInstruction(SET, "@counter", var(1002)),
+                        createInstruction(LABEL, var(1004)),
+                        // if false + call testb -- removed
+                        createInstruction(LABEL, var(1007)),
+                        createInstruction(LABEL, var(1008)),
+                        createInstruction(LABEL, var(1005)),
+                        createInstruction(LABEL, var(1006)),
+                        // call testc (2)
+                        createInstruction(SET, "__fn1retaddr", var(1009)),
+                        createInstruction(SET, "@counter", var(1001)),
+                        createInstruction(LABEL, var(1009)),
+                        createInstruction(SET, "__fn1retaddr", var(1010)),
+                        createInstruction(SET, "@counter", var(1001)),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(PRINTFLUSH, "message1"),
+                        createInstruction(END),
+                        // def testb -- removed
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1011)),
+                        // def testc
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(SET, var(14), "\"End\""),
+                        createInstruction(PRINT, var(14)),
+                        createInstruction(LABEL, var(1012)),
+                        createInstruction(SET, "@counter", "__fn1retaddr"),
+                        createInstruction(END),
+                        // def testa
+                        createInstruction(LABEL, var(1002)),
+                        createInstruction(SET, var(15), "\"Start\""),
+                        createInstruction(PRINT, var(15)),
+                        createInstruction(LABEL, var(1013)),
+                        createInstruction(SET, "@counter", "__fn2retaddr"),
                         createInstruction(END)
                 ),
                 terminus.getResult()

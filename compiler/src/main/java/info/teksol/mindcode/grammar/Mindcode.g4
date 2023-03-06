@@ -48,6 +48,7 @@ expression : MINUS numeric_t                                                    
            | LEFT_RBRACKET expression RIGHT_RBRACKET                                            # parenthesized_expression
            | break_st                                                                           # break_exp
            | continue_st                                                                        # continue_exp
+           | return_st                                                                          # return_exp
            ;
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
@@ -98,6 +99,8 @@ loop_value_list : expression
 continue_st : CONTINUE ( label=loop_label )? ;
 
 break_st : BREAK ( label=loop_label )? ;
+
+return_st : RETURN ( retval=expression )? ;
 
 range : start=int_t DOT DOT end=int_t     # inclusive_range
       | start=int_t DOT DOT DOT end=int_t # exclusive_range
@@ -201,6 +204,7 @@ IN : 'in';
 INLINE : 'inline';
 LOOP : 'loop';
 NULL : 'null';
+RETURN : 'return';
 SENSOR : 'sensor';
 STACK : 'stack';
 THEN : 'then';

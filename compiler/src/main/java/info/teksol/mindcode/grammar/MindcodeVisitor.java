@@ -212,6 +212,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParenthesized_expression(MindcodeParser.Parenthesized_expressionContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code return_exp}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_exp(MindcodeParser.Return_expContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code break_exp}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -365,6 +372,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBreak_st(MindcodeParser.Break_stContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#return_st}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn_st(MindcodeParser.Return_stContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code inclusive_range}
 	 * labeled alternative in {@link MindcodeParser#range}.

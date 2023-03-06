@@ -267,13 +267,26 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitBreakStatement(BreakStatement node) {
-        buffer.append("break\n");
+        buffer.append("break");
+        if (node.getLabel() != null) {
+            buffer.append(' ').append(node.getLabel());
+        }
         return null;
     }
 
     @Override
     public String visitContinueStatement(ContinueStatement node) {
-        buffer.append("continue\n");
+        buffer.append("continue");
+        if (node.getLabel() != null) {
+            buffer.append(' ').append(node.getLabel());
+        }
+        return null;
+    }
+
+    @Override
+    public String visitReturnStatement(ReturnStatement node) {
+        buffer.append("return ");
+        visit(node.getRetval());
         return null;
     }
 }

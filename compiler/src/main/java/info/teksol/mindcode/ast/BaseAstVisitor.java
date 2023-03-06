@@ -41,6 +41,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitPropertyAccess((PropertyAccess) node);
         } else if (node instanceof Range) {
             return visitRange((Range) node);
+        } else if (node instanceof ReturnStatement) {
+            return visitReturnStatement((ReturnStatement) node);
         } else if (node instanceof Seq) {
             return visitSeq((Seq) node);
         } else if (node instanceof StackAllocation) {

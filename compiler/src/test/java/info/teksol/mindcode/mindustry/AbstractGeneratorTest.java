@@ -93,22 +93,25 @@ public class AbstractGeneratorTest extends AbstractAstTest {
                             prettyPrint(actual),
                             "Expected\n" + left + "\nbut found\n" + right + "\non row index " + i + "\n" +
                                     "expected->actual: " + expectedToActual + "\n" +
-                                    "actual->expected: " + actualToExpected + "\n"
+                                    "actual->expected: " + actualToExpected + "\n" +
+                                    formatAsCode(actual)
                     );
                 }
             }
 
-            assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual), "Failed to var instruction at index " + i);
+            assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual), "Failed to var instruction at index " + i
+                    + formatAsCode(actual));
         }
 
         if (actual.size() != expected.size()) {
             assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual),
                     "Expected to have same size, found " + expected.size() + " in expected " +
-                            "vs " + actual.size() + " in actual");
+                            "vs " + actual.size() + " in actual" + formatAsCode(actual));
         }
 
         if (!expectedToActual.keySet().containsAll(registered) && registered.containsAll(expectedToActual.keySet())) {
-            assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual), "Expected all value holes to be used but some were not");
+            assertEquals(prettyPrint(replaceVarsIn(expected)), prettyPrint(actual),
+                    "Expected all value holes to be used but some were not" + formatAsCode(actual));
         }
     }
 
@@ -159,5 +162,34 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         }
 
         return expectedToActual.keySet().containsAll(actualToExpected.values()) && actualToExpected.keySet().containsAll(expectedToActual.values());
+    }
+
+    private String formatAsCode(List<LogicInstruction> program) {
+        StringBuilder str = new StringBuilder();
+        if (true) {
+            str.append("Instructions:");
+            for (LogicInstruction ix : program) {
+                str.append("\ncreateInstruction(").append(ix.getOpcode().name());
+                ix.getArgs().forEach(a -> str.append(", ").append(escape(a)));
+                str.append("),").toString();
+            }
+            str.deleteCharAt(str.length() - 1);
+            str.append("\n\n");
+            return str.toString();
+        } else {
+            return "";
+        }
+    }
+
+    private String escape(String value) {
+        if (value.startsWith("__tmp")) {
+            return "var(" + value.substring(5) + ")";
+        } else if (value.startsWith("__retval")) {
+            return "var(" + value.substring(8) + ")";
+        } else if (value.startsWith("__label")) {
+            return "var(" + (1000 + Integer.parseInt(value.substring(7))) + ")";
+        } else {
+            return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+        }
     }
 }
