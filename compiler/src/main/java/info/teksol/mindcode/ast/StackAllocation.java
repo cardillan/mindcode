@@ -9,15 +9,18 @@ public class StackAllocation extends BaseAstNode {
     private final int first;
     private final int last;
 
+    StackAllocation(String name) {
+        this.name = name;
+        this.first = Integer.MAX_VALUE;
+        this.last = Integer.MAX_VALUE;
+    }
+
     StackAllocation(String name, Range range) {
-        if (
-                !(range.getFirstValue() instanceof NumericLiteral)
-                        || !(range.getLastValue() instanceof NumericLiteral)
-                ) {
+        if (!(range.getFirstValue() instanceof NumericLiteral) || !(range.getLastValue() instanceof NumericLiteral)) {
             throw new InvalidHeapAllocationException("Stack declarations must use numeric literals; received " + range);
         }
 
-        int candidate = Integer.valueOf(((NumericLiteral) range.getLastValue()).getLiteral());
+        int candidate = Integer.parseInt(((NumericLiteral) range.getLastValue()).getLiteral());
         if (range instanceof ExclusiveRange) {
             candidate -= 1;
         } else if (range instanceof InclusiveRange) {
@@ -27,7 +30,7 @@ public class StackAllocation extends BaseAstNode {
         }
 
         this.name = name;
-        this.first = Integer.valueOf(((NumericLiteral) range.getFirstValue()).getLiteral());
+        this.first = Integer.parseInt(((NumericLiteral) range.getFirstValue()).getLiteral());
         this.last = candidate;
     }
 
@@ -39,6 +42,10 @@ public class StackAllocation extends BaseAstNode {
 
     public String getName() {
         return name;
+    }
+
+    public boolean rangeSpecified() {
+        return first != Integer.MAX_VALUE;
     }
 
     int getFirst() {

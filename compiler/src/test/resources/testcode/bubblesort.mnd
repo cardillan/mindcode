@@ -1,0 +1,27 @@
+allocate stack in bank1[0...512]
+ARRAY = bank2
+
+inline def testAndSwap(i, j, sorted)
+    if (a = ARRAY[i]) > (b = ARRAY[j])
+        ARRAY[i] = b
+        ARRAY[j] = a
+        false
+    else
+        sorted
+    end
+end
+
+n = SIZE
+do
+    n -= 1
+    sorted = true
+    for i in 0 ... n
+        sorted = testAndSwap(i, i + 1, sorted)
+    end
+loop while !sorted
+
+for i in 0 ... SIZE
+    print(ARRAY[i])
+end
+
+stopProcessor()

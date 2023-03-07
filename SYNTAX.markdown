@@ -42,23 +42,21 @@ but it does not aim to describe the behavior of the functions/instructions.
 You may declare your own functions using the `def` keyword:
 
 ```
-allocate stack in cell1
-
-def delay(n, fps)
-  _x = 0
-  deadline = @tick + n * fps
-  while @tick < deadline
-    _x += 1
-  end
+def update(message, status)
+  print("Status: ", status, "\n")
+  print("Game time: ", floor(@time) / 1000, " sec")
+  printflush(message)
 end
 ```
 
-This function will prevent the caller from proceeding until the right number of frames have passed.
+This function will print the status and flush it to given message block.
 Calling your own functions is done in the same way as any other function:
 
 ```
-delay(1, 60) // stops execution for 1 second, if your framerate is 60 fps
+update(message1, "The core is on fire!!!")
 ```
+
+You can pass any variable or value assignable to a variable as an argument to the function.
 
 A function may call other function(s), and nothing prevents recursive functions:
 
@@ -89,8 +87,95 @@ fib(8) // 13
 // and so on...
 ```
 
-As you may have noticed, allocating a stack in a Memory Cell or Memory Bank is required in order to handle custom
-functions.
+As you may have noticed, allocating a stack in a Memory Cell or Memory Bank is required in order to handle recursive functions.
+Additional constraint is that only numbers and numerical values can be passed as arguments or stored in local variables
+of recursive functions - this is because function parameters and local variables need to be stored on stack,
+and Memory Cell or Memory Bank only support string numerical values in them.
+
+### Function parameters and local variables
+
+Function parameters and variables used in functions are local to the function.
+Therefore a variable `n` used in a function is different from a variable `n` used in another function
+and also from a variable `n` used in main program body.
+Changes to local variables are not visible outside of the function containing the variable.
+The only exception are variables with upper-case names, such as VARIABLE. These variables are common to all functions
+and the main program body, and modifications of these variables are visible everywhere in the program:
+
+```
+def foo(x)
+  y = x + 10
+  Z = 10
+end
+
+def bar(x)
+  y = x + 20
+  Z = 20
+end
+
+x = 1
+y = 2
+Z = 3
+foo(x)
+bar(x)
+print(x, ":", y, ":", Z)
+printflush(message1)
+```
+
+The output of this program is `1:2:20`.
+
+Do not use upper-case names for parameters -- if you do, the parameters won't be local to their function,
+possibly causing unpredictable side-effects when calling functions.
+
+### Return values
+
+Function ends (returns to the caller) when the end of function definition is reached, or when a `return` statement is executed.
+In the first case, the return value of a function is given by the last expression evaluated by the function;
+in the second case, the return value is equal to the expresion following the `return` keyword, or `null` if the return
+statement doesn't specify a return value:
+
+```
+def foo(n)
+  case n
+    when 1      return
+    when 2      return "Two"
+  end
+  n
+end
+
+print(foo(1), ":", foo(2), ":", foo(3))
+printflush(message1)
+```
+
+The output of this program is `null:Two:3`.
+
+### Inline functions
+
+Normal function are compiled once and called from other places in the program.
+Inline functions are compiled every time they're called, so there can be several copies of them in the compiled code.
+This leads to shorter code per call and faster execution.
+To create an inline function, use `inline` keyword:
+
+```
+inline def printtext(name, value, min, max)
+  if value < min
+    print(name, " too low")
+  elsif value > max
+    print(name, " too high")
+  end
+end
+
+printtext("Health", health, minHealth, maxHealth)
+printtext("Speed", speed, minSpeed, maxSpeed)
+```
+
+Declaring a recursive function inline leads to compilation error.
+
+Large inline functions called multiple times can generate lots of instructions and make the compiled code too long.
+If this happens, remove the `inline` keyword to generate less code.
+
+The compiler will automatically make a function inline when it is called just once in the entire program.
+This is safe, as in this case the program will always be both smaller and faster.
+Other non-recursive functions might also be compiled inline, if the instruction limit isnt't reached.
 
 # Sensors
 

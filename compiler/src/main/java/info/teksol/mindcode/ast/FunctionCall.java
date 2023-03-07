@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class FunctionCall extends BaseAstNode {
+public class FunctionCall extends ControlBlockAstNode {
     private final String functionName;
     private final List<AstNode> params;
 

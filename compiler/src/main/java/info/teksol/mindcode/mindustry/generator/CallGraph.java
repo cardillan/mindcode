@@ -169,7 +169,7 @@ public final class CallGraph {
         callStack.add(callee);
         if (index >= 0) {
             // Detected a cycle in the call graph starting at index. Mark all calls on the cycle as recursive, stop DFS
-            // We know calee is now at the beginning and also at the end of the cycle in callStack
+            // We know callee is now at the beginning and also at the end of the cycle in callStack
             String caller = callee;
             for (String nextCallee : callStack.subList(index + 1, callStack.size())) {
                 functions.get(caller).addRecursiveCall(nextCallee);
@@ -195,18 +195,18 @@ public final class CallGraph {
             this.declaration = declaration;
         }
 
-        /** * @return true if this function should be inlined */
+        /** @return true if this function should be inlined */
         public boolean isInline() {
             // Automatically inline all non-recursive functions called just once
             return declaration.isInline() || !isRecursive() && getUseCount() == 1;
         }
 
-        /** * @return the body of the function from function declaration */
+        /** @return the body of the function from function declaration */
         public AstNode getBody() {
             return declaration.getBody();
         }
 
-        /** * @return name of the function */
+        /** @return name of the function */
         public String getName() {
             return declaration.getName();
         }

@@ -12,3 +12,5 @@ db/cluster
 Instruction_Samples_*.txt
 target
 tmp
+compiler/src/test/resources/testcode/*.msg
+compiler/src/test/resources/testcode/*.txt

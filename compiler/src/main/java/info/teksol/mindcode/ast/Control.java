@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class Control extends BaseAstNode {
+public class Control extends ControlBlockAstNode {
     private final AstNode target;
     private final String property;
     private final List<AstNode> params;

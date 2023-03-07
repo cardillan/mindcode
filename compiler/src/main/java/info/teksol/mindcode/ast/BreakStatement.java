@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class BreakStatement extends BaseAstNode {
+public class BreakStatement extends ControlBlockAstNode {
     private final String label;
 
     BreakStatement(String label) {

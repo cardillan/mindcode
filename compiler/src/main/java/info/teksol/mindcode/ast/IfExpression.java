@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class IfExpression extends BaseAstNode {
+public class IfExpression extends ControlBlockAstNode {
     private final AstNode condition;
     private final AstNode trueBranch;
     private final AstNode falseBranch;

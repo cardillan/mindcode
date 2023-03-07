@@ -1424,4 +1424,27 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 generateUnoptimized((Seq) translateToAst("for a in (@mono, @poly, @mega)\nprint(a)\nend"))
         );
     }
+
+    @Test
+    void refusesAssignmentsToBlockNames() {
+        assertThrows(GenerationException.class, () ->
+                generateUnoptimized(
+                        (Seq) translateToAst("" +
+                                "switch1 = 5"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesBlockNamesAsOutputArguments() {
+        assertThrows(GenerationException.class, () ->
+                generateUnoptimized(
+                        (Seq) translateToAst("" +
+                                "getBlock(10, 20, switch1)"
+                        )
+                )
+        );
+    }
+
 }

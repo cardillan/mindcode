@@ -248,9 +248,22 @@ public class BaseFunctionMapper implements FunctionMapper {
                     // Selector that IS a function name isn't in a parameter list and must be filled in
                     // Generate new temporary variable for unused outputs (may not be necessary)
                     args.add(a.getType().isOutput() ? instructionProcessor.nextTemp() : a.getName());
-                } else if (a.getType().isInputOrOutput()) {
-                    // Optional arguments are always output; generate temporary variable for them
-                    args.add(paramIndex < params.size() ? params.get(paramIndex++) : instructionProcessor.nextTemp());
+                } else if (a.getType().isInput()) {
+                    // Input argument - take it as it is
+                    args.add(params.get(paramIndex++));
+                } else if (a.getType().isOutput()) {
+                    if (paramIndex >= params.size()) {
+                        // Optional arguments are always output; generate temporary variable for them
+                        args.add(instructionProcessor.nextTemp());
+                    } else {
+                        // Block name cannot be used as output argument
+                        String argument = params.get(paramIndex++);
+                        if (instructionProcessor.isBlockName(argument)) {
+                            throw new GenerationException("Using variable " + argument + " in function " + name
+                                    + " not allowed (name reserved for linked blocks)");
+                        }
+                        args.add(argument);
+                    }
                 } else {
                     // Not a variable - strip prefix
                     args.add(stripLocalPrefix(params.get(paramIndex++)));
@@ -465,7 +478,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     private abstract class AbstractFunctionHandler implements FunctionHandler {
         protected final OpcodeVariant opcodeVariant;
-        private final String name;
+        protected final String name;
         protected final int minArgs;
         protected final int numArgs;
 
@@ -548,9 +561,22 @@ public class BaseFunctionMapper implements FunctionMapper {
                     // Selector that IS a function name isn't in a parameter list and must be filled in
                     // Generate new temporary variable for unused outputs (may not be necessary)
                     args.add(a.getType().isOutput() ? instructionProcessor.nextTemp() : a.getName());
-                } else if (a.getType().isInputOrOutput()) {
-                    // Optional arguments are always output; generate temporary variable for them
-                    args.add(paramIndex < params.size() ? params.get(paramIndex++) : instructionProcessor.nextTemp());
+                } else if (a.getType().isInput()) {
+                    // Input argument - take it as it is
+                    args.add(params.get(paramIndex++));
+                } else if (a.getType().isOutput()) {
+                    if (paramIndex >= params.size()) {
+                        // Optional arguments are always output; generate temporary variable for them
+                        args.add(instructionProcessor.nextTemp());
+                    } else {
+                        // Block name cannot be used as output argument
+                        String argument = params.get(paramIndex++);
+                        if (instructionProcessor.isBlockName(argument)) {
+                            throw new GenerationException("Using variable " + argument + " in function " + name
+                                    + " not allowed (name reserved for linked blocks)");
+                        }
+                        args.add(argument);
+                    }
                 } else {
                     // Not a variable - strip prefix
                     args.add(stripLocalPrefix(params.get(paramIndex++)));

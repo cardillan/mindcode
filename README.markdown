@@ -4,6 +4,24 @@ Welcome to Mindcode, a high-level language for [Mindustry](https://github.com/an
 the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a
 high-level language. Mindcode aims to make programming easier for everyone.
 
+## Recent changes
+
+Recently (March 2023) a lot of enhancements were made to Mindcode. Most of them shouldn't break existing code,
+but a few are not compatible. The main enhancements are:
+
+* Full support for Mindustry Logic version 7, including the new World Processor
+* Improvements in custom functions (better code generation, support for local variables, inline functions and return statement, stack only required for recursive functions)
+* Multiple values and/or range expressions after `when` keyword in case expressions
+* List-iteration loops, Do-While loops and non-constant range expressions in range-iteration loops
+* Break and continue statements in all loop types
+* Improvements in code generation (smaller and faster code is produced)
+* A few new operators added, eg. boolean negation, unary minus, strict inequality (`!==`)
+* Improved syntax error identification
+* Most known issues fixed
+
+Also, the meaning of `not` and `!` operators  was changed from **bitwise negation** to **boolean negation**. 
+Bitwise negation can be performed using the new `~` operator.
+
 ## Using Mindcode
 
 Either compile and run Mindcode yourself (see the [Development](#development) section), or visit
@@ -14,11 +32,6 @@ contain the Logic version of your Mindcode. Copy the compiled version. Back in M
 the "Edit" button in the Logic UI. Select "Import from Clipboard". Mindustry is now ready to execute your code. Be on
 the lookout for "invalid" nodes in the Logic, and if you can, please report them so that Mindcode can be improved for
 everyone.
-
-### Recent changes of `not` and `!` operators
-
-Recently, the meaning of `not` and `!` operators  was changed from **bitwise negation** to **boolean negation**. 
-Bitwise negation can be performed using the new `~` operator.
 
 ## Mindcode Syntax
 

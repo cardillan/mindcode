@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class ReturnStatement extends BaseAstNode {
+public class ReturnStatement extends ControlBlockAstNode {
     private final AstNode retval;
 
     ReturnStatement(AstNode expression) {

@@ -351,9 +351,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         // Setting up stack
-                        createInstruction(SET, "__sp", "63"),
                         createInstruction(SET, "STACKPTR", "cell1"),
                         createInstruction(SET, "HEAPPTR", "cell2"),
+                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SENSOR, var(9), "STACKPTR", "@type"),
+                        createInstruction(JUMP, var(1009), "equal", var(9), "@memory-bank"),
+                        createInstruction(SET, "__sp", "63"),
+                        createInstruction(LABEL, var(1009)),
                         // Function call
                         createInstruction(CALL, "STACKPTR", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
@@ -926,20 +930,77 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                                 + "end "
                                 + " "
                                 + "$x = 99 "
-                                + "print(foo(1) + foo(2))")
+                                + "print(foo(1) + foo(2))"
+                        )
                 ).subList(0, 4)
         );
     }
 
     @Test
     void refusesToDeclareRecursiveFunctionsWhenNoStackAround() {
-        assertThrows(MissingStackException.class, ()
-                -> generateUnoptimized(
+        assertThrows(MissingStackException.class,
+                () -> generateUnoptimized(
                         (Seq) translateToAst(""
                                 + "def foo "
                                 + "  foo() "
                                 + "end "
                                 + "foo()"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesMisplacedStackAllocation() {
+        assertThrows(MisplacedStackAllocationException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "if true "
+                                + "  allocate stack in cell1 "
+                                + "end"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesRecursiveInlineFunctions() {
+        assertThrows(InlineRecursiveFunctionException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "allocate stack in cell1 "
+                                + "inline def foo(n) "
+                                + "  foo(n-1) "
+                                + "end "
+                                + "print(foo(1) + foo(2))"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesUppercaseFunctionParameter() {
+        assertThrows(InvalidParameterNameException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "def foo(N) "
+                                + "  N "
+                                + "end "
+                                + "print(foo(1) + foo(2))"
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesBlockNameAsFunctionParameter() {
+        assertThrows(InvalidParameterNameException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "def foo(switch1) "
+                                + "  switch1 "
+                                + "end "
+                                + "print(foo(1) + foo(2))"
                         )
                 )
         );

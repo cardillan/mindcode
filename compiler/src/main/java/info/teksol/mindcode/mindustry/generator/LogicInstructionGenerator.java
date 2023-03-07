@@ -65,7 +65,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public void start(Seq program) {
         callGraph = CallGraphCreator.createFunctionGraph(program, instructionProcessor);
         currentFunction = callGraph.getMain();
-        appendStackAllocation();
+        verifyStackAllocation();
         visit(program);
         appendFunctionDeclarations();
     }
@@ -124,19 +124,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return "marker" + markerIndex++;
     }
 
-    private void appendStackAllocation() {
+    private void verifyStackAllocation() {
         if (callGraph.containsRecursiveFunction()) {
             if (callGraph.getAllocatedStack() == null) {
                 throw new MissingStackException("Cannot declare functions when no stack was allocated");
             }
-
-            // Initialize stack pointer variable
-            pipeline.emit(
-                    createInstruction(SET,
-                            instructionProcessor.getStackPointer(),
-                            String.valueOf(callGraph.getAllocatedStack().getLast())
-                    )
-            );
         }
     }
 
@@ -402,6 +394,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             }
         } else if (node.getVar() instanceof VarRef) {
             final String target = visit(node.getVar());
+            if (instructionProcessor.isBlockName(target)) {
+                throw new GenerationException("Assignment to variable " + target + " not allowed (name reserved for linked blocks)");
+            }
             pipeline.emit(createInstruction(Opcode.SET, target, rvalue));
         } else {
             throw new GenerationException("Unhandled assignment target in " + node);
@@ -581,7 +576,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                         String nextExp = nextLabel();       // Next value in when list
                         Range range = (Range) value;
                         final String minValue = visit(range.getFirstValue());
-                        pipeline.emit(createInstruction(JUMP, nextExp, translateBinaryOpToCode("<"), caseValue, minValue));
+                        pipeline.emit(createInstruction(JUMP, nextExp, "lessThan", caseValue, minValue));
                         // The max value is only evaluated when the min value lets us through
                         final String maxValue = visit(range.getLastValue());
                         pipeline.emit(createInstruction(JUMP, bodyLabel, translateBinaryOpToCode(range.maxValueComparison()), caseValue, maxValue));
@@ -633,7 +628,25 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitStackAllocation(StackAllocation node) {
-        // Do nothing - stack allocations are procesed by CallGraphCreator
+        // Do not initialize stack if no recursive functions are present
+        if (callGraph.containsRecursiveFunction()) {
+            StackAllocation stack = callGraph.getAllocatedStack();
+            String sp = instructionProcessor.getStackPointer();
+
+            // Initialize stack pointer variable
+            if (node.rangeSpecified()) {
+                pipeline.emit(createInstruction(SET, sp, String.valueOf(stack.getLast())));
+            } else {
+                // Range not specified. Determine memory size dynamically.
+                String label = nextLabel();
+                String tmp = nextTemp();
+                pipeline.emit(createInstruction(SET, sp, "511"));
+                pipeline.emit(createInstruction(SENSOR, tmp, stack.getName(), "@type"));
+                pipeline.emit(createInstruction(JUMP, label, "equal", tmp, "@memory-bank"));
+                pipeline.emit(createInstruction(SET, sp, "63"));
+                pipeline.emit(createInstruction(LABEL, label));
+            }
+        }
         return "null";
     }
 

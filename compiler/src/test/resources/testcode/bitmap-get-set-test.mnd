@@ -1,0 +1,21 @@
+// How many bits per variable are stored
+BITS = 32
+BITMAP = bank1
+
+def setBit(bitIndex)
+  BITMAP[bitIndex \ BITS] = BITMAP[bitIndex \ BITS] | (1 << (bitIndex % BITS))
+end
+
+def getBit(bitIndex)
+  BITMAP[bitIndex \ BITS] & (1 << (bitIndex % BITS))
+end
+
+for i in 0 ... 8
+    setBit(2 * i)
+end
+
+for i in 0 ... 16
+    print(getBit(i) ? 1 : 0)
+end
+
+stopProcessor()

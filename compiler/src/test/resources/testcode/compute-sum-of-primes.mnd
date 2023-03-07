@@ -1,0 +1,58 @@
+// How many bits per variable are stored
+// Cannot use all 64 because of the double <--> long conversions
+MOD = 48
+BITMAP = bank1
+
+def setBit(bitIndex)
+  BITMAP[bitIndex \ MOD] = BITMAP[bitIndex \ MOD] | (1 << (bitIndex % MOD))
+end
+
+def getBit(bitIndex)
+  BITMAP[bitIndex \ MOD] & (1 << (bitIndex % MOD))
+end
+
+def testAndSetMultiples(n, maximum)
+    if result = !getBit(n \ 2)
+        max = maximum \ 2
+        for i = n * n \ 2 ; i <= max ; i += n
+            setBit(i)
+        end
+    end
+    result
+end
+
+def sumPrimesUpTo(maximum)
+    sum = 2 + 3
+    i = 5
+    sqrtMax = ceil(sqrt(maximum))
+    
+    while i <= sqrtMax
+        if testAndSetMultiples(i, maximum)
+            sum += i
+        end
+        i += 2
+        if testAndSetMultiples(i, maximum)
+            sum += i
+        end
+        i += 4
+    end
+    
+    while i <= maximum
+        if !getBit(i \ 2)
+            sum += i
+        end
+        i += 2
+        if !getBit(i \ 2)
+            if i <= maximum
+                sum += i
+            end
+        end
+        i += 4
+    end
+    
+    sum
+end
+
+print(sumPrimesUpTo(500))
+
+stopProcessor()

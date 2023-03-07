@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class ContinueStatement extends BaseAstNode {
+public class ContinueStatement extends ControlBlockAstNode {
     private final String label;
 
     ContinueStatement(String label) {

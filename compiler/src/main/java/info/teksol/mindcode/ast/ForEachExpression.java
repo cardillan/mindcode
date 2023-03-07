@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 import java.util.List;
 import java.util.Objects;
 
-public class ForEachExpression extends BaseAstNode {
+public class ForEachExpression extends ControlBlockAstNode {
     private final String label;
     private final AstNode variable;
     private final List<AstNode> values;

@@ -2,7 +2,7 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class DoWhileExpression extends BaseAstNode {
+public class DoWhileExpression extends ControlBlockAstNode {
     private final String label;
     private final AstNode body;
     private final AstNode condition;

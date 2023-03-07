@@ -309,14 +309,11 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         }
 
         final String name = ctx.id().getText();
-        final Range range;
         if (ctx.alloc_range() != null) {
-            range = (Range) visit(ctx.alloc_range());
+            allocatedStack = new StackAllocation(name, (Range) visit(ctx.alloc_range()));
         } else {
-            range = new ExclusiveRange(new NumericLiteral("0"), new NumericLiteral("64"));
+            allocatedStack = new StackAllocation(name);
         }
-
-        allocatedStack = new StackAllocation(name, range);
     }
 
     private void allocateHeap(MindcodeParser.Alloc_listContext ctx) {

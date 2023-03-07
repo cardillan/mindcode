@@ -55,6 +55,15 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return terminus.getResult();
     }
 
+    protected List<LogicInstruction> compile(String code) {
+        return LogicInstructionLabelResolver.resolve(instructionProcessor,
+                generateAndOptimize(instructionProcessor,
+                        (Seq) translateToAst(code),
+                        CompilerProfile.fullOptimizations()
+                )
+        );
+    }
+
     protected List<LogicInstruction> generateAndOptimize(Seq program, Optimisation... optimisations) {
         return generateAndOptimize(instructionProcessor, program, new CompilerProfile(optimisations));
     }
