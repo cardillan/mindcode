@@ -26,7 +26,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "notEqual", "x", "true"),
+                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
                         new LogicInstruction("label", var(1000)),
                         new LogicInstruction("label", var(1001)),
                         new LogicInstruction("end")
@@ -46,8 +46,8 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "notEqual", "x", "true"),
-                        new LogicInstruction("jump", var(1002), "notEqual", "y", "true"),
+                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
+                        new LogicInstruction("jump", var(1002), "equal", "y", "false"),
                         new LogicInstruction("label", var(1002)),
                         new LogicInstruction("label", var(1003)),
                         new LogicInstruction("label", var(1000)),
@@ -69,7 +69,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "notEqual", "x", "true"),
+                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
                         new LogicInstruction("print", "a"),
                         new LogicInstruction("jump", var(1001), "always"),
                         new LogicInstruction("label", var(1000)),

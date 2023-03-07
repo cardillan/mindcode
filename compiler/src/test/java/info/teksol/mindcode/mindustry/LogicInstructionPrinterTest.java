@@ -142,7 +142,7 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "set __tmp3 0\n" +
                         "set n __tmp3\n" +
                         "op lessThan __tmp4 n @links\n" +
-                        "jump 50 notEqual __tmp4 true\n" +
+                        "jump 50 equal __tmp4 false\n" +
                         "getlink __tmp5 n\n" +
                         "set building __tmp5\n" +
                         "sensor __tmp6 building @type\n" +
@@ -152,11 +152,11 @@ class LogicInstructionPrinterTest extends AbstractAstTest {
                         "op or __tmp9 __tmp7 __tmp8\n" +
                         "op equal __tmp10 type @plastanium-conveyor\n" +
                         "op or __tmp11 __tmp9 __tmp10\n" +
-                        "jump 45 notEqual __tmp11 true\n" +
+                        "jump 45 equal __tmp11 false\n" +
                         "sensor __tmp13 building @firstItem\n" +
                         "set resource __tmp13\n" +
                         "op notEqual __tmp14 resource null\n" +
-                        "jump 42 notEqual __tmp14 true\n" +
+                        "jump 42 equal __tmp14 false\n" +
                         "sensor __tmp16 nucleus1 @resource\n" +
                         "set level __tmp16\n" +
                         "op lessThan __tmp17 level capacity\n" +

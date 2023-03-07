@@ -31,9 +31,9 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                 List.of(
                         new LogicInstruction("label", var(1000)),
                         new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("jump", var(1000), "notEqual", "a", "true"),
+                        new LogicInstruction("jump", var(1000), "equal", "a", "false"),
                         new LogicInstruction("label", var(1003)),
-                        new LogicInstruction("jump", var(1001), "notEqual", "b", "true"),
+                        new LogicInstruction("jump", var(1001), "equal", "b", "false"),
                         new LogicInstruction("print", "b"),
                         new LogicInstruction("jump", var(1003), "always"),
                         new LogicInstruction("label", var(1004)),

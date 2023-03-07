@@ -35,8 +35,8 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("label", "__start__"),
-                        new LogicInstruction("jump", "__start__", "notEqual", "a", "true"),
-                        new LogicInstruction("jump", var(1002), "notEqual", "b", "true"),
+                        new LogicInstruction("jump", "__start__", "equal", "a", "false"),
+                        new LogicInstruction("jump", var(1002), "equal", "b", "false"),
                         new LogicInstruction("print", "b"),
                         new LogicInstruction("jump", var(1003), "always"),
                         new LogicInstruction("label", var(1002)),

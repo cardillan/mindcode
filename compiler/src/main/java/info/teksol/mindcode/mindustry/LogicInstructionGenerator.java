@@ -105,7 +105,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String elseBranch = nextLabel();
         final String endBranch = nextLabel();
 
-        pipeline.emit(new LogicInstruction("jump", elseBranch, "notEqual", cond, "true"));
+        pipeline.emit(new LogicInstruction("jump", elseBranch, "equal", cond, "false"));
 
         final String trueBranch = visit(node.getTrueBranch());
         pipeline.emit(new LogicInstruction("set", tmp, trueBranch));
@@ -170,7 +170,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String doneLabel = nextLabel();
         pipeline.emit(new LogicInstruction("label", List.of(condLabel)));
         final String cond = visit(node.getCondition());
-        pipeline.emit(new LogicInstruction("jump", List.of(doneLabel, "notEqual", cond, "true")));
+        pipeline.emit(new LogicInstruction("jump", List.of(doneLabel, "equal", cond, "false")));
         visit(node.getBody());
         pipeline.emit(new LogicInstruction("jump", List.of(condLabel, "always")));
         pipeline.emit(new LogicInstruction("label", List.of(doneLabel)));

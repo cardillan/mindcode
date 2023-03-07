@@ -483,7 +483,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("jump", var(1000), "notEqual", "x", "true"),
+                        new LogicInstruction("jump", var(1000), "equal", "x", "false"),
                         new LogicInstruction("print", "x"),
                         new LogicInstruction("set", var(0), "x"),
                         new LogicInstruction("jump", var(1001), "always"),
