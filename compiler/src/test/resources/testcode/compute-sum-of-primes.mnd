@@ -4,7 +4,7 @@ MOD = 48
 BITMAP = bank1
 
 def setBit(bitIndex)
-  BITMAP[bitIndex \ MOD] = BITMAP[bitIndex \ MOD] | (1 << (bitIndex % MOD))
+  BITMAP[bitIndex \ MOD] |= (1 << (bitIndex % MOD))
 end
 
 def getBit(bitIndex)

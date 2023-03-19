@@ -880,37 +880,13 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExp_assign(MindcodeParser.Exp_assignContext ctx) { }
+	@Override public void enterCompound_assign(MindcodeParser.Compound_assignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExp_assign(MindcodeParser.Exp_assignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx) { }
+	@Override public void exitCompound_assign(MindcodeParser.Compound_assignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

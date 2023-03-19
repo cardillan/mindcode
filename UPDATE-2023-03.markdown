@@ -1,0 +1,333 @@
+# March 2023 release
+
+In March 2023 a new version of Mindcode with significant changes was released.
+
+# Breaking changes
+
+Here is an overview of changes that might break Mindcode source codes developed using previous versions of Mindcode in one of these ways:
+* the source code no longer compiles successfully,
+* the source code compiles, but the compiled program produces different results.
+
+Bug fixes might also make compiled programs behave differently, but they aren't listed here.
+
+## New keywords
+
+The following keywords have been added to Mindcode language:
+* `const`
+* `do`
+* `inline`
+* `loop`
+* `return`
+* `then`
+
+It is no longer possible to use these keywords as identifiers.
+
+## Names of linked buildings
+
+Mindcode no longer allows assigning values to variables whose names might collide with names of buildings linked to the processor in-game
+(for example, `switch1` or `bank3`).
+
+When a building is linked to the processor in-game, an identifier consisting of a short name of the building and a numeric index is created in the processor.
+These identifiers represent external blocks and can be used accordingly by the program, but their values cannot be overwritten.
+Assignments to variables whose name is identical to the name of existing linked blocks are ignored by the processor.
+Code assigning values to such variables might or might not work depending on which buildings are linked to the processor.
+To prevent possibility of errors of this kind, any assignment to a variable whose name might represent a linked building causes compilation error.
+
+## Changes to scope of function parameters/variables
+
+The scope of parameters and variables in custom functions is now local to the function.
+The only exceptions are uppercase identifiers (such as `VARIABLE`),
+which are not permitted for function parameters and have a global scope when used as variables.
+
+Functions which relied on lowercase and mixed-case variables having a global scope will no longer work.
+
+## Operator precedence
+
+Operator precedence was changed to be more in line with usual implementations in other languages (specifically, Ruby).
+Most notably, bitwise AND (`&`) didn't take precedence over bitwise OR (`|`)/XOR (`^`),
+and none of these operators took precedence over comparison operators.
+Order of evaluation of some expressions might therefore change, producing different results.
+
+## Stack allocation
+
+Stack allocation must be placed before the first control statement in a program
+(control statement are loops, ifs, function definitions/calls etc, generally any statement that can change the program flow).
+Earlier, the following code would be valid:
+
+```
+if condition
+    // Do something except custom function call
+end
+
+allocate stack in cell1
+
+def foo(n)
+    foo(n - 1)
+end
+    
+print(foo(4))
+```
+
+Currently Mindcode won't compile this program -- it is necessary to move the stack allocation in front of the for loop.
+Simple assignments to variables are allowed, for example the following code is valid:
+
+```
+memory = cell1
+allocate stack in memory
+
+def foo(n)
+    foo(n - 1)
+end
+    
+print(foo(4))
+```
+
+## Stricter argument checking
+
+Arguments passed to function calls which represent Mindustry Logic keyword (such as `enemy`, `boss` or `any` passed to `radar` function)
+are checked against a list of valid keywords for given argument and invalid keywords are rejected.
+In previous versions such function calls would be compiled to instructions,
+although resulting instructions would be converted to an `Invalid` instruction when pasted to Mindustry Logic processor.
+
+# Improvements and additions
+
+## Mindustry Logic Version 7 support
+
+Mindustry Logic version 7 (as of release 142) is now fully supported, including World Processor instruction set.
+
+The web app compiler targets Version 7 with World Processor instruction set. The command-line compiler can set the target 
+platform to Version 6, Version 7 and Version 7 + World Processor.
+
+Check out [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown) for a list of all supported functions in Version 7.
+
+Code developed and compiled using previous Mindcode versions should compile just fine when targeting version 7
+(with or without the World Processor instruction set), except when trying to use instructions that were explicitly removed from
+Version 7 Logic:
+* `ucontrol pathfind` (mapped to the `pathfind()` function)
+* `rally` and `resupply` can no longer be used as a `group` argument in `ulocate` instruction (mapped to the 
+[`ulocate(...)`](FUNCTIONS_V7.markdown#instruction-ulocate) function).
+
+If you want to continue developing for Mindustry Logic V6, the best way now is to use the command line compiler.
+Support for the web app will hopefully be added shortly.
+
+## Custom functions enhancements
+
+For a more comprehensive dscription of current custom function support, see [Custom Functions](SYNTAX.markdown#custom-functions).
+
+### Stack usage and stack allocation
+
+Only recursive custom functions now require stack allocation. Non-recursive functions are compiled without a stack,
+and can handle all types of variables as arguments (unlike recursive functions, which can only handle numeric parameters and variables).
+
+When no range is given in `allocate stack` clause (eg. `allocate stack in bank1`), the memory is inspected at runtime
+and the entire capacity of given memory block is used as a stack.
+
+### Inline functions
+
+Functions can be declared inline (using `inline def`), in which case they're inserted at every place they're called from.
+Inline functions must not be recursive. The compiler automatically inlines functions which aren't recursive and are called
+only once in the entire program.
+
+### Return statement
+
+New `return` statement may be used to return from the function to caller. In this case, the return value is specified
+by the expression following the return statement, eg. `return result`. When `return` is used without specifying a value,
+the return value is `null`.
+
+### Variable and parameters scope
+
+Parameters and variables in custom functions are local to the function, except when the variable name is in uppercase (eg. `VARIABLE`),
+in which case the variable is shared between all custom functions and the main program body.
+
+### Parameterless function declaration
+
+Functions without parameters can now be declared with parentheses as well as without them:
+
+```
+def foo
+    print("foo")
+end
+
+def bar()
+    print("bar")
+end
+```
+
+## Syntax enhancements
+
+Several existing syntactic elements have been enhanced and some new ones were added.
+
+### Case expressions
+
+Case expression now allows more than one expression per case when alternative:
+
+```
+case buildingType
+    when @battery, @large-battery then
+        // do something
+    when @vault, @container then
+        // do something
+end
+```
+
+The new `then` keyword is optional, but it is strongly advised to be used, since it can prevent errors arising from
+forgotten comma at the end of the expression list.
+
+Additionally, a range expression can be specified in `when` value list:
+
+```
+case value
+    when 0, getMin() .. getMax() then
+        // do something
+    else
+        // do something
+end
+```
+
+The ranges can be expressed using variables and expression, not just numeric literals.
+
+### Break and continue statements
+
+Support for `break` and `continue` statements was added:
+
+```
+while not within(x, y, 6)
+    approach(x, y, 4)
+    if @unit.dead == 1
+        break
+    end
+    ...
+end
+```
+
+### Using labels with break and continue
+
+An unlabeled break statement exits the innermost for or while statement, however a labeled break can exit from an outer statement.
+It is necessary to mark the outer statement with a label, and then use the `break <label>` syntax, as shown here:
+
+```
+MainLoop:
+for i in 1 .. 10
+    for j in 5 .. 20
+        if i > j
+            break MainLoop
+        end
+    end
+end
+```
+
+Similarly, `continue MainLoop` skips the rest of the current iteration of both the inner loop and the main loop.
+Every loop in Mindcode can be marked with a label, and the break or continue statements can use those labels to specify
+which of the currently active loops they operate on.
+
+### Range Iteration Loops
+
+It is now possible to use expressions to specify iteration range:
+
+```
+for n in firstIndex + 1 .. lastIndex - 1
+    sum += cell1[n]
+end
+```
+
+### List Iteration Loops
+
+Loop over a fixed collection of values or expressions:
+
+```
+for u in (@mono, @poly, @mega)
+    ubind(u)
+    if @unit != null
+        break
+    end
+end
+print(u)
+printflush(message1)
+```
+
+The list is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic doesn't support arrays or collections.
+The list can contain not only literals, but variables and expressions as well.
+
+### Do-while loop
+
+A new loop similar to while loop, except the condition is placed at the end of the loop.
+Do-while loops therefore always execute at least once:
+
+```
+do
+    ubind(@poly)
+loop while @unit == null
+```
+
+### Operators
+
+Operator precedence was changed to be more in line with usual implementations in other languages (specifically, Ruby).
+The list of operators in order of precedence can be found [here](SYNTAX.markdown#unary-and-binary-operators).
+
+Additionally, several operators were added or altered:
+
+* `!==`: new strict non-equality operator. Implemented as a negation of the `===` operator.
+* `-`: unary minus (now can be used in expressions, not just in numeric literals).
+* `~`: bitwise not (new operator).
+* `!`, `not`: boolean not (in previous versions, Mindcode treated these operators as bitwise negation instead of boolean negation).
+* `\=`, `%=`, `<<=`, `>>=`, `&=`, `|=`, `^=`, `&&=`, `||=`: new compound assignment operators.
+
+# Compiler enhancements
+
+Command-line compiler accepts parameters on the command line allowing to specify various compiler parameters and control the amount of additional output generated:
+
+```
+Usage: mindcode [-vVersionEdition] [-c] [-p[Level]] [-dLevel] [-oFlags] [input file] [output file] [log file]
+  when input file is not given, input is read from stdin
+  when output file is not given, output is written to stdout
+  when log file is not given, messages are written to stderr
+
+-vVersionEdition: selects target processor version and edition:
+  6:  Mindustry Logic 6
+  7:  Mindustry Logic 7, standard processor (default)
+  7s: Mindustry Logic 7, standard processor
+  7w: Mindustry Logic 7, world processor
+
+-c: print compiled code with virtual instructions
+
+-pLevel: activates parse tree printing into the log file. Possible level values:
+  0: no parse tree printing
+  1: print parse tree, linearize nested Seq objects [default when no level given]
+  2: print parse tree with full indenting
+
+-dLevel: controls output of debug messages. Possible level values:
+  0: no debug output
+  1: output modifications made by all optimizers
+  2: output modifications made by individual optimizers
+  3: output modifications made by individual optimizers and iterations
+
+-oFlags: specifies which optimizers to use.
+  When no flags are given (-o), all optimizers are active
+  otherwise -o is followed by characters representing desired optimizers.
+Available optimizers are:
+  n: replaces always true conditional jumps with unconditional ones, removes always false jumps
+  d: eliminates writes to compiler or user defined variables that are not used
+  s: eliminates jumps to the next instruction
+  i: eliminates temporary variables created to input values into instructions
+  o: eliminates temporary variables created to extract values from instructions
+  c: eliminates temporary variables created to execute case expressions
+  j: merges an op instruction producing a boolean expression into the following conditional jump
+  q: simplifies sequences of intertwined jumps
+  p: merges consecutive print statements outputting text literals
+  t: speeds up execution by eliminating chained jumps
+  e: eliminates instructions made inaccessible by optimizations or false conditions
+  k: optimizes variable storage on stack
+
+Use '-' to negate selection, eg. -o-n uses all optimization except CONDITIONAL_JUMPS_NORMALIZATION.
+```
+
+At this moment, web app compiler doesn't offer these options.
+
+# Code generation enhancements
+
+Code optimization was overhauled and currently the compiler produces quite optimized code.
+There's still space for various improvements, but most of the obvious opportunities for optimizations are handled in this release.
+
+# Bug fixes
+
+All known issues have been fixed in this release. If interested, see the list of closed issues [here](https://github.com/francois/mindcode/issues?q=is%3Aissue+is%3Aclosed).

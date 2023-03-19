@@ -3,7 +3,7 @@ BITS = 32
 BITMAP = bank1
 
 def setBit(bitIndex)
-  BITMAP[bitIndex \ BITS] = BITMAP[bitIndex \ BITS] | (1 << (bitIndex % BITS))
+  BITMAP[bitIndex \ BITS] |= (1 << (bitIndex % BITS))
 end
 
 def getBit(bitIndex)

@@ -5,7 +5,6 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.functions.FunctionMapper;
 import info.teksol.mindcode.mindustry.functions.WrongNumberOfParametersException;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.*;
 import java.util.function.Supplier;
@@ -28,8 +27,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private final InstructionProcessor instructionProcessor;
     private final FunctionMapper functionMapper;
     private final LogicInstructionPipeline pipeline;
-    private final LoopStack loopStack = new LoopStack();
     private final ReturnStack returnStack = new ReturnStack();
+
+    private LoopStack loopStack = new LoopStack();
 
     // Contains the infromation about functions built from the program to support code generation
     private CallGraph callGraph;
@@ -85,12 +85,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         }
     }
 
-    private LogicInstruction createInstruction(Opcode opcode, String... args) {
-        return instructionProcessor.createInstruction(opcode, args);
+    private void emitInstruction(Opcode opcode, String... args) {
+        pipeline.emit(instructionProcessor.createInstruction(opcode, args));
     }
 
-    private LogicInstruction createInstruction(String marker, Opcode opcode, String... args) {
-        return instructionProcessor.createInstruction(marker, opcode, args);
+    private void emitInstruction(String marker, Opcode opcode, String... args) {
+        pipeline.emit(instructionProcessor.createInstruction(marker, opcode, args));
     }
 
     private String translateUnaryOpToCode(String op) {
@@ -133,7 +133,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private void appendFunctionDeclarations() {
-        pipeline.emit(createInstruction(END));
+        emitInstruction(END);
 
         for (CallGraph.Function function : callGraph.getFunctions()) {
             if (function.isInline() || !function.isUsed()) {
@@ -143,7 +143,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             currentFunction = function;
             localPrefix = function.getLocalPrefix();
             functionContext = new LocalContext();
-            pipeline.emit(createInstruction(Opcode.LABEL, function.getLabel()));
+            emitInstruction(Opcode.LABEL, function.getLabel());
             returnStack.enterFunction(nextLabel(), localPrefix + RETURN_VALUE);
 
             if (function.isRecursive()) {
@@ -152,7 +152,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 appendStacklessFunctionDeclaration(function);
             }
 
-            pipeline.emit(createInstruction(END));
+            emitInstruction(END);
             localPrefix = "";
             returnStack.exitFunction();
             currentFunction = callGraph.getMain();
@@ -166,17 +166,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
         // Function parameters and return address are set up at the call site
         final String body = visit(function.getBody());
-        pipeline.emit(createInstruction(SET, localPrefix + RETURN_VALUE, body));
-        pipeline.emit(createInstruction(LABEL, returnStack.getReturnLabel()));
-        pipeline.emit(createInstruction(RETURN, stackName()));
+        emitInstruction(SET, localPrefix + RETURN_VALUE, body);
+        emitInstruction(LABEL, returnStack.getReturnLabel());
+        emitInstruction(RETURN, stackName());
     }
 
     private void appendStacklessFunctionDeclaration(CallGraph.Function function) {
         // Function parameters and return address are set up at the call site
         final String body = visit(function.getBody());
-        pipeline.emit(createInstruction(SET, localPrefix + RETURN_VALUE, body));
-        pipeline.emit(createInstruction(LABEL, returnStack.getReturnLabel()));
-        pipeline.emit(createInstruction(SET, "@counter", localPrefix + RETURN_ADDRESS));
+        emitInstruction(SET, localPrefix + RETURN_VALUE, body);
+        emitInstruction(LABEL, returnStack.getReturnLabel());
+        emitInstruction(SET, "@counter", localPrefix + RETURN_ADDRESS);
     }
 
     @Override
@@ -230,9 +230,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Switching to inline function context -- save/restore old one
         final CallGraph.Function previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
+        final LoopStack previousLoopStack = loopStack;
         try {
             currentFunction = function;
             functionContext = new LocalContext();
+            loopStack = new LoopStack();
             setupFunctionParameters(function, paramValues);
 
             // Retval gets registered in nodeContext, but we don't mind -- inline fucntions do not use stack
@@ -240,11 +242,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             final String returnLabel = nextLabel();
             returnStack.enterFunction(returnLabel, returnValue);
             String result = visit(function.getBody());
-            pipeline.emit(createInstruction(SET, returnValue, result));
-            pipeline.emit(createInstruction(LABEL, returnLabel));
+            emitInstruction(SET, returnValue, result);
+            emitInstruction(LABEL, returnLabel);
             returnStack.exitFunction();
             return returnValue;
         } finally {
+            loopStack = previousLoopStack;
             functionContext = previousContext;
             currentFunction = previousFunction;
         }
@@ -254,11 +257,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         setupFunctionParameters(function, paramValues);
 
         final String returnLabel = nextLabel();
-        pipeline.emit(createInstruction(SET, localPrefix + RETURN_ADDRESS, returnLabel));
+        emitInstruction(SET, localPrefix + RETURN_ADDRESS, returnLabel);
 
          // Stackless function call (could be a jump as well, but this lets us distinguish call and jump easily in the code)
-        pipeline.emit(createInstruction(SET, "@counter", function.getLabel()));
-        pipeline.emit(createInstruction(LABEL, returnLabel)); // where the function must return
+        emitInstruction(SET, "@counter", function.getLabel());
+        emitInstruction(LABEL, returnLabel); // where the function must return
 
         return passReturnValue(function);
     }
@@ -277,20 +280,20 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
         if (useStack) {
             // Store all local varables (both user defined and temporary) on the stack
-            variables.forEach(v -> pipeline.emit(createInstruction(marker, PUSH, stackName(), v)));
+            variables.forEach(v -> emitInstruction(marker, PUSH, stackName(), v));
         }
 
         setupFunctionParameters(function, paramValues);
 
          // Recursive function call
         final String returnLabel = nextLabel();
-        pipeline.emit(createInstruction(marker, CALL, stackName(), function.getLabel(), returnLabel));
-        pipeline.emit(createInstruction(LABEL, returnLabel)); // where the function must return
+        emitInstruction(marker, CALL, stackName(), function.getLabel(), returnLabel);
+        emitInstruction(LABEL, returnLabel); // where the function must return
 
         if (useStack) {
             // Restore all local varables (both user defined and temporary) from the stack
             Collections.reverse(variables);
-            variables.forEach(v -> pipeline.emit(createInstruction(marker, POP, stackName(), v)));
+            variables.forEach(v -> emitInstruction(marker, POP, stackName(), v));
         }
 
         return passReturnValue(function);
@@ -302,7 +305,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         for (int i = 0; i < paramValues.size(); i++) {
             // Visiting paramRefs (which are VarRefs) decorated them with localPrefix
             // paramValues were visited in caller's context
-            pipeline.emit(createInstruction(SET, visit(paramsRefs.get(i)), paramValues.get(i)));
+            emitInstruction(SET, visit(paramsRefs.get(i)), paramValues.get(i));
         }
     }
 
@@ -318,7 +321,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             // TODO: optimizer to remove resultVariable when not needed (not used across same function calls).
             //       Will be complicated; the optimizer would need to utilize the call graph
             final String resultVariable = nextReturnValue();
-            pipeline.emit(createInstruction(SET, resultVariable, localPrefix + RETURN_VALUE));
+            emitInstruction(SET, resultVariable, localPrefix + RETURN_VALUE);
             return resultVariable;
         } else {
             // Use the function return value directly - there's only one place where it is produced
@@ -338,7 +341,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public String visitHeapAccess(HeapAccess node) {
         final String addr = visit(node.getAddress());
         final String tmp = nextNodeResult();
-        pipeline.emit(createInstruction(READ, tmp, node.getCellName(), addr));
+        emitInstruction(READ, tmp, node.getCellName(), addr);
         return tmp;
     }
 
@@ -350,16 +353,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String elseBranch = nextLabel();
         final String endBranch = nextLabel();
 
-        pipeline.emit(createInstruction(JUMP, elseBranch, "equal", cond, "false"));
+        emitInstruction(JUMP, elseBranch, "equal", cond, "false");
 
         final String trueBranch = visit(node.getTrueBranch());
-        pipeline.emit(createInstruction(SET, tmp, trueBranch));
-        pipeline.emit(createInstruction(JUMP, endBranch, "always"));
+        emitInstruction(SET, tmp, trueBranch);
+        emitInstruction(JUMP, endBranch, "always");
 
-        pipeline.emit(createInstruction(LABEL, elseBranch));
+        emitInstruction(LABEL, elseBranch);
         final String falseBranch = visit(node.getFalseBranch());
-        pipeline.emit(createInstruction(SET, tmp, falseBranch));
-        pipeline.emit(createInstruction(LABEL, endBranch));
+        emitInstruction(SET, tmp, falseBranch);
+        emitInstruction(LABEL, endBranch);
 
         return tmp;
     }
@@ -383,7 +386,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             final HeapAccess heapAccess = (HeapAccess) node.getVar();
             final String target = heapAccess.getCellName();
             final String address = visit(heapAccess.getAddress());
-            pipeline.emit(createInstruction(Opcode.WRITE, rvalue, target, address));
+            emitInstruction(Opcode.WRITE, rvalue, target, address);
         } else if (node.getVar() instanceof PropertyAccess) {
             final PropertyAccess propertyAccess = (PropertyAccess) node.getVar();
             final String propTarget = visit(propertyAccess.getTarget());
@@ -397,7 +400,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             if (instructionProcessor.isBlockName(target)) {
                 throw new GenerationException("Assignment to variable " + target + " not allowed (name reserved for linked blocks)");
             }
-            pipeline.emit(createInstruction(Opcode.SET, target, rvalue));
+            emitInstruction(Opcode.SET, target, rvalue);
         } else {
             throw new GenerationException("Unhandled assignment target in " + node);
         }
@@ -414,7 +417,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String expression = visit(node.getExpression());
 
         final String tmp = nextNodeResult();
-        pipeline.emit(createInstruction(OP, translateUnaryOpToCode(node.getOp()), tmp, expression));
+        emitInstruction(OP, translateUnaryOpToCode(node.getOp()), tmp, expression);
         return tmp;
     }
 
@@ -440,23 +443,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             String nextValueLabel = nextLabel();
             // Setting the iterator first. It is possible to use continue in the value expression,
             // in which case the next iteration is performed.
-            pipeline.emit(createInstruction(SET, iterator, nextValueLabel));
-            pipeline.emit(createInstruction(SET, variable, visit(values.get(i))));
-            pipeline.emit(createInstruction(JUMP, bodyLabel, "always"));
-            pipeline.emit(createInstruction(marker, LABEL, nextValueLabel));
+            emitInstruction(SET, iterator, nextValueLabel);
+            emitInstruction(SET, variable, visit(values.get(i)));
+            emitInstruction(JUMP, bodyLabel, "always");
+            emitInstruction(marker, LABEL, nextValueLabel);
         }
 
         // Last value
-        pipeline.emit(createInstruction(SET, iterator, exitLabel));
-        pipeline.emit(createInstruction(SET, variable, visit(values.get(values.size() - 1))));
+        emitInstruction(SET, iterator, exitLabel);
+        emitInstruction(SET, variable, visit(values.get(values.size() - 1)));
 
-        pipeline.emit(createInstruction(LABEL, bodyLabel));
+        emitInstruction(LABEL, bodyLabel);
         visit(node.getBody());
 
         // Label for continue statements
-        pipeline.emit(createInstruction(LABEL, contLabel));
-        pipeline.emit(createInstruction(marker, GOTO, iterator));
-        pipeline.emit(createInstruction(LABEL, exitLabel));
+        emitInstruction(LABEL, contLabel);
+        emitInstruction(marker, GOTO, iterator);
+        emitInstruction(LABEL, exitLabel);
         loopStack.exitLoop(node.getLabel());
 
         return "null";
@@ -469,14 +472,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
-        pipeline.emit(createInstruction(LABEL, beginLabel));
+        emitInstruction(LABEL, beginLabel);
         final String cond = visit(node.getCondition());
-        pipeline.emit(createInstruction(JUMP, doneLabel, "equal", cond, "false"));
+        emitInstruction(JUMP, doneLabel, "equal", cond, "false");
         visit(node.getBody());
-        pipeline.emit(createInstruction(LABEL, continueLabel));
+        emitInstruction(LABEL, continueLabel);
         visit(node.getUpdate());
-        pipeline.emit(createInstruction(JUMP, beginLabel, "always"));
-        pipeline.emit(createInstruction(LABEL, doneLabel));
+        emitInstruction(JUMP, beginLabel, "always");
+        emitInstruction(LABEL, doneLabel);
         loopStack.exitLoop(node.getLabel());
         return "null";
     }
@@ -488,12 +491,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
-        pipeline.emit(createInstruction(LABEL, beginLabel));
+        emitInstruction(LABEL, beginLabel);
         visit(node.getBody());
-        pipeline.emit(createInstruction(LABEL, continueLabel));
+        emitInstruction(LABEL, continueLabel);
         final String cond = visit(node.getCondition());
-        pipeline.emit(createInstruction(JUMP, beginLabel, "notEqual", cond, "false"));
-        pipeline.emit(createInstruction(LABEL, doneLabel));
+        emitInstruction(JUMP, beginLabel, "notEqual", cond, "false");
+        emitInstruction(LABEL, doneLabel);
         loopStack.exitLoop(node.getLabel());
         return "null";
     }
@@ -504,7 +507,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String right = visit(node.getRight());
 
         final String tmp = nextNodeResult();
-        pipeline.emit(createInstruction(OP, translateBinaryOpToCode(node.getOp()), tmp, left, right));
+        emitInstruction(OP, translateBinaryOpToCode(node.getOp()), tmp, left, right);
         return tmp;
     }
 
@@ -536,14 +539,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitStringLiteral(StringLiteral node) {
         final String tmp = nextNodeResult();
-        pipeline.emit(createInstruction(SET, tmp, "\"" + node.getText().replaceAll("\"", "\\\"") + "\""));
+        emitInstruction(SET, tmp, "\"" + node.getText().replaceAll("\"", "\\\"") + "\"");
         return tmp;
     }
 
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
         final String tmp = nextNodeResult();
-        pipeline.emit(createInstruction(SET, tmp, node.getLiteral()));
+        emitInstruction(SET, tmp, node.getLiteral());
         return tmp;
     }
 
@@ -552,7 +555,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String target = visit(node.getTarget());
         final String prop = visit(node.getProperty());
         final String tmp = nextNodeResult();
-        pipeline.emit(createInstruction(SENSOR, tmp, target, prop));
+        emitInstruction(SENSOR, tmp, target, prop);
         return tmp;
     }
 
@@ -576,34 +579,34 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                         String nextExp = nextLabel();       // Next value in when list
                         Range range = (Range) value;
                         final String minValue = visit(range.getFirstValue());
-                        pipeline.emit(createInstruction(JUMP, nextExp, "lessThan", caseValue, minValue));
+                        emitInstruction(JUMP, nextExp, "lessThan", caseValue, minValue);
                         // The max value is only evaluated when the min value lets us through
                         final String maxValue = visit(range.getLastValue());
-                        pipeline.emit(createInstruction(JUMP, bodyLabel, translateBinaryOpToCode(range.maxValueComparison()), caseValue, maxValue));
-                        pipeline.emit(createInstruction(LABEL, nextExp));
+                        emitInstruction(JUMP, bodyLabel, translateBinaryOpToCode(range.maxValueComparison()), caseValue, maxValue);
+                        emitInstruction(LABEL, nextExp);
                     }
                     else {
                         final String whenValue = visit(value);
-                        pipeline.emit(createInstruction(JUMP, bodyLabel, "equal", caseValue, whenValue));
+                        emitInstruction(JUMP, bodyLabel, "equal", caseValue, whenValue);
                     }
                 }
             });
 
             // No match in the when value list: skip to the next alternative
-            pipeline.emit(createInstruction(JUMP, nextAlt, "always"));
+            emitInstruction(JUMP, nextAlt, "always");
 
             // Body of the alternative
-            pipeline.emit(createInstruction(LABEL, bodyLabel));
+            emitInstruction(LABEL, bodyLabel);
             final String body = visit(alternative.getBody());
-            pipeline.emit(createInstruction(SET, resultVar, body));
-            pipeline.emit(createInstruction(JUMP, exitLabel, "always"));
+            emitInstruction(SET, resultVar, body);
+            emitInstruction(JUMP, exitLabel, "always");
 
-            pipeline.emit(createInstruction(LABEL, nextAlt));
+            emitInstruction(LABEL, nextAlt);
         }
 
         final String elseBranch = visit(node.getElseBranch());
-        pipeline.emit(createInstruction(SET, resultVar, elseBranch));
-        pipeline.emit(createInstruction(LABEL, exitLabel));
+        emitInstruction(SET, resultVar, elseBranch);
+        emitInstruction(LABEL, exitLabel);
 
         return resultVar;
     }
@@ -635,16 +638,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
             // Initialize stack pointer variable
             if (node.rangeSpecified()) {
-                pipeline.emit(createInstruction(SET, sp, String.valueOf(stack.getLast())));
+                emitInstruction(SET, sp, String.valueOf(stack.getLast()));
             } else {
                 // Range not specified. Determine memory size dynamically.
                 String label = nextLabel();
                 String tmp = nextTemp();
-                pipeline.emit(createInstruction(SET, sp, "511"));
-                pipeline.emit(createInstruction(SENSOR, tmp, stack.getName(), "@type"));
-                pipeline.emit(createInstruction(JUMP, label, "equal", tmp, "@memory-bank"));
-                pipeline.emit(createInstruction(SET, sp, "63"));
-                pipeline.emit(createInstruction(LABEL, label));
+                emitInstruction(SET, sp, "511");
+                emitInstruction(SENSOR, tmp, stack.getName(), "@type");
+                emitInstruction(JUMP, label, "equal", tmp, "@memory-bank");
+                emitInstruction(SET, sp, "63");
+                emitInstruction(LABEL, label);
             }
         }
         return "null";
@@ -653,14 +656,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitBreakStatement(BreakStatement node) {
         final String label = loopStack.getBreakLabel(node.getLabel());
-        pipeline.emit(createInstruction(JUMP, label, "always"));
+        emitInstruction(JUMP, label, "always");
         return "null";
     }
 
     @Override
     public String visitContinueStatement(ContinueStatement node) {
         final String label = loopStack.getContinueLabel(node.getLabel());
-        pipeline.emit(createInstruction(JUMP, label, "always"));
+        emitInstruction(JUMP, label, "always");
         return "null";
     }
 
@@ -669,8 +672,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String retval = returnStack.getReturnValue();
         final String label = returnStack.getReturnLabel();
         final String expression = visit(node.getRetval());
-        pipeline.emit(createInstruction(SET, retval, expression));
-        pipeline.emit(createInstruction(JUMP, label, "always"));
+        emitInstruction(SET, retval, expression);
+        emitInstruction(JUMP, label, "always");
         return "null";
     }
 

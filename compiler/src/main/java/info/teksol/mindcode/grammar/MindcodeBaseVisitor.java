@@ -521,21 +521,7 @@ public class MindcodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitExp_assign(MindcodeParser.Exp_assignContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx) { return visitChildren(ctx); }
+	@Override public T visitCompound_assign(MindcodeParser.Compound_assignContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -43,9 +43,9 @@ You may declare your own functions using the `def` keyword:
 
 ```
 def update(message, status)
-  print("Status: ", status, "\n")
-  print("Game time: ", floor(@time) / 1000, " sec")
-  printflush(message)
+    print("Status: ", status, "\n")
+    print("Game time: ", floor(@time) / 1000, " sec")
+    printflush(message)
 end
 ```
 
@@ -64,16 +64,16 @@ A function may call other function(s), and nothing prevents recursive functions:
 allocate stack in bank1[0...512]
 
 def fib(n)
-  if n <= 0
-    0
-  else
-    case n
-    when 1
-      1
+    if n <= 0
+        0
     else
-      fib(n - 1) + fib(n - 2)
+        case n
+            when 1
+                1
+            else
+                fib(n - 1) + fib(n - 2)
+        end
     end
-  end
 end
 
 fib(1) // 0
@@ -88,6 +88,7 @@ fib(8) // 13
 ```
 
 As you may have noticed, allocating a stack in a Memory Cell or Memory Bank is required in order to handle recursive functions.
+When no range is specified for stack allocation, the entire capacity of linked memory block is used.
 Additional constraint is that only numbers and numerical values can be passed as arguments or stored in local variables
 of recursive functions - this is because function parameters and local variables need to be stored on stack,
 and Memory Cell or Memory Bank only support string numerical values in them.
@@ -98,18 +99,18 @@ Function parameters and variables used in functions are local to the function.
 Therefore a variable `n` used in a function is different from a variable `n` used in another function
 and also from a variable `n` used in main program body.
 Changes to local variables are not visible outside of the function containing the variable.
-The only exception are variables with upper-case names, such as VARIABLE. These variables are common to all functions
+The only exception are variables with upper-case names, such as `VARIABLE`. These variables are common to all functions
 and the main program body, and modifications of these variables are visible everywhere in the program:
 
 ```
 def foo(x)
-  y = x + 10
-  Z = 10
+    y = x + 10
+    Z = 10
 end
 
 def bar(x)
-  y = x + 20
-  Z = 20
+    y = x + 20
+    Z = 20
 end
 
 x = 1
@@ -135,11 +136,11 @@ statement doesn't specify a return value:
 
 ```
 def foo(n)
-  case n
-    when 1      return
-    when 2      return "Two"
-  end
-  n
+    case n
+        when 1      return
+        when 2      return "Two"
+    end
+    n
 end
 
 print(foo(1), ":", foo(2), ":", foo(3))
@@ -157,11 +158,11 @@ To create an inline function, use `inline` keyword:
 
 ```
 inline def printtext(name, value, min, max)
-  if value < min
-    print(name, " too low")
-  elsif value > max
-    print(name, " too high")
-  end
+    if value < min
+        print(name, " too low")
+    elsif value > max
+        print(name, " too high")
+    end
 end
 
 printtext("Health", health, minHealth, maxHealth)
@@ -233,8 +234,8 @@ You have access to several styles of loops: [while loops](#while-loops), [do-whi
 Loop until a condition becomes true:
 
 ```
-while @unit === null
-  ubind(@poly)
+while @unit == null
+    ubind(@poly)
 end
 ```
 
@@ -243,14 +244,10 @@ end
 Similar to while loops, except the condition is placed at the end of the loop. Do-while loops therefore always execute at least once:
 
 ```
-n = @links
 do
-  n -= 1
-  block = getlink(n)
-  print(block)
-loop while n > 0
+    ubind(@poly)
+loop while @unit == null
 ```
-
 
 ## Range Iteration Loops
 
@@ -296,10 +293,10 @@ Loop over a fixed collection of values or expressions:
 
 ```
 for u in (@mono, @poly, @mega)
-  ubind(u)
-  if @unit != null
-    break
-  end
+    ubind(u)
+    if @unit != null
+        break
+    end
 end
 print(u)
 printflush(message1)
@@ -312,7 +309,7 @@ The list of values is fixed -- it cannot be stored in a variable, for example, a
 ```
 a = 0
 for a in (a + 1, a + 1, a + 1)
-  print(a, "\n")
+    print(a, "\n")
 end
 printflush(message1)
 ```
@@ -328,11 +325,11 @@ The syntax is similar to C's, except for the absence of parenthesis:
 // left and ending at the upper right
 dx = 1
 for x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx
-  // do something with this block
-  if x == NE_X
-    dx *= -1
-    y += dy
-  end
+    // do something with this block
+    if x == NE_X
+        dx *= -1
+        y += dy
+    end
 end
 ```
 
@@ -343,41 +340,42 @@ You can use a `break` or `continue` statement inside a loop in the usual sense (
 
 ```
 while not within(x, y, 6)
-  approach(x, y, 4)
-  if @unit.dead == 1
-    break
-  end
-  ...
+    approach(x, y, 4)
+    if @unit.dead == 1
+        break
+    end
+    ...
 end
 ```
 
 ### Using labels with break or continue
 
 An unlabeled `break` statement exits the innermost `for` or `while` statement, however a labeled `break` can exit from an outer statement.
-It is necessary to mark the outer statement with a label, and then use the `break loop <label>` syntax, as shown here:
+It is necessary to mark the outer statement with a label, and then use the `break <label>` syntax, as shown here:
 
 ```
 MainLoop:
 for i in 1 .. 10
-  for j in 5 .. 20
-    if i > j
-      break MainLoop
+    for j in 5 .. 20
+        if i > j
+            break MainLoop
+        end
     end
-  end
 end
 ```
-Similarly, `continue MainLoop` skips the rest of the current iteration of the main loop. Every loop in Mindcode can be marked with a label,
+Similarly, `continue MainLoop` skips the rest of the current iteration of both the inner loop and the main loop.
+Every loop in Mindcode can be marked with a label,
 and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
 
 
-Note: usually, a `break` or `continue` statement will be the last statements in a block of code (typically in an `if` statement).
+Note: usually, a `break` or `continue` statement will be the last statements in a block of code (typically in an `if` or `case` statement).
 It doesn't make sense to put additional statements or expressions after a `break` or `continue`, since that code would never get executed
 and will be removed by the optimizer. If you do put additional statements there, the compiler will mistake them for a label:
 
 ```
 while true
-  break
-  print("This never gets printed")
+    break
+    print("This never gets printed")
 end
 ```
 
@@ -390,8 +388,8 @@ If you insist on putting additional statement after a `break` or `continue`, use
 
 ```
 while true
-  break;
-  print("This never gets printed")
+    break;
+    print("This never gets printed")
 end
 ```
 
@@ -407,9 +405,9 @@ example:
 
 ```
 result = if n == 0
-  "ready"
+    "ready"
 else
-  "pending"
+    "pending"
 end
 ```
 
@@ -419,27 +417,26 @@ To handle more than two alternatives, you can use `elsif` as an alternative to n
 
 ```
 text = if n > 0
-  "positive"
+    "positive"
 elsif n < 0
-  "negative"
+    "negative"
 else
-  "zero"
+    "zero"
 end
 ```
 is equivalent to
 
 ```
 text = if n > 0
-  "positive"
+    "positive"
 else
-  if n < 0
-    "negative"
-  else
-    "zero"
-  end
+    if n < 0
+        "negative"
+    else
+        "zero"
+    end
 end
 ```
-
 
 ## Ternary Operator
 
@@ -458,14 +455,14 @@ Case/when is another way of writing conditionals. Use case/when when you need to
 
 ```
 next_action = case num_enemies
-  when 0
-    "chill"
-  when 1, 2
-    "alert"
-  when 3, 4, 5
-    "vigilant"
-  else
-    "nuke-the-place"
+    when 0
+        "chill"
+    when 1, 2
+        "alert"
+    when 3, 4, 5
+        "vigilant"
+    else
+        "nuke-the-place"
 end
 ```
 
@@ -474,12 +471,12 @@ It is also possible to use range expressions, and even mix them with normal expr
 
 ```
 text = case number
-  when 0, 1, 2**3 .. 2**5, 42, -115 then
-    "A number I like"
-  when 10**5 .. 10**9 then
-    "A very big number"
-  else
-    "An ugly number"
+    when 0, 1, 2**3 .. 2**5, 42, -115 then
+        "A number I like"
+    when 10**5 .. 10**9 then
+        "A very big number"
+    else
+        "An ugly number"
 end
 ```
 
@@ -544,7 +541,7 @@ Mindustry Logic offers us many comparison operators, namely:
 ```
 // Bind new units until a living one is found
 while not (@unit.dead === 0)
-  ubind(@poly)
+    ubind(@poly)
 end
 ```
 
@@ -646,7 +643,7 @@ more avenues for code sharing.
 
 # Unary and Binary operators
 
-Most operators do the expected: `+`, `-`, `*`, `/`, and they respect priority of operation, meaning we multiply and
+Most operators do the expected: `+`, `-`, `*`, `/`, and they respect precedence of operation, meaning we multiply and
 divide, then add and substract. Add to this operator `\`, which stands for integer division. For example:
 
 ```
@@ -665,11 +662,12 @@ Otherwise, the full list of operators in the order of precedence is as follows:
 7. `&`: binary and (useful for flags)
 8. `|`: binary or (useful for flags),  `^`: binary [xor (exclusive-or)](https://en.wikipedia.org/wiki/Exclusive_or)
 9. `<`: less than,  `<=`: less than or equal,  `>=`: greater than or equal,  `>`:  greater than
-10. `==`: equality,  `!=`: inequality (does not equal),  `===`: strict equality -- use when values can be `null`
+10. `==`: equality,  `!=`: inequality (does not equal),  `===`, `!==`: strict equality and non-equality -- use when values can be `null`
 11. `&&`, `and`: boolean and (`reactor1.thorium > 0 and reactor1.cryofluid <= 10`)
 12. `||`, `or`: boolean or
 13. `? :`: ternary operator
-14. `=`, `/=`, `**=`, `-=`, `+=`, `*=`: assignments (the compound operators combine arithemtic operation with assignment, 'x += 1' is equivalent to 'x = x + 1')
+14. `=`, `**=`, `*=`, `/=`, `\=`, `%=`, `+=`, `-=`, `<<=`, `>>=`, `&=`, `|=`, `^=`, `&&=`, `||=`: assignments
+(the compound operators combine arithmetic operation with assignment, `x += 1` is equivalent to `x = x + 1`)
 
 # Literals
 

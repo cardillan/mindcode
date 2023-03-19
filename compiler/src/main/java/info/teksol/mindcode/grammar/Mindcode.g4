@@ -70,6 +70,7 @@ alloc_list : type=(HEAP | STACK) IN id alloc_range?
 alloc_range : LEFT_SBRACKET range RIGHT_SBRACKET;
 
 fundecl : ( inline = INLINE)? DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
+        | ( inline = INLINE)? DEF name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
         | ( inline = INLINE)? DEF name=id body=expression_list END
         ;
 
@@ -153,9 +154,12 @@ when_value_list : when_expression
                 ;
 
 assign : <assoc=right> target=lvalue ASSIGN value=expression                             # simple_assign
-       | <assoc=right> target=lvalue EXP_ASSIGN value=expression                         # exp_assign
-       | <assoc=right> target=lvalue op=( MUL_ASSIGN | DIV_ASSIGN ) value=expression     # binop_mul_div_assign
-       | <assoc=right> target=lvalue op=( PLUS_ASSIGN | MINUS_ASSIGN ) value=expression  # binop_plus_minus_assign
+       | <assoc=right> target=lvalue op=( EXP_ASSIGN | 
+                                          MUL_ASSIGN | DIV_ASSIGN | IDIV_ASSIGN | MOD_ASSIGN |
+                                          PLUS_ASSIGN | MINUS_ASSIGN |
+                                          SHIFT_LEFT_ASSIGN | SHIFT_RIGHT_ASSIGN |
+                                          BITWISE_AND_ASSIGN | BITWISE_OR_ASSIGN | BITWISE_XOR_ASSIGN |
+                                          AND_ASSIGN | OR_ASSIGN ) value=expression      # compound_assign
        ;
 
 lvalue : unit_ref
@@ -190,6 +194,7 @@ hex_int : HEXINT;
 ALLOCATE : 'allocate';
 BREAK : 'break';
 CASE : 'case';
+CONST : 'const';
 CONTINUE : 'continue';
 DEF : 'def';
 DO : 'do';
@@ -230,11 +235,21 @@ PLUS : '+';
 QUESTION_MARK : '?';
 SEMICOLON : ';';
 
-DIV_ASSIGN : '/=';
 EXP_ASSIGN : '**=';
-MINUS_ASSIGN : '-=';
 MUL_ASSIGN : '*=';
+DIV_ASSIGN : '/=';
+IDIV_ASSIGN : '\\=';
+MOD_ASSIGN : '%=';
 PLUS_ASSIGN : '+=';
+MINUS_ASSIGN : '-=';
+
+SHIFT_LEFT_ASSIGN : '<<=';
+SHIFT_RIGHT_ASSIGN : '>>=';
+BITWISE_AND_ASSIGN : '&=';
+BITWISE_OR_ASSIGN : '|=';
+BITWISE_XOR_ASSIGN : '^=';
+AND_ASSIGN : '&&=';
+OR_ASSIGN : '||=';
 
 LESS_THAN : '<';
 LESS_THAN_EQUAL : '<=';

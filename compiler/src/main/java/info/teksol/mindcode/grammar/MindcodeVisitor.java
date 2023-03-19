@@ -486,26 +486,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSimple_assign(MindcodeParser.Simple_assignContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code exp_assign}
+	 * Visit a parse tree produced by the {@code compound_assign}
 	 * labeled alternative in {@link MindcodeParser#assign}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitExp_assign(MindcodeParser.Exp_assignContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code binop_mul_div_assign}
-	 * labeled alternative in {@link MindcodeParser#assign}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code binop_plus_minus_assign}
-	 * labeled alternative in {@link MindcodeParser#assign}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx);
+	T visitCompound_assign(MindcodeParser.Compound_assignContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree

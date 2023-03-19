@@ -229,33 +229,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitExp_assign(MindcodeParser.Exp_assignContext ctx) {
-        final AstNode target = visit(ctx.target);
-        return new Assignment(
-                target,
-                new BinaryOp(
-                        target,
-                        "**",
-                        visit(ctx.value)
-                )
-        );
-    }
-
-    @Override
-    public AstNode visitBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx) {
-        final AstNode target = visit(ctx.target);
-        return new Assignment(
-                target,
-                new BinaryOp(
-                        target,
-                        ctx.op.getText().replace("=", ""),
-                        visit(ctx.value)
-                )
-        );
-    }
-
-    @Override
-    public AstNode visitBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx) {
+    public AstNode visitCompound_assign(MindcodeParser.Compound_assignContext ctx) {
         final AstNode target = visit(ctx.target);
         return new Assignment(
                 target,

@@ -814,41 +814,17 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitSimple_assign(MindcodeParser.Simple_assignContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code exp_assign}
+	 * Enter a parse tree produced by the {@code compound_assign}
 	 * labeled alternative in {@link MindcodeParser#assign}.
 	 * @param ctx the parse tree
 	 */
-	void enterExp_assign(MindcodeParser.Exp_assignContext ctx);
+	void enterCompound_assign(MindcodeParser.Compound_assignContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code exp_assign}
+	 * Exit a parse tree produced by the {@code compound_assign}
 	 * labeled alternative in {@link MindcodeParser#assign}.
 	 * @param ctx the parse tree
 	 */
-	void exitExp_assign(MindcodeParser.Exp_assignContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code binop_mul_div_assign}
-	 * labeled alternative in {@link MindcodeParser#assign}.
-	 * @param ctx the parse tree
-	 */
-	void enterBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code binop_mul_div_assign}
-	 * labeled alternative in {@link MindcodeParser#assign}.
-	 * @param ctx the parse tree
-	 */
-	void exitBinop_mul_div_assign(MindcodeParser.Binop_mul_div_assignContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code binop_plus_minus_assign}
-	 * labeled alternative in {@link MindcodeParser#assign}.
-	 * @param ctx the parse tree
-	 */
-	void enterBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code binop_plus_minus_assign}
-	 * labeled alternative in {@link MindcodeParser#assign}.
-	 * @param ctx the parse tree
-	 */
-	void exitBinop_plus_minus_assign(MindcodeParser.Binop_plus_minus_assignContext ctx);
+	void exitCompound_assign(MindcodeParser.Compound_assignContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#lvalue}.
 	 * @param ctx the parse tree
