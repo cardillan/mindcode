@@ -262,6 +262,15 @@ public interface InstructionProcessor {
     Set<String> getBlockNames();
 
     /**
+     * Determines whether the identifier is a volatile variable, ie. a variable whose value can change
+     * independently of the program.
+     *
+     * @param identifier identifier to check
+     * @return true if it denotes a volatile variable
+     */
+    boolean isVolatile(String identifier);
+
+    /**
      * Determines whether the identifier could be a block name (such as switch1, cell2, projector3 etc.).
      *
      * @param identifier identifier to check

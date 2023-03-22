@@ -32,7 +32,7 @@ public class StackUsageOptimizer extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         // Both optimizations handle the program body and user functions at once. The program body can contain call
-        // instructions, but no push or pop instructions, so the optimizations won'T do anything on them,
+        // instructions, but no push or pop instructions, so the optimizations won't do anything on them,
         // even if processing the program body might be a bit ineffective.
         removeUnusedVariables();
         removeUnnecessaryPushes();

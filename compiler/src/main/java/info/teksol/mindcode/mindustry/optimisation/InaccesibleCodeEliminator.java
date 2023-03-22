@@ -30,7 +30,8 @@ class InaccesibleCodeEliminator extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         findActiveLabels();
-        return removeInaccessibleInstructions();
+        removeInaccessibleInstructions();
+        return true;
     }
     
     private void findActiveLabels() {
@@ -54,8 +55,7 @@ class InaccesibleCodeEliminator extends GlobalOptimizer {
         return null;
     }
     
-    private boolean removeInaccessibleInstructions() {
-        boolean modified = false;
+    private void removeInaccessibleInstructions() {
         boolean accessible = true;
 
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
@@ -77,12 +77,8 @@ class InaccesibleCodeEliminator extends GlobalOptimizer {
                 } else {
                     // Remove inaccessible
                     it.remove();
-                    modified = true;
                 }
             }
         }
-
-        return modified;
     }
-
 }

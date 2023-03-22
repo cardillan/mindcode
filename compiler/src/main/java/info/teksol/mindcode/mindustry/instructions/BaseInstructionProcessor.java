@@ -389,6 +389,14 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
 
+    private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second", "@minute",
+            "@waveNumber", "@waveTime");
+
+    @Override
+    public boolean isVolatile(String identifier) {
+        return VOLATILE_NAMES.contains(identifier);
+    }
+
     @Override
     public boolean isBlockName(String identifier) {
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
@@ -397,7 +405,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public boolean isGlobalName(String identifier) {
-        return identifier.equals(identifier.toUpperCase()) || isBlockName(identifier);
+        return identifier.equals(identifier.toUpperCase());
     }
 
     // These structures are static for now. Can be made version dependent if needed in the future.

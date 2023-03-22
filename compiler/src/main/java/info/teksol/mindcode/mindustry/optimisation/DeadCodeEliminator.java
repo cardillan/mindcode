@@ -19,7 +19,8 @@ class DeadCodeEliminator extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         analyzeDataflow();
-        return removeUselessWrites();
+        removeUselessWrites();
+        return true;
     }
 
     @Override
@@ -75,11 +76,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         program.stream().filter(ix -> !ix.isPushOrPop()).forEach(this::examineInstruction);
     }
 
-    /**
-     * @return true if we need to do another round of dataflow analysis.
-     */
-    private boolean removeUselessWrites() {
-        int initialSize = program.size();
+    private void removeUselessWrites() {
         final Set<String> uselessWrites = new HashSet<>(writes.keySet());
         uselessWrites.removeAll(reads);
         for (String key : uselessWrites) {
@@ -91,7 +88,6 @@ class DeadCodeEliminator extends GlobalOptimizer {
         }
 
         eliminations.addAll(uselessWrites);
-        return program.size() < initialSize;
     }
     
     /**

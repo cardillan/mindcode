@@ -143,7 +143,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             currentFunction = function;
             localPrefix = function.getLocalPrefix();
             functionContext = new LocalContext();
-            emitInstruction(Opcode.LABEL, function.getLabel());
+            emitInstruction(localPrefix, Opcode.LABEL, function.getLabel());
             returnStack.enterFunction(nextLabel(), localPrefix + RETURN_VALUE);
 
             if (function.isRecursive()) {
@@ -167,7 +167,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Function parameters and return address are set up at the call site
         final String body = visit(function.getBody());
         emitInstruction(SET, localPrefix + RETURN_VALUE, body);
-        emitInstruction(LABEL, returnStack.getReturnLabel());
+        emitInstruction(localPrefix, LABEL, returnStack.getReturnLabel());
         emitInstruction(RETURN, stackName());
     }
 
@@ -175,7 +175,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Function parameters and return address are set up at the call site
         final String body = visit(function.getBody());
         emitInstruction(SET, localPrefix + RETURN_VALUE, body);
-        emitInstruction(LABEL, returnStack.getReturnLabel());
+        emitInstruction(localPrefix, LABEL, returnStack.getReturnLabel());
         emitInstruction(SET, "@counter", localPrefix + RETURN_ADDRESS);
     }
 
@@ -235,6 +235,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             currentFunction = function;
             functionContext = new LocalContext();
             loopStack = new LoopStack();
+
+            emitInstruction(localPrefix, LABEL, nextLabel());
             setupFunctionParameters(function, paramValues);
 
             // Retval gets registered in nodeContext, but we don't mind -- inline fucntions do not use stack
@@ -243,7 +245,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             returnStack.enterFunction(returnLabel, returnValue);
             String result = visit(function.getBody());
             emitInstruction(SET, returnValue, result);
-            emitInstruction(LABEL, returnLabel);
+            emitInstruction(localPrefix, LABEL, returnLabel);
             returnStack.exitFunction();
             return returnValue;
         } finally {
@@ -531,7 +533,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Global (main program body) variables aren't registered -- they must not be pushed onto stack!
         // Adds underscore after non-empty local prefix, to make sure return value and return address variables
         // cannot ever collide with user-defined local variables.
-        return localPrefix.isEmpty() || instructionProcessor.isGlobalName(node.getName())
+        return localPrefix.isEmpty()
+                || instructionProcessor.isGlobalName(node.getName())
+                || instructionProcessor.isBlockName(node.getName())
                 ? node.getName()
                 : functionContext.registerVariable(localPrefix + "_" + node.getName());
     }

@@ -30,11 +30,13 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     public final void flush() {
         original = (int) program.stream().filter(ix -> !ix.isLabel()).count();
 
-        boolean repeat = true;
-        while (repeat) {
+        int size;
+        boolean repeat;
+        do {
+            size = program.size();
             repeat = optimizeProgram();
             debugPrinter.iterationFinished(this, ++iterations, program);
-        }
+        } while (repeat && size != program.size());
 
         emitted = (int) program.stream().filter(ix -> !ix.isLabel()).count();
 
@@ -102,5 +104,17 @@ abstract class GlobalOptimizer extends BaseOptimizer {
         throw new OptimizationException("Instruction to be replaced not found in program." +
                 "\nOriginal instruction: " + original +
                 "\nReplacement instruction: " + replaced);
+    }
+
+    protected void removeInstruction(LogicInstruction original) {
+        for (int index = 0; index < program.size(); index++) {
+            if (program.get(index) == original) {
+                program.remove(index);
+                return;
+            }
+        }
+
+        throw new OptimizationException("Instruction to be removed not found in program." +
+                "\nInstruction: " + original);
     }
 }

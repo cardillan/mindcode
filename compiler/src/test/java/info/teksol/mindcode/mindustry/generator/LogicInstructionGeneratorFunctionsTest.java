@@ -19,6 +19,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "3"),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "__fn0_n", var(0)),
                         createInstruction(SET, var(1), "__fn0_n"),
                         createInstruction(LABEL, var(1000)),
@@ -78,11 +79,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "3"),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "__fn0_n", var(0)),
                         createInstruction(SET, var(1), "__fn0_n"),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(PRINT, var(1)),
                         createInstruction(SET, var(2), "4"),
+                        createInstruction(LABEL, var(1012)),
                         createInstruction(SET, "__fn1_n", var(2)),
                         createInstruction(SET, var(3), "__fn1_n"),
                         createInstruction(LABEL, var(1001)),
@@ -203,6 +206,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(SET, var(0), "4"),
                         createInstruction(SET, "boo", var(0)),
                         createInstruction(SET, var(1), "3"),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "__fn0_n", var(1)),
                         createInstruction(SET, "__fn0_r", "boo"),
                         createInstruction(SET, var(2), "2"),
@@ -234,10 +238,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "4"),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "__fn0_n", var(0)),
                         createInstruction(SET, var(2), "1"),
+                        createInstruction(LABEL, var(1012)),
                         createInstruction(SET, "__fn1_n", "__fn0_n"),
                         createInstruction(SET, var(4), "2"),
+                        createInstruction(LABEL, var(1014)),
                         createInstruction(SET, "__fn2_n", "__fn1_n"),
                         createInstruction(SET, var(6), "3"),
                         createInstruction(OP, "pow", var(7), var(6), "__fn2_n"),
@@ -396,21 +403,24 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "4"),
+                        createInstruction(LABEL, var(1000)),
                         createInstruction(SET, "__fn0_n", var(0)),
                         createInstruction(SET, var(2), "1"),
                         createInstruction(OP, "add", var(3), "__fn0_n", var(2)),
                         createInstruction(SET, var(1), var(3)),
-                        createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(LABEL, var(1002)),
                         createInstruction(SET, "__fn1_n", var(1)),
                         createInstruction(SET, var(5), "1"),
                         createInstruction(OP, "add", var(6), "__fn1_n", var(5)),
                         createInstruction(SET, var(4), var(6)),
-                        createInstruction(LABEL, var(1001)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(LABEL, var(1004)),
                         createInstruction(SET, "__fn2_n", var(4)),
                         createInstruction(SET, var(8), "1"),
                         createInstruction(OP, "add", var(9), "__fn2_n", var(8)),
                         createInstruction(SET, var(7), var(9)),
-                        createInstruction(LABEL, var(1002)),
+                        createInstruction(LABEL, var(1005)),
                         createInstruction(PRINT, var(7)),
                         createInstruction(END)
                 ),
@@ -582,6 +592,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END),
                         // def foo
                         createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1013)),
                         // call bar (inline - creates __fn1_n)
                         createInstruction(SET, "__fn1_n", "__fn0_n"),
                         createInstruction(PRINT, "__fn1_n"),
@@ -620,6 +631,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void preservesBlocksAndConstantsInUserFunctions() {
         assertLogicInstructionsMatch(
                 List.of(
+                        createInstruction(LABEL, var(1001)),
                         createInstruction(SET, "__fn0_block", "lancer1"),
                         createInstruction(SET, var(1), "1"),
                         createInstruction(RADAR, "enemy", "any", "any", "distance", "__fn0_block", var(1), var(2)),
@@ -652,6 +664,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "0"),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "__fn0_n", var(0)),
                         createInstruction(SET, var(2), "2"),
                         createInstruction(OP, "mod", var(3), "__fn0_n", var(2)),
@@ -815,10 +828,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "4"),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "__fn0_n", var(0)),
                         createInstruction(SET, var(2), "1"),
+                        createInstruction(LABEL, var(1012)),
                         createInstruction(SET, "__fn1_n", "__fn0_n"),
                         createInstruction(SET, var(4), "2"),
+                        createInstruction(LABEL, var(1014)),
                         createInstruction(SET, "__fn2_n", "__fn1_n"),
                         createInstruction(SET, var(6), "3"),
                         createInstruction(OP, "pow", var(7), var(6), "__fn2_n"),
@@ -855,27 +871,30 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "4"),
+                        createInstruction(LABEL, var(1000)),
                         createInstruction(SET, "__fn0_n", var(0)),
                         createInstruction(SET, var(2), "1"),
                         createInstruction(OP, "add", var(3), "__fn0_n", var(2)),
                         createInstruction(SET, var(1), var(3)),
-                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(JUMP, var(1001), "always"),
                         createInstruction(SET, var(1), "null"),
-                        createInstruction(LABEL, var(1000)),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(LABEL, var(1002)),
                         createInstruction(SET, "__fn1_n", var(1)),
                         createInstruction(SET, var(5), "1"),
                         createInstruction(OP, "add", var(6), "__fn1_n", var(5)),
                         createInstruction(SET, var(4), var(6)),
-                        createInstruction(JUMP, var(1001), "always"),
+                        createInstruction(JUMP, var(1003), "always"),
                         createInstruction(SET, var(4), "null"),
-                        createInstruction(LABEL, var(1001)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(LABEL, var(1004)),
                         createInstruction(SET, "__fn2_n", var(4)),
                         createInstruction(SET, var(8), "1"),
                         createInstruction(OP, "add", var(9), "__fn2_n", var(8)),
                         createInstruction(SET, var(7), var(9)),
-                        createInstruction(JUMP, var(1002), "always"),
+                        createInstruction(JUMP, var(1005), "always"),
                         createInstruction(SET, var(7), "null"),
-                        createInstruction(LABEL, var(1002)),
+                        createInstruction(LABEL, var(1005)),
                         createInstruction(PRINT, var(7)),
                         createInstruction(END)
                 ),
@@ -893,12 +912,14 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "7"),
+                        createInstruction(LABEL, var(1010)),
                         createInstruction(SET, "__fn0_x", var(0)),
                         createInstruction(SET, "X", "__fn0_x"),
                         createInstruction(SET, var(1), "__fn0_x"),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(PRINT, "X"),
-                        createInstruction(END)),
+                        createInstruction(END)
+                ),
                 generateUnoptimized(
                         (Seq) translateToAst(""
                                 + "def setx(x) "

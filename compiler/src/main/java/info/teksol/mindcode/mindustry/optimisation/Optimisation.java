@@ -32,9 +32,6 @@ public enum Optimisation {
             (inst, next) -> new JumpOverJumpEliminator(inst, new ImprovePositiveConditionalJumps(inst, next)),
             "simplifies sequences of intertwined jumps"),
 
-    PRINT_TEXT_MERGING                  ('p', (inst, next) -> new PrintMerger(inst, next),
-            "merges consecutive print statenents outputting text literals"),
-    
     JUMP_TARGET_PROPAGATION             ('t', (inst, next) -> new PropagateJumpTargets(inst, next),
             "speeds up execution by eliminating chained jumps"),
     
@@ -45,6 +42,12 @@ public enum Optimisation {
 
     STACK_USAGE_OPTIMIZATION            ('k', (inst, next) -> new StackUsageOptimizer(inst, next),
             "optimizes variable storage on stack"),
+
+    FUNCTION_PARAM_OPTIMIZATION         ('f', (inst, next) -> new FunctionParameterOptimizer(inst, next),
+            "optimizes passing arguments to functions"),
+
+    PRINT_TEXT_MERGING                  ('p', (inst, next) -> new PrintMerger(inst, next),
+            "merges consecutive print statenents outputting text literals"),
     ;
     
     private final BiFunction<InstructionProcessor, LogicInstructionPipeline, ? extends BaseOptimizer> instanceCreator;

@@ -1,6 +1,5 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
@@ -9,18 +8,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
-// to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
-// - end instruction is handled identically to jump 0 always
-// - conditional jumps in the jump chain are followed if
-//    (i) their condition is equal the the condition the first jump, and
-//   (ii) the condition arguments do not contain a volatile variable (@time, @tick or @counter)
-//
-// Jump retargeting can move targets forward or backward over long distances; therefore the optimizer is global.
-// No instructions are removed or added except a label at the start of the program.
+/**
+ * If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
+ * to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
+ * - end instruction is handled identically to jump 0 always
+ * - conditional jumps in the jump chain are followed if
+ *    (i) their condition is identical to the condition the first jump, and
+ *   (ii) the condition arguments do not contain a volatile variable (@time, @tick, @counter etc.)
+ *
+ * No instructions are removed or added except a label at the start of the program.
+*/
 class PropagateJumpTargets extends GlobalOptimizer {
     private static final String FIRST_LABEL = "__start__";
-    private static final Set<String> EXCLUDED_ARGS = Set.of("@time", "@tick", "@counter");
     private boolean startLabelUsed = false;
     
     public PropagateJumpTargets(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
@@ -101,6 +100,6 @@ class PropagateJumpTargets extends GlobalOptimizer {
         
         // Compare everything but labels; exclude volatile variables
         return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size())) &&
-                Collections.disjoint(args1, EXCLUDED_ARGS);
+                args1.stream().noneMatch(instructionProcessor::isVolatile);
     }
 }
