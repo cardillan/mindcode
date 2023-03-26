@@ -15,6 +15,7 @@ expression : MINUS numeric_t                                                    
            | case_expr                                                                          # case_expression
            | if_expr                                                                            # if_expression
            | funcall                                                                            # function_call
+           | printf                                                                             # print_format
            | propaccess                                                                         # property_access
            | fundecl                                                                            # function_declaration
            | alloc                                                                              # allocation
@@ -125,6 +126,11 @@ funcall : END LEFT_RBRACKET RIGHT_RBRACKET
         | obj=propaccess LEFT_RBRACKET params=arg_list RIGHT_RBRACKET
         ;
 
+printf : PRINTF LEFT_RBRACKET RIGHT_RBRACKET
+       | PRINTF LEFT_RBRACKET format=literal_t RIGHT_RBRACKET
+       | PRINTF LEFT_RBRACKET format=literal_t COMMA params=arg_list RIGHT_RBRACKET
+       ;
+
 arg_list : arg
          | arg_list COMMA arg
          ;
@@ -209,6 +215,7 @@ IN : 'in';
 INLINE : 'inline';
 LOOP : 'loop';
 NULL : 'null';
+PRINTF : 'printf';
 RETURN : 'return';
 SENSOR : 'sensor';
 STACK : 'stack';

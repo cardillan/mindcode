@@ -13,6 +13,7 @@ import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     private final Map<String, PropertyHandler> propertyMap;
     private final Map<String, FunctionHandler> functionMap;
     private final List<SampleGenerator> sampleGenerators;
+    private final Map<String, BuiltInFunctionHandler> builtInFunctionMap;
 
     BaseFunctionMapper(InstructionProcessor InstructionProcessor, Consumer<String> messageConsumer) {
         this.instructionProcessor = InstructionProcessor;
@@ -36,8 +38,9 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         processorVersion = instructionProcessor.getProcessorVersion();
         processorEdition = instructionProcessor.getProcessorEdition();
-        propertyMap = buildPropertyMap();
-        functionMap = buildFunctionMap();
+        propertyMap = createPropertyMap();
+        functionMap = createFunctionMap();
+        builtInFunctionMap = createBuiltInFunctionMap();
         
         sampleGenerators = new ArrayList();
         propertyMap.values().forEach(p -> p.register(sampleGenerators::add));
@@ -54,7 +57,10 @@ public class BaseFunctionMapper implements FunctionMapper {
     @Override
     public String handleFunction(LogicInstructionPipeline pipeline, String functionName, List<String> params) {
         FunctionHandler handler = functionMap.get(functionName);
-        return handler == null ? null : handler.handleFunction(pipeline, params);
+        BuiltInFunctionHandler builtInHandler = builtInFunctionMap.get(functionName);
+        return handler == null
+                ? builtInHandler == null ? null : builtInHandler.handleFunction(pipeline, params)
+                : handler.handleFunction(pipeline, params);
     }
 
     @Override
@@ -119,7 +125,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             registry.accept(this);
         }
     }
-
+    
     private interface PropertyHandler extends SampleGenerator {
         String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params);
 
@@ -140,12 +146,16 @@ public class BaseFunctionMapper implements FunctionMapper {
         String getKeyword();
     }
 
+    private interface BuiltInFunctionHandler {
+        String handleFunction(LogicInstructionPipeline pipeline, List<String> params);
+    }
+
     //
     // Property handlers
     //
     ///////////////////////////////////////////////////////////////
 
-    private Map<String, PropertyHandler> buildPropertyMap() {
+    private Map<String, PropertyHandler> createPropertyMap() {
         Map<String, PropertyHandler> map = instructionProcessor.getOpcodeVariants().stream()
                 .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.PROP || v.getFunctionMapping() == OpcodeVariant.FunctionMapping.BOTH)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
@@ -385,7 +395,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     //
     ///////////////////////////////////////////////////////////////
 
-    private Map<String, FunctionHandler> buildFunctionMap() {
+    private Map<String, FunctionHandler> createFunctionMap() {
         Map<String, List<FunctionHandler>> functionGroups = instructionProcessor.getOpcodeVariants().stream()
                 .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.FUNC || v.getFunctionMapping() == OpcodeVariant.FunctionMapping.BOTH)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
@@ -663,5 +673,17 @@ public class BaseFunctionMapper implements FunctionMapper {
         public String generateSampleCall() {
             return getName() + "(" + joinNamedArguments(getOpcodeVariant().getArguments()) + ")";
         }
+    }
+    
+    private Map<String, BuiltInFunctionHandler> createBuiltInFunctionMap() {
+        Map<String, BuiltInFunctionHandler> map = new HashMap<>();
+        map.put("println", this::handlePrintlnFunction);
+        return map;
+    }
+    
+    private String handlePrintlnFunction(LogicInstructionPipeline pipeline, List<String> params) {
+        params.forEach((param) -> pipeline.emit(createInstruction(Opcode.PRINT, param)));
+        pipeline.emit(createInstruction(Opcode.PRINT, "\"\\n\""));
+        return params.isEmpty() ? "null" : params.get(params.size() - 1);
     }
 }

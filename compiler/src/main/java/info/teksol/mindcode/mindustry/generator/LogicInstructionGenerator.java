@@ -8,6 +8,8 @@ import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
@@ -543,7 +545,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitStringLiteral(StringLiteral node) {
         final String tmp = nextNodeResult();
-        emitInstruction(SET, tmp, "\"" + node.getText().replaceAll("\"", "\\\"") + "\"");
+        emitInstruction(SET, tmp, node.encode());
         return tmp;
     }
 
@@ -690,6 +692,101 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             throw new UndeclaredFunctionException("Don't know how to handle property [" + target + "." + node.getProperty() + "]");
         }
         return value;
+    }
+
+    @Override
+    public String visitPrintf(Printf node) {
+        // Printf format string may contain references to variables, which is practically a code
+        // Must be therefore handled here and not, for example, as another function call.
+
+        // Arguments passed to printf are handled as any other function arguments
+        // See visitFunctionCall
+        final List<String> params = nodeContext.encapsulate(
+                () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
+
+        String format = node.getFormat().encode();
+        boolean escape = false;
+        StringBuilder accumulator = new StringBuilder();
+        int position = 0;
+
+        // Skip leading and trailing quotes
+        for (int i = 1; i < format.length() - 1; i++) {
+            char ch = format.charAt(i);
+            switch (ch) {
+                case '$':
+                    if (escape) {
+                        accumulator.append('$');
+                        escape = false;
+                        break;
+                    }
+
+                    // Found a variable or argument reference
+                    // Emit accumulator
+                    if (accumulator.length() > 0) {
+                        emitInstruction(Opcode.PRINT, toStringLiteral(accumulator));
+                        accumulator.setLength(0);
+                    }
+
+                    String variable = extractVariable(format.substring(i + 1));
+                    if (variable.isEmpty()) {
+                        // No variable, emit next argument
+                        if (position < params.size()) {
+                            emitInstruction(Opcode.PRINT, params.get(position++));
+                        } else {
+                            throw new TooFewPrintfArgumentsException("Not enough arguments for printf format string " + format);
+                        }
+                    } else {
+                        // Going through visitVarRef ensures proper handling and registering of local variables
+                        String eval = variable.startsWith("@") ? variable : visitVarRef(new VarRef(variable));
+                        emitInstruction(Opcode.PRINT, eval);
+                    }
+
+                    if (format.charAt(i + 1) == '{') {
+                        i = format.indexOf('}', i + 2);
+                    } else {
+                        i += variable.length();
+                    }
+
+                    break;
+
+                case '\\':
+                    escape = true;
+                    break;
+
+                default:
+                    // Escape is only used to escape $ sign, nothing else
+                    if (escape) {
+                        accumulator.append('\\');
+                        escape = false;
+                    }
+                    accumulator.append(ch);
+            }
+        }
+
+        if (accumulator.length() > 0) {
+            emitInstruction(Opcode.PRINT, toStringLiteral(accumulator));
+        }
+
+        if (position < params.size()) {
+            throw new TooManyPrintfArgumentsException("Too many arguments for printf format string " + format);
+        }
+
+        return "null";
+    }
+
+    private static final Pattern REGEX_VARIABLE = Pattern.compile("^([@_a-zA-Z][-a-zA-Z_0-9]*)");
+    private static final Pattern REGEX_BRACKETS = Pattern.compile("^\\{\\s*([@_a-zA-Z][-a-zA-Z_0-9]*)?\\s*\\}");
+
+    private String extractVariable(String string) {
+        Matcher matcher = REGEX_BRACKETS.matcher(string);
+        if (matcher.find()) return matcher.group(1) == null ? "" : matcher.group(1);
+
+        matcher = REGEX_VARIABLE.matcher(string);
+        return matcher.find() ? matcher.group(1) : "";
+    }
+
+    private String toStringLiteral(StringBuilder sbr) {
+        return sbr.insert(0, '"').append('"').toString();
     }
 
     private class LocalContext {

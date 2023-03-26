@@ -35,6 +35,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitNullLiteral((NullLiteral) node);
         } else if (node instanceof NumericLiteral) {
             return visitNumericLiteral((NumericLiteral) node);
+        } else if (node instanceof Printf) {
+            return visitPrintf((Printf) node);
         } else if (node instanceof Ref) {
             return visitRef((Ref) node);
         } else if (node instanceof PropertyAccess) {

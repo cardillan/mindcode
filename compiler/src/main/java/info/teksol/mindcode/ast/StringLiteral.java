@@ -13,6 +13,10 @@ public class StringLiteral extends BaseAstNode {
         return text;
     }
 
+    public String encode() {
+        return "\"" + getText().replaceAll("\"", "'") + "\"";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

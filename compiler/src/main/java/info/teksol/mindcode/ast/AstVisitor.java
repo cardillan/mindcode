@@ -41,6 +41,8 @@ public interface AstVisitor<T> {
 
     T visitPropertyAccess(PropertyAccess node);
 
+    T visitPrintf(Printf node);
+
     T visitCaseExpression(CaseExpression node);
 
     T visitCaseAlternative(CaseAlternative node);

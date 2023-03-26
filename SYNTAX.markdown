@@ -178,6 +178,53 @@ The compiler will automatically make a function inline when it is called just on
 This is safe, as in this case the program will always be both smaller and faster.
 Other non-recursive functions might also be compiled inline, if the instruction limit isnt't reached.
 
+## Built-in functions
+
+Mindcode now defines a few built-in functions that enhance plain Mindustry Logic.
+
+### println
+
+The `println` function prints all its arguments and adds a newline (`"\n"`) at the end.
+The returned value is that of the last argument, or `null` if no argument was passed:
+```
+println("Position: ", x, ", ", y)
+println()
+println("Elapsed time: ", elapsed, " sec")
+printflush(message1)
+```
+
+### printf
+
+The `printf` function takes a string as its first argument.
+It then looks for the `$` characters and replaces them with values like this:
+* If the `$` character is followed by a variable name, the variable is printed (global variables, eg. `$X`, aren't supported).
+* If the `$` is not followed by a variable name, next argument from the argument list is printed.
+* To separate the format instruction from the rest of the text, use another `$`character.
+This is not necessary if the next character cannot be part of a variable name
+(`${}` can be used to place an argument from the argument list immediately followed by some text).
+* To print the `$` character, use `\$`.
+
+|printf() call|is the same as|
+|-------------|--------------|
+|`printf("$@unit at position $x, $y\n")`|`println(@unit, " at position ", x, ", ", y)`|
+|`printf("Time: $ sec, increment: $\n", floor(@second), current - last)`|`println("Time: ", floor(@second), " sec, increment: ", current - last)`|
+|`printf("Coordinates: ${real}+${imag}i")`|`print("Coordinates: ", real, "+", imag, "i")`|
+|`printf("Price: \$$price")`|`print("Price: $", price)`|
+|`printf("Speed: ${}m/s", distance / time)`|`print("Speed: ", distance / time, "m/s")`|
+
+The function was inspired by String interpolation in Ruby, but there are differences.
+Firstly, the first argument to `printf` must be a string literal, as the formatting takes place at compile time
+(Mindustry Logic doesn't provide means to do it at runtime). Secondly, only variables are allowed in curled braces,
+no expressions:
+
+```
+x = 5
+y = 10
+format = "Position: $, $\n"
+printf(format, x, y)                // Format must be a string literal
+printf("Distance: ${len(x, y)}")    // No expressions allowed
+```
+
 # Sensors
 
 You may sense any property using the following syntax:
