@@ -4,23 +4,7 @@ Welcome to Mindcode, a high-level language for [Mindustry](https://github.com/an
 the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a
 high-level language. Mindcode aims to make programming easier for everyone.
 
-## Recent changes
-
-Recently (March 2023) a lot of enhancements were made to Mindcode. Most of them shouldn't break existing code,
-but a few are not compatible. The main enhancements are:
-
-* Full support for Mindustry Logic version 7, including the new World Processor
-* Improvements in custom functions (better code generation, support for local variables, inline functions and return statement, stack only required for recursive functions)
-* Multiple values and/or range expressions after `when` keyword in case expressions
-* List-iteration loops, Do-While loops and non-constant range expressions in range-iteration loops
-* Break and continue statements in all loop types
-* Improvements in code generation (smaller and faster code is produced)
-* A few new operators added, eg. boolean negation, unary minus, strict inequality (`!==`)
-* Improved syntax error identification
-* Most known issues fixed
-
-Also, the meaning of `not` and `!` operators  was changed from **bitwise negation** to **boolean negation**. 
-Bitwise negation can be performed using the new `~` operator.
+Recently a lot of enhancements were made to Mindcode, see this [description of March 2023 changes](UPDATE-2023-03.markdown).
 
 ## Using Mindcode
 
@@ -112,17 +96,41 @@ Things I'd like to add to Mindcode-the-language:
 * [x] further optimize the generated Logic
 * [x] optimize getlink / set
 * [x] optimize sensor / set
+* [x] skip comments when determining the return value of expressions (case/when, if/else, etc.)
 * [x] #16 indirect sensor access. We can't do `resource = @silicon ; CONTAINER.resource`. This tries to call `sensor
   result CONTAINER @resource`, which doesn't make any sense.
+* [x] #17 `break` and `continue`, to better control iteration
+* [x] #19 inline functions, meaning functions that are inlined at the call-site
+* [x] add support for passing non-numerics into/out of non-recursive functions
+* [ ] evaluation of constant expressions at compile time
+* [ ] constant declaration: constants would be evaluated at compile time and wouldn't use a variable
+* [ ] compiler directives (`#pragma`) to parametrize code compilation and optimization
+* [ ] memory jump table for case expressions where possible
+* [ ] `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when` branch
+* [ ] short-circuit boolean evaluation in some form
+  * Ruby-like (`and`, `or` for short-circuit, `&&`, `||` for full evaluation), or
+  * "best-effort" basis (no guarantees either way)
+
+Compiled code analysis
+
 * [ ] warn developers when the generated code goes over 1000 Mindustry instructions
-* [ ] #17 `break`, `next` and `continue`, to better control iteration
-* [ ] #17 `if` operator: `break if some_cond` is equivalent to `if some_cond break end`. It's just a less verbose way of doing it.
-* [ ] #19 inline functions, meaning functions that are inlined at the call-site
-* [ ] skip comments when determining the return value of expressions (case/when, if/else, etc.)
+* [ ] warn developers when trying to pass in/return values that are non-numeric to/from recursive functions
+* [ ] warn developers when variable is read before being written to
+* [ ] determine effective variable types to assist with optimizations
+
+Optimization improvements 
+
+* [ ] multiple optimization passes
+* [ ] additional automatic inlining of nonrecursive functions 
+* [ ] multiple-use temporary variables optimization
+* [ ] common subexpressions optimizations (maybe including repeated array access)
+* [ ] eliminate retval variables/assignments where not needed
+
+Ideas on hold
+
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
-* [ ] warn developers when trying to pass in/return values that are non-numeric to/from functions
+* [ ] #17 `if` operator: `break if some_cond` is equivalent to `if some_cond break end`. It's just a less verbose way of doing it.
 * [ ] improved data types: 2d vector
-* [ ] add support for passing non-numerics into/out of functions
 
 Things I'd like to add to Mindcode-the-webapp:
 

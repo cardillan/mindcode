@@ -6,7 +6,7 @@
 </@com.h1>
 
 <p class="my-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic. Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
-<p class="my-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic. Mindcode includes higher-level constructs, such as inline computations, a functional while loop, and "direct" memory access.<p>
+<p class="my-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic. Mindcode includes higher-level constructs, such as inline computations, user-defined functions, conditional and loop statements, or "direct" memory access. Mindcode now comes with Mindustry Logic 7 support and many additional improvements, see <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/UPDATE-2023-03.markdown">a summary of March 2023 changes</a>.<p>
 <#if model.sample != "">
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">

@@ -335,3 +335,14 @@ There's still space for various improvements, but most of the obvious opportunit
 # Bug fixes
 
 All known issues have been fixed in this release. If interested, see the list of closed issues [here](https://github.com/francois/mindcode/issues?q=is%3Aissue+is%3Aclosed).
+
+Non-exhaustive list of recent bug fixes:
+
+* Variables passed to the `getlink()` function weren't considered used and might be eliminated by optimization. (#59)
+* Optimization might eliminate assignment to a user-defined variable (#62)
+* `elsif` didn't compile without `else` branch. (#65)
+* Nested ternary operators were evaluated in an unusual way. (#71)
+* Control functions with one parameter were compiled incorrectly (#58)
+* `if` and `while` conditions incorrectly evaluated values different from `0` and `1`. (#86)
+* Optimization replace `strictEqual` with `not notEqual`, which is not identical. (#64)
+
