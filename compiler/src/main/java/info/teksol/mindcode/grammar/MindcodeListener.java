@@ -28,6 +28,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code constant}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstant(MindcodeParser.ConstantContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code constant}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstant(MindcodeParser.ConstantContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code binop_equality_comparison}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -519,6 +531,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAlloc_range(MindcodeParser.Alloc_rangeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#const_decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterConst_decl(MindcodeParser.Const_declContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#const_decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitConst_decl(MindcodeParser.Const_declContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#fundecl}.
 	 * @param ctx the parse tree

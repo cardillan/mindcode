@@ -17,6 +17,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitContinueStatement((ContinueStatement) node);
         } else if (node instanceof Control) {
             return visitControl((Control) node);
+        } else if (node instanceof Constant) {
+            return visitConstant((Constant) node);
         } else if (node instanceof DoWhileExpression) {
             return visitDoWhileStatement((DoWhileExpression) node);
         } else if (node instanceof ForEachExpression) {

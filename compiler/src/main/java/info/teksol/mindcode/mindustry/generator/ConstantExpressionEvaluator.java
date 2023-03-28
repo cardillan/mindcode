@@ -26,6 +26,8 @@ public class ConstantExpressionEvaluator {
     public AstNode evaluate(AstNode node) {
         if (node instanceof BinaryOp) {
             return evaluateBinaryOp((BinaryOp) node);
+        } else if (node instanceof Constant) {
+            return evaluateConstant((Constant) node);
         } else if (node instanceof FunctionCall) {
             return evaluateFunctionCall((FunctionCall) node);
         } else if (node instanceof IfExpression) {
@@ -54,6 +56,15 @@ public class ConstantExpressionEvaluator {
             }
         }
 
+        return node;
+    }
+
+    private AstNode evaluateConstant(Constant node) {
+        AstNode evaluated = evaluate(node.getValue());
+        if (!(evaluated instanceof ConstantAstNode)) {
+            throw new GenerationException("Value assigned to constant [" + node.getName() + "] is not a constant expression.");
+        }
+        constants.put(node.getName(), evaluated);
         return node;
     }
 

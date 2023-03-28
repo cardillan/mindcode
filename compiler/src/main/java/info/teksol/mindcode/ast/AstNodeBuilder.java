@@ -76,6 +76,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitConst_decl(MindcodeParser.Const_declContext ctx) {
+        final String name = ctx.name.getText();
+        final AstNode value = visit(ctx.value);
+        return new Constant(name, value);
+    }
+
+    @Override
     public AstNode visitBreak_exp(MindcodeParser.Break_expContext ctx) {
         String label = ctx.break_st().label == null ? null : ctx.break_st().label.getText();
         return new BreakStatement(label);

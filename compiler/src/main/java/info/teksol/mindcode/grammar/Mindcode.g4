@@ -42,6 +42,7 @@ expression : MINUS numeric_t                                                    
            | <assoc=right> cond=expression QUESTION_MARK
                                 (true_branch=expression COLON false_branch=expression)          # ternary_op
            | assign                                                                             # assignment
+           | const_decl                                                                         # constant
            | literal_t                                                                          # literal_string
            | numeric_t                                                                          # literal_numeric
            | bool_t                                                                             # literal_bool
@@ -69,6 +70,8 @@ alloc_list : type=(HEAP | STACK) IN id alloc_range?
            ;
 
 alloc_range : LEFT_SBRACKET range RIGHT_SBRACKET;
+
+const_decl : CONST name=id ASSIGN value=expression;
 
 fundecl : ( inline = INLINE)? DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
         | ( inline = INLINE)? DEF name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END

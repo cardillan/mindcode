@@ -65,6 +65,13 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitConstant(Constant node) {
+        buffer.append("const ").append(node.getName()).append(" = ");
+        visit(node.getValue());
+        return null;
+    }
+
+    @Override
     public String visitForEachStatement(ForEachExpression node) {
         if (node.getLabel() != null) {
             buffer.append(node.getLabel()).append(": ");

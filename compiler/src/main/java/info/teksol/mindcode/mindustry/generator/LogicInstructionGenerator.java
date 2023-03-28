@@ -40,6 +40,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     // These instances track variables that need to be stored on stack for recursive function calls.
     
+    // Constants and global variables
+    // Key is the name of variable/constant
+    // Value is either an ConstantAstNode (for constant) or null (for variable)
+    private Map<String, ConstantAstNode> constants = new HashMap<>();
+
     // Tracks all local function variables, including function parameters - once accessed, they have to be preserved.
     private LocalContext functionContext = new LocalContext();
 
@@ -131,6 +136,25 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 throw new MissingStackException("Cannot declare functions when no stack was allocated");
             }
         }
+    }
+
+    private String queryConstantName(String name) {
+        if (constants.get(name) != null) {
+            return constants.get(name).getLiteral();
+        } else {
+            constants.put(name, null);
+            return null;
+        }
+    }
+
+    private String registerConstant(String name, ConstantAstNode value) {
+        if (constants.get(name) != null) {
+            throw new GenerationException("Multiple declarations of constant [" + name + "]");
+        } else if (constants.containsKey(name)) {
+            throw new GenerationException("Cannot redefine variable [" + name + "] as a constant");
+        }
+        constants.put(name, value);
+        return name;
     }
 
     private void appendFunctionDeclarations() {
@@ -382,6 +406,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitConstant(Constant node) {
+        if (!localPrefix.isEmpty()) {
+            throw new GenerationException("Constant declaration not allowed in user function [" + node.getName() + "]");
+        }
+        AstNode value = expressionEvaluator.evaluate(node.getValue());
+        if (!(value instanceof ConstantAstNode)) {
+            throw new GenerationException("Constant declaration of [" + node.getName() + "] does not use a constant expression");
+        }
+        registerConstant(node.getName(), (ConstantAstNode)value);
+        return "null";
+    }
+
+    @Override
     public String visitAssignment(Assignment node) {
         final String rvalue = visit(node.getValue());
 
@@ -399,9 +436,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 throw new UndeclaredFunctionException("Don't know how to handle property [" + propTarget + "." + prop + "]");
             }
         } else if (node.getVar() instanceof VarRef) {
+            String name = ((VarRef)node.getVar()).getName();
+            if (constants.get(name) != null) {
+                throw new GenerationException("Assignment to constant [" + name + "] not allowed");
+            }
+
             final String target = visit(node.getVar());
             if (instructionProcessor.isBlockName(target)) {
-                throw new GenerationException("Assignment to variable " + target + " not allowed (name reserved for linked blocks)");
+                throw new GenerationException("Assignment to variable [" + target + "] not allowed (name reserved for linked blocks)");
             }
             emitInstruction(Opcode.SET, target, rvalue);
         } else {
@@ -531,7 +573,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitVarRef(VarRef node) {
-        // Global (main program body) variables aren't registered -- they must not be pushed onto stack!
+        // If the name refers to a constant, use it.
+        // If it wasn'T a constant already, the name will be reserved for a variable
+        String constant = queryConstantName(node.getName());
+        if (constant != null) {
+            return constant;
+        }
+
+        // Global (main program body) variables aren't registered locally -- they must not be pushed onto stack!
         // Adds underscore after non-empty local prefix, to make sure return value and return address variables
         // cannot ever collide with user-defined local variables.
         return localPrefix.isEmpty()

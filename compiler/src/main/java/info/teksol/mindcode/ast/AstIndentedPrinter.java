@@ -98,6 +98,15 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitConstant(Constant node) {
+        open("Constant{");
+        print("name="); visit(node.getName()); newLine(",");
+        print("value="); visit(node.getValue());
+        close("}");
+        return null;
+    }
+
+    @Override
     public String visitDoWhileStatement(DoWhileExpression node) {
         open("DoWhileExpression{");
         print("label="); visit(node.getLabel()); newLine(",");

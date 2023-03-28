@@ -11,6 +11,8 @@ public interface AstVisitor<T> {
 
     T visitControl(Control node);
 
+    T visitConstant(Constant node);
+
     T visitDoWhileStatement(DoWhileExpression node);
 
     T visitForEachStatement(ForEachExpression node);

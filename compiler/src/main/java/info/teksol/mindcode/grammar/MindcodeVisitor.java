@@ -23,6 +23,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression_list(MindcodeParser.Expression_listContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code constant}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstant(MindcodeParser.ConstantContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code binop_equality_comparison}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -310,6 +317,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAlloc_range(MindcodeParser.Alloc_rangeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#const_decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConst_decl(MindcodeParser.Const_declContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#fundecl}.
 	 * @param ctx the parse tree
