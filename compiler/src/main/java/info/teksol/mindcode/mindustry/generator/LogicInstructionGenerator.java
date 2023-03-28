@@ -36,6 +36,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     // Contains the infromation about functions built from the program to support code generation
     private CallGraph callGraph;
 
+    private ConstantExpressionEvaluator expressionEvaluator = new ConstantExpressionEvaluator();
+
     // These instances track variables that need to be stored on stack for recursive function calls.
     
     // Tracks all local function variables, including function parameters - once accessed, they have to be preserved.
@@ -80,7 +82,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         parentContext = nodeContext;
         nodeContext = new NodeContext(parentContext);  // inherit variables from parent context
         try {
-            return super.visit(node);
+            // Perform constant expresion evaluation
+            return super.visit(expressionEvaluator.evaluate(node));
         } finally {
             nodeContext = parentContext;
             parentContext = previousParent;
@@ -95,12 +98,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         pipeline.emit(instructionProcessor.createInstruction(marker, opcode, args));
     }
 
-    private String translateUnaryOpToCode(String op) {
-        return instructionProcessor.translateUnaryOpToCode(op);
-    }
-
-    private String translateBinaryOpToCode(String op) {
-        return instructionProcessor.translateBinaryOpToCode(op);
+    private String translateOpToCode(String op) {
+        return instructionProcessor.translateOpToCode(op);
     }
 
     private String nextLabel() {
@@ -421,7 +420,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String expression = visit(node.getExpression());
 
         final String tmp = nextNodeResult();
-        emitInstruction(OP, translateUnaryOpToCode(node.getOp()), tmp, expression);
+        emitInstruction(OP, translateOpToCode(node.getOp()), tmp, expression);
         return tmp;
     }
 
@@ -511,7 +510,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final String right = visit(node.getRight());
 
         final String tmp = nextNodeResult();
-        emitInstruction(OP, translateBinaryOpToCode(node.getOp()), tmp, left, right);
+        emitInstruction(OP, translateOpToCode(node.getOp()), tmp, left, right);
         return tmp;
     }
 
@@ -522,12 +521,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitNullLiteral(NullLiteral node) {
-        return "null";
+        return node.getLiteral();
     }
 
     @Override
     public String visitBooleanLiteral(BooleanLiteral node) {
-        return String.valueOf(node.getValue());
+        return node.getLiteral();
     }
 
     @Override
@@ -545,7 +544,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitStringLiteral(StringLiteral node) {
         final String tmp = nextNodeResult();
-        emitInstruction(SET, tmp, node.encode());
+        emitInstruction(SET, tmp, node.getLiteral());
         return tmp;
     }
 
@@ -588,7 +587,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                         emitInstruction(JUMP, nextExp, "lessThan", caseValue, minValue);
                         // The max value is only evaluated when the min value lets us through
                         final String maxValue = visit(range.getLastValue());
-                        emitInstruction(JUMP, bodyLabel, translateBinaryOpToCode(range.maxValueComparison()), caseValue, maxValue);
+                        emitInstruction(JUMP, bodyLabel, translateOpToCode(range.maxValueComparison()), caseValue, maxValue);
                         emitInstruction(LABEL, nextExp);
                     }
                     else {
@@ -704,7 +703,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         final List<String> params = nodeContext.encapsulate(
                 () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
 
-        String format = node.getFormat().encode();
+        String format = node.getFormat().getLiteral();
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
         int position = 0;

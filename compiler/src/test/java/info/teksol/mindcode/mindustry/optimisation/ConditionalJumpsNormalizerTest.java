@@ -17,24 +17,22 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
     void normalizesConditionalJump() {
         generateInto(
                 sut,
-                (Seq) translateToAst(
-                        "" +
-                                "if false\n" +
-                                "  print(\"Here\")\n" +
-                                "end\n"
+                (Seq) translateToAst(""
+                        + "while false\n"
+                        + "  print(\"Here\")\n"
+                        + "end\n"
                 )
         );
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(JUMP, var(1000), "always"),
-                        createInstruction(SET, var(1), "\"Here\""),
-                        createInstruction(PRINT, var(1)),
-                        createInstruction(SET, var(0), var(1)),
-                        createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(0), "null"),
+                        createInstruction(JUMP, var(1002), "always"),
+                        createInstruction(SET, var(0), "\"Here\""),
+                        createInstruction(PRINT, var(0)),
                         createInstruction(LABEL, var(1001)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1002)),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -46,18 +44,17 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
         generateInto(
                 sut,
                 (Seq) translateToAst(
-                        "if true 1 end"
+                        "while true 1 end"
                 )
         );
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(1), "1"),
-                        createInstruction(SET, var(0), var(1)),
-                        createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(0), "null"),
+                        createInstruction(SET, var(0), "1"),
                         createInstruction(LABEL, var(1001)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1002)),
                         createInstruction(END)
                 ),
                 terminus.getResult()

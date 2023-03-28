@@ -2,10 +2,10 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class NumericLiteral extends BaseAstNode {
+public class NumericLiteral extends ConstantAstNode {
     private final String literal;
 
-    NumericLiteral(String literal) {
+    public NumericLiteral(String literal) {
         this.literal = literal;
     }
 
@@ -13,6 +13,7 @@ public class NumericLiteral extends BaseAstNode {
         this.literal = String.valueOf(last);
     }
 
+    @Override
     public String getLiteral() {
         return literal;
     }
@@ -35,5 +36,10 @@ public class NumericLiteral extends BaseAstNode {
         return "NumericLiteral{" +
                 "literal='" + literal + '\'' +
                 '}';
+    }
+
+    @Override
+    public double getAsDouble() {
+        return literal.startsWith("0x") ? Long.decode(literal) : Double.parseDouble(literal);
     }
 }

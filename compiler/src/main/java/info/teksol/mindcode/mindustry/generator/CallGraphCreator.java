@@ -73,7 +73,8 @@ public class CallGraphCreator  {
                 });
     }
     
-    private void visitNode(AstNode node) {
+    private void visitNode(AstNode nodeToVisit) {
+        AstNode node = nodeToVisit;     // TODO: constant evaluation
         encounteredNodes.add(node);
 
         if (node instanceof FunctionCall) {

@@ -1,12 +1,16 @@
 package info.teksol.mindcode.processor;
 
+import info.teksol.mindcode.ast.AstNode;
+
 /**
  * Mindustry processor variable.
  */
 public interface Variable {
     String getName();
-    void assign(Variable var);
+    ValueType getType();
     boolean isObject();
+
+    void assign(Variable var);
 
     MindustryObject getObject();
     MindustryObject getExistingObject();
@@ -21,7 +25,7 @@ public interface Variable {
     int getIntValue();
     void setIntValue(int value);
 
-    default void setBooleanValue(boolean value) {
-        setIntValue(value ? 1 : 0);
-    }
+    void setBooleanValue(boolean value);
+
+    AstNode toAstNode();
 }

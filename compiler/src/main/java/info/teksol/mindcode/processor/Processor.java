@@ -7,8 +7,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
@@ -92,7 +90,7 @@ public class Processor {
                 if (false) {
                     if (instruction.getOpcode() == Opcode.PRINT) {
                         Variable var = getExistingVariable(instruction.getArg(0));
-                        System.out.printf("Step: %d, counter: %d, instruction: %s === Print %s%n", steps, index, instruction, var.toString());
+                        System.out.printf("Step: %d, counter: %d, instruction: %s *** Print %s%n", steps, index, instruction, var.toString());
 
                     } else {
                         System.out.printf("Step: %d, counter: %d, instruction: %s%n", steps, index, instruction);
@@ -146,7 +144,7 @@ public class Processor {
         Variable targetVar = getOrCreateVariable(target);
         Variable aVar = getExistingVariable(a);
         Variable bVar = getExistingVariable(b);
-        Operation op = OPERATIONS.get(operation);
+        Operation op = ExpressionEvaluator.getOperation(operation);
         if (op == null) {
             throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation " + operation);
         }
@@ -223,12 +221,7 @@ public class Processor {
         }
     }
 
-    private static final Map<String, Operation> OPERATIONS = createOperationsMap();
     private static final Map<String, Condition> CONDITIONS = createConditionsMap();
-
-    private static interface Operation {
-        void execute(Variable result, Variable a, Variable b);
-    }
 
     private static interface Condition {
         boolean evaluate(Variable a, Variable b);
@@ -237,84 +230,14 @@ public class Processor {
     private static Map<String, Condition> createConditionsMap() {
         Map<String, Condition> map = new HashMap<>();
         map.put("always",       (a, b) -> true);
-        map.put("equal",        (a, b) -> equals(a, b));
-        map.put("notEqual",     (a, b) -> !equals(a, b));
+        map.put("equal",        (a, b) -> ExpressionEvaluator.equals(a, b));
+        map.put("notEqual",     (a, b) -> !ExpressionEvaluator.equals(a, b));
         map.put("land",         (a, b) -> a.getDoubleValue() != 0 && b.getDoubleValue() != 0);
         map.put("lessThan",     (a, b) -> a.getDoubleValue() < b.getDoubleValue());
         map.put("lessThanEq",   (a, b) -> a.getDoubleValue() <= b.getDoubleValue());
         map.put("greaterThan",  (a, b) -> a.getDoubleValue() > b.getDoubleValue());
         map.put("greaterThanEq",(a, b) -> a.getDoubleValue() >= b.getDoubleValue());
-        map.put("strictEqual",  (a, b) -> a.isObject() == b.isObject() && equals(a, b));
+        map.put("strictEqual",  (a, b) -> a.isObject() == b.isObject() && ExpressionEvaluator.equals(a, b));
         return map;
     }
-
-    private static Map<String, Operation> createOperationsMap() {
-        Map<String, Operation> map = new HashMap<>();
-        
-        map.put("add",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() + b.getDoubleValue()));
-        map.put("sub",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() - b.getDoubleValue()));
-        map.put("mul",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() * b.getDoubleValue()));
-        map.put("div",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() / b.getDoubleValue()));
-        map.put("idiv",         (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue() / b.getDoubleValue())));
-        map.put("mod",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() % b.getDoubleValue()));
-        map.put("pow",          (r, a, b) -> r.setDoubleValue(Math.pow(a.getDoubleValue(), b.getDoubleValue())));
-
-        map.put("equal",        (r, a, b) -> r.setBooleanValue(equals(a, b)));
-        map.put("notEqual",     (r, a, b) -> r.setBooleanValue(!equals(a, b)));
-        map.put("land",         (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
-        map.put("lessThan",     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() < b.getDoubleValue()));
-        map.put("lessThanEq",   (r, a, b) -> r.setBooleanValue(a.getDoubleValue() <= b.getDoubleValue()));
-        map.put("greaterThan",  (r, a, b) -> r.setBooleanValue(a.getDoubleValue() > b.getDoubleValue()));
-        map.put("greaterThanEq",(r, a, b) -> r.setBooleanValue(a.getDoubleValue() >= b.getDoubleValue()));
-        map.put("strictEqual",  (r, a, b) -> r.setBooleanValue(a.isObject() == b.isObject() && equals(a, b)));
-
-        map.put("shl",          (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
-        map.put("shr",          (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));
-        map.put("or",           (r, a, b) -> r.setLongValue(a.getLongValue() |  b.getLongValue()));
-        map.put("and",          (r, a, b) -> r.setLongValue(a.getLongValue() &  b.getLongValue()));
-        map.put("xor",          (r, a, b) -> r.setLongValue(a.getLongValue() ^  b.getLongValue()));
-        map.put("not",          (r, a, b) -> r.setLongValue(~a.getLongValue()));
-
-        map.put("max",          (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));
-        map.put("min",          (r, a, b) -> r.setDoubleValue(Math.min(a.getDoubleValue(), b.getDoubleValue())));
-        map.put("angle",        (r, a, b) -> r.setDoubleValue(angle(a.getDoubleValue(), b.getDoubleValue())));
-        map.put("len",          (r, a, b) -> r.setDoubleValue(len(a.getDoubleValue(), b.getDoubleValue())));
-//        map.put("noise",        (r, a, b) -> {});     // Not supported here
-        map.put("abs",          (r, a, b) -> r.setDoubleValue(Math.abs(a.getDoubleValue())));
-        map.put("log",          (r, a, b) -> r.setDoubleValue(Math.log(a.getDoubleValue())));
-        map.put("log10",        (r, a, b) -> r.setDoubleValue(Math.log10(a.getDoubleValue())));
-        map.put("floor",        (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue())));
-        map.put("ceil",         (r, a, b) -> r.setDoubleValue(Math.ceil(a.getDoubleValue())));
-        map.put("sqrt",         (r, a, b) -> r.setDoubleValue(Math.sqrt(a.getDoubleValue())));
-        map.put("rand",         (r, a, b) -> r.setDoubleValue(rnd.nextDouble() * a.getDoubleValue()));
-
-        map.put("sin",          (r, a, b) -> r.setDoubleValue(Math.sin(a.getDoubleValue())));
-        map.put("cos",          (r, a, b) -> r.setDoubleValue(Math.cos(a.getDoubleValue())));
-        map.put("tan",          (r, a, b) -> r.setDoubleValue(Math.tan(a.getDoubleValue())));
-
-        map.put("asin",         (r, a, b) -> r.setDoubleValue(Math.asin(a.getDoubleValue())));
-        map.put("acos",         (r, a, b) -> r.setDoubleValue(Math.acos(a.getDoubleValue())));
-        map.put("atan",         (r, a, b) -> r.setDoubleValue(Math.atan(a.getDoubleValue())));
-
-        return map;
-    }
-
-    private static boolean equals(Variable a, Variable b) {
-        if (a.isObject() && b.isObject()) {
-            return Objects.equals(a.getObject(), b.getObject());
-        } else {
-            return Math.abs(a.getDoubleValue() - b.getDoubleValue()) < 0.000001;
-        }
-    }
-
-    private static double angle(double x, double y) {
-        double result = Math.atan(y / x) * 180 / Math.PI;
-        return (result < 0) ? result + 360 : result;
-    }
-
-    private static double len(double x, double y) {
-        return Math.sqrt(x * x + y * y);
-    }
-
-    private static final Random rnd = new Random();
 }

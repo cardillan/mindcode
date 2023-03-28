@@ -25,6 +25,7 @@ public class IntVariable extends AbstractVariable {
         } else {
             setDoubleValue(var.getDoubleValue());
         }
+        setType(var.getType());
     }
 
     @Override
@@ -34,8 +35,12 @@ public class IntVariable extends AbstractVariable {
 
     @Override
     public void setDoubleValue(double value) {
-        unsetObject();
-        this.value = (int) value;
+        if (Double.isInfinite(value) || Double.isNaN(value)) {
+            setObject(null);
+        } else {
+            this.value = (int) value;
+            setType(ValueType.DOUBLE);
+        }
     }
 
     @Override
@@ -45,8 +50,8 @@ public class IntVariable extends AbstractVariable {
 
     @Override
     public void setIntValue(int value) {
-        unsetObject();
         this.value = value;
+        setType(ValueType.LONG);
     }
 
     @Override
@@ -56,7 +61,7 @@ public class IntVariable extends AbstractVariable {
 
     @Override
     public void setLongValue(long value) {
-        unsetObject();
         this.value = (int) value;
+        setType(ValueType.LONG);
     }
 }

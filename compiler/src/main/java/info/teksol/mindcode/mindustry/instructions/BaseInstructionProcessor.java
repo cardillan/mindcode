@@ -10,6 +10,7 @@ import info.teksol.mindcode.mindustry.logic.OpcodeVariant;
 import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
 import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.mindcode.mindustry.logic.TypedArgument;
+import info.teksol.mindcode.processor.ExpressionEvaluator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -408,42 +409,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return identifier.equals(identifier.toUpperCase());
     }
 
-    // These structures are static for now. Can be made version dependent if needed in the future.
-    private static final Map<String, String> UNARY_OPERATORS = Map.of(
-            "not",  "not",
-            "!",    "not"
-    );
-
-    private static final Map<String, String> BINARY_OPERATORS = createBinaryOperatorsMap();
-
-    private static Map<String, String> createBinaryOperatorsMap() {
-        Map<String, String> map = new HashMap<>();
-        map.put("+",    "add");
-        map.put("-",    "sub");
-        map.put("*",    "mul");
-        map.put("/",    "div");
-        map.put("\\",   "idiv");
-        map.put("==",   "equal");
-        map.put("!=",   "notEqual");
-        map.put("<",    "lessThan");
-        map.put("<=",   "lessThanEq");
-        map.put(">=",   "greaterThanEq");
-        map.put(">",    "greaterThan");
-        map.put("===",  "strictEqual");
-        map.put("**",   "pow");
-        map.put("||",   "or");
-        map.put("or",   "or");
-        map.put("&&",   "land");  // logical-and
-        map.put("and",  "land");  // logical-and
-        map.put("%",    "mod");
-        map.put("<<",   "shl");
-        map.put(">>",   "shr");
-        map.put("&",    "and");
-        map.put("|",    "or");
-        map.put("^",    "xor");
-        return Map.copyOf(map);
-    }
-
     private static final Map<String, String> INVERSES = Map.of(
             "equal", "notEqual",
             "notEqual", "equal",
@@ -465,18 +430,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
 
     @Override
-    public String translateUnaryOpToCode(String op) {
-        String translated = UNARY_OPERATORS.get(op);
-        if (translated == null) {
-            throw new GenerationException("Failed to translate unary operator to Mindustry representation: [" + op + "] is not handled");
-        } else {
-            return translated;
-        }
-    }
-
-    @Override
-    public String translateBinaryOpToCode(String op) {
-        String translated = BINARY_OPERATORS.get(op);
+    public String translateOpToCode(String op) {
+        String translated = ExpressionEvaluator.translateOperator(op);
         if (translated == null) {
             throw new GenerationException("Failed to translate binary operator to Mindustry representation: [" + op + "] is not handled");
         } else {

@@ -52,7 +52,7 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
         generateInto(
                 sut,
                 (Seq) translateToAst(
-                        "print(a) if false print(b) end print(c)"
+                        "print(a) while false print(b) end print(c)"
                 )
         );
 
@@ -61,6 +61,7 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "a"),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(LABEL, var(1001)),
+                        createInstruction(LABEL, var(1002)),
                         createInstruction(PRINT, "c"),
                         createInstruction(END)
                 ),
@@ -76,7 +77,7 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         + "def a "
                         + "  print(\"here\") "
                         + "end "
-                        + "if false "
+                        + "while false "
                         + "  a() "
                         + "  a() "
                         + "end "
@@ -86,16 +87,17 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(LABEL, var(1003)),
-                        createInstruction(LABEL, var(1004)),
                         createInstruction(LABEL, var(1001)),
+                        createInstruction(LABEL, var(1004)),
+                        createInstruction(LABEL, var(1005)),
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(SET, var(3), "\"Done\""),
-                        createInstruction(PRINT, var(3)),
+                        createInstruction(LABEL, var(1003)),
+                        createInstruction(SET, var(2), "\"Done\""),
+                        createInstruction(PRINT, var(2)),
                         createInstruction(END),
                         // det a -- removed
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(LABEL, var(1005))
+                        createInstruction(LABEL, var(1006))
                 ),
                 terminus.getResult()
         );
@@ -118,7 +120,7 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         + "end "
                         + "testa(0) "
                         + "testa(0) "
-                        + "if false "
+                        + "while false "
                         + "  testb(1) "
                         + "  testb(1) "
                         + "end "
@@ -138,34 +140,35 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "@counter", var(1002)),
                         createInstruction(LABEL, var(1004)),
                         // if false + call testb -- removed
-                        createInstruction(LABEL, var(1007)),
-                        createInstruction(LABEL, var(1008)),
                         createInstruction(LABEL, var(1005)),
-                        createInstruction(LABEL, var(1006)),
-                        // call testc (2)
-                        createInstruction(SET, "__fn1retaddr", var(1009)),
-                        createInstruction(SET, "@counter", var(1001)),
+                        createInstruction(LABEL, var(1008)),
                         createInstruction(LABEL, var(1009)),
+                        createInstruction(LABEL, var(1006)),
+                        createInstruction(LABEL, var(1007)),
+                        // call testc (2)
                         createInstruction(SET, "__fn1retaddr", var(1010)),
                         createInstruction(SET, "@counter", var(1001)),
                         createInstruction(LABEL, var(1010)),
+                        createInstruction(SET, "__fn1retaddr", var(1011)),
+                        createInstruction(SET, "@counter", var(1001)),
+                        createInstruction(LABEL, var(1011)),
                         createInstruction(PRINTFLUSH, "message1"),
                         createInstruction(END),
                         // def testb -- removed
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(LABEL, var(1011)),
+                        createInstruction(LABEL, var(1012)),
                         // def testc
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(SET, var(14), "\"End\""),
-                        createInstruction(PRINT, var(14)),
-                        createInstruction(LABEL, var(1012)),
+                        createInstruction(SET, var(13), "\"End\""),
+                        createInstruction(PRINT, var(13)),
+                        createInstruction(LABEL, var(1013)),
                         createInstruction(SET, "@counter", "__fn1retaddr"),
                         createInstruction(END),
                         // def testa
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(SET, var(15), "\"Start\""),
-                        createInstruction(PRINT, var(15)),
-                        createInstruction(LABEL, var(1013)),
+                        createInstruction(SET, var(14), "\"Start\""),
+                        createInstruction(PRINT, var(14)),
+                        createInstruction(LABEL, var(1014)),
                         createInstruction(SET, "@counter", "__fn2retaddr"),
                         createInstruction(END)
                 ),

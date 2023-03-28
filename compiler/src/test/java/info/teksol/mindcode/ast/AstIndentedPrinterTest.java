@@ -85,7 +85,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                 "    Assignment{\n" +
                 "        var=VarRef{name='z'},\n" +
                 "        value=UnaryOp{\n" +
-                "            op='not',\n" +
+                "            op='~',\n" +
                 "            expression=VarRef{name='y'}\n" +
                 "        }\n" +
                 "    },\n" +

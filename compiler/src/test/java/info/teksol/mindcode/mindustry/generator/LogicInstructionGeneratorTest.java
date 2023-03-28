@@ -85,18 +85,18 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(OP, "notEqual", var(0), "true", "false"),
-                        createInstruction(JUMP, var(1001), "equal", var(0), "false"),
+                        createInstruction(OP, "notEqual", var(0), "z", "true"),
+                        createInstruction(JUMP, var(1002), "equal", var(0), "false"),
                         createInstruction(SET, var(1), "\"infinite loop!\""),
                         createInstruction(PRINT, var(1)),
-                        createInstruction(LABEL, var(1010)),
-                        createInstruction(JUMP, var(1000), "always"),
                         createInstruction(LABEL, var(1001)),
+                        createInstruction(JUMP, var(1000), "always"),
+                        createInstruction(LABEL, var(1002)),
                         createInstruction(PRINTFLUSH, "message1"),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("while true != false\nprint(\"infinite loop!\")\nend\nprintflush(message1)\n")
+                        (Seq) translateToAst("while z != true\nprint(\"infinite loop!\")\nend\nprintflush(message1)\n")
                 )
         );
     }
@@ -170,12 +170,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, "memory", "cell1"),
-                        createInstruction(SET, var(2), "9"),
-                        createInstruction(SET, var(3), "9"),
-                        createInstruction(OP, "pow", var(4), var(2), var(3)),
-                        createInstruction(OP, "rand", var(5), var(4)),
-                        createInstruction(SET, var(6), "0"),
-                        createInstruction(WRITE, var(5), "memory", var(6)),
+                        createInstruction(SET, var(0), "387420489"),
+                        createInstruction(OP, "rand", var(1), var(0)),
+                        createInstruction(SET, var(2), "0"),
+                        createInstruction(WRITE, var(1), "memory", var(2)),
                         createInstruction(END)
                 ),
                 generateUnoptimized((Seq) translateToAst("memory = cell1 memory[0] = rand(9**9)"))
@@ -186,15 +184,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void convertsFunctionsReturningValues() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(2), "9"),
-                        createInstruction(SET, var(3), "9"),
-                        createInstruction(OP, "pow", var(4), var(2), var(3)),
-                        createInstruction(OP, "rand", var(5), var(4)),
-                        createInstruction(SET, var(6), "0"),
-                        createInstruction(WRITE, var(5), "cell1", var(6)),
+                        createInstruction(SET, var(0), "9"),
+                        createInstruction(SET, "z", var(0)),
+                        createInstruction(SET, var(1), "9"),
+                        createInstruction(OP, "pow", var(2), "z", var(1)),
+                        createInstruction(OP, "rand", var(3), var(2)),
+                        createInstruction(SET, var(4), "0"),
+                        createInstruction(WRITE, var(3), "cell1", var(4)),
                         createInstruction(END)
                 ),
-                generateUnoptimized((Seq) translateToAst("cell1[0] = rand(9**9)"))
+                generateUnoptimized((Seq) translateToAst("z = 9; cell1[0] = rand(z**9)"))
         );
     }
 
@@ -282,10 +281,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "dx", var(1)),
                         createInstruction(SET, var(2), "-1"),
                         createInstruction(SET, "dy", var(2)),
-                        createInstruction(SET, var(3), "2"),
-                        createInstruction(SET, var(4), "1"),
-                        createInstruction(OP, "sub", var(5), var(3), var(4)),
-                        createInstruction(SET, "dz", var(5)),
+                        createInstruction(SET, var(3), "1"),
+                        createInstruction(SET, "dz", var(3)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -752,13 +749,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void supportsTheSqrtFunction() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "2"),
-                        createInstruction(OP, "sqrt", var(1), var(0)),
+                        createInstruction(OP, "sqrt", var(0), "z"),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst("" +
-                                "sqrt(2)"
+                                "sqrt(z)"
                         )
 
                 )
@@ -825,20 +821,17 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "9842"),
-                        createInstruction(SET, var(1), "1"),
-                        createInstruction(OP, "and", var(2), var(0), var(1)),
-                        createInstruction(SET, var(3), "1"),
-                        createInstruction(SET, var(4), "4"),
-                        createInstruction(OP, "shl", var(5), var(3), var(4)),
-                        createInstruction(OP, "xor", var(6), var(2), var(5)),
-                        createInstruction(SET, var(7), "1"),
-                        createInstruction(OP, "shr", var(8), "y", var(7)),
-                        createInstruction(OP, "or", var(9), var(6), var(8)),
+                        createInstruction(OP, "and", var(1), var(0), "x"),
+                        createInstruction(SET, var(2), "4"),
+                        createInstruction(OP, "shl", var(3), "z", var(2)),
+                        createInstruction(OP, "xor", var(4), var(1), var(3)),
+                        createInstruction(SET, var(5), "1"),
+                        createInstruction(OP, "shr", var(6), "y", var(5)),
+                        createInstruction(OP, "or", var(7), var(4), var(6)),
                         createInstruction(END)
-
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("(9842 & 1) ^ (1 << 4) | y >> 1\n")
+                        (Seq) translateToAst("(9842 & x) ^ (z << 4) | y >> 1\n")
                 )
         );
     }
@@ -847,18 +840,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void generatesVectorLengthAndAngleCalls() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "4"),
-                        createInstruction(SET, var(1), "8"),
-                        createInstruction(OP, "len", var(2), var(0), var(1)),
-                        createInstruction(SET, "length", var(2)),
-                        createInstruction(SET, var(3), "4"),
-                        createInstruction(SET, var(4), "8"),
-                        createInstruction(OP, "angle", var(5), var(3), var(4)),
-                        createInstruction(SET, "angle", var(5)),
+                        createInstruction(OP, "len", var(0), "x", "y"),
+                        createInstruction(SET, "length", var(0)),
+                        createInstruction(OP, "angle", var(1), "x", "y"),
+                        createInstruction(SET, "angle", var(1)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("length = len(4, 8)\nangle = angle(4, 8)\n")
+                        (Seq) translateToAst("length = len(x, y)\nangle = angle(x, y)\n")
                 )
         );
     }
@@ -867,13 +856,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void generatesLog10Call() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "405"),
-                        createInstruction(OP, "log10", var(1), var(0)),
-                        createInstruction(SET, "l", var(1)),
+                        createInstruction(OP, "log10", var(0), "x"),
+                        createInstruction(SET, "l", var(0)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("l = log10(405)\n")
+                        (Seq) translateToAst("l = log10(x)\n")
                 )
         );
     }
@@ -899,13 +887,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, var(0), "4"),
-                        createInstruction(SET, var(1), "8"),
-                        createInstruction(OP, "idiv", var(2), var(0), var(1)),
-                        createInstruction(SET, "n", var(2)),
+                        createInstruction(OP, "idiv", var(1), var(0), "z"),
+                        createInstruction(SET, "n", var(1)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("n = 4 \\ 8\n")
+                        (Seq) translateToAst("n = 4 \\ z\n")
                 )
         );
     }
@@ -1446,5 +1433,41 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void resolvesConstantExpressions() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, var(0), "3"),
+                        createInstruction(SET, "a", var(0)),
+                        createInstruction(SET, "b", "null"),
+                        createInstruction(SET, var(1), "3"),
+                        createInstruction(SET, "c", var(1)),
+                        createInstruction(SET, "d", "b"),
+                        createInstruction(SET, var(2), "3"),
+                        createInstruction(SET, "e", var(2)),
+                        createInstruction(SET, var(3), "-2"),
+                        createInstruction(SET, "f", var(3)),
+                        createInstruction(SET, "g", "true"),
+                        createInstruction(SET, var(4), "-5"),
+                        createInstruction(SET, "h", var(4)),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "a = 1 + 2 "
+                                + "b = 1 / 0 "
+                                + "c = min(3, 4) "
+                                + "d = 1 < 2 ? b : c "
+                                + "e = abs(-3) "
+                                + "f = ~1 "
+                                + "g = not false "
+                                + "h = -(2 + 3) "
+                        )
+                )
+        );
+    }
+
+
 
 }

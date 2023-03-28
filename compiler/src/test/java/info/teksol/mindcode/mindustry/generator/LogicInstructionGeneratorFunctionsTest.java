@@ -976,7 +976,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         assertThrows(MisplacedStackAllocationException.class,
                 () -> generateUnoptimized(
                         (Seq) translateToAst(""
-                                + "if true "
+                                + "while true "
                                 + "  allocate stack in cell1 "
                                 + "end"
                         )

@@ -218,20 +218,12 @@ public interface InstructionProcessor {
     boolean isValid(ArgumentType type, String value);
 
     /**
-     * Translates unary Mindcode operator to Mindustry Logic representation.
+     * Translates unary or binary Mindcode operator to Mindustry Logic representation.
      *
      * @param op Mindcode operator
      * @return equivalent Mindustry Logic operation
      */
-    String translateUnaryOpToCode(String op);
-
-    /**
-     * Translates binary Mindcode operator to Mindustry Logic representation.
-     *
-     * @param op Mindcode operator
-     * @return equivalent Mindustry Logic operation
-     */
-    String translateBinaryOpToCode(String op);
+    String translateOpToCode(String op);
 
     /**
      * Returns true if the operation (in Mindustry opcode, ie. lessThan, notEqual etc.) has an inverse.

@@ -2,10 +2,10 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class StringLiteral extends BaseAstNode {
+public class StringLiteral extends ConstantAstNode {
     private final String text;
 
-    StringLiteral(String text) {
+    public StringLiteral(String text) {
         this.text = text;
     }
 
@@ -13,7 +13,8 @@ public class StringLiteral extends BaseAstNode {
         return text;
     }
 
-    public String encode() {
+    @Override
+    public String getLiteral() {
         return "\"" + getText().replaceAll("\"", "'") + "\"";
     }
 
@@ -35,5 +36,10 @@ public class StringLiteral extends BaseAstNode {
         return "StringLiteral{" +
                 "text='" + text + '\'' +
                 '}';
+    }
+
+    @Override
+    public double getAsDouble() {
+        return 1.0;
     }
 }

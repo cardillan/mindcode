@@ -63,12 +63,12 @@ eval(max(2, d(4)), 4,           "max")
 eval(min(2, d(4)), 2,           "min")
 
 eval(abs(d(-2)), 2,             "abs")
-eval(log(2.718281828459045), 1, "log")
-eval(log10(10),  1,             "log10")
+eval(log(d(2.718281828459045)), 1, "log")
+eval(log10(d(10)),  1,           "log10")
 
-eval(floor(2.5), 2,             "floor")
-eval(ceil(2.5),  3,             "ceil")
-eval(sqrt(16),   4,             "sqrt")
+eval(floor(d(2.5)), 2,           "floor")
+eval(ceil(d(2.5)),  3,           "ceil")
+eval(sqrt(d(16)),   4,           "sqrt")
 
 // Mindcode extensions
 eval(-d(8), -8, "unary minus")

@@ -130,7 +130,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBitwise_not_expr(MindcodeParser.Bitwise_not_exprContext ctx) {
-        return new UnaryOp("not", visit(ctx.expression()));
+        return new UnaryOp("~", visit(ctx.expression()));
     }
 
     @Override

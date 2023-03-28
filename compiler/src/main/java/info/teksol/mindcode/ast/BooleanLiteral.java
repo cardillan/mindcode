@@ -2,15 +2,20 @@ package info.teksol.mindcode.ast;
 
 import java.util.Objects;
 
-public class BooleanLiteral extends BaseAstNode {
+public class BooleanLiteral extends ConstantAstNode {
     private final boolean value;
 
-    BooleanLiteral(boolean value) {
+    public BooleanLiteral(boolean value) {
         this.value = value;
     }
 
     public boolean getValue() {
         return value;
+    }
+
+    @Override
+    public String getLiteral() {
+        return String.valueOf(value);
     }
 
     @Override
@@ -31,5 +36,10 @@ public class BooleanLiteral extends BaseAstNode {
         return "BooleanLiteral{" +
                 "value=" + value +
                 '}';
+    }
+
+    @Override
+    public double getAsDouble() {
+        return value ? 1.0 : 0.0;
     }
 }
