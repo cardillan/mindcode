@@ -147,8 +147,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "0"),
-                        createInstruction(GETLINK, "target", var(0)),
+                        createInstruction(GETLINK, "target", "0"),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -213,8 +212,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "100"),
-                        createInstruction(OP, "rand", "r", var(0)),
+                        createInstruction(OP, "rand", "r", "100"),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -266,8 +264,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "0"),
-                        createInstruction(READ, "boo", "cell1", var(0)),
+                        createInstruction(READ, "boo", "cell1", "0"),
                         createInstruction(END)
                 ),
                 terminus.getResult()

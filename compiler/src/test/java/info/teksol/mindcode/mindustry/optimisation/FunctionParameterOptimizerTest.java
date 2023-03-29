@@ -16,7 +16,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
             Optimisation.FUNCTION_PARAM_OPTIMIZATION);
 
     @Test
-    public void eliminatesSimpleParameters() {
+    public void handlesSimpleParameters() {
         generateInto(
                 pipeline,
                 (Seq) translateToAst(""
@@ -27,9 +27,8 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "5"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "5"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
@@ -38,7 +37,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void eliminatesNestedParameters() {
+    public void handlesNestedParameters() {
         generateInto(
                 pipeline,
                 (Seq) translateToAst(""
@@ -50,10 +49,9 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "5"),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "5"),
                         createInstruction(LABEL, var(1003)),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
@@ -63,7 +61,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void eliminatesGlobalVariables() {
+    public void handlesGlobalVariables() {
         generateInto(
                 pipeline,
                 (Seq) translateToAst(""
@@ -75,8 +73,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "5"),
-                        createInstruction(SET, "X", var(0)),
+                        createInstruction(SET, "X", "5"),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(PRINT, "X"),
                         createInstruction(LABEL, var(1001)),
@@ -87,7 +84,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void eliminatesBlockNames() {
+    public void handlesBlockNames() {
         generateInto(
                 pipeline,
                 (Seq) translateToAst(""
@@ -108,7 +105,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void eliminatesChainedVariables() {
+    public void handlesChainedVariables() {
         generateInto(
                 pipeline,
                 (Seq) translateToAst(""
@@ -119,9 +116,8 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "5"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "5"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
@@ -130,7 +126,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
     }
 
     @Test
-    public void eliminatesVariablesInExpressions() {
+    public void handlesVariablesInExpressions() {
         generateInto(
                 pipeline,
                 (Seq) translateToAst(""
@@ -141,11 +137,9 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "5"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(2), "1"),
-                        createInstruction(OP, "add", var(3), var(0), var(2)),
-                        createInstruction(PRINT, var(3)),
+                        createInstruction(OP, "add", var(1), "5", "1"),
+                        createInstruction(PRINT, var(1)),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
@@ -187,12 +181,10 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "0"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, "__fn0_n", var(0)),
-                        createInstruction(SET, var(2), "1"),
-                        createInstruction(OP, "add", var(3), "__fn0_n", var(2)),
-                        createInstruction(SET, "__fn0_n", var(3)),
+                        createInstruction(SET, "__fn0_n", "0"),
+                        createInstruction(OP, "add", var(1), "__fn0_n", "1"),
+                        createInstruction(SET, "__fn0_n", var(1)),
                         createInstruction(PRINT, "__fn0_n"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
@@ -216,8 +208,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "5"),
-                        createInstruction(SET, "X", var(0)),
+                        createInstruction(SET, "X", "5"),
                         createInstruction(SET, "__fn0_n", "X"),
                         createInstruction(SET, "__fn0retaddr", var(1001)),
                         createInstruction(SET, "@counter", var(1000)),

@@ -176,9 +176,9 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     private String formatAsCode(List<LogicInstruction> program) {
         StringBuilder str = new StringBuilder();
         if (true) {
-            str.append("Instructions:");
+            str.append("\nInstructions:");
             for (LogicInstruction ix : program) {
-                str.append("\ncreateInstruction(").append(ix.getOpcode().name());
+                str.append("\n                        createInstruction(").append(ix.getOpcode().name());
                 ix.getArgs().forEach(a -> str.append(", ").append(escape(a)));
                 str.append("),").toString();
             }

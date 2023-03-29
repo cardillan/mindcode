@@ -17,14 +17,11 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(PRINT, "\"\\n\""),
-                        createInstruction(SET, var(0), "10"),
-                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "10"),
                         createInstruction(PRINT, "\"\\n\""),
-                        createInstruction(SET, var(1), "\"foo\""),
-                        createInstruction(PRINT, var(1)),
+                        createInstruction(PRINT, "\"foo\""),
                         createInstruction(PRINT, "\"\\n\""),
-                        createInstruction(END)
-                ),
+                        createInstruction(END)),
                 generateUnoptimized(
                         (Seq) translateToAst(""
                                 + "println() "
@@ -56,13 +53,12 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printfHandlesPositionalParameters() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "10"),
                         createInstruction(PRINT, "\"x: \""),
                         createInstruction(PRINT, "x"),
                         createInstruction(PRINT, "\", y: \""),
                         createInstruction(PRINT, "y"),
                         createInstruction(PRINT, "\", z: \""),
-                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "10"),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -77,9 +73,8 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printfHandlesEscapedDollarSign() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "100"),
                         createInstruction(PRINT, "\"Amount: $\""),
-                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "100"),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -116,8 +111,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printfHandlesVariableReference() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "10"),
-                        createInstruction(SET, "x", var(0)),
+                        createInstruction(SET, "x", "10"),
                         createInstruction(PRINT, "\"x=\""),
                         createInstruction(PRINT, "x"),
                         createInstruction(END)
@@ -135,12 +129,11 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printfHandlesLocalVariableReference() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "5"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, "__fn0_x", var(0)),
+                        createInstruction(SET, "__fn0_x", "5"),
                         createInstruction(PRINT, "\"x=\""),
                         createInstruction(PRINT, "__fn0_x"),
-                        createInstruction(SET, var(1), "null"),
+                        createInstruction(SET, var(0), "null"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
@@ -159,12 +152,11 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printfHandlesGlobalVariableReference() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "10"),
-                        createInstruction(SET, "X", var(0)),
+                        createInstruction(SET, "X", "10"),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(PRINT, "\"X=\""),
                         createInstruction(PRINT, "X"),
-                        createInstruction(SET, var(1), "null"),
+                        createInstruction(SET, var(0), "null"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
@@ -213,7 +205,6 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                 )
         );
     }
-
 
     @Test
     void printfHandlesVariableReferenceThenPositionalArgument() {

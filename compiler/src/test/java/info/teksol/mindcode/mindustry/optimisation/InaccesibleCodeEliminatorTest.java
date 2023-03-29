@@ -92,8 +92,7 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1005)),
                         createInstruction(LABEL, var(1002)),
                         createInstruction(LABEL, var(1003)),
-                        createInstruction(SET, var(2), "\"Done\""),
-                        createInstruction(PRINT, var(2)),
+                        createInstruction(PRINT, "\"Done\""),
                         createInstruction(END),
                         // det a -- removed
                         createInstruction(LABEL, var(1000)),
@@ -159,15 +158,13 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1012)),
                         // def testc
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(SET, var(13), "\"End\""),
-                        createInstruction(PRINT, var(13)),
+                        createInstruction(PRINT, "\"End\""),
                         createInstruction(LABEL, var(1013)),
                         createInstruction(SET, "@counter", "__fn1retaddr"),
                         createInstruction(END),
                         // def testa
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(SET, var(14), "\"Start\""),
-                        createInstruction(PRINT, var(14)),
+                        createInstruction(PRINT, "\"Start\""),
                         createInstruction(LABEL, var(1014)),
                         createInstruction(SET, "@counter", "__fn2retaddr"),
                         createInstruction(END)

@@ -105,19 +105,13 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void correctlyDrawsTriangles() {
         assertEquals(
-                "set __tmp0 20\n" +
-                        "op sub __tmp1 x __tmp0\n" +
-                        "set __tmp2 20\n" +
-                        "op sub __tmp3 y __tmp2\n" +
-                        "set __tmp4 20\n" +
-                        "op add __tmp5 x __tmp4\n" +
-                        "set __tmp6 20\n" +
-                        "op sub __tmp7 y __tmp6\n" +
-                        "set __tmp8 20\n" +
-                        "op add __tmp9 x __tmp8\n" +
-                        "set __tmp10 20\n" +
-                        "op sub __tmp11 y __tmp10\n" +
-                        "draw triangle __tmp1 __tmp3 __tmp5 __tmp7 __tmp9 __tmp11\n" +
+                "op sub __tmp0 x 20\n" +
+                        "op sub __tmp1 y 20\n" +
+                        "op add __tmp2 x 20\n" +
+                        "op sub __tmp3 y 20\n" +
+                        "op add __tmp4 x 20\n" +
+                        "op sub __tmp5 y 20\n" +
+                        "draw triangle __tmp0 __tmp1 __tmp2 __tmp3 __tmp4 __tmp5\n" +
                         "end\n",
                 LogicInstructionPrinter.toString(getInstructionProcessor(),
                         LogicInstructionLabelResolver.resolve(
@@ -139,52 +133,45 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         "set MSG message1\n" +
                         "sensor __tmp0 STORAGE @itemCapacity\n" +
                         "set capacity __tmp0\n" +
-                        "set __tmp1 \"capacity: \"\n" +
-                        "set __tmp2 \"\\n\"\n" +
-                        "print __tmp1\n" +
+                        "print \"capacity: \"\n" +
                         "print capacity\n" +
-                        "print __tmp2\n" +
-                        "set __tmp3 0\n" +
-                        "set n __tmp3\n" +
-                        "op lessThan __tmp4 n @links\n" +
-                        "jump 50 equal __tmp4 false\n" +
-                        "getlink __tmp5 n\n" +
-                        "set building __tmp5\n" +
-                        "sensor __tmp6 building @type\n" +
-                        "set type __tmp6\n" +
-                        "op equal __tmp7 type @conveyor\n" +
-                        "op equal __tmp8 type @titanium-conveyor\n" +
-                        "op or __tmp9 __tmp7 __tmp8\n" +
-                        "op equal __tmp10 type @plastanium-conveyor\n" +
-                        "op or __tmp11 __tmp9 __tmp10\n" +
-                        "jump 45 equal __tmp11 false\n" +
-                        "sensor __tmp13 building @firstItem\n" +
-                        "set resource __tmp13\n" +
-                        "op notEqual __tmp14 resource null\n" +
-                        "jump 42 equal __tmp14 false\n" +
-                        "sensor __tmp16 nucleus1 @resource\n" +
-                        "set level __tmp16\n" +
-                        "op lessThan __tmp17 level capacity\n" +
-                        "control enabled building __tmp17 0 0 0\n" +
-                        "set __tmp18 \"\\n\"\n" +
-                        "set __tmp19 \": \"\n" +
-                        "set __tmp20 \" @ \"\n" +
-                        "print __tmp18\n" +
+                        "print \"\\n\"\n" +
+                        "set n 0\n" +
+                        "op lessThan __tmp1 n @links\n" +
+                        "jump 43 equal __tmp1 false\n" +
+                        "getlink __tmp2 n\n" +
+                        "set building __tmp2\n" +
+                        "sensor __tmp3 building @type\n" +
+                        "set type __tmp3\n" +
+                        "op equal __tmp4 type @conveyor\n" +
+                        "op equal __tmp5 type @titanium-conveyor\n" +
+                        "op or __tmp6 __tmp4 __tmp5\n" +
+                        "op equal __tmp7 type @plastanium-conveyor\n" +
+                        "op or __tmp8 __tmp6 __tmp7\n" +
+                        "jump 39 equal __tmp8 false\n" +
+                        "sensor __tmp10 building @firstItem\n" +
+                        "set resource __tmp10\n" +
+                        "op notEqual __tmp11 resource null\n" +
+                        "jump 36 equal __tmp11 false\n" +
+                        "sensor __tmp13 nucleus1 @resource\n" +
+                        "set level __tmp13\n" +
+                        "op lessThan __tmp14 level capacity\n" +
+                        "control enabled building __tmp14 0 0 0\n" +
+                        "print \"\\n\"\n" +
                         "print n\n" +
-                        "print __tmp19\n" +
+                        "print \": \"\n" +
                         "print resource\n" +
-                        "print __tmp20\n" +
+                        "print \" @ \"\n" +
                         "print level\n" +
-                        "set __tmp15 level\n" +
-                        "jump 43 always 0 0\n" +
-                        "set __tmp15 null\n" +
-                        "set __tmp12 __tmp15\n" +
-                        "jump 46 always 0 0\n" +
+                        "set __tmp12 level\n" +
+                        "jump 37 always 0 0\n" +
                         "set __tmp12 null\n" +
-                        "set __tmp21 1\n" +
-                        "op add __tmp22 n __tmp21\n" +
-                        "set n __tmp22\n" +
-                        "jump 11 always 0 0\n" +
+                        "set __tmp9 __tmp12\n" +
+                        "jump 40 always 0 0\n" +
+                        "set __tmp9 null\n" +
+                        "op add __tmp15 n 1\n" +
+                        "set n __tmp15\n" +
+                        "jump 8 always 0 0\n" +
                         "printflush MSG\n" +
                         "end\n",
                 LogicInstructionPrinter.toString(getInstructionProcessor(),

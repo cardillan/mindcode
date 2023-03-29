@@ -12,10 +12,9 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
     void resolvesAbsoluteAddressesOfLabels() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(JUMP, "5", "equal", "true", "false"),
-                        createInstruction(SET, var(0), "1"),
-                        createInstruction(OP, "add", var(1), "n", var(0)),
-                        createInstruction(SET, "n", var(1)),
+                        createInstruction(JUMP, "4", "equal", "true", "false"),
+                        createInstruction(OP, "add", var(0), "n", "1"),
+                        createInstruction(SET, "n", var(0)),
                         createInstruction(JUMP, "0", "always"),
                         createInstruction(END)
                 ),

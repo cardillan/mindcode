@@ -562,16 +562,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitNullLiteral(NullLiteral node) {
-        return node.getLiteral();
-    }
-
-    @Override
-    public String visitBooleanLiteral(BooleanLiteral node) {
-        return node.getLiteral();
-    }
-
-    @Override
     public String visitVarRef(VarRef node) {
         // If the name refers to a constant, use it.
         // If it wasn'T a constant already, the name will be reserved for a variable
@@ -591,17 +581,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitNullLiteral(NullLiteral node) {
+        return node.getLiteral();
+    }
+
+    @Override
+    public String visitBooleanLiteral(BooleanLiteral node) {
+        return node.getLiteral();
+    }
+
+    @Override
     public String visitStringLiteral(StringLiteral node) {
-        final String tmp = nextNodeResult();
-        emitInstruction(SET, tmp, node.getLiteral());
-        return tmp;
+        return node.getLiteral();
     }
 
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
-        final String tmp = nextNodeResult();
-        emitInstruction(SET, tmp, node.getLiteral());
-        return tmp;
+        return node.getLiteral();
     }
 
     @Override

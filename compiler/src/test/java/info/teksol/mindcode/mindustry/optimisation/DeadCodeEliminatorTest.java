@@ -22,9 +22,8 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "3"),
-                        createInstruction(OP, "equal", var(1), "x", var(0)),
-                        createInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                        createInstruction(OP, "equal", var(0), "x", "3"),
+                        createInstruction(JUMP, var(1000), "equal", var(0), "false"),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(END),
@@ -43,19 +42,15 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), "3"),
-                        createInstruction(OP, "equal", var(1), "x", var(0)),
-                        createInstruction(JUMP, var(1000), "equal", var(1), "false"),
-                        createInstruction(SET, var(3), "1"),
-                        createInstruction(SET, var(2), var(3)),
+                        createInstruction(OP, "equal", var(0), "x", "3"),
+                        createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                        createInstruction(SET, var(1), "1"),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(4), "41"),
-                        createInstruction(SET, var(2), var(4)),
+                        createInstruction(SET, var(1), "41"),
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(SET, "n", var(2)),
-                        createInstruction(SET, var(5), "73"),
-                        createInstruction(UCONTROL, "move", var(5), "n"),
+                        createInstruction(SET, "n", var(1)),
+                        createInstruction(UCONTROL, "move", "73", "n"),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -84,16 +79,14 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(JUMP, var(1000), "equal", var(1), "false"),
                         createInstruction(SENSOR, var(3), "target", "@x"),
                         createInstruction(SENSOR, var(4), "target", "@y"),
-                        createInstruction(SET, var(5), "10"),
-                        createInstruction(UCONTROL, "approach", var(3), var(4), var(5)),
-                        createInstruction(SENSOR, var(6), "target", "@x"),
-                        createInstruction(SENSOR, var(7), "target", "@y"),
-                        createInstruction(SET, var(8), "10"),
-                        createInstruction(UCONTROL, "within", var(6), var(7), var(8), var(9)),
-                        createInstruction(JUMP, var(1002), "equal", var(9), "false"),
-                        createInstruction(SENSOR, var(11), "target", "@x"),
-                        createInstruction(SENSOR, var(12), "target", "@y"),
-                        createInstruction(UCONTROL, "target", var(11), var(12), "SHOOT"),
+                        createInstruction(UCONTROL, "approach", var(3), var(4), "10"),
+                        createInstruction(SENSOR, var(5), "target", "@x"),
+                        createInstruction(SENSOR, var(6), "target", "@y"),
+                        createInstruction(UCONTROL, "within", var(5), var(6), "10", var(7)),
+                        createInstruction(JUMP, var(1002), "equal", var(7), "false"),
+                        createInstruction(SENSOR, var(9), "target", "@x"),
+                        createInstruction(SENSOR, var(10), "target", "@y"),
+                        createInstruction(UCONTROL, "target", var(9), var(10), "SHOOT"),
                         createInstruction(JUMP, var(1003), "always"),
                         createInstruction(LABEL, var(1002)),
                         createInstruction(LABEL, var(1003)),
@@ -124,17 +117,13 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                        createInstruction(SET, var(5), "4"),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", var(5)),
+                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
                         createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(2), "outbuilding"),
-                        createInstruction(SET, var(6), "4"),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", var(6)),
+                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
                         createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", var(3), "outbuilding"),
-                        createInstruction(SET, var(7), "4"),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", var(7)),
+                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
                         createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", var(4), "outbuilding"),
-                        createInstruction(SET, var(8), "4"),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", var(8)),
+                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -170,8 +159,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                        createInstruction(SET, var(5), "4"),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", var(5)),
+                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
                         createInstruction(END)
                 ),
                 terminus.getResult()

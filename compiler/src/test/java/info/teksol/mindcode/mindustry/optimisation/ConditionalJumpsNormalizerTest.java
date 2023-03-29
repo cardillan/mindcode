@@ -28,8 +28,7 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
                 List.of(
                         createInstruction(LABEL, var(1000)),
                         createInstruction(JUMP, var(1002), "always"),
-                        createInstruction(SET, var(0), "\"Here\""),
-                        createInstruction(PRINT, var(0)),
+                        createInstruction(PRINT, "\"Here\""),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(JUMP, var(1000), "always"),
                         createInstruction(LABEL, var(1002)),
@@ -51,7 +50,6 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(0), "1"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(JUMP, var(1000), "always"),
                         createInstruction(LABEL, var(1002)),
