@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
-    // Sequences of jumps are not generated without dead code elimination
-    private final LogicInstructionPipeline sut = new DeadCodeEliminator(new SingleStepJumpEliminator(terminus));
+    private final LogicInstructionPipeline sut = Optimisation.createPipelineOf(terminus, 
+            Optimisation.CONDITIONAL_JUMPS_NORMALIZATION,
+            Optimisation.DEAD_CODE_ELIMINATION,
+            Optimisation.SINGLE_STEP_JUMP_ELIMINATION);
 
     @Test
     void removesSingleJump() {
@@ -21,25 +23,6 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("jump", var(1000), "notEqual", "x", "true"),
-                        new LogicInstruction("label", var(1000)),
-                        new LogicInstruction("label", var(1001)),
-                        new LogicInstruction("end")
-                ),
-                terminus.getResult()
-        );
-    }
-
-    @Test
-    void removesAlwaysFalseJump() {
-        LogicInstructionGenerator.generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "if true 1 end"
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
                         new LogicInstruction("label", var(1000)),
                         new LogicInstruction("label", var(1001)),
                         new LogicInstruction("end")
