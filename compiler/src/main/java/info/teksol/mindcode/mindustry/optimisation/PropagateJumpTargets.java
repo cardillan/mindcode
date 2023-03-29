@@ -16,7 +16,7 @@ import java.util.Set;
 //
 // Jump retargeting can move targets forward or backward over long distances; therefore the optimizer is global.
 // No instructions are removed or added except a label at the start of the program.
-public class PropagateJumpTargets extends GlobalOptimizer {
+class PropagateJumpTargets extends GlobalOptimizer {
     private static final String FIRST_LABEL = "__start__";
     private static final Set<String> EXCLUDED_ARGS = Set.of("@time", "@tick", "@counter");
     private boolean startLabelUsed = false;
@@ -27,6 +27,7 @@ public class PropagateJumpTargets extends GlobalOptimizer {
     
     @Override
     protected void optimizeProgram() {
+        int count = 0;
         program.add(0, new LogicInstruction("label", FIRST_LABEL));
         for (int index = 0; index < program.size(); index++) {
             LogicInstruction instruction = program.get(index);
@@ -36,6 +37,7 @@ public class PropagateJumpTargets extends GlobalOptimizer {
                     startLabelUsed |= label.equals(FIRST_LABEL);
                     // Update target of the original jump
                     program.set(index, replaceArg(instruction, 0, label));
+                    count++;
                 }
             }
         }
@@ -43,6 +45,10 @@ public class PropagateJumpTargets extends GlobalOptimizer {
         if (!startLabelUsed) {
             // Keep start label only if used -- easier on some unit tests
             program.remove(0);
+        }
+
+        if (count > 0) {
+            emitMessage("%6d instructions updated by %s.", count, getClass().getSimpleName());
         }
     }
 

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 // of inacccessible code (ie. code inside the if false ... end statement) should be eliminated,
 // assuming the unconditional jump normalization optimizer was on the pipeline.
 // Labels - even inactive ones - are never removed.
-public class InaccesibleCodeEliminator extends GlobalOptimizer {
+class InaccesibleCodeEliminator extends GlobalOptimizer {
     private Set<String> activeLabels = new HashSet<>();
 
     public InaccesibleCodeEliminator(LogicInstructionPipeline next) {

@@ -1,12 +1,9 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.optimisation;
 
-import info.teksol.mindcode.mindustry.optimisation.CaseExpressionOptimizer;
-import info.teksol.mindcode.mindustry.optimisation.ConditionalJumpsNormalizer;
-import info.teksol.mindcode.mindustry.optimisation.InaccesibleCodeEliminator;
-import info.teksol.mindcode.mindustry.optimisation.InputTempEliminator;
-import info.teksol.mindcode.mindustry.optimisation.OutputTempEliminator;
-import info.teksol.mindcode.mindustry.optimisation.PropagateJumpTargets;
+import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.EnumSet;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 // The optimizations are applied in the declared order, ie. ConditionalJumpsNormalizer gets instructions from the 
@@ -24,24 +21,31 @@ public enum Optimisation {
     INACCESSIBLE_CODE_ELIMINATION       (next -> new InaccesibleCodeEliminator(new SingleStepJumpEliminator(next))),
     ;
     
-    private final Function<LogicInstructionPipeline, LogicInstructionPipeline> instanceCreator;
+    private final Function<LogicInstructionPipeline, ? extends BaseOptimizer> instanceCreator;
 
-    private Optimisation(Function<LogicInstructionPipeline, LogicInstructionPipeline> instanceCreator) {
+    private Optimisation(Function<LogicInstructionPipeline, ? extends BaseOptimizer> instanceCreator) {
         this.instanceCreator = instanceCreator;
     }
     
-    private LogicInstructionPipeline createInstance(LogicInstructionPipeline next) {
+    private BaseOptimizer createInstance(LogicInstructionPipeline next) {
         return instanceCreator.apply(next);
     }
     
     public static LogicInstructionPipeline createCompletePipeline(LogicInstructionPipeline terminus) {
-        LogicInstructionPipeline pipeline = terminus;
+        return createCompletePipeline(terminus, s -> {});
+    }
+    
+    public static LogicInstructionPipeline createCompletePipeline(LogicInstructionPipeline terminus,
+            Consumer<String> messageRecipient) {
+        LogicInstructionPipeline pipeline = new InstructionCounter(terminus, messageRecipient,
+                "%6d instructions after optimizations.");
         Optimisation[] values = values();
         for (int i = values.length - 1; i >= 0; i--) {
-            pipeline = values[i].createInstance(pipeline);
-            
+            BaseOptimizer optimizer = values[i].createInstance(pipeline);
+            optimizer.setMessagesRecipient(messageRecipient);
+            pipeline = optimizer;
         }
-        return pipeline;
+        return new InstructionCounter(pipeline, messageRecipient, "%6d instructions before optimizations.");
     }
     
     public static LogicInstructionPipeline createPipelineOf(LogicInstructionPipeline terminus, Optimisation... optimisation) {
@@ -54,5 +58,32 @@ public enum Optimisation {
             }
         }
         return pipeline;
+    }
+    
+    private static class InstructionCounter implements LogicInstructionPipeline {
+        private final LogicInstructionPipeline next;
+        private final Consumer<String> messageRecipient;
+        private final String message;
+        private int count = 0;
+
+        public InstructionCounter(LogicInstructionPipeline next, Consumer<String> messageRecipient, String message) {
+            this.next = next;
+            this.messageRecipient = messageRecipient;
+            this.message = message;
+        }
+
+        @Override
+        public void emit(LogicInstruction instruction) {
+            if (!instruction.isLabel()) {
+                count++;
+            }
+            next.emit(instruction);
+        }
+
+        @Override
+        public void flush() {
+            messageRecipient.accept(String.format(message, count));
+            next.flush();
+        }
     }
 }

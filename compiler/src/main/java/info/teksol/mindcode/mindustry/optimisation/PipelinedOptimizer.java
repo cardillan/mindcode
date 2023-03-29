@@ -7,6 +7,8 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 // Derived classes only implement states and provide an initial state
 abstract class PipelinedOptimizer extends BaseOptimizer {
     private State state = new UninitializedState();
+    private int received = 0;
+    private int emitted = 0;
 
     public PipelinedOptimizer(LogicInstructionPipeline next) {
         super(next);
@@ -15,14 +17,28 @@ abstract class PipelinedOptimizer extends BaseOptimizer {
     protected abstract State initialState();
 
     @Override
-    public void emit(LogicInstruction instruction) {
+    public final void emit(LogicInstruction instruction) {
+        received++;
         state = state.emit(instruction);
     }
 
     @Override
-    public void flush() {
+    protected void emitToNext(LogicInstruction instruction) {
+        emitted++;
+        super.emitToNext(instruction);
+    }
+
+    @Override
+    public final void flush() {
         state = state.flush();
-        next.flush();
+        generateFinalMessages();
+        super.flush();
+    }
+
+    protected void generateFinalMessages() {
+        if (emitted != received) {
+            emitMessage("%6d instructions eliminated by %s.", received - emitted, getClass().getSimpleName());
+        }
     }
 
     protected interface State {

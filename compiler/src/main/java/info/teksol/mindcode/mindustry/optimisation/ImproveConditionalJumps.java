@@ -1,5 +1,8 @@
-package info.teksol.mindcode.mindustry;
+package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.mindustry.LogicInstruction;
+import info.teksol.mindcode.mindustry.LogicInstructionGenerator;
+import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +18,7 @@ import java.util.Set;
 // 2. var1 and var2 are identical
 // 3. var1 is a __tmp variable
 // 4. <comparison> has an inverse
-public class ImproveConditionalJumps implements LogicInstructionPipeline {
+public class ImproveConditionalJumps extends PipelinedOptimizer {
     private static final Map<String, String> inverses = Map.of(
             "equal", "notEqual",
             "notEqual", "equal",
@@ -25,29 +28,14 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
             "greaterThanEq", "lessThan"
     );
     private static final Set<String> COMPARISON_OPERATORS = inverses.keySet();
-    private final LogicInstructionPipeline next;
-    private State state;
 
     ImproveConditionalJumps(LogicInstructionPipeline next) {
-        this.next = next;
-        this.state = new EmptyState();
+        super(next);
     }
 
     @Override
-    public void emit(LogicInstruction instruction) {
-        state = state.emit(instruction);
-    }
-
-    @Override
-    public void flush() {
-        state = state.flush();
-        next.flush();
-    }
-
-    private interface State {
-        State emit(LogicInstruction instruction);
-
-        State flush();
+    protected State initialState() {
+        return new EmptyState();
     }
 
     private final class EmptyState implements State {
@@ -57,7 +45,7 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
             if (instruction.isOp() && isComparisonOperatorToTmp(instruction)) {
                 return new ExpectJump(instruction);
             } else {
-                next.emit(instruction);
+                emitToNext(instruction);
                 return this;
             }
         }
@@ -79,19 +67,19 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
         public State emit(LogicInstruction instruction) {
             if (instruction.isOp()) {
                 if (!isComparisonOperatorToTmp(instruction)) {
-                    next.emit(op);
-                    next.emit(instruction);
+                    emitToNext(op);
+                    emitToNext(instruction);
                     return new EmptyState();
                 } else {
-                    next.emit(op);
+                    emitToNext(op);
                     return new ExpectJump(instruction);
                 }
             }
 
             // Not a conditional jump
             if (!instruction.isJump() || !instruction.getArgs().get(1).equals("notEqual")) {
-                next.emit(op);
-                next.emit(instruction);
+                emitToNext(op);
+                emitToNext(instruction);
                 return new EmptyState();
             }
 
@@ -104,7 +92,7 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
                     throw new IllegalArgumentException("Unknown operation passed-in; can't find the inverse of [" + op.getArgs().get(0) + "]");
                 }
 
-                next.emit(
+                emitToNext(
                         new LogicInstruction(
                                 "jump",
                                 instruction.getArgs().get(0),
@@ -116,15 +104,15 @@ public class ImproveConditionalJumps implements LogicInstructionPipeline {
                 return new EmptyState();
             } 
             
-            next.emit(op);
-            next.emit(instruction);
+            emitToNext(op);
+            emitToNext(instruction);
             return new EmptyState();
         }
 
 
         @Override
         public State flush() {
-            next.emit(op);
+            emitToNext(op);
             return new EmptyState();
         }
 
