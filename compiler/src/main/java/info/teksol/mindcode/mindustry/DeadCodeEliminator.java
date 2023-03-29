@@ -27,6 +27,7 @@ class DeadCodeEliminator implements LogicInstructionPipeline {
         for (LogicInstruction instruction : program) {
             next.emit(instruction);
         }
+        next.flush();
         program.clear();
     }
 
