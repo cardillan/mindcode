@@ -57,7 +57,7 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
                                 "  n += 1\n" +
                                 "end\n" +
                                 "\n" +
-                                "while n === null\n" +
+                                "while n == null\n" +
                                 "  n += 1\n" +
                                 "end\n"
                 )
@@ -114,6 +114,43 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", var(1), "0"),
                         new LogicInstruction("op", "strictEqual", "alive", var(0), var(1)),
                         new LogicInstruction("jump", var(1000), "notEqual", "alive", "true"),
+                        new LogicInstruction("print", "alive"),
+                        new LogicInstruction("jump", var(1001), "always"),
+                        new LogicInstruction("label", var(1000)),
+                        new LogicInstruction("label", var(1001)),
+                        new LogicInstruction("end")
+                ),
+                terminus.getResult()
+        );
+    }
+
+    @Test
+    void preservesStrictEqualConditions() {
+        // We need our own pipeline for this test
+        final LogicInstructionPipeline customPipeline = 
+                new DeadCodeEliminator(
+                        new OptimizeOpThenSet(
+                                new ImproveConditionalJumps(terminus)
+                        )
+                );
+
+    
+        LogicInstructionGenerator.generateInto(
+                customPipeline,
+                (Seq) translateToAst(
+                        "" +
+                                "if @unit.dead === 0\n" +
+                                "  print(alive)\n" +
+                                "end"
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        new LogicInstruction("sensor", var(0), "@unit", "@dead"),
+                        new LogicInstruction("set", var(1), "0"),
+                        new LogicInstruction("op", "strictEqual", var(2), var(0), var(1)),
+                        new LogicInstruction("jump", var(1000), "notEqual", var(2), "true"),
                         new LogicInstruction("print", "alive"),
                         new LogicInstruction("jump", var(1001), "always"),
                         new LogicInstruction("label", var(1000)),
