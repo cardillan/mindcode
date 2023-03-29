@@ -60,6 +60,10 @@ public class LogicInstruction {
         return opcode.equals("sensor");
     }
 
+    public boolean isEnd() {
+        return opcode.equals("end");
+    }
+
     public String getOpcode() {
         return opcode;
     }

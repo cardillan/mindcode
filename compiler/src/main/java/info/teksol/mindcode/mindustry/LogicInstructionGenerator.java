@@ -34,7 +34,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return terminus.getResult();
     }
 
-    static void generateInto(LogicInstructionPipeline pipeline, Seq program) {
+    public static void generateInto(LogicInstructionPipeline pipeline, Seq program) {
         LogicInstructionGenerator generator = new LogicInstructionGenerator(pipeline);
         generator.start(program);
         pipeline.flush();
