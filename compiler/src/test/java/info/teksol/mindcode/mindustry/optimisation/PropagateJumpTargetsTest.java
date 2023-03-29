@@ -14,9 +14,8 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
             Optimisation.DEAD_CODE_ELIMINATION,
             Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT,
             Optimisation.JUMP_TARGET_PROPAGATION,
-            Optimisation.SET_THEN_PRINT_OPTIMIZATION,
             Optimisation.OP_THEN_SET_OPTIMIZATION,
-            Optimisation.SET_THEN_OP_OPTIMIZATION,
+            Optimisation.INPUT_TEMPS_ELIMINATION,
             Optimisation.GETLINK_THEN_SET_OPTIMIZATION
     );
 
@@ -74,8 +73,7 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
                 List.of(
                         new LogicInstruction("label", var(1000)),
                         new LogicInstruction("jump", var(1001), "notEqual", "c", "null"),
-                        new LogicInstruction("set", var(1), "1"),
-                        new LogicInstruction("getlink", "c", var(1)),
+                        new LogicInstruction("getlink", "c", "1"),
                         new LogicInstruction("jump", var(1001), "notEqual", "c", "null"),
                         new LogicInstruction("print", "\"Not found\""),
                         new LogicInstruction("jump", var(1000), "always"),

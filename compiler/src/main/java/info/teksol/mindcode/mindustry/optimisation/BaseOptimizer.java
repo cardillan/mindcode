@@ -13,7 +13,7 @@ abstract class BaseOptimizer implements LogicInstructionPipeline {
         this.next = next;
     }
 
-    // Creates a new instruction with argument given index set to a new value
+    // Creates a new instruction with argument at given index set to a new value
     protected LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String arg) {
         if (instruction.getArgs().get(argIndex).equals(arg)) {
             return instruction;
@@ -25,4 +25,10 @@ abstract class BaseOptimizer implements LogicInstructionPipeline {
         }
     }
     
+    // Creates a new instruction with all occurences of oldArg replaced newArg in the argument list
+    protected LogicInstruction replaceAllArgs(LogicInstruction instruction, String oldArg, String newArg) {
+        List<String> args = new ArrayList<>(instruction.getArgs());
+        args.replaceAll(arg -> arg.equals(oldArg) ? newArg : arg);
+        return new LogicInstruction(instruction.getOpcode(), args);
+    }
 }

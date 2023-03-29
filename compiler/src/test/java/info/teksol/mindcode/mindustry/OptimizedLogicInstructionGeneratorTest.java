@@ -39,14 +39,13 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("write", "48", "cell1", "48"),
-                        new LogicInstruction("set", var(2), "4"),
                         new LogicInstruction("read", var(3), "cell1", "48"),
                         new LogicInstruction("op", "sub", var(3), var(3), "1"),
                         new LogicInstruction("write", var(1001), "cell1", var(3)),
                         new LogicInstruction("write", var(3), "cell1", "48"),
                         new LogicInstruction("read", var(9), "cell1", "48"),
                         new LogicInstruction("op", "sub", var(9), var(9), "1"),
-                        new LogicInstruction("write", var(2), "cell1", var(9)),
+                        new LogicInstruction("write", "4", "cell1", var(9)),
                         new LogicInstruction("write", var(9), "cell1", "48"),
                         new LogicInstruction("set", "@counter", var(1000)),
                         new LogicInstruction("label", var(1001)),
@@ -54,14 +53,13 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("read", var(15), "cell1", var(16)),
                         new LogicInstruction("op", "add", var(16), var(16), "1"),
                         new LogicInstruction("write", var(16), "cell1", "48"),
-                        new LogicInstruction("set", var(23), "5"),
                         new LogicInstruction("read", var(24), "cell1", "48"),
                         new LogicInstruction("op", "sub", var(24), var(24), "1"),
                         new LogicInstruction("write", var(1002), "cell1", var(24)),
                         new LogicInstruction("write", var(24), "cell1", "48"),
                         new LogicInstruction("read", var(30), "cell1", "48"),
                         new LogicInstruction("op", "sub", var(30), var(30), "1"),
-                        new LogicInstruction("write", var(23), "cell1", var(30)),
+                        new LogicInstruction("write", "5", "cell1", var(30)),
                         new LogicInstruction("write", var(30), "cell1", "48"),
                         new LogicInstruction("set", "@counter", var(1000)),
                         new LogicInstruction("label", var(1002)),
@@ -117,8 +115,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", "x", "41"),
                         new LogicInstruction("set", "y", "72"),
                         new LogicInstruction("op", "add", "pos", "x", "y"),
-                        new LogicInstruction("set", var(3), "40"),
-                        new LogicInstruction("ucontrol", "move", var(3), "pos"),
+                        new LogicInstruction("ucontrol", "move", "40", "pos"),
                         new LogicInstruction("end")
                 ),
                 result
@@ -301,11 +298,10 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         new LogicInstruction("set", "x", "1"),
-                        new LogicInstruction("set", var(2), "\"\\nx+x: \""),
                         new LogicInstruction("print", "\"\\nx: \""),
                         new LogicInstruction("print", "x"),
                         new LogicInstruction("op", "add", var(3), "x", "x"),
-                        new LogicInstruction("print", var(2)),
+                        new LogicInstruction("print", "\"\\nx+x: \""),
                         new LogicInstruction("print", var(3)),
                         new LogicInstruction("end")
                 ),
