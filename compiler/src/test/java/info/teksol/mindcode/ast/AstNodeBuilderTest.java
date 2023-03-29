@@ -798,9 +798,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesCaseWhen() {
         assertEquals(
                 new Seq(
-                        new Assignment(new VarRef("ast0"), new VarRef("n")),
+                        new Assignment(new VarRef("__ast0"), new VarRef("n")),
                         new CaseExpression(
-                                new VarRef("ast0"),
+                                new VarRef("__ast0"),
                                 List.of(
                                         new CaseAlternative(new NumericLiteral("1"), new Seq(new StringLiteral("1"))),
                                         new CaseAlternative(new NumericLiteral("2"), new Seq(new StringLiteral("two")))

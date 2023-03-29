@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry;
 
+import info.teksol.mindcode.mindustry.optimisation.CaseExpressionOptimizer;
 import info.teksol.mindcode.mindustry.optimisation.ConditionalJumpsNormalizer;
 import info.teksol.mindcode.mindustry.optimisation.InaccesibleCodeEliminator;
 import info.teksol.mindcode.mindustry.optimisation.InputTempEliminator;
@@ -16,6 +17,7 @@ public enum Optimisation {
     SINGLE_STEP_JUMP_ELIMINATION        (next -> new SingleStepJumpEliminator(next)),
     INPUT_TEMPS_ELIMINATION             (next -> new InputTempEliminator(next)),
     OUTPUT_TEMPS_ELIMINATION            (next -> new OutputTempEliminator(next)),
+    CASE_EXPRESSION_OPTIMIZATION        (next -> new CaseExpressionOptimizer(next)),
     CONDITIONAL_JUMPS_IMPROVEMENT       (next -> new ImproveConditionalJumps(next)),
     JUMP_TARGET_PROPAGATION             (next -> new PropagateJumpTargets(next)),
     // This optimizer can create additional single step jumps; therefore is bundled with its eliminator

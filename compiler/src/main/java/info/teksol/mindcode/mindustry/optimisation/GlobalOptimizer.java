@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+
 // Base class for global optimizers. Consumes the netire program before performing optimizations on it.
 // Contains helper method to navigate and manipulate the program.
 abstract class GlobalOptimizer extends BaseOptimizer {
@@ -61,7 +62,15 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     }
     
     protected void replaceInstruction(LogicInstruction original, LogicInstruction replaced) {
-        int index = program.indexOf(original);
-        program.set(index, replaced);
+        for (int index = 0; index < program.size(); index++) {
+            if (program.get(index) == original) {
+                program.set(index, replaced);
+                return;
+            }
+        }
+        
+        throw new IllegalStateException("Instruction to be replaced not found in program." +
+                "\nOriginal instruction: " + original +
+                "\nReplacement instruction: " + replaced);
     }
 }

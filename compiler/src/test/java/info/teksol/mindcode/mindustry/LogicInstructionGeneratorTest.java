@@ -448,7 +448,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void generatesCaseWhenElse() {
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "ast0", "n"),
+                        new LogicInstruction("set", "__ast0", "n"),
                         new LogicInstruction("set", var(2), "1"),
                         new LogicInstruction("jump", var(1001), "notEqual", var(0), var(2)),
                         new LogicInstruction("set", var(3), "\"1\""),
@@ -478,7 +478,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 List.of(
                         new LogicInstruction("set", var(0), "0"),
                         new LogicInstruction("read", var(1), "cell1", var(0)),
-                        new LogicInstruction("set", "ast0", var(1)),
+                        new LogicInstruction("set", "__ast0", var(1)),
                         new LogicInstruction("jump", var(1001), "notEqual", var(2), "ST_EMPTY"),
                         new LogicInstruction("set", var(6), "0"),
                         new LogicInstruction("write", "ST_INITIALIZED", "cell1", var(6)),
@@ -1300,7 +1300,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         new LogicInstruction("set", var(0), "2"),
                         new LogicInstruction("op", "rand", var(1), var(0)),
                         new LogicInstruction("op", "floor", var(2), var(1)),
-                        new LogicInstruction("set", "ast0", var(2)),
+                        new LogicInstruction("set", "__ast0", var(2)),
                         new LogicInstruction("set", var(5), "0"),
                         new LogicInstruction("jump", var(1001), "notEqual", var(3), var(5)),
                         new LogicInstruction("set", var(6), "1000"),
@@ -1457,9 +1457,9 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void generatesCorrectCodeWhenCaseBranchIsCommentedOut() {
         assertLogicInstructionsMatch(
                 List.of(
-                        new LogicInstruction("set", "ast0", "n"),
+                        new LogicInstruction("set", "__ast0", "n"),
                         new LogicInstruction("set", var(1), "2"),
-                        new LogicInstruction("jump", var(1001), "notEqual", "ast0", var(1)),
+                        new LogicInstruction("jump", var(1001), "notEqual", "__ast0", var(1)),
                         new LogicInstruction("print", "n"),
                         new LogicInstruction("set", var(0), "n"),
                         new LogicInstruction("jump", var(1000), "always"),
