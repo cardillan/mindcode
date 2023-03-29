@@ -170,13 +170,6 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIf_expression(MindcodeParser.If_expressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code print_format}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrint_format(MindcodeParser.Print_formatContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code assignment}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -444,12 +437,6 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFuncall(MindcodeParser.FuncallContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#printf}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrintf(MindcodeParser.PrintfContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#arg_list}.
 	 * @param ctx the parse tree

@@ -195,15 +195,6 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitPrintf(Printf node) {
-        open("Printf{");
-        print("format="); visit(node.getFormat()); newLine(",");
-        print("params="); visitList(node.getParams());
-        close("}");
-        return null;
-    }
-
-    @Override
     public String visitBooleanLiteral(BooleanLiteral node) {
         print(node);
         return null;

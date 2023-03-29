@@ -142,6 +142,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         if (constants.get(name) != null) {
             return constants.get(name).getLiteral();
         } else {
+            // Register the identifier as a variable name
             constants.put(name, null);
             return null;
         }
@@ -210,6 +211,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // They'll be used solely to pass values to actual function parameters and won't be used subsequently
         final List<String> params = nodeContext.encapsulate(
                 () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
+
+        // Special cases
+        switch (node.getFunctionName()) {
+            case "printf":      return handlePrintf(node, params);
+        }
 
         return handleFunctionCall(node.getFunctionName(), params);
     }
@@ -558,13 +564,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitRef(Ref node) {
+        // TODO: warn when "configure" is used in V7
         return "@" + node.getName();
     }
 
     @Override
     public String visitVarRef(VarRef node) {
         // If the name refers to a constant, use it.
-        // If it wasn'T a constant already, the name will be reserved for a variable
+        // If it wasn't a constant already, the name will be reserved for a variable
         String constant = queryConstantName(node.getName());
         if (constant != null) {
             return constant;
@@ -620,7 +627,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             final String bodyLabel = nextLabel();       // Body of this alternative
 
             nodeContext.encapsulate(() -> {
-                // Each matching value, including the last one, causes a jump to the when body
+                // Each matching value, including the last one, causes a jump to the "when" body
                 // At the end of the list is a jump to the next alternative (next "when" branch)
                 // JumpOverJumpEliminator will improve the generated code
                 for (AstNode value : alternative.getValues()) {
@@ -738,20 +745,24 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return value;
     }
 
-    @Override
-    public String visitPrintf(Printf node) {
+    private String handlePrintf(FunctionCall node, List<String> params) {
         // Printf format string may contain references to variables, which is practically a code
-        // Must be therefore handled here and not, for example, as another function call.
+        // Must be therefore handled here and not by the FunctionMapper
+        
+        if (params.isEmpty()) {
+            // TODO: throw an error -- the format string *should* be here
+            return "null";
+        }
 
-        // Arguments passed to printf are handled as any other function arguments
-        // See visitFunctionCall
-        final List<String> params = nodeContext.encapsulate(
-                () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
+        AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
+        if (!(astFormat instanceof StringLiteral)) {
+            throw new GenerationException("First parameter of printf() function must be a constant string.");
+        }
 
-        String format = node.getFormat().getLiteral();
+        String format = ((StringLiteral) astFormat).getLiteral();
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
-        int position = 0;
+        int position = 1;       // Skipping the 1st param, which is the format string
 
         // Skip leading and trailing quotes
         for (int i = 1; i < format.length() - 1; i++) {

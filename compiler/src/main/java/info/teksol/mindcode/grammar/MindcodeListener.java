@@ -280,18 +280,6 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitIf_expression(MindcodeParser.If_expressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code print_format}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrint_format(MindcodeParser.Print_formatContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code print_format}
-	 * labeled alternative in {@link MindcodeParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrint_format(MindcodeParser.Print_formatContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code assignment}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -745,16 +733,6 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFuncall(MindcodeParser.FuncallContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#printf}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrintf(MindcodeParser.PrintfContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#printf}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrintf(MindcodeParser.PrintfContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#arg_list}.
 	 * @param ctx the parse tree

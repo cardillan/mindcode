@@ -189,31 +189,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitPrint_format(MindcodeParser.Print_formatContext ctx) {
-        final List<AstNode> params = new ArrayList<>();
-        MindcodeParser.PrintfContext printf = ctx.printf();
-        
-        if (printf.format == null) {
-            return new Printf(new StringLiteral(""), List.of());
-        }
-        
-        if (printf.params != null) {
-            final AstNode nodes;
-            if (printf.params.arg_list() != null) {
-                nodes = visit(printf.params.arg_list());
-            } else {
-                nodes = new NoOp();
-            }
-
-            gatherArgs(new Seq(nodes, visit(printf.params.arg())), params);
-        }
-        
-        final String str = printf.format.getText();
-        StringLiteral format = new StringLiteral(str.substring(1, str.length() - 1).replaceAll("\\\\\"", "\""));
-        return new Printf(format, params);
-    }
-    
-    @Override
     public AstNode visitFunction_call(MindcodeParser.Function_callContext ctx) {
         final List<AstNode> params = new ArrayList<>();
 

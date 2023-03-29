@@ -174,18 +174,6 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitPrintf(Printf node) {
-        buffer.append("Printf(");
-        buffer.append(node.getFormat());
-        for (int i = 0; i < node.getParams().size() ; i++) {
-            buffer.append(", ");
-            visit(node.getParams().get(i));
-        }
-        buffer.append(")");
-        return null;
-    }
-
-    @Override
     public String visitBooleanLiteral(BooleanLiteral node) {
         buffer.append(node.getValue());
         return null;

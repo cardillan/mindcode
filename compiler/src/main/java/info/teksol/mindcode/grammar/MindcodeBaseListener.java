@@ -292,18 +292,6 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterPrint_format(MindcodeParser.Print_formatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPrint_format(MindcodeParser.Print_formatContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAssignment(MindcodeParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -791,18 +779,6 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFuncall(MindcodeParser.FuncallContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPrintf(MindcodeParser.PrintfContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPrintf(MindcodeParser.PrintfContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
