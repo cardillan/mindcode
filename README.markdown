@@ -110,6 +110,8 @@ Things I'd like to add to Mindcode-the-language:
 * [ ] short-circuit boolean evaluation in some form
   * Ruby-like (`and`, `or` for short-circuit, `&&`, `||` for full evaluation), or
   * "best-effort" basis (no guarantees either way)
+* [ ] improve compiler error messages
+* [ ] code generation/optimization objective (speed for faster but larger code, size for smaller but slower code) - most of the time smaller is also faster in Mindustry Logic, but there might be a few opportunities for this distinction.
 
 Compiled code analysis
 
@@ -123,8 +125,15 @@ Optimization improvements
 * [ ] multiple optimization passes
 * [ ] additional automatic inlining of nonrecursive functions 
 * [ ] multiple-use temporary variables optimization
-* [ ] common subexpressions optimizations (maybe including repeated array access)
 * [ ] eliminate retval variables/assignments where not needed
+
+More advanced optimizations 
+
+* [ ] common subexpressions optimizations (maybe including repeated array access)
+* [ ] loop unrolling / other loop optimizations
+* [ ] jump threading / crossjumping
+* [ ] forward store for memory-backed variables
+* [ ] tail recursion
 
 Ideas on hold
 
