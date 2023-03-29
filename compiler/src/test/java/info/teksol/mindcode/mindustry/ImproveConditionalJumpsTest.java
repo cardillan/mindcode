@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
-    private final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private final LogicInstructionPipeline pipeline = new ImproveConditionalJumps(terminus);
 
     @Test
@@ -89,15 +88,12 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
 
     @Test
     void preservesUserVariables() {
-        // We need our own pipeline for this test
-        final LogicInstructionPipeline customPipeline = 
-                new DeadCodeEliminator(
-                        new OptimizeOpThenSet(
-                                new ImproveConditionalJumps(terminus)
-                        )
-                );
+        final LogicInstructionPipeline customPipeline = Optimisation.createPipelineOf(terminus,
+                Optimisation.DEAD_CODE_ELIMINATION,
+                Optimisation.OUTPUT_TEMPS_ELIMINATION,
+                Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT
+        );
 
-    
         LogicInstructionGenerator.generateInto(
                 customPipeline,
                 (Seq) translateToAst(
@@ -126,14 +122,11 @@ class ImproveConditionalJumpsTest extends AbstractGeneratorTest {
 
     @Test
     void preservesStrictEqualConditions() {
-        // We need our own pipeline for this test
-        final LogicInstructionPipeline customPipeline = 
-                new DeadCodeEliminator(
-                        new OptimizeOpThenSet(
-                                new ImproveConditionalJumps(terminus)
-                        )
-                );
-
+        final LogicInstructionPipeline customPipeline = Optimisation.createPipelineOf(terminus,
+                Optimisation.DEAD_CODE_ELIMINATION,
+                Optimisation.OUTPUT_TEMPS_ELIMINATION,
+                Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT
+        );
     
         LogicInstructionGenerator.generateInto(
                 customPipeline,

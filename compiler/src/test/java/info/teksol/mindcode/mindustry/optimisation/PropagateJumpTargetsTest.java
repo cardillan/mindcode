@@ -14,9 +14,8 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
             Optimisation.DEAD_CODE_ELIMINATION,
             Optimisation.CONDITIONAL_JUMPS_IMPROVEMENT,
             Optimisation.JUMP_TARGET_PROPAGATION,
-            Optimisation.OP_THEN_SET_OPTIMIZATION,
             Optimisation.INPUT_TEMPS_ELIMINATION,
-            Optimisation.GETLINK_THEN_SET_OPTIMIZATION
+            Optimisation.OUTPUT_TEMPS_ELIMINATION
     );
 
     @Test

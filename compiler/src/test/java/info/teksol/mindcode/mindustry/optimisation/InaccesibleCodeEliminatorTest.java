@@ -16,8 +16,8 @@ public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
             Optimisation.DEAD_CODE_ELIMINATION,
             Optimisation.SINGLE_STEP_JUMP_ELIMINATION,
             Optimisation.JUMP_TARGET_PROPAGATION,
-            Optimisation.INACCESSIBLE_CODE_ELIMINATION,
-            Optimisation.SINGLE_STEP_JUMP_ELIMINATION_2);
+            Optimisation.INACCESSIBLE_CODE_ELIMINATION
+    );
 
     @Test
     void removesOrphanedJump() {
