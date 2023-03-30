@@ -12,8 +12,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     private int temp;
     private HeapAllocation allocatedHeap;
-    private Map<String, Integer> heapAllocations = new HashMap<>();
     private StackAllocation allocatedStack;
+    private final Map<String, Integer> heapAllocations = new HashMap<>();
 
     public static Seq generate(MindcodeParser.ProgramContext program) {
         final AstNodeBuilder builder = new AstNodeBuilder();
@@ -281,7 +281,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             alloc_list = alloc_list.alloc_list();
         }
 
-        return Objects.requireNonNullElseGet(allocatedStack, NoOp::new);
+        return new Seq(
+                Objects.requireNonNullElseGet(allocatedHeap, NoOp::new),
+                Objects.requireNonNullElseGet(allocatedStack, NoOp::new)
+        );
     }
 
     private void allocateStack(MindcodeParser.Alloc_listContext ctx) {
@@ -314,16 +317,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitInclusive_range(MindcodeParser.Inclusive_rangeContext ctx) {
-        return new InclusiveRange(visit(ctx.start), visit(ctx.end));
-    }
-
-    @Override
-    public AstNode visitExclusive_range(MindcodeParser.Exclusive_rangeContext ctx) {
-        return new ExclusiveRange(visit(ctx.start), visit(ctx.end));
-    }
-
-    @Override
     public AstNode visitInclusive_range_exp(MindcodeParser.Inclusive_range_expContext ctx) {
         return new InclusiveRange(visit(ctx.start), visit(ctx.end));
     }
@@ -344,15 +337,11 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         if (heapAllocations.containsKey(name)) {
             location = heapAllocations.get(name);
         } else {
-            if (heapAllocations.size() >= allocatedHeap.size()) {
-                throw new OutOfHeapSpaceException("Allocated heap is too small! Increase the size of the allocation, or switch to a Memory Bank to give the heap even more space; in " + ctx.getText());
-            }
-
             location = heapAllocations.size();
             heapAllocations.put(name, location);
         }
 
-        return new HeapAccess(allocatedHeap.getName(), allocatedHeap.addressOf(location));
+        return new HeapAccess(allocatedHeap.getName(), location);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.ParsingException;
 
 import java.util.Objects;
 
@@ -8,10 +7,6 @@ public class VarRef extends BaseAstNode {
     private final String name;
 
     public VarRef(String name) {
-        if (RESERVED_KEYWORDS.contains(name)) {
-            throw new ParsingException(name + " is a reserved keyword, please use a different word");
-        }
-
         this.name = name;
     }
 

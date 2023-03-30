@@ -149,7 +149,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 String value = virtualInstruction.getArg(1);
                 return List.of(
                         createInstruction(Opcode.WRITE, value, memory, getStackPointer()),
-                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1")
+                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1")
                 );
             }
 
@@ -157,7 +157,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 String memory = virtualInstruction.getArg(0);
                 String varRef = virtualInstruction.getArg(1);
                 return List.of(
-                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
+                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
                         createInstruction(Opcode.READ, varRef, memory, getStackPointer())
                 );
             }
@@ -168,7 +168,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 String retAddr = virtualInstruction.getArg(2);
                 return List.of(
                         createInstruction(Opcode.WRITE, retAddr, memory, getStackPointer()),
-                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
+                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
                         createInstruction(Opcode.SET, "@counter", callAddr)
                 );
             }
@@ -177,7 +177,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 String memory = virtualInstruction.getArg(0);
                 String retAddr = nextTemp();
                 return List.of(
-                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
+                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
                         createInstruction(Opcode.READ, retAddr, memory, getStackPointer()),
                         createInstruction(Opcode.SET, "@counter", retAddr)
                 );

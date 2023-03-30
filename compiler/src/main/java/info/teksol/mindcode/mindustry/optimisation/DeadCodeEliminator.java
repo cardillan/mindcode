@@ -72,8 +72,11 @@ class DeadCodeEliminator extends GlobalOptimizer {
     private void analyzeDataflow() {
         reads.clear();
         writes.clear();
-        reads.add("@counter"); // instruction pointer is *always* read -- and our implementation of call/return depends on this
-        reads.add(instructionProcessor.getStackPointer()); // ditto for stack pointer
+        // Instruction pointer is implicitly read - writes to it must be preserved
+        reads.add("@counter"); 
+        // Same for stack pointer: the push/pop/call/return instructions read __sp implicitly. 
+        // The initial write to __sp must be preserved
+        reads.add(instructionProcessor.getStackPointer());
         program.stream().filter(ix -> !ix.isPushOrPop()).forEach(this::examineInstruction);
     }
 

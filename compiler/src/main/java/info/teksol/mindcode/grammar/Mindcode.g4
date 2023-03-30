@@ -68,7 +68,7 @@ alloc_list : type=(HEAP | STACK) IN id alloc_range?
            | alloc_list COMMA type=(HEAP | STACK) IN id alloc_range?
            ;
 
-alloc_range : LEFT_SBRACKET range RIGHT_SBRACKET;
+alloc_range : LEFT_SBRACKET range_expression RIGHT_SBRACKET;
 
 const_decl : CONST name=id ASSIGN value=expression;
 
@@ -105,10 +105,6 @@ continue_st : CONTINUE ( label=loop_label )? ;
 break_st : BREAK ( label=loop_label )? ;
 
 return_st : RETURN ( retval=expression )? ;
-
-range : start=int_t DOT DOT end=int_t     # inclusive_range
-      | start=int_t DOT DOT DOT end=int_t # exclusive_range
-      ;
 
 range_expression : start=expression DOT DOT end=expression     # inclusive_range_exp
                  | start=expression DOT DOT DOT end=expression # exclusive_range_exp

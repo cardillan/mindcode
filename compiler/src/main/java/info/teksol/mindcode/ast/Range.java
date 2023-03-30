@@ -50,5 +50,6 @@ public abstract class Range extends BaseAstNode {
         );
     }
 
+    public abstract String operator();
     public abstract String maxValueComparison();
 }

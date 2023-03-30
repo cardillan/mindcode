@@ -103,7 +103,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void generatesRecursiveFunctions() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         createInstruction(SET, "__fn0_n", "3"),
                         createInstruction(CALL, "bank1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
@@ -138,7 +138,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void generatesIndirectRecursion() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         // call foo
                         createInstruction(SET, "__fn1_n", "4"),
                         createInstruction(CALL, "bank1", var(1001), var(1002)),
@@ -333,11 +333,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         // Setting up stack
                         createInstruction(SET, "STACKPTR", "cell1"),
                         createInstruction(SET, "HEAPPTR", "cell2"),
-                        createInstruction(SET, "__sp", "511"),
-                        createInstruction(SENSOR, var(0), "STACKPTR", "@type"),
-                        createInstruction(JUMP, var(1001), "equal", var(0), "@memory-bank"),
-                        createInstruction(SET, "__sp", "63"),
-                        createInstruction(LABEL, var(1001)),
+                        createInstruction(SET, "__sp", "0"),
                         // Function call
                         createInstruction(CALL, "STACKPTR", var(1000), var(1002)),
                         createInstruction(LABEL, var(1002)),
@@ -441,7 +437,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void handlesNestedFunctionCallsRecursive() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         createInstruction(SET, "__fn0_n", "4"),
                         createInstruction(CALL, "bank1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
@@ -485,7 +481,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void generatesRecursiveFibonacci() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         createInstruction(SET, "__fn0_n", "10"),
                         createInstruction(CALL, "bank1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
@@ -541,7 +537,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         // aren't pushed to the stack in recursive functions
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         createInstruction(SET, "__fn0_n", "1"),
                         createInstruction(CALL, "bank1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
@@ -706,7 +702,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void handlesRecursiveReturn() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         // call gdc
                         createInstruction(SET, "__fn0_a", "115"),
                         createInstruction(SET, "__fn0_b", "78"),
@@ -868,12 +864,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         // not the start of heap is respected. Everything else superfluous.
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "40"),
+                        createInstruction(SET, "__sp", "20"),
                         createInstruction(WRITE, "99", "cell3", "41")
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst(""
-                                + "allocate stack in cell3[0..40], heap in cell3[41...64] "
+                                + "allocate stack in cell3[20..40], heap in cell3[41...64] "
                                 + "def foo(n) "
                                 + "  foo(n-1) "
                                 + "end "

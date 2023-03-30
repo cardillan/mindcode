@@ -178,7 +178,10 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
     void printsStackAllocationFunctionDefCall() {
         assertEquals("" +
                 "Seq[\n" +
-                "    StackAllocation{name='bank1', first=0, last=511},\n" +
+                "    StackAllocation{\n" +
+                "        name='bank1',\n" +
+                "        range=ExclusiveRange{firstValue=NumericLiteral{literal='0'}, lastValue=NumericLiteral{literal='512'}}\n" +
+                "    },\n" +
                 "    FunctionDeclaration{\n" +
                 "        name='fib',\n" +
                 "        params=[VarRef{name='n'}],\n" +

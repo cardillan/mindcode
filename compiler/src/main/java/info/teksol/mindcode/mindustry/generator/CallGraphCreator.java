@@ -107,7 +107,7 @@ public class CallGraphCreator  {
 
     private void  visitStackAllocation(StackAllocation node) {
         if (allocatedStack != null) {
-            throw new DuplicateStackAllocationException("Found a second stack allocation in " + node);
+            throw new GenerationException("Found a second stack allocation in " + node);
         }
 
         if (encounteredNodes.stream().anyMatch(n -> n instanceof ControlBlockAstNode)) {

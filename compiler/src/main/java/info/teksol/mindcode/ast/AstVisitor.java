@@ -7,6 +7,8 @@ public interface AstVisitor<T> {
 
     T visitIfExpression(IfExpression node);
 
+    T visitHeapAllocation(HeapAllocation node);
+
     T visitHeapAccess(HeapAccess node);
 
     T visitControl(Control node);

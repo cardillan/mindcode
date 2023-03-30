@@ -284,8 +284,20 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitHeapAllocation(HeapAllocation node) {
+        open("HeapAllocation{");
+        print("name="); visit(node.getName()); newLine(",");
+        print("range="); visit(node.getRange());
+        close("}");
+        return null;
+    }
+
+    @Override
     public String visitStackAllocation(StackAllocation node) {
-        print(node);
+        open("StackAllocation{");
+        print("name="); visit(node.getName()); newLine(",");
+        print("range="); visit(node.getRange());
+        close("}");
         return null;
     }
 

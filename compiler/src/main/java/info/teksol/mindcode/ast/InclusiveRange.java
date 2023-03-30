@@ -6,6 +6,11 @@ public class InclusiveRange extends Range {
     }
 
     @Override
+    public String operator() {
+        return "..";
+    }
+
+    @Override
     public String maxValueComparison() {
         return "<=";
     }

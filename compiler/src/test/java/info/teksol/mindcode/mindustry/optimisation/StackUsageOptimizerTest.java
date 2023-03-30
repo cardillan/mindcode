@@ -31,7 +31,7 @@ class StackUsageOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         createInstruction(SET, "__fn0_x", "5"),
                         createInstruction(CALL, "bank1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
@@ -69,7 +69,7 @@ class StackUsageOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         createInstruction(SET, "__fn0_x", "5"),
                         createInstruction(CALL, "bank1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
@@ -112,7 +112,7 @@ class StackUsageOptimizerTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "511"),
+                        createInstruction(SET, "__sp", "0"),
                         createInstruction(SET, "__fn0_x", "5"),
                         createInstruction(CALL, "bank1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),

@@ -10,6 +10,13 @@ import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
+
+    @Test
+    void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
+        assertThrows(OutOfHeapSpaceException.class,
+                () -> generateUnoptimized((Seq) translateToAst("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz")));
+    }
+
     @Test
     void convertsComplexAssignment() {
         assertLogicInstructionsMatch(

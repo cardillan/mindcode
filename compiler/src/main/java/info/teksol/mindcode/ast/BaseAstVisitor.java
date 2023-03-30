@@ -27,6 +27,8 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             return visitFunctionCall((FunctionCall) node);
         } else if (node instanceof FunctionDeclaration) {
             return visitFunctionDeclaration((FunctionDeclaration) node);
+        } else if (node instanceof HeapAllocation) {
+            return visitHeapAllocation((HeapAllocation) node);
         } else if (node instanceof HeapAccess) {
             return visitHeapAccess((HeapAccess) node);
         } else if (node instanceof IfExpression) {

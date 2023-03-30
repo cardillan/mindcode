@@ -1,59 +1,35 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.ParsingException;
-
 import java.util.Objects;
 
 public class StackAllocation extends BaseAstNode {
     private final String name;
-    private final int first;
-    private final int last;
-
-    StackAllocation(String name) {
-        this.name = name;
-        this.first = Integer.MAX_VALUE;
-        this.last = Integer.MAX_VALUE;
-    }
+    private final Range range;
 
     StackAllocation(String name, Range range) {
-        if (!(range.getFirstValue() instanceof NumericLiteral) || !(range.getLastValue() instanceof NumericLiteral)) {
-            throw new InvalidHeapAllocationException("Stack declarations must use numeric literals; received " + range);
-        }
-
-        int candidate = Integer.parseInt(((NumericLiteral) range.getLastValue()).getLiteral());
-        if (range instanceof ExclusiveRange) {
-            candidate -= 1;
-        } else if (range instanceof InclusiveRange) {
-            candidate += 0; // NOP: the last value is already at the proper one
-        } else {
-            throw new ParsingException("Received unexpected type of Range: " + range);
-        }
-
         this.name = name;
-        this.first = Integer.parseInt(((NumericLiteral) range.getFirstValue()).getLiteral());
-        this.last = candidate;
+        this.range = range;
     }
 
     StackAllocation(String name, int first, int last) {
+        this(name, new InclusiveRange(new NumericLiteral(first), new NumericLiteral(last)));
+    }
+
+    StackAllocation(String name) {
         this.name = name;
-        this.first = first;
-        this.last = last;
+        this.range = null;
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean rangeSpecified() {
-        return first != Integer.MAX_VALUE;
+    public Range getRange() {
+        return range;
     }
 
-    int getFirst() {
-        return first;
-    }
-
-    public int getLast() {
-        return last;
+    public boolean hasRange() {
+        return range != null;
     }
 
     @Override
@@ -61,22 +37,20 @@ public class StackAllocation extends BaseAstNode {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StackAllocation that = (StackAllocation) o;
-        return first == that.first &&
-                last == that.last &&
-                Objects.equals(name, that.name);
+        return Objects.equals(range, that.range)
+                && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, first, last);
+        return Objects.hash(name, range);
     }
 
     @Override
     public String toString() {
         return "StackAllocation{" +
                 "name='" + name + '\'' +
-                ", first=" + first +
-                ", last=" + last +
+                ", range=" + range +
                 '}';
     }
 }

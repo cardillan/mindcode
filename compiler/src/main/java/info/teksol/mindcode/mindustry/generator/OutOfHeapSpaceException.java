@@ -1,4 +1,4 @@
-package info.teksol.mindcode.ast;
+package info.teksol.mindcode.mindustry.generator;
 
 import info.teksol.mindcode.ParsingException;
 

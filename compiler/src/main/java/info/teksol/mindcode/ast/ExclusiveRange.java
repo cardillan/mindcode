@@ -6,6 +6,11 @@ public class ExclusiveRange extends Range {
     }
 
     @Override
+    public String operator() {
+        return "...";
+    }
+
+    @Override
     public String maxValueComparison() {
         return "<";
     }

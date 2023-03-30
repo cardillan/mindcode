@@ -261,13 +261,25 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitHeapAllocation(HeapAllocation node) {
+        buffer.append("allocate heap in ");
+        buffer.append(node.getName());
+        buffer.append("[");
+        buffer.append(node.getRange().getFirstValue());
+        buffer.append(node.getRange().operator());
+        buffer.append(node.getRange().getLastValue());
+        buffer.append("]");
+        return null;
+    }
+
+    @Override
     public String visitStackAllocation(StackAllocation node) {
         buffer.append("allocate stack in ");
         buffer.append(node.getName());
         buffer.append("[");
-        buffer.append(node.getFirst());
-        buffer.append("..");
-        buffer.append(node.getLast());
+        buffer.append(node.getRange().getFirstValue());
+        buffer.append(node.getRange().operator());
+        buffer.append(node.getRange().getLastValue());
         buffer.append("]");
         return null;
     }

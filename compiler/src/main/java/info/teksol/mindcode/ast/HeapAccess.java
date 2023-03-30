@@ -1,22 +1,26 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.ParsingException;
 
 import java.util.Objects;
 
 public class HeapAccess extends BaseAstNode {
     private final String cellName;
     private final AstNode address;
+    private final boolean absolute;
 
-    public HeapAccess(String cellName, AstNode address) {
+    private HeapAccess(String cellName, AstNode address, boolean absolute) {
         super(address);
-
-        if (RESERVED_KEYWORDS.contains(cellName)) {
-            throw new ParsingException(cellName + " is a reserved keyword, please use a different word");
-        }
-
         this.cellName = cellName;
         this.address = address;
+        this.absolute = absolute;
+    }
+
+    public HeapAccess(String cellName, AstNode address) {
+        this(cellName, address, true);
+    }
+
+    public HeapAccess(String cellName, int index) {
+        this(cellName, new NumericLiteral(index), false);
     }
 
     public String getCellName() {
@@ -27,25 +31,31 @@ public class HeapAccess extends BaseAstNode {
         return address;
     }
 
+    public boolean isAbsolute() {
+        return absolute;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HeapAccess HeapAccess = (HeapAccess) o;
-        return Objects.equals(cellName, HeapAccess.cellName) &&
-                Objects.equals(address, HeapAccess.address);
+        HeapAccess that = (HeapAccess) o;
+        return absolute == that.absolute &&
+                Objects.equals(cellName, that.cellName) &&
+                Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cellName, address);
+        return Objects.hash(cellName, address, absolute);
     }
 
     @Override
     public String toString() {
         return "HeapAccess{" +
                 "cellName='" + cellName + '\'' +
-                ", address='" + address + '\'' +
+                ", address=" + address + 
+                ", absolute=" + absolute +
                 '}';
     }
 }

@@ -62,6 +62,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     // Prefix for local variables (depends on function being processed)
     private String localPrefix = "";
 
+    private int heapBaseAddress = 0;
+    private int heapSize = 0;
+
     private int markerIndex = 0;
 
     public LogicInstructionGenerator(InstructionProcessor instructionProcessor, FunctionMapper functionMapper,
@@ -369,11 +372,22 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
 
 
+    private String resolveHeapIndex(HeapAccess node) {
+        if (node.isAbsolute()) {
+            return visit(node.getAddress());
+        } else {
+            int index = ((NumericLiteral)node.getAddress()).getAsInteger();
+            if (index >= heapSize) {
+                throw new OutOfHeapSpaceException("Allocated heap is too small! Increase the size of the allocation, or switch to a Memory Bank to give the heap even more space");
+            }
+            return String.valueOf(index + heapBaseAddress);
+        }
+    }
 
     @Override
     public String visitHeapAccess(HeapAccess node) {
-        final String addr = visit(node.getAddress());
         final String tmp = nextNodeResult();
+        final String addr = resolveHeapIndex(node);
         emitInstruction(READ, tmp, node.getCellName(), addr);
         return tmp;
     }
@@ -431,7 +445,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         if (node.getVar() instanceof HeapAccess) {
             final HeapAccess heapAccess = (HeapAccess) node.getVar();
             final String target = heapAccess.getCellName();
-            final String address = visit(heapAccess.getAddress());
+            final String address = resolveHeapIndex(heapAccess);
             emitInstruction(Opcode.WRITE, rvalue, target, address);
         } else if (node.getVar() instanceof PropertyAccess) {
             final PropertyAccess propertyAccess = (PropertyAccess) node.getVar();
@@ -687,26 +701,76 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
-    public String visitStackAllocation(StackAllocation node) {
-        // Do not initialize stack if no recursive functions are present
-        if (callGraph.containsRecursiveFunction()) {
-            StackAllocation stack = callGraph.getAllocatedStack();
-            String sp = instructionProcessor.getStackPointer();
+    public String visitHeapAllocation(HeapAllocation heap) {
+        // Initialize stack pointer variable
+        if (heap.hasRange()) {
+            AstNode first = expressionEvaluator.evaluate(heap.getRange().getFirstValue());
+            AstNode last  = expressionEvaluator.evaluate(heap.getRange().getLastValue());
 
-            // Initialize stack pointer variable
-            if (node.rangeSpecified()) {
-                emitInstruction(SET, sp, String.valueOf(stack.getLast()));
-            } else {
-                // Range not specified. Determine memory size dynamically.
-                String label = nextLabel();
-                String tmp = nextTemp();
-                emitInstruction(SET, sp, "511");
-                emitInstruction(SENSOR, tmp, stack.getName(), "@type");
-                emitInstruction(JUMP, label, "equal", tmp, "@memory-bank");
-                emitInstruction(SET, sp, "63");
-                emitInstruction(LABEL, label);
+            if (!(first instanceof NumericLiteral) || !(last instanceof NumericLiteral)) {
+                throw new InvalidMemoryAllocationException("Heap declarations must use constant range; received " + heap.getRange());
             }
+
+            NumericLiteral firstLit = (NumericLiteral) first;
+            NumericLiteral lastLit = (NumericLiteral) last;
+
+            if (!firstLit.isInteger() || !lastLit.isInteger()) {
+                throw new InvalidMemoryAllocationException("Heap declarations must use integer range; received " + heap.getRange());
+            }
+
+            int firstInt = firstLit.getAsInteger();
+            int lastInt = lastLit.getAsInteger() + (heap.getRange() instanceof InclusiveRange ? 1 : 0);
+
+            if (firstInt >= lastInt) {
+                throw new InvalidMemoryAllocationException("Empty or invalid range in heap declaration: " + heap.getRange());
+            }
+
+            heapBaseAddress = firstInt;
+            heapSize = lastInt - firstInt;
+        } else {
+            heapBaseAddress = 0;
+            heapSize = 64;
         }
+        return "null";
+    }
+
+    @Override
+    public String visitStackAllocation(StackAllocation node) {
+        String literal;
+        StackAllocation stack = callGraph.getAllocatedStack();
+        String sp = instructionProcessor.getStackPointer();
+
+        // Verify stack properties
+        if (stack.hasRange()) {
+            AstNode first = expressionEvaluator.evaluate(stack.getRange().getFirstValue());
+            AstNode last  = expressionEvaluator.evaluate(stack.getRange().getLastValue());
+
+            if (!(first instanceof NumericLiteral) || !(last instanceof NumericLiteral)) {
+                throw new InvalidMemoryAllocationException("Stack declarations must use constant range; received " + stack.getRange());
+            }
+
+            NumericLiteral firstLit = (NumericLiteral) first;
+            NumericLiteral lastLit = (NumericLiteral) last;
+
+            if (!firstLit.isInteger() || !lastLit.isInteger()) {
+                throw new InvalidMemoryAllocationException("Stack declarations must use integer range; received " + stack.getRange());
+            }
+
+            if (firstLit.getAsInteger() >= lastLit.getAsInteger()) {
+                throw new InvalidMemoryAllocationException("Empty or invalid range in stack declaration: " + stack.getRange());
+            }
+
+            literal = String.valueOf(firstLit.getAsInteger());
+        } else {
+            // Range not specified. Start at the bottom
+            literal = "0";
+        }
+
+        // Do not initialize stack variable if no recursive functions are present
+        if (callGraph.containsRecursiveFunction()) {
+            emitInstruction(SET, sp, literal);
+        }
+
         return "null";
     }
 

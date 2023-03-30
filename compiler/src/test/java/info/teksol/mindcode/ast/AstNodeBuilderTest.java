@@ -1,7 +1,6 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
-import info.teksol.mindcode.ParsingException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -295,16 +294,16 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new Seq(
-                                new Seq(new NoOp(), new NoOp()),
+                                new Seq(new HeapAllocation("cell2", 4, 5), new NoOp()),
                                 new Assignment(
-                                        new HeapAccess("cell2", new NumericLiteral("4")),
+                                        new HeapAccess("cell2", 0),
                                         new NumericLiteral("1")
                                 )
                         ),
                         new Assignment(
-                                new HeapAccess("cell2", new NumericLiteral("5")),
+                                new HeapAccess("cell2", 1),
                                 new BinaryOp(
-                                        new HeapAccess("cell2", new NumericLiteral("4")),
+                                        new HeapAccess("cell2", 0),
                                         "+",
                                         new NumericLiteral("42")
                                 )
@@ -467,6 +466,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesHeapAllocationWithExclusiveRange() {
         assertEquals(
                 new Seq(
+                        new HeapAllocation("cell2", new ExclusiveRange(new NumericLiteral(0), new NumericLiteral(64))),
                         new NoOp()
                 ),
                 translateToAst("allocate heap in cell2[ 0 ... 64 ]")
@@ -477,6 +477,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesHeapAllocationWithInclusiveRange() {
         assertEquals(
                 new Seq(
+                        new HeapAllocation("cell2", 0, 30),
                         new NoOp()
                 ),
                 translateToAst("allocate heap in cell2[0 .. 30]")
@@ -486,11 +487,6 @@ class AstNodeBuilderTest extends AbstractAstTest {
     @Test
     void rejectsHeapUsageWhenUnallocated() {
         assertThrows(UnallocatedHeapException.class, () -> translateToAst("$dx = 1"));
-    }
-
-    @Test
-    void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
-        assertThrows(OutOfHeapSpaceException.class, () -> translateToAst("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz"));
     }
 
     @Test
@@ -836,46 +832,6 @@ class AstNodeBuilderTest extends AbstractAstTest {
     }
 
     @Test
-    void rejects_STACK_ReservedKeywordsInVarRef() {
-        assertThrows(ParsingException.class, () -> translateToAst("cell1[STACK] = 0"));
-    }
-
-    @Test
-    void rejects_HEAP_ReservedKeywordsInVarRef() {
-        assertThrows(ParsingException.class, () -> translateToAst("cell1[HEAP] = 0"));
-    }
-
-    @Test
-    void rejects_STACK_ReservedKeywordsInHeapWrite() {
-        assertThrows(ParsingException.class, () -> translateToAst("STACK[1] = 0"));
-    }
-
-    @Test
-    void rejects_HEAP_ReservedKeywordsInHeapWrite() {
-        assertThrows(ParsingException.class, () -> translateToAst("HEAP[1] = 0"));
-    }
-
-    @Test
-    void rejects_STACK_ReservedKeywordsInHeapAccess() {
-        assertThrows(ParsingException.class, () -> translateToAst("STACK[0]"));
-    }
-
-    @Test
-    void rejects_HEAP_ReservedKeywordsInHeapAccess() {
-        assertThrows(ParsingException.class, () -> translateToAst("HEAP[0]"));
-    }
-
-    @Test
-    void rejects_STACK_ReservedKeywordsInVarAssignment() {
-        assertThrows(ParsingException.class, () -> translateToAst("STACK = 0"));
-    }
-
-    @Test
-    void rejects_HEAP_ReservedKeywordsInVarAssignment() {
-        assertThrows(ParsingException.class, () -> translateToAst("HEAP = 0"));
-    }
-
-    @Test
     void acceptsSemicolonAsStatementSeparator() {
         assertEquals(
                 new Seq(
@@ -933,7 +889,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void supportsDeclaringAStack() {
         assertEquals(
                 new Seq(new StackAllocation("cell1", 0, 63)),
-                translateToAst("allocate stack in cell1[0...64]")
+                translateToAst("allocate stack in cell1[0..63]")
         );
     }
 

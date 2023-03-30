@@ -9,8 +9,8 @@ public class NumericLiteral extends ConstantAstNode {
         this.literal = literal;
     }
 
-    public NumericLiteral(int last) {
-        this.literal = String.valueOf(last);
+    public NumericLiteral(int value) {
+        this.literal = String.valueOf(value);
     }
 
     @Override
@@ -41,5 +41,15 @@ public class NumericLiteral extends ConstantAstNode {
     @Override
     public double getAsDouble() {
         return literal.startsWith("0x") ? Long.decode(literal) : Double.parseDouble(literal);
+    }
+
+    public boolean isInteger() {
+        double value = getAsDouble();
+        // Criterium taken from Mindustry Logic
+        return Math.abs(value - (int)value) < 0.00001;
+    }
+
+    public int getAsInteger() {
+        return (int)getAsDouble();
     }
 }

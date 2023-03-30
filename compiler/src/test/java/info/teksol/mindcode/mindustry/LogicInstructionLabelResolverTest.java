@@ -33,13 +33,13 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 List.of(
                         createInstruction(JUMP, "11", "always"),
                         createInstruction(WRITE, "10", "cell1", "__sp"),
-                        createInstruction(OP, "sub", "__sp", "__sp", "1"),
                         createInstruction(OP, "add", "__sp", "__sp", "1"),
+                        createInstruction(OP, "sub", "__sp", "__sp", "1"),
                         createInstruction(READ, "x", "cell1", "__sp"),
                         createInstruction(WRITE, "11", "cell1", "__sp"),
-                        createInstruction(OP, "sub", "__sp", "__sp", "1"),
-                        createInstruction(SET, "@counter", "8"),
                         createInstruction(OP, "add", "__sp", "__sp", "1"),
+                        createInstruction(SET, "@counter", "8"),
+                        createInstruction(OP, "sub", "__sp", "__sp", "1"),
                         createInstruction(READ, "__tmp0", "cell1", "__sp"),
                         createInstruction(SET, "@counter", "__tmp0"),
                         createInstruction(END)

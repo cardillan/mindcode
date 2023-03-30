@@ -46,7 +46,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "48"),
+                        createInstruction(SET, "__sp", "33"),
                         createInstruction(SET, "__fn0_n", "4"),
                         createInstruction(CALL, "cell1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
