@@ -241,4 +241,25 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
         );
     }
 
+    @Test
+    void passesParameterToFunctionRegressionTest() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(LABEL, var(1000)),
+                        createInstruction(SET, var(0), "2"),
+                        createInstruction(LABEL, var(1001)),
+                        createInstruction(OP, "lessThan", var(1), "1", var(0)),
+                        createInstruction(PRINT, var(1)),
+                        createInstruction(PRINTFLUSH, "message1"),
+                        createInstruction(END)
+                ),
+                generateAndOptimize(
+                        (Seq) translateToAst(""
+                                + "inline def d(n) n end "
+                                + "print(1 < d(2)) "
+                                + "printflush(message1)"
+                        )
+                )
+        );
+    }
 }

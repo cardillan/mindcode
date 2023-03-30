@@ -242,7 +242,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             setupFunctionParameters(function, paramValues);
 
             // Retval gets registered in nodeContext, but we don't mind -- inline fucntions do not use stack
-            final String returnValue = nextTemp();
+            final String returnValue = nextReturnValue();
             final String returnLabel = nextLabel();
             returnStack.enterFunction(returnLabel, returnValue);
             String result = visit(function.getBody());
