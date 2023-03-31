@@ -61,7 +61,7 @@
             </div>
         </div>
     </form>
-    <p>At heart, I am a Rubyist. Mindcode bears striking resemblances to Ruby. Don't be surprised!</p>
+    <p >Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/francois/mindcode">project page</a>.<p>
 </div>
 
 <@com.footer/>

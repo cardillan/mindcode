@@ -105,6 +105,7 @@ Things I'd like to add to Mindcode-the-language:
 * [ ] evaluation of constant expressions at compile time
 * [ ] constant declaration: constants would be evaluated at compile time and wouldn't use a variable
 * [ ] compiler directives (`#pragma`) to parametrize code compilation and optimization
+* [ ] display compiler output in the webapp
 * [ ] memory jump table for case expressions where possible
 * [ ] `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when` branch
 * [ ] short-circuit boolean evaluation in some form
@@ -126,13 +127,17 @@ Optimization improvements
 * [ ] additional automatic inlining of nonrecursive functions 
 * [ ] multiple-use temporary variables optimization
 * [ ] eliminate retval variables/assignments where not needed
+* [ ] boolean expressions
+  * ternary operator assignment: instead of conditional jump/set/always jump/set, do set/conditional jump/set.
+  * and/or boolean improvements: conditional jump on individual operands instead of evaluating the and/or and doing conditional jump on that (overlaps with short-circuit boolean eval)
+  * and/or boolean improvements: encode `a and not b` as `a > b`, `a or not b` as `a >= b`.
 
 More advanced optimizations 
 
 * [ ] common subexpressions optimizations (maybe including repeated array access)
 * [ ] loop unrolling / other loop optimizations
 * [ ] jump threading / crossjumping
-* [ ] forward store for memory-backed variables
+* [ ] forward store for external variables
 * [ ] tail recursion
 
 Ideas on hold
@@ -140,13 +145,7 @@ Ideas on hold
 * [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * [ ] #17 `if` operator: `break if some_cond` is equivalent to `if some_cond break end`. It's just a less verbose way of doing it.
 * [ ] improved data types: 2d vector
-
-Things I'd like to add to Mindcode-the-webapp:
-
-* [ ] integrate a better code editor, rather than a plain old `<textarea>`
-* [ ] ability to expose functions to the public
-* [ ] import functions from fellow Mindcode users
-    * this will probably be implemented as a preprocessor, instead of being directly integrated in Mindcode-the-language
+* [ ] integrate a better code editor in the webapp, rather than a plain old `<textarea>`
 
 # License
 
