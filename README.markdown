@@ -102,12 +102,18 @@ Things I'd like to add to Mindcode-the-language:
 * [x] #17 `break` and `continue`, to better control iteration
 * [x] #19 inline functions, meaning functions that are inlined at the call-site
 * [x] add support for passing non-numerics into/out of non-recursive functions
-* [ ] evaluation of constant expressions at compile time
-* [ ] constant declaration: constants would be evaluated at compile time and wouldn't use a variable
-* [ ] compiler directives (`#pragma`) to parametrize code compilation and optimization
-* [ ] display compiler output in the webapp
+* [x] display compiler output in the webapp
+* [x] evaluation of constant expressions at compile time
+* [x] constant declaration: constants would be evaluated at compile time and wouldn't use a variable
+* [ ] compiler directives (`#set`) to parametrize code compilation and optimization
+* [ ] optimizer strength setting - per optimizer (off, on/normal, aggressive)
+* [ ] compatibility warnings:
+  * warn when `configurce` main variable is used in V7 -- ML changes it to `config`
+  * warn about alloy-smelter --> surge-smelter V6 --> V7 name change
 * [ ] memory jump table for case expressions where possible
 * [ ] `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when` branch
+* [ ] varargs inline functions: the vararg can be processed using list iteration loop, or passed to another vararg function (not so sure about this)
+* [ ] `in` boolean operator: tests number is in range
 * [ ] short-circuit boolean evaluation in some form
   * Ruby-like (`and`, `or` for short-circuit, `&&`, `||` for full evaluation), or
   * "best-effort" basis (no guarantees either way)
@@ -117,7 +123,7 @@ Things I'd like to add to Mindcode-the-language:
 Compiled code analysis
 
 * [ ] warn developers when the generated code goes over 1000 Mindustry instructions
-* [ ] warn developers when trying to pass in/return values that are non-numeric to/from recursive functions
+* [ ] warn developers when potentially non-numeric value is being pushed to stack
 * [ ] warn developers when variable is read before being written to
 * [ ] determine effective variable types to assist with optimizations
 
@@ -127,6 +133,8 @@ Optimization improvements
 * [ ] additional automatic inlining of nonrecursive functions 
 * [ ] multiple-use temporary variables optimization
 * [ ] eliminate retval variables/assignments where not needed
+* [ ] elimination of useless statements, eg. `op add x x 0`, `op mul x x 1` or `set x x`
+* [ ] parameters that are only passed to inner calls and never modified won't be stored on stack
 * [ ] boolean expressions
   * ternary operator assignment: instead of conditional jump/set/always jump/set, do set/conditional jump/set.
   * and/or boolean improvements: conditional jump on individual operands instead of evaluating the and/or and doing conditional jump on that (overlaps with short-circuit boolean eval)
@@ -139,6 +147,12 @@ More advanced optimizations
 * [ ] jump threading / crossjumping
 * [ ] forward store for external variables
 * [ ] tail recursion
+
+Additional tooling
+
+* [ ] schematics-creation tool
+  * tool for creating schematics files from layout description
+  * creating layouts including code for processor(s) from Mindcode sources in one go
 
 Ideas on hold
 
