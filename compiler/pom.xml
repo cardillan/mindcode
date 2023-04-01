@@ -82,6 +82,8 @@
                 <version>2.3.2</version>
                 <configuration>
                     <showDeprecation>false</showDeprecation>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>

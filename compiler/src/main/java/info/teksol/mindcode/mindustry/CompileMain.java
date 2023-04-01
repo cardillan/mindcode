@@ -81,7 +81,7 @@ public class CompileMain {
             if (filenames.size() >= 3) {
                 Files.write(Path.of(filenames.get(2)), result.getAllTexts());
             } else {
-                result.getMessages().forEach(System.err::println);
+                result.getAllTexts().forEach(System.err::println);
             }
         } else {
             // Print errors to stderr (and log if given).
