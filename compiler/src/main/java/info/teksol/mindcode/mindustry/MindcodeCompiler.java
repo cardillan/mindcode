@@ -20,16 +20,14 @@ import info.teksol.mindcode.mindustry.optimisation.DebugPrinter;
 import info.teksol.mindcode.mindustry.optimisation.DiffDebugPrinter;
 import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
 import info.teksol.mindcode.mindustry.optimisation.OptimisationPipeline;
-import java.util.stream.Collectors;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 
 public class MindcodeCompiler implements Compiler {
     private final CompilerProfile profile;
     private final InstructionProcessor instructionProcessor;
 
-    private final List<String> errors = new ArrayList<>();
-    private final List<String> messages = new ArrayList<>();
-    private final ANTLRErrorListener errorListener = new ErrorListener(errors);
+    private final List<CompilerMessage> messages = new ArrayList<>();
+    private final ANTLRErrorListener errorListener = new ErrorListener(messages);
 
     MindcodeCompiler(CompilerProfile profile, InstructionProcessor instructionProcessor) {
         this.profile = profile;
@@ -54,8 +52,8 @@ public class MindcodeCompiler implements Compiler {
             }
 
             if (profile.isPrintFinalCode()) {
-                messages.add("\nFinal code before resolving virtual instructions:\n");
-                messages.add(LogicInstructionPrinter.toString(instructionProcessor, result));
+                debug("\nFinal code before resolving virtual instructions:\n");
+                debug(LogicInstructionPrinter.toString(instructionProcessor, result));
             }
 
             // 4: Resolve symbolic labels
@@ -68,10 +66,10 @@ public class MindcodeCompiler implements Compiler {
                 // TODO: use specific command line argument to obtain stack trace
                 e.printStackTrace();
             }
-            errors.add(e.getMessage());
+            messages.add(CompilerMessage.error(e.getMessage()));
         }
 
-        return new CompilerOutput(instructions, errors, messages);
+        return new CompilerOutput(instructions, messages);
     }
 
     /**
@@ -90,9 +88,9 @@ public class MindcodeCompiler implements Compiler {
      */
     private void printParseTree(Seq prog) {
         if (profile.getParseTreeLevel() > 0) {
-            messages.add("Parse tree:");
-            messages.add(AstIndentedPrinter.printIndented(prog, profile.getParseTreeLevel()));
-            messages.add("");
+            debug("Parse tree:");
+            debug(AstIndentedPrinter.printIndented(prog, profile.getParseTreeLevel()));
+            debug("");
         }
     }
 
@@ -106,10 +104,10 @@ public class MindcodeCompiler implements Compiler {
     }
 
     private List<LogicInstruction> optimize(List<LogicInstruction> program) {
-        messages.add(profile.getOptimisations().stream()
-                .sorted()
-                .map(Object::toString)
-                .collect(Collectors.joining(",\n    ", "Active optimisations:\n    ", "\n")));
+//        messages.add(profile.getOptimisations().stream()
+//                .sorted()
+//                .map(Object::toString)
+//                .collect(Collectors.joining(",\n    ", "Active optimisations:\n    ", "\n")));
 
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 || profile.getOptimisations().isEmpty()
@@ -119,21 +117,25 @@ public class MindcodeCompiler implements Compiler {
         program.forEach(pipeline::emit);
         pipeline.flush();
 
-        debugPrinter.print(messages::add);
+        debugPrinter.print(this::debug);
         return terminus.getResult();
     }
 
-    private static class ErrorListener extends BaseErrorListener {
-        private final List<String> errors;
+    private void debug(String message) {
+        messages.add(CompilerMessage.debug(message));
+    }
 
-        public ErrorListener(List<String> errors) {
+    private static class ErrorListener extends BaseErrorListener {
+        private final List<CompilerMessage> errors;
+
+        public ErrorListener(List<CompilerMessage> errors) {
             this.errors = errors;
         }
 
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                 String msg, RecognitionException e) {
-            errors.add("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg);
+            errors.add(CompilerMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
         }
     }
 }

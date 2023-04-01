@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.MessageLevel;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,11 +48,11 @@ class DeadCodeEliminator extends GlobalOptimizer {
                 .collect(Collectors.joining(", "));
         
         if (!eliminated.isEmpty()) {
-            emitMessage("       list of unused variables: %s.", eliminated);
+            emitMessage(MessageLevel.WARNING, "       list of unused variables: %s.", eliminated);
         }
         
         if (!uninitialized.isEmpty()) {
-            emitMessage("       list of uninitialized variables: %s.", uninitialized);
+            emitMessage(MessageLevel.WARNING, "       list of uninitialized variables: %s.", uninitialized);
         }
     }
 

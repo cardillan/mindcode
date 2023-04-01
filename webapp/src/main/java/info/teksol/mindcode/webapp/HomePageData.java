@@ -9,17 +9,22 @@ public class HomePageData {
     private final int sourceLoc;
     private final String compiled;
     private final int compiledLoc;
-    private final List<String> syntaxErrors;
+    private final List<String> errors;
+    private final List<String> warnings;
+    private final List<String> messages;
     private final boolean enableOptimization;
 
-    HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc, List<String> syntaxErrors, boolean enableOptimization) {
+    HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc,
+            List<String> errors, List<String> warnings, List<String> messages, boolean enableOptimization) {
         this.id = id;
         this.sample = sample;
         this.source = source;
         this.sourceLoc = sourceLoc;
         this.compiled = compiled;
         this.compiledLoc = compiledLoc;
-        this.syntaxErrors = syntaxErrors;
+        this.errors = errors;
+        this.warnings = warnings;
+        this.messages = messages;
         this.enableOptimization = enableOptimization;
     }
 
@@ -47,12 +52,24 @@ public class HomePageData {
         return compiledLoc;
     }
 
-    public List<String> getSyntaxErrors() {
-        return syntaxErrors;
-    }
-
     public boolean getEnableOptimization() {
         return enableOptimization;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public List<String> getMessages() {
+        return messages;
+    }
+
+    public boolean getHasErrors() {
+        return !errors.isEmpty();
     }
 
     public boolean isLoggedIn() {

@@ -128,10 +128,12 @@ public class HomeController {
                         id,
                         sampleName,
                         sourceCode,
-                        sourceCode.split("\n").length,
+                        (int) sourceCode.chars().filter(ch -> ch == '\n').count(),
                         compiledCode,
-                        compiledCode.split("\n").length,
-                        syntaxErrors,
+                        (int) compiledCode.chars().filter(ch -> ch == '\n').count(),
+                        result.getErrors(),
+                        result.getWarnings(),
+                        result.getMessages(),
                         enableOptimization)
         );
     }

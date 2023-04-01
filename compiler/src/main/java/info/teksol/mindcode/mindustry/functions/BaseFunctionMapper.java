@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry.functions;
 
+import info.teksol.mindcode.mindustry.CompilerMessage;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.generator.GenerationException;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
 
 public class BaseFunctionMapper implements FunctionMapper {
     private final InstructionProcessor instructionProcessor;
-    private final Consumer<String> messageConsumer;
+    private final Consumer<CompilerMessage> messageConsumer;
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final Map<String, PropertyHandler> propertyMap;
@@ -32,7 +33,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     private final List<SampleGenerator> sampleGenerators;
     private final Map<String, BuiltInFunctionHandler> builtInFunctionMap;
 
-    BaseFunctionMapper(InstructionProcessor InstructionProcessor, Consumer<String> messageConsumer) {
+    BaseFunctionMapper(InstructionProcessor InstructionProcessor, Consumer<CompilerMessage> messageConsumer) {
         this.instructionProcessor = InstructionProcessor;
         this.messageConsumer = messageConsumer;
 
@@ -382,8 +383,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public String handleProperty(LogicInstructionPipeline pipeline, String target, List<String> params) {
             if (!warningEmitted) {
-                messageConsumer.accept("Function '" + deprecated + "' is no longer supported in Mindustry Logic version " +
-                        processorVersion + "; using '" + replacement.getName() + "' instead.");
+                messageConsumer.accept(CompilerMessage.warn(
+                        "Function '" + deprecated + "' is no longer supported in Mindustry Logic version " +
+                        processorVersion + "; using '" + replacement.getName() + "' instead."));
                 warningEmitted = true;
             }
             return replacement.handleProperty(pipeline, target, params);

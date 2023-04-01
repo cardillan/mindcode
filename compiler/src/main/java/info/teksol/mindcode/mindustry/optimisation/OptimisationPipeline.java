@@ -1,5 +1,6 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.mindustry.CompilerMessage;
 import info.teksol.mindcode.mindustry.CompilerProfile;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
@@ -27,7 +28,7 @@ public class OptimisationPipeline implements LogicInstructionPipeline {
     }
 
     public static LogicInstructionPipeline createPipelineForProfile(InstructionProcessor instructionProcessor,
-            LogicInstructionPipeline terminus, CompilerProfile profile, DebugPrinter debugPrinter, Consumer<String> messageRecipient) {
+            LogicInstructionPipeline terminus, CompilerProfile profile, DebugPrinter debugPrinter, Consumer<CompilerMessage> messageRecipient) {
         LogicInstructionPipeline pipeline = new InstructionCounter(terminus, messageRecipient,
                 "%6d instructions after optimizations.", new NullDebugPrinter());
 
@@ -61,12 +62,12 @@ public class OptimisationPipeline implements LogicInstructionPipeline {
 
     private static class InstructionCounter implements Optimizer {
         private final LogicInstructionPipeline next;
-        private final Consumer<String> messageRecipient;
+        private final Consumer<CompilerMessage> messageRecipient;
         private final String message;
         private final DebugPrinter debugPrinter;
         private int count = 0;
 
-        public InstructionCounter(LogicInstructionPipeline next, Consumer<String> messageRecipient, String message,
+        public InstructionCounter(LogicInstructionPipeline next, Consumer<CompilerMessage> messageRecipient, String message,
                 DebugPrinter debugPrinter) {
             this.next = next;
             this.messageRecipient = messageRecipient;
@@ -85,7 +86,7 @@ public class OptimisationPipeline implements LogicInstructionPipeline {
 
         @Override
         public void flush() {
-            messageRecipient.accept(String.format(message, count));
+            messageRecipient.accept(CompilerMessage.info(message, count));
             next.flush();
         }
 
@@ -100,7 +101,7 @@ public class OptimisationPipeline implements LogicInstructionPipeline {
         }
 
         @Override
-        public void setMessagesRecipient(Consumer<String> messagesRecipient) {
+        public void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient) {
             // Do nothing - messageRecipient is set in constructor
         }
     }

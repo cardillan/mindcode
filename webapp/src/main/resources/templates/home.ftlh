@@ -50,14 +50,32 @@
                 </label>
             </div>
             <div>
-                <#list model.syntaxErrors>
-                    <label class="mt-4 block font-bold">Syntax Errors:</label>
-                    <ul class="list-disc list-inside">
-                        <#items as error>
-                            <li class="text-red-700">${error}</li>
-                        </#items>
-                    </ul>
-                </#list>
+                <#if model.hasErrors>
+                    <#list model.errors>
+                        <label class="mt-4 block font-bold">Syntax Errors:</label>
+                        <ul class="list-disc list-inside">
+                            <#items as message>
+                                <li class="text-red-700">${message}</li>
+                            </#items>
+                        </ul>
+                    </#list>
+                <#else>
+                    <label class="mt-4 block font-bold">Compiler messages:</label>
+                    <#list model.warnings>
+                        <ul class="list-disc list-inside">
+                            <#items as message>
+                                <li class="text-red-700">${message}</li>
+                            </#items>
+                        </ul>
+                    </#list>
+                    <#list model.messages>
+                        <ul class="list-disc list-inside">
+                            <#items as message>
+                                <li>${message}</li>
+                            </#items>
+                        </ul>
+                    </#list>
+                </#if>
             </div>
         </div>
     </form>

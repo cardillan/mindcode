@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.MessageLevel;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.HashSet;
@@ -49,7 +50,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
         }
 
         if (count > 0) {
-            emitMessage("%6d instructions updated by %s.", count, getClass().getSimpleName());
+            emitMessage(MessageLevel.INFO, "%6d instructions updated by %s.", count, getClass().getSimpleName());
         }
 
         return false;

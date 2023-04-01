@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.MessageLevel;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +57,10 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     protected void generateFinalMessages() {
         if (emitted != original) {
             if (iterations > 1) {
-                emitMessage("%6d instructions eliminated by %s (%d iterations).", original - emitted,
+                emitMessage(MessageLevel.INFO, "%6d instructions eliminated by %s (%d iterations).", original - emitted,
                         getClass().getSimpleName(), iterations - 1);
             } else {
-                emitMessage("%6d instructions eliminated by %s.", original - emitted, getClass().getSimpleName());
+                emitMessage(MessageLevel.INFO, "%6d instructions eliminated by %s.", original - emitted, getClass().getSimpleName());
             }
         }
     }

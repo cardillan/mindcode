@@ -1,7 +1,9 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
+import info.teksol.mindcode.mindustry.CompilerMessage;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.MessageLevel;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 import java.util.function.Consumer;
@@ -12,7 +14,7 @@ abstract class BaseOptimizer implements Optimizer {
     private final LogicInstructionPipeline next;
     private final String name = getClass().getSimpleName();
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
-    private Consumer<String> messagesRecipient = s -> {};
+    private Consumer<CompilerMessage> messagesRecipient = s -> {};
 
     public BaseOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         this.instructionProcessor = instructionProcessor;
@@ -42,15 +44,15 @@ abstract class BaseOptimizer implements Optimizer {
     }
 
     @Override
-    public void setMessagesRecipient(Consumer<String> messagesRecipient) {
+    public void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient) {
         this.messagesRecipient = messagesRecipient;
         if (next instanceof Optimizer) {
             ((Optimizer)next).setMessagesRecipient(messagesRecipient);
         }
     }
 
-    protected void emitMessage(String fornat, Object... args) {
-        messagesRecipient.accept(String.format(fornat, args));
+    protected void emitMessage(MessageLevel level, String fornat, Object... args) {
+        messagesRecipient.accept(new CompilerMessage(level, String.format(fornat, args)));
     }
     
     protected final LogicInstruction createInstruction(Opcode opcode, String... args) {

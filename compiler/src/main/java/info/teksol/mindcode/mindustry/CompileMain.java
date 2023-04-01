@@ -70,7 +70,7 @@ public class CompileMain {
 
         final CompilerOutput result = compile(contents, profile);
 
-        if (result.getErrors().isEmpty()) {
+        if (!result.hasErrors()) {
             // No errors? Print the compiled code and any messages.
             if (filenames.size() >= 2) {
                 Files.write(Path.of(filenames.get(1)), Collections.singletonList(result.getInstructions()));
@@ -79,7 +79,7 @@ public class CompileMain {
             }
 
             if (filenames.size() >= 3) {
-                Files.write(Path.of(filenames.get(2)), result.getMessages());
+                Files.write(Path.of(filenames.get(2)), result.getAllTexts());
             } else {
                 result.getMessages().forEach(System.err::println);
             }

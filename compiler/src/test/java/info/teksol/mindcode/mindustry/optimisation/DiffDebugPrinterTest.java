@@ -1,6 +1,7 @@
 package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
+import info.teksol.mindcode.mindustry.CompilerMessage;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,7 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         }
 
         @Override public void setDebugPrinter(DebugPrinter debugPrinter) { }
-        @Override public void setMessagesRecipient(Consumer<String> messagesRecipient) { }
+        @Override public void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient) { }
         @Override public void emit(LogicInstruction instruction) { }
         @Override public void flush() { }
     };

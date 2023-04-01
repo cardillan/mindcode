@@ -2,6 +2,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
+import info.teksol.mindcode.mindustry.MessageLevel;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 
 // Base class for pipeline-operating optimizers
@@ -39,7 +40,7 @@ abstract class PipelinedOptimizer extends BaseOptimizer {
 
     protected void generateFinalMessages() {
         if (emitted != received) {
-            emitMessage("%6d instructions eliminated by %s.", received - emitted, getClass().getSimpleName());
+            emitMessage(MessageLevel.INFO, "%6d instructions eliminated by %s.", received - emitted, getClass().getSimpleName());
         }
     }
 
