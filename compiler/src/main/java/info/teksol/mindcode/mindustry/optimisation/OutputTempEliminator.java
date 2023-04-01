@@ -10,11 +10,9 @@ import java.util.List;
 // to replace the temp variable with the target variable used in the set statement.
 // The optimization is performed only when the following conditions are met:
 // 1. The set instruction assigns from a __tmp variable.
-// 2. The __tmp variable is used in exactly one other instruction. If that instruction is a set,
-//    it sets (produces) the __tmp variable in question.
-// 3. The set instruction immediatelly follows the instruction producing the __tmp variable 
-//    (the check is based on absolute instruction sequence in the program, not on the actual program flow).
-// 4. All arguments of the other instruction referencing the __tmp variable are output ones.
+// 2. The __tmp variable is used in exactly one other instruction. The other instruction
+//    immediately precedes the instruction producing the __tmp variable
+// 3. All arguments of the other instruction referencing the __tmp variable are output ones.
 //
 // Push and pop instructions are ignored by the above algorithm. Push/pop instructions of any eliminated variables
 // are removed by the StackUsageOptimizer later on.
@@ -35,14 +33,11 @@ class OutputTempEliminator extends GlobalOptimizer {
             if (!isTemporary(arg1)) continue;
             
             LogicInstruction previous = program.get(index - 1);
-            // Previous instruction is a set producing a different variable
-            if (previous.isSet() && !previous.getArgs().get(0).equals(arg1)) continue;
-            
             List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg1) && !ix.isPushOrPop());
             // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
             if (list.size() != 2 || list.get(0) != previous) continue;
 
-            // Make sure all arg0 arguments of the other instruction are output
+            // Make sure all arg1 arguments of the other instruction are output
             boolean replacesOutputArg = instructionProcessor.getTypedArguments(previous)
                     .filter(t -> t.getValue().equals(arg1))
                     .allMatch(t -> t.getArgumentType().isOutput());

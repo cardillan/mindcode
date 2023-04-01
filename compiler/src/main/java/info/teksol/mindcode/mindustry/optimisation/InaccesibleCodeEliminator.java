@@ -10,14 +10,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// Removes instructions that became inaccessible.
-// There are several ways to obrain inaccessible instructions:
-// 1. Jump retargeting can create inaccesible jumps that are no longer targeted
-// 2. User defined functions which are never called
-// 3. User code like if false ... end or while false ... end
+// This optimizer removes instructions that are inaccessible.
+// There are several ways inaccessible instructions might appear:
+// 1. Jump target propagation can create inaccessible jumps that are no longer targeted
+// 2. User-created inaccessible regions, such as while false ... end
+// 3. User defined functions which are called from an inaccessible region
 //
 // Instruction removal is done in loops until no instructions are removed. This way entire branches
-// of inacccessible code (ie. code inside the if false ... end statement) should be eliminated,
+// of inaccessible code (ie. code inside the while false ... end statement) should be eliminated,
 // assuming the unconditional jump normalization optimizer was on the pipeline.
 // Labels - even inactive ones - are never removed.
 class InaccesibleCodeEliminator extends GlobalOptimizer {

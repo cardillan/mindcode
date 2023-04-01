@@ -11,11 +11,9 @@ import java.util.List;
 // to replace the temp variable with the value used in the set statement.
 // The optimization is performed only when the following conditions are met:
 // 1. The set instruction assigns to a __tmp variable.
-// 2. The __tmp variable is used in exactly one other instruction, *which is not a set to the same variable*
-//    (this can happen when this optimizer is run without dead code removal)
-// 3. The set instruction precedes the instruction using the __tmp variable (the check is based on absolute
-//    instruction sequence in the program, not on the actual program flow).
-// 4. All arguments of the other instruction referencing the __tmp variable are input ones.
+// 2. The __tmp variable is used in exactly one other instruction, which follows the set instruction
+//    (the check is based on absolute instruction sequence in the program, not on the actual program flow).
+//3 . All arguments of the other instruction referencing the __tmp variable are input ones.
 //
 // Push and pop instructions are ignored by the above algorithm. Push/pop instructions of any eliminated variables
 // are removed by the StackUsageOptimizer later on.
@@ -39,11 +37,8 @@ class InputTempEliminator extends GlobalOptimizer {
             // Not exactly two instructions, or this instruction does not come first
             if (list.size() != 2 || list.get(0) != instruction) continue;
             
-            LogicInstruction other = list.get(1);
-            // The other is also an op set to the same variable
-            if (other.isSet() && other.getArgs().get(0).equals(arg0)) continue;
-            
             // Make sure all arg0 arguments of the other instruction are input
+            LogicInstruction other = list.get(1);
             boolean replacesInputArg = instructionProcessor.getTypedArguments(other)
                     .filter(t -> t.getValue().equals(arg0))
                     .allMatch(t -> t.getArgumentType().isInput());
