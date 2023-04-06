@@ -16,7 +16,7 @@ import java.util.Set;
  * - conditional jumps in the jump chain are followed if
  *    (i) their condition is identical to the condition the first jump, and
  *   (ii) the condition arguments do not contain a volatile variable (@time, @tick, @counter etc.)
- *
+ * <p>
  * No instructions are removed or added except a label at the start of the program.
 */
 class PropagateJumpTargets extends GlobalOptimizer {

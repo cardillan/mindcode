@@ -33,22 +33,22 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     private LoopStack loopStack = new LoopStack();
 
-    // Contains the infromation about functions built from the program to support code generation
+    // Contains the information about functions built from the program to support code generation
     private CallGraph callGraph;
 
-    private ConstantExpressionEvaluator expressionEvaluator = new ConstantExpressionEvaluator();
+    private final ConstantExpressionEvaluator expressionEvaluator = new ConstantExpressionEvaluator();
 
     // These instances track variables that need to be stored on stack for recursive function calls.
     
     // Constants and global variables
     // Key is the name of variable/constant
     // Value is either an ConstantAstNode (for constant) or null (for variable)
-    private Map<String, ConstantAstNode> constants = new HashMap<>();
+    private final Map<String, ConstantAstNode> constants = new HashMap<>();
 
     // Tracks all local function variables, including function parameters - once accessed, they have to be preserved.
     private LocalContext functionContext = new LocalContext();
 
-    // Tracks variables whose scope is limited to the node being processed and have no meaning outside of the node.
+    // Tracks variables whose scope is limited to the node being processed and have no meaning outside the node.
     private NodeContext nodeContext = new NodeContext();
 
     // Tracks variables whose scope is limited to the parent node. These are variables that transfer the return value
@@ -82,7 +82,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         appendFunctionDeclarations();
     }
 
-    // Visit is called for every node. This overriden function ensures proper transition of variable contexts between
+    // Visit is called for every node. This overridden function ensures proper transition of variable contexts between
     // parent and child nodes.
     @Override
     public String visit(AstNode node) {
@@ -90,7 +90,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         parentContext = nodeContext;
         nodeContext = new NodeContext(parentContext);  // inherit variables from parent context
         try {
-            // Perform constant expresion evaluation
+            // Perform constant expression evaluation
             return super.visit(expressionEvaluator.evaluate(node));
         } finally {
             nodeContext = parentContext;
@@ -114,7 +114,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return instructionProcessor.nextLabel();
     }
 
-    // Allocates a new temporary variable whose scope is limited to a node (ie. not needed outside that node)
+    // Allocates a new temporary variable whose scope is limited to a node (i.e. not needed outside that node)
     private String nextTemp() {
         return nodeContext.registerVariable(instructionProcessor.nextTemp());
     }
@@ -244,7 +244,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Switching to new function prefix -- save/restore old one
         String previousPrefix = localPrefix;
         try {
-            // Entire inline function evaluates using given prefix (differnent invocations use different variables).
+            // Entire inline function evaluates using given prefix (different invocations use different variables).
             // For other functions, the prefix is only used to set up variables representing function parameters.
             localPrefix = function.isInline() ? instructionProcessor.nextLocalPrefix(functionName) : function.getLocalPrefix();
 
@@ -273,7 +273,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             emitInstruction(localPrefix, LABEL, nextLabel());
             setupFunctionParameters(function, paramValues);
 
-            // Retval gets registered in nodeContext, but we don't mind -- inline fucntions do not use stack
+            // Retval gets registered in nodeContext, but we don't mind -- inline functions do not use stack
             final String returnValue = nextReturnValue();
             final String returnLabel = nextLabel();
             returnStack.enterFunction(returnLabel, returnValue);
@@ -315,7 +315,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         List<String> variables = useStack ? getContextVariables() : List.of();
 
         if (useStack) {
-            // Store all local varables (both user defined and temporary) on the stack
+            // Store all local variables (both user defined and temporary) on the stack
             variables.forEach(v -> emitInstruction(marker, PUSH, stackName(), v));
         }
 
@@ -327,7 +327,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         emitInstruction(LABEL, returnLabel); // where the function must return
 
         if (useStack) {
-            // Restore all local varables (both user defined and temporary) from the stack
+            // Restore all local variables (both user defined and temporary) from the stack
             Collections.reverse(variables);
             variables.forEach(v -> emitInstruction(marker, POP, stackName(), v));
         }
@@ -361,7 +361,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             return resultVariable;
         } else {
             // Use the function return value directly - there's only one place where it is produced
-            // within this funcion's call tree
+            // within this function's call tree
             return localPrefix + RETURN_VALUE;
         }
     }
@@ -663,7 +663,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 }
             });
 
-            // No match in the when value list: skip to the next alternative
+            // No match in the "when" value list: skip to the next alternative
             emitInstruction(JUMP, nextAlt, "always");
 
             // Body of the alternative
@@ -696,7 +696,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitFunctionDeclaration(FunctionDeclaration node) {
-        // Do nothing - function definitions are procesed by CallGraphCreator
+        // Do nothing - function definitions are processed by CallGraphCreator
         return "null";
     }
 
@@ -908,7 +908,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         return sbr.insert(0, '"').append('"').toString();
     }
 
-    private class LocalContext {
+    private static class LocalContext {
         protected final List<String> variables = new ArrayList<>();
 
         String registerVariable(String name) {
@@ -934,11 +934,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         /**
          * Encapsulates processing of given expression, by keeping temporary variable(s) created while evaluating
          * the expression out of current node context. Suitable when the generated temporary variables are known
-         * not to be used outside of the context of the expression. A good example is the condition expression of the
+         * not to be used outside the context of the expression. A good example is the condition expression of the
          * if statement: the condition is evaluated and the result is used to choose the branch to execute, but
          * all this happens before either of the branches are executed and the temporary variable holding the condition
          * value will not be used again.
-         *
+         * <p>
          * Note: if x = a > b then ... else ... end; print(x) is not a problem, because x is a user variable and
          * is registered inside functionContext.
          *

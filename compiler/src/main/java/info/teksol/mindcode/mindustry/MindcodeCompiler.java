@@ -10,6 +10,8 @@ import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -104,10 +106,13 @@ public class MindcodeCompiler implements Compiler {
     }
 
     private List<LogicInstruction> optimize(List<LogicInstruction> program) {
-//        messages.add(profile.getOptimisations().stream()
-//                .sorted()
-//                .map(Object::toString)
-//                .collect(Collectors.joining(",\n    ", "Active optimisations:\n    ", "\n")));
+        messages.add(
+                CompilerMessage.debug(profile.getOptimisations().stream()
+                        .sorted()
+                        .map(Object::toString)
+                        .collect(Collectors.joining(",\n    ", "Active optimisations:\n    ", "\n"))
+                )
+        );
 
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 || profile.getOptimisations().isEmpty()

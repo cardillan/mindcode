@@ -13,7 +13,7 @@ public interface FunctionMapper {
 
     List<FunctionSample> generateSamples();
 
-    public class FunctionSample {
+    class FunctionSample {
         public final int order;
         public final String name;
         public final String functionCall;

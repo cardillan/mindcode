@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
 
-public class InaccesibleCodeEliminatorTest extends AbstractGeneratorTest {
+public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
 
     // Sequences of jumps are not generated without dead code elimination
     private final LogicInstructionPipeline sut = OptimisationPipeline.createPipelineOf(getInstructionProcessor(),

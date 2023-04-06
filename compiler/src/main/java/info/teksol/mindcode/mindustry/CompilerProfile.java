@@ -9,7 +9,7 @@ import java.util.Set;
 public class CompilerProfile {
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
-    private Set<Optimisation> optimisations = EnumSet.allOf(Optimisation.class);
+    private Set<Optimisation> optimisations;
     private boolean printFinalCode = false;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;

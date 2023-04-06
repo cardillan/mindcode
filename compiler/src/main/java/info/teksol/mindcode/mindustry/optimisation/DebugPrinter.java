@@ -16,7 +16,7 @@ public interface DebugPrinter {
      * @param optimizer instance of the optimizer
      * @param instruction the emitted instruction
      */
-    void instructionEmmited(Optimizer optimizer, LogicInstruction instruction);
+    void instructionEmitted(Optimizer optimizer, LogicInstruction instruction);
 
     /**
      * Called by global optimizers at the end of each iteration performed.

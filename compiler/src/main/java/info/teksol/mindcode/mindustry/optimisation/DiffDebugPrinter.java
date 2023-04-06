@@ -31,7 +31,7 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     @Override
-    public void instructionEmmited(Optimizer optimizer, LogicInstruction instruction) {
+    public void instructionEmitted(Optimizer optimizer, LogicInstruction instruction) {
         findProgramVersion(optimizer).getProgram().add(instruction);
     }
 

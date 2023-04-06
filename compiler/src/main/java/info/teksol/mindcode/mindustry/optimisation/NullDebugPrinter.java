@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 
 public class NullDebugPrinter implements DebugPrinter {
     @Override
-    public void instructionEmmited(Optimizer optimizer, LogicInstruction instruction) {
+    public void instructionEmitted(Optimizer optimizer, LogicInstruction instruction) {
         // Do nothing
     }
 

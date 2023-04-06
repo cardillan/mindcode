@@ -860,8 +860,8 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void allocateStackInNonStandardWayProducesCorrectCode() {
-        // in this test, we're only concerned with whether or not the top of the stack is respected, and whether or
-        // not the start of heap is respected. Everything else superfluous.
+        // in this test, we're only concerned with whether the top of the stack is respected, and whether
+        // the start of heap is respected. Everything else superfluous.
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(SET, "__sp", "20"),

@@ -80,7 +80,7 @@ public class OptimisationPipeline implements LogicInstructionPipeline {
             if (!instruction.isLabel()) {
                 count++;
             }
-            debugPrinter.instructionEmmited(this, instruction);
+            debugPrinter.instructionEmitted(this, instruction);
             next.emit(instruction);
         }
 

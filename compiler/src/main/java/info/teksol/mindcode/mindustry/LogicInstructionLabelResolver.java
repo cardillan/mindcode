@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static info.teksol.mindcode.mindustry.logic.Opcode.*;
-
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 
 public class LogicInstructionLabelResolver {
@@ -23,14 +21,14 @@ public class LogicInstructionLabelResolver {
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
         final Map<String, String> addresses = calculateAddresses(program);
-        return resolveAddresses(resolveVirtualnstructions(program), addresses);
+        return resolveAddresses(resolveVirtualInstructions(program), addresses);
     }
 
     private LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String value) {
         return instructionProcessor.replaceArg(instruction, argIndex, value);
     }
 
-    // If there's a known label at given argument index, resolves it, otherwise returns the ogirinal instruction
+    // If there's a known label at given argument index, resolves it, otherwise returns the original instruction
     private LogicInstruction resolveLabel(Map<String, String> addresses, LogicInstruction instruction, int labelIndex) {
         final String arg = instruction.getArg(labelIndex);
         return replaceArg(instruction, labelIndex, addresses.getOrDefault(arg, arg));
@@ -66,7 +64,7 @@ public class LogicInstructionLabelResolver {
         return result;
     }
 
-    private List<LogicInstruction> resolveVirtualnstructions(List<LogicInstruction> program) {
+    private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
         final List<LogicInstruction> result = new ArrayList<>();
         for (final LogicInstruction instruction : program) {
             if (instruction.getOpcode().isVirtual()) {

@@ -223,7 +223,7 @@ public class Processor {
 
     private static final Map<String, Condition> CONDITIONS = createConditionsMap();
 
-    private static interface Condition {
+    private interface Condition {
         boolean evaluate(Variable a, Variable b);
     }
 

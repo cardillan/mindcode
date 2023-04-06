@@ -32,7 +32,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
                 .filter(s -> !isTemporary(s)
                         && !s.startsWith(instructionProcessor.getRetValPrefix())
                         && !isFunctionReturnVariable(s))
-                .map(this::resolveVaribleName)
+                .map(this::resolveVariableName)
                 .sorted()
                 .distinct()
                 .collect(Collectors.joining(", "));
@@ -42,7 +42,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
                         && (s.matches("(__fn\\d+_|[a-zA-Z].*)") || isLocalVariable(s))
                         && !instructionProcessor.getConstantNames().contains(s)
                         && !instructionProcessor.isBlockName(s))
-                .map(this::resolveVaribleName)
+                .map(this::resolveVariableName)
                 .sorted()
                 .distinct()
                 .collect(Collectors.joining(", "));
@@ -64,7 +64,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         return id.matches(instructionProcessor.getLocalPrefix() + "\\d+retval");
     }
 
-    private String resolveVaribleName(String id) {
+    private String resolveVariableName(String id) {
         Tuple2<String, String> parsed = instructionProcessor.parseVariable(id);
         return parsed.getT1() == null ? id : parsed.getT1() + "." + parsed.getT2();
     }
@@ -84,7 +84,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         final Set<String> uselessWrites = new HashSet<>(writes.keySet());
         uselessWrites.removeAll(reads);
         for (String key : uselessWrites) {
-            // Instruction with at most one output argument are removed immediatelly
+            // Instruction with at most one output argument are removed immediately
             // Other instructions are inspected further to find out they're fully unused
             writes.get(key).stream()
                     .filter(ix -> instructionProcessor.getTotalOutputs(ix) < 2 || allWritesUnread(ix))

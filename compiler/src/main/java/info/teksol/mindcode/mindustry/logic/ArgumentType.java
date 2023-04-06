@@ -143,17 +143,17 @@ public enum ArgumentType {
     private final int flags;
     private final List<ArgumentValues> allowedValues;
 
-    private ArgumentType(int flags) {
+    ArgumentType(int flags) {
         this.flags = flags;
         this.allowedValues = List.of();
     }
 
-    private ArgumentType(int flags, String... keywords) {
+    ArgumentType(int flags, String... keywords) {
         this.flags = flags;
         this.allowedValues = List.of(allVersions(keywords));
     }
     
-    private ArgumentType(int flags, ArgumentValues... keywords) {
+    ArgumentType(int flags, ArgumentValues... keywords) {
         this.flags = flags;
         this.allowedValues = List.of(keywords);
     }

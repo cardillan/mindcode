@@ -50,7 +50,7 @@ There are two options for getting Mindcode up and running on your own machine. U
 docker-compose up --build
 ```
 It can take a few minutes to download and compile all the required parts the first time you run this, but subsequent
-runs will be be a lot faster.
+runs will be a lot faster.
 
 The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
 
@@ -133,7 +133,7 @@ Optimization improvements
 * [ ] additional automatic inlining of nonrecursive functions 
 * [ ] multiple-use temporary variables optimization
 * [ ] eliminate retval variables/assignments where not needed
-* [ ] elimination of useless statements, eg. `op add x x 0`, `op mul x x 1` or `set x x`
+* [ ] elimination of useless statements, e.g. `op add x x 0`, `op mul x x 1` or `set x x`
 * [ ] parameters that are only passed to inner calls and never modified won't be stored on stack
 * [ ] boolean expressions
   * ternary operator assignment: instead of conditional jump/set/always jump/set, do set/conditional jump/set.

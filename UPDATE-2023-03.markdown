@@ -51,7 +51,7 @@ Order of evaluation of some expressions might therefore change, producing differ
 ## Stack allocation
 
 Stack allocation must be placed before the first control statement in a program
-(control statement are loops, ifs, function definitions/calls etc, generally any statement that can change the program flow).
+(control statement are loops, ifs, function definitions/calls etc., generally any statement that can change the program flow).
 Earlier, the following code would be valid:
 
 ```
@@ -68,7 +68,7 @@ end
 print(foo(4))
 ```
 
-Currently Mindcode won't compile this program -- it is necessary to move the stack allocation in front of the for loop.
+Currently, Mindcode won't compile this program -- it is necessary to move the stack allocation in front of the for loop.
 Simple assignments to variables are allowed, for example the following code is valid:
 
 ```
@@ -112,14 +112,14 @@ Support for the web app will hopefully be added shortly.
 
 ## Custom functions enhancements
 
-For a more comprehensive dscription of current custom function support, see [Custom Functions](SYNTAX.markdown#custom-functions).
+For a more comprehensive description of current custom function support, see [Custom Functions](SYNTAX-4-FUNCTIONS.markdown#user-defined-functions).
 
 ### Stack usage and stack allocation
 
 Only recursive custom functions now require stack allocation. Non-recursive functions are compiled without a stack,
 and can handle all types of variables as arguments (unlike recursive functions, which can only handle numeric parameters and variables).
 
-When no range is given in `allocate stack` clause (eg. `allocate stack in bank1`), the memory is inspected at runtime
+When no range is given in `allocate stack` clause (e.g. `allocate stack in bank1`), the memory is inspected at runtime
 and the entire capacity of given memory block is used as a stack.
 
 ### Inline functions
@@ -131,12 +131,12 @@ only once in the entire program.
 ### Return statement
 
 New `return` statement may be used to return from the function to caller. In this case, the return value is specified
-by the expression following the return statement, eg. `return result`. When `return` is used without specifying a value,
+by the expression following the return statement, e.g. `return result`. When `return` is used without specifying a value,
 the return value is `null`.
 
 ### Variable and parameters scope
 
-Parameters and variables in custom functions are local to the function, except when the variable name is in uppercase (eg. `VARIABLE`),
+Parameters and variables in custom functions are local to the function, except when the variable name is in uppercase (e.g. `VARIABLE`),
 in which case the variable is shared between all custom functions and the main program body.
 
 ### Parameterless function declaration
@@ -262,7 +262,7 @@ loop while @unit == null
 ### Operators
 
 Operator precedence was changed to be more in line with usual implementations in other languages (specifically, Ruby).
-The list of operators in order of precedence can be found [here](SYNTAX.markdown#unary-and-binary-operators).
+The list of operators in order of precedence can be found [here](SYNTAX-2-EXPRESSIONS.markdown#operators).
 
 Additionally, several operators were added or altered:
 
@@ -274,7 +274,7 @@ Additionally, several operators were added or altered:
 
 ## Built-in functions
 
-The `println()` and `printf()` functions for easier printing (see [Built-in functions](SYNTAX.markdown#built-in-functions)).
+The `println()` and `printf()` functions for easier printing (see [Built-in functions](SYNTAX-4-FUNCTIONS.markdown#built-in-functions)).
 
 # Compiler enhancements
 
@@ -292,9 +292,9 @@ op div __tmp3 __tmp1 1000
 print __tmp3
 ```
 even though the `60 / 1000` could be evaluated at compile time.
-You might use parenthesis around constant expressions to isolate them, helping compile-time evaluation, eg. `print(ticks * (60 / 1000))`.
+You might use parenthesis around constant expressions to isolate them, helping compile-time evaluation, e.g. `print(ticks * (60 / 1000))`.
 
-## Commnad-line compiler
+## Command-line compiler
 
 Command-line compiler accepts parameters on the command line allowing to specify various compiler parameters and control the amount of additional output generated:
 
@@ -340,7 +340,7 @@ Available optimizers are:
   e: eliminates instructions made inaccessible by optimizations or false conditions
   k: optimizes variable storage on stack
 
-Use '-' to negate selection, eg. -o-n uses all optimization except CONDITIONAL_JUMPS_NORMALIZATION.
+Use '-' to negate selection, e.g. -o-n uses all optimization except CONDITIONAL_JUMPS_NORMALIZATION.
 ```
 
 At this moment, web app compiler doesn't offer these options.

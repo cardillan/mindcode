@@ -37,12 +37,12 @@ public class ReturnStackTest {
 
     @Test
     void rejectsProvidingValuesOnEmptyStack() {
-        Assertions.assertThrows(GenerationException.class, () -> returnStack.getReturnLabel());
-        Assertions.assertThrows(GenerationException.class, () -> returnStack.getReturnValue());
+        Assertions.assertThrows(GenerationException.class, returnStack::getReturnLabel);
+        Assertions.assertThrows(GenerationException.class, returnStack::getReturnValue);
     }
 
     @Test
     void rejectsExitFunctionOnEmptyStack() {
-        Assertions.assertThrows(IllegalStateException.class, () -> returnStack.exitFunction());
+        Assertions.assertThrows(IllegalStateException.class, returnStack::exitFunction);
     }
 }

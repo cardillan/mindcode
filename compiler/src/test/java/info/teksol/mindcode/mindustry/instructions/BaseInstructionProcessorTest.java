@@ -9,10 +9,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.mindustry.logic.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
 
@@ -71,7 +68,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     void keepsInstructionIfArgumentIdentical() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "255");
         LogicInstruction replaced = getInstructionProcessor().replaceArg(original, 1, "0");
-        assertTrue(original == replaced);
+        assertSame(original, replaced);
     }
 
     @Test

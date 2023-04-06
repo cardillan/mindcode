@@ -57,7 +57,7 @@ class PrintMerger extends PipelinedOptimizer {
 
     private final class ExpectPrint implements State {
         private final LogicInstruction firstPrint;
-        private List<LogicInstruction> operations = new ArrayList<>();
+        private final List<LogicInstruction> operations = new ArrayList<>();
         
         private ExpectPrint(LogicInstruction instruction) {
             firstPrint = instruction;
@@ -65,7 +65,7 @@ class PrintMerger extends PipelinedOptimizer {
         
         @Override
         public State emit(LogicInstruction instruction) {
-            // Do not merge across jumps and labela
+            // Do not merge across jumps and labels
             // Function calls generate a label, so they prevent merging as well
             if (instruction.isJump() || instruction.isLabel()) {
                 operations.add(instruction);

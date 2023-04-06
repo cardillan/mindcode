@@ -1,6 +1,6 @@
 # Expressions
 
-Most expressions utilize some of the operators. Other important types of expressions are
+Most expressions utilize some operators described below. Other important types of expressions are
 * `if` expressions,
 * `case` expressions,
 * function calls.
@@ -68,7 +68,7 @@ Note that `true` is identical to `1` and `false` is identical to `0` in Mindustr
 
 The `||` and `or` operators, although they are meant to provide boolean or, may not produce boolean values
 when their operands aren't boolean themselves. They're identical with the bitwise or (`|`).
-It works as expected with control statements, eg.
+It works as expected with control statements, e.g.
 
 ```
 items = vault1.totalItems
@@ -91,20 +91,20 @@ In that scenario, the values are considered equal in these cases:
 * one of the values is `null` and the other is `0` (zero), or
 * one of the values is an object and the other is `1` (one).
 
-|  `a`  |  `b`  |`a == b`|`a != b`|`a === b`|`a !== b`|
-|:-----:|:-----:|:------:|:------:|:-------:|:-------:|
-|`null` |  `0`  | `true` | `false`| `false` | `true`  |
-|`null` |  `1`  | `false`| `true` | `false` | `true`  |
-|`null` |  `2`  | `false`| `true` | `false` | `true`  |
-|`@coal`|  `0`  | `false`| `true` | `false` | `true`  |
-|`@coal`|  `1`  | `true` | `false`| `false` | `true`  |
-|`@coal`|  `2`  | `false`| `true` | `false` | `true`  |
-| `"A"` |  `0`  | `false`| `true` | `false` | `true`  |
-| `"A"` |  `1`  | `true` | `false`| `false` | `true`  |
-| `"A"` |  `2`  | `false`| `true` | `false` | `true`  |
-| `"A"` | `"B"` | `false`| `true` | `false` | `true`  |
-|`@coal`|`@lead`| `false`| `true` | `false` | `true`  |
-| `"A" `| `"A"` | `true` | `false`| `true`  | `false` |
+|   `a`   |   `b`   | `a == b` | `a != b` | `a === b` | `a !== b` |
+|:-------:|:-------:|:--------:|:--------:|:---------:|:---------:|
+| `null`  |   `0`   |  `true`  | `false`  |  `false`  |  `true`   |
+| `null`  |   `1`   | `false`  |  `true`  |  `false`  |  `true`   |
+| `null`  |   `2`   | `false`  |  `true`  |  `false`  |  `true`   |
+| `@coal` |   `0`   | `false`  |  `true`  |  `false`  |  `true`   |
+| `@coal` |   `1`   |  `true`  | `false`  |  `false`  |  `true`   |
+| `@coal` |   `2`   | `false`  |  `true`  |  `false`  |  `true`   |
+|  `"A"`  |   `0`   | `false`  |  `true`  |  `false`  |  `true`   |
+|  `"A"`  |   `1`   |  `true`  | `false`  |  `false`  |  `true`   |
+|  `"A"`  |   `2`   | `false`  |  `true`  |  `false`  |  `true`   |
+|  `"A"`  |  `"B"`  | `false`  |  `true`  |  `false`  |  `true`   |
+| `@coal` | `@lead` | `false`  |  `true`  |  `false`  |  `true`   |
+| `"A" `  |  `"A"`  |  `true`  | `false`  |  `true`   |  `false`  |
 
 <details><summary>Show code used to generate data for this table.</summary>
 
@@ -144,7 +144,7 @@ The only thing Logic does correctly with them is comparing them for equality, as
 
 # Expressions without valid evaluation
 
-When an expression cannot be mathematically evaluated (eg. `1 / 0`, `sqrt(-1)`, `log(0)`, ...),
+When an expression cannot be mathematically evaluated (e.g. `1 / 0`, `sqrt(-1)`, `log(0)`, ...),
 the resulting value of the expression is `null`. Additionally, `null` values are treated as zero (`0`).
 Therefore, `15 + 6 / 0` evaluates to `15`.
 
@@ -166,7 +166,7 @@ print __tmp3
 ```
 even though the `60 / 1000` could be evaluated at compile time.
 You can use parenthesis around constant expressions to isolate them,
-helping compile-time evaluation, eg. `print(ticks * (60 / 1000))`.
+helping compile-time evaluation, e.g. `print(ticks * (60 / 1000))`.
 
 # Range expressions
 
@@ -183,7 +183,7 @@ Ranges are constant when both lower and upper values are constant expressions.
 
 Ranges cannot be assigned to variables and can only be used in several contexts:
 
-* Specifying memory ranges in heap ans stack allocation (requires constant ranges),
+* Specifying memory ranges in heap and stack allocation (requires constant ranges),
 * Range iteration loops,
 * Matching against a range in `case` expressions.
 

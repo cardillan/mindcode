@@ -159,7 +159,7 @@ public final class CallGraph {
     private void visitFunction(String callee, long count) {
         Function function = functions.get(callee);
         if (function == null) {
-            // Unknown function. May be a built-in one.
+            // Unknown function. Maybe a built-in one.
             return;
         }
 
@@ -177,7 +177,7 @@ public final class CallGraph {
             }
         } else {
             // Visit all children
-            function.getCalls().forEach((fn, cnt) -> visitFunction(fn, cnt));
+            function.getCalls().forEach(this::visitFunction);
         }
         callStack.remove(callStack.size() - 1);
     }

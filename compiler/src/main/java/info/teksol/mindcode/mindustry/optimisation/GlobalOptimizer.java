@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
-// Base class for global optimizers. Consumes the netire program before performing optimizations on it.
+// Base class for global optimizers. Consumes the entire program before performing optimizations on it.
 // Contains helper method to navigate and manipulate the program.
 abstract class GlobalOptimizer extends BaseOptimizer {
     protected final List<LogicInstruction> program = new ArrayList<>();

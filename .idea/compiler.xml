@@ -12,9 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="mindcode" target="1.5" />
-      <module name="mindcode-compiler" target="11" />
-      <module name="mindcode-webapp" target="11" />
+      <module name="mindcode-schematics" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,8 +1,8 @@
-# Function reference for Minustry V7
+# Function reference for Mindustry V7
 
 This document contains function reference for all built-in Mindcode functions. Functions are grouped by the instruction they encapsulate, so that functions with similar logic are listed together. The Mindcode source listed in the **Function call** column is compiled to the instruction in the **Generated instruction** column. 
  
- In some cases, a single instruction can be generated in more than one way (eg. the `radar` instruction, which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter). Both ways are identical. Additionally, some functions have optional parameters, which are marked by a question mark (eg. `building?`). Only output parameters are optional, and you may omit them if you don't need the value they return. When omitted, the optional parameter is replaced by an unused temporary variable. Mindcode allows you to omit all optional argument, but in this case the entire instruction will be considered useless and may be removed by the optimizer. 
+ In some cases, a single instruction can be generated in more than one way (e.g. the `radar` instruction, which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter). Both ways are identical. Additionally, some functions have optional parameters, which are marked by a question mark (e.g. `building?`). Only output parameters are optional, and you may omit them if you don't need the value they return. When omitted, the optional parameter is replaced by an unused temporary variable. Mindcode allows you to omit all optional argument, but in this case the entire instruction will be considered useless and may be removed by the optimizer. 
 # Micro Processor, Logic Processor and Hyper Processor
 
 

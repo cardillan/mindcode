@@ -7,7 +7,7 @@ public enum ProcessorEdition {
 
     private final String title;
 
-    private ProcessorEdition(String title) {
+    ProcessorEdition(String title) {
         this.title = title;
     }
 

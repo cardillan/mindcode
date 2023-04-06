@@ -20,21 +20,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FunctionReferenceGeneratorTest {
 
-    private static final List<String> PREAMBLE = List.of(new String[] {
-        "This document contains function reference for all built-in Mindcode functions.",
-        "Functions are grouped by the instruction they encapsulate, so that functions with similar logic are listed together.",
-        "The Mindcode source listed in the **Function call** column is compiled to the instruction in the **Generated instruction** column.",
-        System.lineSeparator(),
-        System.lineSeparator(),
-        "In some cases, a single instruction can be generated in more than one way",
-        "(eg. the `radar` instruction, which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter).",
-        "Both ways are identical.",
-        "Additionally, some functions have optional parameters, which are marked by a question mark (eg. `building?`).",
-        "Only output parameters are optional, and you may omit them if you don't need the value they return.",
-        "When omitted, the optional parameter is replaced by an unused temporary variable.",
-        "Mindcode allows you to omit all optional argument, but in this case the entire instruction will be considered useless",
-        "and may be removed by the optimizer.",
-    });
+    private static final List<String> PREAMBLE = List.of(
+            "This document contains function reference for all built-in Mindcode functions.",
+            "Functions are grouped by the instruction they encapsulate, so that functions with similar logic are listed together.",
+            "The Mindcode source listed in the **Function call** column is compiled to the instruction in the **Generated instruction** column.",
+            System.lineSeparator(),
+            System.lineSeparator(),
+            "In some cases, a single instruction can be generated in more than one way",
+            "(e.g. the `radar` instruction, which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter).",
+            "Both ways are identical.",
+            "Additionally, some functions have optional parameters, which are marked by a question mark (e.g. `building?`).",
+            "Only output parameters are optional, and you may omit them if you don't need the value they return.",
+            "When omitted, the optional parameter is replaced by an unused temporary variable.",
+            "Mindcode allows you to omit all optional argument, but in this case the entire instruction will be considered useless",
+            "and may be removed by the optimizer.");
 
     @Test
     void createFunctionReferenceForV6() throws FileNotFoundException {
@@ -50,12 +49,10 @@ public class FunctionReferenceGeneratorTest {
         assertTrue(new File(".." + File.separatorChar + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         FunctionMapper mapper = FunctionMapperFactory.getFunctionMapper(processor, s -> {});
-        List<FunctionMapper.FunctionSample> samples = assertDoesNotThrow(() -> {
-            return mapper.generateSamples();
-        });
+        List<FunctionMapper.FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 
         try (final PrintWriter w = new PrintWriter(".." + File.separatorChar + "FUNCTIONS_" + version + ".markdown")) {
-            w.println("# Function reference for Minustry " + version);
+            w.println("# Function reference for Mindustry " + version);
             w.println();
             PREAMBLE.forEach(s -> { w.print(s); w.print(" "); });
             w.println();
@@ -65,7 +62,7 @@ public class FunctionReferenceGeneratorTest {
 
                 for (Opcode opcode : Opcode.values()) {
                     // Does this opcode exist in edition?
-                    if (!processor.getOpcodeVariants().stream().anyMatch(v -> v.getEdition() == edition && v.getOpcode() == opcode)) {
+                    if (processor.getOpcodeVariants().stream().noneMatch(v -> v.getEdition() == edition && v.getOpcode() == opcode)) {
                         continue;
                     }
 
@@ -89,7 +86,7 @@ public class FunctionReferenceGeneratorTest {
     private void printOpcode(InstructionProcessor processor, PrintWriter w, Opcode opcode,
             List<FunctionMapper.FunctionSample> list) {
 
-        if (!list.stream().anyMatch(v -> v.instruction.getOpcode() == opcode)) {
+        if (list.stream().noneMatch(v -> v.instruction.getOpcode() == opcode)) {
             return;
         }
 

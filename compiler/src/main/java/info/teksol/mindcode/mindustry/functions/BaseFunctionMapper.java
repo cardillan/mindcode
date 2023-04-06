@@ -43,7 +43,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         functionMap = createFunctionMap();
         builtInFunctionMap = createBuiltInFunctionMap();
         
-        sampleGenerators = new ArrayList();
+        sampleGenerators = new ArrayList<>();
         propertyMap.values().forEach(p -> p.register(sampleGenerators::add));
         functionMap.values().forEach(f -> f.register(sampleGenerators::add));
         sampleGenerators.sort(Comparator.comparing(SampleGenerator::getName));
@@ -297,7 +297,6 @@ public class BaseFunctionMapper implements FunctionMapper {
             NamedArgument block = CollectionUtils.removeFirstMatching(arguments, a -> a.getType() == ArgumentType.BLOCK);
             str.append(block.getName()).append('.');
 
-
             List<String> strArguments = arguments.stream()
                     .filter(a -> !a.getType().isUnused() && !a.getType().isFunctionName())
                     .map(NamedArgument::getName)
@@ -420,7 +419,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         List<NamedArgument> arguments = opcodeVariant.getArguments();
         Optional<NamedArgument> selector = arguments.stream().filter(a -> a.getType().isFunctionName()).findFirst();
-        String name = functionName(opcodeVariant, selector);
+        String name = functionName(opcodeVariant, selector.orElse(null));
         final int outputs = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isOutput).count();
         final int results = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType.RESULT::equals).count();
         final int unused  = (int) arguments.stream().map(NamedArgument::getType).filter(ArgumentType::isUnused).count();
@@ -452,7 +451,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         return new StandardFunctionHandler(name, opcodeVariant, minArgs, numArgs, results > 0);
     }
 
-    private String functionName(OpcodeVariant opcodeVariant, Optional<NamedArgument> selector) {
+    private String functionName(OpcodeVariant opcodeVariant, NamedArgument selector) {
         switch (opcodeVariant.getOpcode()) {
             case STOP:
                 return "stopProcessor";
@@ -465,7 +464,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                 }
 
             default:
-                return selector.isPresent() ? selector.get().getName() : opcodeVariant.getOpcode().toString();
+                return selector == null ? opcodeVariant.getOpcode().toString() : selector.getName();
         }
     }
 
@@ -538,21 +537,22 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private class StandardFunctionHandler extends AbstractFunctionHandler implements SelectorFunction {
-        private final Optional<String> keyword;
+        private final String keyword;
         private final boolean hasResult;
 
         StandardFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs, boolean hasResult) {
             super(name, opcodeVariant, minArgs, numArgs);
-            this.keyword = opcodeVariant.getArguments().stream().filter(a -> a.getType().isSelector()).map(NamedArgument::getName).findFirst();
+            this.keyword = opcodeVariant.getArguments().stream().filter(a -> a.getType().isSelector())
+                    .map(NamedArgument::getName).findFirst().orElse(null);
             this.hasResult = hasResult;
         }
 
         @Override
         public String getKeyword() {
-            if (keyword.isEmpty()) {
+            if (keyword == null) {
                 throw new InvalidMetadataException("No keyword selector for function " + getName());
             }
-            return keyword.get();
+            return keyword;
         }
 
         @Override

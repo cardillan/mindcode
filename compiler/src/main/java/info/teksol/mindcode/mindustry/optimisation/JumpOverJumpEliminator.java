@@ -18,7 +18,7 @@ import java.util.List;
 //
 // jump __label1 notEqual __tmp9 false
 //
-// Optimization won't be done if the condition doesn't have an inverse (ie. ===).
+// Optimization won't be done if the condition doesn't have an inverse (i.e. ===).
 //
 // These sequences of instructions may arise when using break or continue statements:
 //

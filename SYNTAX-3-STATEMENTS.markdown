@@ -1,8 +1,8 @@
 # Control flow statements
 
 Control flow statements are statements that alter the flow of code.
-They either branch, ie. execute one of several possible alternatives,
-or they loop, ie. repeat part of the code (zero,) one or more times.
+They either branch, i.e. execute one of several possible alternatives,
+or they loop, i.e. repeat part of the code (zero,) one or more times.
 
 # Loops
 
@@ -233,9 +233,9 @@ result = n == 0 ? "ready" : "pending"
 
 This is the exact same conditional expression as the first `if` statement above, written on one line.
 
-## Case/When Expressions
+## Case Expressions
 
-Case/when is another way of writing conditionals. Use case/when when you need to test a value against multiple different alternatives:
+Case expression is another way of writing conditionals. Use case expression when you need to test a value against multiple different alternatives:
 
 ```
 next_action = case num_enemies
@@ -267,7 +267,7 @@ end
 **Then keyword**
 
 The `then` keyword at the end of the list of when expressions is optional.
-Using it helps to avoid a bug that can happen when you put a superfluous comma at the end of the when expression list:
+Using it helps to avoid a bug that can happen when you put a superfluous comma at the end of the `when` expression list:
 
 ```
 case block.type

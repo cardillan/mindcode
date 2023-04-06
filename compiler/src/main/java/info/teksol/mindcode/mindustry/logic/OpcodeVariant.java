@@ -48,7 +48,7 @@ public class OpcodeVariant {
     public FunctionMapping getFunctionMapping() {
         return functionMapping;
     }
-    public static enum FunctionMapping {
+    public enum FunctionMapping {
         NONE,       // No mapping
         FUNC,       // Mapping to function
         PROP,       // Mapping to property access - block.method(arguments)

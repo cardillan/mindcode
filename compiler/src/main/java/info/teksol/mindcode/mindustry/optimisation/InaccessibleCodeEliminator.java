@@ -17,13 +17,13 @@ import java.util.stream.Stream;
 // 3. User defined functions which are called from an inaccessible region
 //
 // Instruction removal is done in loops until no instructions are removed. This way entire branches
-// of inaccessible code (ie. code inside the while false ... end statement) should be eliminated,
+// of inaccessible code (i.e. code inside the while false ... end statement) should be eliminated,
 // assuming the unconditional jump normalization optimizer was on the pipeline.
 // Labels - even inactive ones - are never removed.
-class InaccesibleCodeEliminator extends GlobalOptimizer {
+class InaccessibleCodeEliminator extends GlobalOptimizer {
     private Set<String> activeLabels = new HashSet<>();
 
-    public InaccesibleCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+    public InaccessibleCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);
     }
 

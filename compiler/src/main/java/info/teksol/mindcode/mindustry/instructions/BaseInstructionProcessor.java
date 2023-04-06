@@ -307,7 +307,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
      * Returns list of argument types based on instruction opcode and instruction variant. The variant of the
      * instruction is determined by inspecting its arguments.
      *
-     * @param opcode
+     * @param opcode opcode of the instruction
      * @param arguments arguments to the instruction
      * @return list of types of given arguments
      */

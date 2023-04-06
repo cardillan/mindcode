@@ -51,8 +51,8 @@ abstract class BaseOptimizer implements Optimizer {
         }
     }
 
-    protected void emitMessage(MessageLevel level, String fornat, Object... args) {
-        messagesRecipient.accept(new CompilerMessage(level, String.format(fornat, args)));
+    protected void emitMessage(MessageLevel level, String format, Object... args) {
+        messagesRecipient.accept(new CompilerMessage(level, String.format(format, args)));
     }
     
     protected final LogicInstruction createInstruction(Opcode opcode, String... args) {

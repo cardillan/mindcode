@@ -56,7 +56,7 @@ public enum Opcode {
     private final boolean virtual;
     private final int size;
 
-    private Opcode(String opcode, String description) {
+    Opcode(String opcode, String description) {
         this.opcode = opcode;
         this.description = description;
         this.additionalPrintArguments = 0;
@@ -64,7 +64,7 @@ public enum Opcode {
         this.size = 1;
     }
     
-    private Opcode(String opcode, String description, int additionalPrintArguments) {
+    Opcode(String opcode, String description, int additionalPrintArguments) {
         this.opcode = opcode;
         this.description = description;
         this.additionalPrintArguments = additionalPrintArguments;
@@ -72,7 +72,7 @@ public enum Opcode {
         this.size = 1;
     }
 
-    private Opcode(String opcode, int size) {
+    Opcode(String opcode, int size) {
         this.opcode = opcode;
         this.description = "Virtual instruction.";
         this.additionalPrintArguments = 0;

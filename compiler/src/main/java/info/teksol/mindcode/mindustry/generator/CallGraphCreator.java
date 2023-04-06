@@ -42,7 +42,7 @@ public class CallGraphCreator  {
         // Creating function structure
         CallGraph graph = new CallGraph(allocatedStack);
         functions.values().forEach(graph::addFunction);
-        callMap.forEach((k, v) -> graph.addFunctionCalls(k, v));
+        callMap.forEach(graph::addFunctionCalls);
 
         graph.buildCallGraph(instructionProcessor);
 

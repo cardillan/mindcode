@@ -14,26 +14,26 @@ import java.util.stream.Collectors;
  * Removes unnecessary function parameters and local variables (replaces them by the argument/value assigned to them).
  * Significantly improves inline functions, but seldom might help with other functions as well. The optimizer
  * processes individual functions (inline and out-of-line) one by one and searches for SET instructions assigning
- * a value to a variable (ie. "set target value") and checks these preconditions are met:
- *
+ * a value to a variable (i.e. "set target value") and checks these preconditions are met:
+ * <p>
  * 1. The target variable is a local variable or parameter -- has the function prefix followed by an underscore,
- *    eg. "__fn0_". This excludes __fnXretaddr and __fnXretval variables, which must be preserved.
- *
- * 2. The target variable is modified exactly once, ie. there isn't any other instruction besides the original SET
+ *    e.g. "__fn0_". This excludes __fnXretaddr and __fnXretval variables, which must be preserved.
+ * <p>
+ * 2. The target variable is modified exactly once, i.e. there isn't any other instruction besides the original SET
  *    instruction which would modify the variable. This includes push/pop instructions, but if those are unnecessary,
  *    they would be already removed by prior optimizers.
- *
- * 3. The value being assigned to the target variable is not volatile (eg. @time, @tick, @counter etc.) and is not
+ * <p>
+ * 3. The value being assigned to the target variable is not volatile (e.g. @time, @tick, @counter etc.) and is not
  *    modified anywhere in the function.
- *
+ * <p>
  * 4. If the function contains a CALL instruction, the value is not a global variable. Global variables might be
  *    modified by the called function. (Block names, while technically also global, are not affected, as these are
  *    effectively constant.)
- *
+ * <p>
  * When the conditions are met, the following happens:
  *  i) The original instruction assigning value to the target variable is removed.
  * ii) Every remaining occurrence of target variable is replaced with the assigned value.
- *
+ * <p>
  * Functions are located in the code using the entry and exit labels marked with function prefix.
  */
 class FunctionParameterOptimizer extends GlobalOptimizer {
@@ -62,7 +62,7 @@ class FunctionParameterOptimizer extends GlobalOptimizer {
 
         // Count the number of times each variable is modified in the function
         Map<String, Long> modifications = function.stream()
-                .flatMap(ix -> instructionProcessor.getTypedArguments(ix))
+                .flatMap(instructionProcessor::getTypedArguments)
                 .filter(a -> a.getArgumentType().isOutput())
                 .map(TypedArgument::getValue)
                 .collect(Collectors.groupingBy(a -> a, Collectors.counting()));

@@ -40,7 +40,7 @@ Mindcode supports many high-level constructs: while loops, inline calculations, 
 
 Some time ago, I saw a Mindustry Logic script here that ran over a region and upgraded any copper conveyors to titanium
 ones. Well, I wrote a version of that script, in Mindcode. It implements a finite state machine to handle the
-complexity. The Mindcode version is 166 lines, including a dozen or more lines of comments, while the the Mindustry
+complexity. The Mindcode version is 166 lines, including a dozen or more lines of comments, while the Mindustry
 Logic version of that script is 241 lines of dense code, with no comments. I encourage you to view the upgrade copper
 conveyors to titanium sample script.
 
@@ -69,7 +69,7 @@ If you want to contact me, please leave a message here, or put a comment in your
 
 Of course, this is the first ever version! Some things that are missing or are not finished at this time are:
 
-* Radar, Unit Radar and Unit Locate are uninplemented
+* Radar, Unit Radar and Unit Locate are unimplemented
 * Draw and Drawflush are unimplemented
 * Many optimizations are still possible, when generating Mindustry Logic
 * Some form of user manual would be nice!

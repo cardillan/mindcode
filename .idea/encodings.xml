@@ -11,7 +11,6 @@
     <file url="file://$PROJECT_DIR$/webapp" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/webapp/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/webapp/src/main/resources" charset="UTF-8" />
-    <file url="file://$APPLICATION_HOME_DIR$/jbr/bin/src/main/java" charset="UTF-8" />
-    <file url="file://$APPLICATION_HOME_DIR$/jbr/bin/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

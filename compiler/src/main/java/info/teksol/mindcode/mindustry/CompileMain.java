@@ -1,6 +1,5 @@
 package info.teksol.mindcode.mindustry;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
 import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
 import info.teksol.mindcode.mindustry.optimisation.Optimisation;
@@ -12,6 +11,7 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Stream;
@@ -182,7 +182,7 @@ public class CompileMain {
             System.err.printf("  %c: %s%n", op.getFlag(), op.getDescription());
         }
         Optimisation op = Optimisation.values()[0];
-        System.err.printf("%nUse '-' to negate selection, eg. -o-%c uses all optimisation except %s.%n%n", op.getFlag(), op);
+        System.err.printf("%nUse '-' to negate selection, e.g. -o-%c uses all optimisation except %s.%n%n", op.getFlag(), op);
         System.exit(exitCode);
     }
 }

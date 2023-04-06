@@ -24,7 +24,7 @@ class InputTempEliminator extends GlobalOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        // Cannot use iterations due to modifications of the the underlying list in the loop
+        // Cannot use iterations due to modifications of the underlying list in the loop
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
             LogicInstruction instruction = it.next();
             if (!instruction.isSet()) continue;

@@ -23,7 +23,7 @@ class OutputTempEliminator extends GlobalOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        // Cannot use iterations due to modifications of the the underlying list in the loop
+        // Cannot use iterations due to modifications of the underlying list in the loop
         for (int index  = 1; index < program.size(); index++)  {
             LogicInstruction current = program.get(index);
             if (!current.isSet()) continue;

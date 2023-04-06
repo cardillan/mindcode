@@ -1,7 +1,7 @@
 # Functions
 
 Mindcode allows you to call existing functions or create new ones.
-Functions are called by specifying a function name and placing parameters in parenthesis.
+Functions are called by specifying a function name and placing parameters in parentheses.
 The parenthesis must be used even if the function has no parameters.
 
 ```
@@ -44,11 +44,11 @@ Mindcode instead creates separate functions, `applyStatus()` and `clearStatus()`
 There are several types of parameters a function can have:
 * _Input parameters_: these parameters will accept any expression, including variables, as arguments. 
   Some instructions perform an operation on a linked block, which is passed as an argument to one of instruction parameters.
-  In these cases, the instruction can be mapped to a method called on the given block, eg. `block.shoot(x, y, doShoot)`
+  In these cases, the instruction can be mapped to a method called on the given block, e.g. `block.shoot(x, y, doShoot)`
   translates to `control shoot block x y doShoot 0`. For some instructions, the instruction can be invoked as a function
   or as a method (`printflush(message1)` or `message1.printflush()`). All existing mappings are shown in the function reference above.
 * _Output parameters_: one of output parameters of the instruction is always mapped to the return value of the function,
-  eg. `block = getlink(linkNum)` translates to instruction `getlink block linkNum`.
+  e.g. `block = getlink(linkNum)` translates to instruction `getlink block linkNum`.
   If the instruction provides more than one output parameters, the remaining ones become parameters of the function.
   Output parameters are typically optional, if you aren't interested in a particular value returned by the instruction,
   you can omit the argument (only arguments at the end of the argument list can be omitted.)
@@ -109,20 +109,20 @@ printflush(message1)
 
 The `printf` function takes a string as its first argument.
 It then looks for the `$` characters and replaces them with values like this:
-* If the `$` character is followed by a variable name, the variable is printed (external variables, eg. `$X`, aren't supported).
+* If the `$` character is followed by a variable name, the variable is printed (external variables, e.g. `$X`, aren't supported).
 * If the `$` is not followed by a variable name, next argument from the argument list is printed.
 * To separate the variable name from the rest of the text, enclose the name in curly braces: `${name}`.
 This is not necessary if the next character cannot be part of a variable name.
 `${}` can be used to place an argument from the argument list immediately followed by some text.
 * To print the `$` character, use `\$`.
 
-|`printf()` call|is the same as|
-|---------------|--------------|
-|`printf("$@unit at position $x, $y\n")`|`println(@unit, " at position ", x, ", ", y)`|
-|`printf("Time: $ sec, increment: $\n", floor(@second), current - last)`|`println("Time: ", floor(@second), " sec, increment: ", current - last)`|
-|`printf("Coordinates: ${real}+${imag}i")`|`print("Coordinates: ", real, "+", imag, "i")`|
-|`printf("Price: \$$price")`|`print("Price: $", price)`|
-|`printf("Speed: ${}m/s", distance / time)`|`print("Speed: ", distance / time, "m/s")`|
+| `printf()` call                                                         | is the same as                                                           |
+|-------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| `printf("$@unit at position $x, $y\n")`                                 | `println(@unit, " at position ", x, ", ", y)`                            |
+| `printf("Time: $ sec, increment: $\n", floor(@second), current - last)` | `println("Time: ", floor(@second), " sec, increment: ", current - last)` |
+| `printf("Coordinates: ${real}+${imag}i")`                               | `print("Coordinates: ", real, "+", imag, "i")`                           |
+| `printf("Price: \$$price")`                                             | `print("Price: $", price)`                                               |
+| `printf("Speed: ${}m/s", distance / time)`                              | `print("Speed: ", distance / time, "m/s")`                               |
 
 The function was inspired by string interpolation in Ruby, but there are differences.
 Firstly, the first argument to `printf` must be a string constant, as the formatting takes place at compile time

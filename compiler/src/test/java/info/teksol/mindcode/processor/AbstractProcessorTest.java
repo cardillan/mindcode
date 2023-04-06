@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AbstractProcessorTest extends AbstractGeneratorTest {
 
     // Prevent unit tests hanging due to possible endless loops in generated code
-    protected int MAX_STEPS = 1000000;
+    protected final int MAX_STEPS = 1000000;
 
     private TestInfo testInfo;
 

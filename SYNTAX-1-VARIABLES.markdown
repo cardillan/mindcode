@@ -53,7 +53,7 @@ end
 both the `DEBUG` variable and the debugging code is compiled as-is, even if the `DEBUG` variable is not changed anywhere else in the code.
 You can therefore assign `true` to the variable and activate the debugging code after pasting it to Mindustry processor.
 
-(Note: unused main variables, ie. variables that are never read, can get removed from the compiled code.
+(Note: unused main variables, i.e. variables that are never read, can get removed from the compiled code.
 This is why we had to include `print(COUNT, WARNING, ITEM)` in the example above.)
 
 # Local variables
@@ -66,7 +66,7 @@ def foo(x)
 end
 ```
 
-both `x` and `y` are local variables, not accessible outside of the function `foo`.
+both `x` and `y` are local variables, not accessible outside the function `foo`.
 
 # Global variables
 
@@ -91,12 +91,12 @@ printflush(message1)
 displays `20, 5` on the `message1` block in Mindustry world (from now on, we'll omit the `printflush(message1)` in examples),
 since both `x` and `local` in the `foo` function are local variables and therefore distinct from `x` and `local` in the main program body.
 
-Using global variables as function parameters (eg. `def foo(Z) ... end`) is not allowed.
+Using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed.
 
 # External memory
 
 Mindcode supports storing variables in external memory (memory cells or memory banks linked to the processor).
-These variables are stored independently from the processor and can be used to share values between processors,
+These variables are stored independently of the processor and can be used to share values between processors,
 or to keep values even when the processor is destroyed or its code recompiled.
 
 On the other hand, only numeric values can be stored in external memory.
@@ -193,7 +193,7 @@ Cell/Memory Bank.
 
 ## Stack
 
-When using recursive functions, some of the local variables and parameters may have to be stored on a stack.
+When using recursive functions, some of their local variables and parameters may have to be stored on a stack.
 As Mindustry Logic doesn't provide a built-in stack, external memory is used instead. This places the same limitations
 on local variables and parameters of recursive functions as on arrays and external variables (that is, only numeric values are supported).
 
@@ -211,7 +211,7 @@ you don't need to worry about your functions not supporting non-numeric variable
 
 ## Heap and stack indirection
 
-When you build your Mindcode scripts, the actual Memory Cell and Memory Bank that you use may be different than the ones
+When you build your Mindcode scripts, the actual Memory Cell and Memory Bank that you use may be different from the ones
 you use when playing the game. To that end, you also have the option of referencing your heap and stack through the use
 of a variable, like this:
 
@@ -260,7 +260,7 @@ The only way to assign a new unit to this variable is to use the `ubind()` funct
 All unit control commands are sent to this unit.
 
 It is possible to store the value of `@unit` in another variable, but the unit cannot be controlled through that variable.
-Just properties of the unit (eg. `dead`) can be read using another variable, and it can be compared for identity:
+Just properties of the unit (e.g. `dead`) can be read using another variable, and it can be compared for identity:
 
 ```
 ubind(@poly)
@@ -273,10 +273,10 @@ end
 
 # Linked blocks
 
-When a block/building (eg. a factory, a turret or a memory cell) is linked to a processor,
+When a block/building (e.g. a factory, a turret or a memory cell) is linked to a processor,
 an object representing the linked blocks is created.
 This object is named using the short name of the linked block and an integer index, 
-eg. `cell1`, `switch3` or `smelter16`.
+e.g. `cell1`, `switch3` or `smelter16`.
 These objects allow the code to directly control or query linked blocks.
 Names of linked blocks are reserved and cannot be used by any variable.
 If a variable with the same name existed earlier, it is removed from the processor.
@@ -399,7 +399,7 @@ Constants are global, even if their names contain lower-case characters.
 The value assigned to them must be either a numeric, boolean or text literal,
 or an expression whose value can be computed at compile time (basically, you can't use a variable there).
 Compile-time evaluation uses the same rules as Mindustry Logic,
-ie. `const ERROR = 1 / 0` is a valid constant declaration which creates a constant `ERROR` with a value of `null`.
+i.e. `const ERROR = 1 / 0` is a valid constant declaration which creates a constant `ERROR` with a value of `null`.
 
 A name used for a constant cannot be used for a global or local variable.
 
