@@ -4,30 +4,34 @@ import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
+
 import java.util.ArrayList;
 import java.util.List;
 
-// This optimizer detects situations where a conditional jump skips a following, unconditional one and replaces it
-// with a single conditional jump with a reversed condition and a target of the second jump. Example:
-//
-// jump __label0 equal __tmp9 false
-// jump __label1
-// label __label0
-//
-// will be turned to
-//
-// jump __label1 notEqual __tmp9 false
-//
-// Optimization won't be done if the condition doesn't have an inverse (i.e. ===).
-//
-// These sequences of instructions may arise when using break or continue statements:
-//
-// while true
-//   ...
-//   if not_alive
-//     break
-//   end
-// end
+/**
+ * This optimizer detects situations where a conditional jump skips a following, unconditional one and replaces it
+ * with a single conditional jump with a reversed condition and the target of the second jump. Example:
+ * <pre>{@code
+ * jump __label0 equal __tmp9 false
+ * jump __label1
+ * label __label0
+ * }</pre>
+ * will be turned to
+ * <pre>{@code
+ * jump __label1 notEqual __tmp9 false
+ * }</pre>
+ * Optimization won't be done if the condition doesn't have an inverse (i.e. {@code ===}).
+ * <p>
+ * These sequences of instructions may arise when using break or continue statements:
+ * <pre>{@code
+ * while true
+ *     ...
+ *     if not_alive
+ *         break
+ *     end
+ * end
+ * }</pre>
+ */
 public class JumpOverJumpEliminator extends PipelinedOptimizer {
 
     public JumpOverJumpEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {

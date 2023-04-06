@@ -12,12 +12,16 @@ import java.util.Set;
 /**
  * If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
  * to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
- * - end instruction is handled identically to jump 0 always
- * - conditional jumps in the jump chain are followed if
- *    (i) their condition is identical to the condition the first jump, and
- *   (ii) the condition arguments do not contain a volatile variable (@time, @tick, @counter etc.)
- * <p>
- * No instructions are removed or added except a label at the start of the program.
+ * <ul>
+ * <li>end instruction is handled identically to jump 0 always,</li>
+ * <li>conditional jumps in the jump chain are followed if:</li>
+ *     <ul>
+ *         <li>their condition is identical to the condition the first jump, and</li>
+ *         <li>the condition arguments do not contain a volatile variable ({@code @time}, {@code @tick},
+ *         {@code @counter} etc.)</li>
+ *     </ul>
+ * </ul>
+ * No instructions are removed or added except possibly a label at the start of the program.
 */
 class PropagateJumpTargets extends GlobalOptimizer {
     private static final String FIRST_LABEL = "__start__";

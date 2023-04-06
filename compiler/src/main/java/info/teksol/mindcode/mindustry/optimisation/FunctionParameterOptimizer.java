@@ -13,27 +13,25 @@ import java.util.stream.Collectors;
 /**
  * Removes unnecessary function parameters and local variables (replaces them by the argument/value assigned to them).
  * Significantly improves inline functions, but seldom might help with other functions as well. The optimizer
- * processes individual functions (inline and out-of-line) one by one and searches for SET instructions assigning
- * a value to a variable (i.e. "set target value") and checks these preconditions are met:
- * <p>
- * 1. The target variable is a local variable or parameter -- has the function prefix followed by an underscore,
- *    e.g. "__fn0_". This excludes __fnXretaddr and __fnXretval variables, which must be preserved.
- * <p>
- * 2. The target variable is modified exactly once, i.e. there isn't any other instruction besides the original SET
- *    instruction which would modify the variable. This includes push/pop instructions, but if those are unnecessary,
- *    they would be already removed by prior optimizers.
- * <p>
- * 3. The value being assigned to the target variable is not volatile (e.g. @time, @tick, @counter etc.) and is not
- *    modified anywhere in the function.
- * <p>
- * 4. If the function contains a CALL instruction, the value is not a global variable. Global variables might be
- *    modified by the called function. (Block names, while technically also global, are not affected, as these are
- *    effectively constant.)
- * <p>
- * When the conditions are met, the following happens:
- *  i) The original instruction assigning value to the target variable is removed.
- * ii) Every remaining occurrence of target variable is replaced with the assigned value.
- * <p>
+ * processes individual functions (inline and out-of-line) one by one and searches for {@code set} instructions
+ * assigning a value to a variable (i.e. {@code set target value}) and checks these preconditions are met:
+ * <ol>
+ * <li>The target variable is a local variable or parameter -- has the function prefix followed by an underscore,
+ * e.g. {@code __fn0_}. This excludes {@code __fnXretaddr} and {@code __fnXretval} variables, which must be preserved.</li>
+ * <li>The target variable is modified exactly once, i.e. there isn't any other instruction besides the original
+ * {@code set} instruction which would modify the variable. This includes push/pop instructions, but if those are
+ * unnecessary, they would be already removed by prior optimizers.</li>
+ * <li>The value being assigned to the target variable is not volatile (e.g. {@code @time}, {@code @tick},
+ * {@code @counter} etc.) and is not modified anywhere in the function.</li>
+ * <li>If the function contains a {@code call} instruction, the value is not a global variable. Global variables
+ * might be modified by the called function. (Block names, while technically also global, are not affected, as these
+ * are effectively constant.)</li>
+ * </ol>
+ * When these preconditions are met, the following happens:
+ * <ul>
+ * <li>The original instruction assigning value to the target variable is removed.</li>
+ * <li>Every remaining occurrence of target variable is replaced with the assigned value.</li>
+ * </ul>
  * Functions are located in the code using the entry and exit labels marked with function prefix.
  */
 class FunctionParameterOptimizer extends GlobalOptimizer {

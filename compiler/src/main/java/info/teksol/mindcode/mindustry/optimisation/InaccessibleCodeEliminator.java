@@ -3,6 +3,7 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -10,16 +11,19 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// This optimizer removes instructions that are inaccessible.
-// There are several ways inaccessible instructions might appear:
-// 1. Jump target propagation can create inaccessible jumps that are no longer targeted
-// 2. User-created inaccessible regions, such as while false ... end
-// 3. User defined functions which are called from an inaccessible region
-//
-// Instruction removal is done in loops until no instructions are removed. This way entire branches
-// of inaccessible code (i.e. code inside the while false ... end statement) should be eliminated,
-// assuming the unconditional jump normalization optimizer was on the pipeline.
-// Labels - even inactive ones - are never removed.
+/**
+ * This optimizer removes instructions that are inaccessible.
+ * There are several ways inaccessible instructions might appear:
+ * <ol>
+ * <li>Jump target propagation can create inaccessible jumps that are no longer targeted</li>
+ * <li>User-created inaccessible regions, such as {@code while false ... end}</li>
+ * <li>User defined functions which are called from an inaccessible region</li>
+ * </ol>
+ * Instruction removal is done in loops until no instructions are removed. This way entire branches
+ * of inaccessible code (i.e. code inside the {@code while false ... end} statement) should be eliminated,
+ * assuming the unconditional jump normalization optimizer was on the pipeline.
+ * Labels - even inactive ones - are never removed.
+ */
 class InaccessibleCodeEliminator extends GlobalOptimizer {
     private Set<String> activeLabels = new HashSet<>();
 
@@ -33,14 +37,14 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
         removeInaccessibleInstructions();
         return true;
     }
-    
+
     private void findActiveLabels() {
         activeLabels = program.stream()
                 .flatMap(this::extractLabelReference)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
     }
-    
+
     private Stream<String> extractLabelReference(LogicInstruction instruction) {
         if (instruction.isJump()) {
             return Stream.of(instruction.getArg(0));
@@ -51,10 +55,10 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
         } else if (instruction.isCall()) {
             return Stream.of(instruction.getArg(1), instruction.getArg(2));
         }
-        
+
         return null;
     }
-    
+
     private void removeInaccessibleInstructions() {
         boolean accessible = true;
 
@@ -69,8 +73,7 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
                 } else if (instruction.isEnd()) {
                     accessible = false;
                 }
-            }
-            else {
+            } else {
                 if (instruction.isLabel()) {
                     // An active jump to here makes next instruction accessible
                     accessible = activeLabels.contains(instruction.getArgs().get(0));

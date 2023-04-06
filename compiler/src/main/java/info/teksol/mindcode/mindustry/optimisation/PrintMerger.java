@@ -3,36 +3,39 @@ package info.teksol.mindcode.mindustry.optimisation;
 import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
 import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
+
 import java.util.ArrayList;
 import java.util.List;
 
-// A simple optimizer which merges together print instructions with string literal arguments.
-// The print instructions will get merged even if they aren't consecutive, assuming there aren't instructions
-// that could break the print sequence (jump, label or print [variable]).
-// Typical sequence of instructions targeted by this optimizer is:
-//
-// print count
-// print "\n"
-// op div ratio count total
-// op mul ratio ratio 100
-// print "Used: "
-// print ratio
-// print "%"
-//
-// Which will get turned to
-//
-// print count
-// op div ratio count total
-// op mul ratio ratio 100
-// print "\nUsed: "
-// print ratio
-// print "%"
-//
+/**
+ * A simple optimizer which merges together print instructions with string literal arguments.
+ * The print instructions will get merged even if they aren't consecutive, assuming there aren't instructions
+ * that could break the print sequence ({@code jump}, {@code label} or {@code print [variable]}).
+ * Typical sequence of instructions targeted by this optimizer is:
+ * <pre>{@code
+ * print count
+ * print "\n"
+ * op div ratio count total
+ * op mul ratio ratio 100
+ * print "Used: "
+ * print ratio
+ * print "%"
+ * }</pre>
+ * Which will get turned to
+ * <pre>{@code
+ * print count
+ * op div ratio count total
+ * op mul ratio ratio 100
+ * print "\nUsed: "
+ * print ratio
+ * print "%"
+ * }</pre>
+ */
 class PrintMerger extends PipelinedOptimizer {
     public PrintMerger(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);
     }
-    
+
     @Override
     protected State initialState() {
         return new EmptyState();
@@ -58,11 +61,11 @@ class PrintMerger extends PipelinedOptimizer {
     private final class ExpectPrint implements State {
         private final LogicInstruction firstPrint;
         private final List<LogicInstruction> operations = new ArrayList<>();
-        
+
         private ExpectPrint(LogicInstruction instruction) {
             firstPrint = instruction;
         }
-        
+
         @Override
         public State emit(LogicInstruction instruction) {
             // Do not merge across jumps and labels
@@ -71,7 +74,7 @@ class PrintMerger extends PipelinedOptimizer {
                 operations.add(instruction);
                 return flush();
             }
-            
+
             if (instruction.isPrint()) {
                 // Only merge string literals
                 if (instruction.getArgs().get(0).startsWith("\"")) {
@@ -87,12 +90,12 @@ class PrintMerger extends PipelinedOptimizer {
                         return new ExpectPrint(instruction);
                     }
                 }
-                
+
                 // Any other print breaks the sequence and cannot be merged
                 operations.add(instruction);
                 return flush();
             }
-            
+
             operations.add(instruction);
             return this;
         }
@@ -106,7 +109,7 @@ class PrintMerger extends PipelinedOptimizer {
             if (str1.startsWith("\"") && str1.endsWith("\"") && str2.startsWith("\"") && str2.endsWith("\"")) {
                 return createInstruction(first.getOpcode(), str1.substring(0, str1.length() - 1) + str2.substring(1));
             }
-            
+
             return null;
         }
 

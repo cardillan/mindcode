@@ -5,17 +5,20 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import java.util.List;
 
-// Generic optimizer to remove all assignments to temporary variables that carry over the output value
-// of the preceding instruction. The set instruction is removed, while the preceding instruction is updated
-// to replace the temp variable with the target variable used in the set statement.
-// The optimization is performed only when the following conditions are met:
-// 1. The set instruction assigns from a __tmp variable.
-// 2. The __tmp variable is used in exactly one other instruction. The other instruction
-//    immediately precedes the instruction producing the __tmp variable
-// 3. All arguments of the other instruction referencing the __tmp variable are output ones.
-//
-// Push and pop instructions are ignored by the above algorithm. Push/pop instructions of any eliminated variables
-// are removed by the StackUsageOptimizer later on.
+/**
+ * Generic optimizer to remove all assignments to temporary variables that carry over the output value
+ * of the preceding instruction. The {@code set} instruction is removed, while the preceding instruction is updated
+ * to replace the temp variable with the target variable used in the {@code set} instruction.
+ * The optimization is performed only when the following conditions are met:
+ * <ol>
+ * <li>The set instruction assigns from a {@code __tmp} variable.</li>
+ * <li>The {@code __tmp} variable is used in exactly one other instruction, which immediately precedes
+ * the instruction producing the {@code __tmp} variable</li>
+ * <li>All arguments of the other instruction referencing the {@code __tmp} variable are output ones.</li>
+ * </ol>
+ * Push and pop instructions are ignored by this optimizer. Push/pop instructions of any eliminated variables
+ * are removed by the StackUsageOptimizer later on.
+ */
 class OutputTempEliminator extends GlobalOptimizer {
     public OutputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);

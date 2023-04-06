@@ -6,17 +6,23 @@ import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
 import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
 import info.teksol.mindcode.mindustry.logic.Opcode;
 
-// Turns the following sequence of instructions:
-//    op <comparison> var1 A B
-//    jump label notEqual var2 false
-//
-// into
-//    jump label <comparison> A B
-//
-// Requirements:
-// 1. jump is a notEqual comparison to false
-// 2. var1 and var2 are identical
-// 3. var1 is a __tmp variable
+/**
+ * Turns the following sequence of instructions:
+ * <pre>{@code
+ *   op <comparison> var1 A B
+ *   jump label notEqual var2 false
+ * }</pre>
+ * into
+ * <pre>{@code
+ *   jump label <comparison> A B
+ * }</pre>
+ * Requirements:
+ * <ol>
+ * <li>jump condition is a notEqual comparison to {@code false}</li>
+ * <li>{@code var1} and {@code var2} are identical</li>
+ * <li>{@code var1} is a {@code __tmp} variable</li>
+ * </ol>
+ */
 public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
     ImprovePositiveConditionalJumps(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {

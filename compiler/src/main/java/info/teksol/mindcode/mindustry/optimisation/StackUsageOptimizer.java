@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 /**
  * Optimizes the stack usage -- eliminates push/pop instruction pairs determined to be unnecessary. Several
  * independent optimizations are performed:
- *
  * <ul><li>
  * Eliminates push/pop instruction for variables that are not used anywhere else (after being eliminated
  * by other optimizers). The optimization is done globally, in a single pass across the entire program.
@@ -68,7 +67,7 @@ public class StackUsageOptimizer extends GlobalOptimizer {
                 // List of variables read in the code block, except push/pop operations
                 Set<String> readVariables = codeBlock.stream()
                         .filter(ix -> !ix.isPushOrPop())
-                        .flatMap(ix -> instructionProcessor.getTypedArguments(ix))
+                        .flatMap(instructionProcessor::getTypedArguments)
                         .filter(arg -> arg.getArgumentType().isInput())
                         .map(TypedArgument::getValue)
                         .collect(Collectors.toSet());
@@ -87,12 +86,16 @@ public class StackUsageOptimizer extends GlobalOptimizer {
     }
 
     private boolean isLinear(List<LogicInstruction> codeBlock) {
-        Set<String> localLabels = codeBlock.stream().filter(LogicInstruction::isLabel).map(ix -> ix.getArg(0)).collect(Collectors.toSet());
+        Set<String> localLabels = codeBlock.stream()
+                .filter(LogicInstruction::isLabel)
+                .map(ix -> ix.getArg(0))
+                .collect(Collectors.toSet());
 
         // Code is linear if every jump targets a local label
         return codeBlock.stream()
                 .filter(ix -> ix.isJump() || ix.isGoto())
-                .flatMap(this::getPossibleTargetLabels).allMatch(localLabels::contains);
+                .flatMap(this::getPossibleTargetLabels)
+                .allMatch(localLabels::contains);
     }
 
     private Stream<String> getPossibleTargetLabels(LogicInstruction instruction) {
