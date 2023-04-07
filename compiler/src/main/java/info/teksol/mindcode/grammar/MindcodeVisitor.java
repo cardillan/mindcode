@@ -107,6 +107,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral_null(MindcodeParser.Literal_nullContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code compiler_directive}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCompiler_directive(MindcodeParser.Compiler_directiveContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code literal_minus}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -274,6 +281,20 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBinop_bitwise_and(MindcodeParser.Binop_bitwise_andContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code numeric_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumeric_directive(MindcodeParser.Numeric_directiveContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code string_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitString_directive(MindcodeParser.String_directiveContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#indirectpropaccess}.
 	 * @param ctx the parse tree

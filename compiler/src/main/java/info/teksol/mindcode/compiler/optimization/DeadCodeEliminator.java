@@ -74,7 +74,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         writes.clear();
         // Instruction pointer is implicitly read - writes to it must be preserved
         reads.add("@counter"); 
-        // Same for stack pointer: the push/pop/call/return instructions read __sp implicitly. 
+        // Same for stack pointer: the push/pop/call/return instructions operate on __sp implicitly.
         // The initial write to __sp must be preserved
         reads.add(instructionProcessor.getStackPointer());
         program.stream().filter(ix -> !ix.isPushOrPop()).forEach(this::examineInstruction);
@@ -84,11 +84,13 @@ class DeadCodeEliminator extends GlobalOptimizer {
         final Set<String> uselessWrites = new HashSet<>(writes.keySet());
         uselessWrites.removeAll(reads);
         for (String key : uselessWrites) {
-            // Instruction with at most one output argument are removed immediately
-            // Other instructions are inspected further to find out they're fully unused
-            writes.get(key).stream()
-                    .filter(ix -> instructionProcessor.getTotalOutputs(ix) < 2 || allWritesUnread(ix))
-                    .forEach(program::remove);
+            if (key.startsWith("__") || level == OptimizationLevel.AGGRESSIVE) {
+                // Instruction with at most one output argument are removed immediately
+                // Other instructions are inspected further to find out they're fully unused
+                writes.get(key).stream()
+                        .filter(ix -> instructionProcessor.getTotalOutputs(ix) < 2 || allWritesUnread(ix))
+                        .forEach(program::remove);
+            }
         }
 
         eliminations.addAll(uselessWrites);

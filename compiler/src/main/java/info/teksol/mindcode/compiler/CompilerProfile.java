@@ -1,33 +1,42 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.compiler.optimization.Optimization;
-import java.util.EnumSet;
+
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CompilerProfile {
+    private final Map<Optimization, OptimizationLevel> levels;
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
-    private Set<Optimization> optimizations;
     private boolean printFinalCode = false;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
 
-    private CompilerProfile(Set<Optimization> optimizations) {
-        this.optimizations = optimizations;
+    private CompilerProfile(OptimizationLevel level) {
+        this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }
 
     public CompilerProfile(Optimization... optimizations) {
-        this.optimizations = Set.of(optimizations);
+        Set<Optimization> optimSet = Set.of(optimizations);
+        this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
+                o -> optimSet.contains(o) ? OptimizationLevel.AGGRESSIVE : OptimizationLevel.OFF));
     }
 
     public static CompilerProfile fullOptimizations() {
-        return new CompilerProfile(EnumSet.allOf(Optimization.class));
+        return new CompilerProfile(OptimizationLevel.AGGRESSIVE);
+    }
+
+    public static CompilerProfile standardOptimizations() {
+        return new CompilerProfile(OptimizationLevel.BASIC);
     }
 
     public static CompilerProfile noOptimizations() {
-        return new CompilerProfile(EnumSet.noneOf(Optimization.class));
+        return new CompilerProfile(OptimizationLevel.OFF);
     }
 
     public ProcessorVersion getProcessorVersion() {
@@ -43,12 +52,24 @@ public class CompilerProfile {
         this.processorEdition = processorEdition;
     }
 
-    public Set<Optimization> getOptimizations() {
-        return optimizations;
+    public OptimizationLevel getOptimizationLevel(Optimization optimization) {
+        return levels.getOrDefault(optimization, OptimizationLevel.OFF);
     }
 
-    public void setOptimizations(Set<Optimization> optimizations) {
-        this.optimizations = Set.copyOf(optimizations);
+    public void setOptimizationLevel(Optimization optimization, OptimizationLevel level) {
+        this.levels.put(optimization, level);
+    }
+
+    public Map<Optimization, OptimizationLevel> getOptimizationLevels() {
+        return Map.copyOf(levels);
+    }
+
+    public void setAllOptimizationLevels(OptimizationLevel level) {
+        Optimization.LIST.forEach(o -> levels.put(o, level));
+    }
+
+    public boolean optimizationsActive() {
+        return levels.values().stream().anyMatch(l -> l != OptimizationLevel.OFF);
     }
 
     public boolean isPrintFinalCode() {

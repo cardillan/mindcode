@@ -104,9 +104,13 @@ class PrintMerger extends PipelinedOptimizer {
         // If merge is not possible (the string constants are malformed), returns null.
         // Only checks for quotes on both ends of the string, doesn't check for proper quote escaping
         private LogicInstruction merge(LogicInstruction first, LogicInstruction second) {
+            final String q = "\"";
             String str1 = first.getArgs().get(0);
             String str2 = second.getArgs().get(0);
-            if (str1.startsWith("\"") && str1.endsWith("\"") && str2.startsWith("\"") && str2.endsWith("\"")) {
+            // Do not merge strings if the length is over 34 + 4 (2x pair of quotes), unless aggressive
+            // Only merge string constants
+            if ((str1.length() + str2.length() <= 38 || level == OptimizationLevel.AGGRESSIVE)
+                    && str1.startsWith(q) && str1.endsWith(q) && str2.startsWith(q) && str2.endsWith(q)) {
                 return createInstruction(first.getOpcode(), str1.substring(0, str1.length() - 1) + str2.substring(1));
             }
 

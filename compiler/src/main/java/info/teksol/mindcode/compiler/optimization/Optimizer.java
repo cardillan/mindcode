@@ -8,6 +8,8 @@ public interface Optimizer extends LogicInstructionPipeline {
 
     String getName();
 
+    void setLevel(OptimizationLevel level);
+
     void setDebugPrinter(DebugPrinter debugPrinter);
 
     void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient);

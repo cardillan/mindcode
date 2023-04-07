@@ -1,37 +1,107 @@
 # Compiler directives
 
 Mindcode allows you to specify some compiler parameters from the code using special `#set` commands.
-Most of these options can be alternatively specified as parameters of the command line compiler.
-The `#set` commands allow you to do the same from the web application.
+The basic syntax is `#set option = value`.
 
-The basic syntax is `#set option = value`. For some options, the value can actually be a comma separated list of values.
+Some of these options can be alternatively specified as parameters of the command line compiler.
 
-```
-#set target = 7
-#set DeadCodeEliminator = off 
-#set DeadCodeEliminator = on (normal)
-#set DeadCodeEliminator = aggressive
-@set optimization = off / on / aggressive
-#set volatile = none
-#set instruction_limit = 1000
-```
+Supported compiler directives are described below.
 
 ## Option `target`
 
 Use the `target` option to specify the Mindcode version:
 
 ```
-#set target = 6
+#set target = ML6
 ```
 
 Possible values for this option are:
-* `6`: compile for Mindcode Logic version 6
-* `7S`: compile for Mindcode Logic version 7 standard processors
-* `7W`: compile for Mindcode Logic version 7 world processor
+* `ML6`: compile for Mindcode Logic version 6
+* `ML7S`: compile for Mindcode Logic version 7 standard processors
+* `ML7W`: compile for Mindcode Logic version 7 world processor
 
-## Option `optimize`
+## Option `optimization`
 
-Use the `optimize` option to activate or deactivate various optimizations of the code.
+Use the `optimization` option set the optimization level of the compiler:
+
+```
+#set optimization = basic
+```
+
+Possible values for this option are:
+* `off`
+* `basic`
+* `aggressive`
+
+The `off` setting deactivates all optimizations. The `basic` setting performs most of the available optimizations.
+The `aggressive` optimizations performs all the available optimizations, even those that might not be wanted in some 
+contexts. For example, assignments to variables that aren't used anywhere else in the program will be removed with this
+setting. When compiling a code snippet just so you would see how Mindcode handles it:
+
+```
+x0 = 0.001
+y0 = 0.002
+x1 = x0 * x0 + y0 * y0
+x2 = 2 * x0 * y0
+```
+we get
+```
+set x0 0.001
+set y0 0.002
+op mul __tmp0 x0 x0
+op mul __tmp1 y0 y0
+op add x1 __tmp0 __tmp1
+op mul __tmp3 2 x0
+op mul x2 __tmp3 y0
+end
+```
+
+However, when compiling using the aggressive optimization level, things change considerably: 
+
+```
+#set optimization = aggressive
+x0 = 0.001
+y0 = 0.002
+x1 = x0 * x0 + y0 * y0
+x2 = 2 * x0 * y0
+```
+produces
+```
+end
+```
+
+None of the variables `x0`, `y0`, `x1` or `y1` is used for anything after being set up, and therefore all are eliminated.
+
+The default optimization level for the web application compiler is `basic`, for the command line compiler it is `aggressive`.
+
+## Individual optimization options
+
+It is possible to set the level of individual optimization tasks. Every optimization is assigned a name,
+and this name can be used in the compiler directive like this:
+
+```
+#set deadCodeElimination = aggressive
+```
+
+Not all optimizations support the `aggressive` level. For those the level `aggressive` is the same as `basic`.
+The complete list of available optimizations, including the option name for setting the level of givn optimization
+and availability of the aggressive optimization level is:
+
+| Optimization                                                    | Option                      | Aggressive |
+|-----------------------------------------------------------------|-----------------------------|:----------:|
+| [Jump normalization](#jump-normalization)                       | jumpNormalization           |     N      |
+| [Dead code elimination](#dead-code-elimination)                 | deadCodeElimination         |     Y      |
+| [Single step elimination](#single-step-elimination)             | singleStepElimination       |     N      |
+| [Temporary inputs elimination](#temporary-inputs-elimination)   | inputTempElimination        |     N      |
+| [Temporary outputs elimination](#temporary-outputs-elimination) | outputTempElimination       |     N      |
+| [Case expression optimization](#case-expression-optimization)   | caseExpressionOptimization  |     N      |
+| [Conditional jump optimization](#conditional-jump-optimization) | conditionalsOptimization    |     N      |
+| [Jump straightening](#jump-straightening)                       | jumpStraightening           |     N      |
+| [Jump threading](#jump-threading)                               | jumpThreading               |     N      |
+| [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessibleCodeElimination |     N      |
+| [Stack optimization](#stack-optimization)                       | stackOptimization           |     N      |
+| [Function call optimization](#function-call-optimization)       | functionCallOptimization    |     N      |
+| [Print merging](#print-merging)                                 | printMerging                |     Y      |
 
 # Compiler optimization
 
@@ -41,7 +111,7 @@ which can be removed or replaced by faster but equivalent ML code.
 The information on compiler optimizations is a bit technical.
 It might be useful if you're trying to better understand how Mindcode generates the ML code.
 
-## Conditional jumps normalization
+## Jump normalization
 
 This optimization handles conditional jumps whose condition is constant:
 * always false conditional jumps are removed,
@@ -58,44 +128,19 @@ If a variable is involved (e.g. `ACTIVE = false; while ACTIVE ...`) the jump won
 
 This optimization inspects the entire code and removes all instructions that write to variables,
 if none of the variables written to are actually read anywhere in the code.
-As a result, compiling code snippets can result in some instructions being unexpectedly removed.
-Let's say you want to see how the compiler handles certain complicated expression:
 
-```
-x0 = 0.001
-y0 = 0.002
-x1 = x0 * x0 + y0 * y0
-x2 = 2 * x0 * y0
-```
-
-and the compiler produces:
-
-```
-end
-```
-
-It's not broken -- it correctly removed code that doesn't have any effect to the rest of the program,
-which, in this case, happens to be all code. When turning off dead code elimination, we get the expected code:
-
-```
-set x0 0.001
-set y0 0.002
-op mul __tmp0 x0 x0
-op mul __tmp1 y0 y0
-op add x1 __tmp0 __tmp1
-op mul __tmp3 2 x0
-op mul x2 __tmp3 y0
-end
-```
+This optimization support `basic` and `aggressive` levels of optimization. On the `aggressive` level,
+the optimization removes all unused assignment, even assignments to main variables.
 
 Dead code eliminator also inspects your code and lists suspicious variables:
-* Unused variables: those are the variables that were eliminated.
+* Unused variables: those are the variables that were eliminated. On `basic` level, some unused variables
+  might remain undetected.
 * Uninitialized variables: those are variables that are read by the program, but never written to.
-(Mindcode doesn't - yet - detects situations where variable is read before it is first written to.)
+  (Mindcode doesn't - yet - detects situations where variable is read before it is first written to.)
 
 Both cases deserve closer inspection, as they might be a result of a typo in a variable name.
 
-## Single step jump elimination
+## Single step elimination
 
 The Mindcode compiler sometimes generates sequences of unconditional jumps where each jump targets the next instruction.
 This optimization finds them and removes all such jumps.
@@ -183,7 +228,7 @@ Requirements:
 3. `var1` is a `__tmp` variable
 4. `<comparison>` has an inverse
 
-## Jump over jump elimination
+## Jump straightening
 
 This optimization detects situations where a conditional jump skips a following, unconditional one and replaces it
 with a single conditional jump with a reversed condition and a target of the second jump. Example:
@@ -213,7 +258,7 @@ while true
 end
 ```
 
-## Jump target propagation
+## Jump threading
 
 If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
 to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
@@ -224,21 +269,19 @@ to the target of the second jump, repeated until the end of jump chain is reache
 
 No instructions are removed or added, but the execution of the code is faster.
 
-Note: this is a simplified form of jump threading optimization.
-
 ## Inaccessible code elimination
 
 This optimizer removes instructions that are inaccessible.
 There are several ways inaccessible instructions might appear:
-1. Jump target propagation can create inaccessible jumps that are no longer targeted
-2. User-created inaccessible regions, such as `while false ... end`
-3. User defined functions which are called from an inaccessible region
+1. Jump threading can create inaccessible jumps that are no longer targeted.
+2. User-created inaccessible regions, such as `while false ... end`.
+3. User defined functions which are called from an inaccessible region.
 
 Instruction removal is done in loops until no instructions are removed. This way entire branches
-of inaccessible code (i.e. code inside the `while false ... end` statement) should be eliminated,
-assuming the unconditional jump normalization optimizer was on the pipeline.
+of inaccessible code (i.e. all code inside the `while false ... end` statement) should be eliminated,
+assuming the unconditional jump normalization optimizer was also active.
 
-## Stack usage optimization
+## Stack optimization
 
 Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. Several
 independent optimizations are performed:
@@ -249,7 +292,7 @@ independent optimizations are performed:
   call and the end of the function is linear (doesn't contain jumps away from the code block -- function calls aren't
   considered) and the variable is not read in the code block, it is removed from the stack.
 
-## Function parameter optimization
+## Function call optimization
 
 This optimizer eliminates unnecessary function parameters and local variables (replaces them by the argument
 or value assigned to them). Significantly improves inline functions, but seldom might help with other functions
@@ -292,8 +335,13 @@ print("Items: ", items)
 print("\nTime: ", @time "\n")
 ```
 
-This optimization can create long string constants, but according to our tests these can be passed
+On `basic` level, the optimization won't merge print instructions if the resulting instruction would produce
+string longer than 34 characters (36 when counting the double quotes). On `aggressive` level, such instructions
+will be merged regardless. This can create long string constants, but according to our tests these can be pasted
 into Mindustry processors even if they're longer than what the Mindustry GUI allows to enter.
+
+If the string longer than 34 characters is already present because the source code contains such a long string
+constant, it is left as is regardless of optimizer level.
 
 ---
 

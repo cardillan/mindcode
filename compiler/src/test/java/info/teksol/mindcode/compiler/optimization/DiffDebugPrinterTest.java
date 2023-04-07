@@ -25,6 +25,10 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
             return "Dummy";
         }
 
+        @Override
+        public void setLevel(OptimizationLevel level) {
+        }
+
         @Override public void setDebugPrinter(DebugPrinter debugPrinter) { }
         @Override public void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient) { }
         @Override public void emit(LogicInstruction instruction) { }

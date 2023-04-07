@@ -439,6 +439,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitDirective(Directive node) {
+        // Do nothing - directives are preprocessed
+        return null;
+    }
+
+    @Override
     public String visitAssignment(Assignment node) {
         final String rvalue = visit(node.getValue());
 

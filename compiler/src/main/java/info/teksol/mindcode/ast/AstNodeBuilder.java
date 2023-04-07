@@ -9,11 +9,10 @@ import java.util.stream.Collectors;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static final String AST_PREFIX = "__ast";
-
+    private final Map<String, Integer> heapAllocations = new HashMap<>();
     private int temp;
     private HeapAllocation allocatedHeap;
     private StackAllocation allocatedStack;
-    private final Map<String, Integer> heapAllocations = new HashMap<>();
 
     public static Seq generate(MindcodeParser.ProgramContext program) {
         final AstNodeBuilder builder = new AstNodeBuilder();
@@ -47,6 +46,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         } else {
             return new NoOp();
         }
+    }
+
+    @Override
+    public AstNode visitNumeric_directive(MindcodeParser.Numeric_directiveContext ctx) {
+        return new Directive(ctx.option.getText(), ctx.value.getText());
+    }
+
+    @Override
+    public AstNode visitString_directive(MindcodeParser.String_directiveContext ctx) {
+        return new Directive(ctx.option.getText(), ctx.value.getText());
     }
 
     @Override

@@ -3,12 +3,14 @@ package info.teksol.mindcode.compiler;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,14 +28,13 @@ import org.antlr.v4.runtime.ANTLRErrorListener;
 
 public class MindcodeCompiler implements Compiler {
     private final CompilerProfile profile;
-    private final InstructionProcessor instructionProcessor;
+    private InstructionProcessor instructionProcessor;
 
     private final List<CompilerMessage> messages = new ArrayList<>();
     private final ANTLRErrorListener errorListener = new ErrorListener(messages);
 
-    MindcodeCompiler(CompilerProfile profile, InstructionProcessor instructionProcessor) {
+    MindcodeCompiler(CompilerProfile profile) {
         this.profile = profile;
-        this.instructionProcessor = instructionProcessor;
     }
 
     @Override
@@ -41,15 +42,15 @@ public class MindcodeCompiler implements Compiler {
         String instructions = "";
 
         try {
-            // 1: parse
             final Seq prog = parse(sourceCode);
             printParseTree(prog);
 
-            // 2: Compile to code
+            DirectiveProcessor.processDirectives(prog, profile);
+            instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(profile);
+
             List<LogicInstruction> result = generateCode(prog);
 
-            // 3: Optimize code
-            if (!profile.getOptimizations().isEmpty()) {
+            if (profile.optimizationsActive()) {
                 result = optimize(result);
             }
 
@@ -58,10 +59,8 @@ public class MindcodeCompiler implements Compiler {
                 debug(LogicInstructionPrinter.toString(instructionProcessor, result));
             }
 
-            // 4: Resolve symbolic labels
             result = LogicInstructionLabelResolver.resolve(instructionProcessor, result);
 
-            // 5: Convert to final output
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
         } catch (RuntimeException e) {
             if (profile.getDebugLevel() > 0) {
@@ -85,9 +84,7 @@ public class MindcodeCompiler implements Compiler {
         return AstNodeBuilder.generate(context);
     }
 
-    /**
-     * Prints the parse tree according to level
-     */
+    /** Prints the parse tree according to level */
     private void printParseTree(Seq prog) {
         if (profile.getParseTreeLevel() > 0) {
             debug("Parse tree:");
@@ -107,16 +104,16 @@ public class MindcodeCompiler implements Compiler {
 
     private List<LogicInstruction> optimize(List<LogicInstruction> program) {
         messages.add(
-                CompilerMessage.debug(profile.getOptimizations().stream()
-                        .sorted()
-                        .map(Object::toString)
+                CompilerMessage.debug(profile.getOptimizationLevels().entrySet().stream()
+                        .sorted(Comparator.comparing(e -> e.getKey().getName()))
+                        .map(e -> e.getKey() + ": " + e.getValue())
                         .collect(Collectors.joining(",\n    ", "Active optimizations:\n    ", "\n"))
                 )
         );
 
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 || profile.getOptimizations().isEmpty()
-                ? new NullDebugPrinter() : new DiffDebugPrinter(profile.getDebugLevel());
+        final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 || profile.optimizationsActive()
+                ? new DiffDebugPrinter(profile.getDebugLevel()) : new NullDebugPrinter();
         final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
                 terminus, profile, debugPrinter, messages::add);
         program.forEach(pipeline::emit);

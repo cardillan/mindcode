@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.compiler.optimization.Optimization;
@@ -96,7 +97,7 @@ public class CompileMain {
     static private void selectOptimization(CompilerProfile profile, String flags) {
         if (flags.isEmpty()) {
             // -o alone activates all
-            profile.setOptimizations(EnumSet.allOf(Optimization.class));
+            profile.setAllOptimizationLevels(OptimizationLevel.AGGRESSIVE);
             return;
         }
         
@@ -112,7 +113,8 @@ public class CompileMain {
             }
         }
 
-        profile.setOptimizations(negate ? EnumSet.complementOf(result) : result);
+        Optimization.LIST.forEach(o -> profile.setOptimizationLevel(o,
+                (negate ^ result.contains(o)) ? OptimizationLevel.AGGRESSIVE : OptimizationLevel.OFF));
     }
     
     static private void selectVersion(CompilerProfile profile, String option) {

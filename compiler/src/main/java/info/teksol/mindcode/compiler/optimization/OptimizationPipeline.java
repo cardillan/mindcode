@@ -34,8 +34,10 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
 
         Optimization[] values = values();
         for (int i = values.length - 1; i >= 0; i--) {
-            if (profile.getOptimizations().contains(values[i])) {
+            OptimizationLevel level = profile.getOptimizationLevel(values[i]);
+            if (level != OptimizationLevel.OFF) {
                 BaseOptimizer optimizer = values[i].createInstance(instructionProcessor, pipeline);
+                optimizer.setLevel(level);
                 optimizer.setMessagesRecipient(messageRecipient);
                 optimizer.setDebugPrinter(debugPrinter);
                 pipeline = optimizer;
@@ -93,6 +95,11 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
         @Override
         public String getName() {
             return "InstructionCounter";
+        }
+
+        @Override
+        public void setLevel(OptimizationLevel level) {
+            // Do nothing
         }
 
         @Override

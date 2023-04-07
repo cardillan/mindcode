@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.logic.MindustryOpcodeVariants;
 import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -7,6 +8,10 @@ import info.teksol.mindcode.logic.ProcessorVersion;
 import java.util.List;
 
 public class InstructionProcessorFactory {
+
+    public static InstructionProcessor getInstructionProcessor(CompilerProfile profile) {
+        return getInstructionProcessor(profile.getProcessorVersion(), profile.getProcessorEdition());
+    }
 
     public static InstructionProcessor getInstructionProcessor(ProcessorVersion version, ProcessorEdition edition) {
         return new BaseInstructionProcessor(version, edition, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));

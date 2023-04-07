@@ -15,6 +15,8 @@ public interface AstVisitor<T> {
 
     T visitConstant(Constant node);
 
+    T visitDirective(Directive node);
+
     T visitDoWhileStatement(DoWhileExpression node);
 
     T visitForEachStatement(ForEachExpression node);

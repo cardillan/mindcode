@@ -105,8 +105,8 @@ Things I'd like to add to Mindcode-the-language:
 * [x] display compiler output in the webapp
 * [x] evaluation of constant expressions at compile time
 * [x] constant declaration: constants would be evaluated at compile time and wouldn't use a variable
-* [ ] compiler directives (`#set`) to parametrize code compilation and optimization
-* [ ] optimizer strength setting - per optimizer (off, on/normal, aggressive)
+* [x] compiler directives (`#set`) to parametrize code compilation and optimization
+* [x] optimizer strength setting - per optimizer (off, basic, aggressive)
 * [ ] compatibility warnings:
   * warn when `configurce` main variable is used in V7 -- ML changes it to `config`
   * warn about alloy-smelter --> surge-smelter V6 --> V7 name change
@@ -118,7 +118,8 @@ Things I'd like to add to Mindcode-the-language:
   * Ruby-like (`and`, `or` for short-circuit, `&&`, `||` for full evaluation), or
   * "best-effort" basis (no guarantees either way)
 * [ ] improve compiler error messages
-* [ ] code generation/optimization objective (speed for faster but larger code, size for smaller but slower code) - most of the time smaller is also faster in Mindustry Logic, but there might be a few opportunities for this distinction.
+* [ ] code generation/optimization objective (speed for faster but larger code, size for smaller but slower code)
+  - most of the time smaller is also faster in Mindustry Logic, but there might be a few opportunities for this distinction.
 
 Compiled code analysis
 
@@ -129,22 +130,22 @@ Compiled code analysis
 
 Optimization improvements 
 
-* [ ] multiple optimization passes
 * [ ] additional automatic inlining of non-recursive functions 
 * [ ] multiple-use temporary variables optimization
 * [ ] eliminate retval variables/assignments where not needed
-* [ ] elimination of useless statements, e.g. `op add x x 0`, `op mul x x 1` or `set x x`
+* [ ] elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`
 * [ ] parameters that are only passed to inner calls and never modified won't be stored on stack
 * [ ] boolean expressions
   * ternary operator assignment: instead of conditional jump/set/always jump/set, do set/conditional jump/set.
   * and/or boolean improvements: conditional jump on individual operands instead of evaluating the and/or and doing conditional jump on that (overlaps with short-circuit boolean eval)
   * and/or boolean improvements: encode `a and not b` as `a > b`, `a or not b` as `a >= b`.
+* [ ] multiple optimization passes
 
 More advanced optimizations 
 
 * [ ] common subexpressions optimizations (maybe including repeated array access)
 * [ ] loop unrolling / other loop optimizations
-* [ ] jump threading / crossjumping
+* [ ] better jump threading / crossjumping
 * [ ] forward store for external variables
 * [ ] tail recursion
 

@@ -1,8 +1,6 @@
 grammar Mindcode;
 
-program : expression_list EOF
-        | EOF
-        ;
+program : expression_list? EOF;
 
 expression_list : expression
                 | expression SEMICOLON
@@ -10,7 +8,8 @@ expression_list : expression
                 | expression_list SEMICOLON expression
                 ;
 
-expression : MINUS numeric_t                                                                    # literal_minus
+expression : directive                                                                          # compiler_directive
+           | MINUS numeric_t                                                                    # literal_minus
            | indirectpropaccess                                                                 # indirect_prop_access
            | case_expr                                                                          # case_expression
            | if_expr                                                                            # if_expression
@@ -51,6 +50,10 @@ expression : MINUS numeric_t                                                    
            | continue_st                                                                        # continue_exp
            | return_st                                                                          # return_exp
            ;
+
+directive : HASHSET option=ID ASSIGN value=INT      # numeric_directive
+          | HASHSET option=ID ASSIGN value=ID       # string_directive
+          ;
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
 
@@ -233,6 +236,7 @@ BITWISE_NOT : '~';
 PLUS : '+';
 QUESTION_MARK : '?';
 SEMICOLON : ';';
+HASHSET : '#set';
 
 EXP_ASSIGN : '**=';
 MUL_ASSIGN : '*=';

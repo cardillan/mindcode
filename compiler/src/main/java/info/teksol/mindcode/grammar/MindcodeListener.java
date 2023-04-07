@@ -172,6 +172,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitLiteral_null(MindcodeParser.Literal_nullContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code compiler_directive}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterCompiler_directive(MindcodeParser.Compiler_directiveContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code compiler_directive}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitCompiler_directive(MindcodeParser.Compiler_directiveContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code literal_minus}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -459,6 +471,30 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinop_bitwise_and(MindcodeParser.Binop_bitwise_andContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code numeric_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumeric_directive(MindcodeParser.Numeric_directiveContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code numeric_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumeric_directive(MindcodeParser.Numeric_directiveContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code string_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void enterString_directive(MindcodeParser.String_directiveContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code string_directive}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void exitString_directive(MindcodeParser.String_directiveContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#indirectpropaccess}.
 	 * @param ctx the parse tree

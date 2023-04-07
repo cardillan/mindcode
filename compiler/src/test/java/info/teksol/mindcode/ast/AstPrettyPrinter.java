@@ -72,6 +72,12 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitDirective(Directive node) {
+        buffer.append("#set ").append(node.getOption()).append(" = ").append(node.getValue());
+        return null;
+    }
+
+    @Override
     public String visitForEachStatement(ForEachExpression node) {
         if (node.getLabel() != null) {
             buffer.append(node.getLabel()).append(": ");
