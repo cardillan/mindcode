@@ -1363,6 +1363,18 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         );
     }
 
-
-
+    @Test
+    void resolvesConstantStrictEqual() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SET, "a", "false"),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst(""
+                                + "a = 0 === null "
+                        )
+                )
+        );
+    }
 }

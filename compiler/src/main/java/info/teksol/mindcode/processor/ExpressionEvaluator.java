@@ -26,6 +26,9 @@ public class ExpressionEvaluator {
             return equals(a.getDoubleValue(), b.getDoubleValue());
         }
     }
+    public static boolean strictEquals(Variable a, Variable b) {
+        return (a.getType().isNumeric() == b.getType().isNumeric()) && equals(a, b);
+    }
 
     public static boolean equals(double a, double b) {
         return Math.abs(a - b) < 0.000001;
@@ -82,7 +85,7 @@ public class ExpressionEvaluator {
         map.put("lessThanEq",   (r, a, b) -> r.setBooleanValue(a.getDoubleValue() <= b.getDoubleValue()));
         map.put("greaterThan",  (r, a, b) -> r.setBooleanValue(a.getDoubleValue() > b.getDoubleValue()));
         map.put("greaterThanEq",(r, a, b) -> r.setBooleanValue(a.getDoubleValue() >= b.getDoubleValue()));
-        map.put("strictEqual",  (r, a, b) -> r.setBooleanValue(a.isObject() == b.isObject() && equals(a, b)));
+        map.put("strictEqual",  (r, a, b) -> r.setBooleanValue(strictEquals(a, b)));
 
         map.put("shl",          (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
         map.put("shr",          (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));

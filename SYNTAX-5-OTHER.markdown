@@ -87,7 +87,7 @@ Not all optimizations support the `aggressive` level. For those the level `aggre
 The complete list of available optimizations, including the option name for setting the level of givn optimization
 and availability of the aggressive optimization level is:
 
-| Optimization                                                    | Option                      | Aggressive |
+| Optimization                                                    | Option name                 | Aggressive |
 |-----------------------------------------------------------------|-----------------------------|:----------:|
 | [Jump normalization](#jump-normalization)                       | jumpNormalization           |     N      |
 | [Dead code elimination](#dead-code-elimination)                 | deadCodeElimination         |     Y      |
@@ -339,9 +339,6 @@ On `basic` level, the optimization won't merge print instructions if the resulti
 string longer than 34 characters (36 when counting the double quotes). On `aggressive` level, such instructions
 will be merged regardless. This can create long string constants, but according to our tests these can be pasted
 into Mindustry processors even if they're longer than what the Mindustry GUI allows to enter.
-
-If the string longer than 34 characters is already present because the source code contains such a long string
-constant, it is left as is regardless of optimizer level.
 
 ---
 

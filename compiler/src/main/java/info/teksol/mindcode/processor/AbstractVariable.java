@@ -14,33 +14,12 @@ public abstract class AbstractVariable implements Variable {
     private final String name;
     private ValueType type;
     private MindustryObject object;
-    
-    public AbstractVariable(String name, MindustryObject object) {
-        this.fixed = false;
-        this.name = name;
-        this.object = object;
-        this.type = ValueType.OBJECT;
-    }
 
-    public AbstractVariable(String name) {
-        this.fixed = false;
-        this.name = name;
-        this.object = null;
-        this.type = ValueType.NULL;
-    }
-
-    public AbstractVariable(boolean fixed, String name, MindustryObject object) {
+    protected AbstractVariable(boolean fixed, String name, MindustryObject object, ValueType valueType) {
         this.fixed = fixed;
         this.name = name;
         this.object = object;
-        this.type = ValueType.OBJECT;
-    }
-
-    public AbstractVariable(boolean fixed, String name) {
-        this.fixed = fixed;
-        this.name = name;
-        this.object = null;
-        this.type = ValueType.NULL;
+        this.type = valueType;
     }
 
     protected abstract String valueToString();
@@ -100,7 +79,11 @@ public abstract class AbstractVariable implements Variable {
 
     @Override
     public String toString() {
-        return isObject() ? String.valueOf(object) : valueToString();
+        switch (type) {
+            case NULL:      return "null";
+            case OBJECT:    return String.valueOf(object);
+            default:        return valueToString();
+        }
     }
 
     @Override

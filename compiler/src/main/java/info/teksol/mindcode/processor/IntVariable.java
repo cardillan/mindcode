@@ -3,14 +3,29 @@ package info.teksol.mindcode.processor;
 public class IntVariable extends AbstractVariable {
     protected int value;
 
-    public IntVariable(String name, int value) {
-        super(name);
+    private IntVariable(boolean fixed, String name, MindustryObject object, ValueType valueType, int value) {
+        super(fixed, name, object, valueType);
         this.value = value;
     }
 
-    public IntVariable(boolean fixed, String name, int value) {
-        super(fixed, name);
-        this.value = value;
+    public static IntVariable newNullValue(boolean fixed, String name) {
+        return new IntVariable(fixed, name, null, ValueType.NULL, 0);
+    }
+
+    public static IntVariable newBooleanValue(boolean fixed, String name, boolean value) {
+        return new IntVariable(fixed, name, null, ValueType.BOOLEAN, value ? 1 : 0);
+    }
+
+    public static IntVariable newIntValue(boolean fixed, String name, int value) {
+        return new IntVariable(fixed, name, null, ValueType.LONG, value);
+    }
+
+    public static IntVariable newStringValue(boolean fixed, String name, String value) {
+        return new IntVariable(fixed, name, new MindustryObject(value, value), ValueType.OBJECT, 0);
+    }
+
+    public static IntVariable newObjectValue(boolean fixed, String name, MindustryObject value) {
+        return new IntVariable(fixed, name, value, ValueType.OBJECT, 0);
     }
 
     @Override

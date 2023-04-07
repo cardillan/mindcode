@@ -21,24 +21,24 @@ public class Processor {
     private final Map<String, Variable> variables = new TreeMap<>();
     private final List<MindustryObject> blocks = new ArrayList<>();
     private final List<String> textBuffer = new ArrayList<>();
-    private final Variable counter = new IntVariable("@counter", 0);
+    private final Variable counter = IntVariable.newIntValue(false,"@counter", 0);
     private int steps = 0;
 
     public Processor() {
         flags = EnumSet.noneOf(ProcessorFlag.class);
         
         variables.put("@counter", counter);
-        variables.put("null", new DoubleVariable(true, "null", null));
-        variables.put("true", new IntVariable(true, "true", 1));
-        variables.put("false", new IntVariable(true, "false", 0));
-        variables.put("0", new IntVariable(true, "0", 0));
-        variables.put("1", new IntVariable(true, "1", 1));
+        variables.put("null", DoubleVariable.newNullValue(true, "null"));
+        variables.put("true", IntVariable.newBooleanValue(true, "true", true));
+        variables.put("false", IntVariable.newBooleanValue(true, "false", false));
+        variables.put("0", IntVariable.newIntValue(true, "0", 0));
+        variables.put("1", IntVariable.newIntValue(true, "1", 1));
     }
 
     public void addBlock(MindustryObject block) {
         blocks.removeIf(b -> b.getName().equals(block.getName()));
         blocks.add(block);
-        variables.put(block.getName(), new DoubleVariable(true, block.getName(), block));
+        variables.put(block.getName(), DoubleVariable.newObjectValue(true, block.getName(), block));
     }
 
     public List<String> getTextBuffer() {
@@ -69,7 +69,7 @@ public class Processor {
         steps = 0;
         textBuffer.clear();
         counter.setIntValue(0);
-        variables.put("@links", new IntVariable(true, "@links", blocks.size()));
+        variables.put("@links", IntVariable.newIntValue(true, "@links", blocks.size()));
 
         while (steps < stepLimit) {
             try {
@@ -199,7 +199,7 @@ public class Processor {
 
     private DoubleVariable createVariable(String value) {
         if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
-            return new DoubleVariable(value, null);
+            return DoubleVariable.newNullValue(false, value);
         } else {
             throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid identifier " + value);
         }
@@ -207,11 +207,13 @@ public class Processor {
 
     private Variable createConstant(String value) {
         if (value.startsWith("\"") && value.endsWith("\"")) {
-            String repl = value.substring(1, value.length() - 1).replace("\\n", "\n").replace("\\\"", "\"").replace("\\\\", "\\");
-            return new DoubleVariable(true, value, new MindustryObject(repl, repl));
+            String repl = value.substring(1, value.length() - 1).replace("\\n", "\n").replace("\\\"", "'").replace("\\\\", "\\");
+            return DoubleVariable.newStringValue(true, value, repl);
         }
         try {
-            return new DoubleVariable(true, value, value.startsWith("0x") ? Long.decode(value) : Double.parseDouble(value));
+            return value.startsWith("0x")
+                    ? DoubleVariable.newLongValue(true, value, Long.decode(value))
+                    : DoubleVariable.newDoubleValue(true, value, Double.parseDouble(value));
         } catch (NumberFormatException ex) {
             if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
                 throw new ExecutionException(ERR_UNINITIALIZED_VAR, "Uninitialized variable " + value);

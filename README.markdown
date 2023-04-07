@@ -108,7 +108,7 @@ Things I'd like to add to Mindcode-the-language:
 * [x] compiler directives (`#set`) to parametrize code compilation and optimization
 * [x] optimizer strength setting - per optimizer (off, basic, aggressive)
 * [ ] compatibility warnings:
-  * warn when `configurce` main variable is used in V7 -- ML changes it to `config`
+  * warn when `configure` main variable is used in V7 -- ML changes it to `config`
   * warn about alloy-smelter --> surge-smelter V6 --> V7 name change
 * [ ] memory jump table for case expressions where possible
 * [ ] `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when` branch
@@ -134,7 +134,7 @@ Optimization improvements
 * [ ] multiple-use temporary variables optimization
 * [ ] eliminate retval variables/assignments where not needed
 * [ ] elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`
-* [ ] parameters that are only passed to inner calls and never modified won't be stored on stack
+* [ ] parameters that are only passed to recursive calls and never modified won't be stored on stack
 * [ ] boolean expressions
   * ternary operator assignment: instead of conditional jump/set/always jump/set, do set/conditional jump/set.
   * and/or boolean improvements: conditional jump on individual operands instead of evaluating the and/or and doing conditional jump on that (overlaps with short-circuit boolean eval)
