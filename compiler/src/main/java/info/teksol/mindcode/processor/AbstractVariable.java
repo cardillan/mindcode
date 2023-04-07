@@ -5,7 +5,7 @@ import info.teksol.mindcode.ast.BooleanLiteral;
 import info.teksol.mindcode.ast.NullLiteral;
 import info.teksol.mindcode.ast.NumericLiteral;
 import info.teksol.mindcode.ast.StringLiteral;
-import info.teksol.mindcode.mindustry.generator.GenerationException;
+import info.teksol.mindcode.compiler.generator.GenerationException;
 
 import static info.teksol.mindcode.processor.ProcessorFlag.*;
 

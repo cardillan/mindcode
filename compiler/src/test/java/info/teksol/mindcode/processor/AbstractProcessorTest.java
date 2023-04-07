@@ -1,6 +1,6 @@
 package info.teksol.mindcode.processor;
 
-import info.teksol.mindcode.mindustry.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -4,20 +4,20 @@ import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import info.teksol.mindcode.mindustry.AccumulatingLogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.CompilerProfile;
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.generator.LogicInstructionGenerator;
-import info.teksol.mindcode.mindustry.LogicInstructionLabelResolver;
-import info.teksol.mindcode.mindustry.LogicInstructionPipeline;
-import info.teksol.mindcode.mindustry.LogicInstructionPrinter;
-import info.teksol.mindcode.mindustry.functions.FunctionMapperFactory;
-import info.teksol.mindcode.mindustry.instructions.InstructionProcessor;
-import info.teksol.mindcode.mindustry.instructions.InstructionProcessorFactory;
-import info.teksol.mindcode.mindustry.logic.ProcessorEdition;
-import info.teksol.mindcode.mindustry.logic.ProcessorVersion;
-import info.teksol.mindcode.mindustry.optimisation.NullDebugPrinter;
-import info.teksol.mindcode.mindustry.optimisation.OptimisationPipeline;
+import info.teksol.mindcode.compiler.AccumulatingLogicInstructionPipeline;
+import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
+import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
+import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
+import info.teksol.mindcode.logic.ProcessorEdition;
+import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
+import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
 import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -37,7 +37,7 @@ class SamplesTest {
 
     private static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        LogicInstructionPipeline pipeline = OptimisationPipeline.createPipelineForProfile(instructionProcessor,
+        LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
                 terminus, profile, new NullDebugPrinter(), s -> {});
         LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
                 FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);

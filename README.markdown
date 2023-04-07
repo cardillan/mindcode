@@ -130,7 +130,7 @@ Compiled code analysis
 Optimization improvements 
 
 * [ ] multiple optimization passes
-* [ ] additional automatic inlining of nonrecursive functions 
+* [ ] additional automatic inlining of non-recursive functions 
 * [ ] multiple-use temporary variables optimization
 * [ ] eliminate retval variables/assignments where not needed
 * [ ] elimination of useless statements, e.g. `op add x x 0`, `op mul x x 1` or `set x x`

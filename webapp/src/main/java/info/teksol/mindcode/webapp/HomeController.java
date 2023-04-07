@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.mindustry.CompilerOutput;
+import info.teksol.mindcode.compiler.CompilerOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.mindustry.CompilerFacade.compile;
+import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 
 @Controller
 @RequestMapping(value = "/")

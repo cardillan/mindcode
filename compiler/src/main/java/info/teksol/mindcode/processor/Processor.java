@@ -1,7 +1,7 @@
 package info.teksol.mindcode.processor;
 
-import info.teksol.mindcode.mindustry.instructions.LogicInstruction;
-import info.teksol.mindcode.mindustry.logic.Opcode;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.Opcode;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;

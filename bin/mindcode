@@ -1,4 +1,4 @@
 #!/bin/sh
 
 jar=$( find "$MINDCODE_PATH/compiler" -type f -name '*.jar' | tr '\n' ':' )
-exec java -classpath $jar info.teksol.mindcode.mindustry.CompileMain $@
+exec java -classpath $jar info.teksol.mindcode.compiler.CompileMain $@

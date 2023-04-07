@@ -1,6 +1,6 @@
 package info.teksol.mindcode.webapp;
 
-import info.teksol.mindcode.mindustry.CompilerOutput;
+import info.teksol.mindcode.compiler.CompilerOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 
-import static info.teksol.mindcode.mindustry.CompilerFacade.compile;
+import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 import static org.springframework.http.HttpStatus.*;
 
 @Controller
