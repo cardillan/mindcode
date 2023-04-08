@@ -72,6 +72,10 @@ public class HomePageData {
         return !errors.isEmpty();
     }
 
+    public boolean getHasMessages() {
+        return !warnings.isEmpty() || !messages.isEmpty();
+    }
+
     public boolean isLoggedIn() {
         return false;
     }

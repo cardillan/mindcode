@@ -50,7 +50,7 @@ public class MindcodeCompiler implements Compiler {
 
             List<LogicInstruction> result = generateCode(prog);
 
-            if (profile.optimizationsActive()) {
+            if (profile.optimizationsActive() && result.size() > 1) {
                 result = optimize(result);
             }
 

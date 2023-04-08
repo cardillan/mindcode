@@ -8,11 +8,10 @@
 <p class="my-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic.
  Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
 <p class="my-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic.
- Mindcode includes higher-level constructs, such as expressions, user-defined functions, control statements, or "direct" memory access.
- <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>.<p>
-<p class="my-2 text-lg">Mindcode now comes with <strong>Mindustry Logic 7 support</strong>
-  and many additional improvements; for a list of recent changes, see <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/CHANGELOG.markdown">changelog</a>.<p>
+ Mindcode includes higher-level constructs, such as expressions, user-defined functions, control statements, or "direct" memory access.<p>
 <#if model.sample != "">
+    <p class="my-2 text-lg">Mindcode now comes with <strong>Mindustry Logic 7 support</strong>
+      and many additional improvements; for a list of recent changes, see <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/CHANGELOG.markdown">changelog</a>.<p>
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">
         <ul class="flex space-around">
@@ -43,16 +42,27 @@
                 <p class="text-center">${model.compiledLoc} lines of code</p>
             </div>
             <div>
-                <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4"/>
-                <@com.link href="/?s=clean">Start with a new script</@com.link>
-                <label>
-                    <#if model.enableOptimization>
-                        <input type="checkbox" name="enableOptimization" checked>
-                    <#else>
-                        <input type="checkbox" name="enableOptimization">
-                    </#if>
-                    Enable optimization
-                </label>
+                <div>
+                    <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4"/>
+                    <@com.link href="/?s=clean">Start with a new script</@com.link>
+                    <label>
+                        <#if model.enableOptimization>
+                            <input type="checkbox" name="enableOptimization" checked>
+                        <#else>
+                            <input type="checkbox" name="enableOptimization">
+                        </#if>
+                        Enable optimization
+                    </label>
+                </div>
+                <div style="margin-top:1cm;text-align:center;">
+                    <p>
+                        Useful links:
+                        <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>
+                        | <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/README.markdown">Readme</a>
+                        | <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/CHANGELOG.markdown">Changelog</a>
+                    </p>
+                    <p>Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/francois/mindcode">project page</a>.<p>
+                </div>
             </div>
             <div>
                 <#if model.hasErrors>
@@ -64,7 +74,7 @@
                             </#items>
                         </ul>
                     </#list>
-                <#else>
+                <#elseif model.hasMessages>
                     <label class="mt-4 block font-bold">Compiler messages:</label>
                     <#list model.warnings>
                         <ul class="list-disc list-inside">
@@ -84,7 +94,6 @@
             </div>
         </div>
     </form>
-    <p >Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/francois/mindcode">project page</a>.<p>
 </div>
 
 <@com.footer/>

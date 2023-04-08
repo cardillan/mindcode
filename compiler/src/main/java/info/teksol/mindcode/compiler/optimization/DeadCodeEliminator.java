@@ -48,11 +48,11 @@ class DeadCodeEliminator extends GlobalOptimizer {
                 .collect(Collectors.joining(", "));
         
         if (!eliminated.isEmpty()) {
-            emitMessage(MessageLevel.WARNING, "       list of unused variables: %s.", eliminated);
+            emitMessage(MessageLevel.WARNING, "       List of unused variables: %s.", eliminated);
         }
         
         if (!uninitialized.isEmpty()) {
-            emitMessage(MessageLevel.WARNING, "       list of uninitialized variables: %s.", uninitialized);
+            emitMessage(MessageLevel.WARNING, "       List of uninitialized variables: %s.", uninitialized);
         }
     }
 

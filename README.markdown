@@ -10,7 +10,7 @@ There main focus of Mindcode design is two-fold:
   and limited instruction space of Mindustry processors.    
 
 Recently a lot of enhancements were made to Mindcode, see this [description of March 2023 changes](doc/announcements/2023-03-29.markdown).
-Also, a [changelog](CHANGELOG.markdown) is now maintained for releases.  
+A [changelog](CHANGELOG.markdown) is now maintained for releases.  
 
 ## Using Mindcode
 

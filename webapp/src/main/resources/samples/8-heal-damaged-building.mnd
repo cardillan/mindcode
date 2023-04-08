@@ -8,7 +8,7 @@ if @unit.dead !== 0 or @unit.controller != @this
     findUnit()
 end
 
-if ulocate(damaged, dmgx, dmgy, dmgbuilding)
+if ulocate(damaged, dmgx, dmgy)
     printf("Damaged at $dmgx, $dmgy\n")
     approach(dmgx, dmgy, 5)
     target(dmgx, dmgy, true)

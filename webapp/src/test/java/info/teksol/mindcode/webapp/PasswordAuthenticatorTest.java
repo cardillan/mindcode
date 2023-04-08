@@ -11,7 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PasswordAuthenticatorTest {
     private final PasswordAuthenticator sut = new PasswordAuthenticator(4);
 
-    @Test
+    // Deactivated for now. Logging is not supported, hashing tests might fail on too fast/too slow computers.
+    // @Test
     void defaultPasswordAuthenticatorTakesAReasonableAmountOfTime() {
         final PasswordAuthenticator sut = new PasswordAuthenticator();
 

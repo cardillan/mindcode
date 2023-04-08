@@ -2,20 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
-
 ## 2023-04-08
 
 ### Added
 
-* Added limited support for compile-time constant expression evaluation
-  ([doc](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#constant-expressions)).
-* Added support for constant declaration (`const foo = 1 / 3`). The value assigned must be a compile-time
-  constant expression ([doc](doc/syntax/SYNTAX-1-VARIABLES.markdown#constants)).
-* Added compiler directives (`#set`): optimization and target instruction set can be now set from the web app compiler
-  ([doc](doc/syntax/SYNTAX-5-OTHER.markdown)).
-* Support for the new `setprop` world processor instruction available in Mindustry v143
-  ([doc](doc/syntax/FUNCTIONS_V7.markdown#instruction-setprop)) .  
+* Added limited support for [compile-time constant expression evaluation](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#constant-expressions).
+* Added support for [constant declaration](doc/syntax/SYNTAX-1-VARIABLES.markdown#constants) (`const foo = 1 / 3`).
+  The value assigned must be a compile-time constant expression.
+* Added [compiler directives](doc/syntax/SYNTAX-5-OTHER.markdown) (`#set`): optimization and target instruction set 
+  can be now set from the web app compiler.
+* Support for the new [`setprop` world processor instruction](doc/syntax/FUNCTIONS_V7.markdown#instruction-setprop)
+  available in Mindustry v143.  
 
 ### Changed
 

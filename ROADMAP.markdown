@@ -72,7 +72,7 @@ but where the exact way of doing them isn't clear yet.
   provide high-level support for inter-processor communication using either memory cells/banks,
   or even unit flags.
   * The first step is already being made: schematics creation tool would allow us to compile
-    the entire multiprocessor component in one go.  
+    the entire multiprocessor schematic in one go.  
 
 ## On hold
 
