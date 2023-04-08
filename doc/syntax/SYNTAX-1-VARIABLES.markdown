@@ -53,8 +53,8 @@ end
 both the `DEBUG` variable and the debugging code is compiled as-is, even if the `DEBUG` variable is not changed anywhere else in the code.
 You can therefore assign `true` to the variable and activate the debugging code after pasting it to Mindustry processor.
 
-(Note: unused main variables, i.e. variables that are never read, can get removed from the compiled code.
-This is why we had to include `print(COUNT, WARNING, ITEM)` in the example above.)
+> **Note**: unused main variables, i.e. variables that are never read, can get removed from the compiled code.
+> This is why we had to include `print(COUNT, WARNING, ITEM)` in the example above.
 
 # Local variables
 
@@ -167,7 +167,7 @@ cell4[36] = cell4[37] = 50
 cell4[38] = cell4[39] = 50
 ```
 
-Note that global variables are allocated on a first-come, first-served basis. If you had the following code:
+**Note**: global variables are allocated on a first-come, first-served basis. If you had the following code:
 
 ```
 allocate heap in cell2[61 .. 63]

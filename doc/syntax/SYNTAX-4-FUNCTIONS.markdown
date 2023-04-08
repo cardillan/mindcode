@@ -24,29 +24,10 @@ but it does not aim to describe the behavior of the functions/instructions.
 * [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
 * [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
 
-## Instruction mapping rules
-
-Generally, functions are mapped to instructions using these rules:
-* If the instruction has just one form (such as `getlink`), the function name corresponds to the instruction name. All instruction names are lowercase.
-* If the instruction takes several forms depending on the exact operation the instruction performs (such as `draw` or `ucontrol`),
-the function name corresponds to the operation. In this case, the function name can be camelCase (such as `itemTake`).
-
-The disparity between those two kinds of functions is a consequence of keeping Mindcode identifiers as close to Mindustry Logic as possible.
-
-There are a few issues with these rules:
-* Both `ucontrol stop` and `stop` would map to the `stop()` function. The `stop` instruction is instead mapped to the `stopProcessor()` function.
-* `ucontrol getBlock` is similar to the new `getblock` World Processor instruction. The resulting functions only differ in case.
-* The `status` World Processor instruction distinguishes clearing and applying the status by a boolean value (true/false). 
-Mindcode instead creates separate functions, `applyStatus()` and `clearStatus()`.
-
 ## Instruction parameters
 
 There are several types of parameters a function can have:
-* _Input parameters_: these parameters will accept any expression, including variables, as arguments. 
-  Some instructions perform an operation on a linked block, which is passed as an argument to one of instruction parameters.
-  In these cases, the instruction can be mapped to a method called on the given block, e.g. `block.shoot(x, y, doShoot)`
-  translates to `control shoot block x y doShoot 0`. For some instructions, the instruction can be invoked as a function
-  or as a method (`printflush(message1)` or `message1.printflush()`). All existing mappings are shown in the function reference above.
+* _Input parameters_: these parameters will accept any expression, including variables, as arguments.
 * _Output parameters_: one of output parameters of the instruction is always mapped to the return value of the function,
   e.g. `block = getlink(linkNum)` translates to instruction `getlink block linkNum`.
   If the instruction provides more than one output parameters, the remaining ones become parameters of the function.
@@ -55,33 +36,63 @@ There are several types of parameters a function can have:
   When not omitted, the argument passed in should be a variable.
 * _Enumerated parameters_: these parameters will only accept one of predefined constants as an argument.
   For example the `uradar` functions requires one of the following values for each of its first three arguments:
-  `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without double quotes or anything.
-  It is not possible to store the value in a variable and pass the variable instead.
+  `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without
+  any escaping or double quotes. It is not possible to store the value in a variable and pass the variable instead.
   Passing a value different to one of the supported values results in compilation error.
+
+## Instruction mapping rules
+
+Generally, functions are mapped to instructions using these rules:
+* If the instruction has just one form (such as `getlink`), the function name corresponds to the instruction name. 
+  All instruction names are lowercase.
+* If the instruction takes several forms depending on the exact operation the instruction performs (such as `draw` or `ucontrol`),
+  the function name corresponds to the operation. In this case, the function name can be camelCase (such as `itemTake`).
+
+The disparity between those two kinds of functions is a consequence of keeping Mindcode nomenclature as close to Mindustry Logic as possible.
+
+There are a few issues with these rules:
+* Both `ucontrol stop` and `stop` would map to the `stop()` function. The `stop` instruction is instead mapped to the `stopProcessor()` function.
+* `ucontrol getBlock` is similar to the new `getblock` World Processor instruction. The resulting functions only differ in case.
+* The `status` World Processor instruction distinguishes clearing and applying the status by a boolean value
+  (`true` or `false`), which is not very readable. Mindcode instead creates separate functions,
+  `applyStatus()` and `clearStatus()`.
+
+## Methods
+
+Some instructions perform an operation on an object (a linked block), which is passed as an argument to one
+of instruction parameters. In these cases, the instruction can be mapped to a method called on the given block,
+e.g. `block.shoot(x, y, doShoot)` translates to `control shoot block x y doShoot 0`.
+
+In some cases, the instruction can be invoked as a function or as a method (`printflush(message1)` or `message1.printflush()`).
+All existing mappings are shown in the function reference above.
 
 ## Alternative `control` syntax
 
-There is a special case for `control` instruction setting a single value on a linked block. Mindcode accepts the following shortcuts:
+There is a special case for `control` instruction setting a single value on a linked block, for whose Mindcode accepts
+the following syntax:
 * `block.enabled = boolean`, which is equivalent to `block.enabled(boolean)`
 * `block.config = value`, which is equivalent to `block.config(value)`
 
 The `block` in the examples can be a variable or a linked block object.
 
+Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS_V7.markdown#instruction-setprop)
+instruction. Looking for ways to support this syntax in the future.
+
 ## Alternative `sensor` syntax
 
-The `sensor` method allows obtaining an object (unit or block) property using any expression, not just constant property names:
+The `sensor` method accepts an expression, not just constant property name, as an argument:
 
 ```
-amount = vault1.sensor(use_titan ? @titanium : @copper)
+amount = vault1.sensor(use_titanium ? @titanium : @copper)
 ```
 
-If the property you're trying to obtain is hard-coded, you can use the _property access_ syntax:
+If the property you're trying to obtain is hard-coded, you can again use an alternate syntax:
 `amount = storage.thorium` instead of the longer equivalent `amount = storage.sensor(@thorium)`.
 You can use this for any property, not just item types, such as `@unit.dead` instead of `@unit.sensor(@dead)`.
 
 Again, the `vault1` or `storage` in the examples can be a variable or a linked block object.
 
-Note that in the case of property access, the `@` character at the beginning of the property name is omitted.
+> **Note**: in the case of property access, the `@` character at the beginning of the property name is omitted.
 
 # Built-in functions
 
@@ -107,7 +118,7 @@ printflush(message1)
 
 ## printf
 
-The `printf` function takes a string as its first argument.
+The `printf` function takes a string literal or string constant as its first argument.
 It then looks for the `$` characters and replaces them with values like this:
 * If the `$` character is followed by a variable name, the variable is printed (external variables, e.g. `$X`, aren't supported).
 * If the `$` is not followed by a variable name, next argument from the argument list is printed.
@@ -135,6 +146,9 @@ y = 10
 format = "Position: $, $\n"
 printf(format, x, y)                // Not allowed - format must be a string constant
 printf("Distance: ${len(x, y)}")    // No expressions allowed
+
+const fmt = "Position: $, $\n"
+printf(fmt, x, y)                   // Allowed - fmt is a string constant
 ```
 
 # User-defined Functions

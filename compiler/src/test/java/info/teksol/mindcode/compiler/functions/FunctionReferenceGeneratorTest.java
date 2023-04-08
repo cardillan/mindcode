@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FunctionReferenceGeneratorTest {
 
+    private static final String SYNTAX_REL_PATH = ".." + File.separatorChar + "doc" + File.separatorChar + "syntax"  + File.separatorChar;
+
     private static final List<String> PREAMBLE = List.of(
             "This document contains function reference for all built-in Mindcode functions.",
             "Functions are grouped by the instruction they encapsulate, so that functions with similar logic are listed together.",
@@ -46,12 +48,12 @@ public class FunctionReferenceGeneratorTest {
     }
 
     private void createFunctionReference(ProcessorVersion version) throws FileNotFoundException {
-        assertTrue(new File(".." + File.separatorChar + "SYNTAX.markdown").isFile());
+        assertTrue(new File(SYNTAX_REL_PATH + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         FunctionMapper mapper = FunctionMapperFactory.getFunctionMapper(processor, s -> {});
         List<FunctionMapper.FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 
-        try (final PrintWriter w = new PrintWriter(".." + File.separatorChar + "FUNCTIONS_" + version + ".markdown")) {
+        try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS_" + version + ".markdown")) {
             w.println("# Function reference for Mindustry " + version);
             w.println();
             PREAMBLE.forEach(s -> { w.print(s); w.print(" "); });

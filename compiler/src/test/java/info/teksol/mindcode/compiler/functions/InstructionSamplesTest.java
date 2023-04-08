@@ -41,7 +41,7 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
     }
 
     private void createInstructionSamples(ProcessorVersion version) throws FileNotFoundException {
-        assertTrue(new File(".." + File.separatorChar + "SYNTAX.markdown").isFile());
+        assertTrue(new File(".." + File.separatorChar + "README.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         List<LogicInstruction> instructions = processor.getOpcodeVariants().stream()
                 .filter(v -> !v.getOpcode().isVirtual())

@@ -5,8 +5,13 @@
     Mindcode: a Mindustry Logic high-level language
 </@com.h1>
 
-<p class="my-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic. Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
-<p class="my-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic. Mindcode includes higher-level constructs, such as inline computations, user-defined functions, conditional and loop statements, or "direct" memory access. Mindcode now comes with <strong>Mindustry Logic 7 support</strong> and many additional improvements, see <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/UPDATE-2023-03.markdown">a summary of March 2023 changes</a>.<p>
+<p class="my-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic.
+ Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
+<p class="my-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic.
+ Mindcode includes higher-level constructs, such as expressions, user-defined functions, control statements, or "direct" memory access.
+ <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>.<p>
+<p class="my-2 text-lg">Mindcode now comes with <strong>Mindustry Logic 7 support</strong>
+  and many additional improvements; for a list of recent changes, see <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/CHANGELOG.markdown">changelog</a>.<p>
 <#if model.sample != "">
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">

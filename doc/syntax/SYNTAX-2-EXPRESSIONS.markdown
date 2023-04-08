@@ -99,12 +99,12 @@ In that scenario, the values are considered equal in these cases:
 | `@coal` |   `0`   | `false`  |  `true`  |  `false`  |  `true`   |
 | `@coal` |   `1`   |  `true`  | `false`  |  `false`  |  `true`   |
 | `@coal` |   `2`   | `false`  |  `true`  |  `false`  |  `true`   |
+| `@coal` | `@lead` | `false`  |  `true`  |  `false`  |  `true`   |
 |  `"A"`  |   `0`   | `false`  |  `true`  |  `false`  |  `true`   |
 |  `"A"`  |   `1`   |  `true`  | `false`  |  `false`  |  `true`   |
 |  `"A"`  |   `2`   | `false`  |  `true`  |  `false`  |  `true`   |
 |  `"A"`  |  `"B"`  | `false`  |  `true`  |  `false`  |  `true`   |
-| `@coal` | `@lead` | `false`  |  `true`  |  `false`  |  `true`   |
-| `"A" `  |  `"A"`  |  `true`  | `false`  |  `true`   |  `false`  |
+|  `"A"`  |  `"A"`  |  `true`  | `false`  |  `true`   |  `false`  |
 
 <details><summary>Show code used to generate data for this table.</summary>
 
@@ -123,11 +123,11 @@ compare(null, 2)
 compare(@coal, 0)
 compare(@coal, 1)
 compare(@coal, 2)
+compare(@coal, @lead)
 compare("A", 0)
 compare("A", 1)
 compare("A", 2)
 compare("A", "B")
-compare(@coal, @lead)
 compare("A", "A")
 printflush(message1)
 ```

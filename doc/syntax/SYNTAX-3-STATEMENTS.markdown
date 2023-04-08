@@ -67,9 +67,8 @@ for n in firstIndex + 1 .. lastIndex - 1
 end
 ```
 
-Please note that currently, range iteration loops can only increment the value
-by 1, and only support increasing values. If the start value is greater than
-the end value, the loop body won't get executed at all.
+> **Note**: currently, range iteration loops can only increment the value by 1, and only support increasing values.
+> If the start value is greater than the end value, the loop body won't get executed at all.
 
 ## List Iteration Loops
 
@@ -152,9 +151,11 @@ Every loop in Mindcode can be marked with a label,
 and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
 
 
-Note: usually, a `break` or `continue` statement will be the last statements in a block of code (typically in an `if` or `case` statement).
-It doesn't make sense to put additional statements or expressions after a `break` or `continue`, since that code would never get executed
-and will be removed by the optimizer. If you do put additional statements there, the compiler will mistake them for a label:
+> **Note**: usually, a `break` or `continue` statement will be the last statements in a block of code
+> (typically in an `if` or `case` statement). It doesn't make sense to put additional statements or expressions
+> after a `break` or `continue`, since that code would never get executed and will be removed by the optimizer.
+
+If you do put additional statements after a `break` or `continue`, the compiler will mistake them for a label:
 
 ```
 while true

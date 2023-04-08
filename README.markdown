@@ -2,9 +2,15 @@
 
 Welcome to Mindcode, a high-level language for [Mindustry](https://github.com/anuke/mindustry). Mindustry is a game in
 the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a
-high-level language. Mindcode aims to make programming easier for everyone.
+high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
-Recently a lot of enhancements were made to Mindcode, see this [description of March 2023 changes](UPDATE-2023-03.markdown).
+There main focus of Mindcode design is two-fold:
+* Keeping terminology and naming convention predictable and close to Mindustry Logic.
+* Only provide language constructs that are not prohibitively expensive given the astonishingly slow speeds
+  and limited instruction space of Mindustry processors.    
+
+Recently a lot of enhancements were made to Mindcode, see this [description of March 2023 changes](doc/announcements/2023-03-29.markdown).
+Also, a [changelog](CHANGELOG.markdown) is now maintained for releases.  
 
 ## Using Mindcode
 
@@ -19,16 +25,599 @@ everyone.
 
 ## Mindcode Syntax
 
-Please read the [syntax](SYNTAX.markdown) document for the high-level
-information. The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus
-always up-to-date with the most-recent version of Mindcode.  If you programmed in any high-level language, you should
+Please read the [syntax](doc/syntax/SYNTAX.markdown) document for the high-level information.
+The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus
+always up-to-date with the most-recent version of Mindcode. If you programmed in any high-level language, you should
 feel right at home.
+
+### VS Code syntax highlighting
 
 [@schittli](https://github.com/schittli) kindly contributed a VS Code syntax highlighter.
 
 ![screenshot of Visual Studio Code, with Mindcode syntax highlighting](https://user-images.githubusercontent.com/8282673/112750180-43947a00-8fc7-11eb-8a22-83be7624753e.png)
 
 Download the extension from the [Visual Studio marketplace](https://marketplace.visualstudio.com/items?itemName=TomSchi.mindcode).
+I'm not sure how well the extension supports latest additions to Mindcode.
+
+### IntelliJ IDEA syntax highlighting
+
+IntelliJ IDEA (even the Community edition) can be easily configured for basic Mindcode syntax highlighting.
+
+* Go to _File / Settings_, or press Ctrl-Alt-S
+* Navigate to _Editor / File types_
+* Create new file type
+  * _Name_: Mindcode
+  * _Description_: Mindcode source file
+  * _Line comment_: `//` (leave _Only at line start_ unchecked)
+  * _Block comment start/end_: leave empty
+  * _Hex prefix_: `0x`
+  * _Number postfixes_: leave empty
+  * _Keywords_: paste Mindcode keywords to the first list. Optionally, paste Mindustry Logic object names to the second list. 
+  * _Ignore case_: leave unchecked.
+* Assign a file extension `*.mnd`
+
+<details><summary>Show full list of Mindcode keywords.</summary>
+
+```
+allocate
+and
+break
+case
+const
+continue
+def
+do
+else
+elsif
+end
+false
+for
+heap
+if
+in
+inline
+loop
+not
+null
+or
+return
+sensor
+stack
+then
+true
+when
+while
+```
+
+</details>
+
+<details><summary>Show full list of Mindustry Logic object names.</summary>
+
+```
+@additive-reconstructor
+@aegires
+@afflict
+@air
+@air-factory
+@alpha
+@ammo
+@ammoCapacity
+@anthicus
+@antumbra
+@arc
+@arkycite
+@arkycite-floor
+@arkyic-boulder
+@arkyic-stone
+@arkyic-vent
+@arkyic-wall
+@arkyid
+@armored-conveyor
+@armored-duct
+@atmospheric-concentrator
+@atrax
+@avert
+@barrier-projector
+@basalt
+@basalt-boulder
+@basic-assembler-module
+@battery
+@battery-large
+@beam-link
+@beam-node
+@beam-tower
+@beryllic-boulder
+@beryllic-stone
+@beryllic-stone-wall
+@beryllium
+@beryllium-wall
+@beryllium-wall-large
+@beta
+@blast-compound
+@blast-door
+@blast-drill
+@blast-mixer
+@bluemat
+@boosting
+@boulder
+@breach
+@bridge-conduit
+@bridge-conveyor
+@bryde
+@build-tower
+@canvas
+@carbide
+@carbide-crucible
+@carbide-wall
+@carbide-wall-large
+@carbon-boulder
+@carbon-stone
+@carbon-vent
+@carbon-wall
+@char
+@chemical-combustion-chamber
+@cleroi
+@cliff
+@cliff-crusher
+@coal
+@coal-centrifuge
+@collaris
+@color
+@combustion-generator
+@command-center
+@commanded
+@conduit
+@config
+@configure
+@conquer
+@constructor
+@container
+@controlled
+@controller
+@conveyor
+@copper
+@copper-wall
+@copper-wall-large
+@core-acropolis
+@core-bastion
+@core-citadel
+@core-foundation
+@core-nucleus
+@core-shard
+@core-zone
+@corvus
+@counter
+@crater-stone
+@crawler
+@cryofluid
+@cryofluid-mixer
+@crystal-blocks
+@crystal-cluster
+@crystal-floor
+@crystal-orbs
+@crystalline-boulder
+@crystalline-stone
+@crystalline-stone-wall
+@crystalline-vent
+@cultivator
+@cyanogen
+@cyanogen-synthesizer
+@cyclone
+@cyerce
+@dacite
+@dacite-boulder
+@dacite-wall
+@dagger
+@dark-metal
+@darksand
+@darksand-tainted-water
+@darksand-water
+@dead
+@deconstructor
+@deep-tainted-water
+@deep-water
+@dense-red-stone
+@differential-generator
+@diffuse
+@diode
+@dirt
+@dirt-wall
+@disassembler
+@disperse
+@disrupt
+@distributor
+@door
+@door-large
+@dormant
+@duct
+@duct-bridge
+@duct-router
+@duct-unloader
+@dune-wall
+@duo
+@eclipse
+@efficiency
+@electric-heater
+@electrolyzer
+@elude
+@emanate
+@empty
+@enabled
+@eruption-drill
+@evoke
+@exponential-reconstructor
+@ferric-boulder
+@ferric-craters
+@ferric-stone
+@ferric-stone-wall
+@firstItem
+@fissile
+@flag
+@flare
+@flux-reactor
+@force-projector
+@foreshadow
+@fortress
+@fuse
+@gamma
+@graphite
+@graphite-press
+@graphitic-wall
+@grass
+@ground-factory
+@hail
+@health
+@heat
+@heat-reactor
+@heat-redirector
+@heat-router
+@heat-source
+@horizon
+@hotrock
+@hydrogen
+@hyper-processor
+@ice
+@ice-snow
+@ice-wall
+@illuminator
+@impact-drill
+@impact-reactor
+@impulse-pump
+@incinerator
+@incite
+@interplanetary-accelerator
+@inverted-sorter
+@item-source
+@item-void
+@itemCapacity
+@junction
+@kiln
+@lancer
+@large-constructor
+@large-logic-display
+@large-payload-mass-driver
+@large-plasma-bore
+@large-shield-projector
+@laser-drill
+@launch-pad
+@lead
+@legacy-mech-pad
+@legacy-unit-factory
+@legacy-unit-factory-air
+@legacy-unit-factory-ground
+@liquid-container
+@liquid-junction
+@liquid-router
+@liquid-source
+@liquid-tank
+@liquid-void
+@liquidCapacity
+@locus
+@logic-display
+@logic-processor
+@lustre
+@mace
+@magmarock
+@malign
+@mass-driver
+@maxHealth
+@mech-assembler
+@mech-fabricator
+@mech-refabricator
+@mechanical-drill
+@mechanical-pump
+@mega
+@meltdown
+@melter
+@memory-bank
+@memory-cell
+@mend-projector
+@mender
+@merui
+@message
+@metaglass
+@metal-floor
+@metal-floor-damaged
+@micro-processor
+@mineX
+@mineY
+@mining
+@minke
+@minute
+@molten-slag
+@mono
+@moss
+@mud
+@multi-press
+@multiplicative-reconstructor
+@name
+@naval-factory
+@navanax
+@neoplasia-reactor
+@neoplasm
+@nitrogen
+@nova
+@obviate
+@oct
+@oil
+@oil-extractor
+@omura
+@ore-crystal-thorium
+@ore-wall-beryllium
+@ore-wall-thorium
+@ore-wall-tungsten
+@overdrive-dome
+@overdrive-projector
+@overflow-duct
+@overflow-gate
+@oxidation-chamber
+@oxide
+@oxynoe
+@ozone
+@parallax
+@payload-conveyor
+@payload-loader
+@payload-mass-driver
+@payload-router
+@payload-source
+@payload-unloader
+@payload-void
+@payloadCount
+@payloadType
+@pebbles
+@phase-conduit
+@phase-conveyor
+@phase-fabric
+@phase-heater
+@phase-synthesizer
+@phase-wall
+@phase-wall-large
+@phase-weaver
+@pine
+@plasma-bore
+@plastanium
+@plastanium-compressor
+@plastanium-conveyor
+@plastanium-wall
+@plastanium-wall-large
+@plated-conduit
+@pneumatic-drill
+@poly
+@pooled-cryofluid
+@power-node
+@power-node-large
+@power-source
+@power-void
+@powerCapacity
+@powerNetCapacity
+@powerNetIn
+@powerNetOut
+@powerNetStored
+@precept
+@prime-refabricator
+@progress
+@pulsar
+@pulse-conduit
+@pulverizer
+@pur-bush
+@pyratite
+@pyratite-mixer
+@pyrolysis-generator
+@quad
+@quasar
+@quell
+@radar
+@range
+@red-diamond-wall
+@red-ice
+@red-ice-boulder
+@red-ice-wall
+@red-stone
+@red-stone-boulder
+@red-stone-vent
+@red-stone-wall
+@redmat
+@redweed
+@regen-projector
+@regolith
+@regolith-wall
+@reign
+@reinforced-bridge-conduit
+@reinforced-conduit
+@reinforced-container
+@reinforced-liquid-container
+@reinforced-liquid-junction
+@reinforced-liquid-router
+@reinforced-liquid-tank
+@reinforced-message
+@reinforced-payload-conveyor
+@reinforced-payload-router
+@reinforced-pump
+@reinforced-surge-wall
+@reinforced-surge-wall-large
+@reinforced-vault
+@repair-point
+@repair-turret
+@retusa
+@rhyolite
+@rhyolite-boulder
+@rhyolite-crater
+@rhyolite-vent
+@rhyolite-wall
+@ripple
+@risso
+@rotary-pump
+@rotation
+@rough-rhyolite
+@router
+@rtg-generator
+@salt
+@salt-wall
+@salvo
+@sand
+@sand-boulder
+@sand-floor
+@sand-wall
+@sand-water
+@scathe
+@scatter
+@scepter
+@scorch
+@scrap
+@scrap-wall
+@scrap-wall-gigantic
+@scrap-wall-huge
+@scrap-wall-large
+@second
+@segment
+@sei
+@separator
+@shale
+@shale-boulder
+@shale-wall
+@shallow-water
+@shield-projector
+@shielded-wall
+@ship-assembler
+@ship-fabricator
+@ship-refabricator
+@shock-mine
+@shockwave-tower
+@shootX
+@shootY
+@shooting
+@shrubs
+@silicon
+@silicon-arc-furnace
+@silicon-crucible
+@silicon-smelter
+@size
+@slag
+@slag-centrifuge
+@slag-heater
+@slag-incinerator
+@small-deconstructor
+@smite
+@snow
+@snow-boulder
+@snow-pine
+@snow-wall
+@solar-panel
+@solar-panel-large
+@sorter
+@space
+@spawn
+@spectre
+@speed
+@spiroct
+@spore
+@spore-cluster
+@spore-moss
+@spore-pine
+@spore-pod
+@spore-press
+@spore-wall
+@steam-generator
+@stell
+@stone
+@stone-wall
+@sublimate
+@surge
+@surge-alloy
+@surge-conveyor
+@surge-crucible
+@surge-router
+@surge-smelter
+@surge-tower
+@surge-wall
+@surge-wall-large
+@swarmer
+@switch
+@tainted-water
+@tank-assembler
+@tank-fabricator
+@tank-refabricator
+@tar
+@team
+@tecta
+@tendrils
+@tetrative-reconstructor
+@thermal-generator
+@thorium
+@thorium-reactor
+@thorium-wall
+@thorium-wall-large
+@thruster
+@tick
+@time
+@timescale
+@titan
+@titanium
+@titanium-conveyor
+@titanium-wall
+@titanium-wall-large
+@totalItems
+@totalLiquids
+@totalPower
+@toxopid
+@tsunami
+@tungsten
+@tungsten-wall
+@tungsten-wall-large
+@turbine-condenser
+@type
+@underflow-duct
+@underflow-gate
+@unit
+@unit-cargo-loader
+@unit-cargo-unload-point
+@unit-repair-tower
+@unloader
+@vanquish
+@vault
+@vela
+@vent-condenser
+@vibrant-crystal-cluster
+@water
+@water-extractor
+@wave
+@white-tree
+@white-tree-dead
+@world-cell
+@world-message
+@world-processor
+@x
+@y
+@yellow-stone
+@yellow-stone-boulder
+@yellow-stone-plates
+@yellow-stone-vent
+@yellow-stone-wall
+@yellowcoral
+@zenith
+```
+
+</details>
 
 ## Mindustry Logic References
 
@@ -78,89 +667,7 @@ emulate an existing test, so that we can prove that your proposal works as inten
 
 ### Roadmap
 
-Things I'd like to add to Mindcode-the-language:
-
-* [x] loops
-    * [x] while
-    * [x] for
-* [x] expressions!
-    * `move(center_x + radius * sin(@tick), center_y + radius * cos(@tick))` moves a unit in a circle around a specific point
-* [x] if expressions (ternary operator)
-* [x] auto-allocated global variables
-* [x] switch / case expression
-* [x] add support for drawing primitives
-* [x] add support for `uradar`
-* [x] add support for `ulocate`
-* [x] add support for `end`
-* [x] functions / reusable procedures
-* [x] further optimize the generated Logic
-* [x] optimize getlink / set
-* [x] optimize sensor / set
-* [x] skip comments when determining the return value of expressions (case/when, if/else, etc.)
-* [x] #16 indirect sensor access. We can't do `resource = @silicon ; CONTAINER.resource`. This tries to call `sensor
-  result CONTAINER @resource`, which doesn't make any sense.
-* [x] #17 `break` and `continue`, to better control iteration
-* [x] #19 inline functions, meaning functions that are inlined at the call-site
-* [x] add support for passing non-numerics into/out of non-recursive functions
-* [x] display compiler output in the webapp
-* [x] evaluation of constant expressions at compile time
-* [x] constant declaration: constants would be evaluated at compile time and wouldn't use a variable
-* [x] compiler directives (`#set`) to parametrize code compilation and optimization
-* [x] optimizer strength setting - per optimizer (off, basic, aggressive)
-* [ ] compatibility warnings:
-  * warn when `configure` main variable is used in V7 -- ML changes it to `config`
-  * warn about alloy-smelter --> surge-smelter V6 --> V7 name change
-* [ ] memory jump table for case expressions where possible
-* [ ] `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when` branch
-* [ ] varargs inline functions: the vararg can be processed using list iteration loop, or passed to another vararg function (not so sure about this)
-* [ ] `in` boolean operator: tests number is in range
-* [ ] short-circuit boolean evaluation in some form
-  * Ruby-like (`and`, `or` for short-circuit, `&&`, `||` for full evaluation), or
-  * "best-effort" basis (no guarantees either way)
-* [ ] improve compiler error messages
-* [ ] code generation/optimization objective (speed for faster but larger code, size for smaller but slower code)
-  - most of the time smaller is also faster in Mindustry Logic, but there might be a few opportunities for this distinction.
-
-Compiled code analysis
-
-* [ ] warn developers when the generated code goes over 1000 Mindustry instructions
-* [ ] warn developers when potentially non-numeric value is being pushed to stack
-* [ ] warn developers when variable is read before being written to
-* [ ] determine effective variable types to assist with optimizations
-
-Optimization improvements 
-
-* [ ] additional automatic inlining of non-recursive functions 
-* [ ] multiple-use temporary variables optimization
-* [ ] eliminate retval variables/assignments where not needed
-* [ ] elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`
-* [ ] parameters that are only passed to recursive calls and never modified won't be stored on stack
-* [ ] boolean expressions
-  * ternary operator assignment: instead of conditional jump/set/always jump/set, do set/conditional jump/set.
-  * and/or boolean improvements: conditional jump on individual operands instead of evaluating the and/or and doing conditional jump on that (overlaps with short-circuit boolean eval)
-  * and/or boolean improvements: encode `a and not b` as `a > b`, `a or not b` as `a >= b`.
-* [ ] multiple optimization passes
-
-More advanced optimizations 
-
-* [ ] common subexpressions optimizations (maybe including repeated array access)
-* [ ] loop unrolling / other loop optimizations
-* [ ] better jump threading / crossjumping
-* [ ] forward store for external variables
-* [ ] tail recursion
-
-Additional tooling
-
-* [ ] schematics-creation tool
-  * tool for creating schematics files from layout description
-  * creating layouts including code for processor(s) from Mindcode sources in one go
-
-Ideas on hold
-
-* [ ] support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
-* [ ] #17 `if` operator: `break if some_cond` is equivalent to `if some_cond break end`. It's just a less verbose way of doing it.
-* [ ] improved data types: 2d vector
-* [ ] integrate a better code editor in the webapp, rather than a plain old `<textarea>`
+Or perhaps a wish-list, can be found [here](ROADMAP.markdown).  
 
 # License
 

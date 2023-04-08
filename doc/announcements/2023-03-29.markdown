@@ -363,4 +363,3 @@ Non-exhaustive list of recent bug fixes:
 * Control functions with one parameter were compiled incorrectly (#58)
 * `if` and `while` conditions incorrectly evaluated values different from `0` and `1`. (#86)
 * Optimization replace `strictEqual` with `not notEqual`, which is not identical. (#64)
-
