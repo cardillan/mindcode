@@ -216,6 +216,7 @@ public class MindustryOpcodeVariants {
 
         add(list, V7, V7, W, OpcodeVariant.FunctionMapping.FUNC, Opcode.GETFLAG, res("result"), in("flag"));
         add(list, V7, V7, W, OpcodeVariant.FunctionMapping.FUNC, Opcode.SETFLAG, in("flag"), in("value"));
+        add(list, V7, V7, W, OpcodeVariant.FunctionMapping.PROP, Opcode.SETPROP, sensor("property"), block("object"), in("value"));
 
         // Virtual instructions
         add(list, V6, V7, S, OpcodeVariant.FunctionMapping.NONE, Opcode.LABEL,  label("label"));

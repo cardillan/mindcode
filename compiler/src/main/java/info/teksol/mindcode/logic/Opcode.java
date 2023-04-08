@@ -39,8 +39,9 @@ public enum Opcode {
     EXPLOSION       ("explosion",       "Create an explosion at a location."),
     SETRATE         ("setrate",         "Set processor execution speed in instructions/tick."),
     FETCH           ("fetch",           "Lookup units, cores, players or buildings by index. Indices start at 0 and end at their returned count."),
-    GETFLAG         ("getflag",         "Set a global flag that can be read by all processors."),
-    SETFLAG         ("setflag",         "Check if a global flag is set."),
+    GETFLAG         ("getflag",         "Check if a global flag is set."),
+    SETFLAG         ("setflag",         "Set a global flag that can be read by all processors."),
+    SETPROP         ("setprop",         "Sets a property of a unit or building."),
 
     LABEL           ("label",           0),
     PUSH            ("push",            2),
