@@ -291,7 +291,7 @@ all possible names of linked blocks are specially handled:
 The second point means that in the following code
 
 ```
-def foo(msg)
+def foo()
     print("In function foo")
     printflush(message1)
 end

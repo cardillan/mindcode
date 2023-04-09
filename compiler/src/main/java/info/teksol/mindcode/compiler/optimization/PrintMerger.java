@@ -68,9 +68,9 @@ class PrintMerger extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            // Do not merge across jumps and labels
+            // Do not merge across jumps, labels and printflushes
             // Function calls generate a label, so they prevent merging as well
-            if (instruction.isJump() || instruction.isLabel()) {
+            if (instruction.isJump() || instruction.isLabel() || instruction.isPrintflush()) {
                 operations.add(instruction);
                 return flush();
             }

@@ -48,7 +48,7 @@ Things being pondered on from time to time.
 * More advanced optimizations:
   * common subexpressions optimizations (maybe including repeated array access)
   * loop unrolling / other loop optimizations
-  * better jump threading / crossjumping
+  * better jump threading / cross-jumping
   * forward store for external variables
   * tail recursion optimization
 

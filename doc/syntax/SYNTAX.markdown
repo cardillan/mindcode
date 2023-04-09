@@ -16,6 +16,10 @@ This document covers the basics of Mindcode syntax:
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
 * [Compiler directives](SYNTAX-5-OTHER.markdown)
 
+As an addendum, some less obvious Mindustry Logic functions are described here: 
+
+* [Mindustry Tips and Tricks](SYNTAX-6-TIPS-N-TRICKS.markdown)
+
 ---
 
 # Mindcode basics
@@ -84,6 +88,13 @@ do not use any identifiers starting with two underscores for your variable or fu
 
 ## Literals
 
+### Null literal
+
+`null` is a literal representing the value of null. Null is the value of variables that haven't been initialized
+and a result of any calculation that is undefined or produced an error in Mindustry.
+
+### Numeric literals
+
 Mindustry supports the classic decimal notation for integers and floats:
 
 * `1`
@@ -96,21 +107,24 @@ Mindustry also supports hexadecimal representation for integers:
 * `0x35`
 * `0xf1`
 
+### Boolean literals
+
 Additionally, boolean literals are available:
 
 * `false`
 * `true`
 
-Boolean values are represented (and equivalent to) as `0` and `1`, respectively.
+Boolean values are representedas (and indistinguishable from) numerical values `0` and `1`, respectively.
+
+### String literals
 
 Finally, there are string literals, a sequence of characters enclosed in double quotes:
 
 `"A string literal."`
 
-It is possible use `\n` as a newline character in a string literal: `print("\n")` creates a new line in text output.
-Double quotes must not be used in a string literal. THey are anly allowed if they are properly escaped, i.e. `\"`,
-and even then they're replaced by single quotes in the compiled code (`"Hello, \"friend\"!"` --> `"Hello, 'friend'!"`),
-as Mindustry Logic cannot handle them otherwise.
+Double quotes in string literals aren't supported in Mindustry. Mindcode only allows them if they are properly
+escaped, i.e. `\"`, and even then they're replaced by single quotes in the compiled code (`"Hello, \"friend\"!"`
+--> `"Hello, 'friend'!"`). Support for escaped double quotes might be completely removed in some future release.
 
 ---
 

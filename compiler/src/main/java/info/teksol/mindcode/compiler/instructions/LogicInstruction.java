@@ -34,6 +34,10 @@ public class LogicInstruction {
         return opcode == PRINT;
     }
 
+    public boolean isPrintflush() {
+        return opcode == PRINTFLUSH;
+    }
+
     public boolean isJump() {
         return opcode == JUMP;
     }

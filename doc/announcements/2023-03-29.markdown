@@ -98,21 +98,21 @@ Mindustry Logic version 7 (as of release 142) is now fully supported, including 
 The web app compiler targets Version 7 with World Processor instruction set. The command-line compiler can set the target 
 platform to Version 6, Version 7 and Version 7 + World Processor.
 
-Check out [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown) for a list of all supported functions in Version 7.
+Check out [Function reference for Mindustry Logic 7](../syntax/FUNCTIONS_V7.markdown) for a list of all supported functions in Version 7.
 
 Code developed and compiled using previous Mindcode versions should compile just fine when targeting version 7
 (with or without the World Processor instruction set), except when trying to use instructions that were explicitly removed from
 Version 7 Logic:
 * `ucontrol pathfind` (mapped to the `pathfind()` function)
 * `rally` and `resupply` can no longer be used as a `group` argument in `ulocate` instruction (mapped to the 
-[`ulocate(...)`](FUNCTIONS_V7.markdown#instruction-ulocate) function).
+[`ulocate(...)`](../syntax/FUNCTIONS_V7.markdown#instruction-ulocate) function).
 
 If you want to continue developing for Mindustry Logic V6, the best way now is to use the command line compiler.
 Support for the web app will hopefully be added shortly.
 
 ## Custom functions enhancements
 
-For a more comprehensive description of current custom function support, see [Custom Functions](SYNTAX-4-FUNCTIONS.markdown#user-defined-functions).
+For a more comprehensive description of current custom function support, see [Custom Functions](../syntax/SYNTAX-4-FUNCTIONS.markdown#user-defined-functions).
 
 ### Stack usage and stack allocation
 
@@ -262,7 +262,7 @@ loop while @unit == null
 ### Operators
 
 Operator precedence was changed to be more in line with usual implementations in other languages (specifically, Ruby).
-The list of operators in order of precedence can be found [here](SYNTAX-2-EXPRESSIONS.markdown#operators).
+The list of operators in order of precedence can be found [here](../syntax/SYNTAX-2-EXPRESSIONS.markdown#operators).
 
 Additionally, several operators were added or altered:
 
@@ -274,7 +274,7 @@ Additionally, several operators were added or altered:
 
 ## Built-in functions
 
-The `println()` and `printf()` functions for easier printing (see [Built-in functions](SYNTAX-4-FUNCTIONS.markdown#built-in-functions)).
+The `println()` and `printf()` functions for easier printing (see [Built-in functions](../syntax/SYNTAX-4-FUNCTIONS.markdown#built-in-functions)).
 
 # Compiler enhancements
 

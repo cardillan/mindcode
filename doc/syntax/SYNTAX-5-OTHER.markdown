@@ -88,7 +88,7 @@ and this name can be used in the compiler directive like this:
 ```
 
 Not all optimizations support the `aggressive` level. For those the level `aggressive` is the same as `basic`.
-The complete list of available optimizations, including the option name for setting the level of givn optimization
+The complete list of available optimizations, including the option name for setting the level of given optimization
 and availability of the aggressive optimization level is:
 
 | Optimization                                                    | Option name                 | Aggressive |
@@ -354,4 +354,4 @@ into Mindustry processors even if they're longer than what the Mindustry GUI all
 
 ---
 
-[« Previous: Functions](SYNTAX-4-FUNCTIONS.markdown)
+[« Previous: Functions](SYNTAX-4-FUNCTIONS.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks »](SYNTAX-6-TIPS-N-TRICKS.markdown)

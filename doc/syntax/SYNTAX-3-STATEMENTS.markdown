@@ -292,7 +292,7 @@ case block.type
 end
 ```
 
-The resulting effect is that when the block is some kind of a conduit, nothing happens.
+The resulting effect is that when the block is some kind of conduit, nothing happens.
 When it is something different, the `block.enabled = intake` expression is evaluated,
 changing wrong block's state.
 
