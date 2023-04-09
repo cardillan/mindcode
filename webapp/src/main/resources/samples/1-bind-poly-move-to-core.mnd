@@ -1,5 +1,5 @@
-// Declare a constant, so we can easily replace where we're going without
-// having to rewrite everything, or recompile
+// Declare a constant, so we can easily replace where we're going
+// without having to rewrite everything, or recompile
 
 TARGET = foundation1
 

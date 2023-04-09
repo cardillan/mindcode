@@ -2,8 +2,8 @@ n = @links
 while n > 0
     n -= 1
     reactor = getlink(n)
-    // Only process reactors. If a different block got linked by mistake,
-    // it would become disabled
+    // Only process reactors. If a different block got linked
+    // by mistake, it would become disabled
     if reactor.type == @thorium-reactor
         pct_avail = reactor.cryofluid / reactor.liquidCapacity
         reactor.enabled = pct_avail >= 0.25

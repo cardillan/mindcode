@@ -12,11 +12,11 @@ NE_Y = @maph
 // Setting to true restores copper conveyors (useful for testing)
 DOWNGRADE = false
 
-// Upgrading is done in stripes of given width -- faster processing
-// (Could be even wider, the build radius is about 20 blocks or so)
+// Upgrading in stripes of given width -- faster processing
+// (Could be even wider, the build radius is ~20 blocks or so)
 WIDTH = 10
 
-// How close unit needs to get to the desired position before upgrading
+// How close unit needs to get to the block being upgraded
 RADIUS = 10
 
 // Count the total number of upgraded blocks
@@ -24,7 +24,7 @@ TOTAL = 0
 
 allocate heap in MEMORY[0 ... 16]
 
-// If a memory cell is attached, the progress can be restored from it
+// If a memory cell is attached, the progress can be stored there
 if $INITIALIZED 
     x = limit($X, SW_X, NE_X)
     y = limit($Y, SW_Y, NE_Y)
@@ -39,15 +39,11 @@ else
     dy = WIDTH
 end
 
-if DOWNGRADE
-    oldType = @titanium-conveyor
-    newType = @conveyor
-else
-    oldType = @conveyor
-    newType = @titanium-conveyor
-end
+oldType = DOWNGRADE ? @titanium-conveyor : @conveyor
+newType = DOWNGRADE ? @conveyor : @titanium-conveyor
 
-// It is possible to pause/stop the processing by attaching a switch and activating it
+// It is possible to pause/stop the processing
+// by attaching a switch and activating it
 while switch1.enabled == false
 
     // If we don't have an active unit, summon a new one
@@ -96,14 +92,13 @@ inline def findUnit()
         ubind(UNIT)
         if @unit == null
             printf("No unit of type $UNIT found.")
-            printflush(message1)
         elsif @unit.controlled != 0
             printf("Looking for a free $UNIT...")
-            printflush(message1)
         else
             flag(1)		// Mark unit as active
             break
         end
+        printflush(message1)
     end
 end
 
@@ -112,13 +107,15 @@ inline def limit(n, min, max)
     min(max(n, min), max)
 end
 
-// If a block of type oldType is found at position, replaces it with newType
+// If a block of type oldType is found at position,
+// replaces it with newType
 inline def replace(x, y, oldType, newType)
     getBlock(x, y, b_type, b_building)
     
     if b_type == oldType
         build(x, y, newType, b_building.rotation, 0)
-        // If the processor is too fast, we need to wait until the block is built
+        // If the processor is too fast, we need to wait
+        // for the unit to finish building the block
         do
             getBlock(x, y, b_type, b_building)
         loop while b_type != newType

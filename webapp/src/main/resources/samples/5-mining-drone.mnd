@@ -13,25 +13,26 @@ do
     ubind(@poly)
 loop while (@unit.dead !== 0) or (@unit.controlled != 0)
 
-// Some Mindustry code on the internet relies on nonzero flag marking used units.
-// Assign non-zero flag to protect our unit from such code run by other processors.
+// Some Mindustry code on the internet relies on nonzero flag
+// marking used units. Assign non-zero flag to protect our unit
+// from such code run by other processors.
 flag(12)
 
 // Mine until the unit is lost or killed
 // Then the program restarts, acquiring another unit
 while (@unit.controller == @this) and (@unit.dead === 0)
 	if @unit.totalItems < @unit.itemCapacity
-		print("state: mining")
+		println("state: mining")
 		approach(PATCH_X, PATCH_Y, 3)
 		mine(PATCH_X, PATCH_Y)
 	else
-		print("state: dropping")
+		println("state: dropping")
 		approach(CONTAINER_X, CONTAINER_Y, 3)
 		itemDrop(CONTAINER, @unit.totalItems)
 	end
 
-	print("\nitemCapacity: ", @unit.itemCapacity)
-	print("\ntotalItems: ", @unit.totalItems)
-	print("\nfirstItem: ", @unit.firstItem)
+	println("item capacity: ", @unit.itemCapacity)
+	println("total items: ", @unit.totalItems)
+	println("first item: ", @unit.firstItem)
 	printflush(message1)
 end

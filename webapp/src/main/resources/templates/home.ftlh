@@ -56,7 +56,6 @@
                 </div>
                 <div style="margin-top:1cm;text-align:center;">
                     <p>
-                        Useful links:
                         <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>
                         | <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/README.markdown">Readme</a>
                         | <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/CHANGELOG.markdown">Changelog</a>

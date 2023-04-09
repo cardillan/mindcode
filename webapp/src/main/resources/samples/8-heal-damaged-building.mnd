@@ -1,5 +1,6 @@
 // Patrols around a building and heals any damaged building
-// Since the patrolling ship is close by, repairing will happen faster than usual
+// Since the patrolling ship is close by, repairing
+// will happen faster than usual
 CENTER = foundation1
 UNIT = @poly
 
@@ -25,14 +26,13 @@ inline def findUnit()
         ubind(UNIT)
         if @unit == null
             printf("No unit of type $UNIT found.")
-            printflush(message1)
         elsif @unit.controlled != 0
             printf("Looking for a free $UNIT...")
-            printflush(message1)
         else
             flag(1)		// Mark unit as active
-            break
+            return
         end
+        printflush(message1)
     end
 end
 

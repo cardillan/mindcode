@@ -35,6 +35,6 @@ if found
 end
 
 // Debugging information
-print("FLAG: ", FLAG)
-print("\nfound: ", found)
+println("FLAG: ", FLAG)
+println("found: ", found)
 printflush(message1)
