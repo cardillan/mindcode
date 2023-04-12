@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ abstract class GlobalOptimizer extends BaseOptimizer {
 
     @Override
     public final void flush() {
-        original = (int) program.stream().filter(ix -> !ix.isLabel()).count();
+        original = (int) program.stream().filter(ix -> !(ix instanceof LabelInstruction)).count();
 
         int size;
         boolean repeat;
@@ -40,7 +41,7 @@ abstract class GlobalOptimizer extends BaseOptimizer {
             debugPrinter.iterationFinished(this, ++iterations, program);
         } while (repeat && size != program.size());
 
-        emitted = (int) program.stream().filter(ix -> !ix.isLabel()).count();
+        emitted = (int) program.stream().filter(ix -> !(ix instanceof LabelInstruction)).count();
 
         generateFinalMessages();
         

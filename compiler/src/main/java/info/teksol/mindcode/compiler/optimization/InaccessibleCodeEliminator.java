@@ -1,8 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -46,15 +45,12 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
     }
 
     private Stream<String> extractLabelReference(LogicInstruction instruction) {
-        if (instruction.isJump()) {
-            return Stream.of(instruction.asJump().getTarget());
-        } else if (instruction.isSet()) {
-            return Stream.of(instruction.asSet().getValue());
-        } else if (instruction.isCall()) {
-            return instruction.asCall().getAddresses().stream();
-        }
-
-        return null;
+        return switch(instruction) {
+            case JumpInstruction ix -> Stream.of(ix.getTarget());
+            case SetInstruction  ix -> Stream.of(ix.getValue());
+            case CallInstruction ix -> ix.getAddresses().stream();
+            default -> null;
+        };
     }
 
     private void removeInaccessibleInstructions() {
@@ -64,18 +60,18 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
             LogicInstruction instruction = it.next();
             if (accessible) {
                 // Unconditional jump makes the next instruction inaccessible
-                if (instruction.isJump() && instruction.asJump().getCondition().equals("always")) {
+                if (instruction instanceof JumpInstruction ix && ix.getCondition().equals("always")) {
                     accessible = false;
-                } else if (instruction.isReturn()) {
+                } else if (instruction instanceof ReturnInstruction) {
                     accessible = false;
-                } else if (instruction.isEnd()) {
+                } else if (instruction instanceof EndInstruction) {
                     accessible = false;
                 }
             } else {
-                if (instruction.isLabel()) {
+                if (instruction instanceof  LabelInstruction ix) {
                     // An active jump to here makes next instruction accessible
-                    accessible = activeLabels.contains(instruction.getArgs().get(0));
-                } else if (!instruction.isEnd() || level == OptimizationLevel.AGGRESSIVE) {
+                    accessible = activeLabels.contains(ix.getLabel());
+                } else if (!(instruction instanceof EndInstruction) || level == OptimizationLevel.AGGRESSIVE) {
                     // Remove inaccessible
                     // Preserve end unless aggressive mode
                     it.remove();

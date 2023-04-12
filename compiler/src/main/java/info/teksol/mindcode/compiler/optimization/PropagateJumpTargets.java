@@ -2,9 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.Opcode;
 
 import java.util.HashSet;
@@ -39,8 +37,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
         program.add(0, createInstruction(Opcode.LABEL, FIRST_LABEL));
         for (int index = 0; index < program.size(); index++) {
             LogicInstruction instruction = program.get(index);
-            if (instruction.isJump()) {
-                JumpInstruction ix = instruction.asJump();
+            if (instruction instanceof JumpInstruction ix) {
                 String label = findJumpRedirection(ix);
                 if (!label.equals(ix.getTarget())) {
                     startLabelUsed |= label.equals(FIRST_LABEL);
@@ -79,21 +76,21 @@ class PropagateJumpTargets extends GlobalOptimizer {
     
     // Determines the jump redirection (one level only)
     private String evaluateJumpRedirection(JumpInstruction firstJump, String label) {
-        int target = findInstructionIndex(0, ix -> ix.isLabel() && ix.asLabel().getLabel().equals(label));
+        int target = findInstructionIndex(0, in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
         if (target < 0) {
             throw new OptimizationException("Could not find label " + label);
         }
 
         // Find next real instruction
-        LogicInstruction next = findInstruction(target + 1, ix -> !ix.isLabel());
+        LogicInstruction next = findInstruction(target + 1, ix -> !(ix instanceof LabelInstruction));
         
         // Redirect compatible jumps
-        if (next.isJump() && (next.asJump().getCondition().equals("always") || isIdenticalJump(firstJump, next))) {
-            return next.asJump().getTarget();
+        if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {
+            return ix.getTarget();
         } 
 
         // Handle end instruction only in aggressive mode
-        if (next.isEnd() && level == OptimizationLevel.AGGRESSIVE) {
+        if (next instanceof EndInstruction && level == OptimizationLevel.AGGRESSIVE) {
             return FIRST_LABEL;
         }
 
@@ -102,7 +99,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
     }
     
     // Returns true if the next jump is semantically identical to the first jump
-    private boolean isIdenticalJump(LogicInstruction firstJump, LogicInstruction nextJump) {
+    private boolean isIdenticalJump(JumpInstruction firstJump, JumpInstruction nextJump) {
         List<String> args1 = firstJump.getArgs();
         List<String> args2 = nextJump.getArgs();
         

@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,22 +36,21 @@ public class LogicInstructionLabelResolver {
     private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program, Map<String, String> addresses) {
         final List<LogicInstruction> result = new ArrayList<>();
         for (final LogicInstruction instruction : program) {
-            switch (instruction.getOpcode()) {
-                case JUMP:
-                    final String label = instruction.asJump().getTarget();
+            switch (instruction) {
+                case JumpInstruction ix:
+                    final String label = ix.getTarget();
                     if (!addresses.containsKey(label)) {
                         throw new CompilerException("Unknown jump label target: [" + label + "] was not previously discovered in " + program);
                     }
-
-                    result.add(resolveLabel(addresses, instruction, 0));
+                    result.add(resolveLabel(addresses, ix, 0));
                     break;
                 
-                case SET:
-                    result.add(resolveLabel(addresses, instruction, 1));
+                case SetInstruction ix:
+                    result.add(resolveLabel(addresses, ix, 1));
                     break;
 
-                case WRITE: 
-                    result.add(resolveLabel(addresses, instruction, 0));
+                case WriteInstruction ix:
+                    result.add(resolveLabel(addresses, ix, 0));
                     break;
 
                 default:
@@ -82,13 +80,12 @@ public class LogicInstructionLabelResolver {
         for (int i = 0; i < program.size(); i++) {
             final LogicInstruction instruction = program.get(i);
             instructionPointer += instructionProcessor.getRealSize(instruction);
-            if (instruction.isLabel()) {
-                final String label = instruction.getArg(0);
-                if (result.containsKey(label)) {
-                    throw new CompilerException("Duplicate label detected: [" + label + "] reused at least twice in " + program);
+            if (instruction instanceof LabelInstruction ix) {
+                if (result.containsKey(ix.getLabel())) {
+                    throw new CompilerException("Duplicate label detected: [" + ix.getLabel() + "] reused at least twice in " + program);
                 }
 
-                result.put(label, String.valueOf(instructionPointer));
+                result.put(ix.getLabel(), String.valueOf(instructionPointer));
             }
         }
 

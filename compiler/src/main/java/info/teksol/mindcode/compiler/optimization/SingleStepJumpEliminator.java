@@ -34,8 +34,8 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
     private final class EmptyState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isJump()) {
-                return new ExpectLabel(instruction.asJump());
+            if (instruction instanceof JumpInstruction ix) {
+                return new ExpectLabel(ix);
             } else {
                 emitToNext(instruction);
                 return this;
@@ -61,19 +61,17 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isLabel()) {
-                LabelInstruction ix = instruction.asLabel();
-                if (ix.getLabel().equals(targetLabel)) {
-                    isJumpToNext = true;
-                }
+            if (instruction instanceof LabelInstruction ix) {
+                isJumpToNext |= ix.getLabel().equals(targetLabel);
                 labels.add(ix);
                 return this;
             }
 
             if (!isJumpToNext) {
-                // Not jump to next -- cannot skip it
+                // Do not emit the instruction if it is a jump to the next one
                 emitToNext(jump);
             }
+
             labels.forEach(SingleStepJumpEliminator.this::emitToNext);
             return new EmptyState().emit(instruction);
         }

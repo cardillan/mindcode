@@ -3,6 +3,8 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.compiler.instructions.SetInstruction;
 
 import java.util.List;
 
@@ -29,30 +31,27 @@ class OutputTempEliminator extends GlobalOptimizer {
     protected boolean optimizeProgram() {
         // Cannot use iterations due to modifications of the underlying list in the loop
         for (int index  = 1; index < program.size(); index++)  {
-            LogicInstruction current = program.get(index);
-            if (!current.isSet()) continue;
+            if (program.get(index) instanceof SetInstruction ix && isTemporary(ix.getValue())) {
+                String value = ix.getValue();
+                List<LogicInstruction> list = findInstructions(
+                        in -> in.getArgs().contains(value) && !(in instanceof PushOrPopInstruction));
 
-            String arg1 = current.getArgs().get(1);
-            // Not an assignment from a temp variable
-            if (!isTemporary(arg1)) continue;
-            
-            LogicInstruction previous = program.get(index - 1);
-            List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg1) && !ix.isPushOrPop());
-            // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
-            if (list.size() != 2 || list.get(0) != previous) continue;
+                LogicInstruction previous = program.get(index - 1);
+                // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
+                if (list.size() != 2 || list.get(0) != previous) continue;
 
-            // Make sure all arg1 arguments of the other instruction are output
-            boolean replacesOutputArg = instructionProcessor.getTypedArguments(previous)
-                    .filter(t -> t.getValue().equals(arg1))
-                    .allMatch(t -> t.getArgumentType().isOutput());
-            if (!replacesOutputArg) continue;
+                // Make sure all arg1 arguments of the other instruction are output
+                boolean replacesOutputArg = instructionProcessor.getTypedArguments(previous)
+                        .filter(t -> t.getValue().equals(value))
+                        .allMatch(t -> t.getArgumentType().isOutput());
+                if (!replacesOutputArg) continue;
 
-            // The current instruction merely transfers a value from the output argument of the previous instruction
-            // Replacing instruction argument by value
-            String arg0 = current.getArgs().get(0);
-            program.set(index - 1, replaceAllArgs(previous, arg1, arg0));
-            program.remove(index);
-            index--;
+                // The current instruction merely transfers a value from the output argument of the previous instruction
+                // Replacing those arguments with target of the set instruction
+                program.set(index - 1, replaceAllArgs(previous, value, ix.getResult()));
+                program.remove(index);
+                index--;
+            }
         }
 
         return false;

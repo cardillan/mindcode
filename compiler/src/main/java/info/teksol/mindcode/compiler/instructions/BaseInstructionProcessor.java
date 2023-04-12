@@ -121,85 +121,62 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public LogicInstruction createInstructionUnchecked(String marker, Opcode opcode, List<String> arguments) {
-        switch (opcode) {
-            case CALL:
-                return new CallInstruction(marker, opcode, arguments);
-            case GOTO:
-                return new GotoInstruction(marker, opcode, arguments);
-            case JUMP:
-                return new JumpInstruction(marker, opcode, arguments);
-            case LABEL:
-                return new LabelInstruction(marker, opcode, arguments);
-            case OP:
-                return new OpInstruction(marker, opcode, arguments);
-            case POP:
-            case PUSH:
-                return new PushOrPopInstruction(marker, opcode, arguments);
-            case PRINT:
-                return new PrintInstruction(marker, opcode, arguments);
-            case READ:
-                return new ReadInstruction(marker, opcode, arguments);
-            case RETURN:
-                return new ReturnInstruction(marker, opcode, arguments);
-            case SET:
-                return new SetInstruction(marker, opcode, arguments);
-            case WRITE:
-                return new WriteInstruction(marker, opcode, arguments);
-            default:
-                return new BaseInstruction(marker, opcode, arguments);
-        }
+        return switch (opcode) {
+            case CALL       -> new CallInstruction(marker, opcode, arguments);
+            case END        -> new EndInstruction(marker, opcode, arguments);
+            case GOTO       -> new GotoInstruction(marker, opcode, arguments);
+            case JUMP       -> new JumpInstruction(marker, opcode, arguments);
+            case LABEL      -> new LabelInstruction(marker, opcode, arguments);
+            case OP         -> new OpInstruction(marker, opcode, arguments);
+            case POP        -> new PopInstruction(marker, opcode, arguments);
+            case PRINT      -> new PrintInstruction(marker, opcode, arguments);
+            case PRINTFLUSH -> new PrintflushInstruction(marker, opcode, arguments);
+            case PUSH       -> new PushInstruction(marker, opcode, arguments);
+            case READ       -> new ReadInstruction(marker, opcode, arguments);
+            case RETURN     -> new ReturnInstruction(marker, opcode, arguments);
+            case SET        -> new SetInstruction(marker, opcode, arguments);
+            case STOP       -> new StopInstruction(marker, opcode, arguments);
+            case WRITE      -> new WriteInstruction(marker, opcode, arguments);
+            default         -> new BaseInstruction(marker, opcode, arguments);
+        };
     }
 
     @Override
     public List<LogicInstruction> resolve(LogicInstruction virtualInstruction) {
-        switch (virtualInstruction.getOpcode()) {
-            case LABEL:
-                return List.of();
+        return switch (virtualInstruction) {
+            case LabelInstruction ix -> List.of();
 
-            case PUSH: {
-                PushOrPopInstruction ix = virtualInstruction.asPushOrPop();
-                return List.of(
-                        createInstruction(Opcode.WRITE, ix.getValue(), ix.getMemory(), getStackPointer()),
-                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1")
-                );
-            }
+            case PushInstruction ix -> List.of(
+                    createInstruction(Opcode.WRITE, ix.getValue(), ix.getMemory(), getStackPointer()),
+                    createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"));
 
-            case POP: {
-                PushOrPopInstruction ix = virtualInstruction.asPushOrPop();
-                return List.of(
-                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
-                        createInstruction(Opcode.READ, ix.getValue(), ix.getMemory(), getStackPointer())
-                );
-            }
+            case PopInstruction ix -> List.of(
+                    createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
+                    createInstruction(Opcode.READ, ix.getValue(), ix.getMemory(), getStackPointer())
+            );
 
-            case CALL: {
-                CallInstruction ix = virtualInstruction.asCall();
-                return List.of(
-                        createInstruction(Opcode.WRITE, ix.getReturn(), ix.getMemory(), getStackPointer()),
-                        createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
-                        createInstruction(Opcode.SET, "@counter", ix.getTarget())
-                );
-            }
+            case CallInstruction ix -> List.of(
+                    createInstruction(Opcode.WRITE, ix.getReturn(), ix.getMemory(), getStackPointer()),
+                    createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
+                    createInstruction(Opcode.SET, "@counter", ix.getTarget())
+            );
 
-            case RETURN: {
-                ReturnInstruction ix = virtualInstruction.asReturn();
+            case ReturnInstruction ix -> {
                 String retAddr = nextTemp();
-                return List.of(
+                yield List.of(
                         createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
                         createInstruction(Opcode.READ, retAddr, ix.getMemory(), getStackPointer()),
                         createInstruction(Opcode.SET, "@counter", retAddr)
                 );
             }
 
-            case GOTO: {
-                return List.of(
-                        createInstruction(Opcode.SET, "@counter", virtualInstruction.asGoto().getLabel())
-                );
-            }
+            case GotoInstruction ix -> List.of(
+                    createInstruction(Opcode.SET, "@counter", ix.getLabel())
+            );
 
-            default:
-                throw new GenerationException("Don't know how to resolve virtual instruction " + virtualInstruction);
-        }
+            default ->
+                    throw new GenerationException("Don't know how to resolve virtual instruction " + virtualInstruction);
+        };
     }
 
     @Override

@@ -40,8 +40,8 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isOp() && isComparisonOperatorToTmp(instruction.asOp())) {
-                return new ExpectJump(instruction.asOp());
+            if (instruction instanceof OpInstruction ix && isComparisonOperatorToTmp(ix)) {
+                return new ExpectJump(ix);
             } else {
                 emitToNext(instruction);
                 return this;
@@ -63,35 +63,23 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            do {
-                if (!instruction.isJump()) break;
-
-                // Not a conditional jump
-                JumpInstruction ix = instruction.asJump();
-                if (!ix.getCondition().equals("notEqual")) break;
-
+            if (instruction instanceof JumpInstruction ix && ix.getCondition().equals("notEqual")) {
                 // Other preconditions for the optimization
                 boolean isSameVariable = ix.getFirstOperand().equals(op.getResult());
                 boolean jumpComparesToFalse = ix.getSecondOperand().equals("false");
 
                 if (isSameVariable && jumpComparesToFalse) {
-                    emitToNext(
-                            createInstruction(
-                                    Opcode.JUMP,
-                                    ix.getTarget(),
-                                    op.getOperation(),
-                                    op.getFirstOperand(),
-                                    op.getSecondOperand()
-                            )
+                    emitToNext(createInstruction(Opcode.JUMP, ix.getTarget(),
+                            op.getOperation(),
+                            op.getFirstOperand(), op.getSecondOperand())
                     );
                     return new EmptyState();
                 }
-            } while (false);
+            }
 
             emitToNext(op);
             return new EmptyState().emit(instruction);
         }
-
 
         @Override
         public State flush() {

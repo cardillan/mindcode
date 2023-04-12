@@ -1,9 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.PrintInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.Opcode;
 
 import java.util.ArrayList;
@@ -46,8 +44,8 @@ class PrintMerger extends PipelinedOptimizer {
     private final class EmptyState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isPrint() && instruction.asPrint().getValue().startsWith("\"")) {
-                return new ExpectPrint(instruction.asPrint());
+            if (instruction instanceof PrintInstruction ix && ix.getValue().startsWith("\"")) {
+                return new ExpectPrint(ix);
             } else {
                 emitToNext(instruction);
                 return this;
@@ -69,17 +67,15 @@ class PrintMerger extends PipelinedOptimizer {
         }
 
         @Override
-        public State emit(LogicInstruction instruction) {
+        public State emit(LogicInstruction instr) {
             // Do not merge across jumps, labels and printflushes
             // Function calls generate a label, so they prevent merging as well
-            if (instruction.isJump() || instruction.isLabel() || instruction.isPrintflush()) {
-                operations.add(instruction);
+            if (instr instanceof JumpInstruction || instr instanceof LabelInstruction || instr instanceof PrintflushInstruction) {
+                operations.add(instr);
                 return flush();
             }
 
-            if (instruction.isPrint()) {
-                PrintInstruction ix = instruction.asPrint();
-
+            if (instr instanceof PrintInstruction ix) {
                 // Only merge string literals
                 if (ix.getValue().startsWith("\"")) {
                     PrintInstruction merged = merge(firstPrint, ix);
@@ -96,12 +92,12 @@ class PrintMerger extends PipelinedOptimizer {
                 }
 
                 // Any other print breaks the sequence and cannot be merged
-                operations.add(instruction);
+                operations.add(instr);
                 return flush();
             }
 
             // Continue merging
-            operations.add(instruction);
+            operations.add(instr);
             return this;
         }
 
@@ -116,7 +112,7 @@ class PrintMerger extends PipelinedOptimizer {
             // Only merge string constants
             if ((str1.length() + str2.length() <= 38 || level == OptimizationLevel.AGGRESSIVE)
                     && str1.startsWith(q) && str1.endsWith(q) && str2.startsWith(q) && str2.endsWith(q)) {
-                return createInstruction(Opcode.PRINT, str1.substring(0, str1.length() - 1) + str2.substring(1)).asPrint();
+                return (PrintInstruction) createInstruction(Opcode.PRINT, str1.substring(0, str1.length() - 1) + str2.substring(1));
             }
 
             return null;

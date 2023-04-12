@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM eclipse-temurin:17
 
 WORKDIR /srv
 
@@ -15,4 +15,4 @@ RUN ./mvnw install -Dmaven.test.skip
 
 EXPOSE 8080
 
-CMD java -classpath `find webapp -type f -name '*.jar' | tr '\n' ':'` info.teksol.mindcode.webapp.WebappApplication
+CMD java --enable-preview -classpath `find webapp -type f -name '*.jar' | tr '\n' ':'` info.teksol.mindcode.webapp.WebappApplication

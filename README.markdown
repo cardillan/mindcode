@@ -645,7 +645,7 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 
 ### Native installation
 
-1. Install Java 11+, Maven 3.6, and PostgreSQL
+1. Install Java 17+, Maven 3.6, and PostgreSQL
 2. Create a database in PostgreSQL named `mindcode_development`
 3. Set environment variables with the PostgreSQL connection parameters:
 ```sh
@@ -664,6 +664,13 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 
 The compiler was written in a Test-Driven Development fashion. If you can, please look in `src/main/test` and attempt to
 emulate an existing test, so that we can prove that your proposal works as intended.
+
+Tests in the `info.teksol.mindcode.processor` package are particularly useful. They compile a script and run it
+on an emulated processor, comparing values produced by `print` instructions with expected ones. The processor emulator
+cannot execute instructions interfacing with the Mindustry world - except Memory Bank and MemoryCell - but it can
+process all kinds of Mindcode control elements. Implementing some more complicated algorithms using loops, 
+conditional statements and/or function helps tremendously. (The emulated processor runs much faster than Mindcode
+processors, so even more complicated algorithms are feasible to run.)
 
 ### Roadmap
 

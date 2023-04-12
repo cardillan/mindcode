@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.TypedArgument;
 
+import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +42,7 @@ public class StackUsageOptimizer extends GlobalOptimizer {
     private final Set<String> variables = new HashSet<>();
 
     private void removeUnusedVariables() {
-        program.stream().filter(ix -> !ix.isPushOrPop()).forEach(this::collectVariables);
+        program.stream().filter(ix -> !(ix instanceof PushOrPopInstruction)).forEach(this::collectVariables);
         program.removeIf(this::uselessStackOperation);
     }
 
@@ -51,14 +51,14 @@ public class StackUsageOptimizer extends GlobalOptimizer {
     }
 
     private boolean uselessStackOperation(LogicInstruction instruction) {
-        return instruction.isPushOrPop() && !variables.contains(instruction.asPushOrPop().getValue());
+        return instruction instanceof PushOrPopInstruction ix && !variables.contains(ix.getValue());
     }
 
     private void removeUnnecessaryPushes() {
         // Loop through call instruction indexes
-        int call = findInstructionIndex(0, LogicInstruction::isCall);
+        int call = findInstructionIndex(0, ix -> ix instanceof CallInstruction);
         while (call > 0) {
-            int finish = findInstructionIndex(call, LogicInstruction::isReturn);
+            int finish = findInstructionIndex(call, ix -> ix instanceof ReturnInstruction);
             if (finish < 0) {
                 break;      // No return after call: something is wrong, bail out.
             }
@@ -67,7 +67,7 @@ public class StackUsageOptimizer extends GlobalOptimizer {
             if (isLinear(codeBlock)) {
                 // List of variables read in the code block, except push/pop operations
                 Set<String> readVariables = codeBlock.stream()
-                        .filter(ix -> !ix.isPushOrPop())
+                        .filter(ix -> !(ix instanceof PushOrPopInstruction))
                         .flatMap(instructionProcessor::getTypedArguments)
                         .filter(arg -> arg.getArgumentType().isInput())
                         .map(TypedArgument::getValue)
@@ -78,39 +78,35 @@ public class StackUsageOptimizer extends GlobalOptimizer {
 
                 // Need to remove from the entire program, not just from the code block, as code block
                 // doesn't contain push instructions preceding the call instruction
-                program.removeIf(ix -> ix.isPushOrPop() && ix.matchesMarker(marker)
-                        && !readVariables.contains(ix.asPushOrPop().getValue()));
+                program.removeIf(in -> in instanceof PushOrPopInstruction ix
+                        && ix.matchesMarker(marker) && !readVariables.contains(ix.getValue()));
             }
 
-            call = findInstructionIndex(call + 1, LogicInstruction::isCall);
+            call = findInstructionIndex(call + 1, ix -> ix instanceof CallInstruction);
         }
     }
 
     private boolean isLinear(List<LogicInstruction> codeBlock) {
         Set<String> localLabels = codeBlock.stream()
-                .filter(LogicInstruction::isLabel)
-                .map(ix -> ix.asLabel().getLabel())
+                .filter(ix -> ix instanceof LabelInstruction)
+                .map(ix -> ((LabelInstruction) ix).getLabel())
                 .collect(Collectors.toSet());
 
         // Code is linear if every jump targets a local label
         return codeBlock.stream()
-                .filter(ix -> ix.isJump() || ix.isGoto())
+                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
                 .flatMap(this::getPossibleTargetLabels)
                 .allMatch(localLabels::contains);
     }
 
     private Stream<String> getPossibleTargetLabels(LogicInstruction instruction) {
-        switch (instruction.getOpcode()) {
-            case JUMP:
-                return Stream.of(instruction.asJump().getTarget());
-
-            case GOTO:
-                return program.stream()
-                        .filter(ix -> ix.isLabel() && ix.matchesMarker(instruction.getMarker()))
-                        .map(ix -> ix.asLabel().getLabel());
-
-            default:
-                return Stream.empty();
-        }
+        return switch (instruction) {
+            case JumpInstruction ix -> Stream.of(ix.getTarget());
+            case GotoInstruction ix -> program.stream()
+                    .filter(in -> in instanceof LabelInstruction && in.matchesMarker(ix.getMarker()))
+                    .map(in -> (LabelInstruction) in)
+                    .map(LabelInstruction::getLabel);
+            default -> Stream.empty();
+        };
     }
 }

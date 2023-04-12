@@ -57,7 +57,7 @@ public class Processor {
     }
 
     public void run(List<LogicInstruction> program, int stepLimit) {
-        if (!getFlag(STOP_PROCESSOR_OPTIONAL) && !program.stream().anyMatch(ix -> ix.getOpcode() == Opcode.STOP)) {
+        if (!getFlag(STOP_PROCESSOR_OPTIONAL) && !program.stream().anyMatch(ix -> ix instanceof StopInstruction)) {
             throw new ExecutionException(STOP_PROCESSOR_OPTIONAL, "A stop instruction not present in given program.");            
         }
 
@@ -83,8 +83,8 @@ public class Processor {
                 LogicInstruction instruction = program.get(index);
 
                 if (false) {
-                    if (instruction.getOpcode() == Opcode.PRINT) {
-                        Variable var = getExistingVariable(instruction.asPrint().getValue());
+                    if (instruction instanceof PrintInstruction ix) {
+                        Variable var = getExistingVariable(ix.getValue());
                         System.out.printf("Step: %d, counter: %d, instruction: %s *** Print %s%n", steps, index, instruction, var.toString());
 
                     } else {
@@ -108,24 +108,19 @@ public class Processor {
             throw new ExecutionException(ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of " + stepLimit + " exceeded");
         }
     }
-    
-    private static String arg(LogicInstruction ix, int index) {
-        return index >= ix.getArgs().size() ? "0" : ix.getArg(index);
-    }
 
-    private boolean execute(LogicInstruction ix) {
-        switch(ix.getOpcode()) {
-            case READ:      return executeRead(ix.asRead());
-            case WRITE:     return executeWrite(ix.asWrite());
-            case PRINT:     return executePrint(ix.asPrint());
-            case SET:       return executeSet(ix.asSet());
-            case OP:        return executeOp(ix.asOp());
-            case JUMP:      return executeJump(ix.asJump());
-            case END:       counter.setIntValue(0); return !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION);
-            case STOP:      return false;
-        }
-
-        throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported opcode " + ix.getOpcode());
+    private boolean execute(LogicInstruction instruction) {
+        return switch(instruction) {
+            case ReadInstruction ix     -> executeRead(ix);
+            case WriteInstruction ix    -> executeWrite(ix);
+            case PrintInstruction ix    -> executePrint(ix);
+            case SetInstruction ix      -> executeSet(ix);
+            case OpInstruction ix       -> executeOp(ix);
+            case JumpInstruction ix     -> executeJump(ix);
+            case EndInstruction ix      -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
+            case StopInstruction ix     -> false;
+            default -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported opcode " + instruction.getOpcode());
+        };
     }
 
     private boolean executeSet(SetInstruction ix) {

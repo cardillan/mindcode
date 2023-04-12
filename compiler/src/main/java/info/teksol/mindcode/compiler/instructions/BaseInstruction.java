@@ -5,8 +5,6 @@ import info.teksol.mindcode.logic.Opcode;
 import java.util.List;
 import java.util.Objects;
 
-import static info.teksol.mindcode.logic.Opcode.*;
-
 public class BaseInstruction implements LogicInstruction {
     private final Opcode opcode;
     private final List<String> args;
@@ -19,96 +17,6 @@ public class BaseInstruction implements LogicInstruction {
         this.opcode = opcode;
         this.args = List.copyOf(args);
         this.marker = marker;
-    }
-
-    @Override
-    public boolean isWrite() {
-        return opcode == WRITE;
-    }
-
-    @Override
-    public boolean isPrint() {
-        return opcode == PRINT;
-    }
-
-    @Override
-    public boolean isPrintflush() {
-        return opcode == PRINTFLUSH;
-    }
-
-    @Override
-    public boolean isJump() {
-        return opcode == JUMP;
-    }
-
-    @Override
-    public boolean isSet() {
-        return opcode == SET;
-    }
-
-    @Override
-    public boolean isOp() {
-        return opcode == OP;
-    }
-
-    @Override
-    public boolean isRead() {
-        return opcode == READ;
-    }
-
-    @Override
-    public boolean isUControl() {
-        return opcode == UCONTROL;
-    }
-
-    @Override
-    public boolean isLabel() {
-        return opcode == LABEL;
-    }
-
-    @Override
-    public boolean isGetlink() {
-        return opcode == GETLINK;
-    }
-
-    @Override
-    public boolean isSensor() {
-        return opcode == SENSOR;
-    }
-
-    @Override
-    public boolean isEnd() {
-        return opcode == END;
-    }
-
-    @Override
-    public boolean isPush() {
-        return opcode == PUSH;
-    }
-
-    @Override
-    public boolean isPop() {
-        return opcode == POP;
-    }
-
-    @Override
-    public boolean isPushOrPop() {
-        return opcode == PUSH || opcode == POP;
-    }
-
-    @Override
-    public boolean isCall() {
-        return opcode == CALL;
-    }
-
-    @Override
-    public boolean isReturn() {
-        return opcode == RETURN;
-    }
-
-    @Override
-    public boolean isGoto() {
-        return opcode == GOTO;
     }
 
     @Override

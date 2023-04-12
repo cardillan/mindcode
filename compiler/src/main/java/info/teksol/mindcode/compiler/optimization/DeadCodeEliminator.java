@@ -5,6 +5,7 @@ import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -78,7 +79,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         // Same for stack pointer: the push/pop/call/return instructions operate on __sp implicitly.
         // The initial write to __sp must be preserved
         reads.add(instructionProcessor.getStackPointer());
-        program.stream().filter(ix -> !ix.isPushOrPop()).forEach(this::examineInstruction);
+        program.stream().filter(ix -> !(ix instanceof PushOrPopInstruction)).forEach(this::examineInstruction);
     }
 
     private void removeUselessWrites() {

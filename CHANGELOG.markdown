@@ -1,12 +1,16 @@
-﻿# Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file.
+
+## Upcoming
+
+* Update to Java 17
 
 ## 2023-04-12
 
 ### Fixed
 
-*  Fixed incorrectly mergiing instructions across `printflush()` calls ([#91](https://github.com/francois/mindcode/issues/91)).
+*  Fixed incorrectly merging instructions across `printflush()` calls ([#91](https://github.com/francois/mindcode/issues/91)).
 
 ## 2023-04-08
 

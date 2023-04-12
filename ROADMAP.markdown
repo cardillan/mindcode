@@ -15,6 +15,7 @@ Things being pondered on from time to time.
 ### Language syntax
 
 * `in` boolean operator: tests number is in range (e.g. `if n in min .. max then ...`)
+* Binary literals (0b0000)
 * Varargs inline functions: the vararg can be processed using list iteration loop, or maybe passed to another vararg function.
 * `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when` branch
 * Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`
@@ -30,6 +31,7 @@ Things being pondered on from time to time.
   * parameters that are only passed to recursive calls and never modified won't be stored on stack
   * eliminate `__retval` variables/assignments where not needed
   * replace jump to return instruction with the return instruction itself
+* Strict Boolean evaluation (probably a compiler directive): ensure every boolean expression produces 0 or 1
 * Improved code generation
   * memory jump table for case expressions where possible
   * code generation/optimization objective (speed for faster but larger code, size for smaller but slower code).

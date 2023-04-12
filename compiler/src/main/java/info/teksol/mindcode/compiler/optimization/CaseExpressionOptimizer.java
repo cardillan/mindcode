@@ -2,8 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -34,30 +33,27 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            LogicInstruction instruction = it.next();
-            if (!instruction.isSet()) continue;
+            if (it.next() instanceof SetInstruction ix && ix.getResult().startsWith(AstNodeBuilder.AST_PREFIX)) {
+                String result = ix.getResult();
+                List<LogicInstruction> list = findInstructions(
+                        in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
-            String arg0 = instruction.getArgs().get(0);
-            // Not an __ast variable
-            if (!arg0.startsWith(AstNodeBuilder.AST_PREFIX)) continue;
+                // The set instruction is not the first one
+                if (list.get(0) != ix) continue;
 
-            String arg1 = instruction.getArgs().get(1);
-            List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(arg0) && !ix.isPushOrPop());
-            // The set instruction is not the first one
-            if (list.get(0) != instruction) continue;
+                // Some of the other instructions aren't part of the case expression
+                if (!list.stream().skip(1).allMatch(in -> isStandardCaseWhenInstruction(in, result))) continue;
 
-            // Some of the other instructions aren't part of the case expression
-            if (!list.stream().skip(1).allMatch(ix -> isStandardCaseWhenInstruction(ix, arg0))) continue;
-
-            // Replace __ast with actual value in all case branches
-            list.stream().skip(1).forEach(ix -> replaceInstruction(ix, replaceAllArgs(ix, arg0, arg1)));
-            it.remove();
+                // Replace __ast with actual value in all case branches
+                list.stream().skip(1).forEach(in -> replaceInstruction(in, replaceAllArgs(in, result, ix.getValue())));
+                it.remove();
+            }
         }
 
         return false;
     }
 
-    private boolean isStandardCaseWhenInstruction(LogicInstruction ix, String ast) {
-        return ix.isJump() && ix.asJump().getFirstOperand().equals(ast);
+    private boolean isStandardCaseWhenInstruction(LogicInstruction instruction, String ast) {
+        return instruction instanceof JumpInstruction ix && ix.getFirstOperand().equals(ast);
     }
 }

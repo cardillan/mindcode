@@ -4,6 +4,7 @@ import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.Opcode;
 
 /**
  * Replaces conditional jumps whose condition is always true with unconditional jumps
@@ -24,10 +25,9 @@ class ConditionalJumpsNormalizer extends PipelinedOptimizer {
     private final class BaseState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isJump()) {
-                JumpInstruction ix = instruction.asJump();
+            if (instruction instanceof JumpInstruction ix) {
                 if (effectivelyUnconditional(ix)) {
-                    emitToNext(createInstruction(instruction.getOpcode(), ix.getTarget(), "always"));
+                    emitToNext(createInstruction(Opcode.JUMP, ix.getTarget(), "always"));
                 } else if (!alwaysFalse(ix)) {
                     emitToNext(instruction);
                 }

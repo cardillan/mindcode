@@ -5,7 +5,7 @@ import info.teksol.mindcode.logic.Opcode;
 import java.util.List;
 
 // Push and pop are always processed at the same time
-public class PushOrPopInstruction extends BaseInstruction {
+public abstract class PushOrPopInstruction extends BaseInstruction {
 
     PushOrPopInstruction(String marker, Opcode opcode, List<String> args) {
         super(marker, opcode, args);

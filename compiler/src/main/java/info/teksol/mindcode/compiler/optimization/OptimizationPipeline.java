@@ -4,7 +4,9 @@ import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import org.antlr.v4.codegen.model.LL1AltBlock;
 
 import java.util.EnumSet;
 import java.util.function.Consumer;
@@ -80,7 +82,7 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
 
         @Override
         public void emit(LogicInstruction instruction) {
-            if (!instruction.isLabel()) {
+            if (!(instruction instanceof LabelInstruction)) {
                 count++;
             }
             debugPrinter.instructionEmitted(this, instruction);

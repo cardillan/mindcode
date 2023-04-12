@@ -40,8 +40,8 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isOp() && isComparisonOperationToTmp(instruction.asOp())) {
-                return new ExpectJump(instruction.asOp());
+            if (instruction instanceof OpInstruction ix && isComparisonOperationToTmp(ix)) {
+                return new ExpectJump(ix);
             } else {
                 emitToNext(instruction);
                 return this;
@@ -63,13 +63,7 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            do {
-                if (!instruction.isJump()) break;
-
-                // Not a conditional jump
-                JumpInstruction ix = instruction.asJump();
-                if (!ix.getCondition().equals("equal")) break;
-
+            if (instruction instanceof JumpInstruction ix && ix.getCondition().equals("equal")) {
                 // Other preconditions for the optimization
                 boolean isSameVariable = ix.getFirstOperand().equals(op.getResult());
                 boolean jumpComparesToFalse = ix.getSecondOperand().equals("false");
@@ -79,18 +73,13 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
                         throw new OptimizationException("Unknown operation passed-in; can't find the inverse of [" + op.getOperation() + "]");
                     }
 
-                    emitToNext(
-                            createInstruction(
-                                    Opcode.JUMP,
-                                    ix.getTarget(),
-                                    getInverse(op.getOperation()),
-                                    op.getFirstOperand(),
-                                    op.getSecondOperand()
-                            )
+                    emitToNext(createInstruction(Opcode.JUMP, ix.getTarget(),
+                            getInverse(op.getOperation()),
+                            op.getFirstOperand(), op.getSecondOperand())
                     );
                     return new EmptyState();
                 }
-            } while (false);
+            }
 
             emitToNext(op);
             return new EmptyState().emit(instruction);

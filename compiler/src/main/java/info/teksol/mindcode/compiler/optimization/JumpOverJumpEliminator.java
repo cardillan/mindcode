@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.Opcode;
 
@@ -47,9 +48,9 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
     private final class EmptyState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isJump() && hasInverse(instruction.asJump().getCondition())) {
-                // "always" doesn't have an inverse
-                return new ExpectJump(instruction.asJump());
+            if (instruction instanceof JumpInstruction ix && hasInverse(ix.getCondition())) {
+                // This is a conditional instruction -- "always" doesn't have an inverse
+                return new ExpectJump(ix);
             } else {
                 emitToNext(instruction);
                 return this;
@@ -71,8 +72,8 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isJump() && instruction.asJump().isUnconditional()) {
-                return new ExpectLabel(conditionalJump, instruction.asJump());
+            if (instruction instanceof JumpInstruction ix && ix.isUnconditional()) {
+                return new ExpectLabel(conditionalJump, ix);
             } else {
                 emitToNext(conditionalJump);
                 return new EmptyState().emit(instruction);
@@ -101,23 +102,16 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isLabel()) {
-                if (instruction.asLabel().getLabel().equals(targetLabel)) {
-                    isJumpOverJump = true;
-                }
+            if (instruction instanceof LabelInstruction ix) {
+                isJumpOverJump |= ix.getLabel().equals(targetLabel);
                 labels.add(instruction);
                 return this;
             }
 
             if (isJumpOverJump) {
-                emitToNext(
-                        createInstruction(
-                                Opcode.JUMP,
-                                unconditionalJump.getTarget(),
-                                getInverse(conditionalJump.getCondition()),
-                                conditionalJump.getFirstOperand(),
-                                conditionalJump.getSecondOperand()
-                        )
+                emitToNext(createInstruction(Opcode.JUMP, unconditionalJump.getTarget(),
+                        getInverse(conditionalJump.getCondition()),
+                        conditionalJump.getFirstOperand(), conditionalJump.getSecondOperand())
                 );
             } else {
                 emitToNext(conditionalJump);

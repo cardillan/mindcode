@@ -2,14 +2,13 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.generator.GenerationException;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.TypedArgument;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +44,7 @@ class FunctionParameterOptimizer extends GlobalOptimizer {
     protected boolean optimizeProgram() {
         // Find all functions (includes inline ones)
         List<String> prefixes = program.stream()
-                .filter(LogicInstruction::isLabel)
+                .filter(ix -> ix instanceof LabelInstruction)
                 .map(LogicInstruction::getMarker)
                 .filter(Objects::nonNull)
                 .filter(s -> s.startsWith(instructionProcessor.getLocalPrefix()))
@@ -72,8 +71,8 @@ class FunctionParameterOptimizer extends GlobalOptimizer {
         // Obtain a list of set instructions that can be eliminated.
         // See preconditions listed in class javadoc
         List<SetInstruction> eliminations = function.stream()
-                .filter(LogicInstruction::isSet)                                                    // precondition 1
-                .map(LogicInstruction::asSet)
+                .filter(ix -> ix instanceof SetInstruction)                                         // precondition 1
+                .map(ix -> (SetInstruction) ix)
                 .filter(ix -> ix.getResult().startsWith(functionPrefix + "_"))                      // precondition 1
                 .filter(ix -> modifications.get(ix.getResult()) == 1)                               // precondition 2
                 .filter(ix -> !modifications.containsKey(ix.getValue()))                            // precondition 3
@@ -84,10 +83,10 @@ class FunctionParameterOptimizer extends GlobalOptimizer {
         eliminations.forEach(ix -> eliminateInstruction(functionPrefix, ix));
     }
 
-    private boolean isCall(LogicInstruction ix) {
+    private boolean isCall(LogicInstruction instr) {
         // Stackless functions are called via set @counter __label
         // TODO: replace with special CALL instruction
-        return ix.isCall() || (ix.isSet() && ix.asSet().getResult().equals("@counter"));
+        return instr instanceof CallInstruction || (instr instanceof SetInstruction ix && ix.getResult().equals("@counter"));
     }
 
     /**
@@ -120,7 +119,7 @@ class FunctionParameterOptimizer extends GlobalOptimizer {
     private List<LogicInstruction> getFunctionInstructions(String functionPrefix) {
         // Find start and end labels
         int[] bounds = program.stream()
-                .filter(LogicInstruction::isLabel)
+                .filter(ix -> ix instanceof LabelInstruction)
                 .filter(ix -> ix.matchesMarker(functionPrefix))
                 .mapToInt(ix -> findInstructionIndex(0, z -> z == ix))
                 .toArray();
