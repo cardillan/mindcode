@@ -18,9 +18,12 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "result"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "result = getblock(floor, x, y)"
-                        + "print(result)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                result = getblock(floor, x, y)
+                                print(result)
+                                """
+                        )
                 )
         );
     }
@@ -34,10 +37,13 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(SETBLOCK, "block", "to", "x", "y", "team", "rotation"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "setblock(floor, to, x, y)\n"
-                        + "setblock(ore, to, x, y)\n"
-                        + "setblock(block, to, x, y, team, rotation)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                setblock(floor, to, x, y)
+                                setblock(ore, to, x, y)
+                                setblock(block, to, x, y, team, rotation)
+                                """
+                        )
                 )
         );
     }
@@ -50,9 +56,12 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "result"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "result = spawn(unit, x, y, rotation, team)"
-                        + "print(result)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                result = spawn(unit, x, y, rotation, team)
+                                print(result)
+                                """
+                        )
                 )
         );
     }
@@ -65,9 +74,12 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(STATUS, "true", "freezing", "unit"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "applyStatus(burning, unit, duration)\n"
-                        + "clearStatus(freezing, unit)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                applyStatus(burning, unit, duration)
+                                clearStatus(freezing, unit)
+                                """
+                        )
                 )
         );
     }
@@ -79,8 +91,11 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(SPAWNWAVE, "x", "y", "natural"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "spawnwave(x, y, natural)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                spawnwave(x, y, natural)
+                                """
+                        )
                 )
         );
     }
@@ -113,29 +128,32 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(SETRULE, "rtsMinSquad", "value", "team"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "setrule(currentWaveTime, value)\n"
-                        + "setrule(waveTimer, value)\n"
-                        + "setrule(waves, value)\n"
-                        + "setrule(wave, value)\n"
-                        + "setrule(waveSpacing, value)\n"
-                        + "setrule(waveSending, value)\n"
-                        + "setrule(attackMode, value)\n"
-                        + "setrule(enemyCoreBuildRadius, value)\n"
-                        + "setrule(dropZoneRadius, value)\n"
-                        + "setrule(unitCap, value)\n"
-                        + "setrule(mapArea, x, y, width, height)\n"
-                        + "setrule(lighting, value)\n"
-                        + "setrule(ambientLight, value)\n"
-                        + "setrule(solarMultiplier, value)\n"
-                        + "setrule(buildSpeed, value, team)\n"
-                        + "setrule(unitBuildSpeed, value, team)\n"
-                        + "setrule(unitCost, value, team)\n"
-                        + "setrule(unitDamage, value, team)\n"
-                        + "setrule(blockHealth, value, team)\n"
-                        + "setrule(blockDamage, value, team)\n"
-                        + "setrule(rtsMinWeight, value, team)\n"
-                        + "setrule(rtsMinSquad, value, team)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                setrule(currentWaveTime, value)
+                                setrule(waveTimer, value)
+                                setrule(waves, value)
+                                setrule(wave, value)
+                                setrule(waveSpacing, value)
+                                setrule(waveSending, value)
+                                setrule(attackMode, value)
+                                setrule(enemyCoreBuildRadius, value)
+                                setrule(dropZoneRadius, value)
+                                setrule(unitCap, value)
+                                setrule(mapArea, x, y, width, height)
+                                setrule(lighting, value)
+                                setrule(ambientLight, value)
+                                setrule(solarMultiplier, value)
+                                setrule(buildSpeed, value, team)
+                                setrule(unitBuildSpeed, value, team)
+                                setrule(unitCost, value, team)
+                                setrule(unitDamage, value, team)
+                                setrule(blockHealth, value, team)
+                                setrule(blockDamage, value, team)
+                                setrule(rtsMinWeight, value, team)
+                                setrule(rtsMinSquad, value, team)
+                                """
+                        )
                 )
         );
     }
@@ -150,11 +168,14 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(MESSAGE, "toast", "duration"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "message(notify)\n"
-                        + "message(mission)\n"
-                        + "message(announce, duration)\n"
-                        + "message(toast, duration)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                message(notify)
+                                message(mission)
+                                message(announce, duration)
+                                message(toast, duration)
+                                """
+                        )
                 )
         );
     }
@@ -168,10 +189,13 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(CUTSCENE, "stop"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "cutscene(pan, x, y, speed)\n"
-                        + "cutscene(zoom, level)\n"
-                        + "cutscene(stop)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                cutscene(pan, x, y, speed)
+                                cutscene(zoom, level)
+                                cutscene(stop)
+                                """
+                        )
                 )
         );
     }
@@ -183,8 +207,11 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(EXPLOSION, "team", "x", "y", "radius", "damage", "air", "ground", "pierce"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "explosion(team, x, y, radius, damage, air, ground, pierce)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                explosion(team, x, y, radius, damage, air, ground, pierce)
+                                """
+                        )
                 )
         );
     }
@@ -196,8 +223,11 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(SETRATE, "ipt"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "setrate(ipt)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                setrate(ipt)
+                                """
+                        )
                 )
         );
     }
@@ -217,16 +247,19 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "result"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "result = fetch(unitCount, team)\n"
-                        + "result = fetch(playerCount, team)\n"
-                        + "result = fetch(coreCount, team)\n"
-                        + "result = fetch(buildCount, team, type)\n"
-                        + "result = fetch(unit, team, index)\n"
-                        + "result = fetch(player, team, index)\n"
-                        + "result = fetch(core, team, index)\n"
-                        + "result = fetch(build, team, index, type)"
-                        + "print(result)")
+                generateAndOptimize((
+                                Seq) translateToAst("""
+                                result = fetch(unitCount, team)
+                                result = fetch(playerCount, team)
+                                result = fetch(coreCount, team)
+                                result = fetch(buildCount, team, type)
+                                result = fetch(unit, team, index)
+                                result = fetch(player, team, index)
+                                result = fetch(core, team, index)
+                                result = fetch(build, team, index, type)
+                                print(result)
+                                """
+                        )
                 )
         );
     }
@@ -239,9 +272,12 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "result"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "result = getflag(flag)"
-                        + "print(result)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                result = getflag(flag)
+                                print(result)
+                                """
+                        )
                 )
         );
     }
@@ -253,8 +289,11 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(SETFLAG, "flag", "value"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "setflag(flag, value)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                setflag(flag, value)
+                                """
+                        )
                 )
         );
     }

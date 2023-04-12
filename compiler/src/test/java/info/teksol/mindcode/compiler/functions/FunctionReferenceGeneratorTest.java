@@ -22,22 +22,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FunctionReferenceGeneratorTest {
 
-    private static final String SYNTAX_REL_PATH = ".." + File.separatorChar + "doc" + File.separatorChar + "syntax"  + File.separatorChar;
+    private static final String SYNTAX_REL_PATH = ".." + File.separatorChar + "doc" + File.separatorChar + "syntax" + File.separatorChar;
 
-    private static final List<String> PREAMBLE = List.of(
-            "This document contains function reference for all built-in Mindcode functions.",
-            "Functions are grouped by the instruction they encapsulate, so that functions with similar logic are listed together.",
-            "The Mindcode source listed in the **Function call** column is compiled to the instruction in the **Generated instruction** column.",
-            System.lineSeparator(),
-            System.lineSeparator(),
-            "In some cases, a single instruction can be generated in more than one way",
-            "(e.g. the `radar` instruction, which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter).",
-            "Both ways are identical.",
-            "Additionally, some functions have optional parameters, which are marked by a question mark (e.g. `building?`).",
-            "Only output parameters are optional, and you may omit them if you don't need the value they return.",
-            "When omitted, the optional parameter is replaced by an unused temporary variable.",
-            "Mindcode allows you to omit all optional argument, but in this case the entire instruction will be considered useless",
-            "and may be removed by the optimizer.");
+    private static final String PREAMBLE = """
+            This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
+            instruction they encapsulate, so that functions with similar logic are listed together. The Mindcode source
+            listed in the **Function call** column is compiled to the instruction in the **Generated instruction**
+            column.
+                        
+            In some cases, a single instruction can be generated in more than one way (e.g. the `radar` instruction,
+            which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter).
+            Both ways are identical. Additionally, some functions have optional parameters, which are marked by
+            a question mark (e.g. `building?`). Only output parameters are optional, and you may omit them if you don't
+            need the value they return. When omitted, the optional parameter is replaced by an unused temporary variable.
+            Mindcode allows you to omit all optional argument, but in this case the entire instruction will be considered
+            useless and may be removed by the optimizer.
+            """;
 
     @Test
     void createFunctionReferenceForV6() throws FileNotFoundException {
@@ -58,7 +58,7 @@ public class FunctionReferenceGeneratorTest {
         try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS_" + version + ".markdown")) {
             w.println("# Function reference for Mindustry " + version);
             w.println();
-            PREAMBLE.forEach(s -> { w.print(s); w.print(" "); });
+            w.print(PREAMBLE.replaceAll("\n", System.lineSeparator()));
             w.println();
 
             for (ProcessorEdition edition : ProcessorEdition.values()) {

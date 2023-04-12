@@ -17,7 +17,14 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     @Test
     void removesDeadSetsInIfExpression() {
         generateInto(sut,
-                (Seq) translateToAst("if x == 3\n  1\nelse\n  end()\nend")
+                (Seq) translateToAst("""
+                        if x == 3
+                            1
+                        else
+                            end()
+                        end
+                        """
+                )
         );
 
         assertLogicInstructionsMatch(
@@ -37,7 +44,15 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     @Test
     void keepsUsefulIfAssignments() {
         generateInto(sut,
-                (Seq) translateToAst("n = if x == 3\n  1\nelse\n  41\nend\nmove(73, n)\n")
+                (Seq) translateToAst("""
+                        n = if x == 3
+                            1
+                        else
+                            41
+                        end
+                        move(73, n)
+                        """
+                )
         );
 
         assertLogicInstructionsMatch(
@@ -60,14 +75,15 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     @Test
     void preventsEliminationOfUradarUsages() {
         generateInto(sut,
-                (Seq) translateToAst("" +
-                        "target = uradar(enemy, ground, any, health, MIN_TO_MAX)\n" +
-                        "if target != null\n" +
-                        "  approach(target.x, target.y, 10)\n" +
-                        "  if within(target.x, target.y, 10)\n" +
-                        "    target(target.x, target.y, SHOOT)\n" +
-                        "  end\n" +
-                        "end\n"
+                (Seq) translateToAst("""
+                        target = uradar(enemy, ground, any, health, MIN_TO_MAX)
+                        if target != null
+                            approach(target.x, target.y, 10)
+                            if within(target.x, target.y, 10)
+                                target(target.x, target.y, SHOOT)
+                            end
+                        end
+                        """
                 )
         );
 
@@ -102,15 +118,16 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     @Test
     void preventsEliminationOfUlocateUsages() {
         generateInto(sut,
-                (Seq) translateToAst("" +
-                        "ulocate(ore, @surge-alloy, outx, outy)\n" +
-                        "approach(outx, outy, 4)\n" +
-                        "ulocate(building, core, ENEMY, outx, outy, outbuilding)\n" +
-                        "approach(outx, outy, 4)\n" +
-                        "ulocate(spawn, outx, outy, outbuilding)\n" +
-                        "approach(outx, outy, 4)\n" +
-                        "ulocate(damaged, outx, outy, outbuilding)\n" +
-                        "approach(outx, outy, 4)\n"
+                (Seq) translateToAst("""
+                        ulocate(ore, @surge-alloy, outx, outy)
+                        approach(outx, outy, 4)
+                        ulocate(building, core, ENEMY, outx, outy, outbuilding)
+                        approach(outx, outy, 4)
+                        ulocate(spawn, outx, outy, outbuilding)
+                        approach(outx, outy, 4)
+                        ulocate(damaged, outx, outy, outbuilding)
+                        approach(outx, outy, 4)
+                        """
                 )
         );
 
@@ -133,8 +150,10 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     @Test
     void completelyRemovesDeadcode() {
         generateInto(sut,
-                (Seq) translateToAst("" +
-                        "n = 1\nn = 1\n"
+                (Seq) translateToAst("""
+                        n = 1
+                        n = 1
+                        """
                 )
         );
 
@@ -149,10 +168,11 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     @Test
     void removesUnusedUlocate() {
         generateInto(sut,
-                (Seq) translateToAst("" +
-                        "ulocate(ore, @surge-alloy, outx, outy)\n" +
-                        "ulocate(ore, @surge-alloy, x, y)\n" +
-                        "approach(outx, outy, 4)"
+                (Seq) translateToAst("""
+                        ulocate(ore, @surge-alloy, outx, outy)
+                        ulocate(ore, @surge-alloy, x, y)
+                        approach(outx, outy, 4)
+                        """
                 )
         );
 
@@ -169,9 +189,10 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     @Test
     void preventsEliminationOfPartiallyUsedUlocate() {
         generateInto(sut,
-                (Seq) translateToAst("" +
-                        "found = ulocate(building, core, ENEMY, outx, outy, outbuilding)\n" +
-                        "print(found)"
+                (Seq) translateToAst("""
+                        found = ulocate(building, core, ENEMY, outx, outy, outbuilding)
+                        print(found)
+                        """
                 )
         );
 

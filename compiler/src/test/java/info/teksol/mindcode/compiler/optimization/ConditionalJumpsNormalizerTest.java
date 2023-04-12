@@ -16,12 +16,12 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
     @Test
     void normalizesConditionalJump() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(""
-                        + "while false\n"
-                        + "  print(\"Here\")\n"
-                        + "end\n"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        while false
+                            print("Here")
+                        end
+                        """
                 )
         );
 
@@ -41,12 +41,7 @@ public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
 
     @Test
     void removesAlwaysFalseJump() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "while true 1 end"
-                )
-        );
+        generateInto(sut, (Seq) translateToAst("while true 1 end"));
 
         assertLogicInstructionsMatch(
                 List.of(

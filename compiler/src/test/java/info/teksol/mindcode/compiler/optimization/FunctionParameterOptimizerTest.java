@@ -18,11 +18,13 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void handlesSimpleParameters() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) print(n) end "
-                        + "bar(5)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            print(n)
+                        end
+                        bar(5)
+                        """
                 )
         );
 
@@ -41,10 +43,15 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
     public void handlesNestedParameters() {
         generateInto(
                 pipeline,
-                (Seq) translateToAst(""
-                        + "inline def foo(n) print(n) end "
-                        + "inline def bar(n) foo(n) end "
-                        + "bar(5)"
+                (Seq) translateToAst("""
+                        inline def foo(n)
+                            print(n)
+                        end
+                        inline def bar(n)
+                            foo(n)
+                        end
+                        bar(5)
+                        """
                 )
         );
 
@@ -63,12 +70,14 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void handlesGlobalVariables() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) print(n) end "
-                        + "X = 5 "
-                        + "bar(X)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            print(n)
+                        end
+                        X = 5
+                        bar(X)
+                        """
                 )
         );
 
@@ -86,11 +95,13 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void handlesBlockNames() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) print(n) end "
-                        + "bar(switch1)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            print(n)
+                        end
+                        bar(switch1)
+                        """
                 )
         );
 
@@ -107,11 +118,14 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void handlesChainedVariables() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) a = n print(a) end "
-                        + "bar(5)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            a = n
+                            print(a)
+                        end
+                        bar(5)
+                        """
                 )
         );
 
@@ -128,11 +142,13 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void handlesVariablesInExpressions() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) print(n + 1) end "
-                        + "bar(5)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            print(n + 1)
+                        end
+                        bar(5)
+                        """
                 )
         );
 
@@ -150,11 +166,13 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void preservesVolatileVariables() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) print(n) end "
-                        + "bar(@time)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            print(n)
+                        end
+                        bar(@time)
+                        """
                 )
         );
 
@@ -172,11 +190,14 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void preservesModifiedVariables() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) n += 1 print(n) end "
-                        + "bar(0)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            n += 1
+                            print(n)
+                        end
+                        bar(0)
+                        """
                 )
         );
 
@@ -196,14 +217,19 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     public void preservesGlobalVariablesWithFunctionCalls() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(""
-                        + "inline def bar(n) foo(n) print(n) end "
-                        + "def foo(n) print(n) end "
-                        + "X = 5 "
-                        + "foo(X)"
-                        + "bar(X)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        inline def bar(n)
+                            foo(n)
+                            print(n)
+                        end
+                        def foo(n)
+                            print(n)
+                        end
+                        X = 5
+                        foo(X)
+                        bar(X)
+                        """
                 )
         );
 
@@ -246,10 +272,13 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateAndOptimize(
-                        (Seq) translateToAst(""
-                                + "inline def d(n) n end "
-                                + "print(1 < d(2)) "
-                                + "printflush(message1)"
+                        (Seq) translateToAst("""
+                                inline def d(n)
+                                    n
+                                end
+                                print(1 < d(2))
+                                printflush(message1)
+                                """
                         )
                 )
         );

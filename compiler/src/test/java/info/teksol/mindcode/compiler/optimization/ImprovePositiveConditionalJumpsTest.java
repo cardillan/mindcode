@@ -14,21 +14,19 @@ class ImprovePositiveConditionalJumpsTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesMinimalSequence() {
-        List.of(
-                createInstruction(OP, "strictEqual", "__tmp0", "a", "b"),
-                createInstruction(JUMP, "label0", "notEqual", "__tmp0", "false"),
-                createInstruction(PRINT, "\"Not equal\""),
-                createInstruction(LABEL, "label0"),
-                createInstruction(END)
-        ).forEach(pipeline::emit);
+        pipeline.emit(createInstruction(OP, "strictEqual", "__tmp0", "a", "b"));
+        pipeline.emit(createInstruction(JUMP, "label0", "notEqual", "__tmp0", "false"));
+        pipeline.emit(createInstruction(PRINT, "\"Not equal\""));
+        pipeline.emit(createInstruction(LABEL, "label0"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                createInstruction(JUMP, "label0", "strictEqual", "a", "b"),
-                createInstruction(PRINT, "\"Not equal\""),
-                createInstruction(LABEL, "label0"),
-                createInstruction(END)
+                        createInstruction(JUMP, "label0", "strictEqual", "a", "b"),
+                        createInstruction(PRINT, "\"Not equal\""),
+                        createInstruction(LABEL, "label0"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );

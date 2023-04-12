@@ -23,10 +23,14 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void removesOrphanedJump() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "while a while b print(b) end end"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        while a
+                            while b
+                                print(b)
+                            end
+                        end
+                        """
                 )
         );
 
@@ -50,10 +54,14 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void eliminateDeadBranch() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "print(a) while false print(b) end print(c)"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        print(a)
+                        while false
+                            print(b)
+                        end
+                        print(c)
+                        """
                 )
         );
 
@@ -72,17 +80,17 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void eliminateUnusedFunction() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(""
-                        + "def a "
-                        + "  print(\"here\") "
-                        + "end "
-                        + "while false "
-                        + "  a() "
-                        + "  a() "
-                        + "end "
-                        + "print(\"Done\")"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        def a
+                            print("here")
+                        end
+                        while false
+                            a()
+                            a()
+                        end
+                        print("Done")
+                        """
                 )
         );
 
@@ -105,28 +113,28 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void keepsUsedFunctions() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(""
-                        + "allocate stack in cell1[0 .. 63] "
-                        + "def testa(n) "
-                        + "  print(\"Start\") "
-                        + "end "
-                        + "def testb(n) "
-                        + "  print(\"Middle\") "
-                        + "end "
-                        + "def testc(n) "
-                        + "  print(\"End\") "
-                        + "end "
-                        + "testa(0) "
-                        + "testa(0) "
-                        + "while false "
-                        + "  testb(1) "
-                        + "  testb(1) "
-                        + "end "
-                        + "testc(2) "
-                        + "testc(2) "
-                        + "printflush(message1)"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        allocate stack in cell1[0 .. 63]
+                        def testa(n)
+                            print("Start")
+                        end
+                        def testb(n)
+                            print("Middle")
+                        end
+                        def testc(n)
+                            print("End")
+                        end
+                        testa(0)
+                        testa(0)
+                        while false
+                            testb(1)
+                            testb(1)
+                        end
+                        testc(2)
+                        testc(2)
+                        printflush(message1)
+                        """
                 )
         );
 

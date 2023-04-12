@@ -24,10 +24,11 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "\"\\n\""),
                         createInstruction(END)),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "println() "
-                                + "println(10) "
-                                + "println(\"foo\")"
+                        (Seq) translateToAst("""
+                                println()
+                                println(10)
+                                println("foo")
+                                """
                         )
                 )
         );
@@ -41,10 +42,11 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf() "
-                                + "printf(\"\") "
-                                + "printf(\"foo\")"
+                        (Seq) translateToAst("""
+                                printf()
+                                printf("")
+                                printf("foo")
+                                """
                         )
                 )
         );
@@ -63,8 +65,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"x: $, y: $, z: $\", x, y, 10)"
+                        (Seq) translateToAst("""
+                                printf("x: $, y: $, z: $", x, y, 10)
+                                """
                         )
                 )
         );
@@ -79,8 +82,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"Amount: \\$$\", 100)"
+                        (Seq) translateToAst("""
+                                printf("Amount: \\$$", 100)
+                                """
                         )
                 )
         );
@@ -90,8 +94,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printfCatchesTooFewArguments() {
         assertThrows(TooFewPrintfArgumentsException.class,
                 () -> generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"Text: $\")"
+                        (Seq) translateToAst("""
+                                printf("Text: $")
+                                """
                         )
                 )
         );
@@ -101,8 +106,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     void printfCatchesTooManyArguments() {
         assertThrows(TooManyPrintfArgumentsException.class,
                 () -> generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"Text: $\", 10, 20)"
+                        (Seq) translateToAst("""
+                                printf("Text: $", 10, 20)
+                                """
                         )
                 )
         );
@@ -118,9 +124,10 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "x = 10 "
-                                + "printf(\"x=$x\")"
+                        (Seq) translateToAst("""
+                                x = 10
+                                printf("x=$x")
+                                """
                         )
                 )
         );
@@ -139,11 +146,12 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(x) "
-                                + "    printf(\"x=$x\") "
-                                + "end "
-                                + "foo(5)"
+                        (Seq) translateToAst("""
+                                def foo(x)
+                                    printf("x=$x")
+                                end
+                                foo(5)
+                                """
                         )
                 )
         );
@@ -162,12 +170,13 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo() "
-                                + "    printf(\"X=$X\") "
-                                + "end "
-                                + "X = 10 "
-                                + "foo()"
+                        (Seq) translateToAst("""
+                                def foo()
+                                    printf("X=$X")
+                                end
+                                X = 10
+                                foo()
+                                """
                         )
                 )
         );
@@ -183,8 +192,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"Time: ${time}sec\")"
+                        (Seq) translateToAst("""
+                                printf("Time: ${time}sec")
+                                """
                         )
                 )
         );
@@ -200,8 +210,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"Text: ${x}$y\")"
+                        (Seq) translateToAst("""
+                                printf("Text: ${x}$y")
+                                """
                         )
                 )
         );
@@ -217,8 +228,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"Text: ${x}$\", y)"
+                        (Seq) translateToAst("""
+                                printf("Text: ${x}$", y)
+                                """
                         )
                 )
         );
@@ -234,8 +246,9 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "printf(\"Text: ${}${}\", x, y)"
+                        (Seq) translateToAst("""
+                                printf("Text: ${}${}", x, y)
+                                """
                         )
                 )
         );

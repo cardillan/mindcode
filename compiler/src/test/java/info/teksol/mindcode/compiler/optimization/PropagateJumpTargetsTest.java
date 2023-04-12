@@ -21,16 +21,15 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
 
     @Test
     void propagatesThroughUnconditionalTargets() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "" +
-                                "if a\n" +
-                                "  if b\n" +
-                                "    print(b)\n" +
-                                "  end\n" +
-                                "  print(a)\n" +
-                                "end"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        if a
+                            if b
+                                print(b)
+                            end
+                            print(a)
+                        end
+                        """
                 )
         );
 
@@ -55,17 +54,16 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
     
     @Test
     void propagatesThroughConditionalTargets() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "" +
-                                "while c == null\n" +
-                                "  c = getlink(1)\n" +
-                                "  if c == null\n" +
-                                "    print(\"Not found\")\n" +
-                                "  end\n" +
-                                "end\n" +
-                                "print(\"Done\")"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        while c == null
+                            c = getlink(1)
+                            if c == null
+                                print("Not found")
+                            end
+                        end
+                        print("Done")
+                        """
                 )
         );
 
@@ -91,17 +89,16 @@ public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
     
     @Test
     void ignoresVolatileVariables() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "" +
-                                "while @time < wait\n" +
-                                "  n += 1\n" +
-                                "  if @time < wait\n" +
-                                "    print(\"Waiting\")\n" +
-                                "  end\n" +
-                                "end\n" +
-                                "print(\"Done\")"
+        generateInto(sut,
+                (Seq) translateToAst("""
+                        while @time < wait
+                            n += 1
+                            if @time < wait
+                                print("Waiting")
+                            end
+                        end
+                        print("Done")
+                        """
                 )
         );
 

@@ -16,16 +16,15 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
     
     @Test
     void collapsesUnnecessaryConditionals() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(
-                        "" +
-                                "value = if cell1[4] == 0\n" +
-                                "  false\n" +
-                                "else\n" +
-                                "  cell1[4] = true\n" +
-                                "  n += 1\n" +
-                                "end\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        value = if cell1[4] == 0
+                            false
+                        else
+                            cell1[4] = true
+                            n += 1
+                        end
+                        """
                 )
         );
 
@@ -50,17 +49,15 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
 
     @Test
     void collapsesJumps() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(
-                        "" +
-                                "while n > 0\n" +
-                                "  n += 1\n" +
-                                "end\n" +
-                                "\n" +
-                                "while n == null\n" +
-                                "  n += 1\n" +
-                                "end\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        while n > 0
+                            n += 1
+                        end
+                        while n == null
+                            n += 1
+                        end
+                        """
                 )
         );
 
@@ -95,13 +92,13 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
                 Optimization.CONDITIONAL_JUMPS_IMPROVEMENT
         );
 
-        generateInto(
-                customPipeline,
-                (Seq) translateToAst(
-                        "alive = @unit.dead === 0\n" +
-                                "if alive\n" +
-                                "  print(alive)\n" +
-                                "end"
+        generateInto(customPipeline,
+                (Seq) translateToAst("""
+                        alive = @unit.dead === 0
+                        if alive
+                            print(alive)
+                        end
+                        """
                 )
         );
 
@@ -128,14 +125,13 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
                 Optimization.OUTPUT_TEMPS_ELIMINATION,
                 Optimization.CONDITIONAL_JUMPS_IMPROVEMENT
         );
-    
-        generateInto(
-                customPipeline,
-                (Seq) translateToAst(
-                        "" +
-                                "if @unit.dead === 0\n" +
-                                "  print(alive)\n" +
-                                "end"
+
+        generateInto(customPipeline,
+                (Seq) translateToAst("""
+                        if @unit.dead === 0
+                            print(alive)
+                        end
+                        """
                 )
         );
 

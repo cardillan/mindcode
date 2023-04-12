@@ -64,13 +64,14 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         printer.iterationFinished(optimizer, 2, program);
         printer.print(messages::add);
 
-        assertEquals("\n" +
-                "Modifications by all optimizers:\n" +
-                "     0 set a 1\n" +
-                "     1 set b 2\n" +
-                "     2 op add c a b\n" +
-                "-    * print c\n" +
-                "     3 end",
+        assertEquals("""
+
+                        Modifications by all optimizers:
+                             0 set a 1
+                             1 set b 2
+                             2 op add c a b
+                        -    * print c
+                             3 end""",
                 String.join("\n", messages));
     }
 
@@ -87,13 +88,14 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         printer.iterationFinished(optimizer, 2, program);
         printer.print(messages::add);
 
-        assertEquals("\n" +
-                "Modifications by all optimizers:\n" +
-                "     0 set a 1\n" +
-                "     1 set b 2\n" +
-                "     2 op add c a b\n" +
-                "+    3 print c\n" +
-                "     4 end",
+        assertEquals("""
+
+                        Modifications by all optimizers:
+                             0 set a 1
+                             1 set b 2
+                             2 op add c a b
+                        +    3 print c
+                             4 end""",
                 String.join("\n", messages));
     }
 
@@ -111,14 +113,15 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         printer.iterationFinished(optimizer, 2, program);
         printer.print(messages::add);
 
-        assertEquals("\n" +
-                "Modifications by all optimizers:\n" +
-                "+    0 set b 2\n" +
-                "     1 set a 1\n" +
-                "-    * set b 2\n" +
-                "     2 op add c a b\n" +
-                "     3 print c\n" +
-                "     4 end",
+        assertEquals("""
+
+                        Modifications by all optimizers:
+                        +    0 set b 2
+                             1 set a 1
+                        -    * set b 2
+                             2 op add c a b
+                             3 print c
+                             4 end""",
                 String.join("\n", messages));
     }
 }

@@ -20,15 +20,15 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesCaseWithVariable() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "x = case UNIT\n" +
-                        "  when @poly 1\n" +
-                        "  when @mega 2\n" +
-                        "  else 3\n" +
-                        "end\n" +
-                        "print(x)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        x = case UNIT
+                            when @poly 1
+                            when @mega 2
+                            else 3
+                        end
+                        print(x)
+                        """
                 )
         );
 
@@ -56,15 +56,15 @@ public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesCaseWithExpression() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "x = case vault1.firstItem\n" +
-                        "  when @lead 1\n" +
-                        "  when @coal 2\n" +
-                        "  else 3\n" +
-                        "end\n" +
-                        "print(x)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        x = case vault1.firstItem
+                            when @lead 1
+                            when @coal 2
+                            else 3
+                        end
+                        print(x)
+                        """
                 )
         );
 

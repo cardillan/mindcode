@@ -139,12 +139,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesGetlinkFollowedBySet() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "target = getlink(0)"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("target = getlink(0)"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -204,12 +199,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesOpThenSet() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "r = rand(100)"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("r = rand(100)"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -222,12 +212,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesOpOpThenSet() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "state = min(max(state, MIN), MAX)"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("state = min(max(state, MIN), MAX)"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -241,12 +226,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesOpThenSetFromBinaryOp() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "remaining = capacity - current"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("remaining = capacity - current"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -293,11 +273,7 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesSensorThenSet() {
-        generateInto(pipeline,
-                (Seq) translateToAst(
-                        "numsilicon = STORAGE.silicon"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("numsilicon = STORAGE.silicon"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -311,8 +287,10 @@ public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     @Test
     void supportsConsecutiveSensors() {
         generateInto(pipeline,
-                (Seq) translateToAst(
-                        "numgraphite = container1.graphite\nnumcoal = container1.coal"
+                (Seq) translateToAst("""
+                        numgraphite = container1.graphite
+                        numcoal = container1.coal
+                        """
                 )
         );
 

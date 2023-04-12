@@ -32,9 +32,10 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     @Test
     void detectsRecursion() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
-                (Seq) translateToAst(""
-                        + "def a  a() end "
-                        + "a()"
+                (Seq) translateToAst("""
+                        def a  a() end
+                        a()
+                        """
                 ),
                 getInstructionProcessor()
         );
@@ -49,10 +50,11 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     @Test
     void detectsDoubleRecursion() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
-                (Seq) translateToAst(""
-                        + "def a  b() end "
-                        + "def b  a() end "
-                        + "a()"
+                (Seq) translateToAst("""
+                        def a  b() end
+                        def b  a() end
+                        a()
+                        """
                 ),
                 getInstructionProcessor()
         );
@@ -71,11 +73,12 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     @Test
     void detectsNonrecursiveCalls() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
-                (Seq) translateToAst(""
-                        + "def a  a() b() c() end "
-                        + "def b  b() end "
-                        + "def c  x=10 end "
-                        + "a()"
+                (Seq) translateToAst("""
+                        def a  a() b() c() end
+                        def b  b() end
+                        def c  x=10 end
+                        a()
+                        """
                 ),
                 getInstructionProcessor()
         );
@@ -93,11 +96,12 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     @Test
     void detectsIndirectCalls() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
-                (Seq) translateToAst(""
-                        + "def a(n) n + 1       end "
-                        + "def b(n) a(n) + 1    end "
-                        + "def c(n) a(n) + b(n) end "
-                        + "print(c(1))"
+                (Seq) translateToAst("""
+                        def a(n) n + 1       end
+                        def b(n) a(n) + 1    end
+                        def c(n) a(n) + b(n) end
+                        print(c(1))
+                        """
                 ),
                 getInstructionProcessor()
         );

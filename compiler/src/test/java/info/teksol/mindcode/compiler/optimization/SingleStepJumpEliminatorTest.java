@@ -18,12 +18,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void removesSingleJump() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "if x 1 end"
-                )
-        );
+        generateInto(sut, (Seq) translateToAst("if x 1 end"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -38,12 +33,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void removesTwoJumps() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "if x if y 1 end end"
-                )
-        );
+        generateInto(sut, (Seq) translateToAst("if x if y 1 end end"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -61,12 +51,7 @@ class SingleStepJumpEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void keepsIsolatedJumps() {
-        generateInto(
-                sut,
-                (Seq) translateToAst(
-                        "if x print(a) else print(b) end"
-                )
-        );
+        generateInto(sut, (Seq) translateToAst("if x print(a) else print(b) end"));
 
         assertLogicInstructionsMatch(
                 List.of(

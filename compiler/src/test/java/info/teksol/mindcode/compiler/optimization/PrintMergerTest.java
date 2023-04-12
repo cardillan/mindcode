@@ -18,11 +18,11 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
     @Test
     void mergesTwoPrints() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "print(\"a\")\n" +
-                        "print(\"b\")"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        print("a")
+                        print("b")
+                        """
                 )
         );
 
@@ -37,12 +37,12 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
     @Test
     void mergesThreePrints() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "print(\"a\")\n" +
-                        "print(\"b\")\n" +
-                        "print(\"c\")"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        print("a")
+                        print("b")
+                        print("c")
+                        """
                 )
         );
 
@@ -57,13 +57,13 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
 
     @Test
     void handlesInterleavedPrints() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "print(\"a\")\n" +
-                        "print(x)\n" +
-                        "print(\"c\")" +
-                        "print(\"d\")"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                         print("a")
+                         print(x)
+                         print("c")
+                         print("d")
+                        """
                 )
         );
 
@@ -82,12 +82,13 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
     void skipsJumps() {
         generateInto(
                 pipeline,
-                (Seq) translateToAst("" +
-                        "print(\"a\")\n" +
-                        "if x\n" +
-                        "  print(x)\n" +
-                        "end\n" +
-                        "print(\"b\")"
+                (Seq) translateToAst("""
+                        print("a")
+                        if x
+                          print(x)
+                        end
+                        print("b")
+                        """
                 )
         );
 
@@ -112,9 +113,10 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
     void mergesAcrossInstructions() {
         generateInto(
                 pipeline,
-                (Seq) translateToAst("" +
-                        "print(\"Rate: \", rate, \" items/sec\", \"\\n\")\n" +
-                        "print(\"Elapsed: \", @time - start, \" ms\")"
+                (Seq) translateToAst("""
+                        println("Rate: ", rate, " items/sec")
+                        println("Elapsed: ", @time - start, " ms")
+                        """
                 )
         );
 
@@ -125,7 +127,7 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
                         createInstruction(OP, "sub", var(0), "@time", "start"),
                         createInstruction(PRINT, "\" items/sec\\nElapsed: \""),
                         createInstruction(PRINT, var(0)),
-                        createInstruction(PRINT, "\" ms\""),
+                        createInstruction(PRINT, "\" ms\\n\""),
                         createInstruction(END)
                 ),
                 terminus.getResult()

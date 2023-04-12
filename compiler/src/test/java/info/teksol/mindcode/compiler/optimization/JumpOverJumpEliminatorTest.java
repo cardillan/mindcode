@@ -23,17 +23,16 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
                 Optimization.JUMP_OVER_JUMP_ELIMINATION
         );
 
-        generateInto(
-                pipeline,
-                (Seq) translateToAst(
-                        "" +
-                                "while true\n" +
-                                "  print(\"In loop\")\n" +
-                                "  if @unit.dead === 0\n" +
-                                "    break\n" +
-                                "  end\n" +
-                                "end\n" +
-                                "print(\"Out of loop\")"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        while true
+                            print("In loop")
+                            if @unit.dead === 0
+                                break
+                            end
+                        end
+                        print("Out of loop")
+                        """
                 )
         );
 
@@ -58,25 +57,23 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesMinimalSequence() {
-        List.of(
-                createInstruction(LABEL, "label0"),
-                createInstruction(JUMP, "label1", "equal", "a", "b"),
-                createInstruction(JUMP, "label0", "always"),
-                createInstruction(LABEL, "label1"),
-                createInstruction(END)
-        ).forEach(pipeline::emit);
+        pipeline.emit(createInstruction(LABEL, "label0"));
+        pipeline.emit(createInstruction(JUMP, "label1", "equal", "a", "b"));
+        pipeline.emit(createInstruction(JUMP, "label0", "always"));
+        pipeline.emit(createInstruction(LABEL, "label1"));
+        pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                createInstruction(LABEL, "label0"),
-                createInstruction(JUMP, "label0", "notEqual", "a", "b"),
-                createInstruction(LABEL, "label1"),
-                createInstruction(END)
+                        createInstruction(LABEL, "label0"),
+                        createInstruction(JUMP, "label0", "notEqual", "a", "b"),
+                        createInstruction(LABEL, "label1"),
+                        createInstruction(END)
                 ),
                 terminus.getResult()
         );
-   }
+    }
 
     @Test
     void ignoresStrictEqual() {
@@ -92,7 +89,7 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
         pipeline.flush();
 
         assertLogicInstructionsMatch(sequence, terminus.getResult());
-   }
+    }
 
     @Test
     void ignoresDistantJumps() {
@@ -109,7 +106,7 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
         pipeline.flush();
 
         assertLogicInstructionsMatch(sequence, terminus.getResult());
-   }
+    }
 
     @Test
     void ignoresConditionalJumps() {
@@ -125,6 +122,6 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
         pipeline.flush();
 
         assertLogicInstructionsMatch(sequence, terminus.getResult());
-   }
+    }
 
 }

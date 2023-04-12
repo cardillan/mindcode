@@ -20,12 +20,13 @@ class StackUsageOptimizerTest extends AbstractGeneratorTest {
     void removesUnusedParameter() {
         generateInto(
                 pipeline,
-                (Seq) translateToAst(""
-                        + "allocate stack in bank1[0...512] "
-                        + "def foo(x) "
-                        + "  foo(x - 1) "
-                        + "end "
-                        + "print(foo(5))"
+                (Seq) translateToAst("""
+                        allocate stack in bank1[0...512]
+                        def foo(x)
+                            foo(x - 1)
+                        end
+                        print(foo(5))
+                        """
                 )
         );
 
@@ -57,13 +58,14 @@ class StackUsageOptimizerTest extends AbstractGeneratorTest {
     void keepsUsedParameter() {
         generateInto(
                 pipeline,
-                (Seq) translateToAst(""
-                        + "allocate stack in bank1[0...512] "
-                        + "def foo(x) "
-                        + "  foo(x - 1) "
-                        + "  x "
-                        + "end "
-                        + "print(foo(5))"
+                (Seq) translateToAst("""
+                        allocate stack in bank1[0...512]
+                        def foo(x)
+                            foo(x - 1)
+                            x
+                        end
+                        print(foo(5))
+                        """
                 )
         );
 
@@ -98,15 +100,16 @@ class StackUsageOptimizerTest extends AbstractGeneratorTest {
         // the loop prevents elimination of y from stack due it not being read after function call.
         generateInto(
                 pipeline,
-                (Seq) translateToAst(""
-                        + "allocate stack in bank1[0...512] "
-                        + "def foo(x) "
-                        + "    while true "
-                        + "        y = x "
-                        + "        foo(x) "
-                        + "    end "
-                        + "end "
-                        + "foo(5)"
+                (Seq) translateToAst("""
+                        allocate stack in bank1[0...512]
+                        def foo(x)
+                            while true
+                                y = x
+                                foo(x)
+                            end
+                        end
+                        foo(5)
+                        """
                 )
         );
 

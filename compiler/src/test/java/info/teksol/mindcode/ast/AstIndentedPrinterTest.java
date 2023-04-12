@@ -17,21 +17,21 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
 
     @Test
     void printsLinearizedSeq() {
-        assertEquals("" +
-                "Seq[\n" +
-                "    FunctionCall{\n" +
-                "        functionName='print',\n" +
-                "        params=[VarRef{name='a'}]\n" +
-                "    },\n" +
-                "    FunctionCall{\n" +
-                "        functionName='print',\n" +
-                "        params=[VarRef{name='b'}]\n" +
-                "    },\n" +
-                "    FunctionCall{\n" +
-                "        functionName='print',\n" +
-                "        params=[VarRef{name='c'}]\n" +
-                "    }\n" +
-                "]",
+        assertEquals("""
+                        Seq[
+                            FunctionCall{
+                                functionName='print',
+                                params=[VarRef{name='a'}]
+                            },
+                            FunctionCall{
+                                functionName='print',
+                                params=[VarRef{name='b'}]
+                            },
+                            FunctionCall{
+                                functionName='print',
+                                params=[VarRef{name='c'}]
+                            }
+                        ]""",
                 printLinearized("" +
                         "print(a)\n" +
                         "print(b)\n" +
@@ -42,23 +42,23 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
 
     @Test
     void printsNestedSeq() {
-        assertEquals("" +
-                "Seq{\n" +
-                "    rest=Seq{\n" +
-                "        rest=Seq{rest=NoOp{}, last=FunctionCall{\n" +
-                "            functionName='print',\n" +
-                "            params=[VarRef{name='a'}]\n" +
-                "        }},\n" +
-                "        last=FunctionCall{\n" +
-                "            functionName='print',\n" +
-                "            params=[VarRef{name='b'}]\n" +
-                "        }\n" +
-                "    },\n" +
-                "    last=FunctionCall{\n" +
-                "        functionName='print',\n" +
-                "        params=[VarRef{name='c'}]\n" +
-                "    }\n" +
-                "}",
+        assertEquals("""
+                        Seq{
+                            rest=Seq{
+                                rest=Seq{rest=NoOp{}, last=FunctionCall{
+                                    functionName='print',
+                                    params=[VarRef{name='a'}]
+                                }},
+                                last=FunctionCall{
+                                    functionName='print',
+                                    params=[VarRef{name='b'}]
+                                }
+                            },
+                            last=FunctionCall{
+                                functionName='print',
+                                params=[VarRef{name='c'}]
+                            }
+                        }""",
                 printNested("" +
                         "print(a)\n" +
                         "print(b)\n" +
@@ -69,55 +69,55 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
 
     @Test
     void printsAssignmentsOpsAndCase() {
-        assertEquals("" +
-                "Seq[\n" +
-                "    Assignment{\n" +
-                "        var=VarRef{name='x'},\n" +
-                "        value=NumericLiteral{literal='10'}\n" +
-                "    },\n" +
-                "    Assignment{\n" +
-                "        var=VarRef{name='y'},\n" +
-                "        value=BinaryOp{\n" +
-                "            left=NumericLiteral{literal='20'},\n" +
-                "            op='+',\n" +
-                "            right=NumericLiteral{literal='30'}\n" +
-                "        }\n" +
-                "    },\n" +
-                "    Assignment{\n" +
-                "        var=VarRef{name='z'},\n" +
-                "        value=UnaryOp{\n" +
-                "            op='~',\n" +
-                "            expression=VarRef{name='y'}\n" +
-                "        }\n" +
-                "    },\n" +
-                "    Assignment{\n" +
-                "        var=VarRef{name='b'},\n" +
-                "        value=BooleanLiteral{value=true}\n" +
-                "    },\n" +
-                "    Seq{\n" +
-                "        rest=Assignment{\n" +
-                "            var=VarRef{name='__ast0'},\n" +
-                "            value=VarRef{name='x'}\n" +
-                "        },\n" +
-                "        last=CaseExpression{\n" +
-                "            condition=VarRef{name='__ast0'},\n" +
-                "            alternatives=[\n" +
-                "                CaseAlternative{\n" +
-                "                    values=[NumericLiteral{literal='0'}],\n" +
-                "                    body=Seq{rest=NoOp{}, last=StringLiteral{text='zero'}}\n" +
-                "                },\n" +
-                "                CaseAlternative{\n" +
-                "                    values=[\n" +
-                "                        VarRef{name='y'},\n" +
-                "                        VarRef{name='z'}\n" +
-                "                    ],\n" +
-                "                    body=Seq{rest=NoOp{}, last=StringLiteral{text='y or z'}}\n" +
-                "                }\n" +
-                "            ],\n" +
-                "            elseBranch=Seq{rest=NoOp{}, last=StringLiteral{text='other'}}\n" +
-                "        }\n" +
-                "    }\n" +
-                "]",
+        assertEquals("""
+                        Seq[
+                            Assignment{
+                                var=VarRef{name='x'},
+                                value=NumericLiteral{literal='10'}
+                            },
+                            Assignment{
+                                var=VarRef{name='y'},
+                                value=BinaryOp{
+                                    left=NumericLiteral{literal='20'},
+                                    op='+',
+                                    right=NumericLiteral{literal='30'}
+                                }
+                            },
+                            Assignment{
+                                var=VarRef{name='z'},
+                                value=UnaryOp{
+                                    op='~',
+                                    expression=VarRef{name='y'}
+                                }
+                            },
+                            Assignment{
+                                var=VarRef{name='b'},
+                                value=BooleanLiteral{value=true}
+                            },
+                            Seq{
+                                rest=Assignment{
+                                    var=VarRef{name='__ast0'},
+                                    value=VarRef{name='x'}
+                                },
+                                last=CaseExpression{
+                                    condition=VarRef{name='__ast0'},
+                                    alternatives=[
+                                        CaseAlternative{
+                                            values=[NumericLiteral{literal='0'}],
+                                            body=Seq{rest=NoOp{}, last=StringLiteral{text='zero'}}
+                                        },
+                                        CaseAlternative{
+                                            values=[
+                                                VarRef{name='y'},
+                                                VarRef{name='z'}
+                                            ],
+                                            body=Seq{rest=NoOp{}, last=StringLiteral{text='y or z'}}
+                                        }
+                                    ],
+                                    elseBranch=Seq{rest=NoOp{}, last=StringLiteral{text='other'}}
+                                }
+                            }
+                        ]""",
                 printLinearized("" +
                         "x = 10\n" +
                         "y = 20 + 30\n" +
@@ -134,35 +134,35 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
 
     @Test
     void printsWhileIfBreak() {
-        assertEquals("" +
-                "Seq[\n" +
-                "    WhileExpression{\n" +
-                "        label=null,\n" +
-                "        condition=BooleanLiteral{value=true},\n" +
-                "        body=Seq[\n" +
-                "            FunctionCall{\n" +
-                "                functionName='print',\n" +
-                "                params=[StringLiteral{text='In loop'}]\n" +
-                "            },\n" +
-                "            IfExpression{\n" +
-                "                condition=BinaryOp{\n" +
-                "                    left=PropertyAccess{\n" +
-                "                        target=Ref{name='unit'},\n" +
-                "                        property=Ref{name='dead'}\n" +
-                "                    },\n" +
-                "                    op='===',\n" +
-                "                    right=NumericLiteral{literal='0'}\n" +
-                "                },\n" +
-                "                trueBranch=Seq{rest=NoOp{}, last=BreakStatement{}},\n" +
-                "                falseBranch=NoOp{}\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    },\n" +
-                "    FunctionCall{\n" +
-                "        functionName='print',\n" +
-                "        params=[StringLiteral{text='Out of loop'}]\n" +
-                "    }\n" +
-                "]",
+        assertEquals("""
+                        Seq[
+                            WhileExpression{
+                                label=null,
+                                condition=BooleanLiteral{value=true},
+                                body=Seq[
+                                    FunctionCall{
+                                        functionName='print',
+                                        params=[StringLiteral{text='In loop'}]
+                                    },
+                                    IfExpression{
+                                        condition=BinaryOp{
+                                            left=PropertyAccess{
+                                                target=Ref{name='unit'},
+                                                property=Ref{name='dead'}
+                                            },
+                                            op='===',
+                                            right=NumericLiteral{literal='0'}
+                                        },
+                                        trueBranch=Seq{rest=NoOp{}, last=BreakStatement{}},
+                                        falseBranch=NoOp{}
+                                    }
+                                ]
+                            },
+                            FunctionCall{
+                                functionName='print',
+                                params=[StringLiteral{text='Out of loop'}]
+                            }
+                        ]""",
                 printLinearized("" +
                         "while true\n" +
                         "  print(\"In loop\")\n" +
@@ -177,64 +177,64 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
 
     @Test
     void printsStackAllocationFunctionDefCall() {
-        assertEquals("" +
-                "Seq[\n" +
-                "    StackAllocation{\n" +
-                "        name='bank1',\n" +
-                "        range=ExclusiveRange{firstValue=NumericLiteral{literal='0'}, lastValue=NumericLiteral{literal='512'}}\n" +
-                "    },\n" +
-                "    FunctionDeclaration{\n" +
-                "        name='fib',\n" +
-                "        params=[VarRef{name='n'}],\n" +
-                "        body=Seq{rest=NoOp{}, last=IfExpression{\n" +
-                "            condition=BinaryOp{\n" +
-                "                left=VarRef{name='n'},\n" +
-                "                op='<=',\n" +
-                "                right=NumericLiteral{literal='0'}\n" +
-                "            },\n" +
-                "            trueBranch=Seq{rest=NoOp{}, last=NumericLiteral{literal='0'}},\n" +
-                "            falseBranch=Seq{\n" +
-                "                rest=Assignment{\n" +
-                "                    var=VarRef{name='__ast0'},\n" +
-                "                    value=VarRef{name='n'}\n" +
-                "                },\n" +
-                "                last=CaseExpression{\n" +
-                "                    condition=VarRef{name='__ast0'},\n" +
-                "                    alternatives=[CaseAlternative{\n" +
-                "                        values=[NumericLiteral{literal='1'}],\n" +
-                "                        body=Seq{rest=NoOp{}, last=NumericLiteral{literal='1'}}\n" +
-                "                    }],\n" +
-                "                    elseBranch=Seq{rest=NoOp{}, last=BinaryOp{\n" +
-                "                        left=FunctionCall{\n" +
-                "                            functionName='fib',\n" +
-                "                            params=[BinaryOp{\n" +
-                "                                left=VarRef{name='n'},\n" +
-                "                                op='-',\n" +
-                "                                right=NumericLiteral{literal='1'}\n" +
-                "                            }]\n" +
-                "                        },\n" +
-                "                        op='+',\n" +
-                "                        right=FunctionCall{\n" +
-                "                            functionName='fib',\n" +
-                "                            params=[BinaryOp{\n" +
-                "                                left=VarRef{name='n'},\n" +
-                "                                op='-',\n" +
-                "                                right=NumericLiteral{literal='2'}\n" +
-                "                            }]\n" +
-                "                        }\n" +
-                "                    }}\n" +
-                "                }\n" +
-                "            }\n" +
-                "        }}\n" +
-                "    },\n" +
-                "    FunctionCall{\n" +
-                "        functionName='print',\n" +
-                "        params=[FunctionCall{\n" +
-                "            functionName='fib',\n" +
-                "            params=[NumericLiteral{literal='5'}]\n" +
-                "        }]\n" +
-                "    }\n" +
-                "]",
+        assertEquals("""
+                        Seq[
+                            StackAllocation{
+                                name='bank1',
+                                range=ExclusiveRange{firstValue=NumericLiteral{literal='0'}, lastValue=NumericLiteral{literal='512'}}
+                            },
+                            FunctionDeclaration{
+                                name='fib',
+                                params=[VarRef{name='n'}],
+                                body=Seq{rest=NoOp{}, last=IfExpression{
+                                    condition=BinaryOp{
+                                        left=VarRef{name='n'},
+                                        op='<=',
+                                        right=NumericLiteral{literal='0'}
+                                    },
+                                    trueBranch=Seq{rest=NoOp{}, last=NumericLiteral{literal='0'}},
+                                    falseBranch=Seq{
+                                        rest=Assignment{
+                                            var=VarRef{name='__ast0'},
+                                            value=VarRef{name='n'}
+                                        },
+                                        last=CaseExpression{
+                                            condition=VarRef{name='__ast0'},
+                                            alternatives=[CaseAlternative{
+                                                values=[NumericLiteral{literal='1'}],
+                                                body=Seq{rest=NoOp{}, last=NumericLiteral{literal='1'}}
+                                            }],
+                                            elseBranch=Seq{rest=NoOp{}, last=BinaryOp{
+                                                left=FunctionCall{
+                                                    functionName='fib',
+                                                    params=[BinaryOp{
+                                                        left=VarRef{name='n'},
+                                                        op='-',
+                                                        right=NumericLiteral{literal='1'}
+                                                    }]
+                                                },
+                                                op='+',
+                                                right=FunctionCall{
+                                                    functionName='fib',
+                                                    params=[BinaryOp{
+                                                        left=VarRef{name='n'},
+                                                        op='-',
+                                                        right=NumericLiteral{literal='2'}
+                                                    }]
+                                                }
+                                            }}
+                                        }
+                                    }
+                                }}
+                            },
+                            FunctionCall{
+                                functionName='print',
+                                params=[FunctionCall{
+                                    functionName='fib',
+                                    params=[NumericLiteral{literal='5'}]
+                                }]
+                            }
+                        ]""",
                 printLinearized("" +
                         "allocate stack in bank1[0...512]\n" +
                         "\n" +

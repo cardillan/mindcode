@@ -12,30 +12,31 @@ import java.util.stream.IntStream;
 public class AlgorithmsTest extends AbstractProcessorTest {
 
     @Test
-    void readsAndWritesMmemory() {
-        testCode(""
-                        + "allocate heap in bank1[0...512] "
-                        + "$A = 10 "
-                        + "print($A) ",
+    void readsAndWritesMemory() {
+        testCode("""
+                        allocate heap in bank1[0...512]
+                        $A = 10
+                        print($A)
+                        """,
                 "10"
         );
     }
 
     void computesRecursiveFibonacci() {
-        testCode(""
-                + "allocate stack in bank1[0...512] "
-                + "def fib(n) "
-                + "    n < 2 ? n : fib(n - 1) + fib(n - 2) "
-                + "end "
-                + "print(fib(10))",
+        testCode("""
+                        allocate stack in bank1[0...512]
+                        def fib(n)
+                            n < 2 ? n : fib(n - 1) + fib(n - 2)
+                        end
+                        print(fib(10))
+                        """,
                 "55"
         );
     }
 
     @Test
     void executeBitTest() throws IOException {
-        testFile(
-                "bitmap-get-set-test.mnd",
+        testFile("bitmap-get-set-test.mnd",
                 List.of(),
                 IntStream.range(1, 17).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
         );
@@ -53,7 +54,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         double[] array = rnd.ints().mapToDouble(i -> Math.abs(i) % 1000).limit(arrayLength).toArray();
         MindustryMemory memory = MindustryMemory.createMemoryBank("bank2", array);
 
-        String code = "SIZE = " + arrayLength + "\n" + readFile(fileName);
+        String code = "const SIZE = " + arrayLength + "\n" + readFile(fileName);
         testCode(code,
                 List.of(memory),
                 Arrays.stream(array).mapToInt(d -> (int) d).sorted().mapToObj(String::valueOf).collect(Collectors.toList())

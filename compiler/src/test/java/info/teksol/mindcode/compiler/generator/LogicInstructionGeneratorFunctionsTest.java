@@ -27,11 +27,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(n) "
-                                + "  n "
-                                + "end "
-                                + "print(foo(3))"
+                        (Seq) translateToAst("""
+                                def foo(n)
+                                  n
+                                end
+                                print(foo(3))
+                                """
                         )
                 )
         );
@@ -61,12 +62,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(n) "
-                                + "  n "
-                                + "end "
-                                + "print(foo(3)) "
-                                + "print(foo(4))"
+                        (Seq) translateToAst("""
+                                def foo(n)
+                                  n
+                                end
+                                print(foo(3))
+                                print(foo(4))
+                                """
                         )
                 )
         );
@@ -89,12 +91,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "inline def foo(n) "
-                                + "  n "
-                                + "end "
-                                + "print(foo(3)) "
-                                + "print(foo(4))"
+                        (Seq) translateToAst("""
+                                inline def foo(n)
+                                  n
+                                end
+                                print(foo(3))
+                                print(foo(4))
+                                """
                         )
                 )
         );
@@ -124,12 +127,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in bank1[0...512] "
-                                + "def foo(n) "
-                                + "  foo(n)   "
-                                + "end "
-                                + "print(foo(3))"
+                        (Seq) translateToAst("""
+                                allocate stack in bank1[0...512]
+                                def foo(n)
+                                  foo(n)  
+                                end
+                                print(foo(3))
+                                """
                         )
                 )
         );
@@ -177,11 +181,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in bank1[0...512] "
-                                + "def foo(n) 1 + bar(n) end "
-                                + "def bar(n) 1 - foo(n) end "
-                                + "print(foo(4))"
+                        (Seq) translateToAst("""
+                                allocate stack in bank1[0...512]
+                                def foo(n) 1 + bar(n) end
+                                def bar(n) 1 - foo(n) end
+                                print(foo(4))
+                                """
                         )
                 )
         );
@@ -205,15 +210,17 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(n, r) "
-                                + "2 * (n ** r) "
-                                + "end "
-                                + " "
-                                + "boo = 4 "
-                                + "x = foo(3, boo) "
-                                + "print(x) "
-                                + "printflush(message1)")
+                        (Seq) translateToAst("""
+                                def foo(n, r)
+                                2 * (n ** r)
+                                end
+                                 
+                                boo = 4
+                                x = foo(3, boo)
+                                print(x)
+                                printflush(message1)
+                                """
+                        )
                 )
         );
     }
@@ -241,11 +248,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(n) 1 + bar(n) end "
-                                + "def bar(n) 2 * baz(n) end "
-                                + "def baz(n) 3 ** n end "
-                                + "print(foo(4))"
+                        (Seq) translateToAst("""
+                                def foo(n) 1 + bar(n) end
+                                def bar(n) 2 * baz(n) end
+                                def baz(n) 3 ** n end
+                                print(foo(4))
+                                """
                         )
                 )
         );
@@ -314,14 +322,15 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(n) 1 + bar(n) end "
-                                + "def bar(n) 2 * baz(n) end "
-                                + "def baz(n) 3 ** n end "
-                                + "foo(0) "
-                                + "bar(0) "
-                                + "baz(0) "
-                                + "print(foo(4))"
+                        (Seq) translateToAst("""
+                                def foo(n) 1 + bar(n) end
+                                def bar(n) 2 * baz(n) end
+                                def baz(n) 3 ** n end
+                                foo(0)
+                                bar(0)
+                                baz(0)
+                                print(foo(4))
+                                """
                         )
                 )
         );
@@ -351,15 +360,16 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(RETURN, "STACKPTR"),
                         createInstruction(END)),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "set STACKPTR = cell1 "
-                                + "set HEAPPTR = cell2 "
-                                + "allocate heap in HEAPPTR[0...16], stack in STACKPTR "
-                                + "def delay "
-                                + "  0 "
-                                + "  delay() "
-                                + "end "
-                                + "$dx = delay() "
+                        (Seq) translateToAst("""
+                                set STACKPTR = cell1
+                                set HEAPPTR = cell2
+                                allocate heap in HEAPPTR[0...16], stack in STACKPTR
+                                def delay
+                                  0
+                                  delay()
+                                end
+                                $dx = delay()
+                                """
                         )
                 )
         );
@@ -388,9 +398,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "inline def a(n) n + 1 end "
-                                + "print(a(a(a(4))))"
+                        (Seq) translateToAst("""
+                                inline def a(n) n + 1 end
+                                print(a(a(a(4))))
+                                """
                         )
                 )
         );
@@ -426,9 +437,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def a(n) n + 1 end "
-                                + "print(a(a(a(4))))"
+                        (Seq) translateToAst("""
+                                def a(n) n + 1 end
+                                print(a(a(a(4))))
+                                """
                         )
                 )
         );
@@ -469,10 +481,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in bank1[0...512] "
-                                + "def a(n) a(n + 1) end "
-                                + "print(a(a(a(4))))"
+                        (Seq) translateToAst("""
+                                allocate stack in bank1[0...512]
+                                def a(n) a(n + 1) end
+                                print(a(a(a(4))))
+                                """
                         )
                 )
         );
@@ -521,12 +534,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in bank1[0...512] "
-                                + "def fib(n) "
-                                + "    n < 2 ? n : fib(n - 1) + fib(n - 2) "
-                                + "end "
-                                + "print(fib(10))"
+                        (Seq) translateToAst("""
+                                allocate stack in bank1[0...512]
+                                def fib(n)
+                                    n < 2 ? n : fib(n - 1) + fib(n - 2)
+                                end
+                                print(fib(10))
+                                """
                         )
                 )
         );
@@ -565,16 +579,17 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in bank1[0...512] "
-                                + "def foo(n) "
-                                + "    bar(n) "
-                                + "    foo(n - 1) "
-                                + "end "
-                                + "inline def bar(n) "
-                                + "    print(n) "
-                                + "end "
-                                + "foo(1)"
+                        (Seq) translateToAst("""
+                                allocate stack in bank1[0...512]
+                                def foo(n)
+                                    bar(n)
+                                    foo(n - 1)
+                                end
+                                inline def bar(n)
+                                    print(n)
+                                end
+                                foo(1)
+                                """
                         )
                 )
         );
@@ -597,13 +612,14 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(block) "
-                                + "  print(radar(enemy, any, any, distance, block, 1)) "
-                                + "  print(block.radar(ally, flying, any, health, 1)) "
-                                + "  print(radar(enemy, boss, any, distance, lancer1, 1)) "
-                                + "end "
-                                + "foo(lancer1)"
+                        (Seq) translateToAst("""
+                                def foo(block)
+                                  print(radar(enemy, any, any, distance, block, 1))
+                                  print(block.radar(ally, flying, any, health, 1))
+                                  print(radar(enemy, boss, any, distance, lancer1, 1))
+                                end
+                                foo(lancer1)
+                                """
                         )
                 )
         );
@@ -633,15 +649,16 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def a(n) "
-                                + "    if n % 2 == 1 "
-                                + "        return \"odd\" "
-                                + "    else "
-                                + "        return \"even\" "
-                                + "    end "
-                                + "end "
-                                + "print(a(0))"
+                        (Seq) translateToAst("""
+                                def a(n)
+                                    if n % 2 == 1
+                                        return "odd"
+                                    else
+                                        return "even" 
+                                    end
+                                end
+                                print(a(0))
+                                """
                         )
                 )
         );
@@ -684,16 +701,17 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def a(n) "
-                                + "    if n % 2 == 1 "
-                                + "        return \"odd\" "
-                                + "    else "
-                                + "        return \"even\" "
-                                + "    end "
-                                + "end "
-                                + "print(a(0))"
-                                + "print(a(1))"
+                        (Seq) translateToAst("""
+                                def a(n)
+                                    if n % 2 == 1
+                                        return "odd"
+                                    else
+                                        return "even"
+                                    end
+                                end
+                                print(a(0))
+                                print(a(1))
+                                """
                         )
                 )
         );
@@ -744,16 +762,17 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in bank1[0...512] "
-                                + "def gdc(a,b) "
-                                + "    if b == 0 "
-                                + "        return a "
-                                + "    else "
-                                + "        return gdc(b, a % b) "
-                                + "    end "
-                                + "end "
-                                + "print(gdc(115, 78))"
+                        (Seq) translateToAst("""
+                                allocate stack in bank1[0...512]
+                                def gdc(a,b)
+                                    if b == 0
+                                        return a
+                                    else
+                                        return gdc(b, a % b)
+                                    end
+                                end
+                                print(gdc(115, 78))
+                                """
                         )
                 )
         );
@@ -788,11 +807,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(n) return 1 + bar(n) end "
-                                + "def bar(n) return 2 * baz(n) end "
-                                + "def baz(n) return 3 ** n end "
-                                + "print(foo(4))"
+                        (Seq) translateToAst("""
+                                def foo(n) return 1 + bar(n) end
+                                def bar(n) return 2 * baz(n) end
+                                def baz(n) return 3 ** n end
+                                print(foo(4))
+                                """
                         )
                 )
         );
@@ -827,9 +847,10 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "inline def a(n) return n + 1 end "
-                                + "print(a(a(a(4))))"
+                        (Seq) translateToAst("""
+                                inline def a(n) return n + 1 end
+                                print(a(a(a(4))))
+                                """
                         )
                 )
         );
@@ -848,12 +869,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def setx(x) "
-                                + "    X = x "
-                                + "end "
-                                + "setx(7) "
-                                + "print(X)"
+                        (Seq) translateToAst("""
+                                def setx(x)
+                                    X = x
+                                end
+                                setx(7)
+                                print(X)
+                                """
                         )
                 )
         );
@@ -869,14 +891,15 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(WRITE, "99", "cell3", "41")
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in cell3[20..40], heap in cell3[41...64] "
-                                + "def foo(n) "
-                                + "  foo(n-1) "
-                                + "end "
-                                + " "
-                                + "$x = 99 "
-                                + "print(foo(1) + foo(2))"
+                        (Seq) translateToAst("""
+                                allocate stack in cell3[20..40], heap in cell3[41...64]
+                                def foo(n)
+                                  foo(n-1)
+                                end
+                                                                
+                                $x = 99
+                                print(foo(1) + foo(2))
+                                """
                         )
                 ).subList(0, 2)
         );
@@ -886,11 +909,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesToDeclareRecursiveFunctionsWhenNoStackAround() {
         assertThrows(MissingStackException.class,
                 () -> generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo "
-                                + "  foo() "
-                                + "end "
-                                + "foo()"
+                        (Seq) translateToAst("""
+                                def foo
+                                  foo()
+                                end
+                                foo()
+                                        """
                         )
                 )
         );
@@ -900,10 +924,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesMisplacedStackAllocation() {
         assertThrows(MisplacedStackAllocationException.class,
                 () -> generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "while true "
-                                + "  allocate stack in cell1 "
-                                + "end"
+                        (Seq) translateToAst("""
+                                while true
+                                  allocate stack in cell1
+                                end
+                                """
                         )
                 )
         );
@@ -913,12 +938,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesRecursiveInlineFunctions() {
         assertThrows(InlineRecursiveFunctionException.class,
                 () -> generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "allocate stack in cell1 "
-                                + "inline def foo(n) "
-                                + "  foo(n-1) "
-                                + "end "
-                                + "print(foo(1) + foo(2))"
+                        (Seq) translateToAst("""
+                                allocate stack in cell1
+                                inline def foo(n)
+                                    foo(n - 1)
+                                end
+                                print(foo(1) + foo(2))
+                                """
                         )
                 )
         );
@@ -928,11 +954,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesUppercaseFunctionParameter() {
         assertThrows(InvalidParameterNameException.class,
                 () -> generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(N) "
-                                + "  N "
-                                + "end "
-                                + "print(foo(1) + foo(2))"
+                        (Seq) translateToAst("""
+                                def foo(N)
+                                    N
+                                end
+                                print(foo(1) + foo(2))
+                                """
                         )
                 )
         );
@@ -942,11 +969,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void refusesBlockNameAsFunctionParameter() {
         assertThrows(InvalidParameterNameException.class,
                 () -> generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "def foo(switch1) "
-                                + "  switch1 "
-                                + "end "
-                                + "print(foo(1) + foo(2))"
+                        (Seq) translateToAst("""
+                                def foo(switch1)
+                                    switch1
+                                end
+                                print(foo(1) + foo(2))
+                                """
                         )
                 )
         );

@@ -100,10 +100,11 @@ class MindcodeParserTest extends AbstractParserTest {
 
     @Test
     void parsesGlobalReferences() {
-        assertDoesNotThrow(() -> parse("" +
-                        "allocate heap in cell2[14 .. 20]\n" +
-                        "$dx += 1\n" +
-                        "$dy = $dx - 4\n"
+        assertDoesNotThrow(() -> parse("""
+                        allocate heap in cell2[14 .. 20]
+                        $dx += 1
+                        $dy = $dx - 4
+                        """
                 )
         );
     }

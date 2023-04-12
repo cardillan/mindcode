@@ -102,17 +102,17 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesDrawingCode() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "color(255,80,80,255)\n" +
-                        "rect(x, y3, 14, 8)\n" +
-                        "color(0,0,0,255)\n" +
-                        "rect(x + 2, y + 5, 8, 4)\n" +
-                        "rect(x12, y3, 2, 2)\n" +
-                        "rect(x12, y + 9, 2, 2)\n" +
-                        "color(255,80,80,255)\n" +
-                        "rect(x + 4, y + 6, 2, 2)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        color(255,80,80,255)
+                        rect(x, y3, 14, 8)
+                        color(0,0,0,255)
+                        rect(x + 2, y + 5, 8, 4)
+                        rect(x12, y3, 2, 2)
+                        rect(x12, y + 9, 2, 2)
+                        color(255,80,80,255)
+                        rect(x + 4, y + 6, 2, 2)
+                        """
                 )
         );
 
@@ -141,12 +141,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesSetThenWriteValueOut() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "cell1[42] = 36"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("cell1[42] = 36"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -159,10 +154,11 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void allowsUsingVariableForCell() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "RAM = cell14\nRAM[21] = 17"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        RAM = cell14
+                        RAM[21] = 17
+                        """
                 )
         );
 
@@ -180,12 +176,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyOptimizesReadAtFixedAddress() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "foo = cell1[14]"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("foo = cell1[14]"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -199,10 +190,12 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyOptimizesHeapAccess() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "allocate heap in cell2[0 ... 4]\ntargetx = @thisx + $offsetx\ntargety = @thisy + $offsety\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        allocate heap in cell2[0 ... 4]
+                        targetx = @thisx + $offsetx
+                        targety = @thisy + $offsety
+                        """
                 )
         );
 
@@ -222,12 +215,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void keepsTerminalSet() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "bar = foo"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("bar = foo"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -257,12 +245,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesSetThenOp() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "FLAG = floor(rand(10000))\n"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("FLAG = floor(rand(10000))\n"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -277,10 +260,11 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesSetThenOpWhenOpDoesNotUseSetAlone() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "r = 2\np = rand(500)\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        r = 2
+                        p = rand(500)
+                        """
                 )
         );
 
@@ -297,10 +281,11 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizeSetThenOpWithBinaryOpFirst() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "x = 41\npos = 70 + x"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        x = 41
+                        pos = 70 + x
+                        """
                 )
         );
 
@@ -317,10 +302,11 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizeSetThenOpWithBinaryOpLast() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "x = 41\npos = x + 70"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        x = 41
+                        pos = x + 70
+                        """
                 )
         );
 
@@ -339,10 +325,11 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void consecutiveSetsThatRelateToEachOtherCollapse() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "a = 1\nb = a\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        a = 1
+                        b = a
+                        """
                 )
         );
 
@@ -358,10 +345,11 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void consecutiveSetsThatDoNotRelateAreLeftAlone() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "a = 1\nb = 2\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        a = 1
+                        b = 2
+                        """
                 )
         );
 
@@ -394,10 +382,10 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
     
     @Test
     void optimizesSetThenPrint() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "print(\"a: \", a)"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        print("a: ", a)
+                        """
                 )
         );
 
@@ -413,12 +401,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesSetThenRead() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "a = cell4[10]"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("a = cell4[10]"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -432,12 +415,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void leavesSetThenPrintUnrelatedUndisturbed() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "x = 1\nprint(y)"
-                )
-        );
+        generateInto(pipeline, (Seq) translateToAst("x = 1\nprint(y)"));
 
         assertLogicInstructionsMatch(
                 List.of(
@@ -451,10 +429,10 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyOptimizesPrintPipelines() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "print(\"damaged at \", dmgx, \", \", dmgy)\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        print("damaged at ", dmgx, ", ", dmgy)
+                        """
                 )
         );
 
@@ -472,10 +450,13 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyLeavesMultipleInstructionsAlone() {
-        generateInto(
-                pipeline,
-                (Seq) translateToAst("" +
-                        "x = 1\nprint(\"damaged at \", dmgx)\nx = 2\nprint(\", \", dmgy)\n"
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        x = 1
+                        print("damaged at ", dmgx)
+                        x = 2
+                        print(", ", dmgy)
+                        """
                 )
         );
 
@@ -495,8 +476,7 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyLeavesTwoSetsOnSameTargetAlone() {
-        generateInto(
-                pipeline,
+        generateInto(pipeline,
                 (Seq) translateToAst("if x print(x) end")
         );
 

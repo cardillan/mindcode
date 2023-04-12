@@ -101,8 +101,8 @@ and availability of the aggressive optimization level is:
 | [Case expression optimization](#case-expression-optimization)   | caseExpressionOptimization  |     N      |
 | [Conditional jump optimization](#conditional-jump-optimization) | conditionalsOptimization    |     N      |
 | [Jump straightening](#jump-straightening)                       | jumpStraightening           |     N      |
-| [Jump threading](#jump-threading)                               | jumpThreading               |     N      |
-| [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessibleCodeElimination |     N      |
+| [Jump threading](#jump-threading)                               | jumpThreading               |     Y      |
+| [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessibleCodeElimination |     Y      |
 | [Stack optimization](#stack-optimization)                       | stackOptimization           |     N      |
 | [Function call optimization](#function-call-optimization)       | functionCallOptimization    |     N      |
 | [Print merging](#print-merging)                                 | printMerging                |     Y      |
@@ -274,10 +274,10 @@ end
 
 If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
 to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
-* `end` instruction is handled identically to `jump 0 always`
+* on `aggressive` level, `end` instruction is handled identically to `jump 0 always`,
 * conditional jumps in the jump chain are followed if
   * their condition is identical to the condition the first jump, and
-  * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.)
+  * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.).
 
 No instructions are removed or added, but the execution of the code is faster.
 
@@ -292,6 +292,10 @@ There are several ways inaccessible instructions might appear:
 Instruction removal is done in loops until no instructions are removed. This way entire branches
 of inaccessible code (i.e. all code inside the `while false ... end` statement) should be eliminated,
 assuming the unconditional jump normalization optimizer was also active.
+
+The `end` instruction, even when not accessible, is not removed unless the optimization level is `aggressive`.
+Main body program and function definitions are each terminated by the `end` instruction and removing it
+might make the produced code somewhat less readable.
 
 ## Stack optimization
 

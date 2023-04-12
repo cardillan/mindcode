@@ -48,7 +48,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "n"),
                         createInstruction(END)
                 ),
-                generateUnoptimized((Seq) translateToAst("n = 0\nwhile n < 5\nn += 1\nend\nprint(\"n: \", n)"))
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                n = 0
+                                while n < 5
+                                    n += 1
+                                end
+                                print("n: ", n)
+                                """
+                        )
+                )
         );
     }
 
@@ -65,7 +74,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "x", "null"),
                         createInstruction(END)
                 ),
-                generateUnoptimized((Seq) translateToAst("a = ~a\nb = !b\nc = not c\nx = null"))
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                a = ~a
+                                b = !b
+                                c = not c
+                                x = null
+                                """
+                        )
+                )
         );
     }
 
@@ -97,7 +114,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("while z != true\nprint(\"infinite loop!\")\nend\nprintflush(message1)\n")
+                        (Seq) translateToAst("""
+                                while z != true
+                                    print("infinite loop!")
+                                end
+                                printflush(message1)
+                                """
+                        )
                 )
         );
     }
@@ -153,8 +176,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(
-                                "value = if cell1[4] == 0\nfalse\nelse\ncell1[4] = true\nn += 1\nend\n"
+                        (Seq) translateToAst("""
+                                value = if cell1[4] == 0
+                                    false
+                                else
+                                    cell1[4] = true
+                                    n += 1
+                                end
+                                """
                         )
                 )
         );
@@ -201,8 +230,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(
-                                "while @unit === null\nubind(@poly)\nend\n")
+                        (Seq) translateToAst("""
+                                while @unit === null
+                                    ubind(@poly)
+                                end
+                                """
+                        )
                 )
         );
 
@@ -240,19 +273,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(
-                                "" +
-                                        "n = 0\n" +
-                                        "\n" +
-                                        "while (reactor = getlink(n)) != null\n" +
-                                        "  if reactor.liquidCapacity > 0\n" +
-                                        "    pct_avail = reactor.cryofluid / reactor.liquidCapacity\n" +
-                                        "    reactor.enabled = pct_avail >= 0.25\n" +
-                                        "  end\n" +
-                                        "\n" +
-                                        "  n += 1\n" +
-                                        "end\n" +
-                                        ""
+                        (Seq) translateToAst("""
+                                n = 0
+                                while (reactor = getlink(n)) != null
+                                    if reactor.liquidCapacity > 0
+                                        pct_avail = reactor.cryofluid / reactor.liquidCapacity
+                                        reactor.enabled = pct_avail >= 0.25
+                                    end
+                                    n += 1
+                                end
+                                """
                         )
                 )
         );
@@ -265,14 +295,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "mul", var(0), "dx", "-1"),
                         createInstruction(SET, "dx", var(0)),
                         createInstruction(SET, "dy", "-1"),
-                        createInstruction(SET, "dz", "1"),
+                        createInstruction(OP, "sub", var(1), "dy", "1"),
+                        createInstruction(SET, "dz", var(1)),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst(
-                                "dx *= -1\ndy = -1\ndz = 2 - 1"
-                        )
-                )
+                generateUnoptimized((Seq) translateToAst("dx *= -1; dy = -1; dz = dy - 1"))
         );
     }
 
@@ -284,8 +311,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(
-                                "// Remember that we initialized ourselves\n\na = 1"
+                        (Seq) translateToAst("""
+                                // Remember that we initialized ourselves
+                                a = 1
+                                """
                         )
                 )
         );
@@ -309,8 +338,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(
-                                "build(x, y, @titanium-conveyor, 1, 0)\ngetBlock(x, y, b_type, b_building, b_floor)\nif b_type == @titanium-conveyor\nn += 1\nend\n"
+                        (Seq) translateToAst("""
+                                build(x, y, @titanium-conveyor, 1, 0)
+                                getBlock(x, y, b_type, b_building, b_floor)
+                                if b_type == @titanium-conveyor
+                                    n += 1
+                                end
+                                """
                         )
                 )
         );
@@ -354,7 +388,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("for n in 1 .. 17\nprint(n)\nend")
+                        (Seq) translateToAst("for n in 1 .. 17 print(n) end")
                 )
         );
     }
@@ -391,7 +425,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("for n in 1 ... 17\nprint(n)\nend\n")
+                        (Seq) translateToAst("for n in 1 ... 17 print(n) end")
                 )
         );
     }
@@ -428,7 +462,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("for n in a ... b\nprint(n)\nend\n")
+                        (Seq) translateToAst("for n in a ... b print(n) end")
                 )
         );
     }
@@ -452,7 +486,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("for i = 0, j = -5; i < 5; j -= 1, i += 1\nprint(n)\nend\n")
+                        (Seq) translateToAst("""
+                                for i = 0, j = -5; i < 5; j -= 1, i += 1
+                                    print(n)
+                                end
+                                """
+                        )
                 )
         );
     }
@@ -493,7 +532,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("case n\nwhen 1\n\"1\"\nwhen 2\n\"two\"\nelse\n\"otherwise\"end\n")
+                        (Seq) translateToAst("""
+                                case n
+                                    when 1      "1"
+                                    when 2      "two"
+                                    else        "otherwise"
+                                end
+                                """
+                        )
                 )
         );
     }
@@ -523,7 +569,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("allocate heap in cell1[0..10]\ncase $state\nwhen ST_EMPTY\n$state = ST_INITIALIZED\nwhen ST_INITIALIZED\n$state = ST_DONE\nend\n")
+                        (Seq) translateToAst("""
+                                allocate heap in cell1[0..10]
+                                case $state
+                                    when ST_EMPTY           $state = ST_INITIALIZED
+                                    when ST_INITIALIZED     $state = ST_DONE
+                                end
+                                """
+                        )
                 )
         );
     }
@@ -560,7 +613,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("case n\nwhen 1, 2, 3\n\"Few\"\nwhen 4,5,6\n\"Several\"\nelse\n\"Many\"end\n")
+                        (Seq) translateToAst("""
+                                case n
+                                    when 1, 2, 3    "Few"
+                                    when 4,5,6      "Several"
+                                    else            "Many"
+                                end
+                                """
+                        )
                 )
         );
     }
@@ -588,7 +648,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("case n when 0 .. 4, 6 .. 8, 10, 12 \"A number I like\" end")
+                        (Seq) translateToAst("""
+                                case n
+                                    when 0 .. 4, 6 .. 8, 10, 12
+                                        "A number I like"
+                                end
+                                """
+                        )
                 )
         );
     }
@@ -607,11 +673,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "if some_cond == false\n  end()\nend"
-                        )
-                )
+                generateUnoptimized((Seq) translateToAst("if some_cond == false end() end"))
         );
     }
 
@@ -624,11 +686,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "running", var(1)),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "running = @tick % 2 == 0"
-                        )
-                )
+                generateUnoptimized((Seq) translateToAst("running = @tick % 2 == 0"))
         );
     }
 
@@ -644,8 +702,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "turret.shoot(leader.shootX, leader.shootY, leader.shooting)\nturret.color(14, 15, 16)\n"
+                        (Seq) translateToAst("""
+                                turret.shoot(leader.shootX, leader.shootY, leader.shooting)
+                                turret.color(14, 15, 16)
+                                """
                         )
                 )
         );
@@ -664,8 +724,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "set HEAPPTR = cell1\nallocate heap in HEAPPTR[0...4]\n$dx = 0\n\n$dy += $dx"
+                        (Seq) translateToAst("""
+                                set HEAPPTR = cell1
+                                allocate heap in HEAPPTR[0...4]
+                                $dx = 0
+                                $dy += $dx
+                                """
                         )
                 )
         );
@@ -678,12 +742,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "sqrt", var(0), "z"),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "sqrt(z)"
-                        )
-
-                )
+                generateUnoptimized((Seq) translateToAst("sqrt(z)"))
         );
     }
 
@@ -711,10 +770,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "case floor(rand(2))\nwhen 0\n  1000\nwhen 1\n  // no op\nend"
+                        (Seq) translateToAst("""
+                                case floor(rand(2))
+                                    when 0
+                                        1000
+                                    when 1
+                                        // no op
+                                    end
+                                """
                         )
-
                 )
         );
     }
@@ -728,12 +792,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "r", var(1)),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "r = min(x, max(y, 2))"
-                        )
-
-                )
+                generateUnoptimized((Seq) translateToAst("r = min(x, max(y, 2))"))
         );
     }
 
@@ -746,10 +805,9 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "xor", var(2), var(0), var(1)),
                         createInstruction(OP, "shr", var(3), "y", "1"),
                         createInstruction(OP, "or", var(4), var(2), var(3)),
-                        createInstruction(END)                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("(9842 & x) ^ (z << 4) | y >> 1\n")
-                )
+                        createInstruction(END)
+                ),
+                generateUnoptimized((Seq) translateToAst("(9842 & x) ^ (z << 4) | y >> 1\n"))
         );
     }
 
@@ -805,9 +863,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "n", var(0)),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst("n = 4 \\ z\n")
-                )
+                generateUnoptimized((Seq) translateToAst("n = 4 \\ z"))
         );
     }
 
@@ -828,12 +884,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "case n\n" +
-                                "// when 1\n" +
-                                "when 2\n" +
-                                "print(n)\n" +
-                                "end\n")
+                        (Seq) translateToAst("""
+                                case n
+                                    // when 1
+                                    when 2
+                                        print(n)
+                                end
+                                """
+                        )
                 )
         );
     }
@@ -857,17 +915,19 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "if n\n" +
-                                "// no op\n" +
-                                "else\n" +
-                                "1\n" +
-                                "end\n" +
-                                "if m\n" +
-                                "1\n" +
-                                "else\n" +
-                                "// 2\n" +
-                                "end\n")
+                        (Seq) translateToAst("""
+                                if n
+                                    // no op
+                                else
+                                    1
+                                end
+                                if m
+                                    1
+                                else
+                                    // 2
+                                end
+                                """
+                        )
                 )
         );
     }
@@ -890,12 +950,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(
-                                "" +
-                                        "resource = @silicon\n" +
-                                        "if vault1.sensor(resource) < vault1.itemCapacity\n" +
-                                        "  foo = true\n" +
-                                        "end\n"
+                        (Seq) translateToAst("""
+                                resource = @silicon
+                                if vault1.sensor(resource) < vault1.itemCapacity
+                                    foo = true
+                                end
+                                """
                         )
                 )
         );
@@ -930,13 +990,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1000)),
                         createInstruction(SET, var(1), "\"false\""),
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(PRINT, "\"\\nsm.enabled: \""),
+                        createInstruction(PRINT, "\"sm.enabled: \""),
                         createInstruction(PRINT, var(1)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(
-                                "print(\"\\nsm.enabled: \", smelter1.enabled ? \"true\" : \"false\")"
+                        (Seq) translateToAst("""
+                                print("sm.enabled: ", smelter1.enabled ? "true" : "false")
+                                """
                         )
                 )
         );
@@ -983,12 +1044,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "mul", "e", "-1", var(1)),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst("" +
-                                "a = -7\n" +
-                                "b = -a\n" +
-                                "c = -5 * b\n" +
-                                "d = 2 * -c\n" +
-                                "e = -d ** 2"
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                a = -7
+                                b = -a
+                                c = -5 * b
+                                d = 2 * -c
+                                e = -d ** 2
+                                """
                         ),
                         Optimization.INPUT_TEMPS_ELIMINATION, Optimization.OUTPUT_TEMPS_ELIMINATION
                 )
@@ -1012,9 +1075,11 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "add", "d", "d", var(3)),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst("" +
-                                "a = b > c ? b : c\n" +
-                                "d += -e *= f"
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                a = b > c ? b : c
+                                d += -e *= f
+                                """
                         ),
                         Optimization.INPUT_TEMPS_ELIMINATION, Optimization.OUTPUT_TEMPS_ELIMINATION
                 )
@@ -1035,11 +1100,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "land", "x", var(3), var(4)),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst("" +
-                                "a = b | c & d\n" +
-                                "e = ~f & g\n" +
-                                "g = h & 31 == 15\n" +
-                                "x = y & 15 and z & 7"
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                a = b | c & d
+                                e = ~f & g
+                                g = h & 31 == 15
+                                x = y & 15 and z & 7
+                                """
                         ),
                         Optimization.INPUT_TEMPS_ELIMINATION, Optimization.OUTPUT_TEMPS_ELIMINATION
                 )
@@ -1057,11 +1124,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "a"),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst(
-                                "a = @unit.dead !== null\nprint(a)"
-                        )
-                )
+                generateUnoptimized((Seq) translateToAst("a = @unit.dead !== null; print(a)"))
         );
     }
 
@@ -1086,15 +1149,17 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "\"End\""),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst("" +
-                                "while a\n" +
-                                "  if b\n" +
-                                "    continue\n" +
-                                "  elsif c\n" +
-                                "    break\n" +
-                                "  end\n" +
-                                "end\n" +
-                                "print(\"End\")"
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                while a
+                                    if b
+                                        continue
+                                    elsif c
+                                        break
+                                    end
+                                end
+                                print("End")
+                                """
                         ),
                         Optimization.DEAD_CODE_ELIMINATION, Optimization.INPUT_TEMPS_ELIMINATION
                 )
@@ -1129,22 +1194,24 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "f"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst("" +
-                                "while a\n" +
-                                "  print(a)\n" +
-                                "  while b\n" +
-                                "    print(b)\n" +
-                                "    if c\n" +
-                                "      print(c)\n" +
-                                "      break\n" +
-                                "    end\n" +
-                                "    print(d)\n" +
-                                "    break\n" +
-                                "  end\n" +
-                                "  print(e)\n" +
-                                "  break\n" +
-                                "end\n" +
-                                "print(f)"
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                while a
+                                    print(a)
+                                    while b
+                                        print(b)
+                                        if c
+                                            print(c)
+                                            break
+                                        end
+                                        print(d)
+                                        break
+                                    end
+                                    print(e)
+                                    break
+                                end
+                                print(f)
+                                """
                         ),
                         Optimization.DEAD_CODE_ELIMINATION, Optimization.INPUT_TEMPS_ELIMINATION
                 )
@@ -1155,8 +1222,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void refusesBreaksOutsideLoop() {
         assertThrows(GenerationException.class, () ->
                 generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "while a\n  print(a)\nend\nbreak"
+                        (Seq) translateToAst("""
+                                while a
+                                    print(a)
+                                end
+                                break
+                                """
                         )
                 )
         );
@@ -1184,20 +1255,22 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "\"After outer\""),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst("" +
-                                "Outer:\n" +
-                                "while a\n" +
-                                "  print(\"In outer\")\n" +
-                                "  Inner:\n" +
-                                "  while b\n" +
-                                "    print(\"In inner\")\n" +
-                                "    break Outer\n" +
-                                "    print(\"After break\")\n" +
-                                "    continue Inner\n" +
-                                "  end\n" +
-                                "  print(\"After inner\")\n" +
-                                "end\n" +
-                                "print(\"After outer\")"
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                Outer:
+                                while a
+                                    print("In outer")
+                                    Inner:
+                                    while b
+                                        print("In inner")
+                                        break Outer
+                                        print("After break")
+                                        continue Inner
+                                    end
+                                    print("After inner")
+                                end
+                                print("After outer")
+                                """
                         ),
                         Optimization.DEAD_CODE_ELIMINATION, Optimization.INPUT_TEMPS_ELIMINATION
                 )
@@ -1265,22 +1338,24 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(PRINTFLUSH, "message1"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst("" +
-                                "print(\"Blocks:\")\n" +
-                                "n = @links\n" +
-                                "MainLoop:\n" +
-                                "do\n" +
-                                "  n = n - 1\n" +
-                                "  block = getlink(n)\n" +
-                                "  if block.type == @sorter\n" +
-                                "    continue MainLoop\n" +
-                                "  end\n" +
-                                "  print(\"\\n\", block)\n" +
-                                "  if block.type == @unloader\n" +
-                                "    break MainLoop\n" +
-                                "  end\n" +
-                                "loop while n > 0\n" +
-                                "printflush(message1)"
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                print("Blocks:")
+                                n = @links
+                                MainLoop:
+                                do
+                                    n = n - 1
+                                    block = getlink(n)
+                                    if block.type == @sorter
+                                        continue MainLoop
+                                    end
+                                    print("\\n", block)
+                                    if block.type == @unloader
+                                        break MainLoop
+                                    end
+                                loop while n > 0
+                                printflush(message1)
+                                """
                         ),
                         Optimization.DEAD_CODE_ELIMINATION, Optimization.SINGLE_STEP_JUMP_ELIMINATION,
                         Optimization.INPUT_TEMPS_ELIMINATION, Optimization.JUMP_OVER_JUMP_ELIMINATION
@@ -1316,22 +1391,14 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     @Test
     void refusesAssignmentsToBlockNames() {
         assertThrows(GenerationException.class, () ->
-                generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "switch1 = 5"
-                        )
-                )
+                generateUnoptimized((Seq) translateToAst("switch1 = 5"))
         );
     }
 
     @Test
     void refusesBlockNamesAsOutputArguments() {
         assertThrows(GenerationException.class, () ->
-                generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "getBlock(10, 20, switch1)"
-                        )
-                )
+                generateUnoptimized((Seq) translateToAst("getBlock(10, 20, switch1)"))
         );
     }
 
@@ -1350,15 +1417,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "a = 1 + 2 "
-                                + "b = 1 / 0 "
-                                + "c = min(3, 4) "
-                                + "d = 1 < 2 ? b : c "
-                                + "e = abs(-3) "
-                                + "f = ~1 "
-                                + "g = not false "
-                                + "h = -(2 + 3) "
+                        (Seq) translateToAst("""
+                                a = 1 + 2
+                                b = 1 / 0
+                                c = min(3, 4)
+                                d = 1 < 2 ? b : c
+                                e = abs(-3)
+                                f = ~1
+                                g = not false
+                                h = -(2 + 3)
+                                """
                         )
                 )
         );
@@ -1371,11 +1439,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "a", "false"),
                         createInstruction(END)
                 ),
-                generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "a = 0 === null "
-                        )
-                )
+                generateUnoptimized((Seq) translateToAst("a = 0 === null "))
         );
     }
 }

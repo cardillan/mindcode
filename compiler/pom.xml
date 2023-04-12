@@ -58,7 +58,7 @@
                 <!-- Code Coverage -->
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
+                <version>0.8.9</version>
                 <executions>
                     <execution>
                         <goals>
@@ -82,8 +82,8 @@
                 <version>2.3.2</version>
                 <configuration>
                     <showDeprecation>false</showDeprecation>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
         </plugins>

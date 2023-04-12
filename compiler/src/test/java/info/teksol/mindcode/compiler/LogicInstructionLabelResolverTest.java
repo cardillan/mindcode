@@ -20,9 +20,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 ),
                 LogicInstructionLabelResolver.resolve(
                         getInstructionProcessor(),
-                        generateUnoptimized(
-                                (Seq) translateToAst("while true\nn = n + 1\nend\n")
-                        )
+                        generateUnoptimized((Seq) translateToAst("while true n = n + 1 end"))
                 )
         );
     }

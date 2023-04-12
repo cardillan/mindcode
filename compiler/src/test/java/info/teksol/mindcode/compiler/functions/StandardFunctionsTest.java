@@ -31,7 +31,20 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("clear(r, g, b)\ncolor(r, g, b, alpha)\nstroke(width)\nline(x1, y1, x2, y2)\nrect(x, y, w, h)\nlineRect(x, y, w, h)\npoly(x, y, sides, radius, rotation)\nlinePoly(x, y, sides, radius, rotation)\ntriangle(x1, y1, x2, y2, x3, y3)\nimage(x, y, @copper, size, rotation)\ndrawflush(display1)\n")
+                        (Seq) translateToAst("""
+                                clear(r, g, b)
+                                color(r, g, b, alpha)
+                                stroke(width)
+                                line(x1, y1, x2, y2)
+                                rect(x, y, w, h)
+                                lineRect(x, y, w, h)
+                                poly(x, y, sides, radius, rotation)
+                                linePoly(x, y, sides, radius, rotation)
+                                triangle(x1, y1, x2, y2, x3, y3)
+                                image(x, y, @copper, size, rotation)
+                                drawflush(display1)
+                                """
+                        )
                 )
         );
     }
@@ -67,14 +80,15 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "target = uradar(enemy, ground, any, health, MIN_TO_MAX)\n"
-                                + "if target != null\n"
-                                + "  approach(target.x, target.y, 10)\n"
-                                + "  if within(target.x, target.y, 10)\n"
-                                + "    target(target.x, target.y, SHOOT)\n"
-                                + "  end\n"
-                                + "end\n"
+                        (Seq) translateToAst("""
+                                target = uradar(enemy, ground, any, health, MIN_TO_MAX)
+                                if target != null
+                                    approach(target.x, target.y, 10)
+                                    if within(target.x, target.y, 10)
+                                        target(target.x, target.y, SHOOT)
+                                    end
+                                end
+                                """
                         )
                 )
         );
@@ -91,11 +105,12 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "ulocate(ore, @surge-alloy, outx, outy)\n"
-                                + "ulocate(building, core, ENEMY, outx, outy, outbuilding)\n"
-                                + "ulocate(spawn, outx, outy, outbuilding)\n"
-                                + "ulocate(damaged, outx, outy, outbuilding)\n"
+                        (Seq) translateToAst("""
+                                ulocate(ore, @surge-alloy, outx, outy)
+                                ulocate(building, core, ENEMY, outx, outy, outbuilding)
+                                ulocate(spawn, outx, outy, outbuilding)
+                                ulocate(damaged, outx, outy, outbuilding)
+                                """
                         )
                 )
         );
@@ -115,11 +130,12 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst(""
-                                + "out = radar(enemy, any, any, distance, salvo1, 1)\n"
-                                + "out = radar(ally, flying, any, health, lancer1, 1)\n"
-                                + "src = salvo1\n"
-                                + "out = radar(enemy, any, any, distance, src, 1)\n"
+                        (Seq) translateToAst("""
+                                out = radar(enemy, any, any, distance, salvo1, 1)
+                                out = radar(ally, flying, any, health, lancer1, 1)
+                                src = salvo1
+                                out = radar(enemy, any, any, distance, src, 1)
+                                """
                         )
                 )
         );
@@ -136,7 +152,12 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("wait(1)\nwait(0.001)\nwait(1000)")
+                        (Seq) translateToAst("""
+                                wait(1)
+                                wait(0.001)
+                                wait(1000)
+                                """
+                        )
                 )
         );
     }
@@ -159,18 +180,21 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "type"),
                         createInstruction(END)
                 ),
-                generateAndOptimize((Seq) translateToAst(""
-                        + "col(color)\n"
-                        + "result = asin(a)\n"
-                        + "result = acos(a)\n"
-                        + "result = atan(a)\n"
-                        + "result = lookup(block, index)\n"
-                        + "result = packcolor(r, g, b, a)\n"
-                        + "wait(sec)\n"
-                        + "payEnter()\n"
-                        + "unbind()\n"
-                        + "getBlock(x, y, type, building, floor)\n"
-                        + "print(result, type)")
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                col(color)
+                                result = asin(a)
+                                result = acos(a)
+                                result = atan(a)
+                                result = lookup(block, index)
+                                result = packcolor(r, g, b, a)
+                                wait(sec)
+                                payEnter()
+                                unbind()
+                                getBlock(x, y, type, building, floor)
+                                print(result, type)
+                                """
+                        )
                 )
         );
     }
