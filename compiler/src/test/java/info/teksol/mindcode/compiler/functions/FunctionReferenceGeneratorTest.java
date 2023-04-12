@@ -6,15 +6,17 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.junit.jupiter.api.Test;
 
-import static info.teksol.mindcode.logic.ProcessorEdition.*;
+import static info.teksol.mindcode.logic.ProcessorEdition.W;
+import static info.teksol.mindcode.logic.ProcessorEdition.WORLD_PROCESSOR;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

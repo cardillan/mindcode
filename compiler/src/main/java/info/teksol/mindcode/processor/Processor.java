@@ -1,14 +1,9 @@
 package info.teksol.mindcode.processor;
 
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.Opcode;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static info.teksol.mindcode.processor.ProcessorFlag.*;
@@ -25,8 +20,8 @@ public class Processor {
     private int steps = 0;
 
     public Processor() {
-        flags = EnumSet.noneOf(ProcessorFlag.class);
-        
+        flags = EnumSet.allOf(ProcessorFlag.class);
+
         variables.put("@counter", counter);
         variables.put("null", DoubleVariable.newNullValue(true, "null"));
         variables.put("true", IntVariable.newBooleanValue(true, "true", true));
@@ -89,7 +84,7 @@ public class Processor {
 
                 if (false) {
                     if (instruction.getOpcode() == Opcode.PRINT) {
-                        Variable var = getExistingVariable(instruction.getArg(0));
+                        Variable var = getExistingVariable(instruction.asPrint().getValue());
                         System.out.printf("Step: %d, counter: %d, instruction: %s *** Print %s%n", steps, index, instruction, var.toString());
 
                     } else {
@@ -103,7 +98,7 @@ public class Processor {
                     break;
                 }
             } catch (ExecutionException ex) {
-                if (!getFlag(ex.getFlag())) {
+                if (getFlag(ex.getFlag())) {
                     throw ex;
                 }
             }
@@ -120,70 +115,76 @@ public class Processor {
 
     private boolean execute(LogicInstruction ix) {
         switch(ix.getOpcode()) {
-            case READ:      return executeRead(arg(ix, 0), arg(ix, 1), arg(ix, 2));
-            case WRITE:     return executeWrite(arg(ix, 0), arg(ix, 1), arg(ix, 2));
-            case PRINT:     return executePrint(arg(ix, 0));
-            case SET:       return executeSet(arg(ix, 0), arg(ix, 1));
-            case OP:        return executeOp(arg(ix, 0), arg(ix, 1), arg(ix, 2), arg(ix, 3));
-            case JUMP:      return executeJump(arg(ix, 0), arg(ix, 1), arg(ix, 2), arg(ix, 3));
-            case END:       counter.setIntValue(0); return getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION);
+            case READ:      return executeRead(ix.asRead());
+            case WRITE:     return executeWrite(ix.asWrite());
+            case PRINT:     return executePrint(ix.asPrint());
+            case SET:       return executeSet(ix.asSet());
+            case OP:        return executeOp(ix.asOp());
+            case JUMP:      return executeJump(ix.asJump());
+            case END:       counter.setIntValue(0); return !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION);
             case STOP:      return false;
         }
 
         throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported opcode " + ix.getOpcode());
     }
 
-    private boolean executeSet(String target, String value) {
-        Variable targetVar = getOrCreateVariable(target);
-        Variable valueVar = getExistingVariable(value);
-        targetVar.assign(valueVar);
+    private boolean executeSet(SetInstruction ix) {
+        Variable target = getOrCreateVariable(ix.getResult());
+        Variable value = getExistingVariable(ix.getValue());
+        target.assign(value);
         return true;
     }
 
-    private boolean executeOp(String operation, String target, String a, String b) {
-        Variable targetVar = getOrCreateVariable(target);
-        Variable aVar = getExistingVariable(a);
-        Variable bVar = getExistingVariable(b);
-        Operation op = ExpressionEvaluator.getOperation(operation);
+    private boolean executeOp(OpInstruction ix) {
+        Variable target = getOrCreateVariable(ix.getResult());
+        Variable a = getExistingVariable(ix.getFirstOperand());
+        Variable b = getExistingVariable(ix.hasSecondOperand() ? ix.getSecondOperand() : "0");
+        Operation op = ExpressionEvaluator.getOperation(ix.getOperation());
         if (op == null) {
-            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation " + operation);
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation " + ix.getOperation());
         }
-        op.execute(targetVar, aVar, bVar);
+        op.execute(target, a, b);
         return true;
     }
 
-    private boolean executeJump(String address, String condition, String a, String b) {
-        Variable aVar = getExistingVariable(a);
-        Variable bVar = getExistingVariable(b);
-        Condition cond = CONDITIONS.get(condition);
-        if (cond == null) {
-            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition " + condition);
+    private boolean executeJump(JumpInstruction ix) {
+        int address = Integer.parseInt(ix.getTarget());
+        if (ix.isUnconditional()) {
+            counter.setIntValue(address);
+        } else {
+            Variable a = getExistingVariable(ix.getFirstOperand());
+            Variable b = getExistingVariable(ix.getSecondOperand());
+            Condition condition = CONDITIONS.get(ix.getCondition());
+            if (condition == null) {
+                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition " + ix.getCondition());
+            }
+            if (condition.evaluate(a, b)) {
+                counter.setIntValue(address);
+            }
         }
-        if (cond.evaluate(aVar, bVar)) {
-            counter.setIntValue(Integer.parseInt(address));
-        }
+
         return true;
     }
 
-    private boolean executePrint(String value) {
-        Variable var = getExistingVariable(value);
+    private boolean executePrint(PrintInstruction ix) {
+        Variable var = getExistingVariable(ix.getValue());
         textBuffer.add(var.toString());
         return true;
     }
 
-    private boolean executeRead(String target, String block, String index) {
-        Variable targetVar = getOrCreateVariable(target);
-        Variable blockVar = getExistingVariable(block);
-        Variable indexVar = getExistingVariable(index);
-        targetVar.setDoubleValue(blockVar.getExistingObject().read(indexVar.getIntValue()));
+    private boolean executeRead(ReadInstruction ix) {
+        Variable target = getOrCreateVariable(ix.getValue());
+        Variable block = getExistingVariable(ix.getMemory());
+        Variable index = getExistingVariable(ix.getIndex());
+        target.setDoubleValue(block.getExistingObject().read(index.getIntValue()));
         return true;
     }
 
-    private boolean executeWrite(String source, String block, String index) {
-        Variable sourceVar = getExistingVariable(source);
-        Variable blockVar = getExistingVariable(block);
-        Variable indexVar = getExistingVariable(index);
-        blockVar.getExistingObject().write(indexVar.getIntValue(), sourceVar.getDoubleValue());
+    private boolean executeWrite(WriteInstruction ix) {
+        Variable source = getExistingVariable(ix.getValue());
+        Variable block = getExistingVariable(ix.getMemory());
+        Variable index = getExistingVariable(ix.getIndex());
+        block.getExistingObject().write(index.getIntValue(), source.getDoubleValue());
         return true;
     }
 

@@ -1,8 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.PrintInstruction;
+import info.teksol.mindcode.logic.Opcode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +46,8 @@ class PrintMerger extends PipelinedOptimizer {
     private final class EmptyState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isPrint() && instruction.getArgs().get(0).startsWith("\"")) {
-                return new ExpectPrint(instruction);
+            if (instruction.isPrint() && instruction.asPrint().getValue().startsWith("\"")) {
+                return new ExpectPrint(instruction.asPrint());
             } else {
                 emitToNext(instruction);
                 return this;
@@ -59,10 +61,10 @@ class PrintMerger extends PipelinedOptimizer {
     }
 
     private final class ExpectPrint implements State {
-        private final LogicInstruction firstPrint;
+        private final PrintInstruction firstPrint;
         private final List<LogicInstruction> operations = new ArrayList<>();
 
-        private ExpectPrint(LogicInstruction instruction) {
+        private ExpectPrint(PrintInstruction instruction) {
             firstPrint = instruction;
         }
 
@@ -76,9 +78,11 @@ class PrintMerger extends PipelinedOptimizer {
             }
 
             if (instruction.isPrint()) {
+                PrintInstruction ix = instruction.asPrint();
+
                 // Only merge string literals
-                if (instruction.getArgs().get(0).startsWith("\"")) {
-                    LogicInstruction merged = merge(firstPrint, instruction);
+                if (ix.getValue().startsWith("\"")) {
+                    PrintInstruction merged = merge(firstPrint, ix);
                     if (merged != null) {
                         operations.forEach(PrintMerger.this::emitToNext);
                         // We can merge the merged instruction with next one as well
@@ -87,7 +91,7 @@ class PrintMerger extends PipelinedOptimizer {
                         // We didn't merge for whatever reason.
                         // Try to merge current instruction with the next one
                         flush();
-                        return new ExpectPrint(instruction);
+                        return new ExpectPrint(ix);
                     }
                 }
 
@@ -96,6 +100,7 @@ class PrintMerger extends PipelinedOptimizer {
                 return flush();
             }
 
+            // Continue merging
             operations.add(instruction);
             return this;
         }
@@ -103,15 +108,15 @@ class PrintMerger extends PipelinedOptimizer {
         // Creates a merged instruction from two constant prints
         // If merge is not possible (the string constants are malformed), returns null.
         // Only checks for quotes on both ends of the string, doesn't check for proper quote escaping
-        private LogicInstruction merge(LogicInstruction first, LogicInstruction second) {
+        private PrintInstruction merge(PrintInstruction first, PrintInstruction second) {
             final String q = "\"";
-            String str1 = first.getArgs().get(0);
-            String str2 = second.getArgs().get(0);
+            String str1 = first.getValue();
+            String str2 = second.getValue();
             // Do not merge strings if the length is over 34 + 4 (2x pair of quotes), unless aggressive
             // Only merge string constants
             if ((str1.length() + str2.length() <= 38 || level == OptimizationLevel.AGGRESSIVE)
                     && str1.startsWith(q) && str1.endsWith(q) && str2.startsWith(q) && str2.endsWith(q)) {
-                return createInstruction(first.getOpcode(), str1.substring(0, str1.length() - 1) + str2.substring(1));
+                return createInstruction(Opcode.PRINT, str1.substring(0, str1.length() - 1) + str2.substring(1)).asPrint();
             }
 
             return null;

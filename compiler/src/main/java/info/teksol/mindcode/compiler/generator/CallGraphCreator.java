@@ -1,20 +1,10 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.ast.FunctionCall;
-import info.teksol.mindcode.ast.FunctionDeclaration;
-import info.teksol.mindcode.ast.ControlBlockAstNode;
-import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.ast.StackAllocation;
-import info.teksol.mindcode.ast.VarRef;
+import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 import static info.teksol.mindcode.compiler.generator.CallGraph.MAIN;
 

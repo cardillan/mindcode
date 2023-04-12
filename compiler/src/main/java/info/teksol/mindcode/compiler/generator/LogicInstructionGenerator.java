@@ -6,6 +6,7 @@ import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.Opcode;
+
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;

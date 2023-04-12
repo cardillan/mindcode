@@ -1,142 +1,88 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.logic.Opcode;
+
 import java.util.List;
-import java.util.Objects;
 
-import static info.teksol.mindcode.logic.Opcode.*;
+public interface LogicInstruction {
+    boolean isWrite();
 
-public class LogicInstruction {
-    private final Opcode opcode;
-    private final List<String> args;
+    boolean isPrint();
 
-    // Used to mark instructions that belong together -- provides additional information to optimizers.
-    // Marker is not considered by hashCode or equals!!
-    private final String marker;
+    boolean isPrintflush();
 
-    LogicInstruction(Opcode opcode, List<String> args) {
-        this.opcode = opcode;
-        this.args = List.copyOf(args);
-        this.marker = null;
-    }
-    
-    LogicInstruction(String marker, Opcode opcode, List<String> args) {
-        this.opcode = opcode;
-        this.args = List.copyOf(args);
-        this.marker = marker;
-    }
+    boolean isJump();
 
-    public boolean isWrite() {
-        return opcode == WRITE;
-    }
+    boolean isSet();
 
-    public boolean isPrint() {
-        return opcode == PRINT;
-    }
+    boolean isOp();
 
-    public boolean isPrintflush() {
-        return opcode == PRINTFLUSH;
-    }
+    boolean isRead();
 
-    public boolean isJump() {
-        return opcode == JUMP;
-    }
+    boolean isUControl();
 
-    public boolean isSet() {
-        return opcode == SET;
-    }
+    boolean isLabel();
 
-    public boolean isOp() {
-        return opcode == OP;
-    }
+    boolean isGetlink();
 
-    public boolean isRead() {
-        return opcode == READ;
-    }
+    boolean isSensor();
 
-    public boolean isUControl() {
-        return opcode == UCONTROL;
+    boolean isEnd();
+
+    boolean isPush();
+
+    boolean isPop();
+
+    boolean isPushOrPop();
+
+    boolean isCall();
+
+    boolean isReturn();
+
+    boolean isGoto();
+
+    Opcode getOpcode();
+
+    List<String> getArgs();
+
+    String getArg(int index);
+
+    String getMarker();
+
+    boolean matchesMarker(String marker);
+
+    default CallInstruction asCall() { return (CallInstruction) this; }
+
+    default GotoInstruction asGoto() {
+        return (GotoInstruction) this;
     }
 
-    public boolean isLabel() {
-        return opcode == LABEL;
+    default JumpInstruction asJump() {
+        return (JumpInstruction) this;
     }
 
-    public boolean isGetlink() {
-        return opcode == GETLINK;
+    default LabelInstruction asLabel() {
+        return (LabelInstruction) this;
     }
 
-    public boolean isSensor() {
-        return opcode == SENSOR;
+    default OpInstruction asOp() {
+        return (OpInstruction) this;
     }
 
-    public boolean isEnd() {
-        return opcode == END;
+    default PrintInstruction asPrint() {
+        return (PrintInstruction) this;
+    }
+    default PushOrPopInstruction asPushOrPop() {
+        return (PushOrPopInstruction) this;
     }
 
-    public boolean isPush() {
-        return opcode == PUSH;
+    default ReadInstruction asRead() { return (ReadInstruction) this; }
+
+    default ReturnInstruction asReturn() {
+        return (ReturnInstruction) this;
     }
 
-    public boolean isPop() {
-        return opcode == POP;
-    }
+    default SetInstruction asSet() { return (SetInstruction) this; }
 
-    public boolean isPushOrPop() {
-        return opcode == PUSH || opcode == POP;
-    }
-
-    public boolean isCall() {
-        return opcode == CALL;
-    }
-
-    public boolean isReturn() {
-        return opcode == RETURN;
-    }
-
-    public boolean isGoto() {
-        return opcode == GOTO;
-    }
-
-    public Opcode getOpcode() {
-        return opcode;
-    }
-
-    public List<String> getArgs() {
-        return args;
-    }
-
-    public String getArg(int index) {
-        return args.get(index);
-    }
-
-    public String getMarker() {
-        return marker;
-    }
-
-    public boolean matchesMarker(String marker) {
-        return this.marker!= null && this.marker.equals(marker);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LogicInstruction that = (LogicInstruction) o;
-        return Objects.equals(opcode, that.opcode) &&
-                Objects.equals(args, that.args);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(opcode, args);
-    }
-
-    @Override
-    public String toString() {
-        return "LogicInstruction{" +
-                "opcode='" + opcode + '\'' +
-                ", args=" + args +
-                '}';
-    }
+    default WriteInstruction asWrite() { return (WriteInstruction) this; }
 }

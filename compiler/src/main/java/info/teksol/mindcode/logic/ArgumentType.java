@@ -4,7 +4,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import static info.teksol.mindcode.logic.ProcessorVersion.*;
+import static info.teksol.mindcode.logic.ProcessorVersion.V6;
+import static info.teksol.mindcode.logic.ProcessorVersion.V7;
 
 public enum ArgumentType {
     /** Non-specific input argument. Accepts literals and variables */

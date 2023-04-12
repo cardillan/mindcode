@@ -5,8 +5,9 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import java.util.List;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 

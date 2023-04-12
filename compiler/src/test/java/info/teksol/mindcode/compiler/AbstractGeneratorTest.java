@@ -7,12 +7,13 @@ import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
 import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
+import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.ProcessorEdition;
+import info.teksol.mindcode.logic.ProcessorVersion;
+
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,12 +56,13 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return terminus.getResult();
     }
 
+    protected CompilerProfile getCompilerProfile() {
+        return CompilerProfile.fullOptimizations();
+    }
+
     protected List<LogicInstruction> compile(String code) {
         return LogicInstructionLabelResolver.resolve(instructionProcessor,
-                generateAndOptimize(instructionProcessor,
-                        (Seq) translateToAst(code),
-                        CompilerProfile.fullOptimizations()
-                )
+                generateAndOptimize(instructionProcessor, (Seq) translateToAst(code), getCompilerProfile())
         );
     }
 

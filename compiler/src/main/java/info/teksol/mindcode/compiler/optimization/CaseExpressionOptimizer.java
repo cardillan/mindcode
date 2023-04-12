@@ -1,9 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.Iterator;
 import java.util.List;
@@ -58,6 +58,6 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
     }
 
     private boolean isStandardCaseWhenInstruction(LogicInstruction ix, String ast) {
-        return ix.isJump() && ix.getArgs().get(2).equals(ast);
+        return ix.isJump() && ix.asJump().getFirstOperand().equals(ast);
     }
 }

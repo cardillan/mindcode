@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+
 import java.util.function.Consumer;
 
 public class FunctionMapperFactory {

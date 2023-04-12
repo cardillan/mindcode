@@ -1,9 +1,12 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,7 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isJump()) {
-                return new ExpectLabel(instruction);
+                return new ExpectLabel(instruction.asJump());
             } else {
                 emitToNext(instruction);
                 return this;
@@ -46,27 +49,29 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
     }
 
     private final class ExpectLabel implements State {
-        private final LogicInstruction jump;
+        private final JumpInstruction jump;
         private final String targetLabel;
-        private final List<LogicInstruction> labels = new ArrayList<>();
+        private final List<LabelInstruction> labels = new ArrayList<>();
         private boolean isJumpToNext = false;
 
-        ExpectLabel(LogicInstruction jump) {
+        ExpectLabel(JumpInstruction jump) {
             this.jump = jump;
-            this.targetLabel = jump.getArgs().get(0);
+            this.targetLabel = jump.getTarget();
         }
 
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isLabel()) {
-                if (instruction.getArgs().get(0).equals(targetLabel)) {
+                LabelInstruction ix = instruction.asLabel();
+                if (ix.getLabel().equals(targetLabel)) {
                     isJumpToNext = true;
                 }
-                labels.add(instruction);
+                labels.add(ix);
                 return this;
             }
 
             if (!isJumpToNext) {
+                // Not jump to next -- cannot skip it
                 emitToNext(jump);
             }
             labels.forEach(SingleStepJumpEliminator.this::emitToNext);

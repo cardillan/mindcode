@@ -2,10 +2,11 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import java.util.List;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 

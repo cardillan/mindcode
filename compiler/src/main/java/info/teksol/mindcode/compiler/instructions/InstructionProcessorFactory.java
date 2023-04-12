@@ -5,6 +5,7 @@ import info.teksol.mindcode.logic.MindustryOpcodeVariants;
 import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
+
 import java.util.List;
 
 public class InstructionProcessorFactory {

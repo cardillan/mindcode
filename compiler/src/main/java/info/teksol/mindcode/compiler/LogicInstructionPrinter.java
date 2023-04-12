@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+
 import java.util.List;
 
 public class LogicInstructionPrinter {

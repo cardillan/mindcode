@@ -1,9 +1,11 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.OpInstruction;
+import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.Opcode;
 
 /**
@@ -38,8 +40,8 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isOp() && isComparisonOperatorToTmp(instruction)) {
-                return new ExpectJump(instruction);
+            if (instruction.isOp() && isComparisonOperatorToTmp(instruction.asOp())) {
+                return new ExpectJump(instruction.asOp());
             } else {
                 emitToNext(instruction);
                 return this;
@@ -53,52 +55,41 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
     }
 
     private final class ExpectJump implements State {
-        private final LogicInstruction op;
+        private final OpInstruction op;
 
-        ExpectJump(LogicInstruction op) {
+        ExpectJump(OpInstruction op) {
             this.op = op;
         }
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isOp()) {
-                if (!isComparisonOperatorToTmp(instruction)) {
-                    emitToNext(op);
-                    emitToNext(instruction);
+            do {
+                if (!instruction.isJump()) break;
+
+                // Not a conditional jump
+                JumpInstruction ix = instruction.asJump();
+                if (!ix.getCondition().equals("notEqual")) break;
+
+                // Other preconditions for the optimization
+                boolean isSameVariable = ix.getFirstOperand().equals(op.getResult());
+                boolean jumpComparesToFalse = ix.getSecondOperand().equals("false");
+
+                if (isSameVariable && jumpComparesToFalse) {
+                    emitToNext(
+                            createInstruction(
+                                    Opcode.JUMP,
+                                    ix.getTarget(),
+                                    op.getOperation(),
+                                    op.getFirstOperand(),
+                                    op.getSecondOperand()
+                            )
+                    );
                     return new EmptyState();
-                } else {
-                    emitToNext(op);
-                    return new ExpectJump(instruction);
                 }
-            }
+            } while (false);
 
-            // Not a conditional jump
-            if (!instruction.isJump() || !instruction.getArgs().get(1).equals("notEqual")) {
-                emitToNext(op);
-                emitToNext(instruction);
-                return new EmptyState();
-            }
-
-            // Other preconditions for the optimization
-            boolean isSameVariable = instruction.getArgs().get(2).equals(op.getArgs().get(1));
-            boolean jumpComparesToFalse = instruction.getArgs().get(3).equals("false");
-            
-            if (isSameVariable && jumpComparesToFalse) {
-                emitToNext(
-                        createInstruction(
-                                Opcode.JUMP,
-                                instruction.getArgs().get(0),
-                                op.getArgs().get(0),
-                                op.getArgs().get(2),
-                                op.getArgs().get(3)
-                        )
-                );
-                return new EmptyState();
-            } 
-            
             emitToNext(op);
-            emitToNext(instruction);
-            return new EmptyState();
+            return new EmptyState().emit(instruction);
         }
 
 
@@ -110,8 +101,8 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
     }
     
-    private boolean isComparisonOperatorToTmp(LogicInstruction instruction) {
-        return instructionProcessor.isValid(ArgumentType.CONDITION, instruction.getArg(0)) &&
-                isTemporary(instruction.getArg(1));
+    private boolean isComparisonOperatorToTmp(OpInstruction instruction) {
+        return instructionProcessor.isValid(ArgumentType.CONDITION, instruction.getOperation()) &&
+                isTemporary(instruction.getResult());
     }
 }

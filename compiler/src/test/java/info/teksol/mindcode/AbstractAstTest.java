@@ -3,8 +3,8 @@ package info.teksol.mindcode;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.AstPrettyPrinter;
-import info.teksol.mindcode.grammar.AbstractParserTest;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.grammar.AbstractParserTest;
 
 import java.util.List;
 

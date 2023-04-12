@@ -1,9 +1,9 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import info.teksol.mindcode.compiler.optimization.Optimization;
 
 import java.util.Map;
 import java.util.Set;

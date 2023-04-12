@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+
 import java.util.ArrayList;
 import java.util.List;
 

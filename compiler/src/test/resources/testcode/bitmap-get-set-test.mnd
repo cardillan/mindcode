@@ -17,5 +17,3 @@ end
 for i in 0 ... 16
     print(getBit(i) ? 1 : 0)
 end
-
-stopProcessor()

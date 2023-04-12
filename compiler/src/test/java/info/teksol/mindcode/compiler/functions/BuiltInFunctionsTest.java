@@ -4,8 +4,9 @@ import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.generator.TooFewPrintfArgumentsException;
 import info.teksol.mindcode.compiler.generator.TooManyPrintfArgumentsException;
-import java.util.List;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;

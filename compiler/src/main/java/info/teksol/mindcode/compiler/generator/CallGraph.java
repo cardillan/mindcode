@@ -1,18 +1,9 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.ast.FunctionDeclaration;
-import info.teksol.mindcode.ast.NoOp;
-import info.teksol.mindcode.ast.StackAllocation;
-import info.teksol.mindcode.ast.VarRef;
+import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**

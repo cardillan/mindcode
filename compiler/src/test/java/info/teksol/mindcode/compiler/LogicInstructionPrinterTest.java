@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

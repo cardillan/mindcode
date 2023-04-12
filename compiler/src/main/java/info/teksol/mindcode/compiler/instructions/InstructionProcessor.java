@@ -1,12 +1,8 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.OpcodeVariant;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
-import info.teksol.mindcode.logic.TypedArgument;
+import info.teksol.mindcode.logic.*;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -85,7 +81,7 @@ public interface InstructionProcessor {
      * @param arguments arguments of the instruction
      * @return a new, non-validated instance of LogicInstruction
      */
-    LogicInstruction createInstructionUnchecked(Opcode opcode, List<String> arguments);
+    LogicInstruction createInstructionUnchecked(String marker, Opcode opcode, List<String> arguments);
 
     /**
      * Provides real Mindustry Logic instructions as a replacement for given virtual instruction.

@@ -7,13 +7,15 @@ import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.OpcodeVariant;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import java.util.List;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static info.teksol.mindcode.logic.MindustryOpcodeVariants.*;
 import static info.teksol.mindcode.logic.OpcodeVariant.FunctionMapping.FUNC;
-import static info.teksol.mindcode.logic.ProcessorEdition.*;
-import static info.teksol.mindcode.logic.ProcessorVersion.*;
+import static info.teksol.mindcode.logic.ProcessorEdition.S;
+import static info.teksol.mindcode.logic.ProcessorVersion.V6;
+import static info.teksol.mindcode.logic.ProcessorVersion.V7;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // This class tests the initialization logic of the BaseFunctionMapper

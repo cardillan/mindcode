@@ -1,4 +1,4 @@
-<project xmlns:pom="http://maven.apache.org/POM/4.0.0">
+<project>
     <modelVersion>4.0.0</modelVersion>
 
     <parent>

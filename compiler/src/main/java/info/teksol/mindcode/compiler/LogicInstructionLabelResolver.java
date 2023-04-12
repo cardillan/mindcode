@@ -1,12 +1,12 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 public class LogicInstructionLabelResolver {
     private final InstructionProcessor instructionProcessor;
@@ -30,8 +30,8 @@ public class LogicInstructionLabelResolver {
 
     // If there's a known label at given argument index, resolves it, otherwise returns the original instruction
     private LogicInstruction resolveLabel(Map<String, String> addresses, LogicInstruction instruction, int labelIndex) {
-        final String arg = instruction.getArg(labelIndex);
-        return replaceArg(instruction, labelIndex, addresses.getOrDefault(arg, arg));
+        final String label = instruction.getArg(labelIndex);
+        return replaceArg(instruction, labelIndex, addresses.getOrDefault(label, label));
     }
 
     private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program, Map<String, String> addresses) {
@@ -39,7 +39,7 @@ public class LogicInstructionLabelResolver {
         for (final LogicInstruction instruction : program) {
             switch (instruction.getOpcode()) {
                 case JUMP:
-                    final String label = instruction.getArg(0);
+                    final String label = instruction.asJump().getTarget();
                     if (!addresses.containsKey(label)) {
                         throw new CompilerException("Unknown jump label target: [" + label + "] was not previously discovered in " + program);
                     }

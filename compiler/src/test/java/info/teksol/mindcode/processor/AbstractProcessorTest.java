@@ -1,13 +1,15 @@
 package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.CompilerProfile;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInfo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,6 +31,10 @@ public class AbstractProcessorTest extends AbstractGeneratorTest {
     protected String readFile(String filename) throws IOException {
         Path path = Path.of("src/test/resources/testcode", filename);
         return Files.readString(path);
+    }
+
+    protected CompilerProfile getCompilerProfile() {
+        return CompilerProfile.standardOptimizations();
     }
 
     protected void testAndEvaluateCode(String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {

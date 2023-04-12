@@ -1,8 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.Opcode;
 
 import java.util.ArrayList;
@@ -46,8 +47,9 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
     private final class EmptyState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isJump() && hasInverse(instruction.getArgs().get(1))) {
-                return new ExpectJump(instruction);
+            if (instruction.isJump() && hasInverse(instruction.asJump().getCondition())) {
+                // "always" doesn't have an inverse
+                return new ExpectJump(instruction.asJump());
             } else {
                 emitToNext(instruction);
                 return this;
@@ -61,16 +63,16 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
     }
 
     private final class ExpectJump implements State {
-        private final LogicInstruction conditionalJump;
+        private final JumpInstruction conditionalJump;
 
-        public ExpectJump(LogicInstruction conditionalJump) {
+        public ExpectJump(JumpInstruction conditionalJump) {
             this.conditionalJump = conditionalJump;
         }
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction.isJump() && instruction.getArgs().get(1).equals("always")) {
-                return new ExpectLabel(conditionalJump, instruction);
+            if (instruction.isJump() && instruction.asJump().isUnconditional()) {
+                return new ExpectLabel(conditionalJump, instruction.asJump());
             } else {
                 emitToNext(conditionalJump);
                 return new EmptyState().emit(instruction);
@@ -86,21 +88,21 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
 
     private final class ExpectLabel implements State {
         private final String targetLabel;
-        private final LogicInstruction conditionalJump;
-        private final LogicInstruction unconditionalJump;
+        private final JumpInstruction conditionalJump;
+        private final JumpInstruction unconditionalJump;
         private final List<LogicInstruction> labels = new ArrayList<>();
         private boolean isJumpOverJump = false;
 
-        public ExpectLabel(LogicInstruction conditionalJump, LogicInstruction unconditionalJump) {
+        public ExpectLabel(JumpInstruction conditionalJump, JumpInstruction unconditionalJump) {
             this.conditionalJump = conditionalJump;
             this.unconditionalJump = unconditionalJump;
-            this.targetLabel = conditionalJump.getArgs().get(0);
+            this.targetLabel = conditionalJump.getTarget();
         }
 
         @Override
         public State emit(LogicInstruction instruction) {
             if (instruction.isLabel()) {
-                if (instruction.getArgs().get(0).equals(targetLabel)) {
+                if (instruction.asLabel().getLabel().equals(targetLabel)) {
                     isJumpOverJump = true;
                 }
                 labels.add(instruction);
@@ -111,10 +113,10 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
                 emitToNext(
                         createInstruction(
                                 Opcode.JUMP,
-                                unconditionalJump.getArgs().get(0),
-                                getInverse(conditionalJump.getArgs().get(1)),
-                                conditionalJump.getArgs().get(2),
-                                conditionalJump.getArgs().get(3)
+                                unconditionalJump.getTarget(),
+                                getInverse(conditionalJump.getCondition()),
+                                conditionalJump.getFirstOperand(),
+                                conditionalJump.getSecondOperand()
                         )
                 );
             } else {

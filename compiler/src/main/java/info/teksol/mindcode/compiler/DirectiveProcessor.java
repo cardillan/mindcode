@@ -1,9 +1,10 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.ast.*;
+import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.Directive;
+import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 

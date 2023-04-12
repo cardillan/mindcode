@@ -4,6 +4,7 @@ import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.TypedArgument;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +51,7 @@ public class StackUsageOptimizer extends GlobalOptimizer {
     }
 
     private boolean uselessStackOperation(LogicInstruction instruction) {
-        return instruction.isPushOrPop() && !variables.contains(instruction.getArg(1));
+        return instruction.isPushOrPop() && !variables.contains(instruction.asPushOrPop().getValue());
     }
 
     private void removeUnnecessaryPushes() {
@@ -78,7 +79,7 @@ public class StackUsageOptimizer extends GlobalOptimizer {
                 // Need to remove from the entire program, not just from the code block, as code block
                 // doesn't contain push instructions preceding the call instruction
                 program.removeIf(ix -> ix.isPushOrPop() && ix.matchesMarker(marker)
-                        && !readVariables.contains(ix.getArg(1)));
+                        && !readVariables.contains(ix.asPushOrPop().getValue()));
             }
 
             call = findInstructionIndex(call + 1, LogicInstruction::isCall);
@@ -88,7 +89,7 @@ public class StackUsageOptimizer extends GlobalOptimizer {
     private boolean isLinear(List<LogicInstruction> codeBlock) {
         Set<String> localLabels = codeBlock.stream()
                 .filter(LogicInstruction::isLabel)
-                .map(ix -> ix.getArg(0))
+                .map(ix -> ix.asLabel().getLabel())
                 .collect(Collectors.toSet());
 
         // Code is linear if every jump targets a local label
@@ -101,12 +102,12 @@ public class StackUsageOptimizer extends GlobalOptimizer {
     private Stream<String> getPossibleTargetLabels(LogicInstruction instruction) {
         switch (instruction.getOpcode()) {
             case JUMP:
-                return Stream.of(instruction.getArg(0));
+                return Stream.of(instruction.asJump().getTarget());
 
             case GOTO:
                 return program.stream()
                         .filter(ix -> ix.isLabel() && ix.matchesMarker(instruction.getMarker()))
-                        .map(ix -> ix.getArg(0));
+                        .map(ix -> ix.asLabel().getLabel());
 
             default:
                 return Stream.empty();

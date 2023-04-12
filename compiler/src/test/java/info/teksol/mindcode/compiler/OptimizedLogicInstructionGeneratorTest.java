@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.ast.Seq;
-import java.io.IOException;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;

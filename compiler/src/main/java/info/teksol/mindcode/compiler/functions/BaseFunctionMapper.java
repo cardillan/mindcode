@@ -5,19 +5,10 @@ import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.NamedArgument;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.OpcodeVariant;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.logic.*;
 import info.teksol.util.CollectionUtils;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -325,7 +316,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             List<String> arguments = getOpcodeVariant().getArguments().stream()
                     .map(a -> a.getType() == ArgumentType.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.getName())
                     .collect(Collectors.toList());
-            return instructionProcessor.createInstructionUnchecked(getOpcode(), arguments);
+            return instructionProcessor.createInstructionUnchecked(null, getOpcode(), arguments);
         }
     }
 
@@ -626,7 +617,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             List<String> arguments = getOpcodeVariant().getArguments().stream()
                     .map(a -> a.getType() == ArgumentType.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.getName())
                     .collect(Collectors.toList());
-            return instructionProcessor.createInstructionUnchecked(getOpcode(), arguments);
+            return instructionProcessor.createInstructionUnchecked(null, getOpcode(), arguments);
         }
     }
 

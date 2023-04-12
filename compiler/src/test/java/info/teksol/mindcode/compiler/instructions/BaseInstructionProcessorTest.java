@@ -4,9 +4,10 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.TypedArgument;
+import org.junit.jupiter.api.Test;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.*;

@@ -23,5 +23,3 @@ loop while !sorted
 for i in 0 ... SIZE
     print(ARRAY[i])
 end
-
-stopProcessor()

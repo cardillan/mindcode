@@ -1,11 +1,11 @@
 package info.teksol.mindcode.processor;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,8 +16,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void printsNumbersStringsObjects() {
         testCode(""
-                        + "print(\"Hello\", 10, 5.5, bank1, null, true, false) "
-                        + "stopProcessor()",
+                        + "print(\"Hello\", 10, 5.5, bank1, null, true, false)",
                 "Hello", "10", "5.5", "bank", "null", "1", "0"
         );
     }
@@ -56,8 +55,7 @@ public class ProcessorTest extends AbstractProcessorTest {
                         + "if res = 2 < 3 "
                         + "  print(true) "
                         + "end "
-                        + "print(res) "
-                        + "stopProcessor()",
+                        + "print(res)",
                 "1", "1"
         );
     }
@@ -76,8 +74,7 @@ public class ProcessorTest extends AbstractProcessorTest {
                         + "while i < 10  "
                         + "    print(j += i) "
                         + "    i += 1 "
-                        + "end "
-                        + "stopProcessor()",
+                        + "end",
                 List.of(),
                 expected
         );
@@ -107,8 +104,7 @@ public class ProcessorTest extends AbstractProcessorTest {
                         + "    if i == 3 continue end "
                         + "    print(i) "
                         + "    if i == d(5) break end "
-                        + "end "
-                        + "stopProcessor()",
+                        + "end",
                 "1", "2", "4", "5"
         );
     }
@@ -122,8 +118,7 @@ public class ProcessorTest extends AbstractProcessorTest {
                         + "    if d(i) == 4 continue end "
                         + "    print(i, j) "
                         + "    if d(i) == 10 break end "
-                        + "end "
-                        + "stopProcessor()",
+                        + "end",
                 "0", "10", "2", "11", "6", "13", "8", "14", "10", "15"
         );
     }
@@ -143,8 +138,7 @@ public class ProcessorTest extends AbstractProcessorTest {
                         + "        else \"D\" "
                         + "    end "
                         + "    print(str) "
-                        + "end "
-                        + "stopProcessor()",
+                        + "end",
                 "A", "B", "B", "B", "C", "C", "C", "D"
         );
     }

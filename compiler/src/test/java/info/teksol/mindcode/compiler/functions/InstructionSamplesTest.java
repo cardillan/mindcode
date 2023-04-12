@@ -5,18 +5,15 @@ import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.NamedArgument;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.OpcodeVariant;
-import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.logic.*;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.ProcessorEdition.W;
 import static org.junit.jupiter.api.Assertions.assertTrue;

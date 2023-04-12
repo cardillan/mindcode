@@ -54,5 +54,3 @@ def sumPrimesUpTo(maximum)
 end
 
 print(sumPrimesUpTo(500))
-
-stopProcessor()

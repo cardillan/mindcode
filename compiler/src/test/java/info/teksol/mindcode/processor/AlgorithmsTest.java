@@ -1,24 +1,33 @@
 package info.teksol.mindcode.processor;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.junit.jupiter.api.Test;
 
 public class AlgorithmsTest extends AbstractProcessorTest {
 
     @Test
+    void readsAndWritesMmemory() {
+        testCode(""
+                        + "allocate heap in bank1[0...512] "
+                        + "$A = 10 "
+                        + "print($A) ",
+                "10"
+        );
+    }
+
     void computesRecursiveFibonacci() {
         testCode(""
                 + "allocate stack in bank1[0...512] "
                 + "def fib(n) "
                 + "    n < 2 ? n : fib(n - 1) + fib(n - 2) "
                 + "end "
-                + "print(fib(10)) "
-                + "stopProcessor()",
+                + "print(fib(10))",
                 "55"
         );
     }

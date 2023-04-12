@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.functions;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.ProcessorEdition;
+
 import java.util.List;
 
 public interface FunctionMapper {

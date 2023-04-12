@@ -3,28 +3,23 @@ package info.teksol.mindcode.compiler;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
-import info.teksol.mindcode.grammar.MindcodeLexer;
-import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
-import org.antlr.v4.runtime.ANTLRErrorListener;
+import info.teksol.mindcode.grammar.MindcodeLexer;
+import info.teksol.mindcode.grammar.MindcodeParser;
+import org.antlr.v4.runtime.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler {
     private final CompilerProfile profile;

@@ -3,26 +3,17 @@ package info.teksol.mindcode.compiler.instructions;
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.compiler.generator.GenerationException;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.NamedArgument;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.OpcodeVariant;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
-import info.teksol.mindcode.logic.TypedArgument;
+import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static info.teksol.util.CollectionUtils.*;
+import static info.teksol.util.CollectionUtils.findFirstIndex;
 
 public class BaseInstructionProcessor implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
@@ -103,12 +94,12 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public LogicInstruction createInstruction(Opcode opcode, String... arguments) {
-        return createInstruction(opcode, List.of(arguments));
+        return createInstruction(null, opcode, List.of(arguments));
     }
 
     @Override
     public LogicInstruction createInstruction(Opcode opcode, List<String> arguments) {
-        return validate(new LogicInstruction(opcode, arguments));
+        return createInstruction(null, opcode, arguments);
     }
 
     @Override
@@ -118,19 +109,45 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public LogicInstruction createInstruction(String marker, Opcode opcode, List<String> arguments) {
-        return validate(new LogicInstruction(marker, opcode, arguments));
+        return validate(createInstructionUnchecked(marker, opcode, arguments));
     }
 
     @Override
     public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {
-        return new LogicInstruction(opcodeVariant.getOpcode(),
+        return createInstruction(opcodeVariant.getOpcode(),
                 opcodeVariant.getArguments().stream().map(NamedArgument::getName).collect(Collectors.toList())
         );
     }
 
     @Override
-    public LogicInstruction createInstructionUnchecked(Opcode opcode, List<String> arguments) {
-        return new LogicInstruction(opcode, arguments);
+    public LogicInstruction createInstructionUnchecked(String marker, Opcode opcode, List<String> arguments) {
+        switch (opcode) {
+            case CALL:
+                return new CallInstruction(marker, opcode, arguments);
+            case GOTO:
+                return new GotoInstruction(marker, opcode, arguments);
+            case JUMP:
+                return new JumpInstruction(marker, opcode, arguments);
+            case LABEL:
+                return new LabelInstruction(marker, opcode, arguments);
+            case OP:
+                return new OpInstruction(marker, opcode, arguments);
+            case POP:
+            case PUSH:
+                return new PushOrPopInstruction(marker, opcode, arguments);
+            case PRINT:
+                return new PrintInstruction(marker, opcode, arguments);
+            case READ:
+                return new ReadInstruction(marker, opcode, arguments);
+            case RETURN:
+                return new ReturnInstruction(marker, opcode, arguments);
+            case SET:
+                return new SetInstruction(marker, opcode, arguments);
+            case WRITE:
+                return new WriteInstruction(marker, opcode, arguments);
+            default:
+                return new BaseInstruction(marker, opcode, arguments);
+        }
     }
 
     @Override
@@ -140,52 +157,48 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 return List.of();
 
             case PUSH: {
-                String memory = virtualInstruction.getArg(0);
-                String value = virtualInstruction.getArg(1);
+                PushOrPopInstruction ix = virtualInstruction.asPushOrPop();
                 return List.of(
-                        createInstruction(Opcode.WRITE, value, memory, getStackPointer()),
+                        createInstruction(Opcode.WRITE, ix.getValue(), ix.getMemory(), getStackPointer()),
                         createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1")
                 );
             }
 
             case POP: {
-                String memory = virtualInstruction.getArg(0);
-                String varRef = virtualInstruction.getArg(1);
+                PushOrPopInstruction ix = virtualInstruction.asPushOrPop();
                 return List.of(
                         createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
-                        createInstruction(Opcode.READ, varRef, memory, getStackPointer())
+                        createInstruction(Opcode.READ, ix.getValue(), ix.getMemory(), getStackPointer())
                 );
             }
 
             case CALL: {
-                String memory = virtualInstruction.getArg(0);
-                String callAddr = virtualInstruction.getArg(1);
-                String retAddr = virtualInstruction.getArg(2);
+                CallInstruction ix = virtualInstruction.asCall();
                 return List.of(
-                        createInstruction(Opcode.WRITE, retAddr, memory, getStackPointer()),
+                        createInstruction(Opcode.WRITE, ix.getReturn(), ix.getMemory(), getStackPointer()),
                         createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
-                        createInstruction(Opcode.SET, "@counter", callAddr)
+                        createInstruction(Opcode.SET, "@counter", ix.getTarget())
                 );
             }
 
             case RETURN: {
-                String memory = virtualInstruction.getArg(0);
+                ReturnInstruction ix = virtualInstruction.asReturn();
                 String retAddr = nextTemp();
                 return List.of(
                         createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
-                        createInstruction(Opcode.READ, retAddr, memory, getStackPointer()),
+                        createInstruction(Opcode.READ, retAddr, ix.getMemory(), getStackPointer()),
                         createInstruction(Opcode.SET, "@counter", retAddr)
                 );
             }
 
             case GOTO: {
                 return List.of(
-                        createInstruction(Opcode.SET, "@counter", virtualInstruction.getArg(0))
+                        createInstruction(Opcode.SET, "@counter", virtualInstruction.asGoto().getLabel())
                 );
             }
 
             default:
-                throw new GenerationException("Don't know how to resolve instruction " + virtualInstruction);
+                throw new GenerationException("Don't know how to resolve virtual instruction " + virtualInstruction);
         }
     }
 

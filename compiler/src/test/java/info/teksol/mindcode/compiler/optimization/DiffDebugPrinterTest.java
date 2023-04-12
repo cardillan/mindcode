@@ -3,16 +3,15 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.junit.jupiter.api.Test;
+import java.util.function.Consumer;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-
-import java.util.function.Consumer;
-import org.junit.jupiter.api.Assertions;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DiffDebugPrinterTest extends AbstractGeneratorTest {

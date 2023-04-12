@@ -90,5 +90,3 @@ a = 1; eval(a &&= 2,   true, "&&=")
 a = 0; eval(a ||= 2,      2, "&&=")
 
 // TODO: add angle, len, trig functions. Rand??
-
-stopProcessor()

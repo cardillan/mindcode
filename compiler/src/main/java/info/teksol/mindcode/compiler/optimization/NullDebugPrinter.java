@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+
 import java.util.List;
 import java.util.function.Consumer;
 

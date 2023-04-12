@@ -39,5 +39,3 @@ quicksort(0, SIZE - 1)
 for i in 0 ... SIZE
     print(ARRAY[i])
 end
-
-stopProcessor()

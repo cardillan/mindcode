@@ -1,10 +1,12 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.Opcode;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,11 +40,12 @@ class PropagateJumpTargets extends GlobalOptimizer {
         for (int index = 0; index < program.size(); index++) {
             LogicInstruction instruction = program.get(index);
             if (instruction.isJump()) {
-                String label = findJumpRedirection(instruction);
-                if (!label.equals(instruction.getArgs().get(0))) {
+                JumpInstruction ix = instruction.asJump();
+                String label = findJumpRedirection(ix);
+                if (!label.equals(ix.getTarget())) {
                     startLabelUsed |= label.equals(FIRST_LABEL);
                     // Update target of the original jump
-                    program.set(index, replaceArg(instruction, 0, label));
+                    program.set(index, replaceArg(ix, 0, label));
                     count++;
                 }
             }
@@ -61,8 +64,8 @@ class PropagateJumpTargets extends GlobalOptimizer {
     }
 
     // Determines the final target of given jump
-    private String findJumpRedirection(LogicInstruction firstJump) {
-        String label = firstJump.getArgs().get(0);
+    private String findJumpRedirection(JumpInstruction firstJump) {
+        String label = firstJump.getTarget();
         Set<String> labels = new HashSet<>();       // Cycle detection
         labels.add(label);
         while (true) {
@@ -75,8 +78,8 @@ class PropagateJumpTargets extends GlobalOptimizer {
     }
     
     // Determines the jump redirection (one level only)
-    private String evaluateJumpRedirection(LogicInstruction firstJump, String label) {
-        int target = findInstructionIndex(0, ix -> ix.isLabel() && ix.getArgs().get(0).equals(label));
+    private String evaluateJumpRedirection(JumpInstruction firstJump, String label) {
+        int target = findInstructionIndex(0, ix -> ix.isLabel() && ix.asLabel().getLabel().equals(label));
         if (target < 0) {
             throw new OptimizationException("Could not find label " + label);
         }
@@ -85,12 +88,12 @@ class PropagateJumpTargets extends GlobalOptimizer {
         LogicInstruction next = findInstruction(target + 1, ix -> !ix.isLabel());
         
         // Redirect compatible jumps
-        if (next.isJump() && (next.getArgs().get(1).equals("always") || isIdenticalJump(firstJump, next))) {
-            return next.getArgs().get(0);
+        if (next.isJump() && (next.asJump().getCondition().equals("always") || isIdenticalJump(firstJump, next))) {
+            return next.asJump().getTarget();
         } 
 
-        // end() is always compatible
-        if (next.isEnd()) {
+        // Handle end instruction only in aggressive mode
+        if (next.isEnd() && level == OptimizationLevel.AGGRESSIVE) {
             return FIRST_LABEL;
         }
 

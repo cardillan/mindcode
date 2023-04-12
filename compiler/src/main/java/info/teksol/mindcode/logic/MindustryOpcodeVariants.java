@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.logic.ProcessorEdition.*;
-import static info.teksol.mindcode.logic.ProcessorVersion.*;
+import static info.teksol.mindcode.logic.ProcessorEdition.S;
+import static info.teksol.mindcode.logic.ProcessorEdition.W;
+import static info.teksol.mindcode.logic.ProcessorVersion.V6;
+import static info.teksol.mindcode.logic.ProcessorVersion.V7;
 
 public class MindustryOpcodeVariants {
     private static final MindustryOpcodeVariants data = new MindustryOpcodeVariants();
