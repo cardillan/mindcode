@@ -25,33 +25,56 @@ public class ConstantExpressionEvaluator {
      * @return compile-time evaluation of the node
      */
     public AstNode evaluate(AstNode node) {
-        if (node instanceof BinaryOp) {
-            return evaluateBinaryOp((BinaryOp) node);
-        } else if (node instanceof Constant) {
-            return evaluateConstant((Constant) node);
-        } else if (node instanceof FunctionCall) {
-            return evaluateFunctionCall((FunctionCall) node);
-        } else if (node instanceof IfExpression) {
-            return evaluateIfExpression((IfExpression) node);
-        } else if (node instanceof UnaryOp) {
-            return evaluateUnaryOp((UnaryOp) node);
-        } else if (node instanceof VarRef) {
-            return evaluateVarRef((VarRef) node);
-        } else {
-            return node;
-        }
+        return switch (node) {
+            case BinaryOp n         -> evaluateBinaryOp(n);
+            case Constant n         -> evaluateConstant(n);
+            case FunctionCall n     -> evaluateFunctionCall(n);
+            case IfExpression n     -> evaluateIfExpression(n);
+            case UnaryOp n          -> evaluateUnaryOp(n);
+            case VarRef n           -> evaluateVarRef(n);
+            default                 -> node;
+        };
     }
 
     private AstNode evaluateBinaryOp(BinaryOp node) {
-        Operation operation = ExpressionEvaluator.getOperation(ExpressionEvaluator.translateOperator(node.getOp()));
-        if (operation != null) {
-            Variable a = variableFromNode("a", evaluate(node.getLeft()));
-            Variable b = variableFromNode("b", evaluate(node.getRight()));
-            if (a != null && b != null) {
-                Variable result = DoubleVariable.newNullValue(false, "result");
-                operation.execute(result, a, b);
-                return result.toAstNode();
+        String machineCode = ExpressionEvaluator.translateOperator(node.getOp());
+        if (ExpressionEvaluator.isDeterministic(machineCode)) {
+            Operation operation = ExpressionEvaluator.getOperation(machineCode);
+            if (operation != null) {
+                Variable a = variableFromNode("a", evaluate(node.getLeft()));
+                Variable b = variableFromNode("b", evaluate(node.getRight()));
+                if (a != null && b != null) {
+                    Variable result = DoubleVariable.newNullValue(false, "result");
+                    operation.execute(result, a, b);
+                    return result.toAstNode();
+                } else if (a != null || b != null) {
+                    // One of them is not null
+                    return evaluatePartially(node, a == null ? b : a, a == null ? node.getLeft() : node.getRight());
+                }
             }
+        }
+
+        return node;
+    }
+
+    private AstNode evaluatePartially(BinaryOp node, Variable fixed, AstNode exp) {
+        switch (node.getOp()) {
+            // TODO: define standard beavior for these functions (short-circuit boolean eval)
+            case "or":
+            case "||":
+            case "|":
+                // If the fixed value is zero, evaluates to the other node
+                return fixed.getDoubleValue() == 0 ? exp : node;
+
+            case "&":
+                // If the fixed value is zero, evaluates to zero
+                return fixed.getDoubleValue() == 0 ? new NumericLiteral("0") : node;
+
+            case "and":
+            case "&&":
+                // If the fixed value is zero (= false), evaluates to false
+                // TODO: we could return exp instead of node if exp was a boolean expression
+                return fixed.getDoubleValue() == 0 ? new BooleanLiteral(false) : node;
         }
 
         return node;
@@ -92,8 +115,8 @@ public class ConstantExpressionEvaluator {
 
     private AstNode evaluateIfExpression(IfExpression node) {
         AstNode conditionValue = evaluate(node.getCondition());
-        if (conditionValue instanceof ConstantAstNode) {
-            boolean isTrue = !ExpressionEvaluator.equals(((ConstantAstNode) conditionValue).getAsDouble(), 0.0);
+        if (conditionValue instanceof ConstantAstNode n) {
+            boolean isTrue = !ExpressionEvaluator.equals(n.getAsDouble(), 0.0);
             return evaluate(isTrue ? node.getTrueBranch() : node.getFalseBranch());
         } else {
             return node;
@@ -120,19 +143,13 @@ public class ConstantExpressionEvaluator {
     }
 
     private static DoubleVariable variableFromNode(String name, AstNode exp) {
-        if (exp instanceof NullLiteral) {
-            return DoubleVariable.newNullValue(false, name);
-        } else if (exp instanceof BooleanLiteral) {
-            return DoubleVariable.newBooleanValue(false, name, ((BooleanLiteral)exp).getValue());
-        } else if (exp instanceof NumericLiteral) {
-            return DoubleVariable.newDoubleValue(false, name, ((NumericLiteral)exp).getAsDouble());
-        } else if (exp instanceof StringLiteral) {
-            return DoubleVariable.newStringValue(false, name, ((StringLiteral)exp).getText());
-        } else if (exp instanceof ConstantAstNode) {
-            throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
-        } else {
-            // Not a constant expression
-            return null;
-        }
+        return switch (exp) {
+            case NullLiteral n      -> DoubleVariable.newNullValue(false, name);
+            case BooleanLiteral n   -> DoubleVariable.newBooleanValue(false, name, n.getValue());
+            case NumericLiteral n   -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
+            case StringLiteral n    -> DoubleVariable.newStringValue(false, name, n.getText());
+            case ConstantAstNode n  -> throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
+            default                 -> null;
+        };
     }
 }

@@ -46,16 +46,16 @@ abstract class BaseOptimizer implements Optimizer {
     @Override
     public void setDebugPrinter(DebugPrinter debugPrinter) {
         this.debugPrinter = debugPrinter;
-        if (next instanceof Optimizer) {
-            ((Optimizer)next).setDebugPrinter(debugPrinter);
+        if (next instanceof Optimizer optimizer) {
+            optimizer.setDebugPrinter(debugPrinter);
         }
     }
 
     @Override
     public void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient) {
         this.messagesRecipient = messagesRecipient;
-        if (next instanceof Optimizer) {
-            ((Optimizer)next).setMessagesRecipient(messagesRecipient);
+        if (next instanceof Optimizer optimizer) {
+            optimizer.setMessagesRecipient(messagesRecipient);
         }
     }
 

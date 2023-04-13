@@ -15,6 +15,17 @@ public class ExpressionEvaluator {
         return OPERATIONS.get(operation);
     }
 
+    public static boolean isDeterministic(String operation) {
+        switch (operation) {
+            case "noise":
+            case "rand":
+                return false;
+
+            default:
+                return true;
+        }
+    }
+
     public static int getNumberOfArguments(String functionName) {
         return ARGUMENTS.getOrDefault(functionName, -1);
     }

@@ -11,64 +11,64 @@ inline def eval(actual, expected, operation)
     end
 end
 
-eval(2 +  d(3), 5,              "add")
-eval(7 -  d(6), 1,              "sub")
-eval(3 *  d(2), 6,              "mul")
-eval(6 /  d(4), 1.5,            "div")
-eval(6 \  d(4), 1,              "idiv")
-eval(6 %  d(4), 2,              "mod")
-eval(2 ** d(4), 16,             "pow")
+eval(2 +  d(3), 5,          "add")
+eval(7 -  d(6), 1,          "sub")
+eval(3 *  d(2), 6,          "mul")
+eval(6 /  d(4), 1.5,        "div")
+eval(6 \  d(4), 1,          "idiv")
+eval(6 %  d(4), 2,          "mod")
+eval(2 ** d(4), 16,         "pow")
 
-eval(5 == d(5), true,           "equal")
-eval(5 == d(6), false,          "equal")
-eval(0 == d(null), true,        "equal null")
+eval(5 == d(5), true,       "equal")
+eval(5 == d(6), false,      "equal")
+eval(0 == d(null), true,    "equal null")
 
-eval(5 != d(5), false,          "notEqual")
-eval(5 != d(6), true,           "notEqual")
-eval(0 != d(null), false,       "notEqual null")
+eval(5 != d(5), false,      "notEqual")
+eval(5 != d(6), true,       "notEqual")
+eval(0 != d(null), false,   "notEqual null")
 
-eval(1 and d(0), false,         "land")
-eval(1 and d(2), true,          "land")
+eval(1 and d(0), false,     "land")
+eval(1 and d(2), true,      "land")
  
-eval(0 <  d(1), true,           "lessThan")
-eval(1 <  d(0), false,          "lessThan")
+eval(0 <  d(1), true,       "lessThan")
+eval(1 <  d(0), false,      "lessThan")
 
-eval(1 <= d(1), true,           "lessThanEq")
-eval(1 <= d(0), false,          "lessThanEq")
+eval(1 <= d(1), true,       "lessThanEq")
+eval(1 <= d(0), false,      "lessThanEq")
 
-eval(2 >  d(1), true,           "greaterThan")
-eval(1 >  d(2), false,          "greaterThan")
+eval(2 >  d(1), true,       "greaterThan")
+eval(1 >  d(2), false,      "greaterThan")
 
-eval(1 >= d(1), true,           "greaterThanEq")
-eval(1 >= d(2), false,          "greaterThanEq")
+eval(1 >= d(1), true,       "greaterThanEq")
+eval(1 >= d(2), false,      "greaterThanEq")
 
 eval(0    === d(null), false,   "strictEqual")
 eval(null === d(null), true,    "strictEqual")
 
-eval(1 << d(2), 4,              "shl")
-eval(9 >> d(2), 2,              "shr")
+eval(1 << d(2), 4,          "shl")
+eval(9 >> d(2), 2,          "shr")
 
-eval(1 |  d(2), 3,              "or")
-eval(3 &  d(2), 2,              "and")
-eval(3 ^  d(2), 1,              "xor")
+eval(1 |  d(2), 3,          "or")
+eval(3 &  d(2), 2,          "and")
+eval(3 ^  d(2), 1,          "xor")
 
 // Small values work because long is signed
-eval(~d(0),     -1,             "not")
-eval(~d(65535), -65536,         "not")
+eval(~d(0),     -1,         "not")
+eval(~d(65535), -65536,     "not")
 
 a = 0xabcdefabcdefabc
-eval(~a, -(a + 1),              "not")
+eval(~a, -(a + 1),          "not")
 
-eval(max(2, d(4)), 4,           "max")
-eval(min(2, d(4)), 2,           "min")
+eval(max(2, d(4)), 4,       "max")
+eval(min(2, d(4)), 2,       "min")
 
-eval(abs(d(-2)), 2,             "abs")
+eval(abs(d(-2)), 2,         "abs")
 eval(log(d(2.718281828459045)), 1, "log")
-eval(log10(d(10)),  1,           "log10")
+eval(log10(d(10)),  1,      "log10")
 
-eval(floor(d(2.5)), 2,           "floor")
-eval(ceil(d(2.5)),  3,           "ceil")
-eval(sqrt(d(16)),   4,           "sqrt")
+eval(floor(d(2.5)), 2,      "floor")
+eval(ceil(d(2.5)),  3,      "ceil")
+eval(sqrt(d(16)),   4,      "sqrt")
 
 // Mindcode extensions
 eval(-d(8), -8, "unary minus")
@@ -91,6 +91,6 @@ a = 3; eval(a &= d(2),       2, "&=")
 a = 3; eval(a ^= d(2),       1, "^=")
 a = 1; eval(a &&= d(0),  false, "&&=")
 a = 1; eval(a &&= d(2),   true, "&&=")
-a = 0; eval(a ||= d(2),      2, "&&=")
+a = 0; eval(a ||= d(2),      2, "||=")
 
 // TODO: add angle, len, trig functions. Rand??

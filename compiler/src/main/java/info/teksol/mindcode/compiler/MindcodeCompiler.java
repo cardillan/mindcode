@@ -107,7 +107,7 @@ public class MindcodeCompiler implements Compiler {
         );
 
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        final DebugPrinter debugPrinter = profile.getDebugLevel() == 0 || profile.optimizationsActive()
+        final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
                 ? new DiffDebugPrinter(profile.getDebugLevel()) : new NullDebugPrinter();
         final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
                 terminus, profile, debugPrinter, messages::add);

@@ -68,7 +68,7 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
                     accessible = false;
                 }
             } else {
-                if (instruction instanceof  LabelInstruction ix) {
+                if (instruction instanceof LabelInstruction ix) {
                     // An active jump to here makes next instruction accessible
                     accessible = activeLabels.contains(ix.getLabel());
                 } else if (!(instruction instanceof EndInstruction) || level == OptimizationLevel.AGGRESSIVE) {

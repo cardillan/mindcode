@@ -217,11 +217,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
 
         // Special cases
-        switch (node.getFunctionName()) {
-            case "printf":      return handlePrintf(node, params);
-        }
-
-        return handleFunctionCall(node.getFunctionName(), params);
+        return switch (node.getFunctionName()) {
+            case "printf"   -> handlePrintf(node, params);
+            default         -> handleFunctionCall(node.getFunctionName(), params);
+        };
     }
 
     private String handleFunctionCall(String functionName, List<String> params) {
@@ -388,8 +387,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     @Override
     public String visitHeapAccess(HeapAccess node) {
         final String tmp = nextNodeResult();
-        final String addr = resolveHeapIndex(node);
-        emitInstruction(READ, tmp, node.getCellName(), addr);
+        final String index = resolveHeapIndex(node);
+        emitInstruction(READ, tmp, node.getCellName(), index);
         return tmp;
     }
 
@@ -432,10 +431,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             throw new GenerationException("Constant declaration not allowed in user function [" + node.getName() + "]");
         }
         AstNode value = expressionEvaluator.evaluate(node.getValue());
-        if (!(value instanceof ConstantAstNode)) {
+        if (value instanceof ConstantAstNode constant) {
+            registerConstant(node.getName(), constant);
+        } else {
             throw new GenerationException("Constant declaration of [" + node.getName() + "] does not use a constant expression");
         }
-        registerConstant(node.getName(), (ConstantAstNode)value);
         return "null";
     }
 
@@ -449,32 +449,33 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     public String visitAssignment(Assignment node) {
         final String rvalue = visit(node.getValue());
 
-        if (node.getVar() instanceof HeapAccess) {
-            final HeapAccess heapAccess = (HeapAccess) node.getVar();
-            final String target = heapAccess.getCellName();
-            final String address = resolveHeapIndex(heapAccess);
-            emitInstruction(Opcode.WRITE, rvalue, target, address);
-        } else if (node.getVar() instanceof PropertyAccess) {
-            final PropertyAccess propertyAccess = (PropertyAccess) node.getVar();
-            final String propTarget = visit(propertyAccess.getTarget());
-            String prop = visit(propertyAccess.getProperty());
-            if (prop.startsWith("@")) prop = prop.replaceFirst("@", "");  // TODO (@francois): is it still relevant?
-            if (functionMapper.handleProperty(pipeline, prop, propTarget, List.of(rvalue)) == null) {
-                throw new UndeclaredFunctionException("Don't know how to handle property [" + propTarget + "." + prop + "]");
+        switch (node.getVar()) {
+            case HeapAccess heapAccess -> {
+                final String target = heapAccess.getCellName();
+                final String address = resolveHeapIndex(heapAccess);
+                emitInstruction(Opcode.WRITE, rvalue, target, address);
             }
-        } else if (node.getVar() instanceof VarRef) {
-            String name = ((VarRef)node.getVar()).getName();
-            if (constants.get(name) != null) {
-                throw new GenerationException("Assignment to constant [" + name + "] not allowed");
+            case PropertyAccess propertyAccess -> {
+                final String propTarget = visit(propertyAccess.getTarget());
+                String prop = visit(propertyAccess.getProperty());
+                if (prop.startsWith("@")) prop = prop.replaceFirst("@", "");  // TODO (@francois): is it still relevant?
+                if (functionMapper.handleProperty(pipeline, prop, propTarget, List.of(rvalue)) == null) {
+                    throw new UndeclaredFunctionException("Don't know how to handle property [" + propTarget + "." + prop + "]");
+                }
             }
+            case VarRef varRef -> {
+                String name = varRef.getName();
+                if (constants.get(name) != null) {
+                    throw new GenerationException("Assignment to constant [" + name + "] not allowed");
+                }
 
-            final String target = visit(node.getVar());
-            if (instructionProcessor.isBlockName(target)) {
-                throw new GenerationException("Assignment to variable [" + target + "] not allowed (name reserved for linked blocks)");
+                final String target = visit(node.getVar());
+                if (instructionProcessor.isBlockName(target)) {
+                    throw new GenerationException("Assignment to variable [" + target + "] not allowed (name reserved for linked blocks)");
+                }
+                emitInstruction(Opcode.SET, target, rvalue);
             }
-            emitInstruction(Opcode.SET, target, rvalue);
-        } else {
-            throw new GenerationException("Unhandled assignment target in " + node);
+            default -> throw new GenerationException("Unhandled assignment target in " + node);
         }
 
         // rvalue holds the result of this node -- needs to be explicitly registered in parent node context.
@@ -652,10 +653,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
                 // At the end of the list is a jump to the next alternative (next "when" branch)
                 // JumpOverJumpEliminator will improve the generated code
                 for (AstNode value : alternative.getValues()) {
-                    if (value instanceof Range) {
+                    if (value instanceof Range range) {
                         // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
                         String nextExp = nextLabel();       // Next value in when list
-                        Range range = (Range) value;
                         final String minValue = visit(range.getFirstValue());
                         emitInstruction(JUMP, nextExp, "lessThan", caseValue, minValue);
                         // The max value is only evaluated when the min value lets us through
@@ -712,28 +712,25 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         // Initialize stack pointer variable
         if (heap.hasRange()) {
             AstNode first = expressionEvaluator.evaluate(heap.getRange().getFirstValue());
-            AstNode last  = expressionEvaluator.evaluate(heap.getRange().getLastValue());
+            AstNode last = expressionEvaluator.evaluate(heap.getRange().getLastValue());
 
-            if (!(first instanceof NumericLiteral) || !(last instanceof NumericLiteral)) {
+            if (first instanceof NumericLiteral firstLit && last instanceof NumericLiteral lastLit) {
+                if (!firstLit.isInteger() || !lastLit.isInteger()) {
+                    throw new InvalidMemoryAllocationException("Heap declarations must use integer range; received " + heap.getRange());
+                }
+
+                int firstInt = firstLit.getAsInteger();
+                int lastInt = lastLit.getAsInteger() + (heap.getRange() instanceof InclusiveRange ? 1 : 0);
+
+                if (firstInt >= lastInt) {
+                    throw new InvalidMemoryAllocationException("Empty or invalid range in heap declaration: " + heap.getRange());
+                }
+
+                heapBaseAddress = firstInt;
+                heapSize = lastInt - firstInt;
+            } else {
                 throw new InvalidMemoryAllocationException("Heap declarations must use constant range; received " + heap.getRange());
             }
-
-            NumericLiteral firstLit = (NumericLiteral) first;
-            NumericLiteral lastLit = (NumericLiteral) last;
-
-            if (!firstLit.isInteger() || !lastLit.isInteger()) {
-                throw new InvalidMemoryAllocationException("Heap declarations must use integer range; received " + heap.getRange());
-            }
-
-            int firstInt = firstLit.getAsInteger();
-            int lastInt = lastLit.getAsInteger() + (heap.getRange() instanceof InclusiveRange ? 1 : 0);
-
-            if (firstInt >= lastInt) {
-                throw new InvalidMemoryAllocationException("Empty or invalid range in heap declaration: " + heap.getRange());
-            }
-
-            heapBaseAddress = firstInt;
-            heapSize = lastInt - firstInt;
         } else {
             heapBaseAddress = 0;
             heapSize = 64;
@@ -752,22 +749,22 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             AstNode first = expressionEvaluator.evaluate(stack.getRange().getFirstValue());
             AstNode last  = expressionEvaluator.evaluate(stack.getRange().getLastValue());
 
-            if (!(first instanceof NumericLiteral) || !(last instanceof NumericLiteral)) {
+            if (first instanceof NumericLiteral firstLit && last instanceof NumericLiteral lastLit) {
+                if (!firstLit.isInteger() || !lastLit.isInteger()) {
+                    throw new InvalidMemoryAllocationException("Stack declarations must use integer range; received " + stack.getRange());
+                }
+
+                int firstInt = firstLit.getAsInteger();
+                int lastInt = lastLit.getAsInteger() + (stack.getRange() instanceof InclusiveRange ? 1 : 0);
+
+                if (firstInt >= lastInt) {
+                    throw new InvalidMemoryAllocationException("Empty or invalid range in stack declaration: " + stack.getRange());
+                }
+
+                literal = String.valueOf(firstInt);
+            } else {
                 throw new InvalidMemoryAllocationException("Stack declarations must use constant range; received " + stack.getRange());
             }
-
-            NumericLiteral firstLit = (NumericLiteral) first;
-            NumericLiteral lastLit = (NumericLiteral) last;
-
-            if (!firstLit.isInteger() || !lastLit.isInteger()) {
-                throw new InvalidMemoryAllocationException("Stack declarations must use integer range; received " + stack.getRange());
-            }
-
-            if (firstLit.getAsInteger() >= lastLit.getAsInteger()) {
-                throw new InvalidMemoryAllocationException("Empty or invalid range in stack declaration: " + stack.getRange());
-            }
-
-            literal = String.valueOf(firstLit.getAsInteger());
         } else {
             // Range not specified. Start at the bottom
             literal = "0";
@@ -826,11 +823,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         }
 
         AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
-        if (!(astFormat instanceof StringLiteral)) {
+        if (astFormat instanceof StringLiteral format) {
+            return handlePrintf(format.getLiteral(), params);
+        } else {
             throw new GenerationException("First parameter of printf() function must be a constant string.");
         }
+    }
 
-        String format = ((StringLiteral) astFormat).getLiteral();
+    private String handlePrintf(String format, List<String> params) {
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
         int position = 1;       // Skipping the 1st param, which is the format string
@@ -901,7 +901,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     private static final Pattern REGEX_VARIABLE = Pattern.compile("^([@_a-zA-Z][-a-zA-Z_0-9]*)");
-    private static final Pattern REGEX_BRACKETS = Pattern.compile("^\\{\\s*([@_a-zA-Z][-a-zA-Z_0-9]*)?\\s*\\}");
+    private static final Pattern REGEX_BRACKETS = Pattern.compile("^\\{\\s*([@_a-zA-Z][-a-zA-Z_0-9]*)?\\s*}");
 
     private String extractVariable(String string) {
         Matcher matcher = REGEX_BRACKETS.matcher(string);
@@ -930,7 +930,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         }
     }
 
-    private class NodeContext extends LocalContext {
+    private static class NodeContext extends LocalContext {
         public NodeContext() {
         }
 

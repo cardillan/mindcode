@@ -16,7 +16,7 @@ public class ReturnStatement extends ControlBlockAstNode {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ReturnStatement && Objects.equals(((ReturnStatement)obj).retval, retval);
+        return obj instanceof ReturnStatement statement && Objects.equals(statement.retval, retval);
     }
 
     @Override

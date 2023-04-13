@@ -241,8 +241,8 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     private void visitSeqInner(Seq node) {
-        if (node.getRest() instanceof Seq) {
-            visitSeqInner((Seq)node.getRest());
+        if (node.getRest() instanceof Seq seq) {
+            visitSeqInner(seq);
         }
         visit(node.getLast()); newLine(",");
     }

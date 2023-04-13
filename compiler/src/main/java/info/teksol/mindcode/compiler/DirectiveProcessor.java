@@ -28,8 +28,8 @@ public class DirectiveProcessor {
     }
 
     private void visitNode(AstNode node) {
-        if (node instanceof Directive) {
-            processDirective((Directive) node);
+        if (node instanceof Directive directive) {
+            processDirective(directive);
         } else {
             node.getChildren().forEach(this::visitNode);
         }

@@ -561,10 +561,9 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     private void gatherAlternatives(AstNode alternative, List<CaseAlternative> accumulator) {
-        if (alternative instanceof CaseAlternative) {
-            accumulator.add((CaseAlternative) alternative);
-        } else if (alternative instanceof Seq) {
-            final Seq seq = (Seq) alternative;
+        if (alternative instanceof CaseAlternative caseAlternative) {
+            accumulator.add(caseAlternative);
+        } else if (alternative instanceof Seq seq) {
             gatherAlternatives(seq.getRest(), accumulator);
             gatherAlternatives(seq.getLast(), accumulator);
         }
@@ -602,8 +601,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     private void gatherValues(AstNode arg, List<AstNode> accumulator) {
-        if (arg instanceof Seq) {
-            final Seq seq = (Seq) arg;
+        if (arg instanceof Seq seq) {
             gatherArgs(seq.getRest(), accumulator);
             gatherArgs(seq.getLast(), accumulator);
         } else if (arg instanceof NoOp) {
@@ -633,8 +631,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     private void gatherArgs(AstNode arg, List<AstNode> accumulator) {
-        if (arg instanceof Seq) {
-            final Seq seq = (Seq) arg;
+        if (arg instanceof Seq seq) {
             gatherArgs(seq.getRest(), accumulator);
             gatherArgs(seq.getLast(), accumulator);
         } else if (arg instanceof NoOp) {

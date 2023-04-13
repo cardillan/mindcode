@@ -15,7 +15,7 @@ public class BreakStatement extends ControlBlockAstNode {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof BreakStatement && Objects.equals(((BreakStatement)obj).label, label);
+        return obj instanceof BreakStatement statement && Objects.equals(statement.label, label);
     }
 
     @Override

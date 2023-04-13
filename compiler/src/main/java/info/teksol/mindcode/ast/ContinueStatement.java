@@ -15,7 +15,7 @@ public class ContinueStatement extends ControlBlockAstNode {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof ContinueStatement && Objects.equals(((ContinueStatement)obj).label, label);
+        return obj instanceof ContinueStatement statement && Objects.equals(statement.label, label);
     }
 
     @Override
