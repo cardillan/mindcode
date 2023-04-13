@@ -662,6 +662,10 @@ bin/run-local
 
 The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
 
+> **Note**: If you run PostgreSQL locally, you won't be able to run Mindcode in Docker due to port clash.
+
+### Contributing 
+
 The compiler was written in a Test-Driven Development fashion. If you can, please look in `src/main/test` and attempt to
 emulate an existing test, so that we can prove that your proposal works as intended.
 
