@@ -134,6 +134,23 @@ The state is [alarm]
 
 In the second case, the doubling of square bracket is not strictly necessary, because `alarm` isn't recognized as a color name.
 
+## Printing values
+
+When printing numbers, Mindustry always prints the full representation of a number. It might be sometimes cumbersome,
+as fractions can produce a lot of digits. To avoid this, use the `floor` or `ceil` function:
+
+```
+start_time = @time
+do_some_stuff()
+duration = @time - start_time
+println("Elapsed: ", floor(duration), " ms")
+```
+
+When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead.
+The same formatting is used to display value of a variable in the Vars dialog in Mindustry UI. There isn't a way to output
+such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't necessarily have 
+a zero value.
+
 ---
 
 [« Previous: Compiler directives](SYNTAX-5-OTHER.markdown)

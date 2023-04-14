@@ -669,4 +669,11 @@ public class MindcodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implemen
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitHex_int(MindcodeParser.Hex_intContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitBinary_int(MindcodeParser.Binary_intContext ctx) { return visitChildren(ctx); }
 }

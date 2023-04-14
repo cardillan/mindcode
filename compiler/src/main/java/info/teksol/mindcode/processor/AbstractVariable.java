@@ -3,6 +3,8 @@ package info.teksol.mindcode.processor;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 
+import java.util.Optional;
+
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;
 
@@ -84,13 +86,13 @@ public abstract class AbstractVariable implements Variable {
     }
 
     @Override
-    public AstNode toAstNode() {
+    public Optional<AstNode> toAstNode() {
         switch (getType()) {
-            case NULL:      return new NullLiteral();
-            case BOOLEAN:   return new BooleanLiteral(getIntValue() != 0);
-            case LONG:      return new NumericLiteral(String.valueOf(getLongValue()));
-            case DOUBLE:    return new NumericLiteral(valueToString());
-            case OBJECT:    return new StringLiteral(String.valueOf(object));
+            case NULL:      return Optional.of(new NullLiteral());
+            case BOOLEAN:   return Optional.of(new BooleanLiteral(getIntValue() != 0));
+            case LONG:      return Optional.of(new NumericLiteral(String.valueOf(getLongValue())));
+            case DOUBLE:    return NumericLiteral.mlogRewrite(String.valueOf(getDoubleValue())).map(NumericLiteral::new);
+            case OBJECT:    return Optional.of(new StringLiteral(String.valueOf(object)));
             default:        throw new GenerationException("Unhandled value type " + getType());
         }
     }

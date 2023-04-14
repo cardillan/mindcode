@@ -179,7 +179,7 @@ unit_ref : AT ref;
 var_ref : id;
 
 ref : ID;
-int_t : decimal_int | hex_int;
+int_t : decimal_int | hex_int | binary_int;
 float_t : FLOAT;
 literal_t : LITERAL;
 null_t : NULL;
@@ -192,6 +192,7 @@ id : ID;
 
 decimal_int : INT;
 hex_int : HEXINT;
+binary_int : BININT;
 
 ALLOCATE : 'allocate';
 BREAK : 'break';
@@ -281,10 +282,27 @@ RIGHT_CBRACKET : '}';
 fragment ESCAPED_QUOTE : '\\"';
 LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';
 
-FLOAT : INT DOT INT;
-INT : [0-9][0-9]*;
-HEXINT : '0' [xX] [a-f0-9]+;
+// fragments
+fragment DecimalExponent : ( 'e' | 'E' | 'e+' | 'E+' | 'e-' | 'E-' ) DecimalDigits;
+fragment DecimalDigits   : ('0'..'9')+ ;
+fragment FloatLiteral    : Float ;
+fragment IntegerLiteral  : Integer ;
+fragment Integer         : Decimal | Binary | Hexadecimal ;
+fragment Decimal         : DecimalDigits ;
+fragment Binary          : '0b' ('0' | '1')+ ;
+fragment Hexadecimal     : '0x' HexDigit+ ;
+fragment DecimalDigit    : '0'..'9' ;
+fragment HexDigit        : ('0'..'9'|'a'..'f'|'A'..'F') ;
+fragment Float           : DecimalDigits DecimalExponent?
+                         | DecimalDigits DOT DecimalDigits DecimalExponent?
+                         ;
+
+FLOAT : Float;
+INT : Decimal;
+HEXINT : Hexadecimal;
+BININT : Binary;
 
 ID : [_a-zA-Z][-a-zA-Z_0-9]*;
 SL_COMMENT : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;
 WS : (' ' | '\t' | '\r' | '\n')+ -> skip;
+

@@ -1043,4 +1043,14 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitHex_int(MindcodeParser.Hex_intContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#binary_int}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinary_int(MindcodeParser.Binary_intContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#binary_int}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinary_int(MindcodeParser.Binary_intContext ctx);
 }

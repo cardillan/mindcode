@@ -1139,6 +1139,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitHex_int(MindcodeParser.Hex_intContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBinary_int(MindcodeParser.Binary_intContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBinary_int(MindcodeParser.Binary_intContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

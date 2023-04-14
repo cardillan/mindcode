@@ -1415,6 +1415,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "f", "-2"),
                         createInstruction(SET, "g", "true"),
                         createInstruction(SET, "h", "-5"),
+                        createInstruction(SET, "i", "1E-4"),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
@@ -1427,6 +1428,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                                 f = ~1
                                 g = not false
                                 h = -(2 + 3)
+                                i = 1 / 10000
                                 """
                         )
                 )

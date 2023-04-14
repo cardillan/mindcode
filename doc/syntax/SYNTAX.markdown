@@ -95,17 +95,25 @@ and a result of any calculation that is undefined or produced an error in Mindus
 
 ### Numeric literals
 
-Mindustry supports the classic decimal notation for integers and floats:
+Mindcode supports the classic decimal notation for integers and floats, including scientific notation:
 
 * `1`
 * `3.14159`
 * `-35`
 * `-9381.355`
+* `1e10`
+* `1.5e-5`
+* `-6.45e+8`
 
-Mindustry also supports hexadecimal representation for integers:
+**Note**: Mindustry itself doesn't recognize numeric literals in scientific notation containing a decimal separator.
+For example, `1.5e-5` is not a valid mlog number. Mindcode accepts these literals and converts them to a notation
+acceptable by mlog, e.g. `15e-6`
+
+Mindustry also supports hexadecimal and binary representation for integers:
 
 * `0x35`
 * `0xf1`
+* `0b010001101`
 
 ### Boolean literals
 
@@ -114,7 +122,7 @@ Additionally, boolean literals are available:
 * `false`
 * `true`
 
-Boolean values are representedas (and indistinguishable from) numerical values `0` and `1`, respectively.
+Boolean values are represented as (and indistinguishable from) numerical values `0` and `1`, respectively.
 
 ### String literals
 

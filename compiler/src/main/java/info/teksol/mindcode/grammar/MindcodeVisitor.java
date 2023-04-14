@@ -622,4 +622,10 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitHex_int(MindcodeParser.Hex_intContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#binary_int}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinary_int(MindcodeParser.Binary_intContext ctx);
 }

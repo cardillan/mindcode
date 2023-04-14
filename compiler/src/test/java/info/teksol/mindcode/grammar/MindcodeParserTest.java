@@ -9,6 +9,38 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MindcodeParserTest extends AbstractParserTest {
+
+    @Test
+    void parsesDecimalNumber() {
+        assertDoesNotThrow(() -> parse("0123456789"));
+    }
+
+    void parsesHexadecimalNumber() {
+        assertDoesNotThrow(() -> parse("0x0123456789ABCDEFabcdef"));
+    }
+
+    void parsesBinaryNumber() {
+        assertDoesNotThrow(() -> parse("0b010101"));
+    }
+
+    void parsesFloatingPointNumber() {
+        assertDoesNotThrow(() -> parse("1.0"));
+        assertDoesNotThrow(() -> parse("0.0"));
+        assertDoesNotThrow(() -> parse(".0"));
+        assertDoesNotThrow(() -> parse("1e5"));
+        assertDoesNotThrow(() -> parse("1e+5"));
+        assertDoesNotThrow(() -> parse("1e-5"));
+        assertDoesNotThrow(() -> parse("1E10"));
+        assertDoesNotThrow(() -> parse("1E+10"));
+        assertDoesNotThrow(() -> parse("1E-10"));
+        assertDoesNotThrow(() -> parse("2.5E10"));
+        assertDoesNotThrow(() -> parse("2.5E+10"));
+        assertDoesNotThrow(() -> parse("2.5E-10"));
+        assertDoesNotThrow(() -> parse(".5E10"));
+        assertDoesNotThrow(() -> parse(".5E+10"));
+        assertDoesNotThrow(() -> parse(".5E-10"));
+    }
+
     @Test
     void parsesTheEmptyProgram() {
         assertDoesNotThrow(() -> parse(""));

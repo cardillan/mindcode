@@ -2,6 +2,8 @@ package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.ast.AstNode;
 
+import java.util.Optional;
+
 /**
  * Mindustry processor variable.
  */
@@ -27,5 +29,5 @@ public interface Variable {
 
     void setBooleanValue(boolean value);
 
-    AstNode toAstNode();
+    Optional<AstNode> toAstNode();
 }

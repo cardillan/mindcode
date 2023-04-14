@@ -207,9 +207,9 @@ public class Processor {
             return DoubleVariable.newStringValue(true, value, repl);
         }
         try {
-            return value.startsWith("0x")
-                    ? DoubleVariable.newLongValue(true, value, Long.decode(value))
-                    : DoubleVariable.newDoubleValue(true, value, Double.parseDouble(value));
+            return value.startsWith("0x") ? DoubleVariable.newLongValue(true, value, Long.decode(value)) :
+                    value.startsWith("0b") ? DoubleVariable.newLongValue(true, value, Long.parseLong(value, 2, value.length(), 2)) :
+                    DoubleVariable.newDoubleValue(true, value, Double.parseDouble(value));
         } catch (NumberFormatException ex) {
             if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
                 throw new ExecutionException(ERR_UNINITIALIZED_VAR, "Uninitialized variable " + value);

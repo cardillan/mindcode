@@ -2,9 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## Upcoming
+## 2023-04-14
 
-* Update to Java 17
+### Fixed
+
+* Fixed creating numeric literals incompatible with mlog during constant expression evaluation (mlog recognizes  
+  decimal point and an exponent, but not both in the same literal; `1.5e-5` is not a valid mlog number).
+
+### Added
+
+* Support for numeric literals in binary (e.g. `0b00101`).
+* Support for scientific notation of numeric literals. Formats not supported by mlog (e.g. `1.5e-5`) are converted 
+  to a valid representation (in this case, `15e-6`).
+  
+### Changed
+
+* Updated project to use Java 17.
 
 ## 2023-04-12
 

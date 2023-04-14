@@ -5,8 +5,6 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class DoubleVariable extends AbstractVariable {
-    private static final NumberFormat format = createNumberFormat();
-
     protected double value;
 
     private DoubleVariable(boolean fixed, String name, MindustryObject object, ValueType valueType, double value) {
@@ -40,7 +38,11 @@ public class DoubleVariable extends AbstractVariable {
 
     @Override
     protected String valueToString() {
-        return format.format(value);
+        if(Math.abs(value - (long) value) < 0.00001) {
+            return String.valueOf((long) value);
+        } else {
+            return String.valueOf(value);
+        }
     }
 
     @Override
@@ -88,11 +90,5 @@ public class DoubleVariable extends AbstractVariable {
     public void setLongValue(long value) {
         this.value = value;
         setType(ValueType.LONG);
-    }
-
-    private static NumberFormat createNumberFormat() {
-        NumberFormat format = DecimalFormat.getNumberInstance(Locale.US);
-        format.setGroupingUsed(false);
-        return format;
     }
 }

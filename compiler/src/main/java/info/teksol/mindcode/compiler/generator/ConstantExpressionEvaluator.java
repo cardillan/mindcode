@@ -1,10 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.*;
-import info.teksol.mindcode.processor.DoubleVariable;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
-import info.teksol.mindcode.processor.Operation;
-import info.teksol.mindcode.processor.Variable;
+import info.teksol.mindcode.processor.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +43,7 @@ public class ConstantExpressionEvaluator {
                 if (a != null && b != null) {
                     Variable result = DoubleVariable.newNullValue(false, "result");
                     operation.execute(result, a, b);
-                    return result.toAstNode();
+                    return result.toAstNode().orElse(node);
                 } else if (a != null || b != null) {
                     // One of them is not null
                     return evaluatePartially(node, a == null ? b : a, a == null ? node.getLeft() : node.getRight());
@@ -110,7 +107,7 @@ public class ConstantExpressionEvaluator {
                 Variable b = variableFromNode("b", evaluated.get(numArgs - 1));
                 Variable result = DoubleVariable.newNullValue(false, "result");
                 operation.execute(result, a, b);
-                return result.toAstNode();
+                return result.toAstNode().orElse(node);
             }
         }
 
@@ -135,7 +132,7 @@ public class ConstantExpressionEvaluator {
                 Variable b = DoubleVariable.newNullValue(false, "result");
                 Variable result = DoubleVariable.newNullValue(false, "result");
                 operation.execute(result, a, b);
-                return result.toAstNode();
+                return result.toAstNode().orElse(node);
             }
         }
 
