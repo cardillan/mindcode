@@ -13,7 +13,7 @@ public class ConstantExpressionEvaluator {
     private final Map<String, AstNode> constants = new HashMap<>();
 
     /**
-     * If the node can be compile-time evaluated, returns the evaluation, otherwise returns this.
+     * If the node can be compile-time evaluated, returns the evaluation, otherwise returns {@code this}.
      * The evaluation can be partial, for example when the IfExpression node has constant condition,
      * it can return just the true/false branch (depending on the compile-time value of the condition)
      * even if those branches aren't constant themselves.

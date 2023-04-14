@@ -41,7 +41,9 @@ public class NumericLiteral extends ConstantAstNode {
 
     @Override
     public double getAsDouble() {
-        return literal.startsWith("0x") ? Long.decode(literal) : Double.parseDouble(literal);
+        return literal.startsWith("0x") ? Long.decode(literal) :
+                literal.startsWith("0b") ? Long.parseLong(literal, 2, literal.length(), 2) :
+                Double.parseDouble(literal);
     }
 
     public boolean isInteger() {
