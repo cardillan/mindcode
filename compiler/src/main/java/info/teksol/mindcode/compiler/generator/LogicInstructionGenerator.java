@@ -480,7 +480,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
             case PropertyAccess propertyAccess -> {
                 final String propTarget = visit(propertyAccess.getTarget());
                 String prop = visit(propertyAccess.getProperty());
-                if (prop.startsWith("@")) prop = prop.replaceFirst("@", "");  // TODO (@francois): is it still relevant?
+                if (prop.startsWith("@")) prop = prop.substring(1);
                 if (functionMapper.handleProperty(pipeline, prop, propTarget, List.of(rvalue)) == null) {
                     throw new UndeclaredFunctionException("Don't know how to handle property [" + propTarget + "." + prop + "]");
                 }

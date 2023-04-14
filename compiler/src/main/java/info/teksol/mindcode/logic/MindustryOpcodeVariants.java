@@ -146,7 +146,6 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7, S, OpcodeVariant.FunctionMapping.FUNC, Opcode.UCONTROL,   uctrl("mine"),      in("x"), in("y"));
         add(list, V6, V7, S, OpcodeVariant.FunctionMapping.FUNC, Opcode.UCONTROL,   uctrl("flag"),      in("value"));
         add(list, V6, V7, S, OpcodeVariant.FunctionMapping.FUNC, Opcode.UCONTROL,   uctrl("build"),     in("x"), in("y"), in("block"), in("rotation"), in("config"));
-        // TODO: either handle multiple return values, or provide a better abstraction over getBlock
         add(list, V6, V6, S, OpcodeVariant.FunctionMapping.FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), out("building"));
         add(list, V7, V7, S, OpcodeVariant.FunctionMapping.FUNC, Opcode.UCONTROL,   uctrl("getBlock"),  in("x"), in("y"), out("type"), out("building"), out("floor"));
         add(list, V6, V7, S, OpcodeVariant.FunctionMapping.FUNC, Opcode.UCONTROL,   uctrl("within"),    in("x"), in("y"), in("radius"), res("result"));

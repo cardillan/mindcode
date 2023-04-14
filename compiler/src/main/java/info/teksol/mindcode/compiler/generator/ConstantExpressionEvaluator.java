@@ -56,7 +56,6 @@ public class ConstantExpressionEvaluator {
 
     private AstNode evaluatePartially(BinaryOp node, Variable fixed, AstNode exp) {
         switch (node.getOp()) {
-            // TODO: define standard behavior for these functions (short-circuit boolean eval)
             case "|":
                 // If the fixed value is zero, evaluates to the other node
                 return fixed.getDoubleValue() == 0 ? exp : node;
@@ -68,13 +67,13 @@ public class ConstantExpressionEvaluator {
             case "or":
             case "||":
                 // If the fixed value is zero (= false), evaluates to false
-                // TODO: we could return exp instead of node if exp was a boolean expression
+                // TODO: return exp instead of node if exp is known to be a boolean expression
                 return fixed.getDoubleValue() != 0 ? new BooleanLiteral(true) : node;
 
             case "and":
             case "&&":
                 // If the fixed value is zero (= false), evaluates to false
-                // TODO: we could return exp instead of node if exp was a boolean expression
+                // TODO: return exp instead of node if exp is known to be a boolean expression
                 return fixed.getDoubleValue() == 0 ? new BooleanLiteral(false) : node;
         }
 

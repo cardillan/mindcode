@@ -105,9 +105,9 @@ Mindcode supports the classic decimal notation for integers and floats, includin
 * `1.5e-5`
 * `-6.45e+8`
 
-**Note**: Mindustry itself doesn't recognize numeric literals in scientific notation containing a decimal separator.
-For example, `1.5e-5` is not a valid mlog number. Mindcode accepts these literals and converts them to a notation
-acceptable by mlog, e.g. `15e-6`
+> **Note**: Mindustry itself doesn't recognize numeric literals in scientific notation containing a decimal separator.
+> For example, `1.5e-5` is not a valid mlog number. Mindcode accepts these literals and converts them to a notation
+> supported by mlog, e.g. `15e-6`.
 
 Mindustry also supports hexadecimal and binary representation for integers:
 

@@ -4,26 +4,31 @@ All notable changes to this project will be documented in this file.
 
 ## 2023-04-14
 
-### Fixed
-
-* Fixed creating numeric literals incompatible with mlog during constant expression evaluation (mlog recognizes  
-  decimal point and an exponent, but not both in the same literal; `1.5e-5` is not a valid mlog number).
-
 ### Added
 
-* Support for numeric literals in binary (e.g. `0b00101`).
-* Support for scientific notation of numeric literals. Formats not supported by mlog (e.g. `1.5e-5`) are converted 
-  to a valid representation (in this case, `15e-6`).
+* Added support for using [binary numeric literals](doc/syntax/SYNTAX.markdown#numeric-literals) (e.g. `0b00101`)
+  in Mindcode source.
+* Added support for using [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#numeric-literals) 
+  in Mindcode source. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g. `1.5e-5`)
+  are converted to mlog-compatible representation (in this case, `15e-6`).
+* Added [simple expression optimizer](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization).
+  Current implementation replaces `mul` by a constant or an `idiv`/`div` followed by a `floor`
+  with a single `idiv` instruction.
   
 ### Changed
 
 * Updated project to use Java 17.
 
+### Fixed
+
+* Fixed constant expression evaluation creating numeric literals incompatible with mlog. (Mlog recognizes  
+  decimal point and an exponent, but not both in the same literal; `1.5e-5` is not a valid mlog number.)
+
 ## 2023-04-12
 
 ### Fixed
 
-*  Fixed incorrectly merging instructions across `printflush()` calls ([#91](https://github.com/francois/mindcode/issues/91)).
+*  Fixed optimizer incorrectly merging instructions across `printflush()` calls ([#91](https://github.com/francois/mindcode/issues/91)).
 
 ## 2023-04-08
 

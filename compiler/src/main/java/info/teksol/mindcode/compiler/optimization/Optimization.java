@@ -28,7 +28,11 @@ public enum Optimization {
     OUTPUT_TEMPS_ELIMINATION            ('o', "outputTempElimination",
             OutputTempEliminator::new,
             "eliminates temporary variables created to extract values from instructions"),
-    
+
+    EXPRESSION_OPTIMIZATION             ('x', "expressionOptimization",
+            ExpressionOptimizer::new,
+            "optimizes some common mathematical expressions"),
+
     CASE_EXPRESSION_OPTIMIZATION        ('c', "caseExpressionOptimization",
             CaseExpressionOptimizer::new,
             "eliminates temporary variables created to execute case expressions"),

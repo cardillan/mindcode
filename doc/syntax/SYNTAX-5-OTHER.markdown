@@ -98,6 +98,7 @@ and availability of the aggressive optimization level is:
 | [Single step elimination](#single-step-elimination)             | singleStepElimination       |     N      |
 | [Temporary inputs elimination](#temporary-inputs-elimination)   | inputTempElimination        |     N      |
 | [Temporary outputs elimination](#temporary-outputs-elimination) | outputTempElimination       |     N      |
+| [Expression optimization](#expression-optimization)             | expressionOptimization      |     N      |
 | [Case expression optimization](#case-expression-optimization)   | caseExpressionOptimization  |     N      |
 | [Conditional jump optimization](#conditional-jump-optimization) | conditionalsOptimization    |     N      |
 | [Jump straightening](#jump-straightening)                       | jumpStraightening           |     N      |
@@ -199,6 +200,15 @@ The optimization is performed only when the following conditions are met:
 
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
 are removed by the stack usage optimization down the line.
+
+## Expression optimization
+
+This optimization looks for sequences of mathematical operations that can be performed more efficiently. Currently,
+the following optimizations are available:
+
+* `floor` function called on a multiplication by a constant or a division. Combines the two operations into one
+  integer division (`idiv`) operation. In case of multiplication, the constant operand is inverted to become the 
+  for the divisor in the `idiv` operation.
 
 ## Case expression optimization
 

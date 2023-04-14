@@ -30,7 +30,7 @@ class OutputTempEliminator extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         // Cannot use iterations due to modifications of the underlying list in the loop
-        for (int index  = 1; index < program.size(); index++)  {
+        for (int index = 1; index < program.size(); index++)  {
             if (program.get(index) instanceof SetInstruction ix && isTemporary(ix.getValue())) {
                 String value = ix.getValue();
                 List<LogicInstruction> list = findInstructions(

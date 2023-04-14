@@ -64,7 +64,7 @@ public class CallGraphCreator  {
     }
     
     private void visitNode(AstNode nodeToVisit) {
-        AstNode node = nodeToVisit;     // TODO: constant evaluation
+        AstNode node = nodeToVisit;
         encounteredNodes.add(node);
 
         switch (node) {
