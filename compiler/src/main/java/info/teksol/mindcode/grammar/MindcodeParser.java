@@ -1,17 +1,13 @@
 // Generated from Mindcode.g4 by ANTLR 4.9.1
 package info.teksol.mindcode.grammar;
-
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.atn.ATN;
-import org.antlr.v4.runtime.atn.ATNDeserializer;
-import org.antlr.v4.runtime.atn.ParserATNSimulator;
-import org.antlr.v4.runtime.atn.PredictionContextCache;
+import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-import org.antlr.v4.runtime.tree.ParseTreeVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
-
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.*;
+import org.antlr.v4.runtime.tree.*;
 import java.util.List;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class MindcodeParser extends Parser {
@@ -1055,14 +1051,15 @@ public class MindcodeParser extends Parser {
 	}
 	public static class Binop_andContext extends ExpressionContext {
 		public ExpressionContext left;
+		public Token op;
 		public ExpressionContext right;
-		public TerminalNode AND() { return getToken(MindcodeParser.AND, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
+		public TerminalNode AND() { return getToken(MindcodeParser.AND, 0); }
 		public Binop_andContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1080,14 +1077,15 @@ public class MindcodeParser extends Parser {
 	}
 	public static class Binop_orContext extends ExpressionContext {
 		public ExpressionContext left;
+		public Token op;
 		public ExpressionContext right;
-		public TerminalNode OR() { return getToken(MindcodeParser.OR, 0); }
 		public List<ExpressionContext> expression() {
 			return getRuleContexts(ExpressionContext.class);
 		}
 		public ExpressionContext expression(int i) {
 			return getRuleContext(ExpressionContext.class,i);
 		}
+		public TerminalNode OR() { return getToken(MindcodeParser.OR, 0); }
 		public Binop_orContext(ExpressionContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1574,7 +1572,7 @@ public class MindcodeParser extends Parser {
 						setState(186);
 						if (!(precpred(_ctx, 13))) throw new FailedPredicateException(this, "precpred(_ctx, 13)");
 						setState(187);
-						match(AND);
+						((Binop_andContext)_localctx).op = match(AND);
 						setState(188);
 						((Binop_andContext)_localctx).right = expression(14);
 						}
@@ -1587,7 +1585,7 @@ public class MindcodeParser extends Parser {
 						setState(189);
 						if (!(precpred(_ctx, 12))) throw new FailedPredicateException(this, "precpred(_ctx, 12)");
 						setState(190);
-						match(OR);
+						((Binop_orContext)_localctx).op = match(OR);
 						setState(191);
 						((Binop_orContext)_localctx).right = expression(13);
 						}

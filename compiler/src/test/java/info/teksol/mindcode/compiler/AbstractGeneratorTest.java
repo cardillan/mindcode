@@ -49,8 +49,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
                 terminus, profile, new NullDebugPrinter(), s -> {});
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(CompilerProfile.noOptimizations(),
+                instructionProcessor, FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
         generator.start(program);
         pipeline.flush();
         return terminus.getResult();
@@ -79,8 +79,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     protected void generateInto(LogicInstructionPipeline pipeline, Seq program) {
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(CompilerProfile.noOptimizations(),
+                instructionProcessor, FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
         generator.start(program);
         pipeline.flush();
     }

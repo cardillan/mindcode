@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class BinaryOp extends BaseAstNode {
-    private final AstNode left;
-    private final String op;
-    private final AstNode right;
+    protected final AstNode left;
+    protected final String op;
+    protected final AstNode right;
 
     public BinaryOp(AstNode left, String op, AstNode right) {
         super(left, right);

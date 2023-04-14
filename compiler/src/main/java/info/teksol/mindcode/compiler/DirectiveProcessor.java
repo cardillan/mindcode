@@ -80,12 +80,22 @@ public class DirectiveProcessor {
         profile.setAllOptimizationLevels(optLevel);
     }
 
+
+    private static void setShortCircuitEval(CompilerProfile compilerProfile, String booleanEval) {
+        switch (booleanEval) {
+            case "short"    -> compilerProfile.setShortCircuitEval(true);
+            case "full"     -> compilerProfile.setShortCircuitEval(false);
+            default         ->  throw new InvalidCompilerDirectiveException("Invalid value '" + booleanEval + "' of compiler directive 'booleanEval'");
+        }
+    }
+
     private static final Map<String, BiConsumer<CompilerProfile, String>> OPTION_HANDLERS = createOptionHandlers();
 
     private static Map<String, BiConsumer<CompilerProfile,String>> createOptionHandlers() {
         Map<String,BiConsumer<CompilerProfile,String>> map = new HashMap<>();
         map.put("target", DirectiveProcessor::setTarget);
         map.put("optimization", DirectiveProcessor::setAllOptimizationsLevel);
+        map.put("booleanEval", DirectiveProcessor::setShortCircuitEval);
         for (Optimization opt : Optimization.values()) {
             map.put(opt.getName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
         }

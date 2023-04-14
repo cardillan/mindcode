@@ -179,7 +179,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(
                         new BinaryOp(
-                                new BinaryOp(
+                                new BoolBinaryOp(
                                         new BinaryOp(
                                                 new VarRef("a"),
                                                 "<",

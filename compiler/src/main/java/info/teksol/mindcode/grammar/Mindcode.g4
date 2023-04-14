@@ -35,8 +35,8 @@ expression : directive                                                          
                                 right=expression                                                # binop_inequality_comparison
            | left=expression op=( NOT_EQUAL | EQUAL 
                                 | STRICT_NOT_EQUAL | STRICT_EQUAL ) right=expression            # binop_equality_comparison
-           | left=expression AND right=expression                                               # binop_and
-           | left=expression OR right=expression                                                # binop_or
+           | left=expression op=AND right=expression                                            # binop_and
+           | left=expression op=OR right=expression                                             # binop_or
            | <assoc=right> cond=expression QUESTION_MARK
                                 (true_branch=expression COLON false_branch=expression)          # ternary_op
            | assign                                                                             # assignment

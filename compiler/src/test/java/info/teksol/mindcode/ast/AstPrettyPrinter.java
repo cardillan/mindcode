@@ -196,6 +196,11 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitBoolBinaryOp(BoolBinaryOp node) {
+        return visitBinaryOp(node);
+    }
+
+    @Override
     public String visitSeq(Seq seq) {
         visit(seq.getRest());
         buffer.append("\n");

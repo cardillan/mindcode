@@ -1088,7 +1088,8 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void correctlyHandlesBitwiseOpPriority() {
-        assertLogicInstructionsMatch(List.of(
+        assertLogicInstructionsMatch(
+                List.of(
                         createInstruction(OP, "and", var(0), "c", "d"),
                         createInstruction(OP, "or", "a", "b", var(0)),
                         createInstruction(OP, "not", var(1), "f"),

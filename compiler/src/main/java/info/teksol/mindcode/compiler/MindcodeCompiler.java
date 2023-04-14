@@ -90,7 +90,7 @@ public class MindcodeCompiler implements Compiler {
 
     private List<LogicInstruction> generateCode(Seq program) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        final LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+        final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
                 FunctionMapperFactory.getFunctionMapper(instructionProcessor, messages::add), terminus);
         generator.start(program);
         terminus.flush();

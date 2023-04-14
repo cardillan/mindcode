@@ -13,6 +13,7 @@ public class CompilerProfile {
     private final Map<Optimization, OptimizationLevel> levels;
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
+    private boolean shortCircuitEval = false;
     private boolean printFinalCode = false;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
@@ -70,6 +71,14 @@ public class CompilerProfile {
 
     public boolean optimizationsActive() {
         return levels.values().stream().anyMatch(l -> l != OptimizationLevel.OFF);
+    }
+
+    public boolean isShortCircuitEval() {
+        return shortCircuitEval;
+    }
+
+    public void setShortCircuitEval(boolean shortCircuitEval) {
+        this.shortCircuitEval = shortCircuitEval;
     }
 
     public boolean isPrintFinalCode() {

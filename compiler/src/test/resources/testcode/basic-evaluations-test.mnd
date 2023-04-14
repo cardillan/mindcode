@@ -87,6 +87,6 @@ a = 3; eval(a &= 2,      2, "&=")
 a = 3; eval(a ^= 2,      1, "^=")
 a = 1; eval(a &&= 0, false, "&&=")
 a = 1; eval(a &&= 2,  true, "&&=")
-a = 0; eval(a ||= 2,     2, "||=")
+a = 0; eval(a ||= 2,  true, "||=")
 
 // TODO: add angle, len, trig functions. Rand??

@@ -39,7 +39,7 @@ class SamplesTest {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
                 terminus, profile, new NullDebugPrinter(), s -> {});
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(instructionProcessor,
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
                 FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
         generator.start(program);
         pipeline.flush();

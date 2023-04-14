@@ -5,6 +5,7 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
     public T visit(AstNode node) {
         return switch(node) {
             case Assignment n           -> visitAssignment(n);
+            case BoolBinaryOp n         -> visitBoolBinaryOp(n);
             case BinaryOp n             -> visitBinaryOp(n);
             case BooleanLiteral n       -> visitBooleanLiteral(n);
             case BreakStatement n       -> visitBreakStatement(n);

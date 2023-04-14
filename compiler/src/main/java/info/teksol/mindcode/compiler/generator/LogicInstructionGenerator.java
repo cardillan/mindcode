@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.*;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
@@ -24,6 +25,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private static final String RETURN_ADDRESS = "retaddr";
     private static final String RETURN_VALUE = "retval";
 
+    private final CompilerProfile profile;
     // The version-dependent functionality is encapsulated in InstructionProcessor and FunctionMapper.
     // If future Mindustry versions offer more capabilities (such as native stack support),
     // even LogicInstructionGenerator might be made version dependent.
@@ -64,15 +66,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     private String localPrefix = "";
 
     private int heapBaseAddress = 0;
+    
     private int heapSize = 0;
 
     private int markerIndex = 0;
 
-    public LogicInstructionGenerator(InstructionProcessor instructionProcessor, FunctionMapper functionMapper,
-            LogicInstructionPipeline pipeline) {
+    public LogicInstructionGenerator(CompilerProfile profile, InstructionProcessor instructionProcessor,
+                                     FunctionMapper functionMapper, LogicInstructionPipeline pipeline) {
         this.instructionProcessor = instructionProcessor;
         this.functionMapper = functionMapper;
         this.pipeline = pipeline;
+        this.profile = profile;
     }
 
     public void start(Seq program) {
@@ -394,24 +398,42 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitIfExpression(IfExpression node) {
-        final String cond = nodeContext.encapsulate(() -> visit(node.getCondition()));
+        if (profile.isShortCircuitEval() && node.getCondition() instanceof BoolBinaryOp boolNode) {
+            final String tmp = nextNodeResult();
+            final String shortCircuitLabel = nextLabel();
+            final String finishLabel = nextLabel();
+            final boolean naturalOrder = nodeContext.encapsulate(() -> processBoolBinaryOp(boolNode, shortCircuitLabel));
 
-        final String tmp = nextNodeResult();
-        final String elseBranch = nextLabel();
-        final String endBranch = nextLabel();
+            final String firstBranch = visit(naturalOrder ? node.getTrueBranch() : node.getFalseBranch());
+            emitInstruction(SET, tmp, firstBranch);
+            emitInstruction(JUMP, finishLabel, "always");
 
-        emitInstruction(JUMP, elseBranch, "equal", cond, "false");
+            emitInstruction(LABEL, shortCircuitLabel);
+            final String secondBranch = visit(naturalOrder ? node.getFalseBranch() : node.getTrueBranch());
+            emitInstruction(SET, tmp, secondBranch);
+            emitInstruction(LABEL, finishLabel);
 
-        final String trueBranch = visit(node.getTrueBranch());
-        emitInstruction(SET, tmp, trueBranch);
-        emitInstruction(JUMP, endBranch, "always");
+            return tmp;
+        } else {
+            final String cond = nodeContext.encapsulate(() -> visit(node.getCondition()));
 
-        emitInstruction(LABEL, elseBranch);
-        final String falseBranch = visit(node.getFalseBranch());
-        emitInstruction(SET, tmp, falseBranch);
-        emitInstruction(LABEL, endBranch);
+            final String tmp = nextNodeResult();
+            final String elseBranch = nextLabel();
+            final String endBranch = nextLabel();
 
-        return tmp;
+            emitInstruction(JUMP, elseBranch, "equal", cond, "false");
+
+            final String trueBranch = visit(node.getTrueBranch());
+            emitInstruction(SET, tmp, trueBranch);
+            emitInstruction(JUMP, endBranch, "always");
+
+            emitInstruction(LABEL, elseBranch);
+            final String falseBranch = visit(node.getFalseBranch());
+            emitInstruction(SET, tmp, falseBranch);
+            emitInstruction(LABEL, endBranch);
+
+            return tmp;
+        }
     }
 
     @Override
@@ -575,10 +597,50 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitBoolBinaryOp(BoolBinaryOp node) {
+        if (!profile.isShortCircuitEval()) {
+            return visitBinaryOp(node);
+        }
+
+        final String shortCircuitLabel = nextLabel();
+        final String finishLabel = nextLabel();
+        final String tmp = nextNodeResult();
+
+        final boolean naturalOrder = processBoolBinaryOp(node, shortCircuitLabel);
+
+        emitInstruction(SET,tmp, naturalOrder ? "true" : "false");
+        emitInstruction(JUMP, finishLabel, "always");
+        emitInstruction(LABEL, shortCircuitLabel);
+        emitInstruction(SET, tmp, naturalOrder ? "false" : "true");
+        emitInstruction(LABEL, finishLabel);
+        return tmp;
+    }
+
+    /**
+     *
+     * @param node node to evaluate
+     * @param shortCircuitLabel label to use for when short-circuit is possible
+     * @return true to emin true branch first, false to emit false branch first
+     */
+    private boolean processBoolBinaryOp(BoolBinaryOp node, String shortCircuitLabel) {
+        final boolean logicalAnd = switch (node.getOp()) {
+            case "and" -> true;
+            case "or" -> false;
+            default -> throw new GenerationException("Unhandled BoolBinaryOp operation in " + node);
+        };
+        final String comparison = logicalAnd ? "equal" : "notEqual";
+
+        final String left = visit(node.getLeft());
+        emitInstruction(JUMP, shortCircuitLabel, comparison, left, "false");
+        final String right = visit(node.getRight());
+        emitInstruction(JUMP, shortCircuitLabel, comparison, right, "false");
+        return logicalAnd;
+    }
+
+    @Override
     public String visitBinaryOp(BinaryOp node) {
         final String left = visit(node.getLeft());
         final String right = visit(node.getRight());
-
         final String tmp = nextNodeResult();
         emitInstruction(OP, translateOpToCode(node.getOp()), tmp, left, right);
         return tmp;

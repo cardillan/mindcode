@@ -220,6 +220,16 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitBoolBinaryOp(BoolBinaryOp node) {
+        open("BoolBinaryOp{");
+        print("left="); visit(node.getLeft()); newLine(",");
+        print("op="); visit(node.getOp()); newLine(",");
+        print("right="); visit(node.getRight());
+        close("}");
+        return null;
+    }
+
+    @Override
     public String visitSeq(Seq node) {
         if (node.getRest() instanceof NoOp) {
             print("Seq{rest="); visit(node.getRest()); print(", last="); visit(node.getLast()); print("}");

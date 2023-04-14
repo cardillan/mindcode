@@ -151,20 +151,16 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     @Override
     public AstNode visitBinop_and(MindcodeParser.Binop_andContext ctx) {
-        return new BinaryOp(
-                visit(ctx.left),
-                "and",
-                visit(ctx.right)
-        );
+        return ctx.op.getText().equals("and")
+                ? new BoolBinaryOp(visit(ctx.left), "and", visit(ctx.right))
+                : new BinaryOp(visit(ctx.left), "and", visit(ctx.right));
     }
 
     @Override
     public AstNode visitBinop_or(MindcodeParser.Binop_orContext ctx) {
-        return new BinaryOp(
-                visit(ctx.left),
-                "or",
-                visit(ctx.right)
-        );
+        return ctx.op.getText().equals("or")
+                ? new BoolBinaryOp(visit(ctx.left), "or", visit(ctx.right))
+                : new BinaryOp(visit(ctx.left), "or", visit(ctx.right));
     }
 
     @Override
