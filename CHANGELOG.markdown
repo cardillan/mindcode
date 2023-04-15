@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+* [`ubind` function](/doc/syntax/FUNCTIONS_V7.markdown#instruction-ubind) now returns the freshly bound unit. 
+
+### Fixed
+
+* Fixed constant expression evaluation crashing on binary numeric literals.
+
 ## 2023-04-14
 
 ### Added

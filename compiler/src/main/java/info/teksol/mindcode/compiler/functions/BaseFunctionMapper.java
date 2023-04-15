@@ -405,7 +405,8 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         // Handle special cases
         switch(opcode) {
-            case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcodeVariant, 1);
+            case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcodeVariant);
+            case UBIND:     return new UbindFunctionHandler(opcode.toString(), opcodeVariant);
         }
 
         List<NamedArgument> arguments = opcodeVariant.getArguments();
@@ -652,8 +653,8 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     // Handles the print function
     private class PrintFunctionHandler extends AbstractFunctionHandler {
-        PrintFunctionHandler(String name, OpcodeVariant opcodeVariant, int numArgs) {
-            super(name, opcodeVariant, numArgs);
+        PrintFunctionHandler(String name, OpcodeVariant opcodeVariant) {
+            super(name, opcodeVariant, 1);
         }
 
         @Override
@@ -668,6 +669,24 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
     }
     
+    private class UbindFunctionHandler extends AbstractFunctionHandler {
+        UbindFunctionHandler(String name, OpcodeVariant opcodeVariant) {
+            super(name, opcodeVariant, 1);
+        }
+
+        @Override
+        public String handleFunction(LogicInstructionPipeline pipeline, List<String> params) {
+            checkArguments(params);
+            pipeline.emit(createInstruction(Opcode.UBIND, params.get(0)));
+            return "@unit";
+        }
+
+        @Override
+        public String generateSampleCall() {
+            return "unit = " + getName() + "(" + joinNamedArguments(getOpcodeVariant().getArguments()) + ")";
+        }
+    }
+
     private Map<String, BuiltInFunctionHandler> createBuiltInFunctionMap() {
         Map<String, BuiltInFunctionHandler> map = new HashMap<>();
         map.put("println", this::handlePrintlnFunction);
