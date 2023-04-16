@@ -19,7 +19,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
-    private InstructionProcessor instructionProcessor =
+    protected InstructionProcessor instructionProcessor =
             InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
 
     protected final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();

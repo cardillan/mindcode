@@ -264,9 +264,8 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(0), "2"),
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(OP, "lessThan", var(1), "1", var(0)),
+                        createInstruction(OP, "lessThan", var(1), "1", "2"),
                         createInstruction(PRINT, var(1)),
                         createInstruction(PRINTFLUSH, "message1"),
                         createInstruction(END)

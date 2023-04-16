@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * considered) and the variable is not read in the code block, it is removed from the stack.
  * </li></ul>
  */
-public class StackUsageOptimizer extends GlobalOptimizer {
+public class StackUsageOptimizer extends BaseFunctionOptimizer {
 
     StackUsageOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);
@@ -86,27 +86,4 @@ public class StackUsageOptimizer extends GlobalOptimizer {
         }
     }
 
-    private boolean isLinear(List<LogicInstruction> codeBlock) {
-        Set<String> localLabels = codeBlock.stream()
-                .filter(ix -> ix instanceof LabelInstruction)
-                .map(ix -> ((LabelInstruction) ix).getLabel())
-                .collect(Collectors.toSet());
-
-        // Code is linear if every jump targets a local label
-        return codeBlock.stream()
-                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
-                .flatMap(this::getPossibleTargetLabels)
-                .allMatch(localLabels::contains);
-    }
-
-    private Stream<String> getPossibleTargetLabels(LogicInstruction instruction) {
-        return switch (instruction) {
-            case JumpInstruction ix -> Stream.of(ix.getTarget());
-            case GotoInstruction ix -> program.stream()
-                    .filter(in -> in instanceof LabelInstruction && in.matchesMarker(ix.getMarker()))
-                    .map(in -> (LabelInstruction) in)
-                    .map(LabelInstruction::getLabel);
-            default -> Stream.empty();
-        };
-    }
 }

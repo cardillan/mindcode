@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+* Added [return value optimizer](doc/syntax/SYNTAX-5-OTHER.markdown#return-value-optimization). Improves processing 
+  return values from function calls. 
+* Added [section about using units](doc/syntax/SYNTAX-6-TIPS-N-TRICKS.markdown#using-units) to Mindustry Tips 
+  and Tricks.
+
 ### Changed
 
 * [`ubind` function](/doc/syntax/FUNCTIONS_V7.markdown#instruction-ubind) now returns the freshly bound unit. 

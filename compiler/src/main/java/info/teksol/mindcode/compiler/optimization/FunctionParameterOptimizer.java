@@ -1,14 +1,11 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.TypedArgument;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +32,7 @@ import java.util.stream.Collectors;
  * </ul>
  * Functions are located in the code using the entry and exit labels marked with function prefix.
  */
-class FunctionParameterOptimizer extends GlobalOptimizer {
+class FunctionParameterOptimizer extends BaseFunctionOptimizer {
     public FunctionParameterOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);
     }
@@ -43,13 +40,7 @@ class FunctionParameterOptimizer extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         // Find all functions (includes inline ones)
-        List<String> prefixes = program.stream()
-                .filter(ix -> ix instanceof LabelInstruction)
-                .map(LogicInstruction::getMarker)
-                .filter(Objects::nonNull)
-                .filter(s -> s.startsWith(instructionProcessor.getLocalPrefix()))
-                .distinct()
-                .collect(Collectors.toList());
+        List<String> prefixes = getFunctions();
 
         prefixes.forEach(this::optimizeFunction);
 
@@ -87,47 +78,5 @@ class FunctionParameterOptimizer extends GlobalOptimizer {
         // Stackless functions are called via set @counter __label
         // TODO: replace with special CALL instruction
         return instr instanceof CallInstruction || (instr instanceof SetInstruction ix && ix.getResult().equals("@counter"));
-    }
-
-    /**
-     * Eliminates given instruction and replaces all occurrences of target variable with the assigned value.
-     *
-     * @param functionPrefix function to be modified
-     * @param ix instruction to eliminate
-     */
-    private void eliminateInstruction(String functionPrefix, SetInstruction ix) {
-        String oldArg = ix.getResult();
-        String newArg = ix.getValue();
-        removeInstruction(ix);
-
-        // The function needs to be collected again, as it could have been modified by previous replacement
-        List<LogicInstruction> function = getFunctionInstructions(functionPrefix);
-
-        for (LogicInstruction current : function) {
-            if (current.getArgs().contains(oldArg)) {
-                replaceInstruction(current, replaceAllArgs(current, oldArg, newArg));
-            }
-        }
-    }
-
-    /**
-     * Creates an independent list (not a sublist of the main program) of instructions belonging to given function.
-     * 
-     * @param functionPrefix prefix assigned to the function realization
-     * @return list of instructions belonging to the function
-     */
-    private List<LogicInstruction> getFunctionInstructions(String functionPrefix) {
-        // Find start and end labels
-        int[] bounds = program.stream()
-                .filter(ix -> ix instanceof LabelInstruction)
-                .filter(ix -> ix.matchesMarker(functionPrefix))
-                .mapToInt(ix -> findInstructionIndex(0, z -> z == ix))
-                .toArray();
-
-        if (bounds.length != 2) {
-            return List.of();
-        } else {
-            return List.copyOf(program.subList(bounds[0], bounds[1]));
-        }
     }
 }

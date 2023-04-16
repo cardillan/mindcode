@@ -62,6 +62,10 @@ public enum Optimization {
             FunctionParameterOptimizer::new,
             "optimizes passing arguments to functions"),
 
+    RETURN_VALUE_OPTIMIZATION           ('r', "returnValueOptimization",
+            ReturnValueOptimizer::new,
+            "optimizes passing return values from functions"),
+
     PRINT_TEXT_MERGING                  ('p', "printMerging",
             PrintMerger::new,
             "merges consecutive print statements outputting text literals"),

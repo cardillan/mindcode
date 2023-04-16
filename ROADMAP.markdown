@@ -4,7 +4,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## In progress
 
-Things being actively worked on.
+Larger changes being actively worked on.
 
  * [Schematics-creation tool](https://github.com/francois/mindcode/issues/90) 
 
@@ -39,6 +39,7 @@ Things being pondered on from time to time.
 
 ### Code generation
 
+* Determine effective variable types to assist with optimizations (globally at first).
 * Temporary variable merging: after all optimizations, all temporary variables will be inspected for scope and
   variables with non-overlapping scopes will be merged into one, and renumbered starting from 0. Fewer temporary
   variables will make inspecting variables inside processors in Mindustry way easier.
@@ -58,7 +59,6 @@ Things being pondered on from time to time.
     Most of the time smaller is also faster in Mindustry Logic, but there might be a few exceptions.
 * Optimization improvements
   * Multiple-use temporary variables optimization - typically as a result of ternary operator or case expression.
-  * Determine effective variable types to assist with optimizations.
   * Boolean expressions:
     * and/or expression improvements: encode `a and not b` as `a > b`, `a or not b` as `a >= b` (requires the 
       previous optimization),
@@ -85,6 +85,10 @@ Things being pondered on from time to time.
 
 ### Other
 
+* LogicInstruction improvements: compiled instructions store all arguments as strings. Optimizers needs to know 
+  sometimes whether an argument is a numeric literal, a local variable, a global variable or a Mindustry object. 
+  Arguments are unnecessarily repeatedly analyzed to obtain this information, which was already known when the 
+  instruction was generated in the first place. Possibly use ints for arguments like Mindustry does.
 * Assimilator: tool to automatically acquire definitions of blocks, units, items, liquids, properties etc. 
   directly from Mindustry sources. Would certainly need supervision, but might help keep Mindcode up to spec with 
   latest Mindustry.

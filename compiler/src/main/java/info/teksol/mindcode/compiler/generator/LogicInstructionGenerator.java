@@ -22,8 +22,8 @@ import static info.teksol.mindcode.logic.Opcode.*;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<String> {
-    private static final String RETURN_ADDRESS = "retaddr";
-    private static final String RETURN_VALUE = "retval";
+    public static final String RETURN_ADDRESS = "retaddr";
+    public static final String RETURN_VALUE = "retval";
 
     private final CompilerProfile profile;
     // The version-dependent functionality is encapsulated in InstructionProcessor and FunctionMapper.
