@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 * Fixed constant expression evaluation crashing on binary numeric literals.
+* Fixed function call optimization not processing numeric literal arguments in some cases.
 
 ## 2023-04-14
 

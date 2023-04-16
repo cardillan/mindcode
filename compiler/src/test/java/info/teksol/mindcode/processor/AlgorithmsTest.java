@@ -22,6 +22,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         );
     }
 
+    @Test
     void computesRecursiveFibonacci() {
         testCode("""
                         allocate stack in bank1[0...512]

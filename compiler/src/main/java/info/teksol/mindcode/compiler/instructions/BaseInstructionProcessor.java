@@ -391,7 +391,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public boolean isGlobalName(String identifier) {
-        return identifier.equals(identifier.toUpperCase());
+        char ch = identifier.charAt(0);
+        // If it doesn't start with one of those characters, it isn't an identifier
+        return (ch == '_' || ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')
+                && identifier.equals(identifier.toUpperCase());
     }
 
     private static final Map<String, String> INVERSES = Map.of(

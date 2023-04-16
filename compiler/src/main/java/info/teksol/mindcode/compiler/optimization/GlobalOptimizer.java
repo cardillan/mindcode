@@ -88,7 +88,7 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     
     // Return list of instructions matching predicate
     protected List<LogicInstruction> findInstructions(Predicate<LogicInstruction> matcher) {
-        return program.stream().filter(matcher).collect(Collectors.toList());
+        return program.stream().filter(matcher).toList();
     }
 
     // Return the number of instructions matching predicate

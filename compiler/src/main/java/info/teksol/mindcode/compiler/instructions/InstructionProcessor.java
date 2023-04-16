@@ -266,8 +266,7 @@ public interface InstructionProcessor {
     boolean isBlockName(String identifier);
 
     /**
-     * Determines whether the identifier denotes a main (global) variable. Such identifiers are either all-caps
-     * identifiers, or possible block names.
+     * Determines whether the string is an identifier denoting a main (global) variable.
      *
      * @param identifier identifier to check
      * @return true if the identifier denotes a main variable
