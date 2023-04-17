@@ -69,7 +69,7 @@ class FunctionParameterOptimizer extends BaseFunctionOptimizer {
                 .filter(ix -> !modifications.containsKey(ix.getValue()))                            // precondition 3
                 .filter(ix -> !instructionProcessor.isVolatile(ix.getValue()))                      // precondition 3
                 .filter(ix -> !hasCalls || !instructionProcessor.isGlobalName(ix.getValue()))       // precondition 4
-                .collect(Collectors.toList());
+                .toList();
 
         eliminations.forEach(ix -> eliminateInstruction(functionPrefix, ix));
     }

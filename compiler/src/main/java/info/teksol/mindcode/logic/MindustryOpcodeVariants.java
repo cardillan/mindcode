@@ -19,7 +19,7 @@ public class MindustryOpcodeVariants {
     public static List<OpcodeVariant> getSpecificOpcodeVariants(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
         return data.variants.stream()
                 .filter(o -> o.isAvailableIn(processorVersion, processorEdition))
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     ///////////////////////////////////////////////////////////////

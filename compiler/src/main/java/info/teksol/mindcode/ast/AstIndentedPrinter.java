@@ -183,6 +183,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitNumericValue(NumericValue node) {
+        print(node);
+        return null;
+    }
+
+    @Override
     public String visitNullLiteral(NullLiteral node) {
         print(node);
         return null;

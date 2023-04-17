@@ -45,6 +45,8 @@ public interface AstVisitor<T> {
 
     T visitNumericLiteral(NumericLiteral node);
 
+    T visitNumericValue(NumericValue node);
+
     T visitPropertyAccess(PropertyAccess node);
 
     T visitRange(Range node);

@@ -621,7 +621,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         return new FunctionDeclaration(
                 ctx.fundecl().inline != null,
                 ctx.fundecl().name.getText(),
-                params.stream().map(a -> (VarRef)a).collect(Collectors.toUnmodifiableList()),
+                params.stream().map(a -> (VarRef)a).toList(),
                 visit(ctx.fundecl().body)
         );
     }

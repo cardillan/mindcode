@@ -4,6 +4,7 @@ import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.logic.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -272,6 +273,18 @@ public interface InstructionProcessor {
      * @return true if the identifier denotes a main variable
      */
     boolean isGlobalName(String identifier);
+
+    /**
+     * Rewrites the literal to conform to mlog limitations. If such a conversion isn't possible, an empty optional
+     * is returned.
+     *
+     * @param literal the literal to process
+     * @return Optional containing mlog compatible literal, or nothing if mlog compatible equivalent doesn't exist
+     */
+    Optional<String> mlogRewrite(String literal);
+
+    Optional<String> mlogFormat(double value);
+
 
     default String getLabelPrefix() {
         return "__label";

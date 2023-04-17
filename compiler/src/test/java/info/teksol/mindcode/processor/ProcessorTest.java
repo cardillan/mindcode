@@ -16,9 +16,19 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void printsNumbersStringsObjects() {
         testCode("""
-                            print("Hello", 10, 5.5, bank1, null, true, false)
+                        print("Hello", 10, 5.5, bank1, null, true, false)
                         """,
                 "Hello", "10", "5.5", "bank", "null", "1", "0"
+        );
+    }
+
+    @Test
+    void computesPackColor() {
+        testCode("""
+                        c = packcolor(1.0, 1.0, 1.0, 1.0)
+                        print(c)
+                        """,
+                "0"
         );
     }
 
@@ -116,12 +126,12 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void executesIteratedForLoopBreakContinue() {
         testCode("""
-                        allocate stack in bank1[0...512] 
-                        def d(n) n > 0 ? -d(-n) : n end 
-                        for i = 0, j = 10; d(i) <= d(j); i += 2, j += 1 
-                            if d(i) == 4 continue end 
-                            print(i, j) 
-                            if d(i) == 10 break end 
+                        allocate stack in bank1[0...512]
+                        def d(n) n > 0 ? -d(-n) : n end
+                        for i = 0, j = 10; d(i) <= d(j); i += 2, j += 1
+                            if d(i) == 4 continue end
+                            print(i, j)
+                            if d(i) == 10 break end
                         end
                         """,
                 "0", "10", "2", "11", "6", "13", "8", "14", "10", "15"
@@ -131,18 +141,18 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void executesComplexCaseExpressions() {
         testCode("""
-                        allocate stack in bank1[0...512] 
-                        def d(n) n > 0 ? -d(-n) : n end 
-                        for i in d(1) .. d(10) 
-                            str = case i 
-                                when d(1) then "A" 
-                                when d(2), d(3), 4 then "B" 
-                                when 5 then continue 
-                                when d(6) .. d(8) then "C" 
-                                when 10 then break 
-                                else "D" 
-                            end 
-                            print(str) 
+                        allocate stack in bank1[0...512]
+                        def d(n) n > 0 ? -d(-n) : n end
+                        for i in d(1) .. d(10)
+                            str = case i
+                                when d(1) then "A"
+                                when d(2), d(3), 4 then "B"
+                                when 5 then continue
+                                when d(6) .. d(8) then "C"
+                                when 10 then break
+                                else "D"
+                            end
+                            print(str)
                         end
                         """,
                 "A", "B", "B", "B", "C", "C", "C", "D"

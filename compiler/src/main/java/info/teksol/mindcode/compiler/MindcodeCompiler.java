@@ -41,7 +41,7 @@ public class MindcodeCompiler implements Compiler {
             printParseTree(prog);
 
             DirectiveProcessor.processDirectives(prog, profile);
-            instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(profile);
+            instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messages::add, profile);
 
             List<LogicInstruction> result = generateCode(prog);
 

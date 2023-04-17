@@ -29,5 +29,5 @@ public interface Variable {
 
     void setBooleanValue(boolean value);
 
-    Optional<AstNode> toAstNode();
+    AstNode toAstNode();
 }

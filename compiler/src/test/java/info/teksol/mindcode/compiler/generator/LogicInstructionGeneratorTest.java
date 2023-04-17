@@ -1415,7 +1415,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(SET, "f", "-2"),
                         createInstruction(SET, "g", "true"),
                         createInstruction(SET, "h", "-5"),
-                        createInstruction(SET, "i", "1E-4"),
+                        createInstruction(SET, "i", "0.0001"),
                         createInstruction(END)
                 ),
                 generateUnoptimized(

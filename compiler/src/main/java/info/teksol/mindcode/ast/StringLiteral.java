@@ -1,5 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+
 import java.util.Objects;
 
 public class StringLiteral extends ConstantAstNode {
@@ -14,7 +16,7 @@ public class StringLiteral extends ConstantAstNode {
     }
 
     @Override
-    public String getLiteral() {
+    public String getLiteral(InstructionProcessor instructionProcessor) {
         return "\"" + getText().replaceAll("\"", "'") + "\"";
     }
 

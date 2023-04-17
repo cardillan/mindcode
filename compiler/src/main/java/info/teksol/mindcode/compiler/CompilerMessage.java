@@ -52,4 +52,12 @@ public class CompilerMessage {
     public static CompilerMessage debug(String message) {
         return new CompilerMessage(MessageLevel.DEBUG, message);
     }
+
+    @Override
+    public String toString() {
+        return "CompilerMessage{" +
+                "level=" + level +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

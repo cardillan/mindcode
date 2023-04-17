@@ -1,6 +1,7 @@
 # Expressions
 
 Most expressions utilize some operators described below. Other important types of expressions are
+
 * `if` expressions,
 * `case` expressions,
 * function calls.
@@ -17,11 +18,11 @@ divide, then add and subtract. Add to this operator `\`, which stands for intege
 3 \ 2 // returns 1
 ```
 
-Most of the operators map directly to Mindustry Logic ones, but several are Mindcode-specific enhancements.
-These enhancements include boolean negation (`!` and `not`) operators, unary minus (`-`), the strict inequality (`!==`) operator,
-or compound assignment operators.
+Almost every operator maps directly to Mindustry Logic ones, but several are Mindcode-specific enhancements. These 
+enhancements include boolean negation (`!` and `not`) operators, unary minus (`-`), the strict inequality (`!==`) 
+operator, or compound assignment operators.
 
-The full list of operators in the order of precedence is as follows:
+The full list of Mindcode operators in the order of precedence is as follows:
 
 1. `!`, `not`: boolean negation,  `~`: binary negation
 2. `**`: exponentiation (`2**4` is `2 * 2 * 2 * 2`, or 16)
@@ -136,37 +137,59 @@ printflush(message1)
 
 # String expressions (unsupported)
 
-Mindustry Logic doesn't allow to evaluate string expressions.
-Practically the only thing that can be done with strings is printing them and comparing them for equality.
-Concatenating strings or using any of the `<`, `<=`, `>` or `>=` operators doesn't work as expected.
-`"a" + "b"` yields `2`, for example, and `"a" < "b"` gives `false`.
+Mindustry Logic doesn't allow to evaluate string expressions. Practically the only thing that can be done with 
+strings is printing them and comparing them for equality. Concatenating strings or using any of the `<`, `<=`, `>` 
+or `>=` operators doesn't work as expected. `"a" + "b"` yields `2`, for example, and `"a" < "b"` gives `false`.
 The only thing Logic does correctly with them is comparing them for equality, as seen above.
 
 # Expressions without valid evaluation
 
-When an expression cannot be mathematically evaluated (e.g. `1 / 0`, `sqrt(-1)`, `log(0)`, ...),
-the resulting value of the expression is `null`. Additionally, `null` values are treated as zero (`0`).
-Therefore, `15 + 6 / 0` evaluates to `15`.
+When an expression cannot be mathematically evaluated (e.g. `1 / 0`, `sqrt(-1)`, `log(0)`, ...), the resulting value 
+of the expression is `null`. Additionally, `null` values are treated as zero (`0`). Therefore, `15 + 6 / 0` 
+evaluates to `15`.
 
-Objects used in numerical expressions always have a value of `1`. `n = @unit * 10` will therefore
-assign `10` to `n` if a unit is bound, `0` otherwise.
+Objects used in numerical expressions always have a value of `1`. `n = @unit * 10` will therefore assign `10` to `n` 
+if a unit is bound, `0` otherwise.
 
 # Constant expressions
 
-Expressions or parts of expressions that are constant are evaluated at compile time.
-For example, `print(60 / 1000)` compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime.
+Expressions or parts of expressions that are constant are evaluated at compile time. For example, `print(60 / 1000)` 
+compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime.
 
-Most of Mindcode operators and deterministic built-in functions can be used in constant expressions.
-Not every possible evaluation is done at the moment, for example `print(ticks * 60 / 1000)` compiles to
+Most of Mindcode operators and deterministic built-in functions can be used in constant expressions. Not every 
+possible evaluation is done at the moment, for example `print(ticks * 60 / 1000)` compiles to
 
 ```
 op mul __tmp1 ticks 60
 op div __tmp3 __tmp1 1000
 print __tmp3
 ```
-even though the `60 / 1000` could be evaluated at compile time.
-You can use parenthesis around constant expressions to isolate them,
-helping compile-time evaluation, e.g. `print(ticks * (60 / 1000))`.
+even though the `60 / 1000` could be evaluated at compile time. You can use parenthesis around constant expressions 
+to isolate them, helping compile-time evaluation, e.g. `print(ticks * (60 / 1000))`.
+
+If the result of a constant expression is a value which
+[cannot be encoded into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), the expression isn't 
+evaluated at compile time, but rather computed at runtime. Expressions are evaluated to the maximum extent possible,
+and it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
+
+```mindcode
+print(10 ** 50)             // Cannot be evaluated
+print(10 ** (2 * 25))       // Multiplication can be evaluated, exponentiation cannot
+print(sqrt(10 ** 50))       // Can be evaluated even though 10 ** 50 cannot
+```
+
+produces
+
+```mlog
+op pow __tmp0 10 50
+print __tmp0
+op pow __tmp1 10 50
+print __tmp1
+print 1E25
+end
+```
+
+If the value of the constant expression can be only encoded to mlog with loss of precision, a warning is issued.
 
 # Range expressions
 

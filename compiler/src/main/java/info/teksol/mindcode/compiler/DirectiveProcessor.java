@@ -33,7 +33,6 @@ public class DirectiveProcessor {
         } else {
             node.getChildren().forEach(this::visitNode);
         }
-        ;
     }
 
     private void processDirective(Directive node) {

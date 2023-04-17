@@ -4,6 +4,7 @@ import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.ast.NumericLiteral;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.processor.ExpressionEvaluator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -82,7 +83,7 @@ public class ExpressionOptimizer extends GlobalOptimizer {
     private Tuple2<String, String> invertMultiplicand(String variable, String literal) {
         try {
             double multiplicand = Double.parseDouble(literal);
-            Optional<String> divisor = NumericLiteral.mlogRewrite(String.valueOf(1.0 / multiplicand));
+            Optional<String> divisor = instructionProcessor.mlogRewrite(String.valueOf(1.0 / multiplicand));
             return divisor.map(lit -> new Tuple2<>(variable, lit)).orElse(null);
         } catch (NumberFormatException ex) {
             // Couldn't parse divisor. Do nothing.

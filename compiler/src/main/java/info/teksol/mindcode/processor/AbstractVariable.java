@@ -86,13 +86,13 @@ public abstract class AbstractVariable implements Variable {
     }
 
     @Override
-    public Optional<AstNode> toAstNode() {
+    public AstNode toAstNode() {
         switch (getType()) {
-            case NULL:      return Optional.of(new NullLiteral());
-            case BOOLEAN:   return Optional.of(new BooleanLiteral(getIntValue() != 0));
-            case LONG:      return Optional.of(new NumericLiteral(String.valueOf(getLongValue())));
-            case DOUBLE:    return NumericLiteral.mlogRewrite(String.valueOf(getDoubleValue())).map(NumericLiteral::new);
-            case OBJECT:    return Optional.of(new StringLiteral(String.valueOf(object)));
+            case NULL:      return new NullLiteral();
+            case BOOLEAN:   return new BooleanLiteral(getIntValue() != 0);
+            case LONG:      return new NumericLiteral(String.valueOf(getLongValue()));
+            case DOUBLE:    return new NumericValue(getDoubleValue());
+            case OBJECT:    return new StringLiteral(String.valueOf(object));
             default:        throw new GenerationException("Unhandled value type " + getType());
         }
     }

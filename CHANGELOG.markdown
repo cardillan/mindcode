@@ -10,14 +10,18 @@ All notable changes to this project will be documented in this file.
   return values from function calls. 
 * Added [section about using units](doc/syntax/SYNTAX-6-TIPS-N-TRICKS.markdown#using-units) to Mindustry Tips 
   and Tricks.
+* Added warnings when constant expression evaluation or Mindcode numeric literal cannot be compiled to mlog without 
+  a loss of precision. 
 
 ### Changed
 
-* [`ubind` function](/doc/syntax/FUNCTIONS_V7.markdown#instruction-ubind) now returns the freshly bound unit. 
+* Changed [`ubind` function](/doc/syntax/FUNCTIONS_V7.markdown#instruction-ubind) to return the freshly bound unit.
+* Changed [encoding of numerical values to mlog](doc/syntax/SYNTAX.markdown#numeric-literals-in-mindustry-logic).
 
 ### Fixed
 
 * Fixed constant expression evaluation crashing on binary numeric literals.
+* Fixed constant expression evaluation producing values not representable in mlog source code.
 * Fixed function call optimization not processing numeric literal arguments in some cases.
 
 ## 2023-04-14

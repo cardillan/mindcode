@@ -39,7 +39,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
     // Contains the information about functions built from the program to support code generation
     private CallGraph callGraph;
 
-    private final ConstantExpressionEvaluator expressionEvaluator = new ConstantExpressionEvaluator();
+    private final ConstantExpressionEvaluator expressionEvaluator;
 
     // These instances track variables that need to be stored on stack for recursive function calls.
     
@@ -77,6 +77,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
         this.functionMapper = functionMapper;
         this.pipeline = pipeline;
         this.profile = profile;
+        this.expressionEvaluator = new ConstantExpressionEvaluator(instructionProcessor);
     }
 
     public void start(Seq program) {
@@ -148,7 +149,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     private String queryConstantName(String name) {
         if (constants.get(name) != null) {
-            return constants.get(name).getLiteral();
+            return constants.get(name).getLiteral(instructionProcessor);
         } else {
             // Register the identifier as a variable name
             constants.put(name, null);
@@ -673,22 +674,27 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
     @Override
     public String visitNullLiteral(NullLiteral node) {
-        return node.getLiteral();
+        return node.getLiteral(instructionProcessor);
     }
 
     @Override
     public String visitBooleanLiteral(BooleanLiteral node) {
-        return node.getLiteral();
+        return node.getLiteral(instructionProcessor);
     }
 
     @Override
     public String visitStringLiteral(StringLiteral node) {
-        return node.getLiteral();
+        return node.getLiteral(instructionProcessor);
     }
 
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
-        return node.getLiteral();
+        return node.getLiteral(instructionProcessor);
+    }
+
+    @Override
+    public String visitNumericValue(NumericValue node) {
+        return node.getLiteral(instructionProcessor);
     }
 
     @Override
@@ -886,7 +892,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<String> {
 
         AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
         if (astFormat instanceof StringLiteral format) {
-            return handlePrintf(format.getLiteral(), params);
+            return handlePrintf(format.getLiteral(instructionProcessor), params);
         } else {
             throw new GenerationException("First parameter of printf() function must be a constant string.");
         }

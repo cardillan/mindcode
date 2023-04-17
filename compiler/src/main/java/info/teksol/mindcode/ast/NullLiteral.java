@@ -1,5 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+
 public class NullLiteral extends ConstantAstNode {
     @Override
     public boolean equals(Object obj) {
@@ -12,7 +14,7 @@ public class NullLiteral extends ConstantAstNode {
     }
 
     @Override
-    public String getLiteral() {
+    public String getLiteral(InstructionProcessor instructionProcessor) {
         return "null";
     }
 

@@ -309,8 +309,10 @@ end
 
 **Additional considerations:**
 
-* Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case expression. Do not use expressions with side effects (such as a function call that would modify some global variable). 
-* Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, but the behavior might change in the future.
+* Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case 
+  expression. Do not use expressions with side effects (such as a function call that would modify some global variable). 
+* Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, 
+  but the behavior might change in the future.
 
 ---
 

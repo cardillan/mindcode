@@ -369,6 +369,18 @@ printflush(message1)
 
 will tell you how bad your silicone situation is.
 
+### Discarding unwanted items
+
+Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that 
+are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
+
+```
+itemDrop(@air, @unit.totalItems)
+```
+
+In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
+suggest specifying the correct amount, just in case something changes in the future.     
+
 ---
 
 [« Previous: Compiler directives](SYNTAX-5-OTHER.markdown)

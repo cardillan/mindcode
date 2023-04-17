@@ -5,6 +5,7 @@
 .idea/vcs.xml
 .idea/workspace.xml
 .idea/dbnavigator.xml
+.idea/codeStyles/Project.xml
 
 # PostgreSQL cluster data directory
 db/cluster
@@ -15,3 +16,4 @@ target
 tmp
 compiler/src/test/resources/testcode/*.msg
 compiler/src/test/resources/testcode/*.txt
+

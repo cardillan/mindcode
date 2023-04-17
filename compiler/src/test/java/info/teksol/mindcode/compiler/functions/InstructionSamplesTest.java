@@ -67,7 +67,7 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
                         .filter(v -> v.versions.contains(processorVersion))
                         .flatMap(v -> v.values.stream())
                         .sorted()
-                        .collect(Collectors.toUnmodifiableList()));
+                        .toList());
             } else {
                 combinations.add(List.of(arg.getName()));
             }

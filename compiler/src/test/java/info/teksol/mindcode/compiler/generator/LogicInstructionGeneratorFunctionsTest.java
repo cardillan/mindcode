@@ -130,7 +130,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         (Seq) translateToAst("""
                                 allocate stack in bank1[0...512]
                                 def foo(n)
-                                  foo(n)  
+                                  foo(n)
                                 end
                                 print(foo(3))
                                 """
@@ -654,7 +654,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                                     if n % 2 == 1
                                         return "odd"
                                     else
-                                        return "even" 
+                                        return "even"
                                     end
                                 end
                                 print(a(0))

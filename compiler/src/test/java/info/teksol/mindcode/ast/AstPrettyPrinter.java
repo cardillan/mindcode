@@ -1,9 +1,15 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 public class AstPrettyPrinter extends BaseAstVisitor<String> {
+    private final InstructionProcessor instructionProcessor;
     private final StringBuilder buffer = new StringBuilder();
+
+    public AstPrettyPrinter(InstructionProcessor instructionProcessor) {
+        this.instructionProcessor = instructionProcessor;
+    }
 
     public String prettyPrint(AstNode node) {
         visit(node);
@@ -149,7 +155,13 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
-        buffer.append(node.getLiteral());
+        buffer.append(node.getLiteral(instructionProcessor));
+        return null;
+    }
+
+    @Override
+    public String visitNumericValue(NumericValue node) {
+        buffer.append(node.getLiteral(instructionProcessor));
         return null;
     }
 

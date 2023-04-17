@@ -129,7 +129,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         before.subList(index1, before.size()).forEach(ix -> output.add(printInstruction(DELETE_PREFIX, -1, ix)));
         for (int i = index2; i < after.size(); i++) {
             output.add(printInstruction(ADD_PREFIX, i, after.get(i)));
-        };
+        }
 
         // Print lines around difference clusters
         boolean active = false;

@@ -57,7 +57,7 @@ public class Processor {
     }
 
     public void run(List<LogicInstruction> program, int stepLimit) {
-        if (!getFlag(STOP_PROCESSOR_OPTIONAL) && !program.stream().anyMatch(ix -> ix instanceof StopInstruction)) {
+        if (!getFlag(STOP_PROCESSOR_OPTIONAL) && program.stream().noneMatch(ix -> ix instanceof StopInstruction)) {
             throw new ExecutionException(STOP_PROCESSOR_OPTIONAL, "A stop instruction not present in given program.");            
         }
 
@@ -111,14 +111,15 @@ public class Processor {
 
     private boolean execute(LogicInstruction instruction) {
         return switch(instruction) {
-            case ReadInstruction ix     -> executeRead(ix);
-            case WriteInstruction ix    -> executeWrite(ix);
-            case PrintInstruction ix    -> executePrint(ix);
-            case SetInstruction ix      -> executeSet(ix);
-            case OpInstruction ix       -> executeOp(ix);
-            case JumpInstruction ix     -> executeJump(ix);
             case EndInstruction ix      -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
+            case JumpInstruction ix     -> executeJump(ix);
+            case OpInstruction ix       -> executeOp(ix);
+            case PackColorInstruction ix-> executePackColor(ix);
+            case PrintInstruction ix    -> executePrint(ix);
+            case ReadInstruction ix     -> executeRead(ix);
+            case SetInstruction ix      -> executeSet(ix);
             case StopInstruction ix     -> false;
+            case WriteInstruction ix    -> executeWrite(ix);
             default -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported opcode " + instruction.getOpcode());
         };
     }
@@ -159,6 +160,31 @@ public class Processor {
         }
 
         return true;
+    }
+
+    private boolean executePackColor(PackColorInstruction ix) {
+        Variable target = getOrCreateVariable(ix.getResult());
+        Variable r = getExistingVariable(ix.getR());
+        Variable g = getExistingVariable(ix.getG());
+        Variable b = getExistingVariable(ix.getB());
+        Variable a = getExistingVariable(ix.getA());
+        double result = toDoubleBits(clamp(r.getDoubleValue()), clamp(g.getDoubleValue()), clamp(b.getDoubleValue()),
+                clamp(a.getDoubleValue()));
+
+        target.setDoubleValue(result);
+        return true;
+    }
+
+    private static float clamp(double value){
+        return Math.max(Math.min((float)value, 1f), 0f);
+    }
+
+    public static double toDoubleBits(float r, float g, float b, float a){
+        return Double.longBitsToDouble(rgba8888(r, g, b, a) & 0x00000000_ffffffffL);
+    }
+
+    private static int rgba8888(float r, float g, float b, float a){
+        return ((int)(r * 255) << 24) | ((int)(g * 255) << 16) | ((int)(b * 255) << 8) | (int)(a * 255);
     }
 
     private boolean executePrint(PrintInstruction ix) {
@@ -207,6 +233,7 @@ public class Processor {
             return DoubleVariable.newStringValue(true, value, repl);
         }
         try {
+            // This code is duplicated in NumericLiteral. Will be removed from here once typed arguments are implemented.
             return value.startsWith("0x") ? DoubleVariable.newLongValue(true, value, Long.decode(value)) :
                     value.startsWith("0b") ? DoubleVariable.newLongValue(true, value, Long.parseLong(value, 2, value.length(), 2)) :
                     DoubleVariable.newDoubleValue(true, value, Double.parseDouble(value));

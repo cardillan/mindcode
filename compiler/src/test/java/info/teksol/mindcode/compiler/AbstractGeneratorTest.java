@@ -19,8 +19,10 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
-    protected InstructionProcessor instructionProcessor =
-            InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
+    protected List<CompilerMessage> messages = new ArrayList<>();
+
+    protected InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(
+            messages::add, ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
 
     protected final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private final Set<String> registered = new HashSet<>();
@@ -182,7 +184,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             for (LogicInstruction ix : program) {
                 str.append("\n                        createInstruction(").append(ix.getOpcode().name());
                 ix.getArgs().forEach(a -> str.append(", ").append(escape(a)));
-                str.append("),").toString();
+                str.append("),");
             }
             str.deleteCharAt(str.length() - 1);
             str.append("\n\n");

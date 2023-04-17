@@ -6,8 +6,7 @@ import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DirectiveProcessorTest {
 
@@ -23,7 +22,7 @@ class DirectiveProcessorTest {
         CompilerProfile profile = CompilerProfile.noOptimizations();
         Seq seq = new Seq(new Directive("optimization", "basic"));
         DirectiveProcessor.processDirectives(seq, profile);
-        assertEquals(true, profile.getOptimizationLevels().values().stream().allMatch(l -> l == OptimizationLevel.BASIC));
+        assertTrue(profile.getOptimizationLevels().values().stream().allMatch(l -> l == OptimizationLevel.BASIC));
     }
 
     @Test

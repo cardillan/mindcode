@@ -1,19 +1,18 @@
 # Variables and constants
 
-Mindcode uses Mindustry Logic processor variables for its own variables.
-These variables can contain a number (integer or real), an object or a value `null`. An object can be a Mindustry object,
-such as a block or a unit, a Mindustry constant such as `@coal`, or a string such as `"Text"`.
+Mindcode uses Mindustry Logic processor variables for its own variables. These variables can contain a number 
+(integer or real), an object or a value `null`. An object can be a Mindustry object, such as a block or a unit, a 
+Mindustry constant such as `@coal`, or a string such as `"Text"`.
 
-Variables aren't declared in Mindcode, they're just used. 
-`count = 10` creates a variable named `count` and assigns a value of `10` to it.
-Variables that weren't previously written to have a value of `0` in Mindustry Logic.
-Once set, processor variables are preserved (even across game saves/loads)
-until the processor code is modified or the processor is destroyed.
+Variables aren't declared in Mindcode, they're created with first use. `count = 10` creates a variable named 
+`count` and assigns a value of `10` to it. Variables that weren't previously written to have a value of `0` in 
+Mindustry Logic. Once set, processor variables are preserved (even across game saves/loads) until the processor code 
+is modified or the processor is destroyed.
 
-Mindustry Logic stores numbers as `double`, a 64-bit floating point value.
-To perform bitwise operations, such as `&` or `<<`, the value is converted to a 64bit integer (a Java `long`),
-the operation is performed and the result is assigned to a `double` again.
-As a consequence, for bitwise operations the variables are able to hold only about 51 bits or so.
+> **Note**: Mindustry Logic stores numbers as `double`, a 64-bit floating point value. To perform bitwise operations,
+> such as `&` or `<<`, the value is converted to a 64bit integer (a Java `long`), the operation is performed and the 
+> result is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold 
+> only about 52 bits or so.
 
 # Main variables
 
@@ -50,8 +49,9 @@ if DEBUG
 end
 ```
 
-both the `DEBUG` variable and the debugging code is compiled as-is, even if the `DEBUG` variable is not changed anywhere else in the code.
-You can therefore assign `true` to the variable and activate the debugging code after pasting it to Mindustry processor.
+both the `DEBUG` variable and the debugging code is compiled as-is, even if the `DEBUG` variable is not changed 
+anywhere else in the code. You can therefore assign `true` to the variable and activate the debugging code after 
+pasting it to Mindustry processor.
 
 > **Note**: unused main variables, i.e. variables that are never read, can get removed from the compiled code.
 > This is why we had to include `print(COUNT, WARNING, ITEM)` in the example above.
@@ -70,10 +70,9 @@ both `x` and `y` are local variables, not accessible outside the function `foo`.
 
 # Global variables
 
-Global variables are common to all user functions and the main program body.
-Use names that don't contain any lowercase letters, such as `MAIN` or `_9` (this is not a good name for a variable, btw.),
-to create global variables. Variables whose name contains at least one lowercase letter are local.
-For example, the following code
+Global variables are common to all user functions and the main program body. Use names that don't contain any
+lowercase letters, such as `MAIN` or `_9` (this is not a good name for a variable, btw.), to create global variables.
+Variables whose name contains at least one lowercase letter are local. For example, the following code
 
 ```
 def foo(x)
@@ -88,20 +87,21 @@ print(MAIN, ", ", local)
 printflush(message1)
 ```
 
-displays `20, 5` on the `message1` block in Mindustry world (from now on, we'll omit the `printflush(message1)` in examples),
-since both `x` and `local` in the `foo` function are local variables and therefore distinct from `x` and `local` in the main program body.
+displays `20, 5` on the `message1` block in Mindustry world (from now on, we'll omit the `printflush(message1)` in 
+examples), since both `x` and `local` in the `foo` function are local variables and therefore distinct from `x` and 
+`local` in the main program body.
 
 Using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed.
 
 # External memory
 
-Mindcode supports storing variables in external memory (memory cells or memory banks linked to the processor).
-These variables are stored independently of the processor and can be used to share values between processors,
-or to keep values even when the processor is destroyed or its code recompiled.
+Mindcode supports storing variables in external memory (memory cells or memory banks linked to the processor). These 
+variables are stored independently of the processor and can be used to share values between processors, or to keep 
+values even when the processor is destroyed or its code recompiled.
 
-On the other hand, only numeric values can be stored in external memory.
-It is therefore not possible to use it to store strings, buildings or item types there.
-This -- quite restrictive -- limitation is unfortunately imposed by Mindustry Logic itself.
+On the other hand, only numeric values can be stored in external memory. It is therefore not possible to use it to 
+store strings, buildings or item types there. This -- quite restrictive -- limitation is unfortunately imposed by 
+Mindustry Logic itself.
 
 ## Arrays
 
@@ -250,41 +250,30 @@ Their names start with the `@` sign. The most common ones are:
 * `@links`: number of blocks linked to the processor
 * `@ipt`: instructions per tick executed by this processor
 * `@unit`: currently bound unit
-* `@unitCount`, `@itemCount`, `@liquidCount`, `@blockCount`: counts of elements of given type, can be used with `lookup` function.
+* `@unitCount`, `@itemCount`, `@liquidCount`, `@blockCount`: counts of elements of given type, can be used with 
+  `lookup` function.
 
 Mindcode allows you to read these variables, but it is not possible to assign a value to them.
-Some of them are constant during the lifetime of the processor, but others do - or at least may - change (`@time`, `@counter` or `@links`).
+Some of them are constant during the lifetime of the processor, but others do - or at least may - change (`@time`, 
+`@counter` or `@links`).
 
-`@unit` is a very special variable - it always contains the unit currently controlled by the processor.
-The only way to assign a new unit to this variable is to use the `ubind()` function.
-All unit control commands are sent to this unit.
-
-It is possible to store the value of `@unit` in another variable, but the unit cannot be controlled through that variable.
-Just properties of the unit (e.g. `dead`) can be read using another variable, and it can be compared for identity:
-
-```
-ubind(@poly)
-bound = @unit
-... 
-if bound != @unit or bound.dead !== 0
-    ...
-end
-```
+`@unit` is a very special variable - it always contains the unit currently controlled by the processor. The only way 
+to assign a new unit to this variable is to use the `ubind()` function. All unit control commands are sent to this unit.
+See also [Using units](/doc/syntax/SYNTAX-6-TIPS-N-TRICKS.markdown#using-units).
 
 # Linked blocks
 
-When a block/building (e.g. a factory, a turret or a memory cell) is linked to a processor,
-an object representing the linked blocks is created.
-This object is named using the short name of the linked block and an integer index, 
-e.g. `cell1`, `switch3` or `smelter16`.
-These objects allow the code to directly control or query linked blocks.
-Names of linked blocks are reserved and cannot be used by any variable.
-If a variable with the same name existed earlier, it is removed from the processor.
-Assignments to a variable named after a linked block are silently ignored by the processor.
+When a block/building (e.g. a factory, a turret or a memory cell) is linked to a processor, an object representing 
+the linked blocks is created. This object is named using the short name of the linked block and an integer index, e.
+g. `cell1`, `switch3` or `smelter16`. These objects allow the code to directly control or query linked blocks. Names 
+of linked blocks are reserved and cannot be used by any variable. If a variable with the same name existed earlier, 
+it is removed from the processor. Assignments to a variable named after a linked block are silently ignored by the 
+processor.
 
-The compiler doesn't know which blocks will be linked to the processor when compiling the code.
-To avoid generating code that wouldn't work when blocks are linked to the processor,
-all possible names of linked blocks are specially handled:
+The compiler doesn't know which blocks will be linked to the processor when compiling the code. To avoid generating 
+code that wouldn't work when blocks are linked to the processor, all possible names of linked blocks are specially 
+handled: 
+
 * it is not possible to assign values to variables with these names,
 * these variables are implicitly global.
 
@@ -299,7 +288,7 @@ end
 
 the `message1` variable represents a message block linked to the processor, even when used inside a function.
 
-The list of possible block names is quite exhaustive
+The list of possible block names is quite exhaustive.
 
 <details><summary>Show full list of Mindustry block names.</summary>
 
@@ -380,8 +369,8 @@ The list of possible block names is quite exhaustive
 
 Any variable name consisting of one of these prefixes and a positive integer is a reserved for linked blocks.
 * These are block names: `point3`, `arc7`, `tank999999`.
-* These aren't: `switch` (no numeric index at all), `cell05` (leading zero), `Router15` (upper-case letter),
-`wave_1` or `reactor-5` (the index doesn't immediately follow the block name).
+* These aren't: `switch` (no numeric index at all), `cell05` (leading zero), `Router15` (upper-case letter), 
+  `wave_1` or `reactor-5` (the index doesn't immediately follow the block name).
 
 # Constants
 
@@ -395,16 +384,19 @@ const RATIO = sqrt(2)
 const message = DEBUG ? "Debug" : "Release"
 ```
 
-Constants are global, even if their names contain lower-case characters.
-The value assigned to them must be either a numeric, boolean or text literal,
-or an expression whose value can be computed at compile time (basically, you can't use a variable there).
-Compile-time evaluation uses the same rules as Mindustry Logic,
-i.e. `const ERROR = 1 / 0` is a valid constant declaration which creates a constant `ERROR` with a value of `null`.
+Constants are global, even if their names contain lower-case characters. The value assigned to them must be either a 
+numeric, boolean or text literal, or an expression whose value can be computed at compile time. Compile-time 
+evaluation uses the same rules as Mindustry Logic, i.e. `const ERROR = 1 / 0` is a valid constant declaration which 
+creates a constant `ERROR` with a value of `null`.
+
+If a numeric value is assigned to a constant, and it isn't possible to
+[encode the value into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), a compilation error 
+occurs.  
 
 A name used for a constant cannot be used for a global or local variable.
 
-Unlike variables, constants aren't kept in processor variables, and their values therefore cannot be changed in compiled code.
-It also means that in the following code
+Unlike variables, constants aren't kept in processor variables, and their values therefore cannot be changed in 
+compiled code. It also means that in the following code
 
 ```
 const DEBUG = false

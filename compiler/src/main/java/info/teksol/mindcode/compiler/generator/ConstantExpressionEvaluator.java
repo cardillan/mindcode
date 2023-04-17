@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.*;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.processor.*;
 
 import java.util.HashMap;
@@ -8,9 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 public class ConstantExpressionEvaluator {
+
+    private final InstructionProcessor instructionProcessor;
+
     private final Map<String, AstNode> constants = new HashMap<>();
+
+    public ConstantExpressionEvaluator(InstructionProcessor instructionProcessor) {
+        this.instructionProcessor = instructionProcessor;
+    }
 
     /**
      * If the node can be compile-time evaluated, returns the evaluation, otherwise returns {@code this}.
@@ -22,6 +29,17 @@ public class ConstantExpressionEvaluator {
      * @return compile-time evaluation of the node
      */
     public AstNode evaluate(AstNode node) {
+        AstNode result = evaluateInner(node);
+
+        if (result instanceof NumericValue value) {
+            AstNode literal = value.toNumericLiteral(instructionProcessor);
+            return literal != null ? literal : node;
+        } else {
+            return result;
+        }
+    }
+
+    private AstNode evaluateInner(AstNode node) {
         return switch (node) {
             case BinaryOp n         -> evaluateBinaryOp(n);
             case Constant n         -> evaluateConstant(n);
@@ -38,12 +56,12 @@ public class ConstantExpressionEvaluator {
         if (ExpressionEvaluator.isDeterministic(machineCode)) {
             Operation operation = ExpressionEvaluator.getOperation(machineCode);
             if (operation != null) {
-                Variable a = variableFromNode("a", evaluate(node.getLeft()));
-                Variable b = variableFromNode("b", evaluate(node.getRight()));
+                Variable a = variableFromNode("a", evaluateInner(node.getLeft()));
+                Variable b = variableFromNode("b", evaluateInner(node.getRight()));
                 if (a != null && b != null) {
                     Variable result = DoubleVariable.newNullValue(false, "result");
                     operation.execute(result, a, b);
-                    return result.toAstNode().orElse(node);
+                    return result.toAstNode();
                 } else if (a != null || b != null) {
                     // One of them is not null
                     return evaluatePartially(node, a == null ? b : a, a == null ? node.getLeft() : node.getRight());
@@ -81,9 +99,14 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluateConstant(Constant node) {
-        AstNode evaluated = evaluate(node.getValue());
+        AstNode evaluated = evaluateInner(node.getValue());
         if (!(evaluated instanceof ConstantAstNode)) {
             throw new GenerationException("Value assigned to constant [" + node.getName() + "] is not a constant expression.");
+        } else if (evaluated instanceof NumericValue value) {
+            evaluated = value.toNumericLiteral(instructionProcessor);
+            if (evaluated == null) {
+                throw new GenerationException("Value assigned to constant [" + node.getName() + "] (" + value.getAsDouble() + ") doesn't have a valid mlog representation.");
+            }
         }
         constants.put(node.getName(), evaluated);
         return node;
@@ -94,10 +117,10 @@ public class ConstantExpressionEvaluator {
         int numArgs = ExpressionEvaluator.getNumberOfArguments(node.getFunctionName());
         if (operation != null && numArgs == node.getParams().size()) {
             List<ConstantAstNode> evaluated = node.getParams().stream()
-                    .map(this::evaluate)
+                    .map(this::evaluateInner)
                     .filter(n -> n instanceof ConstantAstNode)
                     .map(n -> (ConstantAstNode) n)
-                    .collect(Collectors.toList());
+                    .toList();
 
             if (evaluated.size() == numArgs) {
                 // All parameters are constant
@@ -106,7 +129,7 @@ public class ConstantExpressionEvaluator {
                 Variable b = variableFromNode("b", evaluated.get(numArgs - 1));
                 Variable result = DoubleVariable.newNullValue(false, "result");
                 operation.execute(result, a, b);
-                return result.toAstNode().orElse(node);
+                return result.toAstNode();
             }
         }
 
@@ -114,10 +137,10 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluateIfExpression(IfExpression node) {
-        AstNode conditionValue = evaluate(node.getCondition());
+        AstNode conditionValue = evaluateInner(node.getCondition());
         if (conditionValue instanceof ConstantAstNode n) {
             boolean isTrue = !ExpressionEvaluator.equals(n.getAsDouble(), 0.0);
-            return evaluate(isTrue ? node.getTrueBranch() : node.getFalseBranch());
+            return evaluateInner(isTrue ? node.getTrueBranch() : node.getFalseBranch());
         } else {
             return node;
         }
@@ -126,12 +149,12 @@ public class ConstantExpressionEvaluator {
     private AstNode evaluateUnaryOp(UnaryOp node) {
         Operation operation = ExpressionEvaluator.getOperation(ExpressionEvaluator.translateOperator(node.getOp()));
         if (operation != null) {
-            Variable a = variableFromNode("a", evaluate(node.getExpression()));
+            Variable a = variableFromNode("a", evaluateInner(node.getExpression()));
             if (a != null) {
                 Variable b = DoubleVariable.newNullValue(false, "result");
                 Variable result = DoubleVariable.newNullValue(false, "result");
                 operation.execute(result, a, b);
-                return result.toAstNode().orElse(node);
+                return result.toAstNode();
             }
         }
 
@@ -147,6 +170,7 @@ public class ConstantExpressionEvaluator {
             case NullLiteral n      -> DoubleVariable.newNullValue(false, name);
             case BooleanLiteral n   -> DoubleVariable.newBooleanValue(false, name, n.getValue());
             case NumericLiteral n   -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
+            case NumericValue n     -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
             case StringLiteral n    -> DoubleVariable.newStringValue(false, name, n.getText());
             case ConstantAstNode n  -> throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
             default                 -> null;

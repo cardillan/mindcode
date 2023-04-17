@@ -2,11 +2,16 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.Tuple2;
+import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -16,6 +21,7 @@ import java.util.stream.Stream;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
 public class BaseInstructionProcessor implements InstructionProcessor {
+    private final Consumer<CompilerMessage> messageConsumer;
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final List<OpcodeVariant> opcodeVariants;
@@ -29,8 +35,9 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private int functionIndex = 0;
 
     // Protected to allow a subclass to use this constructor in unit tests
-    protected BaseInstructionProcessor(ProcessorVersion processorVersion, ProcessorEdition processorEdition,
-            List<OpcodeVariant> opcodeVariants) {
+    protected BaseInstructionProcessor(Consumer<CompilerMessage> messageConsumer, ProcessorVersion processorVersion,
+                                       ProcessorEdition processorEdition, List<OpcodeVariant> opcodeVariants) {
+        this.messageConsumer = messageConsumer;
         this.processorVersion = processorVersion;
         this.processorEdition = processorEdition;
         this.opcodeVariants = opcodeVariants;
@@ -128,6 +135,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case JUMP       -> new JumpInstruction(marker, opcode, arguments);
             case LABEL      -> new LabelInstruction(marker, opcode, arguments);
             case OP         -> new OpInstruction(marker, opcode, arguments);
+            case PACKCOLOR  -> new PackColorInstruction(marker, opcode, arguments);
             case POP        -> new PopInstruction(marker, opcode, arguments);
             case PRINT      -> new PrintInstruction(marker, opcode, arguments);
             case PRINTFLUSH -> new PrintflushInstruction(marker, opcode, arguments);
@@ -236,7 +244,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return getTypedArguments(instruction)
                 .filter(a -> a.getArgumentType().isInput())
                 .map(TypedArgument::getValue)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     @Override
@@ -244,7 +252,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return getTypedArguments(instruction)
                 .filter(a -> a.getArgumentType().isOutput())
                 .map(TypedArgument::getValue)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     @Override
@@ -252,7 +260,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return getTypedArguments(instruction)
                 .filter(a -> a.getArgumentType().isInputOrOutput())
                 .map(TypedArgument::getValue)
-                .collect(Collectors.toUnmodifiableList());
+                .toList();
     }
 
     @Override
@@ -327,7 +335,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         List<Integer> indexes = opcodeVariants.stream()
                 .map(v -> findFirstIndex(v.getArguments(), a -> a.getType().isSelector()))
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
 
         if (indexes.size() != 1)  {
             throw new MindcodeException("Cannot determine variant selector position for opcode " + opcode);
@@ -445,5 +453,90 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public Set<String> getBlockNames() {
         return BLOCK_NAMES;
+    }
+
+    public Optional<String> mlogRewrite(String literal) {
+        try {
+            return mlogFormat(Double.parseDouble(literal), literal);
+        } catch (NumberFormatException ex) {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> mlogFormat(double value) {
+        return mlogFormat(value, String.valueOf(value));
+    }
+
+    // 20 digits precision
+    private static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
+    private static final BigDecimal LOSS_THRESHOLD = new BigDecimal("1e-8");
+
+    private Optional<String> mlogFormat(double value, String literal) {
+        if (Double.isFinite(value)) {
+            double abs = Math.abs(value);
+
+            // Is it zero?
+            if (abs <= Double.MIN_NORMAL) {
+                return Optional.of("0");
+            }
+
+            if (1e-20 <= abs && abs < Long.MAX_VALUE) {
+                // Fits into a long, Mindustry can convert it using double precision.
+                BigDecimal decimal = new BigDecimal(literal, CONVERSION_CONTEXT);
+                return Optional.of(decimal.stripTrailingZeros().toPlainString());
+            }
+
+            // Can it be represented as a float at all?
+            if ((float) abs == 0f || !Float.isFinite((float) abs)) {
+                return Optional.empty();
+            }
+
+            // Cannot avoid exponent. Format it so that Mindustry understands it.
+            // Use float representation, as too high a precision might create too high exponents
+            float valueFloat = (float) value;
+            String literalFloat = Float.toString(valueFloat);
+            int dot = literalFloat.indexOf('.');
+            int exp = literalFloat.indexOf('E');
+
+            if (dot >= 0 && exp >= 0) {
+                if (dot >= exp) {
+                    return Optional.empty(); // Not possible, but hey
+                }
+
+                int exponent = Integer.parseInt(literalFloat.substring(exp + 1)) ;
+                if (Math.abs(exponent) > 38) {
+                    // Even float precision would be compromised at this point
+                    return Optional.empty();
+                }
+
+                String mantisa =  literalFloat.substring(0, dot) + literalFloat.substring(dot + 1, exp);
+                exponent -= (exp - dot - 1);
+
+                int lastValidDigit = mantisa.length() - 1;
+                while (mantisa.charAt(lastValidDigit) == '0') {
+                    if (--lastValidDigit < 0) {
+                        return Optional.of("0");
+                    }
+                    exponent++;
+                }
+
+                String mlog = exponent == 0
+                        ? mantisa.substring(0, lastValidDigit + 1)
+                        : mantisa.substring(0, lastValidDigit + 1) + literalFloat.charAt(exp) + exponent;
+
+                double refloat = Double.parseDouble(String.valueOf(valueFloat));
+                double absDiff = Math.abs(refloat - value);
+                double relDiff = absDiff / value;
+                if (relDiff > 1e-9) {
+                    messageConsumer.accept(CompilerMessage.warn("Loss of precision while creating mlog literals (original value "+ literal + ", encoded value " + mlog + ")"));
+                }
+
+                return Optional.of(mlog);
+            } else {
+                return Optional.of(literalFloat);
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 }

@@ -56,7 +56,7 @@ public class HomeController {
                         throw new RuntimeException("Failed to read sample: " + filename);
                     }
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         for (int i = 0; i < sampleNames.size(); i++) {
             theSamples.put(sampleNames.get(i), sources.get(i));
