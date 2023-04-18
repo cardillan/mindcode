@@ -302,7 +302,7 @@ Unit becomes controlled by the processor when it is issued a command. Most
 unit as controlled while querying the flag or other properties of the unit won't.
 
 If a unit is not issued commands from a processor for some time, it becomes free again and both `controlled` and 
-`controller` properties are cleared. My tests show it is about 10 secods:
+`controller` properties are cleared. My tests show it takes about 10 seconds:
 
 ```
 loops = 0
