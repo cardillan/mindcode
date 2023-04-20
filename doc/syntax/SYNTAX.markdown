@@ -124,8 +124,11 @@ to Mindustry Logic compatible literal using these rules[^1] (first applicable ru
    notation using 20 digits precision.
 3. If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation 
    without using a decimal separator, using `float` precision (which will be used by Mindustry processor when 
-   reading the literal as well). A "loss of precision" warning is produced.
+   reading the literal as well). If the conversion to float causes loss of precision, a warning is produced.
 4. If none of the above rules is applicable, the conversion isn't possible and compilation error is produced. 
+
+[^1]: the rules are applied to the absolute value on the number being encoded. When the number is negative, a minus
+sign is then prepended to the encoded representation .
 
 This processing ensures that numbers within a reasonable range are encoded to use maximal available precision, 
 without producing mlog representations that would be unreasonably long. 
@@ -145,9 +148,6 @@ Examples of Mindcode literals and their conversion into mlog:
 
 The last two examples show the loss of precision when the number needs to be encoded using exponential notation.
 
-[^1]: the rules are applied to the absolute value on the number being encoded. When the number is negative, a minus
-sign is then prepended to the encoded representation .
-
 ### Binary and hexadecimal literals
 
 Mindustry also supports hexadecimal and binary representation for integers:
@@ -156,7 +156,8 @@ Mindustry also supports hexadecimal and binary representation for integers:
 * `0xf1`
 * `0b010001101`
 
-These literals aren't converted in any way and are written into mindocde  
+These literals are written into mlog code exactly as they appear in Mindustry. If the value of the literal exceeds 
+the maximum allowed range for a 64-bit signed integer, a compilation error occurs.    
 
 ### Boolean literals
 

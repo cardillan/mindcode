@@ -47,9 +47,7 @@ Things being pondered on from time to time.
   * Circular variable assignment: when compiling recursive functions, circular assignments are sometimes generated
     (e.g. `__tmpX = a; a = __tmpX`, the temporary variable can be a retval as well). These assignments will be just
     removed. Needs a global optimizer, as these assignments can cross stack operations.
-  * Parameters that are only passed to recursive calls and never modified won't be stored on stack (this would actually  
-    be a consequence of the previous optimization!)
-  * Eliminate `__retval` variables/assignments where not needed.
+  * Parameters that are only passed to recursive calls and never modified won't be stored on stack.
   * Additional automatic inlining of non-recursive functions.
   * Replace jump to return instruction with the return instruction itself (increases code size).
 * Strict Boolean evaluation (probably a compiler directive): ensure every boolean expression produces 0 or 1
@@ -174,6 +172,10 @@ There are no plans to do any of these. We keep them around just in case.
 * evaluation of constant expressions at compile time
 * constant declaration: constants would be evaluated at compile time and wouldn't use a variable
 * Binary literals (0b0000)
+
+### Code generation
+
+* Eliminate `__retval` variables/assignments where not needed.
 
 ### User interface
 

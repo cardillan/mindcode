@@ -7,7 +7,8 @@ import info.teksol.mindcode.processor.ExpressionEvaluator;
 import java.util.Objects;
 
 /**
- * Represents a constant numeric value which wasn't converted to a literal yet.
+ * Represents a constant numeric value (e.g. an intermediate result of constant expression evaluation)
+ * which hasn't been converted to a literal yet.
  */
 public class NumericValue extends ConstantAstNode {
     private final double value;

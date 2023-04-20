@@ -18,15 +18,24 @@ public class NumericLiteral extends ConstantAstNode {
     }
 
     public NumericLiteral(int value) {
-        this.literal = String.valueOf(value);       // int is safe, no need to rewrite
+        this.literal = String.valueOf(value);
     }
 
     @Override
     public String getLiteral(InstructionProcessor instructionProcessor) {
-        return literal.startsWith("0x") || literal.startsWith("0b")
-                ? literal
-                : instructionProcessor.mlogRewrite(literal).orElseThrow(
-                        () -> new GenerationException("Numeric literal " + literal + " cannot be represented in Mindustry Logic."));
+        try {
+            if (literal.startsWith("0x")) {
+                Long.decode(literal);
+                return literal;
+            } else if (literal.startsWith("0b")) {
+                Long.parseLong(literal, 2, literal.length(), 2);
+                return literal;
+            } else {
+                return instructionProcessor.mlogRewrite(literal).orElseThrow(() -> new NumberFormatException());
+            }
+        } catch (NumberFormatException ex) {
+            throw new GenerationException("Numeric literal " + literal + " doesn't have a valid mlog representation.");
+        }
     }
 
     @Override
