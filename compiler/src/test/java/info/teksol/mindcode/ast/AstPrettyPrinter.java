@@ -155,13 +155,13 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
 
     @Override
     public String visitNumericLiteral(NumericLiteral node) {
-        buffer.append(node.getLiteral(instructionProcessor));
+        buffer.append(node.toLogicLiteral(instructionProcessor).toMlog());
         return null;
     }
 
     @Override
     public String visitNumericValue(NumericValue node) {
-        buffer.append(node.getLiteral(instructionProcessor));
+        buffer.append(node.toLogicLiteral(instructionProcessor).toMlog());
         return null;
     }
 
@@ -298,7 +298,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     @Override
     public String visitStackAllocation(StackAllocation node) {
         buffer.append("allocate stack in ");
-        buffer.append(node.getName());
+        buffer.append(node.getStack());
         buffer.append("[");
         buffer.append(node.getRange().getFirstValue());
         buffer.append(node.getRange().operator());

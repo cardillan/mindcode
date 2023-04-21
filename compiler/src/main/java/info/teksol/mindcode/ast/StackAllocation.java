@@ -1,27 +1,29 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.logic.LogicVariable;
+
 import java.util.Objects;
 
 public class StackAllocation extends BaseAstNode {
-    private final String name;
+    private final LogicVariable stack;
     private final Range range;
 
-    StackAllocation(String name, Range range) {
-        this.name = name;
+    StackAllocation(String stack, Range range) {
+        this.stack = LogicVariable.block(stack);
         this.range = range;
     }
 
-    StackAllocation(String name, int first, int last) {
-        this(name, new InclusiveRange(new NumericLiteral(first), new NumericLiteral(last)));
+    StackAllocation(String stack, int first, int last) {
+        this(stack, new InclusiveRange(new NumericLiteral(first), new NumericLiteral(last)));
     }
 
-    StackAllocation(String name) {
-        this.name = name;
+    StackAllocation(String stack) {
+        this.stack = LogicVariable.block(stack);
         this.range = null;
     }
 
-    public String getName() {
-        return name;
+    public LogicVariable getStack() {
+        return stack;
     }
 
     public Range getRange() {
@@ -38,18 +40,18 @@ public class StackAllocation extends BaseAstNode {
         if (o == null || getClass() != o.getClass()) return false;
         StackAllocation that = (StackAllocation) o;
         return Objects.equals(range, that.range)
-                && Objects.equals(name, that.name);
+                && Objects.equals(stack, that.stack);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, range);
+        return Objects.hash(stack, range);
     }
 
     @Override
     public String toString() {
         return "StackAllocation{" +
-                "name='" + name + '\'' +
+                "stack='" + stack + '\'' +
                 ", range=" + range +
                 '}';
     }

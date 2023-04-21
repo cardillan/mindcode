@@ -1,5 +1,8 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicParameter;
+import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
@@ -7,15 +10,19 @@ import java.util.List;
 // Push and pop are always processed at the same time
 public abstract class PushOrPopInstruction extends BaseInstruction {
 
-    PushOrPopInstruction(String marker, Opcode opcode, List<String> args) {
-        super(marker, opcode, args);
+    PushOrPopInstruction(Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
+        super(opcode, args, params);
     }
 
-    public final String getMemory() {
-        return getArg(0);
+    protected PushOrPopInstruction(BaseInstruction other, String marker) {
+        super(other, marker);
     }
 
-    public final String getValue() {
-        return getArg(1);
+    public final LogicVariable getMemory() {
+        return (LogicVariable) getArg(0);
+    }
+
+    public final LogicVariable getVariable() {
+        return (LogicVariable) getArg(1);
     }
 }

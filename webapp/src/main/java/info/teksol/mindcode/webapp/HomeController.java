@@ -18,7 +18,6 @@ import java.io.StringWriter;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 

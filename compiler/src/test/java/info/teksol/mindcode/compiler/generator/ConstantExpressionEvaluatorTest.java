@@ -6,11 +6,45 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static info.teksol.mindcode.logic.Opcode.*;
 import static info.teksol.mindcode.logic.Opcode.END;
-import static org.junit.jupiter.api.Assertions.*;
+import static info.teksol.mindcode.logic.Opcode.PRINT;
 
 public class ConstantExpressionEvaluatorTest  extends AbstractGeneratorTest {
+
+    @Test
+    void removesConstantsFromCode() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(PRINT, "100"),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                const VALUE = 100
+                                print(VALUE)                                
+                                """
+                        )
+                )
+        );
+    }
+
+    @Test
+    void removesConstantsInPrintf() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(PRINT, "\"Value: \""),
+                        createInstruction(PRINT, "100"),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                const VALUE = 100
+                                printf("Value: $VALUE")                                
+                                """
+                        )
+                )
+        );
+    }
 
     @Test
     void evaluatesExpressionsWithBinaryLiterals() {

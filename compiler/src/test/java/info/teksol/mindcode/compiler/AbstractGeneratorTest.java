@@ -10,11 +10,11 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.logic.*;
 
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,14 +38,43 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return instructionProcessor;
     }
 
+    protected LogicArgument _logic(String str) {
+        return new BaseArgument(str);
+    }
+
+    protected List<LogicArgument> _logic(String... arguments) {
+        return Arrays.stream(arguments).map(this::_logic).toList();
+    }
+
+    protected List<LogicArgument> _logic(List<String> arguments) {
+        return arguments.stream().map(this::_logic).toList();
+    }
+
+    protected List<String> _str(List<LogicArgument> arguments) {
+        return arguments.stream().map(LogicArgument::toMlog).collect(Collectors.toCollection(ArrayList::new));
+    }
+
     // Instruction creation
+    protected final LogicInstruction createInstruction(Opcode opcode) {
+        return instructionProcessor.createInstruction(opcode);
+    }
+
     protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
+        return instructionProcessor.createInstruction(opcode, _logic(args));
+    }
+
+    protected final LogicInstruction createInstructionStr(Opcode opcode, List<String> args) {
+        return instructionProcessor.createInstruction(opcode, _logic(args));
+    }
+
+    protected final LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    protected final LogicInstruction createInstruction(Opcode opcode, List<String> args) {
+    protected final LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> args) {
         return instructionProcessor.createInstruction(opcode, args);
     }
+
 
     public static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
@@ -128,15 +157,17 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         }
     }
 
+
+
     private List<LogicInstruction> replaceVarsIn(List<LogicInstruction> expected) {
         final List<LogicInstruction> result = new ArrayList<>(expected);
         for (int i = 0; i < result.size(); i++) {
             final LogicInstruction instruction = result.get(i);
-            final List<String> newArgs = new ArrayList<>(instruction.getArgs());
+            final List<String> newArgs = _str(instruction.getArgs());
             newArgs.replaceAll(arg -> expectedToActual.getOrDefault(arg, arg));
 
             if (!newArgs.equals(instruction.getArgs())) {
-                result.set(i, createInstruction(instruction.getOpcode(), newArgs));
+                result.set(i, createInstructionStr(instruction.getOpcode(), newArgs));
             }
         }
         return result;
@@ -148,8 +179,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         }
 
         for (int i = 0; i < left.getArgs().size(); i++) {
-            final String a = left.getArgs().get(i);
-            final String b = right.getArgs().get(i);
+            final String a = left.getArgs().get(i).toMlog();
+            final String b = right.getArgs().get(i).toMlog();
             if (a.startsWith("___")) {
                 if (expectedToActual.containsKey(a)) {
                     // we mapped this hole to a value before -- check that we reference the same value again
@@ -183,7 +214,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             str.append("\nInstructions:");
             for (LogicInstruction ix : program) {
                 str.append("\n                        createInstruction(").append(ix.getOpcode().name());
-                ix.getArgs().forEach(a -> str.append(", ").append(escape(a)));
+                ix.getArgs().forEach(a -> str.append(", ").append(escape(a.toMlog())));
                 str.append("),");
             }
             str.deleteCharAt(str.length() - 1);
@@ -205,4 +236,57 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
         }
     }
+
+    // Common constants for creating instructions
+    protected static Operation     div        = Operation.DIV;
+    protected static Operation     floor      = Operation.FLOOR;
+    protected static Operation     idiv       = Operation.IDIV;
+    protected static Operation     mul        = Operation.MUL;
+
+    protected static LogicNumber   K1000      = LogicNumber.get(1000);
+    protected static LogicNumber   K0001      = LogicNumber.get("0.001", 0.001);
+    protected static LogicNumber   K0         = LogicNumber.get(0);
+    protected static LogicNumber   K1         = LogicNumber.get(1);
+    protected static LogicNumber   K255       = LogicNumber.get(255);
+    protected static LogicString   message    = LogicString.create("message");
+
+    protected static LogicLabel    label0     = LogicLabel.symbolic("label0");
+    protected static LogicLabel    label1     = LogicLabel.symbolic("label1");
+    protected static LogicLabel    label2     = LogicLabel.symbolic("label2");
+
+    protected static LogicVariable bank1      = LogicVariable.block("bank1");
+    protected static LogicVariable cell1      = LogicVariable.block("cell1");
+    protected static LogicVariable conveyor1  = LogicVariable.block("conveyor1");
+    protected static LogicVariable vault1     = LogicVariable.block("vault1");
+
+    protected static LogicBuiltIn  coal       = LogicBuiltIn.create("coal");
+    protected static LogicBuiltIn  lead       = LogicBuiltIn.create("lead");
+    protected static LogicBuiltIn  firstItem  = LogicBuiltIn.create("firstItem");
+    protected static LogicBuiltIn  enabled    = LogicBuiltIn.create("enabled");
+    protected static LogicBuiltIn  time       = LogicBuiltIn.create("time");
+    protected static LogicBuiltIn  unit       = LogicBuiltIn.create("unit");
+
+    protected static LogicKeyword  color      = LogicKeyword.create("color");
+
+    protected static LogicVariable C          = LogicVariable.global("C");
+
+    protected static LogicVariable a          = LogicVariable.main("a");
+    protected static LogicVariable b          = LogicVariable.main("b");
+    protected static LogicVariable c          = LogicVariable.main("c");
+    protected static LogicVariable d          = LogicVariable.main("d");
+    protected static LogicVariable another    = LogicVariable.main("another");
+    protected static LogicVariable divisor    = LogicVariable.main("divisor");
+    protected static LogicVariable value      = LogicVariable.main("value");
+    protected static LogicVariable var        = LogicVariable.main("var");
+
+    protected static LogicVariable foo        = LogicVariable.main("foo");
+    protected static LogicVariable result     = LogicVariable.main("result");
+
+    protected static LogicVariable ast0       = LogicVariable.ast("__ast0");
+
+    protected static LogicVariable tmp0       = LogicVariable.temporary("__tmp0");
+    protected static LogicVariable tmp1       = LogicVariable.temporary("__tmp1");
+
+    protected static LogicVariable fn0retval  = LogicVariable.fnRetVal("__fn0retval");
+    protected static LogicVariable retval0    = LogicVariable.retval("__retval0");
 }

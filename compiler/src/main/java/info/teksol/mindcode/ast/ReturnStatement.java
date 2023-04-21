@@ -26,6 +26,6 @@ public class ReturnStatement extends ControlBlockAstNode {
 
     @Override
     public String toString() {
-        return "ReturnStatement{" + (retval == null ? "" : "retval='" + retval) + "'}";
+        return "ReturnStatement{" + (retval == null ? "" : "fnRetVal='" + retval) + "'}";
     }
 }

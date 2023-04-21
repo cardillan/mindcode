@@ -1,48 +1,63 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
 public class JumpInstruction extends BaseInstruction {
 
-    JumpInstruction(String marker, Opcode opcode, List<String> args) {
-        super(marker, opcode, args);
+    JumpInstruction(List<LogicArgument> args, List<LogicParameter> params) {
+        super(Opcode.JUMP, args, params);
+    }
+
+    protected JumpInstruction(BaseInstruction other, String marker) {
+        super(other, marker);
+    }
+
+
+    public JumpInstruction withMarker(String marker) {
+        return new JumpInstruction(this, marker);
+    }
+
+    public JumpInstruction withLabel(LogicLabel label) {
+        return isUnconditional()
+                ? new JumpInstruction(List.of(label, Condition.ALWAYS), getParams())
+                : new JumpInstruction(List.of(label, getCondition(), getFirstOperand(), getSecondOperand()), getParams());
     }
 
     public boolean isUnconditional() {
-        return "always".equals(getCondition());
+        return getCondition() == Condition.ALWAYS;
     }
 
-    public final String getTarget() {
-        return getArg(0);
+    public final LogicLabel getTarget() {
+        return (LogicLabel) getArg(0);
     }
 
-    public final String getCondition() {
-        return getArg(1);
+    public final Condition getCondition() {
+        return (Condition) getArg(1);
     }
 
-    public final String getFirstOperand() {
+    public final LogicValue getFirstOperand() {
         ensureConditional();
-        return getArg(2);
+        return (LogicValue) getArg(2);
     }
 
-    public final String getSecondOperand() {
+    public final LogicValue getSecondOperand() {
         ensureConditional();
-        return getArg(3);
+        return (LogicValue) getArg(3);
     }
 
-    public final String getOperand(int index) {
+    public final LogicValue getOperand(int index) {
         ensureConditional();
         if (index < 0 || index > 1) {
             throw new ArrayIndexOutOfBoundsException("Operand index must be between 0 and 1, got " + index);
         }
-        return getArg(index + 2);
+        return (LogicValue) getArg(index + 2);
     }
 
-    public final List<String> getOperands() {
+    public final List<LogicValue> getOperands() {
         ensureConditional();
-        return getArgs().subList(2, 4);
+        return List.of(getFirstOperand(), getSecondOperand());
     }
 
     private void ensureConditional() {

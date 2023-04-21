@@ -320,7 +320,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     @Override
     public String visitStackAllocation(StackAllocation node) {
         open("StackAllocation{");
-        print("name="); visit(node.getName()); newLine(",");
+        print("name="); visit(node.getStack().toMlog()); newLine(",");
         print("range="); visit(node.getRange());
         close("}");
         return null;
@@ -341,7 +341,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     @Override
     public String visitReturnStatement(ReturnStatement node) {
         open("ReturnStatement{");
-        print("retval="); visit(node.getRetval());
+        print("fnRetVal="); visit(node.getRetval());
         close("}");
         return null;
     }

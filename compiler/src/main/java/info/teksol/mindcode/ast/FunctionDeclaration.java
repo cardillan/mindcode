@@ -6,6 +6,7 @@ import java.util.Objects;
 public class FunctionDeclaration extends BaseAstNode {
     private final boolean inline;
     private final String name;
+
     private final List<VarRef> params;
     private final AstNode body;
 

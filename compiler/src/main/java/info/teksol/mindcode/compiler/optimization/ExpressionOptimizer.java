@@ -1,10 +1,15 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.ast.NumericLiteral;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.OpInstruction;
+import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicNumber;
+import info.teksol.mindcode.logic.Operation;
 
 import java.util.Iterator;
 import java.util.List;
@@ -37,11 +42,10 @@ public class ExpressionOptimizer extends GlobalOptimizer {
     protected boolean optimizeProgram() {
         // Cannot use for-each due to modifications of the underlying list in the loop
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            final Tuple2<String, String> ops;
+            final Tuple2<LogicArgument, LogicArgument> ops;
             if (it.next() instanceof OpInstruction ix && (ops = extractIdivOperands(ix)) != null) {
-                String result = ix.getResult();
-                List<LogicInstruction> list = findInstructions(
-                        in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
+                LogicArgument result = ix.getResult();
+                List<LogicInstruction> list = findInstructions(in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
                 // Preconditions:
                 // - exactly two instructions
@@ -49,9 +53,9 @@ public class ExpressionOptimizer extends GlobalOptimizer {
                 // - the second is the floor operation
                 // - the second operates on the result of the first
                 if (list.size() == 2 && list.get(0) == ix && list.get(1) instanceof OpInstruction ox
-                        && ox.getOperation().equals("floor") && ox.getFirstOperand().equals(ix.getResult())) {
+                        && ox.getOperation() == Operation.FLOOR && ox.getFirstOperand().equals(ix.getResult())) {
 
-                    replaceInstruction(ox, createInstruction(OP, "idiv", ox.getResult(), ops.getT1(), ops.getT2()));
+                    replaceInstruction(ox, createInstruction(OP, Operation.IDIV, ox.getResult(), ops.getT1(), ops.getT2()));
                     it.remove();
                 }
             }
@@ -62,29 +66,29 @@ public class ExpressionOptimizer extends GlobalOptimizer {
 
     private static final Pattern numLiteral = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?");
 
-    private Tuple2<String, String> extractIdivOperands(OpInstruction ix) {
-        if (!isTemporary(ix.getResult())) {
+    private Tuple2<LogicArgument, LogicArgument> extractIdivOperands(OpInstruction ix) {
+        if (ix.getResult().getType() != ArgumentType.TMP_VARIABLE) {
             return null;
         } else {
             return switch (ix.getOperation()) {
-                case "div", "idiv" -> new Tuple2<>(ix.getFirstOperand(), ix.getSecondOperand());
+                case DIV, IDIV -> new Tuple2<>(ix.getFirstOperand(), ix.getSecondOperand());
 
-                case "mul" -> numLiteral.matcher(ix.getSecondOperand()).matches()
-                        ? invertMultiplicand(ix.getFirstOperand(), ix.getSecondOperand())
-                        : numLiteral.matcher(ix.getFirstOperand()).matches()
-                        ? invertMultiplicand(ix.getSecondOperand(), ix.getFirstOperand())
-                        : null;
+                case MUL ->
+                        ix.getFirstOperand().isLiteral() ? invertMultiplicand(ix.getSecondOperand(), ix.getFirstOperand()) :
+                        ix.getSecondOperand().isLiteral() ? invertMultiplicand(ix.getFirstOperand(), ix.getSecondOperand()) :
+                        null;
 
                 default -> null;
             };
         }
     }
 
-    private Tuple2<String, String> invertMultiplicand(String variable, String literal) {
+    private Tuple2<LogicArgument, LogicArgument> invertMultiplicand(LogicArgument variable, LogicArgument literal) {
         try {
-            double multiplicand = Double.parseDouble(literal);
-            Optional<String> divisor = instructionProcessor.mlogRewrite(String.valueOf(1.0 / multiplicand));
-            return divisor.map(lit -> new Tuple2<>(variable, lit)).orElse(null);
+            double multiplicand = literal.getDoubleValue();
+            double divisor = 1.0d / multiplicand;
+            Optional<String> inverted = instructionProcessor.mlogRewrite(String.valueOf(divisor));
+            return inverted.map(lit -> new Tuple2<LogicArgument, LogicArgument>(variable, LogicNumber.get(lit, divisor))).orElse(null);
         } catch (NumberFormatException ex) {
             // Couldn't parse divisor. Do nothing.
             return null;

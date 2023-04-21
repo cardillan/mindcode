@@ -6,7 +6,9 @@ import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.Condition;
+
+import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 
 /**
  * Turns the following sequence of instructions:
@@ -63,14 +65,14 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction instanceof JumpInstruction ix && ix.getCondition().equals("notEqual")) {
+            if (instruction instanceof JumpInstruction ix && ix.getCondition() == Condition.NOT_EQUAL) {
                 // Other preconditions for the optimization
                 boolean isSameVariable = ix.getFirstOperand().equals(op.getResult());
-                boolean jumpComparesToFalse = ix.getSecondOperand().equals("false");
+                boolean jumpComparesToFalse = ix.getSecondOperand() == FALSE;
 
                 if (isSameVariable && jumpComparesToFalse) {
-                    emitToNext(createInstruction(Opcode.JUMP, ix.getTarget(),
-                            op.getOperation(),
+                    emitToNext(createJump(ix.getTarget(),
+                            op.getOperation().toCondition(),
                             op.getFirstOperand(), op.getSecondOperand())
                     );
                     return new EmptyState();
@@ -89,8 +91,7 @@ public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
 
     }
     
-    private boolean isComparisonOperatorToTmp(OpInstruction instruction) {
-        return instructionProcessor.isValid(ArgumentType.CONDITION, instruction.getOperation()) &&
-                isTemporary(instruction.getResult());
+    private boolean isComparisonOperatorToTmp(OpInstruction ix) {
+        return ix.getOperation().toCondition() != null && ix.getResult().getType() == ArgumentType.TMP_VARIABLE;
     }
 }

@@ -1,5 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.logic.Condition;
+
 import java.util.Objects;
 
 public abstract class Range extends BaseAstNode {
@@ -45,11 +47,11 @@ public abstract class Range extends BaseAstNode {
     public BinaryOp buildLoopExitCondition(AstNode name) {
         return new BinaryOp(
                 name,
-                maxValueComparison(),
+                maxValueComparison().getMindcode(),
                 getLastValue()
         );
     }
 
     public abstract String operator();
-    public abstract String maxValueComparison();
+    public abstract Condition maxValueComparison();
 }

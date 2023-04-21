@@ -1,21 +1,6 @@
 package info.teksol.mindcode.compiler;
 
-public class CompilerMessage {
-    private final MessageLevel level;
-    private final String message;
-
-    public CompilerMessage(MessageLevel level, String message) {
-        this.level = level;
-        this.message = message;
-    }
-
-    public MessageLevel getLevel() {
-        return level;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+public record CompilerMessage(MessageLevel level, String message) {
 
     public boolean isError() {
         return level == MessageLevel.ERROR;

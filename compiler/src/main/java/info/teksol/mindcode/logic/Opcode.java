@@ -46,9 +46,11 @@ public enum Opcode {
     LABEL           ("label",           0),
     PUSH            ("push",            2),
     POP             ("pop",             2),
-    CALL            ("call",            3),
+    CALL            ("call",            1),
+    CALLREC         ("callrec",         3),
     RETURN          ("return",          3),
     GOTO            ("goto",            1),
+    SETADDR         ("setaddr",         1),
     ;
     
     private final String opcode;

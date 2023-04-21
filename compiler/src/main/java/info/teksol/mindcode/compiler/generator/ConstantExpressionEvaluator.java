@@ -2,12 +2,15 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.processor.*;
+import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.processor.DoubleVariable;
+import info.teksol.mindcode.processor.ExpressionEvaluator;
+import info.teksol.mindcode.processor.OperationEval;
+import info.teksol.mindcode.processor.Variable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ConstantExpressionEvaluator {
 
@@ -52,15 +55,15 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluateBinaryOp(BinaryOp node) {
-        String machineCode = ExpressionEvaluator.translateOperator(node.getOp());
-        if (ExpressionEvaluator.isDeterministic(machineCode)) {
-            Operation operation = ExpressionEvaluator.getOperation(machineCode);
-            if (operation != null) {
+        Operation operation = Operation.fromMindcode(node.getOp());
+        if (ExpressionEvaluator.isDeterministic(operation)) {
+            OperationEval eval = ExpressionEvaluator.getOperation(operation);
+            if (eval != null) {
                 Variable a = variableFromNode("a", evaluateInner(node.getLeft()));
                 Variable b = variableFromNode("b", evaluateInner(node.getRight()));
                 if (a != null && b != null) {
                     Variable result = DoubleVariable.newNullValue(false, "result");
-                    operation.execute(result, a, b);
+                    eval.execute(result, a, b);
                     return result.toAstNode();
                 } else if (a != null || b != null) {
                     // One of them is not null
@@ -73,29 +76,22 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluatePartially(BinaryOp node, Variable fixed, AstNode exp) {
-        switch (node.getOp()) {
-            case "|":
-                // If the fixed value is zero, evaluates to the other node
-                return fixed.getDoubleValue() == 0 ? exp : node;
+        return switch (node.getOp()) {
+            // If the fixed value is zero, evaluates to the other node
+            case "|" -> fixed.getDoubleValue() == 0 ? exp : node;
 
-            case "&":
-                // If the fixed value is zero, evaluates to zero
-                return fixed.getDoubleValue() == 0 ? new NumericLiteral("0") : node;
+            // If the fixed value is zero, evaluates to zero
+            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral("0") : node;
 
-            case "or":
-            case "||":
-                // If the fixed value is zero (= false), evaluates to false
-                // TODO: return exp instead of node if exp is known to be a boolean expression
-                return fixed.getDoubleValue() != 0 ? new BooleanLiteral(true) : node;
+            // If the fixed value is zero (= false), evaluates to false
+            // TODO: return exp instead of node if exp is known to be a boolean expression
+            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(true) : node;
 
-            case "and":
-            case "&&":
-                // If the fixed value is zero (= false), evaluates to false
-                // TODO: return exp instead of node if exp is known to be a boolean expression
-                return fixed.getDoubleValue() == 0 ? new BooleanLiteral(false) : node;
-        }
-
-        return node;
+            // If the fixed value is zero (= false), evaluates to false
+            // TODO: return exp instead of node if exp is known to be a boolean expression
+            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(false) : node;
+            default -> node;
+        };
     }
 
     private AstNode evaluateConstant(Constant node) {
@@ -113,9 +109,10 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluateFunctionCall(FunctionCall node) {
-        Operation operation = ExpressionEvaluator.getOperation(node.getFunctionName());
-        int numArgs = ExpressionEvaluator.getNumberOfArguments(node.getFunctionName());
-        if (operation != null && numArgs == node.getParams().size()) {
+        Operation operation = Operation.fromMindcode(node.getFunctionName());
+        OperationEval eval = ExpressionEvaluator.getOperation(operation);
+        int numArgs = ExpressionEvaluator.getNumberOfArguments(operation);
+        if (eval != null && numArgs == node.getParams().size()) {
             List<ConstantAstNode> evaluated = node.getParams().stream()
                     .map(this::evaluateInner)
                     .filter(n -> n instanceof ConstantAstNode)
@@ -128,7 +125,7 @@ public class ConstantExpressionEvaluator {
                 Variable a = variableFromNode("a", evaluated.get(0));
                 Variable b = variableFromNode("b", evaluated.get(numArgs - 1));
                 Variable result = DoubleVariable.newNullValue(false, "result");
-                operation.execute(result, a, b);
+                eval.execute(result, a, b);
                 return result.toAstNode();
             }
         }
@@ -147,13 +144,13 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluateUnaryOp(UnaryOp node) {
-        Operation operation = ExpressionEvaluator.getOperation(ExpressionEvaluator.translateOperator(node.getOp()));
-        if (operation != null) {
+        OperationEval eval = ExpressionEvaluator.getOperation(Operation.fromMindcode(node.getOp()));
+        if (eval != null) {
             Variable a = variableFromNode("a", evaluateInner(node.getExpression()));
             if (a != null) {
                 Variable b = DoubleVariable.newNullValue(false, "result");
                 Variable result = DoubleVariable.newNullValue(false, "result");
-                operation.execute(result, a, b);
+                eval.execute(result, a, b);
                 return result.toAstNode();
             }
         }

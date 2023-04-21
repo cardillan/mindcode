@@ -2,13 +2,11 @@ package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.processor.DoubleVariable;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicLiteral;
+import info.teksol.mindcode.logic.LogicNumber;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.Objects;
-import java.util.Optional;
 
 public class NumericLiteral extends ConstantAstNode {
     private final String literal;
@@ -22,19 +20,19 @@ public class NumericLiteral extends ConstantAstNode {
     }
 
     @Override
-    public String getLiteral(InstructionProcessor instructionProcessor) {
+    public LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) {
         try {
             if (literal.startsWith("0x")) {
-                Long.decode(literal);
-                return literal;
+                return LogicNumber.get(literal, Long.decode(literal));
             } else if (literal.startsWith("0b")) {
-                Long.parseLong(literal, 2, literal.length(), 2);
-                return literal;
+                return LogicNumber.get(literal, Long.parseLong(literal, 2, literal.length(), 2));
             } else {
-                return instructionProcessor.mlogRewrite(literal).orElseThrow(() -> new NumberFormatException());
+                return instructionProcessor.mlogRewrite(literal)
+                        .map(str -> LogicNumber.get(str, Double.parseDouble(str)))
+                        .orElseThrow(NumberFormatException::new);
             }
         } catch (NumberFormatException ex) {
-            throw new GenerationException("Numeric literal " + literal + " doesn't have a valid mlog representation.");
+            throw new GenerationException("Numeric literal '" + literal + "' doesn't have a valid mlog representation.");
         }
     }
 
@@ -65,10 +63,10 @@ public class NumericLiteral extends ConstantAstNode {
                 Double.parseDouble(literal);
     }
 
-    public boolean isInteger() {
+    public boolean notInteger() {
         double value = getAsDouble();
         // Criterium taken from Mindustry Logic
-        return Math.abs(value - (int)value) < 0.00001;
+        return Math.abs(value - (int) value) >= 0.00001;
     }
 
     public int getAsInteger() {

@@ -65,11 +65,11 @@ public class DiffDebugPrinter implements DebugPrinter {
      * Selects a subset of recorded versions of the program according to the level of detail.
      */
     private List<ProgramVersion> selectProgramVersions() {
-        switch (level) {
-            case 1:     return diffLevel1();
-            case 2:     return diffLevel2();
-            default:    return versions;
-        }
+        return switch (level) {
+            case 1 -> diffLevel1();
+            case 2 -> diffLevel2();
+            default -> versions;
+        };
     }
 
     private List<ProgramVersion> diffLevel1() {
@@ -138,7 +138,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         for (int i = -DIFF_MARGIN; i < output.size(); i++) {
             if (i + DIFF_MARGIN < output.size() && !output.get(i + DIFF_MARGIN).startsWith(NO_CHANGE_PREFIX)) {
                 if (!active && skipped > 0) {
-                    messageConsumer.accept(NO_CHANGE_PREFIX + "");
+                    messageConsumer.accept(NO_CHANGE_PREFIX);
                 }
                 active = true;
                 countdown = 2 * DIFF_MARGIN + 1;
@@ -179,7 +179,7 @@ public class DiffDebugPrinter implements DebugPrinter {
             str.append("    * ");       // Deleted line -- no number
         }
         str.append(instruction.getOpcode());
-        instruction.getArgs().forEach(arg -> str.append(" ").append(arg));
+        instruction.getArgs().forEach(arg -> str.append(" ").append(arg.toMlog()));
         return str.toString();
     }
 

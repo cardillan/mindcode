@@ -141,11 +141,11 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         // call testa (2x)
-                        createInstruction(SET, "__fn2retaddr", var(1003)),
-                        createInstruction(SET, "@counter", var(1002)),
+                        createInstruction(SETADDR, "__fn2retaddr", var(1003)),
+                        createInstruction(CALL, var(1002)),
                         createInstruction(LABEL, var(1003)),
-                        createInstruction(SET, "__fn2retaddr", var(1004)),
-                        createInstruction(SET, "@counter", var(1002)),
+                        createInstruction(SETADDR, "__fn2retaddr", var(1004)),
+                        createInstruction(CALL, var(1002)),
                         createInstruction(LABEL, var(1004)),
                         // if false + call testb -- removed
                         createInstruction(LABEL, var(1005)),
@@ -154,11 +154,11 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1006)),
                         createInstruction(LABEL, var(1007)),
                         // call testc (2)
-                        createInstruction(SET, "__fn1retaddr", var(1010)),
-                        createInstruction(SET, "@counter", var(1001)),
+                        createInstruction(SETADDR, "__fn1retaddr", var(1010)),
+                        createInstruction(CALL, var(1001)),
                         createInstruction(LABEL, var(1010)),
-                        createInstruction(SET, "__fn1retaddr", var(1011)),
-                        createInstruction(SET, "@counter", var(1001)),
+                        createInstruction(SETADDR, "__fn1retaddr", var(1011)),
+                        createInstruction(CALL, var(1001)),
                         createInstruction(LABEL, var(1011)),
                         createInstruction(PRINTFLUSH, "message1"),
                         createInstruction(END),
@@ -169,13 +169,13 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1001)),
                         createInstruction(PRINT, "\"End\""),
                         createInstruction(LABEL, var(1013)),
-                        createInstruction(SET, "@counter", "__fn1retaddr"),
+                        createInstruction(GOTO, "__fn1retaddr"),
                         createInstruction(END),
                         // def testa
                         createInstruction(LABEL, var(1002)),
                         createInstruction(PRINT, "\"Start\""),
                         createInstruction(LABEL, var(1014)),
-                        createInstruction(SET, "@counter", "__fn2retaddr"),
+                        createInstruction(GOTO, "__fn2retaddr"),
                         createInstruction(END)
                 ),
                 terminus.getResult()

@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -49,11 +48,11 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 List.of(
                         createInstruction(SET, "__sp", "33"),
                         createInstruction(SET, "__fn0_n", "4"),
-                        createInstruction(CALL, "cell1", var(1000), var(1001)),
+                        createInstruction(CALLREC, "cell1", var(1000), var(1001)),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(SET, var(0), "__fn0retval"),
                         createInstruction(SET, "__fn0_n", "5"),
-                        createInstruction(CALL, "cell1", var(1000), var(1002)),
+                        createInstruction(CALLREC, "cell1", var(1000), var(1002)),
                         createInstruction(LABEL, var(1002)),
                         createInstruction(OP, "add", var(2), var(0), "__fn0retval"),
                         createInstruction(WRITE, var(2), "cell2", "3"),
@@ -65,7 +64,7 @@ class OptimizedLogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "sub", var(5), "__fn0_n", "1"),
                         createInstruction(PUSH, "cell1", "__fn0_n"),
                         createInstruction(SET, "__fn0_n", var(5)),
-                        createInstruction(CALL, "cell1", var(1000), var(1004)),
+                        createInstruction(CALLREC, "cell1", var(1000), var(1004)),
                         createInstruction(LABEL, var(1004)),
                         createInstruction(POP, "cell1", "__fn0_n"),
                         createInstruction(OP, "mul", "__fn0retval", "2", "__fn0_n"),

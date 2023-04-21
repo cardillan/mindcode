@@ -1,5 +1,6 @@
 package info.teksol.mindcode.logic;
 
+import javax.inject.Named;
 import java.util.List;
 
 public class OpcodeVariant {
@@ -8,16 +9,18 @@ public class OpcodeVariant {
     private final ProcessorEdition edition;
     private final FunctionMapping functionMapping;
     private final Opcode opcode;
-    private final List<NamedArgument> arguments;
+    private final List<NamedParameter> namedParameters;
+    private final List<LogicParameter> parameterTypes;
 
     public OpcodeVariant(ProcessorVersion versionFrom, ProcessorVersion versionTo, ProcessorEdition edition,
-            FunctionMapping functionMapping, Opcode opcode, NamedArgument... arguments) {
+            FunctionMapping functionMapping, Opcode opcode, NamedParameter... namedParameters) {
         this.versionFrom = versionFrom;
         this.versionTo = versionTo;
         this.edition = edition;
         this.functionMapping = functionMapping;
         this.opcode = opcode;
-        this.arguments = List.of(arguments);
+        this.namedParameters = List.of(namedParameters);
+        this.parameterTypes = this.namedParameters.stream().map(NamedParameter::type).toList();
     }
 
     public boolean isAvailableIn(ProcessorVersion version, ProcessorEdition edition) {
@@ -41,8 +44,12 @@ public class OpcodeVariant {
         return opcode;
     }
 
-    public List<NamedArgument> getArguments() {
-        return arguments;
+    public List<NamedParameter> getNamedParameters() {
+        return namedParameters;
+    }
+
+    public List<LogicParameter> getParameterTypes() {
+        return parameterTypes;
     }
 
     public FunctionMapping getFunctionMapping() {
@@ -52,12 +59,12 @@ public class OpcodeVariant {
         NONE,       // No mapping
         FUNC,       // Mapping to function
         PROP,       // Mapping to property access - block.method(arguments)
-        BOTH;       // Mapping to both a function and a property access
+        BOTH       // Mapping to both a function and a property access
     }
 
     @Override
     public String toString() {
         return "OpcodeVariant{" + "versionFrom=" + versionFrom + ", versionTo=" + versionTo + ", edition=" + edition
-                + ", functionMapping=" + functionMapping + ", opcode=" + opcode + ", arguments=" + arguments + '}';
+                + ", functionMapping=" + functionMapping + ", opcode=" + opcode + ", arguments=" + namedParameters + '}';
     }
 }

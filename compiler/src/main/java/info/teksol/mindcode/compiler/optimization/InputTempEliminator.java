@@ -5,6 +5,9 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.ParameterAssignment;
 
 import java.util.Iterator;
 import java.util.List;
@@ -32,8 +35,8 @@ class InputTempEliminator extends GlobalOptimizer {
     protected boolean optimizeProgram() {
         // Cannot use iterations due to modifications of the underlying list in the loop
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof SetInstruction ix && isTemporary(ix.getResult())) {
-                String result = ix.getResult();
+            if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.TMP_VARIABLE) {
+                LogicArgument result = ix.getTarget();
                 List<LogicInstruction> list = findInstructions(
                         in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
@@ -42,9 +45,9 @@ class InputTempEliminator extends GlobalOptimizer {
 
                 // Make sure all arg0 arguments of the other instruction are input
                 LogicInstruction other = list.get(1);
-                boolean replacesInputArg = instructionProcessor.getTypedArguments(other)
-                        .filter(t -> t.getValue().equals(result))
-                        .allMatch(t -> t.getArgumentType().isInput());
+                boolean replacesInputArg = other.assignmentsStream()
+                        .filter(t -> t.argument().equals(result))
+                        .allMatch(ParameterAssignment::isInput);
                 if (!replacesInputArg) continue;
 
                 // The first instruction merely transfers a value to the input argument of the other instruction

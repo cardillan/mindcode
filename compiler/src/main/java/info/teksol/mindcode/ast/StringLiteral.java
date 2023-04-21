@@ -1,6 +1,9 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicLiteral;
+import info.teksol.mindcode.logic.LogicString;
 
 import java.util.Objects;
 
@@ -16,8 +19,8 @@ public class StringLiteral extends ConstantAstNode {
     }
 
     @Override
-    public String getLiteral(InstructionProcessor instructionProcessor) {
-        return "\"" + getText().replaceAll("\"", "'") + "\"";
+    public LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) {
+        return LogicString.create(getText());
     }
 
     @Override

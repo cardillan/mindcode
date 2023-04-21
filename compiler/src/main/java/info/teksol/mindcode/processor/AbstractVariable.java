@@ -3,8 +3,6 @@ package info.teksol.mindcode.processor;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 
-import java.util.Optional;
-
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;
 
@@ -78,22 +76,21 @@ public abstract class AbstractVariable implements Variable {
 
     @Override
     public String toString() {
-        switch (type) {
-            case NULL:      return "null";
-            case OBJECT:    return String.valueOf(object);
-            default:        return valueToString();
-        }
+        return switch (type) {
+            case NULL   -> "null";
+            case OBJECT -> String.valueOf(object);
+            default     -> valueToString();
+        };
     }
 
     @Override
     public AstNode toAstNode() {
-        switch (getType()) {
-            case NULL:      return new NullLiteral();
-            case BOOLEAN:   return new BooleanLiteral(getIntValue() != 0);
-            case LONG:      return new NumericLiteral(String.valueOf(getLongValue()));
-            case DOUBLE:    return new NumericValue(getDoubleValue());
-            case OBJECT:    return new StringLiteral(String.valueOf(object));
-            default:        throw new GenerationException("Unhandled value type " + getType());
-        }
+        return switch (getType()) {
+            case NULL    -> new NullLiteral();
+            case BOOLEAN -> new BooleanLiteral(getIntValue() != 0);
+            case LONG    -> new NumericLiteral(String.valueOf(getLongValue()));
+            case DOUBLE  -> new NumericValue(getDoubleValue());
+            case OBJECT  -> new StringLiteral(String.valueOf(object));
+        };
     }
 }

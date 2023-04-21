@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.logic.LogicLiteral;
 
 // Base class for nodes that represent constants
 public abstract class ConstantAstNode extends BaseAstNode {
@@ -10,5 +11,5 @@ public abstract class ConstantAstNode extends BaseAstNode {
 
     public abstract double getAsDouble();
 
-    public abstract String getLiteral(InstructionProcessor instructionProcessor);
+    public abstract LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor);
 }

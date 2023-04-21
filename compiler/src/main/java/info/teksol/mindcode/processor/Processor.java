@@ -1,7 +1,9 @@
 package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.Condition;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicNumber;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -120,13 +122,13 @@ public class Processor {
             case SetInstruction ix      -> executeSet(ix);
             case StopInstruction ix     -> false;
             case WriteInstruction ix    -> executeWrite(ix);
-            default -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported opcode " + instruction.getOpcode());
+            default                     -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction " + instruction);
         };
     }
 
     private boolean executeSet(SetInstruction ix) {
-        Variable target = getOrCreateVariable(ix.getResult());
-        Variable value = getExistingVariable(ix.getValue());
+        Variable target = getOrCreateVariable(ix.getArg(0));
+        Variable value = getExistingVariable(ix.getArg(1));
         target.assign(value);
         return true;
     }
@@ -134,8 +136,8 @@ public class Processor {
     private boolean executeOp(OpInstruction ix) {
         Variable target = getOrCreateVariable(ix.getResult());
         Variable a = getExistingVariable(ix.getFirstOperand());
-        Variable b = getExistingVariable(ix.hasSecondOperand() ? ix.getSecondOperand() : "0");
-        Operation op = ExpressionEvaluator.getOperation(ix.getOperation());
+        Variable b = getExistingVariable(ix.hasSecondOperand() ? ix.getSecondOperand() : LogicNumber.ZERO);
+        OperationEval op = ExpressionEvaluator.getOperation(ix.getOperation());
         if (op == null) {
             throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation " + ix.getOperation());
         }
@@ -144,17 +146,17 @@ public class Processor {
     }
 
     private boolean executeJump(JumpInstruction ix) {
-        int address = Integer.parseInt(ix.getTarget());
+        int address = Integer.parseInt(ix.getTarget().toMlog());
         if (ix.isUnconditional()) {
             counter.setIntValue(address);
         } else {
             Variable a = getExistingVariable(ix.getFirstOperand());
             Variable b = getExistingVariable(ix.getSecondOperand());
-            Condition condition = CONDITIONS.get(ix.getCondition());
-            if (condition == null) {
+            ConditionEval conditionEval = CONDITIONS.get(ix.getCondition());
+            if (conditionEval == null) {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition " + ix.getCondition());
             }
-            if (condition.evaluate(a, b)) {
+            if (conditionEval.evaluate(a, b)) {
                 counter.setIntValue(address);
             }
         }
@@ -194,7 +196,7 @@ public class Processor {
     }
 
     private boolean executeRead(ReadInstruction ix) {
-        Variable target = getOrCreateVariable(ix.getValue());
+        Variable target = getOrCreateVariable(ix.getResult());
         Variable block = getExistingVariable(ix.getMemory());
         Variable index = getExistingVariable(ix.getIndex());
         target.setDoubleValue(block.getExistingObject().read(index.getIntValue()));
@@ -202,19 +204,21 @@ public class Processor {
     }
 
     private boolean executeWrite(WriteInstruction ix) {
-        Variable source = getExistingVariable(ix.getValue());
+        // TODO: both an address and a variable can be pushed to stack
+        //       need to properly support both alternatives
+        Variable source = getExistingVariable(ix.getArg(0));
         Variable block = getExistingVariable(ix.getMemory());
         Variable index = getExistingVariable(ix.getIndex());
         block.getExistingObject().write(index.getIntValue(), source.getDoubleValue());
         return true;
     }
 
-    private Variable getOrCreateVariable(String value) {
-        return variables.computeIfAbsent(value, this::createVariable);
+    private Variable getOrCreateVariable(LogicArgument value) {
+        return variables.computeIfAbsent(value.toMlog(), this::createVariable);
     }
 
-    private Variable getExistingVariable(String value) {
-        return variables.computeIfAbsent(value, this::createConstant);
+    private Variable getExistingVariable(LogicArgument value) {
+        return variables.computeIfAbsent(value.toMlog(), this::createConstant);
     }
 
     private static final Pattern VARIABLE_NAME_PATTERN = Pattern.compile("^[_a-zA-Z][-a-zA-Z_0-9]*$");
@@ -246,23 +250,22 @@ public class Processor {
         }
     }
 
-    private static final Map<String, Condition> CONDITIONS = createConditionsMap();
+    private static final Map<Condition, ConditionEval> CONDITIONS = createConditionsMap();
 
-    private interface Condition {
+    private interface ConditionEval {
         boolean evaluate(Variable a, Variable b);
     }
 
-    private static Map<String, Condition> createConditionsMap() {
-        Map<String, Condition> map = new HashMap<>();
-        map.put("always",       (a, b) -> true);
-        map.put("equal",        (a, b) -> ExpressionEvaluator.equals(a, b));
-        map.put("notEqual",     (a, b) -> !ExpressionEvaluator.equals(a, b));
-        map.put("land",         (a, b) -> a.getDoubleValue() != 0 && b.getDoubleValue() != 0);
-        map.put("lessThan",     (a, b) -> a.getDoubleValue() < b.getDoubleValue());
-        map.put("lessThanEq",   (a, b) -> a.getDoubleValue() <= b.getDoubleValue());
-        map.put("greaterThan",  (a, b) -> a.getDoubleValue() > b.getDoubleValue());
-        map.put("greaterThanEq",(a, b) -> a.getDoubleValue() >= b.getDoubleValue());
-        map.put("strictEqual",  (a, b) -> a.isObject() == b.isObject() && ExpressionEvaluator.equals(a, b));
+    private static Map<Condition, ConditionEval> createConditionsMap() {
+        Map<Condition, ConditionEval> map = new HashMap<>();
+        map.put(Condition.EQUAL,           (a,  b) -> ExpressionEvaluator.equals(a, b));
+        map.put(Condition.NOT_EQUAL,       (a,  b) -> !ExpressionEvaluator.equals(a, b));
+        map.put(Condition.LESS_THAN,       (a,  b) -> a.getDoubleValue() <  b.getDoubleValue());
+        map.put(Condition.LESS_THAN_EQ,    (a,  b) -> a.getDoubleValue() <= b.getDoubleValue());
+        map.put(Condition.GREATER_THAN,    (a,  b) -> a.getDoubleValue() >  b.getDoubleValue());
+        map.put(Condition.GREATER_THAN_EQ, (a,  b) -> a.getDoubleValue() >= b.getDoubleValue());
+        map.put(Condition.STRICT_EQUAL,    (a,  b) -> a.isObject() == b.isObject() && ExpressionEvaluator.equals(a, b));
+        map.put(Condition.ALWAYS,          (a,  b) -> true);
         return map;
     }
 }

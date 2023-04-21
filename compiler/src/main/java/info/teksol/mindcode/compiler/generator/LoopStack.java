@@ -1,5 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.logic.LogicLabel;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -9,12 +11,12 @@ import java.util.Map;
  * Class maintaining the stack of active loops and their break and continue labels.
  */
 public class LoopStack {
-    private final Deque<String> breakStack = new ArrayDeque<>();
-    private final Deque<String> continueStack = new ArrayDeque<>();
-    private final Map<String, String> breakMap = new HashMap<>();
-    private final Map<String, String> continueMap = new HashMap<>();
+    private final Deque<LogicLabel> breakStack = new ArrayDeque<>();
+    private final Deque<LogicLabel> continueStack = new ArrayDeque<>();
+    private final Map<String, LogicLabel> breakMap = new HashMap<>();
+    private final Map<String, LogicLabel> continueMap = new HashMap<>();
 
-    void enterLoop(String loopLabel, String breakLabel, String continueLabel) {
+    void enterLoop(String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
         if (loopLabel != null) {
             if (continueMap.containsKey(loopLabel)) {
                 throw new GenerationException("Loop label " + loopLabel + " already in use");
@@ -26,15 +28,15 @@ public class LoopStack {
         breakStack.push(breakLabel);
     }
 
-    String getBreakLabel(String loopLabel) {
+    LogicLabel getBreakLabel(String loopLabel) {
         return getLabel(loopLabel, breakStack, breakMap, "break");
     }
 
-    String getContinueLabel(String loopLabel) {
+    LogicLabel getContinueLabel(String loopLabel) {
         return getLabel(loopLabel, continueStack, continueMap, "continue");
     }
 
-    private String getLabel(String loopLabel, Deque<String> stack, Map<String, String> map, String statement) {
+    private LogicLabel getLabel(String loopLabel, Deque<LogicLabel> stack, Map<String, LogicLabel> map, String statement) {
         if (stack.isEmpty()) {
             throw new GenerationException(statement + " statement outside of a do/while/for loop.");
         }
@@ -42,7 +44,7 @@ public class LoopStack {
         if (loopLabel == null) {
             return stack.peek();
         } else {
-            String label = map.get(loopLabel);
+            LogicLabel label = map.get(loopLabel);
             if (label == null) {
                 throw new GenerationException("Undefined label " + loopLabel);
             }
@@ -55,8 +57,8 @@ public class LoopStack {
             throw new IllegalStateException("exitLoop on empty stack");
         }
 
-        String breakLabel = breakStack.pop();
-        String continueLabel = continueStack.pop();
+        LogicLabel breakLabel = breakStack.pop();
+        LogicLabel continueLabel = continueStack.pop();
 
         if (loopLabel != null) {
             if (!breakLabel.equals(breakMap.remove(loopLabel))) {

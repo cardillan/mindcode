@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.logic.Condition;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -30,10 +31,10 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(JUMP, "11", "always"),
-                        createInstruction(WRITE, "10", "cell1", "__sp"),
+                        createInstruction(WRITE, "a", "cell1", "__sp"),
                         createInstruction(OP, "add", "__sp", "__sp", "1"),
                         createInstruction(OP, "sub", "__sp", "__sp", "1"),
-                        createInstruction(READ, "x", "cell1", "__sp"),
+                        createInstruction(READ, "a", "cell1", "__sp"),
                         createInstruction(WRITE, "11", "cell1", "__sp"),
                         createInstruction(OP, "add", "__sp", "__sp", "1"),
                         createInstruction(SET, "@counter", "8"),
@@ -45,14 +46,14 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 LogicInstructionLabelResolver.resolve(
                         getInstructionProcessor(),
                         List.of(
-                                createInstruction(JUMP, "finish", "always"),
-                                createInstruction(PUSH, "cell1", "10"),
-                                createInstruction(POP, "cell1", "x"),
-                                createInstruction(CALL, "cell1", "callAddr", "returnAddr"),
-                                createInstruction(LABEL, "callAddr"),
-                                createInstruction(RETURN, "cell1"),
-                                createInstruction(LABEL, "returnAddr"),
-                                createInstruction(LABEL, "finish"),
+                                createInstruction(JUMP, label0, Condition.ALWAYS),
+                                createInstruction(PUSH, cell1, a),
+                                createInstruction(POP, cell1, a),
+                                createInstruction(CALLREC, cell1, label1, label2),
+                                createInstruction(LABEL, label1),
+                                createInstruction(RETURN, cell1),
+                                createInstruction(LABEL, label2),
+                                createInstruction(LABEL, label0),
                                 createInstruction(END)
                         )
                 )

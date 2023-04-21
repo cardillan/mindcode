@@ -1299,8 +1299,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("" +
-                                "print(\"Blocks:\")\n" +
+                        (Seq) translateToAst("print(\"Blocks:\")\n" +
                                 "n = @links\n" +
                                 "do\n" +
                                 "  n -= 1\n" +
@@ -1368,15 +1367,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void convertsForEachAndPrintFunctionCall() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, var(0), var(1003)),
+                        createInstruction(SETADDR, var(0), var(1003)),
                         createInstruction(SET, "a", "@mono"),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1003)),
-                        createInstruction(SET, var(0), var(1004)),
+                        createInstruction(SETADDR, var(0), var(1004)),
                         createInstruction(SET, "a", "@poly"),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1004)),
-                        createInstruction(SET, var(0), var(1002)),
+                        createInstruction(SETADDR, var(0), var(1002)),
                         createInstruction(SET, "a", "@mega"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(PRINT, "a"),

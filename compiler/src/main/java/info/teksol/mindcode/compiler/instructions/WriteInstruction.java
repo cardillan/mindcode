@@ -1,24 +1,36 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
 public class WriteInstruction extends BaseInstruction {
 
-    WriteInstruction(String marker, Opcode opcode, List<String> args) {
-        super(marker, opcode, args);
+    WriteInstruction(List<LogicArgument> args, List<LogicParameter> params) {
+        super(Opcode.WRITE, args, params);
     }
 
-    public final String getValue() {
-        return getArg(0);
+    protected WriteInstruction(BaseInstruction other, String marker) {
+        super(other, marker);
     }
 
-    public final String getMemory() {
-        return getArg(1);
+    public WriteInstruction withMarker(String marker) {
+        return new WriteInstruction(this, marker);
     }
 
-    public final String getIndex() {
-        return getArg(2);
+    public final LogicValue getValue() {
+        return (LogicValue) getArg(0);
+    }
+
+    public final LogicAddress getAddress() {
+        return (LogicAddress) getArg(0);
+    }
+
+    public final LogicVariable getMemory() {
+        return (LogicVariable) getArg(1);
+    }
+
+    public final LogicValue getIndex() {
+        return (LogicValue) getArg(2);
     }
 }

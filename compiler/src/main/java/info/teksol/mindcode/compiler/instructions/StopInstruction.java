@@ -6,8 +6,15 @@ import java.util.List;
 
 public class StopInstruction extends BaseInstruction {
 
-    StopInstruction(String marker, Opcode opcode, List<String> args) {
-        super(marker, opcode, args);
+    StopInstruction() {
+        super(Opcode.STOP, List.of(), List.of());
     }
 
+    protected StopInstruction(BaseInstruction other, String marker) {
+        super(other, marker);
+    }
+
+    public StopInstruction withMarker(String marker) {
+        return new StopInstruction(this, marker);
+    }
 }

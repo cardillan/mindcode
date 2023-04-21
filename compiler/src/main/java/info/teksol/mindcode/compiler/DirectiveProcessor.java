@@ -46,18 +46,11 @@ public class DirectiveProcessor {
 
     private static void setTarget(CompilerProfile profile, String target) {
         switch (target) {
-            case "ML6":
-                profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
-                break;
-            case "ML7":
-            case "ML7S":
-                profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
-                break;
-            case "ML7W":
-                profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
-                break;
-            default:
-                throw new InvalidCompilerDirectiveException("Invalid value '" + target + "' of compiler directive 'target'");
+            case "ML6"  -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
+            case "ML7", "ML7S" ->
+                           profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
+            case "ML7W" -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
+            default     -> throw new InvalidCompilerDirectiveException("Invalid value '" + target + "' of compiler directive 'target'");
         }
     }
 

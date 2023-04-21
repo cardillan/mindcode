@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.functions.FunctionMapper.FunctionSample;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.logic.Opcode;
@@ -53,7 +54,7 @@ public class FunctionReferenceGeneratorTest {
         assertTrue(new File(SYNTAX_REL_PATH + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         FunctionMapper mapper = FunctionMapperFactory.getFunctionMapper(processor, s -> {});
-        List<FunctionMapper.FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
+        List<FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 
         try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS_" + version + ".markdown")) {
             w.println("# Function reference for Mindustry " + version);
@@ -88,9 +89,9 @@ public class FunctionReferenceGeneratorTest {
     }
 
     private void printOpcode(InstructionProcessor processor, PrintWriter w, Opcode opcode,
-            List<FunctionMapper.FunctionSample> list) {
+            List<FunctionSample> list) {
 
-        if (list.stream().noneMatch(v -> v.instruction.getOpcode() == opcode)) {
+        if (list.stream().noneMatch(v -> v.instruction().getOpcode() == opcode)) {
             return;
         }
 
@@ -105,21 +106,21 @@ public class FunctionReferenceGeneratorTest {
         w.println("|-------------|---------------------|");
 
         list.stream()
-                .filter(v -> v.instruction.getOpcode() == opcode)
-                .sorted(Comparator.comparingInt(v -> v.order))
+                .filter(v -> v.instruction().getOpcode() == opcode)
+                .sorted(Comparator.comparingInt(FunctionSample::order))
                 .forEach(s -> printSample(processor, w, s));
     }
 
-    private void printSample(InstructionProcessor processor, PrintWriter w, FunctionMapper.FunctionSample sample) {
+    private void printSample(InstructionProcessor processor, PrintWriter w, FunctionSample sample) {
         w.print("|`");
-        w.print(sample.functionCall);
+        w.print(sample.functionCall());
         w.print("`");
-        if (!sample.note.isEmpty()) {
+        if (!sample.note().isEmpty()) {
             w.print("<br/>");
-            w.print(sample.note.replace('\'', '`'));
+            w.print(sample.note().replace('\'', '`'));
         }
         w.print("|`");
-        w.print(LogicInstructionPrinter.toString(processor, sample.instruction));
+        w.print(LogicInstructionPrinter.toString(processor, sample.instruction()));
         w.println("`|");
     }
 }

@@ -3,7 +3,8 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.Set;
  * No instructions are removed or added except possibly a label at the start of the program.
 */
 class PropagateJumpTargets extends GlobalOptimizer {
-    private static final String FIRST_LABEL = "__start__";
+    private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
     private boolean startLabelUsed = false;
     
     public PropagateJumpTargets(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
@@ -34,15 +35,15 @@ class PropagateJumpTargets extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         int count = 0;
-        program.add(0, createInstruction(Opcode.LABEL, FIRST_LABEL));
+        program.add(0, createLabel(FIRST_LABEL));
         for (int index = 0; index < program.size(); index++) {
             LogicInstruction instruction = program.get(index);
             if (instruction instanceof JumpInstruction ix) {
-                String label = findJumpRedirection(ix);
+                LogicLabel label = findJumpRedirection(ix);
                 if (!label.equals(ix.getTarget())) {
                     startLabelUsed |= label.equals(FIRST_LABEL);
                     // Update target of the original jump
-                    program.set(index, replaceArg(ix, 0, label));
+                    program.set(index, ix.withLabel(label));
                     count++;
                 }
             }
@@ -61,12 +62,12 @@ class PropagateJumpTargets extends GlobalOptimizer {
     }
 
     // Determines the final target of given jump
-    private String findJumpRedirection(JumpInstruction firstJump) {
-        String label = firstJump.getTarget();
-        Set<String> labels = new HashSet<>();       // Cycle detection
+    private LogicLabel findJumpRedirection(JumpInstruction firstJump) {
+        LogicLabel label = firstJump.getTarget();
+        Set<LogicLabel> labels = new HashSet<>();       // Cycle detection
         labels.add(label);
         while (true) {
-            String redirected = evaluateJumpRedirection(firstJump, label);
+            LogicLabel redirected = evaluateJumpRedirection(firstJump, label);
             if (redirected == null || !labels.add(redirected)) {
                 return label;
             }
@@ -75,7 +76,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
     }
     
     // Determines the jump redirection (one level only)
-    private String evaluateJumpRedirection(JumpInstruction firstJump, String label) {
+    private LogicLabel evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
         int target = findInstructionIndex(0, in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
         if (target < 0) {
             throw new OptimizationException("Could not find label " + label);
@@ -100,11 +101,10 @@ class PropagateJumpTargets extends GlobalOptimizer {
     
     // Returns true if the next jump is semantically identical to the first jump
     private boolean isIdenticalJump(JumpInstruction firstJump, JumpInstruction nextJump) {
-        List<String> args1 = firstJump.getArgs();
-        List<String> args2 = nextJump.getArgs();
+        List<LogicArgument> args1 = firstJump.getArgs();
+        List<LogicArgument> args2 = nextJump.getArgs();
         
         // Compare everything but labels; exclude volatile variables
-        return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size())) &&
-                args1.stream().noneMatch(instructionProcessor::isVolatile);
+        return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size())) && args1.stream().noneMatch(LogicArgument::isVolatile);
     }
 }

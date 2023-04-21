@@ -115,32 +115,30 @@ public class CompileMain {
     }
     
     static private void selectVersion(CompilerProfile profile, String option) {
-        switch(option.toUpperCase()) {
-            case "6":  profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR); break;
-            case "7":  profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR); break;
-            case "7S": profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR); break;
-            case "7W": profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR); break;
-            default:   showHelp(2);
+        switch (option.toUpperCase()) {
+            case "6"        -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
+            case "7", "7S"  -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
+            case "7W"       -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
+            default         -> showHelp(2);
         }
     }
 
     static private void selectDebugLevel(CompilerProfile profile, String option) {
-        switch(option) {
-            case "0": profile.setDebugLevel(0); break;
-            case "1": profile.setDebugLevel(1); break;
-            case "2": profile.setDebugLevel(2); break;
-            case "3": profile.setDebugLevel(3); break;
-            default: showHelp(2);
+        switch (option) {
+            case "0" -> profile.setDebugLevel(0);
+            case "1" -> profile.setDebugLevel(1);
+            case "2" -> profile.setDebugLevel(2);
+            case "3" -> profile.setDebugLevel(3);
+            default -> showHelp(2);
         }
     }
 
     static private void selectPrintLevel(CompilerProfile profile, String option) {
-        switch(option) {
-            case "0": profile.setParseTreeLevel(0); break;
-            case "":
-            case "1": profile.setParseTreeLevel(1); break;
-            case "2": profile.setParseTreeLevel(2); break;
-            default: showHelp(2);
+        switch (option) {
+            case "0"     -> profile.setParseTreeLevel(0);
+            case "", "1" -> profile.setParseTreeLevel(1);
+            case "2"     -> profile.setParseTreeLevel(2);
+            default      -> showHelp(2);
         }
     }
 

@@ -15,6 +15,5 @@ public enum ProcessorFlag {
     ERR_MEMORY_ACCESS,
     ERR_UNSUPPORTED_BLOCK_OPERATION,
     ERR_EXECUTION_LIMIT_EXCEEDED,
-    ;
 
 }

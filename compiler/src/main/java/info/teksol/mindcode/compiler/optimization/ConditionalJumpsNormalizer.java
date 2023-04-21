@@ -4,7 +4,10 @@ import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.LogicBoolean;
+
+import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
+import static info.teksol.mindcode.logic.LogicBoolean.TRUE;
 
 /**
  * Replaces conditional jumps whose condition is always true with unconditional jumps
@@ -27,7 +30,7 @@ class ConditionalJumpsNormalizer extends PipelinedOptimizer {
         public State emit(LogicInstruction instruction) {
             if (instruction instanceof JumpInstruction ix) {
                 if (effectivelyUnconditional(ix)) {
-                    emitToNext(createInstruction(Opcode.JUMP, ix.getTarget(), "always"));
+                    emitToNext(createUnconditionalJump(ix.getTarget()));
                 } else if (!alwaysFalse(ix)) {
                     emitToNext(instruction);
                 }
@@ -44,22 +47,22 @@ class ConditionalJumpsNormalizer extends PipelinedOptimizer {
     }
 
     private boolean effectivelyUnconditional(JumpInstruction jump) {
-        switch (jump.getCondition()) {
-            case "equal":       return hasArgs(jump, "true", "true") || hasArgs(jump, "false", "false");
-            case "notEqual":    return hasArgs(jump, "true", "false") || hasArgs(jump, "false", "true");
-            default:            return false;
-        }
+        return switch (jump.getCondition()) {
+            case EQUAL      -> hasArgs(jump, TRUE, TRUE) || hasArgs(jump, FALSE, FALSE);
+            case NOT_EQUAL  -> hasArgs(jump, TRUE, FALSE) || hasArgs(jump, FALSE, TRUE);
+            default         -> false;
+        };
     }
 
     private boolean alwaysFalse(JumpInstruction jump) {
-        switch (jump.getCondition()) {
-            case "equal":       return hasArgs(jump, "true", "false") || hasArgs(jump, "false", "true");
-            case "notEqual":    return hasArgs(jump, "true", "true") || hasArgs(jump, "false", "false");
-            default:            return false;
-        }
+        return switch (jump.getCondition()) {
+            case EQUAL      -> hasArgs(jump, TRUE, FALSE) || hasArgs(jump, FALSE, TRUE);
+            case NOT_EQUAL  -> hasArgs(jump, TRUE, TRUE) || hasArgs(jump, FALSE, FALSE);
+            default         -> false;
+        };
     }
 
-    private boolean hasArgs(JumpInstruction jump, String first, String second) {
+    private boolean hasArgs(JumpInstruction jump, LogicBoolean first, LogicBoolean second) {
         return jump.getFirstOperand().equals(first) && jump.getSecondOperand().equals(second);
     }
 }

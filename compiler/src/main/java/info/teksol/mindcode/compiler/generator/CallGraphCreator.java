@@ -64,14 +64,13 @@ public class CallGraphCreator  {
     }
     
     private void visitNode(AstNode nodeToVisit) {
-        AstNode node = nodeToVisit;
-        encounteredNodes.add(node);
+        encounteredNodes.add(nodeToVisit);
 
-        switch (node) {
+        switch (nodeToVisit) {
             case FunctionCall n         -> visitFunctionCall(n);
             case FunctionDeclaration n  -> visitFunctionDeclaration(n);
             case StackAllocation n      -> visitStackAllocation(n);
-            default                     -> node.getChildren().forEach(this::visitNode);
+            default                     -> nodeToVisit.getChildren().forEach(this::visitNode);
         }
     }
 

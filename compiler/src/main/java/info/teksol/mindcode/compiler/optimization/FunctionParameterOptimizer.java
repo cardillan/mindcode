@@ -2,7 +2,9 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.TypedArgument;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicBuiltIn;
+import info.teksol.mindcode.logic.ParameterAssignment;
 
 import java.util.List;
 import java.util.Map;
@@ -51,10 +53,10 @@ class FunctionParameterOptimizer extends BaseFunctionOptimizer {
         List<LogicInstruction> function = getFunctionInstructions(functionPrefix);
 
         // Count the number of times each variable is modified in the function
-        Map<String, Long> modifications = function.stream()
-                .flatMap(instructionProcessor::getTypedArguments)
-                .filter(a -> a.getArgumentType().isOutput())
-                .map(TypedArgument::getValue)
+        Map<LogicArgument, Long> modifications = function.stream()
+                .flatMap(LogicInstruction::assignmentsStream)
+                .filter(ParameterAssignment::isOutput)
+                .map(ParameterAssignment::argument)
                 .collect(Collectors.groupingBy(a -> a, Collectors.counting()));
 
         boolean hasCalls = function.stream().anyMatch(this::isCall);
@@ -62,21 +64,19 @@ class FunctionParameterOptimizer extends BaseFunctionOptimizer {
         // Obtain a list of set instructions that can be eliminated.
         // See preconditions listed in class javadoc
         List<SetInstruction> eliminations = function.stream()
-                .filter(ix -> ix instanceof SetInstruction)                                         // precondition 1
+                .filter(ix -> ix instanceof SetInstruction)                         // precondition 1
                 .map(ix -> (SetInstruction) ix)
-                .filter(ix -> ix.getResult().startsWith(functionPrefix + "_"))                      // precondition 1
-                .filter(ix -> modifications.get(ix.getResult()) == 1)                               // precondition 2
-                .filter(ix -> !modifications.containsKey(ix.getValue()))                            // precondition 3
-                .filter(ix -> !instructionProcessor.isVolatile(ix.getValue()))                      // precondition 3
-                .filter(ix -> !hasCalls || !instructionProcessor.isGlobalName(ix.getValue()))       // precondition 4
+                .filter(ix -> ix.getTarget().isFunctionVariable())                  // precondition 1
+                .filter(ix -> modifications.get(ix.getTarget()) == 1)               // precondition 2
+                .filter(ix -> !modifications.containsKey(ix.getValue()))            // precondition 3
+                .filter(ix -> !ix.getValue().isVolatile())                          // precondition 3
+                .filter(ix -> !hasCalls || !ix.getValue().isGlobalVariable())       // precondition 4
                 .toList();
 
         eliminations.forEach(ix -> eliminateInstruction(functionPrefix, ix));
     }
 
-    private boolean isCall(LogicInstruction instr) {
-        // Stackless functions are called via set @counter __label
-        // TODO: replace with special CALL instruction
-        return instr instanceof CallInstruction || (instr instanceof SetInstruction ix && ix.getResult().equals("@counter"));
+    private boolean isCall(LogicInstruction ix) {
+        return ix instanceof CallRecInstruction || ix instanceof CallInstruction;
     }
 }

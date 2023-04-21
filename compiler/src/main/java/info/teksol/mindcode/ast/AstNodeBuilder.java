@@ -5,7 +5,6 @@ import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static final String AST_PREFIX = "__ast";
@@ -274,13 +273,8 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         MindcodeParser.Alloc_listContext alloc_list = ctx.alloc().alloc_list();
         while (alloc_list != null) {
             switch (alloc_list.type.getText()) {
-                case "heap":
-                    allocateHeap(alloc_list);
-                    break;
-
-                case "stack":
-                    allocateStack(alloc_list);
-                    break;
+                case "heap"  -> allocateHeap(alloc_list);
+                case "stack" -> allocateStack(alloc_list);
             }
 
             alloc_list = alloc_list.alloc_list();

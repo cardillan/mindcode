@@ -21,19 +21,19 @@ public class CompilerOutput {
     }
 
     public List<String> getAllTexts() {
-        return messages.stream().map(CompilerMessage::getMessage).collect(Collectors.toList());
+        return messages.stream().map(CompilerMessage::message).collect(Collectors.toList());
     }
 
     public List<String> getErrors() {
-        return messages.stream().filter(CompilerMessage::isError).map(CompilerMessage::getMessage).map(String::trim).collect(Collectors.toList());
+        return messages.stream().filter(CompilerMessage::isError).map(CompilerMessage::message).map(String::trim).collect(Collectors.toList());
     }
 
     public List<String> getWarnings() {
-        return messages.stream().filter(CompilerMessage::isWarning).map(CompilerMessage::getMessage).map(String::trim).collect(Collectors.toList());
+        return messages.stream().filter(CompilerMessage::isWarning).map(CompilerMessage::message).map(String::trim).collect(Collectors.toList());
     }
 
     public List<String> getMessages() {
-        return messages.stream().filter(CompilerMessage::isInfo).map(CompilerMessage::getMessage).map(String::trim).collect(Collectors.toList());
+        return messages.stream().filter(CompilerMessage::isInfo).map(CompilerMessage::message).map(String::trim).collect(Collectors.toList());
     }
 
     public boolean hasErrors() {

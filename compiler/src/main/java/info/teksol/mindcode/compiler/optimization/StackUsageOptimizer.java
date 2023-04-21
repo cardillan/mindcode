@@ -2,14 +2,14 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.TypedArgument;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicVariable;
 
-import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Optimizes the stack usage -- eliminates push/pop instruction pairs determined to be unnecessary. Several
@@ -39,24 +39,25 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
         return false;
     }
 
-    private final Set<String> variables = new HashSet<>();
+    private final Set<LogicArgument> variables = new HashSet<>();
 
     private void removeUnusedVariables() {
-        program.stream().filter(ix -> !(ix instanceof PushOrPopInstruction)).forEach(this::collectVariables);
+        // Collects all variables from the entire program except push or pop instructions
+        program.stream().filter(Predicate.not(PushOrPopInstruction.class::isInstance))
+                .flatMap(LogicInstruction::inputOutputArgumentsStream)
+                .filter(LogicVariable.class::isInstance)
+                .forEachOrdered(variables::add);
+
         program.removeIf(this::uselessStackOperation);
     }
 
-    private void collectVariables(LogicInstruction instruction) {
-        variables.addAll(instructionProcessor.getInputOutputValues(instruction));
-    }
-
     private boolean uselessStackOperation(LogicInstruction instruction) {
-        return instruction instanceof PushOrPopInstruction ix && !variables.contains(ix.getValue());
+        return instruction instanceof PushOrPopInstruction ix && !variables.contains(ix.getVariable());
     }
 
     private void removeUnnecessaryPushes() {
         // Loop through call instruction indexes
-        int call = findInstructionIndex(0, ix -> ix instanceof CallInstruction);
+        int call = findInstructionIndex(0, ix -> ix instanceof CallRecInstruction);
         while (call > 0) {
             int finish = findInstructionIndex(call, ix -> ix instanceof ReturnInstruction);
             if (finish < 0) {
@@ -66,11 +67,9 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
             List<LogicInstruction> codeBlock = program.subList(call, finish);
             if (isLinear(codeBlock)) {
                 // List of variables read in the code block, except push/pop operations
-                Set<String> readVariables = codeBlock.stream()
+                Set<LogicArgument> readVariables = codeBlock.stream()
                         .filter(ix -> !(ix instanceof PushOrPopInstruction))
-                        .flatMap(instructionProcessor::getTypedArguments)
-                        .filter(arg -> arg.getArgumentType().isInput())
-                        .map(TypedArgument::getValue)
+                        .flatMap(LogicInstruction::inputArgumentsStream)
                         .collect(Collectors.toSet());
 
                 // Push/pop instructions around a call are marked with the same marker
@@ -79,10 +78,10 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
                 // Need to remove from the entire program, not just from the code block, as code block
                 // doesn't contain push instructions preceding the call instruction
                 program.removeIf(in -> in instanceof PushOrPopInstruction ix
-                        && ix.matchesMarker(marker) && !readVariables.contains(ix.getValue()));
+                        && ix.matchesMarker(marker) && !readVariables.contains(ix.getVariable()));
             }
 
-            call = findInstructionIndex(call + 1, ix -> ix instanceof CallInstruction);
+            call = findInstructionIndex(call + 1, ix -> ix instanceof CallRecInstruction);
         }
     }
 

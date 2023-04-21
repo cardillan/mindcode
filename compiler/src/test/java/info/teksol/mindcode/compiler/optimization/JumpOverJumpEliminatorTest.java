@@ -4,6 +4,7 @@ import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.Condition;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 
 public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = new JumpOverJumpEliminator(getInstructionProcessor(), terminus);
+
 
     @Test
     void optimizesBreakInWhileLoop() {
@@ -57,18 +59,18 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void optimizesMinimalSequence() {
-        pipeline.emit(createInstruction(LABEL, "label0"));
-        pipeline.emit(createInstruction(JUMP, "label1", "equal", "a", "b"));
-        pipeline.emit(createInstruction(JUMP, "label0", "always"));
-        pipeline.emit(createInstruction(LABEL, "label1"));
+        pipeline.emit(createInstruction(LABEL, label0));
+        pipeline.emit(createInstruction(JUMP, label1, Condition.EQUAL, a, b));
+        pipeline.emit(createInstruction(JUMP, label0, Condition.ALWAYS));
+        pipeline.emit(createInstruction(LABEL, label1));
         pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(LABEL, "label0"),
-                        createInstruction(JUMP, "label0", "notEqual", "a", "b"),
-                        createInstruction(LABEL, "label1"),
+                        createInstruction(LABEL, label0),
+                        createInstruction(JUMP, label0, Condition.NOT_EQUAL, a, b),
+                        createInstruction(LABEL, label1),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -78,10 +80,10 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     @Test
     void ignoresStrictEqual() {
         List<LogicInstruction> sequence = List.of(
-                createInstruction(LABEL, "label0"),
-                createInstruction(JUMP, "label1", "strictEqual", "a", "b"),
-                createInstruction(JUMP, "label0", "always"),
-                createInstruction(LABEL, "label1"),
+                createInstruction(LABEL, label0),
+                createInstruction(JUMP, label1, Condition.STRICT_EQUAL, a, b),
+                createInstruction(JUMP, label0, Condition.ALWAYS),
+                createInstruction(LABEL, label1),
                 createInstruction(END)
         );
 
@@ -94,11 +96,11 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     @Test
     void ignoresDistantJumps() {
         List<LogicInstruction> sequence = List.of(
-                createInstruction(LABEL, "label0"),
-                createInstruction(JUMP, "label1", "strictEqual", "a", "b"),
-                createInstruction(JUMP, "label0", "always"),
-                createInstruction(PRINT, "a"),
-                createInstruction(LABEL, "label1"),
+                createInstruction(LABEL, label0),
+                createInstruction(JUMP, label1, Condition.STRICT_EQUAL, a, b),
+                createInstruction(JUMP, label0, Condition.ALWAYS),
+                createInstruction(PRINT, a),
+                createInstruction(LABEL, label1),
                 createInstruction(END)
         );
 
@@ -111,10 +113,10 @@ public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     @Test
     void ignoresConditionalJumps() {
         List<LogicInstruction> sequence = List.of(
-                createInstruction(LABEL, "label0"),
-                createInstruction(JUMP, "label1", "equal", "a", "b"),
-                createInstruction(JUMP, "label0", "equal", "c", "d"),
-                createInstruction(LABEL, "label1"),
+                createInstruction(LABEL, label0),
+                createInstruction(JUMP, label1, Condition.EQUAL, a, b),
+                createInstruction(JUMP, label0, Condition.EQUAL, c, d),
+                createInstruction(LABEL, label1),
                 createInstruction(END)
         );
 

@@ -43,7 +43,6 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst("""
-                                printf()
                                 printf("")
                                 printf("foo")
                                 """

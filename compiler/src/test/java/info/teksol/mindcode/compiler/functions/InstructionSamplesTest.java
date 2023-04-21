@@ -59,17 +59,17 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
         List<LogicInstruction> result = new ArrayList<>();
         List<List<String>> combinations = new ArrayList<>();
 
-        for (NamedArgument arg : opcodeVariant.getArguments()) {
-            if (arg.getType() == ArgumentType.LABEL) {
+        for (NamedParameter arg : opcodeVariant.getNamedParameters()) {
+            if (arg.type() == LogicParameter.LABEL) {
                 combinations.add(List.of("0"));
-            } else if (arg.getType().isConst()) {
-                combinations.add(arg.getType().getAllowedValues().stream()
+            } else if (arg.type().isKeyword()) {
+                combinations.add(arg.type().getAllowedValues().stream()
                         .filter(v -> v.versions.contains(processorVersion))
                         .flatMap(v -> v.values.stream())
                         .sorted()
                         .toList());
             } else {
-                combinations.add(List.of(arg.getName()));
+                combinations.add(List.of(arg.name()));
             }
         }
         int variants = combinations.stream()
@@ -78,8 +78,9 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
 
         for (int i = 0; i < variants; i++) {
             final int index = i;
-            List<String> params = combinations.stream()
+            List<LogicArgument> params = combinations.stream()
                     .map(l -> l.get(index % l.size()))
+                    .map(BaseArgument::new)
                     .collect(Collectors.toList());
 
             result.add(processor.createInstruction(opcodeVariant.getOpcode(), params));

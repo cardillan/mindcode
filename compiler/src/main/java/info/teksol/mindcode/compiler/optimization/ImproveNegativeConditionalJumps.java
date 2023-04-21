@@ -5,7 +5,10 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.Condition;
+
+import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
 
 /**
  * Turns the following sequence of instructions:
@@ -63,18 +66,18 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
 
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction instanceof JumpInstruction ix && ix.getCondition().equals("equal")) {
+            if (instruction instanceof JumpInstruction ix && ix.getCondition() == Condition.EQUAL) {
                 // Other preconditions for the optimization
                 boolean isSameVariable = ix.getFirstOperand().equals(op.getResult());
-                boolean jumpComparesToFalse = ix.getSecondOperand().equals("false");
+                boolean jumpComparesToFalse = ix.getSecondOperand() == FALSE;
 
                 if (isSameVariable && jumpComparesToFalse) {
-                    if (!hasInverse(op.getOperation())) {
-                        throw new OptimizationException("Unknown operation passed-in; can't find the inverse of [" + op.getOperation() + "]");
+                    if (!op.getOperation().hasInverse()) {
+                        throw new OptimizationException("Cannot find the inverse of '" + op.getOperation() + "'");
                     }
 
-                    emitToNext(createInstruction(Opcode.JUMP, ix.getTarget(),
-                            getInverse(op.getOperation()),
+                    emitToNext(createJump(ix.getTarget(),
+                            op.getOperation().inverse().toCondition(),
                             op.getFirstOperand(), op.getSecondOperand())
                     );
                     return new EmptyState();
@@ -92,7 +95,7 @@ public class ImproveNegativeConditionalJumps extends PipelinedOptimizer {
         }
     }
 
-    private boolean isComparisonOperationToTmp(OpInstruction instruction) {
-        return hasInverse(instruction.getOperation()) && isTemporary(instruction.getResult());
+    private boolean isComparisonOperationToTmp(OpInstruction ix) {
+        return ix.getOperation().hasInverse() && ix.getResult().getType() == ArgumentType.TMP_VARIABLE;
     }
 }

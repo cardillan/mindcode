@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.logic.LogicBoolean;
 
 import java.util.Objects;
 
@@ -16,8 +17,8 @@ public class BooleanLiteral extends ConstantAstNode {
     }
 
     @Override
-    public String getLiteral(InstructionProcessor instructionProcessor) {
-        return String.valueOf(value);
+    public LogicBoolean toLogicLiteral(InstructionProcessor instructionProcessor) {
+        return value ? LogicBoolean.TRUE : LogicBoolean.FALSE;
     }
 
     @Override

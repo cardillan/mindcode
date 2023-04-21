@@ -96,7 +96,7 @@ public class ScriptsController {
         jdbcTemplate.update(
                 "INSERT INTO public.scripts(id, name, author_id, source) VALUES (?::uuid, ?, ?::uuid, ?)",
                 id.toString(), name, user.getId(), source.replaceAll("\r\n", "\n"));
-        return "redirect:/scripts/" + id.toString() + "/edit";
+        return "redirect:/scripts/" + id + "/edit";
     }
 
     @GetMapping(value = "/{id}/edit")

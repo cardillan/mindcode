@@ -28,7 +28,7 @@ public class LogicInstructionPrinter {
         for (int i = 0; i < count; i++) {
             buffer.append(" ");
             if (instruction.getArgs().size() > i) {
-                buffer.append(instruction.getArg(i));
+                buffer.append(instruction.getArg(i).toMlog());
             } else {
                 buffer.append("0");
             }

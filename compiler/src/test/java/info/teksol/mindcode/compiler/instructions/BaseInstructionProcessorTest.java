@@ -2,12 +2,12 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.generator.GenerationException;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.TypedArgument;
+import info.teksol.mindcode.logic.BaseArgument;
+import info.teksol.mindcode.logic.LogicParameter;
+import info.teksol.mindcode.logic.ParameterAssignment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,7 +58,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     void replacesInstructionArgument() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "255");
-        LogicInstruction replaced = getInstructionProcessor().replaceArg(original, 1, "255");
+        LogicInstruction replaced = getInstructionProcessor().replaceArg(original, 1, new BaseArgument("255"));
         assertEquals(
                 createInstruction(DRAW, "clear", "255", "0", "255"),
                 replaced
@@ -68,14 +68,14 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     void keepsInstructionIfArgumentIdentical() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "255");
-        LogicInstruction replaced = getInstructionProcessor().replaceArg(original, 1, "0");
+        LogicInstruction replaced = getInstructionProcessor().replaceArg(original, 1, new BaseArgument("0"));
         assertSame(original, replaced);
     }
 
     @Test
     void replacesAllArguments() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "0");
-        LogicInstruction replaced = getInstructionProcessor().replaceAllArgs(original, "0", "255");
+        LogicInstruction replaced = getInstructionProcessor().replaceAllArgs(original, new BaseArgument("0"), new BaseArgument("255"));
         assertEquals(
                 createInstruction(DRAW, "clear", "255", "255", "255"),
                 replaced
@@ -83,44 +83,20 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void providesCorrectMetadata_TotalInputs() {
-        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
-        assertEquals(1, getInstructionProcessor().getTotalInputs(ix));
-    }
-
-    @Test
-    void providesCorrectMetadata_TotalOutputs() {
-        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
-        assertEquals(4, getInstructionProcessor().getTotalOutputs(ix));
-    }
-
-    @Test
-    void providesCorrectMetadata_InputValues() {
-        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
-        assertEquals(List.of("@lead"), getInstructionProcessor().getInputValues(ix));
-    }
-
-    @Test
-    void providesCorrectMetadata_OutputValues() {
-        LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
-        assertEquals(List.of("outx", "outy", "found", "building"), getInstructionProcessor().getOutputValues(ix));
-    }
-
-    @Test
     void providesCorrectMetadata_ArgumentTypes() {
         LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
         assertEquals(
                 List.of(
-                        new TypedArgument(ArgumentType.LOCATE, "ore"),
-                        new TypedArgument(ArgumentType.UNUSED, "core"),
-                        new TypedArgument(ArgumentType.UNUSED, "true"),
-                        new TypedArgument(ArgumentType.ORE, "@lead"),
-                        new TypedArgument(ArgumentType.OUTPUT, "outx"),
-                        new TypedArgument(ArgumentType.OUTPUT, "outy"),
-                        new TypedArgument(ArgumentType.RESULT, "found"),
-                        new TypedArgument(ArgumentType.UNUSED_OUTPUT, "building")
+                        new ParameterAssignment(LogicParameter.LOCATE, new BaseArgument("ore")),
+                        new ParameterAssignment(LogicParameter.UNUSED, new BaseArgument("core")),
+                        new ParameterAssignment(LogicParameter.UNUSED, new BaseArgument("true")),
+                        new ParameterAssignment(LogicParameter.ORE, new BaseArgument("@lead")),
+                        new ParameterAssignment(LogicParameter.OUTPUT, new BaseArgument("outx")),
+                        new ParameterAssignment(LogicParameter.OUTPUT, new BaseArgument("outy")),
+                        new ParameterAssignment(LogicParameter.RESULT, new BaseArgument("found")),
+                        new ParameterAssignment(LogicParameter.UNUSED_OUTPUT, new BaseArgument("building"))
                 ),
-                getInstructionProcessor().getTypedArguments(ix).toList()
+                ix.getAssignments()
         );
     }
 
@@ -169,7 +145,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
                 Long.parseLong(instructionProcessor.mlogRewrite(value).orElse("NaN")));
     }
 
-    // Parsing code lifted from Mindustry itself (v143)
+    // Parsing code taken from Mindustry itself (v143)
 
     private static long parseLong(String s, int radix, int start, int end, long defaultValue) {
         boolean negative = false;

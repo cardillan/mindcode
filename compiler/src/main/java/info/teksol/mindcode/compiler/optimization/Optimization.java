@@ -49,7 +49,7 @@ public enum Optimization {
             PropagateJumpTargets::new,
             "speeds up execution by eliminating chained jumps"),
     
-    // This optimizer can create additional single step jumps; therefore is bundled with its eliminator
+    // This optimizer can get additional single step jumps; therefore is bundled with its eliminator
     INACCESSIBLE_CODE_ELIMINATION       ('e', "inaccessibleCodeElimination",
             (inst, next) -> new InaccessibleCodeEliminator(inst, new SingleStepJumpEliminator(inst, next)),
             "eliminates instructions made inaccessible by optimizations or false conditions"),

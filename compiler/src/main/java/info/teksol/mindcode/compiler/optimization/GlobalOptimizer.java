@@ -9,7 +9,6 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 // Base class for global optimizers. Consumes the entire program before performing optimizations on it.

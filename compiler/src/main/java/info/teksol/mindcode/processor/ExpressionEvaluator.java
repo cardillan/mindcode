@@ -1,33 +1,27 @@
 package info.teksol.mindcode.processor;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.util.*;
+import info.teksol.mindcode.logic.Operation;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
 
 public class ExpressionEvaluator {
 
-    public static String translateOperator(String operator) {
-        return TRANSLATIONS.get(operator);
-    }
-
-    public static Operation getOperation(String operation) {
+    public static OperationEval getOperation(Operation operation) {
         return OPERATIONS.get(operation);
     }
 
-    public static boolean isDeterministic(String operation) {
-        switch (operation) {
-            case "noise":
-            case "rand":
-                return false;
-
-            default:
-                return true;
-        }
+    public static boolean isDeterministic(Operation operation) {
+        return switch (operation) {
+            case NOISE, RAND -> false;
+            default -> true;
+        };
     }
 
-    public static int getNumberOfArguments(String functionName) {
-        return ARGUMENTS.getOrDefault(functionName, -1);
+    public static int getNumberOfArguments(Operation operation) {
+        return ARGUMENTS.getOrDefault(operation, -1);
     }
 
     public static boolean equals(Variable a, Variable b) {
@@ -45,112 +39,81 @@ public class ExpressionEvaluator {
         return Math.abs(a - b) < 0.000001;
     }
 
-    private static final Map<String, String> TRANSLATIONS = createTranslationMap();
-    private static final Map<String, Operation> OPERATIONS = createOperationsMap();
-    private static final Map<String, Integer> ARGUMENTS = createArgumentsMap();
+    private static final Map<Operation, OperationEval> OPERATIONS = createOperationsMap();
+    private static final Map<Operation, Integer> ARGUMENTS = createArgumentsMap();
 
-    private static Map<String, String> createTranslationMap() {
-        Map<String, String> map = new HashMap<>();
-        map.put("+",    "add");
-        map.put("-",    "sub");
-        map.put("*",    "mul");
-        map.put("/",    "div");
-        map.put("\\",   "idiv");
-        map.put("==",   "equal");
-        map.put("!=",   "notEqual");
-        map.put("<",    "lessThan");
-        map.put("<=",   "lessThanEq");
-        map.put(">=",   "greaterThanEq");
-        map.put(">",    "greaterThan");
-        map.put("===",  "strictEqual");
-        map.put("**",   "pow");
-        map.put("||",   "or");
-        map.put("or",   "or");
-        map.put("&&",   "land");  // logical-and
-        map.put("and",  "land");  // logical-and
-        map.put("%",    "mod");
-        map.put("<<",   "shl");
-        map.put(">>",   "shr");
-        map.put("&",    "and");
-        map.put("|",    "or");
-        map.put("^",    "xor");
-        map.put("~",    "not");
-        return Map.copyOf(map);
-    }
+    private static Map<Operation, OperationEval> createOperationsMap() {
+        Map<Operation, OperationEval> map = new HashMap<>();
 
-    private static Map<String, Operation> createOperationsMap() {
-        Map<String, Operation> map = new HashMap<>();
+        map.put(Operation.ADD,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() + b.getDoubleValue()));
+        map.put(Operation.SUB,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() - b.getDoubleValue()));
+        map.put(Operation.MUL,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() * b.getDoubleValue()));
+        map.put(Operation.DIV,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() / b.getDoubleValue()));
+        map.put(Operation.IDIV,             (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue() / b.getDoubleValue())));
+        map.put(Operation.MOD,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() % b.getDoubleValue()));
+        map.put(Operation.POW,              (r, a, b) -> r.setDoubleValue(Math.pow(a.getDoubleValue(), b.getDoubleValue())));
 
-        map.put("add",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() + b.getDoubleValue()));
-        map.put("sub",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() - b.getDoubleValue()));
-        map.put("mul",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() * b.getDoubleValue()));
-        map.put("div",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() / b.getDoubleValue()));
-        map.put("idiv",         (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue() / b.getDoubleValue())));
-        map.put("mod",          (r, a, b) -> r.setDoubleValue(a.getDoubleValue() % b.getDoubleValue()));
-        map.put("pow",          (r, a, b) -> r.setDoubleValue(Math.pow(a.getDoubleValue(), b.getDoubleValue())));
+        map.put(Operation.EQUAL,            (r, a, b) -> r.setBooleanValue(equals(a, b)));
+        map.put(Operation.NOT_EQUAL,        (r, a, b) -> r.setBooleanValue(!equals(a, b)));
+        map.put(Operation.LAND,             (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
+        map.put(Operation.LESS_THAN,        (r, a, b) -> r.setBooleanValue(a.getDoubleValue() < b.getDoubleValue()));
+        map.put(Operation.LESS_THAN_EQ,     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() <= b.getDoubleValue()));
+        map.put(Operation.GREATER_THAN,     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() > b.getDoubleValue()));
+        map.put(Operation.GREATER_THAN_EQ,  (r, a, b) -> r.setBooleanValue(a.getDoubleValue() >= b.getDoubleValue()));
+        map.put(Operation.STRICT_EQUAL,     (r, a, b) -> r.setBooleanValue(strictEquals(a, b)));
 
-        map.put("equal",        (r, a, b) -> r.setBooleanValue(equals(a, b)));
-        map.put("notEqual",     (r, a, b) -> r.setBooleanValue(!equals(a, b)));
-        map.put("land",         (r, a, b) -> r.setBooleanValue(a.getDoubleValue() != 0 && b.getDoubleValue() != 0));
-        map.put("lessThan",     (r, a, b) -> r.setBooleanValue(a.getDoubleValue() < b.getDoubleValue()));
-        map.put("lessThanEq",   (r, a, b) -> r.setBooleanValue(a.getDoubleValue() <= b.getDoubleValue()));
-        map.put("greaterThan",  (r, a, b) -> r.setBooleanValue(a.getDoubleValue() > b.getDoubleValue()));
-        map.put("greaterThanEq",(r, a, b) -> r.setBooleanValue(a.getDoubleValue() >= b.getDoubleValue()));
-        map.put("strictEqual",  (r, a, b) -> r.setBooleanValue(strictEquals(a, b)));
+        map.put(Operation.SHL,              (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
+        map.put(Operation.SHR,              (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));
+        map.put(Operation.OR,               (r, a, b) -> r.setLongValue(a.getLongValue() |  b.getLongValue()));
+        map.put(Operation.AND,              (r, a, b) -> r.setLongValue(a.getLongValue() &  b.getLongValue()));
+        map.put(Operation.XOR,              (r, a, b) -> r.setLongValue(a.getLongValue() ^  b.getLongValue()));
+        map.put(Operation.NOT,              (r, a, b) -> r.setLongValue(~a.getLongValue()));
 
-        map.put("shl",          (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
-        map.put("shr",          (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));
-        map.put("or",           (r, a, b) -> r.setLongValue(a.getLongValue() |  b.getLongValue()));
-        map.put("and",          (r, a, b) -> r.setLongValue(a.getLongValue() &  b.getLongValue()));
-        map.put("xor",          (r, a, b) -> r.setLongValue(a.getLongValue() ^  b.getLongValue()));
-        map.put("not",          (r, a, b) -> r.setLongValue(~a.getLongValue()));
+        map.put(Operation.MAX,              (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));
+        map.put(Operation.MIN,              (r, a, b) -> r.setDoubleValue(Math.min(a.getDoubleValue(), b.getDoubleValue())));
+        map.put(Operation.ANGLE,            (r, a, b) -> r.setDoubleValue(angle(a.getDoubleValue(), b.getDoubleValue())));
+        map.put(Operation.LEN,              (r, a, b) -> r.setDoubleValue(len(a.getDoubleValue(), b.getDoubleValue())));
+        map.put(Operation.ABS,              (r, a, b) -> r.setDoubleValue(Math.abs(a.getDoubleValue())));
+        map.put(Operation.LOG,              (r, a, b) -> r.setDoubleValue(Math.log(a.getDoubleValue())));
+        map.put(Operation.LOG10,            (r, a, b) -> r.setDoubleValue(Math.log10(a.getDoubleValue())));
+        map.put(Operation.FLOOR,            (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue())));
+        map.put(Operation.CEIL,             (r, a, b) -> r.setDoubleValue(Math.ceil(a.getDoubleValue())));
+        map.put(Operation.SQRT,             (r, a, b) -> r.setDoubleValue(Math.sqrt(a.getDoubleValue())));
+        map.put(Operation.RAND,             (r, a, b) -> r.setDoubleValue(rnd.nextDouble() * a.getDoubleValue()));
 
-        map.put("max",          (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));
-        map.put("min",          (r, a, b) -> r.setDoubleValue(Math.min(a.getDoubleValue(), b.getDoubleValue())));
-        map.put("angle",        (r, a, b) -> r.setDoubleValue(angle(a.getDoubleValue(), b.getDoubleValue())));
-        map.put("len",          (r, a, b) -> r.setDoubleValue(len(a.getDoubleValue(), b.getDoubleValue())));
-//        map.put("noise",        (r, a, b) -> {});     // Not supported here
-        map.put("abs",          (r, a, b) -> r.setDoubleValue(Math.abs(a.getDoubleValue())));
-        map.put("log",          (r, a, b) -> r.setDoubleValue(Math.log(a.getDoubleValue())));
-        map.put("log10",        (r, a, b) -> r.setDoubleValue(Math.log10(a.getDoubleValue())));
-        map.put("floor",        (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue())));
-        map.put("ceil",         (r, a, b) -> r.setDoubleValue(Math.ceil(a.getDoubleValue())));
-        map.put("sqrt",         (r, a, b) -> r.setDoubleValue(Math.sqrt(a.getDoubleValue())));
-        map.put("rand",         (r, a, b) -> r.setDoubleValue(rnd.nextDouble() * a.getDoubleValue()));
+        map.put(Operation.SIN,              (r, a, b) -> r.setDoubleValue(Math.sin(a.getDoubleValue())));
+        map.put(Operation.COS,              (r, a, b) -> r.setDoubleValue(Math.cos(a.getDoubleValue())));
+        map.put(Operation.TAN,              (r, a, b) -> r.setDoubleValue(Math.tan(a.getDoubleValue())));
 
-        map.put("sin",          (r, a, b) -> r.setDoubleValue(Math.sin(a.getDoubleValue())));
-        map.put("cos",          (r, a, b) -> r.setDoubleValue(Math.cos(a.getDoubleValue())));
-        map.put("tan",          (r, a, b) -> r.setDoubleValue(Math.tan(a.getDoubleValue())));
-
-        map.put("asin",         (r, a, b) -> r.setDoubleValue(Math.asin(a.getDoubleValue())));
-        map.put("acos",         (r, a, b) -> r.setDoubleValue(Math.acos(a.getDoubleValue())));
-        map.put("atan",         (r, a, b) -> r.setDoubleValue(Math.atan(a.getDoubleValue())));
+        map.put(Operation.ASIN,             (r, a, b) -> r.setDoubleValue(Math.asin(a.getDoubleValue())));
+        map.put(Operation.ACOS,             (r, a, b) -> r.setDoubleValue(Math.acos(a.getDoubleValue())));
+        map.put(Operation.ATAN,             (r, a, b) -> r.setDoubleValue(Math.atan(a.getDoubleValue())));
 
         return map;
     }
 
-    private static Map<String, Integer> createArgumentsMap() {
-        Map<String, Integer> map = new HashMap<>();
+    private static Map<Operation, Integer> createArgumentsMap() {
+        Map<Operation, Integer> map = new HashMap<>();
 
-        map.put("max",          2);
-        map.put("min",          2);
-        map.put("angle",        2);
-        map.put("len",          2);
-        map.put("abs",          1);
-        map.put("log",          1);
-        map.put("log10",        1);
-        map.put("floor",        1);
-        map.put("ceil",         1);
-        map.put("sqrt",         1);
-        map.put("sin",          1);
-        map.put("cos",          1);
-        map.put("tan",          1);
+        map.put(Operation.MAX,          2);
+        map.put(Operation.MIN,          2);
+        map.put(Operation.ANGLE,        2);
+        map.put(Operation.LEN,          2);
+        map.put(Operation.ABS,          1);
+        map.put(Operation.LOG,          1);
+        map.put(Operation.LOG10,        1);
+        map.put(Operation.FLOOR,        1);
+        map.put(Operation.CEIL,         1);
+        map.put(Operation.SQRT,         1);
+        map.put(Operation.SIN,          1);
+        map.put(Operation.COS,          1);
+        map.put(Operation.TAN,          1);
 
         // TODO: these functions are only available in Mindustry Logic 7
         // Shouldn't be evaluated when compiling for V6.
-        map.put("asin",         1);
-        map.put("acos",         1);
-        map.put("atan",         1);
+        map.put(Operation.ASIN,         1);
+        map.put(Operation.ACOS,         1);
+        map.put(Operation.ATAN,         1);
 
         return map;
     }

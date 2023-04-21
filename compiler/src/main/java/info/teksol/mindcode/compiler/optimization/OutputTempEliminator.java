@@ -5,6 +5,9 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.ParameterAssignment;
 
 import java.util.List;
 
@@ -31,8 +34,8 @@ class OutputTempEliminator extends GlobalOptimizer {
     protected boolean optimizeProgram() {
         // Cannot use iterations due to modifications of the underlying list in the loop
         for (int index = 1; index < program.size(); index++)  {
-            if (program.get(index) instanceof SetInstruction ix && isTemporary(ix.getValue())) {
-                String value = ix.getValue();
+            if (program.get(index) instanceof SetInstruction ix && ix.getValue().getType() == ArgumentType.TMP_VARIABLE) {
+                LogicArgument value = ix.getValue();
                 List<LogicInstruction> list = findInstructions(
                         in -> in.getArgs().contains(value) && !(in instanceof PushOrPopInstruction));
 
@@ -41,14 +44,14 @@ class OutputTempEliminator extends GlobalOptimizer {
                 if (list.size() != 2 || list.get(0) != previous) continue;
 
                 // Make sure all arg1 arguments of the other instruction are output
-                boolean replacesOutputArg = instructionProcessor.getTypedArguments(previous)
-                        .filter(t -> t.getValue().equals(value))
-                        .allMatch(t -> t.getArgumentType().isOutput());
+                boolean replacesOutputArg = previous.assignmentsStream()
+                        .filter(t -> t.argument().equals(value))
+                        .allMatch(ParameterAssignment::isOutput);
                 if (!replacesOutputArg) continue;
 
                 // The current instruction merely transfers a value from the output argument of the previous instruction
                 // Replacing those arguments with target of the set instruction
-                program.set(index - 1, replaceAllArgs(previous, value, ix.getResult()));
+                program.set(index - 1, replaceAllArgs(previous, value, ix.getTarget()));
                 program.remove(index);
                 index--;
             }

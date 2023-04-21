@@ -32,8 +32,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 params=[VarRef{name='c'}]
                             }
                         ]""",
-                printLinearized("" +
-                        "print(a)\n" +
+                printLinearized("print(a)\n" +
                         "print(b)\n" +
                         "print(c)"
                 )
@@ -59,8 +58,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 params=[VarRef{name='c'}]
                             }
                         }""",
-                printNested("" +
-                        "print(a)\n" +
+                printNested("print(a)\n" +
                         "print(b)\n" +
                         "print(c)"
                 )
@@ -118,8 +116,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 }
                             }
                         ]""",
-                printLinearized("" +
-                        "x = 10\n" +
+                printLinearized("x = 10\n" +
                         "y = 20 + 30\n" +
                         "z = ~y\n" +
                         "b = true\n" +
@@ -163,8 +160,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 params=[StringLiteral{text='Out of loop'}]
                             }
                         ]""",
-                printLinearized("" +
-                        "while true\n" +
+                printLinearized("while true\n" +
                         "  print(\"In loop\")\n" +
                         "  if @unit.dead === 0\n" +
                         "    break\n" +
@@ -235,8 +231,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 }]
                             }
                         ]""",
-                printLinearized("" +
-                        "allocate stack in bank1[0...512]\n" +
+                printLinearized("allocate stack in bank1[0...512]\n" +
                         "\n" +
                         "def fib(n)\n" +
                         "  if n <= 0\n" +

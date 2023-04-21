@@ -237,14 +237,14 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
                 List.of(
                         createInstruction(SET, "X", "5"),
                         createInstruction(SET, "__fn0_n", "X"),
-                        createInstruction(SET, "__fn0retaddr", var(1001)),
-                        createInstruction(SET, "@counter", var(1000)),
+                        createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                        createInstruction(CALL, var(1000)),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(LABEL, var(1002)),
                         createInstruction(SET, "__fn1_n", "X"),
                         createInstruction(SET, "__fn0_n", "__fn1_n"),
-                        createInstruction(SET, "__fn0retaddr", var(1004)),
-                        createInstruction(SET, "@counter", var(1000)),
+                        createInstruction(SETADDR, "__fn0retaddr", var(1004)),
+                        createInstruction(CALL, var(1000)),
                         createInstruction(LABEL, var(1004)),
                         createInstruction(PRINT, "__fn1_n"),
                         createInstruction(LABEL, var(1003)),
@@ -252,7 +252,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1000)),
                         createInstruction(PRINT, "__fn0_n"),
                         createInstruction(LABEL, var(1005)),
-                        createInstruction(SET, "@counter", "__fn0retaddr"),
+                        createInstruction(GOTO, "__fn0retaddr"),
                         createInstruction(END)
                 ),
                 terminus.getResult()

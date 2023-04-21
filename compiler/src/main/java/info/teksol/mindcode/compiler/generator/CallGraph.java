@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -142,7 +143,7 @@ public final class CallGraph {
 
     private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, Function function) {
         function.setLabel(instructionProcessor.nextLabel());
-        function.setLocalPrefix(instructionProcessor.nextLocalPrefix(function.getName()));
+        function.setLocalPrefix(instructionProcessor.nextLocalPrefix());
     }
 
     private final List<String> callStack = new ArrayList<>();
@@ -178,7 +179,7 @@ public final class CallGraph {
         private final Set<String> recursiveCalls = new HashSet<>();
         private final Set<String> indirectCalls = new HashSet<>();
         private Map<String, Long> calls;
-        private String label;
+        private LogicLabel label;
         private String localPrefix;
         private int useCount = 0;
 
@@ -258,7 +259,7 @@ public final class CallGraph {
         }
 
         /** @return the label allocated for the beginning of this function */
-        public String getLabel() {
+        public LogicLabel getLabel() {
             return label;
         }
 
@@ -279,14 +280,14 @@ public final class CallGraph {
 
         // Increase usage count of this function
         private void markUsage(int count) {
-            useCount += (int) count;
+            useCount += count;
         }
 
         private void setCalls(Map<String, Long> calls) {
             this.calls = calls;
         }
 
-        private void setLabel(String label) {
+        private void setLabel(LogicLabel label) {
             this.label = label;
         }
 

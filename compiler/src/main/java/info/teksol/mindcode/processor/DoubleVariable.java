@@ -1,9 +1,5 @@
 package info.teksol.mindcode.processor;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 public class DoubleVariable extends AbstractVariable {
     protected double value;
 

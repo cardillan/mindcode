@@ -5,8 +5,8 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.LogicLabel;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,7 @@ class SingleStepJumpEliminator extends PipelinedOptimizer {
 
     private final class ExpectLabel implements State {
         private final JumpInstruction jump;
-        private final String targetLabel;
+        private final LogicLabel targetLabel;
         private final List<LabelInstruction> labels = new ArrayList<>();
         private boolean isJumpToNext = false;
 

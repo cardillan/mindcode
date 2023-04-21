@@ -1,28 +1,24 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
 public class CallInstruction extends BaseInstruction {
 
-    CallInstruction(String marker, Opcode opcode, List<String> args) {
-        super(marker, opcode, args);
+    CallInstruction(List<LogicArgument> args, List<LogicParameter> params) {
+        super(Opcode.CALL, args, params);
     }
 
-    public final String getMemory() {
-        return getArg(0);
+    protected CallInstruction(BaseInstruction other, String marker) {
+        super(other, marker);
     }
 
-    public final String getTarget() {
-        return getArg(1);
+    public CallInstruction withMarker(String marker) {
+        return new CallInstruction(this, marker);
     }
 
-    public final String getReturn() {
-        return getArg(2);
-    }
-
-    public final List<String> getAddresses() {
-        return getArgs().subList(1, 3);
+    public final LogicLabel getCallAddr() {
+        return (LogicLabel) getArg(0);
     }
 }

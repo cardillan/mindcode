@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+* Changed handling of hexadecimal and boolean literals to include range checks and refuse invalid numbers. 
+
+### Miscellaneous
+
+* Logic instructions arguments are represented by objects with propert attributes and type information instead of 
+  plain strings.  
+
 ## 2023-04-18
 
 ### Added

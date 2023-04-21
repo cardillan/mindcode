@@ -4,8 +4,10 @@ import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.function.Consumer;
 
@@ -62,28 +64,24 @@ abstract class BaseOptimizer implements Optimizer {
     protected void emitMessage(MessageLevel level, String format, Object... args) {
         messagesRecipient.accept(new CompilerMessage(level, String.format(format, args)));
     }
-    
-    protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
+
+    public JumpInstruction createUnconditionalJump(LogicLabel label) {
+        return instructionProcessor.createJumpUnconditional(label);
+    }
+
+    public JumpInstruction createJump(LogicLabel label, Condition condition, LogicValue x, LogicValue y) {
+        return instructionProcessor.createJump(label, condition, x, y);
+    }
+
+    public LabelInstruction createLabel(LogicLabel label) {
+        return instructionProcessor.createLabel(label);
+    }
+
+    protected final LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    protected LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String value) {
-        return instructionProcessor.replaceArg(instruction, argIndex, value);
-    }
-    
-    protected LogicInstruction replaceAllArgs(LogicInstruction instruction, String oldArg, String newArg) {
+    protected LogicInstruction replaceAllArgs(LogicInstruction instruction, LogicArgument oldArg, LogicArgument newArg) {
         return instructionProcessor.replaceAllArgs(instruction, oldArg, newArg);
-    }
-
-    public boolean isTemporary(String varRef) {
-        return instructionProcessor.isTemporary(varRef);
-    }
-
-    protected boolean hasInverse(String comparison) {
-        return instructionProcessor.hasInverse(comparison);
-}
-
-    protected String getInverse(String comparison) {
-        return instructionProcessor.getInverse(comparison);
     }
 }

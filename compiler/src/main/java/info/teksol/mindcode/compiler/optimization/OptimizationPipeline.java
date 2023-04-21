@@ -6,7 +6,6 @@ import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import org.antlr.v4.codegen.model.LL1AltBlock;
 
 import java.util.EnumSet;
 import java.util.function.Consumer;

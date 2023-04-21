@@ -2,8 +2,6 @@ package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.ast.AstNode;
 
-import java.util.Optional;
-
 /**
  * Mindustry processor variable.
  */

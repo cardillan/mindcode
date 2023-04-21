@@ -1,31 +1,39 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
 public class PackColorInstruction extends BaseInstruction {
-    public PackColorInstruction(String marker, Opcode opcode, List<String> args) {
-        super(marker, opcode, args);
+    PackColorInstruction(List<LogicArgument> args, List<LogicParameter> params) {
+        super(Opcode.PACKCOLOR, args, params);
     }
 
-    public final String getResult() {
-        return getArg(0);
+    protected PackColorInstruction(BaseInstruction other, String marker) {
+        super(other, marker);
     }
 
-    public final String getR() {
-        return getArg(1);
+    public PackColorInstruction withMarker(String marker) {
+        return new PackColorInstruction(this, marker);
     }
 
-    public final String getG() {
-        return getArg(2);
+    public final LogicVariable getResult() {
+        return (LogicVariable) getArg(0);
     }
 
-    public final String getB() {
-        return getArg(3);
+    public final LogicValue getR() {
+        return (LogicValue) getArg(1);
     }
 
-    public final String getA() {
-        return getArg(4);
+    public final LogicValue getG() {
+        return (LogicValue) getArg(2);
+    }
+
+    public final LogicValue getB() {
+        return (LogicValue) getArg(3);
+    }
+
+    public final LogicValue getA() {
+        return (LogicValue) getArg(4);
     }
 }

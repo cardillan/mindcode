@@ -1,5 +1,7 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.logic.Condition;
+
 public class InclusiveRange extends Range {
     InclusiveRange(AstNode firstValue, AstNode lastValue) {
         super(firstValue, lastValue);
@@ -11,7 +13,7 @@ public class InclusiveRange extends Range {
     }
 
     @Override
-    public String maxValueComparison() {
-        return "<=";
+    public Condition maxValueComparison() {
+        return Condition.LESS_THAN_EQ;
     }
 }

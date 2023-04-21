@@ -2,6 +2,8 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.logic.Condition;
+import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,7 +16,7 @@ import java.util.stream.Stream;
  * This optimizer removes instructions that are inaccessible.
  * There are several ways inaccessible instructions might appear:
  * <ol>
- * <li>Jump target propagation can create inaccessible jumps that are no longer targeted</li>
+ * <li>Jump target propagation can get inaccessible jumps that are no longer targeted</li>
  * <li>User-created inaccessible regions, such as {@code while false ... end}</li>
  * <li>User defined functions which are called from an inaccessible region</li>
  * </ol>
@@ -24,7 +26,7 @@ import java.util.stream.Stream;
  * Labels - even inactive ones - are never removed.
  */
 class InaccessibleCodeEliminator extends GlobalOptimizer {
-    private Set<String> activeLabels = new HashSet<>();
+    private Set<LogicLabel> activeLabels = new HashSet<>();
 
     public InaccessibleCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
         super(instructionProcessor, next);
@@ -44,11 +46,12 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
                 .collect(Collectors.toSet());
     }
 
-    private Stream<String> extractLabelReference(LogicInstruction instruction) {
+    private Stream<LogicLabel> extractLabelReference(LogicInstruction instruction) {
         return switch(instruction) {
-            case JumpInstruction ix -> Stream.of(ix.getTarget());
-            case SetInstruction  ix -> Stream.of(ix.getValue());
-            case CallInstruction ix -> ix.getAddresses().stream();
+            case JumpInstruction       ix -> Stream.of(ix.getTarget());
+            case SetAddressInstruction ix -> Stream.of(ix.getLabel());
+            case CallInstruction       ix -> Stream.of(ix.getCallAddr());
+            case CallRecInstruction    ix -> ix.getAddresses().stream();
             default -> null;
         };
     }
@@ -60,7 +63,7 @@ class InaccessibleCodeEliminator extends GlobalOptimizer {
             LogicInstruction instruction = it.next();
             if (accessible) {
                 // Unconditional jump makes the next instruction inaccessible
-                if (instruction instanceof JumpInstruction ix && ix.getCondition().equals("always")) {
+                if (instruction instanceof JumpInstruction ix && ix.getCondition() == Condition.ALWAYS) {
                     accessible = false;
                 } else if (instruction instanceof ReturnInstruction) {
                     accessible = false;

@@ -18,7 +18,23 @@ public class AbstractAstTest extends AbstractParserTest {
     }
 
     protected final String prettyPrint(List<LogicInstruction> list) {
-        return list.stream().map(Object::toString).reduce("", (s, s2) -> s + "\n" + s2).strip();
+        //return list.stream().map(Object::toString).reduce("", (s, s2) -> s + "\n" + s2).strip();
+        return formatAsCode(list);
+    }
+
+    private String formatAsCode(List<LogicInstruction> program) {
+        StringBuilder str = new StringBuilder();
+        for (LogicInstruction ix : program) {
+            str.append(ix.getOpcode().getOpcode());
+            ix.getArgs().forEach(a -> str.append(" ").append(escape(a.toMlog())));
+            str.append("\n");
+        }
+        str.deleteCharAt(str.length() - 1);
+        return str.toString();
+    }
+
+    private String escape(String value) {
+        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
     }
 
     protected String prettyPrint(AstNode node) {

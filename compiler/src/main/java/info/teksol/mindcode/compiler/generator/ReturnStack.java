@@ -1,17 +1,22 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicVariable;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Objects;
 
 /**
- * Class maintaining the stack of active functions and the names of their return variables. Used to resolve return
+ * Class maintaining the stack of active functions and their return variables. Used to resolve return
  * statements inside inline functions, which can be nested.
  */
 public class ReturnStack {
     private final Deque<Return> stack = new ArrayDeque<>();
 
-    void enterFunction(String returnLabel, String returnValue) {
+    void enterFunction(LogicLabel returnLabel, LogicVariable returnValue) {
         stack.push(new Return(returnLabel, returnValue));
     }
 
@@ -23,7 +28,7 @@ public class ReturnStack {
         stack.pop();
     }
 
-    String getReturnLabel() {
+    LogicLabel getReturnLabel() {
         if (stack.isEmpty()) {
             throw new GenerationException("return  statement outside of a function.");
         }
@@ -31,7 +36,7 @@ public class ReturnStack {
         return stack.peek().label;
     }
 
-    String getReturnValue() {
+    LogicVariable getReturnValue() {
         if (stack.isEmpty()) {
             throw new GenerationException("return  statement outside of a function.");
         }
@@ -39,13 +44,10 @@ public class ReturnStack {
         return stack.peek().retval;
     }
 
-    private static final class Return {
-        private final String label;
-        private final String retval;
-
-        public Return(String label, String retval) {
-            this.label = Objects.requireNonNull(label);
-            this.retval = Objects.requireNonNull(retval);
+    private record Return(LogicLabel label, LogicVariable retval) {
+        private Return {
+            Objects.requireNonNull(label);
+            Objects.requireNonNull(retval);
         }
     }
 }

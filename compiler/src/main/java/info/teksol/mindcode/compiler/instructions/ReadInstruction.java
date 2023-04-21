@@ -1,24 +1,32 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
 public class ReadInstruction extends BaseInstruction {
 
-    ReadInstruction(String marker, Opcode opcode, List<String> args) {
-        super(marker, opcode, args);
+    ReadInstruction(List<LogicArgument> args, List<LogicParameter> params) {
+        super(Opcode.READ, args, params);
     }
 
-    public final String getValue() {
-        return getArg(0);
+    protected ReadInstruction(BaseInstruction other, String marker) {
+        super(other, marker);
     }
 
-    public final String getMemory() {
-        return getArg(1);
+    public ReadInstruction withMarker(String marker) {
+        return new ReadInstruction(this, marker);
     }
 
-    public final String getIndex() {
-        return getArg(2);
+    public final LogicVariable getResult() {
+        return (LogicVariable) getArg(0);
+    }
+
+    public final LogicVariable getMemory() {
+        return (LogicVariable) getArg(1);
+    }
+
+    public final LogicValue getIndex() {
+        return (LogicValue) getArg(2);
     }
 }

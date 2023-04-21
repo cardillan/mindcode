@@ -2,6 +2,8 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +17,7 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
     }
 
     protected boolean isLinear(List<LogicInstruction> codeBlock) {
-        Set<String> localLabels = codeBlock.stream()
+        Set<LogicLabel> localLabels = codeBlock.stream()
                 .filter(ix -> ix instanceof LabelInstruction)
                 .map(ix -> ((LabelInstruction) ix).getLabel())
                 .collect(Collectors.toSet());
@@ -27,9 +29,9 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
                 .allMatch(localLabels::contains);
     }
 
-    private Stream<String> getPossibleTargetLabels(LogicInstruction instruction) {
+    private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
         return switch (instruction) {
-            case EndInstruction  ix -> Stream.of("0");               // Impossible label: end() is never local
+            case EndInstruction  ix -> Stream.of(LogicLabel.symbolic("0"));               // Impossible label: end() is never local
             case JumpInstruction ix -> Stream.of(ix.getTarget());
             case GotoInstruction ix -> program.stream()
                     .filter(in -> in instanceof LabelInstruction && in.matchesMarker(ix.getMarker()))
@@ -82,8 +84,8 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
      * @param ix instruction to eliminate
      */
     protected void eliminateInstruction(String functionPrefix, SetInstruction ix) {
-        String oldArg = ix.getResult();
-        String newArg = ix.getValue();
+        LogicArgument oldArg = ix.getTarget();
+        LogicArgument newArg = ix.getValue();
         removeInstruction(ix);
 
         // The function needs to be collected again, as it could have been modified by previous replacement

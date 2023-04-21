@@ -2,7 +2,9 @@ package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicLiteral;
+import info.teksol.mindcode.logic.LogicNumber;
 
 import java.util.Objects;
 
@@ -24,10 +26,16 @@ public class NumericValue extends ConstantAstNode {
 
     /**
      * If possible, converts the value to numeric literal.
+     *
      * @return numeric literal representation of the value, or null if literal representation doesn't exist
      */
     public NumericLiteral toNumericLiteral(InstructionProcessor instructionProcessor) {
         return instructionProcessor.mlogFormat(value).map(NumericLiteral::new).orElse(null);
+    }
+
+    @Override
+    public LogicLiteral toLogicLiteral(InstructionProcessor instructionProcessor) {
+        throw new UnsupportedOperationException("Unexpected call to NumericValue.toLogicLiteral.");
     }
 
     @Override

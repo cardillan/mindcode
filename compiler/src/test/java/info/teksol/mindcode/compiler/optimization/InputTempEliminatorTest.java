@@ -3,6 +3,10 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.logic.Condition;
+import info.teksol.mindcode.logic.LogicBoolean;
+import info.teksol.mindcode.logic.Operation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -14,16 +18,17 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
             terminus,
             Optimization.INPUT_TEMPS_ELIMINATION);
 
+
     @Test
     void optimizesBasicCase() {
-        pipeline.emit(createInstruction(SET, "__tmp0", "0"));
-        pipeline.emit(createInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"));
+        pipeline.emit(createInstruction(SET, tmp0, K0));
+        pipeline.emit(createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255));
         pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(DRAW, "color", "0", "0", "0", "255"),
+                        createInstruction(DRAW, color, K0, K0, K0, K255),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -32,15 +37,15 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresNontemporaryVariables() {
-        pipeline.emit(createInstruction(SET, "C", "0"));
-        pipeline.emit(createInstruction(DRAW, "color", "C", "C", "C", "255"));
+        pipeline.emit(createInstruction(SET, C, K0));
+        pipeline.emit(createInstruction(DRAW, color, C, C, C, K255));
         pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "C", "0"),
-                        createInstruction(DRAW, "color", "C", "C", "C", "255"),
+                        createInstruction(SET, C, K0),
+                        createInstruction(DRAW, color, C, C, C, K255),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -49,17 +54,17 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresVariablesWithMultipleUsage() {
-        pipeline.emit(createInstruction(SET, "__tmp0", "0"));
-        pipeline.emit(createInstruction(SET, "__tmp0", "1"));
-        pipeline.emit(createInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"));
+        pipeline.emit(createInstruction(SET, tmp0, K0));
+        pipeline.emit(createInstruction(SET, tmp0, K1));
+        pipeline.emit(createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255));
         pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__tmp0", "0"),
-                        createInstruction(SET, "__tmp0", "1"),
-                        createInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"),
+                        createInstruction(SET, tmp0, K0),
+                        createInstruction(SET, tmp0, K1),
+                        createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -68,15 +73,15 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresInstructionsInWrongOrder() {
-        pipeline.emit(createInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"));
-        pipeline.emit(createInstruction(SET, "__tmp0", "0"));
+        pipeline.emit(createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255));
+        pipeline.emit(createInstruction(SET, tmp0, K0));
         pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(DRAW, "color", "__tmp0", "__tmp0", "__tmp0", "255"),
-                        createInstruction(SET, "__tmp0", "0"),
+                        createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255),
+                        createInstruction(SET, tmp0, K0),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -85,15 +90,15 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void ignoresWrongArgumentType() {
-        pipeline.emit(createInstruction(SET, "__tmp0", "0"));
-        pipeline.emit(createInstruction(GETLINK, "__tmp0", "3"));
+        pipeline.emit(createInstruction(SET, tmp0, K0));
+        pipeline.emit(createInstruction(GETLINK, tmp0, K1));
         pipeline.emit(createInstruction(END));
         pipeline.flush();
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__tmp0", "0"),
-                        createInstruction(GETLINK, "__tmp0", "3"),
+                        createInstruction(SET, tmp0, K0),
+                        createInstruction(GETLINK, tmp0, K1),
                         createInstruction(END)
                 ),
                 terminus.getResult()
@@ -226,21 +231,6 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
         );
     }
 
-    @Test
-    void correctlyHandlesSetThenReadWithDifferingValues() {
-        pipeline.emit(createInstruction(SET, "x", "1"));
-        pipeline.emit(createInstruction(READ, "__tmp0", "cell2", "14"));
-        pipeline.flush();
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(SET, "x", "1"),
-                        createInstruction(READ, var(0), "cell2", "14")
-                ),
-                terminus.getResult()
-        );
-    }
-    
     // Taken from OptimizeSetThenOpTest
     
     @Test
@@ -365,17 +355,15 @@ public class InputTempEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void consecutiveSetsWithNoRelationshipAreLeftAlone() {
-        pipeline.emit(createInstruction(SET, "x", "10"));
-        pipeline.emit(createInstruction(SET, "y", "4"));
+        List<LogicInstruction> sequence = List.of(
+                createInstruction(SET, a, K0),
+                createInstruction(SET, b, K1)
+        );
+
+        sequence.forEach(pipeline::emit);
         pipeline.flush();
 
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(SET, "x", "10"),
-                        createInstruction(SET, "y", "4")
-                ),
-                terminus.getResult()
-        );
+        assertLogicInstructionsMatch(sequence, terminus.getResult());
     }
     
     // Taken from OptimizeSetThenPrintTest

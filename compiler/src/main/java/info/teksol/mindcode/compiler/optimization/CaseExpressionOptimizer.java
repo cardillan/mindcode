@@ -1,8 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +34,8 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof SetInstruction ix && ix.getResult().startsWith(AstNodeBuilder.AST_PREFIX)) {
-                String result = ix.getResult();
+            if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.AST_VARIABLE) {
+                LogicVariable result = (LogicVariable) ix.getTarget();
                 List<LogicInstruction> list = findInstructions(
                         in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
@@ -53,7 +54,7 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
         return false;
     }
 
-    private boolean isStandardCaseWhenInstruction(LogicInstruction instruction, String ast) {
+    private boolean isStandardCaseWhenInstruction(LogicInstruction instruction, LogicVariable ast) {
         return instruction instanceof JumpInstruction ix && ix.getFirstOperand().equals(ast);
     }
 }

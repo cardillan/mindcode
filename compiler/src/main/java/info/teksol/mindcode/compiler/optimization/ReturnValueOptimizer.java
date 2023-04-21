@@ -1,9 +1,8 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.TypedArgument;
+import info.teksol.mindcode.logic.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +42,14 @@ public class ReturnValueOptimizer extends BaseFunctionOptimizer {
         List<SetInstruction> unneededSets = new ArrayList<>();
 
         for (int i = 0; i < program.size(); i++) {
-            // Find retval creation and check is it well-formed
+            // Find fnRetVal creation and check is it well-formed
             if (program.get(i) instanceof SetInstruction instruction
-                    && instruction.getResult().startsWith(instructionProcessor.getRetValPrefix())) {
+                    && instruction.getTarget().getType() == ArgumentType.STORED_RETVAL) {
 
-                String retval = instruction.getResult();
-                String value = instruction.getValue();
+                LogicArgument retval = instruction.getTarget();
+                LogicArgument value = instruction.getValue();
 
-                // Get the other uses of retval
+                // Get the other uses of fnRetVal
                 List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(retval)
                         && !(ix instanceof PushOrPopInstruction));
 
@@ -66,20 +65,17 @@ public class ReturnValueOptimizer extends BaseFunctionOptimizer {
 
                 // Precondition 3
                 boolean isModified = codeBlock.stream()
-                        .flatMap(ix -> instructionProcessor.getTypedArguments(ix))
-                        .filter(arg -> arg.getArgumentType().isOutput())
-                        .map(TypedArgument::getValue)
+                        .flatMap(LogicInstruction::outputArgumentsStream)
                         .anyMatch(value::equals);
                 if (isModified) continue;
 
                 boolean hasFunctionCall = codeBlock.stream().anyMatch(this::containsFunctionCall);
-                if (value.endsWith(LogicInstructionGenerator.RETURN_VALUE)) {
+                if (value.getType() == ArgumentType.FUNCTION_RETVAL) {
                     // Precondition 4
                     if (hasFunctionCall) continue;
                 } else {
                     // Precondition 5
-                    if (hasFunctionCall && instructionProcessor.isGlobalName(value)
-                        || instructionProcessor.isVolatile(value)) continue;
+                    if (hasFunctionCall && value.isGlobalVariable() || value.isVolatile()) continue;
                 }
 
                 removeInstruction(instruction);
@@ -92,11 +88,8 @@ public class ReturnValueOptimizer extends BaseFunctionOptimizer {
     }
 
     private boolean containsFunctionCall(LogicInstruction ix) {
-        // We're assuming any call might modify a retval
+        // We're assuming any call might modify a fnRetVal
         // Need to identify all calls including stackless ones
-        // TODO use special instruction for stackless call for better detection
-        // TODO inspect call graph to see whether a particular call might modify fnRetVal
-        return (ix instanceof CallInstruction) ||
-                (ix instanceof SetInstruction set && set.getResult().equals("@counter"));
+        return ix instanceof CallRecInstruction || ix instanceof CallInstruction;
     }
 }

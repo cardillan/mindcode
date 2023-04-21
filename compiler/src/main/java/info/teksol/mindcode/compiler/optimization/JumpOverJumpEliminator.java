@@ -5,7 +5,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
     private final class EmptyState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction instanceof JumpInstruction ix && hasInverse(ix.getCondition())) {
+            if (instruction instanceof JumpInstruction ix && ix.getCondition().hasInverse()) {
                 // This is a conditional instruction -- "always" doesn't have an inverse
                 return new ExpectJump(ix);
             } else {
@@ -88,7 +88,7 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
     }
 
     private final class ExpectLabel implements State {
-        private final String targetLabel;
+        private final LogicLabel targetLabel;
         private final JumpInstruction conditionalJump;
         private final JumpInstruction unconditionalJump;
         private final List<LogicInstruction> labels = new ArrayList<>();
@@ -109,8 +109,8 @@ public class JumpOverJumpEliminator extends PipelinedOptimizer {
             }
 
             if (isJumpOverJump) {
-                emitToNext(createInstruction(Opcode.JUMP, unconditionalJump.getTarget(),
-                        getInverse(conditionalJump.getCondition()),
+                emitToNext(createJump(unconditionalJump.getTarget(),
+                        conditionalJump.getCondition().inverse(),
                         conditionalJump.getFirstOperand(), conditionalJump.getSecondOperand())
                 );
             } else {

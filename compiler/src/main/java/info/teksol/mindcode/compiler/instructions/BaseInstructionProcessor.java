@@ -1,11 +1,9 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeException;
-import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -15,8 +13,6 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
@@ -28,15 +24,14 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
-    private final Map<ArgumentType, Set<String>> validArgumentValues;
-    private final Map<String, String> functionByPrefix = new HashMap<>();
+    private final Map<LogicParameter, Set<String>> validArgumentValues;
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int functionIndex = 0;
 
     // Protected to allow a subclass to use this constructor in unit tests
     protected BaseInstructionProcessor(Consumer<CompilerMessage> messageConsumer, ProcessorVersion processorVersion,
-                                       ProcessorEdition processorEdition, List<OpcodeVariant> opcodeVariants) {
+            ProcessorEdition processorEdition, List<OpcodeVariant> opcodeVariants) {
         this.messageConsumer = messageConsumer;
         this.processorVersion = processorVersion;
         this.processorEdition = processorEdition;
@@ -51,37 +46,24 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         validArgumentValues = createAllowedArgumentValuesMap();
     }
 
-
     @Override
-    public String nextLabel() {
-        return getLabelPrefix() + labelIndex++;
+    public LogicLabel nextLabel() {
+        return LogicLabel.symbolic(getLabelPrefix() + labelIndex++);
     }
 
     @Override
-    public String nextTemp() {
-        return getTempPrefix() + tmpIndex++;
+    public LogicVariable nextTemp() {
+        return LogicVariable.temporary(getTempPrefix() + tmpIndex++);
     }
 
     @Override
-    public String nextReturnValue() {
-        return getRetValPrefix() + tmpIndex++;
+    public LogicVariable nextReturnValue() {
+        return LogicVariable.retval( getRetValPrefix() + tmpIndex++);
     }
 
     @Override
-    public String nextLocalPrefix(String functionName) {
-        String prefix = getLocalPrefix() + functionIndex++;
-        functionByPrefix.put(prefix, functionName);
-        return prefix;
-    }
-
-    @Override
-    public Tuple2<String, String> parseVariable(String id) {
-        if (id.startsWith(getLocalPrefix())) {
-            int index = id.indexOf('_', getLocalPrefix().length());
-            return new Tuple2<>(functionByPrefix.get(id.substring(0, index)), id.substring(index + 1));
-        } else {
-            return new Tuple2<>(null, id);
-        }
+    public String nextLocalPrefix() {
+        return getLocalPrefix() + functionIndex++;
     }
 
     @Override
@@ -99,53 +81,159 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return opcodeVariants;
     }
 
+
+
     @Override
-    public LogicInstruction createInstruction(Opcode opcode, String... arguments) {
-        return createInstruction(null, opcode, List.of(arguments));
+    public CallInstruction createCallStackless(LogicAddress address) {
+        return (CallInstruction) createInstruction(Opcode.CALL, address);
     }
 
     @Override
-    public LogicInstruction createInstruction(Opcode opcode, List<String> arguments) {
-        return createInstruction(null, opcode, arguments);
+    public CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr) {
+        return (CallRecInstruction) createInstruction(Opcode.CALLREC, stack, callAddr, retAddr);
     }
 
     @Override
-    public LogicInstruction createInstruction(String marker, Opcode opcode, String... arguments) {
-        return createInstruction(marker, opcode, List.of(arguments));
+    public EndInstruction createEnd() {
+        return (EndInstruction) createInstruction(Opcode.END);
     }
 
     @Override
-    public LogicInstruction createInstruction(String marker, Opcode opcode, List<String> arguments) {
-        return validate(createInstructionUnchecked(marker, opcode, arguments));
+    public GotoInstruction createGoto(LogicVariable address) {
+        return (GotoInstruction) createInstruction(Opcode.GOTO, address);
+    }
+
+    @Override
+    public JumpInstruction createJump(LogicLabel label, Condition condition, LogicValue x, LogicValue y) {
+        return (JumpInstruction) createInstruction(Opcode.JUMP, label, condition, x, y);
+    }
+
+    @Override
+    public JumpInstruction createJumpUnconditional(LogicLabel label) {
+        return (JumpInstruction) createInstruction(Opcode.JUMP, label, Condition.ALWAYS);
+    }
+
+    @Override
+    public LabelInstruction createLabel(LogicLabel label) {
+        return (LabelInstruction) createInstruction(Opcode.LABEL, label);
+    }
+
+    @Override
+    public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first) {
+        return (OpInstruction) createInstruction(Opcode.OP, operation, target, first);
+    }
+
+    @Override
+    public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
+        return (OpInstruction) createInstruction(Opcode.OP, operation, target, first, second);
+    }
+
+    @Override
+    public PopInstruction createPop(LogicVariable memory, LogicVariable value) {
+        return (PopInstruction) createInstruction(Opcode.POP, memory, value);
+    }
+
+    @Override
+    public PrintInstruction createPrint(LogicValue what) {
+        return (PrintInstruction) createInstruction(Opcode.PRINT, what);
+    }
+
+    @Override
+    public PrintflushInstruction createPrintflush(LogicVariable messageBlock) {
+        return (PrintflushInstruction) createInstruction(Opcode.PRINTFLUSH, messageBlock);
+    }
+
+    @Override
+    public PushInstruction createPush(LogicVariable memory, LogicVariable value) {
+        return (PushInstruction) createInstruction(Opcode.PUSH, memory, value);
+    }
+
+    @Override
+    public ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index) {
+        return (ReadInstruction) createInstruction(Opcode.READ, result, memory, index);
+    }
+
+    @Override
+    public ReturnInstruction createReturn(LogicVariable stack) {
+        return (ReturnInstruction) createInstruction(Opcode.RETURN, stack);
+    }
+
+    @Override
+    public SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property) {
+        return (SensorInstruction) createInstruction(Opcode.SENSOR, result, target, property);
+    }
+
+    @Override
+    public SetInstruction createSet(LogicVariable target, LogicValue value) {
+        return (SetInstruction) createInstruction(Opcode.SET, target, value);
+    }
+
+    @Override
+    public SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address) {
+        return (SetAddressInstruction) createInstruction(Opcode.SETADDR, variable, address);
+    }
+
+    @Override
+    public StopInstruction createStop() {
+        return (StopInstruction) createInstruction(Opcode.STOP);
+    }
+
+    @Override
+    public WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index) {
+        return (WriteInstruction) createInstruction(Opcode.WRITE, value, memory, index);
+    }
+
+    @Override
+    public WriteInstruction createWriteAddress(LogicAddress value, LogicVariable memory, LogicValue index) {
+        return (WriteInstruction) createInstruction(Opcode.WRITE, value, memory, index);
+    }
+
+
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
+        return createInstruction(opcode, List.of(arguments));
+    }
+
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
+        return validate(createInstructionUnchecked(opcode, arguments));
     }
 
     @Override
     public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {
         return createInstruction(opcodeVariant.getOpcode(),
-                opcodeVariant.getArguments().stream().map(NamedArgument::getName).collect(Collectors.toList())
+                opcodeVariant.getNamedParameters().stream()
+                        .map(NamedParameter::name)
+                        .map(BaseArgument::new)
+                        .collect(Collectors.toList())
         );
     }
 
     @Override
-    public LogicInstruction createInstructionUnchecked(String marker, Opcode opcode, List<String> arguments) {
+    public LogicInstruction createInstructionUnchecked(Opcode opcode, List<LogicArgument> arguments) {
+        List<LogicParameter> params = getParameters(opcode, arguments);
+
         return switch (opcode) {
-            case CALL       -> new CallInstruction(marker, opcode, arguments);
-            case END        -> new EndInstruction(marker, opcode, arguments);
-            case GOTO       -> new GotoInstruction(marker, opcode, arguments);
-            case JUMP       -> new JumpInstruction(marker, opcode, arguments);
-            case LABEL      -> new LabelInstruction(marker, opcode, arguments);
-            case OP         -> new OpInstruction(marker, opcode, arguments);
-            case PACKCOLOR  -> new PackColorInstruction(marker, opcode, arguments);
-            case POP        -> new PopInstruction(marker, opcode, arguments);
-            case PRINT      -> new PrintInstruction(marker, opcode, arguments);
-            case PRINTFLUSH -> new PrintflushInstruction(marker, opcode, arguments);
-            case PUSH       -> new PushInstruction(marker, opcode, arguments);
-            case READ       -> new ReadInstruction(marker, opcode, arguments);
-            case RETURN     -> new ReturnInstruction(marker, opcode, arguments);
-            case SET        -> new SetInstruction(marker, opcode, arguments);
-            case STOP       -> new StopInstruction(marker, opcode, arguments);
-            case WRITE      -> new WriteInstruction(marker, opcode, arguments);
-            default         -> new BaseInstruction(marker, opcode, arguments);
+            case CALL       -> new CallInstruction(arguments, params);
+            case CALLREC    -> new CallRecInstruction(arguments, params);
+            case END        -> new EndInstruction();
+            case GOTO       -> new GotoInstruction(arguments, params);
+            case JUMP       -> new JumpInstruction(arguments, params);
+            case LABEL      -> new LabelInstruction(arguments, params);
+            case OP         -> new OpInstruction(arguments, params);
+            case PACKCOLOR  -> new PackColorInstruction(arguments, params);
+            case POP        -> new PopInstruction(arguments, params);
+            case PRINT      -> new PrintInstruction(arguments, params);
+            case PRINTFLUSH -> new PrintflushInstruction(arguments, params);
+            case PUSH       -> new PushInstruction(arguments, params);
+            case READ       -> new ReadInstruction(arguments, params);
+            case RETURN     -> new ReturnInstruction(arguments, params);
+            case SENSOR     -> new SensorInstruction(arguments, params);
+            case SET        -> new SetInstruction(arguments, params);
+            case SETADDR    -> new SetAddressInstruction(arguments, params);
+            case STOP       -> new StopInstruction();
+            case WRITE      -> new WriteInstruction(arguments, params);
+            default         -> new BaseInstruction(opcode, arguments, params);
         };
     }
 
@@ -155,31 +243,39 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case LabelInstruction ix -> List.of();
 
             case PushInstruction ix -> List.of(
-                    createInstruction(Opcode.WRITE, ix.getValue(), ix.getMemory(), getStackPointer()),
-                    createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"));
+                    createWrite(ix.getVariable(), ix.getMemory(), stackPointer()),
+                    createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
 
             case PopInstruction ix -> List.of(
-                    createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
-                    createInstruction(Opcode.READ, ix.getValue(), ix.getMemory(), getStackPointer())
+                    createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE),
+                    createRead(ix.getVariable(), ix.getMemory(), stackPointer())
             );
 
-            case CallInstruction ix -> List.of(
-                    createInstruction(Opcode.WRITE, ix.getReturn(), ix.getMemory(), getStackPointer()),
-                    createInstruction(Opcode.OP, "add", getStackPointer(), getStackPointer(), "1"),
-                    createInstruction(Opcode.SET, "@counter", ix.getTarget())
+            case CallRecInstruction ix -> List.of(
+                    createInstruction(Opcode.WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()),
+                    createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE),
+                    createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getCallAddr())
             );
 
             case ReturnInstruction ix -> {
-                String retAddr = nextTemp();
+                LogicVariable retAddr = nextTemp();
                 yield List.of(
-                        createInstruction(Opcode.OP, "sub", getStackPointer(), getStackPointer(), "1"),
-                        createInstruction(Opcode.READ, retAddr, ix.getMemory(), getStackPointer()),
-                        createInstruction(Opcode.SET, "@counter", retAddr)
+                        createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE),
+                        createRead(retAddr, ix.getStack(), stackPointer()),
+                        createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, retAddr)
                 );
             }
 
+            case CallInstruction ix -> List.of(
+                    createJumpUnconditional(ix.getCallAddr())
+            );
+
             case GotoInstruction ix -> List.of(
-                    createInstruction(Opcode.SET, "@counter", ix.getLabel())
+                    createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress())
+            );
+
+            case SetAddressInstruction ix -> List.of(
+                    createInstruction(Opcode.SET, ix.getTarget(), ix.getLabel())
             );
 
             default ->
@@ -187,101 +283,65 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         };
     }
 
-    @Override
-    public int getRealSize(LogicInstruction instruction) {
-        return instruction.getOpcode().getSize();
-    }
-
-    @Override
-    public boolean isTemporary(String varRef) {
-        return varRef.startsWith(getTempPrefix());
-    }
-
-    @Override
-    public LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String arg) {
+    public LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, LogicArgument arg) {
         if (instruction.getArg(argIndex).equals(arg)) {
             return instruction;
         }
         else {
-            List<String> newArgs = new ArrayList<>(instruction.getArgs());
+            List<LogicArgument> newArgs = new ArrayList<>(instruction.getArgs());
             newArgs.set(argIndex, arg);
             return createInstruction(instruction.getOpcode(), newArgs);
         }
     }
 
     @Override
-    public LogicInstruction replaceAllArgs(LogicInstruction instruction, String oldArg, String newArg) {
-        List<String> args = new ArrayList<>(instruction.getArgs());
-        args.replaceAll(arg -> arg.equals(oldArg) ? newArg : arg);
-        return createInstruction(instruction.getOpcode(), args);
+    public LogicInstruction replaceAllArgs(LogicInstruction instruction, LogicArgument oldArg, LogicArgument newArg) {
+        List<LogicArgument> args = instruction.getArgs().stream()
+                .map(arg -> arg.equals(oldArg) ? newArg : arg)
+                .toList();
+        return replaceArgs(instruction, args);
     }
 
     @Override
-    public List<ArgumentType> getArgumentTypes(LogicInstruction instruction) {
-        return getArgumentTypes(instruction.getOpcode(), instruction.getArgs());
+    public LogicInstruction replaceArgs(LogicInstruction instruction, List<LogicArgument> newArgs) {
+        return instruction.getMarker() != null
+                ? createInstruction(instruction.getOpcode(), newArgs).withMarker(instruction.getMarker())
+                : createInstruction(instruction.getOpcode(), newArgs);
     }
 
-    @Override
-    public int getTotalInputs(LogicInstruction instruction) {
-        return (int) getArgumentTypes(instruction).stream().filter(ArgumentType::isInput).count();
-    }
-
-    @Override
-    public int getTotalOutputs(LogicInstruction instruction) {
-        return (int) getArgumentTypes(instruction).stream().filter(ArgumentType::isOutput).count();
+    private List<LogicParameter> getArgumentTypes(LogicInstruction instruction) {
+        return getParameters(instruction.getOpcode(), instruction.getArgs());
     }
 
     @Override
     public int getPrintArgumentCount(LogicInstruction instruction) {
         // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
         return variantsByOpcode.get(instruction.getOpcode()).stream()
-                .mapToInt(v -> v.getArguments().size()).max().orElse(0)
+                .mapToInt(v -> v.getNamedParameters().size()).max().orElse(0)
                 + instruction.getOpcode().getAdditionalPrintArguments();
     }
 
-    @Override
-    public List<String> getInputValues(LogicInstruction instruction) {
-        return getTypedArguments(instruction)
-                .filter(a -> a.getArgumentType().isInput())
-                .map(TypedArgument::getValue)
-                .toList();
-    }
 
-    @Override
-    public List<String> getOutputValues(LogicInstruction instruction) {
-        return getTypedArguments(instruction)
-                .filter(a -> a.getArgumentType().isOutput())
-                .map(TypedArgument::getValue)
-                .toList();
-    }
-
-    @Override
-    public List<String> getInputOutputValues(LogicInstruction instruction) {
-        return getTypedArguments(instruction)
-                .filter(a -> a.getArgumentType().isInputOrOutput())
-                .map(TypedArgument::getValue)
-                .toList();
-    }
-
-    @Override
-    public Stream<TypedArgument> getTypedArguments(LogicInstruction instruction) {
-        List<ArgumentType> types = getArgumentTypes(instruction);
-        return IntStream.range(0, types.size())
-                .mapToObj(i -> new TypedArgument(types.get(i), instruction.getArgs().get(i)));
-    }
-
-
-    @Override
-    public boolean isValid(ArgumentType type, String value) {
+    /**
+     * Returns true if the given value is allowed to be used in place of the given argument.
+     * For input and output arguments, anything is permissible at the moment (it could be a variable name, a literal,
+     * or in some cases a @constant), but it might be possible to implement more specific checks in the future.
+     * For other arguments, only concrete, version-specific values are permissible.
+     *
+     * @param type type of the argument
+     * @param value value assigned to the argument
+     * @return true if the value is valid for given argument type
+     */
+    private boolean isValid(LogicParameter type, LogicArgument value) {
         if (type.restrictValues()) {
             Set<String> values = validArgumentValues.get(type);
-            return values.contains(value);
+            return values.contains(value.toMlog());
         } else {
             return true;
         }
     }
 
-    protected OpcodeVariant getOpcodeVariant(Opcode opcode, List<String> arguments) {
+    protected OpcodeVariant getOpcodeVariant(Opcode opcode, List<LogicArgument> arguments) {
         List<OpcodeVariant> variants = variantsByOpcode.get(opcode);
         if (variants == null) {
             return null;
@@ -292,7 +352,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             int position = opcodeKeywordPosition.get(opcode);
 
             // We know that variantsByKeyword contains opcode, as variantsByOpcode.get(opcode) isn't null
-            return position >= arguments.size() ? null : variantsByKeyword.get(opcode).get(arguments.get(position));
+            return position >= arguments.size() ? null : variantsByKeyword.get(opcode).get(arguments.get(position).toMlog());
         }
     }
 
@@ -304,9 +364,9 @@ public class BaseInstructionProcessor implements InstructionProcessor {
      * @param arguments arguments to the instruction
      * @return list of types of given arguments
      */
-    protected List<ArgumentType> getArgumentTypes(Opcode opcode, List<String> arguments) {
+    protected List<LogicParameter> getParameters(Opcode opcode, List<LogicArgument> arguments) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, arguments);
-        return opcodeVariant.getArguments().stream().map(NamedArgument::getType).collect(Collectors.toList());
+        return opcodeVariant == null ? null : opcodeVariant.getParameterTypes();
     }
 
     protected LogicInstruction validate(LogicInstruction instruction) {
@@ -315,17 +375,23 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             throw new GenerationException("Invalid or version incompatible instruction " + instruction);
         }
 
-        if (instruction.getArgs().size() != opcodeVariant.getArguments().size()) {
+        if (instruction.getArgs().size() != opcodeVariant.getNamedParameters().size()) {
             throw new GenerationException("Wrong number of arguments of instruction " + instruction.getOpcode()
-                    + " (expected " + opcodeVariant.getArguments().size() + "). " + instruction);
+                    + " (expected " + opcodeVariant.getNamedParameters().size() + "). " + instruction);
         }
 
         for (int i = 0; i < instruction.getArgs().size(); i++) {
-            String argument = instruction.getArgs().get(i);
-            ArgumentType type = opcodeVariant.getArguments().get(i).getType();
+            NamedParameter namedParameter = opcodeVariant.getNamedParameters().get(i);
+            LogicArgument argument = instruction.getArgs().get(i);
+            LogicParameter type = namedParameter.type();
             if (!isValid(type, argument)) {
-                throw new GenerationException("Argument " + argument + " not compatible with argument type " + type + ". " + instruction);
+                throw new GenerationException("Argument " + argument + " for parameter '" + namedParameter.name()
+                        + "' not compatible with argument type " + type + ". " + instruction);
             }
+        }
+
+        if (instruction.getParams() == null) {
+            throw new GenerationException("Instruction created without valid parameters: " + instruction);
         }
 
         return instruction;
@@ -333,7 +399,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     private int getOpcodeVariantSelectorPosition(Opcode opcode, List<OpcodeVariant> opcodeVariants) {
         List<Integer> indexes = opcodeVariants.stream()
-                .map(v -> findFirstIndex(v.getArguments(), a -> a.getType().isSelector()))
+                .map(v -> findFirstIndex(v.getNamedParameters(), a -> a.type().isSelector()))
                 .distinct()
                 .toList();
 
@@ -349,13 +415,13 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         if (position < 0) {
             return "";      // Single-variant opcode; no keyword
         } else {
-            return opcodeVariant.getArguments().get(position).getName();
+            return opcodeVariant.getNamedParameters().get(position).name();
         }
     }
 
-    private Map<ArgumentType, Set<String>> createAllowedArgumentValuesMap() {
-        Map<ArgumentType, Set<String>> map = new HashMap<>();
-        for (ArgumentType type : ArgumentType.values()) {
+    private Map<LogicParameter, Set<String>> createAllowedArgumentValuesMap() {
+        Map<LogicParameter, Set<String>> map = new HashMap<>();
+        for (LogicParameter type : LogicParameter.values()) {
             Set<String> allowedValues = createAllowedValues(type);
             if (!allowedValues.isEmpty()) {
                 map.put(type, allowedValues);
@@ -365,12 +431,12 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return Map.copyOf(map);
     }
 
-    private Set<String> createAllowedValues(ArgumentType type) {
+    private Set<String> createAllowedValues(LogicParameter type) {
         if (type.isSelector()) {
             return opcodeVariants.stream()
-                    .flatMap(v -> v.getArguments().stream())
-                    .filter(v -> v.getType() == type)
-                    .map(NamedArgument::getName)
+                    .flatMap(v -> v.getNamedParameters().stream())
+                    .filter(v -> v.type() == type)
+                    .map(NamedParameter::name)
                     .collect(Collectors.toUnmodifiableSet());
         } else {
             // Select only compatible keywords and put them into a set
@@ -383,18 +449,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
 
-    private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second", "@minute",
-            "@waveNumber", "@waveTime");
-
-    @Override
-    public boolean isVolatile(String identifier) {
-        return VOLATILE_NAMES.contains(identifier);
-    }
-
     @Override
     public boolean isBlockName(String identifier) {
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
-        return matcher.find() && getBlockNames().contains(matcher.group(1));
+        return matcher.find() && BLOCK_NAMES.contains(matcher.group(1));
     }
 
     @Override
@@ -405,17 +463,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 && identifier.equals(identifier.toUpperCase());
     }
 
-    private static final Map<String, String> INVERSES = Map.of(
-            "equal", "notEqual",
-            "notEqual", "equal",
-            "lessThan", "greaterThanEq",
-            "lessThanEq", "greaterThan",
-            "greaterThan", "lessThanEq",
-            "greaterThanEq", "lessThan"
-    );
-
-    private static final Set<String> CONSTANT_NAMES = Set.of("true", "false", "null");
-
     private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
             "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode",
             "disassembler", "display", "distributor", "dome", "door", "drill", "driver", "duo", "extractor", "factory",
@@ -425,35 +472,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             "scatter", "scorch", "segment", "separator", "shard", "smelter", "sorter", "spectre", "swarmer", "switch",
             "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
 
-    @Override
-    public String translateOpToCode(String op) {
-        String translated = ExpressionEvaluator.translateOperator(op);
-        if (translated == null) {
-            throw new GenerationException("Failed to translate binary operator to Mindustry representation: [" + op + "] is not handled");
-        } else {
-            return translated;
-        }
+
+    private LogicVariable stackPointer() {
+        return LogicVariable.STACK_POINTER;
     }
 
-    @Override
-    public boolean hasInverse(String comparison) {
-        return INVERSES.containsKey(comparison);
-    }
-
-    @Override
-    public String getInverse(String comparison) {
-        return INVERSES.get(comparison);
-    }
-
-    @Override
-    public Set<String> getConstantNames() {
-        return CONSTANT_NAMES;
-    }
-
-    @Override
-    public Set<String> getBlockNames() {
-        return BLOCK_NAMES;
-    }
 
     public Optional<String> mlogRewrite(String literal) {
         try {
@@ -492,7 +515,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             }
 
             // Cannot avoid exponent. Format it so that Mindustry understands it.
-            // Use float representation, as too high a precision might create too high exponents
+            // Use float representation, as too high a precision might get too high exponents
             float valueFloat = (float) value;
             String literalFloat = Float.toString(valueFloat);
             int dot = literalFloat.indexOf('.');

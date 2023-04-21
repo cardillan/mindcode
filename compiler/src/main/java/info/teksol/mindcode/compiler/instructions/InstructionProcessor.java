@@ -1,12 +1,9 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
 
 public interface InstructionProcessor {
 
@@ -14,29 +11,39 @@ public interface InstructionProcessor {
 
     ProcessorEdition getProcessorEdition();
 
-    String nextLabel();
-
-    String nextTemp();
-
-    String nextReturnValue();
-
-    String nextLocalPrefix(String functionName);
-
-    Tuple2<String, String> parseVariable(String id);
-
-    /**
-     * @return the list of opcode variants available to this instruction processor.
-     */
+    /** @return list of all opcode variants available to this instruction processor */
     List<OpcodeVariant> getOpcodeVariants();
 
-    /**
-     * Creates and validates a new LogicInstruction.
-     *
-     * @param opcode opcode of the instruction
-     * @param arguments arguments of the instruction
-     * @return a new, validated instance of LogicInstruction
-     */
-    LogicInstruction createInstruction(Opcode opcode, String... arguments);
+    LogicLabel nextLabel();
+
+    LogicVariable nextTemp();
+
+    LogicVariable nextReturnValue();
+
+    String nextLocalPrefix();
+
+
+    CallInstruction createCallStackless(LogicAddress address);
+    CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr);
+    EndInstruction createEnd();
+    GotoInstruction createGoto(LogicVariable address);
+    JumpInstruction createJump(LogicLabel label, Condition condition, LogicValue x, LogicValue y);
+    JumpInstruction createJumpUnconditional(LogicLabel label);
+    LabelInstruction createLabel(LogicLabel label);
+    OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first);
+    OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second);
+    PopInstruction createPop(LogicVariable memory, LogicVariable value);
+    PrintInstruction createPrint(LogicValue what);
+    PrintflushInstruction createPrintflush(LogicVariable messageBlock);
+    PushInstruction createPush(LogicVariable memory, LogicVariable value);
+    ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index);
+    ReturnInstruction createReturn(LogicVariable stack);
+    SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property);
+    SetInstruction createSet(LogicVariable target, LogicValue value);
+    SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address);
+    StopInstruction createStop();
+    WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index);
+    WriteInstruction createWriteAddress(LogicAddress value, LogicVariable memory, LogicValue index);
 
     /**
      * Creates and validates a new LogicInstruction.
@@ -45,27 +52,16 @@ public interface InstructionProcessor {
      * @param arguments arguments of the instruction
      * @return a new, validated instance of LogicInstruction
      */
-    LogicInstruction createInstruction(Opcode opcode, List<String> arguments);
+    LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments);
 
     /**
-     * Creates and validates a new LogicInstruction with a marker.
+     * Creates and validates a new LogicInstruction.
      *
-     * @param marker marker for the instruction
      * @param opcode opcode of the instruction
      * @param arguments arguments of the instruction
      * @return a new, validated instance of LogicInstruction
      */
-    LogicInstruction createInstruction(String marker, Opcode opcode, String... arguments);
-
-    /**
-     * Creates and validates a new LogicInstruction with a marker.
-     *
-     * @param marker marker for the instruction
-     * @param opcode opcode of the instruction
-     * @param arguments arguments of the instruction
-     * @return a new, validated instance of LogicInstruction
-     */
-    LogicInstruction createInstruction(String marker, Opcode opcode, List<String> arguments);
+    LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);
 
     /**
      * Creates a sample logic instruction from given opcode variant.
@@ -82,7 +78,7 @@ public interface InstructionProcessor {
      * @param arguments arguments of the instruction
      * @return a new, non-validated instance of LogicInstruction
      */
-    LogicInstruction createInstructionUnchecked(String marker, Opcode opcode, List<String> arguments);
+    LogicInstruction createInstructionUnchecked(Opcode opcode, List<LogicArgument> arguments);
 
     /**
      * Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
@@ -93,24 +89,6 @@ public interface InstructionProcessor {
     List<LogicInstruction> resolve(LogicInstruction virtualInstruction);
 
     /**
-     * Provides real size the instruction will take in compiled code. For non-virtual instructions,
-     * the value is always 1.
-     * 
-     * @param instruction instruction to process
-     * @return number of instructions in compiled code this instruction will resolve to
-     */
-    int getRealSize(LogicInstruction instruction);
-
-    /**
-     * Determines whether this variable is temporary and can be therefore eliminated during optimization. Temporary
-     * variables generated by the compiler have known usage patterns which optimizers rely on.
-     *
-     * @param varRef name of the variable
-     * @return  true if the variable is temporary
-     */
-    boolean isTemporary(String varRef);
-
-    /**
      * Returns a logic instruction with an argument set to the  given value.
      * If the instruction is modified, a new version of it is created, otherwise the current instance is returned.
      *
@@ -119,7 +97,7 @@ public interface InstructionProcessor {
      * @param value new value for the argument
      * @return a modified instruction
      */
-    LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, String value);
+    LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, LogicArgument value);
 
     /**
      * Returns a logic instruction with all arguments equal to a specific value replaced by a new value.
@@ -130,33 +108,9 @@ public interface InstructionProcessor {
      * @param newArg new value for the arguments equal to the old value
      * @return a modified instruction
      */
-    LogicInstruction replaceAllArgs(LogicInstruction instruction, String oldArg, String newArg);
+    LogicInstruction replaceAllArgs(LogicInstruction instruction, LogicArgument oldArg, LogicArgument newArg);
 
-    /**
-     * Returns list of argument types based on instruction opcode and instruction variant. The variant
-     * of the instruction is determined by inspecting its arguments.
-     *
-     * @param instruction instruction to process
-     * @return list of types of given arguments
-     */
-    List<ArgumentType> getArgumentTypes(LogicInstruction instruction);
-
-    /**
-     * Determines the number of input arguments to the instruction.
-     *
-     * @param instruction instruction to process
-     * @return number of input arguments
-     */
-    int getTotalInputs(LogicInstruction instruction);
-
-    /**
-     * Determines the number of output arguments to the instruction.
-     *
-     * @param instruction instruction to process
-     * @return number of output arguments
-     */
-    int getTotalOutputs(LogicInstruction instruction);
-
+    LogicInstruction replaceArgs(LogicInstruction instruction, List<LogicArgument> newArgs);
     /**
      * Determines the number of arguments needed to print the instruction
      *
@@ -164,99 +118,6 @@ public interface InstructionProcessor {
      * @return number total printable arguments
      */
     int getPrintArgumentCount(LogicInstruction instruction);
-
-    /**
-     * Determines the types of arguments based on instruction variant and returns values of arguments
-     * which are input in the particular instruction variant.
-     *
-     * @param instruction instruction to process
-     * @return list of argument values assigned to input arguments
-     */
-    List<String> getInputValues(LogicInstruction instruction);
-
-    /**
-     * Determines the types of arguments based on instruction variant and returns values of arguments
-     * which are output in the particular instruction variant.
-     *
-     * @param instruction instruction to process
-     * @return list of argument values assigned to output arguments
-     */
-    List<String> getOutputValues(LogicInstruction instruction);
-
-    /**
-     * Determines the types of arguments based on instruction variant and returns values of arguments
-     * which are input or output in the particular instruction variant.
-     *
-     * @param instruction instruction to process
-     * @return list of argument values assigned to input or output arguments
-     */
-    List<String> getInputOutputValues(LogicInstruction instruction);
-
-    /**
-     * Assigns types to instruction arguments. Types depend on the opcode and instruction variant. The variant
-     * of the instruction is determined by inspecting its arguments.
-     *
-     * @param instruction instruction to process
-     * @return stream of typed arguments
-     */
-    Stream<TypedArgument> getTypedArguments(LogicInstruction instruction);
-
-    /**
-     * Returns true if the given value is allowed to be used in place of the given argument.
-     * For input and output arguments, anything is permissible at the moment (it could be a variable name, a literal,
-     * or in some cases a @constant), but it might be possible to implement more specific checks in the future.
-     * For other arguments, only concrete, version-specific values are permissible.
-     * 
-     * @param type type of the argument
-     * @param value value assigned to the argument
-     * @return true if the value is valid for given argument type
-     */
-    boolean isValid(ArgumentType type, String value);
-
-    /**
-     * Translates unary or binary Mindcode operator to Mindustry Logic representation.
-     *
-     * @param op Mindcode operator
-     * @return equivalent Mindustry Logic operation
-     */
-    String translateOpToCode(String op);
-
-    /**
-     * Returns true if the operation (in Mindustry opcode, i.e. lessThan, notEqual etc.) has an inverse.
-     *
-     * @param comparison operation to inspect
-     * @return true if there exist an inverse operation
-     */
-    boolean hasInverse(String comparison);
-
-    /**
-     * Returns the inverse of given operation (in Mindustry opcode, rg. lessThan ==> greaterThanEq).
-     *
-     * @param comparison operation to invert
-     * @return inverse of the given operation (null if it doesn't exist)
-     */
-    String getInverse(String comparison);
-
-    /**
-     * Returns the set of Mindustry Logic constant names (true, false, null, possibly others).
-     * @return the set of constant names
-     */
-    Set<String> getConstantNames();
-
-    /**
-     * Returns the set of possible Mindustry Logic block names (switch, cell, projector etc.).
-     * @return the set of block names
-     */
-    Set<String> getBlockNames();
-
-    /**
-     * Determines whether the identifier is a volatile variable, i.e. a variable whose value can change
-     * independently of the program.
-     *
-     * @param identifier identifier to check
-     * @return true if it denotes a volatile variable
-     */
-    boolean isVolatile(String identifier);
 
     /**
      * Determines whether the identifier could be a block name (such as switch1, cell2, projector3 etc.).
@@ -300,9 +161,5 @@ public interface InstructionProcessor {
 
     default String getLocalPrefix() {
         return "__fn";
-    }
-
-    default String getStackPointer() {
-        return "__sp";
     }
 }
