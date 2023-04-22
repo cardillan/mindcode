@@ -35,7 +35,7 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
     protected boolean optimizeProgram() {
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
             if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.AST_VARIABLE) {
-                LogicVariable result = (LogicVariable) ix.getTarget();
+                LogicVariable result = ix.getTarget();
                 List<LogicInstruction> list = findInstructions(
                         in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 

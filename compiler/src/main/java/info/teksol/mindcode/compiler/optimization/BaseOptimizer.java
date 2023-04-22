@@ -35,6 +35,10 @@ abstract class BaseOptimizer implements Optimizer {
         next.flush();
     }
 
+    protected boolean aggressive() {
+        return level == OptimizationLevel.AGGRESSIVE;
+    }
+
     @Override
     public String getName() {
         return name;

@@ -4,11 +4,6 @@ public enum LogicNull implements LogicLiteral {
     NULL;
 
     @Override
-    public boolean isLiteral() {
-        return true;
-    }
-
-    @Override
     public ArgumentType getType() {
         return ArgumentType.NULL_LITERAL;
     }

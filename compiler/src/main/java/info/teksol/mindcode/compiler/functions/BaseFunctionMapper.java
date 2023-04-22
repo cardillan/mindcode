@@ -41,18 +41,19 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     @Override
-    public LogicValue handleProperty(LogicInstructionPipeline pipeline, String propertyName, LogicValue target, List<LogicValue> params) {
+    public LogicValue handleProperty(LogicInstructionPipeline pipeline, String propertyName, LogicValue target,
+            List<LogicValue> arguments) {
         PropertyHandler handler = propertyMap.get(propertyName);
-        return handler == null ? null : handler.handleProperty(pipeline, target, params);
+        return handler == null ? null : handler.handleProperty(pipeline, target, arguments);
     }
 
     @Override
-    public LogicValue handleFunction(LogicInstructionPipeline pipeline, String functionName, List<LogicValue> params) {
+    public LogicValue handleFunction(LogicInstructionPipeline pipeline, String functionName, List<LogicValue> arguments) {
         FunctionHandler handler = functionMap.get(functionName);
         BuiltInFunctionHandler builtInHandler = builtInFunctionMap.get(functionName);
         return handler == null
-                ? builtInHandler == null ? null : builtInHandler.handleFunction(pipeline, params)
-                : handler.handleFunction(pipeline, params);
+                ? builtInHandler == null ? null : builtInHandler.handleFunction(pipeline, arguments)
+                : handler.handleFunction(pipeline, arguments);
     }
 
     @Override
@@ -85,12 +86,19 @@ public class BaseFunctionMapper implements FunctionMapper {
         return instructionProcessor.createInstruction(opcode, args);
     }
 
-    private LogicKeyword toKeyword(LogicArgument arg) {
-        // The argument is not a variable. If there was a local prefix added, we need to strip it.
+    private LogicKeyword toKeyword(LogicValue arg) {
+        // Syntactically, instruction keywords are just identifiers.
+        // To convert it to keyword, we use the plain variable name.
         return switch (arg) {
-            case LogicKeyword lk -> lk;
             case LogicVariable lv -> LogicKeyword.create(lv.getName());
             default -> throw new GenerationException("Unexpected type of argument " + arg);
+        };
+    }
+
+    private LogicKeyword toKeywordOptional(LogicValue arg) {
+        return switch (arg) {
+            case LogicVariable lv -> LogicKeyword.create(lv.getName());
+            default -> LogicKeyword.create("");        // A keyword that cannot exist
         };
     }
 
@@ -118,7 +126,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
     
     private interface PropertyHandler extends SampleGenerator {
-        LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> params);
+        LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
             return getOpcodeVariant().getOpcode();
@@ -126,7 +134,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private interface FunctionHandler extends SampleGenerator {
-        LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> params);
+        LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
             return getOpcodeVariant().getOpcode();
@@ -138,7 +146,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private interface BuiltInFunctionHandler {
-        LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> params);
+        LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments);
     }
 
     //
@@ -202,10 +210,10 @@ public class BaseFunctionMapper implements FunctionMapper {
             return opcodeVariant;
         }
 
-        protected void checkArguments(List<LogicValue> params) {
-            if (params.size() != numArgs) {
-                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of parameters (expected "
-                        + numArgs + ", found " + params.size() + ")");
+        protected void checkArguments(List<LogicValue> arguments) {
+            if (arguments.size() != numArgs) {
+                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of arguments (expected "
+                        + numArgs + ", found " + arguments.size() + ")");
             }
         }
 
@@ -229,49 +237,52 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> params) {
-            checkArguments(params);
+        public LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> fnArgs) {
+            checkArguments(fnArgs);
 
             LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : LogicNull.NULL;
-            List<LogicArgument> args = new ArrayList<>();
-            int paramIndex = 0;
+            List<LogicArgument> ixArgs = new ArrayList<>();
+            int argIndex = 0;
 
             for (NamedParameter a : opcodeVariant.getNamedParameters()) {
                 if (a.type() == LogicParameter.RESULT) {
-                    args.add(tmp);
+                    ixArgs.add(tmp);
                 } else if (a.type() == LogicParameter.BLOCK) {
                     // No stripping: it is either a block name - already unprefixed, or a regular variable.
-                    args.add(target);
+                    ixArgs.add(target);
                 } else if (a.type().isSelector()  && !a.type().isFunctionName()) {
-                    // Selector that IS NOT a function name is taken from the parameter list
-                    args.add(toKeyword(params.get(paramIndex++)));
-                } else if (a.type().isSelector() || a.type().isUnused()) {
-                    // Selector that IS a function name isn't in a parameter list and must be filled in
+                    // Selector that IS NOT a function name is taken from the argument list
+                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
+                } else if (a.type().isSelector()) {
+                    // Selector that IS a function name isn't in an argument list and must be filled in
+                    ixArgs.add(LogicKeyword.create(a.name()));
+                } else if (a.type().isUnused()) {
+                    // Unused inputs must be filled with defaults
                     // Generate new temporary variable for unused outputs (may not be necessary)
-                    args.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
+                    ixArgs.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
                 } else if (a.type().isInput()) {
                     // Input argument - take it as it is
-                    args.add(params.get(paramIndex++));
+                    ixArgs.add(fnArgs.get(argIndex++));
                 } else if (a.type().isOutput()) {
-                    if (paramIndex >= params.size()) {
+                    if (argIndex >= fnArgs.size()) {
                         // Optional arguments are always output; generate temporary variable for them
-                        args.add(instructionProcessor.nextTemp());
+                        ixArgs.add(instructionProcessor.nextTemp());
                     } else {
                         // Block name cannot be used as output argument
-                        LogicArgument argument = params.get(paramIndex++);
+                        LogicArgument argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
                             throw new GenerationException("Using variable " + argument + " in function " + name
                                     + " not allowed (name reserved for linked blocks)");
                         }
-                        args.add(argument);
+                        ixArgs.add(argument);
                     }
                 } else {
                     // Not a variable - strip prefix
-                    args.add(toKeyword(params.get(paramIndex++)));
+                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
                 }
             }
 
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), ixArgs));
             return tmp;
         }
 
@@ -371,14 +382,14 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> params) {
+        public LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> arguments) {
             if (!warningEmitted) {
                 messageConsumer.accept(CompilerMessage.warn(
                         "Function '" + deprecated + "' is no longer supported in Mindustry Logic version " +
                         processorVersion + "; using '" + replacement.getName() + "' instead."));
                 warningEmitted = true;
             }
-            return replacement.handleProperty(pipeline, target, params);
+            return replacement.handleProperty(pipeline, target, arguments);
         }
     }
 
@@ -505,11 +516,11 @@ public class BaseFunctionMapper implements FunctionMapper {
             return opcodeVariant;
         }
 
-        protected void checkArguments(List<LogicValue> params) {
-            if (params.size() < minArgs || params.size() > numArgs) {
+        protected void checkArguments(List<LogicValue> arguments) {
+            if (arguments.size() < minArgs || arguments.size() > numArgs) {
                 String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
-                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of parameters (expected "
-                        + args + ", found " + params.size() + ")");
+                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of arguments (expected "
+                        + args + ", found " + arguments.size() + ")");
             }
         }
 
@@ -544,48 +555,50 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> params) {
-            checkArguments(params);
+        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> fnArgs) {
+            checkArguments(fnArgs);
 
             LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : LogicNull.NULL;
-            List<LogicArgument> args = new ArrayList<>();
-            int paramIndex = 0;
+            // Need to support all kinds of arguments here, including keywords
+            List<LogicArgument> ixArgs = new ArrayList<>();
+            int argIndex = 0;
 
             for (NamedParameter a : opcodeVariant.getNamedParameters()) {
                 if (a.type() == LogicParameter.RESULT) {
-                    args.add(tmp);
-                } else if (a.type().isSelector()  && !a.type().isFunctionName()) {
-                    // Selector that IS NOT a function name is taken from the parameter list
-                    args.add(toKeyword(params.get(paramIndex++)));
-                } else if (a.type().isUnused()) {
-                    // Generate new temporary variable for unused outputs (may not be necessary)
-                    args.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
+                    ixArgs.add(tmp);
+                } else if (a.type().isSelector() && !a.type().isFunctionName()) {
+                    // Selector that IS NOT a function name is taken from the argument list
+                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
                 } else if (a.type().isSelector()) {
-                    // Selector that IS a function name isn't in a parameter list and must be filled in
-                    args.add(getOpcode() == Opcode.OP ? Operation.fromMlog(a.name()) : LogicKeyword.create(a.name()));
+                    // Selector that IS a function name isn't in an argument list and must be filled in
+                    // Perhaps we might store the Operation into the NamedParameter directly to avoid lookup
+                    ixArgs.add(getOpcode() == Opcode.OP ? Operation.fromMlog(a.name()) : LogicKeyword.create(a.name()));
+                } else if (a.type().isUnused()) {
+                    // Pass in zero for unused inputs
+                    // Generate new temporary variable for unused outputs (may not be necessary)
+                    ixArgs.add(a.type().isOutput() ? instructionProcessor.nextTemp() : LogicKeyword.create(a.name()));
                 } else if (a.type().isInput()) {
                     // Input argument - take it as it is
-                    args.add(params.get(paramIndex++));
+                    ixArgs.add(fnArgs.get(argIndex++));
                 } else if (a.type().isOutput()) {
-                    if (paramIndex >= params.size()) {
+                    if (argIndex >= fnArgs.size()) {
                         // Optional arguments are always output; generate temporary variable for them
-                        args.add(instructionProcessor.nextTemp());
+                        ixArgs.add(instructionProcessor.nextTemp());
                     } else {
                         // Block name cannot be used as output argument
-                        LogicArgument argument = params.get(paramIndex++);
+                        LogicValue argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
                             throw new GenerationException("Using variable " + argument + " in function " + name
                                     + " not allowed (name reserved for linked blocks)");
                         }
-                        args.add(argument);
+                        ixArgs.add(argument);
                     }
                 } else {
-                    // Not a variable - strip prefix
-                    args.add(toKeyword(params.get(paramIndex++)));
+                    ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
                 }
             }
 
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), args));
+            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), ixArgs));
             return tmp;
         }
 
@@ -621,7 +634,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
     }
 
-    // Chooses a function handler based on the first parameter value
+    // Chooses a function handler based on the first argument value
     private class MultiplexedFunctionHandler extends AbstractFunctionHandler {
         private final Map<String, FunctionHandler> functions;
 
@@ -631,12 +644,13 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> params) {
-            FunctionHandler handler = functions.get(toKeyword(params.get(0)).getKeyword());
+        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
+            // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
+            FunctionHandler handler = functions.get(toKeywordOptional(arguments.get(0)).getKeyword());
             if (handler == null) {
-                throw new UnhandledFunctionVariantException("Unhandled type of " + getOpcode() + " in " + params);
+                throw new UnhandledFunctionVariantException("Unhandled type of " + getOpcode() + " in " + arguments);
             }
-            return handler.handleFunction(pipeline, params);
+            return handler.handleFunction(pipeline, arguments);
         }
 
         @Override
@@ -657,9 +671,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> params) {
-            params.forEach((param) -> pipeline.emit(createInstruction(Opcode.PRINT, param)));
-            return params.get(params.size() - 1);
+        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
+            arguments.forEach(arg -> pipeline.emit(createInstruction(Opcode.PRINT, arg)));
+            return arguments.get(arguments.size() - 1);
         }
 
         @Override
@@ -674,9 +688,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> params) {
-            checkArguments(params);
-            pipeline.emit(createInstruction(Opcode.UBIND, params.get(0)));
+        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
+            checkArguments(arguments);
+            pipeline.emit(createInstruction(Opcode.UBIND, arguments.get(0)));
             return LogicBuiltIn.UNIT;
         }
 
@@ -692,9 +706,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         return map;
     }
     
-    private LogicValue handlePrintlnFunction(LogicInstructionPipeline pipeline, List<LogicValue> params) {
-        params.forEach((param) -> pipeline.emit(createInstruction(Opcode.PRINT, param)));
+    private LogicValue handlePrintlnFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
+        arguments.forEach(arg -> pipeline.emit(createInstruction(Opcode.PRINT, arg)));
         pipeline.emit(createInstruction(Opcode.PRINT, LogicString.NEW_LINE));
-        return params.isEmpty() ? LogicNull.NULL : params.get(params.size() - 1);
+        return arguments.isEmpty() ? LogicNull.NULL : arguments.get(arguments.size() - 1);
     }
 }

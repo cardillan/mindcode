@@ -2,21 +2,27 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.MessageLevel;
+import junit.framework.Assert;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.Opcode.*;
+import static junit.framework.Assert.assertEquals;
 
 class DeadCodeEliminatorTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline sut = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
+    private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
             Optimization.DEAD_CODE_ELIMINATION);
 
     @Test
     void removesDeadSetsInIfExpression() {
-        generateInto(sut,
+        generateInto(pipeline,
                 (Seq) translateToAst("""
                         if x == 3
                             1
@@ -43,7 +49,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void keepsUsefulIfAssignments() {
-        generateInto(sut,
+        generateInto(pipeline,
                 (Seq) translateToAst("""
                         n = if x == 3
                             1
@@ -74,7 +80,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void preventsEliminationOfUradarUsages() {
-        generateInto(sut,
+        generateInto(pipeline,
                 (Seq) translateToAst("""
                         target = uradar(enemy, ground, any, health, MIN_TO_MAX)
                         if target != null
@@ -117,7 +123,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void preventsEliminationOfUlocateUsages() {
-        generateInto(sut,
+        generateInto(pipeline,
                 (Seq) translateToAst("""
                         ulocate(ore, @surge-alloy, outx, outy)
                         approach(outx, outy, 4)
@@ -149,7 +155,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void completelyRemovesDeadcode() {
-        generateInto(sut,
+        generateInto(pipeline,
                 (Seq) translateToAst("""
                         n = 1
                         n = 1
@@ -167,7 +173,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void removesUnusedUlocate() {
-        generateInto(sut,
+        generateInto(pipeline,
                 (Seq) translateToAst("""
                         ulocate(ore, @surge-alloy, outx, outy)
                         ulocate(ore, @surge-alloy, x, y)
@@ -188,7 +194,7 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void preventsEliminationOfPartiallyUsedUlocate() {
-        generateInto(sut,
+        generateInto(pipeline,
                 (Seq) translateToAst("""
                         found = ulocate(building, core, ENEMY, outx, outy, outbuilding)
                         print(found)
@@ -204,6 +210,92 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 terminus.getResult()
+        );
+    }
+
+    private String extractWarnings(List<CompilerMessage> messages) {
+        return messages.stream()
+                .filter(CompilerMessage::isWarning)
+                .map(CompilerMessage::message)
+                .map(String::trim)
+                .collect(Collectors.joining("\n"));
+    }
+
+    @Test
+    void generatesUnusedWarning() {
+        List<CompilerMessage> messages = new ArrayList<>();
+        pipeline.setMessagesRecipient(messages::add);
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        X = 10
+                        """
+                )
+        );
+
+        assertEquals(
+                "List of unused variables: X.",
+                extractWarnings(messages)
+        );
+    }
+
+    @Test
+    void generatesUninitializedWarning() {
+        List<CompilerMessage> messages = new ArrayList<>();
+        pipeline.setMessagesRecipient(messages::add);
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        print(X, Y)
+                        """
+                )
+        );
+
+        assertEquals(
+                "List of uninitialized variables: X, Y.",
+                extractWarnings(messages)
+        );
+    }
+
+    @Test
+    void generatesNoUnexpectedWarnings() {
+        List<CompilerMessage> messages = new ArrayList<>();
+        pipeline.setMessagesRecipient(messages::add);
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        def foo(n)
+                            n = n + 1
+                        end
+                        z = foo(5)
+                        print(z)
+                        """
+                )
+        );
+
+        assertEquals(
+                "",
+                extractWarnings(messages)
+        );
+    }
+
+    @Test
+    void generatesBothWarnings() {
+        List<CompilerMessage> messages = new ArrayList<>();
+        pipeline.setMessagesRecipient(messages::add);
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        def foo(n)
+                            n = n + 1
+                        end
+                        z = foo(5)
+                        print(Z)
+                        """
+                )
+        );
+
+        assertEquals(
+                """
+                        List of unused variables: z.
+                        List of uninitialized variables: Z.""",
+                extractWarnings(messages)
         );
     }
 }

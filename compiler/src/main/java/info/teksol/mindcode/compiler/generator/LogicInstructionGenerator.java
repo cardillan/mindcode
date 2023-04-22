@@ -801,7 +801,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return LogicVariable.main(identifier);
         } else {
             // A truly local variable
-            return LogicVariable.local(currentFunction.getName(), localPrefix, identifier);
+            return functionContext.registerVariable(LogicVariable.local(currentFunction.getName(), localPrefix, identifier));
         }
     }
 

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class LogicInstructionLabelResolver {
     private final InstructionProcessor instructionProcessor;
@@ -71,14 +72,9 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
-        final List<LogicInstruction> result = new ArrayList<>();
-        for (final LogicInstruction instruction : program) {
-            if (instruction.getOpcode().isVirtual()) {
-                result.addAll(instructionProcessor.resolve(instruction));
-            } else {
-                result.add(instruction);
-            }
-        }
-        return result;
+        return program.stream().mapMulti(instructionProcessor::resolve).toList();
+    }
+
+    private void resolveVirtual(LogicInstruction ix, Consumer<LogicInstruction> c) {
     }
 }

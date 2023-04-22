@@ -91,7 +91,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
         } 
 
         // Handle end instruction only in aggressive mode
-        if (next instanceof EndInstruction && level == OptimizationLevel.AGGRESSIVE) {
+        if (next instanceof EndInstruction && aggressive()) {
             return FIRST_LABEL;
         }
 
@@ -105,6 +105,7 @@ class PropagateJumpTargets extends GlobalOptimizer {
         List<LogicArgument> args2 = nextJump.getArgs();
         
         // Compare everything but labels; exclude volatile variables
-        return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size())) && args1.stream().noneMatch(LogicArgument::isVolatile);
+        return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size()))
+                && args1.stream().noneMatch(LogicArgument::isVolatile);
     }
 }

@@ -44,6 +44,10 @@ public interface LogicArgument {
         return false;
     }
 
+    default boolean isCompilerVariable() {
+        return false;
+    }
+
     default boolean isVolatile() {
         return false;
     }

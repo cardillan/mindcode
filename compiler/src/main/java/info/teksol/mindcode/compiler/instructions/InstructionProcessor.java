@@ -4,6 +4,7 @@ import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface InstructionProcessor {
 
@@ -86,7 +87,7 @@ public interface InstructionProcessor {
      * @param virtualInstruction instruction to process
      * @return list of instructions that implement the functionality of given virtual instruction
      */
-    List<LogicInstruction> resolve(LogicInstruction virtualInstruction);
+    void resolve(LogicInstruction virtualInstruction, Consumer<LogicInstruction> consumer);
 
     /**
      * Returns a logic instruction with an argument set to the  given value.

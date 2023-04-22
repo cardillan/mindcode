@@ -2,6 +2,8 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -212,7 +214,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 generateUnoptimized(
                         (Seq) translateToAst("""
                                 def foo(n, r)
-                                2 * (n ** r)
+                                    2 * (n ** r)
                                 end
                                  
                                 boo = 4
@@ -552,38 +554,15 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         // aren't pushed to the stack in recursive functions
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(SET, "__sp", "0"),
-                        createInstruction(SET, "__fn0_n", "1"),
-                        createInstruction(CALLREC, "bank1", var(1000), var(1001)),
-                        createInstruction(LABEL, var(1001)),
-                        createInstruction(SET, var(0), "__fn0retval"),
-                        createInstruction(END),
-                        // def foo
-                        createInstruction(LABEL, var(1000)),
-                        createInstruction(LABEL, var(1003)),
-                        // call bar (inline - creates __fn1_n)
-                        createInstruction(SET, "__fn1_n", "__fn0_n"),
-                        createInstruction(PRINT, "__fn1_n"),
-                        createInstruction(SET, var(1), "__fn1_n"),
-                        createInstruction(LABEL, var(1004)),
-                        createInstruction(OP, "sub", var(2), "__fn0_n", "1"),
-                        createInstruction(PUSH, "bank1", "__fn0_n"),
-                        createInstruction(SET, "__fn0_n", var(2)),
-                        createInstruction(CALLREC, "bank1", var(1000), var(1005)),
-                        createInstruction(LABEL, var(1005)),
-                        createInstruction(POP, "bank1", "__fn0_n"),
-                        createInstruction(SET, var(3), "__fn0retval"),
-                        createInstruction(SET, "__fn0retval", var(3)),
-                        createInstruction(LABEL, var(1002)),
-                        createInstruction(RETURN, "bank1"),
-                        createInstruction(END)
+                        createInstruction(PUSH, "bank1", "__fn0_r"),
+                        createInstruction(POP, "bank1", "__fn0_r")
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst("""
                                 allocate stack in bank1[0...512]
-                                def foo(n)
-                                    bar(n)
-                                    foo(n - 1)
+                                def foo(r)
+                                    bar(r)
+                                    foo(r - 1)
                                 end
                                 inline def bar(n)
                                     print(n)
@@ -591,7 +570,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                                 foo(1)
                                 """
                         )
-                )
+                ).stream()
+                        .filter(ix -> ix instanceof PushOrPopInstruction)
+                        .toList()
         );
     }
 
@@ -634,12 +615,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(OP, "mod", var(1), "__fn0_n", "2"),
                         createInstruction(OP, "equal", var(2), var(1), "1"),
                         createInstruction(JUMP, var(1002), "equal", var(2), "false"),
-                        createInstruction(SET, var(0), "\"odd\""),
+                        createInstruction(SET, var(0), q("odd")),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(SET, var(3), "null"),
                         createInstruction(JUMP, var(1003), "always"),
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(SET, var(0), "\"even\""),
+                        createInstruction(SET, var(0), q("even")),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(SET, var(3), "null"),
                         createInstruction(LABEL, var(1003)),
@@ -686,12 +667,12 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         createInstruction(OP, "mod", var(2), "__fn0_n", "2"),
                         createInstruction(OP, "equal", var(3), var(2), "1"),
                         createInstruction(JUMP, var(1004), "equal", var(3), "false"),
-                        createInstruction(SET, "__fn0retval", "\"odd\""),
+                        createInstruction(SET, "__fn0retval", q("odd")),
                         createInstruction(JUMP, var(1003), "always"),
                         createInstruction(SET, var(4), "null"),
                         createInstruction(JUMP, var(1005), "always"),
                         createInstruction(LABEL, var(1004)),
-                        createInstruction(SET, "__fn0retval", "\"even\""),
+                        createInstruction(SET, "__fn0retval", q("even")),
                         createInstruction(JUMP, var(1003), "always"),
                         createInstruction(SET, var(4), "null"),
                         createInstruction(LABEL, var(1005)),
@@ -714,6 +695,51 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                                 """
                         )
                 )
+        );
+    }
+
+    @Test
+    void pushesParametersToStack() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(PUSH, "bank1", "__fn0_n"),
+                        createInstruction(POP, "bank1", "__fn0_n")
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                allocate stack in bank1
+                                def foo(n)
+                                    foo(n - 1)
+                                end
+                                foo(5)
+                                """
+                        )
+                ).stream()
+                        .filter(ix -> ix instanceof PushOrPopInstruction p && p.getVariable().getName().equals("n"))
+                        .toList()
+        );
+    }
+
+    @Test
+    void pushesLocalVariablesToStack() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(PUSH, "bank1", "__fn0_a"),
+                        createInstruction(POP, "bank1", "__fn0_a")
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                allocate stack in bank1
+                                def foo(n)
+                                    a = n - 1
+                                    foo(a)
+                                end
+                                foo(5)
+                                """
+                        )
+                ).stream()
+                        .filter(ix -> ix instanceof PushOrPopInstruction p && p.getVariable().getName().equals("a"))
+                        .toList()
         );
     }
 
@@ -860,13 +886,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void accessesMainVariables() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, "__fn0_x", "7"),
-                        createInstruction(SET, "X", "__fn0_x"),
-                        createInstruction(SET, var(0), "__fn0_x"),
-                        createInstruction(LABEL, var(1001)),
-                        createInstruction(PRINT, "X"),
-                        createInstruction(END)
+                        createInstruction(SET, "X", "__fn0_x")
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst("""
@@ -874,10 +894,9 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                                     X = x
                                 end
                                 setx(7)
-                                print(X)
                                 """
                         )
-                )
+                ).stream().filter(ix -> ix instanceof SetInstruction set && set.getTarget().getName().equals("X")).toList()
         );
     }
 

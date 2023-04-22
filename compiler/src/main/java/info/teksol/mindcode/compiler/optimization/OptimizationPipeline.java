@@ -8,6 +8,7 @@ import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import static info.teksol.mindcode.compiler.optimization.Optimization.values;
@@ -16,7 +17,7 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
     private final LogicInstructionPipeline optimizationPipeline;
 
     private OptimizationPipeline(LogicInstructionPipeline optimizationPipeline) {
-        this.optimizationPipeline = optimizationPipeline;
+        this.optimizationPipeline = Objects.requireNonNull(optimizationPipeline);
     }
 
     @Override
@@ -27,6 +28,11 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
     @Override
     public void flush() {
         optimizationPipeline.flush();
+    }
+
+    @Override
+    public void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient) {
+        optimizationPipeline.setMessagesRecipient(messagesRecipient);
     }
 
     public static LogicInstructionPipeline createPipelineForProfile(InstructionProcessor instructionProcessor,

@@ -8,6 +8,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.END;
 import static info.teksol.mindcode.logic.Opcode.PRINT;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ConstantExpressionEvaluatorTest  extends AbstractGeneratorTest {
 
@@ -21,7 +22,7 @@ public class ConstantExpressionEvaluatorTest  extends AbstractGeneratorTest {
                 generateUnoptimized(
                         (Seq) translateToAst("""
                                 const VALUE = 100
-                                print(VALUE)                                
+                                print(VALUE)
                                 """
                         )
                 )
@@ -32,14 +33,14 @@ public class ConstantExpressionEvaluatorTest  extends AbstractGeneratorTest {
     void removesConstantsInPrintf() {
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(PRINT, "\"Value: \""),
+                        createInstruction(PRINT, q("Value: ")),
                         createInstruction(PRINT, "100"),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst("""
                                 const VALUE = 100
-                                printf("Value: $VALUE")                                
+                                printf("Value: $VALUE")
                                 """
                         )
                 )
@@ -61,4 +62,73 @@ public class ConstantExpressionEvaluatorTest  extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void acceptsStringConstants() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(PRINT, q("Hello")),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                const TEXT = "Hello"
+                                print(TEXT)
+                                """
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesVariableBasedConstant() {
+        assertThrows(GenerationException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst("""
+                                a = 10
+                                const A = a
+                                """
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesNondeterministicConstant() {
+        assertThrows(GenerationException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst("""
+                                const A = rand(10)
+                                """
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesFunctionBasedConstant() {
+        assertThrows(GenerationException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst("""
+                                def foo() 5 end
+                                const A = foo()
+                                """
+                        )
+                )
+        );
+    }
+
+    @Test
+    void refusesMlogIncompatibleConstants() {
+        assertThrows(GenerationException.class,
+                () -> generateUnoptimized(
+                        (Seq) translateToAst("""
+                                const A = 10**40
+                                """
+                        )
+                )
+        );
+    }
+
+
 }

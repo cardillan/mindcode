@@ -14,6 +14,8 @@ Things being pondered on from time to time.
 
 ### Language syntax
 
+* Allow empty optional arguments in function calls. At this moment, optional arguments can only be omitted at the
+  end of the argument list.
 * Short-circuit boolean evaluation:
   * All logical and/or operators may or may not be short-circuited (i.e. `and`, `or`, `&&`, `||`). Avoid side
     effects, or place side effect call first.
@@ -23,13 +25,11 @@ Things being pondered on from time to time.
     expressions. Short-circuiting will therefore be applied based on code size.
   * Code size needs to be known, will be either fully implemented in the optimizer, or will recompile parse tree
     applying hints learned during optimizations.
-* Allow empty optional arguments in function calls. At this moment, optional arguments can only be omitted at the 
-  end of the argument list. 
 * `in` boolean operator: tests number is in range (e.g. `if n in min .. max then ...`)
 * Varargs inline functions: the vararg can be processed using list iteration loop, or maybe passed to another vararg 
   function.
 * `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when`
-  branch
+  branch (?)
 * Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`
   * Perhaps a way could be found to declare a function as returning several values and parallel-assign them (e.g. 
     `def func(x, out y, out z) return (x + 1, x - 1) end  a, b = func(7)`). The syntax looks just weird. What if we 
@@ -39,6 +39,8 @@ Things being pondered on from time to time.
 
 ### Code generation
 
+* Constant string expressions. Allow strings to be concatenated with other strings and constant expressions. 
+  Constant strings passed to inline functions will be supproted as well.    
 * Determine effective variable types to assist with optimizations (globally at first).
 * Temporary variable merging: after all optimizations, all temporary variables will be inspected for scope and
   variables with non-overlapping scopes will be merged into one, and renumbered starting from 0. Fewer temporary
@@ -80,13 +82,12 @@ Things being pondered on from time to time.
 * Warn developers when the generated code goes over 1000 Mindustry instructions.
 * Warn developers when potentially non-numeric value is being pushed to stack.
 * Warn developers when variable is read before being written to.
+* When the compiled program only contains basic instructions (including print and printflush), run it after 
+  compilation and show the output on the web page. The same might be done for command-line compiler.
 
 ### Other
 
-* LogicInstruction improvements: compiled instructions store all arguments as strings. Optimizers needs to know 
-  sometimes whether an argument is a numeric literal, a local variable, a global variable or a Mindustry object. 
-  Arguments are unnecessarily repeatedly analyzed to obtain this information, which was already known when the 
-  instruction was generated in the first place. Possibly use ints for arguments like Mindustry does.
+* Create standalone jar for command-line compiler.
 * Assimilator: tool to automatically acquire definitions of blocks, units, items, liquids, properties etc. 
   directly from Mindustry sources. Would certainly need supervision, but might help keep Mindcode up to spec with 
   latest Mindustry.
@@ -97,18 +98,24 @@ Things that would be cool, that might be doable in some way given existing const
 doing them isn't clear yet.
 
 * [Parallel comparison](#parallel-comparison)
+* Typed variables, parameters and function return values.
+  * This would allow better optimization and some special features, such as function pointers.
+  * Typed variables would have to be declared and could exist alongside untyped ones.
+  * Compiler directive could be used to require all variables to be typed.
+* Structures. Requires typed variables. All fields of a structure would be stored in separate processor variables. 
+  Would allow functions providing more output values. 
 * Function libraries. Now that inline and stackless functions are really useful, libraries might make sense.
 * Multiprocessing support - some kind of library or framework (probably) that could be used to
   provide high-level support for inter-processor communication using either memory cells/banks,
   or even unit flags.
   * The first step is already being made: schematics creation tool would allow us to compile
     the entire multiprocessor schematic in one go.
-* Function pointers
-  * Use mechanism similar to constant tracking to make sure that a variable used as a function pointer is only ever 
-    assigned a function address to it.
+* Function pointers:
+  * Requires typed variables.
   * We'd need to track all possible assignments to ensure a non-recursive function isn't made recursive through 
     a function pointer.  
-* Pointers to memory-backed arrays?
+* Pointers to memory-backed arrays:
+  * Requires typed variables.
   * Would allow passing arrays to out-of-line functions.
 
 ### Parallel comparison
@@ -177,8 +184,15 @@ There are no plans to do any of these. We keep them around just in case.
 
 * Eliminate `__retval` variables/assignments where not needed.
 
+### Other
+
+* compiler directives (`#set`) to parametrize code compilation and optimization
+* optimizer strength setting - per optimizer (off, basic, aggressive)
+* LogicInstruction improvements: compiled instructions store all arguments as strings. Optimizers needs to know
+  sometimes whether an argument is a numeric literal, a local variable, a global variable or a Mindustry object.
+  Arguments are unnecessarily repeatedly analyzed to obtain this information, which was already known when the
+  instruction was generated in the first place. Possibly use ints for arguments like Mindustry does.
+
 ### User interface
 
 * display compiler output in the webapp
-* compiler directives (`#set`) to parametrize code compilation and optimization
-* optimizer strength setting - per optimizer (off, basic, aggressive)

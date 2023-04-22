@@ -12,7 +12,4 @@ public interface Optimizer extends LogicInstructionPipeline {
     void setLevel(OptimizationLevel level);
 
     void setDebugPrinter(DebugPrinter debugPrinter);
-
-    void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient);
-
 }

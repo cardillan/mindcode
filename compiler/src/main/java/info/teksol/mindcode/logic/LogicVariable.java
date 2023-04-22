@@ -48,6 +48,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return getType() == ArgumentType.LOCAL_VARIABLE && functionPrefix != null;
     }
 
+    public boolean isCompilerVariable() {
+        return getType() == ArgumentType.COMPILER;
+    }
+
     public String getFunctionPrefix() {
         return functionPrefix;
     }
@@ -110,6 +114,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable special(String name) {
-        return new LogicVariable(ArgumentType.SPECIAL, name);
+        return new LogicVariable(ArgumentType.COMPILER, name);
     }
 }

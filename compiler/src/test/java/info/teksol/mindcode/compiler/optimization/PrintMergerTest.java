@@ -56,6 +56,32 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
     }
 
     @Test
+    void mergesAllLiterals() {
+        generateInto(pipeline,
+                (Seq) translateToAst("""
+                        const MAX = 3 * 333
+                        print(15.79684)
+                        print("A")
+                        print(true)
+                        print("B")
+                        print(700)
+                        print("C")
+                        print(null)
+                        print("D")
+                        print(MAX)
+                        """
+                )
+        );
+
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(PRINT, "\"15.79684A1B700CnullD999\""),
+                        createInstruction(END)
+                ),
+                terminus.getResult()
+        );
+    }
+
     void handlesInterleavedPrints() {
         generateInto(pipeline,
                 (Seq) translateToAst("""

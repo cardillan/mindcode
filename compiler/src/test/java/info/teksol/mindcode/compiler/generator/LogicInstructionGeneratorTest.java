@@ -224,6 +224,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(OP, "strictEqual", var(0), "@unit", "null"),
                         createInstruction(JUMP, var(1001), "equal", var(0), "false"),
                         createInstruction(UBIND, "@poly"),
+                        createInstruction(UCONTROL, "move", "10", "10"),
                         createInstruction(LABEL, var(1010)),
                         createInstruction(JUMP, var(1000), "always"),
                         createInstruction(LABEL, var(1001)),
@@ -233,6 +234,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         (Seq) translateToAst("""
                                 while @unit === null
                                     ubind(@poly)
+                                    move(10, 10)
                                 end
                                 """
                         )
@@ -518,16 +520,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(JUMP, var(1002), "equal", "__ast0", "1"),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1002)),
-                        createInstruction(SET, var(0), "\"1\""),
+                        createInstruction(SET, var(0), q("1")),
                         createInstruction(JUMP, var(1000), "always"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(JUMP, var(1004), "equal", "__ast0", "2"),
                         createInstruction(JUMP, var(1003), "always"),
                         createInstruction(LABEL, var(1004)),
-                        createInstruction(SET, var(0), "\"two\""),
+                        createInstruction(SET, var(0), q("two")),
                         createInstruction(JUMP, var(1000), "always"),
                         createInstruction(LABEL, var(1003)),
-                        createInstruction(SET, var(0), "\"otherwise\""),
+                        createInstruction(SET, var(0), q("otherwise")),
                         createInstruction(LABEL, var(1000)),
                         createInstruction(END)
                 ),
@@ -1399,6 +1401,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void refusesBlockNamesAsOutputArguments() {
         assertThrows(GenerationException.class, () ->
                 generateUnoptimized((Seq) translateToAst("getBlock(10, 20, switch1)"))
+        );
+    }
+
+    @Test
+    void refusesBlockNamesAsFunctionPArameters() {
+        assertThrows(GenerationException.class, () ->
+                generateUnoptimized((Seq) translateToAst("def foo(switch1) false end foo(5)"))
         );
     }
 

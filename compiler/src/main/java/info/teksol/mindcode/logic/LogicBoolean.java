@@ -14,11 +14,6 @@ public enum LogicBoolean implements LogicLiteral {
     }
 
     @Override
-    public boolean isLiteral() {
-        return true;
-    }
-
-    @Override
     public ArgumentType getType() {
         return ArgumentType.BOOLEAN_LITERAL;
     }
@@ -28,7 +23,7 @@ public enum LogicBoolean implements LogicLiteral {
         return mlog;
     }
 
-    public LogicBoolean getInverse() {
+    public LogicBoolean not() {
         return this == FALSE ? TRUE : FALSE;
     }
 

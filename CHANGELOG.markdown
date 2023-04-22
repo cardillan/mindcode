@@ -6,11 +6,15 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* Changed handling of hexadecimal and boolean literals to include range checks and refuse invalid numbers. 
+* Enhanced [print merging optimization](doc/syntax/SYNTAX-5-OTHER.markdown#print-merging) to merge non-string 
+  literals (eg. numeric constants) on aggressive optimization level. 
+* Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside valid 
+  range (signed 64-bit integer; note that [Mindustry Logic variables](doc/syntax/SYNTAX-1-VARIABLES.markdown) cannot 
+  represent full range of possible values wihout loss of precision.   
 
 ### Miscellaneous
 
-* Logic instructions arguments are represented by objects with propert attributes and type information instead of 
+* Logic instructions arguments are represented by objects with proper attributes and type information instead of 
   plain strings.  
 
 ## 2023-04-18

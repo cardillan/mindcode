@@ -28,10 +28,6 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
         return literal;
     }
 
-    public String getLiteral() {
-        return literal;
-    }
-
     @Override
     public double getDoubleValue() {
         return value;
@@ -39,8 +35,8 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
 
     @Override
     public String format() {
-        // TODO implement Mindustry-like numeric format
-        throw new UnsupportedOperationException("Not yet");
+        // Code taken from Mindustry to achieve exact match
+        return Math.abs(value - (long) value) < 0.00001 ? String.valueOf((long) value) : String.valueOf(value);
     }
 
     @Override

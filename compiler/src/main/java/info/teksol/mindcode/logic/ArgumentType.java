@@ -19,7 +19,7 @@ public enum ArgumentType {
     STORED_RETVAL,
     FUNCTION_RETVAL,
     FUNCTION_RETADDR,
-    SPECIAL,                // Compiler variables, e.g. stack pointer(s)
+    COMPILER,                // Compiler variables, e.g. stack pointer(s)
 
     // Literals
     NULL_LITERAL,

@@ -16,17 +16,8 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
-    public boolean isLiteral() {
-        return true;
-    }
-
-    @Override
     public String format() {
         return stringValue;
-    }
-
-    public int length() {
-        return stringValue.length();
     }
 
     @Override
@@ -43,10 +34,6 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
 
     public static LogicString create(String value) {
         return new LogicString(value);
-    }
-
-    public static LogicString concat(LogicLiteral value1, LogicLiteral value2) {
-        return new LogicString(value1.format() + value2.format());
     }
 }
 

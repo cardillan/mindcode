@@ -38,19 +38,19 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return instructionProcessor;
     }
 
-    protected LogicArgument _logic(String str) {
+    protected static LogicArgument _logic(String str) {
         return new BaseArgument(str);
     }
 
-    protected List<LogicArgument> _logic(String... arguments) {
-        return Arrays.stream(arguments).map(this::_logic).toList();
+    protected static List<LogicArgument> _logic(String... arguments) {
+        return Arrays.stream(arguments).map(AbstractGeneratorTest::_logic).toList();
     }
 
-    protected List<LogicArgument> _logic(List<String> arguments) {
-        return arguments.stream().map(this::_logic).toList();
+    protected static List<LogicArgument> _logic(List<String> arguments) {
+        return arguments.stream().map(AbstractGeneratorTest::_logic).toList();
     }
 
-    protected List<String> _str(List<LogicArgument> arguments) {
+    protected static List<String> _str(List<LogicArgument> arguments) {
         return arguments.stream().map(LogicArgument::toMlog).collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -232,8 +232,10 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             return "var(" + value.substring(8) + ")";
         } else if (value.startsWith("__label")) {
             return "var(" + (1000 + Integer.parseInt(value.substring(7))) + ")";
+        } else if (value.startsWith("\"") && value.endsWith("\"")) {
+            return "q(" + value + ")";
         } else {
-            return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+            return q(value.replace("\\", "\\\\").replace("\"", "\\\""));
         }
     }
 

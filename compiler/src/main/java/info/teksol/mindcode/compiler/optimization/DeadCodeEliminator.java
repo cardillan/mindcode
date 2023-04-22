@@ -9,6 +9,7 @@ import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 class DeadCodeEliminator extends GlobalOptimizer {
@@ -57,9 +58,6 @@ class DeadCodeEliminator extends GlobalOptimizer {
     private void analyzeDataflow() {
         reads.clear();
         writes.clear();
-        // Stack pointer is implicitly read: the push/pop/call/return instructions operate on it.
-        // The initial write to __sp must be preserved
-        reads.add(LogicVariable.STACK_POINTER);
         program.stream().filter(ix -> !(ix instanceof PushOrPopInstruction)).forEach(this::examineInstruction);
     }
 
@@ -68,7 +66,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         uselessWrites.removeAll(reads);
         for (LogicVariable key : uselessWrites) {
             // Preserve global and main variable assignments unless aggressive
-            if ((key.isGlobalVariable() || key.isMainVariable()) && level != OptimizationLevel.AGGRESSIVE) continue;
+            if ((key.isGlobalVariable() || key.isMainVariable()) && !aggressive()) continue;
 
             // Instruction with at most one output argument are removed immediately
             // Other instructions are inspected further to find out they're fully unused
@@ -106,6 +104,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
+                .filter(Predicate.not(LogicVariable::isCompilerVariable))
                 .forEach(v -> addWrite(instruction, v));
     }
 }

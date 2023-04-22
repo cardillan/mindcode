@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
 import info.teksol.mindcode.logic.Opcode;
 
@@ -46,7 +47,7 @@ class PrintMerger extends PipelinedOptimizer {
     private final class EmptyState implements State {
         @Override
         public State emit(LogicInstruction instruction) {
-            if (instruction instanceof PrintInstruction ix && ix.getValue().getType() == ArgumentType.STRING_LITERAL) {
+            if (instruction instanceof PrintInstruction ix && ix.getValue().isLiteral()) {
                 return new ExpectPrint(ix);
             } else {
                 emitToNext(instruction);
@@ -79,7 +80,7 @@ class PrintMerger extends PipelinedOptimizer {
 
             if (instr instanceof PrintInstruction ix) {
                 // Only merge string literals
-                if (ix.getValue().getType() == ArgumentType.STRING_LITERAL) {
+                if (ix.getValue().isLiteral()) {
                     PrintInstruction merged = merge(firstPrint, ix);
                     if (merged != null) {
                         operations.forEach(PrintMerger.this::emitToNext);
@@ -107,12 +108,16 @@ class PrintMerger extends PipelinedOptimizer {
         // If merge is not possible (the string constants are malformed), returns null.
         // Only checks for quotes on both ends of the string, doesn't check for proper quote escaping
         private PrintInstruction merge(PrintInstruction first, PrintInstruction second) {
-            final String q = "\"";
-            LogicString str1 = (LogicString) first.getValue();
-            LogicString str2 = (LogicString) second.getValue();
-            // Do not merge strings if the length is over 34, unless aggressive
-            if ((str1.length() + str2.length() <= 34 || level == OptimizationLevel.AGGRESSIVE)) {
-                return (PrintInstruction) createInstruction(Opcode.PRINT, LogicString.concat(str1, str2));
+            if (first.getValue() instanceof LogicLiteral lit1 && second.getValue() instanceof LogicLiteral lit2) {
+                if (aggressive() || (lit1.getType() == ArgumentType.STRING_LITERAL && lit2.getType() == ArgumentType.STRING_LITERAL)) {
+                    String str1 = lit1.format();
+                    String str2 = lit2.format();
+                    // Do not merge strings if the length is over 34, unless aggressive
+                    if (str1.length() + str2.length() <= 34 || aggressive()) {
+                        return (PrintInstruction) createInstruction(Opcode.PRINT, LogicString.create(str1 + str2));
+                    }
+                }
+
             }
 
             return null;

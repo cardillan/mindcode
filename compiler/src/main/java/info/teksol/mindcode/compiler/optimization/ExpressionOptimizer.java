@@ -6,10 +6,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicNumber;
-import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.logic.*;
 
 import java.util.Iterator;
 import java.util.List;
@@ -42,9 +39,9 @@ public class ExpressionOptimizer extends GlobalOptimizer {
     protected boolean optimizeProgram() {
         // Cannot use for-each due to modifications of the underlying list in the loop
         for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            final Tuple2<LogicArgument, LogicArgument> ops;
+            final Tuple2<LogicValue, LogicValue> ops;
             if (it.next() instanceof OpInstruction ix && (ops = extractIdivOperands(ix)) != null) {
-                LogicArgument result = ix.getResult();
+                LogicVariable result = ix.getResult();
                 List<LogicInstruction> list = findInstructions(in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
                 // Preconditions:
@@ -66,7 +63,7 @@ public class ExpressionOptimizer extends GlobalOptimizer {
 
     private static final Pattern numLiteral = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?");
 
-    private Tuple2<LogicArgument, LogicArgument> extractIdivOperands(OpInstruction ix) {
+    private Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
         if (ix.getResult().getType() != ArgumentType.TMP_VARIABLE) {
             return null;
         } else {
@@ -83,15 +80,12 @@ public class ExpressionOptimizer extends GlobalOptimizer {
         }
     }
 
-    private Tuple2<LogicArgument, LogicArgument> invertMultiplicand(LogicArgument variable, LogicArgument literal) {
-        try {
-            double multiplicand = literal.getDoubleValue();
-            double divisor = 1.0d / multiplicand;
-            Optional<String> inverted = instructionProcessor.mlogRewrite(String.valueOf(divisor));
-            return inverted.map(lit -> new Tuple2<LogicArgument, LogicArgument>(variable, LogicNumber.get(lit, divisor))).orElse(null);
-        } catch (NumberFormatException ex) {
-            // Couldn't parse divisor. Do nothing.
-            return null;
-        }
+    private Tuple2<LogicValue, LogicValue> invertMultiplicand(LogicValue variable, LogicValue literal) {
+        // If literal.getDoubleValue() returns NaN, the NaN will make it through into the mlogFormat, which will
+        // return an empty optional.
+        double multiplicand = literal.getDoubleValue();
+        double divisor = 1.0d / multiplicand;
+        Optional<String> inverted = instructionProcessor.mlogFormat(divisor);
+        return inverted.map(lit -> Tuple2.ofSame(variable, LogicNumber.get(lit, divisor))).orElse(null);
     }
 }

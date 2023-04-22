@@ -386,6 +386,31 @@ print("Items: ", items)
 print("\nTime: ", @time "\n")
 ```
 
+On `aggressive` level all constant values, not just literals, are merged. For example:
+
+```
+#set optimization = aggressive
+const MAX_VALUE = 10
+printf("Step $i of $MAX_VALUE\n")
+```
+
+produces
+```
+print "Step "
+print i
+print " of 10\n"
+```
+
+On basic optimization level, the output would be:
+
+```
+print "Step "
+print i
+print " of "
+print 10
+print "\n"
+```
+
 On `basic` level, the optimization won't merge print instructions if the resulting instruction would produce
 string longer than 34 characters (36 when counting the double quotes). On `aggressive` level, such instructions
 will be merged regardless. This can create long string constants, but according to our tests these can be pasted

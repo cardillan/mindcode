@@ -238,48 +238,38 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public List<LogicInstruction> resolve(LogicInstruction virtualInstruction) {
-        return switch (virtualInstruction) {
-            case LabelInstruction ix -> List.of();
+    public void resolve(LogicInstruction virtualInstruction, Consumer<LogicInstruction> consumer) {
+        switch (virtualInstruction) {
+            case LabelInstruction ix -> {}       // Do nothing
 
-            case PushInstruction ix -> List.of(
-                    createWrite(ix.getVariable(), ix.getMemory(), stackPointer()),
-                    createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+            case PushInstruction ix -> {
+                consumer.accept(createWrite(ix.getVariable(), ix.getMemory(), stackPointer()));
+                consumer.accept(createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+            }
 
-            case PopInstruction ix -> List.of(
-                    createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE),
-                    createRead(ix.getVariable(), ix.getMemory(), stackPointer())
-            );
+            case PopInstruction ix -> {
+                consumer.accept(createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createRead(ix.getVariable(), ix.getMemory(), stackPointer()));
+            }
 
-            case CallRecInstruction ix -> List.of(
-                    createInstruction(Opcode.WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()),
-                    createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE),
-                    createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getCallAddr())
-            );
+            case CallRecInstruction ix -> {
+                consumer.accept(createInstruction(Opcode.WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
+                consumer.accept(createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
+            }
 
             case ReturnInstruction ix -> {
                 LogicVariable retAddr = nextTemp();
-                yield List.of(
-                        createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE),
-                        createRead(retAddr, ix.getStack(), stackPointer()),
-                        createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, retAddr)
-                );
+                consumer.accept(createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createRead(retAddr, ix.getStack(), stackPointer()));
+                consumer.accept(createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, retAddr));
             }
 
-            case CallInstruction ix -> List.of(
-                    createJumpUnconditional(ix.getCallAddr())
-            );
+            case CallInstruction ix       -> consumer.accept(createJumpUnconditional(ix.getCallAddr()));
+            case GotoInstruction ix       -> consumer.accept(createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
+            case SetAddressInstruction ix -> consumer.accept(createInstruction(Opcode.SET, ix.getTarget(), ix.getLabel()));
 
-            case GotoInstruction ix -> List.of(
-                    createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress())
-            );
-
-            case SetAddressInstruction ix -> List.of(
-                    createInstruction(Opcode.SET, ix.getTarget(), ix.getLabel())
-            );
-
-            default ->
-                    throw new GenerationException("Don't know how to resolve virtual instruction " + virtualInstruction);
+            default                       -> consumer.accept(virtualInstruction);
         };
     }
 
@@ -316,6 +306,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public int getPrintArgumentCount(LogicInstruction instruction) {
         // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
+        // TODO precompute and cache per opcode
         return variantsByOpcode.get(instruction.getOpcode()).stream()
                 .mapToInt(v -> v.getNamedParameters().size()).max().orElse(0)
                 + instruction.getOpcode().getAdditionalPrintArguments();
@@ -449,6 +440,15 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
 
+    private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
+            "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode",
+            "disassembler", "display", "distributor", "dome", "door", "drill", "driver", "duo", "extractor", "factory",
+            "foreshadow", "foundation", "fuse", "gate", "generator", "hail", "incinerator", "junction", "kiln", "lancer",
+            "meltdown", "melter", "mender", "message", "mine", "mixer", "node", "nucleus", "panel", "parallax", "point",
+            "press", "processor", "projector", "pulverizer", "reactor", "reconstructor", "ripple", "router", "salvo",
+            "scatter", "scorch", "segment", "separator", "shard", "smelter", "sorter", "spectre", "swarmer", "switch",
+            "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
+
     @Override
     public boolean isBlockName(String identifier) {
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
@@ -462,16 +462,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return (ch == '_' || ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')
                 && identifier.equals(identifier.toUpperCase());
     }
-
-    private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
-            "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode",
-            "disassembler", "display", "distributor", "dome", "door", "drill", "driver", "duo", "extractor", "factory",
-            "foreshadow", "foundation", "fuse", "gate", "generator", "hail", "incinerator", "junction", "kiln", "lancer",
-            "meltdown", "melter", "mender", "message", "mine", "mixer", "node", "nucleus", "panel", "parallax", "point",
-            "press", "processor", "projector", "pulverizer", "reactor", "reconstructor", "ripple", "router", "salvo",
-            "scatter", "scorch", "segment", "separator", "shard", "smelter", "sorter", "spectre", "swarmer", "switch",
-            "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
-
 
     private LogicVariable stackPointer() {
         return LogicVariable.STACK_POINTER;

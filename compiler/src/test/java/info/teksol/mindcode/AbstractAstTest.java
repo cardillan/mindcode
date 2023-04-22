@@ -17,6 +17,10 @@ public class AbstractAstTest extends AbstractParserTest {
         return AstNodeBuilder.generate(parse(program));
     }
 
+    protected static String q(String str) {
+        return '"' + str + '"';
+    }
+
     protected final String prettyPrint(List<LogicInstruction> list) {
         //return list.stream().map(Object::toString).reduce("", (s, s2) -> s + "\n" + s2).strip();
         return formatAsCode(list);
@@ -34,7 +38,7 @@ public class AbstractAstTest extends AbstractParserTest {
     }
 
     private String escape(String value) {
-        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"";
+        return q(value.replace("\\", "\\\\").replace("\"", "\\\""));
     }
 
     protected String prettyPrint(AstNode node) {

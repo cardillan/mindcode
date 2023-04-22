@@ -6,9 +6,5 @@ public interface LogicLiteral extends LogicValue {
         return true;
     }
 
-    default boolean isFormattable() {
-        return true;
-    }
-
     String format();
 }

@@ -12,7 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="mindcode-schematics" target="11" />
+      <module name="mindcode-schematics" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
