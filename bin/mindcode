@@ -1,4 +1,4 @@
 #!/bin/sh
 
-jar=$( find "$MINDCODE_PATH/compiler" -type f -name '*.jar' | tr '\n' ':' )
+jar=$( find "$MINDCODE_PATH/mindcode" -type f -name '*.jar' | tr '\n' ':' )
 exec java --enable-preview -classpath $jar info.teksol.mindcode.compiler.CompileMain $@

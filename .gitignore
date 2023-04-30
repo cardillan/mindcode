@@ -17,3 +17,4 @@ tmp
 compiler/src/test/resources/testcode/*.msg
 compiler/src/test/resources/testcode/*.txt
 
+out/
