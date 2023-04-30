@@ -8,7 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="mindcode-webapp" />
-        <module name="mindcode-compiler" />
+        <module name="mindcode-mindcode" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

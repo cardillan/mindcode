@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Miscellaneous
+
+* The `compiler` module has been renamed to `mindcode`. The `compiler` module name will be repurposed for a 
+  command-line interface to the `mindcode` module and an upcoming `schemacode` module.  
+
 ## 2023-04-30
 
 ### Changed
