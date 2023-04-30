@@ -244,14 +244,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private String registerConstant(String name, ConstantAstNode value) {
+    private void registerConstant(String name, ConstantAstNode value) {
         if (constants.get(name) != null) {
             throw new GenerationException("Multiple declarations of constant '" + name + "'");
         } else if (constants.containsKey(name)) {
             throw new GenerationException("Cannot redefine variable or function parameter '" + name + "' as a constant");
         }
         constants.put(name, value.toLogicLiteral(instructionProcessor));
-        return name;
     }
 
     private void appendFunctionDeclarations() {
@@ -301,6 +300,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createGoto(LogicVariable.fnRetAddr(localPrefix)));
     }
 
+    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public LogicValue visitFunctionCall(FunctionCall node) {
         // Do not track temporary variables created by evaluating function parameter expressions.

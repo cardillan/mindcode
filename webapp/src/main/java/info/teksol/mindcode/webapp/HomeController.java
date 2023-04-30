@@ -18,6 +18,7 @@ import java.io.StringWriter;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 
@@ -38,14 +39,13 @@ public class HomeController {
                 "upgrade-conveyors"
         );
 
-        final List<String> sources = List.of(
+        final List<String> sources = Stream.of(
                 "1-bind-poly-move-to-core.mnd",
                 "2-thorium-reactor-stopper.mnd",
                 "8-heal-damaged-building.mnd",
                 "3-multi-thorium-reactor.mnd",
                 "5-mining-drone.mnd",
                 "6-upgrade-copper-conveyors-to-titanium.mnd")
-                .stream()
                 .map((filename) -> {
                     try (final BufferedReader reader = new BufferedReader(new InputStreamReader(HomeController.class.getClassLoader().getResourceAsStream("samples/" + filename)))) {
                         final StringWriter out = new StringWriter();

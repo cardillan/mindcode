@@ -13,7 +13,6 @@ import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
 import info.teksol.mindcode.logic.*;
 
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -166,7 +165,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             final List<String> newArgs = _str(instruction.getArgs());
             newArgs.replaceAll(arg -> expectedToActual.getOrDefault(arg, arg));
 
-            if (!newArgs.equals(instruction.getArgs())) {
+            if (!newArgs.equals(_str(instruction.getArgs()))) {
                 result.set(i, createInstructionStr(instruction.getOpcode(), newArgs));
             }
         }

@@ -83,11 +83,12 @@ public interface InstructionProcessor {
 
     /**
      * Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
+     * Non-virtual instructions are passed as-is.
      *
-     * @param virtualInstruction instruction to process
-     * @return list of instructions that implement the functionality of given virtual instruction
+     * @param instruction instruction to process
+     * @param consumer consumer accepting resolved instructions
      */
-    void resolve(LogicInstruction virtualInstruction, Consumer<LogicInstruction> consumer);
+    void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer);
 
     /**
      * Returns a logic instruction with an argument set to the  given value.

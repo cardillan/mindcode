@@ -46,12 +46,12 @@ public class ScriptsController {
                 .replaceAll("%", "")
                 .replaceFirst("^", "%")
                 .replaceFirst("$", "%");
-        final List<Script> scripts = jdbcTemplate.query(
-                "SELECT scripts.id, name, recorded_at, username AS author_name\n" +
-                        "FROM scripts\n" +
-                        "  JOIN users ON users.id = scripts.author_id\n" +
-                        "WHERE author_id = ?::uuid AND (name || source ilike ?)\n" +
-                        "ORDER BY lower(name), recorded_at",
+        final List<Script> scripts = jdbcTemplate.query("""
+                        SELECT scripts.id, name, recorded_at, username AS author_name
+                        FROM scripts
+                          JOIN users ON users.id = scripts.author_id
+                        WHERE author_id = ?::uuid AND (name || source ilike ?)
+                        ORDER BY lower(name), recorded_at""",
                 (ResultSet rs, int rowNum) -> new Script(
                         UUID.fromString(rs.getString("id")),
                         rs.getString("name"),
@@ -103,11 +103,11 @@ public class ScriptsController {
     public ModelAndView editScript(@PathVariable(value = "id") UUID id, HttpSession session) {
         final User user = authenticate(session);
 
-        final List<ScriptVersion> versionHistory = jdbcTemplate.query(
-                "SELECT id, version, name, source, version_slug, committed_at\n" +
-                        "FROM script_versions\n" +
-                        "WHERE script_id = ?\n" +
-                        "ORDER BY version DESC",
+        final List<ScriptVersion> versionHistory = jdbcTemplate.query("""
+                        SELECT id, version, name, source, version_slug, committed_at
+                        FROM script_versions
+                        WHERE script_id = ?
+                        ORDER BY version DESC""",
                 (rs, rowNum) -> new ScriptVersion(
                         rs.getLong("id"),
                         rs.getInt("version"),
@@ -117,13 +117,13 @@ public class ScriptsController {
                         rs.getTimestamp("committed_at").toInstant()),
                 id);
 
-        final EditScriptData data = jdbcTemplate.queryForObject(
-                "SELECT\n" +
-                        "  scripts.name\n" +
-                        ", scripts.source\n" +
-                        "FROM scripts\n" +
-                        "WHERE (author_id = ?::uuid)\n" +
-                        "  AND id = ?::uuid",
+        final EditScriptData data = jdbcTemplate.queryForObject("""
+                        SELECT
+                          scripts.name
+                        , scripts.source
+                        FROM scripts
+                        WHERE (author_id = ?::uuid)
+                          AND id = ?::uuid""",
                 (rs, rowNum) -> {
                     final String source = rs.getString("source");
                     final CompilerOutput compiled = compile(source, true);
@@ -160,23 +160,23 @@ public class ScriptsController {
         int affectedRows;
 
         // In order to never lose work, commit the current version and then rollback
-        affectedRows = jdbcTemplate.update("INSERT INTO script_versions(script_id, name, source, version_slug, version)\n" +
-                        "  SELECT scripts.id, scripts.name, scripts.source, ?, (SELECT coalesce(max(version), 0) FROM script_versions WHERE script_id = ?::uuid) + 1\n" +
-                        "  FROM scripts\n" +
-                        "  WHERE id = ?::uuid" +
-                        "    AND author_id = ?::uuid",
+        affectedRows = jdbcTemplate.update("""
+                        INSERT INTO script_versions(script_id, name, source, version_slug, version)
+                          SELECT scripts.id, scripts.name, scripts.source, ?, (SELECT coalesce(max(version), 0) FROM script_versions WHERE script_id = ?::uuid) + 1
+                          FROM scripts
+                          WHERE id = ?::uuid    AND author_id = ?::uuid""",
                 generateVersionSlug(), id, id, user.getId());
         if (affectedRows == 0) throw new ResponseStatusException(NOT_FOUND, "No script with this ID");
 
-        affectedRows = jdbcTemplate.update(
-                "UPDATE scripts\n" +
-                        "SET name = v.name, source = v.source\n" +
-                        "FROM script_versions AS v\n" +
-                        "WHERE v.script_id = scripts.id\n" +
-                        "  AND v.version_slug = ?\n" +
-                        "  AND v.script_id = ?\n" +
-                        "  AND scripts.id = ?\n" +
-                        "  AND scripts.author_id = ?",
+        affectedRows = jdbcTemplate.update("""
+                        UPDATE scripts
+                        SET name = v.name, source = v.source
+                        FROM script_versions AS v
+                        WHERE v.script_id = scripts.id
+                          AND v.version_slug = ?
+                          AND v.script_id = ?
+                          AND scripts.id = ?
+                          AND scripts.author_id = ?""",
                 slug, id, id, user.getId());
         if (affectedRows == 0) throw new ResponseStatusException(NOT_FOUND, "No script with this ID");
 

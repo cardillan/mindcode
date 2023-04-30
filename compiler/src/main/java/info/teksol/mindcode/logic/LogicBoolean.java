@@ -1,7 +1,5 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.mindcode.compiler.instructions.ReturnInstruction;
-
 public enum LogicBoolean implements LogicLiteral {
     FALSE("false"),
     TRUE("true"),

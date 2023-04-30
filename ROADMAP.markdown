@@ -40,7 +40,7 @@ Things being pondered on from time to time.
 ### Code generation
 
 * Constant string expressions. Allow strings to be concatenated with other strings and constant expressions. 
-  Constant strings passed to inline functions will be supproted as well.    
+  Constant strings passed to inline functions will be supported as well.    
 * Determine effective variable types to assist with optimizations (globally at first).
 * Temporary variable merging: after all optimizations, all temporary variables will be inspected for scope and
   variables with non-overlapping scopes will be merged into one, and renumbered starting from 0. Fewer temporary
@@ -66,6 +66,8 @@ Things being pondered on from time to time.
   * Constant expression evaluation in compiled code / expression optimization.
     * Elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`.
   * Multiple optimization passes (?)
+  * Print merge distribution: `print("Answer is ", answer ? "yes" : "no")` would be turned into
+    `print(answer ? "Answer is yes" : "Answer is no")`, saving one `print` instruction.
 * More advanced optimizations:
   * Common subexpressions optimizations (maybe including repeated array access).
   * Loop unrolling (at first just for for-each loops), perhaps other loop optimizations.
@@ -88,9 +90,6 @@ Things being pondered on from time to time.
 ### Other
 
 * Create standalone jar for command-line compiler.
-* Assimilator: tool to automatically acquire definitions of blocks, units, items, liquids, properties etc. 
-  directly from Mindustry sources. Would certainly need supervision, but might help keep Mindcode up to spec with 
-  latest Mindustry.
 
 ## Musings
 
@@ -117,6 +116,10 @@ doing them isn't clear yet.
 * Pointers to memory-backed arrays:
   * Requires typed variables.
   * Would allow passing arrays to out-of-line functions.
+* Assimilator: tool to automatically acquire definitions of blocks, units, items, liquids, properties etc.
+  directly from Mindustry sources. Would certainly need supervision, but might help keep Mindcode up to spec with
+  latest Mindustry. Might be realized as a fork of the original Mindustry repo with added code to extract all the 
+  information.  
 
 ### Parallel comparison
 

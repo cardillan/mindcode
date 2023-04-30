@@ -1,8 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
-import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayDeque;

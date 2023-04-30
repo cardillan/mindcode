@@ -32,9 +32,11 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 params=[VarRef{name='c'}]
                             }
                         ]""",
-                printLinearized("print(a)\n" +
-                        "print(b)\n" +
-                        "print(c)"
+                printLinearized("""
+                        print(a)
+                        print(b)
+                        print(c)
+                        """
                 )
         );
     }
@@ -58,9 +60,11 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 params=[VarRef{name='c'}]
                             }
                         }""",
-                printNested("print(a)\n" +
-                        "print(b)\n" +
-                        "print(c)"
+                printNested("""
+                        print(a)
+                        print(b)
+                        print(c)
+                        """
                 )
         );
     }
@@ -116,15 +120,17 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 }
                             }
                         ]""",
-                printLinearized("x = 10\n" +
-                        "y = 20 + 30\n" +
-                        "z = ~y\n" +
-                        "b = true\n" +
-                        "case x\n" +
-                        "  when 0 \"zero\"\n" +
-                        "  when y, z \"y or z\"\n" +
-                        "  else \"other\"\n" +
-                        "end"
+                printLinearized("""
+                        x = 10
+                        y = 20 + 30
+                        z = ~y
+                        b = true
+                        case x
+                          when 0 "zero"
+                          when y, z "y or z"
+                          else "other"
+                        end
+                        """
                 )
         );
     }
@@ -160,13 +166,15 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 params=[StringLiteral{text='Out of loop'}]
                             }
                         ]""",
-                printLinearized("while true\n" +
-                        "  print(\"In loop\")\n" +
-                        "  if @unit.dead === 0\n" +
-                        "    break\n" +
-                        "  end\n" +
-                        "end\n" +
-                        "print(\"Out of loop\")"
+                printLinearized("""
+                        while true
+                          print("In loop")
+                          if @unit.dead === 0
+                            break
+                          end
+                        end
+                        print("Out of loop")
+                        """
                 )
         );
     }
@@ -231,22 +239,24 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                                 }]
                             }
                         ]""",
-                printLinearized("allocate stack in bank1[0...512]\n" +
-                        "\n" +
-                        "def fib(n)\n" +
-                        "  if n <= 0\n" +
-                        "    0\n" +
-                        "  else\n" +
-                        "    case n\n" +
-                        "    when 1\n" +
-                        "      1\n" +
-                        "    else\n" +
-                        "      fib(n - 1) + fib(n - 2)\n" +
-                        "    end\n" +
-                        "  end\n" +
-                        "end\n" +
-                        "\n" +
-                        "print(fib(5))"
+                printLinearized("""
+                        allocate stack in bank1[0...512]
+
+                        def fib(n)
+                          if n <= 0
+                            0
+                          else
+                            case n
+                            when 1
+                              1
+                            else
+                              fib(n - 1) + fib(n - 2)
+                            end
+                          end
+                        end
+
+                        print(fib(5))
+                        """
                 )
         );
     }

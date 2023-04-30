@@ -1,6 +1,5 @@
 package info.teksol.mindcode.logic;
 
-import javax.inject.Named;
 import java.util.List;
 
 public class OpcodeVariant {

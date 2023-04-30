@@ -22,8 +22,8 @@ import java.util.List;
  * the instruction producing the {@code __tmp} variable</li>
  * <li>All arguments of the other instruction referencing the {@code __tmp} variable are output ones.</li>
  * </ol>
- * Push and pop instructions are ignored by this optimizer. Push/pop instructions of any eliminated variables
- * are removed by the StackUsageOptimizer later on.
+ * This optimizer ignores push and pop instructions. The StackUsageOptimizer will remove push/pop instructions of any
+ * eliminated variables later on.
  */
 class OutputTempEliminator extends GlobalOptimizer {
     public OutputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {

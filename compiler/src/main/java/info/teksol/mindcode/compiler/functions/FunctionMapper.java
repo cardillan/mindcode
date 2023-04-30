@@ -2,7 +2,6 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.ProcessorEdition;
 

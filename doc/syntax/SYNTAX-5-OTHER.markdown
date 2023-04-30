@@ -268,7 +268,7 @@ will be turned to
 jump __label1 notEqual __tmp9 false
 ```
 
-Optimization won't be done if the condition doesn't have an inverse (`strictEqual`).
+Optimization won't be done if the condition does not have an inverse (`strictEqual`).
 
 These sequences of instructions may arise when using break or continue statements:
 
@@ -386,7 +386,7 @@ print("Items: ", items)
 print("\nTime: ", @time "\n")
 ```
 
-On `aggressive` level all constant values, not just literals, are merged. For example:
+On `aggressive` level, all constant values - not just string constants - are merged. For example:
 
 ```
 #set optimization = aggressive
@@ -410,9 +410,10 @@ print " of "
 print 10
 print "\n"
 ```
+### String length limit
 
-On `basic` level, the optimization won't merge print instructions if the resulting instruction would produce
-string longer than 34 characters (36 when counting the double quotes). On `aggressive` level, such instructions
+On `basic` level, the optimization won't merge print instructions if the merge would produce a string
+longer than 34 characters (36 when counting the double quotes). On `aggressive` level, such instructions
 will be merged regardless. This can create long string constants, but according to our tests these can be pasted
 into Mindustry processors even if they're longer than what the Mindustry GUI allows to enter.
 

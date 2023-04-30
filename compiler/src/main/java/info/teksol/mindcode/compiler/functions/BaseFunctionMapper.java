@@ -89,17 +89,19 @@ public class BaseFunctionMapper implements FunctionMapper {
     private LogicKeyword toKeyword(LogicValue arg) {
         // Syntactically, instruction keywords are just identifiers.
         // To convert it to keyword, we use the plain variable name.
-        return switch (arg) {
-            case LogicVariable lv -> LogicKeyword.create(lv.getName());
-            default -> throw new GenerationException("Unexpected type of argument " + arg);
-        };
+        if (arg instanceof LogicVariable lv) {
+            return LogicKeyword.create(lv.getName());
+        } else {
+            throw new GenerationException("Unexpected type of argument " + arg);
+        }
     }
 
     private LogicKeyword toKeywordOptional(LogicValue arg) {
-        return switch (arg) {
-            case LogicVariable lv -> LogicKeyword.create(lv.getName());
-            default -> LogicKeyword.create("");        // A keyword that cannot exist
-        };
+        if (arg instanceof LogicVariable lv) {
+            return LogicKeyword.create(lv.getName());
+        } else {
+            return LogicKeyword.create("");        // A keyword that cannot exist
+        }
     }
 
     private static String joinNamedArguments(List<NamedParameter> arguments) {

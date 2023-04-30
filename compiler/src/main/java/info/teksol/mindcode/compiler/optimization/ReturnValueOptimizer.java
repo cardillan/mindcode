@@ -15,8 +15,8 @@ import java.util.List;
  * before the return value is used. Optimizations of regular temporary variables are not applied to {@code __retval}s.
  * <p>
  * This optimizer looks for a set instruction in the form {@code set __retvalX variable}. The {@code __retvalX}
- * is expected to be used by one other instruction. The {@code set} instruction is removed and {@code __retvalX} is
- * replaced by {@code variable} in the other instruction if the following conditions are met:
+ * is expected to be used by one other instruction. The optimizer removes the {@code set} instruction and replaces the
+ * {@code __retvalX} by {@code variable} in the other instruction if the following conditions are met:
  * <ol>
  * <li>The {@code __retval} variable is used in exactly one other instruction, which follows the {@code set} instruction
  * (the check is based on absolute instruction sequence in the program, not on the actual program flow). Push and pop

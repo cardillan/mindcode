@@ -4,8 +4,6 @@ import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.MessageLevel;
-import junit.framework.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -3,7 +3,6 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicBuiltIn;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
 import java.util.List;

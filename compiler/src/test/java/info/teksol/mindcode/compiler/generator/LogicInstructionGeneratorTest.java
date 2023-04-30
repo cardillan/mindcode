@@ -1301,14 +1301,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 generateUnoptimized(
-                        (Seq) translateToAst("print(\"Blocks:\")\n" +
-                                "n = @links\n" +
-                                "do\n" +
-                                "  n -= 1\n" +
-                                "  block = getlink(n)\n" +
-                                "  print(\"\\n\", block)\n" +
-                                "loop while n > 0\n" +
-                                "printflush(message1)\n"
+                        (Seq) translateToAst("""
+                                print("Blocks:")
+                                n = @links
+                                do
+                                  n -= 1
+                                  block = getlink(n)
+                                  print("\\n", block)
+                                loop while n > 0
+                                printflush(message1)
+                                """
                         )
                 )
         );

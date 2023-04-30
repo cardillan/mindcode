@@ -2,7 +2,6 @@ package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNumber;
 

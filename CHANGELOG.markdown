@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-04-30
 
 ### Changed
 
@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
   literals (eg. numeric constants) on aggressive optimization level. 
 * Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside valid 
   range (signed 64-bit integer; note that [Mindustry Logic variables](doc/syntax/SYNTAX-1-VARIABLES.markdown) cannot 
-  represent full range of possible values wihout loss of precision.   
+  represent full range of possible values without loss of precision).   
 
 ### Miscellaneous
 
@@ -43,9 +43,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added support for using [binary numeric literals](doc/syntax/SYNTAX.markdown#numeric-literals) (e.g. `0b00101`)
-  in Mindcode source.
-* Added support for using [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#numeric-literals) 
+* Added support for using [binary numeric literals](doc/syntax/SYNTAX.markdown#numeric-literals-in-mindustry-logic) 
+  (e.g. `0b00101`) in Mindcode source.
+* Added support for using
+  [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#numeric-literals-in-mindustry-logic) 
   in Mindcode source. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g. `1.5e-5`)
   are converted to mlog-compatible representation (in this case, `15e-6`).
 * Added [simple expression optimizer](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization).

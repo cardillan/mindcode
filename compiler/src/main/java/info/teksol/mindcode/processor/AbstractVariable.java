@@ -1,7 +1,6 @@
 package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.ast.*;
-import info.teksol.mindcode.compiler.generator.GenerationException;
 
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;

@@ -4,9 +4,6 @@ import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.Condition;
-import info.teksol.mindcode.logic.LogicBoolean;
-import info.teksol.mindcode.logic.Operation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

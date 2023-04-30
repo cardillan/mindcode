@@ -238,8 +238,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public void resolve(LogicInstruction virtualInstruction, Consumer<LogicInstruction> consumer) {
-        switch (virtualInstruction) {
+    public void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+        switch (instruction) {
             case LabelInstruction ix -> {}       // Do nothing
 
             case PushInstruction ix -> {
@@ -269,8 +269,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case GotoInstruction ix       -> consumer.accept(createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
             case SetAddressInstruction ix -> consumer.accept(createInstruction(Opcode.SET, ix.getTarget(), ix.getLabel()));
 
-            default                       -> consumer.accept(virtualInstruction);
-        };
+            default                       -> consumer.accept(instruction);
+        }
     }
 
     public LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, LogicArgument arg) {

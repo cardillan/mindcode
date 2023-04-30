@@ -946,13 +946,15 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 prettyPrint(
-                        translateToAst("def delay\n" +
-                                "  n = 0\n" +
-                                "  deadline = @tick + 60\n" +
-                                "  while @tick < deadline\n" +
-                                "    n += 1\n" +
-                                "  end\n" +
-                                "end\n")
+                        translateToAst("""
+                                def delay
+                                  n = 0
+                                  deadline = @tick + 60
+                                  while @tick < deadline
+                                    n += 1
+                                  end
+                                end
+                                """)
                 )
         );
     }
@@ -977,10 +979,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 prettyPrint(
-                        translateToAst("def foo\n" +
-                                "n=n+1\n" +
-                                "end\n" +
-                                "foo()\n"
+                        translateToAst("""
+                                def foo
+                                n=n+1
+                                end
+                                foo()
+                                """
                         )
                 )
         );
@@ -1004,10 +1008,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 prettyPrint(
-                        translateToAst("def foo(s)\n" +
-                                "  s + 1\n" +
-                                "end\n" +
-                                "foo(1)\n"
+                        translateToAst("""
+                                def foo(s)
+                                  s + 1
+                                end
+                                foo(1)
+                                """
                         )
                 )
         );
@@ -1035,10 +1041,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         )
                 ),
                 prettyPrint(
-                        translateToAst("def foo(s, r)\n" +
-                                "  s + 1 + r\n" +
-                                "end\n" +
-                                "foo(1, 6)\n"
+                        translateToAst("""
+                                def foo(s, r)
+                                  s + 1 + r
+                                end
+                                foo(1, 6)
+                                """
                         )
                 )
         );
@@ -1139,11 +1147,12 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                 new NoOp()
                         )
                 ),
-                translateToAst(
-                        "resource = @silicon\n" +
-                                "if vault1.sensor(resource) < vault1.itemCapacity\n" +
-                                "  harvest(vault1, resource)\n" +
-                                "end\n"
+                translateToAst("""
+                                resource = @silicon
+                                if vault1.sensor(resource) < vault1.itemCapacity
+                                  harvest(vault1, resource)
+                                end
+                                """
                 )
         );
     }
@@ -1214,14 +1223,16 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new FunctionCall("print", new StringLiteral("End"))
                 ),
 
-                translateToAst("while a\n" +
-                        "  if b\n" +
-                        "    continue\n" +
-                        "  elsif c\n" +
-                        "    break\n" +
-                        "  end\n" +
-                        "end\n" +
-                        "print(\"End\")"
+                translateToAst("""
+                        while a
+                          if b
+                            continue
+                          elsif c
+                            break
+                          end
+                        end
+                        print("End")
+                        """
                 )
         );
     }

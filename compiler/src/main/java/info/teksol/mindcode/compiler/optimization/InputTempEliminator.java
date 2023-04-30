@@ -23,8 +23,8 @@ import java.util.List;
  * (the check is based on absolute instruction sequence in the program, not on the actual program flow).</li>
  * <li>All arguments of the other instruction referencing the {@code __tmp} variable are input ones.</li>
  * </ol>
- * Push and pop instructions are ignored by this optimizer. Push/pop instructions of any eliminated variables
- * are removed by the StackUsageOptimizer later on.
+ * This optimizer ignores push and pop instructions. The StackUsageOptimizer will remove push/pop instructions of any
+ * eliminated variables later on.
  */
 class InputTempEliminator extends GlobalOptimizer {
     public InputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {

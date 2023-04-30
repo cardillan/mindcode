@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 import org.junit.jupiter.api.Assertions;
