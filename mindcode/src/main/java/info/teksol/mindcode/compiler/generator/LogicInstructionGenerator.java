@@ -7,6 +7,7 @@ import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.resource.Icons;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -24,7 +25,6 @@ import static info.teksol.mindcode.logic.LogicNull.NULL;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
-
     private final CompilerProfile profile;
     // The version-dependent functionality is encapsulated in InstructionProcessor and FunctionMapper.
     // If future Mindustry versions offer more capabilities (such as native stack support),
@@ -46,7 +46,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     // Constants and global variables
     // Key is the name of variable/constant
     // Value is either an ConstantAstNode (for constant) or null (for variable)
-    private final Map<String, LogicLiteral> constants = new HashMap<>();
+    // Initialized to contain icon constants
+    private final Map<String, LogicLiteral> constants = Icons.getIcons();
 
     // Tracks all local function variables, including function parameters - once accessed, they have to be preserved.
     private LocalContext functionContext = new LocalContext();

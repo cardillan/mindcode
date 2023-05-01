@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+* Added support for using [Mindustry built-in icons](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-icons) in 
+  `print` functions.
+
 ### Miscellaneous
 
 * The `compiler` module has been renamed to `mindcode`. The `compiler` module name will be repurposed for a 
-  command-line interface to the `mindcode` module and an upcoming `schemacode` module.  
+  new command-line interface to the `mindcode` module and an upcoming `schemacode` module.  
 
 ## 2023-04-30
 
