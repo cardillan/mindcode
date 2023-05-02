@@ -67,6 +67,10 @@ for n in firstIndex + 1 .. lastIndex - 1
 end
 ```
 
+The range is evaluated before the loop begins. If the value of the upper bound changes while the loop executes, it 
+isn't reflected while the loop executes. To have the condition fully evaluated on each iteration, use
+a [C-style loop](#c-style-loops) or a [while loop](#while-loops).   
+
 > **Note**: currently, range iteration loops can only increment the value by 1, and only support increasing values.
 > If the start value is greater than the end value, the loop body won't get executed at all.
 

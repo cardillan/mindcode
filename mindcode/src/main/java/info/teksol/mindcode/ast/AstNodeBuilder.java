@@ -370,31 +370,10 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitRanged_for(MindcodeParser.Ranged_forContext ctx) {
         String label = ctx.label == null ? null : ctx.label.getText();
-        final Range range = (Range) visit(ctx.range_expression());
         final AstNode var = visit(ctx.lvalue());
-        return new Seq(
-                new Assignment(
-                        var,
-                        range.getFirstValue()
-                ),
-                new WhileExpression(
-                        label,
-                        new BinaryOp(
-                                var,
-                                range instanceof InclusiveRange ? "<=" : "<",
-                                range.getLastValue()
-                        ),
-                        visit(ctx.loop_body()),
-                        new Assignment(
-                                var,
-                                new BinaryOp(
-                                        var,
-                                        "+",
-                                        new NumericLiteral("1")
-                                )
-                        )
-                )
-        );
+        final Range range = (Range) visit(ctx.range_expression());
+        final AstNode body = visit(ctx.loop_body());
+        return new RangedForExpression(label, var, range, body);
     }
 
     @Override

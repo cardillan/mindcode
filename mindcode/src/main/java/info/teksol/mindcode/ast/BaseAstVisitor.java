@@ -28,6 +28,7 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
             case NumericValue n         -> visitNumericValue(n);
             case PropertyAccess n       -> visitPropertyAccess(n);
             case Range n                -> visitRange(n);
+            case RangedForExpression n  -> visitRangedForExpression(n);
             case Ref n                  -> visitRef(n);
             case ReturnStatement n      -> visitReturnStatement(n);
             case Seq n                  -> visitSeq(n);

@@ -134,8 +134,9 @@ class ReturnValueOptimizerTest extends AbstractGeneratorTest {
     void ignoresNonlinearCodeJumps() {
         List<LogicInstruction> sequence = List.of(
                 createInstruction(SET, retval0, tmp1),
-                createInstruction(JUMP, label0, Condition.ALWAYS),
+                createInstruction(LABEL, label0),
                 createInstruction(SET, a, retval0),
+                createInstruction(JUMP, label0, Condition.ALWAYS),
                 createInstruction(END)
         );
 
@@ -148,25 +149,10 @@ class ReturnValueOptimizerTest extends AbstractGeneratorTest {
     @Test
     void ignoresNonlinearCodeGoto() {
         List<LogicInstruction> sequence = List.of(
-                createInstruction(LABEL, label0).withMarker("marker"),
                 createInstruction(SET, retval0, tmp0),
-                createInstruction(GOTO, tmp1).withMarker("marker"),
+                createInstruction(LABEL, label0).withMarker("marker"),
                 createInstruction(PRINT, retval0),
-                createInstruction(END)
-        );
-
-        sequence.forEach(pipeline::emit);
-        pipeline.flush();
-
-        assertLogicInstructionsMatch(sequence, terminus.getResult());
-    }
-
-    @Test
-    void ignoresNonlinearCodeEnd() {
-        List<LogicInstruction> sequence = List.of(
-                createInstruction(SET, retval0, tmp1),
-                createInstruction(END),
-                createInstruction(SET, a, retval0),
+                createInstruction(GOTO, tmp1).withMarker("marker"),
                 createInstruction(END)
         );
 

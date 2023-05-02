@@ -2,6 +2,7 @@ package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
@@ -41,7 +42,9 @@ public class AbstractProcessorTest extends AbstractGeneratorTest {
         Processor processor = new Processor();
         processor.addBlock(MindustryMemory.createMemoryBank("bank1"));
         blocks.forEach(processor::addBlock);
-        processor.run(compile(code), MAX_STEPS);
+        List<LogicInstruction> instructions = compile(code);
+        //System.out.println(prettyPrint(instructions));
+        processor.run(instructions, MAX_STEPS);
         System.out.printf("Test %-40s %6d steps%n", testInfo.getDisplayName() + ":", processor.getSteps());
         //System.out.println(String.join("", processor.getTextBuffer()));
         evaluator.accept(processor.getTextBuffer());

@@ -12,7 +12,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="mindcode-compiler" target="17" />
       <module name="mindcode-golem" target="17" />
+      <module name="mindcode-schemacode" target="17" />
       <module name="mindcode-schematics" target="17" />
     </bytecodeTargetLevel>
   </component>

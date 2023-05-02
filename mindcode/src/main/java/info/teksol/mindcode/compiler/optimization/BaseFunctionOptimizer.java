@@ -22,16 +22,16 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
                 .map(ix -> ((LabelInstruction) ix).getLabel())
                 .collect(Collectors.toSet());
 
-        // Code is linear if every jump targets a local label
-        return codeBlock.stream()
-                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction || ix instanceof EndInstruction)
-                .flatMap(this::getPossibleTargetLabels)
-                .allMatch(localLabels::contains);
+        // Get jump/goto instructions targeting any of local labels
+        // If all of them are local to the code block, the code block is linear
+        return program.stream()
+                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
+                .filter(ix -> getPossibleTargetLabels(ix).anyMatch(localLabels::contains))
+                .allMatch(ix -> codeBlock.stream().anyMatch(local -> local == ix));
     }
 
     private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
         return switch (instruction) {
-            case EndInstruction  ix -> Stream.of(LogicLabel.symbolic("0"));               // Impossible label: end() is never local
             case JumpInstruction ix -> Stream.of(ix.getTarget());
             case GotoInstruction ix -> program.stream()
                     .filter(in -> in instanceof LabelInstruction && in.matchesMarker(ix.getMarker()))

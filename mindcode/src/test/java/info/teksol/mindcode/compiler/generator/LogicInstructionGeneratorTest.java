@@ -379,12 +379,10 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 List.of(
                         createInstruction(SET, "n", "1"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(OP, "lessThanEq", var(0), "n", "17"),
-                        createInstruction(JUMP, var(1002), "equal", var(0), "false"),
+                        createInstruction(JUMP, var(1002), "greaterThan", "n", "17"),
                         createInstruction(PRINT, "n"),
                         createInstruction(LABEL, var(1001)),
-                        createInstruction(OP, "add", var(1), "n", "1"),
-                        createInstruction(SET, "n", var(1)),
+                        createInstruction(OP, "add", "n", "n", "1"),
                         createInstruction(JUMP, var(1000), "always"),
                         createInstruction(LABEL, var(1002)),
                         createInstruction(END)
@@ -404,8 +402,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
                         // cond
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(OP, "lessThan", var(0), "n", "17"),
-                        createInstruction(JUMP, var(1002), "equal", var(0), "false"),
+                        createInstruction(JUMP, var(1002), "greaterThanEq", "n", "17"),
 
                         // loop body
                         createInstruction(PRINT, "n"),
@@ -414,8 +411,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1001)),
 
                         // increment
-                        createInstruction(OP, "add", var(1), "n", "1"),
-                        createInstruction(SET, "n", var(1)),
+                        createInstruction(OP, "add", "n", "n", "1"),
 
                         // loop
                         createInstruction(JUMP, var(1000), "always"),
@@ -441,8 +437,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
                         // cond
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(OP, "lessThan", var(0), "n", "b"),
-                        createInstruction(JUMP, var(1002), "equal", var(0), "false"),
+                        createInstruction(JUMP, var(1002), "greaterThanEq", "n", "b"),
 
                         // loop body
                         createInstruction(PRINT, "n"),
@@ -451,8 +446,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         createInstruction(LABEL, var(1001)),
 
                         // increment
-                        createInstruction(OP, "add", var(1), "n", "1"),
-                        createInstruction(SET, "n", var(1)),
+                        createInstruction(OP, "add", "n", "n", "1"),
 
                         // loop
                         createInstruction(JUMP, var(1000), "always"),

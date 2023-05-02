@@ -665,6 +665,35 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
+    public LogicValue visitRangedForExpression(RangedForExpression node) {
+        final LogicVariable variable = visitVariable(node.getVariable());
+
+        // Encapsulate both: they're evaluated just here and then reused
+        final LogicValue lowerBound = nodeContext.encapsulate(() -> visit(node.getRange().getFirstValue()));
+        final LogicValue upperBound = nodeContext.encapsulate(() -> visit(node.getRange().getLastValue()));
+
+        final LogicLabel beginLabel = nextLabel();
+        final LogicLabel continueLabel = nextLabel();
+        final LogicLabel doneLabel = nextLabel();
+        //final LogicVariable tmp = nextTemp();
+
+        loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        emit(createSet(variable, lowerBound));
+        //emit(createSet(tmp, upperBound));
+
+        emit(createLabel(beginLabel));
+        emit(createJump(doneLabel, node.getRange().maxValueComparison().inverse(), variable, upperBound));
+        visit(node.getBody());
+        emit(createLabel(continueLabel));
+        emit(createOp(Operation.ADD, variable, variable, LogicNumber.ONE));
+        emit(createJumpUnconditional(beginLabel));
+
+        emit(createLabel(doneLabel));
+        loopStack.exitLoop(node.getLabel());
+        return NULL;
+    }
+
+    @Override
     public LogicValue visitWhileStatement(WhileExpression node) {
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();

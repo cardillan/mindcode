@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
  * by other optimizers). The optimization is done globally, in a single pass across the entire program.
  * </li><li>
  * Inspects every remaining variable pushed/popped around a function call. If the block of code between the function
- * call and the end of the function is linear (doesn't contain jumps outside of the code block -- function calls aren't
- * considered) and the variable is not read in the code block, it is removed from the stack.
+ * call and the end of the function is linear (doesn't contain jumps into the code block from outside -- function
+ * calls aren't considered) and the variable is not read in the code block, it is removed from the stack.
  * </li></ul>
  */
 public class StackUsageOptimizer extends BaseFunctionOptimizer {

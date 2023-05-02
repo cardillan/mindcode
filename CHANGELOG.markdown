@@ -9,6 +9,14 @@ All notable changes to this project will be documented in this file.
 * Added support for using [Mindustry built-in icons](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-icons) in 
   `print` functions.
 
+### Changed
+
+* **Breaking**: changed [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) to 
+  evaluate upper boundary only once, before entering the loop for the first time. Previous version evaluated 
+  the upper bound at each iteration, and reflected possible changes in the upper bound. The documentation was 
+  expanded to specify the evaluation of the upper bound. Use a while loop or a C-style loop if you want to fully 
+  evaluate the loop condition at each iteration.  
+
 ### Miscellaneous
 
 * The `compiler` module has been renamed to `mindcode`. The `compiler` module name will be repurposed for a 

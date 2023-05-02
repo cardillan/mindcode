@@ -102,6 +102,21 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitRangedForExpression(RangedForExpression node) {
+        if (node.getLabel() != null) {
+            buffer.append(node.getLabel()).append(": ");
+        }
+        buffer.append("for ").append(node.getVariable()).append(" in ");
+        buffer.append(node.getRange().getFirstValue());
+        buffer.append(node.getRange().operator());
+        buffer.append(node.getRange().getLastValue());
+        buffer.append("\n");
+        visit(node.getBody());
+        buffer.append("end\n");
+        return null;
+    }
+
+    @Override
     public String visitWhileStatement(WhileExpression node) {
         if (node.getLabel() != null) {
             buffer.append(node.getLabel()).append(": ");

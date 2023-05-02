@@ -51,6 +51,8 @@ public interface AstVisitor<T> {
 
     T visitRange(Range node);
 
+    T visitRangedForExpression(RangedForExpression node);
+
     T visitRef(Ref node);
 
     T visitReturnStatement(ReturnStatement node);

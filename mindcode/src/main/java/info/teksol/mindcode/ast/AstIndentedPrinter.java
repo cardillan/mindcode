@@ -137,6 +137,17 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitRangedForExpression(RangedForExpression node) {
+        open("RangedForExpression{");
+        print("label="); visit(node.getLabel()); newLine(",");
+        print("variable="); visit(node.getVariable()); newLine(",");
+        print("range="); visit(node.getRange()); newLine(",");
+        print("body="); visit(node.getBody());
+        close("}");
+        return null;
+    }
+
+    @Override
     public String visitWhileStatement(WhileExpression node) {
         open("WhileExpression{");
         print("label="); visit(node.getLabel()); newLine(",");

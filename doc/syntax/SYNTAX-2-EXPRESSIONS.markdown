@@ -200,9 +200,9 @@ There are two kinds of ranges:
 * inclusive ranges: `lower .. upper`
 * exclusive ranges: `lower ... upper`
 
-For inclusive ranges, the upper value belongs to the range.
-For exclusive ranges, the upper value doesn't belong to the range.
-Ranges are constant when both lower and upper values are constant expressions.
+For inclusive ranges, the upper bound belongs to the range.
+For exclusive ranges, the upper bound doesn't belong to the range.
+Ranges are constant when both lower and upper bounds are constant expressions.
 
 Ranges cannot be assigned to variables and can only be used in several contexts:
 

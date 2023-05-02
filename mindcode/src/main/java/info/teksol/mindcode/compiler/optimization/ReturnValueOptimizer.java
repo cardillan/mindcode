@@ -22,8 +22,8 @@ import java.util.List;
  * (the check is based on absolute instruction sequence in the program, not on the actual program flow). Push and pop
  * instructions aren't considered.</li>
  * <li>The block of code between the {@code set} instruction and the other instruction is linear (doesn't contain jumps
- * outside the code block -- function calls aren't considered). This shouldn't normally happen; if it does, it means
- * the compiler works way different from what we expect here (essentially a loop in expression).</li>
+ * into the code block from the outside -- function calls aren't considered). (Range iteration loop may produce such
+ * code.)</li>
  * <li>The other variable is not modified in the code block.</li>
  * <li>If the variable is a {@code __fnXretval}: the code block must not contain any function calls - not just calls to
  * the {@code __fnX} function, but calls to any function - we don't know what may happen inside a function call. Call

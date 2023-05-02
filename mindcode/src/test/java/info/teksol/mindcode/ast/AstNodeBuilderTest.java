@@ -558,24 +558,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesInclusiveIteratorStyleLoop() {
         assertEquals(
                 new Seq(
-                        new Assignment(new VarRef("n"), new NumericLiteral("1")),
-                        new WhileExpression(
-                                new BinaryOp(
-                                        new VarRef("n"),
-                                        "<=",
-                                        new NumericLiteral("17")
-                                ),
-                                new Seq(
-                                        new FunctionCall("print", new VarRef("n"))
-                                ),
-                                new Assignment(
-                                        new VarRef("n"),
-                                        new BinaryOp(
-                                                new VarRef("n"),
-                                                "+",
-                                                new NumericLiteral("1")
-                                        )
-                                )
+                        new RangedForExpression(
+                                null,
+                                new VarRef("n"),
+                                new InclusiveRange(new NumericLiteral(1), new NumericLiteral(17)),
+                                new Seq(new FunctionCall("print", new VarRef("n")))
                         )
                 ),
                 translateToAst("for n in 1 .. 17\nprint(n)\nend\n")
@@ -586,24 +573,11 @@ class AstNodeBuilderTest extends AbstractAstTest {
     void parsesExclusiveIteratorStyleLoop() {
         assertEquals(
                 new Seq(
-                        new Assignment(new VarRef("n"), new NumericLiteral("1")),
-                        new WhileExpression(
-                                new BinaryOp(
-                                        new VarRef("n"),
-                                        "<",
-                                        new NumericLiteral("17")
-                                ),
-                                new Seq(
-                                        new FunctionCall("print", new VarRef("n"))
-                                ),
-                                new Assignment(
-                                        new VarRef("n"),
-                                        new BinaryOp(
-                                                new VarRef("n"),
-                                                "+",
-                                                new NumericLiteral("1")
-                                        )
-                                )
+                        new RangedForExpression(
+                                null,
+                                new VarRef("n"),
+                                new ExclusiveRange(new NumericLiteral(1), new NumericLiteral(17)),
+                                new Seq(new FunctionCall("print", new VarRef("n")))
                         )
                 ),
                 translateToAst("for n in 1 ... 17\nprint(n)\nend\n")
