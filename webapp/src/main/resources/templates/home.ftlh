@@ -11,7 +11,7 @@
  Mindcode includes higher-level constructs, such as expressions, user-defined functions, control statements, or "direct" memory access.<p>
 <#if model.sample != "">
     <p class="my-2 text-lg">Mindcode now comes with <strong>Mindustry Logic 7 support</strong>
-      and many additional improvements; for a list of recent changes, see <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/CHANGELOG.markdown">changelog</a>.<p>
+      and many additional improvements; for a list of recent changes, see <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown">changelog</a>.<p>
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">
         <ul class="flex space-around">
@@ -56,11 +56,11 @@
                 </div>
                 <div style="margin-top:1cm;text-align:center;">
                     <p>
-                        <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>
-                        | <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/README.markdown">Readme</a>
-                        | <a class="underline text-blue-500" href="https://github.com/francois/mindcode/blob/main/CHANGELOG.markdown">Changelog</a>
+                        <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>
+                        | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/README.markdown">Readme</a>
+                        | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown">Changelog</a>
                     </p>
-                    <p>Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/francois/mindcode">project page</a>.<p>
+                    <p>Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode">project page</a>.<p>
                 </div>
             </div>
             <div>

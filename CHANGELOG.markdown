@@ -2,12 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-05-03
 
 ### Added
 
 * Added support for using [Mindustry built-in icons](doc/syntax/SYNTAX-1-VARIABLES.markdown#built-in-icons) in 
   `print` functions.
+* Added support for compile-time [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#string-expressions). 
+  Allows - among other things - to embed icons into string constants at compile time, such as
+  `const HEADER = "Using unit: " + UNIT-MEGA`    
 
 ### Changed
 
@@ -15,7 +18,9 @@ All notable changes to this project will be documented in this file.
   evaluate upper boundary only once, before entering the loop for the first time. Previous version evaluated 
   the upper bound at each iteration, and reflected possible changes in the upper bound. The documentation was 
   expanded to specify the evaluation of the upper bound. Use a while loop or a C-style loop if you want to fully 
-  evaluate the loop condition at each iteration.  
+  evaluate the loop condition at each iteration.
+* Changed handling of non-constant string expressions: when detected, a compilation error occurs (see also 
+  [string expressions](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#string-expressions)).
 
 ### Miscellaneous
 
@@ -86,7 +91,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-*  Fixed optimizer incorrectly merging instructions across `printflush()` calls ([#91](https://github.com/francois/mindcode/issues/91)).
+*  Fixed optimizer incorrectly merging instructions across `printflush()` calls 
+  ([#91](https://github.com/cardillan/mindcode/issues/91)).
 
 ## 2023-04-08
 
@@ -121,7 +127,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-*  Fixed parameters not being passed to inline functions ([#89](https://github.com/francois/mindcode/issues/89)).
+*  Fixed parameters not being passed to inline functions ([#89](https://github.com/cardillan/mindcode/issues/89)).
 
 ## Earlier releases
 

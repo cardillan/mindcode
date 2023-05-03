@@ -6,7 +6,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 Larger changes being actively worked on.
 
- * [Schematics-creation tool](https://github.com/francois/mindcode/issues/90) 
+ * [Schematics-creation tool](https://github.com/cardillan/mindcode/issues/90) 
 
 ## Planned
 

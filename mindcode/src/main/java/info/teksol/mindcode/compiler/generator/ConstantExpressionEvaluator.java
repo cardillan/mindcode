@@ -6,7 +6,9 @@ import info.teksol.mindcode.logic.Operation;
 import info.teksol.mindcode.processor.DoubleVariable;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 import info.teksol.mindcode.processor.OperationEval;
+import info.teksol.mindcode.processor.StringVariable;
 import info.teksol.mindcode.processor.Variable;
+import info.teksol.mindcode.resource.Icons;
 
 import java.util.HashMap;
 import java.util.List;
@@ -62,10 +64,18 @@ public class ConstantExpressionEvaluator {
                 Variable a = variableFromNode("a", evaluateInner(node.getLeft()));
                 Variable b = variableFromNode("b", evaluateInner(node.getRight()));
                 if (a != null && b != null) {
-                    Variable result = DoubleVariable.newNullValue(false, "result");
-                    eval.execute(result, a, b);
-                    return result.toAstNode();
+                    if (operation == Operation.ADD && (a instanceof StringVariable || b instanceof StringVariable)) {
+                        String concat = a.toString() + b.toString();
+                        return new StringLiteral(concat);
+                    } else {
+                        Variable result = DoubleVariable.newNullValue(false, "result");
+                        eval.execute(result, a, b);
+                        return result.toAstNode();
+                    }
                 } else if (a != null || b != null) {
+                    if (a instanceof StringVariable || b instanceof StringVariable) {
+                        throw new GenerationException("Unsupported string expression.");
+                    }
                     // One of them is not null
                     return evaluatePartially(node, a == null ? b : a, a == null ? node.getLeft() : node.getRight());
                 }
@@ -124,6 +134,9 @@ public class ConstantExpressionEvaluator {
                 // a and b are the same argument for unary functions
                 Variable a = variableFromNode("a", evaluated.get(0));
                 Variable b = variableFromNode("b", evaluated.get(numArgs - 1));
+                if (a instanceof StringVariable || b instanceof StringVariable) {
+                    throw new GenerationException("Unsupported string expression.");
+                }
                 Variable result = DoubleVariable.newNullValue(false, "result");
                 eval.execute(result, a, b);
                 return result.toAstNode();
@@ -148,6 +161,9 @@ public class ConstantExpressionEvaluator {
         if (eval != null) {
             Variable a = variableFromNode("a", evaluateInner(node.getExpression()));
             if (a != null) {
+                if (a instanceof StringVariable) {
+                    throw new GenerationException("Unsupported string expression.");
+                }
                 Variable b = DoubleVariable.newNullValue(false, "result");
                 Variable result = DoubleVariable.newNullValue(false, "result");
                 eval.execute(result, a, b);
@@ -162,14 +178,17 @@ public class ConstantExpressionEvaluator {
         return constants.getOrDefault(node.getName(), node);
     }
 
-    private static DoubleVariable variableFromNode(String name, AstNode exp) {
+    private static Variable variableFromNode(String name, AstNode exp) {
         return switch (exp) {
             case NullLiteral n      -> DoubleVariable.newNullValue(false, name);
             case BooleanLiteral n   -> DoubleVariable.newBooleanValue(false, name, n.getValue());
             case NumericLiteral n   -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
             case NumericValue n     -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
-            case StringLiteral n    -> DoubleVariable.newStringValue(false, name, n.getText());
+            case StringLiteral n    -> StringVariable.newStringValue(false, name, n.getText());
             case ConstantAstNode n  -> throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
+            case VarRef n           -> Icons.getIcons().containsKey(n.getName())
+                    ? StringVariable.newStringValue(false, n.getName(), Icons.getIcons().get(n.getName()).format())
+                    : null;
             default                 -> null;
         };
     }

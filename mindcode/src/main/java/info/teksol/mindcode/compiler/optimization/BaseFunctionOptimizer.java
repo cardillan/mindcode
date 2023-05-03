@@ -16,7 +16,15 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
         super(instructionProcessor, next);
     }
 
-    protected boolean isLinear(List<LogicInstruction> codeBlock) {
+    /**
+     * Determines whether the code block is localized, i.e. all effects that can happen inside the block are contained
+     * in the block itself. In other word, all jumps that target a label inside the code block originate
+     * in the code block.
+     *
+     * @param codeBlock code block to inspect
+     * @return true if the block is localized
+     */
+    protected boolean isLocalized(List<LogicInstruction> codeBlock) {
         Set<LogicLabel> localLabels = codeBlock.stream()
                 .filter(ix -> ix instanceof LabelInstruction)
                 .map(ix -> ((LabelInstruction) ix).getLabel())

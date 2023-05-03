@@ -65,7 +65,7 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
             }
 
             List<LogicInstruction> codeBlock = program.subList(call, finish);
-            if (isLinear(codeBlock)) {
+            if (isLocalized(codeBlock)) {
                 // List of variables read in the code block, except push/pop operations
                 Set<LogicArgument> readVariables = codeBlock.stream()
                         .filter(ix -> !(ix instanceof PushOrPopInstruction))

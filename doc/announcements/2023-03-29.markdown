@@ -336,7 +336,8 @@ There's still space for various improvements, but most of the obvious opportunit
 
 # Bug fixes
 
-All known issues have been fixed in this release. If interested, see the list of closed issues [here](https://github.com/francois/mindcode/issues?q=is%3Aissue+is%3Aclosed).
+All known issues have been fixed in this release. If interested, see the list of closed issues
+[here](https://github.com/cardillan/mindcode/issues?q=is%3Aissue+is%3Aclosed).
 
 Non-exhaustive list of recent bug fixes:
 

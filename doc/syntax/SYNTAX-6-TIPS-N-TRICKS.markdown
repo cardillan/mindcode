@@ -134,6 +134,22 @@ The state is [alarm]
 
 In the second case, the doubling of square bracket is not strictly necessary, because `alarm` isn't recognized as a color name.
 
+### Displaying icons 
+
+It is also possible to use built-in Mindustry icons in the `print` instruction, for example
+
+```mindcode
+println(ITEM-COAL, ": ", vault1.coal)
+println(ITEM-LEAD, ": ", vault1.lead)
+println(ITEM-SAND, ": ", vault1.sand)
+
+printf("Using $UNIT-MEGA to transport items...\n") 
+```
+
+Supported Mindustry icons are available through built-in String constants containing them. For a complete list of
+available icons, see [Built-in icons](SYNTAX-1-VARIABLES.markdown#built-in-icons), for a possibility of embedding
+icons into string constant see [String expressions](SYNTAX-2-EXPRESSIONS.markdown#string-expressions).
+
 ## Printing values
 
 When printing numbers, Mindustry always prints the full representation of a number. It might be sometimes cumbersome,

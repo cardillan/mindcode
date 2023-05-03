@@ -135,13 +135,6 @@ printflush(message1)
 
 </details>
 
-# String expressions (unsupported)
-
-Mindustry Logic doesn't allow to evaluate string expressions. Practically the only thing that can be done with 
-strings is printing them and comparing them for equality. Concatenating strings or using any of the `<`, `<=`, `>` 
-or `>=` operators doesn't work as expected. `"a" + "b"` yields `2`, for example, and `"a" < "b"` gives `false`.
-The only thing Logic does correctly with them is comparing them for equality, as seen above.
-
 # Expressions without valid evaluation
 
 When an expression cannot be mathematically evaluated (e.g. `1 / 0`, `sqrt(-1)`, `log(0)`, ...), the resulting value 
@@ -190,6 +183,64 @@ end
 ```
 
 If the value of the constant expression can be only encoded to mlog with loss of precision, a warning is issued.
+
+Concatenation of string constants and literals using the `+` operator is also supported.
+
+# String expressions
+
+Mindustry Logic doesn't evaluate string expressions at runtime. When Mindustry detects a string-based  
+expression runtime expression, a compilation error occurs:
+
+```
+x = "A"
+y = x + "B"
+print(y)
+```
+
+Not all such situations are recognized, for example
+
+```
+x = "A"
+y = "B"
+print(x + y)
+```
+
+compiles, but produces `2`, as Mindustry Logic converts all string values to a numerical `1` for all operations.
+
+The only supported operation is concatenation of string constants and literals using the `+` operator, such as: 
+
+```
+const NAME = "John"
+message = formalGreeting ? "Hey " + NAME + "!" : "Good day, " + NAME
+print(message) 
+```
+
+It is most useful to embed icon string constants into larger strings, which would otherwise be impossible:
+
+```
+def displayLevel(container, title, item)
+    println(title, container.sensor(item)
+end 
+
+displayLevel(vault1, ICON-COAL + " level: ", @coal)
+displayLevel(vault1, ICON-LEAD + " level: ", @lead)
+displayLevel(vault1, ICON-SAND + " level: ", @sand)
+```
+
+Note: In this particular example, declaring the function inline and passing the icon name as a separate argument 
+would cause the strings to be merged by print merging optimization, but if the function couldn't be made inline for 
+whatever reason, string concatenation can still occur.
+
+Additionally, it is possible to use compile-time concatenation of a string and a non-string value, if both are 
+constant:
+
+```
+const TOTAL = 10
+const MESSAGE = " out of " + TOTAL
+for i in 1 .. TOTAL
+    print("Step ", i, MESSAGE)
+end
+```
 
 # Range expressions
 

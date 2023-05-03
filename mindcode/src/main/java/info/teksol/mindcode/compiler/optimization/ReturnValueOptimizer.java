@@ -61,7 +61,7 @@ public class ReturnValueOptimizer extends BaseFunctionOptimizer {
                 // Precondition 2
                 int endIndex = findInstructionIndex(i, ix -> ix == other);
                 List<LogicInstruction> codeBlock = program.subList(i + 1, endIndex);
-                if (!isLinear(codeBlock)) continue;
+                if (!isLocalized(codeBlock)) continue;
 
                 // Precondition 3
                 boolean isModified = codeBlock.stream()
