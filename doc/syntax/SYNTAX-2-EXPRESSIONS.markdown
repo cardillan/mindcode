@@ -188,8 +188,13 @@ Concatenation of string constants and literals using the `+` operator is also su
 
 # String expressions
 
-Mindustry Logic doesn't evaluate string expressions at runtime. When Mindustry detects a string-based  
-expression runtime expression, a compilation error occurs:
+Mindustry Logic doesn't evaluate string expressions at runtime, or better, doesn't evaluate them correctly. When a 
+mathematical operation is performed on string variables or values, the string value is converted to `1` for the 
+purpose of the evaluation. This is also true for the `+` operation, which in some other languages performs string 
+concatenation when used on string values. 
+
+Because string operations do not work anyway, the Mindcode compiler produces a compilation error when it detects a 
+string-based runtime expression:
 
 ```
 x = "A"
@@ -219,17 +224,13 @@ It is most useful to embed icon string constants into larger strings, which woul
 
 ```
 def displayLevel(container, title, item)
-    println(title, container.sensor(item)
+    println(title, container.sensor(item))
 end 
 
 displayLevel(vault1, ICON-COAL + " level: ", @coal)
 displayLevel(vault1, ICON-LEAD + " level: ", @lead)
 displayLevel(vault1, ICON-SAND + " level: ", @sand)
 ```
-
-Note: In this particular example, declaring the function inline and passing the icon name as a separate argument 
-would cause the strings to be merged by print merging optimization, but if the function couldn't be made inline for 
-whatever reason, string concatenation can still occur.
 
 Additionally, it is possible to use compile-time concatenation of a string and a non-string value, if both are 
 constant:

@@ -25,7 +25,8 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous
 
 * The `compiler` module has been renamed to `mindcode`. The `compiler` module name will be repurposed for a 
-  new command-line interface to the `mindcode` module and an upcoming `schemacode` module.  
+  new command-line interface to the `mindcode` module and an upcoming
+  [`schemacode` module](https://github.com/cardillan/mindcode/issues/90).  
 
 ## 2023-04-30
 
