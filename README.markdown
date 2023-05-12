@@ -7,23 +7,28 @@ high-level language. Mindcode aims to make Mindustry programming easier for ever
 The main focus of Mindcode design is two-fold:
 * Keeping terminology and naming convention predictable and close to Mindustry Logic.
 * Provide language constructs that are not prohibitively expensive given the astonishingly slow speeds
-  and limited instruction space of Mindustry processors.    
+  and limited instruction space of Mindustry processors.
 
-Recently a lot of enhancements were made to Mindcode, see this [description of March 2023 changes](doc/announcements/2023-03-29.markdown).
+A recent addition to this project is [Schemacode](doc/syntax/SCHEMACODE.markdown), a schematic definition language, and 
+Schematics Builder/Decompiler. Using these tools it is possible to convert existing schematics into a readable, 
+easily updatable text representation which can be compiled back into Mindustry schematics after modifications. The 
+flagship feature of the Schematics Builder is its ability to compile Mindcode and assign it to processors in the 
+schematic on the fly, saving a lot of hassle with maintaining schematics based on Mindcode programs.     
+
 A [changelog](CHANGELOG.markdown) is now maintained for releases.  
 
 ## Using Mindcode
 
-Either compile and run Mindcode yourself (see the [Development](#development) section), or visit
-http://mindcode.herokuapp.com/
+Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area,
+then press the **Compile** button. The _Mindustry Logic_ text area will contain the Logic version of your Mindcode. 
+Copy the compiled version. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. 
+Select **Import from Clipboard**". Mindustry is now ready to execute your code. 
 
-Write some Mindcode in the "Source Code" text area, then press the "Compile" button. The "Compiled Code" section will
-contain the Logic version of your Mindcode. Copy the compiled version. Back in Mindustry, edit your processor, then use
-the "Edit" button in the Logic UI. Select "Import from Clipboard". Mindustry is now ready to execute your code. Be on
-the lookout for "invalid" nodes in the Logic, and if you can, please report them so that Mindcode can be improved for
-everyone.
+It is also possible to build Mindcode locally (see the [Development](#development) section), and use the
+[command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying the compiled code into 
+the clipboard automatically if desired.
 
-## Mindcode Syntax
+### Mindcode Syntax
 
 Please read the [syntax](doc/syntax/SYNTAX.markdown) document for the high-level information.
 The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus
@@ -676,7 +681,7 @@ process all kinds of Mindcode control elements. Implementing some more complicat
 conditional statements and/or function helps tremendously. (The emulated processor runs much faster than Mindcode
 processors, so even more complicated algorithms are feasible to run.)
 
-### Roadmap
+## Roadmap
 
 Or perhaps a wish-list, can be found [here](ROADMAP.markdown).  
 

@@ -7,15 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="mindcode-webapp" />
+        <module name="mindcode-compiler" />
         <module name="mindcode-mindcode" />
+        <module name="mindcode-schemacode" />
+        <module name="mindcode-webapp" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="mindcode-compiler" target="17" />
-      <module name="mindcode-golem" target="17" />
-      <module name="mindcode-schemacode" target="17" />
-      <module name="mindcode-schematics" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>

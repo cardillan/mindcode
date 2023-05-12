@@ -399,4 +399,4 @@ suggest specifying the correct amount, just in case something changes in the fut
 
 ---
 
-[« Previous: Compiler directives](SYNTAX-5-OTHER.markdown)
+[« Previous: Schematics Refresher](TOOLS-REFRESHER.markdown)

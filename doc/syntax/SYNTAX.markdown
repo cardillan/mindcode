@@ -15,9 +15,21 @@ This document covers the basics of Mindcode syntax:
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
 * [Compiler directives](SYNTAX-5-OTHER.markdown)
 
-As an addendum, some less obvious Mindustry Logic functions are described here: 
+Schemacode, a schematics definition language, is covered here:
 
-* [Mindustry Tips and Tricks](SYNTAX-6-TIPS-N-TRICKS.markdown)
+* [Schemacode](SCHEMACODE.markdown)
+
+Supporting tools: 
+
+* [Command line tool](TOOLS-CMDLINE.markdown): a command line tool containing Mindcode Compiler, Schematics Builder and 
+  Schematics Decompiler
+* [Schematics Refresher](TOOLS-REFRESHER.markdown): a Mindustry mod for automatically or manually refreshing 
+  schematics created by Schematics Builder. 
+
+As an addendum, some less obvious Mindustry Logic functions are described here:
+ 
+* [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown): some less obvious Mindustry Logic functions are 
+  described here
 
 ---
 
@@ -117,7 +129,7 @@ When Mindustry processes the source code in Mindustry Logic, it handles numeric 
   to 7 valid digits.
 
 To find a way around these constraints, Mindcode always reads the value of the numeric literal and then converts it 
-to Mindustry Logic compatible literal using these rules[^1] (first applicable rule is used): 
+to Mindustry Logic compatible literal using these rules (first applicable rule is used): 
 
 1. If the value is zero, it is encoded as `0`.
 2. If the value is between 1<sup>-20</sup> and 2<sup>63</sup>-1, the number is converted to standard decimal 
@@ -127,7 +139,7 @@ to Mindustry Logic compatible literal using these rules[^1] (first applicable ru
    reading the literal as well). If the conversion to float causes loss of precision, a warning is produced.
 4. If none of the above rules is applicable, the conversion isn't possible and compilation error is produced. 
 
-[^1]: the rules are applied to the absolute value on the number being encoded. When the number is negative, a minus
+Note: these rules are applied to the absolute value on the number being encoded. When the number is negative, a minus
 sign is then prepended to the encoded representation .
 
 This processing ensures that numbers within a reasonable range are encoded to use maximal available precision, 

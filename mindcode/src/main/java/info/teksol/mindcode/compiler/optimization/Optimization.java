@@ -9,66 +9,66 @@ import java.util.function.BiFunction;
 // The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
 // compiler, makes optimizations and passes them onto the next optimizer.
 public enum Optimization {
-    CONDITIONAL_JUMPS_NORMALIZATION     ('n', "jumpNormalization",
+    CONDITIONAL_JUMPS_NORMALIZATION     ('n', "jump-normalization",
             ConditionalJumpsNormalizer::new,
-            "replaces always true conditional jumps with unconditional ones, removes always false jumps"),
+            "replacing always true conditional jumps with unconditional ones, removing always false jumps"),
 
-    DEAD_CODE_ELIMINATION               ('d', "deadCodeElimination",
+    DEAD_CODE_ELIMINATION               ('d', "dead-code-elimination",
             DeadCodeEliminator::new,
-            "eliminates writes to compiler or user defined variables that are not used"),
+            "eliminating writes to compiler- or user-defined variables that are not used"),
     
-    SINGLE_STEP_JUMP_ELIMINATION        ('s', "singleStepElimination",
+    SINGLE_STEP_JUMP_ELIMINATION        ('s', "single-step-elimination",
             SingleStepJumpEliminator::new,
-            "eliminates jumps to the next instruction"),
+            "eliminating jumps to the next instruction"),
     
-    INPUT_TEMPS_ELIMINATION             ('i', "inputTempElimination",
+    INPUT_TEMPS_ELIMINATION             ('i', "input-temp-elimination",
             InputTempEliminator::new,
-            "eliminates temporary variables created to input values into instructions"),
+            "eliminating temporary variables created to pass values into instructions"),
     
-    OUTPUT_TEMPS_ELIMINATION            ('o', "outputTempElimination",
+    OUTPUT_TEMPS_ELIMINATION            ('o', "output-temp-elimination",
             OutputTempEliminator::new,
-            "eliminates temporary variables created to extract values from instructions"),
+            "eliminating temporary variables created to extract values from instructions"),
 
-    EXPRESSION_OPTIMIZATION             ('x', "expressionOptimization",
+    EXPRESSION_OPTIMIZATION             ('x', "expression-optimization",
             ExpressionOptimizer::new,
-            "optimizes some common mathematical expressions"),
+            "optimizing some common mathematical expressions"),
 
-    CASE_EXPRESSION_OPTIMIZATION        ('c', "caseExpressionOptimization",
+    CASE_EXPRESSION_OPTIMIZATION        ('c', "case-expression-optimization",
             CaseExpressionOptimizer::new,
-            "eliminates temporary variables created to execute case expressions"),
+            "eliminating temporary variables created to execute case expressions"),
     
-    CONDITIONAL_JUMPS_IMPROVEMENT       ('j', "conditionalsOptimization",
+    CONDITIONAL_JUMPS_IMPROVEMENT       ('j', "conditionals-optimization",
             ImproveNegativeConditionalJumps::new,
-            "merges an op instruction producing a boolean expression into the following conditional jump"),
+            "merging an op instruction producing a boolean expression into the following conditional jump"),
     
-    JUMP_OVER_JUMP_ELIMINATION          ('q', "jumpStraightening",
+    JUMP_OVER_JUMP_ELIMINATION          ('q', "jump-straightening",
             (inst, next) -> new JumpOverJumpEliminator(inst, new ImprovePositiveConditionalJumps(inst, next)),
-            "simplifies sequences of intertwined jumps"),
+            "simplifying sequences of intertwined jumps"),
 
-    JUMP_TARGET_PROPAGATION             ('t', "jumpThreading",
+    JUMP_TARGET_PROPAGATION             ('t', "jump-threading",
             PropagateJumpTargets::new,
-            "speeds up execution by eliminating chained jumps"),
+            "eliminating chained jumps"),
     
     // This optimizer can get additional single step jumps; therefore is bundled with its eliminator
-    INACCESSIBLE_CODE_ELIMINATION       ('e', "inaccessibleCodeElimination",
+    INACCESSIBLE_CODE_ELIMINATION       ('e', "inaccessible-code-elimination",
             (inst, next) -> new InaccessibleCodeEliminator(inst, new SingleStepJumpEliminator(inst, next)),
-            "eliminates instructions made inaccessible by optimizations or false conditions"),
+            "eliminating instructions made inaccessible by optimizations or false conditions"),
 
-    STACK_USAGE_OPTIMIZATION            ('k', "stackOptimization",
+    STACK_USAGE_OPTIMIZATION            ('k', "stack-optimization",
             StackUsageOptimizer::new,
-            "optimizes variable storage on stack"),
+            "optimizing variable storage on stack"),
 
-    FUNCTION_PARAM_OPTIMIZATION         ('f', "functionCallOptimization",
+    FUNCTION_PARAM_OPTIMIZATION         ('f', "function-call-optimization",
             FunctionParameterOptimizer::new,
-            "optimizes passing arguments to functions"),
+            "optimizing passing arguments to functions"),
 
-    RETURN_VALUE_OPTIMIZATION           ('r', "returnValueOptimization",
+    RETURN_VALUE_OPTIMIZATION           ('r', "return-value-optimization",
             ReturnValueOptimizer::new,
-            "optimizes passing return values from functions"),
+            "optimizing passing return values from functions"),
 
-    PRINT_TEXT_MERGING                  ('p', "printMerging",
+    PRINT_TEXT_MERGING                  ('p', "print-merging",
             PrintMerger::new,
-            "merges consecutive print statements outputting text literals"),
+            "merging consecutive print statements outputting text literals"),
     ;
     
     private final BiFunction<InstructionProcessor, LogicInstructionPipeline, ? extends BaseOptimizer> instanceCreator;

@@ -1,4 +1,5 @@
 #!/bin/sh
 
+echo This tool is deprecated. Use mcc instead. 1>&2
 jar=$( find "$MINDCODE_PATH/mindcode" -type f -name '*.jar' | tr '\n' ':' )
 exec java --enable-preview -classpath $jar info.teksol.mindcode.compiler.CompileMain $@

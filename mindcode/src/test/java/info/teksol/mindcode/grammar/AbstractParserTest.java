@@ -2,7 +2,11 @@ package info.teksol.mindcode.grammar;
 
 import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.Tuple2;
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +15,7 @@ public abstract class AbstractParserTest {
     protected MindcodeParser.ProgramContext parse(String program) {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        parser.removeErrorListeners();
         final List<String> errors = new ArrayList<>();
         parser.addErrorListener(new BaseErrorListener() {
             @Override
@@ -29,6 +34,7 @@ public abstract class AbstractParserTest {
     Tuple2<MindcodeParser.ProgramContext, List<String>> parseWithErrors(String program) {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        parser.removeErrorListeners();
         final List<String> errors = new ArrayList<>();
         parser.addErrorListener(new BaseErrorListener() {
             @Override

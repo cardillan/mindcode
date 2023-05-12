@@ -2,13 +2,19 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.logic.*;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,11 +42,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         this.processorVersion = processorVersion;
         this.processorEdition = processorEdition;
         this.opcodeVariants = opcodeVariants;
-        variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::getOpcode));
+        variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream()
                 .collect(Collectors.toMap(k -> k, k -> getOpcodeVariantSelectorPosition(k, variantsByOpcode.get(k))));
 
-        variantsByKeyword = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::getOpcode,
+        variantsByKeyword = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode,
                 Collectors.toMap(this::getOpcodeVariantKeyword, v -> v)));
 
         validArgumentValues = createAllowedArgumentValuesMap();
@@ -183,11 +189,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return (WriteInstruction) createInstruction(Opcode.WRITE, value, memory, index);
     }
 
-    @Override
-    public WriteInstruction createWriteAddress(LogicAddress value, LogicVariable memory, LogicValue index) {
-        return (WriteInstruction) createInstruction(Opcode.WRITE, value, memory, index);
-    }
-
 
     @Override
     public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
@@ -201,8 +202,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {
-        return createInstruction(opcodeVariant.getOpcode(),
-                opcodeVariant.getNamedParameters().stream()
+        return createInstruction(opcodeVariant.opcode(),
+                opcodeVariant.namedParameters().stream()
                         .map(NamedParameter::name)
                         .map(BaseArgument::new)
                         .collect(Collectors.toList())
@@ -299,16 +300,12 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 : createInstruction(instruction.getOpcode(), newArgs);
     }
 
-    private List<LogicParameter> getArgumentTypes(LogicInstruction instruction) {
-        return getParameters(instruction.getOpcode(), instruction.getArgs());
-    }
-
     @Override
     public int getPrintArgumentCount(LogicInstruction instruction) {
         // Maximum over all existing opcode variants, plus additional opcode-specific unused arguments
         // TODO precompute and cache per opcode
         return variantsByOpcode.get(instruction.getOpcode()).stream()
-                .mapToInt(v -> v.getNamedParameters().size()).max().orElse(0)
+                .mapToInt(v -> v.namedParameters().size()).max().orElse(0)
                 + instruction.getOpcode().getAdditionalPrintArguments();
     }
 
@@ -357,7 +354,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
      */
     protected List<LogicParameter> getParameters(Opcode opcode, List<LogicArgument> arguments) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, arguments);
-        return opcodeVariant == null ? null : opcodeVariant.getParameterTypes();
+        return opcodeVariant == null ? null : opcodeVariant.parameterTypes();
     }
 
     protected LogicInstruction validate(LogicInstruction instruction) {
@@ -366,13 +363,13 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             throw new GenerationException("Invalid or version incompatible instruction " + instruction);
         }
 
-        if (instruction.getArgs().size() != opcodeVariant.getNamedParameters().size()) {
+        if (instruction.getArgs().size() != opcodeVariant.namedParameters().size()) {
             throw new GenerationException("Wrong number of arguments of instruction " + instruction.getOpcode()
-                    + " (expected " + opcodeVariant.getNamedParameters().size() + "). " + instruction);
+                    + " (expected " + opcodeVariant.namedParameters().size() + "). " + instruction);
         }
 
         for (int i = 0; i < instruction.getArgs().size(); i++) {
-            NamedParameter namedParameter = opcodeVariant.getNamedParameters().get(i);
+            NamedParameter namedParameter = opcodeVariant.namedParameters().get(i);
             LogicArgument argument = instruction.getArgs().get(i);
             LogicParameter type = namedParameter.type();
             if (!isValid(type, argument)) {
@@ -390,7 +387,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     private int getOpcodeVariantSelectorPosition(Opcode opcode, List<OpcodeVariant> opcodeVariants) {
         List<Integer> indexes = opcodeVariants.stream()
-                .map(v -> findFirstIndex(v.getNamedParameters(), a -> a.type().isSelector()))
+                .map(v -> findFirstIndex(v.namedParameters(), a -> a.type().isSelector()))
                 .distinct()
                 .toList();
 
@@ -402,11 +399,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     private String getOpcodeVariantKeyword(OpcodeVariant opcodeVariant) {
-        int position = opcodeKeywordPosition.get(opcodeVariant.getOpcode());
+        int position = opcodeKeywordPosition.get(opcodeVariant.opcode());
         if (position < 0) {
             return "";      // Single-variant opcode; no keyword
         } else {
-            return opcodeVariant.getNamedParameters().get(position).name();
+            return opcodeVariant.namedParameters().get(position).name();
         }
     }
 
@@ -425,7 +422,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private Set<String> createAllowedValues(LogicParameter type) {
         if (type.isSelector()) {
             return opcodeVariants.stream()
-                    .flatMap(v -> v.getNamedParameters().stream())
+                    .flatMap(v -> v.namedParameters().stream())
                     .filter(v -> v.type() == type)
                     .map(NamedParameter::name)
                     .collect(Collectors.toUnmodifiableSet());
@@ -482,7 +479,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     // 20 digits precision
     private static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
-    private static final BigDecimal LOSS_THRESHOLD = new BigDecimal("1e-8");
 
     private Optional<String> mlogFormat(double value, String literal) {
         if (Double.isFinite(value)) {
@@ -541,7 +537,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 double absDiff = Math.abs(refloat - value);
                 double relDiff = absDiff / value;
                 if (relDiff > 1e-9) {
-                    messageConsumer.accept(CompilerMessage.warn("Loss of precision while creating mlog literals (original value "+ literal + ", encoded value " + mlog + ")"));
+                    messageConsumer.accept(MindcodeMessage.warn("Loss of precision while creating mlog literals (original value "+ literal + ", encoded value " + mlog + ")"));
                 }
 
                 return Optional.of(mlog);

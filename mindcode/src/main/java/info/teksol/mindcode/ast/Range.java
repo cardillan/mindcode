@@ -44,14 +44,7 @@ public abstract class Range extends BaseAstNode {
                 '}';
     }
 
-    public BinaryOp buildLoopExitCondition(AstNode name) {
-        return new BinaryOp(
-                name,
-                maxValueComparison().getMindcode(),
-                getLastValue()
-        );
-    }
-
     public abstract String operator();
+
     public abstract Condition maxValueComparison();
 }

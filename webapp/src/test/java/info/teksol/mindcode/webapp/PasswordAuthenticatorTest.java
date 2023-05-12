@@ -4,14 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PasswordAuthenticatorTest {
     private final PasswordAuthenticator sut = new PasswordAuthenticator(4);
 
-    // Deactivated for now. Logging is not supported, hashing tests might fail on too fast/too slow computers.
+    // Deactivated for now. Signing-in is not supported, hashing tests might fail on too fast/too slow computers.
     // @Test
     void defaultPasswordAuthenticatorTakesAReasonableAmountOfTime() {
         final PasswordAuthenticator sut = new PasswordAuthenticator();

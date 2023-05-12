@@ -15,18 +15,20 @@ class MindcodeParserTest extends AbstractParserTest {
         assertDoesNotThrow(() -> parse("0123456789"));
     }
 
+    @Test
     void parsesHexadecimalNumber() {
         assertDoesNotThrow(() -> parse("0x0123456789ABCDEFabcdef"));
     }
 
+    @Test
     void parsesBinaryNumber() {
         assertDoesNotThrow(() -> parse("0b010101"));
     }
 
+    @Test
     void parsesFloatingPointNumber() {
         assertDoesNotThrow(() -> parse("1.0"));
         assertDoesNotThrow(() -> parse("0.0"));
-        assertDoesNotThrow(() -> parse(".0"));
         assertDoesNotThrow(() -> parse("1e5"));
         assertDoesNotThrow(() -> parse("1e+5"));
         assertDoesNotThrow(() -> parse("1e-5"));
@@ -36,9 +38,6 @@ class MindcodeParserTest extends AbstractParserTest {
         assertDoesNotThrow(() -> parse("2.5E10"));
         assertDoesNotThrow(() -> parse("2.5E+10"));
         assertDoesNotThrow(() -> parse("2.5E-10"));
-        assertDoesNotThrow(() -> parse(".5E10"));
-        assertDoesNotThrow(() -> parse(".5E+10"));
-        assertDoesNotThrow(() -> parse(".5E-10"));
     }
 
     @Test

@@ -12,13 +12,19 @@ import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
 import info.teksol.mindcode.logic.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
-    protected List<CompilerMessage> messages = new ArrayList<>();
+    protected final List<CompilerMessage> messages = new ArrayList<>();
 
     protected InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(
             messages::add, ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
@@ -239,55 +245,55 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     // Common constants for creating instructions
-    protected static Operation     div        = Operation.DIV;
-    protected static Operation     floor      = Operation.FLOOR;
-    protected static Operation     idiv       = Operation.IDIV;
-    protected static Operation     mul        = Operation.MUL;
+    protected static final Operation     div        = Operation.DIV;
+    protected static final Operation     floor      = Operation.FLOOR;
+    protected static final Operation     idiv       = Operation.IDIV;
+    protected static final Operation     mul        = Operation.MUL;
 
-    protected static LogicNumber   K1000      = LogicNumber.get(1000);
-    protected static LogicNumber   K0001      = LogicNumber.get("0.001", 0.001);
-    protected static LogicNumber   K0         = LogicNumber.get(0);
-    protected static LogicNumber   K1         = LogicNumber.get(1);
-    protected static LogicNumber   K255       = LogicNumber.get(255);
-    protected static LogicString   message    = LogicString.create("message");
+    protected static final LogicNumber   K1000      = LogicNumber.get(1000);
+    protected static final LogicNumber   K0001      = LogicNumber.get("0.001", 0.001);
+    protected static final LogicNumber   K0         = LogicNumber.get(0);
+    protected static final LogicNumber   K1         = LogicNumber.get(1);
+    protected static final LogicNumber   K255       = LogicNumber.get(255);
+    protected static final LogicString   message    = LogicString.create("message");
 
-    protected static LogicLabel    label0     = LogicLabel.symbolic("label0");
-    protected static LogicLabel    label1     = LogicLabel.symbolic("label1");
-    protected static LogicLabel    label2     = LogicLabel.symbolic("label2");
+    protected static final LogicLabel    label0     = LogicLabel.symbolic("label0");
+    protected static final LogicLabel    label1     = LogicLabel.symbolic("label1");
+    protected static final LogicLabel    label2     = LogicLabel.symbolic("label2");
 
-    protected static LogicVariable bank1      = LogicVariable.block("bank1");
-    protected static LogicVariable cell1      = LogicVariable.block("cell1");
-    protected static LogicVariable conveyor1  = LogicVariable.block("conveyor1");
-    protected static LogicVariable vault1     = LogicVariable.block("vault1");
+    protected static final LogicVariable bank1      = LogicVariable.block("bank1");
+    protected static final LogicVariable cell1      = LogicVariable.block("cell1");
+    protected static final LogicVariable conveyor1  = LogicVariable.block("conveyor1");
+    protected static final LogicVariable vault1     = LogicVariable.block("vault1");
 
-    protected static LogicBuiltIn  coal       = LogicBuiltIn.create("coal");
-    protected static LogicBuiltIn  lead       = LogicBuiltIn.create("lead");
-    protected static LogicBuiltIn  firstItem  = LogicBuiltIn.create("firstItem");
-    protected static LogicBuiltIn  enabled    = LogicBuiltIn.create("enabled");
-    protected static LogicBuiltIn  time       = LogicBuiltIn.create("time");
-    protected static LogicBuiltIn  unit       = LogicBuiltIn.create("unit");
+    protected static final LogicBuiltIn  coal       = LogicBuiltIn.create("coal");
+    protected static final LogicBuiltIn  lead       = LogicBuiltIn.create("lead");
+    protected static final LogicBuiltIn  firstItem  = LogicBuiltIn.create("firstItem");
+    protected static final LogicBuiltIn  enabled    = LogicBuiltIn.create("enabled");
+    protected static final LogicBuiltIn  time       = LogicBuiltIn.create("time");
+    protected static final LogicBuiltIn  unit       = LogicBuiltIn.create("unit");
 
-    protected static LogicKeyword  color      = LogicKeyword.create("color");
+    protected static final LogicKeyword  color      = LogicKeyword.create("color");
 
-    protected static LogicVariable C          = LogicVariable.global("C");
+    protected static final LogicVariable C          = LogicVariable.global("C");
 
-    protected static LogicVariable a          = LogicVariable.main("a");
-    protected static LogicVariable b          = LogicVariable.main("b");
-    protected static LogicVariable c          = LogicVariable.main("c");
-    protected static LogicVariable d          = LogicVariable.main("d");
-    protected static LogicVariable another    = LogicVariable.main("another");
-    protected static LogicVariable divisor    = LogicVariable.main("divisor");
-    protected static LogicVariable value      = LogicVariable.main("value");
-    protected static LogicVariable var        = LogicVariable.main("var");
+    protected static final LogicVariable a          = LogicVariable.main("a");
+    protected static final LogicVariable b          = LogicVariable.main("b");
+    protected static final LogicVariable c          = LogicVariable.main("c");
+    protected static final LogicVariable d          = LogicVariable.main("d");
+    protected static final LogicVariable another    = LogicVariable.main("another");
+    protected static final LogicVariable divisor    = LogicVariable.main("divisor");
+    protected static final LogicVariable value      = LogicVariable.main("value");
+    protected static final LogicVariable var        = LogicVariable.main("var");
 
-    protected static LogicVariable foo        = LogicVariable.main("foo");
-    protected static LogicVariable result     = LogicVariable.main("result");
+    protected static final LogicVariable foo        = LogicVariable.main("foo");
+    protected static final LogicVariable result     = LogicVariable.main("result");
 
-    protected static LogicVariable ast0       = LogicVariable.ast("__ast0");
+    protected static final LogicVariable ast0       = LogicVariable.ast("__ast0");
 
-    protected static LogicVariable tmp0       = LogicVariable.temporary("__tmp0");
-    protected static LogicVariable tmp1       = LogicVariable.temporary("__tmp1");
+    protected static final LogicVariable tmp0       = LogicVariable.temporary("__tmp0");
+    protected static final LogicVariable tmp1       = LogicVariable.temporary("__tmp1");
 
-    protected static LogicVariable fn0retval  = LogicVariable.fnRetVal("__fn0retval");
-    protected static LogicVariable retval0    = LogicVariable.retval("__retval0");
+    protected static final LogicVariable fn0retval  = LogicVariable.fnRetVal("__fn0retval");
+    protected static final LogicVariable retval0    = LogicVariable.retval("__retval0");
 }

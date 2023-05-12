@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-05-13
+
+### Added
+
+* Added Schematics Builder tool with a new [Schemacode language](doc/syntax/SCHEMACODE.markdown).
+* Added new [command-line interface](/doc/syntax/TOOLS-CMDLINE.markdown) for the Mindcode Compiler, Schematics 
+  Builder and Schematics Decompiler.
+* Added [Schematics Builder](http://mindcode.herokuapp.com/schematics) and
+  [Schematics Decompiler](http://mindcode.herokuapp.com/decompiler) interface to the web application. 
+
+### Changed
+
+* **Breaking:** changed names of
+  [individual optimization options](doc/syntax/SYNTAX-5-OTHER.markdown#individual-optimization-options) from
+  `camelCase` to `kebab-case`. The same option names are now used with the new command line tool as in the `#set` 
+  directive.
+
+### Deprecated
+
+* Deprecated the old command-line compiler, it was replaced by the new command line tool and will be removed in one of 
+  the future releases.
+
+### Miscellaneous
+
+* Created [Mindustry Metadata Extractor](https://github.com/cardillan/mimex), a Mindustry mod. The mod, when loaded 
+  into the game, extracts various Mindustry metadata and writes them into external files to be used by Mindcode. At 
+  this moment, only block types for Schematics Builder are extracted, but more metadata will follow.
+* Created [Schematics Refresher](https://github.com/cardillan/SchematicsRefresher), another Mindustry mod. The mod
+  refreshes schematics stored in the `/schematics` subdirectory whenever the game loads or the Refresh button in the 
+  Schematics screen is used. The mod allows to refresh schematics after they were rebuilt by Schematics Builder. 
+
 ## 2023-05-03
 
 ### Added
@@ -14,7 +45,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* **Breaking**: changed [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) to 
+* **Breaking:** changed [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) to 
   evaluate upper boundary only once, before entering the loop for the first time. Previous version evaluated 
   the upper bound at each iteration, and reflected possible changes in the upper bound. The documentation was 
   expanded to specify the evaluation of the upper bound. Use a while loop or a C-style loop if you want to fully 
@@ -49,7 +80,7 @@ All notable changes to this project will be documented in this file.
 
 * Added [return value optimizer](doc/syntax/SYNTAX-5-OTHER.markdown#return-value-optimization). Improves processing 
   return values from function calls. 
-* Added [section about using units](doc/syntax/SYNTAX-6-TIPS-N-TRICKS.markdown#using-units) to Mindustry Tips 
+* Added [section about using units](doc/syntax/MINDUSTRY-TIPS-N-TRICKS.markdown#using-units) to Mindustry Tips 
   and Tricks.
 * Added warnings when constant expression evaluation or Mindcode numeric literal cannot be compiled to mlog without 
   a loss of precision. 

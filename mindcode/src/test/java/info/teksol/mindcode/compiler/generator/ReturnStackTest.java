@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ReturnStackTest {
     private final ReturnStack returnStack = new ReturnStack();
 
-    LogicLabel label1 = LogicLabel.symbolic("label");
-    LogicLabel label2 = LogicLabel.symbolic("label");
+    private static final LogicLabel label1 = LogicLabel.symbolic("label1");
+    private static final LogicLabel label2 = LogicLabel.symbolic("label2");
 
-    LogicVariable fnRetVal1 = LogicVariable.fnRetVal("fnRetVal1");
-    LogicVariable fnRetVal2 = LogicVariable.fnRetVal("fnRetVal2");
+    private static final LogicVariable fnRetVal1 = LogicVariable.fnRetVal("fnRetVal1");
+    private static final LogicVariable fnRetVal2 = LogicVariable.fnRetVal("fnRetVal2");
 
     @Test
     void remembersLabels() {

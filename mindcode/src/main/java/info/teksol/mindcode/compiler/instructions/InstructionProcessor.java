@@ -44,7 +44,6 @@ public interface InstructionProcessor {
     SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address);
     StopInstruction createStop();
     WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index);
-    WriteInstruction createWriteAddress(LogicAddress value, LogicVariable memory, LogicValue index);
 
     /**
      * Creates and validates a new LogicInstruction.

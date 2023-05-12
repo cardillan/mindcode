@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -96,7 +97,7 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
 
         @Override
         public void flush() {
-            messageRecipient.accept(CompilerMessage.info(message, count));
+            messageRecipient.accept(MindcodeMessage.info(message, count));
             next.flush();
         }
 

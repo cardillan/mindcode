@@ -5,7 +5,11 @@ import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -66,26 +70,26 @@ public class CompileMain {
         
         String contents = filenames.isEmpty() ? readStdin() : readFile(filenames.get(0));
 
-        final CompilerOutput result = compile(contents, profile);
+        final CompilerOutput<String> result = compile(contents, profile);
 
         if (!result.hasErrors()) {
             // No errors? Print the compiled code and any messages.
             if (filenames.size() >= 2) {
-                Files.write(Path.of(filenames.get(1)), Collections.singletonList(result.getInstructions()));
+                Files.write(Path.of(filenames.get(1)), Collections.singletonList(result.output()));
             } else {
-                System.out.println(result.getInstructions());
+                System.out.println(result.output());
             }
 
             if (filenames.size() >= 3) {
-                Files.write(Path.of(filenames.get(2)), result.getAllTexts());
+                Files.write(Path.of(filenames.get(2)), result.texts());
             } else {
-                result.getAllTexts().forEach(System.err::println);
+                result.texts().forEach(System.err::println);
             }
         } else {
             // Print errors to stderr (and log if given).
-            result.getErrors().forEach(System.err::println);
+            result.errors().forEach(System.err::println);
             if (filenames.size() >= 3) {
-                Files.write(Path.of(filenames.get(2)), result.getErrors());
+                Files.write(Path.of(filenames.get(2)), result.errors());
             }
             System.exit(1);
         }

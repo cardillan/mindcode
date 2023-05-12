@@ -2,7 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.resource.Icons;
+import info.teksol.mindcode.mimex.Icons;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

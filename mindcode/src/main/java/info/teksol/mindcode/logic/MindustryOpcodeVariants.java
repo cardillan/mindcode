@@ -3,7 +3,7 @@ package info.teksol.mindcode.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import static info.teksol.mindcode.logic.OpcodeVariant.FunctionMapping.*;
+import static info.teksol.mindcode.logic.FunctionMapping.*;
 import static info.teksol.mindcode.logic.ProcessorEdition.S;
 import static info.teksol.mindcode.logic.ProcessorEdition.W;
 import static info.teksol.mindcode.logic.ProcessorVersion.V6;
@@ -11,10 +11,6 @@ import static info.teksol.mindcode.logic.ProcessorVersion.V7;
 
 public class MindustryOpcodeVariants {
     private static final MindustryOpcodeVariants data = new MindustryOpcodeVariants();
-
-    public static List<OpcodeVariant> getAllOpcodeVariants() {
-        return data.variants;
-    }
 
     public static List<OpcodeVariant> getSpecificOpcodeVariants(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
         return data.variants.stream()
@@ -30,7 +26,7 @@ public class MindustryOpcodeVariants {
     }
 
     private void add(List<OpcodeVariant> variants, ProcessorVersion versionFrom, ProcessorVersion versionTo,
-            ProcessorEdition edition, OpcodeVariant.FunctionMapping functionMapping, Opcode opcode, NamedParameter... arguments) {
+            ProcessorEdition edition, FunctionMapping functionMapping, Opcode opcode, NamedParameter... arguments) {
         variants.add(new OpcodeVariant(versionFrom, versionTo, edition, functionMapping, opcode, arguments));
     }
 

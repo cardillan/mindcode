@@ -1,6 +1,8 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
@@ -9,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class LogicInstructionLabelResolver {
     private final InstructionProcessor instructionProcessor;
@@ -26,7 +27,7 @@ public class LogicInstructionLabelResolver {
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
         calculateAddresses(program);
-        return resolveAddresses(resolveVirtualInstructions(program), addresses);
+        return resolveAddresses(resolveVirtualInstructions(program));
     }
 
 
@@ -56,7 +57,7 @@ public class LogicInstructionLabelResolver {
         }
     }
 
-    private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program, Map<LogicLabel, LogicLabel> addresses) {
+    private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program) {
         final List<LogicInstruction> result = new ArrayList<>();
 
         for (final LogicInstruction instruction : program) {
@@ -73,8 +74,5 @@ public class LogicInstructionLabelResolver {
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
         return program.stream().mapMulti(instructionProcessor::resolve).toList();
-    }
-
-    private void resolveVirtual(LogicInstruction ix, Consumer<LogicInstruction> c) {
     }
 }

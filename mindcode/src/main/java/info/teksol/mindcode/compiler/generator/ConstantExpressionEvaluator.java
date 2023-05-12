@@ -3,12 +3,12 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.processor.DoubleVariable;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 import info.teksol.mindcode.processor.OperationEval;
 import info.teksol.mindcode.processor.StringVariable;
 import info.teksol.mindcode.processor.Variable;
-import info.teksol.mindcode.resource.Icons;
 
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +65,7 @@ public class ConstantExpressionEvaluator {
                 Variable b = variableFromNode("b", evaluateInner(node.getRight()));
                 if (a != null && b != null) {
                     if (operation == Operation.ADD && (a instanceof StringVariable || b instanceof StringVariable)) {
-                        String concat = a.toString() + b.toString();
+                        String concat = a.toString().concat(b.toString());
                         return new StringLiteral(concat);
                     } else {
                         Variable result = DoubleVariable.newNullValue(false, "result");

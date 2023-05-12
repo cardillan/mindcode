@@ -4,10 +4,6 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## In progress
 
-Larger changes being actively worked on.
-
- * [Schematics-creation tool](https://github.com/cardillan/mindcode/issues/90) 
-
 ## Planned
 
 Things being pondered on from time to time.
@@ -39,8 +35,6 @@ Things being pondered on from time to time.
 
 ### Code generation
 
-* Constant string expressions. Allow strings to be concatenated with other strings and constant expressions. 
-  Constant strings passed to inline functions will be supported as well.    
 * Determine effective variable types to assist with optimizations (globally at first).
 * Temporary variable merging: after all optimizations, all temporary variables will be inspected for scope and
   variables with non-overlapping scopes will be merged into one, and renumbered starting from 0. Fewer temporary
@@ -57,6 +51,7 @@ Things being pondered on from time to time.
   * Memory jump table for case expressions where possible
   * Code generation/optimization objective (speed for faster but larger code, size for smaller but slower code)
     Most of the time smaller is also faster in Mindustry Logic, but there might be a few exceptions.
+* Propagate constant string evaluation into inline functions.
 * Optimization improvements
   * Multiple-use temporary variables optimization - typically as a result of ternary operator or case expression.
   * Boolean expressions:
@@ -75,8 +70,31 @@ Things being pondered on from time to time.
   * Forward store for external variables / arrays.
   * Tail recursion optimization.
 
+### Schematics Builder
+
+* Add all kinds of checks and validations
+  * Prevent overlapping blocks
+  * Prevent blocks outside schematic region
+  * Prevent impossible block connections
+  * Prevent non-conforming link names in processors
+  * Validate mlog code
+* Support for color (illuminator) and unit type (unit factory) configurations
+* Support for iterative block placement; `@block rightwards` places the block to the right of the last placed block
+* Automatically compute schematic dimensions, adjust positions if the origin is not at (0, 0)
+* Automatically generate names for unnamed processor links
+* Automatically connect blocks to power nodes, possibly with optimizations
+* Automatically add tags based on categories or types of contained blocks
+  * Allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
+* Make decompiler assign labels to all blocks
+* Support for schematics reuse
+  * Place schematic into schematic
+  * Extend existing schematic by adding or removing content
+* Support for filling area with blocks (e.g. walls, conveyors or factories)
+* Support for external compilers to create code for processors.
+
 ### User interface
 
+* Webapp: after decompiling a schematic, redirect to Schematic Builder page using the decompiled source code.
 * Compatibility warnings:
   * warn when `configure` main variable is used in V7 -- ML changes it to `config`,
   * warn about alloy-smelter --> surge-smelter V6 --> V7 name change.
@@ -89,7 +107,8 @@ Things being pondered on from time to time.
 
 ### Other
 
-* Create standalone jar for command-line compiler.
+* Improve [Mindustry Metadata Extractor](https://github.com/cardillan/mimex) to extract more metadata and 
+  automatically put them at the right place in Mindcode.
 
 ## Musings
 
@@ -116,10 +135,6 @@ doing them isn't clear yet.
 * Pointers to memory-backed arrays:
   * Requires typed variables.
   * Would allow passing arrays to out-of-line functions.
-* Assimilator: tool to automatically acquire definitions of blocks, units, items, liquids, properties etc.
-  directly from Mindustry sources. Would certainly need supervision, but might help keep Mindcode up to spec with
-  latest Mindustry. Might be realized as a fork of the original Mindustry repo with added code to extract all the 
-  information.  
 
 ### Parallel comparison
 
@@ -186,6 +201,7 @@ There are no plans to do any of these. We keep them around just in case.
 ### Code generation
 
 * Eliminate `__retval` variables/assignments where not needed.
+* Constant string expressions. Allow strings to be concatenated with other strings and constant expressions.
 
 ### Other
 
@@ -195,6 +211,10 @@ There are no plans to do any of these. We keep them around just in case.
   sometimes whether an argument is a numeric literal, a local variable, a global variable or a Mindustry object.
   Arguments are unnecessarily repeatedly analyzed to obtain this information, which was already known when the
   instruction was generated in the first place. Possibly use ints for arguments like Mindustry does.
+* standalone jar for command-line compiler
+* [Mindustry Metadata Extractor](https://github.com/cardillan/mimex): tool to automatically acquire definitions of 
+  blocks, units, items, liquids, properties etc.
+
 
 ### User interface
 

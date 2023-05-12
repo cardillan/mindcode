@@ -82,6 +82,7 @@ public class PrintMergerTest  extends AbstractGeneratorTest {
         );
     }
 
+    @Test
     void handlesInterleavedPrints() {
         generateInto(pipeline,
                 (Seq) translateToAst("""

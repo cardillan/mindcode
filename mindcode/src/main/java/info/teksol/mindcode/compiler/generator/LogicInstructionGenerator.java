@@ -7,9 +7,15 @@ import info.teksol.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.resource.Icons;
+import info.teksol.mindcode.mimex.Icons;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,10 +204,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     public WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index) {
         return instructionProcessor.createWrite(value, memory, index);
-    }
-
-    public WriteInstruction createWriteAddress(LogicAddress value, LogicVariable memory, LogicValue index) {
-        return instructionProcessor.createWriteAddress(value, memory, index);
     }
 
     private LogicLabel nextLabel() {

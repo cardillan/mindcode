@@ -1,0 +1,25 @@
+schematic
+    name = "On/off switch"
+    description = """
+        Enables/disables linked blocks according to switch state.
+
+        Usage: link blocks to be controlled, use switch to enable/disable them.
+        """
+    tag = BLOCK-MICRO-PROCESSOR
+
+switch1:
+    @switch              at ( 0,  0) facing south enabled
+    @micro-processor     at ( 1,  0) facing south processor
+        links
+            switch1 as switch1
+        end
+        mindcode = """
+            on = switch1.enabled
+            // Starting at 1, we want to skip the switch
+            for link in 1 ... @links
+                device = getlink(link)
+                device.enabled = on
+            end
+            """
+    end
+end

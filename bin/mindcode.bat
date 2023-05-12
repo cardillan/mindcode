@@ -1,4 +1,5 @@
 @echo off
+echo This tool is deprecated. Use mcc.bat instead. 1>&2
 setlocal enableDelayedExpansion
 pushd %~dp0
 set __CLPATH=.

@@ -259,7 +259,7 @@ Some of them are constant during the lifetime of the processor, but others do - 
 
 `@unit` is a very special variable - it always contains the unit currently controlled by the processor. The only way 
 to assign a new unit to this variable is to use the `ubind()` function. All unit control commands are sent to this unit.
-See also [Using units](/doc/syntax/SYNTAX-6-TIPS-N-TRICKS.markdown#using-units).
+See also [Using units](/doc/syntax/MINDUSTRY-TIPS-N-TRICKS.markdown#using-units).
 
 My experience shows that the value of time variables (`@tick`, `@time` and so on) can actually decrease when loading a 
 game from a save file. Take it into account especially when programming loops.   

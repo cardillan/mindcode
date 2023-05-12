@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static info.teksol.mindcode.logic.FunctionMapping.FUNC;
 import static info.teksol.mindcode.logic.MindustryOpcodeVariants.*;
-import static info.teksol.mindcode.logic.OpcodeVariant.FunctionMapping.FUNC;
 import static info.teksol.mindcode.logic.ProcessorEdition.S;
 import static info.teksol.mindcode.logic.ProcessorVersion.V6;
 import static info.teksol.mindcode.logic.ProcessorVersion.V7;

@@ -67,7 +67,7 @@ public class FunctionReferenceGeneratorTest {
 
                 for (Opcode opcode : Opcode.values()) {
                     // Does this opcode exist in edition?
-                    if (processor.getOpcodeVariants().stream().noneMatch(v -> v.getEdition() == edition && v.getOpcode() == opcode)) {
+                    if (processor.getOpcodeVariants().stream().noneMatch(v -> v.edition() == edition && v.opcode() == opcode)) {
                         continue;
                     }
 

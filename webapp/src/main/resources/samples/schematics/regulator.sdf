@@ -1,0 +1,139 @@
+schematic
+    name = "Regulator"
+    description = """
+        Regulates production or consumption by switching devices on or off.
+        Linked blocks are identified and used according to their type as follows:
+        messages are printed to the first message block found,
+        reset switch is the first switch block found
+        (reset causes complete reconfiguration - new scanning of all blocks),
+        sorter or inverted sorter, if configured, specifies item to measure in containers.
+        The last found container/tank/battery/node is used for level measurement.
+        All devices linked after the container are switched on or off
+        according to the fullness of the container.
+        Linking inverted sorter (regardless of its configuration) inverts the activation logic:
+        devices are activated when the level is high and deactivated when it is low.
+        Level is measured as a percentage of total capacity filled by materials.
+        """
+
+    tag = BLOCK-MICRO-PROCESSOR
+message1:
+    @message             at ( 0,  0)
+    @micro-processor     at ( 1,  0) processor
+        links * end
+        mindcode = mindcode_source
+    end
+switch1:
+    @switch              at ( 2,  0) disabled
+end
+
+mindcode_source = """
+    PCT_LOW = 60
+    PCT_HIGH = 80
+    CONTAINER = null
+    SORTER = null
+
+    do
+        println("Configuring regulator...")
+        n = @links
+        while n > 0
+            n = n - 1
+            block = getlink(n)
+            println("Found: ", block)
+            case block.type
+                when @message
+                    MESSAGE = block
+                when @switch
+                    SWITCH = block
+                when @sorter, @inverted-sorter, @unloader
+                    SORTER = block
+                when @vault, @container, @core-shard, @core-foundation, @core-nucleus
+                    CONTAINER = block
+                    SENSOR = @totalItems
+                    MAXIMUM = @itemCapacity
+                    START = n + 1
+                when @liquid-tank, @liquid-container
+                    CONTAINER = block
+                    SENSOR = @totalLiquids
+                    MAXIMUM = @liquidCapacity
+                    START = n + 1
+                when @battery, @battery-large
+                    CONTAINER = block
+                    SENSOR = @totalPower
+                    MAXIMUM = @powerCapacity
+                    START = n + 1
+                when @power-node, @power-node-large, @surge-tower
+                    CONTAINER = block
+                    SENSOR = @powerNetStored
+                    MAXIMUM = @powerNetCapacity
+                    START = n + 1
+            end
+        end
+
+        println("Message: ", MESSAGE)
+        println("Switch: ", SWITCH)
+        println("Sorter: ", SORTER)
+        println("Container: ", CONTAINER)
+        if CONTAINER == null
+            println("No container.")
+        end
+
+        printflush(MESSAGE)
+    loop while CONTAINER == null
+
+    INVERTED = SORTER.type === @inverted-sorter
+    setState(true)
+    CYCLES = 0
+
+    SWITCH.enabled = 0
+    while SWITCH.enabled == 0
+        start = @time
+        item = SORTER.config
+        if item == null || SENSOR != @totalItems
+            item = SENSOR
+            printf("Measuring [gold]total[] in $CONTAINER")
+        else
+            printf("Measuring [gold]$item[] in $CONTAINER")
+        end
+        max = CONTAINER.sensor(MAXIMUM)
+        amount = CONTAINER.sensor(item)
+        pct = (100 * amount) \ max
+
+        if pct <= PCT_LOW
+            setState(true)
+        elsif pct >= PCT_HIGH
+            setState(false)
+        end
+
+        printf("\nLevel: [gold]$pct%[]")
+        if INVERTED
+            printf("\nActivate above [green]$PCT_HIGH%[]")
+            printf("\nDeactivate below [salmon]$PCT_LOW%[]")
+        else
+            printf("\nActivate below [green]$PCT_LOW%[]")
+            printf("\nDeactivate above [salmon]$PCT_HIGH%[]")
+        end
+
+        print(ACTIVE_TEXT)
+
+        n = START
+        while n < @links
+            block = getlink(n)
+            block.enabled = ON
+            print("\n    ", block)
+            n = n + 1
+        end
+
+        printf("[]\n# of cycles: $CYCLES")
+        printf("\n[lightgray]Loop: $ ms", floor(@time - start))
+        printflush(MESSAGE)
+    end
+
+    inline def setState(newState)
+        if STATE != newState
+            STATE = newState
+            CYCLES += 1
+            ON = INVERTED ^ STATE
+            ACTIVE_TEXT = ON ? "\nCurrently active:[green]" : "\nCurrently inactive:[salmon]"
+        end
+    end
+    """

@@ -1,0 +1,32 @@
+schematic
+    name = "Worker Recall Station"
+    description = """
+        When the switch is activated, all poly and mega units which are not controlled by another processor
+        or player are recalled towards the microprocessor. Use to move units away when they're in the way,
+        or to call them back from afar.
+        """
+    tag = BLOCK-MICRO-PROCESSOR
+
+switch1:
+    @switch              at ( 0,  0) facing east  disabled
+    @micro-processor     at ( 1,  0) facing east  processor
+        links * end
+        mlog = """
+           sensor result switch1 @enabled
+           jump 0 notEqual result true
+           set loop 0
+           ubind @poly
+           sensor controlled @unit @controlled
+           jump 7 notEqual controlled 0
+           ucontrol approach @thisx @thisy 5 0 0
+           ubind @mega
+           sensor controlled @unit @controlled
+           jump 11 notEqual controlled 0
+           ucontrol approach @thisx @thisy 9 0 0
+           op add loop loop 1
+           jump 3 lessThan loop 24
+           control enabled switch1 false 0 0 0
+           """
+    end
+end
+

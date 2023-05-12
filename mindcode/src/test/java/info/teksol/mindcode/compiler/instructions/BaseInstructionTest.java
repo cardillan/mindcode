@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.ULOCATE;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BaseInstructionTest extends AbstractGeneratorTest {
 

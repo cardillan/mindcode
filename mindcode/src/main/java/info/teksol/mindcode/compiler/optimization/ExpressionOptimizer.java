@@ -6,12 +6,15 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicNumber;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.logic.Operation;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 import static info.teksol.mindcode.logic.Opcode.OP;
 
@@ -60,8 +63,6 @@ public class ExpressionOptimizer extends GlobalOptimizer {
 
         return false;
     }
-
-    private static final Pattern numLiteral = Pattern.compile("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?");
 
     private Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
         if (ix.getResult().getType() != ArgumentType.TMP_VARIABLE) {

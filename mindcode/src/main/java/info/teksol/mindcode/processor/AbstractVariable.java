@@ -1,6 +1,11 @@
 package info.teksol.mindcode.processor;
 
-import info.teksol.mindcode.ast.*;
+import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.ast.BooleanLiteral;
+import info.teksol.mindcode.ast.NullLiteral;
+import info.teksol.mindcode.ast.NumericLiteral;
+import info.teksol.mindcode.ast.NumericValue;
+import info.teksol.mindcode.ast.StringLiteral;
 
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;

@@ -9,24 +9,22 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
 
     @Test
     void handlesFunctionlessProgram() {
-        Assertions.assertDoesNotThrow(() -> {
-            CallGraph graph = CallGraphCreator.createFunctionGraph(
-                    (Seq) translateToAst("a = 10"),
-                    getInstructionProcessor()
-            );
-
-        });
+        Assertions.assertDoesNotThrow(() ->
+                CallGraphCreator.createFunctionGraph(
+                        (Seq) translateToAst("a = 10"),
+                        getInstructionProcessor()
+                )
+        );
     }
 
     @Test
     void handlesBuiltinFunctions() {
-        Assertions.assertDoesNotThrow(() -> {
-            CallGraph graph = CallGraphCreator.createFunctionGraph(
-                    (Seq) translateToAst("print(a)"),
-                    getInstructionProcessor()
-            );
-
-        });
+        Assertions.assertDoesNotThrow(() ->
+                CallGraphCreator.createFunctionGraph(
+                        (Seq) translateToAst("print(a)"),
+                        getInstructionProcessor()
+                )
+        );
     }
 
     @Test

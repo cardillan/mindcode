@@ -85,6 +85,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(ArgumentType.GLOBAL_VARIABLE, name);
     }
 
+    @SuppressWarnings("ConfusingMainMethod")
     public static LogicVariable main(String name) {
         return new LogicVariable(ArgumentType.LOCAL_VARIABLE, name);
     }

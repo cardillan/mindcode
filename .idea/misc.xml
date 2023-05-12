@@ -53,6 +53,16 @@
           <option name="language" value="" />
           <option name="generateVisitor" value="true" />
         </PerGrammarGenerationSettings>
+        <PerGrammarGenerationSettings>
+          <option name="fileName" value="$PROJECT_DIR$/schemacode/src/main/java/info/teksol/schemacode/grammar/Schemacode.g4" />
+          <option name="autoGen" value="true" />
+          <option name="outputDir" value="src/main/java" />
+          <option name="libDir" value="" />
+          <option name="encoding" value="utf-8" />
+          <option name="pkg" value="info.teksol.schemacode.grammar" />
+          <option name="language" value="" />
+          <option name="generateVisitor" value="true" />
+        </PerGrammarGenerationSettings>
       </list>
     </option>
   </component>
@@ -61,6 +71,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/schemacode/pom.xml" />
       </list>
     </option>
   </component>

@@ -2,27 +2,36 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.grammar.MindcodeLexer;
-import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.compiler.AccumulatingLogicInstructionPipeline;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
+import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
-import info.teksol.mindcode.logic.ProcessorEdition;
-import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
-import org.antlr.v4.runtime.*;
+import info.teksol.mindcode.grammar.MindcodeLexer;
+import info.teksol.mindcode.grammar.MindcodeParser;
+import info.teksol.mindcode.logic.ProcessorEdition;
+import info.teksol.mindcode.logic.ProcessorVersion;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +66,7 @@ class SamplesTest {
     @TestFactory
     List<DynamicTest> validateSamples() {
         final List<DynamicTest> result = new ArrayList<>();
-        final String dirname = "src/main/resources/samples";
+        final String dirname = "src/main/resources/samples/mindcode";
         final File[] files = new File(dirname).listFiles();
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one template; found none");
@@ -81,6 +90,7 @@ class SamplesTest {
     private void compile(String program, File source) throws IOException {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        parser.removeErrorListeners();
         final List<String> errors = new ArrayList<>();
         parser.addErrorListener(new BaseErrorListener() {
             @Override

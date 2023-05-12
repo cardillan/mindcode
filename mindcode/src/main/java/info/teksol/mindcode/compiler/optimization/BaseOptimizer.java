@@ -3,11 +3,16 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
+import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.Condition;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.Opcode;
 
 import java.util.function.Consumer;
 
@@ -66,7 +71,7 @@ abstract class BaseOptimizer implements Optimizer {
     }
 
     protected void emitMessage(MessageLevel level, String format, Object... args) {
-        messagesRecipient.accept(new CompilerMessage(level, String.format(format, args)));
+        messagesRecipient.accept(new MindcodeMessage(level, String.format(format, args)));
     }
 
     public JumpInstruction createUnconditionalJump(LogicLabel label) {

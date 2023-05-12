@@ -10,7 +10,9 @@
 
     <modules>
         <module>mindcode</module>
+        <module>schemacode</module>
         <module>webapp</module>
+        <module>compiler</module>
     </modules>
 
     <name>Mindcode</name>
@@ -44,3 +46,4 @@
         </plugins>
     </build>
 </project>
+

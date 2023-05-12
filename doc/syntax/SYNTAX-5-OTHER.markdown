@@ -84,30 +84,30 @@ It is possible to set the level of individual optimization tasks. Every optimiza
 and this name can be used in the compiler directive like this:
 
 ```
-#set deadCodeElimination = aggressive
+#set dead-code-elimination = aggressive
 ```
 
 Not all optimizations support the `aggressive` level. For those the level `aggressive` is the same as `basic`.
 The complete list of available optimizations, including the option name for setting the level of given optimization
 and availability of the aggressive optimization level is:
 
-| Optimization                                                    | Option name                 | Aggressive |
-|-----------------------------------------------------------------|-----------------------------|:----------:|
-| [Jump normalization](#jump-normalization)                       | jumpNormalization           |     N      |
-| [Dead code elimination](#dead-code-elimination)                 | deadCodeElimination         |     Y      |
-| [Single step elimination](#single-step-elimination)             | singleStepElimination       |     N      |
-| [Temporary inputs elimination](#temporary-inputs-elimination)   | inputTempElimination        |     N      |
-| [Temporary outputs elimination](#temporary-outputs-elimination) | outputTempElimination       |     N      |
-| [Expression optimization](#expression-optimization)             | expressionOptimization      |     N      |
-| [Case expression optimization](#case-expression-optimization)   | caseExpressionOptimization  |     N      |
-| [Conditional jump optimization](#conditional-jump-optimization) | conditionalsOptimization    |     N      |
-| [Jump straightening](#jump-straightening)                       | jumpStraightening           |     N      |
-| [Jump threading](#jump-threading)                               | jumpThreading               |     Y      |
-| [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessibleCodeElimination |     Y      |
-| [Stack optimization](#stack-optimization)                       | stackOptimization           |     N      |
-| [Function call optimization](#function-call-optimization)       | functionCallOptimization    |     N      |
-| [Return value optimization](#return-value-optimization)         | returnValueOptimization     |     N      |
-| [Print merging](#print-merging)                                 | printMerging                |     Y      |
+| Optimization                                                    | Option name                   | Aggressive |
+|-----------------------------------------------------------------|-------------------------------|:----------:|
+| [Jump normalization](#jump-normalization)                       | jump-normalization            |     N      |
+| [Dead code elimination](#dead-code-elimination)                 | dead-code-elimination         |     Y      |
+| [Single step elimination](#single-step-elimination)             | single-step-elimination       |     N      |
+| [Temporary inputs elimination](#temporary-inputs-elimination)   | input-temp-elimination        |     N      |
+| [Temporary outputs elimination](#temporary-outputs-elimination) | output-temp-elimination       |     N      |
+| [Expression optimization](#expression-optimization)             | expression-optimization       |     N      |
+| [Case expression optimization](#case-expression-optimization)   | case-expression-optimization  |     N      |
+| [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization     |     N      |
+| [Jump straightening](#jump-straightening)                       | jump-straightening            |     N      |
+| [Jump threading](#jump-threading)                               | jump-threading                |     Y      |
+| [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessible-code-elimination |     Y      |
+| [Stack optimization](#stack-optimization)                       | stack-optimization            |     N      |
+| [Function call optimization](#function-call-optimization)       | function-call-optimization    |     N      |
+| [Return value optimization](#return-value-optimization)         | return-value-optimization     |     N      |
+| [Print merging](#print-merging)                                 | print-merging                 |     Y      |
 
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
 deactivating it might allow you to use Mindcode until a fix is available. Partially activated optimizations
@@ -419,4 +419,4 @@ into Mindustry processors even if they're longer than what the Mindustry GUI all
 
 ---
 
-[« Previous: Functions](SYNTAX-4-FUNCTIONS.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks »](SYNTAX-6-TIPS-N-TRICKS.markdown)
+[« Previous: Functions](SYNTAX-4-FUNCTIONS.markdown) &nbsp; | &nbsp; [Next: Schemacode »](SCHEMACODE.markdown)

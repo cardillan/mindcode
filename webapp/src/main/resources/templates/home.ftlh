@@ -1,13 +1,11 @@
 <#-- @ftlvariable name="model" type="info.teksol.mindcode.webapp.HomePageData" -->
 <#import "common.ftlh" as com>
 <@com.header/>
-<@com.h1>
-    Mindcode: a Mindustry Logic high-level language
-</@com.h1>
+<@com.navigation selection="mindcode"/>
 
-<p class="my-2 text-lg"><a href="#">Mindustry</a> is a tower-defense type of game, now with added Logic.
+<p class="my-2 text-lg"><a href="https://mindustrygame.github.io/">Mindustry</a> is a tower-defense type of game, now with added Logic.
  Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
-<p class="my-2 text-lg">Mindcode is a high-level language that compiles down to Mindustry Logic.
+<p class="my-2 text-lg"><strong>Mindcode</strong> is a high-level language that compiles down to Mindustry Logic.
  Mindcode includes higher-level constructs, such as expressions, user-defined functions, control statements, or "direct" memory access.<p>
 <#if model.sample != "">
     <p class="my-2 text-lg">Mindcode now comes with <strong>Mindustry Logic 7 support</strong>
@@ -55,11 +53,11 @@
                     </label>
                 </div>
                 <div style="margin-top:1cm;text-align:center;">
-                    <p>
+                    <nav>
                         <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX.markdown">Mindcode syntax</a>
                         | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/README.markdown">Readme</a>
                         | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown">Changelog</a>
-                    </p>
+                    </nav>
                     <p>Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode">project page</a>.<p>
                 </div>
             </div>

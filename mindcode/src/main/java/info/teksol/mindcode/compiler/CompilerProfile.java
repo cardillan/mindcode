@@ -5,10 +5,15 @@ import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Holds parameters pertaining to both Mindustry Compiler and Schematics Builder in one place.
+ */
 public class CompilerProfile {
     private final Map<Optimization, OptimizationLevel> levels;
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
@@ -17,6 +22,11 @@ public class CompilerProfile {
     private boolean printFinalCode = false;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
+    private boolean printStackTrace = true;
+
+    // Schematics Builder
+
+    private List<String> additionalTags = List.of();
 
     private CompilerProfile(OptimizationLevel level) {
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
@@ -103,5 +113,21 @@ public class CompilerProfile {
 
     public void setDebugLevel(int debugLevel) {
         this.debugLevel = debugLevel;
+    }
+
+    public boolean isPrintStackTrace() {
+        return printStackTrace;
+    }
+
+    public void setPrintStackTrace(boolean printStackTrace) {
+        this.printStackTrace = printStackTrace;
+    }
+
+    public List<String> getAdditionalTags() {
+        return additionalTags;
+    }
+
+    public void setAdditionalTags(List<String> additionalTags) {
+        this.additionalTags = Objects.requireNonNull(additionalTags);
     }
 }

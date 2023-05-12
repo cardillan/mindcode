@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler;
 
-public interface Compiler {
+public interface Compiler<T> {
 
-    CompilerOutput compile(String sourceCode);
+    CompilerOutput<T> compile(String sourceCode);
 
 }

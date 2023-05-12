@@ -5,7 +5,13 @@ import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.BaseArgument;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicParameter;
+import info.teksol.mindcode.logic.NamedParameter;
+import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.OpcodeVariant;
+import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -41,7 +47,7 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
         assertTrue(new File(".." + File.separatorChar + "README.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         List<LogicInstruction> instructions = processor.getOpcodeVariants().stream()
-                .filter(v -> !v.getOpcode().isVirtual())
+                .filter(v -> !v.opcode().isVirtual())
                 .flatMap(v -> createOpcodeSamples(processor, v).stream())
                 .collect(Collectors.toList());
 
@@ -51,7 +57,7 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
     }
 
     private List<LogicInstruction> createOpcodeSamples(InstructionProcessor processor, OpcodeVariant opcodeVariant) {
-        if (opcodeVariant.getOpcode() == Opcode.LABEL) {
+        if (opcodeVariant.opcode() == Opcode.LABEL) {
             return List.of();
         }
 
@@ -59,7 +65,7 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
         List<LogicInstruction> result = new ArrayList<>();
         List<List<String>> combinations = new ArrayList<>();
 
-        for (NamedParameter arg : opcodeVariant.getNamedParameters()) {
+        for (NamedParameter arg : opcodeVariant.namedParameters()) {
             if (arg.type() == LogicParameter.LABEL) {
                 combinations.add(List.of("0"));
             } else if (arg.type().isKeyword()) {
@@ -83,7 +89,7 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
 
-            result.add(processor.createInstruction(opcodeVariant.getOpcode(), params));
+            result.add(processor.createInstruction(opcodeVariant.opcode(), params));
         }
 
         return result;

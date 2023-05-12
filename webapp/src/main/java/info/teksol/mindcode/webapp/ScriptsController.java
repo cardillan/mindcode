@@ -4,7 +4,11 @@ import info.teksol.mindcode.compiler.CompilerOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -126,16 +130,16 @@ public class ScriptsController {
                           AND id = ?::uuid""",
                 (rs, rowNum) -> {
                     final String source = rs.getString("source");
-                    final CompilerOutput compiled = compile(source, true);
+                    final CompilerOutput<String> compiled = compile(source, true);
 
                     return new EditScriptData(
                             id,
                             rs.getString("name"),
                             source,
                             source.split("\n").length,
-                            compiled.getInstructions(),
-                            compiled.getInstructions().split("\n").length,
-                            compiled.getErrors(),
+                            compiled.output(),
+                            compiled.output().split("\n").length,
+                            compiled.errors(),
                             versionHistory
                     );
                 },

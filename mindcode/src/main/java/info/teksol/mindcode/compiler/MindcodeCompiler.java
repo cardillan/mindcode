@@ -14,14 +14,19 @@ import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.ANTLRErrorListener;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MindcodeCompiler implements Compiler {
+public class MindcodeCompiler implements Compiler<String> {
     private final CompilerProfile profile;
     private InstructionProcessor instructionProcessor;
 
@@ -33,7 +38,7 @@ public class MindcodeCompiler implements Compiler {
     }
 
     @Override
-    public CompilerOutput compile(String sourceCode) {
+    public CompilerOutput<String> compile(String sourceCode) {
         String instructions = "";
 
         try {
@@ -58,14 +63,13 @@ public class MindcodeCompiler implements Compiler {
 
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
         } catch (RuntimeException e) {
-            if (profile.getDebugLevel() > 0) {
-                // TODO: use specific command line argument to obtain stack trace
+            if (profile.isPrintStackTrace()) {
                 e.printStackTrace();
             }
-            messages.add(CompilerMessage.error(e.getMessage()));
+            messages.add(MindcodeMessage.error(e.getMessage()));
         }
 
-        return new CompilerOutput(instructions, messages);
+        return new CompilerOutput<>(instructions, messages);
     }
 
     /**
@@ -74,6 +78,7 @@ public class MindcodeCompiler implements Compiler {
     private Seq parse(String sourceCode) {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceCode));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
+        parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
         return AstNodeBuilder.generate(context);
@@ -99,7 +104,7 @@ public class MindcodeCompiler implements Compiler {
 
     private List<LogicInstruction> optimize(List<LogicInstruction> program) {
         messages.add(
-                CompilerMessage.debug(profile.getOptimizationLevels().entrySet().stream()
+                MindcodeMessage.debug(profile.getOptimizationLevels().entrySet().stream()
                         .sorted(Comparator.comparing(e -> e.getKey().getName()))
                         .map(e -> e.getKey() + ": " + e.getValue())
                         .collect(Collectors.joining(",\n    ", "Active optimizations:\n    ", "\n"))
@@ -119,7 +124,7 @@ public class MindcodeCompiler implements Compiler {
     }
 
     private void debug(String message) {
-        messages.add(CompilerMessage.debug(message));
+        messages.add(MindcodeMessage.debug(message));
     }
 
     private static class ErrorListener extends BaseErrorListener {
@@ -132,7 +137,7 @@ public class MindcodeCompiler implements Compiler {
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                 String msg, RecognitionException e) {
-            errors.add(CompilerMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
+            errors.add(MindcodeMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
         }
     }
 }

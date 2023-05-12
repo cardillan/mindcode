@@ -16,7 +16,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.time.Instant;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -47,7 +52,7 @@ public class HomeController {
                 "5-mining-drone.mnd",
                 "6-upgrade-copper-conveyors-to-titanium.mnd")
                 .map((filename) -> {
-                    try (final BufferedReader reader = new BufferedReader(new InputStreamReader(HomeController.class.getClassLoader().getResourceAsStream("samples/" + filename)))) {
+                    try (final BufferedReader reader = new BufferedReader(new InputStreamReader(HomeController.class.getClassLoader().getResourceAsStream("samples/mindcode/" + filename)))) {
                         final StringWriter out = new StringWriter();
                         reader.transferTo(out);
                         return out.toString();
@@ -114,12 +119,11 @@ public class HomeController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput result = compile(sourceCode, enableOptimization);
+        final CompilerOutput<String> result = compile(sourceCode, enableOptimization);
         final long end = System.nanoTime();
-        logger.info("performance compiled_in={}µs", TimeUnit.NANOSECONDS.toMicros(end - start));
+        logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
-        final String compiledCode = result.getInstructions();
-        final List<String> syntaxErrors = result.getErrors();
+        final String compiledCode = result.output();
         return new ModelAndView(
                 "home",
                 "model",
@@ -130,9 +134,9 @@ public class HomeController {
                         (int) sourceCode.chars().filter(ch -> ch == '\n').count(),
                         compiledCode,
                         (int) compiledCode.chars().filter(ch -> ch == '\n').count(),
-                        result.getErrors(),
-                        result.getWarnings(),
-                        result.getMessages(),
+                        result.errors(),
+                        result.warnings(),
+                        result.infos(),
                         enableOptimization)
         );
     }

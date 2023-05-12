@@ -2,13 +2,19 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
 import info.teksol.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -65,7 +71,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                                 s.getName(),
                                 s.generateSampleCall(),
                                 s.generateSampleInstruction(),
-                                s.getOpcodeVariant().getEdition(),
+                                s.getOpcodeVariant().edition(),
                                 s.getNote()
                         )
                 ),
@@ -75,7 +81,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                                 s.getName(),
                                 s.generateSecondarySampleCall(),
                                 s.generateSampleInstruction(),
-                                s.getOpcodeVariant().getEdition(),
+                                s.getOpcodeVariant().edition(),
                                 s.getNote()
                         )
                 )
@@ -131,7 +137,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
-            return getOpcodeVariant().getOpcode();
+            return getOpcodeVariant().opcode();
         }
     }
 
@@ -139,7 +145,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
-            return getOpcodeVariant().getOpcode();
+            return getOpcodeVariant().opcode();
         }
     }
 
@@ -158,7 +164,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     private Map<String, PropertyHandler> createPropertyMap() {
         Map<String, PropertyHandler> map = instructionProcessor.getOpcodeVariants().stream()
-                .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.PROP || v.getFunctionMapping() == OpcodeVariant.FunctionMapping.BOTH)
+                .filter(v -> v.functionMapping() == FunctionMapping.PROP || v.functionMapping() == FunctionMapping.BOTH)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
                 .map(this::createPropertyHandler)
                 .collect(Collectors.toMap(PropertyHandler::getName, f -> f));
@@ -172,7 +178,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private PropertyHandler createPropertyHandler(OpcodeVariant opcodeVariant) {
-        List<NamedParameter> arguments = opcodeVariant.getNamedParameters();
+        List<NamedParameter> arguments = opcodeVariant.namedParameters();
         Optional<NamedParameter> selector = arguments.stream().filter(a -> a.type().isFunctionName()).findFirst();
         final int outputs = (int) arguments.stream().map(NamedParameter::type).filter(LogicParameter::isOutput).count();
         final int results = (int) arguments.stream().map(NamedParameter::type).filter(a -> a == LogicParameter.RESULT).count();
@@ -187,7 +193,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         // Subtract one more for target
         int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0) - unused - 1;
-        String name = selector.isPresent() ? selector.get().name() : opcodeVariant.getOpcode().toString();
+        String name = selector.isPresent() ? selector.get().name() : opcodeVariant.opcode().toString();
         return new StandardPropertyHandler(name, opcodeVariant, numArgs, results > 0);
     }
 
@@ -246,7 +252,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             List<LogicArgument> ixArgs = new ArrayList<>();
             int argIndex = 0;
 
-            for (NamedParameter a : opcodeVariant.getNamedParameters()) {
+            for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type() == LogicParameter.RESULT) {
                     ixArgs.add(tmp);
                 } else if (a.type() == LogicParameter.BLOCK) {
@@ -291,7 +297,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public String generateSampleCall() {
             StringBuilder str = new StringBuilder();
-            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().getNamedParameters());
+            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
             NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == LogicParameter.RESULT);
             if (result != null) {
                 str.append(result.name()).append(" = ");
@@ -311,7 +317,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         @Override
         public String generateSecondarySampleCall() {
-            List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().getNamedParameters());
+            List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().namedParameters());
             NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == LogicParameter.BLOCK);
             CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
             if (args.size() == 1 && args.get(0).type() == LogicParameter.INPUT) {
@@ -325,7 +331,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         public LogicInstruction generateSampleInstruction() {
             AtomicInteger counter = new AtomicInteger();
             String tmpPrefix = instructionProcessor.getTempPrefix();
-            List<LogicArgument> arguments = getOpcodeVariant().getNamedParameters().stream()
+            List<LogicArgument> arguments = getOpcodeVariant().namedParameters().stream()
                     .map(a -> a.type() == LogicParameter.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
@@ -355,7 +361,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         @Override
         public String generateSampleCall() {
-            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().getNamedParameters());
+            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
             NamedParameter blockArgument = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == LogicParameter.BLOCK);
             CollectionUtils.removeFirstMatching(arguments, a -> a.type().isSelector());
             return blockArgument.name() + "." + deprecated + "(" + joinNamedArguments(arguments) + ")";
@@ -363,7 +369,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         @Override
         public String generateSecondarySampleCall() {
-            List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().getNamedParameters());
+            List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().namedParameters());
             NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == LogicParameter.BLOCK);
             CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
             if (args.size() == 1 && args.get(0).type() == LogicParameter.INPUT) {
@@ -386,7 +392,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> arguments) {
             if (!warningEmitted) {
-                messageConsumer.accept(CompilerMessage.warn(
+                messageConsumer.accept(MindcodeMessage.warn(
                         "Function '" + deprecated + "' is no longer supported in Mindustry Logic version " +
                         processorVersion + "; using '" + replacement.getName() + "' instead."));
                 warningEmitted = true;
@@ -402,7 +408,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     private Map<String, FunctionHandler> createFunctionMap() {
         Map<String, List<FunctionHandler>> functionGroups = instructionProcessor.getOpcodeVariants().stream()
-                .filter(v -> v.getFunctionMapping() == OpcodeVariant.FunctionMapping.FUNC || v.getFunctionMapping() == OpcodeVariant.FunctionMapping.BOTH)
+                .filter(v -> v.functionMapping() == FunctionMapping.FUNC || v.functionMapping() == FunctionMapping.BOTH)
                 .filter(v -> v.isAvailableIn(processorVersion, processorEdition))
                 .map(this::createFunctionHandler)
                 .collect(Collectors.groupingBy(FunctionHandler::getName));
@@ -414,7 +420,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private FunctionHandler createFunctionHandler(OpcodeVariant opcodeVariant) {
-        final Opcode opcode = opcodeVariant.getOpcode();
+        final Opcode opcode = opcodeVariant.opcode();
 
         // Handle special cases
         //noinspection EnhancedSwitchMigration
@@ -423,7 +429,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             case UBIND:     return new UbindFunctionHandler(opcode.toString(), opcodeVariant);
         }
 
-        List<NamedParameter> arguments = opcodeVariant.getNamedParameters();
+        List<NamedParameter> arguments = opcodeVariant.namedParameters();
         Optional<NamedParameter> selector = arguments.stream().filter(a -> a.type().isFunctionName()).findFirst();
         String name = functionName(opcodeVariant, selector.orElse(null));
         final int outputs = (int) arguments.stream().map(NamedParameter::type).filter(LogicParameter::isOutput).count();
@@ -458,14 +464,14 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private String functionName(OpcodeVariant opcodeVariant, NamedParameter selector) {
-        return switch (opcodeVariant.getOpcode()) {
+        return switch (opcodeVariant.opcode()) {
             case STOP   -> "stopProcessor";
-            case STATUS -> switch (opcodeVariant.getNamedParameters().get(0).name()) {
+            case STATUS -> switch (opcodeVariant.namedParameters().get(0).name()) {
                     case "true"  -> "clearStatus";
                     case "false" -> "applyStatus";
                     default      -> throw new GenerationException("Don't know function name of " + opcodeVariant);
                 };
-            default     -> selector == null ? opcodeVariant.getOpcode().toString() : selector.name();
+            default     -> selector == null ? opcodeVariant.opcode().toString() : selector.name();
         };
     }
 
@@ -543,7 +549,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         StandardFunctionHandler(String name, OpcodeVariant opcodeVariant, int minArgs, int numArgs, boolean hasResult) {
             super(name, opcodeVariant, minArgs, numArgs);
-            this.keyword = opcodeVariant.getNamedParameters().stream().filter(a -> a.type().isSelector())
+            this.keyword = opcodeVariant.namedParameters().stream().filter(a -> a.type().isSelector())
                     .map(NamedParameter::name).findFirst().orElse(null);
             this.hasResult = hasResult;
         }
@@ -565,7 +571,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             List<LogicArgument> ixArgs = new ArrayList<>();
             int argIndex = 0;
 
-            for (NamedParameter a : opcodeVariant.getNamedParameters()) {
+            for (NamedParameter a : opcodeVariant.namedParameters()) {
                 if (a.type() == LogicParameter.RESULT) {
                     ixArgs.add(tmp);
                 } else if (a.type().isSelector() && !a.type().isFunctionName()) {
@@ -607,7 +613,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public String generateSampleCall() {
             StringBuilder str = new StringBuilder();
-            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().getNamedParameters());
+            List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
             NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == LogicParameter.RESULT);
             if (result != null) {
                 str.append(result.name()).append(" = ");
@@ -628,7 +634,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         public LogicInstruction generateSampleInstruction() {
             AtomicInteger counter = new AtomicInteger();
             String tmpPrefix = instructionProcessor.getTempPrefix();
-            List<LogicArgument> arguments = getOpcodeVariant().getNamedParameters().stream()
+            List<LogicArgument> arguments = getOpcodeVariant().namedParameters().stream()
                     .map(a -> a.type() == LogicParameter.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
@@ -680,7 +686,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         @Override
         public String generateSampleCall() {
-            return getName() + "(" + joinNamedArguments(getOpcodeVariant().getNamedParameters()) + ")";
+            return getName() + "(" + joinNamedArguments(getOpcodeVariant().namedParameters()) + ")";
         }
     }
     
@@ -698,7 +704,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         @Override
         public String generateSampleCall() {
-            return "unit = " + getName() + "(" + joinNamedArguments(getOpcodeVariant().getNamedParameters()) + ")";
+            return "unit = " + getName() + "(" + joinNamedArguments(getOpcodeVariant().namedParameters()) + ")";
         }
     }
 

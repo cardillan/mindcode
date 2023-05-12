@@ -1,0 +1,52 @@
+schematic
+    name = "Healing Center"
+    description = """
+        Automatically recalls damaged Poly and Mega units for healing.
+        """
+    tag = UNIT-POLY
+    tag = UNIT-MEGA
+    tag = BLOCK-REPAIR-POINT
+    tag = BLOCK-MICRO-PROCESSOR
+
+    @power-node          at (0, 0) facing west  connected to (0, 1), (0, 2), (1, 0), (1, 1), (2, 0), (2, 1), (2, 2)
+    @repair-point        at (0, 1) facing east 
+    @repair-point        at (0, 2) facing east 
+    @repair-point        at (0, 3) facing east 
+    @power-node          at (0, 4) facing west  connected to (0, 2), (0, 3), (1, 3), (1, 4), (2, 2), (2, 3), (2, 4)
+    @repair-point        at (1, 0) facing east 
+    @repair-point        at (1, 1) facing east 
+    @micro-processor     at (1, 2) facing east  processor
+        mlog = """
+           ubind @mega
+           sensor health @unit @health
+           sensor max @unit @maxHealth
+           jump 0 equal health max
+           ucontrol move @thisx @thisy 0 0 0
+           """
+    end
+    @repair-point        at (1, 3) facing east 
+    @repair-point        at (1, 4) facing east 
+    @repair-point        at (2, 0) facing east 
+    @repair-point        at (2, 1) facing east 
+    @repair-point        at (2, 2) facing east 
+    @repair-point        at (2, 3) facing east 
+    @repair-point        at (2, 4) facing east 
+    @repair-point        at (3, 0) facing east 
+    @repair-point        at (3, 1) facing east 
+    @micro-processor     at (3, 2) facing east  processor
+        mlog = """
+           ubind @poly
+           sensor health @unit @health
+           sensor max @unit @maxHealth
+           jump 0 equal health max
+           ucontrol move @thisx @thisy 0 0 0
+           """
+    end
+    @repair-point        at (3, 3) facing east 
+    @repair-point        at (3, 4) facing east 
+    @power-node          at (4, 0) facing west  connected to (4, 1), (4, 2), (3, 0), (3, 1), (2, 0), (2, 1), (2, 2)
+    @repair-point        at (4, 1) facing east 
+    @repair-point        at (4, 2) facing east 
+    @repair-point        at (4, 3) facing east 
+    @power-node          at (4, 4) facing west  connected to (4, 3), (4, 2), (3, 4), (3, 3), (2, 4), (2, 3), (2, 2)
+end
