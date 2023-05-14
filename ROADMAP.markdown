@@ -73,35 +73,33 @@ Things being pondered on from time to time.
 ### Schematics Builder
 
 * Add all kinds of checks and validations
-  * Prevent overlapping blocks
-  * Prevent blocks outside schematic region
-  * Prevent impossible block connections
-  * Prevent non-conforming link names in processors
-  * Validate mlog code
+  * prevent overlapping blocks
+  * prevent impossible block connections
+  * validate mlog code
 * Support for color (illuminator) and unit type (unit factory) configurations
 * Automatically compute schematic dimensions and borders
   * adjusts positions if the origin is not at (0, 0)
   * allow for negative coordinates - easily add a row to the left or bottom of an existing, complex schematic
+* Schematic Analyzer
+  * finds blocks not connected to power nodes
+  * determines when the power grid in the schematic has more than one segment
+  * finds distribution blocks prone to clogging
+  * finds liquid containers being fed more than one kind of liquid
+  * determines item flow and factory production/consumption ratios
+* Automatically generate names for unnamed processor links
 * Support for iterative block placement:
   * `@block rightwards` places the block to the right of the last placed block
   * `@block upwards from label` places the block upwards from labeled blocks
   * already existing blocks (typically blocks 2x2 or bigger placed in previous row/column) are skipped
-* Automatically generate names for unnamed processor links
 * Automatically connect blocks to power nodes, possibly with optimizations
 * Automatically add tags based on categories or types of contained blocks
-  * Allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
+  * allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
 * Make decompiler assign labels to all blocks
 * Support for schematics reuse
-  * Place schematic into schematic
-  * Extend existing schematic by adding or removing content
+  * place schematic into schematic
+  * extend existing schematic by adding or removing content
 * Support for filling area with blocks (e.g. walls, conveyors or factories)
 * Support for external compilers to create code for processors.
-* Schematic Analyzer
-  * Finds blocks not connected to power nodes
-  * Determines when the power grid in the schematic has more than one segment
-  * Finds distribution blocks prone to clogging
-  * Finds liquid containers being fed more than one kind of liquid
-  * Determines item flow and factory production/consumption ratios
 
 ### User interface
 

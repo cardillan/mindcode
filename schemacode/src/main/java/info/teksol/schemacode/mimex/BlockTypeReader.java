@@ -22,7 +22,7 @@ class BlockTypeReader {
     private static final String RESOURCE_NAME = "mimex-blocks.txt";
     private final List<String> lines;
     private final List<String> header;
-    private final int name, implementation, size, hasPower, configurable, maxNodes, laserRange;
+    private final int name, implementation, size, hasPower, configurable, category, range, maxNodes;
 
     private BlockTypeReader() {
         try (InputStream input = BlockTypeReader.class.getResourceAsStream(RESOURCE_NAME)) {
@@ -36,8 +36,9 @@ class BlockTypeReader {
             size = findColumn("size");
             hasPower = findColumn("hasPower");
             configurable = findColumn("configurable");
+            category = findColumn("category");
             maxNodes = findColumn("maxNodes");
-            laserRange = findColumn("laserRange");
+            range = findColumn("range");
         } catch (IOException e) {
             throw new RuntimeException("Cannot read resource " + RESOURCE_NAME, e);
         } catch (Exception e) {
@@ -64,8 +65,9 @@ class BlockTypeReader {
                         Integer.parseInt(columns[size]),
                         Boolean.parseBoolean(columns[hasPower]),
                         Boolean.parseBoolean(columns[configurable]),
-                        Integer.parseInt(columns[maxNodes]),
-                        Float.parseFloat(columns[laserRange])));
+                        (columns[category]),
+                        Float.parseFloat(columns[range]),
+                        Integer.parseInt(columns[maxNodes])));
             }
             return list.stream().collect(Collectors.toMap(BlockType::name, t -> t));
         } catch (Exception e) {

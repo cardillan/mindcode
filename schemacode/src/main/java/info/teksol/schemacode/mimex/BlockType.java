@@ -11,8 +11,10 @@ public record BlockType(
         int size,
         boolean hasPower,
         boolean configurable,
-        int maxNodes,
-        float laserRange) {
+        String category,
+        float range,
+        int maxNodes
+        ) {
 
     private static final Map<String, BlockType> NAME_MAP = BlockTypeReader.createFromResource();
 
