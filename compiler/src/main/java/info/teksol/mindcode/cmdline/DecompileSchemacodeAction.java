@@ -1,6 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.schemacode.mindustry.SchematicsIO;
+import info.teksol.schemacode.schema.BlockOrder;
 import info.teksol.schemacode.schema.Decompiler;
 import info.teksol.schemacode.schema.Schematics;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -23,49 +24,54 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .help("Decompile a binary msch file into schema definition file.");
 
         subparser.addArgument("input")
-                .help("Mindustry schema file to be decompiled into Schema Definition File")
+                .help("Mindustry schema file to be decompiled into Schema Definition File.")
                 .type(inputFileType);
 
         subparser.addArgument("output")
-                .help("Output file to receive compiled mlog code; uses input file name with .sdf extension if not specified")
+                .help("Output file to receive compiled mlog code; uses input file name with .sdf extension if not specified.")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
         subparser.addArgument("-p", "--relative-positions")
-                .help("Use relative coordinates for block positions where possible")
+                .help("use relative coordinates for block positions where possible")
                 .dest("positions")
                 .action(Arguments.storeTrue())
                 .setDefault(false);
 
         subparser.addArgument("-P", "--absolute-positions")
-                .help("Use absolute coordinates for block positions")
+                .help("use absolute coordinates for block positions")
                 .dest("positions")
                 .action(Arguments.storeFalse())
                 .setDefault(false);
 
         subparser.addArgument("-c", "--relative-connections")
-                .help("Use relative coordinates for connections")
+                .help("use relative coordinates for connections")
                 .dest("connections")
                 .action(Arguments.storeTrue())
                 .setDefault(true);
 
         subparser.addArgument("-C", "--absolute-connections")
-                .help("Use absolute coordinates for connections")
+                .help("use absolute coordinates for connections")
                 .dest("connections")
                 .action(Arguments.storeFalse())
                 .setDefault(true);
 
         subparser.addArgument("-l", "--relative-links")
-                .help("Use relative coordinates for processor links")
+                .help("use relative coordinates for processor links")
                 .dest("links")
                 .action(Arguments.storeTrue())
                 .setDefault(false);
 
         subparser.addArgument("-L", "--absolute-links")
-                .help("Use absolute coordinates for processor links")
+                .help("use absolute coordinates for processor links")
                 .dest("links")
                 .action(Arguments.storeFalse())
                 .setDefault(false);
+
+        subparser.addArgument("-s", "--sort-order")
+                .help("specifies how to order blocks in the schema definition file")
+                .type(Arguments.caseInsensitiveEnumType(BlockOrder.class))
+                .setDefault(BlockOrder.ORIGINAL);
     }
 
     @Override
@@ -79,6 +85,7 @@ public class DecompileSchemacodeAction extends ActionHandler {
             decompiler.setRelativePositions(arguments.getBoolean("positions"));
             decompiler.setRelativeConnections(arguments.getBoolean("connections"));
             decompiler.setRelativeLinks(arguments.getBoolean("links"));
+            decompiler.setBlockOrder(arguments.get("sort_order"));
             String schemaDefinition = decompiler.buildCode();
 
             writeOutput(output, schemaDefinition, false);

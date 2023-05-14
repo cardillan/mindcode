@@ -71,10 +71,10 @@ public class BlockPositionResolver {
     }
 
     private record RelativeBlockPosition(int index, BlockType blockType, String reference, Position position) {
-        public RelativeBlockPosition(int index, AstBlock astBlock, String lastBLock) {
+        public RelativeBlockPosition(int index, AstBlock astBlock, String lastBlock) {
             this(index, BlockType.forName(astBlock.type()),
                     astBlock.position().relative()
-                            ? astBlock.position().getRelativeTo() == null ? lastBLock : astBlock.position().getRelativeTo()
+                            ? astBlock.position().getRelativeTo() == null ? lastBlock : astBlock.position().getRelativeTo()
                             : null,
                     astBlock.position().coordinates());
         }

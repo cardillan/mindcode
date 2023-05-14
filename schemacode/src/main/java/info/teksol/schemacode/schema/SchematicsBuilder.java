@@ -109,6 +109,17 @@ public class SchematicsBuilder {
         // Add all icon constants
         Icons.getIcons().forEach((k, v) -> constants.put(k, v.format()));
 
+        Map<String, Long> labelCounts = astSchematics.blocks().stream()
+                .filter(b -> b.labels() != null && !b.labels().isEmpty())
+                .flatMap(b -> b.labels().stream())
+                .collect(Collectors.groupingBy(l -> l, Collectors.counting()));
+
+        labelCounts.entrySet().stream()
+                .filter(e -> e.getValue() > 1)
+                .forEachOrdered(c -> messageListener.accept(
+                        SchemacodeMessage.error("Multiple definitions of block label '" + c.getKey() + "'.")
+                ));
+
         // Here are absolute positions of all blocks, stored as "#" + index
         // Labeled blocks are additionally stored under all their labels
         BlockPositionResolver positionResolver = new BlockPositionResolver(messageListener);
@@ -118,8 +129,9 @@ public class SchematicsBuilder {
         Map<Position, List<BlockPosition>> byPosition = blockPositions.stream().collect(Collectors.groupingBy(BlockPosition::position));
         List<Position> collisions = byPosition.values().stream().filter(l -> l.size() > 1).map(l -> l.get(0).position()).toList();
         if (!collisions.isEmpty()) {
-            collisions.forEach(c -> messageListener.accept(SchemacodeMessage.error("Multiple blocks at position "
-                                                                                   + c.toStringAbsolute() + ".")));
+            collisions.forEach(c -> messageListener.accept(
+                    SchemacodeMessage.error("Multiple blocks at position " + c.toStringAbsolute() + ".")
+            ));
             return null;
         }
 

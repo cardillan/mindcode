@@ -122,6 +122,17 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     }
 
     @Test
+    void refusesReusedBlockLabels() {
+        buildSchematicsExpectingMessage("""
+                        schematic
+                            switch1: @switch at (0, 0)
+                            switch1: @switch at (1, 0)
+                        end
+                        """,
+                "Multiple definitions of block label 'switch1'.");
+    }
+
+    @Test
     void refusesCircularPositionDefinition() {
         buildSchematicsExpectingMessage("""
                         schematic

@@ -4,6 +4,7 @@ schematic
         Displays all Mindustry properties of a linked block.
         Usage: link a block to the processor, press switch for next page.
         """
+    tag = "Schematic Builder"
     tag = BLOCK-MICRO-PROCESSOR
 
 switch1:

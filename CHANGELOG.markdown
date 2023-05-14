@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* New command line option for Schematics Decompiler to specify order in which blocks are written to the schema 
+  definition file.
+
+### Fixed
+
+* Fixed handling of block label reuse in schemacode. Reusing the same label for multiple blocks now causes an error. 
+
 ## 2023-05-13
 
 ### Added

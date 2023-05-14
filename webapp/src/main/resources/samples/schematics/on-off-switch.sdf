@@ -5,6 +5,7 @@ schematic
 
         Usage: link blocks to be controlled, use switch to enable/disable them.
         """
+    tag = "Schematic Builder"
     tag = BLOCK-MICRO-PROCESSOR
 
 switch1:

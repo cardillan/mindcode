@@ -14,8 +14,9 @@ schematic
         devices are activated when the level is high and deactivated when it is low.
         Level is measured as a percentage of total capacity filled by materials.
         """
-
+    tag = "Schematic Builder"
     tag = BLOCK-MICRO-PROCESSOR
+
 message1:
     @message             at ( 0,  0)
     @micro-processor     at ( 1,  0) processor
@@ -51,7 +52,7 @@ mindcode_source = """
                     SENSOR = @totalItems
                     MAXIMUM = @itemCapacity
                     START = n + 1
-                when @liquid-tank, @liquid-container
+                when @liquid-tank, @liquid-container, @liquid-router
                     CONTAINER = block
                     SENSOR = @totalLiquids
                     MAXIMUM = @liquidCapacity

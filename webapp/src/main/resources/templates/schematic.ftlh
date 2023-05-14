@@ -11,11 +11,12 @@
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">
         <ul class="flex space-around">
-            <li><a href="?s=detector"               class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "detector"             >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Property detector</a>
-            <li><a href="?s=healing-center"         class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "healing-center"       >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Healing center</a>
-            <li><a href="?s=on-off-switch"          class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "on-off-switch"        >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">On/off switch</a>
+            <li><a href="?s=detector"               class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "detector"             >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Property Detector</a>
+            <li><a href="?s=healing-center"         class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "healing-center"       >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Healing Center</a>
+            <li><a href="?s=on-off-switch"          class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "on-off-switch"        >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">On/off Switch</a>
             <li><a href="?s=regulator"              class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "regulator"            >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Regulator</a>
             <li><a href="?s=worker-recall-station"  class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "worker-recall-station">font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Unit Recall Station</a>
+            <li><a href="?s=scrap-to-metaglass-2"   class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "scrap-to-metaglass-2" >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Scrap to Metaglass</a>
         </ul>
     </nav>
 </#if>

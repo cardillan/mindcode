@@ -1,0 +1,82 @@
+schematic
+    name = "Scrap To Metaglass 2"
+    description = """
+        Creates metaglass from scrap. Typically utilizes the kiln fully,
+        albeit sometimes not enough lead may be produced by separators.
+        While the scrap consumption fluctuates, about 11.5 scrap per second is consumed on average.
+        First output produces 2 metaglass per second, second output produces copper, titanium and graphite
+        at a variable rate.
+        Sand or lead is never produced by the factory.
+        """
+    tag = "Schematic Builder"
+    tag = ITEM-METAGLASS
+
+    @bridge-conveyor     at (0, 0) facing south connected to +(3, 0)
+    @separator           at (1, 0) facing south
+conveyor1:
+    @bridge-conveyor     at (3, 0) facing east  connected to +(4, 0)
+separator1:
+    @separator           at (4, 0) facing east 
+    @bridge-conveyor     at (6, 0) facing east  connected to +(1, 0)
+    @bridge-conveyor     at (7, 0) facing west  connected to +(257, 260)
+    @inverted-sorter     at (8, 0) facing west  item @lead
+    @titanium-conveyor   at (9, 0) facing east 
+    @liquid-router       at (3, 1) facing north
+    @power-node          at (6, 1) facing south connected to +(-1, 1), +(1, 2), +(-2, 2), +(-2, 3), +(-5, 1), +(-5, 3), -(5, 1)
+kiln1:
+    @kiln                at (7, 1) facing east 
+    @bridge-conveyor     at (0, 2) facing south connected to -(0, 2)
+    @separator           at (1, 2) facing north
+    @liquid-router       at (3, 2) facing north
+router1:
+    @liquid-router       at (4, 2) facing north
+    @melter              at (5, 2) facing north
+    @pulverizer          at (6, 2) facing east 
+    @titanium-conveyor   at (9, 2) facing east 
+    @bridge-conduit      at (3, 3) facing north connected to +(0, 2)
+melter1:
+    @melter              at (4, 3) facing north
+    @overflow-gate       at (5, 3) facing north
+    @plastanium-conveyor at (6, 3) facing south
+pulverizer1:
+    @pulverizer          at (7, 3) facing east 
+    @separator           at (1, 4) facing north
+    @bridge-conveyor     at (3, 4) facing west  connected to -(0, 4)
+    @separator           at (4, 4) facing east 
+    @plastanium-conveyor at (6, 4) facing south
+    @plastanium-conveyor at (7, 4) facing west 
+    @plastanium-conveyor at (8, 4) facing west 
+    @item-source         at (9, 4) facing west  item @scrap
+    @bridge-conduit      at (3, 5) facing north connected to +(142, 418)
+    @micro-processor     at (6, 5) facing east  processor
+        links * end
+        mindcode = program
+    end
+message1:
+    @message             at (7, 5) facing east
+end
+
+program = """
+    liquid = floor(router1.totalLiquids)
+    if liquid < 12
+        melter1.enabled = true
+    elsif liquid > 16
+        melter1.enabled = false
+    end
+    sand = kiln1.sand
+    if sand < 6
+        pulverizer1.enabled = true
+    elsif sand >= 10
+        pulverizer1.enabled = false
+    end
+    items = conveyor1.totalItems
+    if items < 5
+        separator1.enabled = true
+    elsif items > 8
+        separator1.enabled = false
+    end
+    printf("$LIQUID-SLAG $liquid\n")
+    printf("$ITEM-SAND $sand\n")
+    printf("$BLOCK-BRIDGE-CONVEYOR $items")
+    printflush(message1)
+    """

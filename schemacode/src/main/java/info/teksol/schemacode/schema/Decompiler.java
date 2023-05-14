@@ -15,6 +15,7 @@ import info.teksol.schemacode.mindustry.Liquid;
 import info.teksol.schemacode.mindustry.Position;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +27,7 @@ public class Decompiler {
     private boolean relativeConnections = true;
     private boolean relativeLinks = false;
     private final boolean orderedLinks = true;
+    private BlockOrder blockOrder = BlockOrder.ORIGINAL;
 
     private final StringBuilder sbr = new StringBuilder();
     private int indent = 0;
@@ -58,6 +60,14 @@ public class Decompiler {
 
     public void setRelativeLinks(boolean relativeLinks) {
         this.relativeLinks = relativeLinks;
+    }
+
+    public BlockOrder getBlockOrder() {
+        return blockOrder;
+    }
+
+    public void setBlockOrder(BlockOrder blockOrder) {
+        this.blockOrder = blockOrder;
     }
 
     public Decompiler(Schematics schematics) {
@@ -99,21 +109,26 @@ public class Decompiler {
         sbr.append("schematic");
         indentInc();
         nl().append("name = \"").append(schematics.name()).append('"');
-        nl().append("description = \"\"\"");
-        indentInc();
-        nl().append(schematics.description().replaceAll("\n", strIndent)).append("\"\"\"");
-        indentDec();
+        if (!schematics.description().isBlank()) {
+            nl().append("description = \"\"\"");
+            indentInc();
+            nl().append(schematics.description().replaceAll("\n", strIndent)).append("\"\"\"");
+            indentDec();
+        }
 
         schematics.labels().stream()
                 .mapMulti(this::extractLabelsAndIcons)
+                .filter(t -> !t.isBlank())
                 .distinct()
-                .forEach(l -> nl().append("tag = ").append(Icons.decodeIcon(l)));
+                .forEach(t -> nl().append("tag = ").append(Icons.decodeIcon(t)));
 
-        //nl().append("dimensions = (").append(schematics.width()).append(", ").append(schematics.height()).append(')');
         sbr.append('\n');
 
-        schematics.blocks().stream()//.sorted(Comparator.comparing(Block::y).thenComparing(Block::x))
-                .forEach(this::outputBlock);
+        (switch (blockOrder) {
+            case ORIGINAL   -> schematics.blocks().stream();
+            case HORIZONTAL -> schematics.blocks().stream().sorted(Comparator.comparing(Block::y).thenComparing(Block::x));
+            case VERTICAL   -> schematics.blocks().stream().sorted(Comparator.comparing(Block::x).thenComparing(Block::y));
+        }).forEach(this::outputBlock);
 
         indentDec();
         nl().append("end");

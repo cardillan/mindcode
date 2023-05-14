@@ -5,6 +5,9 @@ schematic
         or player are recalled towards the microprocessor. Use to move units away when they're in the way,
         or to call them back from afar.
         """
+    tag = "Schematic Builder"
+    tag = UNIT-POLY
+    tag = UNIT-MEGA
     tag = BLOCK-MICRO-PROCESSOR
 
 switch1:

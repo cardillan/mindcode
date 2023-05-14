@@ -39,7 +39,8 @@ public class SchematicsController {
                 "healing-center",
                 "on-off-switch",
                 "regulator",
-                "worker-recall-station"
+                "worker-recall-station",
+                "scrap-to-metaglass-2"
         );
 
         final List<String> sources = sampleNames.stream()

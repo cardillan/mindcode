@@ -3,6 +3,7 @@ schematic
     description = """
         Automatically recalls damaged Poly and Mega units for healing.
         """
+    tag = "Schematic Builder"
     tag = UNIT-POLY
     tag = UNIT-MEGA
     tag = BLOCK-REPAIR-POINT
