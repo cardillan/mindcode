@@ -23,6 +23,8 @@ Possible values for this option are:
 * `ML6`: compile for Mindcode Logic version 6
 * `ML7S`: compile for Mindcode Logic version 7 standard processors
 * `ML7W`: compile for Mindcode Logic version 7 world processor
+* `ML7AS`: compile for Mindcode Logic version 7 (revision A) standard processors
+* `ML7AW`: compile for Mindcode Logic version 7 (revision A) world processor
 
 ## Option `optimization`
 

@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+* Added language target `7A`, i.e. Mindcode Logic version 7, revision A. Uses the same instruction set as `7`, except  
+  the `getBlock` and `ulocate` functions are modified to return the located block/building as the return value.
+  See [`getBlock`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol),
+  [`ulocate`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ulocate). Target `7` is still default both in webapp 
+  and in the command line tool, so the change doesn't break existing code.
 * Added command line option for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
   to specify order in which blocks are written to the schema definition file.
 * Added [validation of power node connections](doc/syntax/SCHEMACODE.markdown#connecting-power-nodes). Invalid links 

@@ -4,8 +4,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-import static info.teksol.mindcode.logic.ProcessorVersion.V6;
-import static info.teksol.mindcode.logic.ProcessorVersion.V7;
+import static info.teksol.mindcode.logic.ProcessorVersion.*;
 
 public enum LogicParameter {
     /** Non-specific input parameter. Accepts literals and variables */
@@ -50,7 +49,7 @@ public enum LogicParameter {
                     "@name", "@payloadCount", "@payloadType", "@enabled", "@config"),
             specificVersion(V6,
                     "@commanded", "@configure"),
-            specificVersion(V7,
+            specificVersions(V7, V7A,
                     "@beryllium", "@tungsten", "@oxide", "@carbide",
                     "@neoplasm", "@arkycite", "@ozone", "@hydrogen", "@nitrogen", "@cyanogen",
                     "@progress", "@speed", "@color")
@@ -72,7 +71,7 @@ public enum LogicParameter {
                     "@mono", "@poly", "@mega", "@quad", "@oct",
                     "@risso", "@minke", "@bryde", "@sei", "@omura",
                     "@alpha", "@beta", "@gamma"),
-            specificVersion(V7,
+            specificVersions(V7, V7A,
                     "@retusa", "@oxynoe", "@cyerce", "@aegires", "@navanax",
                     "@stell", "@locus", "@precept", "@vanquish", "@conquer",
                     "@merui", "@cleroi", "@anthicus", "@tecta", "@collaris",
@@ -99,7 +98,7 @@ public enum LogicParameter {
                     "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
                     "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
                     "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite"),
-            specificVersion(V7,
+            specificVersions(V7, V7A,
                     "@beryllium", "@tungsten", "@oxide", "@carbide", "@fissile-matter", "@dormant-cyst")
     ),
 
@@ -145,7 +144,7 @@ public enum LogicParameter {
     ;
     
     private final int flags;
-    private final List<parameterValues> allowedValues;
+    private final List<ParameterValues> allowedValues;
 
     LogicParameter(int flags) {
         this.flags = flags;
@@ -157,7 +156,7 @@ public enum LogicParameter {
         this.allowedValues = List.of(allVersions(keywords));
     }
     
-    LogicParameter(int flags, parameterValues... keywords) {
+    LogicParameter(int flags, ParameterValues... keywords) {
         this.flags = flags;
         this.allowedValues = List.of(keywords);
     }
@@ -218,23 +217,27 @@ public enum LogicParameter {
         return (flags & (Flags.INPUT | Flags.OUTPUT | Flags.UNUSED)) == 0;
     }
 
-    public List<parameterValues> getAllowedValues() {
+    public List<ParameterValues> getAllowedValues() {
         return allowedValues;
     }
 
-    private static parameterValues allVersions(String... keywords) {
-        return new parameterValues(Set.copyOf(EnumSet.allOf(ProcessorVersion.class)), Set.of(keywords));
+    private static ParameterValues allVersions(String... keywords) {
+        return new ParameterValues(Set.copyOf(EnumSet.allOf(ProcessorVersion.class)), Set.of(keywords));
     }
 
-    private static parameterValues specificVersion(ProcessorVersion version, String... keywords) {
-        return new parameterValues(Set.of(version), Set.of(keywords));
+    private static ParameterValues specificVersion(ProcessorVersion version, String... keywords) {
+        return new ParameterValues(Set.of(version), Set.of(keywords));
     }
 
-    public static class parameterValues {
+    private static ParameterValues specificVersions(ProcessorVersion minVersion, ProcessorVersion maxVersion, String... keywords) {
+        return new ParameterValues(ProcessorVersion.matching(minVersion, maxVersion), Set.of(keywords));
+    }
+
+    public static class ParameterValues {
         public final Set<ProcessorVersion> versions;
         public final Set<String> values;
 
-        private parameterValues(Set<ProcessorVersion> versions, Set<String> keywords) {
+        private ParameterValues(Set<ProcessorVersion> versions, Set<String> keywords) {
             this.versions = versions;
             this.values = keywords;
         }

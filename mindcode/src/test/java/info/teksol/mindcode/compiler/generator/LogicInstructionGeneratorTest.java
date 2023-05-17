@@ -327,22 +327,23 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(UCONTROL, "build", "x", "y", "@titanium-conveyor", "1", "0"),
-                        createInstruction(UCONTROL, "getBlock", "x", "y", "b_type", "b_building", "b_floor"),
-                        createInstruction(OP, "equal", var(0), "b_type", "@titanium-conveyor"),
-                        createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                        createInstruction(OP, "add", var(2), "n", "1"),
-                        createInstruction(SET, "n", var(2)),
-                        createInstruction(SET, var(1), var(2)),
+                        createInstruction(UCONTROL, "getBlock", "x", "y", "b_type", var(0), "b_floor"),
+                        createInstruction(SET, "b_building", var(0)),
+                        createInstruction(OP, "equal", var(1), "b_type", "@titanium-conveyor"),
+                        createInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                        createInstruction(OP, "add", var(3), "n", "1"),
+                        createInstruction(SET, "n", var(3)),
+                        createInstruction(SET, var(2), var(3)),
                         createInstruction(JUMP, var(1001), "always"),
                         createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(1), "null"),
+                        createInstruction(SET, var(2), "null"),
                         createInstruction(LABEL, var(1001)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst("""
                                 build(x, y, @titanium-conveyor, 1, 0)
-                                getBlock(x, y, b_type, b_building, b_floor)
+                                b_building = getBlock(x, y, b_type, b_floor)
                                 if b_type == @titanium-conveyor
                                     n += 1
                                 end

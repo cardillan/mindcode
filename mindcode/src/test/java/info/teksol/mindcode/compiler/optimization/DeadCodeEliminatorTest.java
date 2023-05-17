@@ -125,11 +125,11 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
                 (Seq) translateToAst("""
                         ulocate(ore, @surge-alloy, outx, outy)
                         approach(outx, outy, 4)
-                        ulocate(building, core, ENEMY, outx, outy, outbuilding)
+                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
                         approach(outx, outy, 4)
-                        ulocate(spawn, outx, outy, outbuilding)
+                        outbuilding = ulocate(spawn, outx, outy, found)
                         approach(outx, outy, 4)
-                        ulocate(damaged, outx, outy, outbuilding)
+                        outbuilding = ulocate(damaged, outx, outy, found)
                         approach(outx, outy, 4)
                         """
                 )
@@ -139,11 +139,11 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
                 List.of(
                         createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
                         createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(2), "outbuilding"),
+                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(2)),
                         createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", var(3), "outbuilding"),
+                        createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", "found", var(3)),
                         createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", var(4), "outbuilding"),
+                        createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", "found", var(4)),
                         createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
                         createInstruction(END)
                 ),
@@ -194,17 +194,17 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     void preventsEliminationOfPartiallyUsedUlocate() {
         generateInto(pipeline,
                 (Seq) translateToAst("""
-                        found = ulocate(building, core, ENEMY, outx, outy, outbuilding)
-                        print(found)
+                        outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
+                        print(outbuilding)
                         """
                 )
         );
 
         assertLogicInstructionsMatch(
                 List.of(
-                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(0), "outbuilding"),
-                        createInstruction(SET, "found", var(0)),
-                        createInstruction(PRINT, "found"),
+                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(0)),
+                        createInstruction(SET, "outbuilding", var(0)),
+                        createInstruction(PRINT, "outbuilding"),
                         createInstruction(END)
                 ),
                 terminus.getResult()

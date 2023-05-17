@@ -50,6 +50,9 @@ public class DirectiveProcessor {
             case "ML7", "ML7S" ->
                            profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
             case "ML7W" -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
+            case "ML7A", "ML7AS" ->
+                           profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.STANDARD_PROCESSOR);
+            case "ML7AW"-> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.WORLD_PROCESSOR);
             default     -> throw new InvalidCompilerDirectiveException("Invalid value '" + target + "' of compiler directive 'target'");
         }
     }

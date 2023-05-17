@@ -15,8 +15,9 @@ import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,16 +35,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class InstructionSamplesTest extends AbstractGeneratorTest {
 
     @Test
-    void createInstructionSamplesForV6() throws FileNotFoundException {
+    void createInstructionSamplesForV6() throws IOException {
         createInstructionSamples(ProcessorVersion.V6);
     }
 
     @Test
-    void createInstructionSamplesForV7() throws FileNotFoundException {
+    void createInstructionSamplesForV7() throws IOException {
         createInstructionSamples(ProcessorVersion.V7);
     }
 
-    private void createInstructionSamples(ProcessorVersion version) throws FileNotFoundException {
+    @Test
+    void createInstructionSamplesForV7A() throws IOException {
+        createInstructionSamples(ProcessorVersion.V7A);
+    }
+
+    private void createInstructionSamples(ProcessorVersion version) throws IOException {
         assertTrue(new File(".." + File.separatorChar + "README.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         List<LogicInstruction> instructions = processor.getOpcodeVariants().stream()
@@ -51,7 +57,9 @@ public class InstructionSamplesTest extends AbstractGeneratorTest {
                 .flatMap(v -> createOpcodeSamples(processor, v).stream())
                 .collect(Collectors.toList());
 
-        try (final PrintWriter w = new PrintWriter(".." + File.separatorChar + "Instruction_Samples_" + version + ".txt")) {
+        File file = new File(".." + File.separatorChar + "Instruction_Samples_" + version + ".txt");
+        System.out.println(file.getAbsolutePath());
+        try (final PrintWriter w = new PrintWriter(file, StandardCharsets.UTF_8)) {
             w.print(LogicInstructionPrinter.toString(processor, instructions));
         }
     }

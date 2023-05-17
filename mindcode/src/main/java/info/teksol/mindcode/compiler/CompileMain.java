@@ -123,6 +123,8 @@ public class CompileMain {
             case "6"        -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
             case "7", "7S"  -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR);
             case "7W"       -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
+            case "7A", "7AS"-> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.STANDARD_PROCESSOR);
+            case "7AW"      -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.WORLD_PROCESSOR);
             default         -> showHelp(2);
         }
     }

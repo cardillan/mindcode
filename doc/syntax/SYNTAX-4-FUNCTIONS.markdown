@@ -17,12 +17,20 @@ Mindcode currently supports targeting Mindustry versions 6 and 7. Web applicatio
 while command-line version of the compiler allows to select version 6 for better backwards compatibility.
 The differences are minuscule, though, most of the code generated for version 7 will run on version 6 as well.
 
+A specific `7A` target was added to Mindcode, where the `getBlock` and `ulocate` functions return the building that 
+was found at given coordinates or located using the criteria. This update makes the most occurring use case, where the 
+located building is the only used output of the function, a natural way to use the function.
+
+At this point, `7` is still the default target for both command line tool and web application. `7A` will become the 
+default in the future, or in higher Mindcode versions.  
+
 All supported functions and their respective Mindustry instruction counterparts can be found in the function reference.
 Please note that the reference serves just to document all existing functions and the way they are compiled to Mindustry Logic,
 but it does not aim to describe the behavior of the functions/instructions.
 
 * [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
 * [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
+* [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
 
 ## Instruction parameters
 

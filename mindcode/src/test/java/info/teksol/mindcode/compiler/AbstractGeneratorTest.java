@@ -27,7 +27,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected final List<CompilerMessage> messages = new ArrayList<>();
 
     protected InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(
-            messages::add, ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
+            messages::add, ProcessorVersion.V7A, ProcessorEdition.WORLD_PROCESSOR);
 
     protected final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
     private final Set<String> registered = new HashSet<>();

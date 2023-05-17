@@ -29,14 +29,14 @@ and Mindcode) can also be injected into the schematic from external file.
 > nodes. It looks like Mindustry handles these malformed schematics gracefully - I haven't crashed the game yet. 
 > These  checks will be gradually added in future releases. 
 
-## Whitespace and comments
+# Whitespace and comments
 
 All tokes in Schemacode are separated by whitespace. End of line characters have no special meaning (except in text 
 blocks, where they're preserved). There's no character (such as `;`) separating commands in Schemacode.
 
 Schemacode supports line comments using the `//` characters: everything after `//` is ignored.
 
-## Schemacode file structure
+# Schemacode file structure
 
 On the topmost level, the Schemacode source may contain two kinds of definitions:
 
@@ -46,7 +46,7 @@ On the topmost level, the Schemacode source may contain two kinds of definitions
 The Schemacode source must contain exactly one schematic definition, and zero or more string value definitions, in 
 any order.
 
-## String value definition
+# String value definition
 
 The string value definition has the following form:
 
@@ -78,7 +78,7 @@ defined as text blocks marked by triple single quotes (and vice versa).
 
 Text blocks indents are removed when interpreting the value of the literal. 
 
-## Schematic definition
+# Schematic definition
 
 The schematic definition code has the following form:
 
@@ -93,7 +93,7 @@ end
 where definition is either an attribute definition, or a block definition, in any order. By convention the attribute 
 definitions should come first. 
 
-## Attribute definition
+# Attribute definition
 
 Defines various attributes of the schematic. The syntax of attribute definition is:
 
@@ -116,7 +116,7 @@ The following attributes are recognized:
   [Icons](SYNTAX-1-VARIABLES.markdown#built-in-icons)). `tag` attribute can be specified more than once; all 
   specified tags are attached to the schematics.  
   
-## Block definition
+# Block definition
 
 Block definition specifies the type and configuration of a block placed at certain coordinates within the schematic. 
 The syntax of block definition is:
@@ -125,7 +125,7 @@ The syntax of block definition is:
 [labels] <block-type> at <block-position> [facing <direction>] [configuration]
 ```
 
-### Labels
+## Labels
 
 A block can be assigned one or more labels. Labels are identifiers, separated by commas and followed by a colon, e.g.
 
@@ -137,7 +137,7 @@ creates a memory cell at coordinates (3, 5) and assigns labels `cell1` and `cell
 
 Labels are useful for creating references to labeled blocks.
 
-### Block type
+## Block type
 
 To specify a block type, Mindustry built-in block type must be specified, including the `@` sign at the beginning,
 for example `@switch`, `@micro-processor` or `@battery-large`. Only built-in block types are supported at this 
@@ -444,7 +444,7 @@ All supported block types are listed below.
 
 </details>
 
-### Block position
+## Block position
 
 Block position can be specified as relative or absolute. The first block defined by the schematic must use absolute 
 position, but all subsequent blocks can use absolute or relative positions. Relative position always relates to the 
@@ -491,7 +491,7 @@ coordinates. This makes it quite natural to design schematics starting in the lo
 Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layout, it is 
 easier to create the schematic in Mindustry, decompile to Schemacode definition and modify the resulting file.   
 
-### Block orientation
+## Block orientation
 
 Each block in schematic has an orientation, although specific orientation affects only some types of blocks (such as 
 conveyors or unit factories). Orientation can take four values - east, west, north or south - and is specified using 
@@ -506,7 +506,7 @@ e.g. `@conveyor at (2, 4) facing west`.
 The cardinal directions are related to the schematic being defined, i.e. conveyor facing east is moving items from 
 left to right.
 
-### Block configuration
+## Block configuration
 
 Some blocks are stored with specific configurations: connection for bridges or power nodes, item type for unloaders,
 text for messages or links and code for processors. Schemacode supports the following types of configuration:
@@ -521,7 +521,7 @@ text for messages or links and code for processors. Schemacode supports the foll
 * Virtual: a specific configuration marking blocks that aren't part of the schematic, but can be used as link 
   targets. The keyword is accepted by Schematics Builder, but has no meaning at the moment.  
 
-### Boolean configuration
+## Boolean configuration
 
 Boolean configuration is specified as `enabled` or `disabled` for the values of true/false or opened/closed:
 
@@ -535,7 +535,7 @@ The following block types can have boolean configuration specified:
 * `@door-large`
 * `@switch`
 
-### Connection configuration
+## Connection configuration
 
 Connection configuration is specified as `connected to` followed by a comma separated list of absolute or relative 
 positions; relative positions are related to the block being configured. It is also possible to specify a block label:
@@ -587,10 +587,13 @@ The following block types can be connected to several blocks (the exact amount d
 * `@beam-link`
 * `@power-source`
 
-#### Connecting power nodes
+### Connecting power nodes
 
-Power node connections are validated specifically. When any of the following criteria aren't met, a compile error is 
-produced: 
+Several different blocks in Mindustry represent power nodes: `@power-node`, `@power-node-large`, `@surge-tower`,
+`@beam-link` and `@power-source`.
+
+Power node connections are processed and validated specifically. When any of the following criteria aren't met,
+a compile error is produced: 
 
 * The connection must not lead to the same block.
 * The connection must connect to a block which produces or consumes power, or to another power node. (Note: a diode 
@@ -611,9 +614,9 @@ Connecting two power nodes `N1` and `N2` is possible in any of these ways:
 * declaring connection from `N2` to `N1` only, 
 * declaring connection in both directions.
 
-In all these cases both `N1` to `N2` and `N2` to `N1` connections are written to the compiled schematic. 
+In all these cases both the `N1` to `N2` and `N2` to `N1` connections are written to the compiled schematic. 
 
-### Item configuration
+## Item configuration
 
 Item configuration is specified as `item` followed by item name (including the `@` prefix):
 
@@ -632,7 +635,7 @@ The following block types can have item configuration specified:
 * `@unit-cargo-unload-point`
 * `@item-source`
 
-### Liquid configuration
+## Liquid configuration
 
 Liquid configuration is specified as `liquid` followed by liquid name (including the `@` prefix):
 
@@ -644,7 +647,7 @@ The following block types can have liquid configuration specified:
 
 * `@liquid-source`
 
-### Text configuration
+## Text configuration
 
 Text configuration assigns a text content to blocks. It is specified as `text` followed by a string literal,
 text block literal or string value identifier:
@@ -665,7 +668,7 @@ message-text = """
         """
 ```
 
-There's no support to embed build-in icons into the messages at the moment.
+There's no support to embed built-in icons into the messages at the moment.
 
 The following block types can have text configuration specified:
 
@@ -673,7 +676,7 @@ The following block types can have text configuration specified:
 * `@reinforced-message`
 * `@world-message`
 
-### Processor configuration
+## Processor configuration
 
 Processor configuration is the most complex one. It can specify both the code embedded to the processor and 
 links to blocks in the schematics (and even outside the schematics) to the processor. The configuration is specified 
@@ -697,7 +700,7 @@ The following block types can have processor configuration specified:
 * `@hyper-processor`
 * `@world-processor`
 
-#### Processor links
+### Processor links
 
 There are several ways to specify blocks linked to the processor.
 
@@ -838,7 +841,7 @@ Link names must meet the following conditions:
 * Link names must be unique, no two linked blocks can share a link name
 * Each block can be linked at most once, it is not possible to link the same block twice under different names.
 
-#### Processor code
+### Processor code
 
 It is possible to specify either an mlog code, or a Mindcode for the processor. To specify an mlog code, use
 
@@ -936,7 +939,7 @@ read from standard input, it is evaluated from the current directory.
 > **Note**: only command line tool allows you to use code from an external file. The web application cannot access 
 > your local files, and the `file` option is therefore disabled there.  
 
-### Unsupported configurations
+## Unsupported configurations
 
 At this moment, it is not possible to specify configuration for the following blocks:
 

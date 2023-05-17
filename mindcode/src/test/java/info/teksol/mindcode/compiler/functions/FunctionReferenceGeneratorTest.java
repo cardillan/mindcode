@@ -50,6 +50,11 @@ public class FunctionReferenceGeneratorTest {
         createFunctionReference(ProcessorVersion.V7);
     }
 
+    @Test
+    void createFunctionReferenceForV7A() throws FileNotFoundException {
+        createFunctionReference(ProcessorVersion.V7A);
+    }
+
     private void createFunctionReference(ProcessorVersion version) throws FileNotFoundException {
         assertTrue(new File(SYNTAX_REL_PATH + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);

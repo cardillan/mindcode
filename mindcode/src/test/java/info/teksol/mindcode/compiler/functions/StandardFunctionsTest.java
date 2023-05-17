@@ -99,17 +99,20 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(
                 List.of(
                         createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(2), "outbuilding"),
-                        createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", var(3), "outbuilding"),
-                        createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", var(4), "outbuilding"),
+                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", var(3), var(2)),
+                        createInstruction(SET, "outbuilding", var(2)),
+                        createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", var(5), var(4)),
+                        createInstruction(SET, "outbuilding", var(4)),
+                        createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", var(7), var(6)),
+                        createInstruction(SET, "outbuilding", var(6)),
                         createInstruction(END)
                 ),
                 generateUnoptimized(
                         (Seq) translateToAst("""
                                 ulocate(ore, @surge-alloy, outx, outy)
-                                ulocate(building, core, ENEMY, outx, outy, outbuilding)
-                                ulocate(spawn, outx, outy, outbuilding)
-                                ulocate(damaged, outx, outy, outbuilding)
+                                outbuilding = ulocate(building, core, ENEMY, outx, outy)
+                                outbuilding = ulocate(spawn, outx, outy)
+                                outbuilding = ulocate(damaged, outx, outy)
                                 """
                         )
                 )
@@ -175,9 +178,9 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                         createInstruction(WAIT, "sec"),
                         createInstruction(UCONTROL, "payEnter"),
                         createInstruction(UCONTROL, "unbind"),
-                        createInstruction(UCONTROL, "getBlock", "x", "y", "type", "building", "floor"),
+                        createInstruction(UCONTROL, "getBlock", "x", "y", var(0), "building", var(1)),
+                        createInstruction(PRINT, "building"),
                         createInstruction(PRINT, "result"),
-                        createInstruction(PRINT, "type"),
                         createInstruction(END)
                 ),
                 generateAndOptimize(
@@ -191,8 +194,8 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                                 wait(sec)
                                 payEnter()
                                 unbind()
-                                getBlock(x, y, type, building, floor)
-                                print(result, type)
+                                building = getBlock(x, y)
+                                print(building, result)
                                 """
                         )
                 )

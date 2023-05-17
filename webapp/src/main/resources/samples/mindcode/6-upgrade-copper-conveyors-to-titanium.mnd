@@ -1,4 +1,6 @@
-// Initialize variables first; these can be changed in the compiled code 
+#set target = ML7A      // Using revised syntax for getBlock here
+
+// Initialize variables first; these can be changed in the compiled code
 MEMORY = cell1
 UNIT = @poly
 
@@ -110,14 +112,14 @@ end
 // If a block of type oldType is found at position,
 // replaces it with newType
 inline def replace(x, y, oldType, newType)
-    getBlock(x, y, b_type, b_building)
+    b_building = getBlock(x, y, b_type)
     
     if b_type == oldType
         build(x, y, newType, b_building.rotation, 0)
         // If the processor is too fast, we need to wait
         // for the unit to finish building the block
         do
-            getBlock(x, y, b_type, b_building)
+            getBlock(x, y, b_type)
         loop while b_type != newType
         TOTAL += 1
     end

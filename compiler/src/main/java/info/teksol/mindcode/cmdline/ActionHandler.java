@@ -52,8 +52,8 @@ abstract class ActionHandler {
         }
 
         subparser.addArgument("-t", "--target")
-                .help("selects target processor version and edition (version 6, version 7 standard processor or version 7 world processor)")
-                .choices("6", "7s", "7w")
+                .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor, version 7 rev. A with standard processor or world processor)")
+                .choices("6", "7s", "7w", "7as", "7aw")
                 .setDefault("7s");
 
         ArgumentGroup debug = subparser.addArgumentGroup("debug output options");
@@ -92,6 +92,8 @@ abstract class ActionHandler {
             case "6"    -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.S);
             case "7s"   -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.S);
             case "7w"   -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.W);
+            case "7as"  -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.S);
+            case "7aw"  -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.W);
         }
 
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
