@@ -5,6 +5,7 @@ import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.schema.Block;
+import info.teksol.schemacode.schema.BlockPositionMap;
 import info.teksol.schemacode.schema.Schematics;
 
 import java.io.DataInputStream;
@@ -215,6 +216,7 @@ public class SchematicsIO {
         };
     }
 
+    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static void writeObject(DataOutputStream s, Configuration configuration) throws IOException {
         switch (configuration) {
             case EmptyConfiguration c       -> { s.writeByte(0); }

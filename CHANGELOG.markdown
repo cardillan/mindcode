@@ -6,12 +6,17 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* New command line option for Schematics Decompiler to specify order in which blocks are written to the schema 
-  definition file.
+* Added command line option for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
+  to specify order in which blocks are written to the schema definition file.
+* Added [validation of power node connections](doc/syntax/SCHEMACODE.markdown#connecting-power-nodes). Invalid links 
+  now cause compilation errors.
+* Added support for unidirectional declaration of connections between power nodes: it is no longer necessary to 
+  declare a connection between two power nodes in both directions to have it reliably created when building the 
+  schematic.   
 
 ### Fixed
 
-* Fixed handling of block label reuse in schemacode. Reusing the same label for multiple blocks now causes an error. 
+* Fixed handling of block label reuse in schemacode. Reusing the same label for multiple blocks now causes an error.
 
 ## 2023-05-13
 

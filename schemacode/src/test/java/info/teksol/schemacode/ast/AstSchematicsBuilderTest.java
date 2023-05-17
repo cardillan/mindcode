@@ -113,7 +113,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
 
     @Test
-    public void exctractsDescription() {
+    public void extractsDescription() {
         AstDefinitions definitions = createDefinitions("""
                 schematic
                     description = '''
@@ -201,7 +201,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesRelativeDimensions() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     name = "Reactor Control"
                     dimensions = +(16, 11)
@@ -212,7 +212,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesNonRefBlock() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     conveyor at (0, 0)
                 end
@@ -288,7 +288,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void requiresPosition() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     label1: @switch facing south
                 end
@@ -343,7 +343,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesInvalidDirection() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @conveyor at ( 0,  0) facing middle
                 end
@@ -442,7 +442,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesConnectedToRelativeTo() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @power-node at (0, 0) connected to block + (1, 1)
                 end
@@ -473,7 +473,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesItemNonRef() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @sorter at (0, 0) item coal
                 end
@@ -504,7 +504,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesLiquidNonRef() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @liquid-source at (0, 0) liquid water
                 end
@@ -714,7 +714,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesProcessorVirtualLinkReference() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @micro-processor at (0, 0) processor
                         links * virtual end
@@ -933,7 +933,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesProcessorLinkPositionAbsoluteUnnamedVirtual() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @micro-processor at (0, 0) processor
                         links (1, 1) virtual end
@@ -945,7 +945,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesProcessorLinkPositionRelativeUnnamedVirtual() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @micro-processor at (0, 0) processor
                         links +(1, 1) virtual end
@@ -1178,7 +1178,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     public void refusesUnknownConfiguration() {
-        parseSchematicsExpectingMessage("""
+        parseSchematicsExpectingError("""
                 schematic
                     @switch at (0, 0) fluffyBunny
                 end

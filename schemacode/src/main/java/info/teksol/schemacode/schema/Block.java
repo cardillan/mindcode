@@ -1,6 +1,7 @@
 package info.teksol.schemacode.schema;
 
 import info.teksol.schemacode.config.Configuration;
+import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Direction;
@@ -55,5 +56,9 @@ public record Block(
 
     public Block remap(UnaryOperator<Position> mapping) {
         return new Block(labels, blockType, mapping.apply(position), direction, configuration.remap(mapping));
+    }
+
+    public Block withConnections(PositionArray connections) {
+        return new Block(labels, blockType, position, direction, connections);
     }
 }

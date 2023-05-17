@@ -2,8 +2,10 @@ package info.teksol.schemacode;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
+import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schema.Schematics;
 import org.intellij.lang.annotations.Language;
 
@@ -15,6 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractSchematicsTest {
+    public static final Position P0_0 = Position.ORIGIN;
+    public static final Position P1_0 = new Position(1, 0);
+    public static final Position P2_0 = new Position(2, 0);
+    public static final Position P3_0 = new Position(3, 0);
+
+    public static Position p(int x, int y) {
+        return new Position(x, y);
+    }
 
     /**
      * Creates a message listener that throws error at the moment error message is generated. Used in unit tests where
@@ -35,10 +45,10 @@ public abstract class AbstractSchematicsTest {
         return SchemacodeCompiler.parseSchematics(definition, messageListener("parseSchematics"));
     }
 
-    protected void parseSchematicsExpectingMessage(String definition, @Language("RegExp") String regex) {
+    protected void parseSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
         List<CompilerMessage> messages = new ArrayList<>();
         SchemacodeCompiler.parseSchematics(definition, messages::add);
-        assertRegex(regex, messages);
+        assertRegex(MessageLevel.ERROR, regex, messages);
     }
 
     protected AstDefinitions createDefinitions(String definition) {
@@ -52,16 +62,24 @@ public abstract class AbstractSchematicsTest {
         return SchemacodeCompiler.buildSchematics(definitions, compilerProfile, messageListener("buildSchematics"), null);
     }
 
-    protected void buildSchematicsExpectingMessage(String definition, @Language("RegExp") String regex) {
+    protected void buildSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
         List<CompilerMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations();
         SchemacodeCompiler.buildSchematics(definitions, compilerProfile, messages::add, null);
-        assertRegex(regex, messages);
+        assertRegex(MessageLevel.ERROR, regex, messages);
     }
 
-    private void assertRegex(String expectedRegex, List<CompilerMessage> messages) {
-        List<String> list = messages.stream().filter(CompilerMessage::isError).map(CompilerMessage::message).toList();
+    protected void buildSchematicsExpectingWarning(String definition, @Language("RegExp") String regex) {
+        List<CompilerMessage> messages = new ArrayList<>();
+        AstDefinitions definitions = createDefinitions(definition);
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations();
+        SchemacodeCompiler.buildSchematics(definitions, compilerProfile, messages::add, null);
+        assertRegex(MessageLevel.WARNING, regex, messages);
+    }
+
+    private void assertRegex(MessageLevel expectedLevel, String expectedRegex, List<CompilerMessage> messages) {
+        List<String> list = messages.stream().filter(m -> m.level() == expectedLevel).map(CompilerMessage::message).toList();
         if (list.stream().anyMatch(s -> s.matches(expectedRegex))) {
             assertTrue(true);
         } else {

@@ -228,7 +228,8 @@ debug output options:
 ## Decompile Schema action help
 
 ```
-usage: mindcode ds [-h] [-p] [-P] [-c] [-C] [-l] [-L] input [output]
+usage: mindcode ds [-h] [-p] [-P] [-c] [-C] [-l] [-L]
+                [-s {ORIGINAL,HORIZONTAL,VERTICAL}] input [output]
 
 Decompile a binary msch file into schema definition file.
 
@@ -249,6 +250,8 @@ named arguments:
                          Use absolute coordinates for connections
   -l, --relative-links   Use relative coordinates for processor links
   -L, --absolute-links   Use absolute coordinates for processor links
+  -s, --sort-order {ORIGINAL,HORIZONTAL,VERTICAL}
+                         specifies how to order blocks in the schema definition file
 ```
 
 ---

@@ -12,6 +12,10 @@ import java.util.function.UnaryOperator;
 
 public record PositionArray(List<Position> positions) implements Configuration {
 
+    public PositionArray(List<Position> positions) {
+        this.positions = positions.stream().sorted().toList();
+    }
+
     public PositionArray(Position... positions) {
         this(List.of(positions));
     }

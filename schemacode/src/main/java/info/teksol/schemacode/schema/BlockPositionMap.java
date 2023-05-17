@@ -1,7 +1,6 @@
-package info.teksol.schemacode.mindustry;
+package info.teksol.schemacode.schema;
 
-import info.teksol.schemacode.schema.Block;
-import info.teksol.schemacode.schema.Schematics;
+import info.teksol.schemacode.mindustry.Position;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +48,15 @@ public record BlockPositionMap(Map<Integer, Block> blockMap, Map<Integer, Positi
         return new BlockPositionMap(blockMap, positionMap);
     }
 
-    static BlockPositionMap mindustryToBuilder(Schematics schematics) {
+    public static BlockPositionMap forBuilder(Schematics schematics) {
+        return build(schematics,
+                Block::position,
+                b -> b.position().add(b.size() - 1),
+                Block::position
+        );
+    }
+
+    public static BlockPositionMap mindustryToBuilder(Schematics schematics) {
         return build(schematics,
                 b -> b.position().sub((b.size() - 1) / 2),
                 b -> b.position().add(b.size() / 2),
@@ -57,9 +64,9 @@ public record BlockPositionMap(Map<Integer, Block> blockMap, Map<Integer, Positi
         );
     }
 
-    static BlockPositionMap builderToMindustry(Schematics schematics) {
+    public static BlockPositionMap builderToMindustry(Schematics schematics) {
         return build(schematics,
-                b -> b.position(),
+                Block::position,
                 b -> b.position().add(b.size() - 1),
                 b -> b.position().add((b.size() - 1) / 2)
         );

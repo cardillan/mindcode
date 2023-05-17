@@ -587,6 +587,32 @@ The following block types can be connected to several blocks (the exact amount d
 * `@beam-link`
 * `@power-source`
 
+#### Connecting power nodes
+
+Power node connections are validated specifically. When any of the following criteria aren't met, a compile error is 
+produced: 
+
+* The connection must not lead to the same block.
+* The connection must connect to a block which produces or consumes power, or to another power node. (Note: a diode 
+  isn't such a block, power node cannot connect to a diode.)
+* The connection distance must not exceed the power node range. When linking two power nodes, larger of the two 
+  power node ranges is used.
+* Number of connections (including incoming connections from other power nodes) must not exceed the maximum number 
+  of connections for given type of power node.
+
+When the following situations are detected, a warning is produced and the connection is ignored:
+
+* The connection leads to an empty location.
+* The connection to the same block has already been defined.
+
+Connecting two power nodes `N1` and `N2` is possible in any of these ways:
+
+* declaring connection from `N1` to `N2` only, 
+* declaring connection from `N2` to `N1` only, 
+* declaring connection in both directions.
+
+In all these cases both `N1` to `N2` and `N2` to `N1` connections are written to the compiled schematic. 
+
 ### Item configuration
 
 Item configuration is specified as `item` followed by item name (including the `@` prefix):

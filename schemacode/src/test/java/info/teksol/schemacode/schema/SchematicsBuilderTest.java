@@ -20,13 +20,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SchematicsBuilderTest extends AbstractSchematicsTest {
-
-    public static final Position P0_0 = Position.ORIGIN;
-    public static final Position P1_0 = new Position(1, 0);
-    public static final Position P2_0 = new Position(2, 0);
-    public static final Position P3_0 = new Position(3, 0);
-
-
     @Test
     void unwrapsStringBlock() {
         String expected = """
@@ -67,7 +60,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesMissingSchematics() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         constant = "foo"
                         """,
                 "No schematic defined.");
@@ -75,7 +68,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesMultipleSchematics() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         schematic
                             name = "First"
                         end
@@ -89,7 +82,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesConstantRedefinitions() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         schematic
                             name = "Schematics"
                         end
@@ -102,7 +95,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesUndefinedConstants() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         schematic
                             name = foo
                         end
@@ -112,7 +105,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesMultipleBlocksAsPosition() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         schematic
                             @switch at (0, 0)
                             @switch at (0, 0)
@@ -123,7 +116,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesReusedBlockLabels() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         schematic
                             switch1: @switch at (0, 0)
                             switch1: @switch at (1, 0)
@@ -134,7 +127,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesCircularPositionDefinition() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         schematic
                         switch1:
                             @switch at (0, 0)
@@ -149,7 +142,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesUnknownBlockReference() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                         schematic
                         switch1:
                             @switch at (0, 0)
@@ -191,7 +184,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refuseMultipleNames() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                 schematic
                     name = "Name"
                     name = "Another"
@@ -556,14 +549,15 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     void buildsSchematicsWithNodeConnections() {
         Schematics actual = buildSchematics("""
                 schematic
-                    dimensions = (1, 1)
-                    @power-node at (0, 0) connected to (1, 0), +(2, 0), +(3, 0)
+                    @power-node at (0, 0) connected to (1, 0)
+                    @power-node at (1, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematics expected = new Schematics("", "", List.of(), 2, 1,
                 List.of(
-                        new Block(List.of(), BlockType.forName("@power-node"), P0_0, Direction.EAST, new PositionArray(P1_0, P2_0, P3_0))
+                        new Block(List.of(), BlockType.forName("@power-node"), P0_0, Direction.EAST, new PositionArray(P1_0)),
+                        new Block(List.of(), BlockType.forName("@power-node"), P1_0, Direction.EAST, new PositionArray(P0_0))
                 )
         );
 
@@ -689,7 +683,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesWrongLinkNames() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                 schematic
                     dimensions = (1, 1)
                     @micro-processor at (0, 0) processor
@@ -760,7 +754,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesUnknownBlocks() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                 schematic
                     dimensions = (1, 1)
                     @fluffyBunny at (0, 0)
@@ -771,7 +765,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void refusesWrongConfiguration() {
-        buildSchematicsExpectingMessage("""
+        buildSchematicsExpectingError("""
                 schematic
                     dimensions = (1, 1)
                     @message at (0, 0) enabled

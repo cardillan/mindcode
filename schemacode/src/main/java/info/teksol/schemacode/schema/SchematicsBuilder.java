@@ -226,15 +226,17 @@ public class SchematicsBuilder {
 
         info("Created schematic '%s' with dimensions (%d, %d).", name, dim.x(), dim.y());
 
-        return new Schematics(name, description, merged, dim.x(), dim.y(), blocks);
+        return PowerGridSolver.solve(this,
+                new Schematics(name, description, merged, dim.x(), dim.y(), blocks)
+        );
     }
 
     private Position calculateDimensions(List<Block> blocks) {
         if (blocks.isEmpty()) {
             return Position.ORIGIN;
         } else {
-            int x = blocks.stream().mapToInt(Block::xMax).max().getAsInt();
-            int y = blocks.stream().mapToInt(Block::yMax).max().getAsInt();
+            int x = blocks.stream().mapToInt(Block::xMax).max().orElse(0);
+            int y = blocks.stream().mapToInt(Block::yMax).max().orElse(0);
             return new Position(x + 1, y + 1);
         }
     }
