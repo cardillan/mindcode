@@ -17,7 +17,7 @@ public record AstConnection(AstCoordinates position, String id) implements AstCo
         if (position != null) {
             return position.evaluate(builder, lastPosition);
         } else {
-            return builder.getBlock(id).position();
+            return builder.getBlockPosition(id).position();
         }
     }
 }

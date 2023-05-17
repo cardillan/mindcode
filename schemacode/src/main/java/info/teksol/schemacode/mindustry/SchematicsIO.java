@@ -71,7 +71,7 @@ public class SchematicsIO {
     }
 
     public static void write(Schematics build, OutputStream output) throws IOException {
-        BlockPositionMap map = BlockPositionMap.builderToMindustry(build);
+        BlockPositionMap<Block> map = BlockPositionMap.builderToMindustry(m -> {}, build.blocks());
         List<Block> blocks = build.blocks().stream().map(b -> b.remap(map::translate)).toList();
         Schematics msch = new Schematics(build.name(), build.description(), build.labels(), build.width(), build.height(), blocks);
         writeMsch(msch, output);
@@ -128,14 +128,14 @@ public class SchematicsIO {
             }
 
             List<Block> blocks = new ArrayList<>();
-            for (int i = 0; i < total; i++) {
+            for (int index = 0, i = 0; i < total; i++) {
                 BlockType blockType = typeMap.get(stream.readByte());
                 Position position = Position.unpack(stream.readInt());
                 Configuration raw = ver == 0 ? mapConfig(blockType, stream.readInt(), position) : readObject(stream);
                 Direction direction = Direction.convert(stream.readByte());
                 if (!"@air".equals(blockType.name())) {
                     Configuration config = convert(blockType, position, raw);
-                    blocks.add(new Block(List.of(), blockType, position, direction, config));
+                    blocks.add(new Block(index++, List.of(), blockType, position, direction, config));
                 }
             }
 
@@ -147,7 +147,7 @@ public class SchematicsIO {
 
     public static Schematics read(InputStream input) throws IOException {
         Schematics msch = readMsch(input);
-        BlockPositionMap map = BlockPositionMap.mindustryToBuilder(msch);
+        BlockPositionMap<Block> map = BlockPositionMap.mindustryToBuilder(m -> {}, msch.blocks());
         List<Block> blocks = msch.blocks().stream().map(b -> b.remap(map::translate)).toList();
         return new Schematics(msch.name(), msch.description(), msch.labels(), msch.width(), msch.height(), blocks);
     }

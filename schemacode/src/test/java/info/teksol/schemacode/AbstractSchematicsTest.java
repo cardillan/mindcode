@@ -4,8 +4,13 @@ import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.schemacode.ast.AstDefinitions;
+import info.teksol.schemacode.config.Configuration;
+import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
+import info.teksol.schemacode.mimex.BlockType;
+import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.schema.Block;
 import info.teksol.schemacode.schema.Schematics;
 import org.intellij.lang.annotations.Language;
 
@@ -24,6 +29,21 @@ public abstract class AbstractSchematicsTest {
 
     public static Position p(int x, int y) {
         return new Position(x, y);
+    }
+
+    public static PositionArray pa(Position... positions) {
+        return new PositionArray(positions);
+    }
+
+    // Block index generator. Class is re-instantiated for each test, index always starts from zero.
+    private int index = 0;
+
+    public Block block(List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(index++, labels, BlockType.forName(blockType), position, direction, configuration);
+    }
+
+    public Block block(String blockType, Position position, Direction direction, Configuration configuration) {
+        return new Block(index++, List.of(), BlockType.forName(blockType), position, direction, configuration);
     }
 
     /**

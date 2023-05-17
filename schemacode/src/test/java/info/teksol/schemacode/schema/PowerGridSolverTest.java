@@ -1,8 +1,6 @@
 package info.teksol.schemacode.schema;
 
 import info.teksol.schemacode.AbstractSchematicsTest;
-import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import org.junit.jupiter.api.DynamicTest;
@@ -15,8 +13,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PowerGridSolverTest extends AbstractSchematicsTest {
+
     @Test
-    void warnsAboutNonexistentLinkedBLock() {
+    void warnsAboutNonexistentLinkedBlock() {
         buildSchematicsExpectingWarning("""
                 schematic
                     @power-node at (0, 0) connected to (1, 1)
@@ -66,19 +65,19 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematics expected = new Schematics("", "", List.of(), 7, 7,
                 List.of(
-                        new Block(List.of(), BlockType.forName("@power-source"), P0_0, Direction.EAST, new PositionArray(
+                        block("@power-source", P0_0, Direction.EAST, pa(
                                 p(0, 6), p(1, 6), p(2, 6), p(3, 5), p(4, 5), p(5, 3), p(5, 4), p(6, 0), p(6, 1), p(6, 2))
                         ),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(0, 6), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(1, 6), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(2, 6), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(3, 5), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(4, 5), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(5, 3), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(5, 4), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(6, 0), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(6, 1), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(6, 2), Direction.EAST, new PositionArray(P0_0))
+                        block("@power-node", p(0, 6), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(1, 6), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(2, 6), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(3, 5), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(4, 5), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(5, 3), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(5, 4), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(6, 0), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(6, 1), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(6, 2), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -109,24 +108,24 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematics expected = new Schematics("", "", List.of(), 16, 16,
                 List.of(
-                        new Block(List.of(), BlockType.forName("@power-node-large"), P0_0, Direction.EAST, new PositionArray(
+                        block("@power-node-large", P0_0, Direction.EAST, pa(
                                 p( 1, 15), p( 6, 15), p( 7, 14), p( 8, 14), p( 9, 13), p(10, 12), p(11, 12),
                                 p(12, 11), p(12, 10), p(13,  9), p(14,  8), p(14,  7), p(15,  6), p(15,  1))
                         ),
-                        new Block(List.of(), BlockType.forName("@power-node"), p( 1, 15), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p( 6, 15), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p( 7, 14), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p( 8, 14), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p( 9, 13), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(10, 12), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(11, 12), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(12, 11), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(12, 10), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(13,  9), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(14,  8), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(14,  7), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(15,  6), Direction.EAST, new PositionArray(P0_0)),
-                        new Block(List.of(), BlockType.forName("@power-node"), p(15,  1), Direction.EAST, new PositionArray(P0_0))
+                        block("@power-node", p( 1, 15), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p( 6, 15), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p( 7, 14), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p( 8, 14), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p( 9, 13), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(10, 12), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(11, 12), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(12, 11), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(12, 10), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(13,  9), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(14,  8), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(14,  7), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(15,  6), Direction.EAST, pa(P0_0)),
+                        block("@power-node", p(15,  1), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -144,8 +143,8 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematics expected = new Schematics("", "", List.of(), 31, 31,
                 List.of(
-                        new Block(List.of(), BlockType.forName("@surge-tower"), P0_0, Direction.EAST, new PositionArray(p(29, 29))),
-                        new Block(List.of(), BlockType.forName("@surge-tower"), p(29, 29), Direction.EAST, new PositionArray(P0_0))
+                        block("@surge-tower", P0_0, Direction.EAST, pa(p(29, 29))),
+                        block("@surge-tower", p(29, 29), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -163,8 +162,8 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
         Schematics expected = new Schematics("", "", List.of(), 29, 33,
                 List.of(
-                        new Block(List.of(), BlockType.forName("@surge-tower"), P0_0, Direction.EAST, new PositionArray(p(27, 31))),
-                        new Block(List.of(), BlockType.forName("@surge-tower"), p(27, 31), Direction.EAST, new PositionArray(P0_0))
+                        block("@surge-tower", P0_0, Direction.EAST, pa(p(27, 31))),
+                        block("@surge-tower", p(27, 31), Direction.EAST, pa(P0_0))
                 )
         );
 
@@ -220,7 +219,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
     }
 
     @Test
-    void warnsAboutMultiplyLinkedBLock() {
+    void warnsAboutMultiplyLinkedBlock() {
         buildSchematicsExpectingWarning("""
                 schematic
                     @power-node at (0, 0) connected to (1, 1), (1, 1)

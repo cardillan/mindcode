@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file.
   and in the command line tool, so the change doesn't break existing code.
 * Added command line option for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
   to specify order in which blocks are written to the schema definition file.
+* Added [overlapping blocks detection](doc/syntax/SCHEMACODE.markdown#block-position). Overlapping blocks now cause 
+  compilation errors.
+* Added support for [non-zero schematic origin](doc/syntax/SCHEMACODE.markdown#origin-and-dimensions-calculation).
 * Added [validation of power node connections](doc/syntax/SCHEMACODE.markdown#connecting-power-nodes). Invalid links 
   now cause compilation errors.
 * Added support for unidirectional declaration of connections between power nodes: it is no longer necessary to 

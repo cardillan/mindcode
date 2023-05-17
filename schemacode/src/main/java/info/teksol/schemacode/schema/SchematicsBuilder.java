@@ -18,7 +18,7 @@ import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Item;
 import info.teksol.schemacode.mindustry.Liquid;
 import info.teksol.schemacode.mindustry.Position;
-import info.teksol.schemacode.schema.BlockPositionResolver.BlockPosition;
+import info.teksol.schemacode.schema.BlockPositionResolver.AstBlockPosition;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -37,23 +37,26 @@ import java.util.stream.Stream;
 
 public class SchematicsBuilder {
     private final CompilerProfile compilerProfile;
-    private final AstSchematics astSchematics;
-    private final Map<String, String> constants;
-    private final Map<String, BlockPosition> blockNameMap;
-    private final Map<Position, BlockPosition> blockPositionMap;
     private final Consumer<CompilerMessage> messageListener;
+    private final AstDefinitions astDefinitions;
     private final Path basePath;
 
-    private SchematicsBuilder(CompilerProfile compilerProfile, AstSchematics astSchematics, Map<String, String> constants,
-            Map<String, BlockPosition> blockNameMap, Map<Position, BlockPosition> blockPositionMap,
-            Consumer<CompilerMessage> messageListener, Path basePath) {
+    private AstSchematics astSchematics;
+    private Map<String, String> constants;
+    private Map<String, BlockPosition> astLabelMap;
+    private BlockPositionMap<BlockPosition> astPositionMap;
+    private BlockPositionMap<Block> positionMap;
+
+    public SchematicsBuilder(CompilerProfile compilerProfile, Consumer<CompilerMessage> messageListener, AstDefinitions astDefinitions, Path basePath) {
         this.compilerProfile = compilerProfile;
-        this.astSchematics = astSchematics;
-        this.constants = constants;
-        this.blockNameMap = blockNameMap;
-        this.blockPositionMap = blockPositionMap;
         this.messageListener = messageListener;
+        this.astDefinitions = astDefinitions;
         this.basePath = basePath;
+    }
+
+    public static SchematicsBuilder create(CompilerProfile compilerProfile, AstDefinitions definitions,
+            Consumer<CompilerMessage> messageListener, Path basePath) {
+        return new SchematicsBuilder(compilerProfile, messageListener, definitions, basePath);
     }
 
     public void addMessage(CompilerMessage message) {
@@ -72,98 +75,6 @@ public class SchematicsBuilder {
         messageListener.accept(SchemacodeMessage.info(args.length == 0 ? message : message.formatted(args)));
     }
 
-    public static SchematicsBuilder create(CompilerProfile compilerProfile, AstDefinitions definitions,
-            Consumer<CompilerMessage> messageListener, Path basePath) {
-        List<AstSchematics> schematicsList = definitions.definitions().stream()
-                .filter(AstSchematics.class::isInstance)
-                .map(AstSchematics.class::cast)
-                .toList();
-
-        if (schematicsList.isEmpty()) {
-            messageListener.accept(SchemacodeMessage.error("No schematic defined."));
-            return null;
-        } else if (schematicsList.size() > 1) {
-            messageListener.accept(SchemacodeMessage.error("More than one schematic defined."));
-            return null;
-        }
-
-        AstSchematics astSchematics = schematicsList.get(0);
-
-        Map<String, List<AstStringConstant>> constantLists = definitions.definitions().stream()
-                .filter(AstStringConstant.class::isInstance)
-                .map(AstStringConstant.class::cast)
-                .collect(Collectors.groupingBy(AstStringConstant::name));
-
-        List<String> redefinition = constantLists.entrySet().stream()
-                .filter(e -> e.getValue().size() > 1).map(Map.Entry::getKey).toList();
-        if (!redefinition.isEmpty()) {
-            redefinition.forEach(id -> messageListener.accept(SchemacodeMessage.error("Identifier '" + id + "' defined more than once.")));
-            return null;
-        }
-
-        // Resolve indirections
-        Map<String, String> constants = constantLists.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> resolve(constantLists, new HashSet<>(), e.getValue().get(0), messageListener)));
-
-        // Add all icon constants
-        Icons.getIcons().forEach((k, v) -> constants.put(k, v.format()));
-
-        Map<String, Long> labelCounts = astSchematics.blocks().stream()
-                .filter(b -> b.labels() != null && !b.labels().isEmpty())
-                .flatMap(b -> b.labels().stream())
-                .collect(Collectors.groupingBy(l -> l, Collectors.counting()));
-
-        labelCounts.entrySet().stream()
-                .filter(e -> e.getValue() > 1)
-                .forEachOrdered(c -> messageListener.accept(
-                        SchemacodeMessage.error("Multiple definitions of block label '" + c.getKey() + "'.")
-                ));
-
-        // Here are absolute positions of all blocks, stored as "#" + index
-        // Labeled blocks are additionally stored under all their labels
-        BlockPositionResolver positionResolver = new BlockPositionResolver(messageListener);
-        Map<String, BlockPosition> blockNameMap = positionResolver.resolveAllBlocks(astSchematics);
-        List<BlockPosition> blockPositions = blockNameMap.values().stream().distinct().toList();
-
-        Map<Position, List<BlockPosition>> byPosition = blockPositions.stream().collect(Collectors.groupingBy(BlockPosition::position));
-        List<Position> collisions = byPosition.values().stream().filter(l -> l.size() > 1).map(l -> l.get(0).position()).toList();
-        if (!collisions.isEmpty()) {
-            collisions.forEach(c -> messageListener.accept(
-                    SchemacodeMessage.error("Multiple blocks at position " + c.toStringAbsolute() + ".")
-            ));
-            return null;
-        }
-
-        Map<Position, BlockPosition> blockPositionMap = blockPositions.stream()
-                .collect(Collectors.toMap(BlockPosition::position, b -> b));
-
-        return new SchematicsBuilder(compilerProfile, astSchematics, constants, blockNameMap, blockPositionMap,
-                messageListener, basePath);
-    }
-
-    private static String resolve(Map<String, List<AstStringConstant>> constantLists, Set<String> visited, AstStringConstant value,
-            Consumer<CompilerMessage> messageListener) {
-        return switch (value.value()) {
-            case null -> throw new SchematicsInternalError("Identifier '%s': unexpected null value.", value.name());
-            case AstStringRef ref -> {
-                if (!visited.add(ref.reference())) {
-                    messageListener.accept(SchemacodeMessage.error("Circular definition of identifier '" + ref.reference() + "'."));
-                    yield "";
-                } else if (!constantLists.containsKey(ref.reference())) {
-                    messageListener.accept(SchemacodeMessage.error("Undefined identifier '" + ref.reference() + "'."));
-                    yield "";
-                }
-
-                yield resolve(constantLists, visited, constantLists.get(ref.reference()).get(0), messageListener);
-            }
-            case AstStringBlock block -> block.getValue();
-            case AstStringLiteral lit -> lit.getValue();
-            default -> throw new SchematicsInternalError("Identifier '%s': unexpected class '%s': %s",
-                    value.name(), value.value().getClass(), value.value());
-        };
-    }
-
     public CompilerProfile getCompilerProfile() {
         return compilerProfile;
     }
@@ -177,15 +88,51 @@ public class SchematicsBuilder {
     }
 
     public Schematics buildSchematics() {
+        extractConstants();
+
+        List<AstSchematics> schematicsList = astDefinitions.definitions().stream()
+                .filter(AstSchematics.class::isInstance)
+                .map(AstSchematics.class::cast)
+                .toList();
+
+        if (schematicsList.isEmpty()) {
+            error("No schematic defined.");
+            return null;
+        } else if (schematicsList.size() > 1) {
+            error("More than one schematic defined.");
+            return null;
+        }
+
+        astSchematics = schematicsList.get(0);
+
+        Map<String, Long> labelCounts = astSchematics.blocks().stream()
+                .filter(b -> b.labels() != null && !b.labels().isEmpty())
+                .flatMap(b -> b.labels().stream())
+                .collect(Collectors.groupingBy(l -> l, Collectors.counting()));
+
+        labelCounts.entrySet().stream()
+                .filter(e -> e.getValue() > 1)
+                .forEachOrdered(c -> error("Multiple definitions of block label '%s'.", c.getKey()));
+
+        astSchematics.blocks().stream().filter(astBlock -> !BlockType.isNameValid(astBlock.type()))
+                .forEachOrdered(astBlock -> error("Unknown block type '%s'.", astBlock.type()));
+
+        List<AstBlock> astBlocks = astSchematics.blocks().stream()
+                .filter(astBlock -> BlockType.isNameValid(astBlock.type())).toList();
+
+        // Here are absolute positions of all blocks, stored as "#" + index
+        // Labeled blocks are additionally stored under all their labels
+        BlockPositionResolver positionResolver = new BlockPositionResolver(messageListener);
+        astLabelMap = positionResolver.resolveAllBlocks(astBlocks);
+        List<BlockPosition> blockPositions = astLabelMap.values().stream().distinct().toList();
+
+        astPositionMap = BlockPositionMap.forBuilder(messageListener, blockPositions);
+
         final List<Block> blocks = new ArrayList<>();
-        for (int index = 0; index < astSchematics.blocks().size(); index++) {
-            AstBlock astBlock = astSchematics.blocks().get(index);
-            BlockPosition blockPos = getBlock(index);
+        for (int index = 0; index < astBlocks.size(); index++) {
+            AstBlock astBlock = astBlocks.get(index);
+            BlockPosition blockPos = getBlockPosition(index);
             BlockType type = BlockType.forName(astBlock.type());
-            if (type == null) {
-                error("Unknown block type '%s'.", astBlock.type());
-                continue;
-            }
             Direction direction = astBlock.direction() == null
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
@@ -195,7 +142,7 @@ public class SchematicsBuilder {
                         blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
                         type.configurationType(), ConfigurationType.fromInstance(configuration));
             } else {
-                blocks.add(new Block(astBlock.labels(), type, blockPos.position(), direction,
+                blocks.add(new Block(index, astBlock.labels(), type, blockPos.position(), direction,
                         configuration.as(type.configurationType().getConfigurationClass())));
             }
         }
@@ -203,7 +150,24 @@ public class SchematicsBuilder {
         String name = getStringAttribute("name", "");
         String description = unwrap(getStringAttribute("description", ""));
 
-        Position dim = calculateDimensions(blocks);
+        List<String> labels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
+        List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(Icons::translateIcon).toList();
+        List<String> merged = Stream.concat(labels.stream(), additionalLabels.stream()).distinct().toList();
+
+        positionMap = BlockPositionMap.forBuilder(m -> {}, blocks);
+
+        Schematics schematics = new Schematics(name, description, merged, 0, 0, blocks);
+        schematics = PowerGridSolver.solve(this, schematics);
+
+        // Compensate for non-zero origin
+        Position origin = findLowerLeftCoordinate(schematics.blocks());
+        List<Block> repositioned = origin.zero() ? schematics.blocks()
+                :  schematics.blocks().stream().map(b -> b.remap(p -> p.sub(origin))).toList();
+        if (!origin.zero()) {
+            info("Schematic origin at (%d, %d) adjusted to (0, 0).", origin.x(), origin.y());
+        }
+
+        Position dim = calculateDimensions(repositioned);
         AstCoordinates sourceDim = getAttribute("dimensions", AstCoordinates.class);
         if (sourceDim != null) {
             if (sourceDim.relative()) {
@@ -215,20 +179,68 @@ public class SchematicsBuilder {
                 } else {
                     warn("Actual schematic dimensions %s are smaller than specified dimensions %s.",
                             dim.toStringAbsolute(), sourceDim.coordinates().toStringAbsolute());
-                    dim = sourceDim.coordinates();
                 }
             }
         }
 
-        List<String> labels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
-        List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(Icons::translateIcon).toList();
-        List<String> merged = Stream.concat(labels.stream(), additionalLabels.stream()).distinct().toList();
+        schematics = new Schematics(schematics.name(), schematics.description(), schematics.labels(), dim.x(), dim.y(), repositioned);
+        info("Created schematic '%s' with dimensions (%d, %d).", name, schematics.width(), schematics.height());
+        return schematics;
+    }
 
-        info("Created schematic '%s' with dimensions (%d, %d).", name, dim.x(), dim.y());
+    private void extractConstants() {
+        Map<String, List<AstStringConstant>> astConstantLists = astDefinitions.definitions().stream()
+                .filter(AstStringConstant.class::isInstance)
+                .map(AstStringConstant.class::cast)
+                .collect(Collectors.groupingBy(AstStringConstant::name));
 
-        return PowerGridSolver.solve(this,
-                new Schematics(name, description, merged, dim.x(), dim.y(), blocks)
-        );
+        List<String> redefinition = astConstantLists.entrySet().stream()
+                .filter(e -> e.getValue().size() > 1).map(Map.Entry::getKey).toList();
+        if (!redefinition.isEmpty()) {
+            redefinition.forEach(id -> error("Identifier '%s' defined more than once.", id));
+        }
+
+        Map<String, AstStringConstant> astConstants = astConstantLists.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().get(0)));
+
+        // Resolve indirections
+        constants = astConstants.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> resolveConstant(astConstants, new HashSet<>(), e.getValue())));
+
+        // Add all icon constants
+        Icons.getIcons().forEach((k, v) -> constants.put(k, v.format()));
+    }
+
+    private String resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {
+        return switch (value.value()) {
+            case null -> throw new SchematicsInternalError("Identifier '%s': unexpected null value.", value.name());
+            case AstStringRef ref -> {
+                if (!visited.add(ref.reference())) {
+                    error("Circular definition of identifier '%s'.", ref.reference());
+                    yield "";
+                } else if (!constantLists.containsKey(ref.reference())) {
+                    error("Undefined identifier '%s'.", ref.reference());
+                    yield "";
+                }
+
+                yield resolveConstant(constantLists, visited, constantLists.get(ref.reference()));
+            }
+            case AstStringBlock block -> block.getValue();
+            case AstStringLiteral lit -> lit.getValue();
+            default -> throw new SchematicsInternalError("Identifier '%s': unexpected class '%s': %s",
+                    value.name(), value.value().getClass(), value.value());
+        };
+    }
+
+    private Position findLowerLeftCoordinate(List<Block> blocks) {
+        if (blocks.isEmpty()) {
+            return Position.ORIGIN;
+        } else {
+            int x = blocks.stream().mapToInt(Block::x).min().orElse(0);
+            int y = blocks.stream().mapToInt(Block::y).min().orElse(0);
+            return new Position(x, y);
+        }
     }
 
     private Position calculateDimensions(List<Block> blocks) {
@@ -317,26 +329,35 @@ public class SchematicsBuilder {
         return result;
     }
 
-    public BlockPosition getBlock(String name) {
-        BlockPosition blockPosition = blockNameMap.get(name);
-        if (blockPosition != null) {
-            return blockPosition;
-        }
-        error("Unknown block name '%s'", name);
-        return new BlockPosition(0, BlockType.forName("@air"), Position.INVALID);
-    }
-
-    public BlockPosition getBlock(int index) {
-        return requireNonNull(blockNameMap.get("#" + index),
+    public BlockPosition getBlockPosition(int index) {
+        return requireNonNull(astLabelMap.get("#" + index),
                 () -> new SchematicsInternalError("Invalid block index %d.", index));
     }
 
-    public BlockPosition getBlock(Position position) {
-        return blockPositionMap.get(position);
+    public BlockPosition getBlockPosition(String name) {
+        BlockPosition blockPosition = astLabelMap.get(name);
+        if (blockPosition != null) {
+            return blockPosition;
+        }
+        error("Unknown block label '%s'", name);
+        return new AstBlockPosition(0, BlockType.forName("@air"), Position.INVALID);
+    }
+    public Map<String, BlockPosition> getAstLabelMap() {
+        return astLabelMap;
     }
 
-    public Map<String, BlockPosition> getBlockNameMap() {
-        return blockNameMap;
+
+    public BlockPosition getBlockPosition(Position position) {
+        return astPositionMap.at(position);
+    }
+
+    public Position getAnchor(Position position) {
+        BlockPosition anchor = getBlockPosition(position);
+        return anchor == null ? position : anchor.position();
+    }
+
+    public BlockPositionMap<Block> getPositionMap() {
+        return positionMap;
     }
 
     private static <T, E extends  Throwable> T requireNonNull(T object, Supplier<E> exception) throws E {

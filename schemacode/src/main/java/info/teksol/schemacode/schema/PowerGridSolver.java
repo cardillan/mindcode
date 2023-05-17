@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 class PowerGridSolver {
     private final SchematicsBuilder builder;
     private final Schematics input;
-    private final BlockPositionMap positionMap;
+    private final BlockPositionMap<Block> positionMap;
 
     private PowerGridSolver(SchematicsBuilder builder, Schematics schematics) {
         this.builder = builder;
         this.input = schematics;
-        this.positionMap = BlockPositionMap.forBuilder(schematics);
+        this.positionMap = builder.getPositionMap();
     }
 
     static Schematics solve(SchematicsBuilder builder, Schematics schematics) {
@@ -32,12 +32,12 @@ class PowerGridSolver {
         powerNodes.forEach((block, links) ->
                 links.forEach(linkedBlock -> {
                     if (isPowerNode(linkedBlock)) {
-                        Set<Block> linkedBLockLinks = powerNodes.get(linkedBlock);
-                        if (linkedBLockLinks == null) {
+                        Set<Block> linkedBlockLinks = powerNodes.get(linkedBlock);
+                        if (linkedBlockLinks == null) {
                             throw new SchematicsInternalError("Linked power node not contained in powerNodes map.");
                         } else {
                             // Ensure reciprocal link is there
-                            linkedBLockLinks.add(block);
+                            linkedBlockLinks.add(block);
                         }
                     }
                 }));

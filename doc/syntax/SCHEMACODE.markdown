@@ -23,12 +23,6 @@ Most importantly, logic processors can be fully configured using Schemacode. Whe
 in a given processor, it is possible to use either the native mlog language, or Mindcode. The source code (both mlog 
 and Mindcode) can also be injected into the schematic from external file.
 
-> **Note**: At this moment, Schematics Builder skips a lot of validation that would ensure the schematics it produces 
-> are compatible with Mindustry. It is, for example, possible to define overlapping blocks, blocks outside the 
-> schematic area, schematic with empty columns or rows at the edges, or impossible connections of bridges or power 
-> nodes. It looks like Mindustry handles these malformed schematics gracefully - I haven't crashed the game yet. 
-> These  checks will be gradually added in future releases. 
-
 # Whitespace and comments
 
 All tokes in Schemacode are separated by whitespace. End of line characters have no special meaning (except in text 
@@ -115,7 +109,7 @@ The following attributes are recognized:
 * `tag`: assigns a tag to the schematics. The tag can be either a String value, or a predefined icon (see
   [Icons](SYNTAX-1-VARIABLES.markdown#built-in-icons)). `tag` attribute can be specified more than once; all 
   specified tags are attached to the schematics.  
-  
+
 # Block definition
 
 Block definition specifies the type and configuration of a block placed at certain coordinates within the schematic. 
@@ -473,7 +467,6 @@ All three ways of specifying block position can be seen in this example:
 ```
 schematic
   name "Example"
-  dimensions (1, 3)
 message1:
   @message at (1, 0)                      // Places block at (1, 0)
 switch1:
@@ -482,11 +475,13 @@ switch1:
 end
 ```
 
-Blocks in the schematic must not overlap. At this moment, Schematics Builder doesn't check for block overlaps.
+Blocks in the schematic must not overlap. Overlapping blocks are detected and cause compilation error.
 
 Blocks larger than 1x1 are placed into the schematics in such a way that their lower-left corner is at the given 
 coordinates. This makes it quite natural to design schematics starting in the lower left corner, i.e. from coordinates
-(0, 0), and building right and up (or up and right).   
+(0, 0), and building right and up (or up and right). 
+
+Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
 
 Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layout, it is 
 easier to create the schematic in Mindustry, decompile to Schemacode definition and modify the resulting file.   
@@ -504,7 +499,7 @@ facing <orientation>
 e.g. `@conveyor at (2, 4) facing west`.
 
 The cardinal directions are related to the schematic being defined, i.e. conveyor facing east is moving items from 
-left to right.
+left to right, relative to the standard orientation of the schematic.
 
 ## Block configuration
 
@@ -526,7 +521,7 @@ text for messages or links and code for processors. Schemacode supports the foll
 Boolean configuration is specified as `enabled` or `disabled` for the values of true/false or opened/closed:
 
 ```
-@door at (1,0) focing south enabled   // Creates an opened door
+@door at (1,0) enabled   // Creates an opened door
 ```
 
 The following block types can have boolean configuration specified:
@@ -565,9 +560,7 @@ When the schematic is built in the Mindustry map and later a compatible block is
 virtual connection, the connection will be automatically made.    
 
 At this moment it is not verified that the connection is valid. Be careful not to create a connection that would be 
-out of range, or impossible (such as diagonal connections for bridges), or that would exceed the maximal number of 
-supported connections.
-
+out of range, or impossible (such as diagonal connections for bridges).
 
 The following block types can be connected to at most one block:
 
@@ -683,7 +676,7 @@ links to blocks in the schematics (and even outside the schematics) to the proce
 using the `processor` syntax:
 
 ```
-    @micro-processor at (0,0) processor
+    @micro-processor at (0, 0) processor
         links
             <link specifications>
         end
@@ -721,7 +714,6 @@ This is the easiest way that can be used when every linked block is assigned the
 
 ```
 schematic
-    dimensions = (3, 1)
     @micro-processor at (0, 0) processor
         links * end
         mlog = ""
@@ -738,13 +730,12 @@ using pattern matching:
 
 ```
 schematic
-    dimensions = (3, 2)
     @micro-processor at (0, 0) processor
         links p1-* end
         mlog = ""
     end
-    p1-switch1, p2-switch1: @switch  at  (1, 0)
     p1-message1:            @message at +(1, 0)
+    p1-switch1, p2-switch1: @switch  at +(1, 0)
     
     @micro-processor at (0, 1) processor
         links p2-* end
@@ -765,18 +756,17 @@ name for the label; if it isn't specified, the label is used as a link name. Any
 
 ```
 schematic
-    dimensions = (4, 1)
     @micro-processor at (0, 0) processor
         links 
             switch1                   // linked as "switch1"       
-            p1-message1               // linked as "message1", prefix stripped
-            p2-message1 as message2   // linked as "message2"
+            a-message1                // linked as "message1", prefix stripped
+            b-message1 as message2    // linked as "message2"
         end
         mlog = ""
     end
-    switch1:      @switch  at  (1, 0)
-    p1-message1:  @message at +(1, 0)
-    p2-message1:  @message at +(1, 0)
+    switch1:      @switch  at +(1, 0)
+    a-message1:   @message at +(1, 0)
+    b-message1:   @message at +(1, 0)
 end
 ```
 
@@ -787,7 +777,6 @@ Finally, it is possible to specify linked blocks by their positions. In this cas
 
 ```
 schematic
-    dimensions = (4, 1)
     @micro-processor at (0, 0) processor
         links 
              (1, 0) as switch1
@@ -815,7 +804,6 @@ All the ways to specify processor links can be mixed, for example:
 
 ```
 schematic
-    dimensions = (5, 1)
     @micro-processor at (0, 0) processor
         links
             p-*
@@ -838,8 +826,9 @@ Link names must meet the following conditions:
 * A link name must correspond to the last part of the block type name (e.g. `drill` for `@laser-drill`, `cell` for 
   `@memory-cell` and so on; if the last part is `large`, the next-to-last is used as in `node` for 
   `@power-node-large`), followed by a number.
-* Link names must be unique, no two linked blocks can share a link name
-* Each block can be linked at most once, it is not possible to link the same block twice under different names.
+* Link names must be unique, no two linked blocks can share a link name in a single processor.
+* Each block can be linked at most once, it is not possible to link the same block twice under different names in a 
+  single processor.
 
 ### Processor code
 
@@ -869,7 +858,6 @@ A string literal is probably not very useful, but it could look like this:
 
 ```
 schematic
-    dimensions = (3, 1)
     @micro-processor at (0, 0) processor
         links * end
         mindcode = "print(switch1.enabled); printflush(message1)"
@@ -883,7 +871,6 @@ A text block allows to include line breaks in the code definition:
 
 ```
 schematic
-    dimensions = (3, 1)
     @micro-processor at (0, 0) processor
         links * end
         mlog = """
@@ -901,12 +888,11 @@ A string value identifier allows to move the code away from the processor defini
 
 ```
 schematic
-    dimensions = (3, 1)
     @micro-processor at (0, 0) processor
         links switch1 end
         mindcode = source-code
     end
-    switch1:  @switch  at (1, 0)
+    switch1: @switch at +(1, 0)
 end
 
 source-code = """
@@ -923,7 +909,6 @@ An external file can be defined like this:
 
 ```
 schematic
-    dimensions = (3, 1)
     @micro-processor at (0, 0) processor
         links * end
         mindcode = file "../mindcode/regulator.mnd"
@@ -952,6 +937,28 @@ At this moment, it is not possible to specify configuration for the following bl
 * `@illuminator`
 
 Support for these blocks will be eventually added.
+
+# Origin and dimensions calculation
+
+Schematics Builder automatically calculates schematic boundaries. If the lower-left corner of the compiled schematic
+isn't positioned at (0, 0), all block and connection positions of the schematics are shifted to compensate for the 
+non-zero origin. Note that the position (0, 0) can be still left empty:
+
+```
+schematic
+  @switch at (2, 3)
+  @message at (3, 2)
+end
+```
+
+The positions in this schematics will be adjusted to (0, 1) for switch and (1, 0) for message block. It is therefore 
+possible to easily extend an existing schematic to the left or down without having to manually reposition all blocks.
+
+Similarly, the dimensions of the schematic are calculated as the dimensions of the smallest rectangle containing all 
+blocks of the schematic. These dimensions are written to the compiled schematic. If dimensions smaller than computed 
+dimensions are specified as an attribute, a compilation error occurs.
+
+
 
 ---
 

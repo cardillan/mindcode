@@ -31,10 +31,10 @@ public record AstCoordinates(Position coordinates, boolean relative, String rela
 
     public Position evaluate(SchematicsBuilder builder, Position lastPosition) {
         if (relative) {
-            Position rel = relativeTo == null ? lastPosition : builder.getBlock(relativeTo).position();
+            Position rel = relativeTo == null ? lastPosition : builder.getBlockPosition(relativeTo).position();
             return rel.add(coordinates);
         } else {
-            return coordinates();
+            return builder.getAnchor(coordinates());
         }
     }
 

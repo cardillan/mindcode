@@ -22,6 +22,10 @@ public record BlockType(
         return NAME_MAP.get(name);
     }
 
+    public static boolean isNameValid(String name) {
+        return NAME_MAP.containsKey(name);
+    }
+
     public String getBaseLinkName(){
         String strippedTypeName = name.substring(1);
         if (strippedTypeName.contains("-")) {

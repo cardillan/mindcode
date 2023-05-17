@@ -7,7 +7,7 @@ import info.teksol.schemacode.ast.AstLink;
 import info.teksol.schemacode.ast.AstProcessor;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schema.Block;
-import info.teksol.schemacode.schema.BlockPositionResolver.BlockPosition;
+import info.teksol.schemacode.schema.BlockPosition;
 import info.teksol.schemacode.schema.SchematicsBuilder;
 
 import java.io.ByteArrayInputStream;
@@ -134,28 +134,27 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
         links.stream()
                 .filter(l -> !compatibleLinkName(builder, l))
                 .forEachOrdered(l -> builder.error("Incompatible link name '%s' for block type '%s'.", l.name,
-                        builder.getBlock(l.position).blockType().name()));
+                        builder.getBlockPosition(l.position).blockType().name()));
 
         String mlog = convertToMlog(builder, processor);
         return new ProcessorConfiguration(links, mlog);
     }
 
     private static boolean compatibleLinkName(SchematicsBuilder builder, Link link) {
-        BlockPosition position = builder.getBlock(link.position);
+        BlockPosition position = builder.getBlockPosition(link.position);
         if (position == null) return true;
         String baseName = position.blockType().getBaseLinkName();
         return link.name().startsWith(baseName) && link.name.substring(baseName.length()).matches("[1-9]\\d*");
     }
 
     private static String convertToMlog(SchematicsBuilder builder, AstProcessor processor) {
-        String programText = processor.program().getProgramText(builder);
-
         return switch (processor.language()) {
             case NONE -> "";
-            case MLOG -> programText;
+            case MLOG -> processor.program().getProgramText(builder);
             case MINDCODE -> {
                 builder.info("Compiling " + processor.program().getProgramId(builder));
-                CompilerOutput<String> output = CompilerFacade.compile(programText, builder.getCompilerProfile());
+                CompilerOutput<String> output = CompilerFacade.compile(processor.program().getProgramText(builder),
+                        builder.getCompilerProfile());
                 output.messages().forEach(builder::addMessage);
                 if (output.hasErrors()) {
                     builder.error("Compile errors in Mindcode source code.");
@@ -167,10 +166,6 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
     }
 
     public record Link(String name, Position position) implements Comparable<Link> {
-
-        public Link {
-        }
-
         public Link(String name, int x, int y) {
             this(name, new Position(x, y));
         }

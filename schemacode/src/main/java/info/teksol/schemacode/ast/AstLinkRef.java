@@ -10,7 +10,7 @@ public record AstLinkRef(String reference, String name, boolean virtual) impleme
 
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
-        linkConsumer.accept(new Link(stripPrefix(trueLinkName()), builder.getBlock(reference).position()));
+        linkConsumer.accept(new Link(stripPrefix(trueLinkName()), builder.getBlockPosition(reference).position()));
     }
 
     private String trueLinkName() {

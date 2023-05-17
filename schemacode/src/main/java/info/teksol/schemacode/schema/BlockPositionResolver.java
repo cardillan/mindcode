@@ -4,12 +4,12 @@ import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.schemacode.SchemacodeMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstBlock;
-import info.teksol.schemacode.ast.AstSchematics;
 import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.Position;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -25,10 +25,10 @@ public class BlockPositionResolver {
         this.messageListener = messageListener;
     }
 
-    public Map<String, BlockPosition> resolveAllBlocks(AstSchematics schematics) {
+    public Map<String, BlockPosition> resolveAllBlocks(List<AstBlock> blocks) {
         Map<String, RelativeBlockPosition> relativeBlocks = new HashMap<>();
         int index = 0;
-        for (AstBlock astBlock : schematics.blocks()) {
+        for (AstBlock astBlock : blocks) {
             RelativeBlockPosition blockPosition = new RelativeBlockPosition(index, astBlock, "#" + (index - 1));
             relativeBlocks.put("#" + index, blockPosition);
             astBlock.labels().forEach(l -> relativeBlocks.put(l, blockPosition));
@@ -67,7 +67,7 @@ public class BlockPositionResolver {
         }
     }
 
-    public record BlockPosition(int index, BlockType blockType, Position position) {
+    public record AstBlockPosition(int index, BlockType blockType, Position position) implements BlockPosition {
     }
 
     private record RelativeBlockPosition(int index, BlockType blockType, String reference, Position position) {
@@ -91,7 +91,7 @@ public class BlockPositionResolver {
             if (reference != null) {
                 throw new SchematicsInternalError("Cannot convert relative block position %s to absolute.", this);
             }
-            return new BlockPosition(index, blockType, position);
+            return new AstBlockPosition(index, blockType, position);
         }
     }
 }
