@@ -28,25 +28,25 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitDefinition(SchemacodeParser.DefinitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SchemacodeParser#schematics}.
+	 * Enter a parse tree produced by {@link SchemacodeParser#schematic}.
 	 * @param ctx the parse tree
 	 */
-	void enterSchematics(SchemacodeParser.SchematicsContext ctx);
+	void enterSchematic(SchemacodeParser.SchematicContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SchemacodeParser#schematics}.
+	 * Exit a parse tree produced by {@link SchemacodeParser#schematic}.
 	 * @param ctx the parse tree
 	 */
-	void exitSchematics(SchemacodeParser.SchematicsContext ctx);
+	void exitSchematic(SchemacodeParser.SchematicContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SchemacodeParser#schematicsItem}.
+	 * Enter a parse tree produced by {@link SchemacodeParser#schematicItem}.
 	 * @param ctx the parse tree
 	 */
-	void enterSchematicsItem(SchemacodeParser.SchematicsItemContext ctx);
+	void enterSchematicItem(SchemacodeParser.SchematicItemContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link SchemacodeParser#schematicsItem}.
+	 * Exit a parse tree produced by {@link SchemacodeParser#schematicItem}.
 	 * @param ctx the parse tree
 	 */
-	void exitSchematicsItem(SchemacodeParser.SchematicsItemContext ctx);
+	void exitSchematicItem(SchemacodeParser.SchematicItemContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code name}
 	 * labeled alternative in {@link SchemacodeParser#attribute}.

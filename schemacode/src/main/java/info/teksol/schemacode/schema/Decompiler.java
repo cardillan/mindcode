@@ -33,7 +33,7 @@ public class Decompiler {
     private int indent = 0;
     private String strIndent = "";
 
-    private final Schematics schematics;
+    private final Schematic schematic;
     private final Map<Position, Block> blocks;
     private final List<ProcessorConfiguration> processors;
     private final boolean useProcessorPrefix;
@@ -70,12 +70,12 @@ public class Decompiler {
         this.blockOrder = blockOrder;
     }
 
-    public Decompiler(Schematics schematics) {
+    public Decompiler(Schematic schematic) {
         setIndent(0);
 
-        this.schematics = schematics;
-        blocks = schematics.blocks().stream().collect(Collectors.toMap(Block::position, b -> b));
-        processors = schematics.blocks().stream()
+        this.schematic = schematic;
+        blocks = schematic.blocks().stream().collect(Collectors.toMap(Block::position, b -> b));
+        processors = schematic.blocks().stream()
                 .filter(b -> b.configurationType() == ConfigurationType.PROCESSOR)
                 .map(b -> b.configuration().as(ProcessorConfiguration.class))
                 .toList();
@@ -108,15 +108,15 @@ public class Decompiler {
     public String buildCode() {
         sbr.append("schematic");
         indentInc();
-        nl().append("name = \"").append(schematics.name()).append('"');
-        if (!schematics.description().isBlank()) {
+        nl().append("name = \"").append(schematic.name()).append('"');
+        if (!schematic.description().isBlank()) {
             nl().append("description = \"\"\"");
             indentInc();
-            nl().append(schematics.description().replaceAll("\n", strIndent)).append("\"\"\"");
+            nl().append(schematic.description().replaceAll("\n", strIndent)).append("\"\"\"");
             indentDec();
         }
 
-        schematics.labels().stream()
+        schematic.labels().stream()
                 .mapMulti(this::extractLabelsAndIcons)
                 .filter(t -> !t.isBlank())
                 .distinct()
@@ -125,9 +125,9 @@ public class Decompiler {
         sbr.append('\n');
 
         (switch (blockOrder) {
-            case ORIGINAL   -> schematics.blocks().stream();
-            case HORIZONTAL -> schematics.blocks().stream().sorted(Comparator.comparing(Block::y).thenComparing(Block::x));
-            case VERTICAL   -> schematics.blocks().stream().sorted(Comparator.comparing(Block::x).thenComparing(Block::y));
+            case ORIGINAL   -> schematic.blocks().stream();
+            case HORIZONTAL -> schematic.blocks().stream().sorted(Comparator.comparing(Block::y).thenComparing(Block::x));
+            case VERTICAL   -> schematic.blocks().stream().sorted(Comparator.comparing(Block::x).thenComparing(Block::y));
         }).forEach(this::outputBlock);
 
         indentDec();

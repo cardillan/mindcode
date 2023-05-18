@@ -11,7 +11,7 @@ import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.schema.Block;
-import info.teksol.schemacode.schema.Schematics;
+import info.teksol.schemacode.schema.Schematic;
 import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public abstract class AbstractSchematicsTest {
         return SchemacodeCompiler.createDefinitions(parseTree, messageListener("createDefinitions"));
     }
 
-    protected Schematics buildSchematics(String definition) {
+    protected Schematic buildSchematics(String definition) {
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations();
         return SchemacodeCompiler.buildSchematics(definitions, compilerProfile, messageListener("buildSchematics"), null);

@@ -13,7 +13,7 @@ The command line tool supports three different actions. The action is specified 
 which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
-* `cs` or `compile-schema`: builds a schematics from Schemacode source into a binary `.msch` file.
+* `cs` or `compile-schema`: builds a schematic from Schemacode source into a binary `.msch` file.
 * `ds` or `decompile schema`: decompiles a binary `.msch` file to Schemacode source.
 
 ## Input/output files
@@ -35,7 +35,7 @@ action was successful, the output is copied to the clipboard and can be pasted d
 
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the 
   processor configuration screen, by using **Edit/Import from clipboard** command.
-* _Compile schema_ action: clipboard contains schematics encoded into mindustry compatible string, which can be pasted 
+* _Compile schema_ action: clipboard contains schematic encoded into mindustry compatible string, which can be pasted 
   as new schematics on the Schematics screen, by using **Import schematics/Import from clipboard** command. 
 
 ## Compiler options
@@ -162,7 +162,7 @@ Compile a schema definition file into binary msch file.
 
 named arguments:
   -h, --help             show this help message and exit
-  -c, --clipboard        encode schematics into text representation and paste into clipboard
+  -c, --clipboard        encode schematic into text representation and paste into clipboard
   -t, --target {6,7s,7w}
                          selects target processor version  and  edition  (version  6,  version  7  standard processor or
                          version 7 world processor)
@@ -172,7 +172,7 @@ input/output files:
   output                 Output file to receive binary Mindustry schema (msch).
   -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
   -a, --add-tag TAG [TAG ...]
-                         defines additional  tags(s) to add to the  schematics,  plain  text and symbolic icon names are
+                         defines additional  tags(s) to add to the  schematic,  plain  text and symbolic icon names are
                          supported
 
 optimization levels:

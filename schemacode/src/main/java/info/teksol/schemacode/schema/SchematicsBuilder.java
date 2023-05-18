@@ -41,7 +41,7 @@ public class SchematicsBuilder {
     private final AstDefinitions astDefinitions;
     private final Path basePath;
 
-    private AstSchematics astSchematics;
+    private AstSchematic astSchematic;
     private Map<String, String> constants;
     private Map<String, BlockPosition> astLabelMap;
     private BlockPositionMap<BlockPosition> astPositionMap;
@@ -87,12 +87,12 @@ public class SchematicsBuilder {
         return basePath != null;
     }
 
-    public Schematics buildSchematics() {
+    public Schematic buildSchematics() {
         extractConstants();
 
-        List<AstSchematics> schematicsList = astDefinitions.definitions().stream()
-                .filter(AstSchematics.class::isInstance)
-                .map(AstSchematics.class::cast)
+        List<AstSchematic> schematicsList = astDefinitions.definitions().stream()
+                .filter(AstSchematic.class::isInstance)
+                .map(AstSchematic.class::cast)
                 .toList();
 
         if (schematicsList.isEmpty()) {
@@ -103,9 +103,9 @@ public class SchematicsBuilder {
             return null;
         }
 
-        astSchematics = schematicsList.get(0);
+        astSchematic = schematicsList.get(0);
 
-        Map<String, Long> labelCounts = astSchematics.blocks().stream()
+        Map<String, Long> labelCounts = astSchematic.blocks().stream()
                 .filter(b -> b.labels() != null && !b.labels().isEmpty())
                 .flatMap(b -> b.labels().stream())
                 .collect(Collectors.groupingBy(l -> l, Collectors.counting()));
@@ -114,10 +114,10 @@ public class SchematicsBuilder {
                 .filter(e -> e.getValue() > 1)
                 .forEachOrdered(c -> error("Multiple definitions of block label '%s'.", c.getKey()));
 
-        astSchematics.blocks().stream().filter(astBlock -> !BlockType.isNameValid(astBlock.type()))
+        astSchematic.blocks().stream().filter(astBlock -> !BlockType.isNameValid(astBlock.type()))
                 .forEachOrdered(astBlock -> error("Unknown block type '%s'.", astBlock.type()));
 
-        List<AstBlock> astBlocks = astSchematics.blocks().stream()
+        List<AstBlock> astBlocks = astSchematic.blocks().stream()
                 .filter(astBlock -> BlockType.isNameValid(astBlock.type())).toList();
 
         // Here are absolute positions of all blocks, stored as "#" + index
@@ -156,13 +156,13 @@ public class SchematicsBuilder {
 
         positionMap = BlockPositionMap.forBuilder(m -> {}, blocks);
 
-        Schematics schematics = new Schematics(name, description, merged, 0, 0, blocks);
-        schematics = PowerGridSolver.solve(this, schematics);
+        Schematic schematic = new Schematic(name, description, merged, 0, 0, blocks);
+        schematic = PowerGridSolver.solve(this, schematic);
 
         // Compensate for non-zero origin
-        Position origin = findLowerLeftCoordinate(schematics.blocks());
-        List<Block> repositioned = origin.zero() ? schematics.blocks()
-                :  schematics.blocks().stream().map(b -> b.remap(p -> p.sub(origin))).toList();
+        Position origin = findLowerLeftCoordinate(schematic.blocks());
+        List<Block> repositioned = origin.zero() ? schematic.blocks()
+                :  schematic.blocks().stream().map(b -> b.remap(p -> p.sub(origin))).toList();
         if (!origin.zero()) {
             info("Schematic origin at (%d, %d) adjusted to (0, 0).", origin.x(), origin.y());
         }
@@ -183,9 +183,9 @@ public class SchematicsBuilder {
             }
         }
 
-        schematics = new Schematics(schematics.name(), schematics.description(), schematics.labels(), dim.x(), dim.y(), repositioned);
-        info("Created schematic '%s' with dimensions (%d, %d).", name, schematics.width(), schematics.height());
-        return schematics;
+        schematic = new Schematic(schematic.name(), schematic.description(), schematic.labels(), dim.x(), dim.y(), repositioned);
+        info("Created schematic '%s' with dimensions (%d, %d).", name, schematic.width(), schematic.height());
+        return schematic;
     }
 
     private void extractConstants() {
@@ -269,7 +269,7 @@ public class SchematicsBuilder {
     }
 
     private <T> T getAttribute(String name, Class<T> expectedType) {
-        List<AstSchemaAttribute> list = astSchematics.attributes().stream().filter(a -> a.attribute().equals(name)).toList();
+        List<AstSchemaAttribute> list = astSchematic.attributes().stream().filter(a -> a.attribute().equals(name)).toList();
         if (list.isEmpty()) {
             return null;
         } else if (list.size() > 1) {
@@ -285,7 +285,7 @@ public class SchematicsBuilder {
     }
 
     private <T> List<T> getAttributes(String name, Class<T> expectedType) {
-        List<AstSchemaItem> list = astSchematics.attributes().stream()
+        List<AstSchemaItem> list = astSchematic.attributes().stream()
                 .filter(a -> a.attribute().equals(name))
                 .map(AstSchemaAttribute::value)
                 .toList();

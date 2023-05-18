@@ -47,7 +47,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
     @Test
     void buildsInRangeLinks() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @power-source        at ( 0,  0)
                     @power-node          at ( 0,  6) connected to (0, 0)
@@ -63,7 +63,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 7, 7,
+        Schematic expected = new Schematic("", "", List.of(), 7, 7,
                 List.of(
                         block("@power-source", P0_0, Direction.EAST, pa(
                                 p(0, 6), p(1, 6), p(2, 6), p(3, 5), p(4, 5), p(5, 3), p(5, 4), p(6, 0), p(6, 1), p(6, 2))
@@ -86,7 +86,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
     
     @Test
     void buildsInRangeLinksLarge() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @power-node-large    at ( 0,  0)
                     @power-node          at ( 1, 15)  connected to (0, 0)
@@ -106,7 +106,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 16, 16,
+        Schematic expected = new Schematic("", "", List.of(), 16, 16,
                 List.of(
                         block("@power-node-large", P0_0, Direction.EAST, pa(
                                 p( 1, 15), p( 6, 15), p( 7, 14), p( 8, 14), p( 9, 13), p(10, 12), p(11, 12),
@@ -134,14 +134,14 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
     @Test
     void buildsInRangeSurgeTower1() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @surge-tower at ( 0,  0) connected to (29, 29)
                     @surge-tower at (29, 29)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 31, 31,
+        Schematic expected = new Schematic("", "", List.of(), 31, 31,
                 List.of(
                         block("@surge-tower", P0_0, Direction.EAST, pa(p(29, 29))),
                         block("@surge-tower", p(29, 29), Direction.EAST, pa(P0_0))
@@ -153,14 +153,14 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
 
     @Test
     void buildsInRangeSurgeTower2() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @surge-tower at ( 0,  0) connected to (27, 31)
                     @surge-tower at (27, 31)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 29, 33,
+        Schematic expected = new Schematic("", "", List.of(), 29, 33,
                 List.of(
                         block("@surge-tower", P0_0, Direction.EAST, pa(p(27, 31))),
                         block("@surge-tower", p(27, 31), Direction.EAST, pa(P0_0))

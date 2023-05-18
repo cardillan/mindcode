@@ -23,17 +23,17 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDefinition(SchemacodeParser.DefinitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SchemacodeParser#schematics}.
+	 * Visit a parse tree produced by {@link SchemacodeParser#schematic}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSchematics(SchemacodeParser.SchematicsContext ctx);
+	T visitSchematic(SchemacodeParser.SchematicContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SchemacodeParser#schematicsItem}.
+	 * Visit a parse tree produced by {@link SchemacodeParser#schematicItem}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSchematicsItem(SchemacodeParser.SchematicsItemContext ctx);
+	T visitSchematicItem(SchemacodeParser.SchematicItemContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code name}
 	 * labeled alternative in {@link SchemacodeParser#attribute}.

@@ -31,14 +31,14 @@ public class SchemacodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSchematics(SchemacodeParser.SchematicsContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSchematic(SchemacodeParser.SchematicContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSchematicsItem(SchemacodeParser.SchematicsItemContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSchematicItem(SchemacodeParser.SchematicItemContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

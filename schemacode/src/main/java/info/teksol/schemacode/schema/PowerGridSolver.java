@@ -12,20 +12,20 @@ import java.util.stream.Collectors;
 
 class PowerGridSolver {
     private final SchematicsBuilder builder;
-    private final Schematics input;
+    private final Schematic input;
     private final BlockPositionMap<Block> positionMap;
 
-    private PowerGridSolver(SchematicsBuilder builder, Schematics schematics) {
+    private PowerGridSolver(SchematicsBuilder builder, Schematic schematic) {
         this.builder = builder;
-        this.input = schematics;
+        this.input = schematic;
         this.positionMap = builder.getPositionMap();
     }
 
-    static Schematics solve(SchematicsBuilder builder, Schematics schematics) {
-        return new PowerGridSolver(builder, schematics).solve();
+    static Schematic solve(SchematicsBuilder builder, Schematic schematic) {
+        return new PowerGridSolver(builder, schematic).solve();
     }
 
-    Schematics solve() {
+    Schematic solve() {
         Map<Block, Set<Block>> powerNodes = input.blocks().stream().filter(this::isPowerNode)
                 .collect(Collectors.toMap(b -> b, this::collectLinks));
 
@@ -50,7 +50,7 @@ class PowerGridSolver {
         // Rebuild block list
         List<Block> blocks = input.blocks().stream().map(block -> replaceLinks(block, powerNodes.get(block))).toList();
 
-        return new Schematics(input.name(), input.description(), input.labels(), input.width(), input.height(), blocks);
+        return new Schematic(input.name(), input.description(), input.labels(), input.width(), input.height(), blocks);
     }
 
     private Block replaceLinks(Block block, Set<Block> links) {

@@ -143,20 +143,20 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithName() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     name = "Name"
                 end
                 """);
 
-        Schematics expected = new Schematics("Name", "", List.of(), 0, 0, List.of());
+        Schematic expected = new Schematic("Name", "", List.of(), 0, 0, List.of());
 
         assertEquals(expected, actual);
     }
 
     @Test
     void buildsSchematicsWithIndirectName() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     name = my_name
                 end
@@ -164,7 +164,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 my_name = "Name"
                 """);
 
-        Schematics expected = new Schematics("Name", "", List.of(), 0, 0, List.of());
+        Schematic expected = new Schematic("Name", "", List.of(), 0, 0, List.of());
 
         assertEquals(expected, actual);
     }
@@ -183,60 +183,60 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithDescription() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     description = "Description"
                 end
                 """);
 
-        Schematics expected = new Schematics("", "Description", List.of(), 0, 0, List.of());
+        Schematic expected = new Schematic("", "Description", List.of(), 0, 0, List.of());
 
         assertEquals(expected, actual);
     }
 
     @Test
     void buildsSchematicsWithTextTag() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     tag = "tag"
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of("tag"), 0, 0, List.of());
+        Schematic expected = new Schematic("", "", List.of("tag"), 0, 0, List.of());
 
         assertEquals(expected, actual);
     }
 
     @Test
     void buildsSchematicsWithIconTag() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     tag = ITEM-COAL
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(Icons.translateIcon("ITEM-COAL")), 0, 0, List.of());
+        Schematic expected = new Schematic("", "", List.of(Icons.translateIcon("ITEM-COAL")), 0, 0, List.of());
 
         assertEquals(expected, actual);
     }
 
     @Test
     void buildsSchematicsWithMergedTags() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     tag = "tag"
                     tag = "tag"
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of("tag"), 0, 0, List.of());
+        Schematic expected = new Schematic("", "", List.of("tag"), 0, 0, List.of());
 
         assertEquals(expected, actual);
     }
 
     @Test
     void buildsSchematicsWithDimensions() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (5, 7)
                     @message at (0, 0)
@@ -244,7 +244,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 5, 7,
+        Schematic expected = new Schematic("", "", List.of(), 5, 7,
                 List.of(
                         block("@message", P0_0,    Direction.EAST, TextConfiguration.EMPTY),
                         block("@message", p(4, 6), Direction.EAST, TextConfiguration.EMPTY)
@@ -256,13 +256,13 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPositiveOrigin() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @message at (4, 6)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@message", P0_0,    Direction.EAST, TextConfiguration.EMPTY)
                 )
@@ -273,13 +273,13 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithNegativeOrigin() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @message at (-7, -5)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@message", P0_0,    Direction.EAST, TextConfiguration.EMPTY)
                 )
@@ -290,14 +290,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPlainMessage() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @message at (0, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
@@ -308,14 +308,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPlainSwitch() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @switch at (0, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@switch", P0_0, Direction.EAST, BooleanConfiguration.FALSE)
                 )
@@ -326,13 +326,13 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPlainNode() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @power-node at (0, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@power-node", P0_0, Direction.EAST, PositionArray.EMPTY)
                 )
@@ -343,13 +343,13 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPlainBridge() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @bridge-conveyor at (0, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@bridge-conveyor", P0_0, Direction.EAST, Position.INVALID)
                 )
@@ -360,13 +360,13 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPlainUnloader() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @unloader at (0, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@unloader", P0_0, Direction.EAST, EmptyConfiguration.EMPTY)
                 )
@@ -377,13 +377,13 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPlainLiquidSource() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @liquid-source at (0, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@liquid-source", P0_0, Direction.EAST, EmptyConfiguration.EMPTY)
                 )
@@ -394,13 +394,13 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithPlainMicroProcessor() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @micro-processor at (0, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@micro-processor", P0_0, Direction.EAST, new ProcessorConfiguration())
                 )
@@ -411,7 +411,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithBlockLabel() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                 message1:
@@ -419,7 +419,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block(List.of("message1"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
@@ -430,7 +430,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithMultipleBlockLabel() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                 message1, message2:
@@ -438,7 +438,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block(List.of("message1", "message2"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY)
                 )
@@ -449,14 +449,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithRelativeBlockPosition() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @message at (0, 0)
                     @message at + (1, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 2, 1,
+        Schematic expected = new Schematic("", "", List.of(), 2, 1,
                 List.of(
                         block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
                         block("@message", P1_0, Direction.EAST, TextConfiguration.EMPTY)
@@ -468,7 +468,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithRelativeToBlockPosition() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (2, 1)
                 message1:
@@ -477,7 +477,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 2, 1,
+        Schematic expected = new Schematic("", "", List.of(), 2, 1,
                 List.of(
                         block(List.of("message1"), "@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
                         block("@message", P1_0, Direction.EAST, TextConfiguration.EMPTY)
@@ -489,7 +489,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithAllDirections() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (4, 1)
                     @message at  (0, 0) facing east
@@ -499,7 +499,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 4, 1,
+        Schematic expected = new Schematic("", "", List.of(), 4, 1,
                 List.of(
                         block("@message", P0_0, Direction.EAST, TextConfiguration.EMPTY),
                         block("@message", P1_0, Direction.WEST, TextConfiguration.EMPTY),
@@ -513,14 +513,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithMessageText() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @message at (0, 0) text "This is a message"
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@message", P0_0, Direction.EAST, new TextConfiguration("This is a message"))
                 )
@@ -531,7 +531,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithMessageTextIndirect() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @message at (0, 0) text msg
@@ -542,7 +542,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                     '''
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@message", P0_0, Direction.EAST, new TextConfiguration("This is a message\n"))
                 )
@@ -553,14 +553,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithSwitchEnabled() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @switch at (0, 0) enabled
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@switch", P0_0, Direction.EAST, BooleanConfiguration.TRUE)
                 )
@@ -571,14 +571,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithNodeConnections() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @power-node at (0, 0) connected to (1, 0)
                     @power-node at (1, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 2, 1,
+        Schematic expected = new Schematic("", "", List.of(), 2, 1,
                 List.of(
                         block("@power-node", P0_0, Direction.EAST, pa(P1_0)),
                         block("@power-node", P1_0, Direction.EAST, pa(P0_0))
@@ -590,14 +590,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithBridgeConnection() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @bridge-conveyor at (0, 0) connected to +(1, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@bridge-conveyor", P0_0, Direction.EAST, P1_0)
                 )
@@ -608,7 +608,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithNamedBridgeConnection() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (2, 1)
                     @bridge-conveyor at (0, 0) connected to bridge1
@@ -617,7 +617,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 2, 1,
+        Schematic expected = new Schematic("", "", List.of(), 2, 1,
                 List.of(
                         block(List.of(),          "@bridge-conveyor", P0_0, Direction.EAST, P1_0),
                         block(List.of("bridge1"), "@bridge-conveyor", P1_0, Direction.EAST, Position.INVALID)
@@ -629,14 +629,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithUnloaderCoal() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @unloader at (0, 0) item @coal
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@unloader", P0_0, Direction.EAST, Item.COAL)
                 )
@@ -647,14 +647,14 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithLiquidSourceCryofluid() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @liquid-source at (0, 0) liquid @cryofluid
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@liquid-source", P0_0, Direction.EAST, Liquid.CRYOFLUID)
                 )
@@ -665,7 +665,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithMicroProcessorLinks() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @micro-processor at (0, 0) processor
                         links
@@ -684,7 +684,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 4, 1,
+        Schematic expected = new Schematic("", "", List.of(), 4, 1,
                 List.of(
                         block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
@@ -728,7 +728,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithMicroProcessorMlog() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @micro-processor at (0, 0) processor
@@ -737,7 +737,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
@@ -753,7 +753,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
     @Test
     void buildsSchematicsWithMicroProcessorMindcode() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     dimensions = (1, 1)
                     @micro-processor at (0, 0) processor
@@ -762,7 +762,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 1, 1,
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
                         block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(

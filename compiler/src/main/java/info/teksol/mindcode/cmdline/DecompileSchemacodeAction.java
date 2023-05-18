@@ -3,7 +3,7 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schema.BlockOrder;
 import info.teksol.schemacode.schema.Decompiler;
-import info.teksol.schemacode.schema.Schematics;
+import info.teksol.schemacode.schema.Schematic;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -80,8 +80,8 @@ public class DecompileSchemacodeAction extends ActionHandler {
         File output = resolveOutputFile(input, arguments.get("output"), ".sdf");
 
         try (FileInputStream fis = new FileInputStream(input)) {
-            Schematics schematics = SchematicsIO.read(fis);
-            Decompiler decompiler = new Decompiler(schematics);
+            Schematic schematic = SchematicsIO.read(fis);
+            Decompiler decompiler = new Decompiler(schematic);
             decompiler.setRelativePositions(arguments.getBoolean("positions"));
             decompiler.setRelativeConnections(arguments.getBoolean("connections"));
             decompiler.setRelativeLinks(arguments.getBoolean("links"));

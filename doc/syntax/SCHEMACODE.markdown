@@ -99,16 +99,16 @@ The following attributes are recognized:
 
 * `name`: specifies the name of the schematic. The value of the attribute is String (a string text value, a string 
   literal, or a text block). Can be specified at most once.
-* `description`: specifies the description of the schematics. The value of the attribute is String (a string text 
+* `description`: specifies the description of the schematic. The value of the attribute is String (a string text 
   value, a string literal, or a text block). In case of text block, single newline characters are removed; an empty
   line must be used to define a line break. Can be specified at most once.
 * `dimensions`: specifies the dimensions of the schematic, given as `(width, height)`, where `width` and `height` 
   are positive numbers. Can be specified at most once. When not specified, the dimensions are calculated from 
   schematic definition. Must not be smaller than calculated dimensions when specified. (In the future, specifying 
   dimensions different from calculated ones might serve some specific purpose.)  
-* `tag`: assigns a tag to the schematics. The tag can be either a String value, or a predefined icon (see
+* `tag`: assigns a tag to the schematic. The tag can be either a String value, or a predefined icon (see
   [Icons](SYNTAX-1-VARIABLES.markdown#built-in-icons)). `tag` attribute can be specified more than once; all 
-  specified tags are attached to the schematics.  
+  specified tags are attached to the schematic.  
 
 # Block definition
 
@@ -442,7 +442,7 @@ All supported block types are listed below.
 
 Block position can be specified as relative or absolute. The first block defined by the schematic must use absolute 
 position, but all subsequent blocks can use absolute or relative positions. Relative position always relates to the 
-previous block, as defined by the schematics.
+previous block, as defined by the schematic.
 
 Block position must be specified using this syntax: 
 
@@ -477,8 +477,8 @@ end
 
 Blocks in the schematic must not overlap. Overlapping blocks are detected and cause compilation error.
 
-Blocks larger than 1x1 are placed into the schematics in such a way that their lower-left corner is at the given 
-coordinates. This makes it quite natural to design schematics starting in the lower left corner, i.e. from coordinates
+Blocks larger than 1x1 are placed into the schematic in such a way that their lower-left corner is at the given 
+coordinates. This makes it quite natural to design schematic starting in the lower left corner, i.e. from coordinates
 (0, 0), and building right and up (or up and right). 
 
 Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
@@ -555,7 +555,7 @@ When connecting to blocks larger than 1x1 by their position, it is sufficient to
 the block, it is not necessary to target the lower left corner.
 
 Connection specified by position may lead to a place not occupied by any block, or even to a place outside the 
-schematics. Such a connection - called a "virtual connection" - is allowed and will be compiled into the schematic. 
+schematic. Such a connection - called a "virtual connection" - is allowed and will be compiled into the schematic. 
 When the schematic is built in the Mindustry map and later a compatible block is added at the position of the 
 virtual connection, the connection will be automatically made.    
 
@@ -672,7 +672,7 @@ The following block types can have text configuration specified:
 ## Processor configuration
 
 Processor configuration is the most complex one. It can specify both the code embedded to the processor and 
-links to blocks in the schematics (and even outside the schematics) to the processor. The configuration is specified 
+links to blocks in the schematic (and even outside the schematic) to the processor. The configuration is specified 
 using the `processor` syntax:
 
 ```
@@ -792,12 +792,12 @@ end
 
 Relative coordinates evaluate against the processor block.
 
-Pay attention to the `message4` block: its coordinates are (2, 0), which is inside the schematics, but there's no 
+Pay attention to the `message4` block: its coordinates are (2, 0), which is inside the schematic, but there's no 
 block at these coordinates. The link is created nevertheless, and when the schematic is built in Mindustry world, any 
-block placed subsequently on the tile corresponding to the position (2, 0) in the schematics will be automatically 
+block placed subsequently on the tile corresponding to the position (2, 0) in the schematic will be automatically 
 linked to the processor. If it is a message, it will be linked as `message4`.
 
-Virtual links can be placed outside the schematics as well. The keyword `virtual` marks such virtual links. It is 
+Virtual links can be placed outside the schematic as well. The keyword `virtual` marks such virtual links. It is 
 optional now, but it will become compulsory for virtual blocks in the future.
 
 All the ways to specify processor links can be mixed, for example:
@@ -941,7 +941,7 @@ Support for these blocks will be eventually added.
 # Origin and dimensions calculation
 
 Schematics Builder automatically calculates schematic boundaries. If the lower-left corner of the compiled schematic
-isn't positioned at (0, 0), all block and connection positions of the schematics are shifted to compensate for the 
+isn't positioned at (0, 0), all block and connection positions of the schematic are shifted to compensate for the 
 non-zero origin. Note that the position (0, 0) can be still left empty:
 
 ```
@@ -951,7 +951,7 @@ schematic
 end
 ```
 
-The positions in this schematics will be adjusted to (0, 1) for switch and (1, 0) for message block. It is therefore 
+The positions in this schematic will be adjusted to (0, 1) for switch and (1, 0) for message block. It is therefore 
 possible to easily extend an existing schematic to the left or down without having to manually reposition all blocks.
 
 Similarly, the dimensions of the schematic are calculated as the dimensions of the smallest rectangle containing all 

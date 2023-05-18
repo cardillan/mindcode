@@ -40,25 +40,25 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSchematics(SchemacodeParser.SchematicsContext ctx) { }
+	@Override public void enterSchematic(SchemacodeParser.SchematicContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSchematics(SchemacodeParser.SchematicsContext ctx) { }
+	@Override public void exitSchematic(SchemacodeParser.SchematicContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSchematicsItem(SchemacodeParser.SchematicsItemContext ctx) { }
+	@Override public void enterSchematicItem(SchemacodeParser.SchematicItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSchematicsItem(SchemacodeParser.SchematicsItemContext ctx) { }
+	@Override public void exitSchematicItem(SchemacodeParser.SchematicItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

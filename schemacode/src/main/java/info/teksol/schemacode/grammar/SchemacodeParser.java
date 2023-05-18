@@ -25,7 +25,7 @@ public class SchemacodeParser extends Parser {
 		TextBlock2=37, TextLine=38, Int=39, Id=40, Ref=41, Pattern=42, SLComment=43, 
 		Ws=44, Any=45;
 	public static final int
-		RULE_definitions = 0, RULE_definition = 1, RULE_schematics = 2, RULE_schematicsItem = 3, 
+		RULE_definitions = 0, RULE_definition = 1, RULE_schematic = 2, RULE_schematicItem = 3, 
 		RULE_attribute = 4, RULE_block = 5, RULE_labelList = 6, RULE_position = 7, 
 		RULE_coordinates = 8, RULE_relativeCoordinates = 9, RULE_coordinatesRelativeTo = 10, 
 		RULE_direction = 11, RULE_configuration = 12, RULE_connectionList = 13, 
@@ -33,7 +33,7 @@ public class SchemacodeParser extends Parser {
 		RULE_program = 18, RULE_textDef = 19, RULE_stringValue = 20, RULE_stringLiteral = 21;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"definitions", "definition", "schematics", "schematicsItem", "attribute", 
+			"definitions", "definition", "schematic", "schematicItem", "attribute", 
 			"block", "labelList", "position", "coordinates", "relativeCoordinates", 
 			"coordinatesRelativeTo", "direction", "configuration", "connectionList", 
 			"connection", "processor", "processorLinks", "linkDef", "program", "textDef", 
@@ -179,8 +179,8 @@ public class SchemacodeParser extends Parser {
 	}
 
 	public static class DefinitionContext extends ParserRuleContext {
-		public SchematicsContext schematics() {
-			return getRuleContext(SchematicsContext.class,0);
+		public SchematicContext schematic() {
+			return getRuleContext(SchematicContext.class,0);
 		}
 		public StringValueContext stringValue() {
 			return getRuleContext(StringValueContext.class,0);
@@ -215,7 +215,7 @@ public class SchemacodeParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(51);
-				schematics();
+				schematic();
 				}
 				break;
 			case 2:
@@ -238,41 +238,41 @@ public class SchemacodeParser extends Parser {
 		return _localctx;
 	}
 
-	public static class SchematicsContext extends ParserRuleContext {
+	public static class SchematicContext extends ParserRuleContext {
 		public Token name;
-		public SchematicsItemContext items;
+		public SchematicItemContext items;
 		public TerminalNode Schematic() { return getToken(SchemacodeParser.Schematic, 0); }
 		public TerminalNode End() { return getToken(SchemacodeParser.End, 0); }
 		public TerminalNode Colon() { return getToken(SchemacodeParser.Colon, 0); }
 		public TerminalNode Id() { return getToken(SchemacodeParser.Id, 0); }
-		public List<SchematicsItemContext> schematicsItem() {
-			return getRuleContexts(SchematicsItemContext.class);
+		public List<SchematicItemContext> schematicItem() {
+			return getRuleContexts(SchematicItemContext.class);
 		}
-		public SchematicsItemContext schematicsItem(int i) {
-			return getRuleContext(SchematicsItemContext.class,i);
+		public SchematicItemContext schematicItem(int i) {
+			return getRuleContext(SchematicItemContext.class,i);
 		}
-		public SchematicsContext(ParserRuleContext parent, int invokingState) {
+		public SchematicContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_schematics; }
+		@Override public int getRuleIndex() { return RULE_schematic; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSchematics(this);
+			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSchematic(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSchematics(this);
+			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSchematic(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSchematics(this);
+			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSchematic(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final SchematicsContext schematics() throws RecognitionException {
-		SchematicsContext _localctx = new SchematicsContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_schematics);
+	public final SchematicContext schematic() throws RecognitionException {
+		SchematicContext _localctx = new SchematicContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_schematic);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -283,7 +283,7 @@ public class SchemacodeParser extends Parser {
 			if (_la==Id) {
 				{
 				setState(55);
-				((SchematicsContext)_localctx).name = match(Id);
+				((SchematicContext)_localctx).name = match(Id);
 				setState(56);
 				match(Colon);
 				}
@@ -298,7 +298,7 @@ public class SchemacodeParser extends Parser {
 				{
 				{
 				setState(60);
-				((SchematicsContext)_localctx).items = schematicsItem();
+				((SchematicContext)_localctx).items = schematicItem();
 				}
 				}
 				setState(63); 
@@ -320,35 +320,35 @@ public class SchemacodeParser extends Parser {
 		return _localctx;
 	}
 
-	public static class SchematicsItemContext extends ParserRuleContext {
+	public static class SchematicItemContext extends ParserRuleContext {
 		public AttributeContext attribute() {
 			return getRuleContext(AttributeContext.class,0);
 		}
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
-		public SchematicsItemContext(ParserRuleContext parent, int invokingState) {
+		public SchematicItemContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_schematicsItem; }
+		@Override public int getRuleIndex() { return RULE_schematicItem; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSchematicsItem(this);
+			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).enterSchematicItem(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSchematicsItem(this);
+			if ( listener instanceof SchemacodeListener ) ((SchemacodeListener)listener).exitSchematicItem(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSchematicsItem(this);
+			if ( visitor instanceof SchemacodeVisitor ) return ((SchemacodeVisitor<? extends T>)visitor).visitSchematicItem(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final SchematicsItemContext schematicsItem() throws RecognitionException {
-		SchematicsItemContext _localctx = new SchematicsItemContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_schematicsItem);
+	public final SchematicItemContext schematicItem() throws RecognitionException {
+		SchematicItemContext _localctx = new SchematicItemContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_schematicItem);
 		try {
 			setState(69);
 			_errHandler.sync(this);

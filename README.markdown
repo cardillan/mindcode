@@ -10,8 +10,8 @@ The main focus of Mindcode design is two-fold:
   and limited instruction space of Mindustry processors.
 
 A recent addition to this project is [Schemacode](doc/syntax/SCHEMACODE.markdown), a schematic definition language, and 
-Schematics Builder/Decompiler. Using these tools it is possible to convert existing schematics into a readable, 
-easily updatable text representation which can be compiled back into Mindustry schematics after modifications. The 
+Schematics Builder/Decompiler. Using these tools it is possible to convert existing schematic into a readable, 
+easily updatable text representation which can be compiled back into Mindustry schematic after modifications. The 
 flagship feature of the Schematics Builder is its ability to compile Mindcode and assign it to processors in the 
 schematic on the fly, saving a lot of hassle with maintaining schematics based on Mindcode programs.     
 

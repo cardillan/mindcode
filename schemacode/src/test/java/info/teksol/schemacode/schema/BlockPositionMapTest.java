@@ -48,14 +48,14 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
 
     @Test
     void supportsLinkingNodesByAnyTile() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @power-node     at (0, 0) connected to (4, 2)
                     @battery-large  at (2, 0)
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 5, 3,
+        Schematic expected = new Schematic("", "", List.of(), 5, 3,
                 List.of(
                         block("@power-node",    P0_0, Direction.EAST, pa(P2_0)),
                         block("@battery-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY)
@@ -67,7 +67,7 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
 
     @Test
     void supportsLinkingProcessorsByAnyTile() {
-        Schematics actual = buildSchematics("""
+        Schematic actual = buildSchematics("""
                 schematic
                     @micro-processor at (0, 0) processor
                         links (4, 2) as battery1 end
@@ -76,7 +76,7 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematics expected = new Schematics("", "", List.of(), 5, 3,
+        Schematic expected = new Schematic("", "", List.of(), 5, 3,
                 List.of(
                         block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(List.of(new Link("battery1", 2, 0)),"")

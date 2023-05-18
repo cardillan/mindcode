@@ -6,7 +6,7 @@ import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.schema.Block;
 import info.teksol.schemacode.schema.BlockPositionMap;
-import info.teksol.schemacode.schema.Schematics;
+import info.teksol.schemacode.schema.Schematic;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -27,27 +27,27 @@ public class SchematicsIO {
     private static final byte[] HEADER = {'m', 's', 'c', 'h'};
     private static final byte VERSION = 1;
 
-    public static void writeMsch(Schematics schematics, OutputStream output) throws IOException {
+    public static void writeMsch(Schematic schematic, OutputStream output) throws IOException {
         output.write(HEADER);
         output.write(VERSION);
 
         try (DataOutputStream stream = new DataOutputStream(new DeflaterOutputStream(output))) {
-            stream.writeShort(schematics.width());
-            stream.writeShort(schematics.height());
-            Map<String, String> tags = createTags(schematics);
+            stream.writeShort(schematic.width());
+            stream.writeShort(schematic.height());
+            Map<String, String> tags = createTags(schematic);
             stream.writeByte(tags.size());
             for (var e : tags.entrySet()) {
                 stream.writeUTF(e.getKey());
                 stream.writeUTF(e.getValue());
             }
-            List<BlockType> typeList = schematics.blocks().stream().map(Block::blockType).distinct().toList();
+            List<BlockType> typeList = schematic.blocks().stream().map(Block::blockType).distinct().toList();
             stream.writeByte(typeList.size());
             for (BlockType t : typeList) {
                 stream.writeUTF(t.name().substring(1));
             }
 
-            stream.writeInt(schematics.blocks().size());
-            for (Block block : schematics.blocks()) {
+            stream.writeInt(schematic.blocks().size());
+            for (Block block : schematic.blocks()) {
                 stream.writeByte(typeList.indexOf(block.blockType()));
                 stream.writeInt(block.position().pack());
                 writeObject(stream, block.configuration().encode(block));
@@ -60,20 +60,20 @@ public class SchematicsIO {
         return str == null ? "" : str;
     }
 
-    private static Map<String, String> createTags(Schematics schematics) {
+    private static Map<String, String> createTags(Schematic schematic) {
         Map<String, String> tags = new LinkedHashMap<>();
-        tags.put("name", strNull(schematics.name()));
-        tags.put("description", strNull(schematics.description()));
-        if (!schematics.labels().isEmpty()) {
-            tags.put("labels", encodeLabels(schematics.labels()));
+        tags.put("name", strNull(schematic.name()));
+        tags.put("description", strNull(schematic.description()));
+        if (!schematic.labels().isEmpty()) {
+            tags.put("labels", encodeLabels(schematic.labels()));
         }
         return tags;
     }
 
-    public static void write(Schematics build, OutputStream output) throws IOException {
+    public static void write(Schematic build, OutputStream output) throws IOException {
         BlockPositionMap<Block> map = BlockPositionMap.builderToMindustry(m -> {}, build.blocks());
         List<Block> blocks = build.blocks().stream().map(b -> b.remap(map::translate)).toList();
-        Schematics msch = new Schematics(build.name(), build.description(), build.labels(), build.width(), build.height(), blocks);
+        Schematic msch = new Schematic(build.name(), build.description(), build.labels(), build.width(), build.height(), blocks);
         writeMsch(msch, output);
     }
 
@@ -89,7 +89,7 @@ public class SchematicsIO {
         return new Tuple2<>(new DataInputStream(new InflaterInputStream(input)), ver);
     }
 
-    public static Schematics readMsch(InputStream input) throws IOException {
+    public static Schematic readMsch(InputStream input) throws IOException {
         Tuple2<DataInputStream, Integer> inputs = skipHeader(input);
         int ver = inputs.getT2();
 
@@ -141,15 +141,15 @@ public class SchematicsIO {
 
             String name = tagMap.getOrDefault("name", "");
             String description = tagMap.getOrDefault("description", "");
-            return new Schematics(name, description, labels, width, height, blocks);
+            return new Schematic(name, description, labels, width, height, blocks);
         }
     }
 
-    public static Schematics read(InputStream input) throws IOException {
-        Schematics msch = readMsch(input);
+    public static Schematic read(InputStream input) throws IOException {
+        Schematic msch = readMsch(input);
         BlockPositionMap<Block> map = BlockPositionMap.mindustryToBuilder(m -> {}, msch.blocks());
         List<Block> blocks = msch.blocks().stream().map(b -> b.remap(map::translate)).toList();
-        return new Schematics(msch.name(), msch.description(), msch.labels(), msch.width(), msch.height(), blocks);
+        return new Schematic(msch.name(), msch.description(), msch.labels(), msch.width(), msch.height(), blocks);
     }
 
     @SuppressWarnings("UnnecessaryDefault")

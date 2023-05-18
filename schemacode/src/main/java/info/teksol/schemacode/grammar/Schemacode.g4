@@ -5,13 +5,13 @@ definitions
     ;
 
 definition
-    : schematics
+    : schematic
     | stringValue
     ;
 
-schematics : (name=Id Colon)? Schematic items=schematicsItem+ End ;
+schematic : (name=Id Colon)? Schematic items=schematicItem+ End ;
 
-schematicsItem
+schematicItem
     : attribute
     | block
     ;

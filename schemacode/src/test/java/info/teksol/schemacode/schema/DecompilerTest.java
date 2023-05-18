@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DecompilerTest extends AbstractSchematicsTest {
 
     private String recompile(String definition, boolean relativePositions, boolean relativeConnections, boolean relativeLinks) {
-        Schematics schematics = buildSchematics(definition);
-        Decompiler decompiler = new Decompiler(schematics);
+        Schematic schematic = buildSchematics(definition);
+        Decompiler decompiler = new Decompiler(schematic);
         decompiler.setRelativePositions(relativePositions);
         decompiler.setRelativeConnections(relativeConnections);
         decompiler.setRelativeLinks(relativeLinks);

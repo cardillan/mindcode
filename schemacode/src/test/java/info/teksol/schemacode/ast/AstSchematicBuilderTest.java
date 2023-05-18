@@ -9,10 +9,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AstSchematicsBuilderTest extends AbstractSchematicsTest {
+class AstSchematicBuilderTest extends AbstractSchematicsTest {
 
     protected AstDefinitions definitionWithBlocks(AstBlock... blocks) {
-        return new AstDefinitions(List.of(new AstSchematics(List.of(), List.of(blocks))));
+        return new AstDefinitions(List.of(new AstSchematic(List.of(), List.of(blocks))));
     }
 
     @Test
@@ -47,7 +47,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
         AstDefinitions expected = new AstDefinitions(
                 List.of(
-                        new AstSchematics(
+                        new AstSchematic(
                                 List.of(
                                         new AstSchemaAttribute("name", AstStringLiteral.fromText("On/off switch")),
                                         new AstSchemaAttribute("description", AstStringLiteral.fromText("Description")),
@@ -122,7 +122,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
                 """
         );
 
-        assertTrue(definitions.definitions().get(0) instanceof AstSchematics schematics
+        assertTrue(definitions.definitions().get(0) instanceof AstSchematic schematics
                 && schematics.attributes().get(0).attribute().equals("description")
                 && schematics.attributes().get(0).value() instanceof AstStringBlock stringBlock
                 && stringBlock.getValue().equals("Description"));
@@ -139,7 +139,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
         AstDefinitions expected = new AstDefinitions(
                 List.of(
-                        new AstSchematics(
+                        new AstSchematic(
                                 List.of(
                                         new AstSchemaAttribute("name", AstStringLiteral.fromText("Name"))
                                 ),
@@ -163,7 +163,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
         AstDefinitions expected = new AstDefinitions(
                 List.of(
-                        new AstSchematics(
+                        new AstSchematic(
                                 List.of(
                                         new AstSchemaAttribute("name", new AstStringRef("str_Name"))
                                 ),
@@ -187,7 +187,7 @@ class AstSchematicsBuilderTest extends AbstractSchematicsTest {
 
         AstDefinitions expected = new AstDefinitions(
                 List.of(
-                        new AstSchematics(
+                        new AstSchematic(
                                 List.of(
                                         new AstSchemaAttribute("dimensions", new AstCoordinates(4, 5))
                                 ),

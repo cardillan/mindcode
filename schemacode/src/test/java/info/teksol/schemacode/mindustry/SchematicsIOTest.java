@@ -1,6 +1,6 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.schemacode.schema.Schematics;
+import info.teksol.schemacode.schema.Schematic;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -90,10 +90,10 @@ class SchematicsIOTest {
         // Comparison done on uncompressed arrays (although processor configuration is compressed anyway)
         // The schematics were obtained from Mindustry itself.
         byte[] contents = Files.readAllBytes(schema.toPath());
-        Schematics schematics = assertDoesNotThrow(() -> SchematicsIO.read(new ByteArrayInputStream(contents)));
+        Schematic schematic = assertDoesNotThrow(() -> SchematicsIO.read(new ByteArrayInputStream(contents)));
         byte[] rewritten = assertDoesNotThrow(() -> {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
-            SchematicsIO.write(schematics, output);
+            SchematicsIO.write(schematic, output);
             return output.toByteArray();
         });
 

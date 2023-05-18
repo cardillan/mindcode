@@ -3,7 +3,7 @@ package info.teksol.schemacode;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schema.Decompiler;
-import info.teksol.schemacode.schema.Schematics;
+import info.teksol.schemacode.schema.Schematic;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -21,8 +21,8 @@ public class SchematicsDecompiler {
         byte[] binary = Base64.getDecoder().decode(encodedSchematics);
 
         try (InputStream is = new ByteArrayInputStream(binary)) {
-            Schematics schematics = SchematicsIO.read(is);
-            Decompiler decompiler = new Decompiler(schematics);
+            Schematic schematic = SchematicsIO.read(is);
+            Decompiler decompiler = new Decompiler(schematic);
             decompiler.setRelativePositions(false);
             decompiler.setRelativeConnections(true);
             decompiler.setRelativeLinks(true);

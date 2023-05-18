@@ -97,8 +97,8 @@ Any
 rule names:
 definitions
 definition
-schematics
-schematicsItem
+schematic
+schematicItem
 attribute
 block
 labelList

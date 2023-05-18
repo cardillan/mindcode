@@ -46,11 +46,11 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     }
 
     @Override
-    public AstSchemaItem visitSchematics(SchemacodeParser.SchematicsContext ctx) {
+    public AstSchemaItem visitSchematic(SchemacodeParser.SchematicContext ctx) {
         //final String id = ctx.name == null ? null : ctx.name.getText();
         final List<AstSchemaAttribute> attributes = new ArrayList<>();
         final List<AstBlock> blocks = new ArrayList<>();
-        for (SchemacodeParser.SchematicsItemContext item : ctx.schematicsItem()) {
+        for (SchemacodeParser.SchematicItemContext item : ctx.schematicItem()) {
             AstSchemaItem schemaItem = visit(item);
             switch (schemaItem) {
                 case AstSchemaAttribute a  -> attributes.add(a);
@@ -60,7 +60,7 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
             }
         }
 
-        return new AstSchematics(attributes, blocks);
+        return new AstSchematic(attributes, blocks);
     }
 
     // Attributes

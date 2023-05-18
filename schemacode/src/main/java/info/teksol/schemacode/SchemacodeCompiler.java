@@ -9,7 +9,7 @@ import info.teksol.schemacode.grammar.SchemacodeLexer;
 import info.teksol.schemacode.grammar.SchemacodeParser;
 import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
 import info.teksol.schemacode.mindustry.SchematicsIO;
-import info.teksol.schemacode.schema.Schematics;
+import info.teksol.schemacode.schema.Schematic;
 import info.teksol.schemacode.schema.SchematicsBuilder;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -51,7 +51,7 @@ public class SchemacodeCompiler {
         return AstSchematicsBuilder.generate(parseTree, messageListener);
     }
 
-    static Schematics buildSchematics(AstDefinitions astDefinitions, CompilerProfile compilerProfile,
+    static Schematic buildSchematics(AstDefinitions astDefinitions, CompilerProfile compilerProfile,
             Consumer<CompilerMessage> messageListener, Path basePath) {
         SchematicsBuilder builder = SchematicsBuilder.create(compilerProfile, astDefinitions, messageListener, basePath);
         return builder == null ? null : builder.buildSchematics();
@@ -69,12 +69,12 @@ public class SchemacodeCompiler {
         AstDefinitions astDefinitions = createDefinitions(parseTree, messages::add);
         if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
-        Schematics schematics = buildSchematics(astDefinitions, compilerProfile, messages::add, basePath);
+        Schematic schematic = buildSchematics(astDefinitions, compilerProfile, messages::add, basePath);
         if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
-            SchematicsIO.write(schematics, output);
+            SchematicsIO.write(schematic, output);
             return new CompilerOutput<>(output.toByteArray(), messages);
         } catch (IOException e) {
             throw new SchematicsInternalError(e, "Error converting schematics to binary representation.");
