@@ -298,4 +298,21 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
         );
     }
 
+
+    @Test
+    void generatesSetProp() {
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(SETPROP, "property", "object", "value"),
+                        createInstruction(END)
+                ),
+                generateAndOptimize(
+                        (Seq) translateToAst("""
+                                object.setprop(property, value)
+                                """
+                        )
+                )
+        );
+    }
+
 }

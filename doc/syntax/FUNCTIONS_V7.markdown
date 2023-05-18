@@ -184,6 +184,7 @@ Control the currently bound unit.
 |`stop()`|`ucontrol stop 0 0 0 0 0`|
 |`move(x, y)`|`ucontrol move x y 0 0 0`|
 |`approach(x, y, radius)`|`ucontrol approach x y radius 0 0`|
+|`pathfind(x, y)`|`ucontrol pathfind x y 0 0 0`|
 |`boost(enable)`|`ucontrol boost enable 0 0 0 0`|
 |`target(x, y, shoot)`|`ucontrol target x y shoot 0 0`|
 |`targetp(unit, shoot)`|`ucontrol targetp unit shoot 0 0 0`|

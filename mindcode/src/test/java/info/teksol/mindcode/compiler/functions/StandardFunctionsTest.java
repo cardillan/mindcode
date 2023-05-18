@@ -201,4 +201,21 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void generatesNewPathfind() {
+        setInstructionProcessor(InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.STANDARD_PROCESSOR));
+        assertLogicInstructionsMatch(
+                List.of(
+                        createInstruction(UCONTROL, "pathfind", "50", "50"),
+                        createInstruction(END)
+                ),
+                generateUnoptimized(
+                        (Seq) translateToAst("""
+                                pathfind(50, 50)
+                                """
+                        )
+                )
+        );
+    }
 }

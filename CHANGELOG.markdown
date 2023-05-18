@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file.
   See [`getBlock`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol),
   [`ulocate`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ulocate). Target `7` is still default both in webapp 
   and in the command line tool, so the change doesn't break existing code.
+* Added support for newly available `ucontrol pathfind` instruction. When issued, navigates current unit to given 
+  location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol). 
 * Added command line option for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
   to specify order in which blocks are written to the schema definition file.
 * Added [overlapping blocks detection](doc/syntax/SCHEMACODE.markdown#block-position). Overlapping blocks now cause 

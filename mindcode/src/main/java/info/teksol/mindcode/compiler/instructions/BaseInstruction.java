@@ -32,7 +32,8 @@ public class BaseInstruction implements LogicInstruction {
             inputs = -1;
             outputs = -1;
         } else {
-            assignments = IntStream.range(0, params.size()).mapToObj(i -> new ParameterAssignment(params.get(i), args.get(i))).toList();
+            int count = Math.min(params.size(), args.size());
+            assignments = IntStream.range(0, count).mapToObj(i -> new ParameterAssignment(params.get(i), args.get(i))).toList();
             inputs = (int) params.stream().filter(LogicParameter::isInput).count();
             outputs = (int) params.stream().filter(LogicParameter::isOutput).count();
         }
