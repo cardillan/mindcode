@@ -377,18 +377,6 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLinkRef(SchemacodeParser.LinkRefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLinkRef(SchemacodeParser.LinkRefContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLinkPos(SchemacodeParser.LinkPosContext ctx) { }
 	/**
 	 * {@inheritDoc}

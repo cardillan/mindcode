@@ -227,13 +227,6 @@ public class SchemacodeBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitLinkRef(SchemacodeParser.LinkRefContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitLinkPos(SchemacodeParser.LinkPosContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

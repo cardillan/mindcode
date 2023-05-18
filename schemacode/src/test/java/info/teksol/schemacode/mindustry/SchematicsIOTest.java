@@ -52,8 +52,8 @@ class SchematicsIOTest {
     @TestFactory
     List<DynamicTest> readsSchematics() {
         final List<DynamicTest> result = new ArrayList<>();
-        final String dirname = "src/test/resources/schematics";
-        final File[] files = new File(dirname).listFiles();
+        final String directory = "src/test/resources/schematics";
+        final File[] files = new File(directory).listFiles();
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one schematic; found none");
         Arrays.sort(files);
@@ -72,8 +72,8 @@ class SchematicsIOTest {
     @TestFactory
     List<DynamicTest> rewriteSchematics() {
         final List<DynamicTest> result = new ArrayList<>();
-        final String dirname = "src/test/resources/schematics";
-        final File[] files = new File(dirname).listFiles();
+        final String directory = "src/test/resources/schematics";
+        final File[] files = new File(directory).listFiles();
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one schematic; found none");
         Arrays.sort(files);

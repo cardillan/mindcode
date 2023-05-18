@@ -79,14 +79,14 @@ public abstract class AbstractSchematicsTest {
     protected Schematic buildSchematics(String definition) {
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations();
-        return SchemacodeCompiler.buildSchematics(definitions, compilerProfile, messageListener("buildSchematics"), null);
+        return SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messageListener("buildSchematics"), null);
     }
 
     protected void buildSchematicsExpectingError(String definition, @Language("RegExp") String regex) {
         List<CompilerMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations();
-        SchemacodeCompiler.buildSchematics(definitions, compilerProfile, messages::add, null);
+        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, null);
         assertRegex(MessageLevel.ERROR, regex, messages);
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractSchematicsTest {
         List<CompilerMessage> messages = new ArrayList<>();
         AstDefinitions definitions = createDefinitions(definition);
         CompilerProfile compilerProfile = CompilerProfile.fullOptimizations();
-        SchemacodeCompiler.buildSchematics(definitions, compilerProfile, messages::add, null);
+        SchemacodeCompiler.buildSchematic(definitions, compilerProfile, messages::add, null);
         assertRegex(MessageLevel.WARNING, regex, messages);
     }
 

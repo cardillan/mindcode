@@ -84,7 +84,6 @@ processorLinks
 
 linkDef
     : linkPattern=Pattern                                   # linkPattern
-    | linkRef=Id ( As alias=Id )? virtual=Virtual?          # linkRef           // TODO: remove, linkPos supersedes this
     | linkPos=connection ( As alias=Id virtual=Virtual? )?  # linkPos
     ;
 

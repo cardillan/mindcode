@@ -10,6 +10,10 @@ public record AstLinkPos(AstConnection connection, String name, boolean virtual)
 
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
-        linkConsumer.accept(new Link(name, connection.evaluate(builder, processorPosition)));
+        linkConsumer.accept(new Link(stripPrefix(trueLinkName()), connection.evaluate(builder, processorPosition)));
+    }
+
+    private String trueLinkName() {
+        return name == null ? connection().id() : name;
     }
 }

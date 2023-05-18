@@ -51,10 +51,10 @@ public class SchemacodeCompiler {
         return AstSchematicsBuilder.generate(parseTree, messageListener);
     }
 
-    static Schematic buildSchematics(AstDefinitions astDefinitions, CompilerProfile compilerProfile,
+    static Schematic buildSchematic(AstDefinitions astDefinitions, CompilerProfile compilerProfile,
             Consumer<CompilerMessage> messageListener, Path basePath) {
         SchematicsBuilder builder = SchematicsBuilder.create(compilerProfile, astDefinitions, messageListener, basePath);
-        return builder == null ? null : builder.buildSchematics();
+        return builder.buildSchematics();
     }
 
     public static CompilerOutput<byte[]> compile(String definition, CompilerProfile compilerProfile, Path basePath) {
@@ -69,7 +69,7 @@ public class SchemacodeCompiler {
         AstDefinitions astDefinitions = createDefinitions(parseTree, messages::add);
         if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
-        Schematic schematic = buildSchematics(astDefinitions, compilerProfile, messages::add, basePath);
+        Schematic schematic = buildSchematic(astDefinitions, compilerProfile, messages::add, basePath);
         if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
         try {

@@ -388,7 +388,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@power-node",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstConnections(new AstConnection(new AstCoordinates(1, 1)))
+                        new AstConnections(new AstConnection(1, 1))
                 )
         );
 
@@ -409,7 +409,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@power-node",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstConnections(new AstConnection(new AstCoordinates(1, 1, true)))
+                        new AstConnections(new AstConnection(1, 1, true))
                 )
         );
 
@@ -431,8 +431,8 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         new AstCoordinates(0, 0),
                         null,
                         new AstConnections(
-                                new AstConnection(new AstCoordinates(1, 1, true)),
-                                new AstConnection(new AstCoordinates(2, 2))
+                                new AstConnection(1, 1, true),
+                                new AstConnection(2, 2)
                         )
                 )
         );
@@ -705,7 +705,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkRef("cell1", null, false)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection("cell1"), null, false)), null, Language.NONE)
                 )
         );
 
@@ -740,7 +740,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkRef("cell1", "cell2", false)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection("cell1"), "cell2", false)), null, Language.NONE)
                 )
         );
 
@@ -763,7 +763,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkRef("cell1", "cell2", true)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection("cell1"), "cell2", true)), null, Language.NONE)
                 )
         );
 
@@ -775,7 +775,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
         AstDefinitions actual = createDefinitions("""
                 schematic
                     @micro-processor at (0, 0) processor
-                        links cell1 virtual end
+                        links -(1, 1) as cell1 virtual end
                     end
                 end
                 """);
@@ -786,7 +786,9 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkRef("cell1", null, true)), null, Language.NONE)
+                        new AstProcessor(
+                                List.of(new AstLinkPos(new AstConnection(-1, -1, true), "cell1", true)),
+                                null, Language.NONE)
                 )
         );
 
@@ -809,7 +811,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(new AstCoordinates(1, 1)), null, false)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1), null, false)), null, Language.NONE)
                 )
         );
 
@@ -832,7 +834,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(new AstCoordinates(1, 1, true)), null, false)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1, true), null, false)), null, Language.NONE)
                 )
         );
 
@@ -855,7 +857,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(new AstCoordinates(1, 1)), "switch1", false)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1), "switch1", false)), null, Language.NONE)
                 )
         );
 
@@ -878,7 +880,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(new AstCoordinates(1, 1, true)), "switch1", false)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1, true), "switch1", false)), null, Language.NONE)
                 )
         );
 
@@ -901,7 +903,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(new AstCoordinates(1, 1)), "switch1", true)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1), "switch1", true)), null, Language.NONE)
                 )
         );
 
@@ -924,7 +926,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(new AstCoordinates(1, 1, true)), "switch1", true)), null, Language.NONE)
+                        new AstProcessor(List.of(new AstLinkPos(new AstConnection(1, 1, true), "switch1", true)), null, Language.NONE)
                 )
         );
 
@@ -980,11 +982,11 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         null,
                         new AstProcessor(List.of(
                                 new AstLinkPattern("p1-*"),
-                                new AstLinkRef("switch1", null, false),
-                                new AstLinkRef("cell1", "cell2", false),
-                                new AstLinkPos(new AstConnection(new AstCoordinates(1, 1)), null, false),
-                                new AstLinkPos(new AstConnection(new AstCoordinates(2, 2, true)), "message1", false),
-                                new AstLinkPos(new AstConnection(new AstCoordinates(-1, -1, true)), "display1", true)
+                                new AstLinkPos(new AstConnection("switch1"), null, false),
+                                new AstLinkPos(new AstConnection("cell1"), "cell2", false),
+                                new AstLinkPos(new AstConnection(1, 1), null, false),
+                                new AstLinkPos(new AstConnection(2, 2, true), "message1", false),
+                                new AstLinkPos(new AstConnection(-1, -1, true), "display1", true)
                         ), null, Language.NONE)
                 )
         );

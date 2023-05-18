@@ -341,18 +341,6 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitLinkPattern(SchemacodeParser.LinkPatternContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code linkRef}
-	 * labeled alternative in {@link SchemacodeParser#linkDef}.
-	 * @param ctx the parse tree
-	 */
-	void enterLinkRef(SchemacodeParser.LinkRefContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code linkRef}
-	 * labeled alternative in {@link SchemacodeParser#linkDef}.
-	 * @param ctx the parse tree
-	 */
-	void exitLinkRef(SchemacodeParser.LinkRefContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code linkPos}
 	 * labeled alternative in {@link SchemacodeParser#linkDef}.
 	 * @param ctx the parse tree

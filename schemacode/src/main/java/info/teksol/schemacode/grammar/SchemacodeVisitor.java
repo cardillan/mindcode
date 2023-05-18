@@ -207,13 +207,6 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLinkPattern(SchemacodeParser.LinkPatternContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code linkRef}
-	 * labeled alternative in {@link SchemacodeParser#linkDef}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLinkRef(SchemacodeParser.LinkRefContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code linkPos}
 	 * labeled alternative in {@link SchemacodeParser#linkDef}.
 	 * @param ctx the parse tree

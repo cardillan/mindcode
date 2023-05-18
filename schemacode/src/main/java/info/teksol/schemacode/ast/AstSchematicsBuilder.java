@@ -193,14 +193,6 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     }
 
     @Override
-    public AstLinkRef visitLinkRef(SchemacodeParser.LinkRefContext ctx) {
-        String reference = ctx.linkRef.getText();
-        String name = ctx.alias == null ? null : ctx.alias.getText();
-        boolean virtual = ctx.virtual != null;
-        return new AstLinkRef(reference, name, virtual);
-    }
-
-    @Override
     public AstLinkPos visitLinkPos(SchemacodeParser.LinkPosContext ctx) {
         AstConnection connection = (AstConnection) visit(ctx.linkPos);
         String name = ctx.alias == null ? null : ctx.alias.getText();

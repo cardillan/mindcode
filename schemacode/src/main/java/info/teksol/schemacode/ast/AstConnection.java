@@ -9,6 +9,14 @@ public record AstConnection(AstCoordinates position, String id) implements AstCo
         this(position, null);
     }
 
+    public AstConnection(int x, int y) {
+        this(new AstCoordinates(x, y), null);
+    }
+
+    public AstConnection(int x, int y, boolean relative) {
+        this(new AstCoordinates(x, y, relative), null);
+    }
+
     public AstConnection(String id) {
         this(null, id);
     }
