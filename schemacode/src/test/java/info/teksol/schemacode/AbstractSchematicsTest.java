@@ -32,7 +32,7 @@ public abstract class AbstractSchematicsTest {
     }
 
     public static PositionArray pa(Position... positions) {
-        return new PositionArray(positions);
+        return positions.length == 0 ? PositionArray.EMPTY : new PositionArray(positions);
     }
 
     // Block index generator. Class is re-instantiated for each test, index always starts from zero.

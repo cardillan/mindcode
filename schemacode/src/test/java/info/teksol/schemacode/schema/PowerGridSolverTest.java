@@ -190,7 +190,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                     @power-node at %s connected to (0, 0)
                 end
                 """.formatted(position.toStringAbsolute()),
-                "Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of range connection to block '@power-node' at \\(\\s*0,\\s*0\\)\\.");
+                "Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to block '@power-node' at \\(\\s*0,\\s*0\\)\\.");
     }
 
     @TestFactory
@@ -215,7 +215,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                     @power-node at %s connected to (0, 0)
                 end
                 """.formatted(position.toStringAbsolute()),
-                "Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of range connection to block '@power-node-large' at \\(\\s*0,\\s*0\\)\\.");
+                "Block '@power-node' at \\(\\s*\\d+,\\s*\\d+\\) has an out-of-range connection to block '@power-node-large' at \\(\\s*0,\\s*0\\)\\.");
     }
 
     @Test
@@ -247,6 +247,6 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                     @power-node          at ( 1,  1) connected to (0, 0)
                 end
                 """,
-                "Block '@power-node' at \\(\\s*0,\\s*0\\) has too many connections\\.");
+                "Block '@power-node' at \\(\\s*0,\\s*0\\) has more than 10 connection\\(s\\)\\.");
     }
 }

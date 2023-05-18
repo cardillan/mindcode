@@ -11,18 +11,18 @@ The main focus of Mindcode design is two-fold:
 
 A recent addition to this project is [Schemacode](doc/syntax/SCHEMACODE.markdown), a schematic definition language, and 
 Schematics Builder/Decompiler. Using these tools it is possible to convert existing schematic into a readable, 
-easily updatable text representation which can be compiled back into Mindustry schematic after modifications. The 
+human editable text representation which can be compiled back into Mindustry schematic after modifications. The 
 flagship feature of the Schematics Builder is its ability to compile Mindcode and assign it to processors in the 
 schematic on the fly, saving a lot of hassle with maintaining schematics based on Mindcode programs.     
 
-A [changelog](CHANGELOG.markdown) is now maintained for releases.  
+A [changelog](CHANGELOG.markdown) is now maintained for releases.
 
 ## Using Mindcode
 
 Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area,
 then press the **Compile** button. The _Mindustry Logic_ text area will contain the Logic version of your Mindcode. 
 Copy the compiled version. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. 
-Select **Import from Clipboard**". Mindustry is now ready to execute your code. 
+Select **Import from Clipboard**. Mindustry is now ready to execute your code. 
 
 It is also possible to build Mindcode locally (see the [Development](#development) section), and use the
 [command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying the compiled code into 

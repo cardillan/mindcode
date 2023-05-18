@@ -23,6 +23,9 @@ Most importantly, logic processors can be fully configured using Schemacode. Whe
 in a given processor, it is possible to use either the native mlog language, or Mindcode. The source code (both mlog 
 and Mindcode) can also be injected into the schematic from external file.
 
+It might be useful to have a look at existing Schemacode samples at http://mindcode.herokuapp.com/schematics before 
+going on with this documentation.
+
 # Whitespace and comments
 
 All tokes in Schemacode are separated by whitespace. End of line characters have no special meaning (except in text 
@@ -580,15 +583,42 @@ The following block types can be connected to several blocks (the exact amount d
 * `@beam-link`
 * `@power-source`
 
+### Connecting bridges
+
+Both normal and phase bridge connections must conform to the following criteria, otherwise a compilation error occurs:
+
+* At most one connection is allowed.
+* The connection must not lead to the same block (no connection to itself).
+* The connections must lead to a block of the same type; it is not possible to connect e.g. a `@bridge-conveyor` to 
+  a `@phase-conveyor`.
+* No circular connections: if a block is connected to another block, the other block must not be connected to the 
+  original block.
+* The connection must be either vertical or horizontal; diagonal connections of any kind are disallowed.
+* The connection distance must not exceed the bridge range.
+
+Connections to empty positions are allowed and no warnings are generated. When the schematic is build in a Mindustry 
+world and later a bridge of the same type is placed at the target position, the bridge is automatically connected.
+
+### Connecting mass drivers
+
+Mass driver connections must conform to the following criteria, otherwise a compilation error occurs:
+
+* At most one connection is allowed.
+* The connection must not lead to the same block (no connection to itself).
+* The connections must lead to a block of the same type; it is not possible to connect e.g. a `@payload-mass-driver` to
+  a `@large-payload-mass-driver`.
+* The connection distance must not exceed the mass driver range.
+
+Connections to empty positions are allowed and no warnings are generated.
+
 ### Connecting power nodes
 
 Several different blocks in Mindustry represent power nodes: `@power-node`, `@power-node-large`, `@surge-tower`,
 `@beam-link` and `@power-source`.
 
-Power node connections are processed and validated specifically. When any of the following criteria aren't met,
-a compile error is produced: 
+Power node connections must conform to the following criteria, otherwise a compilation error occurs:
 
-* The connection must not lead to the same block.
+* The connection must not lead to the same block (no connection to itself).
 * The connection must connect to a block which produces or consumes power, or to another power node. (Note: a diode 
   isn't such a block, power node cannot connect to a diode.)
 * The connection distance must not exceed the power node range. When linking two power nodes, larger of the two 

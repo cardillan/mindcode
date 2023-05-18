@@ -32,9 +32,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// TODO: position blocks by lower left corner (??)
-// TODO: included file path relative to processed file
-
 public class SchematicsBuilder {
     private final CompilerProfile compilerProfile;
     private final Consumer<CompilerMessage> messageListener;
@@ -143,7 +140,7 @@ public class SchematicsBuilder {
                         type.configurationType(), ConfigurationType.fromInstance(configuration));
             } else {
                 blocks.add(new Block(index, astBlock.labels(), type, blockPos.position(), direction,
-                        configuration.as(type.configurationType().getConfigurationClass())));
+                        configuration.as(type.configurationType().getBuilderConfigurationClass())));
             }
         }
 
@@ -158,6 +155,7 @@ public class SchematicsBuilder {
 
         Schematic schematic = new Schematic(name, description, merged, 0, 0, blocks);
         schematic = PowerGridSolver.solve(this, schematic);
+        BridgeSolver.solve(this, schematic);
 
         // Compensate for non-zero origin
         Position origin = findLowerLeftCoordinate(schematic.blocks());

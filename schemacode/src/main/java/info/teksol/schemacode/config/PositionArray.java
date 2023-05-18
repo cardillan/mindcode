@@ -26,6 +26,10 @@ public record PositionArray(List<Position> positions) implements Configuration {
         return positions.size();
     }
 
+    public Position get(int index) {
+        return positions.get(index);
+    }
+
     @Override
     public <T extends Configuration> T as(Class<T> type) {
         if (type == Position.class) {

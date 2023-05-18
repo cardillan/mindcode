@@ -44,6 +44,10 @@ public enum ConfigurationType {
         return cfgClass;
     }
 
+    public Class<? extends Configuration> getBuilderConfigurationClass() {
+        return secondaryClass == null ? cfgClass : secondaryClass;
+    }
+
     public boolean isCompatible(Configuration configuration) {
         return cfgClass.isInstance(configuration) || secondaryClass != null && secondaryClass.isInstance(configuration);
     }

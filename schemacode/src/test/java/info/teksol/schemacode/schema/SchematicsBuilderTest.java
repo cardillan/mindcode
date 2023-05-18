@@ -11,7 +11,6 @@ import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Item;
 import info.teksol.schemacode.mindustry.Liquid;
-import info.teksol.schemacode.mindustry.Position;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -351,7 +350,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
-                        block("@bridge-conveyor", P0_0, Direction.EAST, Position.INVALID)
+                        block("@bridge-conveyor", P0_0, Direction.EAST, PositionArray.EMPTY)
                 )
         );
 
@@ -599,7 +598,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
-                        block("@bridge-conveyor", P0_0, Direction.EAST, P1_0)
+                        block("@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0))
                 )
         );
 
@@ -619,8 +618,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 2, 1,
                 List.of(
-                        block(List.of(),          "@bridge-conveyor", P0_0, Direction.EAST, P1_0),
-                        block(List.of("bridge1"), "@bridge-conveyor", P1_0, Direction.EAST, Position.INVALID)
+                        block(List.of(),          "@bridge-conveyor", P0_0, Direction.EAST, pa(P1_0)),
+                        block(List.of("bridge1"), "@bridge-conveyor", P1_0, Direction.EAST, pa())
                 )
         );
 

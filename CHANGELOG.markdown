@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file.
 * Added [overlapping blocks detection](doc/syntax/SCHEMACODE.markdown#block-position). Overlapping blocks now cause 
   compilation errors.
 * Added support for [non-zero schematic origin](doc/syntax/SCHEMACODE.markdown#origin-and-dimensions-calculation).
+* Added validation of [bridge](doc/syntax/SCHEMACODE.markdown#connecting-bridges) and
+  [mass driver](doc/syntax/SCHEMACODE.markdown#connecting-mass-drivers) connections. Invalid links now cause 
+  compilation errors.
 * Added [validation of power node connections](doc/syntax/SCHEMACODE.markdown#connecting-power-nodes). Invalid links 
   now cause compilation errors.
 * Added support for unidirectional declaration of connections between power nodes: it is no longer necessary to 

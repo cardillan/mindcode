@@ -44,8 +44,9 @@ class PowerGridSolver {
 
         // Report overloaded nodes
         powerNodes.entrySet().stream().filter(e -> e.getKey().blockType().maxNodes() < e.getValue().size())
-                .forEachOrdered(e -> builder.error("Block '%s' at %s has too many connections.",
-                        e.getKey().name(), e.getKey().position().toStringAbsolute()));
+                .map(Map.Entry::getKey)
+                .forEachOrdered(b -> builder.error("Block '%s' at %s has more than %d connection(s).",
+                        b.name(), b.position().toStringAbsolute(), b.blockType().maxNodes()));
 
         // Rebuild block list
         List<Block> blocks = input.blocks().stream().map(block -> replaceLinks(block, powerNodes.get(block))).toList();
@@ -74,7 +75,7 @@ class PowerGridSolver {
                         powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute(),
                         linkedBlock.name(), pos.toStringAbsolute());
             } else if (!inRange(powerNodeBlock, linkedBlock) && !inRange(linkedBlock, powerNodeBlock)) {
-                builder.error("Block '%s' at %s has an out-of range connection to block '%s' at %s.",
+                builder.error("Block '%s' at %s has an out-of-range connection to block '%s' at %s.",
                         powerNodeBlock.name(), powerNodeBlock.position().toStringAbsolute(),
                         linkedBlock.name(), pos.toStringAbsolute());
             } else {

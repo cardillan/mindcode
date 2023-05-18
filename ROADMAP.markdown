@@ -73,28 +73,24 @@ Things being pondered on from time to time.
 ### Schematics Builder
 
 * Add all kinds of checks and validations
-  * prevent overlapping blocks
-  * prevent impossible block connections
   * validate mlog code
 * Support for color (illuminator) and unit type (unit factory) configurations
-* Automatically compute schematic dimensions and borders
-  * adjusts positions if the origin is not at (0, 0)
-  * allow for negative coordinates - easily add a row to the left or bottom of an existing, complex schematic
+* Automatically generate names for unnamed processor links
 * Schematic Analyzer
   * finds blocks not connected to power nodes
   * determines when the power grid in the schematic has more than one segment
   * finds distribution blocks prone to clogging
   * finds liquid containers being fed more than one kind of liquid
   * determines item flow and factory production/consumption ratios
-* Automatically generate names for unnamed processor links
 * Support for iterative block placement:
-  * `@block rightwards` places the block to the right of the last placed block
-  * `@block upwards from label` places the block upwards from labeled blocks
+  * `<@block> rightwards` places the block to the right of the last placed block
+  * `<@block> upwards from <label>` places the block upwards from labeled blocks
   * already existing blocks (typically blocks 2x2 or bigger placed in previous row/column) are skipped
 * Automatically connect blocks to power nodes, possibly with optimizations
 * Automatically add tags based on categories or types of contained blocks
   * allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
-* Make decompiler assign labels to all blocks
+* Make decompiler assign labels to all blocks and use the labels for all block references (e.g. in bridge or power 
+  node connections).
 * Support for schematics reuse
   * place schematic into schematic
   * extend existing schematic by adding or removing content
@@ -219,7 +215,7 @@ There are no plans to do any of these. We keep them around just in case.
 * LogicInstruction improvements: compiled instructions store all arguments as strings. Optimizers needs to know
   sometimes whether an argument is a numeric literal, a local variable, a global variable or a Mindustry object.
   Arguments are unnecessarily repeatedly analyzed to obtain this information, which was already known when the
-  instruction was generated in the first place. Possibly use ints for arguments like Mindustry does.
+  instruction was generated in the first place.
 * standalone jar for command-line compiler
 * [Mindustry Metadata Extractor](https://github.com/cardillan/mimex): tool to automatically acquire definitions of 
   blocks, units, items, liquids, properties etc.

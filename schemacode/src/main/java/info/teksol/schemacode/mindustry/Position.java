@@ -1,6 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.schemacode.config.Configuration;
+import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.schema.Block;
 
 import java.util.function.UnaryOperator;
@@ -10,6 +11,11 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
     public static final Position ORIGIN = new Position(0, 0);
 
     public static final Position INVALID = new Position(-255, -255);
+
+    @Override
+    public <T extends Configuration> T as(Class<T> type) {
+        return type == PositionArray.class ? type.cast(new PositionArray(this)) : Configuration.super.as(type);
+    }
 
     /**
      * Adds another 2D grid point to this point.
@@ -53,6 +59,10 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
 
     public boolean nonPositive() {
         return x <= 0 && y <= 0 && (x | y) != 0;
+    }
+
+    public boolean orthogonal(Position position) {
+        return x() == position.x() || y() == position.y();
     }
 
     /**
