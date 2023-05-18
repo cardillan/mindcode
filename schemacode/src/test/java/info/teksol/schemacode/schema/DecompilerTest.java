@@ -13,6 +13,7 @@ class DecompilerTest extends AbstractSchematicsTest {
         decompiler.setRelativePositions(relativePositions);
         decompiler.setRelativeConnections(relativeConnections);
         decompiler.setRelativeLinks(relativeLinks);
+        decompiler.setDirectionLevel(DirectionLevel.ROTATABLE_ONLY);
         return decompiler.buildCode();
     }
 
@@ -27,7 +28,7 @@ class DecompilerTest extends AbstractSchematicsTest {
                     tag = "label2"
                     tag = BLOCK-SWITCH
 
-                    @switch              at ( 0,  0) facing east  enabled
+                    @switch              at ( 0,  0) enabled
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -43,9 +44,9 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @switch              at ( 0,  0) facing east  enabled
-                    @switch              at ( 1,  0) facing east  enabled
-                    @switch              at ( 2,  0) facing east  enabled
+                    @switch              at ( 0,  0) enabled
+                    @switch              at ( 1,  0) enabled
+                    @switch              at ( 2,  0) enabled
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -61,10 +62,27 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @switch              at ( 0,  0) facing east  enabled
-                    @switch              at +(1, 0) facing east  enabled
-                    @switch              at +(1, 0) facing east  enabled
-                    @switch              at +(1, 0) facing east  enabled
+                    @switch              at ( 0,  0) enabled
+                    @switch              at +(1, 0) enabled
+                    @switch              at +(1, 0) enabled
+                    @switch              at +(1, 0) enabled
+                end
+                """.replaceAll("'''", "\"\"\"");
+
+        String actual = recompile(expected, true, false, false);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void decompilesDirections() {
+        String expected = """
+                schematic
+                    name = "Name"
+                    description = '''
+                        Description'''
+
+                    @conveyor            at ( 0,  0) facing north
+                    @conveyor            at +(1, 0) facing south
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -80,9 +98,9 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @power-node          at ( 0,  0) facing east  connected to ( 1,  0), ( 2,  0)
-                    @power-node          at ( 1,  0) facing east  connected to ( 0,  0), ( 2,  0)
-                    @power-node          at ( 2,  0) facing east  connected to ( 0,  0), ( 1,  0)
+                    @power-node          at ( 0,  0) connected to ( 1,  0), ( 2,  0)
+                    @power-node          at ( 1,  0) connected to ( 0,  0), ( 2,  0)
+                    @power-node          at ( 2,  0) connected to ( 0,  0), ( 1,  0)
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -98,9 +116,9 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @power-node          at ( 0,  0) facing east  connected to +(1, 0), +(2, 0)
-                    @power-node          at ( 1,  0) facing east  connected to -(1, 0), +(1, 0)
-                    @power-node          at ( 2,  0) facing east  connected to -(2, 0), -(1, 0)
+                    @power-node          at ( 0,  0) connected to +(1, 0), +(2, 0)
+                    @power-node          at ( 1,  0) connected to -(1, 0), +(1, 0)
+                    @power-node          at ( 2,  0) connected to -(2, 0), -(1, 0)
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -116,7 +134,7 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @micro-processor     at ( 0,  0) facing east  processor
+                    @micro-processor     at ( 0,  0) processor
                         links
                             ( 1,  1) as switch1 virtual
                             ( 2,  1) as switch2 virtual
@@ -142,7 +160,7 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @micro-processor     at ( 0,  0) facing east  processor
+                    @micro-processor     at ( 0,  0) processor
                         links
                             +(1, 1) as switch1 virtual
                             +(2, 1) as switch2 virtual
@@ -169,14 +187,14 @@ class DecompilerTest extends AbstractSchematicsTest {
                         Description'''
 
                 switch1:
-                    @switch              at ( 0,  0) facing east  enabled
+                    @switch              at ( 0,  0) enabled
                 switch2:
-                    @switch              at ( 1,  0) facing east  enabled
+                    @switch              at ( 1,  0) enabled
                 switch3:
-                    @switch              at ( 2,  0) facing east  enabled
+                    @switch              at ( 2,  0) enabled
                 switch4:
-                    @switch              at ( 3,  0) facing east  enabled
-                    @micro-processor     at ( 0,  1) facing east  processor
+                    @switch              at ( 3,  0) enabled
+                    @micro-processor     at ( 0,  1) processor
                         links
                             switch1 as switch1
                             switch2 as switch2
@@ -204,21 +222,21 @@ class DecompilerTest extends AbstractSchematicsTest {
                         Description'''
 
                 p0-switch1:
-                    @switch              at ( 0,  0) facing east  enabled
+                    @switch              at ( 0,  0) enabled
                 p0-switch2:
-                    @switch              at ( 1,  0) facing east  enabled
+                    @switch              at ( 1,  0) enabled
                 p1-switch1:
-                    @switch              at ( 2,  0) facing east  enabled
+                    @switch              at ( 2,  0) enabled
                 p1-switch2:
-                    @switch              at ( 3,  0) facing east  enabled
-                    @micro-processor     at ( 0,  1) facing east  processor
+                    @switch              at ( 3,  0) enabled
+                    @micro-processor     at ( 0,  1) processor
                         links
                             p0-switch1 as switch1
                             p0-switch2 as switch2
                         end
                         mlog = mlog-0
                     end
-                    @micro-processor     at ( 0,  2) facing east  processor
+                    @micro-processor     at ( 0,  2) processor
                         links
                             p1-switch1 as switch1
                             p1-switch2 as switch2
@@ -246,8 +264,8 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @unloader            at ( 0,  0) facing east  item @coal
-                    @unloader            at ( 0,  1) facing east  item @pyratite
+                    @unloader            at ( 0,  0) item @coal
+                    @unloader            at ( 0,  1) item @pyratite
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -263,8 +281,8 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @liquid-source       at ( 0,  0) facing east  liquid @water
-                    @liquid-source       at ( 0,  1) facing east  liquid @cryofluid
+                    @liquid-source       at ( 0,  0) liquid @water
+                    @liquid-source       at ( 0,  1) liquid @cryofluid
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -280,8 +298,8 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @bridge-conveyor     at ( 0,  0) facing east  connected to ( 3,  0)
-                    @bridge-conduit      at ( 0,  1) facing east  connected to ( 3,  1)
+                    @bridge-conveyor     at ( 0,  0) connected to ( 3,  0)
+                    @bridge-conduit      at ( 0,  1) connected to ( 3,  1)
                 end
                 """.replaceAll("'''", "\"\"\"");
 
@@ -297,11 +315,27 @@ class DecompilerTest extends AbstractSchematicsTest {
                     description = '''
                         Description'''
 
-                    @message             at ( 0,  0) facing east  text "Single line"
-                    @message             at ( 0,  1) facing east  text '''
+                    @message             at ( 0,  0) text "Single line"
+                    @message             at ( 0,  1) text '''
                         Multiline 1
                         Multiline 2
                         '''
+                end
+                """.replaceAll("'''", "\"\"\"");
+
+        String actual = recompile(expected, false, false, false);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void decompilesUnitConfiguration() {
+        String expected = """
+                schematic
+                    name = "Name"
+                    description = '''
+                        Description'''
+                
+                    @air-factory         at ( 0,  0) facing west  unit @mono
                 end
                 """.replaceAll("'''", "\"\"\"");
 

@@ -4,26 +4,27 @@ import info.teksol.mindcode.Tuple2;
 import info.teksol.schemacode.config.PositionArray;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 class BridgeSolver {
     private final SchematicsBuilder builder;
-    private final Schematic schematic;
+    private final List<Block> blocks;
     private final BlockPositionMap<Block> positionMap;
     private final Set<Tuple2<Integer, Integer>> linkBacks = new HashSet<>();
 
-    private BridgeSolver(SchematicsBuilder builder, Schematic schematic) {
+    private BridgeSolver(SchematicsBuilder builder, List<Block> blocks) {
         this.builder = builder;
-        this.schematic = schematic;
+        this.blocks = blocks;
         this.positionMap = builder.getPositionMap();
     }
 
-    static void solve(SchematicsBuilder builder, Schematic schematic) {
-        new BridgeSolver(builder, schematic).solve();
+    static void solve(SchematicsBuilder builder, List<Block> blocks) {
+        new BridgeSolver(builder, blocks).solve();
     }
 
     void solve() {
-        schematic.blocks().forEach(this::processBlock);
+        blocks.forEach(this::processBlock);
     }
 
     private void processBlock(Block block) {

@@ -147,6 +147,11 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     }
 
     @Override
+    public AstSchemaItem visitUnit(SchemacodeParser.UnitContext ctx) {
+        return new AstUnitReference(ctx.Ref().getSymbol().getText());
+    }
+
+    @Override
     public AstText visitText(SchemacodeParser.TextContext ctx) {
         return (AstText) visit(ctx.textDef());
     }

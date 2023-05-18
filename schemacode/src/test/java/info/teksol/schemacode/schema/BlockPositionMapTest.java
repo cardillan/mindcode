@@ -2,9 +2,9 @@ package info.teksol.schemacode.schema;
 
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.config.EmptyConfiguration;
-import info.teksol.schemacode.config.ProcessorConfiguration;
-import info.teksol.schemacode.config.ProcessorConfiguration.Link;
 import info.teksol.schemacode.mindustry.Direction;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

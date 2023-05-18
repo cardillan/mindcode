@@ -3,6 +3,7 @@ package info.teksol.schemacode.mimex;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Implementation;
 
+import java.util.List;
 import java.util.Map;
 
 public record BlockType(
@@ -13,7 +14,9 @@ public record BlockType(
         boolean configurable,
         String category,
         float range,
-        int maxNodes
+        int maxNodes,
+        boolean rotate,
+        List<String> unitPlans
         ) {
 
     private static final Map<String, BlockType> NAME_MAP = BlockTypeReader.createFromResource();

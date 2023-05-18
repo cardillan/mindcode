@@ -5,12 +5,13 @@ import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.config.BooleanConfiguration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.config.ProcessorConfiguration;
-import info.teksol.schemacode.config.ProcessorConfiguration.Link;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Item;
 import info.teksol.schemacode.mindustry.Liquid;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
+import info.teksol.schemacode.mindustry.UnitPlan;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -401,7 +402,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
-                        block("@micro-processor", P0_0, Direction.EAST, new ProcessorConfiguration())
+                        block("@micro-processor", P0_0, Direction.EAST, ProcessorConfiguration.EMPTY)
                 )
         );
 
@@ -776,6 +777,50 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     }
 
     @Test
+    void buildsSchematicsWithAirFactoryFlare() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @air-factory at (0, 0) unit @flare
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", List.of(), 3, 3,
+                List.of(
+                        block("@air-factory", P0_0, Direction.EAST, new UnitPlan("@flare"))
+                )
+        );
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void buildsSchematicsWithAirFactoryMono() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @air-factory at (0, 0) unit @mono
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", List.of(), 3, 3,
+                List.of(
+                        block("@air-factory", P0_0, Direction.EAST, new UnitPlan("@mono"))
+                )
+        );
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void refusesUnsupportedUnitConfiguration() {
+        buildSchematicsExpectingError("""
+                schematic
+                    @air-factory at (0, 0) unit @poly
+                end
+                """,
+                "Block '@air-factory' at \\(\\s*0,\\s*0\\): unknown or unsupported unit type '@poly'\\.");
+    }
+
+    @Test
     void refusesUnknownBlocks() {
         buildSchematicsExpectingError("""
                 schematic
@@ -794,6 +839,6 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                     @message at (0, 0) enabled
                 end
                 """,
-                "Unexpected configuration type for block @message at \\(\\s*0,\\s*0\\): expected TEXT, found BOOLEAN.");
+                "Unexpected configuration type for block '@message' at \\(\\s*0,\\s*0\\): expected TEXT, found BOOLEAN.");
     }
 }

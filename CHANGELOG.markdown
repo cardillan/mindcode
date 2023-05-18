@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
   location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol). 
 * Added command line option for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
   to specify order in which blocks are written to the schema definition file.
+* Added support for [unit configuration](doc/syntax/SCHEMACODE.markdown#unit-configuration) in Schemacode. 
 * Added [overlapping blocks detection](doc/syntax/SCHEMACODE.markdown#block-position). Overlapping blocks now cause 
   compilation errors.
 * Added support for [non-zero schematic origin](doc/syntax/SCHEMACODE.markdown#origin-and-dimensions-calculation).

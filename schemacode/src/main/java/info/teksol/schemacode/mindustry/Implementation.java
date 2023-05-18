@@ -126,7 +126,7 @@ public enum Implementation {
     UNITASSEMBLERMODULE,
     UNITCARGOLOADER,
     UNITCARGOUNLOADPOINT(ConfigurationType.ITEM),
-    UNITFACTORY(ConfigurationType.INTEGER),
+    UNITFACTORY(ConfigurationType.UNIT_PLAN),
     UNLOADER(ConfigurationType.ITEM),
     VARIABLEREACTOR,
     WALL,

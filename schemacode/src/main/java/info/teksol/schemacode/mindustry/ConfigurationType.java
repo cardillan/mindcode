@@ -5,7 +5,6 @@ import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.IntConfiguration;
 import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.config.ProcessorConfiguration;
 import info.teksol.schemacode.config.TextConfiguration;
 
 import java.util.function.Supplier;
@@ -18,8 +17,9 @@ public enum ConfigurationType {
     INTEGER(IntConfiguration.class, () -> IntConfiguration.ZERO),
     ITEM(Item.class, () -> EmptyConfiguration.EMPTY),
     LIQUID(Liquid.class, () -> EmptyConfiguration.EMPTY),
-    PROCESSOR(ProcessorConfiguration.class, ProcessorConfiguration::new),
+    PROCESSOR(ProcessorConfiguration.class, () -> ProcessorConfiguration.EMPTY),
     TEXT(TextConfiguration.class, () -> TextConfiguration.EMPTY),
+    UNIT_PLAN(UnitPlan.class, () -> UnitPlan.EMPTY),
     ;
 
     private final Class<? extends Configuration> cfgClass;

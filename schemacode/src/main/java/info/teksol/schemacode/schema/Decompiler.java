@@ -6,13 +6,15 @@ import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.IntConfiguration;
 import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.config.ProcessorConfiguration;
-import info.teksol.schemacode.config.ProcessorConfiguration.Link;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mindustry.ConfigurationType;
+import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Item;
 import info.teksol.schemacode.mindustry.Liquid;
 import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
+import info.teksol.schemacode.mindustry.UnitPlan;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -28,6 +30,7 @@ public class Decompiler {
     private boolean relativeLinks = false;
     private final boolean orderedLinks = true;
     private BlockOrder blockOrder = BlockOrder.ORIGINAL;
+    private DirectionLevel directionLevel = DirectionLevel.ROTATABLE_ONLY;
 
     private final StringBuilder sbr = new StringBuilder();
     private int indent = 0;
@@ -68,6 +71,14 @@ public class Decompiler {
 
     public void setBlockOrder(BlockOrder blockOrder) {
         this.blockOrder = blockOrder;
+    }
+
+    public DirectionLevel getDirectionLevel() {
+        return directionLevel;
+    }
+
+    public void setDirectionLevel(DirectionLevel directionLevel) {
+        this.directionLevel = directionLevel;
     }
 
     public Decompiler(Schematic schematic) {
@@ -171,8 +182,17 @@ public class Decompiler {
         }
 
         nl().append(String.format("%-20s", block.name())).append(" at ")
-                .append(pos.toStringNear(relativePositions && lastBlock != null ? lastBlock.position() : null))
-                .append(" facing ").append(block.direction().toSchemacode());
+                .append(pos.toStringNear(relativePositions && lastBlock != null ? lastBlock.position() : null));
+
+        boolean appendFacing = switch (directionLevel) {
+            case ROTATABLE_ONLY -> block.blockType().rotate() && block.direction() != Direction.EAST;
+            case NON_DEFAULT    -> block.direction() != Direction.EAST;
+            case ALWAYS -> true;
+        };
+
+        if (appendFacing) {
+            sbr.append(" facing ").append(block.direction().toSchemacode());
+        }
 
         if (block.configuration() != EmptyConfiguration.EMPTY) {
             outputConfiguration(block);
@@ -193,6 +213,7 @@ public class Decompiler {
             case PositionArray p            -> writeConnections(block, p);
             case ProcessorConfiguration p   -> writeProcessor(block, p);
             case TextConfiguration t        -> writeText(t);
+            case UnitPlan p                 -> sbr.append(" unit ").append(p.unitName());
             default                         -> sbr.append(" // unknown configuration: ").append(cfg);
         }
     }

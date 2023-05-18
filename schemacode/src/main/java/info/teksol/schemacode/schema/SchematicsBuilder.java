@@ -10,14 +10,16 @@ import info.teksol.schemacode.config.BooleanConfiguration;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.config.ProcessorConfiguration;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Direction;
+import info.teksol.schemacode.mindustry.Implementation;
 import info.teksol.schemacode.mindustry.Item;
 import info.teksol.schemacode.mindustry.Liquid;
 import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration;
+import info.teksol.schemacode.mindustry.UnitPlan;
 import info.teksol.schemacode.schema.BlockPositionResolver.AstBlockPosition;
 
 import java.nio.file.Path;
@@ -125,7 +127,7 @@ public class SchematicsBuilder {
 
         astPositionMap = BlockPositionMap.forBuilder(messageListener, blockPositions);
 
-        final List<Block> blocks = new ArrayList<>();
+        List<Block> blocks = new ArrayList<>();
         for (int index = 0; index < astBlocks.size(); index++) {
             AstBlock astBlock = astBlocks.get(index);
             BlockPosition blockPos = getBlockPosition(index);
@@ -135,7 +137,7 @@ public class SchematicsBuilder {
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
             Configuration configuration = decodeAstConfiguration(blockPos.position(), astBlock.configuration());
             if (!type.configurationType().isCompatible(configuration) && configuration != EmptyConfiguration.EMPTY) {
-                error("Unexpected configuration type for block %s at %s: expected %s, found %s.",
+                error("Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
                         blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
                         type.configurationType(), ConfigurationType.fromInstance(configuration));
             } else {
@@ -147,25 +149,49 @@ public class SchematicsBuilder {
         String name = getStringAttribute("name", "");
         String description = unwrap(getStringAttribute("description", ""));
 
-        List<String> labels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
+        List<String> schemaLabels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
         List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(Icons::translateIcon).toList();
-        List<String> merged = Stream.concat(labels.stream(), additionalLabels.stream()).distinct().toList();
+        List<String> labels = Stream.concat(schemaLabels.stream(), additionalLabels.stream()).distinct().toList();
 
         positionMap = BlockPositionMap.forBuilder(m -> {}, blocks);
 
-        Schematic schematic = new Schematic(name, description, merged, 0, 0, blocks);
-        schematic = PowerGridSolver.solve(this, schematic);
-        BridgeSolver.solve(this, schematic);
+        validateUnitFactoriesConfig(blocks);
+        blocks = PowerGridSolver.solve(this, blocks);
+        BridgeSolver.solve(this, blocks);
 
+        return createSchematic(name, description, labels, blocks);
+    }
+
+    private Position calculateOrigin(List<Block> blocks) {
+        if (blocks.isEmpty()) {
+            return Position.ORIGIN;
+        } else {
+            int x = blocks.stream().mapToInt(Block::x).min().orElse(0);
+            int y = blocks.stream().mapToInt(Block::y).min().orElse(0);
+            return new Position(x, y);
+        }
+    }
+
+    private Position calculateDimensions(List<Block> blocks) {
+        if (blocks.isEmpty()) {
+            return Position.ORIGIN;
+        } else {
+            int x = blocks.stream().mapToInt(Block::xMax).max().orElse(0);
+            int y = blocks.stream().mapToInt(Block::yMax).max().orElse(0);
+            return new Position(x + 1, y + 1);
+        }
+    }
+
+    private Schematic createSchematic(String name, String description, List<String> labels, List<Block> blocks) {
         // Compensate for non-zero origin
-        Position origin = findLowerLeftCoordinate(schematic.blocks());
-        List<Block> repositioned = origin.zero() ? schematic.blocks()
-                :  schematic.blocks().stream().map(b -> b.remap(p -> p.sub(origin))).toList();
+        Position origin = calculateOrigin(blocks);
+        List<Block> repositioned = origin.zero() ? blocks : blocks.stream().map(b -> b.remap(p -> p.sub(origin))).toList();
         if (!origin.zero()) {
             info("Schematic origin at (%d, %d) adjusted to (0, 0).", origin.x(), origin.y());
         }
 
         Position dim = calculateDimensions(repositioned);
+
         AstCoordinates sourceDim = getAttribute("dimensions", AstCoordinates.class);
         if (sourceDim != null) {
             if (sourceDim.relative()) {
@@ -181,8 +207,8 @@ public class SchematicsBuilder {
             }
         }
 
-        schematic = new Schematic(schematic.name(), schematic.description(), schematic.labels(), dim.x(), dim.y(), repositioned);
-        info("Created schematic '%s' with dimensions (%d, %d).", name, schematic.width(), schematic.height());
+        Schematic schematic = new Schematic(name, description, labels, dim.x(), dim.y(), repositioned);
+        info("Created schematic '%s' with dimensions $s.", name, dim.toStringAbsolute());
         return schematic;
     }
 
@@ -231,26 +257,6 @@ public class SchematicsBuilder {
         };
     }
 
-    private Position findLowerLeftCoordinate(List<Block> blocks) {
-        if (blocks.isEmpty()) {
-            return Position.ORIGIN;
-        } else {
-            int x = blocks.stream().mapToInt(Block::x).min().orElse(0);
-            int y = blocks.stream().mapToInt(Block::y).min().orElse(0);
-            return new Position(x, y);
-        }
-    }
-
-    private Position calculateDimensions(List<Block> blocks) {
-        if (blocks.isEmpty()) {
-            return Position.ORIGIN;
-        } else {
-            int x = blocks.stream().mapToInt(Block::xMax).max().orElse(0);
-            int y = blocks.stream().mapToInt(Block::yMax).max().orElse(0);
-            return new Position(x + 1, y + 1);
-        }
-    }
-
     @SuppressWarnings("DuplicateBranchesInSwitch")
     private Configuration decodeAstConfiguration(Position position, AstConfiguration configuration) {
         return switch (configuration) {
@@ -259,11 +265,20 @@ public class SchematicsBuilder {
             case AstConnection c        -> c.evaluate(this, position);
             case AstConnections c       -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, position)).toList());
             case AstItemReference r     -> Item.forName(r.item());
-            case AstLiquidReference r   -> Liquid.forName(r.item());
+            case AstLiquidReference r   -> Liquid.forName(r.liquid());
+            case AstUnitReference r     -> new UnitPlan(r.unit());
             case AstProcessor p         -> ProcessorConfiguration.fromAstConfiguration(this, p, position);
             case AstText t              -> new TextConfiguration(t.getText(this));
             default                     -> EmptyConfiguration.EMPTY;
         };
+    }
+
+    private void validateUnitFactoriesConfig(List<Block> blocks) {
+        blocks.stream().filter(b -> b.blockType().implementation() == Implementation.UNITFACTORY)
+                .filter(b -> !b.configuration().as(UnitPlan.class).unitName().isEmpty())
+                .filter(b -> !b.blockType().unitPlans().contains(b.configuration().as(UnitPlan.class).unitName()))
+                .forEach(b -> error("Block '%s' at %s: unknown or unsupported unit type '%s'.",
+                        b.name(), b.position().toStringAbsolute(), b.configuration().as(UnitPlan.class).unitName()));
     }
 
     private <T> T getAttribute(String name, Class<T> expectedType) {

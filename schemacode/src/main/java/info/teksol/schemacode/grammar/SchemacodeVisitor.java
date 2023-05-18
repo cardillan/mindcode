@@ -133,6 +133,13 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiquid(SchemacodeParser.LiquidContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code unit}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnit(SchemacodeParser.UnitContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code text}
 	 * labeled alternative in {@link SchemacodeParser#configuration}.
 	 * @param ctx the parse tree

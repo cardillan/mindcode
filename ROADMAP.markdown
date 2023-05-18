@@ -74,14 +74,14 @@ Things being pondered on from time to time.
 
 * Add all kinds of checks and validations
   * validate mlog code
-* Support for color (illuminator) and unit type (unit factory) configurations
+* Support for color (illuminator) configurations
 * Automatically generate names for unnamed processor links
-* Schematic Analyzer
-  * finds blocks not connected to power nodes
-  * determines when the power grid in the schematic has more than one segment
-  * finds distribution blocks prone to clogging
-  * finds liquid containers being fed more than one kind of liquid
-  * determines item flow and factory production/consumption ratios
+* Schematic Analyzer, a tool to identify potential errors in schematics:
+  * blocks not connected to power nodes
+  * the power grid having more than one segment (i.e. not fully connected)
+  * distribution blocks prone to clogging
+  * liquid containers being fed more than one kind of liquid
+  * determines item flow and unbalanced factory production/consumption ratios
 * Support for iterative block placement:
   * `<@block> rightwards` places the block to the right of the last placed block
   * `<@block> upwards from <label>` places the block upwards from labeled blocks

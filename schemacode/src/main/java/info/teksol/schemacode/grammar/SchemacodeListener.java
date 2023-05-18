@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  * This interface defines a complete listener for a parse tree produced by
  * {@link SchemacodeParser}.
  */
+@SuppressWarnings({"EmptyMethod", "unused"})
 public interface SchemacodeListener extends ParseTreeListener {
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#definitions}.
@@ -213,6 +214,18 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLiquid(SchemacodeParser.LiquidContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code unit}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnit(SchemacodeParser.UnitContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code unit}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnit(SchemacodeParser.UnitContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code text}
 	 * labeled alternative in {@link SchemacodeParser#configuration}.

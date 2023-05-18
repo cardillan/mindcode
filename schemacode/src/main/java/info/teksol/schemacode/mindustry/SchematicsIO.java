@@ -169,8 +169,22 @@ public class SchematicsIO {
             case LIQUID         -> raw.as(Liquid.class);
             case PROCESSOR      -> ProcessorConfiguration.decode(raw.as(ByteArray.class), position);
             case TEXT           -> raw.as(TextConfiguration.class);
+            case UNIT_PLAN      -> selectUnitPlan(raw.as(IntConfiguration.class), blockType);
             default -> throw new SchematicsInternalError("Unhandled configuration type %s.", blockType.configurationType());
         };
+    }
+
+    private static UnitPlan selectUnitPlan(IntConfiguration integer, BlockType blockType) {
+        if (blockType.implementation().configurationType() != ConfigurationType.UNIT_PLAN) {
+            throw new SchematicsInternalError("UNIT_PLAN configuration: '%s' is not a unit factory.", blockType.name());
+        }
+
+        int index = integer.value();
+        if (index < 0 || index >= blockType.unitPlans().size()) {
+            throw new SchematicsInternalError("Invalid plan index %d for unit factory %s.", index, blockType.name());
+        }
+
+        return new UnitPlan(blockType.unitPlans().get(index));
     }
 
     private static Configuration mapConfig(BlockType block, int value, Position position) {

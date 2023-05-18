@@ -1,7 +1,7 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.schemacode.config.ProcessorConfiguration.Link;
 import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
 import info.teksol.schemacode.schema.SchematicsBuilder;
 
 import java.util.function.Consumer;

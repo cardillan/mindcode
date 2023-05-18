@@ -1,11 +1,12 @@
-package info.teksol.schemacode.config;
+package info.teksol.schemacode.mindustry;
 
 import info.teksol.mindcode.compiler.CompilerFacade;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstLink;
 import info.teksol.schemacode.ast.AstProcessor;
-import info.teksol.schemacode.mindustry.Position;
+import info.teksol.schemacode.config.ByteArray;
+import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.schema.Block;
 import info.teksol.schemacode.schema.BlockPosition;
 import info.teksol.schemacode.schema.SchematicsBuilder;
@@ -28,13 +29,11 @@ import java.util.zip.InflaterInputStream;
 
 public record ProcessorConfiguration(List<Link> links, String code) implements Configuration {
 
+    public static final ProcessorConfiguration EMPTY = new ProcessorConfiguration(List.of(), "");
+
     private static final int maxByteLength = 1024 * 500;
 
     private static final Charset charset = StandardCharsets.UTF_8;
-
-    public ProcessorConfiguration() {
-        this(List.of(), "");
-    }
 
     @Override
     public Configuration encode(Block block) {

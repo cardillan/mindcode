@@ -58,6 +58,7 @@ configuration
     | Connected To connectionList   # connections
     | Item Ref                      # item
     | Liquid Ref                    # liquid
+    | Unit Ref                      # unit
     | Text text=textDef             # text
     | status=( Enabled | Disabled ) # boolean
     | def=processor                 # logic
@@ -124,10 +125,12 @@ Mindcode        : 'mindcode';
 Mlog            : 'mlog';
 Name            : 'name';
 Processor       : 'processor';
+Rgb             : 'rgb';
 Schematic       : 'schematic';
 Tag             : 'tag';
 Text            : 'text';
 To              : 'to';
+Unit            : 'unit';
 Virtual         : 'virtual';
 
 Assign          : '=';

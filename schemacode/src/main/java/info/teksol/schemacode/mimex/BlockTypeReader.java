@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class BlockTypeReader {
 
@@ -22,7 +23,7 @@ class BlockTypeReader {
     private static final String RESOURCE_NAME = "mimex-blocks.txt";
     private final List<String> lines;
     private final List<String> header;
-    private final int name, implementation, size, hasPower, configurable, category, range, maxNodes;
+    private final int name, implementation, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
 
     private BlockTypeReader() {
         try (InputStream input = BlockTypeReader.class.getResourceAsStream(RESOURCE_NAME)) {
@@ -39,6 +40,8 @@ class BlockTypeReader {
             category = findColumn("category");
             maxNodes = findColumn("maxNodes");
             range = findColumn("range");
+            rotate = findColumn("rotate");
+            unitPlans = findColumn("unitPlans");
         } catch (IOException e) {
             throw new RuntimeException("Cannot read resource " + RESOURCE_NAME, e);
         } catch (Exception e) {
@@ -58,7 +61,7 @@ class BlockTypeReader {
         try {
             ArrayList<BlockType> list = new ArrayList<>(lines.size() - 1);
             for (int i = 1; i < lines.size(); i++) {
-                String[] columns = lines.get(i).split(";");
+                String[] columns = lines.get(i).split(";", -1);
                 list.add(new BlockType(
                         "@" + columns[name],
                         Implementation.valueOf(columns[implementation].toUpperCase()),
@@ -67,12 +70,18 @@ class BlockTypeReader {
                         Boolean.parseBoolean(columns[configurable]),
                         (columns[category]),
                         Float.parseFloat(columns[range]),
-                        Integer.parseInt(columns[maxNodes])));
+                        Integer.parseInt(columns[maxNodes]),
+                        Boolean.parseBoolean(columns[rotate]),
+                        parseUnitPlans(columns[unitPlans])));
             }
             return list.stream().collect(Collectors.toMap(BlockType::name, t -> t));
         } catch (Exception e) {
             throw new RuntimeException("Error parsing file " + RESOURCE_NAME, e);
         }
+    }
+
+    private List<String> parseUnitPlans(String unitPlans) {
+        return unitPlans.isBlank() ? List.of() : Stream.of(unitPlans.split("\\|")).map("@"::concat).toList();
     }
 
     public static void main(String[] argv) {
