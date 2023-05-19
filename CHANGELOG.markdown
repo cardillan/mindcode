@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 * Fixed handling of block label reuse in schemacode. Reusing the same label for multiple blocks now causes an error.
+* Fixed [#93: Mindcode compiled wrong when using semicolons](https://github.com/cardillan/mindcode/issues/93).
 
 ## 2023-05-13
 

@@ -1,4 +1,4 @@
-// Generated from Schemacode.g4 by ANTLR 4.9.1
+// Generated from Schemacode.g4 by ANTLR 4.12.0
 package info.teksol.schemacode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 

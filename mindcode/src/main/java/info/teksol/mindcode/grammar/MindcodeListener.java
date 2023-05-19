@@ -1,4 +1,4 @@
-// Generated from Mindcode.g4 by ANTLR 4.9.1
+// Generated from Mindcode.g4 by ANTLR 4.12.0
 package info.teksol.mindcode.grammar;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 

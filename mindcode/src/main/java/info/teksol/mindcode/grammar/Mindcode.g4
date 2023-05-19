@@ -2,10 +2,8 @@ grammar Mindcode;
 
 program : expression_list? EOF;
 
-expression_list : expression
-                | expression SEMICOLON
-                | expression_list expression
-                | expression_list SEMICOLON expression
+expression_list : expression SEMICOLON?
+                | expression_list expression SEMICOLON?
                 ;
 
 expression : directive                                                                          # compiler_directive

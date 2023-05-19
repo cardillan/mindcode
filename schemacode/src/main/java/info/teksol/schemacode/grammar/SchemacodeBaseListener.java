@@ -1,4 +1,4 @@
-// Generated from Schemacode.g4 by ANTLR 4.9.1
+// Generated from Schemacode.g4 by ANTLR 4.12.0
 package info.teksol.schemacode.grammar;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("CheckReturnValue")
 public class SchemacodeBaseListener implements SchemacodeListener {
 	/**
 	 * {@inheritDoc}
