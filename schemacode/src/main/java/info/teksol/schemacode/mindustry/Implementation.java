@@ -57,7 +57,7 @@ public enum Implementation {
     LEGACYCOMMANDCENTER,
     LEGACYMECHPAD,
     LEGACYUNITFACTORY,
-    LIGHTBLOCK(ConfigurationType.INTEGER),
+    LIGHTBLOCK(ConfigurationType.COLOR),
     LIQUIDBRIDGE(ConfigurationType.CONNECTION),
     LIQUIDJUNCTION,
     LIQUIDROUTER,

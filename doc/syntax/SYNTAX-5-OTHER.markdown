@@ -351,23 +351,22 @@ Optimizes passing return values to callers.
 
 Function return values are carried by `__retval` variables instead of `__tmp` ones, because the original variable 
 providing the return value -- `__fnXretval` -- might get overwritten during another function call before the return 
-value is used. Optimizations of regular temporary variables are not applied to `__retval`s.
+value is used. Standard temporary variable optimizations are not applied to `__retval`s.
 
 This optimizer looks for a set instruction in the form `set __retvalX variable`. The `__retvalX` is expected to be 
-used by one other instruction. The set instruction is removed and `__retvalX` is replaced by `variable` in the other 
-instruction if the following conditions are met:
+used by one other instruction. The optimizer removes the set instruction and replaces the `__retvalX` by `variable`
+in the other instruction if the following conditions are met:
 
-1. The `__retval` variable is used in exactly one other instruction, which follows the set instruction (the check is
+1. The `__retval` variable is used in exactly one other instruction, which follows the set instruction (the check is 
    based on absolute instruction sequence in the program, not on the actual program flow). Push and pop instructions 
-   aren't considered. 
-2. The block of code between the `set` instruction and the other instruction is linear (doesn't contain jumps 
-   outside the code block -- function calls aren't considered). This shouldn't normally happen; if it does, it means 
-   the compiler works way different from what this optimizer expects (essentially a loop in an expression). 
+   aren't considered.
+2. The block of code between the `set` instruction and the other instruction is localized (doesn't contain jumps into 
+   the code block from the outside -- function calls aren't considered). Range iteration loop may produce such code.
 3. The other variable is not modified in the code block.
 4. If the variable is a `__fnXretval`: the code block must not contain any function calls - not just calls to the 
    `__fnX` function, but calls to any function - we don't know what may happen inside a function call.
 5. If the variable is not a `__fnXretval`: the variable must not be volatile, and if it is global, the code block 
-   must not contain any function calls. 
+   must not contain any function calls.
 
 ## Print merging
 

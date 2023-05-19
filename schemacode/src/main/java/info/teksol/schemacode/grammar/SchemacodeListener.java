@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  * This interface defines a complete listener for a parse tree produced by
  * {@link SchemacodeParser}.
  */
-@SuppressWarnings({"EmptyMethod", "unused"})
+@SuppressWarnings("ALL")
 public interface SchemacodeListener extends ParseTreeListener {
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#definitions}.
@@ -179,6 +179,18 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitVirtual(SchemacodeParser.VirtualContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code color}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void enterColor(SchemacodeParser.ColorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code color}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void exitColor(SchemacodeParser.ColorContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code connections}
 	 * labeled alternative in {@link SchemacodeParser#configuration}.
 	 * @param ctx the parse tree
@@ -262,6 +274,16 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLogic(SchemacodeParser.LogicContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#colorDef}.
+	 * @param ctx the parse tree
+	 */
+	void enterColorDef(SchemacodeParser.ColorDefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#colorDef}.
+	 * @param ctx the parse tree
+	 */
+	void exitColorDef(SchemacodeParser.ColorDefContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#connectionList}.
 	 * @param ctx the parse tree

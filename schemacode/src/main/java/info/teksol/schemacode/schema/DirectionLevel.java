@@ -1,7 +1,7 @@
 package info.teksol.schemacode.schema;
 
 public enum DirectionLevel {
-    ROTATABLE_ONLY,
+    ROTATABLE,
     NON_DEFAULT,
-    ALWAYS
+    ALL
 }

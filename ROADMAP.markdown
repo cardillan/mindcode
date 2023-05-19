@@ -72,9 +72,9 @@ Things being pondered on from time to time.
 
 ### Schematics Builder
 
-* Add all kinds of checks and validations
-  * validate mlog code
-* Support for color (illuminator) configurations
+* Improve error reporting: pass tokens through AST tree/schematic components and provide file and line/column numbers  
+  when reporting errors. Use this as a proof of concept for implementing better error reporting in Mindcode.
+* Validate mlog code included in processor configuration against given processor target. 
 * Automatically generate names for unnamed processor links
 * Schematic Analyzer, a tool to identify potential errors in schematics:
   * blocks not connected to power nodes
@@ -82,19 +82,19 @@ Things being pondered on from time to time.
   * distribution blocks prone to clogging
   * liquid containers being fed more than one kind of liquid
   * determines item flow and unbalanced factory production/consumption ratios
+* Automatically connect blocks to power nodes, possibly with optimizations
 * Support for iterative block placement:
   * `<@block> rightwards` places the block to the right of the last placed block
   * `<@block> upwards from <label>` places the block upwards from labeled blocks
   * already existing blocks (typically blocks 2x2 or bigger placed in previous row/column) are skipped
-* Automatically connect blocks to power nodes, possibly with optimizations
 * Automatically add tags based on categories or types of contained blocks
-  * allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
+  * Allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
 * Make decompiler assign labels to all blocks and use the labels for all block references (e.g. in bridge or power 
   node connections).
-* Support for schematics reuse
-  * place schematic into schematic
-  * extend existing schematic by adding or removing content
-* Support for filling area with blocks (e.g. walls, conveyors or factories)
+* Support for schematics reuse by:
+  * placing schematic into schematic
+  * extending existing schematic by adding or removing content
+* Support for filling area with blocks
 * Support for external compilers to create code for processors.
 
 ### User interface
@@ -109,11 +109,13 @@ Things being pondered on from time to time.
 * Warn developers when variable is read before being written to.
 * When the compiled program only contains basic instructions (including print and printflush), run it after 
   compilation and show the output on the web page. The same might be done for command-line compiler.
+* Render an image of built schematic to show it in the web application.
 
 ### Other
 
 * Improve [Mindustry Metadata Extractor](https://github.com/cardillan/mimex) to extract more metadata and 
   automatically put them at the right place in Mindcode.
+* Add links to examples in documentation to open them in web app.
 
 ## Musings
 
@@ -175,52 +177,4 @@ There are no plans to do any of these. We keep them around just in case.
 
 ## Completed
 
-### Language syntax
-
-* loops
-    * while
-    * for
-* expressions!
-    * `move(center_x + radius * sin(@tick), center_y + radius * cos(@tick))` moves a unit in a circle around a specific point
-* if expressions (ternary operator)
-* auto-allocated global variables
-* switch / case expression
-* add support for drawing primitives
-* add support for `uradar`
-* add support for `ulocate`
-* add support for `end`
-* functions / reusable procedures
-* further optimize the generated Logic
-* optimize getlink / set
-* optimize sensor / set
-* skip comments when determining the return value of expressions (case/when, if/else, etc.)
-* #16 indirect sensor access. We can't do `resource = @silicon ; CONTAINER.resource`. This tries to call `sensor
-  result CONTAINER @resource`, which doesn't make any sense.
-* #17 `break` and `continue`, to better control iteration
-* #19 inline functions, meaning functions that are inlined at the call-site
-* add support for passing non-numerics into/out of non-recursive functions
-* evaluation of constant expressions at compile time
-* constant declaration: constants would be evaluated at compile time and wouldn't use a variable
-* Binary literals (0b0000)
-
-### Code generation
-
-* Eliminate `__retval` variables/assignments where not needed.
-* Constant string expressions. Allow strings to be concatenated with other strings and constant expressions.
-
-### Other
-
-* compiler directives (`#set`) to parametrize code compilation and optimization
-* optimizer strength setting - per optimizer (off, basic, aggressive)
-* LogicInstruction improvements: compiled instructions store all arguments as strings. Optimizers needs to know
-  sometimes whether an argument is a numeric literal, a local variable, a global variable or a Mindustry object.
-  Arguments are unnecessarily repeatedly analyzed to obtain this information, which was already known when the
-  instruction was generated in the first place.
-* standalone jar for command-line compiler
-* [Mindustry Metadata Extractor](https://github.com/cardillan/mimex): tool to automatically acquire definitions of 
-  blocks, units, items, liquids, properties etc.
-
-
-### User interface
-
-* display compiler output in the webapp
+Completed functionalities are no longer tracked here. All changes are now tracked in [changelog](CHANGELOG.markdown).

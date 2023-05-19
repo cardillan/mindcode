@@ -112,6 +112,13 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVirtual(SchemacodeParser.VirtualContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code color}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColor(SchemacodeParser.ColorContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code connections}
 	 * labeled alternative in {@link SchemacodeParser#configuration}.
 	 * @param ctx the parse tree
@@ -160,6 +167,12 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLogic(SchemacodeParser.LogicContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SchemacodeParser#colorDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitColorDef(SchemacodeParser.ColorDefContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#connectionList}.
 	 * @param ctx the parse tree

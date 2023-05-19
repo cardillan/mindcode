@@ -12,9 +12,9 @@ import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
 import info.teksol.schemacode.mimex.BlockType;
+import info.teksol.schemacode.mindustry.Color;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Direction;
-import info.teksol.schemacode.mindustry.Implementation;
 import info.teksol.schemacode.mindustry.Item;
 import info.teksol.schemacode.mindustry.Liquid;
 import info.teksol.schemacode.mindustry.Position;
@@ -135,15 +135,9 @@ public class SchematicsBuilder {
             Direction direction = astBlock.direction() == null
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
-            Configuration configuration = decodeAstConfiguration(blockPos.position(), astBlock.configuration());
-            if (!type.configurationType().isCompatible(configuration) && configuration != EmptyConfiguration.EMPTY) {
-                error("Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
-                        blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
-                        type.configurationType(), ConfigurationType.fromInstance(configuration));
-            } else {
-                blocks.add(new Block(index, astBlock.labels(), type, blockPos.position(), direction,
-                        configuration.as(type.configurationType().getBuilderConfigurationClass())));
-            }
+            Configuration configuration = convertAstConfiguration(blockPos, astBlock.configuration());
+            blocks.add(new Block(index, astBlock.labels(), type, blockPos.position(), direction,
+                    configuration.as(type.configurationType().getBuilderConfigurationClass())));
         }
 
         String name = getStringAttribute("name", "");
@@ -155,7 +149,6 @@ public class SchematicsBuilder {
 
         positionMap = BlockPositionMap.forBuilder(m -> {}, blocks);
 
-        validateUnitFactoriesConfig(blocks);
         blocks = PowerGridSolver.solve(this, blocks);
         BridgeSolver.solve(this, blocks);
 
@@ -258,27 +251,67 @@ public class SchematicsBuilder {
     }
 
     @SuppressWarnings("DuplicateBranchesInSwitch")
-    private Configuration decodeAstConfiguration(Position position, AstConfiguration configuration) {
-        return switch (configuration) {
+    // TODO report errors on all invalid configurations, such as unknown item or liquid
+    private Configuration convertAstConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
+        Configuration configuration = switch (astConfiguration) {
             case null                   -> EmptyConfiguration.EMPTY;
             case AstBoolean b           -> BooleanConfiguration.of(b.value());
-            case AstConnection c        -> c.evaluate(this, position);
-            case AstConnections c       -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, position)).toList());
-            case AstItemReference r     -> Item.forName(r.item());
-            case AstLiquidReference r   -> Liquid.forName(r.liquid());
-            case AstUnitReference r     -> new UnitPlan(r.unit());
-            case AstProcessor p         -> ProcessorConfiguration.fromAstConfiguration(this, p, position);
+            case AstConnection c        -> c.evaluate(this, blockPos.position());
+            case AstConnections c       -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
+            case AstItemReference r     -> verifyValue( blockPos, Item.forName(r.item()), r.item(), "item");
+            case AstLiquidReference r   -> verifyValue( blockPos, Liquid.forName(r.liquid()), r.liquid(), "liquid");
+            case AstProcessor p         -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
+            case AstRgbaValue rgb        -> convertToRgbValue(blockPos, rgb);
             case AstText t              -> new TextConfiguration(t.getText(this));
+            case AstUnitReference r     -> convertToUnitPlan(blockPos, r);
             default                     -> EmptyConfiguration.EMPTY;
         };
+
+        if (!blockPos.configurationType().isCompatible(configuration)) {
+            error("Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
+                    blockPos.blockType().name(), blockPos.position().toStringAbsolute(),
+                    blockPos.configurationType(), ConfigurationType.fromInstance(configuration));
+            return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
+        } else {
+            return configuration;
+        }
     }
 
-    private void validateUnitFactoriesConfig(List<Block> blocks) {
-        blocks.stream().filter(b -> b.blockType().implementation() == Implementation.UNITFACTORY)
-                .filter(b -> !b.configuration().as(UnitPlan.class).unitName().isEmpty())
-                .filter(b -> !b.blockType().unitPlans().contains(b.configuration().as(UnitPlan.class).unitName()))
-                .forEach(b -> error("Block '%s' at %s: unknown or unsupported unit type '%s'.",
-                        b.name(), b.position().toStringAbsolute(), b.configuration().as(UnitPlan.class).unitName()));
+    private Color convertToRgbValue(BlockPosition blockPos, AstRgbaValue rgb) {
+        return new Color(
+                clamp(blockPos, "red", rgb.red()),
+                clamp(blockPos, "green", rgb.green()),
+                clamp(blockPos, "blue", rgb.blue()),
+                clamp(blockPos, "alpha", rgb.alpha())
+        );
+    }
+
+    private Configuration verifyValue(BlockPosition blockPos, Configuration value, String strValue, String valueName) {
+        if (value == null) {
+            error("Block '%s' at %s: unknown or unsupported %s '%s'.",
+                    blockPos.name(), blockPos.position().toStringAbsolute(), valueName, strValue);
+            return EmptyConfiguration.EMPTY; // Ignore wrong configuration but keep processing the block
+        } else {
+            return value;
+        }
+    }
+
+    private int clamp(BlockPosition blockPos, String component, int value) {
+        if (value < 0 || value > 255) {
+            error("Block '%s' at %s: value %d of color component '%s' outside valid range <0, 255>.",
+                    blockPos.name(), blockPos.position().toStringAbsolute(), value, component);
+        }
+        return Math.max(Math.min(value, 255), 0);
+    }
+
+    private Configuration convertToUnitPlan(BlockPosition blockPos, AstUnitReference unitReference) {
+        if (blockPos.blockType().unitPlans().contains(unitReference.unit())) {
+            return new UnitPlan(unitReference.unit());
+        } else {
+            error("Block '%s' at %s: unknown or unsupported unit type '%s'.",
+                    blockPos.name(), blockPos.position().toStringAbsolute(), unitReference.unit());
+            return EmptyConfiguration.EMPTY;
+        }
     }
 
     private <T> T getAttribute(String name, Class<T> expectedType) {

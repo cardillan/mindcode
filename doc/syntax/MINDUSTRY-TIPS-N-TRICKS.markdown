@@ -260,7 +260,7 @@ my_unit = findFreeUnit(@mono, flag)
 ```
 
 Later on, you might loop through all units and use the particular value of the flag to recognize those you acquired.
-Flag are typically generated randomly so that two processors running the same code do not steal each other's units.
+Flags are typically generated randomly so that two processors running the same code do not steal each other's units.
 
 There are two downsides to this arrangement:
 
@@ -274,8 +274,8 @@ There are two downsides to this arrangement:
 
 The alternative to using flags is querying the unit to see whether it is free or actively controlled. When a unit is 
 free, the `@unit.controlled` property returns `0`. When the value is nonzero, the unit is controlled, either by
-a processor, or directly by a player, or part of the player group (different values are assigned to each of these 
-cases).
+a processor, or directly by a player, or by being part of the units commanded indirectly by player (different values 
+are assigned to each of these possibilities).
 
 A wee bit enhanced `findFreeUnit()` function using the `controlled` property might look like this:
 

@@ -55,6 +55,7 @@ direction
 
 configuration
     : Virtual                       # virtual
+    | Color colorDef                # color
     | Connected To connectionList   # connections
     | Item Ref                      # item
     | Liquid Ref                    # liquid
@@ -62,6 +63,10 @@ configuration
     | Text text=textDef             # text
     | status=( Enabled | Disabled ) # boolean
     | def=processor                 # logic
+    ;
+
+colorDef
+    : Rgba LeftParen red=Int Comma green=Int Comma blue=Int Comma alpha=Int RightParen
     ;
 
 connectionList
@@ -109,6 +114,7 @@ stringLiteral
 As              : 'as';
 At              : 'at';
 Connected       : 'connected';
+Color           : 'color';
 Description     : 'description';
 Dimensions      : 'dimensions';
 Disabled        : 'disabled';
@@ -124,7 +130,7 @@ Mindcode        : 'mindcode';
 Mlog            : 'mlog';
 Name            : 'name';
 Processor       : 'processor';
-Rgb             : 'rgb';
+Rgba            : 'rgba';
 Schematic       : 'schematic';
 Tag             : 'tag';
 Text            : 'text';

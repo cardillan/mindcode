@@ -6,6 +6,7 @@ import info.teksol.schemacode.config.BooleanConfiguration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
+import info.teksol.schemacode.mindustry.Color;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Item;
 import info.teksol.schemacode.mindustry.Liquid;
@@ -646,6 +647,16 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     }
 
     @Test
+    void refusesSchematicsWithInvalidItemConfiguration() {
+        buildSchematicsExpectingError("""
+                schematic
+                    @unloader at (0, 0) item @fluffyBunny
+                end
+                """,
+                "Block '@unloader' at \\(\\s*0,\\s*0\\): unknown or unsupported item '@fluffyBunny'\\.");
+    }
+
+    @Test
     void buildsSchematicsWithLiquidSourceCryofluid() {
         Schematic actual = buildSchematics("""
                 schematic
@@ -661,6 +672,16 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
         );
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void refusesSchematicsWithInvalidLiquidConfiguration() {
+        buildSchematicsExpectingError("""
+                schematic
+                    @liquid-source at (0, 0) liquid @fluffyBunny
+                end
+                """,
+                "Block '@liquid-source' at \\(\\s*0,\\s*0\\): unknown or unsupported liquid '@fluffyBunny'\\.");
     }
 
     @Test
@@ -818,6 +839,63 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """,
                 "Block '@air-factory' at \\(\\s*0,\\s*0\\): unknown or unsupported unit type '@poly'\\.");
+    }
+
+    @Test
+    void buildsIlluminatorWithColor() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @illuminator at (0, 0) color rgba(255, 0, 0, 127)
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", List.of(), 1, 1,
+                List.of(
+                        block("@illuminator", P0_0, Direction.EAST, new Color(255, 0, 0, 127))
+                )
+        );
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void refusesWrongColorValueRed() {
+        buildSchematicsExpectingError("""
+                schematic
+                    @illuminator at (0, 0) color rgba(256, 0, 0, 127)
+                end
+                """,
+                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value 256 of color component 'red' outside valid range <0, 255>\\.");
+    }
+
+    @Test
+    void refusesWrongColorValueGreen() {
+        buildSchematicsExpectingError("""
+                schematic
+                    @illuminator at (0, 0) color rgba(255, -1, 0, 127)
+                end
+                """,
+                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value -1 of color component 'green' outside valid range <0, 255>\\.");
+    }
+
+    @Test
+    void refusesWrongColorValueBlue() {
+        buildSchematicsExpectingError("""
+                schematic
+                    @illuminator at (0, 0) color rgba(255, 0, 99999, 127)
+                end
+                """,
+                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value 99999 of color component 'blue' outside valid range <0, 255>\\.");
+    }
+
+    @Test
+    void refusesWrongColorValueAlpha() {
+        buildSchematicsExpectingError("""
+                schematic
+                    @illuminator at (0, 0) color rgba(255, 0, 0, 256)
+                end
+                """,
+                "Block '@illuminator' at \\(\\s*0,\\s*0\\): value 256 of color component 'alpha' outside valid range <0, 255>\\.");
     }
 
     @Test

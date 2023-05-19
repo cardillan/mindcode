@@ -17,7 +17,7 @@ import java.util.List;
  * <p>
  * Function return values are carried by {@code __retval} variables instead of {@code __tmp} ones, because the original
  * variable  providing the return value -- {@code __fnXretval} -- might get overwritten during another function call
- * before the return value is used. Optimizations of regular temporary variables are not applied to {@code __retval}s.
+ * before the return value is used. Standard temporary variable optimizations are not applied to {@code __retval}s.
  * <p>
  * This optimizer looks for a set instruction in the form {@code set __retvalX variable}. The {@code __retvalX}
  * is expected to be used by one other instruction. The optimizer removes the {@code set} instruction and replaces the
@@ -27,8 +27,8 @@ import java.util.List;
  * (the check is based on absolute instruction sequence in the program, not on the actual program flow). Push and pop
  * instructions aren't considered.</li>
  * <li>The block of code between the {@code set} instruction and the other instruction is linear (doesn't contain jumps
- * into the code block from the outside -- function calls aren't considered). (Range iteration loop may produce such
- * code.)</li>
+ * into the code block from the outside -- function calls aren't considered). Range iteration loop may produce such
+ * code.</li>
  * <li>The other variable is not modified in the code block.</li>
  * <li>If the variable is a {@code __fnXretval}: the code block must not contain any function calls - not just calls to
  * the {@code __fnX} function, but calls to any function - we don't know what may happen inside a function call. Call

@@ -98,7 +98,7 @@ public class SchematicsIO {
             short height = stream.readShort();
 
             if (width > 128 || height > 128) {
-                throw new IOException("Invalid schematic: Too large (max possible size is 128x128)");
+                throw new IOException("Invalid schematic: Too large (max possible size is 128x128).");
             }
 
             int tags = stream.readUnsignedByte();
@@ -116,7 +116,7 @@ public class SchematicsIO {
                 String name = stream.readUTF();
                 BlockType block = BlockType.forName("@" + FALLBACK.getOrDefault(name, name));
                 if (block == null) {
-                    throw new IOException("Unknown block name " + name);
+                    throw new IOException("Unknown block type '@" + name + "'.");
                 }
                 typeMap.add(block);
             }
@@ -162,6 +162,7 @@ public class SchematicsIO {
         return switch (blockType.configurationType()) {
             case NONE           -> raw.as(EmptyConfiguration.class);
             case BOOLEAN        -> raw.as(BooleanConfiguration.class);
+            case COLOR          -> Color.decode(raw.as(IntConfiguration.class).value());
             case CONNECTION     -> raw.as(Position.class).add(position);
             case CONNECTIONS    -> raw.as(PositionArray.class).remap(position::add);
             case INTEGER        -> raw.as(IntConfiguration.class);
@@ -176,7 +177,7 @@ public class SchematicsIO {
 
     private static UnitPlan selectUnitPlan(IntConfiguration integer, BlockType blockType) {
         if (blockType.implementation().configurationType() != ConfigurationType.UNIT_PLAN) {
-            throw new SchematicsInternalError("UNIT_PLAN configuration: '%s' is not a unit factory.", blockType.name());
+            throw new SchematicsInternalError("Block '%s' does not support UNIT_PLAN configuration.", blockType.name());
         }
 
         int index = integer.value();

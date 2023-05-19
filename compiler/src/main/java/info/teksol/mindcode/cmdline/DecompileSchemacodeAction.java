@@ -3,6 +3,7 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schema.BlockOrder;
 import info.teksol.schemacode.schema.Decompiler;
+import info.teksol.schemacode.schema.DirectionLevel;
 import info.teksol.schemacode.schema.Schematic;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -69,8 +70,15 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .setDefault(false);
 
         subparser.addArgument("-s", "--sort-order")
-                .help("specifies how to order blocks in the schema definition file")
+                .help("specifies how to order blocks in the decompiled schema definition file")
                 .type(Arguments.caseInsensitiveEnumType(BlockOrder.class))
+                .setDefault(BlockOrder.ORIGINAL);
+
+        subparser.addArgument("-d", "--direction")
+                .help("specifies when to include direction clause in decompiled schema definition file: " +
+                        "only for blocks affected by rotation, only for block with non-default direction, " +
+                        "or for all blocks")
+                .type(Arguments.caseInsensitiveEnumType(DirectionLevel.class))
                 .setDefault(BlockOrder.ORIGINAL);
     }
 
@@ -86,11 +94,12 @@ public class DecompileSchemacodeAction extends ActionHandler {
             decompiler.setRelativeConnections(arguments.getBoolean("connections"));
             decompiler.setRelativeLinks(arguments.getBoolean("links"));
             decompiler.setBlockOrder(arguments.get("sort_order"));
+            decompiler.setDirectionLevel(arguments.get("direction"));
             String schemaDefinition = decompiler.buildCode();
 
             writeOutput(output, schemaDefinition, false);
         } catch (IOException e) {
-            throw new info.teksol.mindcode.cmdline.ProcessingException(e, "Error reading file %s.", input.getPath());
+            throw new info.teksol.mindcode.cmdline.ProcessingException(e, "Error reading file '%s': %s", input.getPath(), e.getMessage());
         }
     }
 }

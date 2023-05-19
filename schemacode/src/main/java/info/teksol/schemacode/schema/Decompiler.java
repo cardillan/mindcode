@@ -4,9 +4,9 @@ import info.teksol.mindcode.mimex.Icons;
 import info.teksol.schemacode.config.BooleanConfiguration;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.EmptyConfiguration;
-import info.teksol.schemacode.config.IntConfiguration;
 import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
+import info.teksol.schemacode.mindustry.Color;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Item;
@@ -30,7 +30,7 @@ public class Decompiler {
     private boolean relativeLinks = false;
     private final boolean orderedLinks = true;
     private BlockOrder blockOrder = BlockOrder.ORIGINAL;
-    private DirectionLevel directionLevel = DirectionLevel.ROTATABLE_ONLY;
+    private DirectionLevel directionLevel = DirectionLevel.ROTATABLE;
 
     private final StringBuilder sbr = new StringBuilder();
     private int indent = 0;
@@ -185,9 +185,9 @@ public class Decompiler {
                 .append(pos.toStringNear(relativePositions && lastBlock != null ? lastBlock.position() : null));
 
         boolean appendFacing = switch (directionLevel) {
-            case ROTATABLE_ONLY -> block.blockType().rotate() && block.direction() != Direction.EAST;
-            case NON_DEFAULT    -> block.direction() != Direction.EAST;
-            case ALWAYS -> true;
+            case ROTATABLE -> block.blockType().rotate();
+            case NON_DEFAULT -> block.direction() != Direction.EAST;
+            case ALL -> true;
         };
 
         if (appendFacing) {
@@ -206,7 +206,7 @@ public class Decompiler {
         Configuration cfg = block.configuration().as(cfgClass);
         switch (cfg) {
             case BooleanConfiguration b     -> sbr.append(b.value() ? " enabled" : " disabled");
-            case IntConfiguration i         -> sbr.append(" // int configuration: ").append(i.value());
+            case Color c                    -> writeColor(c);
             case Item i                     -> sbr.append(" item ").append(i.getName());
             case Liquid l                   -> sbr.append(" liquid ").append(l.getName());
             case Position p                 -> writeConnection(block, p);
@@ -216,6 +216,15 @@ public class Decompiler {
             case UnitPlan p                 -> sbr.append(" unit ").append(p.unitName());
             default                         -> sbr.append(" // unknown configuration: ").append(cfg);
         }
+    }
+
+    private void writeColor(Color color) {
+        sbr.append(" color rgba(")
+                .append(color.red()).append(", ")
+                .append(color.green()).append(", ")
+                .append(color.blue()).append(", ")
+                .append(color.alpha())
+                .append(')');
     }
 
     private void writeConnection(Block block, Position p) {

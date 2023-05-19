@@ -8,8 +8,6 @@ import java.util.function.UnaryOperator;
 
 public interface Configuration {
 
-    // TODO: LightBlock color configuration RGBA
-
     default <T extends Configuration> T as (Class<T> type) {
         if (type.isInstance(this)) {
             return type.cast(this);

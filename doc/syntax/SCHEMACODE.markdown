@@ -416,6 +416,7 @@ All supported block types are listed below.
 * `@unloader`
 * `@reinforced-container`
 * `@reinforced-vault`
+* `@illuminator`
 * `@launch-pad`
 * `@interplanetary-accelerator`
 
@@ -509,6 +510,7 @@ Some blocks are stored with specific configurations: connection for bridges or p
 text for messages or links and code for processors. Schemacode supports the following types of configuration:
 
 * [Boolean](#boolean-configuration): on/off or open/close, for switches and doors.
+* [Color](#color-configuration): color of the illuminator block.
 * [Single connection](#connection-configuration): connection to another block (e.g. a bridge or a mass driver).
 * [Multiple connections](#connection-configuration): connections to several different blocks (e.g. for power nodes).
 * [Item](#item-configuration): item type selected in a sorter, unloader or similar block.
@@ -532,6 +534,24 @@ The following block types can have boolean configuration specified:
 * `@door`
 * `@door-large`
 * `@switch`
+
+## Color configuration
+
+Color configuration is specified as `color rgba(<red>, <green>, <blue>, <alpha>)`, where `<red>`, `<green>` and 
+`<blue>` are the value if individual color components, while `<alpha>` is the value of the alpha channel. all these 
+values must be given as a number between `0` and `255`, inclusive. Alpha specifies the opacity, `0` is not opaque at 
+all (i.e. fully transparent), `255` is fully opaque. The exact handling of the alpha channel is done by the 
+illuminator block, generally speaking higher values of alpha make the illuminator lightning more prominent.
+
+This example specifies an illuminator block emitting intense green color: 
+
+```
+    @illuminator at (0, 0) color rgba(0, 255, 0, 255)
+```
+
+The following block types can have color configuration specified:
+
+* `@illuminator`
 
 ## Connection configuration
 

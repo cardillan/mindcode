@@ -7,15 +7,17 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Added language target `7A`, i.e. Mindcode Logic version 7, revision A. Uses the same instruction set as `7`, except  
-  the `getBlock` and `ulocate` functions are modified to return the located block/building as the return value.
+  the `getBlock` and `ulocate` functions returning the located block/building.
   See [`getBlock`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol),
   [`ulocate`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ulocate). Target `7` is still default both in webapp 
   and in the command line tool, so the change doesn't break existing code.
-* Added support for newly available `ucontrol pathfind` instruction. When issued, navigates current unit to given 
+* Added support for the reintroduced `ucontrol pathfind` instruction. When issued, navigates current unit to given 
   location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol). 
-* Added command line option for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
-  to specify order in which blocks are written to the schema definition file.
-* Added support for [unit configuration](doc/syntax/SCHEMACODE.markdown#unit-configuration) in Schemacode. 
+* Added command line options for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
+  to specify order in which blocks are written to the schema definition file and when to generate the `facing` 
+  directive.
+* Added support for [color configuration](doc/syntax/SCHEMACODE.markdown#color-configuration) and 
+  [unit configuration](doc/syntax/SCHEMACODE.markdown#unit-configuration) in Schemacode. 
 * Added [overlapping blocks detection](doc/syntax/SCHEMACODE.markdown#block-position). Overlapping blocks now cause 
   compilation errors.
 * Added support for [non-zero schematic origin](doc/syntax/SCHEMACODE.markdown#origin-and-dimensions-calculation).

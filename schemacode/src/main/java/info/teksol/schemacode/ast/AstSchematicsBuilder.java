@@ -5,6 +5,8 @@ import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
 import info.teksol.schemacode.grammar.SchemacodeParser;
 import info.teksol.schemacode.grammar.SchemacodeParser.BooleanContext;
+import info.teksol.schemacode.grammar.SchemacodeParser.ColorContext;
+import info.teksol.schemacode.grammar.SchemacodeParser.ColorDefContext;
 import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
 import info.teksol.schemacode.grammar.SchemacodeParser.SchemaTagContext;
 import info.teksol.schemacode.schema.Language;
@@ -104,6 +106,20 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     @Override
     public AstSchemaItem visitBoolean(BooleanContext ctx) {
         return new AstBoolean(ctx.status.getText().equals("enabled"));
+    }
+
+    @Override
+    public AstColor visitColor(ColorContext ctx) {
+        return visitColorDef(ctx.colorDef());
+    }
+
+    @Override
+    public AstRgbaValue visitColorDef(ColorDefContext ctx) {
+        int red   = Integer.parseInt(ctx.red.getText());
+        int green = Integer.parseInt(ctx.green.getText());
+        int blue  = Integer.parseInt(ctx.blue.getText());
+        int alpha  = Integer.parseInt(ctx.alpha.getText());
+        return new AstRgbaValue(red, green, blue, alpha);
     }
 
     @Override

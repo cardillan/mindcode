@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public enum ConfigurationType {
     NONE(EmptyConfiguration.class, () -> EmptyConfiguration.EMPTY),
     BOOLEAN(BooleanConfiguration.class, () -> BooleanConfiguration.FALSE),
+    COLOR(Color.class, () -> Color.WHITE),
     CONNECTION(Position.class, PositionArray.class, () -> Position.INVALID),
     CONNECTIONS(PositionArray.class, () -> PositionArray.EMPTY),
     INTEGER(IntConfiguration.class, () -> IntConfiguration.ZERO),
@@ -22,39 +23,40 @@ public enum ConfigurationType {
     UNIT_PLAN(UnitPlan.class, () -> UnitPlan.EMPTY),
     ;
 
-    private final Class<? extends Configuration> cfgClass;
-    private final Class<? extends Configuration> secondaryClass;
-
+    private final Class<? extends Configuration> mindustryClass;
+    private final Class<? extends Configuration> schemacodeClass;
     private final Supplier<Configuration> initializer;
 
-    ConfigurationType(Class<? extends Configuration> cfgClass, Supplier<Configuration> initializer) {
-        this.cfgClass = cfgClass;
+    ConfigurationType(Class<? extends Configuration> mindustryClass, Supplier<Configuration> initializer) {
+        this.mindustryClass = mindustryClass;
+        this.schemacodeClass = mindustryClass;
         this.initializer = initializer;
-        this.secondaryClass = null;
     }
 
-    ConfigurationType(Class<? extends Configuration> cfgClass, Class<? extends Configuration> secondaryClass,
+    ConfigurationType(Class<? extends Configuration> mindustryClass, Class<? extends Configuration> schemacodeClass,
             Supplier<Configuration> initializer) {
-        this.cfgClass = cfgClass;
-        this.secondaryClass = secondaryClass;
+        this.mindustryClass = mindustryClass;
+        this.schemacodeClass = schemacodeClass;
         this.initializer = initializer;
     }
 
     public Class<? extends Configuration> getConfigurationClass() {
-        return cfgClass;
+        return mindustryClass;
     }
 
     public Class<? extends Configuration> getBuilderConfigurationClass() {
-        return secondaryClass == null ? cfgClass : secondaryClass;
+        return schemacodeClass;
     }
 
     public boolean isCompatible(Configuration configuration) {
-        return cfgClass.isInstance(configuration) || secondaryClass != null && secondaryClass.isInstance(configuration);
+        return configuration instanceof EmptyConfiguration
+                || mindustryClass.isInstance(configuration)
+                || schemacodeClass.isInstance(configuration);
     }
 
     public static <T extends Configuration> T createEmpty(Class<T> cfgClass) {
         for (ConfigurationType configurationType : values()) {
-            if (configurationType.cfgClass == cfgClass) {
+            if (configurationType.mindustryClass == cfgClass) {
                 //noinspection unchecked
                 return (T) configurationType.initializer.get();
             }
@@ -65,7 +67,7 @@ public enum ConfigurationType {
 
     public static ConfigurationType fromInstance(Configuration configuration) {
         for (ConfigurationType configurationType : values()) {
-            if (configurationType.cfgClass.isInstance(configuration)) {
+            if (configurationType.mindustryClass.isInstance(configuration)) {
                 return configurationType;
             }
         }

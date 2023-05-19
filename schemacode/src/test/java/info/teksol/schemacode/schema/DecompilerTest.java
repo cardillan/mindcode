@@ -13,7 +13,7 @@ class DecompilerTest extends AbstractSchematicsTest {
         decompiler.setRelativePositions(relativePositions);
         decompiler.setRelativeConnections(relativeConnections);
         decompiler.setRelativeLinks(relativeLinks);
-        decompiler.setDirectionLevel(DirectionLevel.ROTATABLE_ONLY);
+        decompiler.setDirectionLevel(DirectionLevel.ROTATABLE);
         return decompiler.buildCode();
     }
 
@@ -336,6 +336,22 @@ class DecompilerTest extends AbstractSchematicsTest {
                         Description'''
                 
                     @air-factory         at ( 0,  0) facing west  unit @mono
+                end
+                """.replaceAll("'''", "\"\"\"");
+
+        String actual = recompile(expected, false, false, false);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void decompilesColorConfiguration() {
+        String expected = """
+                schematic
+                    name = "Name"
+                    description = '''
+                        Description'''
+                
+                    @illuminator         at ( 0,  0) color rgba(255, 255, 0, 255)
                 end
                 """.replaceAll("'''", "\"\"\"");
 

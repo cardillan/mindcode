@@ -23,13 +23,12 @@ Supporting tools:
 
 * [Command line tool](TOOLS-CMDLINE.markdown): a command line tool containing Mindcode Compiler, Schematics Builder and 
   Schematics Decompiler
-* [Schematics Refresher](TOOLS-REFRESHER.markdown): a Mindustry mod for automatically or manually refreshing 
-  schematics created by Schematics Builder. 
+* [Schematics Refresher](TOOLS-REFRESHER.markdown): a Mindustry mod providing automatic or manual refreshing of 
+  schematics created by Schematics Builder (or any other tool). 
 
 As an addendum, some less obvious Mindustry Logic functions are described here:
  
-* [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown): some less obvious Mindustry Logic functions are 
-  described here
+* [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown).
 
 ---
 

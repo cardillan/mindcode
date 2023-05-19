@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * which can be extended to create a listener which only needs to handle a subset
  * of the available methods.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings("ALL")
 public class SchemacodeBaseListener implements SchemacodeListener {
 	/**
 	 * {@inheritDoc}
@@ -209,6 +209,18 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterColor(SchemacodeParser.ColorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColor(SchemacodeParser.ColorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConnections(SchemacodeParser.ConnectionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -288,6 +300,18 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLogic(SchemacodeParser.LogicContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterColorDef(SchemacodeParser.ColorDefContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitColorDef(SchemacodeParser.ColorDefContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
