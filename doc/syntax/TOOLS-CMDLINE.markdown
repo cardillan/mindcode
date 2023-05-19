@@ -252,6 +252,9 @@ named arguments:
   -L, --absolute-links   Use absolute coordinates for processor links
   -s, --sort-order {ORIGINAL,HORIZONTAL,VERTICAL}
                          specifies how to order blocks in the schema definition file
+  -d, --direction {ROTATABLE,NON_DEFAULT,ALL}
+                         specifies when to include  direction  clause  in  decompiled  schema  definition file: only for
+                         blocks affected by rotation, only for block with non-default direction, or for all blocks
 ```
 
 ---

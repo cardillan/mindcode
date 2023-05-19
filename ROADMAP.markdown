@@ -123,6 +123,7 @@ Things that would be cool, that might be doable in some way given existing const
 doing them isn't clear yet.
 
 * [Parallel comparison](#parallel-comparison)
+* Should case expressions use strict comparison (===)? 
 * Typed variables, parameters and function return values.
   * This would allow better optimization and some special features, such as function pointers.
   * Typed variables would have to be declared and could exist alongside untyped ones.

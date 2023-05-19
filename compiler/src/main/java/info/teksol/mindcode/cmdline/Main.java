@@ -21,6 +21,7 @@ public class Main {
         ArgumentParser parser = ArgumentParsers.newFor("mindcode", DefaultSettings.VERSION_0_9_0_DEFAULT_SETTINGS)
                 .singleMetavar(true)
                 .defaultFormatWidth(79)
+                //.defaultFormatWidth(120)
                 .terminalWidthDetection(true)
                 .build()
                 .description("Mindcode/Schemacode command-line compiler.");

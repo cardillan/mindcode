@@ -9,18 +9,12 @@ as a text and obtain a valid Schemacode representation by decompiling. To decomp
 [command line tool](TOOLS-CMDLINE.markdown) has to be used; decompiling a text representation obtained via clipboard is 
 possible through the [web application](http://mindcode.herokuapp.com/decompiler).
 
-Schemacode supports almost all existing features of Mindustry schematics. Among the unsupported features at this 
-moment are:
-
-* specifying the color of an illuminator block,
-* all configurations specific to Erekir-only objects, such as canvas contents.
-
-The illuminator and factory configurations will be added (hopefully) shortly, while support for Erekir-specific 
-content is not planned at this moment.
+Schemacode supports almost all existing features of Mindustry schematics. Specifically, all features employed by 
+Serpulo technology are fully supported. Features specific to Erekir (such as canvas pictures) are unavailable.
 
 Most importantly, logic processors can be fully configured using Schemacode. When specifying the code to be embedded 
 in a given processor, it is possible to use either the native mlog language, or Mindcode. The source code (both mlog 
-and Mindcode) can also be injected into the schematic from external file.
+and Mindcode) can also be injected into the schematic from external file when building it using the command line tool.
 
 It might be useful to have a look at existing Schemacode samples at http://mindcode.herokuapp.com/schematics before 
 going on with this documentation.
@@ -68,7 +62,7 @@ id = '''
     '''
 ```
 
-No escape characters are recognized in either type of string literal. To encode line endings into string literals, 
+No escape characters are recognized in either kind of string values. To encode line endings into string values, 
 the text block version must be used. It is possible to use triple double quotes in string literals when they're 
 defined as text blocks marked by triple single quotes (and vice versa). 
 
@@ -447,10 +441,10 @@ Block position can be specified as relative or absolute. The first block defined
 position, but all subsequent blocks can use absolute or relative positions. Relative position always relates to the 
 previous block, as defined by the schematic.
 
-Block position must be specified using this syntax: 
+Block position can be specified using this syntax: 
 
 ```
-[+, -] (x, y)
+[+-] (x, y)
 ```
 
 The `+` or `-` sign, if used, specifies relative position, in which case the `x` and `y` coordinates are added to or 
@@ -460,7 +454,7 @@ position for the block.
 It is also possible to specify a position relative to another block using this syntax:
 
 ```
-label {+, -} (x, y)
+label {+-} (x, y)
 ```
 
 In this case, the position is specified as an offset against the position of a block labeled as `label`.
@@ -486,7 +480,7 @@ coordinates. This makes it quite natural to design schematic starting in the low
 
 Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
 
-Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layout, it is 
+Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layouts, it is 
 easier to create the schematic in Mindustry, decompile to Schemacode definition and modify the resulting file.   
 
 ## Block orientation
@@ -990,20 +984,6 @@ read from standard input, it is evaluated from the current directory.
 
 > **Note**: only command line tool allows you to use code from an external file. The web application cannot access 
 > your local files, and the `file` option is therefore disabled there.  
-
-## Unsupported configurations
-
-At this moment, it is not possible to specify configuration for the following blocks:
-
-* `@ground-factory`
-* `@air-factory`
-* `@naval-factory`
-* `@mech-fabricator`
-* `@tank-fabricator`
-* `@ship-fabricator`
-* `@illuminator`
-
-Support for these blocks will be eventually added.
 
 # Origin and dimensions calculation
 
