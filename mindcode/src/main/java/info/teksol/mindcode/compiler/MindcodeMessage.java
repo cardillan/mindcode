@@ -1,5 +1,7 @@
 package info.teksol.mindcode.compiler;
 
+import org.intellij.lang.annotations.PrintFormat;
+
 public record MindcodeMessage(MessageLevel level, String message) implements CompilerMessage {
 
     public static MindcodeMessage error(String message) {
@@ -14,7 +16,7 @@ public record MindcodeMessage(MessageLevel level, String message) implements Com
         return new MindcodeMessage(MessageLevel.INFO, message);
     }
 
-    public static MindcodeMessage info(String message, Object... args) {
+    public static MindcodeMessage info(@PrintFormat String message, Object... args) {
         return new MindcodeMessage(MessageLevel.INFO, String.format(message, args));
     }
 

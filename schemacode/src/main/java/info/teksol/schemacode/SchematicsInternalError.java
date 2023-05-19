@@ -1,5 +1,7 @@
 package info.teksol.schemacode;
 
+import org.intellij.lang.annotations.PrintFormat;
+
 public class SchematicsInternalError extends RuntimeException {
 
     public SchematicsInternalError(String message) {
@@ -14,11 +16,11 @@ public class SchematicsInternalError extends RuntimeException {
         super(message, cause);
     }
 
-    public SchematicsInternalError(String format, Object... args) {
+    public SchematicsInternalError(@PrintFormat String format, Object... args) {
         super(String.format(format, args));
     }
 
-    public SchematicsInternalError(Throwable cause, String format, Object... args) {
+    public SchematicsInternalError(Throwable cause, @PrintFormat String format, Object... args) {
         super(String.format(format, args), cause);
     }
 }

@@ -13,6 +13,7 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.Opcode;
+import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.function.Consumer;
 
@@ -70,7 +71,7 @@ abstract class BaseOptimizer implements Optimizer {
         }
     }
 
-    protected void emitMessage(MessageLevel level, String format, Object... args) {
+    protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {
         messagesRecipient.accept(new MindcodeMessage(level, String.format(format, args)));
     }
 

@@ -151,7 +151,7 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
             case NONE -> "";
             case MLOG -> processor.program().getProgramText(builder);
             case MINDCODE -> {
-                builder.info("Compiling " + processor.program().getProgramId(builder));
+                builder.info("Compiling %s", processor.program().getProgramId(builder));
                 CompilerOutput<String> output = CompilerFacade.compile(processor.program().getProgramText(builder),
                         builder.getCompilerProfile());
                 output.messages().forEach(builder::addMessage);

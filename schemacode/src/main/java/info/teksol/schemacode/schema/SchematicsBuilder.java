@@ -21,6 +21,7 @@ import info.teksol.schemacode.mindustry.Position;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration;
 import info.teksol.schemacode.mindustry.UnitPlan;
 import info.teksol.schemacode.schema.BlockPositionResolver.AstBlockPosition;
+import org.intellij.lang.annotations.PrintFormat;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -62,15 +63,15 @@ public class SchematicsBuilder {
         messageListener.accept(message);
     }
 
-    public void error(String message, Object... args) {
+    public void error(@PrintFormat String message, Object... args) {
         messageListener.accept(SchemacodeMessage.error(args.length == 0 ? message : message.formatted(args)));
     }
 
-    public void warn(String message, Object... args) {
+    public void warn(@PrintFormat String message, Object... args) {
         messageListener.accept(SchemacodeMessage.warn(args.length == 0 ? message : message.formatted(args)));
     }
 
-    public void info(String message, Object... args) {
+    public void info(@PrintFormat String message, Object... args) {
         messageListener.accept(SchemacodeMessage.info(args.length == 0 ? message : message.formatted(args)));
     }
 
@@ -201,7 +202,7 @@ public class SchematicsBuilder {
         }
 
         Schematic schematic = new Schematic(name, description, labels, dim.x(), dim.y(), repositioned);
-        info("Created schematic '%s' with dimensions $s.", name, dim.toStringAbsolute());
+        info("Created schematic '%s' with dimensions %s.", name, dim.toStringAbsolute());
         return schematic;
     }
 

@@ -6,6 +6,7 @@ import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.Position;
+import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +40,7 @@ public class BlockPositionResolver {
                 .collect(Collectors.toMap(Map.Entry::getKey, e -> resolve(relativeBlocks, e.getValue())));
     }
 
-    private void error(String format, Object... args) {
+    private void error(@PrintFormat String format, Object... args) {
         messageListener.accept(SchemacodeMessage.error(String.format(format, args)));
     }
 

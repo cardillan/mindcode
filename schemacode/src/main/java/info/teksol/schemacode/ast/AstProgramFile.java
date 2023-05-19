@@ -20,7 +20,7 @@ public record AstProgramFile(AstText fileName) implements AstProgram {
             try {
                 return Files.readString(path);
             } catch (IOException ex) {
-                builder.error("Error reading file '%s'.".formatted(path.toString()));
+                builder.error("Error reading file '%s'.", path.toString());
                 return "";
             }
         } else {
