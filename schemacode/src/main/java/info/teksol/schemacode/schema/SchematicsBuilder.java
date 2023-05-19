@@ -251,15 +251,14 @@ public class SchematicsBuilder {
     }
 
     @SuppressWarnings("DuplicateBranchesInSwitch")
-    // TODO report errors on all invalid configurations, such as unknown item or liquid
     private Configuration convertAstConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
         Configuration configuration = switch (astConfiguration) {
             case null                   -> EmptyConfiguration.EMPTY;
             case AstBoolean b           -> BooleanConfiguration.of(b.value());
             case AstConnection c        -> c.evaluate(this, blockPos.position());
             case AstConnections c       -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
-            case AstItemReference r     -> verifyValue( blockPos, Item.forName(r.item()), r.item(), "item");
-            case AstLiquidReference r   -> verifyValue( blockPos, Liquid.forName(r.liquid()), r.liquid(), "liquid");
+            case AstItemReference r     -> verifyValue(blockPos, Item.forName(r.item()), r.item(), "item");
+            case AstLiquidReference r   -> verifyValue(blockPos, Liquid.forName(r.liquid()), r.liquid(), "liquid");
             case AstProcessor p         -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
             case AstRgbaValue rgb        -> convertToRgbValue(blockPos, rgb);
             case AstText t              -> new TextConfiguration(t.getText(this));
