@@ -13,6 +13,7 @@ public class FunctionParameterOptimizerTest extends AbstractGeneratorTest {
 
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.DEAD_CODE_ELIMINATION,
             Optimization.FUNCTION_PARAM_OPTIMIZATION);
 

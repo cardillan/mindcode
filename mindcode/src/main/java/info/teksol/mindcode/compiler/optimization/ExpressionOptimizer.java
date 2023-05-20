@@ -41,22 +41,24 @@ public class ExpressionOptimizer extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         // Cannot use for-each due to modifications of the underlying list in the loop
-        for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            final Tuple2<LogicValue, LogicValue> ops;
-            if (it.next() instanceof OpInstruction ix && (ops = extractIdivOperands(ix)) != null) {
-                LogicVariable result = ix.getResult();
-                List<LogicInstruction> list = findInstructions(in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
+        try (LogicIterator it = createIterator()) {
+            while(it.hasNext()) {
+                final Tuple2<LogicValue, LogicValue> ops;
+                if (it.next() instanceof OpInstruction ix && (ops = extractIdivOperands(ix)) != null) {
+                    LogicVariable result = ix.getResult();
+                    List<LogicInstruction> list = findInstructions(in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
-                // Preconditions:
-                // - exactly two instructions
-                // - div/idiv/mul comes first
-                // - the second is the floor operation
-                // - the second operates on the result of the first
-                if (list.size() == 2 && list.get(0) == ix && list.get(1) instanceof OpInstruction ox
-                        && ox.getOperation() == Operation.FLOOR && ox.getFirstOperand().equals(ix.getResult())) {
+                    // Preconditions:
+                    // - exactly two instructions
+                    // - div/idiv/mul comes first
+                    // - the second is the floor operation
+                    // - the second operates on the result of the first
+                    if (list.size() == 2 && list.get(0) == ix && list.get(1) instanceof OpInstruction ox
+                            && ox.getOperation() == Operation.FLOOR && ox.getFirstOperand().equals(ix.getResult())) {
 
-                    replaceInstruction(ox, createInstruction(OP, Operation.IDIV, ox.getResult(), ops.getT1(), ops.getT2()));
-                    it.remove();
+                        replaceInstruction(ox, createInstruction(OP, Operation.IDIV, ox.getResult(), ops.getT1(), ops.getT2()));
+                        it.remove();
+                    }
                 }
             }
         }

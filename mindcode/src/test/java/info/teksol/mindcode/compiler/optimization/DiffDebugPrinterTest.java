@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,10 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
 
         @Override
         public void setLevel(OptimizationLevel level) {
+        }
+
+        @Override
+        public void setGoal(GenerationGoal goal) {
         }
 
         @Override public void setDebugPrinter(DebugPrinter debugPrinter) { }

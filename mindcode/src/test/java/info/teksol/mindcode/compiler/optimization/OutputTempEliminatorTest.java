@@ -12,6 +12,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 public class OutputTempEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.OUTPUT_TEMPS_ELIMINATION);
 
 

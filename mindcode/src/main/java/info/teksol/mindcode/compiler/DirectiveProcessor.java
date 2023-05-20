@@ -60,7 +60,7 @@ public class DirectiveProcessor {
     private static void setOptimizationLevel(Optimization optimization, CompilerProfile profile, String level) {
         OptimizationLevel optLevel = OptimizationLevel.VALUE_MAP.get(level);
         if (optLevel == null) {
-            throw new InvalidCompilerDirectiveException("Invalid value '" + level + "' of compiler directive '" + optimization.getName() + "'");
+            throw new InvalidCompilerDirectiveException("Invalid value '" + level + "' of compiler directive '" + optimization.getOptionName() + "'");
         }
 
         profile.setOptimizationLevel(optimization, optLevel);
@@ -75,12 +75,20 @@ public class DirectiveProcessor {
         profile.setAllOptimizationLevels(optLevel);
     }
 
-
     private static void setShortCircuitEval(CompilerProfile compilerProfile, String booleanEval) {
         switch (booleanEval) {
             case "short"    -> compilerProfile.setShortCircuitEval(true);
             case "full"     -> compilerProfile.setShortCircuitEval(false);
             default         ->  throw new InvalidCompilerDirectiveException("Invalid value '" + booleanEval + "' of compiler directive 'booleanEval'");
+        }
+    }
+
+    private static void setGenerationGoal(CompilerProfile compilerProfile, String goal) {
+        switch (goal) {
+            case "size"     -> compilerProfile.setGoal(GenerationGoal.SIZE);
+            case "speed"    -> compilerProfile.setGoal(GenerationGoal.SPEED);
+            case "auto"     -> compilerProfile.setGoal(GenerationGoal.AUTO);
+            default         ->  throw new InvalidCompilerDirectiveException("Invalid value '" + goal + "' of compiler directive 'goal'");
         }
     }
 
@@ -91,8 +99,9 @@ public class DirectiveProcessor {
         map.put("target", DirectiveProcessor::setTarget);
         map.put("optimization", DirectiveProcessor::setAllOptimizationsLevel);
         map.put("booleanEval", DirectiveProcessor::setShortCircuitEval);
+        map.put("goal", DirectiveProcessor::setGenerationGoal);
         for (Optimization opt : Optimization.values()) {
-            map.put(opt.getName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
+            map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
         }
         return map;
     }

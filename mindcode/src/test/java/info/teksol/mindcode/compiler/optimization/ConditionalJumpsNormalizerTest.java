@@ -12,6 +12,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 public class ConditionalJumpsNormalizerTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline sut = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.CONDITIONAL_JUMPS_NORMALIZATION);
 
     @Test

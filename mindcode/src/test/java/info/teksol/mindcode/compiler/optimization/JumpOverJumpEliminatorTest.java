@@ -14,11 +14,11 @@ import static info.teksol.mindcode.logic.Opcode.*;
 public class JumpOverJumpEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = new JumpOverJumpEliminator(getInstructionProcessor(), terminus);
 
-
     @Test
     void optimizesBreakInWhileLoop() {
         final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
                 terminus,
+                getCompilerProfile(),
                 Optimization.DEAD_CODE_ELIMINATION,
                 Optimization.SINGLE_STEP_JUMP_ELIMINATION,
                 Optimization.INPUT_TEMPS_ELIMINATION,

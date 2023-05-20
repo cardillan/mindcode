@@ -2,6 +2,7 @@ package info.teksol.mindcode.cmdline;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -85,7 +86,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         List<String> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.OFF.name());
         List<String> actual = new ArrayList<>();
         for (Optimization optimization : Optimization.LIST) {
-            String cmdLine = "cm --" + optimization.getName() + " off";
+            String cmdLine = "cm --" + optimization.getOptionName() + " off";
             Namespace arguments = parseCommandLine(cmdLine);
             actual.add(arguments.<OptimizationLevel>get(optimization.name()).name());
         }
@@ -120,6 +121,12 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     public void stacktraceArgument() throws ArgumentParserException {
         Namespace arguments = parseCommandLine("cm -s");
         assertEquals(true, arguments.get("stacktrace"));
+    }
+
+    @Test
+    public void goalArgument() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine("cm -g auto");
+        assertEquals(GenerationGoal.AUTO, arguments.get("goal"));
     }
 
     @Test

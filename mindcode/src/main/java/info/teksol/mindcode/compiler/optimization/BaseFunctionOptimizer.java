@@ -22,39 +22,6 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
     }
 
     /**
-     * Determines whether the code block is localized, i.e. all effects that can happen inside the block are contained
-     * in the block itself. In other word, all jumps that target a label inside the code block originate
-     * in the code block.
-     *
-     * @param codeBlock code block to inspect
-     * @return true if the block is localized
-     */
-    protected boolean isLocalized(List<LogicInstruction> codeBlock) {
-        Set<LogicLabel> localLabels = codeBlock.stream()
-                .filter(ix -> ix instanceof LabelInstruction)
-                .map(ix -> ((LabelInstruction) ix).getLabel())
-                .collect(Collectors.toSet());
-
-        // Get jump/goto instructions targeting any of local labels
-        // If all of them are local to the code block, the code block is linear
-        return program.stream()
-                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
-                .filter(ix -> getPossibleTargetLabels(ix).anyMatch(localLabels::contains))
-                .allMatch(ix -> codeBlock.stream().anyMatch(local -> local == ix));
-    }
-
-    private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
-        return switch (instruction) {
-            case JumpInstruction ix -> Stream.of(ix.getTarget());
-            case GotoInstruction ix -> program.stream()
-                    .filter(in -> in instanceof LabelInstruction && in.matchesMarker(ix.getMarker()))
-                    .map(in -> (LabelInstruction) in)
-                    .map(LabelInstruction::getLabel);
-            default -> Stream.empty();
-        };
-    }
-
-    /**
      * Creates an independent list (not a sublist of the main program) of instructions belonging to given function.
      *
      * @param functionPrefix prefix assigned to the function realization
@@ -62,7 +29,7 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
      */
     protected List<LogicInstruction> getFunctionInstructions(String functionPrefix) {
         // Find start and end labels
-        int[] bounds = program.stream()
+        int[] bounds = instructionStream()
                 .filter(ix -> ix instanceof LabelInstruction)
                 .filter(ix -> ix.matchesMarker(functionPrefix))
                 .mapToInt(ix -> findInstructionIndex(0, z -> z == ix))
@@ -71,7 +38,7 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
         if (bounds.length != 2) {
             return List.of();
         } else {
-            return List.copyOf(program.subList(bounds[0], bounds[1]));
+            return List.copyOf(instructionSubList(bounds[0], bounds[1]));
         }
     }
 
@@ -81,7 +48,7 @@ public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
      * @return list of existing function prefixes.
      */
     protected List<String> getFunctions() {
-        return program.stream()
+        return instructionStream()
                 .filter(ix -> ix instanceof LabelInstruction)
                 .map(LogicInstruction::getMarker)
                 .filter(Objects::nonNull)

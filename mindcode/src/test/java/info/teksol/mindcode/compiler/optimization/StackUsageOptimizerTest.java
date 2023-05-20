@@ -13,6 +13,7 @@ class StackUsageOptimizerTest extends AbstractGeneratorTest {
 
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.DEAD_CODE_ELIMINATION,
             Optimization.STACK_USAGE_OPTIMIZATION);
 

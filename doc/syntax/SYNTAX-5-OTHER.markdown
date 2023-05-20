@@ -26,9 +26,23 @@ Possible values for this option are:
 * `ML7AS`: compile for Mindcode Logic version 7 (revision A) standard processors
 * `ML7AW`: compile for Mindcode Logic version 7 (revision A) world processor
 
+## Option `goal`
+
+Use the `goal` option to specify whether the compiler/optimizer prefers to generate smaller code or faster code. 
+Possible values are:
+
+* `size`: the compiler/optimizer tries to generate smaller code.
+* `speed`: the compiler/optimizer might add instructions, if it makes the resulting code faster. Currently, this 
+  distinction is employed by the loop optimizer, which can duplicate parts of the code to avoid unnecessary jump. At 
+  this moment, at most three instructions per avoided jump are generated.
+* `auto`: reserved for future use, at this moment the setting is identical to `size`.
+
+Over time, additional `speed` specific optimizations will be added, as well as an automatic process to find the best 
+balance between speed and size. 
+
 ## Option `optimization`
 
-Use the `optimization` option set the optimization level of the compiler:
+Use the `optimization` option to set the optimization level of the compiler:
 
 ```
 #set optimization = basic
@@ -104,6 +118,7 @@ and availability of the aggressive optimization level is:
 | [Case expression optimization](#case-expression-optimization)   | case-expression-optimization  |     N      |
 | [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization     |     N      |
 | [Jump straightening](#jump-straightening)                       | jump-straightening            |     N      |
+| [Loop optimization](#loop-optimization)                         | loop-optimization             |     N      |
 | [Jump threading](#jump-threading)                               | jump-threading                |     Y      |
 | [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessible-code-elimination |     Y      |
 | [Stack optimization](#stack-optimization)                       | stack-optimization            |     N      |
@@ -282,6 +297,10 @@ while true
   end
 end
 ```
+
+## Loop optimization
+
+
 
 ## Jump threading
 

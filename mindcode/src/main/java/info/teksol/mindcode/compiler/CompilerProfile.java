@@ -18,6 +18,7 @@ public class CompilerProfile {
     private final Map<Optimization, OptimizationLevel> levels;
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
+    private GenerationGoal goal = GenerationGoal.SPEED;
     private boolean shortCircuitEval = false;
     private boolean printFinalCode = false;
     private int parseTreeLevel = 0;
@@ -81,6 +82,14 @@ public class CompilerProfile {
 
     public boolean optimizationsActive() {
         return levels.values().stream().anyMatch(l -> l != OptimizationLevel.OFF);
+    }
+
+    public GenerationGoal getGoal() {
+        return goal;
+    }
+
+    public void setGoal(GenerationGoal goal) {
+        this.goal = goal;
     }
 
     public boolean isShortCircuitEval() {

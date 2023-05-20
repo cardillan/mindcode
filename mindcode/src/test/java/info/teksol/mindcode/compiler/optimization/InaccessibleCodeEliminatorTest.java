@@ -14,6 +14,7 @@ public class InaccessibleCodeEliminatorTest extends AbstractGeneratorTest {
     // Sequences of jumps are not generated without dead code elimination
     private final LogicInstructionPipeline sut = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.CONDITIONAL_JUMPS_NORMALIZATION,
             Optimization.DEAD_CODE_ELIMINATION,
             Optimization.SINGLE_STEP_JUMP_ELIMINATION,

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.MindcodeMessage;
@@ -24,6 +25,7 @@ abstract class BaseOptimizer implements Optimizer {
     private final String name = getClass().getSimpleName();  // TODO: use name from Optimization enum
 
     protected OptimizationLevel level = OptimizationLevel.AGGRESSIVE;
+    protected GenerationGoal goal  = GenerationGoal.SIZE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
     private Consumer<CompilerMessage> messagesRecipient = s -> {};
 
@@ -53,6 +55,11 @@ abstract class BaseOptimizer implements Optimizer {
     @Override
     public void setLevel(OptimizationLevel level) {
         this.level = level;
+    }
+
+    @Override
+    public void setGoal(GenerationGoal goal) {
+        this.goal = goal;
     }
 
     @Override

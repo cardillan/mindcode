@@ -12,6 +12,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 public class ExpressionOptimizerTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.EXPRESSION_OPTIMIZATION);
 
 

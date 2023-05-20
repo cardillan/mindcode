@@ -47,12 +47,12 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
 
     private void removeUnusedVariables() {
         // Collects all variables from the entire program except push or pop instructions
-        program.stream().filter(Predicate.not(PushOrPopInstruction.class::isInstance))
+        instructionStream().filter(Predicate.not(PushOrPopInstruction.class::isInstance))
                 .flatMap(LogicInstruction::inputOutputArgumentsStream)
                 .filter(LogicVariable.class::isInstance)
                 .forEachOrdered(variables::add);
 
-        program.removeIf(this::uselessStackOperation);
+        removeMatchingInstructions(this::uselessStackOperation);
     }
 
     private boolean uselessStackOperation(LogicInstruction instruction) {
@@ -68,7 +68,7 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
                 break;      // No return after call: something is wrong, bail out.
             }
 
-            List<LogicInstruction> codeBlock = program.subList(call, finish);
+            List<LogicInstruction> codeBlock = instructionSubList(call, finish);
             if (isLocalized(codeBlock)) {
                 // List of variables read in the code block, except push/pop operations
                 Set<LogicArgument> readVariables = codeBlock.stream()
@@ -77,11 +77,11 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
                         .collect(Collectors.toSet());
 
                 // Push/pop instructions around a call are marked with the same marker
-                String marker = program.get(call).getMarker();
+                String marker = getInstruction(call).getMarker();
 
                 // Need to remove from the entire program, not just from the code block, as code block
                 // doesn't contain push instructions preceding the call instruction
-                program.removeIf(in -> in instanceof PushOrPopInstruction ix
+                removeMatchingInstructions(in -> in instanceof PushOrPopInstruction ix
                         && ix.matchesMarker(marker) && !readVariables.contains(ix.getVariable()));
             }
 

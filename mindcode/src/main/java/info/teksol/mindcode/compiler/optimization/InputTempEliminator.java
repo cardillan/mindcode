@@ -9,7 +9,6 @@ import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,27 +32,28 @@ class InputTempEliminator extends GlobalOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        // Cannot use iterations due to modifications of the underlying list in the loop
-        for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.TMP_VARIABLE) {
-                LogicArgument result = ix.getTarget();
-                List<LogicInstruction> list = findInstructions(
-                        in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
+        try (LogicIterator it = createIterator()) {
+            while (it.hasNext()) {
+                if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.TMP_VARIABLE) {
+                    LogicArgument result = ix.getTarget();
+                    List<LogicInstruction> list = findInstructions(
+                            in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
-                // Not exactly two instructions, or this instruction does not come first
-                if (list.size() != 2 || list.get(0) != ix) continue;
+                    // Not exactly two instructions, or this instruction does not come first
+                    if (list.size() != 2 || list.get(0) != ix) continue;
 
-                // Make sure all arg0 arguments of the other instruction are input
-                LogicInstruction other = list.get(1);
-                boolean replacesInputArg = other.assignmentsStream()
-                        .filter(t -> t.argument().equals(result))
-                        .allMatch(ParameterAssignment::isInput);
-                if (!replacesInputArg) continue;
+                    // Make sure all arg0 arguments of the other instruction are input
+                    LogicInstruction other = list.get(1);
+                    boolean replacesInputArg = other.assignmentsStream()
+                            .filter(t -> t.argument().equals(result))
+                            .allMatch(ParameterAssignment::isInput);
+                    if (!replacesInputArg) continue;
 
-                // The first instruction merely transfers a value to the input argument of the other instruction
-                // Replacing instruction argument by value
-                replaceInstruction(other, replaceAllArgs(other, result, ix.getValue()));
-                it.remove();
+                    // The first instruction merely transfers a value to the input argument of the other instruction
+                    // Replacing instruction argument by value
+                    replaceInstruction(other, replaceAllArgs(other, result, ix.getValue()));
+                    it.remove();
+                }
             }
         }
 

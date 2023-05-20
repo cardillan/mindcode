@@ -8,65 +8,70 @@ import java.util.function.BiFunction;
 
 // The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
 // compiler, makes optimizations and passes them onto the next optimizer.
+// TODO: refactor to ensure 1:1 correspondence between enum and implementation. Might need multiple passes.
 public enum Optimization {
-    CONDITIONAL_JUMPS_NORMALIZATION     ('n', "jump-normalization",
+    CONDITIONAL_JUMPS_NORMALIZATION     ('n', "Jump Normalization",
             ConditionalJumpsNormalizer::new,
             "replacing always true conditional jumps with unconditional ones, removing always false jumps"),
 
-    DEAD_CODE_ELIMINATION               ('d', "dead-code-elimination",
+    DEAD_CODE_ELIMINATION               ('d', "Dead Code Elimination",
             DeadCodeEliminator::new,
             "eliminating writes to compiler- or user-defined variables that are not used"),
     
-    SINGLE_STEP_JUMP_ELIMINATION        ('s', "single-step-elimination",
+    SINGLE_STEP_JUMP_ELIMINATION        ('s', "Single Step Elimination",
             SingleStepJumpEliminator::new,
             "eliminating jumps to the next instruction"),
     
-    INPUT_TEMPS_ELIMINATION             ('i', "input-temp-elimination",
+    INPUT_TEMPS_ELIMINATION             ('i', "Input Temp Elimination",
             InputTempEliminator::new,
             "eliminating temporary variables created to pass values into instructions"),
     
-    OUTPUT_TEMPS_ELIMINATION            ('o', "output-temp-elimination",
+    OUTPUT_TEMPS_ELIMINATION            ('o', "Output Temp Elimination",
             OutputTempEliminator::new,
             "eliminating temporary variables created to extract values from instructions"),
 
-    EXPRESSION_OPTIMIZATION             ('x', "expression-optimization",
+    EXPRESSION_OPTIMIZATION             ('x', "Expression Optimization",
             ExpressionOptimizer::new,
             "optimizing some common mathematical expressions"),
 
-    CASE_EXPRESSION_OPTIMIZATION        ('c', "case-expression-optimization",
+    CASE_EXPRESSION_OPTIMIZATION        ('c', "Ease Expression Optimization",
             CaseExpressionOptimizer::new,
             "eliminating temporary variables created to execute case expressions"),
     
-    CONDITIONAL_JUMPS_IMPROVEMENT       ('j', "conditionals-optimization",
+    CONDITIONAL_JUMPS_IMPROVEMENT       ('j', "Conditionals Optimization",
             ImproveNegativeConditionalJumps::new,
             "merging an op instruction producing a boolean expression into the following conditional jump"),
     
-    JUMP_OVER_JUMP_ELIMINATION          ('q', "jump-straightening",
+    JUMP_OVER_JUMP_ELIMINATION          ('q', "Jump Straightening",
             (inst, next) -> new JumpOverJumpEliminator(inst, new ImprovePositiveConditionalJumps(inst, next)),
             "simplifying sequences of intertwined jumps"),
 
-    JUMP_TARGET_PROPAGATION             ('t', "jump-threading",
+    LOOP_OPTIMIZATION                   ('l', "Loop Optimization",
+            LoopOptimizer::new,
+            "improving loops"),
+
+    JUMP_TARGET_PROPAGATION             ('t', "Jump Threading",
             PropagateJumpTargets::new,
             "eliminating chained jumps"),
     
     // This optimizer can get additional single step jumps; therefore is bundled with its eliminator
-    INACCESSIBLE_CODE_ELIMINATION       ('e', "inaccessible-code-elimination",
+    INACCESSIBLE_CODE_ELIMINATION       ('e', "Inaccessible Code Elimination",
             (inst, next) -> new InaccessibleCodeEliminator(inst, new SingleStepJumpEliminator(inst, next)),
             "eliminating instructions made inaccessible by optimizations or false conditions"),
 
-    STACK_USAGE_OPTIMIZATION            ('k', "stack-optimization",
+    STACK_USAGE_OPTIMIZATION            ('k', "Stack Optimization",
             StackUsageOptimizer::new,
             "optimizing variable storage on stack"),
 
-    FUNCTION_PARAM_OPTIMIZATION         ('f', "function-call-optimization",
+    FUNCTION_PARAM_OPTIMIZATION         ('f', "Function Call Optimization",
             FunctionParameterOptimizer::new,
             "optimizing passing arguments to functions"),
 
-    RETURN_VALUE_OPTIMIZATION           ('r', "return-value-optimization",
+    RETURN_VALUE_OPTIMIZATION           ('r', "Return Value Optimization",
             ReturnValueOptimizer::new,
             "optimizing passing return values from functions"),
 
-    PRINT_TEXT_MERGING                  ('p', "print-merging",
+    PRINT_TEXT_MERGING                  ('p', "Print Merging",
             PrintMerger::new,
             "merging consecutive print statements outputting text literals"),
     ;
@@ -76,6 +81,7 @@ public enum Optimization {
     // Command line flag for referencing this optimizer
     private final char flag;
     private final String name;
+    private final String optionName;
     private final String description;
 
     Optimization(char flag, String name,
@@ -83,6 +89,7 @@ public enum Optimization {
                  String description) {
         this.flag = flag;
         this.name = name;
+        this.optionName = name.toLowerCase().replace(' ', '-');
         this.instanceCreator = instanceCreator;
         this.description = description;
     }
@@ -93,6 +100,10 @@ public enum Optimization {
 
     public String getName() {
         return name;
+    }
+
+    public String getOptionName() {
+        return optionName;
     }
 
     public String getDescription() {

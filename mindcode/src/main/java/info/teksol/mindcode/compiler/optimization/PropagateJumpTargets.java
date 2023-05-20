@@ -39,23 +39,25 @@ class PropagateJumpTargets extends GlobalOptimizer {
     @Override
     protected boolean optimizeProgram() {
         int count = 0;
-        program.add(0, createLabel(FIRST_LABEL));
-        for (int index = 0; index < program.size(); index++) {
-            LogicInstruction instruction = program.get(index);
-            if (instruction instanceof JumpInstruction ix) {
-                LogicLabel label = findJumpRedirection(ix);
-                if (!label.equals(ix.getTarget())) {
-                    startLabelUsed |= label.equals(FIRST_LABEL);
-                    // Update target of the original jump
-                    program.set(index, ix.withLabel(label));
-                    count++;
+        try (LogicIterator it = createIterator()) {
+            it.add(createLabel(FIRST_LABEL));
+            while (it.hasNext()) {
+                LogicInstruction instruction = it.next();
+                if (instruction instanceof JumpInstruction ix) {
+                    LogicLabel label = findJumpRedirection(ix);
+                    if (!label.equals(ix.getTarget())) {
+                        startLabelUsed |= label.equals(FIRST_LABEL);
+                        // Update target of the original jump
+                        it.set(ix.withLabel(label));
+                        count++;
+                    }
                 }
             }
         }
-        
+
         if (!startLabelUsed) {
             // Keep start label only if used -- easier on some unit tests
-            program.remove(0);
+            removeInstruction(0);
         }
 
         if (count > 0) {

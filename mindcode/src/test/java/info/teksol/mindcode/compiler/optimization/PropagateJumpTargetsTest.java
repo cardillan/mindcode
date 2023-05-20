@@ -12,6 +12,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 public class PropagateJumpTargetsTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline sut = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.DEAD_CODE_ELIMINATION,
             Optimization.CONDITIONAL_JUMPS_IMPROVEMENT,
             Optimization.JUMP_TARGET_PROPAGATION,

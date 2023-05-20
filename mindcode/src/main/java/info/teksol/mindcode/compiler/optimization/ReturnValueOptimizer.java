@@ -44,46 +44,47 @@ public class ReturnValueOptimizer extends BaseFunctionOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        for (int i = 0; i < program.size(); i++) {
-            // Find fnRetVal creation and check is it well-formed
-            if (program.get(i) instanceof SetInstruction instruction
-                    && instruction.getTarget().getType() == ArgumentType.STORED_RETVAL) {
+        try (LogicIterator it = createIterator()) {
+            while (it.hasNext()) {
+                // Find fnRetVal creation and check is it well-formed
+                if (it.next() instanceof SetInstruction instruction
+                        && instruction.getTarget().getType() == ArgumentType.STORED_RETVAL) {
 
-                LogicArgument retval = instruction.getTarget();
-                LogicArgument value = instruction.getValue();
+                    LogicArgument retval = instruction.getTarget();
+                    LogicArgument value = instruction.getValue();
 
-                // Get the other uses of fnRetVal
-                List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(retval)
-                        && !(ix instanceof PushOrPopInstruction));
+                    // Get the other uses of fnRetVal
+                    List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(retval)
+                            && !(ix instanceof PushOrPopInstruction));
 
-                // Precondition 1
-                if (list.size() != 2 || list.get(0) != instruction) continue;
+                    // Precondition 1
+                    if (list.size() != 2 || list.get(0) != instruction) continue;
 
-                LogicInstruction other = list.get(1);
+                    LogicInstruction other = list.get(1);
 
-                // Precondition 2
-                int endIndex = findInstructionIndex(i, ix -> ix == other);
-                List<LogicInstruction> codeBlock = program.subList(i + 1, endIndex);
-                if (!isLocalized(codeBlock)) continue;
+                    // Precondition 2
+                    int endIndex = findInstructionIndex(it.previousIndex(), ix -> ix == other);
+                    List<LogicInstruction> codeBlock = instructionSubList(it.nextIndex(), endIndex);
+                    if (!isLocalized(codeBlock)) continue;
 
-                // Precondition 3
-                boolean isModified = codeBlock.stream()
-                        .flatMap(LogicInstruction::outputArgumentsStream)
-                        .anyMatch(value::equals);
-                if (isModified) continue;
+                    // Precondition 3
+                    boolean isModified = codeBlock.stream()
+                            .flatMap(LogicInstruction::outputArgumentsStream)
+                            .anyMatch(value::equals);
+                    if (isModified) continue;
 
-                boolean hasFunctionCall = codeBlock.stream().anyMatch(this::containsFunctionCall);
-                if (value.getType() == ArgumentType.FUNCTION_RETVAL) {
-                    // Precondition 4
-                    if (hasFunctionCall) continue;
-                } else {
-                    // Precondition 5
-                    if (hasFunctionCall && value.isGlobalVariable() || value.isVolatile()) continue;
+                    boolean hasFunctionCall = codeBlock.stream().anyMatch(this::containsFunctionCall);
+                    if (value.getType() == ArgumentType.FUNCTION_RETVAL) {
+                        // Precondition 4
+                        if (hasFunctionCall) continue;
+                    } else {
+                        // Precondition 5
+                        if (hasFunctionCall && value.isGlobalVariable() || value.isVolatile()) continue;
+                    }
+
+                    removeInstruction(instruction);
+                    replaceInstruction(other, replaceAllArgs(other, retval, value));
                 }
-
-                removeInstruction(instruction);
-                replaceInstruction(other, replaceAllArgs(other, retval, value));
-                i--;
             }
         }
 

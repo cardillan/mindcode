@@ -9,7 +9,6 @@ import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,21 +36,23 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        for (Iterator<LogicInstruction> it = program.iterator(); it.hasNext(); ) {
-            if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.AST_VARIABLE) {
-                LogicVariable result = ix.getTarget();
-                List<LogicInstruction> list = findInstructions(
-                        in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
+        try (LogicIterator it = createIterator()) {
+            while (it.hasNext()){
+                if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.AST_VARIABLE) {
+                    LogicVariable result = ix.getTarget();
+                    List<LogicInstruction> list = findInstructions(
+                            in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
-                // The set instruction is not the first one
-                if (list.get(0) != ix) continue;
+                    // The set instruction is not the first one
+                    if (list.get(0) != ix) continue;
 
-                // Some of the other instructions aren't part of the case expression
-                if (!list.stream().skip(1).allMatch(in -> isStandardCaseWhenInstruction(in, result))) continue;
+                    // Some of the other instructions aren't part of the case expression
+                    if (!list.stream().skip(1).allMatch(in -> isStandardCaseWhenInstruction(in, result))) continue;
 
-                // Replace __ast with actual value in all case branches
-                list.stream().skip(1).forEach(in -> replaceInstruction(in, replaceAllArgs(in, result, ix.getValue())));
-                it.remove();
+                    // Replace __ast with actual value in all case branches
+                    list.stream().skip(1).forEach(in -> replaceInstruction(in, replaceAllArgs(in, result, ix.getValue())));
+                    it.remove();
+                }
             }
         }
 

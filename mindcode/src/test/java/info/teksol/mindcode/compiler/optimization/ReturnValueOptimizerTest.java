@@ -14,6 +14,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 class ReturnValueOptimizerTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.RETURN_VALUE_OPTIMIZATION);
 
     @Test

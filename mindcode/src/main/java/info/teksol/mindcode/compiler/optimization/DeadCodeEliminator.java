@@ -63,7 +63,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
     private void analyzeDataflow() {
         reads.clear();
         writes.clear();
-        program.stream().filter(ix -> !(ix instanceof PushOrPopInstruction)).forEach(this::examineInstruction);
+        instructionStream().filter(ix -> !(ix instanceof PushOrPopInstruction)).forEach(this::examineInstruction);
     }
 
     private void removeUselessWrites() {
@@ -77,7 +77,9 @@ class DeadCodeEliminator extends GlobalOptimizer {
             // Other instructions are inspected further to find out they're fully unused
             writes.get(key).stream()
                     .filter(ix -> ix.getOutputs() < 2 || allWritesUnread(ix))
-                    .forEach(program::remove);
+                    .mapToInt(ix -> findInstructionIndex(0, ixx -> ixx == ix))
+                    .filter(i -> i >= 0)
+                    .forEach(this::removeInstruction);
         }
 
         eliminations.addAll(uselessWrites);

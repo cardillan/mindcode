@@ -12,6 +12,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.CONDITIONAL_JUMPS_IMPROVEMENT);
     
     @Test
@@ -87,6 +88,7 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
     void preservesUserVariables() {
         final LogicInstructionPipeline customPipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
                 terminus,
+                getCompilerProfile(),
                 Optimization.DEAD_CODE_ELIMINATION,
                 Optimization.OUTPUT_TEMPS_ELIMINATION,
                 Optimization.CONDITIONAL_JUMPS_IMPROVEMENT
@@ -121,6 +123,7 @@ class ImproveNegativeConditionalJumpsTest extends AbstractGeneratorTest {
     void preservesStrictEqualConditions() {
         final LogicInstructionPipeline customPipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
                 terminus,
+                getCompilerProfile(),
                 Optimization.DEAD_CODE_ELIMINATION,
                 Optimization.OUTPUT_TEMPS_ELIMINATION,
                 Optimization.CONDITIONAL_JUMPS_IMPROVEMENT

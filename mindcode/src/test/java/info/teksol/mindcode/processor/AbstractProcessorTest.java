@@ -1,6 +1,7 @@
 package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
+import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -51,7 +53,8 @@ public class AbstractProcessorTest extends AbstractGeneratorTest {
     }
 
     protected void testCode(String code, List<MindustryObject> blocks, List<String> expectedOutputs) {
-        testAndEvaluateCode(code, blocks, outputs -> assertEquals(expectedOutputs, outputs));
+        testAndEvaluateCode(code, blocks, outputs -> assertEquals(expectedOutputs, outputs,
+                () -> messages.stream().map(CompilerMessage::message).collect(Collectors.joining("\n"))));
     }
 
     protected void testCode(String code, String... expectedOutputs) {

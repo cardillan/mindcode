@@ -16,6 +16,7 @@ import static junit.framework.Assert.assertEquals;
 class DeadCodeEliminatorTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.DEAD_CODE_ELIMINATION);
 
     @Test

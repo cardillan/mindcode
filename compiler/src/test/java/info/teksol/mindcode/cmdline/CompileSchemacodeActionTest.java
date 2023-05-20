@@ -85,7 +85,7 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
         List<String> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.OFF.name());
         List<String> actual = new ArrayList<>();
         for (Optimization optimization : Optimization.LIST) {
-            String cmdLine = "cs --" + optimization.getName() + " off";
+            String cmdLine = "cs --" + optimization.getOptionName() + " off";
             Namespace arguments = parseCommandLine(cmdLine);
             actual.add(arguments.<OptimizationLevel>get(optimization.name()).name());
         }

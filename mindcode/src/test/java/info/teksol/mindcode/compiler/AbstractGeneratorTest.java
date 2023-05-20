@@ -7,7 +7,7 @@ import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
+import info.teksol.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
 import info.teksol.mindcode.logic.*;
@@ -81,19 +81,23 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
 
-    public static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
+    public List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
+        DiffDebugPrinter debugPrinter = new DiffDebugPrinter(profile.getDebugLevel());
         LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
-                terminus, profile, new NullDebugPrinter(), s -> {});
+                terminus, profile, debugPrinter, messages::add);
         LogicInstructionGenerator generator = new LogicInstructionGenerator(CompilerProfile.noOptimizations(),
-                instructionProcessor, FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
+                instructionProcessor, FunctionMapperFactory.getFunctionMapper(instructionProcessor, messages::add), pipeline);
         generator.start(program);
         pipeline.flush();
+        debugPrinter.print(s -> messages.add(MindcodeMessage.debug(s)));
         return terminus.getResult();
     }
 
     protected CompilerProfile getCompilerProfile() {
-        return CompilerProfile.fullOptimizations();
+        CompilerProfile compilerProfile = CompilerProfile.fullOptimizations();
+        compilerProfile.setDebugLevel(3);
+        return compilerProfile;
     }
 
     protected List<LogicInstruction> compile(String code) {
@@ -116,7 +120,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     protected void generateInto(LogicInstructionPipeline pipeline, Seq program) {
         LogicInstructionGenerator generator = new LogicInstructionGenerator(CompilerProfile.noOptimizations(),
-                instructionProcessor, FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
+                instructionProcessor, FunctionMapperFactory.getFunctionMapper(instructionProcessor, messages::add), pipeline);
         generator.start(program);
         pipeline.flush();
     }

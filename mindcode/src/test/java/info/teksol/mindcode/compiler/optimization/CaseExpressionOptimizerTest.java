@@ -15,6 +15,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 public class CaseExpressionOptimizerTest extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.OUTPUT_TEMPS_ELIMINATION,
             Optimization.JUMP_OVER_JUMP_ELIMINATION,
             Optimization.CASE_EXPRESSION_OPTIMIZATION

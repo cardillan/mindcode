@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -37,7 +38,8 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
     }
 
     public static LogicInstructionPipeline createPipelineForProfile(InstructionProcessor instructionProcessor,
-            LogicInstructionPipeline terminus, CompilerProfile profile, DebugPrinter debugPrinter, Consumer<CompilerMessage> messageRecipient) {
+            LogicInstructionPipeline terminus, CompilerProfile profile, DebugPrinter debugPrinter,
+            Consumer<CompilerMessage> messageRecipient) {
         LogicInstructionPipeline pipeline = new InstructionCounter(terminus, messageRecipient,
                 "%6d instructions after optimizations.", new NullDebugPrinter());
 
@@ -47,6 +49,7 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
             if (level != OptimizationLevel.OFF) {
                 BaseOptimizer optimizer = values[i].createInstance(instructionProcessor, pipeline);
                 optimizer.setLevel(level);
+                optimizer.setGoal(profile.getGoal());
                 optimizer.setMessagesRecipient(messageRecipient);
                 optimizer.setDebugPrinter(debugPrinter);
                 pipeline = optimizer;
@@ -59,15 +62,23 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
     }
 
     public static LogicInstructionPipeline createPipelineOf(InstructionProcessor instructionProcessor,
-            LogicInstructionPipeline terminus, Optimization... optimization) {
+            LogicInstructionPipeline terminus, CompilerProfile profile, Optimization... optimization) {
+
         EnumSet<Optimization> includes = EnumSet.of(optimization[0], optimization);
         LogicInstructionPipeline pipeline = terminus;
         Optimization[] values = values();
         for (int i = values.length - 1; i >= 0; i--) {
+
             if (includes.contains(values[i])) {
-                pipeline = values[i].createInstance(instructionProcessor, pipeline);
+                BaseOptimizer optimizer = values[i].createInstance(instructionProcessor, pipeline);
+                optimizer.setLevel(OptimizationLevel.AGGRESSIVE);
+                optimizer.setGoal(profile.getGoal());
+                //optimizer.setMessagesRecipient(messageRecipient);
+                //optimizer.setDebugPrinter(debugPrinter);
+                pipeline = optimizer;
             }
         }
+
         return new OptimizationPipeline(pipeline);
     }
 
@@ -108,6 +119,11 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
 
         @Override
         public void setLevel(OptimizationLevel level) {
+            // Do nothing
+        }
+
+        @Override
+        public void setGoal(GenerationGoal goal) {
             // Do nothing
         }
 

@@ -13,6 +13,7 @@ import info.teksol.mindcode.logic.ProcessorVersion;
 import java.util.List;
 
 public class AbstractAstTest extends AbstractParserTest {
+
     public AstNode translateToAst(String program) {
         return AstNodeBuilder.generate(parse(program));
     }

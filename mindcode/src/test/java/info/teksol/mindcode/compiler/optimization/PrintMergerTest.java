@@ -12,6 +12,7 @@ import static info.teksol.mindcode.logic.Opcode.*;
 public class PrintMergerTest  extends AbstractGeneratorTest {
     private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
             terminus,
+            getCompilerProfile(),
             Optimization.INPUT_TEMPS_ELIMINATION,
             Optimization.PRINT_TEXT_MERGING
     );

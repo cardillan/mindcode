@@ -17,12 +17,22 @@ class DirectiveProcessorTest {
         DirectiveProcessor.processDirectives(seq, profile);
         assertEquals(ProcessorVersion.V6, profile.getProcessorVersion());
     }
+
     @Test
     void processesDirectiveOptimization() {
         CompilerProfile profile = CompilerProfile.noOptimizations();
         Seq seq = new Seq(new Directive("optimization", "basic"));
         DirectiveProcessor.processDirectives(seq, profile);
         assertTrue(profile.getOptimizationLevels().values().stream().allMatch(l -> l == OptimizationLevel.BASIC));
+    }
+
+    @Test
+    void processesDirectiveGoal() {
+        CompilerProfile profile = CompilerProfile.noOptimizations();
+        profile.setGoal(GenerationGoal.SIZE);
+        Seq seq = new Seq(new Directive("goal", "speed"));
+        DirectiveProcessor.processDirectives(seq, profile);
+        assertEquals(GenerationGoal.SPEED, profile.getGoal());
     }
 
     @Test

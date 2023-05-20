@@ -1,6 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -44,7 +45,7 @@ abstract class ActionHandler {
                 .setDefault(OptimizationLevel.AGGRESSIVE);
 
         for (Optimization optimization : Optimization.LIST) {
-            optimizations.addArgument("--" + optimization.getName())
+            optimizations.addArgument("--" + optimization.getOptionName())
                     .help("optimization level of " + optimization.getDescription())
                     .type(Arguments.caseInsensitiveEnumType(OptimizationLevel.class))
                     .dest(optimization.name())
@@ -55,6 +56,10 @@ abstract class ActionHandler {
                 .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor, version 7 rev. A with standard processor or world processor)")
                 .choices("6", "7s", "7w", "7as", "7aw")
                 .setDefault("7s");
+
+        subparser.addArgument("-g", "--goal")
+                .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
+                .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class));
 
         ArgumentGroup debug = subparser.addArgumentGroup("debug output options");
 
