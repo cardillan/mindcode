@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
 import org.junit.jupiter.api.Test;
 
@@ -10,20 +9,18 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void printsURadarAndUControl() {
         assertDoesNotThrow(() ->
-                LogicInstructionPrinter.toString(getInstructionProcessor(),
+                LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
-                                getInstructionProcessor(),
-                                generateAndOptimize(
-                                        (Seq) translateToAst("""
-                                                target = uradar(enemy, ground, any, health, MIN_TO_MAX)
-                                                if target != null
-                                                    approach(target.x, target.y, 10)
-                                                    if within(target.x, target.y, 10)
-                                                        target(target.x, target.y, SHOOT)
-                                                    end
-                                                end
-                                                """
-                                        )
+                                instructionProcessor,
+                                generateInstructions("""
+                                        target = uradar(enemy, ground, any, health, MIN_TO_MAX)
+                                        if target != null
+                                            approach(target.x, target.y, 10)
+                                            if within(target.x, target.y, 10)
+                                                target(target.x, target.y, SHOOT)
+                                            end
+                                        end
+                                        """
                                 )
                         )
                 )
@@ -33,17 +30,15 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void printsULocate() {
         assertDoesNotThrow(() ->
-                LogicInstructionPrinter.toString(getInstructionProcessor(),
+                LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
-                                getInstructionProcessor(),
-                                generateAndOptimize(
-                                        (Seq) translateToAst("""
-                                                ulocate(ore, @surge-alloy, outx, outy)
-                                                ulocate(building, core, ENEMY, outx, outy, outbuilding)
-                                                ulocate(spawn, outx, outy, outbuilding)
-                                                ulocate(damaged, outx, outy, outbuilding)
-                                                """
-                                        )
+                                instructionProcessor,
+                                generateInstructions("""
+                                        ulocate(ore, @surge-alloy, outx, outy)
+                                        ulocate(building, core, ENEMY, outx, outy, outbuilding)
+                                        ulocate(spawn, outx, outy, outbuilding)
+                                        ulocate(damaged, outx, outy, outbuilding)
+                                        """
                                 )
                         )
                 )
@@ -54,26 +49,24 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void realLifeScripts1() {
         assertThrows(WrongNumberOfParametersException.class, () ->
-                LogicInstructionPrinter.toString(getInstructionProcessor(),
+                LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
-                                getInstructionProcessor(),
-                                generateAndOptimize(
-                                        (Seq) translateToAst("""
-                                                flag = 33548
-                                                ubind(@poly)
-                                                if @unit.flag != flag
-                                                    end()
-                                                end
-                                                ulocate(building, core, false, found, building)
-                                                if @unit.totalItems < @unit.itemCapacity
-                                                    approach(container1.x, container1.y, 5)
-                                                    itemTake(container1, @silicon, @unit.itemCapacity - @unit.totalItems)
-                                                else
-                                                    approach(found.x, found.y, 5)
-                                                    itemDrop(found, @silicon, @unit.totalItems)
-                                                end
-                                                """
-                                        )
+                                instructionProcessor,
+                                generateInstructions("""
+                                        flag = 33548
+                                        ubind(@poly)
+                                        if @unit.flag != flag
+                                            end()
+                                        end
+                                        ulocate(building, core, false, found, building)
+                                        if @unit.totalItems < @unit.itemCapacity
+                                            approach(container1.x, container1.y, 5)
+                                            itemTake(container1, @silicon, @unit.itemCapacity - @unit.totalItems)
+                                        else
+                                            approach(found.x, found.y, 5)
+                                            itemDrop(found, @silicon, @unit.totalItems)
+                                        end
+                                        """
                                 )
                         )
                 )
@@ -83,20 +76,18 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
     @Test
     void realLifeScripts2() {
         assertDoesNotThrow(() ->
-                LogicInstructionPrinter.toString(getInstructionProcessor(),
+                LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
-                                getInstructionProcessor(),
-                                generateAndOptimize(
-                                        (Seq) translateToAst("""
-                                                leader = getlink(0)
-                                                count = 1
-                                                while count < @links
-                                                    turret = getlink(count)
-                                                    turret.shoot(leader.shootX, leader.shootY, leader.shooting)
-                                                    count = count + 1
-                                                end
-                                                """
-                                        )
+                                instructionProcessor,
+                                generateInstructions("""
+                                        leader = getlink(0)
+                                        count = 1
+                                        while count < @links
+                                            turret = getlink(count)
+                                            turret.shoot(leader.shootX, leader.shootY, leader.shooting)
+                                            count = count + 1
+                                        end
+                                        """
                                 )
                         )
                 )
@@ -115,10 +106,10 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         draw triangle __tmp0 __tmp1 __tmp2 __tmp3 __tmp4 __tmp5
                         end
                         """,
-                LogicInstructionPrinter.toString(getInstructionProcessor(),
+                LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
-                                getInstructionProcessor(),
-                                generateUnoptimized((Seq) translateToAst("triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)"))
+                                instructionProcessor,
+                                generateInstructions("triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)")
                         )
                 )
         );
@@ -173,34 +164,32 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         printflush MSG
                         end
                         """,
-                LogicInstructionPrinter.toString(getInstructionProcessor(),
+                LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
-                                getInstructionProcessor(),
-                                generateUnoptimized(
-                                        (Seq) translateToAst("""
-                                                STORAGE = nucleus1
-                                                MSG = message1
-                                                capacity = STORAGE.itemCapacity
-                                                                                                
-                                                print("capacity: ", capacity, "\\n")
-                                                                                                
-                                                for n = 0 ; n < @links ; n += 1
-                                                    building = getlink(n)
-                                                    type = building.type
-                                                    if type == @conveyor
-                                                            || type == @titanium-conveyor
-                                                            || type == @plastanium-conveyor
-                                                        resource = building.firstItem
-                                                        if resource != null
-                                                            level = nucleus1.resource
-                                                            building.enabled = level < capacity
-                                                            print("\\n", n, ": ", resource, " @ ", level)
-                                                        end
-                                                    end
+                                instructionProcessor,
+                                generateInstructions("""
+                                        STORAGE = nucleus1
+                                        MSG = message1
+                                        capacity = STORAGE.itemCapacity
+                                                                                        
+                                        print("capacity: ", capacity, "\\n")
+                                                                                        
+                                        for n = 0 ; n < @links ; n += 1
+                                            building = getlink(n)
+                                            type = building.type
+                                            if type == @conveyor
+                                                    || type == @titanium-conveyor
+                                                    || type == @plastanium-conveyor
+                                                resource = building.firstItem
+                                                if resource != null
+                                                    level = nucleus1.resource
+                                                    building.enabled = level < capacity
+                                                    print("\\n", n, ": ", resource, " @ ", level)
                                                 end
-                                                printflush(MSG)
-                                                """
-                                        )
+                                            end
+                                        end
+                                        printflush(MSG)
+                                        """
                                 )
                         )
                 )

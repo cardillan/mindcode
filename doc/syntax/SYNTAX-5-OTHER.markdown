@@ -1,6 +1,6 @@
 # Compiler directives
 
-Mindcode allows you to specify some compiler options in the source code using special `#set` commands.
+Mindcode allows you to alter some compiler options in the source code using special `#set` commands.
 The basic syntax is: 
 
 ```
@@ -9,7 +9,7 @@ The basic syntax is:
 
 Some of these options can be alternatively specified as parameters of the command line compiler.
 
-Supported compiler directives are described below.
+Supported compiler options are described below.
 
 ## Option `target`
 
@@ -28,13 +28,13 @@ Possible values for this option are:
 
 ## Option `goal`
 
-Use the `goal` option to specify whether the compiler/optimizer prefers to generate smaller code or faster code. 
+Use the `goal` option to specify whether the compiler should prefer to generate smaller code or faster code. 
 Possible values are:
 
-* `size`: the compiler/optimizer tries to generate smaller code.
-* `speed`: the compiler/optimizer might add instructions, if it makes the resulting code faster. Currently, this 
+* `size`: the compiler tries to generate smaller code.
+* `speed`: the compiler might add instructions, if it makes the resulting code faster. Currently, this 
   distinction is employed by the loop optimizer, which can duplicate parts of the code to avoid unnecessary jump. At 
-  this moment, at most three instructions per avoided jump are generated.
+  this moment, at most three additional instructions per loop jump are generated.
 * `auto`: reserved for future use, at this moment the setting is identical to `size`.
 
 Over time, additional `speed` specific optimizations will be added, as well as an automatic process to find the best 

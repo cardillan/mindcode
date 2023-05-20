@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +11,11 @@ import java.util.function.Consumer;
  * Formats and prints a simple diff between various versions of the program produced by individual optimizers.
  */
 public class DiffDebugPrinter implements DebugPrinter {
-    private static final int DIFF_MARGIN = 3;
     private static final String ADD_PREFIX          = "+";
     private static final String DELETE_PREFIX       = "-";
     private static final String NO_CHANGE_PREFIX    = " ";
 
+    private int diffMargin = 3;
     private final List<ProgramVersion> versions = new ArrayList<>();
     private final int level;
 
@@ -41,6 +42,14 @@ public class DiffDebugPrinter implements DebugPrinter {
         versions.add(new ProgramVersion(optimizer, iteration, program));
     }
 
+    public int getDiffMargin() {
+        return diffMargin;
+    }
+
+    public void setDiffMargin(int diffMargin) {
+        this.diffMargin = diffMargin;
+    }
+
     private ProgramVersion findProgramVersion(Optimizer optimizer) {
         for (ProgramVersion version : versions) {
             if (version.getOptimizer() == optimizer) {
@@ -64,7 +73,7 @@ public class DiffDebugPrinter implements DebugPrinter {
     /*
      * Selects a subset of recorded versions of the program according to the level of detail.
      */
-    private List<ProgramVersion> selectProgramVersions() {
+    protected List<ProgramVersion> selectProgramVersions() {
         return switch (level) {
             case 1 -> diffLevel1();
             case 2 -> diffLevel2();
@@ -72,14 +81,14 @@ public class DiffDebugPrinter implements DebugPrinter {
         };
     }
 
-    private List<ProgramVersion> diffLevel1() {
+    protected List<ProgramVersion> diffLevel1() {
         ProgramVersion first = versions.get(0);
         ProgramVersion last = versions.get(versions.size() - 1);
         last.setTitle("all optimizers");
         return List.of(first, last);
     }
 
-    private List<ProgramVersion> diffLevel2() {
+    protected List<ProgramVersion> diffLevel2() {
         // Select the last iteration of each optimizer
         List<ProgramVersion> result = new ArrayList<>();
         for (int i = 0; i < versions.size(); i++) {
@@ -135,13 +144,13 @@ public class DiffDebugPrinter implements DebugPrinter {
         boolean active = false;
         int countdown = 0;
         int skipped = 0;
-        for (int i = -DIFF_MARGIN; i < output.size(); i++) {
-            if (i + DIFF_MARGIN < output.size() && !output.get(i + DIFF_MARGIN).startsWith(NO_CHANGE_PREFIX)) {
+        for (int i = -diffMargin; i < output.size(); i++) {
+            if (i + diffMargin < output.size() && !output.get(i + diffMargin).startsWith(NO_CHANGE_PREFIX)) {
                 if (!active && skipped > 0) {
                     messageConsumer.accept(NO_CHANGE_PREFIX);
                 }
                 active = true;
-                countdown = 2 * DIFF_MARGIN + 1;
+                countdown = 2 * diffMargin + 1;
             } else {
                 countdown--;
                 if (countdown <= 0) {
@@ -160,14 +169,8 @@ public class DiffDebugPrinter implements DebugPrinter {
         }
     }
 
-    protected int findInstructionIndex(List<LogicInstruction> program, int index, LogicInstruction ix) {
-        for (int i = index; i < program.size(); i++) {
-            if (program.get(i) == ix) {
-                return i;
-            }
-        }
-
-        return -1;
+    protected int findInstructionIndex(List<LogicInstruction> program, int index, LogicInstruction instruction) {
+        return CollectionUtils.findFirstIndex(program, index, ix -> ix == instruction);
     }
 
     private String printInstruction(String prefix, int index, LogicInstruction instruction) {
@@ -184,8 +187,8 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     // Class holding program version and information about the optimizer and iteration which produced it.
-    static class ProgramVersion {
-        private final Optimizer optimizer;
+    protected static class ProgramVersion {
+        public final Optimizer optimizer;
         private final List<LogicInstruction> program;
         private String title;
 

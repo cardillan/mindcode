@@ -67,6 +67,41 @@ class OutputTempEliminator extends GlobalOptimizer {
             }
         }
 
+        try (LogicIterator itCurr = createIterator(); LogicIterator itPrev = createIterator()) {
+            if (itCurr.hasNext()) {
+                itCurr.next(); // Skip first
+            }
+
+            while (itCurr.hasNext()) {
+                LogicInstruction current = itCurr.next();
+                LogicInstruction previous = itPrev.next();
+                if (current instanceof SetInstruction ix && ix.getValue().getType() == ArgumentType.TMP_VARIABLE) {
+                    LogicArgument value = ix.getValue();
+                    List<LogicInstruction> list = findInstructions(
+                            in -> in.getArgs().contains(value) && !(in instanceof PushOrPopInstruction));
+
+                    // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
+                    if (list.size() == 2 && list.get(0) == previous) {
+                        // Make sure all arg1 arguments of the other instruction are output
+                        boolean replacesOutputArg = previous.assignmentsStream()
+                                .filter(t -> t.argument().equals(value))
+                                .allMatch(ParameterAssignment::isOutput);
+
+                        if (replacesOutputArg) {
+                            // The current instruction merely transfers a value from the output argument of the previous instruction
+                            // Replacing those arguments with target of the set instruction
+                            itPrev.set(replaceAllArgs(previous, value, ix.getTarget()));
+                            itCurr.remove();
+
+                            // We just removed instruction *after* itPref cursor, but we need itPref to sync with itCurr
+                            // which got its cursor decreased.
+                            itPrev.previous();
+                        }
+                    }
+                }
+            }
+        }
+
         return false;
     }
 }

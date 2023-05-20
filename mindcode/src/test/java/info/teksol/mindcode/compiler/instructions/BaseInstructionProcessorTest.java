@@ -58,7 +58,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     void replacesInstructionArgument() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "255");
-        LogicInstruction replaced = getInstructionProcessor().replaceArg(original, 1, new BaseArgument("255"));
+        LogicInstruction replaced = instructionProcessor.replaceArg(original, 1, new BaseArgument("255"));
         assertEquals(
                 createInstruction(DRAW, "clear", "255", "0", "255"),
                 replaced
@@ -68,14 +68,14 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     void keepsInstructionIfArgumentIdentical() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "255");
-        LogicInstruction replaced = getInstructionProcessor().replaceArg(original, 1, new BaseArgument("0"));
+        LogicInstruction replaced = instructionProcessor.replaceArg(original, 1, new BaseArgument("0"));
         assertSame(original, replaced);
     }
 
     @Test
     void replacesAllArguments() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "0");
-        LogicInstruction replaced = getInstructionProcessor().replaceAllArgs(original, new BaseArgument("0"), new BaseArgument("255"));
+        LogicInstruction replaced = instructionProcessor.replaceAllArgs(original, new BaseArgument("0"), new BaseArgument("255"));
         assertEquals(
                 createInstruction(DRAW, "clear", "255", "255", "255"),
                 replaced

@@ -1,9 +1,13 @@
 package info.teksol.mindcode.processor;
 
-import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.optimization.AbstractOptimizerTest;
+import info.teksol.mindcode.compiler.optimization.Optimization;
+import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mindcode.compiler.optimization.Optimizer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
@@ -19,7 +23,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // Base class for algorithm tests
 // Processor for execution is equipped with bank1 memory bank.
 // Additional blocks can be added
-public class AbstractProcessorTest extends AbstractGeneratorTest {
+public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
+
+    @Override
+    protected Class<Optimizer> getTestedClass() {
+        return null;
+    }
+
+    @Override
+    protected List<Optimization> getAllOptimizations() {
+        return Optimization.LIST;
+    }
+
 
     // Prevent unit tests hanging due to possible endless loops in generated code
     protected final int MAX_STEPS = 1000000;
@@ -36,8 +51,13 @@ public class AbstractProcessorTest extends AbstractGeneratorTest {
         return Files.readString(path);
     }
 
-    protected CompilerProfile getCompilerProfile() {
-        return CompilerProfile.standardOptimizations();
+    @Override
+    protected CompilerProfile createCompilerProfile() {
+        return super.createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.BASIC);
+    }
+
+    protected List<LogicInstruction> compile(String code) {
+        return LogicInstructionLabelResolver.resolve(instructionProcessor, generateInstructions(code));
     }
 
     protected void testAndEvaluateCode(String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {

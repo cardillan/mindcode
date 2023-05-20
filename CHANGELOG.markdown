@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Added option for [code generation goal](doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). Allows to specify whether 
+  to generate smaller code or faster code.
+* Added basic [loop optimization](doc/syntax/SYNTAX-5-OTHER.markdown#loop-optimization).
+
 ## 2023-05-21
 
 Note: the bug fixed in this release only affects the command line tool. The web app hasn't been redeployed.

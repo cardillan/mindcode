@@ -1,86 +1,71 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static junit.framework.Assert.assertEquals;
 
-class DeadCodeEliminatorTest extends AbstractGeneratorTest {
-    private final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineOf(getInstructionProcessor(),
-            terminus,
-            getCompilerProfile(),
-            Optimization.DEAD_CODE_ELIMINATION);
+class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
+
+    @Override
+    protected Class<DeadCodeEliminator> getTestedClass() {
+        return DeadCodeEliminator.class;
+    }
+
+    @Override
+    protected List<Optimization> getAllOptimizations() {
+        return List.of(Optimization.DEAD_CODE_ELIMINATION);
+    }
 
     @Test
     void removesDeadSetsInIfExpression() {
-        generateInto(pipeline,
-                (Seq) translateToAst("""
+        assertCompilesTo("""
                         if x == 3
                             1
                         else
                             end()
                         end
-                        """
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(OP, "equal", var(0), "x", "3"),
-                        createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                        createInstruction(JUMP, var(1001), "always"),
-                        createInstruction(LABEL, var(1000)),
-                        createInstruction(END),
-                        createInstruction(LABEL, var(1001)),
-                        createInstruction(END)
-                ),
-                terminus.getResult()
+                        """,
+                createInstruction(OP, "equal", var(0), "x", "3"),
+                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
         );
     }
 
     @Test
     void keepsUsefulIfAssignments() {
-        generateInto(pipeline,
-                (Seq) translateToAst("""
+        assertCompilesTo("""
                         n = if x == 3
                             1
                         else
                             41
                         end
                         move(73, n)
-                        """
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(OP, "equal", var(0), "x", "3"),
-                        createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                        createInstruction(SET, var(1), "1"),
-                        createInstruction(JUMP, var(1001), "always"),
-                        createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, var(1), "41"),
-                        createInstruction(LABEL, var(1001)),
-                        createInstruction(SET, "n", var(1)),
-                        createInstruction(UCONTROL, "move", "73", "n"),
-                        createInstruction(END)
-                ),
-                terminus.getResult()
+                        """,
+                createInstruction(OP, "equal", var(0), "x", "3"),
+                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                createInstruction(SET, var(1), "1"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, var(1), "41"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(SET, "n", var(1)),
+                createInstruction(UCONTROL, "move", "73", "n"),
+                createInstruction(END)
         );
     }
 
     @Test
     void preventsEliminationOfUradarUsages() {
-        generateInto(pipeline,
-                (Seq) translateToAst("""
+        assertCompilesTo("""
                         target = uradar(enemy, ground, any, health, MIN_TO_MAX)
                         if target != null
                             approach(target.x, target.y, 10)
@@ -88,42 +73,34 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
                                 target(target.x, target.y, SHOOT)
                             end
                         end
-                        """
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(URADAR, "enemy", "ground", "any", "health", "0", "MIN_TO_MAX", var(0)),
-                        createInstruction(SET, "target", var(0)),
-                        createInstruction(OP, "notEqual", var(1), "target", "null"),
-                        createInstruction(JUMP, var(1000), "equal", var(1), "false"),
-                        createInstruction(SENSOR, var(3), "target", "@x"),
-                        createInstruction(SENSOR, var(4), "target", "@y"),
-                        createInstruction(UCONTROL, "approach", var(3), var(4), "10"),
-                        createInstruction(SENSOR, var(5), "target", "@x"),
-                        createInstruction(SENSOR, var(6), "target", "@y"),
-                        createInstruction(UCONTROL, "within", var(5), var(6), "10", var(7)),
-                        createInstruction(JUMP, var(1002), "equal", var(7), "false"),
-                        createInstruction(SENSOR, var(9), "target", "@x"),
-                        createInstruction(SENSOR, var(10), "target", "@y"),
-                        createInstruction(UCONTROL, "target", var(9), var(10), "SHOOT"),
-                        createInstruction(JUMP, var(1003), "always"),
-                        createInstruction(LABEL, var(1002)),
-                        createInstruction(LABEL, var(1003)),
-                        createInstruction(JUMP, var(1001), "always"),
-                        createInstruction(LABEL, var(1000)),
-                        createInstruction(LABEL, var(1001)),
-                        createInstruction(END)
-                ),
-                terminus.getResult()
+                        """,
+                createInstruction(URADAR, "enemy", "ground", "any", "health", "0", "MIN_TO_MAX", var(0)),
+                createInstruction(SET, "target", var(0)),
+                createInstruction(OP, "notEqual", var(1), "target", "null"),
+                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                createInstruction(SENSOR, var(3), "target", "@x"),
+                createInstruction(SENSOR, var(4), "target", "@y"),
+                createInstruction(UCONTROL, "approach", var(3), var(4), "10"),
+                createInstruction(SENSOR, var(5), "target", "@x"),
+                createInstruction(SENSOR, var(6), "target", "@y"),
+                createInstruction(UCONTROL, "within", var(5), var(6), "10", var(7)),
+                createInstruction(JUMP, var(1002), "equal", var(7), "false"),
+                createInstruction(SENSOR, var(9), "target", "@x"),
+                createInstruction(SENSOR, var(10), "target", "@y"),
+                createInstruction(UCONTROL, "target", var(9), var(10), "SHOOT"),
+                createInstruction(JUMP, var(1003), "always"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
         );
     }
 
     @Test
     void preventsEliminationOfUlocateUsages() {
-        generateInto(pipeline,
-                (Seq) translateToAst("""
+        assertCompilesTo("""
                         ulocate(ore, @surge-alloy, outx, outy)
                         approach(outx, outy, 4)
                         outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
@@ -132,83 +109,52 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
                         approach(outx, outy, 4)
                         outbuilding = ulocate(damaged, outx, outy, found)
                         approach(outx, outy, 4)
-                        """
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(2)),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", "found", var(3)),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", "found", var(4)),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(END)
-                ),
-                terminus.getResult()
+                        """,
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
+                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
+                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(2)),
+                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
+                createInstruction(ULOCATE, "spawn", "core", "true", "@copper", "outx", "outy", "found", var(3)),
+                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
+                createInstruction(ULOCATE, "damaged", "core", "true", "@copper", "outx", "outy", "found", var(4)),
+                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
+                createInstruction(END)
         );
     }
 
     @Test
     void completelyRemovesDeadcode() {
-        generateInto(pipeline,
-                (Seq) translateToAst("""
+        assertCompilesTo("""
                         n = 1
                         n = 1
-                        """
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(END)
-                ),
-                terminus.getResult()
+                        """,
+                createInstruction(END)
         );
     }
 
     @Test
     void removesUnusedUlocate() {
-        generateInto(pipeline,
-                (Seq) translateToAst("""
+        assertCompilesTo("""
                         ulocate(ore, @surge-alloy, outx, outy)
                         ulocate(ore, @surge-alloy, x, y)
                         approach(outx, outy, 4)
-                        """
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
-                        createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
-                        createInstruction(END)
-                ),
-                terminus.getResult()
+                        """,
+                createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "outx", "outy", var(0), var(1)),
+                createInstruction(UCONTROL, "approach", "outx", "outy", "4"),
+                createInstruction(END)
         );
     }
 
     @Test
     void preventsEliminationOfPartiallyUsedUlocate() {
-        generateInto(pipeline,
-                (Seq) translateToAst("""
+        assertCompilesTo("""
                         outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
                         print(outbuilding)
-                        """
-                )
-        );
-
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(0)),
-                        createInstruction(SET, "outbuilding", var(0)),
-                        createInstruction(PRINT, "outbuilding"),
-                        createInstruction(END)
-                ),
-                terminus.getResult()
+                        """,
+                createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "outx", "outy", "found", var(0)),
+                createInstruction(SET, "outbuilding", var(0)),
+                createInstruction(PRINT, "outbuilding"),
+                createInstruction(END)
         );
     }
 
@@ -222,14 +168,9 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesUnusedWarning() {
-        List<CompilerMessage> messages = new ArrayList<>();
-        pipeline.setMessagesRecipient(messages::add);
-        generateInto(pipeline,
-                (Seq) translateToAst("""
-                        X = 10
-                        """
-                )
-        );
+        generateInstructions("""
+                X = 10
+                """);
 
         assertEquals(
                 "List of unused variables: X.",
@@ -239,14 +180,9 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesUninitializedWarning() {
-        List<CompilerMessage> messages = new ArrayList<>();
-        pipeline.setMessagesRecipient(messages::add);
-        generateInto(pipeline,
-                (Seq) translateToAst("""
-                        print(X, Y)
-                        """
-                )
-        );
+        generateInstructions("""
+                print(X, Y)
+                """);
 
         assertEquals(
                 "List of uninitialized variables: X, Y.",
@@ -256,18 +192,13 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesNoUnexpectedWarnings() {
-        List<CompilerMessage> messages = new ArrayList<>();
-        pipeline.setMessagesRecipient(messages::add);
-        generateInto(pipeline,
-                (Seq) translateToAst("""
-                        def foo(n)
-                            n = n + 1
-                        end
-                        z = foo(5)
-                        print(z)
-                        """
-                )
-        );
+        generateInstructions("""
+                def foo(n)
+                    n = n + 1
+                end
+                z = foo(5)
+                print(z)
+                """);
 
         assertEquals(
                 "",
@@ -277,18 +208,13 @@ class DeadCodeEliminatorTest extends AbstractGeneratorTest {
 
     @Test
     void generatesBothWarnings() {
-        List<CompilerMessage> messages = new ArrayList<>();
-        pipeline.setMessagesRecipient(messages::add);
-        generateInto(pipeline,
-                (Seq) translateToAst("""
-                        def foo(n)
-                            n = n + 1
-                        end
-                        z = foo(5)
-                        print(Z)
-                        """
-                )
-        );
+        generateInstructions("""
+                def foo(n)
+                    n = n + 1
+                end
+                z = foo(5)
+                print(Z)
+                """);
 
         assertEquals(
                 """

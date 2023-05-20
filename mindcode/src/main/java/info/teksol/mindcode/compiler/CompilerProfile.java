@@ -59,25 +59,38 @@ public class CompilerProfile {
         return processorEdition;
     }
 
-    public void setProcessorVersionEdition(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
+    public CompilerProfile setProcessorVersionEdition(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
         this.processorVersion = processorVersion;
         this.processorEdition = processorEdition;
+        return this;
+    }
+
+    public CompilerProfile setProcessorEdition(ProcessorEdition processorEdition) {
+        this.processorEdition = processorEdition;
+        return this;
+    }
+
+    public CompilerProfile setProcessorVersion(ProcessorVersion processorVersion) {
+        this.processorVersion = processorVersion;
+        return this;
     }
 
     public OptimizationLevel getOptimizationLevel(Optimization optimization) {
         return levels.getOrDefault(optimization, OptimizationLevel.OFF);
     }
 
-    public void setOptimizationLevel(Optimization optimization, OptimizationLevel level) {
+    public CompilerProfile setOptimizationLevel(Optimization optimization, OptimizationLevel level) {
         this.levels.put(optimization, level);
+        return this;
     }
 
     public Map<Optimization, OptimizationLevel> getOptimizationLevels() {
         return Map.copyOf(levels);
     }
 
-    public void setAllOptimizationLevels(OptimizationLevel level) {
+    public CompilerProfile setAllOptimizationLevels(OptimizationLevel level) {
         Optimization.LIST.forEach(o -> levels.put(o, level));
+        return this;
     }
 
     public boolean optimizationsActive() {
@@ -88,55 +101,62 @@ public class CompilerProfile {
         return goal;
     }
 
-    public void setGoal(GenerationGoal goal) {
+    public CompilerProfile setGoal(GenerationGoal goal) {
         this.goal = goal;
+        return this;
     }
 
     public boolean isShortCircuitEval() {
         return shortCircuitEval;
     }
 
-    public void setShortCircuitEval(boolean shortCircuitEval) {
+    public CompilerProfile setShortCircuitEval(boolean shortCircuitEval) {
         this.shortCircuitEval = shortCircuitEval;
+        return this;
     }
 
     public boolean isPrintFinalCode() {
         return printFinalCode;
     }
 
-    public void setPrintFinalCode(boolean printFinalCode) {
+    public CompilerProfile setPrintFinalCode(boolean printFinalCode) {
         this.printFinalCode = printFinalCode;
+        return this;
     }
 
     public int getParseTreeLevel() {
         return parseTreeLevel;
     }
 
-    public void setParseTreeLevel(int parseTreeLevel) {
+    public CompilerProfile setParseTreeLevel(int parseTreeLevel) {
         this.parseTreeLevel = parseTreeLevel;
+        return this;
     }
 
     public int getDebugLevel() {
         return debugLevel;
     }
 
-    public void setDebugLevel(int debugLevel) {
+    public CompilerProfile setDebugLevel(int debugLevel) {
         this.debugLevel = debugLevel;
+        return this;
     }
 
     public boolean isPrintStackTrace() {
         return printStackTrace;
     }
 
-    public void setPrintStackTrace(boolean printStackTrace) {
+    public CompilerProfile setPrintStackTrace(boolean printStackTrace) {
         this.printStackTrace = printStackTrace;
+        return this;
     }
 
     public List<String> getAdditionalTags() {
         return additionalTags;
     }
 
-    public void setAdditionalTags(List<String> additionalTags) {
+    public CompilerProfile setAdditionalTags(List<String> additionalTags) {
         this.additionalTags = Objects.requireNonNull(additionalTags);
+        return this;
     }
 }

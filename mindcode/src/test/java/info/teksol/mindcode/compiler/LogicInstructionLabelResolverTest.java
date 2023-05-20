@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.logic.Condition;
 import org.junit.jupiter.api.Test;
 
@@ -20,8 +19,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 LogicInstructionLabelResolver.resolve(
-                        getInstructionProcessor(),
-                        generateUnoptimized((Seq) translateToAst("while true n = n + 1 end"))
+                        instructionProcessor,
+                        generateInstructions("while true n = n + 1 end")
                 )
         );
     }
@@ -44,7 +43,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 LogicInstructionLabelResolver.resolve(
-                        getInstructionProcessor(),
+                        instructionProcessor,
                         List.of(
                                 createInstruction(JUMP, label0, Condition.ALWAYS),
                                 createInstruction(PUSH, cell1, a),
@@ -59,6 +58,4 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 )
         );
     }
-
-
 }

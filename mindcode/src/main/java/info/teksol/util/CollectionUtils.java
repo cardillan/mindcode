@@ -5,17 +5,21 @@ import java.util.function.Predicate;
 
 public class CollectionUtils {
 
-    public static <E> int findFirstIndex(List<? extends E> list, Predicate<E> criteria) {
-        for (int i = 0; i < list.size(); i++) {
-            if (criteria.test(list.get(i))) {
+    public static <E> int findFirstIndex(List<? extends E> list, int startIndex, Predicate<E> matcher) {
+        for (int i = startIndex; i < list.size(); i++) {
+            if (matcher.test(list.get(i))) {
                 return i;
             }
         }
         return -1;
     }
 
-    public static <E> E removeFirstMatching(List<? extends E> list, Predicate<E> criteria) {
-        int index = findFirstIndex(list, criteria);
+    public static <E> int findFirstIndex(List<? extends E> list, Predicate<E> matcher) {
+        return findFirstIndex(list, 0, matcher);
+    }
+
+    public static <E> E removeFirstMatching(List<? extends E> list, Predicate<E> matcher) {
+        int index = findFirstIndex(list, matcher);
         return index < 0 ? null : list.remove(index);
     }
 }

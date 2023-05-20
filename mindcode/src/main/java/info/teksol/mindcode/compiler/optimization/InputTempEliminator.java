@@ -24,6 +24,9 @@ import java.util.List;
  * </ol>
  * This optimizer ignores push and pop instructions. The StackUsageOptimizer will remove push/pop instructions of any
  * eliminated variables later on.
+ *
+ * Note: this class is mostly obsolete, as {@link info.teksol.mindcode.compiler.generator.LogicInstructionGenerator}
+ * no longer creates temporary variables for literals.
  */
 class InputTempEliminator extends GlobalOptimizer {
     public InputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {

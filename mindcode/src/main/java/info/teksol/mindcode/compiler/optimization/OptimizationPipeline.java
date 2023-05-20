@@ -82,7 +82,7 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
         return new OptimizationPipeline(pipeline);
     }
 
-    private static class InstructionCounter implements Optimizer {
+    public static class InstructionCounter implements Optimizer {
         private final LogicInstructionPipeline next;
         private final Consumer<CompilerMessage> messageRecipient;
         private final String message;

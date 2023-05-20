@@ -19,6 +19,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static info.teksol.util.CollectionUtils.findFirstIndex;
+
 
 // Base class for global optimizers. Consumes the entire program before performing optimizations on it.
 // Contains helper method to navigate and manipulate the program.
@@ -128,14 +130,7 @@ abstract class GlobalOptimizer extends BaseOptimizer {
     // Starting at given index, finds first instruction matching predicate.
     // Returns the index or -1 if not found.
     protected int findInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
-        for (int i = startIndex; i < program.size(); i++) {
-            LogicInstruction instruction = program.get(i);
-            if (matcher.test(instruction)) {
-                return i;
-            }
-        }
-        
-        return -1;
+        return findFirstIndex(program, startIndex, matcher);
     }
     
     // Starting at given index, find first instruction matching predicate. Return null if not found.

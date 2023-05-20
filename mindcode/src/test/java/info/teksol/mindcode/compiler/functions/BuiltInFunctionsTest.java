@@ -1,12 +1,9 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.generator.TooFewPrintfArgumentsException;
 import info.teksol.mindcode.compiler.generator.TooManyPrintfArgumentsException;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,88 +12,63 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void generatesPrintln() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"\\n\""),
-                        createInstruction(PRINT, "10"),
-                        createInstruction(PRINT, "\"\\n\""),
-                        createInstruction(PRINT, "\"foo\""),
-                        createInstruction(PRINT, "\"\\n\""),
-                        createInstruction(END)),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                println()
-                                println(10)
-                                println("foo")
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        println()
+                        println(10)
+                        println("foo")
+                        """,
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, "10"),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(PRINT, q("foo")),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(END)
         );
     }
 
     @Test
     void handlesEmptyPrintf() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"foo\""),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("")
-                                printf("foo")
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        printf("")
+                        printf("foo")
+                        """,
+                createInstruction(PRINT, q("foo")),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfHandlesPositionalParameters() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"x: \""),
-                        createInstruction(PRINT, "x"),
-                        createInstruction(PRINT, "\", y: \""),
-                        createInstruction(PRINT, "y"),
-                        createInstruction(PRINT, "\", z: \""),
-                        createInstruction(PRINT, "10"),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("x: $, y: $, z: $", x, y, 10)
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        printf("x: $, y: $, z: $", x, y, 10)
+                        """,
+                createInstruction(PRINT, q("x: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(PRINT, q(", y: ")),
+                createInstruction(PRINT, "y"),
+                createInstruction(PRINT, q(", z: ")),
+                createInstruction(PRINT, "10"),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfHandlesEscapedDollarSign() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"Amount: $\""),
-                        createInstruction(PRINT, "100"),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("Amount: \\$$", 100)
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        printf("Amount: \\$$", 100)
+                        """,
+                createInstruction(PRINT, q("Amount: $")),
+                createInstruction(PRINT, "100"),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfCatchesTooFewArguments() {
         assertThrows(TooFewPrintfArgumentsException.class,
-                () -> generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("Text: $")
-                                """
-                        )
+                () -> generateInstructions("""
+                        printf("Text: $")
+                        """
                 )
         );
     }
@@ -104,152 +76,109 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
     @Test
     void printfCatchesTooManyArguments() {
         assertThrows(TooManyPrintfArgumentsException.class,
-                () -> generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("Text: $", 10, 20)
-                                """
-                        )
+                () -> generateInstructions("""
+                        printf("Text: $", 10, 20)
+                        """
                 )
         );
     }
 
     @Test
     void printfHandlesVariableReference() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(SET, "x", "10"),
-                        createInstruction(PRINT, "\"x=\""),
-                        createInstruction(PRINT, "x"),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                x = 10
-                                printf("x=$x")
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        x = 10
+                        printf("x=$x")
+                        """,
+                createInstruction(SET, "x", "10"),
+                createInstruction(PRINT, q("x=")),
+                createInstruction(PRINT, "x"),
+                createInstruction(END)
+
         );
     }
 
     @Test
     void printfHandlesLocalVariableReference() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(LABEL, var(1000)),
-                        createInstruction(SET, "__fn0_x", "5"),
-                        createInstruction(PRINT, "\"x=\""),
-                        createInstruction(PRINT, "__fn0_x"),
-                        createInstruction(SET, var(0), "null"),
-                        createInstruction(LABEL, var(1001)),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                def foo(x)
-                                    printf("x=$x")
-                                end
-                                foo(5)
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        def foo(x)
+                            printf("x=$x")
+                        end
+                        foo(5)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0_x", "5"),
+                createInstruction(PRINT, q("x=")),
+                createInstruction(PRINT, "__fn0_x"),
+                createInstruction(SET, var(0), "null"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfHandlesGlobalVariableReference() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(SET, "X", "10"),
-                        createInstruction(LABEL, var(1000)),
-                        createInstruction(PRINT, "\"X=\""),
-                        createInstruction(PRINT, "X"),
-                        createInstruction(SET, var(0), "null"),
-                        createInstruction(LABEL, var(1001)),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                def foo()
-                                    printf("X=$X")
-                                end
-                                X = 10
-                                foo()
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        def foo()
+                            printf("X=$X")
+                        end
+                        X = 10
+                        foo()
+                        """,
+                createInstruction(SET, "X", "10"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, q("X=")),
+                createInstruction(PRINT, "X"),
+                createInstruction(SET, var(0), "null"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfHandlesEnclosedVariableReference() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"Time: \""),
-                        createInstruction(PRINT, "time"),
-                        createInstruction(PRINT, "\"sec\""),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("Time: ${time}sec")
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        printf("Time: ${time}sec")
+                        """,
+                createInstruction(PRINT, q("Time: ")),
+                createInstruction(PRINT, "time"),
+                createInstruction(PRINT, q("sec")),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfHandlesSequentialVariableReference() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"Text: \""),
-                        createInstruction(PRINT, "x"),
-                        createInstruction(PRINT, "y"),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("Text: ${x}$y")
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        printf("Text: ${x}$y")
+                        """,
+                createInstruction(PRINT, q("Text: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(PRINT, "y"),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfHandlesVariableReferenceThenPositionalArgument() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"Text: \""),
-                        createInstruction(PRINT, "x"),
-                        createInstruction(PRINT, "y"),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("Text: ${x}$", y)
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        printf("Text: ${x}$", y)
+                        """,
+                createInstruction(PRINT, q("Text: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(PRINT, "y"),
+                createInstruction(END)
         );
     }
 
     @Test
     void printfHandlesAdjacentPositionalArguments() {
-        assertLogicInstructionsMatch(
-                List.of(
-                        createInstruction(PRINT, "\"Text: \""),
-                        createInstruction(PRINT, "x"),
-                        createInstruction(PRINT, "y"),
-                        createInstruction(END)
-                ),
-                generateUnoptimized(
-                        (Seq) translateToAst("""
-                                printf("Text: ${}${}", x, y)
-                                """
-                        )
-                )
+        assertCompilesTo("""
+                        printf("Text: ${}${}", x, y)
+                        """,
+                createInstruction(PRINT, q("Text: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(PRINT, "y"),
+                createInstruction(END)
         );
     }
 
