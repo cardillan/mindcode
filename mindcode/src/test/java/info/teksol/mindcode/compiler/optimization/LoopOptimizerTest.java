@@ -35,19 +35,20 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesRangedForLoops() {
         assertCompilesTo("""
-                        for i in 1 .. 10
-                            print(i)
+                        for i in 0 ... 10
+                            cell1[i] = 1
                         end
+                        print("Done.")
                         """,
-                createInstruction(SET, "i", "1"),
+                createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "greaterThan", "i", "10"),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "i"),
+                createInstruction(WRITE, "1", "cell1", "i"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1003), "lessThanEq", "i", "10"),
+                createInstruction(JUMP, var(1003), "lessThan", "i", "10"),
                 createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, q("Done.")),
                 createInstruction(END)
         );
     }
@@ -63,13 +64,32 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         """,
                 createInstruction(SET, "i", "10"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "lessThanEq", "i", "0"),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, "i"),
                 createInstruction(OP, "sub", var(1), "i", "1"),
                 createInstruction(SET, "i", var(1)),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(JUMP, var(1003), "greaterThan", "i", "0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesWhileLoopComparingToNull() {
+        assertCompilesTo("""
+                        block = null
+                        while block == null
+                            block = getlink(1)
+                        end
+                        """,
+                createInstruction(SET, "block", "null"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(GETLINK, var(1), "1"),
+                createInstruction(SET, "block", var(1)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(JUMP, var(1003), "equal", "block", "null"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
@@ -154,7 +174,6 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         """,
                 createInstruction(SET, "i", "1"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "greaterThan", "i", "10"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(PRINT, "i"),
                 createInstruction(JUMP, var(1002), "greaterThan", "i", "5"),
@@ -182,7 +201,6 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         """,
                 createInstruction(SET, "i", "10"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "lessThanEq", "i", "0"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(OP, "sub", var(1), "i", "1"),
                 createInstruction(SET, "i", var(1)),

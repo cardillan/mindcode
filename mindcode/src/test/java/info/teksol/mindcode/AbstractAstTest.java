@@ -5,12 +5,9 @@ import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.AstPrettyPrinter;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.grammar.AbstractParserTest;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
-
-import java.util.List;
 
 public class AbstractAstTest extends AbstractParserTest {
 

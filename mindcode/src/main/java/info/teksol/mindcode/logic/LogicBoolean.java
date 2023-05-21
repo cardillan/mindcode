@@ -17,6 +17,11 @@ public enum LogicBoolean implements LogicLiteral {
     }
 
     @Override
+    public boolean isNumericLiteral() {
+        return true;
+    }
+
+    @Override
     public String toMlog() {
         return mlog;
     }

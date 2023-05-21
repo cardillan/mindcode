@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AbstractGeneratorTest extends AbstractAstTest {
 
     protected final List<CompilerMessage> messages = new ArrayList<>();
-    protected InstructionProcessor instructionProcessor = createInstructionProcessor(createCompilerProfile());
+    protected final InstructionProcessor instructionProcessor = createInstructionProcessor(createCompilerProfile());
 
 
     protected void assertCompilesTo(CompilerProfile profile, Predicate<LogicInstruction> filter,
@@ -153,7 +153,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     protected String formatMessages() {
-        return messages.isEmpty() ? "" : "\nGenerated mesages:\n"
+        return messages.isEmpty() ? "" : "\nGenerated messages:\n"
                 + messages.stream().map(CompilerMessage::message).collect(Collectors.joining("\n")) ;
     }
 
@@ -199,10 +199,9 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             return;
         }
 
-        for (int i = 0; i < actual.size(); i++) {
-            final int index = i;
-            final LogicInstruction left = expected.get(i);
-            final LogicInstruction right = actual.get(i);
+        for (int index = 0; index < actual.size(); index++) {
+            final LogicInstruction left = expected.get(index);
+            final LogicInstruction right = actual.get(index);
             if (left.getOpcode().equals(right.getOpcode())) {
                 if (!matchArgs(left, right)) {
                     assertFailed(replaceVarsIn(expected), actual, createUnmatchedArgumentsMessage(actual, index, left, right));

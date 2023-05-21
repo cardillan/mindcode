@@ -28,6 +28,10 @@ public interface LogicArgument {
         return false;
     }
 
+    default boolean isNumericLiteral() {
+        return false;
+    }
+
     default boolean isUserVariable() {
         return false;
     }

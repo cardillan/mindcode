@@ -11,9 +11,9 @@ import java.util.function.Consumer;
  * Formats and prints a simple diff between various versions of the program produced by individual optimizers.
  */
 public class DiffDebugPrinter implements DebugPrinter {
-    private static final String ADD_PREFIX          = "+";
-    private static final String DELETE_PREFIX       = "-";
-    private static final String NO_CHANGE_PREFIX    = " ";
+    protected static final String ADD_PREFIX          = "+";
+    protected static final String DELETE_PREFIX       = "-";
+    protected static final String NO_CHANGE_PREFIX    = " ";
 
     private int diffMargin = 3;
     private final List<ProgramVersion> versions = new ArrayList<>();
@@ -100,12 +100,16 @@ public class DiffDebugPrinter implements DebugPrinter {
         return result;
     }
 
+    protected boolean printAll() {
+        return false;
+    }
+
     // Prints diff between the "before" and "after" versions. Instructions in the output are numbered
     // according to the after list.
     private void printDiff(Consumer<String> messageConsumer, String title, List<LogicInstruction> before,
             List<LogicInstruction> after) {
         // Do not print steps that didn't change anything
-        if (before.equals(after)) {
+        if (before.equals(after) && !printAll()) {
             return;
         }
 
@@ -141,8 +145,8 @@ public class DiffDebugPrinter implements DebugPrinter {
         }
 
         // Print lines around difference clusters
-        boolean active = false;
-        int countdown = 0;
+        boolean active = printAll();
+        int countdown = active ? 2 * diffMargin + 1 : 0;
         int skipped = 0;
         for (int i = -diffMargin; i < output.size(); i++) {
             if (i + diffMargin < output.size() && !output.get(i + diffMargin).startsWith(NO_CHANGE_PREFIX)) {
@@ -173,7 +177,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         return CollectionUtils.findFirstIndex(program, index, ix -> ix == instruction);
     }
 
-    private String printInstruction(String prefix, int index, LogicInstruction instruction) {
+    protected String printInstruction(String prefix, int index, LogicInstruction instruction) {
         StringBuilder str = new StringBuilder(50);
         str.append(prefix);
         if (index >= 0) {

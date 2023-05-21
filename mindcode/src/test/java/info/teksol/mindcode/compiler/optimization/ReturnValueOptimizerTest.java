@@ -247,7 +247,7 @@ class ReturnValueOptimizerTest extends AbstractOptimizerTest<ReturnValueOptimize
 
 
     @Test
-    void ignoresVolatileInSCript() {
+    void ignoresVolatileInScript() {
         assertCompilesTo("""
                         def foo(x)
                             @time

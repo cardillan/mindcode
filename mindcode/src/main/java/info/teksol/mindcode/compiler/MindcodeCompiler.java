@@ -24,6 +24,7 @@ import org.antlr.v4.runtime.Recognizer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class MindcodeCompiler implements Compiler<String> {
@@ -42,22 +43,29 @@ public class MindcodeCompiler implements Compiler<String> {
         String instructions = "";
 
         try {
+            long parseStart = System.nanoTime();
             final Seq prog = parse(sourceCode);
             printParseTree(prog);
+            long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
-            DirectiveProcessor.processDirectives(prog, profile);
+            long compileStart = System.nanoTime();
+            DirectiveProcessor.processDirectives(prog, profile, messages::add);
             instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messages::add, profile);
-
             List<LogicInstruction> result = generateCode(prog);
+            long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
 
+            long optimizeStart = System.nanoTime();
             if (profile.optimizationsActive() && result.size() > 1) {
                 result = optimize(result);
             }
+            long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
             if (profile.isPrintFinalCode()) {
                 debug("\nFinal code before resolving virtual instructions:\n");
                 debug(LogicInstructionPrinter.toString(instructionProcessor, result));
             }
+
+            info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
 
             result = LogicInstructionLabelResolver.resolve(instructionProcessor, result);
 
@@ -121,6 +129,10 @@ public class MindcodeCompiler implements Compiler<String> {
 
         debugPrinter.print(this::debug);
         return terminus.getResult();
+    }
+
+    private void info(String message) {
+        messages.add(MindcodeMessage.info(message));
     }
 
     private void debug(String message) {

@@ -12,7 +12,6 @@ import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.logic.Operation;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 

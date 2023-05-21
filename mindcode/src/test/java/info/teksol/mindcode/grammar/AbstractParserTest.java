@@ -2,7 +2,6 @@ package info.teksol.mindcode.grammar;
 
 import info.teksol.mindcode.ParsingException;
 import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.ast.Seq;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStreams;

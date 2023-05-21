@@ -9,7 +9,6 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
-import java.util.EnumSet;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -59,27 +58,6 @@ public class OptimizationPipeline implements LogicInstructionPipeline {
         return new OptimizationPipeline(
                 new InstructionCounter(pipeline, messageRecipient, "%6d instructions before optimizations.", debugPrinter)
         );
-    }
-
-    public static LogicInstructionPipeline createPipelineOf(InstructionProcessor instructionProcessor,
-            LogicInstructionPipeline terminus, CompilerProfile profile, Optimization... optimization) {
-
-        EnumSet<Optimization> includes = EnumSet.of(optimization[0], optimization);
-        LogicInstructionPipeline pipeline = terminus;
-        Optimization[] values = values();
-        for (int i = values.length - 1; i >= 0; i--) {
-
-            if (includes.contains(values[i])) {
-                BaseOptimizer optimizer = values[i].createInstance(instructionProcessor, pipeline);
-                optimizer.setLevel(OptimizationLevel.AGGRESSIVE);
-                optimizer.setGoal(profile.getGoal());
-                //optimizer.setMessagesRecipient(messageRecipient);
-                //optimizer.setDebugPrinter(debugPrinter);
-                pipeline = optimizer;
-            }
-        }
-
-        return new OptimizationPipeline(pipeline);
     }
 
     public static class InstructionCounter implements Optimizer {

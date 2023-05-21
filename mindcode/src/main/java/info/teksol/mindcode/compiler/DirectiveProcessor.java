@@ -7,24 +7,32 @@ import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
+import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
  */
 public class DirectiveProcessor {
     private final CompilerProfile profile;
+    private final Consumer<CompilerMessage> messageConsumer;
 
-    private DirectiveProcessor(CompilerProfile profile) {
+    private DirectiveProcessor(CompilerProfile profile, Consumer<CompilerMessage> messageConsumer) {
         this.profile = profile;
+        this.messageConsumer = messageConsumer;
     }
 
-    public static void processDirectives(Seq program, CompilerProfile profile) {
-        DirectiveProcessor processor = new DirectiveProcessor(profile);
+    public static void processDirectives(Seq program, CompilerProfile profile, Consumer<CompilerMessage> messageConsumer) {
+        DirectiveProcessor processor = new DirectiveProcessor(profile, messageConsumer);
         processor.visitNode(program);
+    }
+
+    private void error(@PrintFormat String format, Object... args) {
+        messageConsumer.accept(MindcodeMessage.error(format.formatted(args)));
     }
 
     private void visitNode(AstNode node) {
@@ -38,13 +46,13 @@ public class DirectiveProcessor {
     private void processDirective(Directive node) {
         BiConsumer<CompilerProfile, String> handler = OPTION_HANDLERS.get(node.getOption());
         if (handler == null) {
-            throw new UnknownCompilerDirectiveException("Unknown compiler directive '" + node.getOption() + "'");
+            error("Unknown compiler directive '%s'.", node.getOption());
+        } else {
+            handler.accept(profile, node.getValue());
         }
-
-        handler.accept(profile, node.getValue());
     }
 
-    private static void setTarget(CompilerProfile profile, String target) {
+    private void setTarget(CompilerProfile profile, String target) {
         switch (target) {
             case "ML6"  -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.STANDARD_PROCESSOR);
             case "ML7", "ML7S" ->
@@ -53,53 +61,53 @@ public class DirectiveProcessor {
             case "ML7A", "ML7AS" ->
                            profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.STANDARD_PROCESSOR);
             case "ML7AW"-> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.WORLD_PROCESSOR);
-            default     -> throw new InvalidCompilerDirectiveException("Invalid value '" + target + "' of compiler directive 'target'");
+            default     -> error("Invalid value '%s' of compiler directive 'target'.", target);
         }
     }
 
-    private static void setOptimizationLevel(Optimization optimization, CompilerProfile profile, String level) {
+    private void setOptimizationLevel(Optimization optimization, CompilerProfile profile, String level) {
         OptimizationLevel optLevel = OptimizationLevel.VALUE_MAP.get(level);
         if (optLevel == null) {
-            throw new InvalidCompilerDirectiveException("Invalid value '" + level + "' of compiler directive '" + optimization.getOptionName() + "'");
+            error("Invalid value '%s' of compiler directive '%s'.", level, optimization.getOptionName());
+        } else {
+            profile.setOptimizationLevel(optimization, optLevel);
         }
-
-        profile.setOptimizationLevel(optimization, optLevel);
     }
 
-    private static void setAllOptimizationsLevel(CompilerProfile profile, String level) {
+    private void setAllOptimizationsLevel(CompilerProfile profile, String level) {
         OptimizationLevel optLevel = OptimizationLevel.VALUE_MAP.get(level);
         if (optLevel == null) {
-            throw new InvalidCompilerDirectiveException("Invalid value '" + level + "' of compiler directive 'optimization'");
+            error("Invalid value '%s' of compiler directive 'optimization'.", level);
+        } else {
+            profile.setAllOptimizationLevels(optLevel);
         }
-
-        profile.setAllOptimizationLevels(optLevel);
     }
 
-    private static void setShortCircuitEval(CompilerProfile compilerProfile, String booleanEval) {
+    private void setShortCircuitEval(CompilerProfile compilerProfile, String booleanEval) {
         switch (booleanEval) {
             case "short"    -> compilerProfile.setShortCircuitEval(true);
             case "full"     -> compilerProfile.setShortCircuitEval(false);
-            default         ->  throw new InvalidCompilerDirectiveException("Invalid value '" + booleanEval + "' of compiler directive 'booleanEval'");
+            default         ->  error("Invalid value '%s' of compiler directive 'booleanEval'.", booleanEval);
         }
     }
 
-    private static void setGenerationGoal(CompilerProfile compilerProfile, String goal) {
+    private void setGenerationGoal(CompilerProfile compilerProfile, String goal) {
         switch (goal) {
             case "size"     -> compilerProfile.setGoal(GenerationGoal.SIZE);
             case "speed"    -> compilerProfile.setGoal(GenerationGoal.SPEED);
             case "auto"     -> compilerProfile.setGoal(GenerationGoal.AUTO);
-            default         ->  throw new InvalidCompilerDirectiveException("Invalid value '" + goal + "' of compiler directive 'goal'");
+            default         ->  error("Invalid value '%s' of compiler directive 'goal'.", goal);
         }
     }
 
-    private static final Map<String, BiConsumer<CompilerProfile, String>> OPTION_HANDLERS = createOptionHandlers();
+    private final Map<String, BiConsumer<CompilerProfile, String>> OPTION_HANDLERS = createOptionHandlers();
 
-    private static Map<String, BiConsumer<CompilerProfile,String>> createOptionHandlers() {
+    private Map<String, BiConsumer<CompilerProfile,String>> createOptionHandlers() {
         Map<String,BiConsumer<CompilerProfile,String>> map = new HashMap<>();
-        map.put("target", DirectiveProcessor::setTarget);
-        map.put("optimization", DirectiveProcessor::setAllOptimizationsLevel);
-        map.put("booleanEval", DirectiveProcessor::setShortCircuitEval);
-        map.put("goal", DirectiveProcessor::setGenerationGoal);
+        map.put("target", this::setTarget);
+        map.put("optimization", this::setAllOptimizationsLevel);
+        map.put("booleanEval", this::setShortCircuitEval);
+        map.put("goal", this::setGenerationGoal);
         for (Optimization opt : Optimization.values()) {
             map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
         }

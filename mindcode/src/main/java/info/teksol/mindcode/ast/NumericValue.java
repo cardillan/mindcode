@@ -61,7 +61,7 @@ public class NumericValue extends ConstantAstNode {
 
     public boolean isInteger() {
         double value = getAsDouble();
-        // Criterium taken from Mindustry Logic
+        // Criteria taken from Mindustry Logic
         return Math.abs(value - (int)value) < 0.00001;
     }
 

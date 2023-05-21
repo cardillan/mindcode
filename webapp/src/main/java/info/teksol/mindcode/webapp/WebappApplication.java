@@ -17,7 +17,7 @@ public class WebappApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         new DbMigrator().migrate(template);
     }
 }

@@ -24,6 +24,11 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
+    public boolean isNumericLiteral() {
+        return true;
+    }
+
+    @Override
     public String toMlog() {
         return literal;
     }

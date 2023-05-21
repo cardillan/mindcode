@@ -72,7 +72,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     private class FilteredDiffDebugPrinter extends DiffDebugPrinter {
-        private Class<T> testedClass;
+        private final Class<T> testedClass;
 
         private boolean activated = false;
 
@@ -105,8 +105,13 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
             } else {
                 List<ProgramVersion> selected = diffLevel2();
                 int index = findFirstIndex(selected, v -> v.optimizer.getClass() == testedClass);
-                return index >= 0 && index < selected.size() - 1 ? selected.subList(index, index + 2) : List.of();
+                return index > 0 && index < selected.size()  ? selected.subList(index - 1, index + 1) : List.of();
             }
+        }
+
+        @Override
+        protected boolean printAll() {
+            return true;
         }
     }
 }

@@ -46,7 +46,7 @@ Mindcode_ and _Compile schema_ actions. See the command line help for more detai
 # Command line help
 
 It is possible to obtain command line help by using a `-h` or `--help` argument. A general help is displayed when no 
-action is specified, and an aciton-specific help is displayed when using `-h` together with action. For reference, 
+action is specified, and an action-specific help is displayed when using `-h` together with action. For reference, 
 the command line help is included here.
 
 ## General help

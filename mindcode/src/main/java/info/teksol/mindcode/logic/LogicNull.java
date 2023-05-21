@@ -9,6 +9,11 @@ public enum LogicNull implements LogicLiteral {
     }
 
     @Override
+    public boolean isNumericLiteral() {
+        return true;
+    }
+
+    @Override
     public String toMlog() {
         return "null";
     }
@@ -16,5 +21,10 @@ public enum LogicNull implements LogicLiteral {
     @Override
     public String format() {
         return "null";
+    }
+
+    @Override
+    public double getDoubleValue() {
+        return 0.0;
     }
 }

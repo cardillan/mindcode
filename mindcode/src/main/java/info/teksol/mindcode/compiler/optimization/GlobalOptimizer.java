@@ -338,7 +338,7 @@ abstract class GlobalOptimizer extends BaseOptimizer {
         }
     }
 
-    private List<LogicIterator> iterators = new ArrayList<>();
+    private final List<LogicIterator> iterators = new ArrayList<>();
 
     private LogicIterator createIterator(int index) {
         LogicIterator iterator = new LogicIterator(index);

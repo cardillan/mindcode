@@ -28,14 +28,17 @@ Possible values for this option are:
 
 ## Option `goal`
 
-Use the `goal` option to specify whether the compiler should prefer to generate smaller code or faster code. 
+Use the `goal` option to specify whether Mindcode should prefer to generate smaller code, or faster code. 
 Possible values are:
 
-* `size`: the compiler tries to generate smaller code.
-* `speed`: the compiler might add instructions, if it makes the resulting code faster. Currently, this 
-  distinction is employed by the loop optimizer, which can duplicate parts of the code to avoid unnecessary jump. At 
-  this moment, at most three additional instructions per loop jump are generated.
+* `size`: Mindcode tries to generate smaller code.
+* `speed`: Mindcode can generate additional instructions, if it makes the resulting code faster. Currently, this 
+  distinction is employed by [loop optimization](#loop-optimization), which can duplicate parts of the code
+  to avoid unnecessary jumps.
 * `auto`: reserved for future use, at this moment the setting is identical to `size`.
+
+The default setting at this moment is `speed`. If you're hitting the 1000 instruction limit, try setting the goal to 
+`size`.
 
 Over time, additional `speed` specific optimizations will be added, as well as an automatic process to find the best 
 balance between speed and size. 
@@ -55,8 +58,9 @@ Possible values for this option are:
 
 The `off` setting deactivates all optimizations. The `basic` setting performs most of the available optimizations.
 The `aggressive` optimizations performs all the available optimizations, even those that might not be wanted in some 
-contexts. For example, assignments to variables that aren't used anywhere else in the program will be removed with this
-setting. When compiling a code snippet just so you would see how Mindcode handles it:
+contexts or which might make understanding or modifying the resulting mlog code particularly difficult. For example, 
+assignments to variables that aren't used anywhere else in the program will be removed with this setting. When 
+compiling a code snippet just so you would see how Mindcode handles it:
 
 ```
 x0 = 0.001
@@ -92,7 +96,8 @@ end
 
 None of the variables `x0`, `y0`, `x1` or `y1` is used for anything after being set up, and therefore all are eliminated.
 
-The default optimization level for the web application compiler is `basic`, for the command line compiler it is `aggressive`.
+The default optimization level for the web application compiler is `basic`, for the command line compiler it is 
+`aggressive`.
 
 ## Individual optimization options
 
@@ -118,7 +123,7 @@ and availability of the aggressive optimization level is:
 | [Case expression optimization](#case-expression-optimization)   | case-expression-optimization  |     N      |
 | [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization     |     N      |
 | [Jump straightening](#jump-straightening)                       | jump-straightening            |     N      |
-| [Loop optimization](#loop-optimization)                         | loop-optimization             |     N      |
+| [Loop optimization](#loop-optimization)                         | loop-optimization             |     Y      |
 | [Jump threading](#jump-threading)                               | jump-threading                |     Y      |
 | [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessible-code-elimination |     Y      |
 | [Stack optimization](#stack-optimization)                       | stack-optimization            |     N      |
@@ -131,7 +136,7 @@ deactivating it might allow you to use Mindcode until a fix is available. Partia
 aren't routinely tested, so by deactivating one you might even discover some new bugs. On the other hand, full
 optimization suite is tested by running compiled code on an emulated Mindustry processor, so bugs should be rare. 
 
-In particular, some optimizers expect to work on code that was already processed by different optimization,
+In particular, some optimizers expect to work on code that was already processed by different optimizations,
 so turning off some optimizations might render other optimizations ineffective. (This is *not* a bug, though.)  
 
 # Compiler optimization
@@ -145,6 +150,7 @@ It might be useful if you're trying to better understand how Mindcode generates 
 ## Jump normalization
 
 This optimization handles conditional jumps whose condition is constant:
+
 * always false conditional jumps are removed,
 * always true conditional jumps are converted to unconditional ones.
 
@@ -165,7 +171,7 @@ the optimization removes all unused assignment, even assignments to main variabl
 
 Dead code eliminator also inspects your code and prints out suspicious variables:
 * _Unused variables_: those are the variables that were, or could be, eliminated. On `basic` level,
-  some unused variables might remain undetected.
+  some unused variables might not be reported.
 * _Uninitialized variables_: those are variables that are read by the program, but never written to.
   (Mindcode doesn't - yet - detects situations where variable is read before it is first written to.)
 
@@ -185,8 +191,6 @@ Technically, if we have a sequence
 we could eliminate both jumps. This optimization will only remove the second jump, because before that removal the first
 one doesn't target the next instruction. However, such sequences aren't typically generated by the compiler.
 
-Multiple optimization passes will handle this issue as well.
-
 ## Temporary inputs elimination
 
 The compiler sometimes creates temporary variables whose only function is to pass value to another instruction.
@@ -202,6 +206,9 @@ The optimization is performed only when the following conditions are met:
 
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
 are removed by the stack usage optimization down the line.
+
+Note: changes to the way unoptimized code is generated rendered this particular optimizer pretty much useless. It is 
+kept around just in case it might become useful again. 
 
 ## Temporary outputs elimination
 
@@ -300,12 +307,81 @@ end
 
 ## Loop optimization
 
+The loop optimizers improves loops with the condition at the beginning by performing these modifications:
 
+* If the loop jump condition is invertible, the unconditional jump at the end of the loop to the loop condition is 
+  replaced by a conditional jump with inverted loop condition targeting the first instruction of the loop body. This 
+  doesn't affect the number of instructions, but executes one less instruction per loop.
+  * If the loop condition isn't invertible (that is, the jump condition is '==='), the optimization isn't done, 
+    since the saved jump would be spent on inverting the condition, and we would increase code size for no benefit 
+    at all.  
+* If the previous optimization was done, the optimization level is set to `aggressive`, and the loop condition is 
+  known to be true before the first iteration of the loop, the jump at the front of the loop is removed. Only the 
+  simplest cases, where the loop control variable is set by an instruction immediately preceding the front jump and 
+  the jump condition compares the control variable to a constant, are handled. Many loop conditions fit these 
+  criteria though, namely all range iteration loops.
+* If the loop conditions is a complex expression spanning several instructions, it can still be replicated at the 
+  end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). Since this 
+  increases the code size, at most three instructions are copied in this way. One instruction execution per loop is 
+  still saved this way, at the price of increased code size.
+
+The result of the first two optimizations in the list can be seen here:
+
+```
+#set loop-optimization = aggressive
+for i in 0 ... 10
+    cell1[i] = 1
+end
+print("Done.")
+```
+
+produces 
+
+```
+set i 0
+write 1 cell1 i
+op add i i 1
+jump 1 lessThan i 10
+print "Done."
+end
+```
+
+Executing the entire loop (including the `i` variable initialization) takes 31 steps. Without optimization, the loop 
+would require 42 steps. That's quite significant difference, especially for small loops.
+
+The third modification is demonstrated here:
+
+```
+#set loop-optimization = aggressive
+#set goal = speed
+
+while switch1.enabled and switch2.enabled
+    print("Doing something.")
+end
+print("A switch has been reset.")
+```
+
+which produces:
+
+```
+sensor __tmp0 switch1 @enabled
+sensor __tmp1 switch2 @enabled
+op land __tmp2 __tmp0 __tmp1
+jump 9 equal __tmp2 false
+print "Doing something."
+sensor __tmp0 switch1 @enabled
+sensor __tmp1 switch2 @enabled
+op land __tmp2 __tmp0 __tmp1
+jump 4 notEqual __tmp2 false
+print "A switch has been reset."
+end
+```
 
 ## Jump threading
 
 If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
 to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
+
 * on `aggressive` level, `end` instruction is handled identically to `jump 0 always`,
 * conditional jumps in the jump chain are followed if
   * their condition is identical to the condition the first jump, and

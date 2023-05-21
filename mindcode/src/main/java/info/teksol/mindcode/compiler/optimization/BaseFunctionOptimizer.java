@@ -1,20 +1,15 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.LogicInstructionPipeline;
-import info.teksol.mindcode.compiler.instructions.GotoInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class BaseFunctionOptimizer extends GlobalOptimizer {
     public BaseFunctionOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {

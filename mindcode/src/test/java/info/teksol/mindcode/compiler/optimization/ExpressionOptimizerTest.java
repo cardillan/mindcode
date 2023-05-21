@@ -108,7 +108,7 @@ public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOpt
     }
 
     @Test
-    void ignoresNonconstantMultiplicants() {
+    void ignoresNonconstantMultiplicands() {
         assertDoesNotOptimize(
                 createInstruction(OP, mul, tmp0, value, divisor),
                 createInstruction(OP, floor, result, tmp0),
