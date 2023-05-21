@@ -79,7 +79,7 @@ public class DecompileSchemacodeAction extends ActionHandler {
                         "only for blocks affected by rotation, only for block with non-default direction, " +
                         "or for all blocks")
                 .type(Arguments.caseInsensitiveEnumType(DirectionLevel.class))
-                .setDefault(BlockOrder.ORIGINAL);
+                .setDefault(DirectionLevel.ROTATABLE);
     }
 
     @Override

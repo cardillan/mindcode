@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-05-21
+
+Note: the bug fixed in this release only affects the command line tool. The web app hasn't been redeployed.
+
+### Fixed
+
+* Fixed the command line tool application crashing when decompiling a schematics.  
+
 ## 2023-05-20
 
 ### Added
