@@ -9,6 +9,7 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
@@ -55,13 +56,10 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
 
     protected List<LogicInstruction> optimizeInstructions(CompilerProfile profile, List<LogicInstruction> instructions) {
         final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        FilteredDiffDebugPrinter debugPrinter = new FilteredDiffDebugPrinter();
+        DebugPrinter debugPrinter = new FilteredDiffDebugPrinter();
         LogicInstructionPipeline pipeline = createLogicInstructionPipeline(profile, terminus, debugPrinter);
 
         pipeline.process(instructions);
-        if (!debugPrinter.activated) {
-            throw new RuntimeException("No instructions processed by " + debugPrinter.testedClass.getSimpleName() + ".");
-        }
         debugPrinter.print(s -> messages.add(MindcodeMessage.debug(s)));
         return terminus.getResult();
     }
@@ -85,7 +83,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         @Override
         public void instructionEmitted(Optimizer optimizer, LogicInstruction instruction) {
             super.instructionEmitted(optimizer, instruction);
-            if (testedClass == null || optimizer.getClass() == testedClass) {
+            if (optimizer.getClass() == testedClass) {
                 activated = true;
             }
         }
@@ -93,9 +91,17 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         @Override
         public void iterationFinished(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
             super.iterationFinished(optimizer, iteration, program);
-            if (testedClass == null || optimizer.getClass() == testedClass) {
+            if (optimizer.getClass() == testedClass) {
                 activated = true;
             }
+        }
+
+        @Override
+        public void print(Consumer<String> messageConsumer) {
+            if (testedClass != null && !activated) {
+                throw new RuntimeException("No instructions processed by " + testedClass.getSimpleName() + ".");
+            }
+            super.print(messageConsumer);
         }
 
         @Override

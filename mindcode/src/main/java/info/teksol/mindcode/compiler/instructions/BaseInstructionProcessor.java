@@ -63,6 +63,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public LogicVariable nextProtectedTemp() {
+        return LogicVariable.protectedTemporary(getTempPrefix() + tmpIndex++);
+    }
+
+    @Override
     public LogicVariable nextReturnValue() {
         return LogicVariable.retval( getRetValPrefix() + tmpIndex++);
     }

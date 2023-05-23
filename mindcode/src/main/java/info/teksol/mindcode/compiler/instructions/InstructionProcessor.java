@@ -18,7 +18,7 @@ public interface InstructionProcessor {
     LogicLabel nextLabel();
 
     LogicVariable nextTemp();
-
+    LogicVariable nextProtectedTemp();
     LogicVariable nextReturnValue();
 
     String nextLocalPrefix();

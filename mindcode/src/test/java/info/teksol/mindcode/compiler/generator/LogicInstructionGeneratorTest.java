@@ -351,11 +351,12 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertCompilesTo(
                 "for n in a ... b print(n) end",
                 // init
+                createInstruction(SET, var(0), "b"),
                 createInstruction(SET, "n", "a"),
 
                 // cond
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "n", "b"),
+                createInstruction(JUMP, var(1002), "greaterThanEq", "n", var(0)),
 
                 // loop body
                 createInstruction(PRINT, "n"),

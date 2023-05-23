@@ -98,6 +98,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(ArgumentType.TMP_VARIABLE, name);
     }
 
+    public static LogicVariable protectedTemporary(String name) {
+        return new LogicVariable(ArgumentType.PROTECTED_VARIABLE, name);
+    }
+
     public static LogicVariable ast(String name) {
         return new LogicVariable(ArgumentType.AST_VARIABLE, name);
     }

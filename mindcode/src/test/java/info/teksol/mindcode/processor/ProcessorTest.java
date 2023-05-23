@@ -158,4 +158,18 @@ public class ProcessorTest extends AbstractProcessorTest {
                 "A", "B", "B", "B", "C", "C", "C", "D"
         );
     }
+
+    @Test
+    void executesRangeExpressionWithFixedBounds() {
+        testCode("""
+                        a = 0
+                        b = 10
+                        for i in a ... b
+                            b = b - 1
+                        end
+                        print(i)
+                        """,
+                "10"
+        );
+    }
 }

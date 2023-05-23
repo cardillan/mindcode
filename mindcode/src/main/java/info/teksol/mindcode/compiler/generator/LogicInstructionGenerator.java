@@ -215,6 +215,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return nodeContext.registerVariable(instructionProcessor.nextTemp());
     }
 
+    // Allocates a new temporary variable whose scope is limited to a node (i.e. not needed outside that node)
+    // but is protected - must not be optimized away
+    private LogicVariable nextProtectedTemp() {
+        return nodeContext.registerVariable(instructionProcessor.nextProtectedTemp());
+    }
+
     // Allocates a new temporary variable which holds the evaluated value of a node
     private LogicVariable nextNodeResult() {
         return parentContext.registerVariable(instructionProcessor.nextTemp());
@@ -670,21 +676,27 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitRangedForExpression(RangedForExpression node) {
         final LogicVariable variable = visitVariable(node.getVariable());
 
-        // Encapsulate both: they're evaluated just here and then reused
+        // Encapsulate both: they're evaluated just here and not propagated anywhere
         final LogicValue lowerBound = nodeContext.encapsulate(() -> visit(node.getRange().getFirstValue()));
         final LogicValue upperBound = nodeContext.encapsulate(() -> visit(node.getRange().getLastValue()));
+
+        LogicValue fixedUpperBound;
+        if (upperBound.isLiteral()) {
+            fixedUpperBound = upperBound;
+        } else {
+            LogicVariable tmp = nextProtectedTemp();
+            emit(createSet(tmp, upperBound));
+            fixedUpperBound = tmp;
+        }
+
+        emit(createSet(variable, lowerBound));
 
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
-        //final LogicVariable tmp = nextTemp();
-
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
-        emit(createSet(variable, lowerBound));
-        //emit(createSet(tmp, upperBound));
-
         emit(createLabel(beginLabel));
-        emit(createJump(doneLabel, node.getRange().maxValueComparison().inverse(), variable, upperBound));
+        emit(createJump(doneLabel, node.getRange().maxValueComparison().inverse(), variable, fixedUpperBound));
         visit(node.getBody());
         emit(createLabel(continueLabel));
         emit(createOp(Operation.ADD, variable, variable, LogicNumber.ONE));

@@ -35,7 +35,6 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
         return Optimization.LIST;
     }
 
-
     // Prevent unit tests hanging due to possible endless loops in generated code
     protected final int MAX_STEPS = 1000000;
 
@@ -74,7 +73,8 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
 
     protected void testCode(String code, List<MindustryObject> blocks, List<String> expectedOutputs) {
         testAndEvaluateCode(code, blocks, outputs -> assertEquals(expectedOutputs, outputs,
-                () -> messages.stream().map(CompilerMessage::message).collect(Collectors.joining("\n"))));
+                () -> messages.stream().map(CompilerMessage::message)
+                        .collect(Collectors.joining("\n", "\n", "\n"))));
     }
 
     protected void testCode(String code, String... expectedOutputs) {
