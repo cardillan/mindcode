@@ -50,7 +50,7 @@ public class CompileMain {
             } else if (arg.startsWith("-v")) {
                 selectVersion(profile, arg.substring(2));
             } else if (arg.equals("-c")) {
-                profile.setPrintFinalCode(true);
+                profile.setFinalCodeOutput(FinalCodeOutput.PLAIN);
             } else if (arg.startsWith("-p")) {
                 selectPrintLevel(profile, arg.substring(2));
             } else if (arg.startsWith("-o")) {

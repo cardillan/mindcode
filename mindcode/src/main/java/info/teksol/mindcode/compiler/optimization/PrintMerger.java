@@ -1,25 +1,21 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PrintInstruction;
 import info.teksol.mindcode.compiler.instructions.PrintflushInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
-import info.teksol.mindcode.logic.Opcode;
 
-import java.util.ArrayList;
-import java.util.List;
+import static info.teksol.mindcode.logic.ArgumentType.STRING_LITERAL;
 
 /**
- * A simple optimizer which merges together print instructions with string literal arguments.
- * The print instructions will get merged even if they aren't consecutive, assuming there aren't instructions
- * that could break the print sequence ({@code jump}, {@code label} or {@code print [variable]}).
- * Typical sequence of instructions targeted by this optimizer is:
+ * A simple optimizer which merges together print instructions with string literal arguments. The print instructions
+ * will get merged even if they aren't consecutive, assuming there aren't instructions that could break the print
+ * sequence ({@code jump}, {@code label} or {@code print [variable]}). Typical sequence of instructions targeted by this
+ * optimizer is:
  * <pre>{@code
  * print count
  * print "\n"
@@ -39,100 +35,61 @@ import java.util.List;
  * print "%"
  * }</pre>
  */
-class PrintMerger extends PipelinedOptimizer {
-    public PrintMerger(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+class PrintMerger extends BaseOptimizer {
+
+    public PrintMerger(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
+
+    private PrintInstruction previous = null;
 
     @Override
-    protected State initialState() {
-        return new EmptyState();
+    protected boolean optimizeProgram() {
+        try (LogicIterator iterator = createIterator()) {
+            while (iterator.hasNext()) {
+                switch (iterator.next()) {
+                    case PrintInstruction current -> tryMerge(iterator, current);
+
+                    // Do not merge across jumps, (active) labels and printflushes
+                    // Function calls generate a label, so they prevent merging as well
+                    case JumpInstruction ix -> previous = null;
+                    case LabelInstruction ix && isActive(ix) -> previous = null;
+                    case PrintflushInstruction ix -> previous = null;
+
+                    default -> {
+                    } // Do nothing
+                }
+            }
+        }
+
+        return false;
     }
 
-    private final class EmptyState implements State {
-        @Override
-        public State emit(LogicInstruction instruction) {
-            if (instruction instanceof PrintInstruction ix && ix.getValue().isLiteral()) {
-                return new ExpectPrint(ix);
-            } else {
-                emitToNext(instruction);
-                return this;
+    // Tries to merge previous and current.
+    // When successful, updates instructions and sets previous to the newly merged instruction.
+    // If the merge is not possible, sets previous to current
+    private void tryMerge(LogicIterator iterator, PrintInstruction current) {
+        if (previous != null && previous.getValue() instanceof LogicLiteral lit1 && current.getValue() instanceof LogicLiteral lit2) {
+            if (aggressive() || (lit1.getType() == STRING_LITERAL && lit2.getType() == STRING_LITERAL)) {
+                String str1 = lit1.format();
+                String str2 = lit2.format();
+                // Do not merge strings if the combined length is over 34, unless aggressive
+                if (str1.length() + str2.length() <= 34 || aggressive()) {
+                    PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
+                    removeInstruction(previous);
+                    iterator.set(merged);
+                    previous = merged;
+                    return;
+                }
             }
         }
 
-        @Override
-        public State flush() {
-            return this;
-        }
+        previous = current;
     }
 
-    private final class ExpectPrint implements State {
-        private final PrintInstruction firstPrint;
-        private final List<LogicInstruction> operations = new ArrayList<>();
-
-        private ExpectPrint(PrintInstruction instruction) {
-            firstPrint = instruction;
-        }
-
-        @Override
-        public State emit(LogicInstruction instr) {
-            // Do not merge across jumps, labels and printflushes
-            // Function calls generate a label, so they prevent merging as well
-            if (instr instanceof JumpInstruction || instr instanceof LabelInstruction || instr instanceof PrintflushInstruction) {
-                operations.add(instr);
-                return flush();
-            }
-
-            if (instr instanceof PrintInstruction ix) {
-                // Only merge string literals
-                if (ix.getValue().isLiteral()) {
-                    PrintInstruction merged = merge(firstPrint, ix);
-                    if (merged != null) {
-                        operations.forEach(PrintMerger.this::emitToNext);
-                        // We can merge the merged instruction with next one as well
-                        return new ExpectPrint(merged);
-                    } else {
-                        // We didn't merge for whatever reason.
-                        // Try to merge current instruction with the next one
-                        flush();
-                        return new ExpectPrint(ix);
-                    }
-                }
-
-                // Any other print breaks the sequence and cannot be merged
-                operations.add(instr);
-                return flush();
-            }
-
-            // Continue merging
-            operations.add(instr);
-            return this;
-        }
-
-        // Creates a merged instruction from two constant prints
-        // If merge is not possible (the string constants are malformed), returns null.
-        // Only checks for quotes on both ends of the string, doesn't check for proper quote escaping
-        private PrintInstruction merge(PrintInstruction first, PrintInstruction second) {
-            if (first.getValue() instanceof LogicLiteral lit1 && second.getValue() instanceof LogicLiteral lit2) {
-                if (aggressive() || (lit1.getType() == ArgumentType.STRING_LITERAL && lit2.getType() == ArgumentType.STRING_LITERAL)) {
-                    String str1 = lit1.format();
-                    String str2 = lit2.format();
-                    // Do not merge strings if the length is over 34, unless aggressive
-                    if (str1.length() + str2.length() <= 34 || aggressive()) {
-                        return (PrintInstruction) createInstruction(Opcode.PRINT, LogicString.create(str1 + str2));
-                    }
-                }
-
-            }
-
-            return null;
-        }
-
-        @Override
-        public State flush() {
-            emitToNext(firstPrint);
-            operations.forEach(PrintMerger.this::emitToNext);
-            return new EmptyState();
-        }
+    private boolean isActive(LabelInstruction ix) {
+        return ix.getMarker() != null ||
+                firstInstructionIndex(0, ixx -> ixx.getArgs().stream()
+                        .anyMatch(a -> a instanceof LogicLabel la && la.equals(ix.getLabel()))) >= 0;
     }
 }

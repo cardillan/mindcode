@@ -87,14 +87,15 @@ public abstract class AbstractVariable implements Variable {
         };
     }
 
+    // TODO track original token for constants
     @Override
     public AstNode toAstNode() {
         return switch (getType()) {
-            case NULL    -> new NullLiteral();
-            case BOOLEAN -> new BooleanLiteral(getIntValue() != 0);
-            case LONG    -> new NumericLiteral(String.valueOf(getLongValue()));
-            case DOUBLE  -> new NumericValue(getDoubleValue());
-            case OBJECT  -> new StringLiteral(String.valueOf(object));
+            case NULL    -> new NullLiteral(null);
+            case BOOLEAN -> new BooleanLiteral(null, getIntValue() != 0);
+            case LONG    -> new NumericLiteral(null, String.valueOf(getLongValue()));
+            case DOUBLE  -> new NumericValue(null, getDoubleValue());
+            case OBJECT  -> new StringLiteral(null, String.valueOf(object));
         };
     }
 }

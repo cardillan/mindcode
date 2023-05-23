@@ -1,9 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.Condition;
@@ -27,71 +25,32 @@ import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
  * <li>{@code var1} is a {@code __tmp} variable</li>
  * </ol>
  */
-public class ImprovePositiveConditionalJumps extends PipelinedOptimizer {
+public class ImprovePositiveConditionalJumps extends BaseOptimizer {
 
-    ImprovePositiveConditionalJumps(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+    ImprovePositiveConditionalJumps(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
-    protected State initialState() {
-        return new EmptyState();
-    }
+    protected boolean optimizeProgram() {
+        try (LogicIterator iterator = createIterator()) {
+            while (iterator.hasNext()) {
+                if (iterator.next() instanceof OpInstruction op
+                        && op.getOperation().toCondition() != null
+                        && op.getResult().getType() == ArgumentType.TMP_VARIABLE
+                        && iterator.peek(0) instanceof JumpInstruction jump
+                        && jump.getCondition() == Condition.NOT_EQUAL
+                        && jump.getX().equals(op.getResult())
+                        && jump.getY() == FALSE) {
 
-    private final class EmptyState implements State {
-
-        @Override
-        public State emit(LogicInstruction instruction) {
-            if (instruction instanceof OpInstruction ix && isComparisonOperatorToTmp(ix)) {
-                return new ExpectJump(ix);
-            } else {
-                emitToNext(instruction);
-                return this;
-            }
-        }
-
-        @Override
-        public State flush() {
-            return this;
-        }
-    }
-
-    private final class ExpectJump implements State {
-        private final OpInstruction op;
-
-        ExpectJump(OpInstruction op) {
-            this.op = op;
-        }
-
-        @Override
-        public State emit(LogicInstruction instruction) {
-            if (instruction instanceof JumpInstruction ix && ix.getCondition() == Condition.NOT_EQUAL) {
-                // Other preconditions for the optimization
-                boolean isSameVariable = ix.getFirstOperand().equals(op.getResult());
-                boolean jumpComparesToFalse = ix.getSecondOperand() == FALSE;
-
-                if (isSameVariable && jumpComparesToFalse) {
-                    emitToNext(createJump(ix.getTarget(),
-                            op.getOperation().toCondition(),
-                            op.getFirstOperand(), op.getSecondOperand())
-                    );
-                    return new EmptyState();
+                    iterator.remove();
+                    iterator.next();        // skip the peeked instruction
+                    iterator.set(createJump(jump.getAstContext(), jump.getTarget(),
+                            op.getOperation().toCondition(), op.getX(), op.getY()));
                 }
             }
-
-            emitToNext(op);
-            return new EmptyState().emit(instruction);
         }
 
-        @Override
-        public State flush() {
-            emitToNext(op);
-            return new EmptyState();
-        }
-
-    }
-    
-    private boolean isComparisonOperatorToTmp(OpInstruction ix) {
-        return ix.getOperation().toCondition() != null && ix.getResult().getType() == ArgumentType.TMP_VARIABLE;
+        return false;
     }
 }

@@ -21,7 +21,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                             end
                                         end
                                         """
-                                )
+                                ).instructions()
                         )
                 )
         );
@@ -39,7 +39,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                         ulocate(spawn, outx, outy, outbuilding)
                                         ulocate(damaged, outx, outy, outbuilding)
                                         """
-                                )
+                                ).instructions()
                         )
                 )
         );
@@ -67,7 +67,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                             itemDrop(found, @silicon, @unit.totalItems)
                                         end
                                         """
-                                )
+                                ).instructions()
                         )
                 )
         );
@@ -88,7 +88,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                             count = count + 1
                                         end
                                         """
-                                )
+                                ).instructions()
                         )
                 )
         );
@@ -109,14 +109,16 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                 LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
                                 instructionProcessor,
-                                generateInstructions("triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)")
+                                generateInstructions("""
+                                        triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)
+                                        """).instructions()
                         )
                 )
         );
     }
 
     @Test
-    void reallifeScripts() {
+    void realLifeScripts() {
         assertEquals("""
                         set STORAGE nucleus1
                         set MSG message1
@@ -190,7 +192,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                         end
                                         printflush(MSG)
                                         """
-                                )
+                                ).instructions()
                         )
                 )
         );

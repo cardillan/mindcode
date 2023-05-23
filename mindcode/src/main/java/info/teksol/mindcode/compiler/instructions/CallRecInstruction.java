@@ -10,14 +10,18 @@ import java.util.List;
 
 public class CallRecInstruction extends BaseInstruction {
 
-    CallRecInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.CALLREC, args, params);
+    CallRecInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.CALLREC, args, params);
     }
 
     protected CallRecInstruction(BaseInstruction other, String marker) {
         super(other, marker);
     }
 
+    @Override
+    public CallRecInstruction copy() {
+        return new CallRecInstruction(this, marker);
+    }
     public CallRecInstruction withMarker(String marker) {
         return new CallRecInstruction(this, marker);
     }

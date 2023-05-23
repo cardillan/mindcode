@@ -6,12 +6,17 @@ import java.util.List;
 
 public class StopInstruction extends BaseInstruction {
 
-    StopInstruction() {
-        super(Opcode.STOP, List.of(), List.of());
+    StopInstruction(AstContext astContext) {
+        super(astContext, Opcode.STOP, List.of(), List.of());
     }
 
     protected StopInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public StopInstruction copy() {
+        return new StopInstruction(this, marker);
     }
 
     public StopInstruction withMarker(String marker) {

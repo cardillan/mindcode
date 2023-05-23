@@ -12,12 +12,17 @@ import java.util.List;
 
 public class OpInstruction extends BaseInstruction {
 
-    OpInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.OP, args, params);
+    OpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.OP, args, params);
     }
 
     protected OpInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public OpInstruction copy() {
+        return new OpInstruction(this, marker);
     }
 
     public OpInstruction withMarker(String marker) {
@@ -40,11 +45,11 @@ public class OpInstruction extends BaseInstruction {
         return (LogicVariable) getArg(1);
     }
 
-    public final LogicValue getFirstOperand() {
+    public final LogicValue getX() {
         return (LogicValue) getArg(2);
     }
 
-    public final LogicValue getSecondOperand() {
+    public final LogicValue getY() {
         return (LogicValue) getArg(3);
     }
 
@@ -56,6 +61,6 @@ public class OpInstruction extends BaseInstruction {
     }
 
     public final List<LogicValue> getOperands() {
-        return List.of(getFirstOperand(), getSecondOperand());
+        return List.of(getX(), getY());
     }
 }

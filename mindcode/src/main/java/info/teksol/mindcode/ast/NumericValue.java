@@ -3,6 +3,7 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
+import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
@@ -13,7 +14,8 @@ import java.util.Objects;
 public class NumericValue extends ConstantAstNode {
     private final double value;
 
-    public NumericValue(double value) {
+    public NumericValue(Token startToken, double value) {
+        super(startToken);
         this.value = value;
     }
 
@@ -28,7 +30,7 @@ public class NumericValue extends ConstantAstNode {
      * @return numeric literal representation of the value, or null if literal representation doesn't exist
      */
     public NumericLiteral toNumericLiteral(InstructionProcessor instructionProcessor) {
-        return instructionProcessor.mlogFormat(value).map(NumericLiteral::new).orElse(null);
+        return instructionProcessor.mlogFormat(value).map(str -> new NumericLiteral(startToken(),str)).orElse(null);
     }
 
     @Override
@@ -63,9 +65,5 @@ public class NumericValue extends ConstantAstNode {
         double value = getAsDouble();
         // Criteria taken from Mindustry Logic
         return Math.abs(value - (int)value) < 0.00001;
-    }
-
-    public int getAsInteger() {
-        return (int) getAsDouble();
     }
 }

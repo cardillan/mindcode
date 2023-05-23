@@ -1,14 +1,8 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.LogicLabel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This optimizer detects situations where a conditional jump skips a following, unconditional one and replaces it
@@ -34,100 +28,37 @@ import java.util.List;
  * end
  * }</pre>
  */
-public class JumpOverJumpEliminator extends PipelinedOptimizer {
+public class JumpOverJumpEliminator extends BaseOptimizer {
 
-    public JumpOverJumpEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+    public JumpOverJumpEliminator(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
-    protected State initialState() {
-        return new EmptyState();
-    }
+    protected boolean optimizeProgram() {
+        try (LogicIterator iterator = createIterator()) {
+            while (iterator.hasNext()) {
+                if (iterator.next() instanceof JumpInstruction jump
+                        && jump.getCondition().hasInverse()
+                        && iterator.peek(0) instanceof JumpInstruction next
+                        && next.isUnconditional()) {
 
-    private final class EmptyState implements State {
-        @Override
-        public State emit(LogicInstruction instruction) {
-            if (instruction instanceof JumpInstruction ix && ix.getCondition().hasInverse()) {
-                // This is a conditional instruction -- "always" doesn't have an inverse
-                return new ExpectJump(ix);
-            } else {
-                emitToNext(instruction);
-                return this;
+                    try (LogicIterator inner = iterator.copy()) {
+                        inner.next(); // Skip unconditional jump
+                        while (inner.hasNext() && inner.next() instanceof LabelInstruction label) {
+                            if (label.getLabel().equals(jump.getTarget())) {
+                                iterator.set(createJump(jump.getAstContext(), next.getTarget(),
+                                        jump.getCondition().inverse(), jump.getX(), jump.getY()));
+                                iterator.next();
+                                iterator.remove();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        @Override
-        public State flush() {
-            return this;
-        }
-    }
-
-    private final class ExpectJump implements State {
-        private final JumpInstruction conditionalJump;
-
-        public ExpectJump(JumpInstruction conditionalJump) {
-            this.conditionalJump = conditionalJump;
-        }
-
-        @Override
-        public State emit(LogicInstruction instruction) {
-            if (instruction instanceof JumpInstruction ix && ix.isUnconditional()) {
-                return new ExpectLabel(conditionalJump, ix);
-            } else {
-                emitToNext(conditionalJump);
-                return new EmptyState().emit(instruction);
-            }
-        }
-
-        @Override
-        public State flush() {
-            emitToNext(conditionalJump);
-            return new EmptyState();
-        }
-    }
-
-    private final class ExpectLabel implements State {
-        private final LogicLabel targetLabel;
-        private final JumpInstruction conditionalJump;
-        private final JumpInstruction unconditionalJump;
-        private final List<LogicInstruction> labels = new ArrayList<>();
-        private boolean isJumpOverJump = false;
-
-        public ExpectLabel(JumpInstruction conditionalJump, JumpInstruction unconditionalJump) {
-            this.conditionalJump = conditionalJump;
-            this.unconditionalJump = unconditionalJump;
-            this.targetLabel = conditionalJump.getTarget();
-        }
-
-        @Override
-        public State emit(LogicInstruction instruction) {
-            if (instruction instanceof LabelInstruction ix) {
-                isJumpOverJump |= ix.getLabel().equals(targetLabel);
-                labels.add(instruction);
-                return this;
-            }
-
-            if (isJumpOverJump) {
-                emitToNext(createJump(unconditionalJump.getTarget(),
-                        conditionalJump.getCondition().inverse(),
-                        conditionalJump.getFirstOperand(), conditionalJump.getSecondOperand())
-                );
-            } else {
-                emitToNext(conditionalJump);
-                emitToNext(unconditionalJump);
-            }
-
-            labels.forEach(JumpOverJumpEliminator.this::emitToNext);
-            return new EmptyState().emit(instruction);
-        }
-
-        @Override
-        public State flush() {
-            emitToNext(conditionalJump);
-            emitToNext(unconditionalJump);
-            labels.forEach(JumpOverJumpEliminator.this::emitToNext);
-            return new EmptyState();
-        }
+        return false;
     }
 }

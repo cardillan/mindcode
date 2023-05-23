@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.EndInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -28,19 +27,19 @@ import java.util.Set;
  * </ul>
  * No instructions are removed or added except possibly a label at the start of the program.
 */
-class PropagateJumpTargets extends GlobalOptimizer {
+class PropagateJumpTargets extends BaseOptimizer {
     private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
     private boolean startLabelUsed = false;
     
-    public PropagateJumpTargets(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+    public PropagateJumpTargets(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
     
     @Override
     protected boolean optimizeProgram() {
         int count = 0;
         try (LogicIterator it = createIterator()) {
-            it.add(createLabel(FIRST_LABEL));
+            it.add(createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
             while (it.hasNext()) {
                 LogicInstruction instruction = it.next();
                 if (instruction instanceof JumpInstruction ix) {
@@ -83,13 +82,13 @@ class PropagateJumpTargets extends GlobalOptimizer {
     
     // Determines the jump redirection (one level only)
     private LogicLabel evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
-        int target = findInstructionIndex(0, in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
+        int target = firstInstructionIndex(0, in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
         if (target < 0) {
             throw new OptimizationException("Could not find label " + label);
         }
 
         // Find next real instruction
-        LogicInstruction next = findInstruction(target + 1, ix -> !(ix instanceof LabelInstruction));
+        LogicInstruction next = firstInstruction(target + 1, ix -> !(ix instanceof LabelInstruction));
         
         // Redirect compatible jumps
         if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {

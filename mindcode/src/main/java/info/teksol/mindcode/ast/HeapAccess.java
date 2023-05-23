@@ -1,6 +1,9 @@
 package info.teksol.mindcode.ast;
 
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class HeapAccess extends BaseAstNode {
@@ -8,19 +11,19 @@ public class HeapAccess extends BaseAstNode {
     private final AstNode address;
     private final boolean absolute;
 
-    private HeapAccess(String cellName, AstNode address, boolean absolute) {
-        super(address);
+    private HeapAccess(Token startToken, String cellName, AstNode address, boolean absolute) {
+        super(startToken, address);
         this.cellName = cellName;
         this.address = address;
         this.absolute = absolute;
     }
 
-    public HeapAccess(String cellName, AstNode address) {
-        this(cellName, address, true);
+    public HeapAccess(Token startToken, String cellName, AstNode address) {
+        this(startToken, cellName, address, true);
     }
 
-    public HeapAccess(String cellName, int index) {
-        this(cellName, new NumericLiteral(index), false);
+    public HeapAccess(Token startToken, String cellName, int index) {
+        this(startToken, cellName, new NumericLiteral(startToken, index), false);
     }
 
     public String getCellName() {
@@ -57,5 +60,10 @@ public class HeapAccess extends BaseAstNode {
                 ", address=" + address + 
                 ", absolute=" + absolute +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.HEAP_ACCESS;
     }
 }

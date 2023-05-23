@@ -9,12 +9,17 @@ import java.util.List;
 
 public class PrintflushInstruction extends BaseInstruction {
 
-    PrintflushInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.PRINTFLUSH, args, params);
+    PrintflushInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.PRINTFLUSH, args, params);
     }
 
     protected PrintflushInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public PrintflushInstruction copy() {
+        return new PrintflushInstruction(this, marker);
     }
 
     public PrintflushInstruction withMarker(String marker) {

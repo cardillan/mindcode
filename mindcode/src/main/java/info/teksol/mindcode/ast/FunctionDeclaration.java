@@ -1,5 +1,9 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextSubtype;
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,8 +14,8 @@ public class FunctionDeclaration extends BaseAstNode {
     private final List<VarRef> params;
     private final AstNode body;
 
-    public FunctionDeclaration(boolean inline, String name, List<VarRef> params, AstNode body) {
-        super(body);
+    public FunctionDeclaration(Token startToken, boolean inline, String name, List<VarRef> params, AstNode body) {
+        super(startToken, body);
         this.inline = inline;
         this.name = name;
         this.params = params;
@@ -56,5 +60,15 @@ public class FunctionDeclaration extends BaseAstNode {
                 ", params=" + params +
                 ", body=" + body +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.FUNCTION;
+    }
+
+    @Override
+    public AstContextSubtype getContextSubype() {
+        return AstContextSubtype.BODY;
     }
 }

@@ -9,12 +9,17 @@ import java.util.List;
 
 public class ReturnInstruction extends BaseInstruction {
 
-    ReturnInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.RETURN, args, params);
+    ReturnInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.RETURN, args, params);
     }
 
     protected ReturnInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public ReturnInstruction copy() {
+        return new ReturnInstruction(this, marker);
     }
 
     public ReturnInstruction withMarker(String marker) {

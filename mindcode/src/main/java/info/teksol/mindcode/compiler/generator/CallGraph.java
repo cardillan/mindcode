@@ -32,7 +32,7 @@ public final class CallGraph {
         this.allocatedStack = allocatedStack;
 
         // Create mock function declaration representing main program body.
-        addFunction(new FunctionDeclaration(true, MAIN, List.of(), new NoOp()));
+        addFunction(new FunctionDeclaration(null, true, MAIN, List.of(), new NoOp()));
     }
 
     /**
@@ -201,6 +201,10 @@ public final class CallGraph {
         public boolean isInline() {
             // Automatically inline all non-recursive functions called just once
             return declaration.isInline() || !isRecursive() && getUseCount() == 1;
+        }
+
+        public FunctionDeclaration getDeclaration() {
+            return declaration;
         }
 
         /** @return the body of the function from function declaration */

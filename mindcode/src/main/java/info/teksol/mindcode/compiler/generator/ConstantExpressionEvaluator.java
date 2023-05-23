@@ -25,7 +25,7 @@ public class ConstantExpressionEvaluator {
     }
 
     /**
-     * If the node can be compile-time evaluated, returns the evaluation, otherwise returns {@code this}.
+     * If the node can be compile-time evaluated, returns the evaluation, otherwise returns the node itself.
      * The evaluation can be partial, for example when the IfExpression node has constant condition,
      * it can return just the true/false branch (depending on the compile-time value of the condition)
      * even if those branches aren't constant themselves.
@@ -66,7 +66,7 @@ public class ConstantExpressionEvaluator {
                 if (a != null && b != null) {
                     if (operation == Operation.ADD && (a instanceof StringVariable || b instanceof StringVariable)) {
                         String concat = a.toString().concat(b.toString());
-                        return new StringLiteral(concat);
+                        return new StringLiteral(node.startToken(), concat);
                     } else {
                         Variable result = DoubleVariable.newNullValue(false, "result");
                         eval.execute(result, a, b);
@@ -91,15 +91,15 @@ public class ConstantExpressionEvaluator {
             case "|" -> fixed.getDoubleValue() == 0 ? exp : node;
 
             // If the fixed value is zero, evaluates to zero
-            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral("0") : node;
+            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral(node.startToken(), "0") : node;
 
             // If the fixed value is zero (= false), evaluates to false
             // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(true) : node;
+            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(node.startToken(), true) : node;
 
             // If the fixed value is zero (= false), evaluates to false
             // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(false) : node;
+            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(node.startToken(), false) : node;
             default -> node;
         };
     }

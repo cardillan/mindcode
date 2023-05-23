@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -17,13 +16,13 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-class DeadCodeEliminator extends GlobalOptimizer {
+class DeadCodeEliminator extends BaseOptimizer {
     private final Set<LogicVariable> reads = new HashSet<>();
     private final Map<LogicVariable, List<LogicInstruction>> writes = new HashMap<>();
     private final Set<LogicVariable> eliminations = new HashSet<>();
 
-    DeadCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+    DeadCodeEliminator(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
@@ -77,7 +76,7 @@ class DeadCodeEliminator extends GlobalOptimizer {
             // Other instructions are inspected further to find out they're fully unused
             writes.get(key).stream()
                     .filter(ix -> ix.getOutputs() < 2 || allWritesUnread(ix))
-                    .mapToInt(ix -> findInstructionIndex(0, ixx -> ixx == ix))
+                    .mapToInt(ix -> firstInstructionIndex(0, ixx -> ixx == ix))
                     .filter(i -> i >= 0)
                     .forEach(this::removeInstruction);
         }

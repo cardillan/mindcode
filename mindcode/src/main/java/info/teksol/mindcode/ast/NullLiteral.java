@@ -3,8 +3,14 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNull;
+import org.antlr.v4.runtime.Token;
 
 public class NullLiteral extends ConstantAstNode {
+
+    public NullLiteral(Token startToken) {
+        super(startToken);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof NullLiteral;

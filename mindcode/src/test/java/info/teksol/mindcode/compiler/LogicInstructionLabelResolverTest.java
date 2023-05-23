@@ -20,7 +20,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 ),
                 LogicInstructionLabelResolver.resolve(
                         instructionProcessor,
-                        generateInstructions("while true n = n + 1 end")
+                        generateInstructions("while true n = n + 1 end").instructions()
                 )
         );
     }

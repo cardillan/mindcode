@@ -11,10 +11,14 @@ import java.util.List;
 
 public class JumpInstruction extends BaseInstruction {
 
-    JumpInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.JUMP, args, params);
+    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.JUMP, args, params);
     }
 
+    @Override
+    public JumpInstruction copy() {
+        return new JumpInstruction(this, marker);
+    }
     protected JumpInstruction(BaseInstruction other, String marker) {
         super(other, marker);
     }
@@ -26,8 +30,8 @@ public class JumpInstruction extends BaseInstruction {
 
     public JumpInstruction withLabel(LogicLabel label) {
         return isUnconditional()
-                ? new JumpInstruction(List.of(label, Condition.ALWAYS), getParams())
-                : new JumpInstruction(List.of(label, getCondition(), getFirstOperand(), getSecondOperand()), getParams());
+                ? new JumpInstruction(getAstContext(), List.of(label, Condition.ALWAYS), getParams())
+                : new JumpInstruction(getAstContext(),List.of(label, getCondition(), getX(), getY()), getParams());
     }
 
     public boolean isUnconditional() {
@@ -42,12 +46,12 @@ public class JumpInstruction extends BaseInstruction {
         return (Condition) getArg(1);
     }
 
-    public final LogicValue getFirstOperand() {
+    public final LogicValue getX() {
         ensureConditional();
         return (LogicValue) getArg(2);
     }
 
-    public final LogicValue getSecondOperand() {
+    public final LogicValue getY() {
         ensureConditional();
         return (LogicValue) getArg(3);
     }
@@ -62,7 +66,7 @@ public class JumpInstruction extends BaseInstruction {
 
     public final List<LogicValue> getOperands() {
         ensureConditional();
-        return List.of(getFirstOperand(), getSecondOperand());
+        return List.of(getX(), getY());
     }
 
     private void ensureConditional() {

@@ -1,5 +1,8 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class DoWhileExpression extends ControlBlockAstNode {
@@ -7,8 +10,8 @@ public class DoWhileExpression extends ControlBlockAstNode {
     private final AstNode body;
     private final AstNode condition;
 
-    DoWhileExpression(String label, AstNode body, AstNode condition) {
-        super(body, condition);
+    DoWhileExpression(Token startToken, String label, AstNode body, AstNode condition) {
+        super(startToken, body, condition);
         this.label = label;
         this.body = body;
         this.condition = condition;
@@ -47,5 +50,10 @@ public class DoWhileExpression extends ControlBlockAstNode {
                 ", body=" + body +
                 ", condition=" + condition +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.LOOP;
     }
 }

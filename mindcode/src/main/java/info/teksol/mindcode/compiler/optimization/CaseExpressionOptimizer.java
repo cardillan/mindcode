@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -29,9 +28,9 @@ import java.util.List;
  * are removed by the stack usage optimization down the line.
  */
 
-class CaseExpressionOptimizer extends GlobalOptimizer {
-    public CaseExpressionOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+class CaseExpressionOptimizer extends BaseOptimizer {
+    public CaseExpressionOptimizer(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
@@ -40,7 +39,7 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
             while (it.hasNext()){
                 if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.AST_VARIABLE) {
                     LogicVariable result = ix.getTarget();
-                    List<LogicInstruction> list = findInstructions(
+                    List<LogicInstruction> list = instructions(
                             in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
                     // The set instruction is not the first one
@@ -60,6 +59,6 @@ class CaseExpressionOptimizer extends GlobalOptimizer {
     }
 
     private boolean isStandardCaseWhenInstruction(LogicInstruction instruction, LogicVariable ast) {
-        return instruction instanceof JumpInstruction ix && ix.getFirstOperand().equals(ast);
+        return instruction instanceof JumpInstruction ix && ix.getX().equals(ast);
     }
 }

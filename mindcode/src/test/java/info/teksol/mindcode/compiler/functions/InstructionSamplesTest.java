@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -33,6 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class InstructionSamplesTest {
 
+    private static final AstContext STATIC_AST_CONTEXT = AstContext.createRootNode();
+
     @Test
     void createInstructionSamplesForV6() throws IOException {
         createInstructionSamples(ProcessorVersion.V6);
@@ -57,7 +60,6 @@ public class InstructionSamplesTest {
                 .collect(Collectors.toList());
 
         File file = new File(".." + File.separatorChar + "Instruction_Samples_" + version + ".txt");
-        System.out.println(file.getAbsolutePath());
         try (final PrintWriter w = new PrintWriter(file, StandardCharsets.UTF_8)) {
             w.print(LogicInstructionPrinter.toString(processor, instructions));
         }
@@ -96,7 +98,7 @@ public class InstructionSamplesTest {
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
 
-            result.add(processor.createInstruction(opcodeVariant.opcode(), params));
+            result.add(processor.createInstruction(STATIC_AST_CONTEXT, opcodeVariant.opcode(), params));
         }
 
         return result;

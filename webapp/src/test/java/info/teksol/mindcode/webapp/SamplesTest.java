@@ -2,18 +2,15 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.AccumulatingLogicInstructionPipeline;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
-import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
+import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
-import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
+import info.teksol.mindcode.compiler.optimization.MindcodeOptimizer;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -45,14 +42,10 @@ class SamplesTest {
             InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
 
     private static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
-        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
-        LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
-                terminus, profile, new NullDebugPrinter(), s -> {});
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, s -> {}), pipeline);
-        generator.start(program);
-        pipeline.flush();
-        return terminus.getResult();
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor, s -> {});
+        GeneratorOutput generatorOutput  = generator.generate(program);
+        MindcodeOptimizer optimizer = new MindcodeOptimizer(instructionProcessor, profile, s -> {});
+        return optimizer.optimize(generatorOutput);
     }
 
     private  List<LogicInstruction> generateAndOptimize(Seq program) {
@@ -87,8 +80,8 @@ class SamplesTest {
         compile(sw.toString(), sample);
     }
 
-    private void compile(String program, File source) throws IOException {
-        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
+    private void compile(String source, File file) throws IOException {
+        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(source));
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         parser.removeErrorListeners();
         final List<String> errors = new ArrayList<>();
@@ -100,16 +93,16 @@ class SamplesTest {
         });
 
         final MindcodeParser.ProgramContext context = parser.program();
-        final Seq prog = AstNodeBuilder.generate(context);
-        List<LogicInstruction> unoptimized = generateUnoptimized(prog);
-        List<LogicInstruction> optimized = generateAndOptimize(prog);
+        final Seq program = AstNodeBuilder.generate(context);
+        List<LogicInstruction> unoptimized = generateUnoptimized(program);
+        List<LogicInstruction> optimized = generateAndOptimize(program);
 
         final File tmp = new File("tmp", "samples");
         if (!tmp.exists()) assertTrue(tmp.mkdirs());
 
-        final File unoptimizedTarget = new File(tmp, source.getName() + "-unoptimized.txt");
-        final File optimizedTarget = new File(tmp, source.getName() + "-optimized.txt");
-        final File diffTarget = new File(tmp, source.getName() + ".patch");
+        final File unoptimizedTarget = new File(tmp, file.getName() + "-unoptimized.txt");
+        final File optimizedTarget = new File(tmp, file.getName() + "-optimized.txt");
+        final File diffTarget = new File(tmp, file.getName() + ".patch");
 
         try (final Writer w = new FileWriter(unoptimizedTarget)) {
             w.write(LogicInstructionPrinter.toString(instructionProcessor, unoptimized));
@@ -130,7 +123,7 @@ class SamplesTest {
         final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(instructionProcessor, optimized);
 
         final String opcodes = LogicInstructionPrinter.toString(instructionProcessor, result);
-        assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + program);
+        assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + source);
         assertTrue(errors.isEmpty(), errors.toString());
     }
 }

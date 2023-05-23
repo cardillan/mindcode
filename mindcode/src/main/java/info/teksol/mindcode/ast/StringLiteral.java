@@ -3,13 +3,15 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
+import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class StringLiteral extends ConstantAstNode {
     private final String text;
 
-    public StringLiteral(String text) {
+    public StringLiteral(Token startToken, String text) {
+        super(startToken);
         this.text = text;
     }
 

@@ -1,8 +1,8 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MessageLevel;
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
@@ -33,10 +33,10 @@ import static info.teksol.mindcode.logic.ArgumentType.TMP_VARIABLE;
  * If the opening jump has a form of op followed by negation jump, the condition is still replicated at the end
  * of the body as a jump based on the op condition. In this case, execution of two instructions per loop is avoided.
  */
-public class LoopOptimizer extends GlobalOptimizer {
+public class LoopOptimizer extends BaseOptimizer {
 
-    public LoopOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+    public LoopOptimizer(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
@@ -65,10 +65,10 @@ public class LoopOptimizer extends GlobalOptimizer {
                         LogicInstruction openingIx = openingIterator.next();
                         if (openingIx instanceof JumpInstruction jump) {
                             if (jump.getCondition().hasInverse() && targetsLoopExit(jump, iterator) && canDuplicate(condEval)) {
-                                LogicLabel bodyLabel = getOpeningLabel(openingIterator);
+                                LogicLabel bodyLabel = getOpeningLabel(openingIterator, jump.getAstContext());
                                 insertInstructions(iterator, condEval);
-                                iterator.set(createJump(bodyLabel, jump.getCondition().inverse(),
-                                        jump.getFirstOperand(), jump.getSecondOperand()));
+                                iterator.set(createJump(jump.getAstContext(), bodyLabel,
+                                        jump.getCondition().inverse(), jump.getX(), jump.getY()));
 
                                 // Remove the opening jump, if the loop is known to be executed at least once
                                 // and the optimization level is aggressive.
@@ -98,16 +98,16 @@ public class LoopOptimizer extends GlobalOptimizer {
                             break;
                         } else if (openingIx instanceof OpInstruction op && openingIterator.peek(0) instanceof JumpInstruction jump
                                 && op.getOperation().isCondition() && op.getResult().getType() == TMP_VARIABLE
-                                && jump.getCondition() == Condition.EQUAL && jump.getFirstOperand().equals(op.getResult())
-                                && jump.getSecondOperand().equals(LogicBoolean.FALSE)
+                                && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
+                                && jump.getY().equals(LogicBoolean.FALSE)
                                 && targetsLoopExit(jump, iterator) && canDuplicate(condEval)) {
                             // This is a (probably) non-invertible op and a jump
                             // We make a jump from the op as the loop closing jump
                             openingIterator.next(); // Read the jump instruction
-                            LogicLabel bodyLabel = getOpeningLabel(openingIterator);
+                            LogicLabel bodyLabel = getOpeningLabel(openingIterator, jump.getAstContext());
                             insertInstructions(iterator, condEval);
-                            iterator.set(createJump(bodyLabel, op.getOperation().toCondition(),
-                                    op.getFirstOperand(), op.getSecondOperand()));
+                            iterator.set(createJump(jump.getAstContext(), bodyLabel, op.getOperation().toCondition(),
+                                    op.getX(), op.getY()));
                             count++;
                             break;
                         } else  {
@@ -127,9 +127,9 @@ public class LoopOptimizer extends GlobalOptimizer {
     }
 
     private boolean alwaysNegative(JumpInstruction jump) {
-        if (jump.getFirstOperand().isNumericLiteral() && jump.getSecondOperand().isNumericLiteral()) {
-            double a = jump.getFirstOperand().getDoubleValue();
-            double b = jump.getSecondOperand().getDoubleValue();
+        if (jump.getX().isNumericLiteral() && jump.getY().isNumericLiteral()) {
+            double a = jump.getX().getDoubleValue();
+            double b = jump.getY().getDoubleValue();
             boolean value = switch (jump.getCondition()) {
                 case ALWAYS                 -> true;
                 case EQUAL, STRICT_EQUAL    -> ExpressionEvaluator.equals(a, b);
@@ -156,7 +156,7 @@ public class LoopOptimizer extends GlobalOptimizer {
         if (!instructions.isEmpty()) {
             try (LogicIterator adder = iterator.copy()) {
                 adder.previous();
-                instructions.forEach(adder::add);
+                instructions.stream().map(LogicInstruction::copy).forEach(adder::add);
             }
         }
     }
@@ -169,13 +169,13 @@ public class LoopOptimizer extends GlobalOptimizer {
     }
 
     // Obtains or creates a label at the beginning of the loop body
-    private LogicLabel getOpeningLabel(LogicIterator openingIterator) {
+    private LogicLabel getOpeningLabel(LogicIterator openingIterator, AstContext astContext) {
         if (openingIterator.next() instanceof LabelInstruction label) {
             return label.getLabel();
         } else {
             LogicLabel label = instructionProcessor.nextLabel();
             openingIterator.previous(); // Undo next() in the if condition
-            openingIterator.add(createLabel(label));
+            openingIterator.add(createLabel(astContext, label));
             return label;
         }
     }

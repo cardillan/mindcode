@@ -160,7 +160,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     }
 
     @Test
-    void executesRangeExpressionWithFixedBounds() {
+    void executesFixedBoundsRangedFor() {
         testCode("""
                         a = 0
                         b = 10

@@ -2,6 +2,8 @@ package info.teksol.mindcode.cmdline;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.FinalCodeOutput;
+import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -111,9 +113,15 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
     }
 
     @Test
-    public void printVirtualArgument() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine("cs -r");
-        assertEquals(true, arguments.get("print_virtual"));
+    public void finalCodeOutputDefault() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine("cm -f");
+        assertEquals(FinalCodeOutput.PLAIN, arguments.get("print_final"));
+    }
+
+    @Test
+    public void finalCodeOutputFlat() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine("cm -f flat_ast");
+        assertEquals(FinalCodeOutput.FLAT_AST, arguments.get("print_final"));
     }
 
     @Test
@@ -124,15 +132,31 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine("cs -t 6 -o off -p 1 -d 3 -r -s");
-        CompilerProfile compilerProfile = ActionHandler.createCompilerProfile(arguments);
+        Namespace arguments = parseCommandLine("cs -t 6 -o off -p 1 -d 3 -f source -s -g size");
+        CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
-        assertEquals(ProcessorEdition.STANDARD_PROCESSOR, compilerProfile.getProcessorEdition());
-        assertEquals(ProcessorVersion.V6, compilerProfile.getProcessorVersion());
-        assertEquals(OptimizationLevel.OFF, compilerProfile.getOptimizationLevel(Optimization.RETURN_VALUE_OPTIMIZATION));
-        assertEquals(1, compilerProfile.getParseTreeLevel());
-        assertEquals(3, compilerProfile.getDebugLevel());
-        assertTrue(compilerProfile.isPrintFinalCode());
-        assertTrue(compilerProfile.isPrintStackTrace());
+        assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
+        assertEquals(ProcessorVersion.V6, actual.getProcessorVersion());
+        assertEquals(OptimizationLevel.OFF, actual.getOptimizationLevel(Optimization.RETURN_VALUE_OPTIMIZATION));
+        assertEquals(1, actual.getParseTreeLevel());
+        assertEquals(3, actual.getDebugLevel());
+        assertEquals(GenerationGoal.SIZE, actual.getGoal());
+        assertEquals(FinalCodeOutput.SOURCE, actual.getFinalCodeOutput());
+        assertTrue(actual.isPrintStackTrace());
+    }
+
+    public void createsCompilerProfileDefault() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine("cs");
+        CompilerProfile expected = CompilerProfile.fullOptimizations();
+        CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
+
+        assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
+        assertEquals(expected.getProcessorVersion(), actual.getProcessorVersion());
+        assertEquals(expected.getOptimizationLevel(Optimization.RETURN_VALUE_OPTIMIZATION), actual.getOptimizationLevel(Optimization.RETURN_VALUE_OPTIMIZATION));
+        assertEquals(expected.getParseTreeLevel(), actual.getParseTreeLevel());
+        assertEquals(expected.getDebugLevel(), actual.getDebugLevel());
+        assertEquals(expected.getGoal(), actual.getGoal());
+        assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());
+        assertEquals(expected.isPrintStackTrace(), actual.isPrintStackTrace());
     }
 }

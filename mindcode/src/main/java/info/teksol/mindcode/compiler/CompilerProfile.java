@@ -20,7 +20,7 @@ public class CompilerProfile {
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
     private GenerationGoal goal = GenerationGoal.SPEED;
     private boolean shortCircuitEval = false;
-    private boolean printFinalCode = false;
+    private FinalCodeOutput finalCodeOutput = null;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
     private boolean printStackTrace = true;
@@ -115,13 +115,12 @@ public class CompilerProfile {
         return this;
     }
 
-    public boolean isPrintFinalCode() {
-        return printFinalCode;
+    public void setFinalCodeOutput(FinalCodeOutput finalCodeOutput) {
+        this.finalCodeOutput = finalCodeOutput;
     }
 
-    public CompilerProfile setPrintFinalCode(boolean printFinalCode) {
-        this.printFinalCode = printFinalCode;
-        return this;
+    public FinalCodeOutput getFinalCodeOutput() {
+        return finalCodeOutput;
     }
 
     public int getParseTreeLevel() {

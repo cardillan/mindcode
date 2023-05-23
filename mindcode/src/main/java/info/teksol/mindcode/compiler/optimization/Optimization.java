@@ -1,10 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 // The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
 // compiler, makes optimizations and passes them onto the next optimizer.
@@ -43,7 +42,7 @@ public enum Optimization {
             "merging an op instruction producing a boolean expression into the following conditional jump"),
     
     JUMP_OVER_JUMP_ELIMINATION          ('q', "Jump Straightening",
-            (inst, next) -> new JumpOverJumpEliminator(inst, new ImprovePositiveConditionalJumps(inst, next)),
+            List.of(JumpOverJumpEliminator::new, ImprovePositiveConditionalJumps::new),
             "simplifying sequences of intertwined jumps"),
 
     LOOP_OPTIMIZATION                   ('l', "Loop Optimization",
@@ -56,7 +55,7 @@ public enum Optimization {
     
     // This optimizer can get additional single step jumps; therefore is bundled with its eliminator
     INACCESSIBLE_CODE_ELIMINATION       ('e', "Inaccessible Code Elimination",
-            (inst, next) -> new InaccessibleCodeEliminator(inst, new SingleStepJumpEliminator(inst, next)),
+            List.of(InaccessibleCodeEliminator::new, SingleStepJumpEliminator::new),
             "eliminating instructions made inaccessible by optimizations or false conditions"),
 
     STACK_USAGE_OPTIMIZATION            ('k', "Stack Optimization",
@@ -76,7 +75,7 @@ public enum Optimization {
             "merging consecutive print statements outputting text literals"),
     ;
     
-    private final BiFunction<InstructionProcessor, LogicInstructionPipeline, ? extends BaseOptimizer> instanceCreator;
+    private final List<Function<InstructionProcessor, Optimizer>> instanceCreators;
     
     // Command line flag for referencing this optimizer
     private final char flag;
@@ -84,13 +83,19 @@ public enum Optimization {
     private final String optionName;
     private final String description;
 
-    Optimization(char flag, String name,
-                 BiFunction<InstructionProcessor, LogicInstructionPipeline, ? extends BaseOptimizer> instanceCreator,
-                 String description) {
+    Optimization(char flag, String name, List<Function<InstructionProcessor, Optimizer>> instanceCreators, String description) {
         this.flag = flag;
         this.name = name;
         this.optionName = name.toLowerCase().replace(' ', '-');
-        this.instanceCreator = instanceCreator;
+        this.instanceCreators = instanceCreators;
+        this.description = description;
+    }
+
+    Optimization(char flag, String name, Function<InstructionProcessor, Optimizer> instanceCreator, String description) {
+        this.flag = flag;
+        this.name = name;
+        this.optionName = name.toLowerCase().replace(' ', '-');
+        this.instanceCreators = List.of(instanceCreator);
         this.description = description;
     }
     
@@ -109,9 +114,9 @@ public enum Optimization {
     public String getDescription() {
         return description;
     }
-    
-    BaseOptimizer createInstance(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        return instanceCreator.apply(instructionProcessor, next);
+
+    public List<Function<InstructionProcessor, Optimizer>> getInstanceCreators() {
+        return instanceCreators;
     }
 
     public static final List<Optimization> LIST = List.of(values());

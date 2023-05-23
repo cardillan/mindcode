@@ -8,8 +8,13 @@ import java.util.List;
 
 public class PopInstruction extends PushOrPopInstruction {
 
-    public PopInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.POP, args, params);
+    public PopInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.POP, args, params);
+    }
+
+    @Override
+    public PopInstruction copy() {
+        return new PopInstruction(this, marker);
     }
 
     protected PopInstruction(BaseInstruction other, String marker) {

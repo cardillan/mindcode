@@ -9,12 +9,17 @@ import java.util.List;
 
 public class GotoInstruction extends BaseInstruction {
 
-    GotoInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.GOTO, args, params);
+    GotoInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.GOTO, args, params);
     }
 
     protected GotoInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public GotoInstruction copy() {
+        return new GotoInstruction(this, marker);
     }
 
     public GotoInstruction withMarker(String marker) {

@@ -1,6 +1,8 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
 import info.teksol.mindcode.logic.LogicVariable;
+import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
@@ -8,16 +10,19 @@ public class StackAllocation extends BaseAstNode {
     private final LogicVariable stack;
     private final Range range;
 
-    StackAllocation(String stack, Range range) {
+    StackAllocation(Token startToken, String stack, Range range) {
+        super(startToken);
         this.stack = LogicVariable.block(stack);
         this.range = range;
     }
 
-    StackAllocation(String stack, int first, int last) {
-        this(stack, new InclusiveRange(new NumericLiteral(first), new NumericLiteral(last)));
+    StackAllocation(Token startToken, String stack, int first, int last) {
+        this(startToken, stack, new InclusiveRange(startToken,
+                new NumericLiteral(startToken, first), new NumericLiteral(startToken, last)));
     }
 
-    StackAllocation(String stack) {
+    StackAllocation(Token startToken, String stack) {
+        super(startToken);
         this.stack = LogicVariable.block(stack);
         this.range = null;
     }
@@ -54,5 +59,10 @@ public class StackAllocation extends BaseAstNode {
                 "stack='" + stack + '\'' +
                 ", range=" + range +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.STACK_ALLOC;
     }
 }

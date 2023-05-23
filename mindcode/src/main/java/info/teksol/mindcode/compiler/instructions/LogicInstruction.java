@@ -10,7 +10,10 @@ import java.util.stream.Stream;
 
 public interface LogicInstruction {
 
+    LogicInstruction copy();
+
     Opcode getOpcode();
+
     List<LogicArgument> getArgs();
 
     LogicArgument getArg(int index);
@@ -38,11 +41,19 @@ public interface LogicInstruction {
     /** @return stream of arguments assigned to input or output parameters */
     Stream<LogicArgument> inputOutputArgumentsStream();
 
+    AstContext getAstContext();
+
     String getMarker();
 
     boolean matchesMarker(String marker);
 
     LogicInstruction withMarker(String marker);
+
+    boolean matchesContext(AstContext astContext);
+
+    AstContext findContextOfType(AstContextType contextType);
+
+    AstContext findTopContextOfType(AstContextType contextType);
 
     /**
      * Returns the true size of the instruction. Real instructions have a size of 1, virtual instruction may get

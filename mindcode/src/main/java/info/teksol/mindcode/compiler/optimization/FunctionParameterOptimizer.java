@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.CallInstruction;
 import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -37,23 +37,21 @@ import java.util.stream.Collectors;
  * </ul>
  * Functions are located in the code using the entry and exit labels marked with function prefix.
  */
-class FunctionParameterOptimizer extends BaseFunctionOptimizer {
-    public FunctionParameterOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+class FunctionParameterOptimizer extends BaseOptimizer {
+    public FunctionParameterOptimizer(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
     protected boolean optimizeProgram() {
         // Find all functions (includes inline ones)
-        List<String> prefixes = getFunctions();
-
-        prefixes.forEach(this::optimizeFunction);
-
+        getInlineFunctions().forEach(this::optimizeFunction);
+        getOutOfLineFunctions().forEach(this::optimizeFunction);
         return true;
     }
 
-    private void optimizeFunction(String functionPrefix) {
-        List<LogicInstruction> function = getFunctionInstructions(functionPrefix);
+    private void optimizeFunction(AstContext astContext) {
+        List<LogicInstruction> function = contextInstructions(astContext);
 
         // Count the number of times each variable is modified in the function
         Map<LogicArgument, Long> modifications = function.stream()
@@ -76,10 +74,31 @@ class FunctionParameterOptimizer extends BaseFunctionOptimizer {
                 .filter(ix -> !hasCalls || !ix.getValue().isGlobalVariable())       // precondition 4
                 .toList();
 
-        eliminations.forEach(ix -> eliminateInstruction(functionPrefix, ix));
+        eliminations.forEach(ix -> eliminateInstruction(astContext, ix));
     }
 
     private boolean isCall(LogicInstruction ix) {
         return ix instanceof CallRecInstruction || ix instanceof CallInstruction;
+    }
+
+    /**
+     * Eliminates given set instruction and replaces all occurrences of target variable with the assigned value.
+     *
+     * @param astContext context representing function to be modified
+     * @param ix instruction to eliminate
+     */
+    protected void eliminateInstruction(AstContext astContext, SetInstruction ix) {
+        LogicArgument oldArg = ix.getTarget();
+        LogicArgument newArg = ix.getValue();
+        removeInstruction(ix);
+
+        // The function needs to be collected again, as it could have been modified by previous replacement
+        List<LogicInstruction> function = contextInstructions(astContext);
+
+        for (LogicInstruction current : function) {
+            if (current.getArgs().contains(oldArg)) {
+                replaceInstruction(current, replaceAllArgs(current, oldArg, newArg));
+            }
+        }
     }
 }

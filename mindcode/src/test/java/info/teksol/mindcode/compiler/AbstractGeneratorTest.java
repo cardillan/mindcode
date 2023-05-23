@@ -3,8 +3,9 @@ package info.teksol.mindcode.compiler;
 import info.teksol.mindcode.AbstractAstTest;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
+import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -33,7 +34,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected void assertCompilesTo(CompilerProfile profile, Predicate<LogicInstruction> filter,
             String code, LogicInstruction... instructions) {
         List<LogicInstruction> expected = List.of(instructions);
-        List<LogicInstruction> actual = generateInstructions(profile, code);
+        List<LogicInstruction> actual = generateInstructions(profile, code).instructions();
         if (filter != null) {
             actual = actual.stream().filter(filter).toList();
         }
@@ -103,41 +104,38 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     // This class always creates unoptimized code.
     // To test functions of optimizers, use AbstractOptimizerTest subclass.
-    protected List<LogicInstruction> generateInstructions(CompilerProfile profile, String code) {
+    protected GeneratorOutput generateInstructions(CompilerProfile profile, String code) {
         Seq program = generateAstTree(code);
-
-        final AccumulatingLogicInstructionPipeline pipeline = new AccumulatingLogicInstructionPipeline();
-        final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, messages::add), pipeline);
-        generator.start(program);
-        pipeline.flush();
-        return pipeline.getResult();
+        final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor, messages::add);
+        return generator.generate(program);
     }
 
-    protected List<LogicInstruction> generateInstructions(String code) {
+    protected GeneratorOutput generateInstructions(String code) {
         return generateInstructions(createCompilerProfile(), code);
     }
 
     // Instruction creation
 
+    private final AstContext mockAstContext = AstContext.createRootNode();
+
     protected final LogicInstruction createInstruction(Opcode opcode) {
-        return instructionProcessor.createInstruction(opcode);
+        return instructionProcessor.createInstruction(mockAstContext, opcode);
     }
 
     protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
-        return instructionProcessor.createInstruction(opcode, _logic(args));
+        return instructionProcessor.createInstruction(mockAstContext, opcode, _logic(args));
     }
 
     protected final LogicInstruction createInstructionStr(Opcode opcode, List<String> args) {
-        return instructionProcessor.createInstruction(opcode, _logic(args));
+        return instructionProcessor.createInstruction(mockAstContext, opcode, _logic(args));
     }
 
     protected final LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
-        return instructionProcessor.createInstruction(opcode, args);
+        return instructionProcessor.createInstruction(mockAstContext, opcode, args);
     }
 
     protected final LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> args) {
-        return instructionProcessor.createInstruction(opcode, args);
+        return instructionProcessor.createInstruction(mockAstContext, opcode, args);
     }
 
     // Test evaluation

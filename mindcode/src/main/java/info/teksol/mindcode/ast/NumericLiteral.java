@@ -4,17 +4,20 @@ import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNumber;
+import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class NumericLiteral extends ConstantAstNode {
     private final String literal;
 
-    public NumericLiteral(String literal) {
+    public NumericLiteral(Token startToken, String literal) {
+        super(startToken);
         this.literal = literal;
     }
 
-    public NumericLiteral(int value) {
+    public NumericLiteral(Token startToken, int value) {
+        super(startToken);
         this.literal = String.valueOf(value);
     }
 

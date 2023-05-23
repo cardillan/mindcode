@@ -1,11 +1,14 @@
 package info.teksol.mindcode.ast;
 
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class Ref extends BaseAstNode {
     private final String name;
 
-    Ref(String name) {
+    Ref(Token startToken, String name) {
+        super(startToken);
         this.name = name;
     }
 

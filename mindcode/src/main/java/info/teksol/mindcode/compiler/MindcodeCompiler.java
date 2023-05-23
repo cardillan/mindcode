@@ -3,15 +3,15 @@ package info.teksol.mindcode.compiler;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
+import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mindcode.compiler.optimization.DiffDebugPrinter;
+import info.teksol.mindcode.compiler.optimization.MindcodeOptimizer;
 import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
-import info.teksol.mindcode.compiler.optimization.OptimizationPipeline;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import org.antlr.v4.runtime.ANTLRErrorListener;
@@ -33,8 +33,7 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private final List<CompilerMessage> messages = new ArrayList<>();
     private final ANTLRErrorListener errorListener = new ErrorListener(messages);
-
-    MindcodeCompiler(CompilerProfile profile) {
+    public MindcodeCompiler(CompilerProfile profile) {
         this.profile = profile;
     }
 
@@ -44,25 +43,32 @@ public class MindcodeCompiler implements Compiler<String> {
 
         try {
             long parseStart = System.nanoTime();
-            final Seq prog = parse(sourceCode);
-            printParseTree(prog);
+            final Seq program = parse(sourceCode);
+            printParseTree(program);
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
             long compileStart = System.nanoTime();
-            DirectiveProcessor.processDirectives(prog, profile, messages::add);
+            DirectiveProcessor.processDirectives(program, profile, messages::add);
             instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messages::add, profile);
-            List<LogicInstruction> result = generateCode(prog);
+            GeneratorOutput generated = generateCode(program);
             long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
 
             long optimizeStart = System.nanoTime();
-            if (profile.optimizationsActive() && result.size() > 1) {
-                result = optimize(result);
+            List<LogicInstruction> result = List.of();
+            if (profile.optimizationsActive() && generated.instructions().size() > 1) {
+                result = optimize(generated);
             }
             long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
-            if (profile.isPrintFinalCode()) {
+            if (profile.getFinalCodeOutput() != null) {
                 debug("\nFinal code before resolving virtual instructions:\n");
-                debug(LogicInstructionPrinter.toString(instructionProcessor, result));
+                String output = switch (profile.getFinalCodeOutput()) {
+                    case PLAIN      -> LogicInstructionPrinter.toString(instructionProcessor, result);
+                    case FLAT_AST   -> LogicInstructionPrinter.toStringWithContextsShort(instructionProcessor, result);
+                    case DEEP_AST   -> LogicInstructionPrinter.toStringWithContextsFull(instructionProcessor, result);
+                    case SOURCE     -> LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, result, sourceCode);
+                };
+                debug(output);
             }
 
             info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
@@ -93,24 +99,21 @@ public class MindcodeCompiler implements Compiler<String> {
     }
 
     /** Prints the parse tree according to level */
-    private void printParseTree(Seq prog) {
+    private void printParseTree(Seq program) {
         if (profile.getParseTreeLevel() > 0) {
             debug("Parse tree:");
-            debug(AstIndentedPrinter.printIndented(prog, profile.getParseTreeLevel()));
+            debug(AstIndentedPrinter.printIndented(program, profile.getParseTreeLevel()));
             debug("");
         }
     }
 
-    private List<LogicInstruction> generateCode(Seq program) {
-        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
+    private GeneratorOutput generateCode(Seq program) {
         final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor,
-                FunctionMapperFactory.getFunctionMapper(instructionProcessor, messages::add), terminus);
-        generator.start(program);
-        terminus.flush();
-        return terminus.getResult();
+                messages::add);
+        return generator.generate(program);
     }
 
-    private List<LogicInstruction> optimize(List<LogicInstruction> program) {
+    private List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         messages.add(
                 MindcodeMessage.debug(profile.getOptimizationLevels().entrySet().stream()
                         .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
@@ -119,16 +122,14 @@ public class MindcodeCompiler implements Compiler<String> {
                 )
         );
 
-        final AccumulatingLogicInstructionPipeline terminus = new AccumulatingLogicInstructionPipeline();
         final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
                 ? new DiffDebugPrinter(profile.getDebugLevel()) : new NullDebugPrinter();
-        final LogicInstructionPipeline pipeline = OptimizationPipeline.createPipelineForProfile(instructionProcessor,
-                terminus, profile, debugPrinter, messages::add);
-        program.forEach(pipeline::emit);
-        pipeline.flush();
 
+        MindcodeOptimizer optimizer = new MindcodeOptimizer(instructionProcessor, profile, messages::add);
+        optimizer.setDebugPrinter(debugPrinter);
+        List<LogicInstruction> result = optimizer.optimize(generatorOutput);
         debugPrinter.print(this::debug);
-        return terminus.getResult();
+        return result;
     }
 
     private void info(String message) {

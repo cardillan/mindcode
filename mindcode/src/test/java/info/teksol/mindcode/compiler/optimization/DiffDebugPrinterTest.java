@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.GenerationGoal;
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -34,9 +35,11 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         }
 
         @Override public void setDebugPrinter(DebugPrinter debugPrinter) { }
-        @Override public void setMessagesRecipient(Consumer<CompilerMessage> messagesRecipient) { }
-        @Override public void emit(LogicInstruction instruction) { }
-        @Override public void flush() { }
+
+        @Override
+        public void optimizeProgram(List<LogicInstruction> program, AstContext rootContext) { }
+
+        @Override public void setMessageRecipient(Consumer<CompilerMessage> messageRecipient) { }
     };
 
     @Test
@@ -48,8 +51,8 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(PRINT, "c"));
         program.add(createInstruction(END));
 
-        printer.iterationFinished(optimizer, 1, program);
-        printer.iterationFinished(optimizer, 2, program);
+        printer.registerIteration(optimizer, 1, program);
+        printer.registerIteration(optimizer, 2, program);
         printer.print(messages::add);
 
         Assertions.assertTrue(messages.isEmpty());
@@ -64,9 +67,9 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(PRINT, "c"));
         program.add(createInstruction(END));
 
-        printer.iterationFinished(optimizer, 1, program);
+        printer.registerIteration(optimizer, 1, program);
         program.remove(3);
-        printer.iterationFinished(optimizer, 2, program);
+        printer.registerIteration(optimizer, 2, program);
         printer.print(messages::add);
 
         assertEquals("""
@@ -88,9 +91,9 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(OP, "add", "c", "a", "b"));
         program.add(createInstruction(END));
 
-        printer.iterationFinished(optimizer, 1, program);
+        printer.registerIteration(optimizer, 1, program);
         program.add(3, createInstruction(PRINT, "c"));
-        printer.iterationFinished(optimizer, 2, program);
+        printer.registerIteration(optimizer, 2, program);
         printer.print(messages::add);
 
         assertEquals("""
@@ -113,9 +116,9 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(PRINT, "c"));
         program.add(createInstruction(END));
 
-        printer.iterationFinished(optimizer, 1, program);
+        printer.registerIteration(optimizer, 1, program);
         Collections.swap(program, 0, 1);
-        printer.iterationFinished(optimizer, 2, program);
+        printer.registerIteration(optimizer, 2, program);
         printer.print(messages::add);
 
         assertEquals("""

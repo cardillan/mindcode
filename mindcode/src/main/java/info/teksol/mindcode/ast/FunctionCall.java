@@ -1,5 +1,8 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -7,12 +10,12 @@ public class FunctionCall extends ControlBlockAstNode {
     private final String functionName;
     private final List<AstNode> params;
 
-    FunctionCall(String functionName, AstNode... params) {
-        this(functionName, List.of(params));
+    FunctionCall(Token startToken, String functionName, AstNode... params) {
+        this(startToken, functionName, List.of(params));
     }
 
-    FunctionCall(String functionName, List<AstNode> params) {
-        super(params);
+    FunctionCall(Token startToken, String functionName, List<AstNode> params) {
+        super(startToken, params);
         this.functionName = functionName;
         this.params = params;
     }
@@ -45,5 +48,10 @@ public class FunctionCall extends ControlBlockAstNode {
                 "functionName='" + functionName + '\'' +
                 ", params=" + params +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.CALL;
     }
 }

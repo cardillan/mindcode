@@ -26,6 +26,9 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         }
         this.name = Objects.requireNonNull(name);
         this.fullName = Objects.requireNonNull(functionName) + "." + name;
+        if (fullName.startsWith(".")) {
+            throw new IllegalStateException("Empty function name.");
+        }
     }
 
     @Override
@@ -50,10 +53,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public boolean isCompilerVariable() {
         return getType() == ArgumentType.COMPILER;
-    }
-
-    public String getFunctionPrefix() {
-        return functionPrefix;
     }
 
     public String getName() {

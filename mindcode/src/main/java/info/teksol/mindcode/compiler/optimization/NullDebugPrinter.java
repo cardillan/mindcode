@@ -7,12 +7,7 @@ import java.util.function.Consumer;
 
 public class NullDebugPrinter implements DebugPrinter {
     @Override
-    public void instructionEmitted(Optimizer optimizer, LogicInstruction instruction) {
-        // Do nothing
-    }
-
-    @Override
-    public void iterationFinished(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
+    public void registerIteration(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
         // Do nothing
     }
 

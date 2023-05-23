@@ -1,5 +1,8 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class WhileExpression extends ControlBlockAstNode {
@@ -8,12 +11,12 @@ public class WhileExpression extends ControlBlockAstNode {
     private final AstNode body;
     private final AstNode update;
 
-    WhileExpression(AstNode condition, AstNode body, AstNode update) {
-        this(null, condition, body, update);
+    WhileExpression(Token startToken, AstNode condition, AstNode body, AstNode update) {
+        this(startToken, null, condition, body, update);
     }
 
-    WhileExpression(String label, AstNode condition, AstNode body, AstNode update) {
-        super(condition, body);
+    WhileExpression(Token startToken, String label, AstNode condition, AstNode body, AstNode update) {
+        super(startToken, condition, body);
         this.label = label;
         this.condition = condition;
         this.body = body;
@@ -58,5 +61,10 @@ public class WhileExpression extends ControlBlockAstNode {
                 ", body=" + body +
                 ", update=" + update +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.LOOP;
     }
 }

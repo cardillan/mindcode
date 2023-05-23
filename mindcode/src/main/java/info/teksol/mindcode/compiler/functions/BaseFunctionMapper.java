@@ -1,9 +1,9 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
@@ -17,10 +17,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BaseFunctionMapper implements FunctionMapper {
+    private final AstContext staticAstContext = AstContext.createRootNode();
+    private final Supplier<AstContext> astContextSupplier;
     private final InstructionProcessor instructionProcessor;
     private final Consumer<CompilerMessage> messageConsumer;
     private final ProcessorVersion processorVersion;
@@ -30,7 +33,9 @@ public class BaseFunctionMapper implements FunctionMapper {
     private final List<SampleGenerator> sampleGenerators;
     private final Map<String, BuiltInFunctionHandler> builtInFunctionMap;
 
-    BaseFunctionMapper(InstructionProcessor InstructionProcessor, Consumer<CompilerMessage> messageConsumer) {
+    BaseFunctionMapper(InstructionProcessor InstructionProcessor, Supplier<AstContext> astContextSupplier,
+            Consumer<CompilerMessage> messageConsumer) {
+        this.astContextSupplier = astContextSupplier;
         this.instructionProcessor = InstructionProcessor;
         this.messageConsumer = messageConsumer;
 
@@ -47,19 +52,19 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     @Override
-    public LogicValue handleProperty(LogicInstructionPipeline pipeline, String propertyName, LogicValue target,
+    public LogicValue handleProperty(Consumer<LogicInstruction> program, String propertyName, LogicValue target,
             List<LogicValue> arguments) {
         PropertyHandler handler = propertyMap.get(propertyName);
-        return handler == null ? null : handler.handleProperty(pipeline, target, arguments);
+        return handler == null ? null : handler.handleProperty(program, target, arguments);
     }
 
     @Override
-    public LogicValue handleFunction(LogicInstructionPipeline pipeline, String functionName, List<LogicValue> arguments) {
+    public LogicValue handleFunction(Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
         FunctionHandler handler = functionMap.get(functionName);
         BuiltInFunctionHandler builtInHandler = builtInFunctionMap.get(functionName);
         return handler == null
-                ? builtInHandler == null ? null : builtInHandler.handleFunction(pipeline, arguments)
-                : handler.handleFunction(pipeline, arguments);
+                ? builtInHandler == null ? null : builtInHandler.handleFunction(program, arguments)
+                : handler.handleFunction(program, arguments);
     }
 
     @Override
@@ -89,7 +94,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
-        return instructionProcessor.createInstruction(opcode, args);
+        return instructionProcessor.createInstruction(astContextSupplier.get(), opcode, args);
     }
 
     private LogicKeyword toKeyword(LogicValue arg) {
@@ -134,7 +139,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
     
     private interface PropertyHandler extends SampleGenerator {
-        LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> arguments);
+        LogicValue handleProperty(Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
             return getOpcodeVariant().opcode();
@@ -142,7 +147,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private interface FunctionHandler extends SampleGenerator {
-        LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments);
+        LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments);
 
         default Opcode getOpcode() {
             return getOpcodeVariant().opcode();
@@ -154,7 +159,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     }
 
     private interface BuiltInFunctionHandler {
-        LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments);
+        LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments);
     }
 
     //
@@ -245,7 +250,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> fnArgs) {
+        public LogicValue handleProperty(Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> fnArgs) {
             checkArguments(fnArgs);
 
             LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : LogicNull.NULL;
@@ -256,7 +261,6 @@ public class BaseFunctionMapper implements FunctionMapper {
                 if (a.type() == LogicParameter.RESULT) {
                     ixArgs.add(tmp);
                 } else if (a.type() == LogicParameter.BLOCK) {
-                    // No stripping: it is either a block name - already unprefixed, or a regular variable.
                     ixArgs.add(target);
                 } else if (a.type().isSelector()  && !a.type().isFunctionName()) {
                     // Selector that IS NOT a function name is taken from the argument list
@@ -285,12 +289,11 @@ public class BaseFunctionMapper implements FunctionMapper {
                         ixArgs.add(argument);
                     }
                 } else {
-                    // Not a variable - strip prefix
                     ixArgs.add(toKeyword(fnArgs.get(argIndex++)));
                 }
             }
 
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), ixArgs));
+            program.accept(instructionProcessor.createInstruction(astContextSupplier.get(), getOpcode(), ixArgs));
             return tmp;
         }
 
@@ -335,7 +338,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                     .map(a -> a.type() == LogicParameter.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
-            return instructionProcessor.createInstructionUnchecked(getOpcode(), arguments);
+            return instructionProcessor.createInstructionUnchecked(staticAstContext, getOpcode(), arguments);
         }
     }
 
@@ -390,14 +393,14 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleProperty(LogicInstructionPipeline pipeline, LogicValue target, List<LogicValue> arguments) {
+        public LogicValue handleProperty(Consumer<LogicInstruction> program, LogicValue target, List<LogicValue> arguments) {
             if (!warningEmitted) {
                 messageConsumer.accept(MindcodeMessage.warn(
                         "Function '" + deprecated + "' is no longer supported in Mindustry Logic version " +
                         processorVersion + "; using '" + replacement.getName() + "' instead."));
                 warningEmitted = true;
             }
-            return replacement.handleProperty(pipeline, target, arguments);
+            return replacement.handleProperty(program, target, arguments);
         }
     }
 
@@ -563,7 +566,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> fnArgs) {
+        public LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> fnArgs) {
             checkArguments(fnArgs);
 
             LogicValue tmp = hasResult ? instructionProcessor.nextTemp() : LogicNull.NULL;
@@ -606,7 +609,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                 }
             }
 
-            pipeline.emit(instructionProcessor.createInstruction(getOpcode(), ixArgs));
+            program.accept(instructionProcessor.createInstruction(astContextSupplier.get(), getOpcode(), ixArgs));
             return tmp;
         }
 
@@ -638,7 +641,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                     .map(a -> a.type() == LogicParameter.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
-            return instructionProcessor.createInstructionUnchecked(getOpcode(), arguments);
+            return instructionProcessor.createInstructionUnchecked(staticAstContext, getOpcode(), arguments);
         }
     }
 
@@ -652,13 +655,13 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
+        public LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments) {
             // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
             FunctionHandler handler = functions.get(toKeywordOptional(arguments.get(0)).getKeyword());
             if (handler == null) {
                 throw new UnhandledFunctionVariantException("Unhandled type of " + getOpcode() + " in " + arguments);
             }
-            return handler.handleFunction(pipeline, arguments);
+            return handler.handleFunction(program, arguments);
         }
 
         @Override
@@ -679,8 +682,8 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
-            arguments.forEach(arg -> pipeline.emit(createInstruction(Opcode.PRINT, arg)));
+        public LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+            arguments.forEach(arg -> program.accept(createInstruction(Opcode.PRINT, arg)));
             return arguments.get(arguments.size() - 1);
         }
 
@@ -696,9 +699,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         }
 
         @Override
-        public LogicValue handleFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
+        public LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments) {
             checkArguments(arguments);
-            pipeline.emit(createInstruction(Opcode.UBIND, arguments.get(0)));
+            program.accept(createInstruction(Opcode.UBIND, arguments.get(0)));
             return LogicBuiltIn.UNIT;
         }
 
@@ -714,9 +717,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         return map;
     }
     
-    private LogicValue handlePrintlnFunction(LogicInstructionPipeline pipeline, List<LogicValue> arguments) {
-        arguments.forEach(arg -> pipeline.emit(createInstruction(Opcode.PRINT, arg)));
-        pipeline.emit(createInstruction(Opcode.PRINT, LogicString.NEW_LINE));
+    private LogicValue handlePrintlnFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments) {
+        arguments.forEach(arg -> program.accept(createInstruction(Opcode.PRINT, arg)));
+        program.accept(createInstruction(Opcode.PRINT, LogicString.NEW_LINE));
         return arguments.isEmpty() ? LogicNull.NULL : arguments.get(arguments.size() - 1);
     }
 }

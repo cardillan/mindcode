@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.CallInstruction;
 import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
 import info.teksol.mindcode.compiler.instructions.EndInstruction;
@@ -32,11 +31,11 @@ import java.util.stream.Stream;
  * assuming the unconditional jump normalization optimizer was on the pipeline.
  * Labels - even inactive ones - are never removed.
  */
-class InaccessibleCodeEliminator extends GlobalOptimizer {
+class InaccessibleCodeEliminator extends BaseOptimizer {
     private Set<LogicLabel> activeLabels = new HashSet<>();
 
-    public InaccessibleCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+    public InaccessibleCodeEliminator(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override

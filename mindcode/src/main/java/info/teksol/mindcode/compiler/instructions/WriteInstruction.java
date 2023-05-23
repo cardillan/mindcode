@@ -11,12 +11,17 @@ import java.util.List;
 
 public class WriteInstruction extends BaseInstruction {
 
-    WriteInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.WRITE, args, params);
+    WriteInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.WRITE, args, params);
     }
 
     protected WriteInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public WriteInstruction copy() {
+        return new WriteInstruction(this, marker);
     }
 
     public WriteInstruction withMarker(String marker) {

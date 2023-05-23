@@ -9,14 +9,18 @@ import java.util.List;
 
 public class PrintInstruction extends BaseInstruction {
 
-    PrintInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.PRINT, args, params);
+    PrintInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.PRINT, args, params);
     }
 
     public PrintInstruction(BaseInstruction other, String marker) {
         super(other, marker);
     }
 
+    @Override
+    public PrintInstruction copy() {
+        return new PrintInstruction(this, marker);
+    }
     public PrintInstruction withMarker(String marker) {
         return new PrintInstruction(this, marker);
     }

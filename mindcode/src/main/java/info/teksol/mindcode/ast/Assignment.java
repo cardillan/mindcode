@@ -1,13 +1,16 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class Assignment extends BaseAstNode {
     private final AstNode var;
     private final AstNode value;
 
-    public Assignment(AstNode var, AstNode value) {
-        super(var, value);
+    public Assignment(Token startToken, AstNode var, AstNode value) {
+        super(startToken, var, value);
         this.var = var;
         this.value = value;
     }
@@ -40,5 +43,10 @@ public class Assignment extends BaseAstNode {
                 "var=" + var +
                 ", value=" + value +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.ASSIGNMENT;
     }
 }

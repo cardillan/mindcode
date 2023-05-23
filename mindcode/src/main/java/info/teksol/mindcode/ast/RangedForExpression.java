@@ -1,5 +1,8 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class RangedForExpression extends ControlBlockAstNode {
@@ -8,8 +11,8 @@ public class RangedForExpression extends ControlBlockAstNode {
     private final Range range;
     private final AstNode body;
 
-    public RangedForExpression(String label, AstNode variable, Range range, AstNode body) {
-        super(variable, range, body);
+    public RangedForExpression(Token startToken, String label, AstNode variable, Range range, AstNode body) {
+        super(startToken, variable, range, body);
         this.label = label;
         this.variable = variable;
         this.range = range;
@@ -55,5 +58,10 @@ public class RangedForExpression extends ControlBlockAstNode {
                 ", range=" + range +
                 ", body=" + body +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.LOOP;
     }
 }

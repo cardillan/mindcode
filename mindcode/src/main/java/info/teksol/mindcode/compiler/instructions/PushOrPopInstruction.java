@@ -10,8 +10,8 @@ import java.util.List;
 // Push and pop are always processed at the same time
 public abstract class PushOrPopInstruction extends BaseInstruction {
 
-    PushOrPopInstruction(Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
-        super(opcode, args, params);
+    PushOrPopInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, opcode, args, params);
     }
 
     protected PushOrPopInstruction(BaseInstruction other, String marker) {

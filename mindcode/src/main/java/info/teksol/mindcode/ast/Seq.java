@@ -1,19 +1,21 @@
 package info.teksol.mindcode.ast;
 
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class Seq extends BaseAstNode {
     private final AstNode rest;
     private final AstNode last;
 
-    public Seq(AstNode last) {
-        super(last);
+    public Seq(Token startToken, AstNode last) {
+        super(startToken, last);
         this.rest = new NoOp();
         this.last = last;
     }
 
-    public Seq(AstNode rest, AstNode last) {
-        super(rest, last);
+    public Seq(Token startToken, AstNode rest, AstNode last) {
+        super(startToken, rest, last);
         this.rest = rest;
         this.last = last;
     }

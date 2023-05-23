@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class BaseInstruction implements LogicInstruction {
+    private final AstContext astContext;
     private final Opcode opcode;
     private final List<LogicArgument> args;
     private final List<LogicParameter> params;
@@ -22,7 +23,8 @@ public class BaseInstruction implements LogicInstruction {
     // Marker is not considered by hashCode or equals!
     protected final String marker;
 
-    BaseInstruction(Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
+    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
+        this.astContext = astContext;
         this.opcode = opcode;
         this.args = List.copyOf(args);
         this.marker = null;
@@ -40,6 +42,7 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     protected BaseInstruction(BaseInstruction other, String marker) {
+        this.astContext = other.astContext;
         this.opcode = other.opcode;
         this.args = other.args;
         this.marker = marker;
@@ -47,6 +50,15 @@ public class BaseInstruction implements LogicInstruction {
         this.assignments = other.assignments;
         this.inputs = other.inputs;
         this.outputs = other.outputs;
+    }
+
+    public AstContext getAstContext() {
+        return astContext;
+    }
+
+    @Override
+    public BaseInstruction copy() {
+        return new BaseInstruction(this, marker);
     }
 
     @Override
@@ -120,7 +132,20 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public boolean matchesMarker(String marker) {
-        return this.marker!= null && this.marker.equals(marker);
+        return this.marker != null && this.marker.equals(marker);
+    }
+
+    @Override
+    public boolean matchesContext(AstContext astContext) {
+        return getAstContext().matches(astContext);
+    }
+
+    public AstContext findContextOfType(AstContextType contextType) {
+        return astContext.findContextOfType(contextType);
+    }
+
+    public AstContext findTopContextOfType(AstContextType contextType) {
+        return astContext.findTopContextOfType(contextType);
     }
 
     @Override

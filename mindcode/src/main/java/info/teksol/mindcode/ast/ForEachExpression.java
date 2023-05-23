@@ -1,5 +1,8 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -9,8 +12,8 @@ public class ForEachExpression extends ControlBlockAstNode {
     private final List<AstNode> values;
     private final AstNode body;
 
-    ForEachExpression(String label, AstNode variable, List<AstNode> values, AstNode body) {
-        super(values, variable, body);
+    ForEachExpression(Token startToken, String label, AstNode variable, List<AstNode> values, AstNode body) {
+        super(startToken, values, variable, body);
         this.label = label;
         this.variable = variable;
         this.values = values;
@@ -57,5 +60,10 @@ public class ForEachExpression extends ControlBlockAstNode {
                 ", values=" + values +
                 ", body=" + body +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.LOOP;
     }
 }

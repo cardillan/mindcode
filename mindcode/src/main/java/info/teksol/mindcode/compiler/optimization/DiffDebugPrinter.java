@@ -33,13 +33,8 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     @Override
-    public void instructionEmitted(Optimizer optimizer, LogicInstruction instruction) {
-        findProgramVersion(optimizer).getProgram().add(instruction);
-    }
-
-    @Override
-    public void iterationFinished(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
-        versions.add(new ProgramVersion(optimizer, iteration, program));
+    public void registerIteration(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
+        versions.add(new ProgramVersion(optimizer, iteration, List.copyOf(program)));
     }
 
     public int getDiffMargin() {
@@ -48,18 +43,6 @@ public class DiffDebugPrinter implements DebugPrinter {
 
     public void setDiffMargin(int diffMargin) {
         this.diffMargin = diffMargin;
-    }
-
-    private ProgramVersion findProgramVersion(Optimizer optimizer) {
-        for (ProgramVersion version : versions) {
-            if (version.getOptimizer() == optimizer) {
-                return version;
-            }
-        }
-
-        ProgramVersion version = new ProgramVersion(optimizer);
-        versions.add(version);
-        return version;
     }
 
     @Override
@@ -92,7 +75,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         // Select the last iteration of each optimizer
         List<ProgramVersion> result = new ArrayList<>();
         for (int i = 0; i < versions.size(); i++) {
-            if (i == versions.size() - 1 || versions.get(i).getOptimizer() != versions.get(i+1).getOptimizer()) {
+            if (i == versions.size() - 1 || versions.get(i).getOptimizerClass() != versions.get(i+1).getOptimizerClass()) {
                 result.add(versions.get(i));
             }
         }
@@ -181,7 +164,9 @@ public class DiffDebugPrinter implements DebugPrinter {
         StringBuilder str = new StringBuilder(50);
         str.append(prefix);
         if (index >= 0) {
-            str.append(String.format("%5d ", index));
+            String formatted = "     ".concat(String.valueOf(index));
+            str.append(formatted.substring(formatted.length() - 5)).append(' ');
+            //str.append(String.format("%5d ", index));
         } else {
             str.append("    * ");       // Deleted line -- no number
         }
@@ -192,24 +177,18 @@ public class DiffDebugPrinter implements DebugPrinter {
 
     // Class holding program version and information about the optimizer and iteration which produced it.
     protected static class ProgramVersion {
-        public final Optimizer optimizer;
+        private final Class<? extends Optimizer> optimizerClass;
         private final List<LogicInstruction> program;
         private String title;
 
-        ProgramVersion(Optimizer optimizer) {
-            this.optimizer = optimizer;
-            this.program = new ArrayList<>();
-            this.title = optimizer.getName();
+        public ProgramVersion(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
+            this.optimizerClass = optimizer == null ? null : optimizer.getClass();
+            this.program = program;
+            this.title = optimizer == null ? "" : optimizer.getName() + ", iteration " + iteration;
         }
 
-        ProgramVersion(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
-            this.optimizer = optimizer;
-            this.program = List.copyOf(program);
-            this.title = optimizer.getName() + ", iteration " + iteration;
-        }
-
-        Optimizer getOptimizer() {
-            return optimizer;
+        public Class<? extends Optimizer> getOptimizerClass() {
+            return optimizerClass;
         }
 
         List<LogicInstruction> getProgram() {

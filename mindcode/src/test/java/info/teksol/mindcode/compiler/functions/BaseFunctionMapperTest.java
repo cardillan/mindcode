@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.functions;
 
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.logic.Opcode;
@@ -25,7 +26,8 @@ public class BaseFunctionMapperTest {
         InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6,
                 ProcessorEdition.STANDARD_PROCESSOR, opcodeVariants);
 
-        return new BaseFunctionMapper(instructionProcessor, s -> {});
+        AstContext staticAstContext = AstContext.createRootNode();
+        return new BaseFunctionMapper(instructionProcessor, () -> staticAstContext, s -> {});
     }
 
     @Test

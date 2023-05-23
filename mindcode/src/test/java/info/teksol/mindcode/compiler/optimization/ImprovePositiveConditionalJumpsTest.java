@@ -1,12 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.AccumulatingLogicInstructionPipeline;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.Operation;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,19 +19,17 @@ class ImprovePositiveConditionalJumpsTest extends AbstractOptimizerTest<ImproveP
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        return List.of(Optimization.CONDITIONAL_JUMPS_IMPROVEMENT);
+        return List.of(Optimization.JUMP_OVER_JUMP_ELIMINATION);
     }
 
-    @NotNull
     @Override
-    protected LogicInstructionPipeline createLogicInstructionPipeline(CompilerProfile profile,
-            AccumulatingLogicInstructionPipeline terminus, DebugPrinter debugPrinter) {
-        ImprovePositiveConditionalJumps optimizer = new ImprovePositiveConditionalJumps(instructionProcessor, terminus);
-        optimizer.setLevel(OptimizationLevel.AGGRESSIVE);
-        optimizer.setGoal(profile.getGoal());
-        optimizer.setMessagesRecipient(messages::add);
-        optimizer.setDebugPrinter(debugPrinter);
-        return optimizer;
+    protected MindcodeOptimizer createMindcodeOptimizer(CompilerProfile profile) {
+        return new MindcodeOptimizer(instructionProcessor, profile, messages::add) {
+            @Override
+            protected List<Optimizer> getOptimizers() {
+                return List.of(new ImprovePositiveConditionalJumps(instructionProcessor));
+            }
+        };
     }
 
     @Test

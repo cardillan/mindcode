@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
@@ -24,13 +23,13 @@ import java.util.List;
  * </ol>
  * This optimizer ignores push and pop instructions. The StackUsageOptimizer will remove push/pop instructions of any
  * eliminated variables later on.
- *
+ * <p>
  * Note: this class is mostly obsolete, as {@link info.teksol.mindcode.compiler.generator.LogicInstructionGenerator}
  * no longer creates temporary variables for literals.
  */
-class InputTempEliminator extends GlobalOptimizer {
-    public InputTempEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+class InputTempEliminator extends BaseOptimizer {
+    public InputTempEliminator(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
@@ -39,7 +38,7 @@ class InputTempEliminator extends GlobalOptimizer {
             while (it.hasNext()) {
                 if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.TMP_VARIABLE) {
                     LogicArgument result = ix.getTarget();
-                    List<LogicInstruction> list = findInstructions(
+                    List<LogicInstruction> list = instructions(
                             in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
                     // Not exactly two instructions, or this instruction does not come first

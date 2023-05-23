@@ -12,21 +12,13 @@ import java.util.function.Consumer;
 public interface DebugPrinter {
 
     /**
-     * Called by pipelined optimizers whenever an instruction is emitted.
-     *
-     * @param optimizer instance of the optimizer
-     * @param instruction the emitted instruction
-     */
-    void instructionEmitted(Optimizer optimizer, LogicInstruction instruction);
-
-    /**
      * Called by global optimizers at the end of each iteration performed.
      *
-     * @param optimizer instance of the optimizer
+     * @param optimizer instance of the optimizer (null for unoptimized code)
      * @param iteration number of the performed iteration
      * @param program state of the program after the iteration was performed
      */
-    void iterationFinished(Optimizer optimizer, int iteration, List<LogicInstruction> program);
+    void registerIteration(Optimizer optimizer, int iteration, List<LogicInstruction> program);
 
     /**
      * Processes and outputs collected information for later analysis.

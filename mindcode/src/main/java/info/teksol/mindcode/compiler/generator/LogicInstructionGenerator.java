@@ -1,13 +1,16 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.*;
+import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.functions.FunctionMapper;
+import info.teksol.mindcode.compiler.functions.FunctionMapperFactory;
 import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
+import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
+import info.teksol.mindcode.processor.ExpressionEvaluator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,13 +35,17 @@ import static info.teksol.mindcode.logic.LogicNull.NULL;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
+
+    private static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
+    private static final int INFINITE_LOOP_REPETITIONS = 25;    // Estimated number of repetitions for infinite loops
+
     private final CompilerProfile profile;
     // The version-dependent functionality is encapsulated in InstructionProcessor and FunctionMapper.
     // If future Mindustry versions offer more capabilities (such as native stack support),
     // even LogicInstructionGenerator might be made version dependent.
+    private final Consumer<CompilerMessage> messageConsumer;
     private final InstructionProcessor instructionProcessor;
     private final FunctionMapper functionMapper;
-    private final LogicInstructionPipeline pipeline;
     private final ReturnStack returnStack = new ReturnStack();
 
     private LoopStack loopStack = new LoopStack();
@@ -67,7 +75,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private NodeContext parentContext = new NodeContext();
 
     // Function definition being presently compiled (including inlined functions)
-    private CallGraph.Function currentFunction; 
+    private Function currentFunction;
 
     // Prefix for local variables (depends on function being processed)
     private String localPrefix = "";
@@ -78,27 +86,63 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private int markerIndex = 0;
 
+    private List<LogicInstruction> instructions = new ArrayList<>();
+
+    private AstContext astContext = AstContext.createRootNode();
+
     public LogicInstructionGenerator(CompilerProfile profile, InstructionProcessor instructionProcessor,
-                                     FunctionMapper functionMapper, LogicInstructionPipeline pipeline) {
+            Consumer<CompilerMessage> messageConsumer) {
+        this.messageConsumer = messageConsumer;
         this.instructionProcessor = instructionProcessor;
-        this.functionMapper = functionMapper;
-        this.pipeline = pipeline;
+        this.functionMapper = FunctionMapperFactory.getFunctionMapper( instructionProcessor,
+                () -> astContext, messageConsumer);
         this.profile = profile;
         this.expressionEvaluator = new ConstantExpressionEvaluator(instructionProcessor);
     }
 
-    public void start(Seq program) {
+    public GeneratorOutput generate(Seq program) {
         callGraph = CallGraphCreator.createFunctionGraph(program, instructionProcessor);
         currentFunction = callGraph.getMain();
         verifyStackAllocation();
         visit(program);
         appendFunctionDeclarations();
+        return new GeneratorOutput(List.copyOf(instructions), astContext);
     }
 
-    public void emit(LogicInstruction instruction) {
-        pipeline.emit(instruction);
+    private void emit(LogicInstruction instruction) {
+        instructions.add(instruction);
     }
 
+    private void enterAstNode(AstNode node) {
+        enterAstNode(node, node.getContextType());
+    }
+
+    private void enterAstNode(AstNode node, AstContextType contextType) {
+        if (node.getContextType() != AstContextType.NONE) {
+            astContext = astContext.childNode(node, contextType);
+        }
+    }
+
+    private void exitAstNode(AstNode node) {
+        if (node.getContextType() != AstContextType.NONE) {
+            if (astContext.contextSubtype() != node.getContextSubype() || astContext.node() != node) {
+                throw new IllegalStateException("Unexpected AST context " + astContext);
+            }
+            astContext = astContext.parent();
+        }
+    }
+
+    private void setContextSubtype(AstContextSubtype contextSubtype, double multiplier) {
+        if (astContext.contextSubtype() != AstContextSubtype.BASIC) {
+            clearContextSubtype();
+        }
+        astContext = astContext.subtype(contextSubtype, multiplier);
+    }
+
+    private void clearContextSubtype() {
+        astContext = astContext.parent();
+    }
+    
     // Visit is called for every node. This overridden function ensures proper transition of variable contexts between
     // parent and child nodes.
     @Override
@@ -106,13 +150,15 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         NodeContext previousParent = parentContext;
         parentContext = nodeContext;
         nodeContext = new NodeContext(parentContext);  // inherit variables from parent context
-        try {
-            // Perform constant expression evaluation
-            return super.visit(expressionEvaluator.evaluate(node));
-        } finally {
-            nodeContext = parentContext;
-            parentContext = previousParent;
-        }
+        enterAstNode(node);
+
+        // Perform constant expression evaluation
+        LogicValue visited = super.visit(expressionEvaluator.evaluate(node));
+
+        exitAstNode(node);
+        nodeContext = parentContext;
+        parentContext = previousParent;
+        return visited;
     }
 
     public LogicVariable visitVariable(AstNode node) {
@@ -127,83 +173,83 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
 
     public CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr) {
-        return instructionProcessor.createCallRecursive(stack, callAddr, retAddr);
+        return instructionProcessor.createCallRecursive(astContext, stack, callAddr, retAddr);
     }
 
     public EndInstruction createEnd() {
-        return instructionProcessor.createEnd();
+        return instructionProcessor.createEnd(astContext);
     }
 
     public GotoInstruction createGoto(LogicVariable address) {
-        return instructionProcessor.createGoto(address);
+        return instructionProcessor.createGoto(astContext, address);
     }
 
-    public JumpInstruction createJump(LogicLabel label, Condition condition, LogicValue x, LogicValue y) {
-        return instructionProcessor.createJump(label, condition, x, y);
+    public JumpInstruction createJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
+        return instructionProcessor.createJump(astContext, target, condition, x, y);
     }
 
-    public JumpInstruction createJumpUnconditional(LogicLabel label) {
-        return instructionProcessor.createJumpUnconditional(label);
+    public JumpInstruction createJumpUnconditional(LogicLabel target) {
+        return instructionProcessor.createJumpUnconditional(astContext, target);
     }
 
     public LabelInstruction createLabel(LogicLabel label) {
-        return instructionProcessor.createLabel(label);
+        return instructionProcessor.createLabel(astContext, label);
     }
 
     public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first) {
-        return instructionProcessor.createOp(operation, target, first);
+        return instructionProcessor.createOp(astContext, operation, target, first);
     }
 
     public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
-        return instructionProcessor.createOp(operation, target, first, second);
+        return instructionProcessor.createOp(astContext, operation, target, first, second);
     }
 
     public PopInstruction createPop(LogicVariable memory, LogicVariable value) {
-        return instructionProcessor.createPop(memory, value);
+        return instructionProcessor.createPop(astContext, memory, value);
     }
 
     public PrintInstruction createPrint(LogicValue what) {
-        return instructionProcessor.createPrint(what);
+        return instructionProcessor.createPrint(astContext, what);
     }
 
     public PrintflushInstruction createPrintflush(LogicVariable messageBlock) {
-        return instructionProcessor.createPrintflush(messageBlock);
+        return instructionProcessor.createPrintflush(astContext, messageBlock);
     }
 
     public PushInstruction createPush(LogicVariable memory, LogicVariable value) {
-        return instructionProcessor.createPush(memory, value);
+        return instructionProcessor.createPush(astContext, memory, value);
     }
 
     public ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index) {
-        return instructionProcessor.createRead(result, memory, index);
+        return instructionProcessor.createRead(astContext, result, memory, index);
     }
 
     public ReturnInstruction createReturn(LogicVariable memory) {
-        return instructionProcessor.createReturn(memory);
+        return instructionProcessor.createReturn(astContext, memory);
     }
 
     public SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property) {
-        return instructionProcessor.createSensor(result, target, property);
+        return instructionProcessor.createSensor(astContext, result, target, property);
     }
 
     public SetInstruction createSet(LogicVariable target, LogicValue value) {
-        return instructionProcessor.createSet(target, value);
+        return instructionProcessor.createSet(astContext, target, value);
     }
 
     public SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address) {
-        return instructionProcessor.createSetAddress(variable, address);
+        return instructionProcessor.createSetAddress(astContext, variable, address);
     }
 
     public CallInstruction createCallStackless(LogicAddress value) {
-        return instructionProcessor.createCallStackless(value);
+        return instructionProcessor.createCallStackless(astContext, value);
     }
 
     public StopInstruction createStop() {
-        return instructionProcessor.createStop();
+        return instructionProcessor.createStop(astContext);
     }
 
     public WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index) {
-        return instructionProcessor.createWrite(value, memory, index);
+        return instructionProcessor.createWrite(astContext, value, memory, index);
     }
 
     private LogicLabel nextLabel() {
@@ -265,15 +311,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private void appendFunctionDeclarations() {
         emit(createEnd());
 
-        for (CallGraph.Function function : callGraph.getFunctions()) {
+        for (Function function : callGraph.getFunctions()) {
             if (function.isInline() || !function.isUsed()) {
                 continue;
             }
 
+            enterAstNode(function.getDeclaration());
             currentFunction = function;
             localPrefix = function.getLocalPrefix();
             functionContext = new LocalContext();
-            emit(createLabel(function.getLabel()).withMarker(localPrefix));
+            emit(createLabel(function.getLabel()));
             returnStack.enterFunction(nextLabel(), LogicVariable.fnRetVal(localPrefix));
 
             if (function.isRecursive()) {
@@ -283,6 +330,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             }
 
             emit(createEnd());
+            exitAstNode(function.getDeclaration());
+
             localPrefix = "";
             returnStack.exitFunction();
             currentFunction = callGraph.getMain();
@@ -290,42 +339,48 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     }
 
-    private void appendRecursiveFunctionDeclaration(CallGraph.Function function) {
+    private void appendRecursiveFunctionDeclaration(Function function) {
         // Register all parameters for stack storage
         function.getParams().stream().map(this::visitVariableVarRef).forEach(functionContext::registerVariable);
 
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
         emit(createSet(LogicVariable.fnRetVal(localPrefix), body));
-        emit(createLabel(returnStack.getReturnLabel()).withMarker(localPrefix));
+        emit(createLabel(returnStack.getReturnLabel()));
         emit(createReturn(stackName()));
     }
 
-    private void appendStacklessFunctionDeclaration(CallGraph.Function function) {
+    private void appendStacklessFunctionDeclaration(Function function) {
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
         emit(createSet(LogicVariable.fnRetVal(localPrefix), body));
-        emit(createLabel(returnStack.getReturnLabel()).withMarker(localPrefix));
+        emit(createLabel(returnStack.getReturnLabel()));
         emit(createGoto(LogicVariable.fnRetAddr(localPrefix)));
     }
 
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public LogicValue visitFunctionCall(FunctionCall node) {
+        setContextSubtype(AstContextSubtype.FUNCTION_ARGUMENTS, 1.0);
         // Do not track temporary variables created by evaluating function parameter expressions.
         // They'll be used solely to pass values to actual function parameters and won't be used subsequently
         final List<LogicValue> params = nodeContext.encapsulate(
                 () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
 
+        setContextSubtype(AstContextSubtype.SYSTEM_FUNCTION, 1.0);
         // Special cases
-        return switch (node.getFunctionName()) {
+        LogicValue returnValue = switch (node.getFunctionName()) {
             case "printf"   -> handlePrintf(node, params);
             default         -> handleFunctionCall(node.getFunctionName(), params);
         };
+
+        clearContextSubtype();
+
+        return returnValue;
     }
 
     private LogicValue handleFunctionCall(String functionName, List<LogicValue> params) {
-        LogicValue output = functionMapper.handleFunction(pipeline, functionName, params);
+        LogicValue output = functionMapper.handleFunction(instructions::add, functionName, params);
         if (output != null) {
             return output;
         } else if (callGraph.containsFunction(functionName)) {
@@ -336,7 +391,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicValue handleUserFunctionCall(String functionName, List<LogicValue> params) {
-        CallGraph.Function function = callGraph.getFunction(functionName);
+        Function function = callGraph.getFunction(functionName);
         if (params.size() != function.getParamCount()) {
             throw new WrongNumberOfParametersException("Function '" + functionName + "': wrong number of parameters (expected "
                     + function.getParamCount() + ", found " + params.size() + ")");
@@ -352,8 +407,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             if (function.isInline()) {
                 return handleInlineFunctionCall(function, params);
             } else if (!function.isRecursive()) {
+                setContextSubtype(AstContextSubtype.OUT_OF_LINE_CALL, 1.0);
                 return handleStacklessFunctionCall(function, params);
             } else {
+                setContextSubtype(AstContextSubtype.RECURSIVE_CALL, 1.0);
                 return handleRecursiveFunctionCall(function, params);
             }
         } finally {
@@ -361,17 +418,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private LogicValue handleInlineFunctionCall(CallGraph.Function function, List<LogicValue> paramValues) {
+    private LogicValue handleInlineFunctionCall(Function function, List<LogicValue> paramValues) {
         // Switching to inline function context -- save/restore old one
-        final CallGraph.Function previousFunction = currentFunction;
+        final Function previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
         final LoopStack previousLoopStack = loopStack;
         try {
+            enterAstNode(function.getDeclaration(), AstContextType.INLINE_FUNCTION);
             currentFunction = function;
             functionContext = new LocalContext();
             loopStack = new LoopStack();
 
-            emit(createLabel(nextLabel()).withMarker(localPrefix));
+            emit(createLabel(nextLabel()));
             setupFunctionParameters(function, paramValues);
 
             // Retval gets registered in nodeContext, but we don't mind -- inline functions do not use stack
@@ -380,17 +438,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             returnStack.enterFunction(returnLabel, returnValue);
             LogicValue result = visit(function.getBody());
             emit(createSet(returnValue, result));
-            emit(createLabel(returnLabel).withMarker(localPrefix));
+            emit(createLabel(returnLabel));
             returnStack.exitFunction();
             return returnValue;
         } finally {
             loopStack = previousLoopStack;
             functionContext = previousContext;
             currentFunction = previousFunction;
+            exitAstNode(function.getDeclaration());
         }
     }
 
-    private LogicValue handleStacklessFunctionCall(CallGraph.Function function, List<LogicValue> paramValues) {
+    private LogicValue handleStacklessFunctionCall(Function function, List<LogicValue> paramValues) {
         setupFunctionParameters(function, paramValues);
 
         final LogicLabel returnLabel = nextLabel();
@@ -407,34 +466,36 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return new ArrayList<>(result);
     }
 
-    private LogicValue handleRecursiveFunctionCall(CallGraph.Function function, List<LogicValue> paramValues) {
-        String marker = nextMarker();
-
+    private LogicValue handleRecursiveFunctionCall(Function function, List<LogicValue> paramValues) {
         boolean useStack = currentFunction.isRecursiveCall(function.getName());
         List<LogicVariable> variables = useStack ? getContextVariables() : List.of();
 
         if (useStack) {
             // Store all local variables (both user defined and temporary) on the stack
-            variables.forEach(v -> emit(createPush(stackName(), v).withMarker(marker)));
+            variables.forEach(v -> emit(createPush(stackName(), v)));
         }
 
         setupFunctionParameters(function, paramValues);
 
          // Recursive function call
         final LogicLabel returnLabel = nextLabel();
-        emit(createCallRecursive(stackName(), function.getLabel(), returnLabel).withMarker(marker));
+        emit(createCallRecursive(stackName(), function.getLabel(), returnLabel));
         emit(createLabel(returnLabel)); // where the function must return
 
         if (useStack) {
             // Restore all local variables (both user defined and temporary) from the stack
             Collections.reverse(variables);
-            variables.forEach(v -> emit(createPop(stackName(), v).withMarker(marker)));
+            variables.forEach(v -> emit(createPop(stackName(), v)));
         }
 
         return passReturnValue(function);
     }
 
-    private void setupFunctionParameters(CallGraph.Function function, List<LogicValue> arguments) {
+    private void setupFunctionParameters(Function function, List<LogicValue> arguments) {
+        // Make sure parameter names are formed using function name
+        Function previousFunction = currentFunction;
+        currentFunction = function;
+
         // Setup variables representing function parameters with values from this call
         List<VarRef> paramsRefs = function.getParams();
         for (int i = 0; i < arguments.size(); i++) {
@@ -446,9 +507,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             emit(createSet(argument, arguments.get(i)));
         }
+
+        currentFunction = previousFunction;
     }
 
-    private LogicValue passReturnValue(CallGraph.Function function) {
+    private LogicValue passReturnValue(Function function) {
         if (currentFunction.isRepeatedCall(function.getName())) {
             // Copy default return variable to new temp, for the function is called multiple times
             // and we must not overwrite result of previous call(s) with this one
@@ -498,22 +561,29 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicValue visitIfExpression(IfExpression node) {
         if (profile.isShortCircuitEval() && node.getCondition() instanceof BoolBinaryOp boolNode) {
+            setContextSubtype(AstContextSubtype.IF_CONDITION, 1.0);
             final LogicVariable tmp = nextNodeResult();
             final LogicLabel shortCircuitLabel = nextLabel();
             final LogicLabel finishLabel = nextLabel();
             final boolean naturalOrder = nodeContext.encapsulate(() -> processBoolBinaryOp(boolNode, shortCircuitLabel));
 
+            setContextSubtype(
+                    naturalOrder ? AstContextSubtype.TRUE_BRANCH : AstContextSubtype.FALSE_BRANCH, 0.5);
             final LogicValue firstBranch = visit(naturalOrder ? node.getTrueBranch() : node.getFalseBranch());
             emit(createSet(tmp, firstBranch));
             emit(createJumpUnconditional(finishLabel));
 
+            setContextSubtype(
+                    naturalOrder ? AstContextSubtype.FALSE_BRANCH : AstContextSubtype.TRUE_BRANCH, 0.5);
             emit(createLabel(shortCircuitLabel));
             final LogicValue secondBranch = visit(naturalOrder ? node.getFalseBranch() : node.getTrueBranch());
             emit(createSet(tmp, secondBranch));
             emit(createLabel(finishLabel));
 
+            clearContextSubtype();
             return tmp;
         } else {
+            setContextSubtype(AstContextSubtype.IF_CONDITION, 1.0);
             final LogicValue cond = nodeContext.encapsulate(() -> visit(node.getCondition()));
 
             final LogicVariable tmp = nextNodeResult();
@@ -522,15 +592,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             emit(createJump(elseBranch, Condition.EQUAL, cond, FALSE));
 
+            setContextSubtype(AstContextSubtype.TRUE_BRANCH, 0.5);
             final LogicValue trueBranch = visit(node.getTrueBranch());
             emit(createSet(tmp, trueBranch));
             emit(createJumpUnconditional(endBranch));
 
+            setContextSubtype(AstContextSubtype.FALSE_BRANCH, 0.5);
             emit(createLabel(elseBranch));
             final LogicValue falseBranch = visit(node.getFalseBranch());
             emit(createSet(tmp, falseBranch));
             emit(createLabel(endBranch));
 
+            clearContextSubtype();
             return tmp;
         }
     }
@@ -581,7 +654,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 LogicArgument prop = visit(propertyAccess.getProperty());
                 // TODO modify PropertyAccess to distinguish direct and indirect properties
                 String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
-                if (functionMapper.handleProperty(pipeline, propertyName, propTarget, List.of(rvalue)) == null) {
+                if (functionMapper.handleProperty(instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
                     throw new UndeclaredFunctionException("Don't know how to handle property [" + propTarget + "." + prop + "]");
                 }
             }
@@ -645,6 +718,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         loopStack.enterLoop(node.getLabel(), exitLabel, contLabel);
 
+        // Multiplier is set to 1: all instructions execute exactly once
+        setContextSubtype(AstContextSubtype.LOOP_ITERATOR, 1.0);
+
         // All but the last value
         for (int i = 0; i < values.size() - 1; i++) {
             LogicLabel nextValueLabel = nextLabel();
@@ -660,6 +736,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createSetAddress(iterator, exitLabel));
         emit(createSet(variable, visit(values.get(values.size() - 1))));
 
+        setContextSubtype(AstContextSubtype.BODY, values.size());
         emit(createLabel(bodyLabel));
         visit(node.getBody());
 
@@ -667,6 +744,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createLabel(contLabel));
         emit(createGoto(iterator).withMarker(marker));
         emit(createLabel(exitLabel));
+
+        clearContextSubtype();
         loopStack.exitLoop(node.getLabel());
 
         return NULL;
@@ -689,56 +768,78 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             fixedUpperBound = tmp;
         }
 
+        int multiplier = lowerBound.isNumericLiteral() && upperBound.isNumericLiteral()
+                ? (int) (upperBound.getDoubleValue() - lowerBound.getDoubleValue()) : LOOP_REPETITIONS;
+
         emit(createSet(variable, lowerBound));
 
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        setContextSubtype(AstContextSubtype.LOOP_CONDITION, multiplier);
         emit(createLabel(beginLabel));
         emit(createJump(doneLabel, node.getRange().maxValueComparison().inverse(), variable, fixedUpperBound));
+        setContextSubtype(AstContextSubtype.BODY, multiplier);
         visit(node.getBody());
         emit(createLabel(continueLabel));
+        setContextSubtype(AstContextSubtype.LOOP_UPDATE, multiplier);
         emit(createOp(Operation.ADD, variable, variable, LogicNumber.ONE));
         emit(createJumpUnconditional(beginLabel));
 
         emit(createLabel(doneLabel));
+        clearContextSubtype();
         loopStack.exitLoop(node.getLabel());
         return NULL;
     }
 
     @Override
     public LogicValue visitWhileStatement(WhileExpression node) {
+        AstNode condition = expressionEvaluator.evaluate(node.getCondition());
+        int multiplier = condition instanceof ConstantAstNode c && !ExpressionEvaluator.equals(c.getAsDouble(), 0.0)
+                ? INFINITE_LOOP_REPETITIONS : LOOP_REPETITIONS;
+
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
+        setContextSubtype(AstContextSubtype.LOOP_CONDITION, multiplier);
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
         emit(createLabel(beginLabel));
         final LogicValue cond = visit(node.getCondition());
         emit(createJump(doneLabel, Condition.EQUAL, cond, FALSE));
+        setContextSubtype(AstContextSubtype.BODY, multiplier);
         visit(node.getBody());
         emit(createLabel(continueLabel));
+        setContextSubtype(AstContextSubtype.LOOP_UPDATE, multiplier);
         visit(node.getUpdate());
         emit(createJumpUnconditional(beginLabel));
         emit(createLabel(doneLabel));
         loopStack.exitLoop(node.getLabel());
+        clearContextSubtype();
         return NULL;
     }
 
     @Override
     public LogicValue visitDoWhileStatement(DoWhileExpression node) {
+        AstNode condition = expressionEvaluator.evaluate(node.getCondition());
+        int multiplier = condition instanceof ConstantAstNode c && !ExpressionEvaluator.equals(c.getAsDouble(), 0.0)
+                ? INFINITE_LOOP_REPETITIONS : LOOP_REPETITIONS;
+
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        setContextSubtype(AstContextSubtype.BODY, multiplier);
         emit(createLabel(beginLabel));
         visit(node.getBody());
+        setContextSubtype(AstContextSubtype.LOOP_CONDITION, multiplier);
         emit(createLabel(continueLabel));
         final LogicValue cond = visit(node.getCondition());
         emit(createJump(beginLabel, Condition.NOT_EQUAL, cond, FALSE));
         emit(createLabel(doneLabel));
+        clearContextSubtype();
         loopStack.exitLoop(node.getLabel());
         return NULL;
     }
@@ -845,7 +946,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return LogicVariable.main(identifier);
         } else {
             // A truly local variable
-            return functionContext.registerVariable(LogicVariable.local(currentFunction.getName(), localPrefix, identifier));
+            return functionContext.registerVariable(
+                    LogicVariable.local(currentFunction.getName(), localPrefix, identifier));
         }
     }
 
@@ -889,8 +991,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicVariable resultVar = nextNodeResult();
         final LogicLabel exitLabel = nextLabel();
 
+        final double multiplier = 1.0 / node.getAlternatives().size();
+        int remain = node.getAlternatives().size();
         final LogicValue caseValue = visit(node.getCondition());
         for (final CaseAlternative alternative : node.getAlternatives()) {
+            enterAstNode(alternative);
+            setContextSubtype(AstContextSubtype.WHEN_VALUES, multiplier * remain--);
+
             final LogicLabel nextAlt = nextLabel();         // Next alternative
             final LogicLabel bodyLabel = nextLabel();       // Body of this alternative
 
@@ -920,10 +1027,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emit(createJumpUnconditional(nextAlt));
 
             // Body of the alternative
+            setContextSubtype(AstContextSubtype.WHEN_BODY, multiplier);
             emit(createLabel(bodyLabel));
             final LogicValue body = visit(alternative.getBody());
             emit(createSet(resultVar, body));
             emit(createJumpUnconditional(exitLabel));
+            clearContextSubtype();
+            exitAstNode(alternative);
 
             emit(createLabel(nextAlt));
         }
@@ -1047,7 +1157,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitControl(Control node) {
         final LogicValue target = visit(node.getTarget());
         final List<LogicValue> args = node.getParams().stream().map(this::visit).collect(Collectors.toList());
-        LogicValue value = functionMapper.handleProperty(pipeline, node.getProperty(), target, args);
+        LogicValue value = functionMapper.handleProperty(instructions::add, node.getProperty(), target, args);
         if (value == null) {
             throw new UndeclaredFunctionException("Don't know how to handle property [" + target + "." + node.getProperty() + "]");
         }

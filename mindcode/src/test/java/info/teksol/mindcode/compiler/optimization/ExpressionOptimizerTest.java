@@ -64,7 +64,7 @@ public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOpt
     }
 
     @Test
-    void optimizesNonconstantDivThenFloor() {
+    void optimizesNonConstantDivThenFloor() {
         assertOptimizesTo(
                 List.of(
                         createInstruction(OP, div, tmp0, value, divisor),
@@ -80,7 +80,7 @@ public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOpt
     }
 
     @Test
-    void ignoresNontemporaryVariables() {
+    void ignoresNonTemporaryVariables() {
         assertDoesNotOptimize(
                 createInstruction(OP, div, foo, value, K1000),
                 createInstruction(OP, floor, result, foo),
@@ -108,7 +108,7 @@ public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOpt
     }
 
     @Test
-    void ignoresNonconstantMultiplicands() {
+    void ignoresNonConstantMultiplicands() {
         assertDoesNotOptimize(
                 createInstruction(OP, mul, tmp0, value, divisor),
                 createInstruction(OP, floor, result, tmp0),

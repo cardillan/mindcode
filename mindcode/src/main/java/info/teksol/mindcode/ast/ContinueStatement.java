@@ -1,11 +1,15 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class ContinueStatement extends ControlBlockAstNode {
     private final String label;
 
-    ContinueStatement(String label) {
+    ContinueStatement(Token startToken, String label) {
+        super(startToken);
         this.label = label;
     }
 
@@ -26,5 +30,10 @@ public class ContinueStatement extends ControlBlockAstNode {
     @Override
     public String toString() {
         return "ContinueStatement{" + (label == null ? "" : "label='" + label + '\'') + '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.CONTINUE;
     }
 }

@@ -16,52 +16,10 @@ public interface InstructionProcessor {
     List<OpcodeVariant> getOpcodeVariants();
 
     LogicLabel nextLabel();
-
     LogicVariable nextTemp();
     LogicVariable nextProtectedTemp();
     LogicVariable nextReturnValue();
-
     String nextLocalPrefix();
-
-
-    CallInstruction createCallStackless(LogicAddress address);
-    CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr);
-    EndInstruction createEnd();
-    GotoInstruction createGoto(LogicVariable address);
-    JumpInstruction createJump(LogicLabel label, Condition condition, LogicValue x, LogicValue y);
-    JumpInstruction createJumpUnconditional(LogicLabel label);
-    LabelInstruction createLabel(LogicLabel label);
-    OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first);
-    OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second);
-    PopInstruction createPop(LogicVariable memory, LogicVariable value);
-    PrintInstruction createPrint(LogicValue what);
-    PrintflushInstruction createPrintflush(LogicVariable messageBlock);
-    PushInstruction createPush(LogicVariable memory, LogicVariable value);
-    ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index);
-    ReturnInstruction createReturn(LogicVariable stack);
-    SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property);
-    SetInstruction createSet(LogicVariable target, LogicValue value);
-    SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address);
-    StopInstruction createStop();
-    WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index);
-
-    /**
-     * Creates and validates a new LogicInstruction.
-     *
-     * @param opcode opcode of the instruction
-     * @param arguments arguments of the instruction
-     * @return a new, validated instance of LogicInstruction
-     */
-    LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments);
-
-    /**
-     * Creates and validates a new LogicInstruction.
-     *
-     * @param opcode opcode of the instruction
-     * @param arguments arguments of the instruction
-     * @return a new, validated instance of LogicInstruction
-     */
-    LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);
 
     /**
      * Creates a sample logic instruction from given opcode variant.
@@ -71,14 +29,30 @@ public interface InstructionProcessor {
      */
     LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
 
-    /**
-     * Creates a logic instruction without validating it. To be used for creating sample instructions.
-     *
-     * @param opcode opcode of the instruction
-     * @param arguments arguments of the instruction
-     * @return a new, non-validated instance of LogicInstruction
-     */
-    LogicInstruction createInstructionUnchecked(Opcode opcode, List<LogicArgument> arguments);
+
+    CallInstruction createCallStackless(AstContext astContext, LogicAddress address);
+    CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr);
+    EndInstruction createEnd(AstContext astContext);
+    GotoInstruction createGoto(AstContext astContext, LogicVariable address);
+    JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y);
+    JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target);
+    LabelInstruction createLabel(AstContext astContext, LogicLabel label);
+    OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first);
+    OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second);
+    PopInstruction createPop(AstContext astContext, LogicVariable memory, LogicVariable value);
+    PrintInstruction createPrint(AstContext astContext, LogicValue what);
+    PrintflushInstruction createPrintflush(AstContext astContext, LogicVariable messageBlock);
+    PushInstruction createPush(AstContext astContext, LogicVariable memory, LogicVariable value);
+    ReadInstruction createRead(AstContext astContext, LogicVariable result, LogicVariable memory, LogicValue index);
+    ReturnInstruction createReturn(AstContext astContext, LogicVariable stack);
+    SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property);
+    SetInstruction createSet(AstContext astContext, LogicVariable target, LogicValue value);
+    SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address);
+    StopInstruction createStop(AstContext astContext);
+    WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index);
+    LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments);
+    LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
+    LogicInstruction createInstructionUnchecked(AstContext context, Opcode opcode, List<LogicArgument> arguments);
 
     /**
      * Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
@@ -88,17 +62,6 @@ public interface InstructionProcessor {
      * @param consumer consumer accepting resolved instructions
      */
     void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer);
-
-    /**
-     * Returns a logic instruction with an argument set to the  given value.
-     * If the instruction is modified, a new version of it is created, otherwise the current instance is returned.
-     *
-     * @param instruction instruction to modify
-     * @param argIndex index of an argument to set
-     * @param value new value for the argument
-     * @return a modified instruction
-     */
-    LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, LogicArgument value);
 
     /**
      * Returns a logic instruction with all arguments equal to a specific value replaced by a new value.

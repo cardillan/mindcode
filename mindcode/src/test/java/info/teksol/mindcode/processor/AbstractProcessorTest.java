@@ -56,7 +56,7 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
     }
 
     protected List<LogicInstruction> compile(String code) {
-        return LogicInstructionLabelResolver.resolve(instructionProcessor, generateInstructions(code));
+        return LogicInstructionLabelResolver.resolve(instructionProcessor, generateInstructions(code).instructions());
     }
 
     protected void testAndEvaluateCode(String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {

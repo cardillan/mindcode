@@ -8,12 +8,17 @@ import java.util.List;
 
 public class PushInstruction extends PushOrPopInstruction {
 
-    public PushInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.PUSH, args, params);
+    public PushInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.PUSH, args, params);
     }
 
     protected PushInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public PushInstruction copy() {
+        return new PushInstruction(this, marker);
     }
 
     public PushInstruction withMarker(String marker) {

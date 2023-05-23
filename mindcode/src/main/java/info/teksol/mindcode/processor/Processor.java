@@ -141,8 +141,8 @@ public class Processor {
 
     private boolean executeOp(OpInstruction ix) {
         Variable target = getOrCreateVariable(ix.getResult());
-        Variable a = getExistingVariable(ix.getFirstOperand());
-        Variable b = getExistingVariable(ix.hasSecondOperand() ? ix.getSecondOperand() : LogicNumber.ZERO);
+        Variable a = getExistingVariable(ix.getX());
+        Variable b = getExistingVariable(ix.hasSecondOperand() ? ix.getY() : LogicNumber.ZERO);
         OperationEval op = ExpressionEvaluator.getOperation(ix.getOperation());
         if (op == null) {
             throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation " + ix.getOperation());
@@ -156,8 +156,8 @@ public class Processor {
         if (ix.isUnconditional()) {
             counter.setIntValue(address);
         } else {
-            Variable a = getExistingVariable(ix.getFirstOperand());
-            Variable b = getExistingVariable(ix.getSecondOperand());
+            Variable a = getExistingVariable(ix.getX());
+            Variable b = getExistingVariable(ix.getY());
             ConditionEval conditionEval = CONDITIONS.get(ix.getCondition());
             if (conditionEval == null) {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition " + ix.getCondition());

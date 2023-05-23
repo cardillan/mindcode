@@ -9,14 +9,18 @@ import info.teksol.mindcode.logic.Opcode;
 import java.util.List;
 
 public class PackColorInstruction extends BaseInstruction {
-    PackColorInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.PACKCOLOR, args, params);
+    PackColorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.PACKCOLOR, args, params);
     }
 
     protected PackColorInstruction(BaseInstruction other, String marker) {
         super(other, marker);
     }
 
+    @Override
+    public PackColorInstruction copy() {
+        return new PackColorInstruction(this, marker);
+    }
     public PackColorInstruction withMarker(String marker) {
         return new PackColorInstruction(this, marker);
     }

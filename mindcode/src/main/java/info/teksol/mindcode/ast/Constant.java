@@ -1,12 +1,15 @@
 package info.teksol.mindcode.ast;
 
+import org.antlr.v4.runtime.Token;
+
 import java.util.Objects;
 
 public class Constant extends BaseAstNode {
     private final String name;
     private final AstNode value;
 
-    public Constant(String name, AstNode value) {
+    public Constant(Token startToken, String name, AstNode value) {
+        super(startToken);
         this.name = name;
         this.value = value;
     }

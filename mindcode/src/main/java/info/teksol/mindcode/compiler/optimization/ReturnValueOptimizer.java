@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.CallInstruction;
 import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -37,9 +36,9 @@ import java.util.List;
  * the code block must not contain any function calls.</li>
  * </ol>
  */
-public class ReturnValueOptimizer extends BaseFunctionOptimizer {
-    public ReturnValueOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+public class ReturnValueOptimizer extends BaseOptimizer {
+    public ReturnValueOptimizer(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class ReturnValueOptimizer extends BaseFunctionOptimizer {
                     LogicArgument value = instruction.getValue();
 
                     // Get the other uses of fnRetVal
-                    List<LogicInstruction> list = findInstructions(ix -> ix.getArgs().contains(retval)
+                    List<LogicInstruction> list = instructions(ix -> ix.getArgs().contains(retval)
                             && !(ix instanceof PushOrPopInstruction));
 
                     // Precondition 1
@@ -63,7 +62,7 @@ public class ReturnValueOptimizer extends BaseFunctionOptimizer {
                     LogicInstruction other = list.get(1);
 
                     // Precondition 2
-                    int endIndex = findInstructionIndex(it.previousIndex(), ix -> ix == other);
+                    int endIndex = firstInstructionIndex(it.previousIndex(), ix -> ix == other);
                     List<LogicInstruction> codeBlock = instructionSubList(it.nextIndex(), endIndex);
                     if (!isLocalized(codeBlock)) continue;
 

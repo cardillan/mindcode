@@ -1,17 +1,17 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.ProcessorEdition;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public interface FunctionMapper {
 
-    LogicValue handleFunction(LogicInstructionPipeline pipeline, String functionName, List<LogicValue> params);
+    LogicValue handleFunction(Consumer<LogicInstruction> program, String functionName, List<LogicValue> params);
 
-    LogicValue handleProperty(LogicInstructionPipeline pipeline, String propertyName, LogicValue target, List<LogicValue> params);
+    LogicValue handleProperty(Consumer<LogicInstruction> program, String propertyName, LogicValue target, List<LogicValue> params);
 
     List<FunctionSample> generateSamples();
 

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.FinalCodeOutput;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
@@ -33,6 +34,8 @@ abstract class ActionHandler {
     abstract void handle(Namespace arguments);
 
     void configureMindcodeCompiler(Subparser subparser) {
+        CompilerProfile defaults = CompilerProfile.fullOptimizations();
+
         ArgumentGroup optimizations = subparser.addArgumentGroup("optimization levels")
                 .description("Options to specify global and individual optimization levels. " +
                         "Individual optimizers use global level when not explicitly set. Available optimization levels " +
@@ -53,13 +56,15 @@ abstract class ActionHandler {
         }
 
         subparser.addArgument("-t", "--target")
-                .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor, version 7 rev. A with standard processor or world processor)")
+                .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor," +
+                        " version 7 rev. A with standard processor or world processor)")
                 .choices("6", "7s", "7w", "7as", "7aw")
                 .setDefault("7s");
 
         subparser.addArgument("-g", "--goal")
                 .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
-                .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class));
+                .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class))
+                .setDefault(defaults.getGoal());
 
         ArgumentGroup debug = subparser.addArgumentGroup("debug output options");
 
@@ -67,17 +72,20 @@ abstract class ActionHandler {
                 .help("sets the detail level of parse tree output into the log file, 0 = off")
                 .choices(Arguments.range(0, 2))
                 .type(Integer.class)
-                .setDefault(0);
+                .setDefault(defaults.getParseTreeLevel());
 
         debug.addArgument("-d", "--debug-messages")
                 .help("sets the detail level of debug messages, 0 = off")
                 .choices(Arguments.range(0, 3))
                 .type(Integer.class)
-                .setDefault(0);
+                .setDefault(defaults.getDebugLevel());
 
-        debug.addArgument("-r", "--print-virtual")
-                .help("prints compiled code before virtual instructions resolution")
-                .action(Arguments.storeTrue());
+        debug.addArgument("-f", "--print-final")
+                .help("activates output of the final code (before virtual instructions resolution) of given type")
+                .type(Arguments.caseInsensitiveEnumType(FinalCodeOutput.class))
+                .nargs("?")
+                .setConst(FinalCodeOutput.PLAIN)
+                .setDefault(defaults.getFinalCodeOutput());
 
         debug.addArgument("-s", "--stacktrace")
                 .help("prints stack trace into stderr when an exception occurs")
@@ -103,7 +111,8 @@ abstract class ActionHandler {
 
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
         profile.setDebugLevel(arguments.getInt("debug_messages"));
-        profile.setPrintFinalCode(arguments.getBoolean("print_virtual"));
+        profile.setGoal(arguments.get("goal"));
+        profile.setFinalCodeOutput(arguments.get("print_final"));
         profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
 
         return profile;

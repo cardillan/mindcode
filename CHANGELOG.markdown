@@ -4,7 +4,28 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Fixed
+
+* Fixed the [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) not having upper 
+  boundary fixed under some conditions. The feature announced in release [2023-05-03](#2023-05-03) wasn't fully 
+  implemented until now.
+* Fixed bugs in the [stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization). In some cases, 
+  `push`/`pop` instructions were mistakenly removed, in other cases optional `push`/`pop` instructions were left in 
+  the code. Current implementation utilizes AST structure metadata to identify and protect variables used in loops.   
+
+### Miscellaneous
+
+* Generated mlog instructions are now linked to the AST nodes they were created from, and through them to the parser 
+  tokens (for now in somewhat coarse granularity).
+  * This allows optimizers to inspect source AST nodes of individual instructions, providing detailed information 
+    about code structure. Optimizations based on these metadata should be much safer (the higher level code 
+    structure is known, not guessed from individual instructions).
+  * Instructions can be linked to source code. At this moment it can be only displayed using the `-f source` command 
+    line argument, hopefully in the future a better error reporting will be built using the metadata.   
+
 ## 2023-05-23
+
+### Added
 
 * Added option for [code generation goal](doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). Allows to specify whether 
   to aim for a smaller code or a faster code.

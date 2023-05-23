@@ -410,16 +410,17 @@ might make the produced code somewhat less readable.
 Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. Several
 independent optimizations are performed:
 
-* `push`/`pop` instruction elimination for variables that are not used anywhere else (after being eliminated
-  by other optimizations). The optimization is done globally, in a single pass across the entire program.
-* every remaining variable pushed/popped around a function call is inspected. If the block of code between the function
-  call and the end of the function is linear (doesn't contain jumps away from the code block -- function calls aren't
-  considered) and the variable is not read in the code block, it is removed from the stack.
+* `push`/`pop` instruction elimination for variables that are not used anywhere apart from the push/pop instructions.
+  This happens when variables are eliminated by other optimizations. The optimization is done globally, in a single 
+  pass across the entire program.
+* `push`/`pop` instructions elimination for variables that are read neither by any instruction between the call 
+  instruction and the end of the function, nor by any instruction which is part of the same loop as the call 
+  instruction. 
 
 ## Function call optimization
 
 This optimizer eliminates unnecessary function parameters and local variables (replaces them by the argument
-or value assigned to them). Significantly improves inline functions, but seldom might help with other functions
+or value assigned to them). Significantly improves inline functions, but seldom might improve other function calls
 as well. The optimizer processes individual functions (inline and out-of-line) one by one and searches for 
 `set` instructions assigning a value to a variable (i.e. `set target value`) and checks these preconditions are met:
 

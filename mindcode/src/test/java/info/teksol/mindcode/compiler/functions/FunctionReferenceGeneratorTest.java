@@ -58,7 +58,7 @@ public class FunctionReferenceGeneratorTest {
     private void createFunctionReference(ProcessorVersion version) throws FileNotFoundException {
         assertTrue(new File(SYNTAX_REL_PATH + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
-        FunctionMapper mapper = FunctionMapperFactory.getFunctionMapper(processor, s -> {});
+        FunctionMapper mapper = FunctionMapperFactory.getStaticFunctionMapper(processor, s -> {});
         List<FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 
         try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS_" + version + ".markdown")) {

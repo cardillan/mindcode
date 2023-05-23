@@ -1,9 +1,14 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
-public interface Optimizer extends LogicInstructionPipeline {
+import java.util.List;
+import java.util.function.Consumer;
+
+public interface Optimizer {
 
     String getName();
 
@@ -11,5 +16,9 @@ public interface Optimizer extends LogicInstructionPipeline {
 
     void setGoal(GenerationGoal goal);
 
+    void setMessageRecipient(Consumer<CompilerMessage> messageRecipient);
+
     void setDebugPrinter(DebugPrinter debugPrinter);
+
+    void optimizeProgram(List<LogicInstruction> program, AstContext rootContext);
 }

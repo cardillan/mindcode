@@ -782,7 +782,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         $x = 99
                         print(foo(1) + foo(2))
                         """
-                ).subList(0, 2)
+                ).instructions().subList(0, 2)
         );
     }
 

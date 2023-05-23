@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
@@ -14,8 +13,6 @@ import info.teksol.mindcode.logic.Operation;
 
 import java.util.List;
 import java.util.Optional;
-
-import static info.teksol.mindcode.logic.Opcode.OP;
 
 /**
  * This optimizer improves and streamlines expressions.
@@ -32,9 +29,9 @@ import static info.teksol.mindcode.logic.Opcode.OP;
  * where 1 / constant is evaluated here. If the instruction is div instead of mul, the inverse isn't taken.
  * </p>
  */
-public class ExpressionOptimizer extends GlobalOptimizer {
-    public ExpressionOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+public class ExpressionOptimizer extends BaseOptimizer {
+    public ExpressionOptimizer(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
@@ -45,7 +42,7 @@ public class ExpressionOptimizer extends GlobalOptimizer {
                 final Tuple2<LogicValue, LogicValue> ops;
                 if (it.next() instanceof OpInstruction ix && (ops = extractIdivOperands(ix)) != null) {
                     LogicVariable result = ix.getResult();
-                    List<LogicInstruction> list = findInstructions(in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
+                    List<LogicInstruction> list = instructions(in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
                     // Preconditions:
                     // - exactly two instructions
@@ -53,9 +50,10 @@ public class ExpressionOptimizer extends GlobalOptimizer {
                     // - the second is the floor operation
                     // - the second operates on the result of the first
                     if (list.size() == 2 && list.get(0) == ix && list.get(1) instanceof OpInstruction ox
-                            && ox.getOperation() == Operation.FLOOR && ox.getFirstOperand().equals(ix.getResult())) {
+                            && ox.getOperation() == Operation.FLOOR && ox.getX().equals(ix.getResult())) {
 
-                        replaceInstruction(ox, createInstruction(OP, Operation.IDIV, ox.getResult(), ops.getT1(), ops.getT2()));
+                        replaceInstruction(ox, createOp(ox.getAstContext(),
+                                Operation.IDIV, ox.getResult(), ops.getT1(), ops.getT2()));
                         it.remove();
                     }
                 }
@@ -70,11 +68,11 @@ public class ExpressionOptimizer extends GlobalOptimizer {
             return null;
         } else {
             return switch (ix.getOperation()) {
-                case DIV, IDIV -> new Tuple2<>(ix.getFirstOperand(), ix.getSecondOperand());
+                case DIV, IDIV -> new Tuple2<>(ix.getX(), ix.getY());
 
                 case MUL ->
-                        ix.getFirstOperand().isLiteral() ? invertMultiplicand(ix.getSecondOperand(), ix.getFirstOperand()) :
-                        ix.getSecondOperand().isLiteral() ? invertMultiplicand(ix.getFirstOperand(), ix.getSecondOperand()) :
+                        ix.getX().isLiteral() ? invertMultiplicand(ix.getY(), ix.getX()) :
+                        ix.getY().isLiteral() ? invertMultiplicand(ix.getX(), ix.getY()) :
                         null;
 
                 default -> null;

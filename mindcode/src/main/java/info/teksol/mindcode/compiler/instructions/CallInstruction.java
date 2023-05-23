@@ -9,12 +9,17 @@ import java.util.List;
 
 public class CallInstruction extends BaseInstruction {
 
-    CallInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.CALL, args, params);
+    CallInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.CALL, args, params);
     }
 
     protected CallInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public CallInstruction copy() {
+        return new CallInstruction(this, marker);
     }
 
     public CallInstruction withMarker(String marker) {

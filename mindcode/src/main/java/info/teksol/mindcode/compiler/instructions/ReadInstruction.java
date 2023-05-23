@@ -10,8 +10,13 @@ import java.util.List;
 
 public class ReadInstruction extends BaseInstruction {
 
-    ReadInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.READ, args, params);
+    ReadInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.READ, args, params);
+    }
+
+    @Override
+    public ReadInstruction copy() {
+        return new ReadInstruction(this, marker);
     }
 
     protected ReadInstruction(BaseInstruction other, String marker) {

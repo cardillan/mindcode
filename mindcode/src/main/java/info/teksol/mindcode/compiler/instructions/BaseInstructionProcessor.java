@@ -9,7 +9,6 @@ import info.teksol.mindcode.logic.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static info.teksol.mindcode.logic.Opcode.*;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
 public class BaseInstructionProcessor implements InstructionProcessor {
@@ -92,122 +92,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return opcodeVariants;
     }
 
-
-
-    @Override
-    public CallInstruction createCallStackless(LogicAddress address) {
-        return (CallInstruction) createInstruction(Opcode.CALL, address);
-    }
-
-    @Override
-    public CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr) {
-        return (CallRecInstruction) createInstruction(Opcode.CALLREC, stack, callAddr, retAddr);
-    }
-
-    @Override
-    public EndInstruction createEnd() {
-        return (EndInstruction) createInstruction(Opcode.END);
-    }
-
-    @Override
-    public GotoInstruction createGoto(LogicVariable address) {
-        return (GotoInstruction) createInstruction(Opcode.GOTO, address);
-    }
-
-    @Override
-    public JumpInstruction createJump(LogicLabel label, Condition condition, LogicValue x, LogicValue y) {
-        return (JumpInstruction) createInstruction(Opcode.JUMP, label, condition, x, y);
-    }
-
-    @Override
-    public JumpInstruction createJumpUnconditional(LogicLabel label) {
-        return (JumpInstruction) createInstruction(Opcode.JUMP, label, Condition.ALWAYS);
-    }
-
-    @Override
-    public LabelInstruction createLabel(LogicLabel label) {
-        return (LabelInstruction) createInstruction(Opcode.LABEL, label);
-    }
-
-    @Override
-    public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first) {
-        return (OpInstruction) createInstruction(Opcode.OP, operation, target, first);
-    }
-
-    @Override
-    public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
-        return (OpInstruction) createInstruction(Opcode.OP, operation, target, first, second);
-    }
-
-    @Override
-    public PopInstruction createPop(LogicVariable memory, LogicVariable value) {
-        return (PopInstruction) createInstruction(Opcode.POP, memory, value);
-    }
-
-    @Override
-    public PrintInstruction createPrint(LogicValue what) {
-        return (PrintInstruction) createInstruction(Opcode.PRINT, what);
-    }
-
-    @Override
-    public PrintflushInstruction createPrintflush(LogicVariable messageBlock) {
-        return (PrintflushInstruction) createInstruction(Opcode.PRINTFLUSH, messageBlock);
-    }
-
-    @Override
-    public PushInstruction createPush(LogicVariable memory, LogicVariable value) {
-        return (PushInstruction) createInstruction(Opcode.PUSH, memory, value);
-    }
-
-    @Override
-    public ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index) {
-        return (ReadInstruction) createInstruction(Opcode.READ, result, memory, index);
-    }
-
-    @Override
-    public ReturnInstruction createReturn(LogicVariable stack) {
-        return (ReturnInstruction) createInstruction(Opcode.RETURN, stack);
-    }
-
-    @Override
-    public SensorInstruction createSensor(LogicVariable result, LogicValue target, LogicValue property) {
-        return (SensorInstruction) createInstruction(Opcode.SENSOR, result, target, property);
-    }
-
-    @Override
-    public SetInstruction createSet(LogicVariable target, LogicValue value) {
-        return (SetInstruction) createInstruction(Opcode.SET, target, value);
-    }
-
-    @Override
-    public SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address) {
-        return (SetAddressInstruction) createInstruction(Opcode.SETADDR, variable, address);
-    }
-
-    @Override
-    public StopInstruction createStop() {
-        return (StopInstruction) createInstruction(Opcode.STOP);
-    }
-
-    @Override
-    public WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index) {
-        return (WriteInstruction) createInstruction(Opcode.WRITE, value, memory, index);
-    }
-
-
-    @Override
-    public LogicInstruction createInstruction(Opcode opcode, LogicArgument... arguments) {
-        return createInstruction(opcode, List.of(arguments));
-    }
-
-    @Override
-    public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
-        return validate(createInstructionUnchecked(opcode, arguments));
-    }
-
+    private static final AstContext sampleContext = AstContext.createRootNode();
     @Override
     public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {
-        return createInstruction(opcodeVariant.opcode(),
+        return createInstruction(sampleContext, opcodeVariant.opcode(),
                 opcodeVariant.namedParameters().stream()
                         .map(NamedParameter::name)
                         .map(BaseArgument::new)
@@ -216,77 +104,179 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public LogicInstruction createInstructionUnchecked(Opcode opcode, List<LogicArgument> arguments) {
+    public CallInstruction createCallStackless(AstContext astContext, LogicAddress address) {
+        return (CallInstruction) createInstruction(astContext, CALL, address);
+    }
+
+    @Override
+    public CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr) {
+        return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr);
+    }
+
+    @Override
+    public EndInstruction createEnd(AstContext astContext) {
+        return (EndInstruction) createInstruction(astContext, END);
+    }
+
+    @Override
+    public GotoInstruction createGoto(AstContext astContext, LogicVariable address) {
+        return (GotoInstruction) createInstruction(astContext, GOTO, address);
+    }
+
+    @Override
+    public JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
+        return (JumpInstruction) createInstruction(astContext, JUMP, target, condition, x, y);
+    }
+
+    @Override
+    public JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target) {
+        return (JumpInstruction) createInstruction(astContext, JUMP, target, Condition.ALWAYS);
+    }
+
+    @Override
+    public LabelInstruction createLabel(AstContext astContext, LogicLabel label) {
+        return (LabelInstruction) createInstruction(astContext, LABEL, label);
+    }
+
+    @Override
+    public OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first) {
+        return (OpInstruction) createInstruction(astContext, OP, operation, target, first);
+    }
+
+    @Override
+    public OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second) {
+        return (OpInstruction) createInstruction(astContext, OP, operation, target, first, second);
+    }
+
+    @Override
+    public PopInstruction createPop(AstContext astContext, LogicVariable memory, LogicVariable value) {
+        return (PopInstruction) createInstruction(astContext, POP, memory, value);
+    }
+
+    @Override
+    public PrintInstruction createPrint(AstContext astContext, LogicValue what) {
+        return (PrintInstruction) createInstruction(astContext, PRINT, what);
+    }
+
+    @Override
+    public PrintflushInstruction createPrintflush(AstContext astContext, LogicVariable messageBlock) {
+        return (PrintflushInstruction) createInstruction(astContext, PRINTFLUSH, messageBlock);
+    }
+
+    @Override
+    public PushInstruction createPush(AstContext astContext, LogicVariable memory, LogicVariable value) {
+        return (PushInstruction) createInstruction(astContext, PUSH, memory, value);
+    }
+
+    @Override
+    public ReadInstruction createRead(AstContext astContext, LogicVariable result, LogicVariable memory, LogicValue index) {
+        return (ReadInstruction) createInstruction(astContext, READ, result, memory, index);
+    }
+
+    @Override
+    public ReturnInstruction createReturn(AstContext astContext, LogicVariable stack) {
+        return (ReturnInstruction) createInstruction(astContext, RETURN, stack);
+    }
+
+    @Override
+    public SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {
+        return (SensorInstruction) createInstruction(astContext, SENSOR, result, target, property);
+    }
+
+    @Override
+    public SetInstruction createSet(AstContext astContext, LogicVariable target, LogicValue value) {
+        return (SetInstruction) createInstruction(astContext, SET, target, value);
+    }
+
+    @Override
+    public SetAddressInstruction createSetAddress(AstContext astContext, LogicVariable variable, LogicLabel address) {
+        return (SetAddressInstruction) createInstruction(astContext, SETADDR, variable, address);
+    }
+
+    @Override
+    public StopInstruction createStop(AstContext astContext) {
+        return (StopInstruction) createInstruction(astContext, STOP);
+    }
+
+    @Override
+    public WriteInstruction createWrite(AstContext astContext, LogicValue value, LogicVariable memory, LogicValue index) {
+        return (WriteInstruction) createInstruction(astContext, WRITE, value, memory, index);
+    }
+
+
+    @Override
+    public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {
+        return createInstruction(astContext, opcode, List.of(arguments));
+    }
+
+    @Override
+    public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
+        return validate(createInstructionUnchecked(astContext, opcode, arguments));
+    }
+
+    @Override
+    public LogicInstruction createInstructionUnchecked(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
         List<LogicParameter> params = getParameters(opcode, arguments);
 
         return switch (opcode) {
-            case CALL       -> new CallInstruction(arguments, params);
-            case CALLREC    -> new CallRecInstruction(arguments, params);
-            case END        -> new EndInstruction();
-            case GOTO       -> new GotoInstruction(arguments, params);
-            case JUMP       -> new JumpInstruction(arguments, params);
-            case LABEL      -> new LabelInstruction(arguments, params);
-            case OP         -> new OpInstruction(arguments, params);
-            case PACKCOLOR  -> new PackColorInstruction(arguments, params);
-            case POP        -> new PopInstruction(arguments, params);
-            case PRINT      -> new PrintInstruction(arguments, params);
-            case PRINTFLUSH -> new PrintflushInstruction(arguments, params);
-            case PUSH       -> new PushInstruction(arguments, params);
-            case READ       -> new ReadInstruction(arguments, params);
-            case RETURN     -> new ReturnInstruction(arguments, params);
-            case SENSOR     -> new SensorInstruction(arguments, params);
-            case SET        -> new SetInstruction(arguments, params);
-            case SETADDR    -> new SetAddressInstruction(arguments, params);
-            case STOP       -> new StopInstruction();
-            case WRITE      -> new WriteInstruction(arguments, params);
-            default         -> new BaseInstruction(opcode, arguments, params);
+            case CALL       -> new CallInstruction(astContext, arguments, params);
+            case CALLREC    -> new CallRecInstruction(astContext, arguments, params);
+            case END        -> new EndInstruction(astContext);
+            case GOTO       -> new GotoInstruction(astContext, arguments, params);
+            case JUMP       -> new JumpInstruction(astContext, arguments, params);
+            case LABEL      -> new LabelInstruction(astContext, arguments, params);
+            case OP         -> new OpInstruction(astContext, arguments, params);
+            case PACKCOLOR  -> new PackColorInstruction(astContext, arguments, params);
+            case POP        -> new PopInstruction(astContext, arguments, params);
+            case PRINT      -> new PrintInstruction(astContext, arguments, params);
+            case PRINTFLUSH -> new PrintflushInstruction(astContext, arguments, params);
+            case PUSH       -> new PushInstruction(astContext, arguments, params);
+            case READ       -> new ReadInstruction(astContext, arguments, params);
+            case RETURN     -> new ReturnInstruction(astContext, arguments, params);
+            case SENSOR     -> new SensorInstruction(astContext, arguments, params);
+            case SET        -> new SetInstruction(astContext, arguments, params);
+            case SETADDR    -> new SetAddressInstruction(astContext, arguments, params);
+            case STOP       -> new StopInstruction(astContext);
+            case WRITE      -> new WriteInstruction(astContext, arguments, params);
+            default         -> new BaseInstruction(astContext, opcode, arguments, params);
         };
     }
 
     @Override
     public void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+        AstContext astContext = instruction.getAstContext();
+
         switch (instruction) {
             case LabelInstruction ix -> {}       // Do nothing
 
             case PushInstruction ix -> {
-                consumer.accept(createWrite(ix.getVariable(), ix.getMemory(), stackPointer()));
-                consumer.accept(createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
+                consumer.accept(createOp(astContext, Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
             }
 
             case PopInstruction ix -> {
-                consumer.accept(createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(ix.getVariable(), ix.getMemory(), stackPointer()));
+                consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createRead(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
             }
 
             case CallRecInstruction ix -> {
-                consumer.accept(createInstruction(Opcode.WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
-                consumer.accept(createOp(Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
+                consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
+                consumer.accept(createOp(astContext, Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
             }
 
             case ReturnInstruction ix -> {
                 LogicVariable retAddr = nextTemp();
-                consumer.accept(createOp(Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(retAddr, ix.getStack(), stackPointer()));
-                consumer.accept(createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, retAddr));
+                consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createRead(astContext, retAddr, ix.getStack(), stackPointer()));
+                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, retAddr));
             }
 
-            case CallInstruction ix       -> consumer.accept(createJumpUnconditional(ix.getCallAddr()));
-            case GotoInstruction ix       -> consumer.accept(createInstruction(Opcode.SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
-            case SetAddressInstruction ix -> consumer.accept(createInstruction(Opcode.SET, ix.getTarget(), ix.getLabel()));
+            case CallInstruction ix       -> consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
+            case GotoInstruction ix       -> consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
+            case SetAddressInstruction ix -> consumer.accept(createInstruction(astContext, SET, ix.getTarget(), ix.getLabel()));
 
             default                       -> consumer.accept(instruction);
-        }
-    }
-
-    public LogicInstruction replaceArg(LogicInstruction instruction, int argIndex, LogicArgument arg) {
-        if (instruction.getArg(argIndex).equals(arg)) {
-            return instruction;
-        }
-        else {
-            List<LogicArgument> newArgs = new ArrayList<>(instruction.getArgs());
-            newArgs.set(argIndex, arg);
-            return createInstruction(instruction.getOpcode(), newArgs);
         }
     }
 
@@ -301,8 +291,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public LogicInstruction replaceArgs(LogicInstruction instruction, List<LogicArgument> newArgs) {
         return instruction.getMarker() != null
-                ? createInstruction(instruction.getOpcode(), newArgs).withMarker(instruction.getMarker())
-                : createInstruction(instruction.getOpcode(), newArgs);
+                ? createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs).withMarker(instruction.getMarker())
+                : createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
     }
 
     @Override
@@ -523,11 +513,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                     return Optional.empty();
                 }
 
-                String mantisa =  literalFloat.substring(0, dot) + literalFloat.substring(dot + 1, exp);
+                String mantissa =  literalFloat.substring(0, dot) + literalFloat.substring(dot + 1, exp);
                 exponent -= (exp - dot - 1);
 
-                int lastValidDigit = mantisa.length() - 1;
-                while (mantisa.charAt(lastValidDigit) == '0') {
+                int lastValidDigit = mantissa.length() - 1;
+                while (mantissa.charAt(lastValidDigit) == '0') {
                     if (--lastValidDigit < 0) {
                         return Optional.of("0");
                     }
@@ -535,11 +525,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 }
 
                 String mlog = exponent == 0
-                        ? mantisa.substring(0, lastValidDigit + 1)
-                        : mantisa.substring(0, lastValidDigit + 1) + literalFloat.charAt(exp) + exponent;
+                        ? mantissa.substring(0, lastValidDigit + 1)
+                        : mantissa.substring(0, lastValidDigit + 1) + literalFloat.charAt(exp) + exponent;
 
-                double refloat = Double.parseDouble(String.valueOf(valueFloat));
-                double absDiff = Math.abs(refloat - value);
+                double reFloat = Double.parseDouble(String.valueOf(valueFloat));
+                double absDiff = Math.abs(reFloat - value);
                 double relDiff = absDiff / value;
                 if (relDiff > 1e-9) {
                     messageConsumer.accept(MindcodeMessage.warn("Loss of precision while creating mlog literals (original value "+ literal + ", encoded value " + mlog + ")"));

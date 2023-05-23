@@ -2,13 +2,15 @@ package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicBoolean;
+import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
 
 public class BooleanLiteral extends ConstantAstNode {
     private final boolean value;
 
-    public BooleanLiteral(boolean value) {
+    public BooleanLiteral(Token startToken, boolean value) {
+        super(startToken);
         this.value = value;
     }
 

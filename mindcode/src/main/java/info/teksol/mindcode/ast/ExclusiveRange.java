@@ -1,10 +1,11 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.logic.Condition;
+import org.antlr.v4.runtime.Token;
 
 public class ExclusiveRange extends Range {
-    ExclusiveRange(AstNode firstValue, AstNode lastValue) {
-        super(firstValue, lastValue);
+    ExclusiveRange(Token startToken, AstNode firstValue, AstNode lastValue) {
+        super(startToken,firstValue, lastValue);
     }
 
     @Override

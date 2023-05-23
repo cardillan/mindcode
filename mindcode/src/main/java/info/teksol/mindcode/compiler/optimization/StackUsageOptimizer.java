@@ -1,11 +1,11 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.LogicInstructionPipeline;
+import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.instructions.AstContextType;
 import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
-import info.teksol.mindcode.compiler.instructions.ReturnInstruction;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicVariable;
 
@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static info.teksol.util.CollectionUtils.findFirstIndex;
+
 /**
  * Optimizes the stack usage -- eliminates push/pop instruction pairs determined to be unnecessary. Several
  * independent optimizations are performed:
@@ -22,15 +24,16 @@ import java.util.stream.Collectors;
  * Eliminates push/pop instruction for variables that are not used anywhere else (after being eliminated
  * by other optimizers). The optimization is done globally, in a single pass across the entire program.
  * </li><li>
- * Inspects every remaining variable pushed/popped around a function call. If the block of code between the function
- * call and the end of the function is linear (doesn't contain jumps into the code block from outside -- function
- * calls aren't considered) and the variable is not read in the code block, it is removed from the stack.
+ * Removes variables from stack matching the following conditions:
+ * <ol><li>The variable isn't read by any instruction following the call instruction, up to the end of the function.
+ * </li><li>The variable isn't read by any instruction in any loop shared with the call instruction.
+ * </li></ol>
  * </li></ul>
  */
-public class StackUsageOptimizer extends BaseFunctionOptimizer {
+public class StackUsageOptimizer extends BaseOptimizer {
 
-    StackUsageOptimizer(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
-        super(instructionProcessor, next);
+    StackUsageOptimizer(InstructionProcessor instructionProcessor) {
+        super(instructionProcessor);
     }
 
     @Override
@@ -47,10 +50,13 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
 
     private void removeUnusedVariables() {
         // Collects all variables from the entire program except push or pop instructions
-        instructionStream().filter(Predicate.not(PushOrPopInstruction.class::isInstance))
+        List<LogicArgument> list = instructionStream()
+                .filter(Predicate.not(PushOrPopInstruction.class::isInstance))
                 .flatMap(LogicInstruction::inputOutputArgumentsStream)
                 .filter(LogicVariable.class::isInstance)
-                .forEachOrdered(variables::add);
+                .toList();
+
+        variables.addAll(list);
 
         removeMatchingInstructions(this::uselessStackOperation);
     }
@@ -60,33 +66,41 @@ public class StackUsageOptimizer extends BaseFunctionOptimizer {
     }
 
     private void removeUnnecessaryPushes() {
-        // Loop through call instruction indexes
-        int call = findInstructionIndex(0, ix -> ix instanceof CallRecInstruction);
-        while (call > 0) {
-            int finish = findInstructionIndex(call, ix -> ix instanceof ReturnInstruction);
-            if (finish < 0) {
-                break;      // No return after call: something is wrong, bail out.
+        try (LogicIterator it = createIterator()) {
+            while (it.hasNext()) {
+                if (it.next() instanceof CallRecInstruction call) {
+                    // Obtain entire function
+                    AstContext functionContext = call.findContextOfType(AstContextType.FUNCTION);
+                    if (functionContext == null) {
+                        continue;   // If there's no function context, we're in main body. Skip call.
+                    }
+
+                    List<LogicInstruction> function = contextInstructions(functionContext);
+
+                    // 1. Preserve all variables that are read anywhere after the call
+                    int callIndex = findFirstIndex(function, ix -> ix == call);
+                    List<LogicInstruction> codeBlock = function.subList(callIndex, function.size());
+                    Set<LogicArgument> preserveVariables = codeBlock.stream()
+                            .filter(ix -> !(ix instanceof PushOrPopInstruction))
+                            .flatMap(LogicInstruction::inputArgumentsStream)
+                            .filter(LogicVariable.class::isInstance)
+                            .collect(Collectors.toCollection(HashSet::new));
+
+                    // 2. Preserve all variables which are part of the same loop as the call. As the loops are
+                    // hierarchical, we can inspect just the topmost loop.
+                    contextStream(call.findTopContextOfType(AstContextType.LOOP))
+                            .filter(ix -> !(ix instanceof PushOrPopInstruction))
+                            .flatMap(LogicInstruction::inputArgumentsStream)
+                            .forEachOrdered(preserveVariables::add);
+
+                    // Remove instructions from the function
+                    function.stream()
+                            .filter(in -> in instanceof PushOrPopInstruction ix &&
+                                    ix.getAstContext().matches(call.getAstContext()) &&
+                                    !preserveVariables.contains(ix.getVariable()))
+                            .forEachOrdered(this::removeInstruction);
+                }
             }
-
-            List<LogicInstruction> codeBlock = instructionSubList(call, finish);
-            if (isLocalized(codeBlock)) {
-                // List of variables read in the code block, except push/pop operations
-                Set<LogicArgument> readVariables = codeBlock.stream()
-                        .filter(ix -> !(ix instanceof PushOrPopInstruction))
-                        .flatMap(LogicInstruction::inputArgumentsStream)
-                        .collect(Collectors.toSet());
-
-                // Push/pop instructions around a call are marked with the same marker
-                String marker = getInstruction(call).getMarker();
-
-                // Need to remove from the entire program, not just from the code block, as code block
-                // doesn't contain push instructions preceding the call instruction
-                removeMatchingInstructions(in -> in instanceof PushOrPopInstruction ix
-                        && ix.matchesMarker(marker) && !readVariables.contains(ix.getVariable()));
-            }
-
-            call = findInstructionIndex(call + 1, ix -> ix instanceof CallRecInstruction);
         }
     }
-
 }

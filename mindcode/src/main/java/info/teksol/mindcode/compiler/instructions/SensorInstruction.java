@@ -10,12 +10,17 @@ import java.util.List;
 
 public class SensorInstruction extends BaseInstruction {
 
-    SensorInstruction(List<LogicArgument> args, List<LogicParameter> params) {
-        super(Opcode.SENSOR, args, params);
+    SensorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.SENSOR, args, params);
     }
 
     protected SensorInstruction(BaseInstruction other, String marker) {
         super(other, marker);
+    }
+
+    @Override
+    public SensorInstruction copy() {
+        return new SensorInstruction(this, marker);
     }
 
     public SensorInstruction withMarker(String marker) {
