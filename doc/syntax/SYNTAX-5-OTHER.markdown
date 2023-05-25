@@ -126,7 +126,7 @@ and availability of the aggressive optimization level is:
 | [Loop optimization](#loop-optimization)                         | loop-optimization             |     Y      |
 | [If expression optimization](#if-expression-optimization)       | if-expression-optimization    |     Y      |
 | [Jump threading](#jump-threading)                               | jump-threading                |     Y      |
-| [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessible-code-elimination |     Y      |
+| [Unreachable code elimination](#unreachable-code-elimination)   | unreachable-code-elimination  |     Y      |
 | [Stack optimization](#stack-optimization)                       | stack-optimization            |     N      |
 | [Function call optimization](#function-call-optimization)       | function-call-optimization    |     N      |
 | [Return value optimization](#return-value-optimization)         | return-value-optimization     |     N      |
@@ -546,16 +546,16 @@ to the target of the second jump, repeated until the end of jump chain is reache
 
 No instructions are removed or added, but the execution of the code is faster.
 
-## Inaccessible code elimination
+## Unreachable code elimination
 
-This optimizer removes instructions that are inaccessible.
-There are several ways inaccessible instructions might appear:
-1. Jump threading can create inaccessible jumps that are no longer targeted.
-2. User-created inaccessible regions, such as `while false ... end`.
-3. User defined functions which are called from an inaccessible region.
+This optimizer removes instructions that are unreachable.
+There are several ways unreachable instructions might appear:
+1. Jump threading can create unreachable jumps that are no longer targeted.
+2. User-created unreachable regions, such as `while false ... end`.
+3. User defined functions which are called from an unreachable region.
 
 Instruction removal is done in loops until no instructions are removed. This way entire branches
-of inaccessible code (i.e. all code inside the `while false ... end` statement) should be eliminated,
+of unreachable code (i.e. all code inside the `while false ... end` statement) should be eliminated,
 assuming the unconditional jump normalization optimizer was also active.
 
 The `end` instruction, even when not accessible, is not removed unless the optimization level is `aggressive`.

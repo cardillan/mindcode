@@ -21,7 +21,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 Optimization.SINGLE_STEP_JUMP_ELIMINATION,
                 Optimization.JUMP_OVER_JUMP_ELIMINATION,
                 Optimization.OUTPUT_TEMPS_ELIMINATION,
-                Optimization.INACCESSIBLE_CODE_ELIMINATION,
+                Optimization.UNREACHABLE_CODE_ELIMINATION,
                 Optimization.IF_EXPRESSION_OPTIMIZATION
         );
     }

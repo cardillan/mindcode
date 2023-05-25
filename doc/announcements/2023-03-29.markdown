@@ -321,7 +321,7 @@ Available optimizers are:
   q: simplifies sequences of intertwined jumps
   p: merges consecutive print statements outputting text literals
   t: speeds up execution by eliminating chained jumps
-  e: eliminates instructions made inaccessible by optimizations or false conditions
+  e: eliminates instructions made unreachable by optimizations or false conditions
   k: optimizes variable storage on stack
 
 Use '-' to negate selection, e.g. -o-n uses all optimization except CONDITIONAL_JUMPS_NORMALIZATION.

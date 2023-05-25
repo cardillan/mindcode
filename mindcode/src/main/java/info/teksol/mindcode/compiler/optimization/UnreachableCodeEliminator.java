@@ -19,29 +19,29 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * This optimizer removes instructions that are inaccessible.
- * There are several ways inaccessible instructions might appear:
+ * This optimizer removes instructions that are unreachable.
+ * There are several ways unreachable instructions might appear:
  * <ol>
- * <li>Jump target propagation can get inaccessible jumps that are no longer targeted</li>
- * <li>User-created inaccessible regions, such as {@code while false ... end}</li>
- * <li>User defined functions which are called from an inaccessible region</li>
+ * <li>Jump target propagation can get unreachable jumps that are no longer targeted</li>
+ * <li>User-created unreachable regions, such as {@code while false ... end}</li>
+ * <li>User defined functions which are called from an unreachable region</li>
  * </ol>
  * Instruction removal is done in loops until no instructions are removed. This way entire branches
- * of inaccessible code (i.e. code inside the {@code while false ... end} statement) should be eliminated,
+ * of unreachable code (i.e. code inside the {@code while false ... end} statement) should be eliminated,
  * assuming the unconditional jump normalization optimizer was on the pipeline.
  * Labels - even inactive ones - are never removed.
  */
-class InaccessibleCodeEliminator extends BaseOptimizer {
+class UnreachableCodeEliminator extends BaseOptimizer {
     private Set<LogicLabel> activeLabels = new HashSet<>();
 
-    public InaccessibleCodeEliminator(InstructionProcessor instructionProcessor) {
+    public UnreachableCodeEliminator(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
     }
 
     @Override
     protected boolean optimizeProgram() {
         findActiveLabels();
-        removeInaccessibleInstructions();
+        removeUnreachableInstructions();
         return true;
     }
 
@@ -62,14 +62,14 @@ class InaccessibleCodeEliminator extends BaseOptimizer {
         };
     }
 
-    private void removeInaccessibleInstructions() {
+    private void removeUnreachableInstructions() {
         boolean accessible = true;
 
         try (LogicIterator it = createIterator()) {
             while(it.hasNext()) {
                 LogicInstruction instruction = it.next();
                 if (accessible) {
-                    // Unconditional jump makes the next instruction inaccessible
+                    // Unconditional jump makes the next instruction unreachable
                     if (instruction instanceof JumpInstruction ix && ix.getCondition() == Condition.ALWAYS) {
                         accessible = false;
                     } else if (instruction instanceof ReturnInstruction) {
@@ -82,7 +82,7 @@ class InaccessibleCodeEliminator extends BaseOptimizer {
                         // An active jump to here makes next instruction accessible
                         accessible = activeLabels.contains(ix.getLabel());
                     } else if (!(instruction instanceof EndInstruction) || aggressive()) {
-                        // Remove inaccessible
+                        // Remove unreachable
                         // Preserve end unless aggressive mode
                         it.remove();
                     }

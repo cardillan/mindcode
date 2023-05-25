@@ -77,7 +77,7 @@ usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] 
                 [--single-step-elimination LEVEL] [--input-temp-elimination LEVEL] [--output-temp-elimination LEVEL]
                 [--expression-optimization LEVEL] [--case-expression-optimization LEVEL]
                 [--conditionals-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--inaccessible-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--function-call-optimization LEVEL] [--return-value-optimization LEVEL] [--print-merging LEVEL]
                 [-t {6,7s,7w}] [-p {0..2}] [-d {0..3}] [-r] [-s] [input] [output]
 
@@ -127,8 +127,8 @@ optimization levels:
                          optimization level of simplifying sequences of intertwined jumps
   --jump-threading LEVEL
                          optimization level of eliminating chained jumps
-  --inaccessible-code-elimination LEVEL
-                         optimization level of eliminating  instructions  made  inaccessible  by  optimizations or false
+  --unreachable-code-elimination LEVEL
+                         optimization level of eliminating  instructions  made  unreachable  by  optimizations or false
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack
@@ -154,7 +154,7 @@ usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] 
                 [--single-step-elimination LEVEL] [--input-temp-elimination LEVEL] [--output-temp-elimination LEVEL]
                 [--expression-optimization LEVEL] [--case-expression-optimization LEVEL]
                 [--conditionals-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--inaccessible-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--function-call-optimization LEVEL] [--return-value-optimization LEVEL] [--print-merging LEVEL]
                 [-t {6,7s,7w}] [-p {0..2}] [-d {0..3}] [-r] [-s] [-a TAG [TAG ...]] [input] [output]
 
@@ -205,8 +205,8 @@ optimization levels:
                          optimization level of simplifying sequences of intertwined jumps
   --jump-threading LEVEL
                          optimization level of eliminating chained jumps
-  --inaccessible-code-elimination LEVEL
-                         optimization level of eliminating  instructions  made  inaccessible  by  optimizations or false
+  --unreachable-code-elimination LEVEL
+                         optimization level of eliminating  instructions  made  unreachable  by  optimizations or false
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack

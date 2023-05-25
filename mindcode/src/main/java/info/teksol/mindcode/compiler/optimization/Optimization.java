@@ -58,9 +58,9 @@ public enum Optimization {
             "eliminating chained jumps"),
     
     // This optimizer can get additional single step jumps; therefore is bundled with its eliminator
-    INACCESSIBLE_CODE_ELIMINATION       ('e', "Inaccessible Code Elimination",
-            List.of(InaccessibleCodeEliminator::new, SingleStepJumpEliminator::new),
-            "eliminating instructions made inaccessible by optimizations or false conditions"),
+    UNREACHABLE_CODE_ELIMINATION       ('e', "Unreachable Code Elimination",
+            List.of(UnreachableCodeEliminator::new, SingleStepJumpEliminator::new),
+            "eliminating instructions made unreachable by optimizations or false conditions"),
 
     STACK_USAGE_OPTIMIZATION            ('k', "Stack Optimization",
             StackUsageOptimizer::new,

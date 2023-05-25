@@ -7,11 +7,11 @@ import java.util.List;
 import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-public class InaccessibleCodeEliminatorTest extends AbstractOptimizerTest<InaccessibleCodeEliminator> {
+public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCodeEliminator> {
 
     @Override
-    protected Class<InaccessibleCodeEliminator> getTestedClass() {
-        return InaccessibleCodeEliminator.class;
+    protected Class<UnreachableCodeEliminator> getTestedClass() {
+        return UnreachableCodeEliminator.class;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class InaccessibleCodeEliminatorTest extends AbstractOptimizerTest<Inacce
                 DEAD_CODE_ELIMINATION,
                 SINGLE_STEP_JUMP_ELIMINATION,
                 JUMP_TARGET_PROPAGATION,
-                INACCESSIBLE_CODE_ELIMINATION
+                UNREACHABLE_CODE_ELIMINATION
         );
     }
 

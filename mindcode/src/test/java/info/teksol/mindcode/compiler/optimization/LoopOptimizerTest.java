@@ -22,7 +22,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 Optimization.CONDITIONAL_JUMPS_IMPROVEMENT,
                 Optimization.SINGLE_STEP_JUMP_ELIMINATION,
                 Optimization.JUMP_OVER_JUMP_ELIMINATION,
-                Optimization.INACCESSIBLE_CODE_ELIMINATION,
+                Optimization.UNREACHABLE_CODE_ELIMINATION,
                 Optimization.LOOP_OPTIMIZATION
         );
     }
