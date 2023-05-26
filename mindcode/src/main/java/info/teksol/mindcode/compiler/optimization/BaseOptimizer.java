@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.AstContextType;
@@ -17,6 +18,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -84,6 +86,16 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return program.get(index);
     }
 
+    protected LogicInstruction previousInstruction(LogicInstruction instruction) {
+        int index = instructionIndex(instruction);
+        return index > 0 ? program.get(index - 1) : null;
+    }
+
+    protected LogicInstruction nextInstruction(LogicInstruction instruction) {
+        int index = instructionIndex(instruction);
+        return index >= 0 && index < program.size() - 1 ? program.get(index + 1) : null;
+    }
+
     protected List<LogicInstruction> instructionSubList(int fromIndex, int toIndex) {
         return Collections.unmodifiableList(program.subList(fromIndex, toIndex));
     }
@@ -91,10 +103,18 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     protected Stream<LogicInstruction> instructionStream() {
         return program.stream();
     }
+
+    protected int instructionIndex(LogicInstruction instruction) {
+        for (int i = 0; i < program.size(); i++) {
+            if (instruction == program.get(i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
     //</editor-fold>
 
     //<editor-fold desc="Finding instructions by properties">
-
     // Starting at given index, finds first instruction matching predicate.
     // Returns the index or -1 if not found.
     protected int firstInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
@@ -131,29 +151,42 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //</editor-fold>
 
     //<editor-fold desc="Finding contexts">
+    private void forEachContext(AstContext astContext, Predicate<AstContext> matcher, Consumer<AstContext> action) {
+        if (matcher.test(astContext)) {
+            action.accept(astContext);
+        }
+        astContext.children().forEach(c -> forEachContext(c, matcher, action));
+    }
+
+    protected void forEachContext(Predicate<AstContext> matcher, Consumer<AstContext> action) {
+        forEachContext(rootContext,matcher, action);
+    }
+
+    protected List<AstContext> contexts(Predicate<AstContext> matcher) {
+        List<AstContext> contexts = new ArrayList<>();
+        forEachContext(rootContext, matcher, contexts::add);
+        return List.copyOf(contexts);
+    }
+
+    protected AstContext context(Predicate<AstContext> matcher) {
+        List<AstContext> contexts = contexts(matcher);
+        return switch (contexts.size()) {
+            case 0 -> null;
+            case 1 -> contexts.get(0);
+            default -> throw new MindcodeException("More than one context found.");
+        };
+    }
+
     /**
      * Creates a list of AST contexts representing inline functions.
      * @return list of inline function node contexts
      */
     protected List<AstContext> getInlineFunctions() {
-        List<AstContext> functions = new ArrayList<>();
-        gatherContexts(rootContext,
-                functions, c -> c.contextType() == AstContextType.INLINE_FUNCTION);
-        return List.copyOf(functions);
+        return contexts( c -> c.contextType() == AstContextType.INLINE_FUNCTION);
     }
 
     protected List<AstContext> getOutOfLineFunctions() {
-        List<AstContext> functions = new ArrayList<>();
-        gatherContexts(rootContext,
-                functions, c -> c.contextType() == AstContextType.FUNCTION);
-        return List.copyOf(functions);
-    }
-
-    protected void gatherContexts(AstContext astContext, List<AstContext> list, Predicate<AstContext> filter) {
-        if (filter.test(astContext)) {
-            list.add(astContext);
-        }
-        astContext.children().forEach(c -> gatherContexts(c, list, filter));
+        return contexts( c -> c.contextType() == AstContextType.FUNCTION);
     }
     //</editor-fold>
 
@@ -194,11 +227,34 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //</editor-fold>
 
     //<editor-fold desc="Program modification by direct access">
+    protected void insertInstruction(int index, LogicInstruction instruction) {
+        iterators.forEach(iterator -> iterator.instructionAdded(index));
+        program.add(index, instruction);
+        modifications++;
+    }
+
+    protected void replaceInstruction(int index, LogicInstruction instruction) {
+        program.set(index, instruction);
+        modifications++;
+    }
+
+    protected void removeInstruction(int index) {
+        iterators.forEach(iterator -> iterator.instructionRemoved(index));
+        program.remove(index);
+        modifications++;
+    }
+
+
+    protected void insertInstructions(int index, List<LogicInstruction> instructions) {
+        for (LogicInstruction instruction : instructions) {
+            insertInstruction(index++, instruction);
+        }
+    }
+
     protected void replaceInstruction(LogicInstruction original, LogicInstruction replaced) {
         for (int index = 0; index < program.size(); index++) {
             if (program.get(index) == original) {
-                program.set(index, replaced);
-                modifications++;
+                replaceInstruction(index, replaced);
                 return;
             }
         }
@@ -231,8 +287,15 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //</editor-fold>
 
     //<editor-fold desc="Logic iterator">
+    private final List<LogicIterator> iterators = new ArrayList<>();
+
     protected LogicIterator createIterator() {
         return createIterator(0);
+    }
+
+    protected LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
+        int index = instructionIndex(instruction);
+        return index < 0 ? null : createIterator(index);
     }
 
     protected LogicIterator createIteratorAtLabel(LogicLabel label) {
@@ -383,10 +446,6 @@ abstract class BaseOptimizer extends AbstractOptimizer {
                     '}';
         }
     }
-    //</editor-fold>
-
-    //<editor-fold desc="Internal iterator management">
-    private final List<LogicIterator> iterators = new ArrayList<>();
 
     private LogicIterator createIterator(int index) {
         LogicIterator iterator = new LogicIterator(index);
@@ -398,23 +457,6 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         if (!iterators.remove(iterator)) {
             throw new IllegalStateException("Trying to close unknown iterator.");
         }
-    }
-
-    private void insertInstruction(int index, LogicInstruction instruction) {
-        iterators.forEach(iterator -> iterator.instructionAdded(index));
-        program.add(index, instruction);
-        modifications++;
-    }
-
-    protected void removeInstruction(int index) {
-        iterators.forEach(iterator -> iterator.instructionRemoved(index));
-        program.remove(index);
-        modifications++;
-    }
-
-    private void replaceInstruction(int index, LogicInstruction instruction) {
-        program.set(index, instruction);
-        modifications++;
     }
     //</editor-fold>
 }

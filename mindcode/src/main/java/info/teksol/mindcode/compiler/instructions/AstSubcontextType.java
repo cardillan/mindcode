@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
-public enum AstContextSubtype {
+public enum AstSubcontextType {
     BASIC           ("    "),
 
     WHEN_VALUES     ("WVAL"),
@@ -12,6 +12,7 @@ public enum AstContextSubtype {
 
 
     BODY            ("BODY"),
+    LOOP_INIT       ("LCON"),
     LOOP_CONDITION  ("LCON"),
     LOOP_UPDATE     ("LUPD"),
     LOOP_ITERATOR   ("ITER"),
@@ -27,12 +28,12 @@ public enum AstContextSubtype {
     public final String text;
     final double multiplier;
 
-    AstContextSubtype(String text) {
+    AstSubcontextType(String text) {
         this.text = text;
         this.multiplier = 1.0;
     }
 
-    AstContextSubtype(String text, double multiplier) {
+    AstSubcontextType(String text, double multiplier) {
         this.text = text;
         this.multiplier = multiplier;
     }

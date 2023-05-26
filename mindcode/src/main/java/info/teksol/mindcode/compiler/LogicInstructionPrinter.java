@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.compiler.instructions.AstContext;
-import info.teksol.mindcode.compiler.instructions.AstContextSubtype;
+import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
@@ -38,14 +38,14 @@ public class LogicInstructionPrinter {
         instructions.forEach((instruction) -> {
             LinkedList<AstContext> unroll = new LinkedList<>();
             for (AstContext ctx = instruction.getAstContext(); ctx != null; ctx = ctx.parent()) {
-                if (ctx.contextSubtype() == AstContextSubtype.BASIC) {
+                if (ctx.subcontextType() == AstSubcontextType.BASIC) {
                     unroll.addFirst(ctx);
                 }
             }
 
             String hierarchy = unroll.stream().limit(10).map(c -> c.contextType().text).collect(Collectors.joining(" "));
             AstContext ctx = instruction.getAstContext();
-            buffer.append("%-50s  %s  %10s ".formatted(hierarchy, ctx.contextSubtype().text, format.format(ctx.weight()/totalWeight)));
+            buffer.append("%-50s  %s  %10s ".formatted(hierarchy, ctx.subcontextType().text, format.format(ctx.weight()/totalWeight)));
             buffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
@@ -64,7 +64,7 @@ public class LogicInstructionPrinter {
         instructions.forEach((instruction) -> {
             AstContext ctx = instruction.getAstContext();
             buffer.append("%3d:%s  %s %8s ".formatted(ctx.level(), ctx.contextType().text,
-                    ctx.contextSubtype().text, format.format(ctx.weight()/totalWeight)));
+                    ctx.subcontextType().text, format.format(ctx.weight()/totalWeight)));
             buffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");

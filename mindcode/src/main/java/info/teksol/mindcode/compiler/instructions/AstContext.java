@@ -9,26 +9,26 @@ public record AstContext(
         int level,
         AstNode node,
         AstContextType contextType,
-        AstContextSubtype contextSubtype,
+        AstSubcontextType subcontextType,
         AstContext parent,
         double weight,
         List<AstContext> children
 ) {
 
     public static AstContext createRootNode() {
-        return new AstContext(0, null, AstContextType.ROOT, AstContextSubtype.BODY,
+        return new AstContext(0, null, AstContextType.ROOT, AstSubcontextType.BODY,
                 null, 1.0, new ArrayList<>());
     }
 
-    public AstContext childNode(AstNode node, AstContextType contextType) {
+    public AstContext createChild(AstNode node, AstContextType contextType) {
         AstContext child = new AstContext(level + 1, node, contextType, node.getContextSubype(),
                 this, weight, new ArrayList<>());
         children.add(child);
         return child;
     }
 
-    public AstContext subtype(AstContextSubtype contextSubtype, double multiplier) {
-        AstContext child = new AstContext(level, node, contextType, contextSubtype,
+    public AstContext createSubcontext(AstSubcontextType subcontextType, double multiplier) {
+        AstContext child = new AstContext(level, node, contextType, subcontextType,
                 this, weight * multiplier, new ArrayList<>());
         children.add(child);
         return child;
@@ -70,13 +70,22 @@ public record AstContext(
         return found;
     }
 
+    public AstContext findSubcontext(AstSubcontextType type) {
+        for (AstContext child : children) {
+            if (child.subcontextType == type) {
+                return child;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "AstContext{" +
                 "level=" + level +
                 ", node=" + node +
                 ", contextType=" + contextType +
-                ", contextSubtype=" + contextSubtype +
+                ", subcontextType=" + subcontextType +
                 ", weight=" + weight +
                 '}';
     }

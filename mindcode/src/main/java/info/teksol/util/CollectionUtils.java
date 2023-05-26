@@ -22,4 +22,8 @@ public class CollectionUtils {
         int index = findFirstIndex(list, matcher);
         return index < 0 ? null : list.remove(index);
     }
+
+    public static <E> E fromEnd(List<? extends E> list, int index) {
+        return (index < 0 || index >= list.size()) ? null : list.get(list.size() - index - 1);
+    }
 }

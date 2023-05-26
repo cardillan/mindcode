@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.instructions.AstContextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
@@ -14,24 +15,27 @@ import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
+import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
 import static info.teksol.mindcode.logic.ArgumentType.TMP_VARIABLE;
+import static info.teksol.util.CollectionUtils.fromEnd;
 
 /**
  * The loop optimizers improves loops with the condition at the beginning by performing these modifications:
  * <ol>
  * <li>Replacing the closing unconditional jump to the loop condition with a jump based on the inverse of the loop
- * condition leading to loop body. This saves the unconditional jump. If the loop condition evaluates through
- * additional instructions apart from the jump, these will be copied to the end of the loop too (assuming the
+ * condition leading to loop body. This avoid the execution of the unconditional jump. If the loop condition evaluates
+ * through additional instructions apart from the jump, these will be copied to the end of the loop too (assuming the
  * code generation goal is 'speed' and the loop condition takes at most three  additional instructions.)</li>
- * <li>If the previous modification was done and it can be determined that the loop condition holds before the first
- * iteration of the loop: removing the conditional jump at the beginning of the loop.</li>
+ * <li>If the previous modification was done, the loop condition consists of the jump only and it can be determined
+ * that the loop condition holds before the first iteration of the loop, the conditional jump at the beginning
+ * of the loop is removed.</li>
  * </ol>
- *
+ * <p>
  * If the opening jump has a form of op followed by negation jump, the condition is still replicated at the end
- * of the body as a jump based on the op condition. In this case, execution of two instructions per loop is avoided.
+ * of the body as a jump having the op condition. In this case, execution of two instructions per loop is avoided.
  */
 public class LoopOptimizer extends BaseOptimizer {
 
@@ -39,85 +43,92 @@ public class LoopOptimizer extends BaseOptimizer {
         super(instructionProcessor);
     }
 
-    @Override
-    protected boolean optimizeProgram() {
-        int count = 0;
+    private int count;
 
-        LogicIterator iterator = createIterator();
-        while (iterator.hasNext()) {
-            if (iterator.next() instanceof JumpInstruction closing && closing.isUnconditional()) {
-                // We're locating loops using the backjump instruction. If such instruction leads to
-                // a linear sequence of instructions terminated by a conditional jump to a location directly
-                // after the backjump, we found a loop with condition at the beginning.
+    private void optimizeLoop(AstContext loop) {
+        // TODO provide enhanced list class for accessing instructions from both start and end
+        List<LogicInstruction> condition = contextInstructions(loop.findSubcontext(LOOP_CONDITION));
+        List<LogicInstruction> update = contextInstructions(loop.findSubcontext(LOOP_UPDATE));
+        if (condition.isEmpty() || update.isEmpty() || !hasConditionAtFront(loop)) {
+            return;
+        }
 
-                // Obtain the potential loop setup instruction right before the label
-                // There might be additional labels, but we don't care - only the simplest case is handled
-                LogicIterator tmpIterator = createIteratorAtLabel(closing.getTarget());
-                LogicInstruction loopSetup = tmpIterator.hasPrevious() ? tmpIterator.previous() : null;
-                tmpIterator.close();
+        // Make sure the structure of the loop meets expectations
+        if (condition.get(0) instanceof LabelInstruction conditionLabel
+                && fromEnd(condition, 0) instanceof JumpInstruction jump
+                && jump.isConditional()
+                && fromEnd(update, 0) instanceof LabelInstruction doneLabel
+                && jump.getTarget().equals(doneLabel.getLabel())
+                && fromEnd(update, 1) instanceof JumpInstruction backJump
+                && backJump.isUnconditional()) {
 
-                try (LogicIterator openingIterator = createIteratorAtLabelledInstruction(closing.getTarget())) {
-                    // Loop through the instructions at the (possible) beginning of the loop
-                    // Gather instructions serving to evaluate the loop condition
-                    List<LogicInstruction> condEval = new ArrayList<>();
+            // Find the instruction immediately preceding the condition
+            LogicInstruction loopSetup = previousInstruction(conditionLabel);
 
-                    while (openingIterator.hasNext() && openingIterator.nextIndex() < iterator.nextIndex()) {
-                        LogicInstruction openingIx = openingIterator.next();
-                        if (openingIx instanceof JumpInstruction jump) {
-                            if (jump.getCondition().hasInverse() && targetsLoopExit(jump, iterator) && canDuplicate(condEval)) {
-                                LogicLabel bodyLabel = getOpeningLabel(openingIterator, jump.getAstContext());
-                                insertInstructions(iterator, condEval);
-                                iterator.set(createJump(jump.getAstContext(), bodyLabel,
-                                        jump.getCondition().inverse(), jump.getX(), jump.getY()));
+            // Condition instructions without the label and jump (possibly empty)
+            final List<LogicInstruction> conditionEvaluation;
+            final Function<LogicLabel, JumpInstruction> newJumpCreator; // Creates the new jump when label is known
 
-                                // Remove the opening jump, if the loop is known to be executed at least once
-                                // and the optimization level is aggressive.
-                                // Preconditions:
-                                // 1. The condition consists of the jump only.
-                                // 2. The loop control variable is initialized by a set immediately preceding
-                                //    the loop
-                                // 3. The jump instruction compares the loop control variable to a constant
-                                // 4. The jump evaluates to false (i.e. doesn't skip over the loop) for the initial
-                                //    value of the loop control variable
-                                //
-                                // TODO remove the loop altogether if the loop is known to be never executed, i.e.
-                                //      if the jump evaluates to true for the initial value of the loop control variable
-                                if (level == OptimizationLevel.AGGRESSIVE && condEval.isEmpty() &&
-                                        loopSetup instanceof SetInstruction set && set.getValue().isNumericLiteral() &&
-                                        jump.getArgs().contains(set.getTarget())) {
-                                    // Cheap trick to replace the loop control variable with its initial value
-                                    LogicInstruction test = replaceAllArgs(jump, set.getTarget(), set.getValue());
-                                    if (alwaysNegative((JumpInstruction)test)) {
-                                        removeInstruction(jump);
-                                    }
-                                }
+            if (fromEnd(condition, 1) instanceof OpInstruction op
+                    && op.getOperation().isCondition() && op.getResult().getType() == TMP_VARIABLE
+                    && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
+                    && jump.getY().equals(LogicBoolean.FALSE)) {
 
-                                count++;
-                            }
-                            // If we couldn't handle this jump, stop processing anyway
-                            break;
-                        } else if (openingIx instanceof OpInstruction op && openingIterator.peek(0) instanceof JumpInstruction jump
-                                && op.getOperation().isCondition() && op.getResult().getType() == TMP_VARIABLE
-                                && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
-                                && jump.getY().equals(LogicBoolean.FALSE)
-                                && targetsLoopExit(jump, iterator) && canDuplicate(condEval)) {
-                            // This is a (probably) non-invertible op and a jump
-                            // We make a jump from the op as the loop closing jump
-                            openingIterator.next(); // Read the jump instruction
-                            LogicLabel bodyLabel = getOpeningLabel(openingIterator, jump.getAstContext());
-                            insertInstructions(iterator, condEval);
-                            iterator.set(createJump(jump.getAstContext(), bodyLabel, op.getOperation().toCondition(),
-                                    op.getX(), op.getY()));
-                            count++;
-                            break;
-                        } else  {
-                            condEval.add(openingIx);
-                        }
+                // This is inverse jump
+                conditionEvaluation = condition.subList(1, condition.size() - 2); // Remove the op as well
+                newJumpCreator = target -> createJump(jump.getAstContext(), target,
+                        op.getOperation().toCondition(), op.getX(), op.getY());
+            } else {
+                if (!jump.getCondition().hasInverse()) {
+                    // Inverting the condition wouldn't save execution time
+                    return;
+                }
+                conditionEvaluation = condition.subList(1, condition.size() - 1);
+                newJumpCreator = target -> createJump(jump.getAstContext(), target,
+                        jump.getCondition().inverse(), jump.getX(), jump.getY());
+            }
+
+            // Can we duplicate the additional condition instructions? If not, nothing to do
+            if (canDuplicate(conditionEvaluation)) {
+                // Perform the optimization: copy condition jump
+                LogicLabel bodyLabel = getLoopBodyLabel(jump, loop.findSubcontext(BODY));
+                int index = instructionIndex(backJump);
+                replaceInstruction(index, newJumpCreator.apply(bodyLabel));
+                insertInstructions(index, conditionEvaluation);
+
+                // Remove the opening jump, if the loop is known to be executed at least once
+                // and the optimization level is aggressive.
+                // Preconditions:
+                // 1. The condition consists of the condition label and the jump only (i.e. not inverted).
+                // 2. The loop control variable is initialized by a set immediately preceding
+                //    the loop
+                // 3. The jump instruction compares the loop control variable to a constant
+                // 4. The jump evaluates to false (i.e. doesn't skip over the loop) for the initial
+                //    value of the loop control variable
+                //
+                // TODO use general compile-time evaluation to find the possible states of the condition
+                //      and either remove the jump, or the entire loop accordingly.
+                if (aggressive() && condition.size() == 2
+                        && loopSetup instanceof SetInstruction set && set.getValue().isNumericLiteral()
+                        && jump.getArgs().contains(set.getTarget())) {
+                    // Replace the loop control variable with its initial value and evaluate
+                    LogicInstruction test = replaceAllArgs(jump, set.getTarget(), set.getValue());
+                    if (alwaysNegative((JumpInstruction) test)) {
+                        removeInstruction(jump);
                     }
                 }
+
+                count++;
             }
         }
-        iterator.close();
+    }
+
+    @Override
+    protected boolean optimizeProgram() {
+        count = 0;
+
+        forEachContext(c -> c.contextType() == AstContextType.LOOP && c.subcontextType() == BASIC,
+                this::optimizeLoop);
 
         if (count > 0) {
             emitMessage(MessageLevel.INFO, "%6d loop jumps improved by %s.", count, getClass().getSimpleName());
@@ -126,57 +137,48 @@ public class LoopOptimizer extends BaseOptimizer {
         return false;
     }
 
+    private boolean hasConditionAtFront(AstContext loop) {
+        for (AstContext child : loop.children()) {
+            switch (child.subcontextType()) {
+                case LOOP_CONDITION:        return true;        // condition comes first
+                case BODY, LOOP_ITERATOR:   return false;       // condition doesn't come first
+            }
+        }
+        return false;
+    }
+
+    private boolean canDuplicate(List<LogicInstruction> conditionEvaluation) {
+        // Use real instruction size for the test
+        int size = conditionEvaluation.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        return size == 0 || goal == GenerationGoal.SPEED && size <= 3;
+    }
+
+    // Obtains or creates a label at the beginning of the loop body
+    private LogicLabel getLoopBodyLabel(LogicInstruction jump, AstContext astContext) {
+        int index = instructionIndex(jump);
+        if (instructionAt(index + 1) instanceof LabelInstruction label) {
+            return label.getLabel();
+        }
+        LogicLabel label = instructionProcessor.nextLabel();
+        insertInstruction(index + 1, createLabel(astContext, label));
+        return label;
+    }
+
     private boolean alwaysNegative(JumpInstruction jump) {
         if (jump.getX().isNumericLiteral() && jump.getY().isNumericLiteral()) {
             double a = jump.getX().getDoubleValue();
             double b = jump.getY().getDoubleValue();
             boolean value = switch (jump.getCondition()) {
-                case ALWAYS                 -> true;
-                case EQUAL, STRICT_EQUAL    -> ExpressionEvaluator.equals(a, b);
-                case NOT_EQUAL              -> !ExpressionEvaluator.equals(a, b);
-                case GREATER_THAN           -> a > b;
-                case GREATER_THAN_EQ        -> a >= b;
-                case LESS_THAN              -> a < b;
-                case LESS_THAN_EQ           -> a <= b;
+                case ALWAYS -> true;
+                case EQUAL, STRICT_EQUAL -> ExpressionEvaluator.equals(a, b);
+                case NOT_EQUAL -> !ExpressionEvaluator.equals(a, b);
+                case GREATER_THAN -> a > b;
+                case GREATER_THAN_EQ -> a >= b;
+                case LESS_THAN -> a < b;
+                case LESS_THAN_EQ -> a <= b;
             };
             return !value;
         }
         return false;
-    }
-
-    private boolean canDuplicate(List<LogicInstruction> condEval) {
-        // Use real instruction size for the test
-        return condEval.isEmpty() ||
-                isLocalized(condEval) &&
-                        goal == GenerationGoal.SPEED &&
-                        condEval.stream().mapToInt(LogicInstruction::getRealSize).sum() <= 3;
-    }
-
-    private void insertInstructions(LogicIterator iterator, List<LogicInstruction> instructions) {
-        if (!instructions.isEmpty()) {
-            try (LogicIterator adder = iterator.copy()) {
-                adder.previous();
-                instructions.stream().map(LogicInstruction::copy).forEach(adder::add);
-            }
-        }
-    }
-
-    private boolean targetsLoopExit(JumpInstruction jump, LogicIterator iterator) {
-        try (LogicIterator followingIterator = createIteratorAtLabel(jump.getTarget())) {
-            return (iterator.nextIndex() <= followingIterator.nextIndex()
-                    && iterator.between(followingIterator).allMatch(ix -> ix instanceof LabelInstruction));
-        }
-    }
-
-    // Obtains or creates a label at the beginning of the loop body
-    private LogicLabel getOpeningLabel(LogicIterator openingIterator, AstContext astContext) {
-        if (openingIterator.next() instanceof LabelInstruction label) {
-            return label.getLabel();
-        } else {
-            LogicLabel label = instructionProcessor.nextLabel();
-            openingIterator.previous(); // Undo next() in the if condition
-            openingIterator.add(createLabel(astContext, label));
-            return label;
-        }
     }
 }

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.instructions.AstContextSubtype;
 import info.teksol.mindcode.compiler.instructions.AstContextType;
+import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
 import org.antlr.v4.runtime.Token;
 
 import java.util.List;
@@ -13,5 +13,5 @@ public interface AstNode {
 
     AstContextType getContextType();
 
-    AstContextSubtype getContextSubype();
+    AstSubcontextType getContextSubype();
 }

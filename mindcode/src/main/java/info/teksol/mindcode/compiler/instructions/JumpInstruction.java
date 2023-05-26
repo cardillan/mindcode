@@ -28,10 +28,14 @@ public class JumpInstruction extends BaseInstruction {
         return new JumpInstruction(this, marker);
     }
 
-    public JumpInstruction withLabel(LogicLabel label) {
+    public JumpInstruction withTarget(LogicLabel label) {
         return isUnconditional()
                 ? new JumpInstruction(getAstContext(), List.of(label, Condition.ALWAYS), getParams())
                 : new JumpInstruction(getAstContext(),List.of(label, getCondition(), getX(), getY()), getParams());
+    }
+
+    public boolean isConditional() {
+        return getCondition() != Condition.ALWAYS;
     }
 
     public boolean isUnconditional() {

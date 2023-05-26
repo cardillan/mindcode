@@ -1,7 +1,7 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.instructions.AstContextSubtype;
 import info.teksol.mindcode.compiler.instructions.AstContextType;
+import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
 import org.antlr.v4.runtime.Token;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public class FunctionDeclaration extends BaseAstNode {
     }
 
     @Override
-    public AstContextSubtype getContextSubype() {
-        return AstContextSubtype.BODY;
+    public AstSubcontextType getContextSubype() {
+        return AstSubcontextType.BODY;
     }
 }

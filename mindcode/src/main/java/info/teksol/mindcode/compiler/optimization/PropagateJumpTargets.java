@@ -47,7 +47,7 @@ class PropagateJumpTargets extends BaseOptimizer {
                     if (!label.equals(ix.getTarget())) {
                         startLabelUsed |= label.equals(FIRST_LABEL);
                         // Update target of the original jump
-                        it.set(ix.withLabel(label));
+                        it.set(ix.withTarget(label));
                         count++;
                     }
                 }

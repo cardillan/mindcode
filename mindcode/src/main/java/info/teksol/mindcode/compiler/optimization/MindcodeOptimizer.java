@@ -49,6 +49,9 @@ public class MindcodeOptimizer {
     public List<LogicInstruction> optimize(GeneratorOutput generatorOutput) {
         program.addAll(generatorOutput.instructions());
 
+        int count = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        messageRecipient.accept(MindcodeMessage.info("%6d instructions before optimizations.", count));
+
         debugPrinter.registerIteration(null, 0, List.copyOf(program));
 
         for (Optimizer optimizer : getOptimizers()) {
@@ -58,8 +61,8 @@ public class MindcodeOptimizer {
             optimizer.optimizeProgram(program, generatorOutput.rootAstContext());
         }
 
-        int count = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-        messageRecipient.accept(MindcodeMessage.info("%6d instructions after optimizations.", count));
+        int newCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        messageRecipient.accept(MindcodeMessage.info("%6d instructions after optimizations.", newCount));
         return List.copyOf(program);
     }
 }
