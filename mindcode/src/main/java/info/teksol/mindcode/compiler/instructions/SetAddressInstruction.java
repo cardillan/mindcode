@@ -10,21 +10,27 @@ import java.util.List;
 
 public class SetAddressInstruction extends BaseInstruction {
 
-    SetAddressInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
-        super(astContext, Opcode.SETADDR, args, params);
+    SetAddressInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
+        super(astContext, Opcode.SETADDR, args, params, marker);
     }
 
-    protected SetAddressInstruction(BaseInstruction other, String marker) {
-        super(other, marker);
+    protected SetAddressInstruction(BaseInstruction other, AstContext astContext, String marker) {
+        super(other, astContext, marker);
     }
 
     @Override
     public SetAddressInstruction copy() {
-        return new SetAddressInstruction(this, marker);
+        return new SetAddressInstruction(this, astContext, marker);
     }
 
+    @Override
     public SetAddressInstruction withMarker(String marker) {
-        return new SetAddressInstruction(this, marker);
+        return new SetAddressInstruction(this, astContext, marker);
+    }
+
+    @Override
+    public SetAddressInstruction withContext(AstContext astContext) {
+        return new SetAddressInstruction(this, astContext, marker);
     }
 
     public final LogicVariable getResult() {

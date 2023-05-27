@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  * </li></ol>
  * </li></ul>
  */
-public class StackUsageOptimizer extends AstContextOptimizer {
+public class StackUsageOptimizer extends BaseOptimizer {
 
     StackUsageOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);

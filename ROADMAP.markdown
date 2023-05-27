@@ -27,15 +27,11 @@ I hope to include these in next release(s).
 * Will be implemented through detailed data flow analysis
   * Information about possible variable values will be gathered
 * Will probably require multi-pass optimizations
-  * The instruction pipeline will be rescinded; all optimizers will be global, operating on a static list
-    of instructions. Less code paths to support.
-  * Some optimizers will only be run once after all passes (jump threading)
+  * Some optimizers will only be run once after all passes (e.g. jump threading)
   * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
     current implementation
 * Known constraints on variable values will allow better expression optimization, especially with booleans
 * Needed to support meaningful loop unrolling
-* This will require quite a lot of infrastructure to set up, such as the AST context for instructions.
-  * Will also generate at least crude execution frequency statistics
 
 ### Optimizing code for speed 
 

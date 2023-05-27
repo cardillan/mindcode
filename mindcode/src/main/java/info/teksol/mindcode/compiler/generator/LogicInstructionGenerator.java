@@ -656,7 +656,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             case PropertyAccess propertyAccess -> {
                 LogicValue propTarget = visit(propertyAccess.getTarget());
                 LogicArgument prop = visit(propertyAccess.getProperty());
-                // TODO modify PropertyAccess to distinguish direct and indirect properties
                 String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
                 if (functionMapper.handleProperty(instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
                     throw new UndeclaredFunctionException("Don't know how to handle property [" + propTarget + "." + prop + "]");
@@ -675,6 +674,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         emit(createSet(variable, rvalue));
                         // TODO returning rvalue causes temp variable to be used twice, disallowing some optimizations
                         //      investigate returning variable instead of rvalue here
+                        // return variable;
                     } else {
                         throw new GenerationException("Assignment to variable '" + target + "' not allowed (name reserved for linked blocks)");
                     }

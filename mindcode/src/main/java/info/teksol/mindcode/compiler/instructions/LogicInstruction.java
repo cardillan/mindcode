@@ -50,6 +50,8 @@ public interface LogicInstruction {
 
     LogicInstruction withMarker(String marker);
 
+    LogicInstruction withContext(AstContext astContext);
+
     boolean matchesContext(AstContext astContext);
 
     AstContext findContextOfType(AstContextType contextType);

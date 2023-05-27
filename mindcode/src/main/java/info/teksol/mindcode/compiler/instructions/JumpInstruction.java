@@ -9,32 +9,35 @@ import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
-import java.util.Objects;
 
 public class JumpInstruction extends BaseInstruction {
 
-    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
-        super(astContext, Opcode.JUMP, args, params);
+    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
+        super(astContext, Opcode.JUMP, args, params, marker);
+    }
+
+    protected JumpInstruction(BaseInstruction other, AstContext astContext, String marker) {
+        super(other, astContext, marker);
     }
 
     @Override
     public JumpInstruction copy() {
-        return new JumpInstruction(this, marker);
+        return new JumpInstruction(this, astContext, marker);
     }
-
-    protected JumpInstruction(BaseInstruction other, String marker) {
-        super(other, marker);
-    }
-
 
     public JumpInstruction withMarker(String marker) {
-        return Objects.equals(this.marker, marker) ? this : new JumpInstruction(this, marker);
+        return new JumpInstruction(this, astContext, marker);
+    }
+
+    @Override
+    public JumpInstruction withContext(AstContext astContext) {
+        return new JumpInstruction(this, astContext, marker);
     }
 
     public JumpInstruction withTarget(LogicLabel target) {
         return isUnconditional()
-                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getParams()).withMarker(marker)
-                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getParams()).withMarker(marker);
+                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getParams(),marker)
+                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getParams(), marker);
     }
 
     public JumpInstruction invert() {
@@ -42,7 +45,7 @@ public class JumpInstruction extends BaseInstruction {
             throw new GenerationException("Jump is not invertible. " + this);
         }
         return new JumpInstruction(getAstContext(),
-                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams()).withMarker(marker);
+                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams(), marker);
     }
 
     public boolean isConditional() {

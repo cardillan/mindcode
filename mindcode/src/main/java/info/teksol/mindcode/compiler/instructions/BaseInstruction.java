@@ -11,7 +11,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class BaseInstruction implements LogicInstruction {
-    private final AstContext astContext;
     private final Opcode opcode;
     private final List<LogicArgument> args;
     private final List<LogicParameter> params;
@@ -20,14 +19,15 @@ public class BaseInstruction implements LogicInstruction {
     private final int outputs;
 
     // Used to mark instructions with additional information to optimizers.
-    // Marker is not considered by hashCode or equals!
+    // AstContext and marker are not considered by hashCode or equals!
+    protected final AstContext astContext;
     protected final String marker;
 
-    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
+    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params, String marker) {
         this.astContext = astContext;
         this.opcode = opcode;
         this.args = List.copyOf(args);
-        this.marker = null;
+        this.marker = marker;
         this.params = params;
         if (params == null) {
             assignments = null;
@@ -41,8 +41,8 @@ public class BaseInstruction implements LogicInstruction {
         }
     }
 
-    protected BaseInstruction(BaseInstruction other, String marker) {
-        this.astContext = other.astContext;
+    protected BaseInstruction(BaseInstruction other, AstContext astContext, String marker) {
+        this.astContext = astContext;
         this.opcode = other.opcode;
         this.args = other.args;
         this.marker = marker;
@@ -58,12 +58,17 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public BaseInstruction copy() {
-        return new BaseInstruction(this, marker);
+        return new BaseInstruction(this, astContext, marker);
     }
 
     @Override
     public BaseInstruction withMarker(String marker) {
-        return Objects.equals(this.marker, marker) ? this : new BaseInstruction(this, marker);
+        return Objects.equals(this.marker, marker) ? this : new BaseInstruction(this, astContext, marker);
+    }
+
+    @Override
+    public BaseInstruction withContext(AstContext astContext) {
+        return Objects.equals(this.astContext, astContext) ? this : new BaseInstruction(this, astContext, marker);
     }
 
     @Override

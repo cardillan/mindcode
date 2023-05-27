@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// TODO refactor MindcodeCompiler to allow tests to be run through it
-//      (reduce number of possible code paths)
 public class AbstractGeneratorTest extends AbstractAstTest {
 
     protected final List<CompilerMessage> messages = new ArrayList<>();

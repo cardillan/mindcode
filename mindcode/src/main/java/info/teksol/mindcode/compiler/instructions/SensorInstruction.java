@@ -10,25 +10,30 @@ import java.util.List;
 
 public class SensorInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    SensorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
-        super(astContext, Opcode.SENSOR, args, params);
+    SensorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
+        super(astContext, Opcode.SENSOR, args, params, marker);
     }
 
-    protected SensorInstruction(BaseInstruction other, String marker) {
-        super(other, marker);
+    protected SensorInstruction(BaseInstruction other, AstContext astContext, String marker) {
+        super(other, astContext, marker);
     }
 
     @Override
     public SensorInstruction copy() {
-        return new SensorInstruction(this, marker);
+        return new SensorInstruction(this, astContext, marker);
     }
 
     public SensorInstruction withMarker(String marker) {
-        return new SensorInstruction(this, marker);
+        return new SensorInstruction(this, astContext, marker);
+    }
+
+    @Override
+    public SensorInstruction withContext(AstContext astContext) {
+        return new SensorInstruction(this, astContext, marker);
     }
 
     public SensorInstruction withResult(LogicVariable result) {
-        return new SensorInstruction(getAstContext(), List.of(result, getObject(), getProperty()), getParams()).withMarker(marker);
+        return new SensorInstruction(getAstContext(), List.of(result, getObject(), getProperty()), getParams(), marker);
     }
 
     public final LogicVariable getResult() {

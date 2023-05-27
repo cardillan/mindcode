@@ -15,7 +15,8 @@ import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 
-import java.util.function.Function;
+import java.util.List;
+import java.util.function.BiFunction;
 
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
 
@@ -34,7 +35,7 @@ import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
  * If the opening jump has a form of op followed by negation jump, the condition is still replicated at the end
  * of the body as a jump having the op condition. In this case, execution of two instructions per loop is avoided.
  */
-public class LoopOptimizer extends AstContextOptimizer {
+public class LoopOptimizer extends BaseOptimizer {
 
     public LoopOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
@@ -57,7 +58,10 @@ public class LoopOptimizer extends AstContextOptimizer {
     }
 
     private void optimizeLoop(AstContext loop) {
-        LogicList condition = contextInstructions(loop.findSubcontext(LOOP_CONDITION));
+        List<AstContext> conditions = loop.findSubcontexts(LOOP_CONDITION);
+        if (conditions.size() != 1) return;     // Either malformed, or already optimized.
+
+        LogicList condition = contextInstructions(conditions.get(0));
         LogicList update = contextInstructions(loop.findSubcontext(LOOP_UPDATE));
         if (condition.isEmpty() || update.isEmpty() || !hasConditionAtFront(loop)) {
             return;
@@ -73,11 +77,11 @@ public class LoopOptimizer extends AstContextOptimizer {
                 && backJump.isUnconditional()) {
 
             // Find the instruction immediately preceding the condition
-            LogicInstruction loopSetup = previousInstruction(conditionLabel);
+            LogicInstruction loopSetup = instructionBefore(conditionLabel);
 
             // Condition instructions without the label and jump (possibly empty)
             final LogicList conditionEvaluation;
-            final Function<LogicLabel, JumpInstruction> newJumpCreator; // Creates the new jump when label is known
+            final BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator; // Creates the new jump when label is known
 
             if (condition.fromEnd(1) instanceof OpInstruction op
                     && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
@@ -86,7 +90,7 @@ public class LoopOptimizer extends AstContextOptimizer {
 
                 // This is inverse jump
                 conditionEvaluation = condition.subList(1, condition.size() - 2); // Remove the op as well
-                newJumpCreator = target -> createJump(jump.getAstContext(), target,
+                newJumpCreator = (astContext, target) -> createJump(astContext, target,
                         op.getOperation().toCondition(), op.getX(), op.getY());
             } else {
                 if (!jump.getCondition().hasInverse()) {
@@ -94,18 +98,27 @@ public class LoopOptimizer extends AstContextOptimizer {
                     return;
                 }
                 conditionEvaluation = condition.subList(1, condition.size() - 1);
-                newJumpCreator = target -> jump.invert().withTarget(target);
+                newJumpCreator = (astContext, target) -> createJump(astContext, target,
+                        jump.getCondition().inverse(), jump.getX(), jump.getY());
             }
 
             // Can we duplicate the additional condition instructions? If not, nothing to do
             if (canDuplicate(conditionEvaluation)) {
-                // Perform the optimization: copy condition jump
+                // We need to create a copy of the condition context
+                AstContext newContext = conditions.get(0).createCopy();
+
+                // Perform the optimization: newContext condition jump
                 LogicInstruction firstBodyInstruction = contextStream(loop.findSubcontext(LOOP_CONDITION))
                         .limit(1).findFirst().get();
                 LogicLabel bodyLabel = createLoopBodyLabel(jump, firstBodyInstruction.getAstContext());
                 int index = instructionIndex(backJump);
-                replaceInstruction(index, newJumpCreator.apply(bodyLabel));
-                insertInstructions(index, conditionEvaluation);
+                replaceInstruction(index, newJumpCreator.apply(newContext,bodyLabel));
+
+                List<LogicInstruction> copied = conditionEvaluation.stream().map(ix -> ix.withContext(newContext)).toList();
+                insertInstructions(index, copied);
+
+                // We need to assign an independent context to the doneLabel as well
+                replaceInstruction(doneLabel, doneLabel.withContext(doneLabel.getAstContext().createCopy()));
 
                 // Remove the opening jump, if the loop is known to be executed at least once
                 // and the optimization level is aggressive.

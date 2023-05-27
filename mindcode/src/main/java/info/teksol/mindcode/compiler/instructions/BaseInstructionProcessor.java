@@ -219,26 +219,26 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         List<LogicParameter> params = getParameters(opcode, arguments);
 
         return switch (opcode) {
-            case CALL       -> new CallInstruction(astContext, arguments, params);
-            case CALLREC    -> new CallRecInstruction(astContext, arguments, params);
-            case END        -> new EndInstruction(astContext);
-            case GOTO       -> new GotoInstruction(astContext, arguments, params);
-            case JUMP       -> new JumpInstruction(astContext, arguments, params);
-            case LABEL      -> new LabelInstruction(astContext, arguments, params);
-            case OP         -> new OpInstruction(astContext, arguments, params);
-            case PACKCOLOR  -> new PackColorInstruction(astContext, arguments, params);
-            case POP        -> new PopInstruction(astContext, arguments, params);
-            case PRINT      -> new PrintInstruction(astContext, arguments, params);
-            case PRINTFLUSH -> new PrintflushInstruction(astContext, arguments, params);
-            case PUSH       -> new PushInstruction(astContext, arguments, params);
-            case READ       -> new ReadInstruction(astContext, arguments, params);
-            case RETURN     -> new ReturnInstruction(astContext, arguments, params);
-            case SENSOR     -> new SensorInstruction(astContext, arguments, params);
-            case SET        -> new SetInstruction(astContext, arguments, params);
-            case SETADDR    -> new SetAddressInstruction(astContext, arguments, params);
-            case STOP       -> new StopInstruction(astContext);
-            case WRITE      -> new WriteInstruction(astContext, arguments, params);
-            default         -> new BaseInstruction(astContext, opcode, arguments, params);
+            case CALL       -> new CallInstruction(astContext, arguments, params, null);
+            case CALLREC    -> new CallRecInstruction(astContext, arguments, params, null);
+            case END        -> new EndInstruction(astContext, null);
+            case GOTO       -> new GotoInstruction(astContext, arguments, params, null);
+            case JUMP       -> new JumpInstruction(astContext, arguments, params, null);
+            case LABEL      -> new LabelInstruction(astContext, arguments, params, null);
+            case OP         -> new OpInstruction(astContext, arguments, params, null);
+            case PACKCOLOR  -> new PackColorInstruction(astContext, arguments, params, null);
+            case POP        -> new PopInstruction(astContext, arguments, params, null);
+            case PRINT      -> new PrintInstruction(astContext, arguments, params, null);
+            case PRINTFLUSH -> new PrintflushInstruction(astContext, arguments, params, null);
+            case PUSH       -> new PushInstruction(astContext, arguments, params, null);
+            case READ       -> new ReadInstruction(astContext, arguments, params, null);
+            case RETURN     -> new ReturnInstruction(astContext, arguments, params, null);
+            case SENSOR     -> new SensorInstruction(astContext, arguments, params, null);
+            case SET        -> new SetInstruction(astContext, arguments, params, null);
+            case SETADDR    -> new SetAddressInstruction(astContext, arguments, params, null);
+            case STOP       -> new StopInstruction(astContext, null);
+            case WRITE      -> new WriteInstruction(astContext, arguments, params, null);
+            default         -> new BaseInstruction(astContext, opcode, arguments, params, null);
         };
     }
 

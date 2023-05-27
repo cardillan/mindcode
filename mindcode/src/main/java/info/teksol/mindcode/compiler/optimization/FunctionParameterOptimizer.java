@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * </ul>
  * Functions are located in the code using the entry and exit labels marked with function prefix.
  */
-class FunctionParameterOptimizer extends AstContextOptimizer {
+class FunctionParameterOptimizer extends BaseOptimizer {
     public FunctionParameterOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
     }

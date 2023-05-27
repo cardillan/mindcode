@@ -23,10 +23,11 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         return new FilteredDiffDebugPrinter();
     }
 
-    // TODO problem: manually created instructions do not have properly set up contexts
-    //      Testing is only possible for optimizers not relying on AstContext being available.
     protected void assertOptimizesTo(CompilerProfile profile, List<LogicInstruction> instructions, List<LogicInstruction> expected) {
-        GeneratorOutput generatorOutput = new GeneratorOutput(instructions, STATIC_AST_CONTEXT);
+        // rootAstContext is intentionally null
+        // This method cannot be used to test optimizers that rely on AST context structure, because
+        // at this moment the AST context is not built for manually created instructions
+        GeneratorOutput generatorOutput = new GeneratorOutput(instructions, null);
         List<LogicInstruction> actual = optimizeInstructions(profile, generatorOutput);
         assertLogicInstructionsMatch(expected, actual);
     }
@@ -35,13 +36,9 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         assertOptimizesTo(createCompilerProfile(), instructions, expected);
     }
 
-    // TODO problem: manually created instructions do not have properly set up contexts
-    //      Testing is only possible for optimizers not relying on AstContext being available.
     protected void assertDoesNotOptimize(CompilerProfile profile, LogicInstruction... instructions) {
-        List<LogicInstruction> expected = List.of(instructions);
-        GeneratorOutput generatorOutput = new GeneratorOutput(expected, STATIC_AST_CONTEXT);
-        List<LogicInstruction> actual = optimizeInstructions(profile, generatorOutput);
-        assertLogicInstructionsMatch(expected, actual);
+        List<LogicInstruction> list = List.of(instructions);
+        assertOptimizesTo(profile, list, list);
     }
 
     protected void assertDoesNotOptimize(LogicInstruction... instructions) {

@@ -49,7 +49,6 @@ public abstract class BaseAstNode implements AstNode {
         return AstContextType.NONE;
     }
 
-    // TODO return "BODY" for nodes representing bodies
     @Override
     public AstSubcontextType getContextSubype() {
         return AstSubcontextType.BASIC;

@@ -4,34 +4,48 @@ import info.teksol.mindcode.ast.AstNode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public record AstContext(
-        int level,
-        AstNode node,
-        AstContextType contextType,
-        AstSubcontextType subcontextType,
-        AstContext parent,
-        double weight,
-        List<AstContext> children
-) {
+public final class AstContext {
+    private final int level;
+    private final AstNode node;
+    private final AstContextType contextType;
+    private final AstSubcontextType subcontextType;
+    private final AstContext parent;
+    private final double weight;
+    private final List<AstContext> children = new ArrayList<>();
+
+    public AstContext(int level, AstNode node, AstContextType contextType, AstSubcontextType subcontextType,
+            AstContext parent, double weight) {
+        this.level = level;
+        this.node = node;
+        this.contextType = contextType;
+        this.subcontextType = subcontextType;
+        this.parent = parent;
+        this.weight = weight;
+    }
 
     public static AstContext createRootNode() {
         return new AstContext(0, null, AstContextType.ROOT, AstSubcontextType.BASIC,
-                null, 1.0, new ArrayList<>());
+                null, 1.0);
     }
 
     public AstContext createChild(AstNode node, AstContextType contextType) {
         AstContext child = new AstContext(level + 1, node, contextType, node.getContextSubype(),
-                this, weight, new ArrayList<>());
+                this, weight);
         children.add(child);
         return child;
     }
 
     public AstContext createSubcontext(AstSubcontextType subcontextType, double multiplier) {
         AstContext child = new AstContext(level, node, contextType, subcontextType,
-                this, weight * multiplier, new ArrayList<>());
+                this, weight * multiplier);
         children.add(child);
         return child;
+    }
+
+    public AstContext createCopy() {
+        return new AstContext(level, node, contextType, subcontextType, parent, weight);
     }
 
     /**
@@ -93,4 +107,52 @@ public record AstContext(
                 ", weight=" + weight +
                 '}';
     }
+
+    public int level() {
+        return level;
+    }
+
+    public AstNode node() {
+        return node;
+    }
+
+    public AstContextType contextType() {
+        return contextType;
+    }
+
+    public AstSubcontextType subcontextType() {
+        return subcontextType;
+    }
+
+    public AstContext parent() {
+        return parent;
+    }
+
+    public double weight() {
+        return weight;
+    }
+
+    public List<AstContext> children() {
+        return children;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (AstContext) obj;
+        return this.level == that.level &&
+                Objects.equals(this.node, that.node) &&
+                Objects.equals(this.contextType, that.contextType) &&
+                Objects.equals(this.subcontextType, that.subcontextType) &&
+                Objects.equals(this.parent, that.parent) &&
+                Double.doubleToLongBits(this.weight) == Double.doubleToLongBits(that.weight) &&
+                Objects.equals(this.children, that.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(level, node, contextType, subcontextType, parent, weight, children);
+    }
+
 }

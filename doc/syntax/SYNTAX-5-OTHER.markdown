@@ -381,15 +381,15 @@ end
 
 ## If expression optimization
 
-The _If expression optimization_ perform three types of optimizations on blocks of code created by if/ternary 
-expressions, which are internally handled identically. All possible optimizations are done independently.
+This optimization consists of three types of modifications performed on blocks of code created by if/ternary 
+expressions. All possible optimizations are done independently.
 
 ### Value propagation
 
-The value of ternary expressions and if expressions is sometimes assigned to a user variable. In these situations, the 
-true and false branches of the if/ternary expression assign the value to a temporary variable, which is then 
-assigned to the user variable. This optimization detects these situations and when possible, assigns the final value 
-to the user variable directly in the true/false branches:
+The value of ternary expressions and if expressions is sometimes assigned to a user-defined variable. In these 
+situations, the true and false branches of the if/ternary expression assign the value to a temporary variable, which 
+is then assigned to the user variable. This optimization detects these situations and when possible, assigns the 
+final value to the user variable directly in the true/false branches:
 
 ```
 abs = if x < 0
@@ -457,10 +457,10 @@ Execution speed:
 * x is negative: 4 instructions (0, 1, 2, 3) are executed,
 * x is positive: 3 instructions (0, 1, 3) are executed.
 
-The execution time is the same. However, one instruction is saved.
+The execution time is the same. However, one less instruction is generated.
 
 The forward assignment optimization can be done if at least one of the branches consist of just one instruction, and 
-both branches produce a value in their last instructions. Depending on the type of condition and the branch sizes,
+both branches produce a value which is then used. Depending on the type of condition and the branch sizes,
 either true branch or false branch can get eliminated this way. Average execution time remains the same, although in 
 some cases the number of executed instructions per branch can change by one (total number of instructions executed 
 by both branches remains the same).
@@ -469,7 +469,7 @@ by both branches remains the same).
 
 The instruction generator always generates true branch first. In some cases, the jump condition is formulated in 
 such a way that it cannot be expressed in a single jump and requires additional instruction (this only happens with 
-the strict equality operator `===`, which doesn't have an opposite operating in mlog instruction set).
+the strict equality operator `===`, which doesn't have an opposite operating in Mindustry Logic).
 
 The additional instruction can be avoided when the true and false branches in the code are swapped. When this 
 optimizer detects such a situation, it does exactly that:
@@ -495,8 +495,8 @@ end
 
 ### Chained if-else statements
 
-The `elsif` statements are the same as nested `if` statements, and are also handled by the optimizer (basically by 
-optimizing each if expression on its own):
+The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. 
+Optimizations of these nested statements work as expected:
 
 ```
 y = if x < 0

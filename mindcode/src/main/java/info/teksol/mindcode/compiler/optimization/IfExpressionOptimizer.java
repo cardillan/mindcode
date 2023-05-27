@@ -16,7 +16,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
 
-public class IfExpressionOptimizer extends AstContextOptimizer {
+public class IfExpressionOptimizer extends BaseOptimizer {
 
     public IfExpressionOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);

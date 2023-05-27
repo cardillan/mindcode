@@ -9,21 +9,26 @@ import java.util.List;
 
 public class ReturnInstruction extends BaseInstruction {
 
-    ReturnInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
-        super(astContext, Opcode.RETURN, args, params);
+    ReturnInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
+        super(astContext, Opcode.RETURN, args, params, marker);
     }
 
-    protected ReturnInstruction(BaseInstruction other, String marker) {
-        super(other, marker);
+    protected ReturnInstruction(BaseInstruction other, AstContext astContext, String marker) {
+        super(other, astContext, marker);
     }
 
     @Override
     public ReturnInstruction copy() {
-        return new ReturnInstruction(this, marker);
+        return new ReturnInstruction(this, astContext, marker);
     }
 
     public ReturnInstruction withMarker(String marker) {
-        return new ReturnInstruction(this, marker);
+        return new ReturnInstruction(this, astContext, marker);
+    }
+
+    @Override
+    public ReturnInstruction withContext(AstContext astContext) {
+        return new ReturnInstruction(this, astContext, marker);
     }
 
     public final LogicVariable getStack() {

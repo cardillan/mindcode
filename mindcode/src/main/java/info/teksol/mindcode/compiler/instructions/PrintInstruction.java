@@ -9,20 +9,26 @@ import java.util.List;
 
 public class PrintInstruction extends BaseInstruction {
 
-    PrintInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
-        super(astContext, Opcode.PRINT, args, params);
+    PrintInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
+        super(astContext, Opcode.PRINT, args, params, marker);
     }
 
-    public PrintInstruction(BaseInstruction other, String marker) {
-        super(other, marker);
+    private PrintInstruction(BaseInstruction other, AstContext astContext, String marker) {
+        super(other, astContext, marker);
     }
 
     @Override
     public PrintInstruction copy() {
-        return new PrintInstruction(this, marker);
+        return new PrintInstruction(this, astContext, marker);
     }
+
     public PrintInstruction withMarker(String marker) {
-        return new PrintInstruction(this, marker);
+        return new PrintInstruction(this, astContext, marker);
+    }
+
+    @Override
+    public PrintInstruction withContext(AstContext astContext) {
+        return new PrintInstruction(this, astContext, marker);
     }
 
     public final LogicValue getValue() {
