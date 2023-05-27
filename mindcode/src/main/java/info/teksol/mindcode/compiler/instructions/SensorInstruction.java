@@ -8,7 +8,7 @@ import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
 
-public class SensorInstruction extends BaseInstruction {
+public class SensorInstruction extends BaseInstruction implements LogicResultInstruction {
 
     SensorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
         super(astContext, Opcode.SENSOR, args, params);
@@ -27,11 +27,15 @@ public class SensorInstruction extends BaseInstruction {
         return new SensorInstruction(this, marker);
     }
 
+    public SensorInstruction withResult(LogicVariable result) {
+        return new SensorInstruction(getAstContext(), List.of(result, getObject(), getProperty()), getParams()).withMarker(marker);
+    }
+
     public final LogicVariable getResult() {
         return (LogicVariable) getArg(0);
     }
 
-    public final LogicVariable getTarget() {
+    public final LogicVariable getObject() {
         return (LogicVariable) getArg(1);
     }
 

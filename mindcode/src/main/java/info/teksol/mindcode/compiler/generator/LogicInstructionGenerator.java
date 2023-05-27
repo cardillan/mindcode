@@ -86,7 +86,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private int markerIndex = 0;
 
-    private List<LogicInstruction> instructions = new ArrayList<>();
+    private final List<LogicInstruction> instructions = new ArrayList<>();
 
     private AstContext astContext = AstContext.createRootNode();
 
@@ -104,7 +104,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         callGraph = CallGraphCreator.createFunctionGraph(program, instructionProcessor);
         currentFunction = callGraph.getMain();
         verifyStackAllocation();
+        setSubcontextType(AstSubcontextType.BODY, 1.0);
         visit(program);
+        clearSubcontextType();
         appendFunctionDeclarations();
         return new GeneratorOutput(List.copyOf(instructions), astContext);
     }
@@ -561,29 +563,29 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicValue visitIfExpression(IfExpression node) {
         if (profile.isShortCircuitEval() && node.getCondition() instanceof BoolBinaryOp boolNode) {
-            setSubcontextType(AstSubcontextType.IF_CONDITION, 1.0);
+            setSubcontextType(AstSubcontextType.CONDITION, 1.0);
             final LogicVariable tmp = nextNodeResult();
             final LogicLabel shortCircuitLabel = nextLabel();
             final LogicLabel finishLabel = nextLabel();
             final boolean naturalOrder = nodeContext.encapsulate(() -> processBoolBinaryOp(boolNode, shortCircuitLabel));
 
-            setSubcontextType(
-                    naturalOrder ? AstSubcontextType.TRUE_BRANCH : AstSubcontextType.FALSE_BRANCH, 0.5);
+            setSubcontextType(AstSubcontextType.BODY, 0.5);
             final LogicValue firstBranch = visit(naturalOrder ? node.getTrueBranch() : node.getFalseBranch());
             emit(createSet(tmp, firstBranch));
+            setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
             emit(createJumpUnconditional(finishLabel));
 
-            setSubcontextType(
-                    naturalOrder ? AstSubcontextType.FALSE_BRANCH : AstSubcontextType.TRUE_BRANCH, 0.5);
+            setSubcontextType(AstSubcontextType.BODY, 0.5);
             emit(createLabel(shortCircuitLabel));
             final LogicValue secondBranch = visit(naturalOrder ? node.getFalseBranch() : node.getTrueBranch());
             emit(createSet(tmp, secondBranch));
+            setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
             emit(createLabel(finishLabel));
 
             clearSubcontextType();
             return tmp;
         } else {
-            setSubcontextType(AstSubcontextType.IF_CONDITION, 1.0);
+            setSubcontextType(AstSubcontextType.CONDITION, 1.0);
             final LogicValue cond = nodeContext.encapsulate(() -> visit(node.getCondition()));
 
             final LogicVariable tmp = nextNodeResult();
@@ -592,15 +594,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             emit(createJump(elseBranch, Condition.EQUAL, cond, FALSE));
 
-            setSubcontextType(AstSubcontextType.TRUE_BRANCH, 0.5);
+            setSubcontextType(AstSubcontextType.BODY, 0.5);
             final LogicValue trueBranch = visit(node.getTrueBranch());
             emit(createSet(tmp, trueBranch));
+            setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
             emit(createJumpUnconditional(endBranch));
-
-            setSubcontextType(AstSubcontextType.FALSE_BRANCH, 0.5);
             emit(createLabel(elseBranch));
+
+            setSubcontextType(AstSubcontextType.BODY, 0.5);
             final LogicValue falseBranch = visit(node.getFalseBranch());
             emit(createSet(tmp, falseBranch));
+            setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
             emit(createLabel(endBranch));
 
             clearSubcontextType();
@@ -1190,7 +1194,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         // Skip leading and trailing quotes
         for (int i = 0; i < format.length(); i++) {
             char ch = format.charAt(i);
-            //noinspection EnhancedSwitchMigration
             switch (ch) {
                 case '$':
                     if (escape) {

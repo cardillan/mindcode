@@ -60,7 +60,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         return switch (level) {
             case 1 -> diffLevel1();
             case 2 -> diffLevel2();
-            default -> versions;
+            default -> diffLevel3();
         };
     }
 
@@ -81,6 +81,10 @@ public class DiffDebugPrinter implements DebugPrinter {
         }
 
         return result;
+    }
+
+    protected List<ProgramVersion> diffLevel3() {
+        return versions;
     }
 
     protected boolean printAll() {

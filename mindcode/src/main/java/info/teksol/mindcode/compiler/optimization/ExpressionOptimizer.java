@@ -5,7 +5,6 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicNumber;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
@@ -64,7 +63,7 @@ public class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {
-        if (ix.getResult().getType() != ArgumentType.TMP_VARIABLE) {
+        if (!ix.getResult().isTemporaryVariable()) {
             return null;
         } else {
             return switch (ix.getOperation()) {

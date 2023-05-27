@@ -15,8 +15,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static info.teksol.util.CollectionUtils.findFirstIndex;
-
 /**
  * Optimizes the stack usage -- eliminates push/pop instruction pairs determined to be unnecessary. Several
  * independent optimizations are performed:
@@ -30,7 +28,7 @@ import static info.teksol.util.CollectionUtils.findFirstIndex;
  * </li></ol>
  * </li></ul>
  */
-public class StackUsageOptimizer extends BaseOptimizer {
+public class StackUsageOptimizer extends AstContextOptimizer {
 
     StackUsageOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
@@ -75,11 +73,11 @@ public class StackUsageOptimizer extends BaseOptimizer {
                         continue;   // If there's no function context, we're in main body. Skip call.
                     }
 
-                    List<LogicInstruction> function = contextInstructions(functionContext);
+                    LogicList function = contextInstructions(functionContext);
 
                     // 1. Preserve all variables that are read anywhere after the call
-                    int callIndex = findFirstIndex(function, ix -> ix == call);
-                    List<LogicInstruction> codeBlock = function.subList(callIndex, function.size());
+                    int callIndex = function.indexOf(ix -> ix == call);
+                    LogicList codeBlock = function.subList(callIndex, function.size());
                     Set<LogicArgument> preserveVariables = codeBlock.stream()
                             .filter(ix -> !(ix instanceof PushOrPopInstruction))
                             .flatMap(LogicInstruction::inputArgumentsStream)

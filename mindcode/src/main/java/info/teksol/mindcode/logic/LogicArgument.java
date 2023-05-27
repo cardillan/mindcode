@@ -44,6 +44,10 @@ public interface LogicArgument {
         return false;
     }
 
+    default boolean isTemporaryVariable() {
+        return false;
+    }
+
     default boolean isFunctionVariable() {
         return false;
     }

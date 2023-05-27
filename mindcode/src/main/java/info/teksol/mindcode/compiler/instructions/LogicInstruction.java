@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicParameter;
+import info.teksol.mindcode.logic.LogicVariable;
 import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
@@ -63,5 +64,9 @@ public interface LogicInstruction {
      */
     default int getRealSize() {
         return getOpcode().getSize();
+    }
+
+    default LogicVariable getResult() {
+        return null;
     }
 }

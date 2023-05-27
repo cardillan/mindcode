@@ -124,6 +124,7 @@ and availability of the aggressive optimization level is:
 | [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization     |     N      |
 | [Jump straightening](#jump-straightening)                       | jump-straightening            |     N      |
 | [Loop optimization](#loop-optimization)                         | loop-optimization             |     Y      |
+| [If expression optimization](#if-expression-optimization)       | if-expression-optimization    |     Y      |
 | [Jump threading](#jump-threading)                               | jump-threading                |     Y      |
 | [Inaccessible code elimination](#inaccessible-code-elimination) | inaccessible-code-elimination |     Y      |
 | [Stack optimization](#stack-optimization)                       | stack-optimization            |     N      |
@@ -134,7 +135,8 @@ and availability of the aggressive optimization level is:
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
 deactivating it might allow you to use Mindcode until a fix is available. Partially activated optimizations
 aren't routinely tested, so by deactivating one you might even discover some new bugs. On the other hand, full
-optimization suite is tested by running compiled code on an emulated Mindustry processor, so bugs should be rare. 
+optimization suite is tested by running compiled code on an emulated Mindustry processor, so bugs will hopefully
+be rare. 
 
 In particular, some optimizers expect to work on code that was already processed by different optimizations,
 so turning off some optimizations might render other optimizations ineffective. (This is *not* a bug, though.)  
@@ -374,6 +376,161 @@ sensor __tmp1 switch2 @enabled
 op land __tmp2 __tmp0 __tmp1
 jump 4 notEqual __tmp2 false
 print "A switch has been reset."
+end
+```
+
+## If expression optimization
+
+The _If expression optimization_ perform three types of optimizations on blocks of code created by if/ternary 
+expressions, which are internally handled identically. All possible optimizations are done independently.
+
+### Value propagation
+
+The value of ternary expressions and if expressions is sometimes assigned to a user variable. In these situations, the 
+true and false branches of the if/ternary expression assign the value to a temporary variable, which is then 
+assigned to the user variable. This optimization detects these situations and when possible, assigns the final value 
+to the user variable directly in the true/false branches:
+
+```
+abs = if x < 0
+    negative += 1;  // The semicolon is needed to separate the two statements
+    -x
+else
+    positive += 1
+    x
+end
+```
+
+produces this code:
+
+```
+jump 4 greaterThanEq x 0
+op add negative negative 1
+op mul abs x -1
+jump 6 always 0 0
+op add positive positive 1
+set abs x
+end
+```
+
+As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions 
+producing a single value are handled, specifically:
+
+* `set`
+* `op`
+* `read`
+* `sensor`
+* `packcolor`
+
+### Forward assignment
+
+Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
+
+```
+print(x < 0 ? "negative" : "positive")
+```
+
+Without If expression optimization, the produced code is
+
+```
+jump 3 greaterThanEq x 0
+set __tmp1 "negative"
+jump 4 always 0 0
+set __tmp1 "positive"
+print __tmp1
+```
+
+Execution speed:
+* x is negative: 4 instructions (0, 1, 2, 4) are executed,
+* x is positive: 3 instructions (0, 3, 4) are executed. 
+
+The if expression optimization turns the code into this:
+
+```
+set __tmp1 "positive"
+jump 3 greaterThanEq x 0
+set __tmp1 "negative"
+print __tmp1
+```
+
+Execution speed:
+* x is negative: 4 instructions (0, 1, 2, 3) are executed,
+* x is positive: 3 instructions (0, 1, 3) are executed.
+
+The execution time is the same. However, one instruction is saved.
+
+The forward assignment optimization can be done if at least one of the branches consist of just one instruction, and 
+both branches produce a value in their last instructions. Depending on the type of condition and the branch sizes,
+either true branch or false branch can get eliminated this way. Average execution time remains the same, although in 
+some cases the number of executed instructions per branch can change by one (total number of instructions executed 
+by both branches remains the same).
+
+### Compound condition elimination
+
+The instruction generator always generates true branch first. In some cases, the jump condition is formulated in 
+such a way that it cannot be expressed in a single jump and requires additional instruction (this only happens with 
+the strict equality operator `===`, which doesn't have an opposite operating in mlog instruction set).
+
+The additional instruction can be avoided when the true and false branches in the code are swapped. When this 
+optimizer detects such a situation, it does exactly that:
+
+```
+if @unit.dead === 0
+    print("alive")
+else
+    print("dead")
+end
+```
+
+Notice the `print("dead")` occurs before `print("alive")` now:
+
+```
+sensor __tmp0 @unit @dead
+jump 4 strictEqual __tmp0 0
+print "dead"
+jump 0 always 0 0
+print "alive"
+end
+```
+
+### Chained if-else statements
+
+The `elsif` statements are the same as nested `if` statements, and are also handled by the optimizer (basically by 
+optimizing each if expression on its own):
+
+```
+y = if x < 0
+    "negative"
+elsif x > 0
+    "positive"
+else
+    "zero"
+end
+```
+
+produces
+
+```
+set y "negative"
+jump 5 lessThan x 0
+set y "zero"
+jump 5 lessThanEq x 0
+set y "positive"
+end
+```
+
+saving three instructions over the code without if statement optimization:
+
+```
+jump 3 greaterThanEq x 0
+set __tmp1 "negative"
+jump 8 always 0 0
+jump 6 lessThanEq x 0
+set __tmp3 "positive"
+jump 7 always 0 0
+set __tmp3 "zero"
+set __tmp1 __tmp3
+set y __tmp1
 end
 ```
 

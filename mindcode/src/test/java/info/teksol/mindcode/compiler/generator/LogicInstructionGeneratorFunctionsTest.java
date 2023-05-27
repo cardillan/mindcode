@@ -753,7 +753,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void accessesMainVariables() {
         assertCompilesTo(
-                ix -> ix instanceof SetInstruction set && set.getTarget().getName().equals("X"),
+                ix -> ix instanceof SetInstruction set && set.getResult().getName().equals("X"),
                 """
                         def setx(x)
                             X = x

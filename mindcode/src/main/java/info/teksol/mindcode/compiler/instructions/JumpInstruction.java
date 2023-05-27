@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
@@ -8,6 +9,7 @@ import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
+import java.util.Objects;
 
 public class JumpInstruction extends BaseInstruction {
 
@@ -19,19 +21,28 @@ public class JumpInstruction extends BaseInstruction {
     public JumpInstruction copy() {
         return new JumpInstruction(this, marker);
     }
+
     protected JumpInstruction(BaseInstruction other, String marker) {
         super(other, marker);
     }
 
 
     public JumpInstruction withMarker(String marker) {
-        return new JumpInstruction(this, marker);
+        return Objects.equals(this.marker, marker) ? this : new JumpInstruction(this, marker);
     }
 
-    public JumpInstruction withTarget(LogicLabel label) {
+    public JumpInstruction withTarget(LogicLabel target) {
         return isUnconditional()
-                ? new JumpInstruction(getAstContext(), List.of(label, Condition.ALWAYS), getParams())
-                : new JumpInstruction(getAstContext(),List.of(label, getCondition(), getX(), getY()), getParams());
+                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getParams()).withMarker(marker)
+                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getParams()).withMarker(marker);
+    }
+
+    public JumpInstruction invert() {
+        if (!isInvertible()) {
+            throw new GenerationException("Jump is not invertible. " + this);
+        }
+        return new JumpInstruction(getAstContext(),
+                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams()).withMarker(marker);
     }
 
     public boolean isConditional() {
@@ -40,6 +51,10 @@ public class JumpInstruction extends BaseInstruction {
 
     public boolean isUnconditional() {
         return getCondition() == Condition.ALWAYS;
+    }
+
+    public boolean isInvertible() {
+        return getCondition().hasInverse();
     }
 
     public final LogicLabel getTarget() {

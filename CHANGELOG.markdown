@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+* Added [If expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#if-expression-optimization). In some cases 
+  only decreases the number of instructions by rearranging them, in other cases can decrease number of executed 
+  instructions. Only if statements containing both true and false branch are affected. 
+
 ### Fixed
 
 * Fixed the [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) not having upper 
@@ -17,11 +23,16 @@ All notable changes to this project will be documented in this file.
 
 * Generated mlog instructions are now linked to the AST nodes they were created from, and through them to the parser 
   tokens (for now in somewhat coarse granularity).
-  * This allows optimizers to inspect source AST nodes of individual instructions, providing detailed information 
-    about code structure. Optimizations based on these metadata should be much safer (the higher level code 
-    structure is known, not guessed from individual instructions).
+  * This allows optimizers to inspect source AST nodes of individual instructions, obtaining information about code 
+    structure. Optimizations based on these metadata should be easier to write and understand, once necessary 
+    support tooling is in place.
+  * It is necessary to update the AST context structure after each optimization iteration. These updates aren't done 
+    of the fly -- optimizers must understand the changes they make to the program in a single iteration aren't 
+    reflected to the AST context structure.
+  * Optimizers need to be careful to create newly generated instructions using the right (already existing) AST 
+    context, otherwise subsequent AST context-based optimizers can misunderstand the code structure. 
   * Instructions can be linked to source code. At this moment it can be only displayed using the `-f source` command 
-    line argument, hopefully in the future a better error reporting will be built using the metadata.   
+    line argument, hopefully in the future a better error reporting will be built using these metadata.   
 
 ## 2023-05-23
 

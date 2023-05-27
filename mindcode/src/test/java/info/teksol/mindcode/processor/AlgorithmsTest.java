@@ -36,7 +36,15 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     }
 
     @Test
-    void executeBitTest() throws IOException {
+    void executeBitReadTest() throws IOException {
+        testFile("bit-read-test.mnd",
+                List.of(),
+                IntStream.range(0, 16).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
+        );
+    }
+
+    @Test
+    void executeBitGetSetTest() throws IOException {
         testFile("bitmap-get-set-test.mnd",
                 List.of(),
                 IntStream.range(1, 17).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())

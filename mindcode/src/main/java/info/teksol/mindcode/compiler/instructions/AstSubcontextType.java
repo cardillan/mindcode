@@ -6,9 +6,10 @@ public enum AstSubcontextType {
     WHEN_VALUES     ("WVAL"),
     WHEN_BODY       ("WBOD"),
 
-    IF_CONDITION    ("ICON"),
-    TRUE_BRANCH     ("TBRN"),
-    FALSE_BRANCH    ("FBRN"),
+    CONDITION       ("ICON"),
+
+    /** Unconditional transition between two blocks, or labels taking parts in such transitions. */
+    FLOW_CONTROL    ("FLOW"),
 
 
     BODY            ("BODY"),

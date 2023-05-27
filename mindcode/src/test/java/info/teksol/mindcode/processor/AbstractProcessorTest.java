@@ -88,5 +88,4 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
     protected void testFile(String fileName, String... expectedOutputs) throws IOException {
         testFile(fileName, List.of(), List.of(expectedOutputs));
     }
-
 }

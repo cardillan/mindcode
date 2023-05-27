@@ -47,6 +47,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
+    public boolean isTemporaryVariable() {
+        return getType() == ArgumentType.TMP_VARIABLE;
+    }
+
+    @Override
     public boolean isFunctionVariable() {
         return getType() == ArgumentType.LOCAL_VARIABLE && functionPrefix != null;
     }

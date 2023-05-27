@@ -16,7 +16,7 @@ public record AstContext(
 ) {
 
     public static AstContext createRootNode() {
-        return new AstContext(0, null, AstContextType.ROOT, AstSubcontextType.BODY,
+        return new AstContext(0, null, AstContextType.ROOT, AstSubcontextType.BASIC,
                 null, 1.0, new ArrayList<>());
     }
 
@@ -77,6 +77,10 @@ public record AstContext(
             }
         }
         return null;
+    }
+
+    public List<AstContext> findSubcontexts(AstSubcontextType type) {
+        return children.stream().filter(c -> c.subcontextType == type).toList();
     }
 
     @Override

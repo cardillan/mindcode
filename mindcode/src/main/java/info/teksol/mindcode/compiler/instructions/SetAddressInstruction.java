@@ -27,7 +27,7 @@ public class SetAddressInstruction extends BaseInstruction {
         return new SetAddressInstruction(this, marker);
     }
 
-    public final LogicVariable getTarget() {
+    public final LogicVariable getResult() {
         return (LogicVariable) getArg(0);
     }
 

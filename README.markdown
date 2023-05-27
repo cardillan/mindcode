@@ -5,12 +5,16 @@ the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programm
 high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
 The main focus of Mindcode design is two-fold:
-* Keeping terminology and naming convention predictable and close to Mindustry Logic.
+* Keeping terminology and naming convention close to Mindustry Logic.
 * Provide language constructs that are not prohibitively expensive given the astonishingly slow speeds
   and limited instruction space of Mindustry processors.
 
-A recent addition to this project is [Schemacode](doc/syntax/SCHEMACODE.markdown), a schematic definition language, and 
-Schematics Builder/Decompiler. Using these tools it is possible to convert existing schematic into a readable, 
+In recent releases, significant changes were made to the way code optimization works. It is possible that some bugs 
+have been introduced to Mindcode compiler. I'll be glad to hear about anything strange you encounter (both in the 
+web application and when using the command line compiler). Please open a new issue when you encounter anything strange.
+
+Before that, [Schemacode](doc/syntax/SCHEMACODE.markdown), a schematic definition language with a Schematics
+builder and decompiler were added. Using these tools it is possible to convert existing schematic into a readable, 
 human editable text representation which can be compiled back into Mindustry schematic after modifications. The 
 flagship feature of the Schematics Builder is its ability to compile Mindcode and assign it to processors in the 
 schematic on the fly, saving a lot of hassle with maintaining schematics based on Mindcode programs.     

@@ -4,7 +4,6 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
@@ -39,7 +38,7 @@ class OutputTempEliminator extends BaseOptimizer {
             while (itCurr.hasNext()) {
                 LogicInstruction current = itCurr.next();
                 LogicInstruction previous = itPrev.next();
-                if (current instanceof SetInstruction ix && ix.getValue().getType() == ArgumentType.TMP_VARIABLE) {
+                if (current instanceof SetInstruction ix && ix.getValue().isTemporaryVariable()) {
                     LogicArgument value = ix.getValue();
                     List<LogicInstruction> list = instructions(
                             in -> in.getArgs().contains(value) && !(in instanceof PushOrPopInstruction));
@@ -54,7 +53,7 @@ class OutputTempEliminator extends BaseOptimizer {
                         if (replacesOutputArg) {
                             // The current instruction merely transfers a value from the output argument of the previous instruction
                             // Replacing those arguments with target of the set instruction
-                            itPrev.set(replaceAllArgs(previous, value, ix.getTarget()));
+                            itPrev.set(replaceAllArgs(previous, value, ix.getResult()));
                             itCurr.remove();
 
                             // We just removed instruction *after* itPref cursor, but we need itPref to sync with itCurr

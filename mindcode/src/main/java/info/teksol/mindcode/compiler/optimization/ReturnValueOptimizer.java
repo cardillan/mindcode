@@ -47,9 +47,9 @@ public class ReturnValueOptimizer extends BaseOptimizer {
             while (it.hasNext()) {
                 // Find fnRetVal creation and check is it well-formed
                 if (it.next() instanceof SetInstruction instruction
-                        && instruction.getTarget().getType() == ArgumentType.STORED_RETVAL) {
+                        && instruction.getResult().getType() == ArgumentType.STORED_RETVAL) {
 
-                    LogicArgument retval = instruction.getTarget();
+                    LogicArgument retval = instruction.getResult();
                     LogicArgument value = instruction.getValue();
 
                     // Get the other uses of fnRetVal

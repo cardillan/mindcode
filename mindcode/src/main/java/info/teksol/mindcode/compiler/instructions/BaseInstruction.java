@@ -63,7 +63,7 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public BaseInstruction withMarker(String marker) {
-        return new BaseInstruction(this, marker);
+        return Objects.equals(this.marker, marker) ? this : new BaseInstruction(this, marker);
     }
 
     @Override

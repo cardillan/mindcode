@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * </ul>
  * Functions are located in the code using the entry and exit labels marked with function prefix.
  */
-class FunctionParameterOptimizer extends BaseOptimizer {
+class FunctionParameterOptimizer extends AstContextOptimizer {
     public FunctionParameterOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
     }
@@ -51,7 +51,7 @@ class FunctionParameterOptimizer extends BaseOptimizer {
     }
 
     private void optimizeFunction(AstContext astContext) {
-        List<LogicInstruction> function = contextInstructions(astContext);
+        LogicList function = contextInstructions(astContext);
 
         // Count the number of times each variable is modified in the function
         Map<LogicArgument, Long> modifications = function.stream()
@@ -67,8 +67,8 @@ class FunctionParameterOptimizer extends BaseOptimizer {
         List<SetInstruction> eliminations = function.stream()
                 .filter(ix -> ix instanceof SetInstruction)                         // precondition 1
                 .map(ix -> (SetInstruction) ix)
-                .filter(ix -> ix.getTarget().isFunctionVariable())                  // precondition 1
-                .filter(ix -> modifications.get(ix.getTarget()) == 1)               // precondition 2
+                .filter(ix -> ix.getResult().isFunctionVariable())                  // precondition 1
+                .filter(ix -> modifications.get(ix.getResult()) == 1)               // precondition 2
                 .filter(ix -> !modifications.containsKey(ix.getValue()))            // precondition 3
                 .filter(ix -> !ix.getValue().isVolatile())                          // precondition 3
                 .filter(ix -> !hasCalls || !ix.getValue().isGlobalVariable())       // precondition 4
@@ -88,12 +88,12 @@ class FunctionParameterOptimizer extends BaseOptimizer {
      * @param ix instruction to eliminate
      */
     protected void eliminateInstruction(AstContext astContext, SetInstruction ix) {
-        LogicArgument oldArg = ix.getTarget();
+        LogicArgument oldArg = ix.getResult();
         LogicArgument newArg = ix.getValue();
         removeInstruction(ix);
 
         // The function needs to be collected again, as it could have been modified by previous replacement
-        List<LogicInstruction> function = contextInstructions(astContext);
+        LogicList function = contextInstructions(astContext);
 
         for (LogicInstruction current : function) {
             if (current.getArgs().contains(oldArg)) {

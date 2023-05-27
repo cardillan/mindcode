@@ -8,7 +8,7 @@ import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
 
-public class PackColorInstruction extends BaseInstruction {
+public class PackColorInstruction extends BaseInstruction implements LogicResultInstruction {
     PackColorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
         super(astContext, Opcode.PACKCOLOR, args, params);
     }
@@ -25,6 +25,11 @@ public class PackColorInstruction extends BaseInstruction {
         return new PackColorInstruction(this, marker);
     }
 
+    public SensorInstruction withResult(LogicVariable result) {
+        return new SensorInstruction(getAstContext(), List.of(result, getR(), getG(), getB(), getA()), getParams()).withMarker(marker);
+    }
+
+    @Override
     public final LogicVariable getResult() {
         return (LogicVariable) getArg(0);
     }

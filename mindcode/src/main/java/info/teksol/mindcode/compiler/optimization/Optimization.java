@@ -49,6 +49,10 @@ public enum Optimization {
             LoopOptimizer::new,
             "improving loops"),
 
+    IF_EXPRESSION_OPTIMIZATION           ('b', "If Expression Optimization",
+            IfExpressionOptimizer::new,
+            "improving ternary/if expressions"),
+
     JUMP_TARGET_PROPAGATION             ('t', "Jump Threading",
             PropagateJumpTargets::new,
             "eliminating chained jumps"),

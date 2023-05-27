@@ -10,7 +10,7 @@ import info.teksol.mindcode.logic.Operation;
 
 import java.util.List;
 
-public class OpInstruction extends BaseInstruction {
+public class OpInstruction extends BaseInstruction implements LogicResultInstruction {
 
     OpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
         super(astContext, Opcode.OP, args, params);
@@ -29,6 +29,13 @@ public class OpInstruction extends BaseInstruction {
         return new OpInstruction(this, marker);
     }
 
+    @Override
+    public OpInstruction withResult(LogicVariable result) {
+        return hasSecondOperand()
+                ? new OpInstruction(getAstContext(), List.of(getArg(0), result, getArg(2), getArg(3)), getParams()).withMarker(marker)
+                : new OpInstruction(getAstContext(), List.of(getArg(0), result, getArg(2)), getParams()).withMarker(marker);
+    }
+
     public boolean hasSecondOperand() {
         return getArgs().size() > 3;
     }
@@ -41,6 +48,7 @@ public class OpInstruction extends BaseInstruction {
         }
     }
 
+    @Override
     public final LogicVariable getResult() {
         return (LogicVariable) getArg(1);
     }

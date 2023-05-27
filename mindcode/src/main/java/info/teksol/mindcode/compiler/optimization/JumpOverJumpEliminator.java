@@ -47,8 +47,7 @@ public class JumpOverJumpEliminator extends BaseOptimizer {
                         inner.next(); // Skip unconditional jump
                         while (inner.hasNext() && inner.next() instanceof LabelInstruction label) {
                             if (label.getLabel().equals(jump.getTarget())) {
-                                iterator.set(createJump(jump.getAstContext(), next.getTarget(),
-                                        jump.getCondition().inverse(), jump.getX(), jump.getY()));
+                                iterator.set(jump.invert().withTarget(next.getTarget()));
                                 iterator.next();
                                 iterator.remove();
                                 break;

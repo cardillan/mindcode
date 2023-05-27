@@ -3,7 +3,6 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.Condition;
 
 import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
@@ -37,7 +36,7 @@ public class ImprovePositiveConditionalJumps extends BaseOptimizer {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof OpInstruction op
                         && op.getOperation().toCondition() != null
-                        && op.getResult().getType() == ArgumentType.TMP_VARIABLE
+                        && op.getResult().isTemporaryVariable()
                         && iterator.peek(0) instanceof JumpInstruction jump
                         && jump.getCondition() == Condition.NOT_EQUAL
                         && jump.getX().equals(op.getResult())

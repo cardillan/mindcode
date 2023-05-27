@@ -4,7 +4,6 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
@@ -36,8 +35,8 @@ class InputTempEliminator extends BaseOptimizer {
     protected boolean optimizeProgram() {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
-                if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.TMP_VARIABLE) {
-                    LogicArgument result = ix.getTarget();
+                if (it.next() instanceof SetInstruction ix && ix.getResult().isTemporaryVariable()) {
+                    LogicArgument result = ix.getResult();
                     List<LogicInstruction> list = instructions(
                             in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 

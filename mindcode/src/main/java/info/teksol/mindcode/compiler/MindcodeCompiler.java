@@ -117,7 +117,7 @@ public class MindcodeCompiler implements Compiler<String> {
         messages.add(
                 MindcodeMessage.debug(profile.getOptimizationLevels().entrySet().stream()
                         .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
-                        .map(e -> e.getKey() + ": " + e.getValue())
+                        .map(e -> e.getKey().getOptionName() + " = " + e.getValue().name().toLowerCase())
                         .collect(Collectors.joining(",\n    ", "Active optimizations:\n    ", "\n"))
                 )
         );

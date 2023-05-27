@@ -274,7 +274,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
             case CallInstruction ix       -> consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
             case GotoInstruction ix       -> consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
-            case SetAddressInstruction ix -> consumer.accept(createInstruction(astContext, SET, ix.getTarget(), ix.getLabel()));
+            case SetAddressInstruction ix -> consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()));
 
             default                       -> consumer.accept(instruction);
         }
@@ -375,6 +375,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
         if (instruction.getParams() == null) {
             throw new GenerationException("Instruction created without valid parameters: " + instruction);
+        }
+
+        if (instruction instanceof JumpInstruction && instruction.getAstContext().subcontextType() == AstSubcontextType.BODY) {
+            throw new GenerationException("Jump instruction not allowed in BODY subcontext." + instruction);
         }
 
         return instruction;

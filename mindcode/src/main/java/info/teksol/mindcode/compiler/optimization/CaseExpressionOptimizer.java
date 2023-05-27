@@ -37,8 +37,8 @@ class CaseExpressionOptimizer extends BaseOptimizer {
     protected boolean optimizeProgram() {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()){
-                if (it.next() instanceof SetInstruction ix && ix.getTarget().getType() == ArgumentType.AST_VARIABLE) {
-                    LogicVariable result = ix.getTarget();
+                if (it.next() instanceof SetInstruction ix && ix.getResult().getType() == ArgumentType.AST_VARIABLE) {
+                    LogicVariable result = ix.getResult();
                     List<LogicInstruction> list = instructions(
                             in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));
 
