@@ -384,14 +384,12 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitIterated_for(MindcodeParser.Iterated_forContext ctx) {
         String label = ctx.label == null ? null : ctx.label.getText();
-        return new Seq(ctx.getStart(),
+        return new WhileExpression(ctx.getStart(),
+                label,
                 visit(ctx.init),
-                new WhileExpression(ctx.getStart(),
-                        label,
-                        visit(ctx.cond),
-                        visit(ctx.loop_body()),
-                        visit(ctx.increment)
-                )
+                visit(ctx.cond),
+                visit(ctx.loop_body()),
+                visit(ctx.increment)
         );
     }
 
@@ -442,7 +440,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitWhile_expression(MindcodeParser.While_expressionContext ctx) {
         String label = ctx.label == null ? null : ctx.label.getText();
-        return new WhileExpression(ctx.getStart(),label,
+        return new WhileExpression(ctx.getStart(),label, new NoOp(),
                 visit(ctx.cond), visit(ctx.loop_body()), new NoOp());
     }
 

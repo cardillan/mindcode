@@ -1,28 +1,48 @@
 package info.teksol.mindcode.compiler.instructions;
 
 public enum AstSubcontextType {
+    /** Nonspecific context. */
     BASIC           ("    "),
 
-    WHEN_VALUES     ("WVAL"),
-    WHEN_BODY       ("WBOD"),
+    /**
+     * Sequence of statements, with a single entry point and (mostly) single exit point.
+     * Break, continue and return might jump out of the block, use {@code BaseOptimizer.isContained}
+     * to detect these cases.
+     */
+    BODY            ("BODY"),
 
-    CONDITION       ("ICON"),
+    /** The condition in if, loop, when or similar structures. Contains code for the entire expression. */
+    CONDITION       ("COND"),
 
-    /** Unconditional transition between two blocks, or labels taking parts in such transitions. */
+    /** Jumps between blocks, or labels for these jumps. */
     FLOW_CONTROL    ("FLOW"),
 
+    /** Initialization code for a control structure (only loops at this moment).  */
+    INIT            ("INIT"),
 
-    BODY            ("BODY"),
-    LOOP_INIT       ("LCON"),
-    LOOP_CONDITION  ("LCON"),
-    LOOP_UPDATE     ("LUPD"),
-    LOOP_ITERATOR   ("ITER"),
+    /** Update code (setting up next iteration) in a loop. */
+    UPDATE          ("UPDT"),
 
-    FUNCTION_ARGUMENTS  ("ARGS"),
-    SYSTEM_FUNCTION     ("SFUN"),
-    INLINE_FUNCTION     ("INLI"),
-    OUT_OF_LINE_CALL    ("OCAL"),
-    RECURSIVE_CALL      ("RCAL"),
+    /** For-each iterator code. No further structure at the moment. */
+    ITERATOR        ("ITER"),
+
+    /** Code setting up arguments before a function call. */
+    ARGUMENTS       ("ARGS"),
+
+    /**
+     * Call to a system function (mapped to an instruction) or a built-in function.
+     * Technically not a call, as it includes the entire function body.
+     */
+    SYSTEM_CALL     ("SCAL"),
+
+    /** Inlined function call. */
+    INLINE_CALL     ("ICAL"),
+
+    /**  Call to an out-of-line (but stackless) function. */
+    OUT_OF_LINE_CALL("OCAL"),
+
+    /** A recursive function call, includes stack operations. */
+    RECURSIVE_CALL  ("RCAL"),
 
     ;
 

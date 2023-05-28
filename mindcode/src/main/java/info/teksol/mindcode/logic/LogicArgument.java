@@ -48,6 +48,10 @@ public interface LogicArgument {
         return false;
     }
 
+    default boolean isProtectedVariable() {
+        return false;
+    }
+
     default boolean isFunctionVariable() {
         return false;
     }

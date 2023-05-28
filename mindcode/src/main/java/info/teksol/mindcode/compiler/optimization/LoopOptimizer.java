@@ -46,49 +46,43 @@ public class LoopOptimizer extends BaseOptimizer {
     @Override
     protected boolean optimizeProgram() {
         count = 0;
-
-        forEachContext(c -> c.contextType() == AstContextType.LOOP && c.subcontextType() == BASIC,
-                this::optimizeLoop);
-
+        forEachContext(AstContextType.LOOP, BASIC, this::optimizeLoop);
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d loop jumps improved by %s.", count, getClass().getSimpleName());
+            emitMessage(MessageLevel.INFO, "%6d loops improved by %s.", count, getClass().getSimpleName());
         }
-
         return false;
     }
 
     private void optimizeLoop(AstContext loop) {
-        List<AstContext> conditions = loop.findSubcontexts(LOOP_CONDITION);
+        List<AstContext> conditions = loop.findSubcontexts(CONDITION);
         if (conditions.size() != 1) return;     // Either malformed, or already optimized.
 
         LogicList condition = contextInstructions(conditions.get(0));
-        LogicList update = contextInstructions(loop.findSubcontext(LOOP_UPDATE));
-        if (condition.isEmpty() || update.isEmpty() || !hasConditionAtFront(loop)) {
+        LogicList next = contextInstructions(loop.findSubcontext(FLOW_CONTROL));
+        if (condition.isEmpty() || next.isEmpty() || !hasConditionAtFront(loop)) {
             return;
         }
 
-        // Make sure the structure of the loop meets expectations
         if (condition.get(0) instanceof LabelInstruction conditionLabel
-                && condition.fromEnd(0) instanceof JumpInstruction jump
+                && condition.getLast() instanceof JumpInstruction jump
                 && jump.isConditional()
-                && update.fromEnd(0) instanceof LabelInstruction doneLabel
+                && next.getLast() instanceof LabelInstruction doneLabel
                 && jump.getTarget().equals(doneLabel.getLabel())
-                && update.fromEnd(1) instanceof JumpInstruction backJump
+                && next.getFromEnd(1) instanceof JumpInstruction backJump
                 && backJump.isUnconditional()) {
 
-            // Find the instruction immediately preceding the condition
             LogicInstruction loopSetup = instructionBefore(conditionLabel);
 
-            // Condition instructions without the label and jump (possibly empty)
+            // Gather condition instructions without the label and jump (possibly empty)
             final LogicList conditionEvaluation;
             final BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator; // Creates the new jump when label is known
 
-            if (condition.fromEnd(1) instanceof OpInstruction op
+            if (condition.getFromEnd(1) instanceof OpInstruction op
                     && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
                     && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
                     && jump.getY().equals(LogicBoolean.FALSE)) {
 
-                // This is inverse jump
+                // This is an inverse jump
                 conditionEvaluation = condition.subList(1, condition.size() - 2); // Remove the op as well
                 newJumpCreator = (astContext, target) -> createJump(astContext, target,
                         op.getOperation().toCondition(), op.getX(), op.getY());
@@ -104,21 +98,13 @@ public class LoopOptimizer extends BaseOptimizer {
 
             // Can we duplicate the additional condition instructions? If not, nothing to do
             if (canDuplicate(conditionEvaluation)) {
-                // We need to create a copy of the condition context
-                AstContext newContext = conditions.get(0).createCopy();
+                LogicLabel bodyLabel = obtainContextLabel(loop.findSubcontext(BODY));
+                LogicList copy = conditionEvaluation.duplicate();
 
-                // Perform the optimization: newContext condition jump
-                LogicInstruction firstBodyInstruction = contextStream(loop.findSubcontext(LOOP_CONDITION))
-                        .limit(1).findFirst().get();
-                LogicLabel bodyLabel = createLoopBodyLabel(jump, firstBodyInstruction.getAstContext());
+                // Replace the last jump first, then insert the rest of the code *before* it
                 int index = instructionIndex(backJump);
-                replaceInstruction(index, newJumpCreator.apply(newContext,bodyLabel));
-
-                List<LogicInstruction> copied = conditionEvaluation.stream().map(ix -> ix.withContext(newContext)).toList();
-                insertInstructions(index, copied);
-
-                // We need to assign an independent context to the doneLabel as well
-                replaceInstruction(doneLabel, doneLabel.withContext(doneLabel.getAstContext().createCopy()));
+                replaceInstruction(index, newJumpCreator.apply(copy.getAstContext(),bodyLabel));
+                insertInstructions(index, copy);
 
                 // Remove the opening jump, if the loop is known to be executed at least once
                 // and the optimization level is aggressive.
@@ -130,6 +116,7 @@ public class LoopOptimizer extends BaseOptimizer {
                 // 4. The jump evaluates to false (i.e. doesn't skip over the loop) for the initial
                 //    value of the loop control variable
                 //
+                // This only handles the simplest cases.
                 // TODO use general compile-time evaluation to find the possible states of the condition
                 //      and either remove the jump, or the entire loop accordingly.
                 if (aggressive() && condition.size() == 2
@@ -148,13 +135,9 @@ public class LoopOptimizer extends BaseOptimizer {
     }
 
     private boolean hasConditionAtFront(AstContext loop) {
-        for (AstContext child : loop.children()) {
-            switch (child.subcontextType()) {
-                case LOOP_CONDITION:        return true;        // condition comes first
-                case BODY, LOOP_ITERATOR:   return false;       // condition doesn't come first
-            }
-        }
-        return false;
+        List<AstContext> children = loop.children();
+        return (children.size() >= 2) && (children.get(0).subcontextType() == CONDITION
+                || children.get(0).subcontextType() == INIT && children.get(1).subcontextType() == CONDITION);
     }
 
     private boolean canDuplicate(LogicList conditionEvaluation) {
@@ -163,25 +146,18 @@ public class LoopOptimizer extends BaseOptimizer {
         return size == 0 || goal == GenerationGoal.SPEED && size <= 3;
     }
 
-    // We must not reuse label that's already there - it might belong to a different AST context
-    private LogicLabel createLoopBodyLabel(LogicInstruction jump, AstContext astContext) {
-        LogicLabel label = instructionProcessor.nextLabel();
-        insertAfter(jump, createLabel(astContext, label));
-        return label;
-    }
-
     private boolean alwaysNegative(JumpInstruction jump) {
         if (jump.getX().isNumericLiteral() && jump.getY().isNumericLiteral()) {
             double a = jump.getX().getDoubleValue();
             double b = jump.getY().getDoubleValue();
             boolean value = switch (jump.getCondition()) {
-                case ALWAYS -> true;
-                case EQUAL, STRICT_EQUAL -> ExpressionEvaluator.equals(a, b);
-                case NOT_EQUAL -> !ExpressionEvaluator.equals(a, b);
-                case GREATER_THAN -> a > b;
-                case GREATER_THAN_EQ -> a >= b;
-                case LESS_THAN -> a < b;
-                case LESS_THAN_EQ -> a <= b;
+                case ALWAYS             -> true;
+                case EQUAL,STRICT_EQUAL -> ExpressionEvaluator.equals(a, b);
+                case NOT_EQUAL          -> !ExpressionEvaluator.equals(a, b);
+                case GREATER_THAN       -> a > b;
+                case GREATER_THAN_EQ    -> a >= b;
+                case LESS_THAN          -> a < b;
+                case LESS_THAN_EQ       -> a <= b;
             };
             return !value;
         }

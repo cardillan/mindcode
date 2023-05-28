@@ -141,6 +141,7 @@ public class AstIndentedPrinterTest extends AbstractAstTest {
                         Seq[
                             WhileExpression{
                                 label=null,
+                                initialization=NoOp{},
                                 condition=BooleanLiteral{value=true},
                                 body=Seq[
                                     FunctionCall{

@@ -151,6 +151,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     public String visitWhileStatement(WhileExpression node) {
         open("WhileExpression{");
         print("label="); visit(node.getLabel()); newLine(",");
+        print("initialization="); visit(node.getInitialization()); newLine(",");
         print("condition="); visit(node.getCondition()); newLine(",");
         print("body="); visit(node.getBody());
         close("}");

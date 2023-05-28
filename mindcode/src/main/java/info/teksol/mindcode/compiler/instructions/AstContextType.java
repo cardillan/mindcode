@@ -12,8 +12,8 @@ public enum AstContextType {
     STACK_ALLOC     ("SALO"),
 
     FUNCTION        ("FNDF"),
-    INLINE_FUNCTION ("FNIN"),
     CALL            ("CALL"),
+    INLINED_CALL    ("ICAL"),
     RETURN          ("RETN"),
 
     IF              ("IF  "),

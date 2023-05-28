@@ -32,7 +32,7 @@ public class PackColorInstruction extends BaseInstruction implements LogicResult
     }
 
     public SensorInstruction withResult(LogicVariable result) {
-        return new SensorInstruction(getAstContext(), List.of(result, getR(), getG(), getB(), getA()), getParams(), marker);
+        return new SensorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getParams(), marker);
     }
 
     @Override

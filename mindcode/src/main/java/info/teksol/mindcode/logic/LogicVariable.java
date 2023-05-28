@@ -52,6 +52,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
+    public boolean isProtectedVariable() {
+        return getType() == ArgumentType.PROTECTED_VARIABLE;
+    }
+
+    @Override
     public boolean isFunctionVariable() {
         return getType() == ArgumentType.LOCAL_VARIABLE && functionPrefix != null;
     }

@@ -20,11 +20,7 @@ public enum Optimization {
     SINGLE_STEP_JUMP_ELIMINATION        ('s', "Single Step Elimination",
             SingleStepJumpEliminator::new,
             "eliminating jumps to the next instruction"),
-    
-    INPUT_TEMPS_ELIMINATION             ('i', "Input Temp Elimination",
-            InputTempEliminator::new,
-            "eliminating temporary variables created to pass values into instructions"),
-    
+
     OUTPUT_TEMPS_ELIMINATION            ('o', "Output Temp Elimination",
             OutputTempEliminator::new,
             "eliminating temporary variables created to extract values from instructions"),
@@ -73,6 +69,10 @@ public enum Optimization {
     RETURN_VALUE_OPTIMIZATION           ('r', "Return Value Optimization",
             ReturnValueOptimizer::new,
             "optimizing passing return values from functions"),
+
+    INPUT_TEMPS_ELIMINATION             ('i', "Input Temp Elimination",
+            InputTempEliminator::new,
+            "eliminating temporary variables created to pass values into instructions"),
 
     PRINT_TEXT_MERGING                  ('p', "Print Merging",
             PrintMerger::new,

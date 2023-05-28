@@ -76,7 +76,7 @@ class DeadCodeEliminator extends BaseOptimizer {
             // Other instructions are inspected further to find out they're fully unused
             writes.get(key).stream()
                     .filter(ix -> ix.getOutputs() < 2 || allWritesUnread(ix))
-                    .mapToInt(ix -> firstInstructionIndex(0, ixx -> ixx == ix))
+                    .mapToInt(ix -> firstInstructionIndex(ixx -> ixx == ix))
                     .filter(i -> i >= 0)
                     .forEach(this::removeInstruction);
         }

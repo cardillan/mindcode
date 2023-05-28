@@ -363,13 +363,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public LogicValue visitFunctionCall(FunctionCall node) {
-        setSubcontextType(AstSubcontextType.FUNCTION_ARGUMENTS, 1.0);
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         // Do not track temporary variables created by evaluating function parameter expressions.
         // They'll be used solely to pass values to actual function parameters and won't be used subsequently
         final List<LogicValue> params = nodeContext.encapsulate(
                 () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
 
-        setSubcontextType(AstSubcontextType.SYSTEM_FUNCTION, 1.0);
+        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         // Special cases
         LogicValue returnValue = switch (node.getFunctionName()) {
             case "printf"   -> handlePrintf(node, params);
@@ -426,7 +426,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LocalContext previousContext = functionContext;
         final LoopStack previousLoopStack = loopStack;
         try {
-            enterAstNode(function.getDeclaration(), AstContextType.INLINE_FUNCTION);
+            enterAstNode(function.getDeclaration(), AstContextType.INLINED_CALL);
             currentFunction = function;
             functionContext = new LocalContext();
             loopStack = new LoopStack();
@@ -672,9 +672,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 if (target instanceof LogicVariable variable) {
                     if (target.getType() != ArgumentType.BLOCK) {
                         emit(createSet(variable, rvalue));
-                        // TODO returning rvalue causes temp variable to be used twice, disallowing some optimizations
-                        //      investigate returning variable instead of rvalue here
-                        // return variable;
+                        // Returning rvalue causes temp variable to be used twice
+                        // This is not accounted for in some optimizations, but the impact seems to be minimal
+                        // Decided not to switch to returning "variable" instead
                     } else {
                         throw new GenerationException("Assignment to variable '" + target + "' not allowed (name reserved for linked blocks)");
                     }
@@ -723,7 +723,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         loopStack.enterLoop(node.getLabel(), exitLabel, contLabel);
 
         // Multiplier is set to 1: all instructions execute exactly once
-        setSubcontextType(AstSubcontextType.LOOP_ITERATOR, 1.0);
+        setSubcontextType(AstSubcontextType.ITERATOR, 1.0);
 
         // All but the last value
         for (int i = 0; i < values.size() - 1; i++) {
@@ -746,6 +746,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         // Label for continue statements
         emit(createLabel(contLabel));
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, values.size());
         emit(createGoto(iterator).withMarker(marker));
         emit(createLabel(exitLabel));
 
@@ -766,7 +767,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         int multiplier = lowerBound.isNumericLiteral() && upperBound.isNumericLiteral()
                 ? (int) (upperBound.getDoubleValue() - lowerBound.getDoubleValue()) : LOOP_REPETITIONS;
 
-        setSubcontextType(AstSubcontextType.LOOP_INIT, multiplier);
+        setSubcontextType(AstSubcontextType.INIT, multiplier);
 
         LogicValue fixedUpperBound;
         if (upperBound.isLiteral()) {
@@ -783,16 +784,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
-        setSubcontextType(AstSubcontextType.LOOP_CONDITION, multiplier);
+        setSubcontextType(AstSubcontextType.CONDITION, multiplier);
         emit(createLabel(beginLabel));
         emit(createJump(doneLabel, node.getRange().maxValueComparison().inverse(), variable, fixedUpperBound));
         setSubcontextType(AstSubcontextType.BODY, multiplier);
         visit(node.getBody());
         emit(createLabel(continueLabel));
-        setSubcontextType(AstSubcontextType.LOOP_UPDATE, multiplier);
+        setSubcontextType(AstSubcontextType.UPDATE, multiplier);
         emit(createOp(Operation.ADD, variable, variable, LogicNumber.ONE));
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
         emit(createJumpUnconditional(beginLabel));
-
         emit(createLabel(doneLabel));
         clearSubcontextType();
         loopStack.exitLoop(node.getLabel());
@@ -805,20 +806,24 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         int multiplier = condition instanceof ConstantAstNode c && !ExpressionEvaluator.equals(c.getAsDouble(), 0.0)
                 ? INFINITE_LOOP_REPETITIONS : LOOP_REPETITIONS;
 
+        setSubcontextType(AstSubcontextType.INIT, multiplier);
+        visit(node.getInitialization());
+
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
-        setSubcontextType(AstSubcontextType.LOOP_CONDITION, multiplier);
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
+        setSubcontextType(AstSubcontextType.CONDITION, multiplier);
         emit(createLabel(beginLabel));
         final LogicValue cond = visit(node.getCondition());
         emit(createJump(doneLabel, Condition.EQUAL, cond, FALSE));
         setSubcontextType(AstSubcontextType.BODY, multiplier);
         visit(node.getBody());
         emit(createLabel(continueLabel));
-        setSubcontextType(AstSubcontextType.LOOP_UPDATE, multiplier);
+        setSubcontextType(AstSubcontextType.UPDATE, multiplier);
         visit(node.getUpdate());
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
         emit(createJumpUnconditional(beginLabel));
         emit(createLabel(doneLabel));
         loopStack.exitLoop(node.getLabel());
@@ -840,10 +845,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setSubcontextType(AstSubcontextType.BODY, multiplier);
         emit(createLabel(beginLabel));
         visit(node.getBody());
-        setSubcontextType(AstSubcontextType.LOOP_CONDITION, multiplier);
         emit(createLabel(continueLabel));
+        setSubcontextType(AstSubcontextType.CONDITION, multiplier);
         final LogicValue cond = visit(node.getCondition());
         emit(createJump(beginLabel, Condition.NOT_EQUAL, cond, FALSE));
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
         emit(createLabel(doneLabel));
         clearSubcontextType();
         loopStack.exitLoop(node.getLabel());
@@ -1002,7 +1008,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicValue caseValue = visit(node.getCondition());
         for (final CaseAlternative alternative : node.getAlternatives()) {
             enterAstNode(alternative);
-            setSubcontextType(AstSubcontextType.WHEN_VALUES, multiplier * remain--);
+            setSubcontextType(AstSubcontextType.CONDITION, multiplier * remain--);
 
             final LogicLabel nextAlt = nextLabel();         // Next alternative
             final LogicLabel bodyLabel = nextLabel();       // Body of this alternative
@@ -1033,20 +1039,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emit(createJumpUnconditional(nextAlt));
 
             // Body of the alternative
-            setSubcontextType(AstSubcontextType.WHEN_BODY, multiplier);
+            setSubcontextType(AstSubcontextType.BODY, multiplier);
             emit(createLabel(bodyLabel));
             final LogicValue body = visit(alternative.getBody());
             emit(createSet(resultVar, body));
+            setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
             emit(createJumpUnconditional(exitLabel));
+            emit(createLabel(nextAlt));
             clearSubcontextType();
             exitAstNode(alternative);
-
-            emit(createLabel(nextAlt));
         }
 
+        setSubcontextType(AstSubcontextType.BODY, multiplier);
         final LogicValue elseBranch = visit(node.getElseBranch());
         emit(createSet(resultVar, elseBranch));
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
         emit(createLabel(exitLabel));
+        clearSubcontextType();
 
         return resultVar;
     }

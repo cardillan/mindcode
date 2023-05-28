@@ -534,7 +534,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new Seq(null, 
                                 new Assignment(null, new VarRef(null, "n"), new NumericLiteral(null, "5"))
                         ),
-                        new WhileExpression(null, 
+                        new WhileExpression(null, null,
+                                new NoOp(),
                                 new BinaryOp(null, new VarRef(null, "n"), ">", new NumericLiteral(null, "0")),
                                 new Seq(null, 
                                         new Assignment(null, 
@@ -610,33 +611,32 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void parsesCStyleLoop() {
-        assertEquals(
-                new Seq(null, 
-                        new Seq(null, 
-                                new Assignment(null, new VarRef(null, "i"), new NumericLiteral(null, "0")),
-                                new Assignment(null, new VarRef(null, "j"), new NumericLiteral(null, "-5"))
-                        ),
-                        new WhileExpression(null, 
-                                new BinaryOp(null, 
+        assertEquals(new Seq(null,
+                        new WhileExpression(null, null,
+                                new Seq(null,
+                                        new Assignment(null, new VarRef(null, "i"), new NumericLiteral(null, "0")),
+                                        new Assignment(null, new VarRef(null, "j"), new NumericLiteral(null, "-5"))
+                                ),
+                                new BinaryOp(null,
                                         new VarRef(null, "i"),
                                         "<",
                                         new NumericLiteral(null, "5")
                                 ),
-                                new Seq(null, 
+                                new Seq(null,
                                         new FunctionCall(null, "print", new VarRef(null, "n"))
                                 ),
-                                new Seq(null, 
-                                        new Assignment(null, 
+                                new Seq(null,
+                                        new Assignment(null,
                                                 new VarRef(null, "j"),
-                                                new BinaryOp(null, 
+                                                new BinaryOp(null,
                                                         new VarRef(null, "j"),
                                                         "-",
                                                         new NumericLiteral(null, "1")
                                                 )
                                         ),
-                                        new Assignment(null, 
+                                        new Assignment(null,
                                                 new VarRef(null, "i"),
-                                                new BinaryOp(null, 
+                                                new BinaryOp(null,
                                                         new VarRef(null, "i"),
                                                         "+",
                                                         new NumericLiteral(null, "1")
@@ -654,8 +654,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(null, 
                         new NoOp(),
-                        new WhileExpression(null, 
-                                new BinaryOp(null, 
+                        new WhileExpression(null, null,
+                                new NoOp(),
+                                new BinaryOp(null,
                                         new Ref(null, "unit"),
                                         "===",
                                         new NullLiteral(null)
@@ -898,7 +899,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
                                                                 )
                                                         )
                                                 ),
-                                                new WhileExpression(null,
+                                                new WhileExpression(null, null,
+                                                        new NoOp(),
                                                         new BinaryOp(null,
                                                                 new Ref(null, "tick"),
                                                                 "<",
@@ -1178,7 +1180,8 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 new Seq(null,
                         new Seq(null,
-                                new WhileExpression(null,
+                                new WhileExpression(null, null,
+                                        new NoOp(),
                                         new VarRef(null, "a"),
                                         new Seq(null,
                                                 new IfExpression(null,

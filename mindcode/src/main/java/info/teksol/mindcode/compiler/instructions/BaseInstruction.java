@@ -24,8 +24,8 @@ public class BaseInstruction implements LogicInstruction {
     protected final String marker;
 
     BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        this.astContext = astContext;
-        this.opcode = opcode;
+        this.astContext = Objects.requireNonNull(astContext);
+        this.opcode = Objects.requireNonNull(opcode);
         this.args = List.copyOf(args);
         this.marker = marker;
         this.params = params;
@@ -42,7 +42,7 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     protected BaseInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        this.astContext = astContext;
+        this.astContext = Objects.requireNonNull(astContext);
         this.opcode = other.opcode;
         this.args = other.args;
         this.marker = marker;
@@ -142,7 +142,7 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public boolean matchesContext(AstContext astContext) {
-        return getAstContext().matches(astContext);
+        return this.astContext.matches(astContext);
     }
 
     public AstContext findContextOfType(AstContextType contextType) {
@@ -170,7 +170,8 @@ public class BaseInstruction implements LogicInstruction {
     @Override
     public String toString() {
         return "LogicInstruction{" +
-                "opcode='" + opcode + '\'' +
+                "astContext.id: " + astContext.id +
+                ", opcode='" + opcode + '\'' +
                 ", args=" + args +
                 '}';
     }

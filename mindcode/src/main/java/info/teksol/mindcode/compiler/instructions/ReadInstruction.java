@@ -34,7 +34,7 @@ public class ReadInstruction extends BaseInstruction implements LogicResultInstr
     }
 
     public ReadInstruction withResult(LogicVariable result) {
-        return new ReadInstruction(getAstContext(), List.of(result, getMemory(), getIndex()), getParams(), marker);
+        return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getParams(), marker);
     }
 
     @Override

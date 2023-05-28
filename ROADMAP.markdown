@@ -6,41 +6,55 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 I hope to include these in next release(s).
 
+* An initial implementation of Common subexpression optimization. Will avoid implementing optimizations for handling 
+  obvious optimization candidates for specific cases.
 * Create much more processor tests - unit tests based on executing compiled code and comparing the output. They're 
   extremely useful at detecting bugs caused by unforeseen interference of different optimizers.
     
 ## Intense contemplation
 
-### Short-circuit boolean evaluation
-
-* All logical and/or operators may or may not be short-circuited (i.e. `and`, `or`, `&&`, `||`). Avoid side
-  effects, or place side effect call first.
-* In Mindustry Logic, invalid operations just do nothing; it is therefore not needed to use short-circuit to avoid,
-  say, a null pointer exception or invalid arithmetic operation. It might be cheaper to just execute the faulty 
-  instruction. It would make sense to use short-circuit to avoid costly operations, such as function calls or 
-  complicated expressions. Short-circuiting will therefore be applied based on code size.
-* Code size needs to be known, will be either fully implemented in the optimizer, or will recompile parse tree
-  applying hints learned during optimizations.
-
 ### Common subexpression optimization
 
-* Will be implemented through detailed data flow analysis
-  * Information about possible variable values will be gathered
+Still hazy. Notes so far:
+
+* Will be implemented through control flow graph analysis
+  * AST context structure might provide sufficient CFG representation; if not, a CFG will be built from it.  
+  * Information about possible variable values will be gathered.
+  * All operations will be evaluated using constrained mode (the operation takes two constrained variable in and 
+    produces constrained output)
+  * Recursive constrained-value expression evaluation will be used for expressions inside a loop. The constraints 
+    will reflect possibility of repeating the operation indefinitely.
 * Will probably require multi-pass optimizations
   * Some optimizers will only be run once after all passes (e.g. jump threading)
   * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
     current implementation
+* Constrained-value expression evaluation.
+  * We should be able to at least partially evaluate expressions over variables with known constraints (such as 
+    "non-negative", "less than x", "integer", and so on). 
+  * Elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`.
 * Known constraints on variable values will allow better expression optimization, especially with booleans
-* Needed to support meaningful loop unrolling
+
+### Short-circuit boolean evaluation
+
+* The `and` and `or` operators will be subject to short-circuiting. All other, including `&&` and `||`, are always 
+evaluated fully.
+* Short-circuiting will be done by the compiler. Optimizers will look for opportunities to avoid short-circuiting 
+  for smaller or faster code.
+* Short-circuiting will never be removed for:
+  * Instructions which affect the world, (e.g. `print`, `draw`, `ucontrol`  etc. - it is necessary to keep track of 
+    which opcodes do affect the world.)
+  * Useful (as determined by CSE data flow analysis) assignments to variables.
 
 ### Optimizing code for speed 
 
-Some optimizations (e.g. dynamic function inlining) might be done through multiple passes compilation: optimizer will 
-prepare hints for logic instruction generator, which in turn will regenerate the entire code using those hints. 
-After the first pass the size of the resulting program is known, and we can trade space for speed up to the 1000 
-instruction limits. Will also make automatic inlining possible. At least a crude measure of execution frequency will 
-be needed to avoid trading space for speed on rarely used sections of code (maybe user-defined/optimizer-generated 
-compiler hints?).
+* It is already done in loop optimization
+* A general approach:
+  * all opportunities for speed optimizations will be identified and gathered,
+  * if all optimizations are impossible without reaching 1000 instructions limit, the most effective ones will be 
+    selected (based on instruction frequency analysis or [`#use statement`](#use-statement) - explicit 
+    `#use goal = speed` code blocks will be prioritized).
+* At least some optimizations (e.g. function inlining) will require AST tree node rebuild - it will probably be 
+  easier than a recompile. Loop unrolling, on the other hand, seems feasible for optimizers to realize.
 
 ### Processor-variables backed arrays and loop optimizations
 
@@ -104,6 +118,18 @@ Things being pondered on from time to time.
     `def func(x, out y, out z) return (x + 1, x - 1) end  a, b = func(7)`). The syntax looks just weird. What if we 
     don't need some of the return values? 
 
+#### #use statement
+
+```
+#use compiler-option = value, compiler-option = value, ...
+  [code]
+end
+```
+
+Compiles code within the code block applying certain compiler options (e.g. goal) to it. Some compiler options 
+(target, optimization) will remain global and won't be available in `#use`. The intended purpose is to provide means 
+to compile different parts of code for size or speed.
+
 ### Code generation / optimization
 
 * Function calls:
@@ -113,27 +139,20 @@ Things being pondered on from time to time.
   * Parameters that are only passed to recursive calls and never modified won't be stored on stack.
   * Additional automatic inlining of non-recursive functions.
   * Replace jump to return instruction with the return instruction itself (increases code size).
-* Optimization improvements
-  * Boolean expressions:
-    * and/or expression improvements: encode `a and not b` as `a > b`, `a or not b` as `a >= b` (requires the
-      previous optimization),
-* Determine effective variable types to assist with optimizations (globally at first).
+* Boolean expression optimizations: encode `a and not b` as `a > b`, `a or not b` as `a >= b`, if both values are 
+  known to be boolean.
 * Temporary variable merging: after all optimizations, all temporary variables will be inspected for scope and
   variables with non-overlapping scopes will be merged into one, and renumbered starting from 0. Fewer temporary
   variables will make inspecting variables inside processors in Mindustry way easier.
-* Strict Boolean evaluation (probably a compiler directive): ensure every boolean expression produces 0 or 1
 * Improved code generation
   * Memory/instruction jump table for case expressions where possible
 * Propagate constant string evaluation into inline functions.
-* Constant expression evaluation in compiled code / expression optimization.
-  * Elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`.
 * Multiple optimization passes (?)
-* String constant concatenation: `print("Answer is ", answer ? "yes" : "no")` would be turned into
+* String constant distribution: `print("Answer is ", answer ? "yes" : "no")` would be turned into
   `print(answer ? "Answer is yes" : "Answer is no")`, saving one `print` instruction.
-  * This needs to be done in compiler
 * More advanced optimizations:
   * Common subexpressions optimizations (maybe including repeated array access).
-  * Loop unrolling (at first just for for-each loops), perhaps other loop optimizations.
+  * Loop unrolling, perhaps other loop optimizations.
   * Better jump threading / cross-jumping.
   * Forward store for external variables / arrays.
   * Tail recursion optimization.

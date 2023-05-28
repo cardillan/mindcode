@@ -132,7 +132,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     }
 
     @Test
-    void reallifeScripts() {
+    void realLifeScripts() {
         assertCompilesTo("""
                         silicon = reconstructor1.silicon
                         graphite = reconstructor1.graphite
@@ -152,7 +152,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     }
 
     @Test
-    void reallifeScripts2() {
+    void realLifeScripts2() {
         assertCompilesTo("""
                         level = nucleus1.resource
                         print(level)
@@ -301,6 +301,63 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(PRINT, "TestVar"),
                 createInstruction(PRINT, "\"\\n\""),
                 createInstruction(PRINT, "Result"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesLoopsInConditions() {
+        assertCompilesTo("""
+                inline def sum(n)
+                  c = 0
+                  for i in 0 ... n
+                    c += cell1[i]
+                  end
+                  return c
+                end
+                
+                result = if sum(4) < sum(8)
+                    print("Less")
+                    0
+                else
+                    1
+                end
+                print(result)
+                """,
+                createInstruction(SET, "result", "1"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0_c", "0"),
+                createInstruction(SET, var(1), "4"),
+                createInstruction(SET, "__fn0_i", "0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(JUMP, var(1004), "greaterThanEq", "__fn0_i", var(1)),
+                createInstruction(LABEL, var(1012)),
+                createInstruction(READ, var(2), "cell1", "__fn0_i"),
+                createInstruction(OP, "add", "__fn0_c", "__fn0_c", var(2)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
+                createInstruction(JUMP, var(1012), "lessThan", "__fn0_i", var(1)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(SET, "__fn1_c", "0"),
+                createInstruction(SET, var(5), "8"),
+                createInstruction(SET, "__fn1_i", "0"),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(JUMP, var(1009), "greaterThanEq", "__fn1_i", var(5)),
+                createInstruction(LABEL, var(1013)),
+                createInstruction(READ, var(6), "cell1", "__fn1_i"),
+                createInstruction(OP, "add", "__fn1_c", "__fn1_c", var(6)),
+                createInstruction(LABEL, var(1008)),
+                createInstruction(OP, "add", "__fn1_i", "__fn1_i", "1"),
+                createInstruction(JUMP, var(1013), "lessThan", "__fn1_i", var(5)),
+                createInstruction(LABEL, var(1009)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(JUMP, var(1011), "greaterThanEq", "__fn0_c", "__fn1_c"),
+                createInstruction(PRINT, q("Less")),
+                createInstruction(SET, "result", "0"),
+                createInstruction(LABEL, var(1011)),
+                createInstruction(PRINT, "result"),
                 createInstruction(END)
         );
     }

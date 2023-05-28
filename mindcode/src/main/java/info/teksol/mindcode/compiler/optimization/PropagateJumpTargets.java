@@ -82,7 +82,7 @@ class PropagateJumpTargets extends BaseOptimizer {
     
     // Determines the jump redirection (one level only)
     private LogicLabel evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
-        int target = firstInstructionIndex(0, in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
+        int target = firstInstructionIndex(in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
         if (target < 0) {
             throw new OptimizationException("Could not find label " + label);
         }

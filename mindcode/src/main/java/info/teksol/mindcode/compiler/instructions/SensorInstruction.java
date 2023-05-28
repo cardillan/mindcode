@@ -33,7 +33,7 @@ public class SensorInstruction extends BaseInstruction implements LogicResultIns
     }
 
     public SensorInstruction withResult(LogicVariable result) {
-        return new SensorInstruction(getAstContext(), List.of(result, getObject(), getProperty()), getParams(), marker);
+        return new SensorInstruction(astContext, List.of(result, getObject(), getProperty()), getParams(), marker);
     }
 
     public final LogicVariable getResult() {

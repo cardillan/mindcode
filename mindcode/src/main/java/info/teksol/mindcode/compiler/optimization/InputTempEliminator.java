@@ -15,7 +15,7 @@ import java.util.List;
  * to replace the temp variable with the value used in the {@code set} instruction.
  * The optimization is performed only when the following conditions are met:
  * <ol>
- * <li>The set instruction assigns to a {@code __tmp} variable.</li>
+ * <li>The set instruction assigns value to a temporary variable, or a literal to a protected variable.</li>
  * <li>The {@code __tmp} variable is used in exactly one other instruction, which follows the {@code set} instruction
  * (the check is based on absolute instruction sequence in the program, not on the actual program flow).</li>
  * <li>All arguments of the other instruction referencing the {@code __tmp} variable are input ones.</li>
@@ -35,7 +35,8 @@ class InputTempEliminator extends BaseOptimizer {
     protected boolean optimizeProgram() {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
-                if (it.next() instanceof SetInstruction ix && ix.getResult().isTemporaryVariable()) {
+                if (it.next() instanceof SetInstruction ix && (ix.getResult().isTemporaryVariable()
+                        || ix.getResult().isProtectedVariable() && ix.getValue().isLiteral())) {
                     LogicArgument result = ix.getResult();
                     List<LogicInstruction> list = instructions(
                             in -> in.getArgs().contains(result) && !(in instanceof PushOrPopInstruction));

@@ -7,17 +7,15 @@ import java.util.Objects;
 
 public class WhileExpression extends ControlBlockAstNode {
     private final String label;
+    private final AstNode initialization;
     private final AstNode condition;
     private final AstNode body;
     private final AstNode update;
 
-    WhileExpression(Token startToken, AstNode condition, AstNode body, AstNode update) {
-        this(startToken, null, condition, body, update);
-    }
-
-    WhileExpression(Token startToken, String label, AstNode condition, AstNode body, AstNode update) {
-        super(startToken, condition, body);
+    WhileExpression(Token startToken, String label, AstNode initialization, AstNode condition, AstNode body, AstNode update) {
+        super(startToken, initialization, condition, body);
         this.label = label;
+        this.initialization = initialization;
         this.condition = condition;
         this.body = body;
         this.update = update;
@@ -25,6 +23,10 @@ public class WhileExpression extends ControlBlockAstNode {
 
     public String getLabel() {
         return label;
+    }
+
+    public AstNode getInitialization() {
+        return initialization;
     }
 
     public AstNode getCondition() {

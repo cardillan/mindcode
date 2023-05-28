@@ -124,7 +124,7 @@ and availability of the aggressive optimization level is:
 | [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization     |     N      |
 | [Jump straightening](#jump-straightening)                       | jump-straightening            |     N      |
 | [Loop optimization](#loop-optimization)                         | loop-optimization             |     Y      |
-| [If expression optimization](#if-expression-optimization)       | if-expression-optimization    |     Y      |
+| [If expression optimization](#if-expression-optimization)       | if-expression-optimization    |     N      |
 | [Jump threading](#jump-threading)                               | jump-threading                |     Y      |
 | [Unreachable code elimination](#unreachable-code-elimination)   | unreachable-code-elimination  |     Y      |
 | [Stack optimization](#stack-optimization)                       | stack-optimization            |     N      |
@@ -315,13 +315,13 @@ The loop optimizers improves loops with the condition at the beginning by perfor
   replaced by a conditional jump with inverted loop condition targeting the first instruction of the loop body. This 
   doesn't affect the number of instructions, but executes one less instruction per loop.
   * If the loop condition isn't invertible (that is, the jump condition is '==='), the optimization isn't done, 
-    since the saved jump would be spent on inverting the condition, and we would increase code size for no benefit 
+    since the saved jump would be spent on inverting the condition, and the code size would increase for no benefit 
     at all.  
 * If the previous optimization was done, the optimization level is set to `aggressive`, and the loop condition is 
   known to be true before the first iteration of the loop, the jump at the front of the loop is removed. Only the 
   simplest cases, where the loop control variable is set by an instruction immediately preceding the front jump and 
   the jump condition compares the control variable to a constant, are handled. Many loop conditions fit these 
-  criteria though, namely all range iteration loops.
+  criteria though, namely all constant-range iteration loops.
 * If the loop conditions is a complex expression spanning several instructions, it can still be replicated at the 
   end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). Since this 
   increases the code size, at most three instructions are copied in this way. One instruction execution per loop is 

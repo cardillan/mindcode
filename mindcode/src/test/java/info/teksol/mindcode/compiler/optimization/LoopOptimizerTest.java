@@ -214,4 +214,35 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void optimizesBitReadTest() {
+        assertCompilesTo(CompilerProfile.fullOptimizations(),
+                        """
+                        def getBit(bitIndex)
+                          bitIndex % 2
+                        end
+                        
+                        for i in 0 ... 16
+                            print(getBit(i) ? 1 : 0)
+                        end
+                        """,
+                createInstruction(SET, "i", "0"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(SET, var(2), "0"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(OP, "mod", var(0), "i", "2"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(JUMP, var(1006), "equal", var(0), "false"),
+                createInstruction(SET, var(2), "1"),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(PRINT, var(2)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1007), "lessThan", "i", "16"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
 }

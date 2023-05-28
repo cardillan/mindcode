@@ -87,9 +87,11 @@ class PrintMerger extends BaseOptimizer {
         previous = current;
     }
 
+    // TODO find or create a function for this in BaseOptimizer
+    //      This might miss some active labels
     private boolean isActive(LabelInstruction ix) {
         return ix.getMarker() != null ||
-                firstInstructionIndex(0, ixx -> ixx.getArgs().stream()
+                firstInstructionIndex(ixx -> ixx.getArgs().stream()
                         .anyMatch(a -> a instanceof LogicLabel la && la.equals(ix.getLabel()))) >= 0;
     }
 }

@@ -3,26 +3,39 @@ package info.teksol.mindcode.compiler.instructions;
 import info.teksol.mindcode.ast.AstNode;
 
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class AstContext {
+    private static final AtomicInteger counter = new AtomicInteger();
+    public final int id;
+
     private final int level;
     private final AstNode node;
     private final AstContextType contextType;
     private final AstSubcontextType subcontextType;
     private final AstContext parent;
     private final double weight;
-    private final List<AstContext> children = new ArrayList<>();
+    private final List<AstContext> children;
 
-    public AstContext(int level, AstNode node, AstContextType contextType, AstSubcontextType subcontextType,
-            AstContext parent, double weight) {
+    private AstContext(int level, AstNode node, AstContextType contextType, AstSubcontextType subcontextType,
+            AstContext parent, double weight, List<AstContext> children) {
+        this.id = counter.getAndIncrement();
         this.level = level;
         this.node = node;
         this.contextType = contextType;
         this.subcontextType = subcontextType;
         this.parent = parent;
         this.weight = weight;
+        this.children = children;
+    }
+
+    public AstContext(int level, AstNode node, AstContextType contextType, AstSubcontextType subcontextType,
+            AstContext parent, double weight) {
+        this(level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
     }
 
     public static AstContext createRootNode() {
@@ -48,6 +61,21 @@ public final class AstContext {
         return new AstContext(level, node, contextType, subcontextType, parent, weight);
     }
 
+    public Map<AstContext, AstContext> createDeepCopy() {
+        Map<AstContext, AstContext> map = new IdentityHashMap<>(16);
+        createDeepCopy(map, parent);
+        return map;
+    }
+
+    private AstContext createDeepCopy(Map<AstContext, AstContext> map, AstContext parent) {
+        AstContext copy = new AstContext(level, node, contextType, subcontextType, parent, weight);
+        children.stream()
+                .map(c -> c.createDeepCopy(map, copy))
+                .forEachOrdered(copy.children::add);
+        map.put(this, copy);
+        return copy;
+    }
+
     /**
      * This context matches another context when they're the same instance, or when this context is a direct child of
      * the other context.
@@ -57,6 +85,10 @@ public final class AstContext {
      */
     public boolean matches(AstContext other) {
         return this == other || (parent != null && parent.matches(other));
+    }
+
+    public boolean matches(AstContextType contextType, AstSubcontextType subcontextType) {
+        return this.contextType == contextType && this.subcontextType == subcontextType;
     }
 
     public AstContext findContextOfType(AstContextType contextType) {
@@ -86,7 +118,7 @@ public final class AstContext {
 
     public AstContext findSubcontext(AstSubcontextType type) {
         for (AstContext child : children) {
-            if (child.subcontextType == type) {
+            if (child.node == node && child.subcontextType == type) {
                 return child;
             }
         }
@@ -100,7 +132,8 @@ public final class AstContext {
     @Override
     public String toString() {
         return "AstContext{" +
-                "level=" + level +
+                "id=" + id +
+                ", level=" + level +
                 ", node=" + node +
                 ", contextType=" + contextType +
                 ", subcontextType=" + subcontextType +
@@ -134,6 +167,10 @@ public final class AstContext {
 
     public List<AstContext> children() {
         return children;
+    }
+
+    public AstContext child(int index) {
+        return children.get(index);
     }
 
     @Override

@@ -37,8 +37,8 @@ public class OpInstruction extends BaseInstruction implements LogicResultInstruc
     @Override
     public OpInstruction withResult(LogicVariable result) {
         return hasSecondOperand()
-                ? new OpInstruction(getAstContext(), List.of(getArg(0), result, getArg(2), getArg(3)), getParams(), marker)
-                : new OpInstruction(getAstContext(), List.of(getArg(0), result, getArg(2)), getParams(), marker);
+                ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getParams(), marker)
+                : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getParams(), marker);
     }
 
     public boolean hasSecondOperand() {

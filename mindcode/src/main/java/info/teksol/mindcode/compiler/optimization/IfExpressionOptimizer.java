@@ -24,8 +24,7 @@ public class IfExpressionOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram() {
-        forEachContext(c -> c.contextType() == AstContextType.IF && c.subcontextType() == BASIC,
-                this::optimizeIfExpression);
+        forEachContext(AstContextType.IF, BASIC, this::optimizeIfExpression);
         return false;
     }
 
@@ -37,15 +36,14 @@ public class IfExpressionOptimizer extends BaseOptimizer {
             return;
         }
 
-        // See the subcontext structure above
-        LogicList trueBranch = contextInstructions(ifExpression.children().get(1));
-        LogicList falseBranch = contextInstructions(ifExpression.children().get(3));
-        LogicList lastInstruction = contextInstructions(ifExpression.children().get(4));
+        // See the expected subcontext structure above
+        LogicList trueBranch = contextInstructions(ifExpression.child(1));
+        LogicList falseBranch = contextInstructions(ifExpression.child(3));
 
         LogicInstruction lastTrue = trueBranch.getLast();
         LogicInstruction lastFalse = falseBranch.getLast();
-        JumpInstruction negatedJump = negateCompoundCondition(condition);
-        boolean trySwap = true;
+        JumpInstruction invertedJump = negateCompoundCondition(condition);
+        boolean swappable = true;
 
         // Can we rearrange branches?
         // Expensive tests last
@@ -53,20 +51,20 @@ public class IfExpressionOptimizer extends BaseOptimizer {
                 && res1.getResult().equals(res2.getResult())
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
-            if (negatedJump != null && trueBranch.size() == 1) {
-                moveTrueBranchUsingJump(condition, trueBranch, falseBranch, negatedJump, true);
-                trySwap = false;
+            if (invertedJump != null && trueBranch.size() == 1) {
+                moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
+                swappable = false;
             } else if (falseBranch.size() == 1) {
                 moveFalseBranch(condition, trueBranch, falseBranch, jump);
-                trySwap = false;
-            } else if (negatedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()) {
+                swappable = false;
+            } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()) {
                 moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
-                trySwap = false;
+                swappable = false;
             }
 
             // Can we propagate writes?
             if (res1.getResult().isTemporaryVariable()
-                    && instructionAfter(lastInstruction.getLast()) instanceof SetInstruction finalSet
+                    && instructionAfter(ifExpression) instanceof SetInstruction finalSet
                     && finalSet.getValue().equals(res1.getResult())) {
                 replaceInstruction(res1, res1.withResult(finalSet.getResult()));
                 replaceInstruction(res2, res2.withResult(finalSet.getResult()));
@@ -74,8 +72,8 @@ public class IfExpressionOptimizer extends BaseOptimizer {
             }
         }
 
-        if (trySwap && negatedJump != null) {
-            swapBranches(condition, trueBranch, falseBranch, negatedJump);
+        if (swappable && invertedJump != null) {
+            swapBranches(condition, trueBranch, falseBranch, invertedJump);
         }
     }
 
@@ -88,8 +86,8 @@ public class IfExpressionOptimizer extends BaseOptimizer {
     }
 
     private JumpInstruction negateCompoundCondition(LogicList condition) {
-        if (condition.fromEnd(0) instanceof JumpInstruction jump
-                && condition.fromEnd(1) instanceof OpInstruction op
+        if (condition.getFromEnd(0) instanceof JumpInstruction jump
+                && condition.getFromEnd(1) instanceof OpInstruction op
                 && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
                 && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
                 && jump.getY().equals(LogicBoolean.FALSE)) {
