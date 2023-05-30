@@ -44,7 +44,7 @@ public final class AstContext {
     }
 
     public AstContext createChild(AstNode node, AstContextType contextType) {
-        AstContext child = new AstContext(level + 1, node, contextType, node.getContextSubype(),
+        AstContext child = new AstContext(level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);
         return child;

@@ -127,7 +127,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private void exitAstNode(AstNode node) {
         if (node.getContextType() != AstContextType.NONE) {
-            if (astContext.subcontextType() != node.getContextSubype() || astContext.node() != node) {
+            if (astContext.subcontextType() != node.getSubcontextType() || astContext.node() != node) {
                 throw new IllegalStateException("Unexpected AST context " + astContext);
             }
             astContext = astContext.parent();

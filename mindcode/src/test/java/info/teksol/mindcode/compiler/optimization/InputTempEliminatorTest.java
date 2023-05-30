@@ -37,7 +37,7 @@ public class InputTempEliminatorTest extends AbstractOptimizerTest<InputTempElim
     }
 
     @Test
-    void ignoresNontemporaryVariables() {
+    void ignoresNonTemporaryVariables() {
         assertDoesNotOptimize(
                 createInstruction(SET, C, K0),
                 createInstruction(DRAW, color, C, C, C, K255),

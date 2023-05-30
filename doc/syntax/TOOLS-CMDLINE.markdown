@@ -14,7 +14,7 @@ which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
 * `cs` or `compile-schema`: builds a schematic from Schemacode source into a binary `.msch` file.
-* `ds` or `decompile schema`: decompiles a binary `.msch` file to Schemacode source.
+* `ds` or `decompile-schema`: decompiles a binary `.msch` file to Schemacode source.
 
 ## Input/output files
 
@@ -74,21 +74,25 @@ Actions:
 
 ```
 usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
-                [--single-step-elimination LEVEL] [--input-temp-elimination LEVEL] [--output-temp-elimination LEVEL]
-                [--expression-optimization LEVEL] [--case-expression-optimization LEVEL]
-                [--conditionals-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--function-call-optimization LEVEL] [--return-value-optimization LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w}] [-p {0..2}] [-d {0..3}] [-r] [-s] [input] [output]
+                [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
+                [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
+                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--jump-threading LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--function-call-optimization LEVEL]
+                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
+                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-p {0..2}] [-d {0..3}]
+                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a mindcode source file into text mlog file.
 
 named arguments:
   -h, --help             show this help message and exit
   -c, --clipboard        paste compiled mlog code into clipboard
-  -t, --target {6,7s,7w}
-                         selects target processor version  and  edition  (version  6,  version  7  standard processor or
-                         version 7 world processor)
+  -t, --target {6,7s,7w,7as,7aw}
+                         selects target processor version and edition (version  6,  version 7 with standard processor or
+                         world processor, version 7 rev. A with standard processor or world processor)
+  -g, --goal {SIZE,SPEED,AUTO}
+                         sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
+                         automatically
 
 input/output files:
   input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified.
@@ -111,24 +115,26 @@ optimization levels:
                          used
   --single-step-elimination LEVEL
                          optimization level of eliminating jumps to the next instruction
-  --input-temp-elimination LEVEL
-                         optimization level of eliminating temporary variables created to pass values into instructions
   --output-temp-elimination LEVEL
                          optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
                          instructions
   --expression-optimization LEVEL
                          optimization level of optimizing some common mathematical expressions
-  --case-expression-optimization LEVEL
+  --ease-expression-optimization LEVEL
                          optimization level of eliminating temporary variables created to execute case expressions
   --conditionals-optimization LEVEL
                          optimization level of  merging  an  op  instruction  producing  a  boolean  expression into the
                          following conditional jump
   --jump-straightening LEVEL
                          optimization level of simplifying sequences of intertwined jumps
+  --loop-optimization LEVEL
+                         optimization level of improving loops
+  --if-expression-optimization LEVEL
+                         optimization level of improving ternary/if expressions
   --jump-threading LEVEL
                          optimization level of eliminating chained jumps
   --unreachable-code-elimination LEVEL
-                         optimization level of eliminating  instructions  made  unreachable  by  optimizations or false
+                         optimization level of  eliminating  instructions  made  unreachable  by  optimizations or false
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack
@@ -136,6 +142,8 @@ optimization levels:
                          optimization level of optimizing passing arguments to functions
   --return-value-optimization LEVEL
                          optimization level of optimizing passing return values from functions
+  --input-temp-elimination LEVEL
+                         optimization level of eliminating temporary variables created to pass values into instructions
   --print-merging LEVEL  optimization level of merging consecutive print statements outputting text literals
 
 debug output options:
@@ -143,7 +151,8 @@ debug output options:
                          sets the detail level of parse tree output into the log file, 0 = off
   -d, --debug-messages {0..3}
                          sets the detail level of debug messages, 0 = off
-  -r, --print-virtual    prints compiled code before virtual instructions resolution
+  -u, --print-unresolved [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]
+                         activates output of the unresolved code (before virtual instructions resolution) of given type
   -s, --stacktrace       prints stack trace into stderr when an exception occurs
 ```
 
@@ -151,28 +160,32 @@ debug output options:
 
 ```
 usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
-                [--single-step-elimination LEVEL] [--input-temp-elimination LEVEL] [--output-temp-elimination LEVEL]
-                [--expression-optimization LEVEL] [--case-expression-optimization LEVEL]
-                [--conditionals-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--function-call-optimization LEVEL] [--return-value-optimization LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w}] [-p {0..2}] [-d {0..3}] [-r] [-s] [-a TAG [TAG ...]] [input] [output]
+                [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
+                [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
+                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--jump-threading LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--function-call-optimization LEVEL]
+                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
+                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-p {0..2}] [-d {0..3}]
+                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
 
 Compile a schema definition file into binary msch file.
 
 named arguments:
   -h, --help             show this help message and exit
-  -c, --clipboard        encode schematic into text representation and paste into clipboard
-  -t, --target {6,7s,7w}
-                         selects target processor version  and  edition  (version  6,  version  7  standard processor or
-                         version 7 world processor)
+  -c, --clipboard        encode schematics into text representation and paste into clipboard
+  -t, --target {6,7s,7w,7as,7aw}
+                         selects target processor version and edition (version  6,  version 7 with standard processor or
+                         world processor, version 7 rev. A with standard processor or world processor)
+  -g, --goal {SIZE,SPEED,AUTO}
+                         sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
+                         automatically
 
 input/output files:
   input                  Schema definition file to be compiled into a binary msch file.
   output                 Output file to receive binary Mindustry schema (msch).
   -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
   -a, --add-tag TAG [TAG ...]
-                         defines additional  tags(s) to add to the  schematic,  plain  text and symbolic icon names are
+                         defines additional tag(s) to add to  the  schematics,  plain  text  and symbolic icon names are
                          supported
 
 optimization levels:
@@ -189,24 +202,26 @@ optimization levels:
                          used
   --single-step-elimination LEVEL
                          optimization level of eliminating jumps to the next instruction
-  --input-temp-elimination LEVEL
-                         optimization level of eliminating temporary variables created to pass values into instructions
   --output-temp-elimination LEVEL
                          optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
                          instructions
   --expression-optimization LEVEL
                          optimization level of optimizing some common mathematical expressions
-  --case-expression-optimization LEVEL
+  --ease-expression-optimization LEVEL
                          optimization level of eliminating temporary variables created to execute case expressions
   --conditionals-optimization LEVEL
                          optimization level of  merging  an  op  instruction  producing  a  boolean  expression into the
                          following conditional jump
   --jump-straightening LEVEL
                          optimization level of simplifying sequences of intertwined jumps
+  --loop-optimization LEVEL
+                         optimization level of improving loops
+  --if-expression-optimization LEVEL
+                         optimization level of improving ternary/if expressions
   --jump-threading LEVEL
                          optimization level of eliminating chained jumps
   --unreachable-code-elimination LEVEL
-                         optimization level of eliminating  instructions  made  unreachable  by  optimizations or false
+                         optimization level of  eliminating  instructions  made  unreachable  by  optimizations or false
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack
@@ -214,6 +229,8 @@ optimization levels:
                          optimization level of optimizing passing arguments to functions
   --return-value-optimization LEVEL
                          optimization level of optimizing passing return values from functions
+  --input-temp-elimination LEVEL
+                         optimization level of eliminating temporary variables created to pass values into instructions
   --print-merging LEVEL  optimization level of merging consecutive print statements outputting text literals
 
 debug output options:
@@ -221,37 +238,38 @@ debug output options:
                          sets the detail level of parse tree output into the log file, 0 = off
   -d, --debug-messages {0..3}
                          sets the detail level of debug messages, 0 = off
-  -r, --print-virtual    prints compiled code before virtual instructions resolution
+  -u, --print-unresolved [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]
+                         activates output of the unresolved code (before virtual instructions resolution) of given type
   -s, --stacktrace       prints stack trace into stderr when an exception occurs
 ```
 
 ## Decompile Schema action help
 
 ```
-usage: mindcode ds [-h] [-p] [-P] [-c] [-C] [-l] [-L]
-                [-s {ORIGINAL,HORIZONTAL,VERTICAL}] input [output]
+usage: mindcode ds [-h] [-p] [-P] [-c] [-C] [-l] [-L] [-s {ORIGINAL,HORIZONTAL,VERTICAL}]
+                [-d {ROTATABLE,NON_DEFAULT,ALL}] input [output]
 
 Decompile a binary msch file into schema definition file.
 
 positional arguments:
-  input                  Mindustry schema file to be decompiled into Schema Definition File
+  input                  Mindustry schema file to be decompiled into Schema Definition File.
   output                 Output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
-                         specified
+                         specified.
 
 named arguments:
   -h, --help             show this help message and exit
   -p, --relative-positions
-                         Use relative coordinates for block positions where possible
+                         use relative coordinates for block positions where possible
   -P, --absolute-positions
-                         Use absolute coordinates for block positions
+                         use absolute coordinates for block positions
   -c, --relative-connections
-                         Use relative coordinates for connections
+                         use relative coordinates for connections
   -C, --absolute-connections
-                         Use absolute coordinates for connections
-  -l, --relative-links   Use relative coordinates for processor links
-  -L, --absolute-links   Use absolute coordinates for processor links
+                         use absolute coordinates for connections
+  -l, --relative-links   use relative coordinates for processor links
+  -L, --absolute-links   use absolute coordinates for processor links
   -s, --sort-order {ORIGINAL,HORIZONTAL,VERTICAL}
-                         specifies how to order blocks in the schema definition file
+                         specifies how to order blocks in the decompiled schema definition file
   -d, --direction {ROTATABLE,NON_DEFAULT,ALL}
                          specifies when to include  direction  clause  in  decompiled  schema  definition file: only for
                          blocks affected by rotation, only for block with non-default direction, or for all blocks

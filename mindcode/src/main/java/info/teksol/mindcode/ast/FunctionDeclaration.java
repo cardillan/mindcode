@@ -68,7 +68,7 @@ public class FunctionDeclaration extends BaseAstNode {
     }
 
     @Override
-    public AstSubcontextType getContextSubype() {
+    public AstSubcontextType getSubcontextType() {
         return AstSubcontextType.BODY;
     }
 }

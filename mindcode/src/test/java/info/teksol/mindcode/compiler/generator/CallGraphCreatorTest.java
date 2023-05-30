@@ -69,7 +69,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void detectsNonrecursiveCalls() {
+    void detectsNonRecursiveCalls() {
         CallGraph graph = CallGraphCreator.createFunctionGraph(
                 (Seq) translateToAst("""
                         def a  a() b() c() end

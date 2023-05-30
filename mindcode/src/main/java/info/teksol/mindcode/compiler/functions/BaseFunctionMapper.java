@@ -426,7 +426,6 @@ public class BaseFunctionMapper implements FunctionMapper {
         final Opcode opcode = opcodeVariant.opcode();
 
         // Handle special cases
-        //noinspection EnhancedSwitchMigration
         switch(opcode) {
             case PRINT:     return new PrintFunctionHandler(opcode.toString(), opcodeVariant);
             case UBIND:     return new UbindFunctionHandler(opcode.toString(), opcodeVariant);

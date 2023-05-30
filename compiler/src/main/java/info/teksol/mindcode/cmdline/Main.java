@@ -7,21 +7,25 @@ import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
+import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
 
-import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class Main {
+
+    public static final Map<Action, Subparser> ACTION_PARSERS = new EnumMap<>(Action.class);
+
     public static void main(String[] args) {
-        ArgumentParser parser = createArgumentParser(Arguments.fileType().verifyCanRead());
+        ArgumentParser parser = createArgumentParser(Arguments.fileType().verifyCanRead(), 79);
         handleCommandLine(parser, args);
     }
 
-    static ArgumentParser createArgumentParser(FileArgumentType inputFileType) {
+    static ArgumentParser createArgumentParser(FileArgumentType inputFileType, int defaultFormatWidth) {
         ArgumentParser parser = ArgumentParsers.newFor("mindcode", DefaultSettings.VERSION_0_9_0_DEFAULT_SETTINGS)
                 .singleMetavar(true)
-                .defaultFormatWidth(79)
-                //.defaultFormatWidth(120)
+                .defaultFormatWidth(defaultFormatWidth)
                 .terminalWidthDetection(true)
                 .build()
                 .description("Mindcode/Schemacode command-line compiler.");
@@ -33,7 +37,9 @@ public class Main {
                 .metavar("ACTION")
                 .dest("action");
 
-        Arrays.asList(Action.values()).forEach(action -> action.configureSubparsers(subparsers, inputFileType));
+        for (Action action : Action.values()) {
+            Main.ACTION_PARSERS.put(action, action.appendSubparser(subparsers, inputFileType));
+        }
 
         return parser;
     }
@@ -50,10 +56,10 @@ public class Main {
         }
     }
 
-    private enum Action {
-        cm(new CompileMindcodeAction()),
-        cs(new CompileSchemacodeAction()),
-        ds(new DecompileSchemacodeAction()),
+    public enum Action {
+        COMPILE_MINDCODE(new CompileMindcodeAction()),
+        COMPILE_SCHEMA(new CompileSchemacodeAction()),
+        DECOMPILE_SCHEMA(new DecompileSchemacodeAction()),
         ;
 
         private final ActionHandler handler;
@@ -62,8 +68,8 @@ public class Main {
             this.handler = handler;
         }
 
-        public void configureSubparsers(Subparsers subparsers, FileArgumentType inputFileType) {
-            handler.configureSubparsers(subparsers, inputFileType);
+        public Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
+            return handler.appendSubparser(subparsers, inputFileType);
         }
 
         void handle(Namespace namespace) {

@@ -193,7 +193,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void convertsReallifeTest1() {
+    void convertsRealLifeTest1() {
         assertCompilesTo("""
                         n = 0
                         while (reactor = getlink(n)) != null
@@ -607,7 +607,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
-    void supportsLogiclessCaseWhen() {
+    void supportsNoOpCaseWhen() {
         assertCompilesTo("""
                         case floor(rand(2))
                             when 0

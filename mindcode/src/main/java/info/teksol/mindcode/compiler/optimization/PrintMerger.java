@@ -50,7 +50,7 @@ class PrintMerger extends BaseOptimizer {
                 switch (iterator.next()) {
                     case PrintInstruction current -> tryMerge(iterator, current);
 
-                    // Do not merge across jumps, (active) labels and printflushes
+                    // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
                     case JumpInstruction ix -> previous = null;
                     case LabelInstruction ix && isActive(ix) -> previous = null;

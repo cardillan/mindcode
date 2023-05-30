@@ -12,7 +12,7 @@ services:
     volumes:
       - mindcode-postgres-data:/var/lib/postgresql/data
     ports:
-      - 127.0.0.1:5432:5432
+      - "127.0.0.1:5432:5432"
 
   mindcode-web:
     build:
@@ -21,7 +21,7 @@ services:
     depends_on:
       - mindcode-db
     ports:
-      - 127.0.0.1:8080:8080
+      - "127.0.0.1:8080:8080"
 
 volumes:
   mindcode-postgres-data:

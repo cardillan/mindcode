@@ -13,5 +13,5 @@ public interface AstNode {
 
     AstContextType getContextType();
 
-    AstSubcontextType getContextSubype();
+    AstSubcontextType getSubcontextType();
 }

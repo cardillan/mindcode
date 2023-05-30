@@ -2,13 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-05-30
 
 ### Added
 
 * Added [If expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#if-expression-optimization). In some cases 
   only decreases the number of instructions by rearranging them, in other cases can decrease number of executed 
-  instructions. Only if statements containing both true and false branch are affected. 
+  instructions. Only if/ternary expressions containing both true and false branch are affected. 
 
 ### Fixed
 
@@ -16,13 +16,14 @@ All notable changes to this project will be documented in this file.
   boundary fixed under some conditions. The feature announced in release [2023-05-03](#2023-05-03) wasn't fully 
   implemented until now.
 * Fixed bugs in the [stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization). In some cases, 
-  `push`/`pop` instructions were mistakenly removed, in other cases optional `push`/`pop` instructions were left in 
-  the code. Current implementation utilizes AST structure metadata to identify and protect variables used in loops.   
-
+  `push`/`pop` instructions were mistakenly removed, in other cases unnecessary `push`/`pop` instructions were left
+  in the code. Current implementation utilizes AST structure metadata to identify and protect variables used in 
+  loops.   
+  
 ### Miscellaneous
 
-* Generated mlog instructions are now linked to the AST nodes they were created from, and through them to the parser 
-  tokens (for now in somewhat coarse granularity).
+* Generated mlog instructions are now linked to the AST nodes they were created from (via instances of AstContext),
+  and through them to the parser tokens (for now in somewhat coarse granularity).
   * This allows optimizers to inspect source AST nodes of individual instructions, obtaining information about code 
     structure. Optimizations based on these metadata should be easier to write and understand, once necessary 
     support tooling is in place.
@@ -30,7 +31,8 @@ All notable changes to this project will be documented in this file.
     of the fly -- optimizers must understand the changes they make to the program in a single iteration aren't 
     reflected to the AST context structure.
   * Optimizers need to be careful to create newly generated instructions using the right (already existing) AST 
-    context, otherwise subsequent AST context-based optimizers can misunderstand the code structure. 
+    context, otherwise subsequent AST context-based optimizers can misunderstand the code structure. There are means
+    to duplicate existing code while deep-copying the context structure.
   * Instructions can be linked to source code. At this moment it can be only displayed using the `-f source` command 
     line argument, hopefully in the future a better error reporting will be built using these metadata.   
 

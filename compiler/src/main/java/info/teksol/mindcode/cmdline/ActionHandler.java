@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 abstract class ActionHandler {
 
-    abstract void configureSubparsers(Subparsers subparsers, FileArgumentType inputFileType);
+    abstract Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType);
 
     abstract void handle(Namespace arguments);
 
@@ -80,8 +80,8 @@ abstract class ActionHandler {
                 .type(Integer.class)
                 .setDefault(defaults.getDebugLevel());
 
-        debug.addArgument("-f", "--print-final")
-                .help("activates output of the final code (before virtual instructions resolution) of given type")
+        debug.addArgument("-u", "--print-unresolved")
+                .help("activates output of the unresolved code (before virtual instructions resolution) of given type")
                 .type(Arguments.caseInsensitiveEnumType(FinalCodeOutput.class))
                 .nargs("?")
                 .setConst(FinalCodeOutput.PLAIN)
@@ -112,7 +112,7 @@ abstract class ActionHandler {
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
         profile.setDebugLevel(arguments.getInt("debug_messages"));
         profile.setGoal(arguments.get("goal"));
-        profile.setFinalCodeOutput(arguments.get("print_final"));
+        profile.setFinalCodeOutput(arguments.get("print_unresolved"));
         profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
 
         return profile;

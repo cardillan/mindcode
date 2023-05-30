@@ -20,7 +20,7 @@ import java.util.List;
 public class CompileSchemacodeAction extends ActionHandler {
 
     @Override
-    void configureSubparsers(Subparsers subparsers, FileArgumentType inputFileType) {
+    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
         Subparser subparser = subparsers.addParser("cs")
                 .aliases("compile-schema")
                 .description("Compile a schema definition file into binary msch file.")
@@ -57,6 +57,8 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .type(String.class)
                 .nargs("+")
                 .setDefault(List.of());
+
+        return subparser;
     }
 
     @Override

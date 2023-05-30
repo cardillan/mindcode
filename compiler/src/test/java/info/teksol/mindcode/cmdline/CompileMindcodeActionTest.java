@@ -114,14 +114,14 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void finalCodeOutputDefault() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine("cm -f");
-        assertEquals(FinalCodeOutput.PLAIN, arguments.get("print_final"));
+        Namespace arguments = parseCommandLine("cm -u");
+        assertEquals(FinalCodeOutput.PLAIN, arguments.get("print_unresolved"));
     }
 
     @Test
     public void finalCodeOutputFlat() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine("cm -f flat_ast");
-        assertEquals(FinalCodeOutput.FLAT_AST, arguments.get("print_final"));
+        Namespace arguments = parseCommandLine("cm -u flat_ast");
+        assertEquals(FinalCodeOutput.FLAT_AST, arguments.get("print_unresolved"));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine("cm -t 6 -o off -p 1 -d 3 -f source -s -g size");
+        Namespace arguments = parseCommandLine("cm -t 6 -o off -p 1 -d 3 -u source -s -g size");
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());

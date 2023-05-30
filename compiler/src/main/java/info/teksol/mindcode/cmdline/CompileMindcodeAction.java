@@ -18,7 +18,7 @@ import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 public class CompileMindcodeAction extends ActionHandler {
 
     @Override
-    void configureSubparsers(Subparsers subparsers, FileArgumentType inputFileType) {
+    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
         Subparser subparser = subparsers.addParser("cm")
                 .aliases("compile-mindcode")
                 .description("Compile a mindcode source file into text mlog file.")
@@ -49,6 +49,8 @@ public class CompileMindcodeAction extends ActionHandler {
                 .setDefault(new File("-"));
 
         configureMindcodeCompiler(subparser);
+
+        return subparser;
     }
 
     @Override

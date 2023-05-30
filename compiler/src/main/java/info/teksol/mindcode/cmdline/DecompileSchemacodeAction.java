@@ -18,7 +18,7 @@ import java.io.IOException;
 public class DecompileSchemacodeAction extends ActionHandler {
 
     @Override
-    void configureSubparsers(Subparsers subparsers, FileArgumentType inputFileType) {
+    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
         Subparser subparser = subparsers.addParser("ds")
                 .aliases("decompile-schema")
                 .description("Decompile a binary msch file into schema definition file.")
@@ -80,6 +80,8 @@ public class DecompileSchemacodeAction extends ActionHandler {
                         "or for all blocks")
                 .type(Arguments.caseInsensitiveEnumType(DirectionLevel.class))
                 .setDefault(DirectionLevel.ROTATABLE);
+
+        return subparser;
     }
 
     @Override

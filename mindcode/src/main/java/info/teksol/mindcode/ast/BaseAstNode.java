@@ -50,7 +50,7 @@ public abstract class BaseAstNode implements AstNode {
     }
 
     @Override
-    public AstSubcontextType getContextSubype() {
+    public AstSubcontextType getSubcontextType() {
         return AstSubcontextType.BASIC;
     }
 }

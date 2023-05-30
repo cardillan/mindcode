@@ -10,8 +10,9 @@ import info.teksol.mindcode.logic.ProcessorVersion;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -41,27 +42,27 @@ public class FunctionReferenceGeneratorTest {
             """;
 
     @Test
-    void createFunctionReferenceForV6() throws FileNotFoundException {
+    void createFunctionReferenceForV6() throws IOException {
         createFunctionReference(ProcessorVersion.V6);
     }
 
     @Test
-    void createFunctionReferenceForV7() throws FileNotFoundException {
+    void createFunctionReferenceForV7() throws IOException {
         createFunctionReference(ProcessorVersion.V7);
     }
 
     @Test
-    void createFunctionReferenceForV7A() throws FileNotFoundException {
+    void createFunctionReferenceForV7A() throws IOException {
         createFunctionReference(ProcessorVersion.V7A);
     }
 
-    private void createFunctionReference(ProcessorVersion version) throws FileNotFoundException {
+    private void createFunctionReference(ProcessorVersion version) throws IOException {
         assertTrue(new File(SYNTAX_REL_PATH + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
         FunctionMapper mapper = FunctionMapperFactory.getStaticFunctionMapper(processor, s -> {});
         List<FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 
-        try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS_" + version + ".markdown")) {
+        try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS_" + version + ".markdown", StandardCharsets.UTF_8)) {
             w.println("# Function reference for Mindustry " + version);
             w.println();
             w.print(PREAMBLE.replaceAll("\n", System.lineSeparator()));
