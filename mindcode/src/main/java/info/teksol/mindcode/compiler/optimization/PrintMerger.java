@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.instructions.GotoLabelInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
@@ -53,6 +54,7 @@ class PrintMerger extends BaseOptimizer {
                     // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
                     case JumpInstruction ix -> previous = null;
+                    case GotoLabelInstruction ix -> previous = null;
                     case LabelInstruction ix && isActive(ix) -> previous = null;
                     case PrintflushInstruction ix -> previous = null;
 
@@ -90,8 +92,7 @@ class PrintMerger extends BaseOptimizer {
     // TODO find or create a function for this in BaseOptimizer
     //      This might miss some active labels
     private boolean isActive(LabelInstruction ix) {
-        return ix.getMarker() != null ||
-                firstInstructionIndex(ixx -> ixx.getArgs().stream()
-                        .anyMatch(a -> a instanceof LogicLabel la && la.equals(ix.getLabel()))) >= 0;
+        return firstInstructionIndex(ixx -> ixx.getArgs().stream()
+                .anyMatch(a -> a instanceof LogicLabel la && la.equals(ix.getLabel()))) >= 0;
     }
 }

@@ -10,31 +10,26 @@ import java.util.List;
 
 public class ReadInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    ReadInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.READ, args, params, marker);
+    ReadInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.READ, args, params);
     }
 
-    protected ReadInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected ReadInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public ReadInstruction copy() {
-        return new ReadInstruction(this, astContext, marker);
-    }
-
-    @Override
-    public ReadInstruction withMarker(String marker) {
-        return new ReadInstruction(this, astContext, marker);
+        return new ReadInstruction(this, astContext);
     }
 
     @Override
     public ReadInstruction withContext(AstContext astContext) {
-        return new ReadInstruction(this, astContext, marker);
+        return new ReadInstruction(this, astContext);
     }
 
     public ReadInstruction withResult(LogicVariable result) {
-        return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getParams(), marker);
+        return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getParams());
     }
 
     @Override

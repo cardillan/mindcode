@@ -76,8 +76,8 @@ public abstract class AbstractOptimizer implements Optimizer {
         return instructionProcessor.createEnd(astContext);
     }
 
-    protected GotoInstruction createGoto(AstContext astContext, LogicVariable address) {
-        return instructionProcessor.createGoto(astContext, address);
+    protected GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
+        return instructionProcessor.createGoto(astContext, address, marker);
     }
 
     protected JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
@@ -90,6 +90,10 @@ public abstract class AbstractOptimizer implements Optimizer {
 
     protected LabelInstruction createLabel(AstContext astContext, LogicLabel label) {
         return instructionProcessor.createLabel(astContext, label);
+    }
+
+    public GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
+        return instructionProcessor.createGotoLabel(astContext, label, marker);
     }
 
     protected OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first) {

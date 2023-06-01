@@ -10,35 +10,31 @@ import java.util.List;
 
 public class SetInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    SetInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.SET, args, params, marker);
+    SetInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.SET, args, params);
     }
 
-    protected SetInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected SetInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public SetInstruction copy() {
-        return new SetInstruction(this, astContext, marker);
-    }
-
-    public SetInstruction withMarker(String marker) {
-        return new SetInstruction(this, astContext, marker);
+        return new SetInstruction(this, astContext);
     }
 
     @Override
     public SetInstruction withContext(AstContext astContext) {
-        return new SetInstruction(this, astContext, marker);
+        return new SetInstruction(this, astContext);
     }
 
     @Override
     public SetInstruction withResult(LogicVariable result) {
-        return new SetInstruction(astContext, List.of(result, getValue()), getParams(), marker);
+        return new SetInstruction(astContext, List.of(result, getValue()), getParams());
     }
 
     public SetInstruction withValue(LogicValue value) {
-        return new SetInstruction(astContext, List.of(getResult(), value), getParams(), marker);
+        return new SetInstruction(astContext, List.of(getResult(), value), getParams());
     }
 
     @Override

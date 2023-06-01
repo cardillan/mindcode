@@ -79,11 +79,11 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                         print("Done")
                         """,
                 createInstruction(LABEL, var(1001)),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(LABEL, var(1005)),
+                createInstruction(GOTOLABEL, var(1004), "__fn0"),
+                createInstruction(GOTOLABEL, var(1005), "__fn0"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "\"Done\""),
+                createInstruction(PRINT, q("Done")),
                 createInstruction(END),
                 // det a -- removed
                 createInstruction(LABEL, var(1000)),
@@ -117,23 +117,23 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                 // call testa (2x)
                 createInstruction(SETADDR, "__fn2retaddr", var(1003)),
                 createInstruction(CALL, var(1002)),
-                createInstruction(LABEL, var(1003)),
+                createInstruction(GOTOLABEL, var(1003), "__fn2"),
                 createInstruction(SETADDR, "__fn2retaddr", var(1004)),
                 createInstruction(CALL, var(1002)),
-                createInstruction(LABEL, var(1004)),
+                createInstruction(GOTOLABEL, var(1004), "__fn2"),
                 // if false + call testb -- removed
                 createInstruction(LABEL, var(1005)),
-                createInstruction(LABEL, var(1008)),
-                createInstruction(LABEL, var(1009)),
+                createInstruction(GOTOLABEL, var(1008), "__fn0"),
+                createInstruction(GOTOLABEL, var(1009), "__fn0"),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(LABEL, var(1007)),
                 // call testc (2)
                 createInstruction(SETADDR, "__fn1retaddr", var(1010)),
                 createInstruction(CALL, var(1001)),
-                createInstruction(LABEL, var(1010)),
+                createInstruction(GOTOLABEL, var(1010), "__fn1"),
                 createInstruction(SETADDR, "__fn1retaddr", var(1011)),
                 createInstruction(CALL, var(1001)),
-                createInstruction(LABEL, var(1011)),
+                createInstruction(GOTOLABEL, var(1011), "__fn1"),
                 createInstruction(PRINTFLUSH, "message1"),
                 createInstruction(END),
                 // def testb -- removed
@@ -143,13 +143,13 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "\"End\""),
                 createInstruction(LABEL, var(1013)),
-                createInstruction(GOTO, "__fn1retaddr"),
+                createInstruction(GOTO, "__fn1retaddr", "__fn1"),
                 createInstruction(END),
                 // def testa
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, "\"Start\""),
                 createInstruction(LABEL, var(1014)),
-                createInstruction(GOTO, "__fn2retaddr"),
+                createInstruction(GOTO, "__fn2retaddr", "__fn2"),
                 createInstruction(END)
         );
     }

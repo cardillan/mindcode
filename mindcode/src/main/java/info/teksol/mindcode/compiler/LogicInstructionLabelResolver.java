@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
@@ -36,7 +36,7 @@ public class LogicInstructionLabelResolver {
         for (int i = 0; i < program.size(); i++) {
             final LogicInstruction instruction = program.get(i);
             instructionPointer += instruction.getRealSize();
-            if (instruction instanceof LabelInstruction ix) {
+            if (instruction instanceof LabeledInstruction ix) {
                 if (addresses.containsKey(ix.getLabel())) {
                     throw new CompilerException("Duplicate label detected: [" + ix.getLabel() + "] reused at least twice in " + program);
                 }

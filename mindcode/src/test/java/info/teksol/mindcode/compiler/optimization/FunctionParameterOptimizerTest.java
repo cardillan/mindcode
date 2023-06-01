@@ -173,20 +173,20 @@ public class FunctionParameterOptimizerTest extends AbstractOptimizerTest<Functi
                 createInstruction(SET, "__fn0_n", "X"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(SET, "__fn1_n", "X"),
                 createInstruction(SET, "__fn0_n", "__fn1_n"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1004)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1004)),
+                createInstruction(GOTOLABEL, var(1004), "__fn0"),
                 createInstruction(PRINT, "__fn1_n"),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, "__fn0_n"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(GOTO, "__fn0retaddr"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END)
         );
     }

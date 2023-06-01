@@ -5,6 +5,7 @@ import info.teksol.mindcode.compiler.instructions.EndInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
@@ -88,7 +89,7 @@ class PropagateJumpTargets extends BaseOptimizer {
         }
 
         // Find next real instruction
-        LogicInstruction next = firstInstruction(target + 1, ix -> !(ix instanceof LabelInstruction));
+        LogicInstruction next = firstInstruction(target + 1, ix -> !(ix instanceof LabeledInstruction));
         
         // Redirect compatible jumps
         if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {

@@ -12,32 +12,28 @@ import java.util.List;
 
 public class JumpInstruction extends BaseInstruction {
 
-    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.JUMP, args, params, marker);
+    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.JUMP, args, params);
     }
 
-    protected JumpInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected JumpInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public JumpInstruction copy() {
-        return new JumpInstruction(this, astContext, marker);
-    }
-
-    public JumpInstruction withMarker(String marker) {
-        return new JumpInstruction(this, astContext, marker);
+        return new JumpInstruction(this, astContext);
     }
 
     @Override
     public JumpInstruction withContext(AstContext astContext) {
-        return new JumpInstruction(this, astContext, marker);
+        return new JumpInstruction(this, astContext);
     }
 
     public JumpInstruction withTarget(LogicLabel target) {
         return isUnconditional()
-                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getParams(),marker)
-                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getParams(), marker);
+                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getParams())
+                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getParams());
     }
 
     public JumpInstruction invert() {
@@ -45,7 +41,7 @@ public class JumpInstruction extends BaseInstruction {
             throw new GenerationException("Jump is not invertible. " + this);
         }
         return new JumpInstruction(getAstContext(),
-                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams(), marker);
+                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams());
     }
 
     public boolean isConditional() {

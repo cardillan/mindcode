@@ -271,11 +271,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return first non-label instruction following the label
      */
     protected int labeledInstructionIndex(LogicLabel label) {
-        int labelIndex = firstInstructionIndex(ix -> ix instanceof LabelInstruction li && li.getLabel().equals(label));
+        int labelIndex = firstInstructionIndex(ix -> ix instanceof LabeledInstruction li && li.getLabel().equals(label));
         if (labelIndex < 0) {
             throw new OptimizationException("Label not found in program.\nLabel: " + label);
         }
-        return firstInstructionIndex(labelIndex + 1, ix -> !(ix instanceof LabelInstruction));
+        return firstInstructionIndex(labelIndex + 1, ix -> !(ix instanceof LabeledInstruction));
     }
 
     /**
@@ -356,8 +356,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     // TODO it would probably be better to reimplement the logic depending on this to use AST contexts
     protected boolean isIsolated(List<LogicInstruction> codeBlock) {
         Set<LogicLabel> localLabels = codeBlock.stream()
-                .filter(ix -> ix instanceof LabelInstruction)
-                .map(ix -> ((LabelInstruction) ix).getLabel())
+                .filter(ix -> ix instanceof LabeledInstruction)
+                .map(ix -> ((LabeledInstruction) ix).getLabel())
                 .collect(Collectors.toSet());
 
         // Get jump/goto instructions targeting any of local labels
@@ -395,9 +395,9 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return switch (instruction) {
             case JumpInstruction ix -> Stream.of(ix.getTarget());
             case GotoInstruction ix -> instructionStream()
-                    .filter(in -> in instanceof LabelInstruction && in.matchesMarker(ix.getMarker()))
-                    .map(in -> (LabelInstruction) in)
-                    .map(LabelInstruction::getLabel);
+                    .filter(in -> in instanceof GotoLabelInstruction gl && gl.matches(ix))
+                    .map(in -> (GotoLabelInstruction) in)
+                    .map(GotoLabelInstruction::getLabel);
             default -> Stream.empty();
         };
     }

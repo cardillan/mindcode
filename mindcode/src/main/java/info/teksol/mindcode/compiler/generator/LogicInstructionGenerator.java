@@ -182,8 +182,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return instructionProcessor.createEnd(astContext);
     }
 
-    public GotoInstruction createGoto(LogicVariable address) {
-        return instructionProcessor.createGoto(astContext, address);
+    public GotoInstruction createGoto(LogicVariable address, LogicLabel marker) {
+        return instructionProcessor.createGoto(astContext, address, marker);
     }
 
     public JumpInstruction createJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
@@ -196,6 +196,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     public LabelInstruction createLabel(LogicLabel label) {
         return instructionProcessor.createLabel(astContext, label);
+    }
+
+    public GotoLabelInstruction createGotoLabel(LogicLabel label, LogicLabel marker) {
+        return instructionProcessor.createGotoLabel(astContext, label, marker);
     }
 
     public OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first) {
@@ -238,6 +242,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return instructionProcessor.createSet(astContext, target, value);
     }
 
+    // TODO bind together SetAddress, Goto and GotoLabel so that use of regular label with goto is precluded
     public SetAddressInstruction createSetAddress(LogicVariable variable, LogicLabel address) {
         return instructionProcessor.createSetAddress(astContext, variable, address);
     }
@@ -279,8 +284,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return parentContext.registerVariable(instructionProcessor.nextReturnValue());
     }
 
-    private String nextMarker() {
-        return "marker" + markerIndex++;
+    private LogicLabel nextMarker() {
+        return LogicLabel.symbolic("marker" + markerIndex++);
     }
 
     private void verifyStackAllocation() {
@@ -357,7 +362,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicValue body = visit(function.getBody());
         emit(createSet(LogicVariable.fnRetVal(localPrefix), body));
         emit(createLabel(returnStack.getReturnLabel()));
-        emit(createGoto(LogicVariable.fnRetAddr(localPrefix)));
+        emit(createGoto(LogicVariable.fnRetAddr(localPrefix), LogicLabel.symbolic(localPrefix)));
     }
 
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
@@ -457,7 +462,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel returnLabel = nextLabel();
         emit(createSetAddress(LogicVariable.fnRetAddr(localPrefix), returnLabel));
         emit(createCallStackless(function.getLabel()));
-        emit(createLabel(returnLabel)); // where the function must return
+        emit(createGotoLabel(returnLabel, LogicLabel.symbolic(localPrefix))); // where the function must return
 
         return passReturnValue(function);
     }
@@ -718,7 +723,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel bodyLabel = nextLabel();
         final LogicLabel exitLabel = nextLabel();
         final LogicVariable iterator = nextTemp();        // Holds instruction address of the next iteration
-        final String marker = nextMarker();
+        final LogicLabel marker = nextMarker();
 
         loopStack.enterLoop(node.getLabel(), exitLabel, contLabel);
 
@@ -733,11 +738,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emit(createSetAddress(iterator, nextValueLabel));
             emit(createSet(variable, visit(values.get(i))));
             emit(createJumpUnconditional(bodyLabel));
-            emit(createLabel(nextValueLabel).withMarker(marker));
+            emit(createGotoLabel(nextValueLabel, marker));
         }
 
         // Last value
-        emit(createSetAddress(iterator, exitLabel));
+        LogicLabel lastValueLabel = nextLabel();
+        emit(createSetAddress(iterator, lastValueLabel));
         emit(createSet(variable, visit(values.get(values.size() - 1))));
 
         setSubcontextType(AstSubcontextType.BODY, values.size());
@@ -747,7 +753,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         // Label for continue statements
         emit(createLabel(contLabel));
         setSubcontextType(AstSubcontextType.FLOW_CONTROL, values.size());
-        emit(createGoto(iterator).withMarker(marker));
+        emit(createGoto(iterator, marker));
+        emit(createGotoLabel(lastValueLabel, marker));
         emit(createLabel(exitLabel));
 
         clearSubcontextType();

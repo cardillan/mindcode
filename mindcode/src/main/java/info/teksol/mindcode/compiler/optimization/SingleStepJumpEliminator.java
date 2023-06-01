@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicLabel;
 
@@ -37,7 +38,7 @@ class SingleStepJumpEliminator extends BaseOptimizer {
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
 
-                if (ix instanceof LabelInstruction il) {
+                if (ix instanceof LabeledInstruction il) {
                     isJumpToNext |= il.getLabel().equals(targetLabel);
                 } else {
                     if (isJumpToNext) {

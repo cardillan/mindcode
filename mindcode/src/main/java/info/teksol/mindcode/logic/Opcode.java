@@ -44,6 +44,7 @@ public enum Opcode {
     SETPROP         ("setprop",         "Sets a property of a unit or building."),
 
     LABEL           ("label",           0),
+    GOTOLABEL       ("gotolabel",       0),
     PUSH            ("push",            2),
     POP             ("pop",             2),
     CALL            ("call",            1),

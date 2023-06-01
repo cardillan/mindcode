@@ -9,26 +9,22 @@ import java.util.List;
 
 public class CallInstruction extends BaseInstruction {
 
-    CallInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.CALL, args, params, marker);
+    CallInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.CALL, args, params);
     }
 
-    protected CallInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected CallInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public CallInstruction copy() {
-        return new CallInstruction(this, astContext, marker);
-    }
-
-    public CallInstruction withMarker(String marker) {
-        return new CallInstruction(this, astContext, marker);
+        return new CallInstruction(this, astContext);
     }
 
     @Override
     public CallInstruction withContext(AstContext astContext) {
-        return new CallInstruction(this, astContext, marker);
+        return new CallInstruction(this, astContext);
     }
 
     public final LogicLabel getCallAddr() {

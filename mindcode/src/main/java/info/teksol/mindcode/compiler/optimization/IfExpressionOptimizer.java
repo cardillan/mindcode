@@ -113,7 +113,7 @@ public class IfExpressionOptimizer extends BaseOptimizer {
         int conditionIndex = instructionIndex(condition.getLast());
         replaceInstruction(conditionIndex, invertedJump.withTarget(labelInstruction.getLabel()));
 
-        // If it was a compound instruction, remove it
+        // If it was a compound condition, remove it
         // (Note: dead code eliminator in an additional pass would remove it too)
         if (compoundCondition) {
             removeInstruction(conditionIndex - 1);

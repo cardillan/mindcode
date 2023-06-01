@@ -1,6 +1,14 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.CallInstruction;
+import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
+import info.teksol.mindcode.compiler.instructions.EndInstruction;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.ReturnInstruction;
+import info.teksol.mindcode.compiler.instructions.SetAddressInstruction;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 
@@ -23,11 +31,19 @@ import java.util.stream.Stream;
  * assuming the unconditional jump normalization optimizer was on the pipeline.
  * Labels - even inactive ones - are never removed.
  */
-class UnreachableCodeEliminator extends BaseOptimizer {
+<<<<<<< HEAD:mindcode/src/main/java/info/teksol/mindcode/compiler/optimization/InaccessibleCodeEliminator.java
+class InaccessibleCodeEliminator extends BaseOptimizer {
     private Set<LogicLabel> activeLabels = new HashSet<>();
 
-    public UnreachableCodeEliminator(InstructionProcessor instructionProcessor) {
+    public InaccessibleCodeEliminator(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
+=======
+class UnreachableCodeEliminator extends GlobalOptimizer {
+    private Set<LogicLabel> activeLabels = new HashSet<>();
+
+    public UnreachableCodeEliminator(InstructionProcessor instructionProcessor, LogicInstructionPipeline next) {
+        super(instructionProcessor, next);
+>>>>>>> 5fe6f0e (Terminology: inaccessible code --> unreachable code):mindcode/src/main/java/info/teksol/mindcode/compiler/optimization/UnreachableCodeEliminator.java
     }
 
     @Override
@@ -70,7 +86,7 @@ class UnreachableCodeEliminator extends BaseOptimizer {
                         accessible = false;
                     }
                 } else {
-                    if (instruction instanceof LabeledInstruction ix) {
+                    if (instruction instanceof LabelInstruction ix) {
                         // An active jump to here makes next instruction accessible
                         accessible = activeLabels.contains(ix.getLabel());
                     } else if (!(instruction instanceof EndInstruction) || aggressive()) {

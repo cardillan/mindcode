@@ -6,25 +6,21 @@ import java.util.List;
 
 public class EndInstruction extends BaseInstruction {
 
-    EndInstruction(AstContext astContext, String marker) {
-        super(astContext, Opcode.END, List.of(), List.of(), marker);
+    EndInstruction(AstContext astContext) {
+        super(astContext, Opcode.END, List.of(), List.of());
     }
 
-    protected EndInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected EndInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public EndInstruction copy() {
-        return new EndInstruction(this, astContext, marker);
-    }
-
-    public EndInstruction withMarker(String marker) {
-        return new EndInstruction(this, astContext, marker);
+        return new EndInstruction(this, astContext);
     }
 
     @Override
     public EndInstruction withContext(AstContext astContext) {
-        return new EndInstruction(this, astContext, marker);
+        return new EndInstruction(this, astContext);
     }
 }

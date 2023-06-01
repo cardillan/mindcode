@@ -44,12 +44,6 @@ public interface LogicInstruction {
 
     AstContext getAstContext();
 
-    String getMarker();
-
-    boolean matchesMarker(String marker);
-
-    LogicInstruction withMarker(String marker);
-
     LogicInstruction withContext(AstContext astContext);
 
     boolean matchesContext(AstContext astContext);

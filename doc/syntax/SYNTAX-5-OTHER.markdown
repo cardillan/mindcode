@@ -467,9 +467,9 @@ by both branches remains the same).
 
 ### Compound condition elimination
 
-The instruction generator always generates true branch first. In some cases, the jump condition is formulated in 
-such a way that it cannot be expressed in a single jump and requires additional instruction (this only happens with 
-the strict equality operator `===`, which doesn't have an opposite operating in Mindustry Logic).
+The instruction generator always generates true branch first. In some cases, the jump condition cannot be expressed 
+as a single jump and requires additional instruction (this only happens with the strict equality operator `===`, 
+which doesn't have an opposite operating in Mindustry Logic).
 
 The additional instruction can be avoided when the true and false branches in the code are swapped. When this 
 optimizer detects such a situation, it does exactly that:

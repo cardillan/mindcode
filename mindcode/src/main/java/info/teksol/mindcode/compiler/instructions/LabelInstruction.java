@@ -7,31 +7,28 @@ import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
 
-public class LabelInstruction extends BaseInstruction {
+public class LabelInstruction extends BaseInstruction implements LabeledInstruction {
 
-    LabelInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.LABEL, args, params, marker);
+    LabelInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.LABEL, args, params);
     }
 
-    protected LabelInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected LabelInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public LabelInstruction copy() {
-        return new LabelInstruction(this, astContext, marker);
-    }
-
-    public LabelInstruction withMarker(String marker) {
-        return new LabelInstruction(this, astContext, marker);
+        return new LabelInstruction(this, astContext);
     }
 
     @Override
     public LabelInstruction withContext(AstContext astContext) {
-        return new LabelInstruction(this, astContext, marker);
+        return new LabelInstruction(this, astContext);
     }
 
-    public final LogicLabel getLabel() {
+    @Override
+    public LogicLabel getLabel() {
         return (LogicLabel) getArg(0);
     }
 }

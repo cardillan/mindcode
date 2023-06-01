@@ -21,13 +21,11 @@ public class BaseInstruction implements LogicInstruction {
     // Used to mark instructions with additional information to optimizers.
     // AstContext and marker are not considered by hashCode or equals!
     protected final AstContext astContext;
-    protected final String marker;
 
-    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params, String marker) {
+    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
         this.astContext = Objects.requireNonNull(astContext);
         this.opcode = Objects.requireNonNull(opcode);
         this.args = List.copyOf(args);
-        this.marker = marker;
         this.params = params;
         if (params == null) {
             assignments = null;
@@ -41,11 +39,10 @@ public class BaseInstruction implements LogicInstruction {
         }
     }
 
-    protected BaseInstruction(BaseInstruction other, AstContext astContext, String marker) {
+    protected BaseInstruction(BaseInstruction other, AstContext astContext) {
         this.astContext = Objects.requireNonNull(astContext);
         this.opcode = other.opcode;
         this.args = other.args;
-        this.marker = marker;
         this.params = other.params;
         this.assignments = other.assignments;
         this.inputs = other.inputs;
@@ -58,17 +55,12 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public BaseInstruction copy() {
-        return new BaseInstruction(this, astContext, marker);
-    }
-
-    @Override
-    public BaseInstruction withMarker(String marker) {
-        return Objects.equals(this.marker, marker) ? this : new BaseInstruction(this, astContext, marker);
+        return new BaseInstruction(this, astContext);
     }
 
     @Override
     public BaseInstruction withContext(AstContext astContext) {
-        return Objects.equals(this.astContext, astContext) ? this : new BaseInstruction(this, astContext, marker);
+        return Objects.equals(this.astContext, astContext) ? this : new BaseInstruction(this, astContext);
     }
 
     @Override
@@ -128,16 +120,6 @@ public class BaseInstruction implements LogicInstruction {
     @Override
     public int getOutputs() {
         return outputs;
-    }
-
-    @Override
-    public String getMarker() {
-        return marker;
-    }
-
-    @Override
-    public boolean matchesMarker(String marker) {
-        return this.marker != null && this.marker.equals(marker);
     }
 
     @Override

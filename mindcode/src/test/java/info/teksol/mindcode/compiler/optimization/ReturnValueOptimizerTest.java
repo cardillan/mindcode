@@ -124,9 +124,9 @@ class ReturnValueOptimizerTest extends AbstractOptimizerTest<ReturnValueOptimize
     void ignoresNonlinearCodeGoto() {
         assertDoesNotOptimize(
                 createInstruction(SET, retval0, tmp0),
-                createInstruction(LABEL, label0).withMarker("marker"),
+                createInstruction(GOTOLABEL, label0, marker),
                 createInstruction(PRINT, retval0),
-                createInstruction(GOTO, tmp1).withMarker("marker"),
+                createInstruction(GOTO, tmp1, marker),
                 createInstruction(END)
         );
     }
@@ -199,19 +199,19 @@ class ReturnValueOptimizerTest extends AbstractOptimizerTest<ReturnValueOptimize
                 createInstruction(SET, "__fn0_x", "1"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
                 createInstruction(SET, var(0), "__fn0retval"),
                 createInstruction(SET, "__fn0_x", "2"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1002)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
                 createInstruction(PRINT, var(0)),
                 createInstruction(PRINT, "__fn0retval"),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0retval", "__fn0_x"),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(GOTO, "__fn0retaddr"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END)
         );
     }

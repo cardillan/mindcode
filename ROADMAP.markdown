@@ -6,6 +6,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 I hope to include these in next release(s).
 
+* Replace markers with specific GotoLabel virtual instruction
 * An initial implementation of Common subexpression optimization. Will avoid implementing optimizations for handling 
   obvious optimization candidates for specific cases.
 * Create much more processor tests - unit tests based on executing compiled code and comparing the output. They're 

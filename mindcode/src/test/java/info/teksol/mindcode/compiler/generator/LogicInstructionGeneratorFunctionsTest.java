@@ -42,24 +42,23 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                         print(foo(3))
                         print(foo(4))
                         """,
-
                 createInstruction(SET, "__fn0_n", "3"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
                 createInstruction(SET, var(0), "__fn0retval"),
                 createInstruction(PRINT, var(0)),
                 createInstruction(SET, "__fn0_n", "4"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1002)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
                 createInstruction(SET, var(1), "__fn0retval"),
                 createInstruction(PRINT, var(1)),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0retval", "__fn0_n"),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(GOTO, "__fn0retaddr"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END)
         );
     }
@@ -234,25 +233,25 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(SET, "__fn1_n", "0"),
                 createInstruction(SETADDR, "__fn1retaddr", var(1003)),
                 createInstruction(CALL, var(1001)),
-                createInstruction(LABEL, var(1003)),
+                createInstruction(GOTOLABEL, var(1003), "__fn1"),
                 createInstruction(SET, var(0), "__fn1retval"),
                 // call bar
                 createInstruction(SET, "__fn0_n", "0"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1004)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1004)),
+                createInstruction(GOTOLABEL, var(1004), "__fn0"),
                 createInstruction(SET, var(1), "__fn0retval"),
                 // call baz
                 createInstruction(SET, "__fn2_n", "0"),
                 createInstruction(SETADDR, "__fn2retaddr", var(1005)),
                 createInstruction(CALL, var(1002)),
-                createInstruction(LABEL, var(1005)),
+                createInstruction(GOTOLABEL, var(1005), "__fn2"),
                 createInstruction(SET, var(2), "__fn2retval"),
                 // call foo (again)
                 createInstruction(SET, "__fn1_n", "4"),
                 createInstruction(SETADDR, "__fn1retaddr", var(1006)),
                 createInstruction(CALL, var(1001)),
-                createInstruction(LABEL, var(1006)),
+                createInstruction(GOTOLABEL, var(1006), "__fn1"),
                 createInstruction(SET, var(3), "__fn1retval"),
                 createInstruction(PRINT, var(3)),
                 createInstruction(END),
@@ -262,11 +261,11 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(SET, "__fn2_n", "__fn0_n"),
                 createInstruction(SETADDR, "__fn2retaddr", var(1008)),
                 createInstruction(CALL, var(1002)),
-                createInstruction(LABEL, var(1008)),
+                createInstruction(GOTOLABEL, var(1008), "__fn2"),
                 createInstruction(OP, "mul", var(4), "2", "__fn2retval"),
                 createInstruction(SET, "__fn0retval", var(4)),
                 createInstruction(LABEL, var(1007)),
-                createInstruction(GOTO, "__fn0retaddr"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END),
                 // def foo
                 createInstruction(LABEL, var(1001)),
@@ -274,18 +273,18 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(SET, "__fn0_n", "__fn1_n"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1010)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1010)),
+                createInstruction(GOTOLABEL, var(1010), "__fn0"),
                 createInstruction(OP, "add", var(5), "1", "__fn0retval"),
                 createInstruction(SET, "__fn1retval", var(5)),
                 createInstruction(LABEL, var(1009)),
-                createInstruction(GOTO, "__fn1retaddr"),
+                createInstruction(GOTO, "__fn1retaddr", "__fn1"),
                 createInstruction(END),
                 // def baz
                 createInstruction(LABEL, var(1002)),
                 createInstruction(OP, "pow", var(6), "3", "__fn2_n"),
                 createInstruction(SET, "__fn2retval", var(6)),
                 createInstruction(LABEL, var(1011)),
-                createInstruction(GOTO, "__fn2retaddr"),
+                createInstruction(GOTO, "__fn2retaddr", "__fn2"),
                 createInstruction(END)
         );
     }
@@ -353,23 +352,25 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     @Test
     void handlesNestedFunctionCallsStackless() {
         assertCompilesTo("""
-                        def a(n) n + 1 end
+                        def a(n)
+                            n + 1
+                        end
                         print(a(a(a(4))))
                         """,
                 createInstruction(SET, "__fn0_n", "4"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
                 createInstruction(SET, var(0), "__fn0retval"),
                 createInstruction(SET, "__fn0_n", var(0)),
                 createInstruction(SETADDR, "__fn0retaddr", var(1002)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
                 createInstruction(SET, var(1), "__fn0retval"),
                 createInstruction(SET, "__fn0_n", var(1)),
                 createInstruction(SETADDR, "__fn0retaddr", var(1003)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1003)),
+                createInstruction(GOTOLABEL, var(1003), "__fn0"),
                 createInstruction(SET, var(2), "__fn0retval"),
                 createInstruction(PRINT, var(2)),
                 createInstruction(END),
@@ -378,7 +379,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(OP, "add", var(3), "__fn0_n", "1"),
                 createInstruction(SET, "__fn0retval", var(3)),
                 createInstruction(LABEL, var(1004)),
-                createInstruction(GOTO, "__fn0retaddr"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END)
         );
     }
@@ -565,13 +566,13 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(SET, "__fn0_n", "0"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
                 createInstruction(SET, var(0), "__fn0retval"),
                 createInstruction(PRINT, var(0)),
                 createInstruction(SET, "__fn0_n", "1"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1002)),
                 createInstruction(CALL, var(1000)),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
                 createInstruction(SET, var(1), "__fn0retval"),
                 createInstruction(PRINT, var(1)),
                 createInstruction(END),
@@ -591,7 +592,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
                 createInstruction(LABEL, var(1005)),
                 createInstruction(SET, "__fn0retval", var(4)),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(GOTO, "__fn0retaddr"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END)
         );
     }

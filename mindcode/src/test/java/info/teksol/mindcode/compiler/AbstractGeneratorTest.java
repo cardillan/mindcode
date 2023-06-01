@@ -319,7 +319,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicString   message   = LogicString.create("message");     
     protected static final LogicLabel    label0    = LogicLabel.symbolic("label0");      
     protected static final LogicLabel    label1    = LogicLabel.symbolic("label1");      
-    protected static final LogicLabel    label2    = LogicLabel.symbolic("label2");      
+    protected static final LogicLabel    marker    = LogicLabel.symbolic("marker");
+    protected static final LogicLabel    label2    = LogicLabel.symbolic("label2");
     protected static final LogicVariable bank1     = LogicVariable.block("bank1");       
     protected static final LogicVariable cell1     = LogicVariable.block("cell1");       
     protected static final LogicVariable conveyor1 = LogicVariable.block("conveyor1");   

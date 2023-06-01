@@ -10,26 +10,22 @@ import java.util.List;
 
 public class CallRecInstruction extends BaseInstruction {
 
-    CallRecInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.CALLREC, args, params, marker);
+    CallRecInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.CALLREC, args, params);
     }
 
-    protected CallRecInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected CallRecInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public CallRecInstruction copy() {
-        return new CallRecInstruction(this, astContext, marker);
-    }
-
-    public CallRecInstruction withMarker(String marker) {
-        return new CallRecInstruction(this, astContext, marker);
+        return new CallRecInstruction(this, astContext);
     }
 
     @Override
     public CallRecInstruction withContext(AstContext astContext) {
-        return new CallRecInstruction(this, astContext, marker);
+        return new CallRecInstruction(this, astContext);
     }
 
     public final LogicVariable getStack() {

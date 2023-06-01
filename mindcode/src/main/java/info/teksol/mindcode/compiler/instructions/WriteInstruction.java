@@ -11,26 +11,22 @@ import java.util.List;
 
 public class WriteInstruction extends BaseInstruction {
 
-    WriteInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.WRITE, args, params, marker);
+    WriteInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.WRITE, args, params);
     }
 
-    protected WriteInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected WriteInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public WriteInstruction copy() {
-        return new WriteInstruction(this, astContext, marker);
-    }
-
-    public WriteInstruction withMarker(String marker) {
-        return new WriteInstruction(this, astContext, marker);
+        return new WriteInstruction(this, astContext);
     }
 
     @Override
     public WriteInstruction withContext(AstContext astContext) {
-        return new WriteInstruction(this, astContext, marker);
+        return new WriteInstruction(this, astContext);
     }
 
     public final LogicValue getValue() {

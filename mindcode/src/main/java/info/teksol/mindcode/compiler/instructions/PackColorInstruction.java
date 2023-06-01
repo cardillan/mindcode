@@ -9,30 +9,26 @@ import info.teksol.mindcode.logic.Opcode;
 import java.util.List;
 
 public class PackColorInstruction extends BaseInstruction implements LogicResultInstruction {
-    PackColorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.PACKCOLOR, args, params, marker);
+    PackColorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.PACKCOLOR, args, params);
     }
 
-    protected PackColorInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected PackColorInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public PackColorInstruction copy() {
-        return new PackColorInstruction(this, astContext, marker);
-    }
-
-    public PackColorInstruction withMarker(String marker) {
-        return new PackColorInstruction(this, astContext, marker);
+        return new PackColorInstruction(this, astContext);
     }
 
     @Override
     public PackColorInstruction withContext(AstContext astContext) {
-        return new PackColorInstruction(this, astContext, marker);
+        return new PackColorInstruction(this, astContext);
     }
 
-    public SensorInstruction withResult(LogicVariable result) {
-        return new SensorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getParams(), marker);
+    public PackColorInstruction withResult(LogicVariable result) {
+        return new PackColorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getParams());
     }
 
     @Override

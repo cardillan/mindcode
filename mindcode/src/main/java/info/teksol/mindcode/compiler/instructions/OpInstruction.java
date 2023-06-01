@@ -12,33 +12,29 @@ import java.util.List;
 
 public class OpInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    OpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params, String marker) {
-        super(astContext, Opcode.OP, args, params, marker);
+    OpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+        super(astContext, Opcode.OP, args, params);
     }
 
-    protected OpInstruction(BaseInstruction other, AstContext astContext, String marker) {
-        super(other, astContext, marker);
+    protected OpInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public OpInstruction copy() {
-        return new OpInstruction(this, astContext, marker);
-    }
-
-    public OpInstruction withMarker(String marker) {
-        return new OpInstruction(this, astContext, marker);
+        return new OpInstruction(this, astContext);
     }
 
     @Override
     public OpInstruction withContext(AstContext astContext) {
-        return new OpInstruction(this, astContext, marker);
+        return new OpInstruction(this, astContext);
     }
 
     @Override
     public OpInstruction withResult(LogicVariable result) {
         return hasSecondOperand()
-                ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getParams(), marker)
-                : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getParams(), marker);
+                ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getParams())
+                : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getParams());
     }
 
     public boolean hasSecondOperand() {

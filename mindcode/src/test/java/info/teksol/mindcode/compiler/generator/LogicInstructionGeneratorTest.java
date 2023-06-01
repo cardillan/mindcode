@@ -1084,22 +1084,26 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void convertsForEachAndPrintFunctionCall() {
-        assertCompilesTo(
-                "for a in (@mono, @poly, @mega)\nprint(a)\nend",
+        assertCompilesTo("""
+                        for a in (@mono, @poly, @mega)
+                            print(a)
+                        end
+                        """,
                 createInstruction(SETADDR, var(0), var(1003)),
                 createInstruction(SET, "a", "@mono"),
                 createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1003)),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
                 createInstruction(SETADDR, var(0), var(1004)),
                 createInstruction(SET, "a", "@poly"),
                 createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(SETADDR, var(0), var(1002)),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
+                createInstruction(SETADDR, var(0), var(1005)),
                 createInstruction(SET, "a", "@mega"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "a"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(GOTO, var(0)),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1005), "marker0"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );

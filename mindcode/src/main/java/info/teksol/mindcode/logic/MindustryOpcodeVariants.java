@@ -220,14 +220,15 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7A, W, PROP, Opcode.SETPROP, sensor("property"), block("object"), in("value"));
 
         // Virtual instructions
-        add(list, V6, V7A, S, NONE, Opcode.LABEL,   label("label"));
-        add(list, V6, V7A, S, NONE, Opcode.PUSH,    block("memory"), out("value"));
-        add(list, V6, V7A, S, NONE, Opcode.POP,     block("memory"), out("value"));
-        add(list, V6, V7A, S, NONE, Opcode.CALL,    label("callAddr"));
-        add(list, V6, V7A, S, NONE, Opcode.CALLREC, block("memory"), label("callAddr"), label("retAddr"));
-        add(list, V6, V7A, S, NONE, Opcode.RETURN,  block("memory"));
-        add(list, V6, V7A, S, NONE, Opcode.GOTO,    in("address"));
-        add(list, V6, V7A, S, NONE, Opcode.SETADDR, out("result"),   in("address"));
+        add(list, V6, V7A, S, NONE, Opcode.LABEL,       label("label"));
+        add(list, V6, V7A, S, NONE, Opcode.GOTOLABEL,   label("address"), label("marker"));
+        add(list, V6, V7A, S, NONE, Opcode.PUSH,        block("memory"), out("value"));
+        add(list, V6, V7A, S, NONE, Opcode.POP,         block("memory"), out("value"));
+        add(list, V6, V7A, S, NONE, Opcode.CALL,        label("callAddr"));
+        add(list, V6, V7A, S, NONE, Opcode.CALLREC,     block("memory"), label("callAddr"), label("retAddr"));
+        add(list, V6, V7A, S, NONE, Opcode.RETURN,      block("memory"));
+        add(list, V6, V7A, S, NONE, Opcode.GOTO,        in("address"), label("marker"));
+        add(list, V6, V7A, S, NONE, Opcode.SETADDR,     out("result"),   in("address"));
 
         return List.copyOf(list);
     }
