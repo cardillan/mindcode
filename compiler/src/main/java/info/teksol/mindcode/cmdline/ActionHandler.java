@@ -59,7 +59,7 @@ abstract class ActionHandler {
                 .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor," +
                         " version 7 rev. A with standard processor or world processor)")
                 .choices("6", "7s", "7w", "7as", "7aw")
-                .setDefault("7s");
+                .setDefault("7w");
 
         subparser.addArgument("-g", "--goal")
                 .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")

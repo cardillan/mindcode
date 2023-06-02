@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -19,7 +20,7 @@ public class CompileMindcodeAction extends ActionHandler {
 
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
-        Subparser subparser = subparsers.addParser("cm")
+        Subparser subparser = subparsers.addParser(Action.COMPILE_MINDCODE.getShortcut())
                 .aliases("compile-mindcode")
                 .description("Compile a mindcode source file into text mlog file.")
                 .help("Compile a mindcode source file into text mlog file.");
