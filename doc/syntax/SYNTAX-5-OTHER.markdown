@@ -548,8 +548,8 @@ No instructions are removed or added, but the execution of the code is faster.
 
 ## Unreachable code elimination
 
-This optimizer removes instructions that are unreachable.
-There are several ways unreachable instructions might appear:
+This optimizer removes instructions that are unreachable. There are several ways unreachable instructions might appear:
+
 1. Jump threading can create unreachable jumps that are no longer targeted.
 2. User-created unreachable regions, such as `while false ... end`.
 3. User defined functions which are called from an unreachable region.

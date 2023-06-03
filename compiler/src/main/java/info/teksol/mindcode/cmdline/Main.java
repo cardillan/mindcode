@@ -47,7 +47,7 @@ public class Main {
     static void handleCommandLine(ArgumentParser parser, String[] args) {
         try {
             Namespace arguments = parser.parseArgs(args);
-            Action.valueOf(arguments.get("action")).handle(arguments);
+            Action.fromShortcut(arguments.get("action")).handle(arguments);
         } catch (ArgumentParserException e) {
             parser.handleError(e);
         } catch (ProcessingException e) {
@@ -57,14 +57,16 @@ public class Main {
     }
 
     public enum Action {
-        COMPILE_MINDCODE(new CompileMindcodeAction()),
-        COMPILE_SCHEMA(new CompileSchemacodeAction()),
-        DECOMPILE_SCHEMA(new DecompileSchemacodeAction()),
+        COMPILE_MINDCODE("cm", new CompileMindcodeAction()),
+        COMPILE_SCHEMA("cs", new CompileSchemacodeAction()),
+        DECOMPILE_SCHEMA("ds", new DecompileSchemacodeAction()),
         ;
 
+        private final String shortcut;
         private final ActionHandler handler;
 
-        Action(ActionHandler handler) {
+        Action(String shortcut, ActionHandler handler) {
+            this.shortcut = shortcut;
             this.handler = handler;
         }
 
@@ -72,8 +74,22 @@ public class Main {
             return handler.appendSubparser(subparsers, inputFileType);
         }
 
+        public String getShortcut() {
+            return shortcut;
+        }
+
         void handle(Namespace namespace) {
             handler.handle(namespace);
+        }
+
+        static Action fromShortcut(String shortcut) {
+            for (Action a : Action.values()) {
+                if (shortcut.equals(a.shortcut)) {
+                    return a;
+                }
+            }
+
+            throw new IllegalArgumentException("Unknwon shortcut value " + shortcut);
         }
     }
 }

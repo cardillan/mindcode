@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -21,7 +22,7 @@ public class CompileSchemacodeAction extends ActionHandler {
 
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
-        Subparser subparser = subparsers.addParser("cs")
+        Subparser subparser = subparsers.addParser(Action.COMPILE_SCHEMA.getShortcut())
                 .aliases("compile-schema")
                 .description("Compile a schema definition file into binary msch file.")
                 .help("Compile a schema definition file into binary msch file.");

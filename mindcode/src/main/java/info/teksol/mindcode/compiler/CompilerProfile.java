@@ -23,7 +23,7 @@ public class CompilerProfile {
     private FinalCodeOutput finalCodeOutput = null;
     private int parseTreeLevel = 0;
     private int debugLevel = 0;
-    private boolean printStackTrace = true;
+    private boolean printStackTrace = false;
 
     // Schematics Builder
 
