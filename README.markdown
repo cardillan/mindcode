@@ -670,6 +670,16 @@ bin/run-local
 ```
 
 The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
+### Last solution for win7
+Docker outdated ,bash failed
+1. do as 1,2,3 at Native installation
+2. use idea to build
+3. run webapp/src/main/java/info/teksol/mindcode/webapp/WebappApplication.java in idea with env vars
+
+```
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/mindcode_development;SPRING_DATASOURCE_USERNAME=postgres;SPRING_DATASOURCE_PASSWORD=ENTER_YOUR_PASSWORD
+```
+The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it,too.
 
 > **Note**: If you run PostgreSQL locally, you won't be able to run Mindcode in Docker due to port clash.
 
