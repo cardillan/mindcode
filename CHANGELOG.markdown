@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-06-08
+
+### Fixed
+
+* Fixed incorrect creation of schematics containing bridges. Configuration for bridges and other blocks that connect 
+  to a single other block was mistakenly written as an array of connection into a `.msch` file.  
+
 ## 2023-06-02
 
 Note: the bug fixed in this release only affects the command line tool. The web app hasn't been redeployed.

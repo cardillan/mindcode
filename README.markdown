@@ -644,9 +644,10 @@ There are two options for getting Mindcode up and running on your own machine. U
 
 ### With Docker & Docker Compose
 
-```sh
+```
 docker-compose up --build
 ```
+
 It can take a few minutes to download and compile all the required parts the first time you run this, but subsequent
 runs will be a lot faster.
 
@@ -656,8 +657,43 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 
 1. Install Java 17+, Maven 3.6, and PostgreSQL
 2. Create a database in PostgreSQL named `mindcode_development`
-3. Set environment variables with the PostgreSQL connection parameters:
-```sh
+
+> **Note**: If you install PostgreSQL locally, you won't be able to run Mindcode in Docker due to a port collision.
+
+#### Windows 
+
+Set environment variables with the PostgreSQL connection parameters. You can set them by running the following 
+commands in the console: 
+
+```
+SET SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/mindcode_development
+SET SPRING_DATASOURCE_USERNAME=postgres_username
+SET SPRING_DATASOURCE_PASSWORD=postgres_password
+```
+
+You also need to set a `JAVA_HOME` variable pointing to the directory containing your Java 17 installation, for 
+example (the exact path depends on the distribution and version of Java you've installed):
+
+```
+JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17.0.6.10-hotspot
+```
+
+(You can also set all these variables permanently in the _System Properties_ dialog, in the _Advanced_ tab, after 
+pressing the _Environment Variables..._ button.)
+
+Then, using the same console window, run:
+
+```
+bin\webapp.bat
+```
+
+The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
+
+#### Linux
+
+Set environment variables with the PostgreSQL connection parameters:
+
+```
 export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/mindcode_development
 export SPRING_DATASOURCE_USERNAME=postgres_username
 export SPRING_DATASOURCE_PASSWORD=postgres_password
@@ -665,13 +701,18 @@ export SPRING_DATASOURCE_PASSWORD=postgres_password
 
 Then run:
 
-```sh
+```
 bin/run-local
 ```
 
 The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
 
-> **Note**: If you run PostgreSQL locally, you won't be able to run Mindcode in Docker due to port clash.
+#### IDE
+
+To run the application for your IDE, set the environment variables as described above (some IDEs allow to set them 
+just in the IDE) and set the startup class to `info.teksol.mindcode.webapp.WebappApplication`. When you run or debug 
+the project, the Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact 
+with it.
 
 ### Contributing 
 

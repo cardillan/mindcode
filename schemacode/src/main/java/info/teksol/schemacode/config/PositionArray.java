@@ -33,7 +33,7 @@ public record PositionArray(List<Position> positions) implements Configuration {
     @Override
     public <T extends Configuration> T as(Class<T> type) {
         if (type == Position.class) {
-            return type.cast(positions.isEmpty() ? Position.unpack(-1) : positions.get(0));
+            return type.cast(positions.isEmpty() ? Position.INVALID : positions.get(0));
         }
         return Configuration.super.as(type);
     }

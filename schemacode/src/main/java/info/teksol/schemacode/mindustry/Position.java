@@ -8,9 +8,11 @@ import java.util.function.UnaryOperator;
 
 public record Position(int x, int y) implements Comparable<Position>, Configuration {
 
+    private static final int INVALID_COORDINATE = -255;
+
     public static final Position ORIGIN = new Position(0, 0);
 
-    public static final Position INVALID = new Position(-255, -255);
+    public static final Position INVALID = new Position(INVALID_COORDINATE, INVALID_COORDINATE);
 
     @Override
     public <T extends Configuration> T as(Class<T> type) {
@@ -24,11 +26,11 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
      * @return this 2d grid point for chaining.
      */
     public Position add(Position other) {
-        return other.zero() ? this : new Position(x + other.x, y + other.y);
+        return invalid() || other.zero() ? this : new Position(x + other.x, y + other.y);
     }
 
     public Position add(int offset) {
-        return offset == 0 ? this : new Position(x + offset, y + offset);
+        return invalid() || offset == 0 ? this : new Position(x + offset, y + offset);
     }
 
     /**
@@ -38,11 +40,11 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
      * @return this 2d grid point for chaining.
      */
     public Position sub(Position other) {
-        return other.zero() ? this : new Position(x - other.x, y - other.y);
+        return invalid() || other.zero() ? this : new Position(x - other.x, y - other.y);
     }
 
     public Position sub(int offset) {
-        return offset == 0 ? this : new Position(x - offset, y - offset);
+        return invalid() || offset == 0 ? this : new Position(x - offset, y - offset);
     }
 
     public Position remap(UnaryOperator<Position> mapping) {
@@ -54,7 +56,11 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
     }
 
     public boolean zero() {
-        return x == 0 &&y == 0;
+        return x == 0 && y == 0;
+    }
+
+    public boolean invalid() {
+        return x == INVALID_COORDINATE && y == INVALID_COORDINATE;
     }
 
     public boolean nonPositive() {
@@ -62,7 +68,7 @@ public record Position(int x, int y) implements Comparable<Position>, Configurat
     }
 
     public boolean orthogonal(Position position) {
-        return x() == position.x() || y() == position.y();
+        return x == position.x || y == position.y;
     }
 
     /**

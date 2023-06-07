@@ -50,7 +50,7 @@ public class SchematicsIO {
             for (Block block : schematic.blocks()) {
                 stream.writeByte(typeList.indexOf(block.blockType()));
                 stream.writeInt(block.position().pack());
-                writeObject(stream, block.configuration().encode(block));
+                writeObject(stream, block.configuration().as(block.configurationClass()).encode(block));
                 stream.writeByte(block.direction().ordinal());
             }
         }
