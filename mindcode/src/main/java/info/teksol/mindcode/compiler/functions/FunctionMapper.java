@@ -9,9 +9,9 @@ import java.util.function.Consumer;
 
 public interface FunctionMapper {
 
-    LogicValue handleFunction(Consumer<LogicInstruction> program, String functionName, List<LogicValue> params);
+    LogicValue handleFunction(Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments);
 
-    LogicValue handleProperty(Consumer<LogicInstruction> program, String propertyName, LogicValue target, List<LogicValue> params);
+    LogicValue handleProperty(Consumer<LogicInstruction> program, String propertyName, LogicValue target, List<LogicValue> arguments);
 
     List<FunctionSample> generateSamples();
 

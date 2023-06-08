@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.logic.LogicLabel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -45,13 +46,13 @@ public class LoopStackTest {
     @Test
     void rejectsDuplicateLabels() {
         loopStack.enterLoop("label1", break1, continue1);
-        Assertions.assertThrows(GenerationException.class, () -> loopStack.enterLoop("label1", break2, continue2));
+        Assertions.assertThrows(MindcodeException.class, () -> loopStack.enterLoop("label1", break2, continue2));
     }
 
     @Test
     void rejectsProvidingLabelsOnEmptyStack() {
-        Assertions.assertThrows(GenerationException.class, () -> loopStack.getBreakLabel(null));
-        Assertions.assertThrows(GenerationException.class, () -> loopStack.getContinueLabel(null));
+        Assertions.assertThrows(MindcodeException.class, () -> loopStack.getBreakLabel(null));
+        Assertions.assertThrows(MindcodeException.class, () -> loopStack.getContinueLabel(null));
     }
 
     @Test

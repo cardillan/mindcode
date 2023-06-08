@@ -1,6 +1,6 @@
 package info.teksol.mindcode.grammar;
 
-import info.teksol.mindcode.ParsingException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.Tuple2;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -13,37 +13,55 @@ import java.util.List;
 
 public abstract class AbstractParserTest {
     protected MindcodeParser.ProgramContext parse(String program) {
+        final List<String> errors = new ArrayList<>();
+        ErrorListener errorListener = new ErrorListener(errors);
+
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errorListener);
+
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         parser.removeErrorListeners();
-        final List<String> errors = new ArrayList<>();
-        parser.addErrorListener(new BaseErrorListener() {
-            @Override
-            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-                errors.add("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg);
-            }
-        });
+        parser.addErrorListener(errorListener);
 
         final MindcodeParser.ProgramContext context = parser.program();
         if (!errors.isEmpty()) {
-            throw new ParsingException(errors.toString());
+            throw new MindcodeInternalError(errors.toString());
         }
         return context;
     }
 
     Tuple2<MindcodeParser.ProgramContext, List<String>> parseWithErrors(String program) {
+        final List<String> errors = new ArrayList<>();
+        ErrorListener errorListener = new ErrorListener(errors);
+
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(program));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errorListener);
+
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         parser.removeErrorListeners();
-        final List<String> errors = new ArrayList<>();
-        parser.addErrorListener(new BaseErrorListener() {
-            @Override
-            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-                errors.add("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg);
-            }
-        });
+        parser.addErrorListener(errorListener);
 
         final MindcodeParser.ProgramContext context = parser.program();
         return new Tuple2<>(context, errors);
+    }
+
+    private static class ErrorListener extends BaseErrorListener {
+        private final List<String> errors;
+
+        public ErrorListener(List<String> errors) {
+            this.errors = errors;
+        }
+
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+                String msg, RecognitionException e) {
+            if (offendingSymbol == null) {
+                errors.add("Syntax error on line " + line + ":" + charPositionInLine + ": " + msg);
+            } else {
+                errors.add("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg);
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +11,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
-        assertThrows(OutOfHeapSpaceException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz"));
     }
 
@@ -1003,7 +1004,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesBreaksOutsideLoop() {
-        assertThrows(GenerationException.class, () ->
+        assertThrows(MindcodeException.class, () ->
                 generateInstructions("""
                         while a
                             print(a)
@@ -1111,19 +1112,19 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesAssignmentsToBlockNames() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("switch1 = 5"));
     }
 
     @Test
     void refusesBlockNamesAsOutputArguments() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("getBlock(10, 20, switch1)"));
     }
 
     @Test
     void refusesBlockNamesAsFunctionParameters() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("def foo(switch1) false end foo(5)"));
     }
 

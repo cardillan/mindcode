@@ -1,8 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.generator.TooFewPrintfArgumentsException;
-import info.teksol.mindcode.compiler.generator.TooManyPrintfArgumentsException;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
@@ -65,7 +64,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void printfCatchesTooFewArguments() {
-        assertThrows(TooFewPrintfArgumentsException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         printf("Text: $")
                         """
@@ -75,7 +74,7 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
 
     @Test
     void printfCatchesTooManyArguments() {
-        assertThrows(TooManyPrintfArgumentsException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         printf("Text: $", 10, 20)
                         """

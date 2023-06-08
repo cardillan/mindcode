@@ -1,9 +1,9 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.MindcodeMessage;
-import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.logic.*;
 
 import java.math.BigDecimal;
@@ -360,11 +360,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     protected LogicInstruction validate(LogicInstruction instruction) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(instruction.getOpcode(), instruction.getArgs());
         if (opcodeVariant == null) {
-            throw new GenerationException("Invalid or version incompatible instruction " + instruction);
+            throw new MindcodeInternalError("Invalid or version incompatible instruction " + instruction);
         }
 
         if (instruction.getArgs().size() != opcodeVariant.namedParameters().size()) {
-            throw new GenerationException("Wrong number of arguments of instruction " + instruction.getOpcode()
+            throw new MindcodeInternalError("Wrong number of arguments of instruction " + instruction.getOpcode()
                     + " (expected " + opcodeVariant.namedParameters().size() + "). " + instruction);
         }
 
@@ -373,17 +373,17 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             LogicArgument argument = instruction.getArgs().get(i);
             LogicParameter type = namedParameter.type();
             if (!isValid(type, argument)) {
-                throw new GenerationException("Argument " + argument + " for parameter '" + namedParameter.name()
+                throw new MindcodeInternalError("Argument " + argument + " for parameter '" + namedParameter.name()
                         + "' not compatible with argument type " + type + ". " + instruction);
             }
         }
 
         if (instruction.getParams() == null) {
-            throw new GenerationException("Instruction created without valid parameters: " + instruction);
+            throw new MindcodeInternalError("Instruction created without valid parameters: " + instruction);
         }
 
         if (instruction instanceof JumpInstruction && instruction.getAstContext().subcontextType() == AstSubcontextType.BODY) {
-            throw new GenerationException("Jump instruction not allowed in BODY subcontext." + instruction);
+            throw new MindcodeInternalError("Jump instruction not allowed in BODY subcontext." + instruction);
         }
 
         return instruction;

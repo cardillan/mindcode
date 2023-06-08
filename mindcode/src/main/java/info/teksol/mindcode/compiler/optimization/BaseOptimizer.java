@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.LogicLabel;
@@ -121,7 +122,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
                     if (context == ctx) {
                         // Some optimization moved instructions in such a way that
                         // instructions in this context do not form continuous region.
-                        throw new OptimizationException("Discontinuous AST context " + context);
+                        throw new MindcodeInternalError("Discontinuous AST context " + context);
                     }
                 }
                 children.add(context);
@@ -273,7 +274,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     protected int labeledInstructionIndex(LogicLabel label) {
         int labelIndex = firstInstructionIndex(ix -> ix instanceof LabeledInstruction li && li.getLabel().equals(label));
         if (labelIndex < 0) {
-            throw new OptimizationException("Label not found in program.\nLabel: " + label);
+            throw new MindcodeInternalError("Label not found in program.\nLabel: " + label);
         }
         return firstInstructionIndex(labelIndex + 1, ix -> !(ix instanceof LabeledInstruction));
     }
@@ -412,12 +413,12 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      *
      * @param index where to place the instruction
      * @param instruction instruction to add
-     * @throws OptimizationException when the new instruction is already present elsewhere in the program
+     * @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
      */
     protected void insertInstruction(int index, LogicInstruction instruction) {
         for (LogicInstruction logicInstruction : program) {
             if (logicInstruction == instruction) {
-                throw new OptimizationException("Trying to insert the same instruction twice.\n" + instruction);
+                throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + instruction);
             }
         }
 
@@ -432,7 +433,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      *
      * @param index where to place the instructions
      * @param instructions instructions to add
-     * @throws OptimizationException when any of the new instructions is already present elsewhere in the program
+     * @throws MindcodeInternalError when any of the new instructions is already present elsewhere in the program
      */
     protected void insertInstructions(int index, LogicList instructions) {
         for (LogicInstruction instruction : instructions) {
@@ -450,13 +451,13 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      *
      * @param index index of an instruction to be replaced
      * @param instruction new instruction for given index
-     * @throws OptimizationException when trying to replace an instruction with itself, or when the replaced
+     * @throws MindcodeInternalError when trying to replace an instruction with itself, or when the replaced
      * instruction is already present elsewhere in the program
      */
     protected void replaceInstruction(int index, LogicInstruction instruction) {
         for (LogicInstruction logicInstruction : program) {
             if (logicInstruction == instruction) {
-                throw new OptimizationException("Trying to insert the same instruction twice.\n" + instruction);
+                throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + instruction);
             }
         }
         program.set(index, instruction);
@@ -863,7 +864,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return switch (contexts.size()) {
             case 0 -> null;
             case 1 -> contexts.get(0);
-            default -> throw new OptimizationException("More than one context found.");
+            default -> throw new MindcodeInternalError("More than one context found.");
         };
     }
 

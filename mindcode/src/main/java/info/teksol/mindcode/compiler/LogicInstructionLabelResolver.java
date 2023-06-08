@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -38,7 +39,7 @@ public class LogicInstructionLabelResolver {
             instructionPointer += instruction.getRealSize();
             if (instruction instanceof LabeledInstruction ix) {
                 if (addresses.containsKey(ix.getLabel())) {
-                    throw new CompilerException("Duplicate label detected: [" + ix.getLabel() + "] reused at least twice in " + program);
+                    throw new MindcodeInternalError("Duplicate label detected: '%s' reused at least twice in %s", ix.getLabel(), program);
                 }
 
                 addresses.put(ix.getLabel(), LogicLabel.absolute(instructionPointer));
@@ -49,7 +50,7 @@ public class LogicInstructionLabelResolver {
     private LogicArgument resolveLabel(LogicArgument argument) {
         if (argument instanceof LogicLabel label) {
             if (!addresses.containsKey(label)) {
-                throw new CompilerException("Unknown jump label target: '" + label + "' was not previously discovered in program");
+                throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
             }
             return addresses.get(label);
         } else {

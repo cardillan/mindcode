@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNumber;
@@ -34,7 +34,7 @@ public class NumericLiteral extends ConstantAstNode {
                         .orElseThrow(NumberFormatException::new);
             }
         } catch (NumberFormatException ex) {
-            throw new GenerationException("Numeric literal '" + literal + "' doesn't have a valid mlog representation.");
+            throw new MindcodeException("Numeric literal '" + literal + "' does not have a valid mlog representation.");
         }
     }
 

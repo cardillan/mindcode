@@ -1,8 +1,8 @@
 package info.teksol.mindcode.compiler.functions;
 
-import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.MindcodeInternalError;
 
-public class InvalidMetadataException extends GenerationException {
+public class InvalidMetadataException extends MindcodeInternalError {
     InvalidMetadataException(String message) {
         super(message);
     }

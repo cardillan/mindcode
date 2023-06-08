@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.AstContextType;
@@ -151,7 +152,7 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
 
     @Test
     void handlesLabelledInstructionIndexNonexistent() {
-        assertThrows(OptimizationException.class, () -> test.labeledInstructionIndex(label1));
+        assertThrows(MindcodeInternalError.class, () -> test.labeledInstructionIndex(label1));
     }
 
     @Test
@@ -191,7 +192,7 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
 
     @Test
     void handlesLabelledInstructionNonexistent() {
-        assertThrows(OptimizationException.class, () -> test.labeledInstruction(label1));
+        assertThrows(MindcodeInternalError.class, () -> test.labeledInstruction(label1));
     }
 
     @Test
@@ -207,7 +208,7 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
 
     @Test
     void refusesRepeatedInserts() {
-        assertThrows(OptimizationException.class, () -> test.insertInstruction(1, ix2));
+        assertThrows(MindcodeInternalError.class, () -> test.insertInstruction(1, ix2));
     }
 
     @Test
@@ -230,7 +231,7 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
 
     @Test
     void refusesReplaceInstructionWithDuplicate() {
-        assertThrows(OptimizationException.class, () -> test.replaceInstruction(ix1, ix2));
+        assertThrows(MindcodeInternalError.class, () -> test.replaceInstruction(ix1, ix2));
     }
 
     @Test

@@ -2,12 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+* Fixed some syntax errors in source programs not being properly reported. Some syntax errors were ignored, others 
+  might have caused unhandled exceptions in the web or command line application. When a syntax error occurs, 
+  partially generated code is no longer displayed in the web application.      
+
 ## 2023-06-08
 
 ### Fixed
 
 * Fixed incorrect creation of schematics containing bridges. Configuration for bridges and other blocks that connect 
-  to a single other block was mistakenly written as an array of connection into a `.msch` file.  
+  to a single other block was mistakenly written as an array of connections into a `.msch` file, which are ignored 
+  by Mindustry.   
 
 ## 2023-06-02
 

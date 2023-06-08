@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.Operation;
@@ -74,7 +75,7 @@ public class ConstantExpressionEvaluator {
                     }
                 } else if (a != null || b != null) {
                     if (a instanceof StringVariable || b instanceof StringVariable) {
-                        throw new GenerationException("Unsupported string expression.");
+                        throw new MindcodeException("Unsupported string expression.");
                     }
                     // One of them is not null
                     return evaluatePartially(node, a == null ? b : a, a == null ? node.getLeft() : node.getRight());
@@ -107,11 +108,11 @@ public class ConstantExpressionEvaluator {
     private AstNode evaluateConstant(Constant node) {
         AstNode evaluated = evaluateInner(node.getValue());
         if (!(evaluated instanceof ConstantAstNode)) {
-            throw new GenerationException("Value assigned to constant [" + node.getName() + "] is not a constant expression.");
+            throw new MindcodeException("Value assigned to constant '" + node.getName() + "' is not a constant expression.");
         } else if (evaluated instanceof NumericValue value) {
             evaluated = value.toNumericLiteral(instructionProcessor);
             if (evaluated == null) {
-                throw new GenerationException("Value assigned to constant [" + node.getName() + "] (" + value.getAsDouble() + ") doesn't have a valid mlog representation.");
+                throw new MindcodeException("Value assigned to constant '" + node.getName() + "' (" + value.getAsDouble() + ") doesn't have a valid mlog representation.");
             }
         }
         constants.put(node.getName(), evaluated);
@@ -135,7 +136,7 @@ public class ConstantExpressionEvaluator {
                 Variable a = variableFromNode("a", evaluated.get(0));
                 Variable b = variableFromNode("b", evaluated.get(numArgs - 1));
                 if (a instanceof StringVariable || b instanceof StringVariable) {
-                    throw new GenerationException("Unsupported string expression.");
+                    throw new MindcodeException("Unsupported string expression.");
                 }
                 Variable result = DoubleVariable.newNullValue(false, "result");
                 eval.execute(result, a, b);
@@ -162,7 +163,7 @@ public class ConstantExpressionEvaluator {
             Variable a = variableFromNode("a", evaluateInner(node.getExpression()));
             if (a != null) {
                 if (a instanceof StringVariable) {
-                    throw new GenerationException("Unsupported string expression.");
+                    throw new MindcodeException("Unsupported string expression.");
                 }
                 Variable b = DoubleVariable.newNullValue(false, "result");
                 Variable result = DoubleVariable.newNullValue(false, "result");

@@ -35,15 +35,16 @@ public class SchemacodeCompiler {
      * @return Top node of parsed AST tree
      */
     static DefinitionsContext parseSchematics(String definition, Consumer<CompilerMessage> messageListener) {
+        ErrorListener errorListener = new ErrorListener(messageListener);
+
         final SchemacodeLexer lexer = new SchemacodeLexer(CharStreams.fromString(definition));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errorListener);
+
         final SchemacodeParser parser = new SchemacodeParser(new BufferedTokenStream(lexer));
         parser.removeErrorListeners();
-        parser.addErrorListener(new BaseErrorListener() {
-            @Override
-            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-                messageListener.accept(SchemacodeMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
-            }
-        });
+        parser.addErrorListener(errorListener);
+
         return parser.definitions();
     }
 
@@ -91,5 +92,24 @@ public class SchemacodeCompiler {
 
     private static boolean hasErrors(List<CompilerMessage> messages) {
         return messages.stream().anyMatch(CompilerMessage::isError);
+    }
+
+
+    private static class ErrorListener extends BaseErrorListener {
+        private final Consumer<CompilerMessage> messageListener;
+
+        public ErrorListener(Consumer<CompilerMessage> messageListener) {
+            this.messageListener = messageListener;
+        }
+
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+                String msg, RecognitionException e) {
+            if (offendingSymbol == null) {
+                messageListener.accept(SchemacodeMessage.error("Syntax error on line " + line + ":" + charPositionInLine + ": " + msg));
+            } else {
+                messageListener.accept(SchemacodeMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
+            }
+        }
     }
 }

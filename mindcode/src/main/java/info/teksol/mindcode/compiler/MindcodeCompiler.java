@@ -44,6 +44,9 @@ public class MindcodeCompiler implements Compiler<String> {
         try {
             long parseStart = System.nanoTime();
             final Seq program = parse(sourceCode);
+            if (messages.stream().anyMatch(CompilerMessage::isError)) {
+                return new CompilerOutput<>("", messages);
+            }
             printParseTree(program);
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
@@ -76,11 +79,11 @@ public class MindcodeCompiler implements Compiler<String> {
             result = LogicInstructionLabelResolver.resolve(instructionProcessor, result);
 
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             if (profile.isPrintStackTrace()) {
                 e.printStackTrace();
             }
-            messages.add(MindcodeMessage.error(e.getMessage()));
+            messages.add(MindcodeMessage.error("Error while compiling source code."));
         }
 
         return new CompilerOutput<>(instructions, messages);
@@ -91,6 +94,8 @@ public class MindcodeCompiler implements Compiler<String> {
      */
     private Seq parse(String sourceCode) {
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceCode));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errorListener);
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
@@ -150,7 +155,11 @@ public class MindcodeCompiler implements Compiler<String> {
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                 String msg, RecognitionException e) {
-            errors.add(MindcodeMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
+            if (offendingSymbol == null) {
+                errors.add(MindcodeMessage.error("Syntax error on line " + line + ":" + charPositionInLine + ": " + msg));
+            } else {
+                errors.add(MindcodeMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 import org.junit.jupiter.api.Assertions;
@@ -45,8 +46,8 @@ public class ReturnStackTest {
 
     @Test
     void rejectsProvidingValuesOnEmptyStack() {
-        Assertions.assertThrows(GenerationException.class, returnStack::getReturnLabel);
-        Assertions.assertThrows(GenerationException.class, returnStack::getReturnValue);
+        Assertions.assertThrows(MindcodeException.class, returnStack::getReturnLabel);
+        Assertions.assertThrows(MindcodeException.class, returnStack::getReturnValue);
     }
 
     @Test

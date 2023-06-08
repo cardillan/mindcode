@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.mimex.Icons;
 import org.junit.jupiter.api.Test;
@@ -55,19 +56,19 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesVariableBasedConstant() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("a = 10  const A = a"));
     }
 
     @Test
     void refusesNondeterministicConstant() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("const A = rand(10)"));
     }
 
     @Test
     void refusesFunctionBasedConstant() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         def foo() 5 end
                         const A = foo()
@@ -78,7 +79,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesMlogIncompatibleConstants() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("const A = 10**40"));
     }
 
@@ -147,7 +148,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesInvalidStringOperation() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         a = "A" - "B"
                         print(a)
@@ -158,7 +159,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesPartialStringConcatenation() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         a = "A" + B
                         print(a)
@@ -169,7 +170,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesStringFunction() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         a = max("A", "B")
                         print(a)
@@ -180,7 +181,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesPartialStringFunction() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         a = max("A", 0)
                         print(a)
@@ -191,7 +192,7 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
 
     @Test
     void refusesUnaryStringFunction() {
-        assertThrows(GenerationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         a = not "A"
                         print(a)

@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicParameter;
 import info.teksol.mindcode.logic.LogicValue;
@@ -45,7 +45,7 @@ public class OpInstruction extends BaseInstruction implements LogicResultInstruc
         if (getArg(0) instanceof Operation op) {
             return op;
         } else {
-            throw new GenerationException(getArg(0) + " is not an operation.");
+            throw new MindcodeInternalError(getArg(0) + " is not an operation.");
         }
     }
 

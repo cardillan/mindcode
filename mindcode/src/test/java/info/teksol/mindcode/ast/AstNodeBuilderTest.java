@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
 import info.teksol.mindcode.AbstractAstTest;
+import info.teksol.mindcode.MindcodeException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -486,7 +487,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void rejectsHeapUsageWhenUnallocated() {
-        assertThrows(UnallocatedHeapException.class, () -> translateToAst("$dx = 1"));
+        assertThrows(MindcodeException.class, () -> translateToAst("$dx = 1"));
     }
 
     @Test
@@ -870,7 +871,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
 
     @Test
     void rejectsDualStackAllocation() {
-        assertThrows(StackAlreadyAllocatedException.class, () ->
+        assertThrows(MindcodeException.class, () ->
                 translateToAst("allocate stack in cell1[0...64], stack in cell2[0...512]")
         );
     }

@@ -1,6 +1,6 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.MindcodeInternalError;
 
 public enum Condition implements LogicArgument {
     EQUAL("equal", "=="),
@@ -46,7 +46,7 @@ public enum Condition implements LogicArgument {
             case GREATER_THAN_EQ -> LESS_THAN;
             case LESS_THAN_EQ -> GREATER_THAN;
             case GREATER_THAN -> LESS_THAN_EQ;
-            default -> throw new GenerationException(this + " has no inverse.");
+            default -> throw new MindcodeInternalError(this + " has no inverse.");
         };
     }
 }

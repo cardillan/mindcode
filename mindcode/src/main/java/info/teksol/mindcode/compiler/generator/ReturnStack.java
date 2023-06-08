@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 
@@ -28,7 +29,7 @@ public class ReturnStack {
 
     LogicLabel getReturnLabel() {
         if (stack.isEmpty()) {
-            throw new GenerationException("return  statement outside of a function.");
+            throw new MindcodeException("return statement outside of a function.");
         }
 
         return stack.peek().label;
@@ -36,7 +37,7 @@ public class ReturnStack {
 
     LogicVariable getReturnValue() {
         if (stack.isEmpty()) {
-            throw new GenerationException("return  statement outside of a function.");
+            throw new MindcodeException("return statement outside of a function.");
         }
 
         return stack.peek().retval;

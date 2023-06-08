@@ -2,7 +2,18 @@ package info.teksol.mindcode.compiler;
 
 import org.intellij.lang.annotations.PrintFormat;
 
+import java.util.Objects;
+
 public record MindcodeMessage(MessageLevel level, String message) implements CompilerMessage {
+
+    public MindcodeMessage {
+        if (message == null) {
+            System.out.println("Ha!");
+        }
+
+        Objects.requireNonNull(level);
+        Objects.requireNonNull(message);
+    }
 
     public static MindcodeMessage error(String message) {
         return new MindcodeMessage(MessageLevel.ERROR, message);

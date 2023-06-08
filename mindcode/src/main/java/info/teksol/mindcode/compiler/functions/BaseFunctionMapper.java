@@ -1,8 +1,9 @@
 package info.teksol.mindcode.compiler.functions;
 
+import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.MindcodeMessage;
-import info.teksol.mindcode.compiler.generator.GenerationException;
 import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -103,7 +104,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         if (arg instanceof LogicVariable lv) {
             return LogicKeyword.create(lv.getName());
         } else {
-            throw new GenerationException("Unexpected type of argument " + arg);
+            throw new MindcodeInternalError("Unexpected type of argument " + arg);
         }
     }
 
@@ -225,7 +226,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         protected void checkArguments(List<LogicValue> arguments) {
             if (arguments.size() != numArgs) {
-                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of arguments (expected "
+                throw new MindcodeException("Function '" + name + "': wrong number of arguments (expected "
                         + numArgs + ", found " + arguments.size() + ")");
             }
         }
@@ -283,7 +284,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                         // Block name cannot be used as output argument
                         LogicArgument argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            throw new GenerationException("Using variable " + argument + " in function " + name
+                            throw new MindcodeException("Using argument " + argument + " in a call to function " + name
                                     + " not allowed (name reserved for linked blocks)");
                         }
                         ixArgs.add(argument);
@@ -471,7 +472,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             case STATUS -> switch (opcodeVariant.namedParameters().get(0).name()) {
                     case "true"  -> "clearStatus";
                     case "false" -> "applyStatus";
-                    default      -> throw new GenerationException("Don't know function name of " + opcodeVariant);
+                    default      -> throw new MindcodeInternalError("Opcode variant " + opcodeVariant + " not mapped to a function.");
                 };
             default     -> selector == null ? opcodeVariant.opcode().toString() : selector.name();
         };
@@ -529,7 +530,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         protected void checkArguments(List<LogicValue> arguments) {
             if (arguments.size() < minArgs || arguments.size() > numArgs) {
                 String args = (minArgs == numArgs) ? String.valueOf(numArgs) : minArgs + " to " + numArgs;
-                throw new WrongNumberOfParametersException("Function '" + name + "': wrong number of arguments (expected "
+                throw new MindcodeException("Function '" + name + "': wrong number of arguments (expected "
                         + args + ", found " + arguments.size() + ")");
             }
         }
@@ -598,7 +599,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                         // Block name cannot be used as output argument
                         LogicValue argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            throw new GenerationException("Using variable " + argument + " in function " + name
+                            throw new MindcodeException("Using argument " + argument + " in a call to function " + name
                                     + " not allowed (name reserved for linked blocks)");
                         }
                         ixArgs.add(argument);
@@ -658,7 +659,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
             FunctionHandler handler = functions.get(toKeywordOptional(arguments.get(0)).getKeyword());
             if (handler == null) {
-                throw new UnhandledFunctionVariantException("Unhandled type of " + getOpcode() + " in " + arguments);
+                throw new MindcodeException("Unhandled type of " + getOpcode() + " in " + arguments);
             }
             return handler.handleFunction(program, arguments);
         }

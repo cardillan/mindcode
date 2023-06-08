@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import org.antlr.v4.runtime.Token;
@@ -21,7 +21,7 @@ public class NumericValue extends ConstantAstNode {
 
     public String getLiteral(InstructionProcessor instructionProcessor) {
         return instructionProcessor.mlogFormat(value).orElseThrow(
-                () -> new GenerationException("Numeric literal " + value + " cannot be represented in Mindustry Logic."));
+                () -> new MindcodeException("Numeric literal '" + value + "' does not have a valid mlog representation."));
     }
 
     /**

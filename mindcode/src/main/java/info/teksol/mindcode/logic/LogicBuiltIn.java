@@ -1,6 +1,6 @@
 package info.teksol.mindcode.logic;
 
-import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.MindcodeException;
 
 import java.util.Objects;
 import java.util.Set;
@@ -16,7 +16,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
         super(ArgumentType.BUILT_IN);
         this.name = Objects.requireNonNull(name);
         if (name.startsWith("@")) {
-            throw new GenerationException("Do not specify '@' at the beginning of property name " + name);
+            throw new MindcodeException("Unexpected '@' at the beginning of property name " + name);
         }
     }
 

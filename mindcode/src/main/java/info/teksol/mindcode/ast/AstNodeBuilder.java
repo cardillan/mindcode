@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.ParsingException;
+import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 
@@ -222,7 +223,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
             } else if (ctx.funcall().obj.var_ref() != null) {
                 target = visit(ctx.funcall().obj.var_ref());
             } else {
-                throw new ParsingException("Failed to parse function call on a property access at " + ctx.getText());
+                throw new MindcodeInternalError("Failed to parse function call on a property access at " + ctx.getText());
             }
 
             return new Control(ctx.getStart(),
@@ -292,7 +293,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     private void allocateStack(MindcodeParser.Alloc_listContext ctx) {
         if (allocatedStack != null) {
-            throw new StackAlreadyAllocatedException("Only one stack can be allocated, found a second declaration in " + ctx.getText());
+            throw new MindcodeException("Multiple stack declaration in " + ctx.getText());
         }
 
         final String name = ctx.id().getText();
@@ -305,7 +306,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     private void allocateHeap(MindcodeParser.Alloc_listContext ctx) {
         if (allocatedHeap != null) {
-            throw new HeapAlreadyAllocatedException("Only one heap/stack can be allocated, found a second declaration in " + ctx.getText());
+            throw new MindcodeException("Multiple stack/heap allocations in " + ctx.getText());
         }
 
         final String name = ctx.id().getText();
@@ -333,7 +334,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitGlobal_ref(MindcodeParser.Global_refContext ctx) {
         if (allocatedHeap == null) {
-            throw new UnallocatedHeapException("The heap must be allocated before using it in " + ctx.getText());
+            throw new MindcodeException("The heap must be allocated before using it in " + ctx.getText());
         }
 
         final String name = ctx.name.getText();
@@ -361,7 +362,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         } else if (ctx.unit_ref() != null) {
             target = visit(ctx.unit_ref());
         } else {
-            throw new ParsingException("Expected var ref or unit ref in " + ctx.getText());
+            throw new MindcodeInternalError("Expected var ref or unit ref in " + ctx.getText());
         }
 
         return new PropertyAccess(ctx.getStart(), target, new Ref(ctx.getStart(), ctx.prop.getText()));
@@ -497,7 +498,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         } else if (ctx.ELSE() != null) {
             return ctx.false_branch == null ? new Seq(ctx.getStart(), new NoOp()) : visit(ctx.false_branch);
         } else {
-            throw new ParsingException("Unhandled if/elsif/else; neither ELSIF nor ELSE were true in " + ctx.getText());
+            throw new MindcodeException("Unhandled if/elsif/else; neither ELSIF nor ELSE were true in " + ctx.getText());
         }
     }
 

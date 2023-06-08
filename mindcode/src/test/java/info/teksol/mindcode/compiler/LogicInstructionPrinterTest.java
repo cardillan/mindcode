@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.compiler.functions.WrongNumberOfParametersException;
+import info.teksol.mindcode.MindcodeException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +48,8 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
 
     @Test
     void realLifeScripts1() {
-        assertThrows(WrongNumberOfParametersException.class, () ->
+        // TODO trigger the wrong number of arguments error more specifically
+        assertThrows(MindcodeException.class, () ->
                 LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
                                 instructionProcessor,

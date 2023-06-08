@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.EndInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -85,7 +86,7 @@ class PropagateJumpTargets extends BaseOptimizer {
     private LogicLabel evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
         int target = firstInstructionIndex(in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
         if (target < 0) {
-            throw new OptimizationException("Could not find label " + label);
+            throw new MindcodeInternalError("Could not find label " + label);
         }
 
         // Find next real instruction

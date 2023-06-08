@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.ArrayDeque;
@@ -19,7 +20,7 @@ public class LoopStack {
     void enterLoop(String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
         if (loopLabel != null) {
             if (continueMap.containsKey(loopLabel)) {
-                throw new GenerationException("Loop label " + loopLabel + " already in use");
+                throw new MindcodeException("Loop label '" + loopLabel + "' already in use.");
             }
             continueMap.put(loopLabel, continueLabel);
             breakMap.put(loopLabel, breakLabel);
@@ -38,7 +39,7 @@ public class LoopStack {
 
     private LogicLabel getLabel(String loopLabel, Deque<LogicLabel> stack, Map<String, LogicLabel> map, String statement) {
         if (stack.isEmpty()) {
-            throw new GenerationException(statement + " statement outside of a do/while/for loop.");
+            throw new MindcodeException(statement + " statement outside of a do/while/for loop.");
         }
 
         if (loopLabel == null) {
@@ -46,7 +47,7 @@ public class LoopStack {
         } else {
             LogicLabel label = map.get(loopLabel);
             if (label == null) {
-                throw new GenerationException("Undefined label " + loopLabel);
+                throw new MindcodeException("Undefined label '" + loopLabel + "'.");
             }
             return label;
         }

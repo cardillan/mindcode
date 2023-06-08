@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.compiler.generator.GenerationException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
@@ -38,7 +38,7 @@ public class JumpInstruction extends BaseInstruction {
 
     public JumpInstruction invert() {
         if (!isInvertible()) {
-            throw new GenerationException("Jump is not invertible. " + this);
+            throw new MindcodeInternalError("Jump is not invertible. " + this);
         }
         return new JumpInstruction(getAstContext(),
                 List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams());

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
@@ -789,7 +790,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesToDeclareRecursiveFunctionsWhenNoStackAround() {
-        assertThrows(MissingStackException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         def foo
                             foo()
@@ -802,7 +803,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesMisplacedStackAllocation() {
-        assertThrows(MisplacedStackAllocationException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         while true
                           allocate stack in cell1
@@ -814,7 +815,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesRecursiveInlineFunctions() {
-        assertThrows(InlineRecursiveFunctionException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         allocate stack in cell1
                         inline def foo(n)
@@ -828,7 +829,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesUppercaseFunctionParameter() {
-        assertThrows(InvalidParameterNameException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         def foo(N)
                             N
@@ -841,7 +842,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
 
     @Test
     void refusesBlockNameAsFunctionParameter() {
-        assertThrows(InvalidParameterNameException.class,
+        assertThrows(MindcodeException.class,
                 () -> generateInstructions("""
                         def foo(switch1)
                             switch1

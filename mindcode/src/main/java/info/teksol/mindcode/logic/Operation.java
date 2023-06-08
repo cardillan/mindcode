@@ -1,7 +1,7 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.compiler.generator.GenerationException;
 
 import java.util.List;
 import java.util.Map;
@@ -117,7 +117,7 @@ public enum Operation implements LogicArgument {
             case GREATER_THAN_EQ -> LESS_THAN;
             case LESS_THAN_EQ -> GREATER_THAN;
             case GREATER_THAN -> LESS_THAN_EQ;
-            default -> throw new GenerationException(this + " has no inverse.");
+            default -> throw new MindcodeInternalError(this + " has no inverse.");
         };
     }
     

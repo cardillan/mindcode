@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.generator;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.ControlBlockAstNode;
 import info.teksol.mindcode.ast.FunctionCall;
@@ -54,14 +55,14 @@ public class CallGraphCreator  {
 
     private void validateFunction(InstructionProcessor instructionProcessor, Function function) {
         if (function.isInline() && function.isRecursive()) {
-            throw new InlineRecursiveFunctionException("Recursive function declared inline: " + function.getName());
+            throw new MindcodeException("Recursive function declared inline: " + function.getName());
         }
 
         function.getParams().stream()
                 .map(VarRef::getName)
                 .filter(instructionProcessor::isBlockName)
                 .forEach(name -> { 
-                    throw new InvalidParameterNameException("Function " + function.getName()
+                    throw new MindcodeException("Function " + function.getName()
                         + " has parameter named " + name + "; this name is reserved for linked blocks");
                 });
 
@@ -69,7 +70,7 @@ public class CallGraphCreator  {
                 .map(VarRef::getName)
                 .filter(instructionProcessor::isGlobalName)
                 .forEach(name -> {
-                    throw new InvalidParameterNameException("Function " + function.getName()
+                    throw new MindcodeException("Function " + function.getName()
                         + " has parameter named " + name + "; this name denotes global variable");
                 });
     }
@@ -92,7 +93,7 @@ public class CallGraphCreator  {
 
     private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {
         if (functions.containsKey(functionDeclaration.getName())) {
-            throw new GenerationException("Multiple declarations of function " + functionDeclaration.getName());
+            throw new MindcodeException("Multiple declarations of function " + functionDeclaration.getName());
         }
         functions.put(functionDeclaration.getName(), functionDeclaration);
         callMap.put(functionDeclaration.getName(), new ArrayList<>());
@@ -104,11 +105,11 @@ public class CallGraphCreator  {
 
     private void  visitStackAllocation(StackAllocation node) {
         if (allocatedStack != null) {
-            throw new GenerationException("Found a second stack allocation in " + node);
+            throw new MindcodeException("Multiple stack allocations in " + node);
         }
 
         if (encounteredNodes.stream().anyMatch(n -> n instanceof ControlBlockAstNode)) {
-            throw new MisplacedStackAllocationException(
+            throw new MindcodeException(
                     "Stack allocation must not be preceded by a control statement or a function call.");
         }
 

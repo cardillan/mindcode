@@ -81,16 +81,16 @@ class SamplesTest {
     }
 
     private void compile(String source, File file) throws IOException {
+        final List<String> errors = new ArrayList<>();
+        ErrorListener errorListener = new ErrorListener(errors);
+
         final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(source));
+        lexer.removeErrorListeners();
+        lexer.addErrorListener(errorListener);
+
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         parser.removeErrorListeners();
-        final List<String> errors = new ArrayList<>();
-        parser.addErrorListener(new BaseErrorListener() {
-            @Override
-            public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-                errors.add("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg);
-            }
-        });
+        parser.addErrorListener(errorListener);
 
         final MindcodeParser.ProgramContext context = parser.program();
         final Seq program = AstNodeBuilder.generate(context);
@@ -125,5 +125,23 @@ class SamplesTest {
         final String opcodes = LogicInstructionPrinter.toString(instructionProcessor, result);
         assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + source);
         assertTrue(errors.isEmpty(), errors.toString());
+    }
+
+    private static class ErrorListener extends BaseErrorListener {
+        private final List<String> errors;
+
+        public ErrorListener(List<String> errors) {
+            this.errors = errors;
+        }
+
+        @Override
+        public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+                String msg, RecognitionException e) {
+            if (offendingSymbol == null) {
+                errors.add("Syntax error on line " + line + ":" + charPositionInLine + ": " + msg);
+            } else {
+                errors.add("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg);
+            }
+        }
     }
 }
