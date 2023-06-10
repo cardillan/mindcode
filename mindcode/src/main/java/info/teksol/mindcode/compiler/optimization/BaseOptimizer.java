@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
 
 import java.util.ArrayList;
@@ -374,7 +375,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * Outside jumps are generated as a result of break, continue or return statements.
      *
      * @param codeBlock code block to inspect
-     * @return true if the code block exits though its last instruction.
+     * @return true if the code block always exits though its last instruction.
      */
     protected boolean isContained(List<LogicInstruction> codeBlock) {
         Set<LogicLabel> localLabels = codeBlock.stream()
@@ -386,10 +387,22 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         // No end/return instructions
         // All jump/goto instructions from this context must target only local labels
         return codeBlock.stream()
-                .noneMatch(ix -> ix instanceof ReturnInstruction || ix instanceof EndInstruction)
+                .noneMatch(ix -> ix instanceof ReturnInstruction ||
+                        ix instanceof EndInstruction && !ix.getAstContext().matches(AstSubcontextType.END))
                 && codeBlock.stream()
                 .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
                 .allMatch(ix -> getPossibleTargetLabels(ix).allMatch(localLabels::contains));
+    }
+
+    /**
+     * Determines whether the given code block is contained, meaning it doesn't contain jumps outside.
+     * Outside jumps are generated as a result of break, continue or return statements.
+     *
+     * @param logicList code block to inspect
+     * @return true if the code block always exits though its last instruction.
+     */
+    protected boolean isContained(LogicList logicList) {
+        return isContained(logicList.instructions);
     }
 
     private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
@@ -518,6 +531,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     protected void replaceInstruction(LogicInstruction original, LogicInstruction replaced) {
         replaceInstruction(existingInstructionIndex(original), replaced);
     }
+
+    protected void replaceInstructionArguments(LogicInstruction instruction, List<LogicArgument> newArgs) {
+        replaceInstruction(instruction,  replaceArgs(instruction, newArgs));
+    }
+
 
     /**
      * Removes an existing instruction from the program. If the instruction isn't found, an exception is thrown.
@@ -825,6 +843,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //</editor-fold>
 
     //<editor-fold desc="Finding contexts">
+    protected AstContext getRootContext() {
+        return rootContext;
+    }
+
     protected boolean hasSubcontexts(AstContext context, AstSubcontextType... types) {
         if (context.children().size() == types.length) {
             for (int i = 0; i < types.length; i++) {
@@ -886,28 +908,28 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //<editor-fold desc="Finding instructions by context">
     protected LogicList contextInstructions(AstContext astContext) {
         return astContext == null ? EMPTY :
-                new LogicList(astContext, List.copyOf(instructionStream().filter(ix -> ix.matchesContext(astContext)).toList()));
+                new LogicList(astContext, List.copyOf(instructionStream().filter(ix -> ix.belongsTo(astContext)).toList()));
     }
 
     protected Stream<LogicInstruction> contextStream(AstContext astContext) {
-        return astContext == null ? Stream.empty() : instructionStream().filter(ix -> ix.matchesContext(astContext));
+        return astContext == null ? Stream.empty() : instructionStream().filter(ix -> ix.belongsTo(astContext));
     }
 
     protected LogicInstruction firstInstruction(AstContext astContext) {
-        return firstInstruction(ix -> ix.matchesContext(astContext));
+        return firstInstruction(ix -> ix.belongsTo(astContext));
     }
 
     protected LogicInstruction lastInstruction(AstContext astContext) {
-        return lastInstruction(ix -> ix.matchesContext(astContext));
+        return lastInstruction(ix -> ix.belongsTo(astContext));
     }
 
 
     protected LogicInstruction instructionBefore(AstContext astContext) {
-        return instructionAt(firstInstructionIndex(ix -> ix.matchesContext(astContext)) - 1);
+        return instructionAt(firstInstructionIndex(ix -> ix.belongsTo(astContext)) - 1);
     }
 
     protected LogicInstruction instructionAfter(AstContext astContext) {
-        return instructionAt(lastInstructionIndex(ix -> ix.matchesContext(astContext)) + 1);
+        return instructionAt(lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1);
     }
     //</editor-fold>
 

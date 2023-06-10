@@ -1,6 +1,8 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -13,6 +15,7 @@ public final class AstContext {
     private static final AtomicInteger counter = new AtomicInteger();
     public final int id;
 
+    private final String functionPrefix;
     private final int level;
     private final AstNode node;
     private final AstContextType contextType;
@@ -21,9 +24,10 @@ public final class AstContext {
     private final double weight;
     private final List<AstContext> children;
 
-    private AstContext(int level, AstNode node, AstContextType contextType, AstSubcontextType subcontextType,
-            AstContext parent, double weight, List<AstContext> children) {
+    private AstContext(String functionPrefix, int level, AstNode node, AstContextType contextType,
+            AstSubcontextType subcontextType, AstContext parent, double weight, List<AstContext> children) {
         this.id = counter.getAndIncrement();
+        this.functionPrefix = functionPrefix;
         this.level = level;
         this.node = node;
         this.contextType = contextType;
@@ -33,32 +37,36 @@ public final class AstContext {
         this.children = children;
     }
 
-    public AstContext(int level, AstNode node, AstContextType contextType, AstSubcontextType subcontextType,
-            AstContext parent, double weight) {
-        this(level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
+    public AstContext(String functionPrefix, int level, AstNode node, AstContextType contextType,
+            AstSubcontextType subcontextType, AstContext parent, double weight) {
+        this(functionPrefix, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
     }
 
     public static AstContext createRootNode() {
-        return new AstContext(0, null, AstContextType.ROOT, AstSubcontextType.BASIC,
-                null, 1.0);
+        return new AstContext(null, 0, null, AstContextType.ROOT,
+                AstSubcontextType.BASIC, null, 1.0);
     }
 
     public AstContext createChild(AstNode node, AstContextType contextType) {
-        AstContext child = new AstContext(level + 1, node, contextType, node.getSubcontextType(),
+        AstContext child = new AstContext(functionPrefix, level + 1, node, contextType, node.getSubcontextType(),
+                this, weight);
+        children.add(child);
+
+        return child;
+    }
+
+    public AstContext createFunctionDeclaration(String functionPrefix, AstNode node, AstContextType contextType) {
+        AstContext child = new AstContext(functionPrefix, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);
         return child;
     }
 
     public AstContext createSubcontext(AstSubcontextType subcontextType, double multiplier) {
-        AstContext child = new AstContext(level, node, contextType, subcontextType,
+        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType,
                 this, weight * multiplier);
         children.add(child);
         return child;
-    }
-
-    public AstContext createCopy() {
-        return new AstContext(level, node, contextType, subcontextType, parent, weight);
     }
 
     public Map<AstContext, AstContext> createDeepCopy() {
@@ -68,7 +76,7 @@ public final class AstContext {
     }
 
     private AstContext createDeepCopy(Map<AstContext, AstContext> map, AstContext parent) {
-        AstContext copy = new AstContext(level, node, contextType, subcontextType, parent, weight);
+        AstContext copy = new AstContext(functionPrefix, level, node, contextType, subcontextType, parent, weight);
         children.stream()
                 .map(c -> c.createDeepCopy(map, copy))
                 .forEachOrdered(copy.children::add);
@@ -77,18 +85,41 @@ public final class AstContext {
     }
 
     /**
-     * This context matches another context when they're the same instance, or when this context is a direct child of
-     * the other context.
+     * This context belongs to another context when they're the same instance, or when this context is a direct child
+     * of the other context.
      *
      * @param other context to match
-     * @return true if this context matches the other context
+     * @return true if this context belongs to the other context
      */
-    public boolean matches(AstContext other) {
-        return this == other || (parent != null && parent.matches(other));
+    public boolean belongsTo(AstContext other) {
+        return this == other || (parent != null && parent.belongsTo(other));
     }
 
     public boolean matches(AstContextType contextType, AstSubcontextType subcontextType) {
         return this.contextType == contextType && this.subcontextType == subcontextType;
+    }
+
+    public boolean matches(AstSubcontextType subcontextType) {
+        return this.subcontextType == subcontextType;
+    }
+
+    public boolean matchesRecursively(AstSubcontextType... subcontextTypes) {
+        for (AstSubcontextType subcontextType : subcontextTypes) {
+            if (matches(subcontextType)) {
+                return true;
+            }
+        }
+        return parent != null && parent.matchesRecursively(subcontextTypes);
+    }
+
+    /**
+     * Determines whether a local variable belongs to the same function as this context.
+     *
+     * @param variable variable to inspect
+     * @return true if the variable belongs to the same function as this context
+     */
+    public boolean isLocalVariable(LogicVariable variable) {
+        return variable.getType() == ArgumentType.LOCAL_VARIABLE && Objects.equals(functionPrefix, variable.getFunctionPrefix());
     }
 
     public AstContext findContextOfType(AstContextType contextType) {
@@ -116,6 +147,18 @@ public final class AstContext {
         return found;
     }
 
+    public AstContext findMatchingChild(AstContext descendant) {
+        AstContext current = descendant;
+        while (current != null) {
+            if (current.parent == this) {
+                return current;
+            }
+            current = current.parent;
+        }
+
+        return null;
+    }
+
     public AstContext findSubcontext(AstSubcontextType type) {
         for (AstContext child : children) {
             if (child.node == node && child.subcontextType == type) {
@@ -134,10 +177,10 @@ public final class AstContext {
         return "AstContext{" +
                 "id=" + id +
                 ", level=" + level +
-                ", node=" + node +
                 ", contextType=" + contextType +
                 ", subcontextType=" + subcontextType +
                 ", weight=" + weight +
+                ", node=" + node +
                 '}';
     }
 
@@ -147,6 +190,10 @@ public final class AstContext {
 
     public AstNode node() {
         return node;
+    }
+
+    public String functionPrefix() {
+        return functionPrefix;
     }
 
     public AstContextType contextType() {
@@ -182,7 +229,7 @@ public final class AstContext {
                 Objects.equals(this.node, that.node) &&
                 Objects.equals(this.contextType, that.contextType) &&
                 Objects.equals(this.subcontextType, that.subcontextType) &&
-                Objects.equals(this.parent, that.parent) &&
+                this.parent == that.parent &&
                 Double.doubleToLongBits(this.weight) == Double.doubleToLongBits(that.weight) &&
                 Objects.equals(this.children, that.children);
     }

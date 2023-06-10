@@ -13,11 +13,9 @@ In recent releases, significant changes were made to the way code optimization w
 have been introduced to Mindcode compiler. I'll be glad to hear about anything strange you encounter (both in the 
 web application and when using the command line compiler). Please open a new issue when you encounter anything strange.
 
-Before that, [Schemacode](doc/syntax/SCHEMACODE.markdown), a schematic definition language with a Schematics
-builder and decompiler were added. Using these tools it is possible to convert existing schematic into a readable, 
-human editable text representation which can be compiled back into Mindustry schematic after modifications. The 
-flagship feature of the Schematics Builder is its ability to compile Mindcode and assign it to processors in the 
-schematic on the fly, saving a lot of hassle with maintaining schematics based on Mindcode programs.     
+The latest significant enhancement is the
+[Data flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could
+remove user defined variables from compiled code - see the documentation for details.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
 

@@ -123,7 +123,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
     }
 
     @Test
-    void completelyRemovesDeadcode() {
+    void completelyRemovesDeadCode() {
         assertCompilesTo("""
                         n = 1
                         n = 1
@@ -158,7 +158,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
         );
     }
 
-    private String extractWarnings(List<CompilerMessage> messages) {
+    protected String extractWarnings(List<CompilerMessage> messages) {
         return messages.stream()
                 .filter(CompilerMessage::isWarning)
                 .map(CompilerMessage::message)

@@ -172,4 +172,28 @@ public class ProcessorTest extends AbstractProcessorTest {
                 "10"
         );
     }
+
+    @Test
+    void executesLoopsInConditions() {
+        testCode("""
+                        inline def sum(n)
+                            c = 0
+                            for i in 0 ... n
+                                c += i
+                            end
+                            print(c)
+                            return c
+                        end
+
+                        result = if sum(4) < sum(8)
+                            print("Less")
+                            0
+                        else
+                            1
+                        end
+                        print(result)
+                        """,
+                "6", "28", "Less", "0"
+        );
+    }
 }

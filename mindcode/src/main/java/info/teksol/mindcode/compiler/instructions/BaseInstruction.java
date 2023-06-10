@@ -123,8 +123,8 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     @Override
-    public boolean matchesContext(AstContext astContext) {
-        return this.astContext.matches(astContext);
+    public boolean belongsTo(AstContext astContext) {
+        return this.astContext.belongsTo(astContext);
     }
 
     public AstContext findContextOfType(AstContextType contextType) {

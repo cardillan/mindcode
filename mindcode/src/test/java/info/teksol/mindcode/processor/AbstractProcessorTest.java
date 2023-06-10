@@ -52,7 +52,13 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
 
     @Override
     protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.BASIC);
+        CompilerProfile profile = super.createCompilerProfile();
+        profile.setAllOptimizationLevels(OptimizationLevel.AGGRESSIVE);
+        // Do not remove end instructions
+        profile.setOptimizationLevel(Optimization.JUMP_TARGET_PROPAGATION, OptimizationLevel.BASIC);
+        // Do not merge constants in print statements
+        profile.setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.BASIC);
+        return profile;
     }
 
     protected List<LogicInstruction> compile(String code) {

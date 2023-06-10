@@ -69,6 +69,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return name;
     }
 
+    public String getFunctionPrefix() {
+        return functionPrefix;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -76,6 +80,20 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     @Override
     public String toMlog() {
         return functionPrefix != null ? functionPrefix + "_" + name : name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LogicVariable that = (LogicVariable) o;
+        return Objects.equals(fullName, that.fullName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), fullName);
     }
 
     @Override

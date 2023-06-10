@@ -109,11 +109,10 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         pos = x + y
                         move(40, pos)
                         """,
-                createInstruction(SET, "x", "41"),
-                createInstruction(SET, "y", "72"),
-                createInstruction(OP, "add", "pos", "x", "y"),
+                createInstruction(OP, "add", "pos", "41", "72"),
                 createInstruction(UCONTROL, "move", "40", "pos"),
                 createInstruction(END)
+
         );
     }
 
@@ -123,8 +122,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         addr_FLAG = 0
                         conveyor1.enabled = cell1[addr_FLAG] == 0
                         """,
-                createInstruction(SET, "addr_FLAG", "0"),
-                createInstruction(READ, var(0), "cell1", "addr_FLAG"),
+                createInstruction(READ, var(0), "cell1", "0"),
                 createInstruction(OP, "equal", var(1), var(0), "0"),
                 createInstruction(CONTROL, "enabled", "conveyor1", var(1)),
                 createInstruction(END)
@@ -219,10 +217,9 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         stop()
                         """,
                 createInstruction(SET, "desired", "@dagger"),
-                createInstruction(SET, "boosting", "false"),
                 createInstruction(UCONTROL, "payTake", "desired"),
                 createInstruction(UCONTROL, "payDrop"),
-                createInstruction(UCONTROL, "boost", "boosting"),
+                createInstruction(UCONTROL, "boost", "false"),
                 createInstruction(UCONTROL, "idle"),
                 createInstruction(UCONTROL, "stop"),
                 createInstruction(END)
@@ -237,12 +234,9 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         print("\\nx: ", x)
                         print("\\nx+x: ", x+x)
                         """,
-                createInstruction(SET, "x", "1"),
-                createInstruction(PRINT, "\"\\nx: \""),
-                createInstruction(PRINT, "x"),
-                createInstruction(OP, "add", var(3), "x", "x"),
-                createInstruction(PRINT, "\"\\nx+x: \""),
-                createInstruction(PRINT, var(3)),
+                createInstruction(OP, "add", var(0), "1", "1"),
+                createInstruction(PRINT, q("\nx: 1\nx+x: ")),
+                createInstruction(PRINT, var(0)),
                 createInstruction(END)
         );
     }
@@ -296,10 +290,8 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         Result = ~TestVar
                         print(TestVar, "\\n", Result)
                         """,
-                createInstruction(SET, "TestVar", "0xf"),
-                createInstruction(OP, "not", "Result", "TestVar"),
-                createInstruction(PRINT, "TestVar"),
-                createInstruction(PRINT, "\"\\n\""),
+                createInstruction(OP, "not", "Result", "0xf"),
+                createInstruction(PRINT, q("15\n")),
                 createInstruction(PRINT, "Result"),
                 createInstruction(END)
         );
@@ -327,30 +319,28 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(SET, "result", "1"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_c", "0"),
-                createInstruction(SET, var(1), "4"),
                 createInstruction(SET, "__fn0_i", "0"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(JUMP, var(1004), "greaterThanEq", "__fn0_i", var(1)),
+                createInstruction(JUMP, var(1004), "greaterThanEq", "0", "4"),
                 createInstruction(LABEL, var(1012)),
                 createInstruction(READ, var(2), "cell1", "__fn0_i"),
                 createInstruction(OP, "add", "__fn0_c", "__fn0_c", var(2)),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
-                createInstruction(JUMP, var(1012), "lessThan", "__fn0_i", var(1)),
+                createInstruction(JUMP, var(1012), "lessThan", "__fn0_i", "4"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(SET, "__fn1_c", "0"),
-                createInstruction(SET, var(5), "8"),
                 createInstruction(SET, "__fn1_i", "0"),
                 createInstruction(LABEL, var(1007)),
-                createInstruction(JUMP, var(1009), "greaterThanEq", "__fn1_i", var(5)),
+                createInstruction(JUMP, var(1009), "greaterThanEq", "0", "8"),
                 createInstruction(LABEL, var(1013)),
                 createInstruction(READ, var(6), "cell1", "__fn1_i"),
                 createInstruction(OP, "add", "__fn1_c", "__fn1_c", var(6)),
                 createInstruction(LABEL, var(1008)),
                 createInstruction(OP, "add", "__fn1_i", "__fn1_i", "1"),
-                createInstruction(JUMP, var(1013), "lessThan", "__fn1_i", var(5)),
+                createInstruction(JUMP, var(1013), "lessThan", "__fn1_i", "8"),
                 createInstruction(LABEL, var(1009)),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(JUMP, var(1011), "greaterThanEq", "__fn0_c", "__fn1_c"),

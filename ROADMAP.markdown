@@ -2,29 +2,25 @@
 
 This documents servers as a scratch pad to track ideas and possible enhancements to Mindcode.
 
-## In progress
+## Current priorities
 
-I hope to include these in next release(s).
-
-* Replace markers with specific GotoLabel virtual instruction
-* An initial implementation of Common subexpression optimization. Will avoid implementing optimizations for handling 
-  obvious optimization candidates for specific cases.
-* Create much more processor tests - unit tests based on executing compiled code and comparing the output. They're 
-  extremely useful at detecting bugs caused by unforeseen interference of different optimizers.
+* Constant folding.
+* Common subexpression optimization.
+* Multiple-passes optimization.
+* Moving invariant code out of loops/if branches.
+* Loop unrolling (starts to being possible with data flow analysis).
+* Creating additional processor tests - unit tests based on executing compiled code and comparing the output.
+  They're extremely useful at detecting bugs caused by unforeseen interference of different optimizers. Some graph 
+  algorithms perhaps?
     
 ## Intense contemplation
 
-### Common subexpression optimization
+### Constant folding and common subexpression optimization
 
-Still hazy. Notes so far:
-
-* Will be implemented through control flow graph analysis
-  * AST context structure might provide sufficient CFG representation; if not, a CFG will be built from it.  
-  * Information about possible variable values will be gathered.
-  * All operations will be evaluated using constrained mode (the operation takes two constrained variable in and 
-    produces constrained output)
-  * Recursive constrained-value expression evaluation will be used for expressions inside a loop. The constraints 
-    will reflect possibility of repeating the operation indefinitely.
+* Will be implemented through data flow analysis:
+  * Instructions with constant arguments will be evaluated at compile time.
+  * VariableState will be expanded to contain not just known constant variable values, but also subexpressions. A 
+    proper way to represent the subexpressions must be found. 
 * Will probably require multi-pass optimizations
   * Some optimizers will only be run once after all passes (e.g. jump threading)
   * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
@@ -33,18 +29,18 @@ Still hazy. Notes so far:
   * We should be able to at least partially evaluate expressions over variables with known constraints (such as 
     "non-negative", "less than x", "integer", and so on). 
   * Elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`.
-* Known constraints on variable values will allow better expression optimization, especially with booleans
+* Known constraints on variable values will allow better expression optimization, especially with booleans.
 
 ### Short-circuit boolean evaluation
 
-* The `and` and `or` operators will be subject to short-circuiting. All other, including `&&` and `||`, are always 
-evaluated fully.
+* The `and` and `or` operators will be subject to short-circuiting. All other, including `&&` and `||`, will always 
+be evaluated fully.
 * Short-circuiting will be done by the compiler. Optimizers will look for opportunities to avoid short-circuiting 
   for smaller or faster code.
 * Short-circuiting will never be removed for:
   * Instructions which affect the world, (e.g. `print`, `draw`, `ucontrol`  etc. - it is necessary to keep track of 
     which opcodes do affect the world.)
-  * Useful (as determined by CSE data flow analysis) assignments to variables.
+  * Useful (as determined by data flow analysis) assignments to variables.
 
 ### Optimizing code for speed 
 
@@ -74,11 +70,11 @@ loop optimizations they might be very useful - and not so slow.
   * No pointers to arrays
   * Random access will be realized as an out-of-line function
     * Compute function address from index (address = 2 * index + offset)
-    * For Writes: set value to be written to a variable
+    * For Writes: set value to be written to a transfer variable
     * Make the call (set return address + jump)
       * Perform read/write and jump back
     * For reads: the read value is stored in a transfer variable
-  * Access to a constant index will be identical to accessing a normal variable
+  * Accessing an array item at constant index will be identical to accessing a normal variable
   * Array access will be realized as a virtual instruction and resolved in the instruction resolution step
     * If future common subexpression optimization finds out an index is constant, the instruction is resolved to
       constant index access naturally
@@ -89,7 +85,7 @@ loop optimizations they might be very useful - and not so slow.
   * Full loop unrolling for static loops 
   * For dynamic loops:
     * If the loop variable is used solely to access the array, transform the loop from loop over indexes to loop 
-      over function access arrays
+      over function access pointers
     * If the variable is dual-use, but simple iteration, use shadow variable for array access
     * Loop unrolling still possible, just with jump-out tests after each iteration
 * For each syntax over arrays
@@ -127,9 +123,9 @@ Things being pondered on from time to time.
 end
 ```
 
-Compiles code within the code block applying certain compiler options (e.g. goal) to it. Some compiler options 
-(target, optimization) will remain global and won't be available in `#use`. The intended purpose is to provide means 
-to compile different parts of code for size or speed.
+Compiles code within the code block applying certain compiler options (e.g. `goal`) to it. Some compiler options 
+(`target`, `optimization`) will remain global and won't be available in `#use`. The intended purpose is to provide 
+means to compile different parts of code for size or speed.
 
 ### Code generation / optimization
 

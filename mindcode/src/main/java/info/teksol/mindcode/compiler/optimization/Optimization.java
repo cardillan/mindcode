@@ -45,9 +45,13 @@ public enum Optimization {
             LoopOptimizer::new,
             "improving loops"),
 
-    IF_EXPRESSION_OPTIMIZATION           ('b', "If Expression Optimization",
+    IF_EXPRESSION_OPTIMIZATION          ('b', "If Expression Optimization",
             IfExpressionOptimizer::new,
             "improving ternary/if expressions"),
+
+    DATA_FLOW_OPTIMIZATION              ('g', "Data Flow Optimization",
+            DataFlowOptimizer::new,
+            "improving variable assignments and and expressions"),
 
     JUMP_TARGET_PROPAGATION             ('t', "Jump Threading",
             PropagateJumpTargets::new,

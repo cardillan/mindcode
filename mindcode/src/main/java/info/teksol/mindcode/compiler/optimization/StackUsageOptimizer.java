@@ -94,7 +94,7 @@ public class StackUsageOptimizer extends BaseOptimizer {
                     // Remove instructions from the function
                     function.stream()
                             .filter(in -> in instanceof PushOrPopInstruction ix &&
-                                    ix.getAstContext().matches(call.getAstContext()) &&
+                                    ix.getAstContext().belongsTo(call.getAstContext()) &&
                                     !preserveVariables.contains(ix.getVariable()))
                             .forEachOrdered(this::removeInstruction);
                 }

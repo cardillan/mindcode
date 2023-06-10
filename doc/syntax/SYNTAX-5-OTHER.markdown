@@ -112,25 +112,26 @@ Not all optimizations support the `aggressive` level. For those the level `aggre
 The complete list of available optimizations, including the option name for setting the level of given optimization
 and availability of the aggressive optimization level is:
 
-| Optimization                                                    | Option name                   | Aggressive |
-|-----------------------------------------------------------------|-------------------------------|:----------:|
-| [Jump normalization](#jump-normalization)                       | jump-normalization            |     N      |
-| [Dead code elimination](#dead-code-elimination)                 | dead-code-elimination         |     Y      |
-| [Single step elimination](#single-step-elimination)             | single-step-elimination       |     N      |
-| [Temporary inputs elimination](#temporary-inputs-elimination)   | input-temp-elimination        |     N      |
-| [Temporary outputs elimination](#temporary-outputs-elimination) | output-temp-elimination       |     N      |
-| [Expression optimization](#expression-optimization)             | expression-optimization       |     N      |
-| [Case expression optimization](#case-expression-optimization)   | case-expression-optimization  |     N      |
-| [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization     |     N      |
-| [Jump straightening](#jump-straightening)                       | jump-straightening            |     N      |
-| [Loop optimization](#loop-optimization)                         | loop-optimization             |     Y      |
-| [If expression optimization](#if-expression-optimization)       | if-expression-optimization    |     N      |
-| [Jump threading](#jump-threading)                               | jump-threading                |     Y      |
-| [Unreachable code elimination](#unreachable-code-elimination)   | unreachable-code-elimination  |     Y      |
-| [Stack optimization](#stack-optimization)                       | stack-optimization            |     N      |
-| [Function call optimization](#function-call-optimization)       | function-call-optimization    |     N      |
-| [Return value optimization](#return-value-optimization)         | return-value-optimization     |     N      |
-| [Print merging](#print-merging)                                 | print-merging                 |     Y      |
+| Optimization                                                    | Option name                  | Aggressive |
+|-----------------------------------------------------------------|------------------------------|:----------:|
+| [Jump normalization](#jump-normalization)                       | jump-normalization           |     N      |
+| [Dead code elimination](#dead-code-elimination)                 | dead-code-elimination        |     Y      |
+| [Single step elimination](#single-step-elimination)             | single-step-elimination      |     N      |
+| [Temporary inputs elimination](#temporary-inputs-elimination)   | input-temp-elimination       |     N      |
+| [Temporary outputs elimination](#temporary-outputs-elimination) | output-temp-elimination      |     N      |
+| [Expression optimization](#expression-optimization)             | expression-optimization      |     N      |
+| [Case expression optimization](#case-expression-optimization)   | case-expression-optimization |     N      |
+| [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization    |     N      |
+| [Jump straightening](#jump-straightening)                       | jump-straightening           |     N      |
+| [Loop optimization](#loop-optimization)                         | loop-optimization            |     Y      |
+| [If expression optimization](#if-expression-optimization)       | if-expression-optimization   |     N      |
+| [Data flow optimization](#data-flow-optimization)               | data-flow-optimization       |     Y      |
+| [Jump threading](#jump-threading)                               | jump-threading               |     Y      |
+| [Unreachable code elimination](#unreachable-code-elimination)   | unreachable-code-elimination |     Y      |
+| [Stack optimization](#stack-optimization)                       | stack-optimization           |     N      |
+| [Function call optimization](#function-call-optimization)       | function-call-optimization   |     N      |
+| [Return value optimization](#return-value-optimization)         | return-value-optimization    |     N      |
+| [Print merging](#print-merging)                                 | print-merging                |     Y      |
 
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
 deactivating it might allow you to use Mindcode until a fix is available. Partially activated optimizations
@@ -533,6 +534,98 @@ set __tmp1 __tmp3
 set y __tmp1
 end
 ```
+
+## Data flow optimization
+
+This optimization inspects the data flow in the program and removes instructions and variables (both user defined 
+and temporary) that are dispensable or have no effect on the program execution. Each individual optimizations performed 
+is described separately.
+
+At this moment, data flow optimization doesn't affect global variables at all. Furthermore, main body variables are 
+only processed when the optimization level is set to `aggressive`.
+
+This optimization inspects values of user defined variables and can make changes to the code that are only valid for 
+the particular values assigned to the affected variables in the source code. To produce compiled code where 
+changing values of some variables is possible, use global variables preferably. If you use local variables for 
+this purpose, make sure to set the optimization level for this optimizer to `basic`.   
+
+### Detection of uninitialized variables
+
+The data flow analysis reveals cases where variables might not be properly initialized, i.e. situations where a 
+value of a variable is read before it is known that some value has been written to the variable. This is not an 
+optimization, i.e. nothing is done to the uninitialized variables.
+
+Since Mindustry Logic executes the code repeatedly while preserving variable values, not initializing a variable 
+might be a valid choice. In this case, just ignore the warning, or move the entire code into an infinite loop and 
+initialize the variables before that loop. For example,
+
+```
+count += 1
+print(count)
+printflush(message1)
+```
+
+can be rewritten to
+
+```
+count = 0
+while true
+    count += 1
+    print(count)
+    printflush(message1)
+end
+```
+
+### Unnecessary assignment elimination
+
+All assignments to local and temporary variables are inspected and unnecessary assignments are removed. The 
+assignment is unnecessary if the variable is not read after being assigned, or if it is not read before another 
+assignment to the variable is made:
+
+```
+a = rand(10)
+a = rand(20)
+print(a)
+a = rand(30)
+```
+
+compiles to:
+
+```
+op rand a 20 0
+print a
+end
+```
+
+The first assignment to `a` is removed, because `a` is not read before another value is assigned to it. The last
+assignment to `a` is removed, because `a` is not read after that assignment at all.
+
+An assignment can also become unnecessary due to constant propagation.
+
+### Constant propagation
+
+When a variable is used in an instruction and the value of the variable is known to be constant value, the variable 
+itself is replaced by the constant value. This can in turn make the original assignment unnecessary. See for example:
+
+```
+a = 10
+b = 20
+c = b + 30
+printf("$a, $b, $c.")
+```
+
+with `aggressive` optimization produces
+
+```
+op add c 20 30
+print "10, 20, "
+print c
+print "."
+end
+```
+
+Note: the `op add c 20 30` instruction could be also eliminated, since the operation could be evaluated at compile 
+time. This particular optimization (called "constant folding") will be added in future releases. 
 
 ## Jump threading
 

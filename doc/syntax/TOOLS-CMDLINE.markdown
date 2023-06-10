@@ -76,11 +76,11 @@ Actions:
 usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
                 [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
-                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--function-call-optimization LEVEL]
-                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-p {0..2}] [-d {0..3}]
-                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
+                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--function-call-optimization LEVEL] [--return-value-optimization LEVEL]
+                [--input-temp-elimination LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}]
+                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a mindcode source file into text mlog file.
 
@@ -131,6 +131,8 @@ optimization levels:
                          optimization level of improving loops
   --if-expression-optimization LEVEL
                          optimization level of improving ternary/if expressions
+  --data-flow-optimization LEVEL
+                         optimization level of improving variable assignments and and expressions
   --jump-threading LEVEL
                          optimization level of eliminating chained jumps
   --unreachable-code-elimination LEVEL
@@ -162,11 +164,11 @@ debug output options:
 usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
                 [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
-                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--function-call-optimization LEVEL]
-                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-p {0..2}] [-d {0..3}]
-                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
+                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--function-call-optimization LEVEL] [--return-value-optimization LEVEL]
+                [--input-temp-elimination LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}]
+                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
 
 Compile a schema definition file into binary msch file.
 
@@ -218,6 +220,8 @@ optimization levels:
                          optimization level of improving loops
   --if-expression-optimization LEVEL
                          optimization level of improving ternary/if expressions
+  --data-flow-optimization LEVEL
+                         optimization level of improving variable assignments and and expressions
   --jump-threading LEVEL
                          optimization level of eliminating chained jumps
   --unreachable-code-elimination LEVEL

@@ -38,10 +38,10 @@ class OutputTempEliminator extends BaseOptimizer {
             while (itCurr.hasNext()) {
                 LogicInstruction current = itCurr.next();
                 LogicInstruction previous = itPrev.next();
-                if (current instanceof SetInstruction ix && ix.getValue().isTemporaryVariable()) {
-                    LogicArgument value = ix.getValue();
+                if (current instanceof SetInstruction set && set.getValue().isTemporaryVariable()) {
+                    LogicArgument value = set.getValue();
                     List<LogicInstruction> list = instructions(
-                            in -> in.getArgs().contains(value) && !(in instanceof PushOrPopInstruction));
+                            ix -> ix.getArgs().contains(value) && !(ix instanceof PushOrPopInstruction));
 
                     // Not exactly two instructions, or the previous instruction doesn't produce the tmp variable
                     if (list.size() == 2 && list.get(0) == previous) {
@@ -53,7 +53,7 @@ class OutputTempEliminator extends BaseOptimizer {
                         if (replacesOutputArg) {
                             // The current instruction merely transfers a value from the output argument of the previous instruction
                             // Replacing those arguments with target of the set instruction
-                            itPrev.set(replaceAllArgs(previous, value, ix.getResult()));
+                            itPrev.set(replaceAllArgs(previous, value, set.getResult()).withContext(set.getAstContext()));
                             itCurr.remove();
 
                             // We just removed instruction *after* itPref cursor, but we need itPref to sync with itCurr

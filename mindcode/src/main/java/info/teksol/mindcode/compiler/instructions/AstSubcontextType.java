@@ -4,12 +4,18 @@ public enum AstSubcontextType {
     /** Nonspecific context. */
     BASIC           ("    "),
 
+    /** System generated END instruction */
+    END             ("END "),
+
     /**
      * Sequence of statements, with a single entry point and (mostly) single exit point.
      * Break, continue and return might jump out of the block, use {@code BaseOptimizer.isContained}
      * to detect these cases.
      */
     BODY            ("BODY"),
+
+    /** The else branch of a case statement. Like a body, but must be handled specifically by expression optimizers. */
+    ELSE            ("ELSE"),
 
     /** The condition in if, loop, when or similar structures. Contains code for the entire expression. */
     CONDITION       ("COND"),

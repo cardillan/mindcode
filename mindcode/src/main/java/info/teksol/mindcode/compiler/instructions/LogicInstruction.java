@@ -46,7 +46,7 @@ public interface LogicInstruction {
 
     LogicInstruction withContext(AstContext astContext);
 
-    boolean matchesContext(AstContext astContext);
+    boolean belongsTo(AstContext astContext);
 
     AstContext findContextOfType(AstContextType contextType);
 

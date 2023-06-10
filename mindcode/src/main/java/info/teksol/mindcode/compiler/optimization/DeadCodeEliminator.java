@@ -45,6 +45,7 @@ class DeadCodeEliminator extends BaseOptimizer {
         
         String uninitialized = reads.stream()
                 .filter(s -> s.getType() != ArgumentType.BLOCK && !writes.containsKey(s))
+                .filter(LogicVariable::isGlobalVariable)        // Non-global variables are handled by Data Flow Optimization
                 .map(LogicVariable::getFullName)
                 .sorted()
                 .distinct()

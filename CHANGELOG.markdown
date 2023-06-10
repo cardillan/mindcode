@@ -2,7 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-06-11
+
+### Added
+
+* Added [Data flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could 
+  remove user defined variables from compiled code - see the documentation for details. 
 
 ### Fixed
 
@@ -30,9 +35,9 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added [If expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#if-expression-optimization). In some cases 
-  only decreases the number of instructions by rearranging them, in other cases can decrease number of executed 
-  instructions. Only if/ternary expressions containing both true and false branch are affected. 
+* Added [If expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#if-expression-optimization). Sometimes 
+  it only decreases the number of instructions by rearranging them, in other cases it can decrease number of executed 
+  instructions. Only ternary expressions and if statements containing both true and false branch are affected. 
 
 ### Fixed
 

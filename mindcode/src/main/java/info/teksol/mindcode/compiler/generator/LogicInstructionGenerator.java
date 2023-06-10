@@ -41,9 +41,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private static final int INFINITE_LOOP_REPETITIONS = 25;    // Estimated number of repetitions for infinite loops
 
     private final CompilerProfile profile;
-    // The version-dependent functionality is encapsulated in InstructionProcessor and FunctionMapper.
-    // If future Mindustry versions offer more capabilities (such as native stack support),
-    // even LogicInstructionGenerator might be made version dependent.
     private final Consumer<CompilerMessage> messageConsumer;
     private final InstructionProcessor instructionProcessor;
     private final FunctionMapper functionMapper;
@@ -126,6 +123,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
+    private void enterFunctionAstNode(String functionPrefix, AstNode node) {
+        astContext = astContext.createFunctionDeclaration(functionPrefix, node, node.getContextType());
+    }
+
     private void exitAstNode(AstNode node) {
         if (node.getContextType() != AstContextType.NONE) {
             if (astContext.subcontextType() != node.getSubcontextType() || astContext.node() != node) {
@@ -136,7 +137,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private void setSubcontextType(AstSubcontextType subcontextType, double multiplier) {
-        if (astContext.subcontextType() != AstSubcontextType.BASIC) {
+        if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
             clearSubcontextType();
         }
         astContext = astContext.createSubcontext(subcontextType, multiplier);
@@ -316,15 +317,21 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         constants.put(name, value.toLogicLiteral(instructionProcessor));
     }
 
-    private void appendFunctionDeclarations() {
+    private void emitEnd() {
+        setSubcontextType(AstSubcontextType.END, 1.0);
         emit(createEnd());
+        clearSubcontextType();
+    }
+
+    private void appendFunctionDeclarations() {
+        emitEnd();
 
         for (Function function : callGraph.getFunctions()) {
             if (function.isInline() || !function.isUsed()) {
                 continue;
             }
 
-            enterAstNode(function.getDeclaration());
+            enterFunctionAstNode(function.getLocalPrefix(), function.getDeclaration());
             currentFunction = function;
             localPrefix = function.getLocalPrefix();
             functionContext = new LocalContext();
@@ -337,7 +344,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 appendStacklessFunctionDeclaration(function);
             }
 
-            emit(createEnd());
+            emitEnd();
             exitAstNode(function.getDeclaration());
 
             localPrefix = "";
@@ -767,27 +774,30 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitRangedForExpression(RangedForExpression node) {
+        final AstNode lowerBound = expressionEvaluator.evaluate(node.getRange().getFirstValue());
+        final AstNode upperBound = expressionEvaluator.evaluate(node.getRange().getLastValue());
+
+        int multiplier = lowerBound instanceof LogicValue lowerValue && lowerValue.isNumericLiteral()
+                && upperBound instanceof LogicValue upperValue && upperValue.isNumericLiteral()
+                ? (int) (upperValue.getDoubleValue() - lowerValue.getDoubleValue()) : LOOP_REPETITIONS;
+
+        setSubcontextType(AstSubcontextType.INIT, multiplier);
         final LogicVariable variable = visitVariable(node.getVariable());
 
         // Encapsulate both: they're evaluated just here and not propagated anywhere
-        final LogicValue lowerBound = nodeContext.encapsulate(() -> visit(node.getRange().getFirstValue()));
-        final LogicValue upperBound = nodeContext.encapsulate(() -> visit(node.getRange().getLastValue()));
-
-        int multiplier = lowerBound.isNumericLiteral() && upperBound.isNumericLiteral()
-                ? (int) (upperBound.getDoubleValue() - lowerBound.getDoubleValue()) : LOOP_REPETITIONS;
-
-        setSubcontextType(AstSubcontextType.INIT, multiplier);
+        final LogicValue lowerValue = nodeContext.encapsulate(() -> visit(node.getRange().getFirstValue()));
+        final LogicValue upperValue = nodeContext.encapsulate(() -> visit(node.getRange().getLastValue()));
 
         LogicValue fixedUpperBound;
-        if (upperBound.isLiteral()) {
-            fixedUpperBound = upperBound;
+        if (upperValue.isLiteral()) {
+            fixedUpperBound = upperValue;
         } else {
             LogicVariable tmp = nextProtectedTemp();
-            emit(createSet(tmp, upperBound));
+            emit(createSet(tmp, upperValue));
             fixedUpperBound = tmp;
         }
 
-        emit(createSet(variable, lowerBound));
+        emit(createSet(variable, lowerValue));
 
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
@@ -1014,9 +1024,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         final double multiplier = 1.0 / node.getAlternatives().size();
         int remain = node.getAlternatives().size();
+        setSubcontextType(AstSubcontextType.INIT, 1.0);
         final LogicValue caseValue = visit(node.getCondition());
         for (final CaseAlternative alternative : node.getAlternatives()) {
-            enterAstNode(alternative);
             setSubcontextType(AstSubcontextType.CONDITION, multiplier * remain--);
 
             final LogicLabel nextAlt = nextLabel();         // Next alternative
@@ -1056,10 +1066,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emit(createJumpUnconditional(exitLabel));
             emit(createLabel(nextAlt));
             clearSubcontextType();
-            exitAstNode(alternative);
         }
 
-        setSubcontextType(AstSubcontextType.BODY, multiplier);
+        setSubcontextType(AstSubcontextType.ELSE, multiplier);
         final LogicValue elseBranch = visit(node.getElseBranch());
         emit(createSet(resultVar, elseBranch));
         setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);

@@ -73,6 +73,14 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return arguments.stream().map(LogicArgument::toMlog).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    protected String extractWarnings(List<CompilerMessage> messages) {
+        return messages.stream()
+                .filter(CompilerMessage::isWarning)
+                .map(CompilerMessage::message)
+                .map(String::trim)
+                .collect(Collectors.joining("\n"));
+    }
+
     // Configuration
 
     protected ProcessorVersion getProcessorVersion() {

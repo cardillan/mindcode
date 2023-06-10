@@ -38,7 +38,7 @@ public class LogicInstructionPrinter {
         instructions.forEach((instruction) -> {
             LinkedList<AstContext> unroll = new LinkedList<>();
             for (AstContext ctx = instruction.getAstContext(); ctx != null; ctx = ctx.parent()) {
-                if (ctx.subcontextType() == AstSubcontextType.BASIC) {
+                if (ctx.subcontextType() == (ctx.node() == null ?  AstSubcontextType.BASIC : ctx.node().getSubcontextType())) {
                     unroll.addFirst(ctx);
                 }
             }
