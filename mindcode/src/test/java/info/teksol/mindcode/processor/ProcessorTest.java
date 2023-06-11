@@ -196,4 +196,17 @@ public class ProcessorTest extends AbstractProcessorTest {
                 "6", "28", "Less", "0"
         );
     }
+
+    @Test
+    void executesExpressionWithVariableAssignments() {
+        // The preferred output might be "3", "4": see #96
+        testCode("""
+                        a = 1
+                        print(a + (a += 1))
+                        b = 1
+                        print((b += 1) + b)
+                        """,
+                "4", "4"
+        );
+    }
 }
