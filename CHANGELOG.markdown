@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 * Fixed some syntax errors in source programs not being properly reported. Some syntax errors were ignored, others 
   might have caused unhandled exceptions in the web or command line application. When a syntax error occurs, 
   partially generated code is no longer displayed in the web application.      
+* Fixed compiler not producing any code when optimizations were switched off.
 
 ## 2023-06-08
 

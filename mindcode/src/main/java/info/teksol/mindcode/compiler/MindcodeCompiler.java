@@ -57,9 +57,11 @@ public class MindcodeCompiler implements Compiler<String> {
             long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
 
             long optimizeStart = System.nanoTime();
-            List<LogicInstruction> result = List.of();
+            List<LogicInstruction> result;
             if (profile.optimizationsActive() && generated.instructions().size() > 1) {
                 result = optimize(generated);
+            } else {
+                result = generated.instructions();
             }
             long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
