@@ -13,6 +13,7 @@ import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 
 import java.util.List;
@@ -146,18 +147,20 @@ public class LoopOptimizer extends BaseOptimizer {
         return size == 0 || goal == GenerationGoal.SPEED && size <= 3;
     }
 
+    // TODO Move to a utility class for expression evaluation shared among optimizers
     private boolean alwaysNegative(JumpInstruction jump) {
-        if (jump.getX().isNumericLiteral() && jump.getY().isNumericLiteral()) {
-            double a = jump.getX().getDoubleValue();
-            double b = jump.getY().getDoubleValue();
+        if (jump.getX() instanceof LogicLiteral xLiteral && xLiteral.isNumericLiteral()
+                && jump.getY() instanceof LogicLiteral yLiteral && yLiteral.isNumericLiteral()) {
+            double x = xLiteral.getDoubleValue();
+            double y = yLiteral.getDoubleValue();
             boolean value = switch (jump.getCondition()) {
                 case ALWAYS             -> true;
-                case EQUAL,STRICT_EQUAL -> ExpressionEvaluator.equals(a, b);
-                case NOT_EQUAL          -> !ExpressionEvaluator.equals(a, b);
-                case GREATER_THAN       -> a > b;
-                case GREATER_THAN_EQ    -> a >= b;
-                case LESS_THAN          -> a < b;
-                case LESS_THAN_EQ       -> a <= b;
+                case EQUAL,STRICT_EQUAL -> ExpressionEvaluator.equals(x, y);
+                case NOT_EQUAL          -> !ExpressionEvaluator.equals(x, y);
+                case GREATER_THAN       -> x > y;
+                case GREATER_THAN_EQ    -> x >= y;
+                case LESS_THAN          -> x < y;
+                case LESS_THAN_EQ       -> x <= y;
             };
             return !value;
         }

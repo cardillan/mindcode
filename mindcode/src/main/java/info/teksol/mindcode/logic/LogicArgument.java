@@ -63,8 +63,4 @@ public interface LogicArgument {
     default boolean isVolatile() {
         return false;
     }
-
-    default double getDoubleValue() {
-        return Double.NaN;
-    }
 }

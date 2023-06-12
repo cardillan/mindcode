@@ -3,33 +3,33 @@ package info.teksol.mindcode.processor;
 public class DoubleVariable extends AbstractVariable {
     protected double value;
 
-    private DoubleVariable(boolean fixed, String name, MindustryObject object, ValueType valueType, double value) {
+    private DoubleVariable(boolean fixed, String name, MindustryObject object, MindustryValueType valueType, double value) {
         super(fixed, name, object, valueType);
         this.value = value;
     }
 
     public static DoubleVariable newNullValue(boolean fixed, String name) {
-        return new DoubleVariable(fixed, name, null, ValueType.NULL, 0.0);
+        return new DoubleVariable(fixed, name, null, MindustryValueType.NULL, 0.0);
     }
 
 
     public static DoubleVariable newBooleanValue(boolean fixed, String name, boolean value) {
-        return new DoubleVariable(fixed, name, null, ValueType.BOOLEAN, value ? 1.0 : 0.0);
+        return new DoubleVariable(fixed, name, null, MindustryValueType.BOOLEAN, value ? 1.0 : 0.0);
     }
 
     public static DoubleVariable newLongValue(boolean fixed, String name, long value) {
-        return new DoubleVariable(fixed, name, null, ValueType.LONG, value);
+        return new DoubleVariable(fixed, name, null, MindustryValueType.LONG, value);
     }
     public static DoubleVariable newDoubleValue(boolean fixed, String name, double value) {
-        return new DoubleVariable(fixed, name, null, ValueType.DOUBLE, value);
+        return new DoubleVariable(fixed, name, null, MindustryValueType.DOUBLE, value);
     }
 
     public static DoubleVariable newStringValue(boolean fixed, String name, String value) {
-        return new DoubleVariable(fixed, name, new MindustryObject(value, value), ValueType.OBJECT, 0.0);
+        return new DoubleVariable(fixed, name, new MindustryObject(value, value), MindustryValueType.OBJECT, 0.0);
     }
 
     public static DoubleVariable newObjectValue(boolean fixed, String name, MindustryObject value) {
-        return new DoubleVariable(fixed, name, value, ValueType.OBJECT, 0.0);
+        return new DoubleVariable(fixed, name, value, MindustryValueType.OBJECT, 0.0);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class DoubleVariable extends AbstractVariable {
         } else {
             setDoubleValue(var.getDoubleValue());
         }
-        setType(var.getType());
+        setType(var.getMindustryValueType());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DoubleVariable extends AbstractVariable {
             setObject(null);
         } else {
             this.value = value;
-            setType(ValueType.DOUBLE);
+            setType(MindustryValueType.DOUBLE);
         }
     }
 
@@ -74,7 +74,7 @@ public class DoubleVariable extends AbstractVariable {
     @Override
     public void setIntValue(int value) {
         this.value = value;
-        setType(ValueType.LONG);
+        setType(MindustryValueType.LONG);
     }
 
     @Override
@@ -85,6 +85,6 @@ public class DoubleVariable extends AbstractVariable {
     @Override
     public void setLongValue(long value) {
         this.value = value;
-        setType(ValueType.LONG);
+        setType(MindustryValueType.LONG);
     }
 }

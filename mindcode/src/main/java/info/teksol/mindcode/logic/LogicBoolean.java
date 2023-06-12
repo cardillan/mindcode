@@ -1,5 +1,7 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.mindcode.processor.MindustryValueType;
+
 public enum LogicBoolean implements LogicLiteral {
     FALSE("false"),
     TRUE("true"),
@@ -14,6 +16,26 @@ public enum LogicBoolean implements LogicLiteral {
     @Override
     public ArgumentType getType() {
         return ArgumentType.BOOLEAN_LITERAL;
+    }
+
+    @Override
+    public MindustryValueType getMindustryValueType() {
+        return MindustryValueType.BOOLEAN;
+    }
+
+    @Override
+    public double getDoubleValue() {
+        return this == TRUE ? 1.0 : 0.0;
+    }
+
+    @Override
+    public long getLongValue() {
+        return this == TRUE ? 1 : 0;
+    }
+
+    @Override
+    public Object getObject() {
+        return null;
     }
 
     @Override
@@ -33,5 +55,9 @@ public enum LogicBoolean implements LogicLiteral {
     @Override
     public String format() {
         return this == TRUE ? "1" : "0";
+    }
+
+    public static LogicBoolean get(boolean value) {
+        return value ? TRUE : FALSE;
     }
 }

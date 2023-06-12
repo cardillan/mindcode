@@ -5,13 +5,13 @@ import info.teksol.mindcode.MindcodeException;
 public class StringVariable extends AbstractVariable {
     protected String value;
 
-    private StringVariable(boolean fixed, String name, MindustryObject object, ValueType valueType, String value) {
+    private StringVariable(boolean fixed, String name, MindustryObject object, MindustryValueType valueType, String value) {
         super(fixed, name, object, valueType);
         this.value = value;
     }
 
     public static StringVariable newStringValue(boolean fixed, String name, String value) {
-        return new StringVariable(fixed, name, new MindustryObject(value, value), ValueType.OBJECT, value);
+        return new StringVariable(fixed, name, new MindustryObject(value, value), MindustryValueType.OBJECT, value);
     }
 
     public String getStringValue() {

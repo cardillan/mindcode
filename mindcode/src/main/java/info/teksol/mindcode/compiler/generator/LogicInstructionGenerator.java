@@ -777,8 +777,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final AstNode lowerBound = expressionEvaluator.evaluate(node.getRange().getFirstValue());
         final AstNode upperBound = expressionEvaluator.evaluate(node.getRange().getLastValue());
 
-        int multiplier = lowerBound instanceof LogicValue lowerValue && lowerValue.isNumericLiteral()
-                && upperBound instanceof LogicValue upperValue && upperValue.isNumericLiteral()
+        int multiplier = lowerBound instanceof LogicLiteral lowerValue && lowerValue.isNumericLiteral()
+                && upperBound instanceof LogicLiteral upperValue && upperValue.isNumericLiteral()
                 ? (int) (upperValue.getDoubleValue() - lowerValue.getDoubleValue()) : LOOP_REPETITIONS;
 
         setSubcontextType(AstSubcontextType.INIT, multiplier);

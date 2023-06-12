@@ -17,6 +17,7 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.processor.ExpressionEvaluator;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,11 +25,13 @@ import java.util.stream.Collectors;
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
 
 public class DataFlowOptimizer extends BaseOptimizer {
-
     public static final boolean DEBUG = false;
+
+    private final ExpressionValue expressionValue;
 
     public DataFlowOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
+        expressionValue = new ExpressionValue(instructionProcessor);
     }
 
     private final Map<LogicInstruction, LogicInstruction> replacements = new IdentityHashMap<>();
@@ -311,7 +314,12 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        LogicLiteral value = instruction instanceof SetInstruction set && set.getValue() instanceof LogicLiteral literal ? literal : null;
+        LogicLiteral value = switch (replacements.getOrDefault(instruction, instruction)) {
+            case SetInstruction set && set.getValue() instanceof LogicLiteral literal -> literal;
+            case OpInstruction op && op.getOperation().isDeterministic() -> evaluateOpInstruction(op);
+            default -> null;
+        };
+
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
@@ -328,12 +336,26 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 }
             }
 
-
-
             if (updated) {
                 replacements.put(instruction, replaceArgs(instruction, arguments));
             }
         }
+    }
+
+    private LogicLiteral evaluateOpInstruction(OpInstruction op) {
+        if (op.getX() instanceof LogicLiteral x && x.isNumericLiteral()) {
+            if (op.hasSecondOperand()) {
+                if (op.getY() instanceof LogicLiteral y && y.isNumericLiteral()) {
+                    ExpressionEvaluator.getOperation(op.getOperation()).execute(expressionValue, x, y);
+                    return expressionValue.getLiteral();
+                }
+            } else {
+                ExpressionEvaluator.getOperation(op.getOperation()).execute(expressionValue, x, x);
+                return expressionValue.getLiteral();
+            }
+        }
+
+        return null;
     }
 
     private boolean canEliminate(LogicVariable variable, LogicInstruction instruction) {
@@ -394,6 +416,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
     private class VariableStates {
         private final Map<LogicVariable, LogicLiteral> values;
+
         /**
          * Maps variables to a list of instructions defining its current value
          */

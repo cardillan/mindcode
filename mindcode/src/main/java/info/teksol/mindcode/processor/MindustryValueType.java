@@ -3,7 +3,7 @@ package info.teksol.mindcode.processor;
 /**
  * Possible types of Mindustry Logic expressions
  */
-public enum ValueType {
+public enum MindustryValueType {
     NULL(false),
     OBJECT(false),
     BOOLEAN(true),
@@ -13,7 +13,7 @@ public enum ValueType {
 
     private final boolean numeric;
 
-    ValueType(boolean numeric) {
+    MindustryValueType(boolean numeric) {
         this.numeric = numeric;
     }
 

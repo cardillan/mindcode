@@ -5,27 +5,20 @@ import info.teksol.mindcode.ast.AstNode;
 /**
  * Mindustry processor variable.
  */
-public interface Variable {
+public interface Variable extends MindustryValue, MindustryResult {
     String getName();
-    ValueType getType();
-    boolean isObject();
 
     void assign(Variable var);
 
     MindustryObject getObject();
+
     MindustryObject getExistingObject();
+
     void setObject(MindustryObject object);
 
-    double getDoubleValue();
-    void setDoubleValue(double value);
-
-    long getLongValue();
-    void setLongValue(long value);
-
     int getIntValue();
-    void setIntValue(int value);
 
-    void setBooleanValue(boolean value);
+    void setIntValue(int value);
 
     AstNode toAstNode();
 }

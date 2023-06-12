@@ -109,8 +109,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         pos = x + y
                         move(40, pos)
                         """,
-                createInstruction(OP, "add", "pos", "41", "72"),
-                createInstruction(UCONTROL, "move", "40", "pos"),
+                createInstruction(UCONTROL, "move", "40", "113"),
                 createInstruction(END)
 
         );
@@ -234,9 +233,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         print("\\nx: ", x)
                         print("\\nx+x: ", x+x)
                         """,
-                createInstruction(OP, "add", var(0), "1", "1"),
-                createInstruction(PRINT, q("\nx: 1\nx+x: ")),
-                createInstruction(PRINT, var(0)),
+                createInstruction(PRINT, q("\nx: 1\nx+x: 2")),
                 createInstruction(END)
         );
     }
@@ -290,9 +287,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         Result = ~TestVar
                         print(TestVar, "\\n", Result)
                         """,
-                createInstruction(OP, "not", "Result", "0xf"),
-                createInstruction(PRINT, q("15\n")),
-                createInstruction(PRINT, "Result"),
+                createInstruction(PRINT, q("15\n-16")),
                 createInstruction(END)
         );
     }

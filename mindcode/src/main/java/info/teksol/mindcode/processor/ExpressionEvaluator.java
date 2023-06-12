@@ -2,7 +2,7 @@ package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.logic.Operation;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
@@ -24,15 +24,16 @@ public class ExpressionEvaluator {
         return ARGUMENTS.getOrDefault(operation, -1);
     }
 
-    public static boolean equals(Variable a, Variable b) {
+    public static boolean equals(MindustryValue a, MindustryValue b) {
         if (a.isObject() && b.isObject()) {
             return Objects.equals(a.getObject(), b.getObject());
         } else {
             return equals(a.getDoubleValue(), b.getDoubleValue());
         }
     }
-    public static boolean strictEquals(Variable a, Variable b) {
-        return (a.getType().isNumeric() == b.getType().isNumeric()) && equals(a, b);
+
+    public static boolean strictEquals(MindustryValue a, MindustryValue b) {
+        return (a.getMindustryValueType().isNumeric() == b.getMindustryValueType().isNumeric()) && equals(a, b);
     }
 
     public static boolean equals(double a, double b) {
@@ -43,7 +44,7 @@ public class ExpressionEvaluator {
     private static final Map<Operation, Integer> ARGUMENTS = createArgumentsMap();
 
     private static Map<Operation, OperationEval> createOperationsMap() {
-        Map<Operation, OperationEval> map = new HashMap<>();
+        Map<Operation, OperationEval> map = new EnumMap<>(Operation.class);
 
         map.put(Operation.ADD,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() + b.getDoubleValue()));
         map.put(Operation.SUB,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() - b.getDoubleValue()));
@@ -93,7 +94,7 @@ public class ExpressionEvaluator {
     }
 
     private static Map<Operation, Integer> createArgumentsMap() {
-        Map<Operation, Integer> map = new HashMap<>();
+        Map<Operation, Integer> map = new EnumMap<>(Operation.class);
 
         map.put(Operation.MAX,          2);
         map.put(Operation.MIN,          2);

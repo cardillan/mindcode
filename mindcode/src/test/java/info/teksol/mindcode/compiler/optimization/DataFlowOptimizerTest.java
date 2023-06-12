@@ -47,8 +47,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         i = j + 2
                         print(i, j)
                         """,
-                createInstruction(OP, "add", "i", "15", "2"),
-                createInstruction(PRINT, "i"),
+                createInstruction(PRINT, "17"),
                 createInstruction(PRINT, "15"),
                 createInstruction(END)
         );

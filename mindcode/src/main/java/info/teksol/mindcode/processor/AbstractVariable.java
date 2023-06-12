@@ -13,10 +13,10 @@ import static info.teksol.mindcode.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;
 public abstract class AbstractVariable implements Variable {
     private final boolean fixed;
     private final String name;
-    private ValueType type;
+    private MindustryValueType type;
     private MindustryObject object;
 
-    protected AbstractVariable(boolean fixed, String name, MindustryObject object, ValueType valueType) {
+    protected AbstractVariable(boolean fixed, String name, MindustryObject object, MindustryValueType valueType) {
         this.fixed = fixed;
         this.name = name;
         this.object = object;
@@ -26,23 +26,18 @@ public abstract class AbstractVariable implements Variable {
     protected abstract String valueToString();
 
     @Override
-    public ValueType getType() {
+    public MindustryValueType getMindustryValueType() {
         return type;
     }
 
-    protected void setType(ValueType type) {
+    protected void setType(MindustryValueType type) {
         if (fixed) {
             throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot assign to fixed variable " + getName());
         }
         this.type = type;
-        if (type != ValueType.OBJECT) {
+        if (type != MindustryValueType.OBJECT) {
             object = null;
         }
-    }
-
-    @Override
-    public boolean isObject() {
-        return type == ValueType.OBJECT;
     }
 
     @Override
@@ -69,13 +64,13 @@ public abstract class AbstractVariable implements Variable {
             throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot assign to fixed variable " + getName());
         }
         this.object = object;
-        this.type = object == null ? ValueType.NULL : ValueType.OBJECT;
+        this.type = object == null ? MindustryValueType.NULL : MindustryValueType.OBJECT;
     }
 
     @Override
     public void setBooleanValue(boolean value) {
         setIntValue(value ? 1 : 0);
-        setType(ValueType.BOOLEAN);
+        setType(MindustryValueType.BOOLEAN);
     }
 
     @Override
@@ -90,7 +85,7 @@ public abstract class AbstractVariable implements Variable {
     // TODO track original token for constants
     @Override
     public AstNode toAstNode() {
-        return switch (getType()) {
+        return switch (getMindustryValueType()) {
             case NULL    -> new NullLiteral(null);
             case BOOLEAN -> new BooleanLiteral(null, getIntValue() != 0);
             case LONG    -> new NumericLiteral(null, String.valueOf(getLongValue()));

@@ -39,14 +39,14 @@ public enum Operation implements LogicArgument {
     MIN("min"),
     ANGLE("angle"),
     LEN("len"),
-    NOISE("noise"),
+    NOISE(false, "noise"),
     ABS("abs"),
     LOG("log"),
     LOG10("log10"),
     FLOOR("floor"),
     CEIL("ceil"),
     SQRT("sqrt"),
-    RAND("rand"),
+    RAND(false, "rand"),
 
     SIN("sin"),
     COS("cos"),
@@ -59,15 +59,24 @@ public enum Operation implements LogicArgument {
 
     private final String mlog;
     private final List<String> mindcode;
+    private final boolean deterministic;
 
     Operation(String mlog, String... mindcode) {
         this.mlog = mlog;
         this.mindcode = List.of(mindcode);
+        this.deterministic = true;
     }
     
     Operation(String mlog) {
         this.mlog = mlog;
         this.mindcode = List.of(mlog);
+        this.deterministic = true;
+    }
+
+    Operation(boolean deterministic, String mlog) {
+        this.mlog = mlog;
+        this.mindcode = List.of(mlog);
+        this.deterministic = deterministic;
     }
 
     public static Operation fromMindcode(String code) {
@@ -90,6 +99,10 @@ public enum Operation implements LogicArgument {
 
     public boolean isCondition() {
         return ordinal() <= STRICT_EQUAL.ordinal();
+    }
+
+    public boolean isDeterministic() {
+        return deterministic;
     }
 
     public Condition toCondition() {

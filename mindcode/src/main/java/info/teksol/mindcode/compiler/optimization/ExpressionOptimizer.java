@@ -5,6 +5,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicNumber;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
@@ -70,8 +71,8 @@ public class ExpressionOptimizer extends BaseOptimizer {
                 case DIV, IDIV -> new Tuple2<>(ix.getX(), ix.getY());
 
                 case MUL ->
-                        ix.getX().isLiteral() ? invertMultiplicand(ix.getY(), ix.getX()) :
-                        ix.getY().isLiteral() ? invertMultiplicand(ix.getX(), ix.getY()) :
+                        ix.getX().isNumericLiteral() ? invertMultiplicand(ix.getY(), ix.getX()) :
+                        ix.getY().isNumericLiteral() ? invertMultiplicand(ix.getX(), ix.getY()) :
                         null;
 
                 default -> null;
@@ -80,9 +81,8 @@ public class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private Tuple2<LogicValue, LogicValue> invertMultiplicand(LogicValue variable, LogicValue literal) {
-        // If literal.getDoubleValue() returns NaN, the NaN will make it through into the mlogFormat, which will
-        // return an empty optional.
-        double multiplicand = literal.getDoubleValue();
+        // We know literal is a NumericLiteral
+        double multiplicand = ((LogicLiteral) literal).getDoubleValue();
         double divisor = 1.0d / multiplicand;
         Optional<String> inverted = instructionProcessor.mlogFormat(divisor);
         return inverted.map(lit -> Tuple2.ofSame(variable, LogicNumber.get(lit, divisor))).orElse(null);
