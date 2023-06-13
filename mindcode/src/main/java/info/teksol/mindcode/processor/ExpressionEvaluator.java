@@ -13,16 +13,31 @@ public class ExpressionEvaluator {
         return OPERATIONS.get(operation);
     }
 
-    public static boolean isDeterministic(Operation operation) {
-        return switch (operation) {
-            case NOISE, RAND -> false;
-            default -> true;
-        };
-    }
-
     public static int getNumberOfArguments(Operation operation) {
         return ARGUMENTS.getOrDefault(operation, -1);
     }
+
+    public static void evaluatePackColor(MindustryResult target, MindustryValue r, MindustryValue g, MindustryValue b, MindustryValue a) {
+        double result = toDoubleBits(clamp(r.getDoubleValue()), clamp(g.getDoubleValue()), clamp(b.getDoubleValue()),
+                clamp(a.getDoubleValue()));
+
+        target.setDoubleValue(result);
+    }
+
+
+    private static float clamp(double value){
+        return Math.max(Math.min((float)value, 1f), 0f);
+    }
+
+    public static double toDoubleBits(float r, float g, float b, float a){
+        return Double.longBitsToDouble(rgba8888(r, g, b, a) & 0x00000000_ffffffffL);
+    }
+
+    private static int rgba8888(float r, float g, float b, float a){
+        return ((int)(r * 255) << 24) | ((int)(g * 255) << 16) | ((int)(b * 255) << 8) | (int)(a * 255);
+    }
+
+
 
     public static boolean equals(MindustryValue a, MindustryValue b) {
         if (a.isObject() && b.isObject()) {

@@ -45,6 +45,11 @@ public class LogicString extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
+    public boolean isNull() {
+        return false;
+    }
+
+    @Override
     public double getDoubleValue() {
         return 1.0;
     }

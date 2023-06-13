@@ -4,32 +4,76 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* Constant folding.
-* Common subexpression optimization.
+* Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax 
+  error reporting would be much preferable, but quite hard to implement). 
+* External variable value reuse
+  * When a value is read or written to a memory cell, store it and don't reread it if not necessary, unless the 
+    memory cell was declared `volatile`.
+  * Needs to reset stored values on possible overwrites.
+    * Tracking of possible memory block aliases (will be done globally) - all memory blocks obtained via instructions 
+      (`getlink`, `getBlock`, `ulocate`) are considered aliased (the optimizer cannot exclude the possibility 
+      they're the same block). Can be overridden by setting the memory model or individual variable to `restricted`.
+    * Tracking of possible index aliases - don't know how to do in general case, probably will just reset 
+      everything whenever any write to a memory occurs. Possible tracking of rewrites for specific constant indexes
+      (will cover external variables).
+      * If it was possible to establish that two expression values are distinct, we might utilize this knowledge and 
+        not reset the value represented by a known-to-be-distinct expression when a memory write occurs at the other 
+        expression index. We might consider expressions that differ by an integer constant distinct. 
+* Volatile values: always reread, never reuse last value
+  * Specific built-in ones (already done)
+  * All sensed properties (already done - the entire `sensor` instruction is deemed volatile)
+  * New compiler directive will allow to declare memory model for a memory block, linked block or built-in variable
+    (`#declare variable [volatile | aliased | restriced]`).
 * Multiple-passes optimization.
-* Moving invariant code out of loops/if branches.
-* Loop unrolling (starts to being possible with data flow analysis).
+  * At this point, there might already be benefits from additional passes. 
+  * Some optimizers will only be run once after all passes (e.g. jump threading)
+  * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
+    current implementation
+* Update ConditionalJumpsNormalizer to fully evaluate literal-based conditions. Data Flow optimizer can replace 
+  variables in conditional jumps with literals, allowing ConditionalJumpsNormalizer to process them.   
+* Loop unrolling - already possible and promising big returns.
+* More expression optimizations:
+  * replace addition/subtraction of 0 by assignment,
+  * replace multiplication/division by 1 by assignment,
+  * probably done by ExpressionOptimizer to avoid bloating of Data flow optimizer. Requires multiple optimization 
+    passes.
+* Pulling invariant code out of loops/if branches.
+* Pushing branch-specific code into if branches.
+* Improve data flow optimization around function calls further:
+  * inspect push/pop instructions to correctly model variable state after function call to allow more optimizations
+    take place,
+  * create specialized optimizer for replacing variables inside push (pop?) instructions where possible.
+  * create global optimizer to handle functions with constant return values. Handle specific case of function
+    always returning one of its input arguments.
+* Instruction reordering for better constant folding/subexpression optimization
+  * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
+    variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
+    user variable instead of the temporary one.
 * Creating additional processor tests - unit tests based on executing compiled code and comparing the output.
   They're extremely useful at detecting bugs caused by unforeseen interference of different optimizers. Some graph 
   algorithms perhaps?
+  * Towers of Hanoi
     
 ## Intense contemplation
 
 ### Constant folding and common subexpression optimization
 
-* Will be implemented through data flow analysis:
-  * Instructions with constant arguments will be evaluated at compile time.
-  * VariableState will be expanded to contain not just known constant variable values, but also subexpressions. A 
-    proper way to represent the subexpressions must be found. 
-* Will probably require multi-pass optimizations
-  * Some optimizers will only be run once after all passes (e.g. jump threading)
-  * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
-    current implementation
-* Constrained-value expression evaluation.
-  * We should be able to at least partially evaluate expressions over variables with known constraints (such as 
-    "non-negative", "less than x", "integer", and so on). 
-  * Elimination of useless statements, e.g. `op add x y 0`, `op mul x y 1` or `set x x`.
-* Known constraints on variable values will allow better expression optimization, especially with booleans.
+* General constant folding on expression tree, including factoring out constants from complex expressions
+  * A theory-based approach is probably needed.  
+* Global variable type inferring.
+  * More precise might be obtained through data flow analysis. This will be a start.
+  * Temporary variables are typically single-use, global type inferring might work very well for them.
+* Inferring invariants: use global analysis/data flow analysis to infer invariants
+  * Constraints on variable values inferred from conditions
+    *  "non-null", "non-negative", "less than x", "boolean", "integer"
+  * Constraints on relationships between variables
+    * Not equal/equal
+    * Less (or equal) than/greater (or equal) than
+    * Linear transformation (y = ax + b), with constant or even variable a/b.
+  * Inferred invariants will allow better expression optimization, especially with booleans
+    * Control loop variable aliasing: when a linearly transformed value of a control loop variable is used (say, for 
+      array index access) and the control loop variable has no other uses, apply the linear transformation to the 
+      loop variable, initialization code and condition.
 
 ### Short-circuit boolean evaluation
 
@@ -66,7 +110,7 @@ loop optimizations they might be very useful - and not so slow.
     * Needs fixed-size (in terms of the number of instructions) iterations. 
 * The arrays
   * Declared at fixed size
-  * Arrays, not lists - no add/remove. no inherent size
+  * Arrays, not lists - no add/remove, no inherent size
   * No pointers to arrays
   * Random access will be realized as an out-of-line function
     * Compute function address from index (address = 2 * index + offset)
@@ -85,12 +129,12 @@ loop optimizations they might be very useful - and not so slow.
   * Full loop unrolling for static loops 
   * For dynamic loops:
     * If the loop variable is used solely to access the array, transform the loop from loop over indexes to loop 
-      over function access pointers
+      over function access pointers (see also linear transformation of loop variable)
     * If the variable is dual-use, but simple iteration, use shadow variable for array access
     * Loop unrolling still possible, just with jump-out tests after each iteration
 * For each syntax over arrays
   * Possible support to modify the underlying array through the loop control variable, or specific syntax (`yield exp`)
-
+  
 * Assign hints to AST Context nodes to be used by LoginInstructionGenerator in multi-pass compilation.  
  
 ## Planned

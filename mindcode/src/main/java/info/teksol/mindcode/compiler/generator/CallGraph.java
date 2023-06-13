@@ -35,6 +35,10 @@ public final class CallGraph {
         addFunction(new FunctionDeclaration(null, true, MAIN, List.of(), new NoOp()));
     }
 
+    public static CallGraph createEmpty() {
+        return new CallGraph(null);
+    }
+
     /**
      * @return list of all existing functions
      */
@@ -69,7 +73,15 @@ public final class CallGraph {
      * @throws NullPointerException if the function doesn't exist
      */
     public Function getFunction(String name) {
-        return Objects.requireNonNull(functions.get(name));
+        return Objects.requireNonNull(functions.get(name),
+                () -> "Requested nonexistent function " + name);
+    }
+
+    public Function getFunctionByPrefix(String localPrefix) {
+        return functions.values().stream()
+                .filter(f -> localPrefix.equals(f.localPrefix))
+                .findFirst()
+                .orElseThrow();
     }
 
     /**

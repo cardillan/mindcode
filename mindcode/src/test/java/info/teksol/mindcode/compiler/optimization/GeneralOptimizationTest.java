@@ -215,8 +215,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         idle()
                         stop()
                         """,
-                createInstruction(SET, "desired", "@dagger"),
-                createInstruction(UCONTROL, "payTake", "desired"),
+                createInstruction(UCONTROL, "payTake", "@dagger"),
                 createInstruction(UCONTROL, "payDrop"),
                 createInstruction(UCONTROL, "boost", "false"),
                 createInstruction(UCONTROL, "idle"),

@@ -3,6 +3,7 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.FinalCodeOutput;
 import info.teksol.mindcode.compiler.GenerationGoal;
+import info.teksol.mindcode.compiler.MemoryModel;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -66,6 +67,13 @@ abstract class ActionHandler {
                 .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class))
                 .setDefault(defaults.getGoal());
 
+        subparser.addArgument("-m", "--memory-model")
+                .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
+                        "aliased (a memory block may be accessed through different variables), or restricted " +
+                        "(a memory block will never be accessed through different variables)")
+                .type(Arguments.caseInsensitiveEnumType(MemoryModel.class))
+                .setDefault(defaults.getMemoryModel());
+
         ArgumentGroup debug = subparser.addArgumentGroup("debug output options");
 
         debug.addArgument("-p", "--parse-tree")
@@ -112,6 +120,7 @@ abstract class ActionHandler {
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
         profile.setDebugLevel(arguments.getInt("debug_messages"));
         profile.setGoal(arguments.get("goal"));
+        profile.setMemoryModel(arguments.get("memory_model"));
         profile.setFinalCodeOutput(arguments.get("print_unresolved"));
         profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
 

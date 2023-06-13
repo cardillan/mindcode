@@ -20,7 +20,7 @@ public enum AstSubcontextType {
     /** The condition in if, loop, when or similar structures. Contains code for the entire expression. */
     CONDITION       ("COND"),
 
-    /** Jumps between blocks, or labels for these jumps. */
+    /** Jumps between blocks, or labels for such jumps. */
     FLOW_CONTROL    ("FLOW"),
 
     /** Initialization code for a control structure (only loops at this moment).  */
@@ -41,7 +41,6 @@ public enum AstSubcontextType {
      */
     SYSTEM_CALL     ("SCAL"),
 
-    /** Inlined function call. */
     INLINE_CALL     ("ICAL"),
 
     /**  Call to an out-of-line (but stackless) function. */

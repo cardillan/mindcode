@@ -9,13 +9,17 @@ The main focus of Mindcode design is two-fold:
 * Provide language constructs that are not prohibitively expensive given the astonishingly slow speeds
   and limited instruction space of Mindustry processors.
 
-In recent releases, significant changes were made to the way code optimization works. It is possible that some bugs 
-have been introduced to Mindcode compiler. I'll be glad to hear about anything strange you encounter (both in the 
-web application and when using the command line compiler). Please open a new issue when you encounter anything strange.
+## Latest enhancements
 
-The latest significant enhancement is the
-[Data flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could
-remove user defined variables from compiled code - see the documentation for details.
+The latest significant enhancements to Mindcode are
+
+* [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in 
+  Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic, 
+  either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the 
+  code (specified in Mindcode or Mindustry Logic language) and linked blocks.
+* [Data flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
+  and streamlines complex expressions, eliminates unnecessary variables and instructions, and reuses common cde 
+  fragments, significantly improving the quality of generated mlog code.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
 

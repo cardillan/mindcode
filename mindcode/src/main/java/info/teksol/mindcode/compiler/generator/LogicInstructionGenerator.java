@@ -106,7 +106,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         visit(program);
         clearSubcontextType();
         appendFunctionDeclarations();
-        return new GeneratorOutput(List.copyOf(instructions), astContext);
+        return new GeneratorOutput(callGraph, List.copyOf(instructions), astContext);
     }
 
     private void emit(LogicInstruction instruction) {
@@ -141,6 +141,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             clearSubcontextType();
         }
         astContext = astContext.createSubcontext(subcontextType, multiplier);
+    }
+
+    private void setSubcontextType(String functionPrefix, AstSubcontextType subcontextType, double multiplier) {
+        if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
+            clearSubcontextType();
+        }
+        astContext = astContext.createSubcontext(functionPrefix, subcontextType, multiplier);
     }
 
     private void clearSubcontextType() {
@@ -422,10 +429,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             if (function.isInline()) {
                 return handleInlineFunctionCall(function, arguments);
             } else if (!function.isRecursive()) {
-                setSubcontextType(AstSubcontextType.OUT_OF_LINE_CALL, 1.0);
+                setSubcontextType(function.getLocalPrefix(), AstSubcontextType.OUT_OF_LINE_CALL, 1.0);
                 return handleStacklessFunctionCall(function, arguments);
             } else {
-                setSubcontextType(AstSubcontextType.RECURSIVE_CALL, 1.0);
+                setSubcontextType(function.getLocalPrefix(), AstSubcontextType.RECURSIVE_CALL, 1.0);
                 return handleRecursiveFunctionCall(function, arguments);
             }
         } finally {
@@ -438,30 +445,28 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final Function previousFunction = currentFunction;
         final LocalContext previousContext = functionContext;
         final LoopStack previousLoopStack = loopStack;
-        try {
-            enterAstNode(function.getDeclaration(), AstContextType.INLINED_CALL);
-            currentFunction = function;
-            functionContext = new LocalContext();
-            loopStack = new LoopStack();
 
-            emit(createLabel(nextLabel()));
-            setupFunctionParameters(function, paramValues);
+        setSubcontextType(AstSubcontextType.INLINE_CALL, 1.0);
+        currentFunction = function;
+        functionContext = new LocalContext();
+        loopStack = new LoopStack();
 
-            // Retval gets registered in nodeContext, but we don't mind -- inline functions do not use stack
-            final LogicVariable returnValue = nextReturnValue();
-            final LogicLabel returnLabel = nextLabel();
-            returnStack.enterFunction(returnLabel, returnValue);
-            LogicValue result = visit(function.getBody());
-            emit(createSet(returnValue, result));
-            emit(createLabel(returnLabel));
-            returnStack.exitFunction();
-            return returnValue;
-        } finally {
-            loopStack = previousLoopStack;
-            functionContext = previousContext;
-            currentFunction = previousFunction;
-            exitAstNode(function.getDeclaration());
-        }
+        emit(createLabel(nextLabel()));
+        setupFunctionParameters(function, paramValues);
+
+        // Retval gets registered in nodeContext, but we don't mind -- inline functions do not use stack
+        final LogicVariable returnValue = nextReturnValue();
+        final LogicLabel returnLabel = nextLabel();
+        returnStack.enterFunction(returnLabel, returnValue);
+        LogicValue result = visit(function.getBody());
+        emit(createSet(returnValue, result));
+        emit(createLabel(returnLabel));
+        returnStack.exitFunction();
+
+        loopStack = previousLoopStack;
+        functionContext = previousContext;
+        currentFunction = previousFunction;
+        return returnValue;
     }
 
     private LogicValue handleStacklessFunctionCall(Function function, List<LogicValue> paramValues) {
@@ -534,9 +539,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             // Allocate 'return value' type temp variable for it, so that it won't be eliminated;
             // this is easier than ensuring optimizers do not eliminate normal temporary variables
             // that received return values from functions.
-            //
-            // TODO: optimizer to remove resultVariable when not needed (not used across same function calls).
-            //       Will be complicated; the optimizer would need to utilize the call graph
             final LogicVariable resultVariable = nextReturnValue();
             emit(createSet(resultVariable, LogicVariable.fnRetVal(localPrefix)));
             return resultVariable;

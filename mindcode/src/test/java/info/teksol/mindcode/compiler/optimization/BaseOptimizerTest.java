@@ -32,10 +32,10 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
     }
 
     private final AstContext testContext = mockAstContext.createChild(new NoOp(), AstContextType.NONE);
-    private final LogicInstruction ix0 = instructionProcessor.createInstruction(testContext, Opcode.SET, a, K0);
+    private final LogicInstruction ix0 = instructionProcessor.createInstruction(testContext, Opcode.SET, a, P0);
     private final LogicInstruction ix1 = instructionProcessor.createInstruction(testContext, Opcode.LABEL, label0);
-    private final LogicInstruction ix2 = instructionProcessor.createInstruction(testContext, Opcode.SET, c, K0);
-    private final LogicInstruction ix3 = instructionProcessor.createInstruction(testContext, Opcode.SET, d, K0);
+    private final LogicInstruction ix2 = instructionProcessor.createInstruction(testContext, Opcode.SET, c, P0);
+    private final LogicInstruction ix3 = instructionProcessor.createInstruction(testContext, Opcode.SET, d, P0);
     private final List<LogicInstruction> instructions = new ArrayList<>(List.of(ix0, ix1, ix2));
     private final DummyOptimizer test = new DummyOptimizer(instructionProcessor, instructions);
 
@@ -302,7 +302,6 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
         public DummyOptimizer(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
             super(instructionProcessor);
             setProgram(instructions);
-            setRootContext(mockAstContext);
         }
 
         @Override

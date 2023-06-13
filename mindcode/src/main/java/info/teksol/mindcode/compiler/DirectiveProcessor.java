@@ -91,13 +91,24 @@ public class DirectiveProcessor {
         }
     }
 
-    private void setGenerationGoal(CompilerProfile compilerProfile, String goal) {
-        switch (goal) {
-            case "size"     -> compilerProfile.setGoal(GenerationGoal.SIZE);
-            case "speed"    -> compilerProfile.setGoal(GenerationGoal.SPEED);
-            case "auto"     -> compilerProfile.setGoal(GenerationGoal.AUTO);
-            default         ->  error("Invalid value '%s' of compiler directive 'goal'.", goal);
+    private void setGenerationGoal(CompilerProfile compilerProfile, String strGoal) {
+        for (GenerationGoal goal : GenerationGoal.values()) {
+            if (goal.name().equalsIgnoreCase(strGoal)) {
+                compilerProfile.setGoal(goal);
+                return;
+            }
         }
+        error("Invalid value '%s' of compiler directive 'goal'.", strGoal);
+    }
+
+    private void setMemoryModel(CompilerProfile compilerProfile, String strModel) {
+        for (MemoryModel memoryModel : MemoryModel.values()) {
+            if (memoryModel.name().equalsIgnoreCase(strModel)) {
+                compilerProfile.setMemoryModel(memoryModel);
+                return;
+            }
+        }
+        error("Invalid value '%s' of compiler directive 'memory-model'.", strModel);
     }
 
     private final Map<String, BiConsumer<CompilerProfile, String>> OPTION_HANDLERS = createOptionHandlers();
@@ -108,6 +119,7 @@ public class DirectiveProcessor {
         map.put("optimization", this::setAllOptimizationsLevel);
         map.put("booleanEval", this::setShortCircuitEval);
         map.put("goal", this::setGenerationGoal);
+        map.put("memory-model", this::setMemoryModel);
         for (Optimization opt : Optimization.values()) {
             map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
         }

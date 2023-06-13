@@ -8,6 +8,12 @@ public interface LogicLiteral extends LogicValue, MindustryValue {
         return true;
     }
 
+    default boolean isConstant() {
+        return true;
+    }
+
+    boolean isNull();
+
     double getDoubleValue();
 
     String format();

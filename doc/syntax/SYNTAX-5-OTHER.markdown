@@ -43,6 +43,11 @@ The default setting at this moment is `speed`. If you're hitting the 1000 instru
 Over time, additional `speed` specific optimizations will be added, as well as an automatic process to find the best 
 balance between speed and size. 
 
+## Option `memory-model`
+
+This option has been added to support future enhancements of Mindcode. Setting the option doesn't have any effect at 
+this moment. 
+
 ## Option `optimization`
 
 Use the `optimization` option to set the optimization level of the compiler:
@@ -129,7 +134,6 @@ and availability of the aggressive optimization level is:
 | [Jump threading](#jump-threading)                               | jump-threading               |     Y      |
 | [Unreachable code elimination](#unreachable-code-elimination)   | unreachable-code-elimination |     Y      |
 | [Stack optimization](#stack-optimization)                       | stack-optimization           |     N      |
-| [Function call optimization](#function-call-optimization)       | function-call-optimization   |     N      |
 | [Return value optimization](#return-value-optimization)         | return-value-optimization    |     N      |
 | [Print merging](#print-merging)                                 | print-merging                |     Y      |
 
@@ -196,10 +200,10 @@ one doesn't target the next instruction. However, such sequences aren't typicall
 
 ## Temporary inputs elimination
 
-The compiler sometimes creates temporary variables whose only function is to pass value to another instruction.
-This optimization removes all assignments to temporary variables that are only used as arguments
-in a subsequent instruction. The `set` instruction is removed, while the other instruction is updated
-to replace the temp variable with the value used in the set statement.
+The compiler sometimes creates temporary variables whose only function is to pass value to another instruction. This 
+optimization removes all assignments to temporary variables that are only used as arguments in a subsequent 
+instruction. The `set` instruction is removed, while the other instruction is updated to replace the temp variable 
+with the value used in the set statement.
 
 The optimization is performed only when the following conditions are met:
 1. The `set` instruction assigns to a `__tmp` variable.
@@ -210,15 +214,15 @@ The optimization is performed only when the following conditions are met:
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
 are removed by the stack usage optimization down the line.
 
-Note: changes to the way unoptimized code is generated rendered this particular optimizer pretty much useless. It is 
-kept around just in case it might become useful again. 
+Note: changes to the way unoptimized code is generated rendered this particular optimizer ineffective. Furthermore, if 
+there was possible optimization, it could be done by Data flow optimizer instead.
 
 ## Temporary outputs elimination
 
-The compiler sometimes creates temporary variables whose only function is to store output value of an instruction before passing it somewhere else.
-This optimization removes all assignments to temporary variables that carry over the output value
-of the preceding instruction. The `set` instruction is removed, while the preceding instruction is updated
-to replace the temp variable with the target variable used in the set statement.
+The compiler sometimes creates temporary variables whose only function is to store output value of an instruction 
+before passing it somewhere else. This optimization removes all assignments to temporary variables that carry over 
+the output value of the preceding instruction. The `set` instruction is removed, while the preceding instruction is 
+updated to replace the temp variable with the target variable used in the set statement.
 
 The optimization is performed only when the following conditions are met:
 1. The `set` instruction assigns from a `__tmp` variable.
@@ -235,8 +239,8 @@ This optimization looks for sequences of mathematical operations that can be per
 the following optimizations are available:
 
 * `floor` function called on a multiplication by a constant or a division. Combines the two operations into one
-  integer division (`idiv`) operation. In case of multiplication, the constant operand is inverted to become the 
-  for the divisor in the `idiv` operation.
+  integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the
+  divisor in the `idiv` operation.
 
 ## Case expression optimization
 
@@ -319,9 +323,9 @@ The loop optimizers improves loops with the condition at the beginning by perfor
     since the saved jump would be spent on inverting the condition, and the code size would increase for no benefit 
     at all.  
 * If the previous optimization was done, the optimization level is set to `aggressive`, and the loop condition is 
-  known to be true before the first iteration of the loop, the jump at the front of the loop is removed. Only the 
-  simplest cases, where the loop control variable is set by an instruction immediately preceding the front jump and 
-  the jump condition compares the control variable to a constant, are handled. Many loop conditions fit these 
+  known to be true before the first iteration of the loop, the optimizer removes the jump at the front of the loop. 
+  Only the simplest cases, where the loop control variable is set by an instruction immediately preceding the front 
+  jump and the jump condition compares the control variable to a constant, are handled. Many loop conditions fit these 
   criteria though, namely all constant-range iteration loops.
 * If the loop conditions is a complex expression spanning several instructions, it can still be replicated at the 
   end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). Since this 
@@ -537,27 +541,38 @@ end
 
 ## Data flow optimization
 
-This optimization inspects the data flow in the program and removes instructions and variables (both user defined 
-and temporary) that are dispensable or have no effect on the program execution. Each individual optimizations performed 
-is described separately.
+This optimization inspects the actual data flow in the program and removes instructions and variables (both user 
+defined and temporary) that are dispensable or have no effect on the program execution. Each individual optimization 
+performed is described separately below.
 
-At this moment, data flow optimization doesn't affect global variables at all. Furthermore, main body variables are 
-only processed when the optimization level is set to `aggressive`.
+Data flow optimizations can have profound effect on the resulting code. User-defined variables can get completely 
+eliminated, and variables in expressions can get replaced by different variables that were determined to hold the 
+same value. The goal of these replacements is to allow eliminating some instructions. The optimizer doesn't try to 
+avoid variable replacements that do not lead to instruction elimination - this would make the resulting code more 
+understandable, but the optimizer would have to be more complex and therefore more prone to errors.
 
-This optimization inspects values of user defined variables and can make changes to the code that are only valid for 
-the particular values assigned to the affected variables in the source code. To produce compiled code where 
-changing values of some variables is possible, use global variables preferably. If you use local variables for 
-this purpose, make sure to set the optimization level for this optimizer to `basic`.   
+> **Note:** One of Mindcode goals is to support making small changes to the compiled code, allowing users to change 
+> crucial parameters in the compiled code without a need to recompile entire program. To this end, assignments to 
+> [global variables](SYNTAX-1-VARIABLES.markdown#global-variables) are never removed. Any changes to `set` 
+> instructions in the compiled code assigning value to global variables are fully supported and the resulting program
+> is fully functional, as if the value was assigned to the global variable in the source code itself.
+>
+> [Main variables](SYNTAX-1-VARIABLES.markdown#main-variables) are treated in the same way, unless the optimization
+> level is set to `aggressive`. In this case, main variables can be completely removed by the program, and even if
+> they stay in the compiled code, changing the value assigned to a main variable may not produce the same effect as 
+> compiling the program with the other value. In other words, changing a value assigned to main variable in the 
+> compiled code may make the program faulty.  
 
 ### Detection of uninitialized variables
 
 The data flow analysis reveals cases where variables might not be properly initialized, i.e. situations where a 
-value of a variable is read before it is known that some value has been written to the variable. This is not an 
-optimization, i.e. nothing is done to the uninitialized variables.
+value of a variable is read before it is known that some value has been written to the variable. Warnings are 
+generated for each uninitialized variable found.
 
 Since Mindustry Logic executes the code repeatedly while preserving variable values, not initializing a variable 
-might be a valid choice. In this case, just ignore the warning, or move the entire code into an infinite loop and 
-initialize the variables before that loop. For example,
+might be a valid choice, relying on the fact that all variables are assigned a value of `null` by Mindustry at the 
+beginning. If you intentionally leave a variable uninitialized, you may just ignore the warning. To avoid the 
+warning, move the entire code into an infinite loop and initialize the variables before that loop. For example:
 
 ```
 count += 1
@@ -565,7 +580,7 @@ print(count)
 printflush(message1)
 ```
 
-can be rewritten to
+can be rewritten as
 
 ```
 count = 0
@@ -576,13 +591,16 @@ while true
 end
 ```
 
+Technically, this is not an optimization, as only warnings are generated for uninitialized variables.
+
 ### Unnecessary assignment elimination
 
-All assignments to local and temporary variables are inspected and unnecessary assignments are removed. The 
-assignment is unnecessary if the variable is not read after being assigned, or if it is not read before another 
-assignment to the variable is made:
+All assignments to variables (except for global variables and main variables on `basic` level) are inspected and 
+unnecessary assignments are removed. The assignment is unnecessary if the variable is not read after being assigned, 
+or if it is not read before another assignment to the variable is made:
 
 ```
+#set optimization = aggressive
 a = rand(10)
 a = rand(20)
 print(a)
@@ -600,32 +618,137 @@ end
 The first assignment to `a` is removed, because `a` is not read before another value is assigned to it. The last
 assignment to `a` is removed, because `a` is not read after that assignment at all.
 
-An assignment can also become unnecessary due to constant propagation.
+An assignment can also become unnecessary due to other optimizations carried by this optimizer. 
 
 ### Constant propagation
 
-When a variable is used in an instruction and the value of the variable is known to be constant value, the variable 
+When a variable is used in an instruction and the value of the variable is known to be a constant value, the variable 
 itself is replaced by the constant value. This can in turn make the original assignment unnecessary. See for example:
 
 ```
+#set optimization = aggressive
 a = 10
 b = 20
-c = b + 30
+c = @tick + b
 printf("$a, $b, $c.")
 ```
 
-with `aggressive` optimization produces
+produces
 
 ```
-op add c 20 30
+op add c @tick 20
 print "10, 20, "
 print c
 print "."
 end
 ```
 
-Note: the `op add c 20 30` instruction could be also eliminated, since the operation could be evaluated at compile 
-time. This particular optimization (called "constant folding") will be added in future releases. 
+### Constant folding
+
+Constant propagation described above ensures that constant values are used instead of variables where possible. When 
+a deterministic operation is performed on constant values (such as addition by the `op add` instruction), constant 
+folding evaluates the expression and replaces the operation with the resulting value, eliminating an instruction.
+For example:
+
+```
+#set optimization = aggressive
+a = 10
+b = 20
+c = a + b
+printf("$a, $b, $c.")
+```
+
+produces
+
+```
+print "10, 20, 30."
+end
+```
+
+Looks quite spectacular, doesn't it? Here's what happened:
+
+* The optimizer figured out that variables `a` and `b` are not needed, because they only hold a constant value.
+* Then it found out the `c = a + b` expression has a constant value too.
+* What was left was a sequence of print statements, each printing a constant value.
+  [Print merging optimization](#print-merging) on `aggressive` level then merged it all together.
+
+Not every opportunity for constant folding is detected at this moment. While `x = 1 + y + 2` is optimized to
+`op add x y 3`, `x = 1 + y + z + 2` it too complex to process as this moment and the constant values of `1` and `2` 
+won't be added at compile time. 
+
+If the result of a constant expression doesn't have a valid mlog representation, the optimization is not performed. 
+In other cases, [loss of precision](SYNTAX.markdown#numeric-literals-in-mindustry-logic) might occur. 
+
+### Common subexpressions optimization
+
+The Data flow optimizer keeps track of expressions that have been evaluated. When the same expression is encountered 
+for a second (third, fourth, ...) time, the result of the last computation is reused instead of evaluating the 
+expression again. In the following code:    
+
+```
+a = rand(10)
+b = a + 1
+c = 1 + a + 1
+d = 1 + a + 2
+print(a, b, c, d)
+```
+
+the optimizer notices that the value `a + 1` was assigned to `b` after it was computed for the first time
+and reuses it in the subsequent instructions: 
+
+```
+op rand a 10 0
+op add b a 1
+op add c 1 b
+op add d 2 b
+print a
+print b
+print c
+print d
+end
+```
+
+Again, not every possible opportunity is used. Instructions are not rearranged, for example, even if doing so would 
+allow more evaluations to be reused.
+
+On the other hand, entire complex expressions are reused if they're identical. In the following code
+
+```
+a = rand(10)
+b = rand(10)
+x = 1 + sqrt(a * a + b * b)
+y = 2 + sqrt(a * a + b * b)
+print(x, y)
+```
+
+the entire square root is evaluated only once: 
+
+```
+op rand a 10 0
+op rand b 10 0
+op mul __tmp2 a a
+op mul __tmp3 b b
+op add __tmp4 __tmp2 __tmp3
+op sqrt __tmp5 __tmp4 0
+op add x 1 __tmp5
+op add y 2 __tmp5
+print x
+print y
+end
+```
+
+### Function call optimizations
+
+Variables and expressions passed as arguments to inline functions, as well as return values of inline functions, are 
+processed in the same way as other local variables. Using an inlined function therefore doesn't incur any overhead 
+at all in Mindcode.
+
+Data flow analysis, with some restrictions, is also applied to stackless and recursive function calls. Optimizations 
+are applied to function arguments and return values. This optimization has completely replaced earlier _Function call 
+optimization_, and superseded the [Return value optimization](#return-value-optimization) - all optimizations that 
+could be performed by Return value optimization (and some that couldn't) are performed by this optimizer now. Return 
+value optimization will eventually be removed; it is kept for now as a backup solution if you needed to disable Data 
+flow optimization for some reason.
 
 ## Jump threading
 
@@ -666,30 +789,6 @@ independent optimizations are performed:
 * `push`/`pop` instructions elimination for variables that are read neither by any instruction between the call 
   instruction and the end of the function, nor by any instruction which is part of the same loop as the call 
   instruction. 
-
-## Function call optimization
-
-This optimizer eliminates unnecessary function parameters and local variables (replaces them by the argument
-or value assigned to them). Significantly improves inline functions, but seldom might improve other function calls
-as well. The optimizer processes individual functions (inline and out-of-line) one by one and searches for 
-`set` instructions assigning a value to a variable (i.e. `set target value`) and checks these preconditions are met:
-
-1. The target variable is a local variable or parameter -- has the function prefix followed by an underscore,
-   e.g. `__fn0_`. This excludes `__fnXretaddr` and `__fnXretval` variables, which must be preserved.
-2. The target variable is modified exactly once, i.e. there isn't any other instruction besides the original `set`
-   instruction which would modify the variable. This includes `push`/`pop` instructions, but if those are unnecessary,
-   they would be already removed by prior optimizers.
-3. The value being assigned to the target variable is not volatile (e.g. `@time`, `@tick`, `@counter` etc.)
-   and is not modified anywhere in the function.
-4. If the function contains a `call` instruction, the value is not a global variable. Global variables might be
-   modified by the called function. (Block names, while technically also global, are not affected, as these are
-   effectively constant.)
-
-When the conditions are met, the following happens:
-* The original instruction assigning value to the target variable is removed.
-* Every remaining occurrence of target variable is replaced with the assigned value.
-
-Functions are located in the code using the entry and exit labels marked with function prefix.
 
 ## Return value optimization
 

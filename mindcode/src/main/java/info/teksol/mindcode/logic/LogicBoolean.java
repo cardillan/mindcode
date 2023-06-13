@@ -24,6 +24,11 @@ public enum LogicBoolean implements LogicLiteral {
     }
 
     @Override
+    public boolean isNull() {
+        return false;
+    }
+
+    @Override
     public double getDoubleValue() {
         return this == TRUE ? 1.0 : 0.0;
     }

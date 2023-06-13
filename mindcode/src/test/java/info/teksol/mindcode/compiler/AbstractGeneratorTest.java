@@ -6,6 +6,7 @@ import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -122,7 +123,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     // Instruction creation
 
-    protected final AstContext mockAstContext = AstContext.createRootNode();
+    protected final AstContext mockAstRootContext = AstContext.createRootNode();
+    protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
 
     protected final LogicInstruction createInstruction(Opcode opcode) {
         return instructionProcessor.createInstruction(mockAstContext, opcode);
@@ -315,16 +317,29 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     // Common constants for creating instructions
-    protected static final Operation     div       = Operation.DIV;                           
-    protected static final Operation     floor     = Operation.FLOOR;                         
+    protected static final Operation     add       = Operation.ADD;
+    protected static final Operation     sub       = Operation.SUB;
+    protected static final Operation     div       = Operation.DIV;
+    protected static final Operation     floor     = Operation.FLOOR;
     protected static final Operation     idiv      = Operation.IDIV;                          
     protected static final Operation     mul       = Operation.MUL;                           
     protected static final LogicNumber   K1000     = LogicNumber.get(1000);                   
     protected static final LogicNumber   K0001     = LogicNumber.get("0.001", 0.001);
-    protected static final LogicNumber   K0        = LogicNumber.get(0);                      
-    protected static final LogicNumber   K1        = LogicNumber.get(1);                      
-    protected static final LogicNumber   K255      = LogicNumber.get(255);                    
-    protected static final LogicString   message   = LogicString.create("message");     
+    protected static final LogicNumber   P0        = LogicNumber.get(0);
+    protected static final LogicNumber   P0_5      = LogicNumber.create("0.5", 0.5);
+    protected static final LogicNumber   P1        = LogicNumber.get(1);
+    protected static final LogicNumber   P2        = LogicNumber.get(2);
+    protected static final LogicNumber   P4        = LogicNumber.get(4);
+    protected static final LogicNumber   P8        = LogicNumber.get(8);
+    protected static final LogicNumber   P9        = LogicNumber.get(9);
+    protected static final LogicNumber   P10       = LogicNumber.get(10);
+    protected static final LogicNumber   P11       = LogicNumber.get(11);
+    protected static final LogicNumber   P255      = LogicNumber.get(255);
+    protected static final LogicNumber   N1        = LogicNumber.get(-1);
+    protected static final LogicNumber   N9        = LogicNumber.get(-9);
+    protected static final LogicNumber   N10       = LogicNumber.get(-10);
+    protected static final LogicNumber   N11       = LogicNumber.get(-11);
+    protected static final LogicString   message   = LogicString.create("message");
     protected static final LogicLabel    label0    = LogicLabel.symbolic("label0");      
     protected static final LogicLabel    label1    = LogicLabel.symbolic("label1");      
     protected static final LogicLabel    marker    = LogicLabel.symbolic("marker");

@@ -16,6 +16,11 @@ public enum LogicNull implements LogicLiteral {
     }
 
     @Override
+    public boolean isNull() {
+        return true;
+    }
+
+    @Override
     public boolean isNumericLiteral() {
         return true;
     }

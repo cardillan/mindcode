@@ -48,25 +48,12 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
 
     @Test
     void realLifeScripts1() {
-        // TODO trigger the wrong number of arguments error more specifically
         assertThrows(MindcodeException.class, () ->
                 LogicInstructionPrinter.toString(instructionProcessor,
                         LogicInstructionLabelResolver.resolve(
                                 instructionProcessor,
                                 generateInstructions("""
-                                        flag = 33548
-                                        ubind(@poly)
-                                        if @unit.flag != flag
-                                            end()
-                                        end
-                                        ulocate(building, core, false, found, building)
-                                        if @unit.totalItems < @unit.itemCapacity
-                                            approach(container1.x, container1.y, 5)
-                                            itemTake(container1, @silicon, @unit.itemCapacity - @unit.totalItems)
-                                        else
-                                            approach(found.x, found.y, 5)
-                                            itemDrop(found, @silicon, @unit.totalItems)
-                                        end
+                                        itemDrop(found, @silicon, @unit.totalItems)
                                         """
                                 ).instructions()
                         )

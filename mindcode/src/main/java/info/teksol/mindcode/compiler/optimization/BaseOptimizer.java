@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
+import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
@@ -36,6 +37,7 @@ import static info.teksol.util.CollectionUtils.findLastIndex;
  */
 abstract class BaseOptimizer extends AbstractOptimizer {
     private List<LogicInstruction> program;
+    private CallGraph callGraph;
     private AstContext rootContext;
     private int iterations = 0;
     private int modifications = 0;
@@ -58,14 +60,15 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         this.program = program;
     }
 
-    protected void setRootContext(AstContext rootContext) {
-        this.rootContext = rootContext;
+    public CallGraph getCallGraph() {
+        return callGraph;
     }
 
     @Override
-    public void optimizeProgram(List<LogicInstruction> input, AstContext rootContext) {
+    public void optimizeProgram(List<LogicInstruction> input, CallGraph callGraph, AstContext rootContext) {
         this.rootContext = rootContext;
         this.program = Objects.requireNonNull(input);
+        this.callGraph = Objects.requireNonNull(callGraph);
 
         initialCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
 
@@ -896,7 +899,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return list of inline function node contexts
      */
     protected List<AstContext> getInlineFunctions() {
-        return contexts(c -> c.contextType() == AstContextType.INLINED_CALL);
+        return contexts(c -> c.subcontextType() == AstSubcontextType.INLINE_CALL);
     }
 
     protected List<AstContext> getOutOfLineFunctions() {

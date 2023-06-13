@@ -25,12 +25,12 @@ public class InputTempEliminatorTest extends AbstractOptimizerTest<InputTempElim
     void optimizesBasicCase() {
         assertOptimizesTo(
                 List.of(
-                        createInstruction(SET, tmp0, K0),
-                        createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255),
+                        createInstruction(SET, tmp0, P0),
+                        createInstruction(DRAW, color, tmp0, tmp0, tmp0, P255),
                         createInstruction(END)
                 ),
                 List.of(
-                        createInstruction(DRAW, color, K0, K0, K0, K255),
+                        createInstruction(DRAW, color, P0, P0, P0, P255),
                         createInstruction(END)
                 )
         );
@@ -39,8 +39,8 @@ public class InputTempEliminatorTest extends AbstractOptimizerTest<InputTempElim
     @Test
     void ignoresNonTemporaryVariables() {
         assertDoesNotOptimize(
-                createInstruction(SET, C, K0),
-                createInstruction(DRAW, color, C, C, C, K255),
+                createInstruction(SET, C, P0),
+                createInstruction(DRAW, color, C, C, C, P255),
                 createInstruction(END)
         );
     }
@@ -48,9 +48,9 @@ public class InputTempEliminatorTest extends AbstractOptimizerTest<InputTempElim
     @Test
     void ignoresVariablesWithMultipleUsage() {
         assertDoesNotOptimize(
-                createInstruction(SET, tmp0, K0),
-                createInstruction(SET, tmp0, K1),
-                createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255),
+                createInstruction(SET, tmp0, P0),
+                createInstruction(SET, tmp0, P1),
+                createInstruction(DRAW, color, tmp0, tmp0, tmp0, P255),
                 createInstruction(END)
         );
     }
@@ -58,8 +58,8 @@ public class InputTempEliminatorTest extends AbstractOptimizerTest<InputTempElim
     @Test
     void ignoresInstructionsInWrongOrder() {
         assertDoesNotOptimize(
-                createInstruction(DRAW, color, tmp0, tmp0, tmp0, K255),
-                createInstruction(SET, tmp0, K0),
+                createInstruction(DRAW, color, tmp0, tmp0, tmp0, P255),
+                createInstruction(SET, tmp0, P0),
                 createInstruction(END)
         );
     }
@@ -67,8 +67,8 @@ public class InputTempEliminatorTest extends AbstractOptimizerTest<InputTempElim
     @Test
     void ignoresWrongArgumentType() {
         assertDoesNotOptimize(
-                createInstruction(SET, tmp0, K0),
-                createInstruction(GETLINK, tmp0, K1),
+                createInstruction(SET, tmp0, P0),
+                createInstruction(GETLINK, tmp0, P1),
                 createInstruction(END)
         );
     }
@@ -76,8 +76,8 @@ public class InputTempEliminatorTest extends AbstractOptimizerTest<InputTempElim
     @Test
     void consecutiveSetsWithNoRelationshipAreLeftAlone() {
         assertDoesNotOptimize(
-                createInstruction(SET, a, K0),
-                createInstruction(SET, b, K1)
+                createInstruction(SET, a, P0),
+                createInstruction(SET, b, P1)
         );
     }
 }

@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.GenerationGoal;
+import info.teksol.mindcode.compiler.MemoryModel;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.instructions.*;
@@ -20,10 +21,9 @@ import java.util.function.Consumer;
 public abstract class AbstractOptimizer implements Optimizer {
     protected final InstructionProcessor instructionProcessor;
     private final String name = getClass().getSimpleName();  // TODO: use name from Optimization enum
-
     protected OptimizationLevel level = OptimizationLevel.AGGRESSIVE;
-
-    protected GenerationGoal goal  = GenerationGoal.SIZE;
+    protected GenerationGoal goal = GenerationGoal.SIZE;
+    protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
     private Consumer<CompilerMessage> messageRecipient = s -> {};
 
@@ -44,6 +44,11 @@ public abstract class AbstractOptimizer implements Optimizer {
     @Override
     public void setGoal(GenerationGoal goal) {
         this.goal = goal;
+    }
+
+    @Override
+    public void setMemoryModel(MemoryModel memoryModel) {
+        this.memoryModel = memoryModel;
     }
 
     @Override

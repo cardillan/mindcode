@@ -1,7 +1,6 @@
 package info.teksol.mindcode.ast;
 
 
-import info.teksol.mindcode.compiler.instructions.AstContextType;
 import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
@@ -60,10 +59,5 @@ public class HeapAccess extends BaseAstNode {
                 ", address=" + address + 
                 ", absolute=" + absolute +
                 '}';
-    }
-
-    @Override
-    public AstContextType getContextType() {
-        return AstContextType.HEAP_ACCESS;
     }
 }

@@ -198,7 +198,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     }
 
     @Test
-    void executesExpressionWithVariableAssignments() {
+    void executesExpressionWithAssignments() {
         // The preferred output might be "3", "4": see #96
         testCode("""
                         a = 1

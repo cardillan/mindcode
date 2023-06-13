@@ -78,9 +78,9 @@ usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] 
                 [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
                 [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--function-call-optimization LEVEL] [--return-value-optimization LEVEL]
-                [--input-temp-elimination LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}]
-                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
+                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
+                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
+                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a mindcode source file into text mlog file.
 
@@ -93,6 +93,10 @@ named arguments:
   -g, --goal {SIZE,SPEED,AUTO}
                          sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
                          automatically
+  -m, --memory-model {VOLATILE,ALIASED,RESTRICTED}
+                         sets model for handling  linked  memory  blocks:  volatile  (shared  with different processor),
+                         aliased (a memory block may be accessed  through  different variables), or restricted (a memory
+                         block will never be accessed through different variables)
 
 input/output files:
   input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified.
@@ -140,8 +144,6 @@ optimization levels:
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack
-  --function-call-optimization LEVEL
-                         optimization level of optimizing passing arguments to functions
   --return-value-optimization LEVEL
                          optimization level of optimizing passing return values from functions
   --input-temp-elimination LEVEL
@@ -166,9 +168,9 @@ usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] 
                 [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
                 [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--function-call-optimization LEVEL] [--return-value-optimization LEVEL]
-                [--input-temp-elimination LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}]
-                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
+                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
+                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
+                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
 
 Compile a schema definition file into binary msch file.
 
@@ -181,6 +183,10 @@ named arguments:
   -g, --goal {SIZE,SPEED,AUTO}
                          sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
                          automatically
+  -m, --memory-model {VOLATILE,ALIASED,RESTRICTED}
+                         sets model for handling  linked  memory  blocks:  volatile  (shared  with different processor),
+                         aliased (a memory block may be accessed  through  different variables), or restricted (a memory
+                         block will never be accessed through different variables)
 
 input/output files:
   input                  Schema definition file to be compiled into a binary msch file.
@@ -229,8 +235,6 @@ optimization levels:
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack
-  --function-call-optimization LEVEL
-                         optimization level of optimizing passing arguments to functions
   --return-value-optimization LEVEL
                          optimization level of optimizing passing return values from functions
   --input-temp-elimination LEVEL

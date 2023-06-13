@@ -75,7 +75,7 @@ class ReturnValueOptimizerTest extends AbstractOptimizerTest<ReturnValueOptimize
     void optimizesFunctionCallsWithoutFnRetVal() {
         assertOptimizesTo(
                 List.of(
-                        createInstruction(SET, retval0, unit),
+                        createInstruction(SET, retval0, tmp0),
                         createInstruction(CALLREC, bank1, label0, label1),
                         createInstruction(LABEL, label1),
                         createInstruction(PRINT, retval0),
@@ -84,7 +84,7 @@ class ReturnValueOptimizerTest extends AbstractOptimizerTest<ReturnValueOptimize
                 List.of(
                         createInstruction(CALLREC, bank1, label0, label1),
                         createInstruction(LABEL, label1),
-                        createInstruction(PRINT, unit),
+                        createInstruction(PRINT, tmp0),
                         createInstruction(END)
                 )
         );
@@ -135,7 +135,7 @@ class ReturnValueOptimizerTest extends AbstractOptimizerTest<ReturnValueOptimize
     void ignoresModifiedVariables() {
         assertDoesNotOptimize(
                 createInstruction(SET, retval0, a),
-                createInstruction(SET, a, K1),
+                createInstruction(SET, a, P1),
                 createInstruction(PRINT, retval0),
                 createInstruction(END)
         );

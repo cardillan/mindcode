@@ -117,9 +117,8 @@ public class LoopOptimizer extends BaseOptimizer {
                 // 4. The jump evaluates to false (i.e. doesn't skip over the loop) for the initial
                 //    value of the loop control variable
                 //
-                // This only handles the simplest cases.
-                // TODO use general compile-time evaluation to find the possible states of the condition
-                //      and either remove the jump, or the entire loop accordingly.
+                // This only handles the simplest cases. More complex cases will be resolved when multiple pass
+                // optimization is implemented.
                 if (aggressive() && condition.size() == 2
                         && loopSetup instanceof SetInstruction set && set.getValue().isNumericLiteral()
                         && jump.getArgs().contains(set.getResult())) {

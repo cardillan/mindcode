@@ -66,10 +66,6 @@ public enum Optimization {
             StackUsageOptimizer::new,
             "optimizing variable storage on stack"),
 
-    FUNCTION_PARAM_OPTIMIZATION         ('f', "Function Call Optimization",
-            FunctionParameterOptimizer::new,
-            "optimizing passing arguments to functions"),
-
     RETURN_VALUE_OPTIMIZATION           ('r', "Return Value Optimization",
             ReturnValueOptimizer::new,
             "optimizing passing return values from functions"),

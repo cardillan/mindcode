@@ -10,6 +10,8 @@ import info.teksol.mindcode.logic.ParameterAssignment;
 import java.util.List;
 
 /**
+ * Deprecated: superseded by {@link DataFlowOptimizer}.
+ * <p>
  * Generic optimizer to remove all assignments to temporary variables that are only used as parameters
  * in subsequent instruction. The {@code set} instruction is removed, while the other instruction is updated
  * to replace the temp variable with the value used in the {@code set} instruction.
@@ -26,6 +28,7 @@ import java.util.List;
  * Note: this class is mostly obsolete, as {@link info.teksol.mindcode.compiler.generator.LogicInstructionGenerator}
  * no longer creates temporary variables for literals.
  */
+@Deprecated
 class InputTempEliminator extends BaseOptimizer {
     public InputTempEliminator(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);

@@ -223,4 +223,32 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                 extractWarnings(messages)
         );
     }
+
+
+    @Test
+    void eliminatesUnusedReturnValues() {
+        assertCompilesTo("""
+                        def foo(n)
+                            print(n)
+                            n * 2
+                        end
+                        foo(2)
+                        foo(4)
+                        """,
+                createInstruction(SET, "__fn0_n", "2"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(SET, "__fn0_n", "4"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1002)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(END)
+        );
+    }
 }

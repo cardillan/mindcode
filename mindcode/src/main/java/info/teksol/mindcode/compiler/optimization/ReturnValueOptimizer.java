@@ -12,6 +12,8 @@ import info.teksol.mindcode.logic.LogicArgument;
 import java.util.List;
 
 /**
+ * Deprecated: superseded by {@link DataFlowOptimizer}.
+ * <p>
  * Optimizes passing return values to callers.
  * <p>
  * Function return values are carried by {@code __retval} variables instead of {@code __tmp} ones, because the original
@@ -36,6 +38,7 @@ import java.util.List;
  * the code block must not contain any function calls.</li>
  * </ol>
  */
+@Deprecated
 public class ReturnValueOptimizer extends BaseOptimizer {
     public ReturnValueOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);

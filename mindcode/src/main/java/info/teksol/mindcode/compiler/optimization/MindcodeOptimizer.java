@@ -56,9 +56,10 @@ public class MindcodeOptimizer {
 
         for (Optimizer optimizer : getOptimizers()) {
             optimizer.setGoal(profile.getGoal());
+            optimizer.setMemoryModel(profile.getMemoryModel());
             optimizer.setMessageRecipient(messageRecipient);
             optimizer.setDebugPrinter(debugPrinter);
-            optimizer.optimizeProgram(program, generatorOutput.rootAstContext());
+            optimizer.optimizeProgram(program, generatorOutput.callGraph(), generatorOutput.rootAstContext());
         }
 
         int newCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();

@@ -19,6 +19,7 @@ public class CompilerProfile {
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
     private GenerationGoal goal = GenerationGoal.SPEED;
+    private MemoryModel memoryModel = MemoryModel.VOLATILE;
     private boolean shortCircuitEval = false;
     private FinalCodeOutput finalCodeOutput = null;
     private int parseTreeLevel = 0;
@@ -104,6 +105,14 @@ public class CompilerProfile {
     public CompilerProfile setGoal(GenerationGoal goal) {
         this.goal = goal;
         return this;
+    }
+
+    public MemoryModel getMemoryModel() {
+        return memoryModel;
+    }
+
+    public void setMemoryModel(MemoryModel memoryModel) {
+        this.memoryModel = memoryModel;
     }
 
     public boolean isShortCircuitEval() {

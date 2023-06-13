@@ -73,13 +73,13 @@ public class OutputTempEliminatorTest extends AbstractOptimizerTest<OutputTempEl
     void ignoresInstructionsInWrongOrder() {
         assertOptimizesTo(
                 List.of(
-                        createInstruction(PRINT, K1),
+                        createInstruction(PRINT, P1),
                         createInstruction(SET, result, tmp0),
                         createInstruction(SENSOR, tmp0, vault1, coal),
                         createInstruction(END)
                 ),
                 List.of(
-                        createInstruction(PRINT, K1),
+                        createInstruction(PRINT, P1),
                         createInstruction(SET, result, tmp0),
                         createInstruction(SENSOR, tmp0, vault1, coal),
                         createInstruction(END)
@@ -149,24 +149,24 @@ public class OutputTempEliminatorTest extends AbstractOptimizerTest<OutputTempEl
     @Test
     void leavesGetlinkFollowedBySetForDifferentStuffAlone() {
         assertDoesNotOptimize(
-                createInstruction(GETLINK, a, K0),
-                createInstruction(SET, b, K1)
+                createInstruction(GETLINK, a, P0),
+                createInstruction(SET, b, P1)
         );
     }
 
     @Test
     void leavesGetlinkFollowedByGetlinkAlone() {
         assertDoesNotOptimize(
-                createInstruction(GETLINK, a, K0),
-                createInstruction(GETLINK, b, K1),
-                createInstruction(READ, c, cell1, K1)
+                createInstruction(GETLINK, a, P0),
+                createInstruction(GETLINK, b, P1),
+                createInstruction(READ, c, cell1, P1)
         );
     }
 
     @Test
     void ignoresTerminalGetlink() {
         assertDoesNotOptimize(
-                createInstruction(GETLINK, a, K0)
+                createInstruction(GETLINK, a, P0)
         );
     }
 
@@ -218,8 +218,8 @@ public class OutputTempEliminatorTest extends AbstractOptimizerTest<OutputTempEl
     @Test
     void leavesReadThenSetButOtherValueAlone() {
         assertDoesNotOptimize(
-                createInstruction(READ, tmp0, cell1, K1),
-                createInstruction(SET, tmp1, K1),
+                createInstruction(READ, tmp0, cell1, P1),
+                createInstruction(SET, tmp1, P1),
                 createInstruction(END)
         );
     }
@@ -252,7 +252,7 @@ public class OutputTempEliminatorTest extends AbstractOptimizerTest<OutputTempEl
     void leavesSensorThenSetWithUnrelatedAlone() {
         assertDoesNotOptimize(
                 createInstruction(SENSOR, a, vault1, coal),
-                createInstruction(SET, b, K1)
+                createInstruction(SET, b, P1)
         );
     }
 

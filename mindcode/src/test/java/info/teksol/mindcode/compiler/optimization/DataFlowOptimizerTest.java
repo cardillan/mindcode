@@ -37,45 +37,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         return super.createCompilerProfile().setGoal(GenerationGoal.SPEED);
     }
 
-    @Test
-    void removesUnneededAssignments() {
-        assertCompilesTo("""
-                        i = 5
-                        j = 10
-                        i = j + 1
-                        j = 15
-                        i = j + 2
-                        print(i, j)
-                        """,
-                createInstruction(PRINT, "17"),
-                createInstruction(PRINT, "15"),
-                createInstruction(END)
-        );
-    }
-
-
-    @Test
-    void leavesUninitializedVariables() {
-        assertCompilesTo("""
-                        a = 0
-                        if b
-                            a = 1
-                            b = 1
-                        end
-                        b = 2
-                        print(a)
-                        """,
-                createInstruction(SET, "a", "0"),
-                createInstruction(JUMP, var(1000), "equal", "b", "false"),
-                createInstruction(SET, "a", "1"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(SET, "b", "2"),
-                createInstruction(PRINT, "a"),
-                createInstruction(END)
-        );
-    }
-
+    //<editor-fold desc="Warnings">
     @Test
     void generatesUninitializedWarning() {
         generateInstructions("""
@@ -95,11 +57,11 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void recognizesIfStatementInitialization() {
         generateInstructions("""
                 if switch1.enabled
-                    a = 1
-                    b = a
+                    a = rand(10)
+                    b = rand(10)
                 else
-                    a = 2
-                    b = a
+                    a = -rand(10)
+                    b = -rand(10)
                 end
                 print(a, b)
                 """);
@@ -128,7 +90,93 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
 
     @Test
-    void processesPartialIfStatementInitialization() {
+    void generatesWarningsAboutLocalVariables() {
+        generateInstructions("""
+                def foo()
+                    print(n)
+                end
+                foo()
+                foo()
+               """);
+
+        assertEquals(
+                """
+                        List of uninitialized variables: foo.n.""",
+                extractWarnings(messages)
+        );
+    }
+
+    @Test
+    void generatesNoWarningsAboutFunctionParameters() {
+        generateInstructions("""
+                def foo(n)
+                    print(n)
+                end
+                foo(0)
+                foo(1)
+               """);
+
+        assertEquals("", extractWarnings(messages));
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Main variables">
+    @Test
+    void removesUnneededVariables() {
+        assertCompilesTo("""
+                        i = 5
+                        j = 10
+                        j = 15
+                        i = j + 2
+                        print(i, j)
+                        """,
+                createInstruction(PRINT, "17"),
+                createInstruction(PRINT, "15"),
+                createInstruction(END)
+        );
+    }
+
+
+    @Test
+    void leavesUninitializedVariables() {
+        assertCompilesTo("""
+                        print(flag)
+                        flag = 1
+                        """,
+                createInstruction(PRINT, "flag"),
+                createInstruction(SET, "flag", "1"),        // This instruction is kept
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void keepsLatestAssignment() {
+        assertCompilesTo("""
+                        index = 0
+                        b = rand(10)
+                        index = 0
+                        while index < 10
+                            print(b)
+                            index = index + 1
+                        end
+                        """,
+                createInstruction(OP, "rand", "b", "10"),
+                createInstruction(SET, "index", "0"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(PRINT, "b"),
+                createInstruction(OP, "add", "index", "index", "1"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(JUMP, var(1003), "lessThan", "index", "10"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="If statements">
+    @Test
+    void processesIfStatements() {
         assertCompilesTo("""
                         a = 0
                         b = 0
@@ -182,6 +230,109 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
 
     @Test
+    void handlesSingleBranchIfStatements() {
+        assertCompilesTo("""
+                        a = 1
+                        if switch1.enabled
+                            a = 2
+                        end
+                        print(a)
+                        """,
+                createInstruction(SET, "a", "1"),
+                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
+                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                createInstruction(SET, "a", "2"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "a"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesOptimizedIfStatements() {
+        assertCompilesTo("""
+                        a = 10
+                        print(a > 5 ? "High" : "Low")
+                        """,
+                createInstruction(SET, var(1), q("Low")),
+                createInstruction(JUMP, var(1001), "lessThanEq", "10", "5"),
+                createInstruction(SET, var(1), q("High")),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(1)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesBranchedExpressions() {
+        assertCompilesTo("""
+                        a = rand(10)
+                        b = a + 1
+                        if switch1.enabled
+                            c = 2 * (a + 1)
+                            print(c)
+                        else
+                            c = 10
+                            print(c)
+                        end
+                        print(b, c)
+                        """,
+                createInstruction(OP, "rand", "a", "10"),
+                createInstruction(OP, "add", "b", "a", "1"),
+                createInstruction(SENSOR, var(2), "switch1", "@enabled"),
+                createInstruction(JUMP, var(1000), "equal", var(2), "false"),
+                createInstruction(OP, "mul", "c", "2", "b"),
+                createInstruction(PRINT, "c"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "c", "10"),
+                createInstruction(PRINT, "10"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "b"),
+                createInstruction(PRINT, "c"),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Case statements">
+    @Test
+    void handlesCaseExpressions() {
+        assertCompilesTo("""
+                        a = case cell1[0]
+                            when 0, 1, 2 then 10
+                            when 10 .. 20 then 20
+                            else 30
+                        end
+                        print(a)
+                        """,
+                createInstruction(READ, "__ast0", "cell1", "0"),
+                createInstruction(JUMP, var(1002), "equal", "__ast0", "0"),
+                createInstruction(JUMP, var(1002), "equal", "__ast0", "1"),
+                createInstruction(JUMP, var(1001), "notEqual", "__ast0", "2"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, var(1), "10"),
+                createInstruction(JUMP, var(1000), "always"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(JUMP, var(1005), "lessThan", "__ast0", "10"),
+                createInstruction(JUMP, var(1004), "lessThanEq", "__ast0", "20"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(JUMP, var(1003), "always"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(SET, var(1), "20"),
+                createInstruction(JUMP, var(1000), "always"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, var(1), "30"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, var(1)),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Loops">
+    @Test
     void handlesWhileLoops() {
         assertCompilesTo("""
                         i = 0
@@ -220,42 +371,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+    //</editor-fold>
 
-    @Test
-    void handlesSingleBranchIfStatements() {
-        assertCompilesTo("""
-                        a = 1
-                        if switch1.enabled
-                            a = 2
-                        end
-                        print(a)
-                        """,
-                createInstruction(SET, "a", "1"),
-                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
-                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                createInstruction(SET, "a", "2"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "a"),
-                createInstruction(END)
-        );
-    }
-
-    @Test
-    void handlesOptimizedIfStatements() {
-        assertCompilesTo("""
-                        a = 10
-                        print(a > 5 ? "High" : "Low")
-                        """,
-                createInstruction(SET, var(1), q("Low")),
-                createInstruction(JUMP, var(1001), "lessThanEq", "10", "5"),
-                createInstruction(SET, var(1), q("High")),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, var(1)),
-                createInstruction(END)
-        );
-    }
-
+    //<editor-fold desc="Exit points">
     @Test
     void handlesReturnStatements() {
         assertCompilesTo("""
@@ -272,42 +390,190 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+    //</editor-fold>
 
-
+    //<editor-fold desc="Inline functions">
     @Test
-    void handlesCaseExpressions() {
+    public void handlesSimpleParameters() {
         assertCompilesTo("""
-                        a = case cell1[0]
-                            when 0, 1, 2 then 10
-                            when 10 .. 20 then 20
-                            else 30
+                        inline def bar(n)
+                            print(n)
                         end
-                        print(a)
+                        bar(5)
                         """,
-                createInstruction(READ, "__ast0", "cell1", "0"),
-                createInstruction(JUMP, var(1002), "equal", "__ast0", "0"),
-                createInstruction(JUMP, var(1002), "equal", "__ast0", "1"),
-                createInstruction(JUMP, var(1001), "notEqual", "__ast0", "2"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(SET, var(1), "10"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1005), "lessThan", "__ast0", "10"),
-                createInstruction(JUMP, var(1004), "lessThanEq", "__ast0", "20"),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(JUMP, var(1003), "always"),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(SET, var(1), "20"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(SET, var(1), "30"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(SET, "a", var(1)),
-                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "5"),
+                createInstruction(LABEL, var(1001)),
                 createInstruction(END)
         );
     }
 
+    @Test
+    public void handlesInlineFunctionsGlobalVariables() {
+        assertCompilesTo("""
+                        inline def bar(n)
+                            print(n)
+                        end
+                        X = 5
+                        bar(X)
+                        """,
+                createInstruction(SET, "X", "5"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "X"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    public void handlesBlockNames() {
+        assertCompilesTo("""
+                        inline def bar(n)
+                            print(n)
+                        end
+                        bar(switch1)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "switch1"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    public void handlesChainedVariables() {
+        assertCompilesTo("""
+                        inline def bar(n)
+                            a = n
+                            print(a)
+                        end
+                        bar(5)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "5"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    public void handlesArgumentsInExpressions() {
+        assertCompilesTo("""
+                        inline def bar(n)
+                            print(n + 1)
+                        end
+                        bar(5)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "6"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    public void preservesVolatileVariables() {
+        assertCompilesTo("""
+                        inline def bar(n)
+                            print(n)
+                        end
+                        bar(@time)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0_n", "@time"),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    public void preservesModifiedVariables() {
+        assertCompilesTo("""
+                        inline def bar(n)
+                            while n < 10
+                                n += 1
+                                print(n)
+                            end
+                        end
+                        bar(0)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0_n", "0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(OP, "add", "__fn0_n", "__fn0_n", "1"),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(JUMP, var(1005), "lessThan", "__fn0_n", "10"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void passesParameterToFunctionRegressionTest() {
+        assertCompilesTo(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.AGGRESSIVE),
+                """
+                        X = 5
+                        inline def d(n)
+                            n
+                        end
+                        print(1 < d(2))
+                        printflush(message1)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "true"),
+                createInstruction(PRINTFLUSH, "message1"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    public void handlesNestedParameters() {
+        assertCompilesTo("""
+                        inline def foo(n)
+                            print(n)
+                        end
+                        inline def bar(n)
+                            foo(n)
+                        end
+                        bar(5)
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, "5"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesComplexInlineFunctionArgumentSetup() {
+        assertCompilesTo("""
+                        printDomeStatus(@silicon, "\\n[green]Silicon[] status:\\n")
+                        inline def printDomeStatus(item, text)
+                            print(text)
+                            level = DOME.sensor(item)
+                            printf("  dome:  [green]$[]\\n", level)
+                        end
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, q("\\n[green]Silicon[] status:\\n")),
+                createInstruction(SENSOR, "__fn0_level", "DOME", "@silicon"),
+                createInstruction(PRINT, q("  dome:  [green]")),
+                createInstruction(PRINT, "__fn0_level"),
+                createInstruction(PRINT, q("[]\\n")),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Function arguments/calls">
     @Test
     void handlesFunctionArgumentSetup() {
         assertCompilesTo("""
@@ -327,8 +593,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(SETADDR, "__fn0retaddr", var(1004)),
                 createInstruction(CALL, var(1000)),
                 createInstruction(GOTOLABEL, var(1004), "__fn0"),
-                createInstruction(SET, var(1), "__fn0retval"),
-                createInstruction(PRINT, var(1)),
+                createInstruction(PRINT, "__fn0retval"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(OP, "add", "n", "n", "1"),
                 createInstruction(JUMP, var(1007), "lessThanEq", "n", "10"),
@@ -345,4 +610,464 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void optimizesFunctionArguments() {
+        assertCompilesTo("""
+                        def foo(n)
+                            print(n * 2)
+                        end
+                        foo(2)
+                        foo(2)
+                        """,
+                createInstruction(SET, "__fn0_n", "2"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1002)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "mul", var(2), "__fn0_n", "2"),
+                createInstruction(PRINT, var(2)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesRecursiveFibonacci() {
+        assertCompilesTo("""
+                        allocate stack in bank1[0...512]
+                        def fib(n)
+                            n < 2 ? n : fib(n - 1) + fib(n - 2)
+                        end
+                        print(fib(10))
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(SET, "__fn0_n", "10"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0retval", "__fn0_n"),
+                createInstruction(JUMP, var(1004), "lessThan", "__fn0_n", "2"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(OP, "sub", var(3), "__fn0_n", "1"),
+                createInstruction(PUSH, "bank1", "__fn0_n"),
+                createInstruction(SET, "__fn0_n", var(3)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1005)),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(POP, "bank1", "__fn0_n"),
+                createInstruction(SET, var(4), "__fn0retval"),
+                createInstruction(OP, "sub", var(5), "__fn0_n", "2"),
+                createInstruction(PUSH, "bank1", "__fn0_n"),
+                createInstruction(PUSH, "bank1", var(4)),
+                createInstruction(SET, "__fn0_n", var(5)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1006)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(POP, "bank1", var(4)),
+                createInstruction(POP, "bank1", "__fn0_n"),
+                createInstruction(OP, "add", "__fn0retval", var(4), "__fn0retval"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(RETURN, "bank1")
+        );
+    }
+
+    @Test
+    public void preservesGlobalVariablesWithFunctionCalls() {
+        assertCompilesTo("""
+                        inline def bar(n)
+                            foo(n)
+                            print(n)
+                        end
+                        def foo(n)
+                            print(n)
+                        end
+                        X = 5
+                        Y = 6
+                        foo(X)
+                        bar(Y)
+                        """,
+                createInstruction(SET, "X", "5"),
+                createInstruction(SET, "Y", "6"),
+                createInstruction(SET, "__fn0_n", "X"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, "__fn0_n", "Y"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1004)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1004), "__fn0"),
+                createInstruction(PRINT, "Y"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    public void handlesConstantFunctionReturn() {
+        assertCompilesTo("""
+                        def foo(n)
+                            print(n)
+                            5
+                        end
+                        print(foo(2))
+                        print(foo(3))
+                        """,
+                createInstruction(SET, "__fn0_n", "2"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(SET, "__fn0_n", "3"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1002)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
+                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(SET, "__fn0retval", "5"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Subexpressions">
+    @Test
+    void optimizesSubexpressions() {
+        assertCompilesTo("""
+                        a = rand(10)
+                        b = a + 1
+                        c = 1 + (a + 1)
+                        d = 2 + (1 + a)
+                        print(a, b, c, d)
+                        """,
+                createInstruction(OP, "rand", "a", "10"),
+                createInstruction(OP, "add", "b", "a", "1"),
+                createInstruction(OP, "add", "c", "a", "2"),
+                createInstruction(OP, "add", "d", "a", "3"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "b"),
+                createInstruction(PRINT, "c"),
+                createInstruction(PRINT, "d"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesExtendedSubexpressions() {
+        assertCompilesTo("""
+                        a = 1
+                        b = rand(10)
+                        c = 2
+                        d = a + b + c
+                        print(d)
+                        """,
+                createInstruction(OP, "rand", "b", "10"),
+                createInstruction(OP, "add", "d", "b", "3"),
+                createInstruction(PRINT, "d"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void avoidsIncompatibleLiterals() {
+        assertCompilesTo("""
+                        base = 2
+                        a = base ** 8
+                        b = base ** a
+                        print(a, b)
+                        """,
+                createInstruction(OP, "pow", "b", "2", "256"),
+                createInstruction(PRINT, "256"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesComplexExpressions() {
+        assertCompilesTo("""
+                        a = rand(10)
+                        b = rand(10)
+                        print(1 + sqrt(a * a + b * b))
+                        print(2 + sqrt(a * a + b * b))
+                        print(1 + sqrt(a * a + b * b))
+                        """,
+                createInstruction(OP, "rand", "a", "10"),
+                createInstruction(OP, "rand", "b", "10"),
+                createInstruction(OP, "mul", var(2), "a", "a"),
+                createInstruction(OP, "mul", var(3), "b", "b"),
+                createInstruction(OP, "add", var(4), var(2), var(3)),
+                createInstruction(OP, "sqrt", var(5), var(4)),
+                createInstruction(OP, "add", var(6), "1", var(5)),
+                createInstruction(PRINT, var(6)),
+                createInstruction(OP, "add", var(11), "2", var(5)),
+                createInstruction(PRINT, var(11)),
+                createInstruction(PRINT, var(6)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesAddAfterSub() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, sub, tmp0, a, P1),
+                        createInstruction(OP, add, tmp1, tmp0, P10),    // (a - 1) + 10
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp0, P1, a),
+                        createInstruction(OP, add, tmp1, tmp0, P10),    // (1 - a) + 10
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp0, a, P1),
+                        createInstruction(OP, add, tmp1, P10, tmp0),    // 10 + (a - 1)
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp0, P1, a),
+                        createInstruction(OP, add, tmp1, P10, tmp0),    // 10 + (1 - a)
+                        createInstruction(PRINT, tmp1)
+                ),
+                List.of(
+                        createInstruction(OP, add, tmp1, a, P9),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp1, P11, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, add, tmp1, a, P9),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp1, P11, a),
+                        createInstruction(PRINT, tmp1)
+                )
+        );
+    }
+
+    @Test
+    void optimizesSubAfterAdd() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, add, tmp0, a, P1),
+                        createInstruction(OP, sub, tmp1, tmp0, P10),    // (a + 1) - 10
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, add, tmp0, P1, a),
+                        createInstruction(OP, sub, tmp1, tmp0, P10),    // (1 + a) - 10
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, add, tmp0, a, P1),
+                        createInstruction(OP, sub, tmp1, P10, tmp0),    // 10 - (a + 1)
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, add, tmp0, P1, a),
+                        createInstruction(OP, sub, tmp1, P10, tmp0),    // 10 - (1 + a)
+                        createInstruction(PRINT, tmp1)
+                ),
+                List.of(
+                        createInstruction(OP, sub, tmp1, a, P9),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp1, a, P9),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp1, P9, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp1, P9, a),
+                        createInstruction(PRINT, tmp1)
+                )
+        );
+    }
+
+    @Test
+    void optimizesSubAfterSub() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, sub, tmp0, a, P1),
+                        createInstruction(OP, sub, tmp1, tmp0, P10),    // (a - 1) - 10
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp0, P1, a),
+                        createInstruction(OP, sub, tmp1, tmp0, P10),    // (1 - a) - 10
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp0, a, P1),
+                        createInstruction(OP, sub, tmp1, P10, tmp0),    // 10 - (a - 1)
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp0, P1, a),
+                        createInstruction(OP, sub, tmp1, P10, tmp0),    // 10 - (1 - a)
+                        createInstruction(PRINT, tmp1)
+                ),
+                List.of(
+                        createInstruction(OP, sub, tmp1, a, P11),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp1, N9, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, sub, tmp1, P11, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, add, tmp1, a, P9),
+                        createInstruction(PRINT, tmp1)
+                )
+        );
+    }
+
+    @Test
+    void optimizesMulAfterDiv() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, div, tmp0, a, P2),
+                        createInstruction(OP, mul, tmp1, tmp0, P4),    // (a / 2) * 4
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp0, P2, a),
+                        createInstruction(OP, mul, tmp1, tmp0, P4),    // (2 / a) * 4
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp0, a, P2),
+                        createInstruction(OP, mul, tmp1, P4, tmp0),    // 4 * (a / 2)
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp0, P2, a),
+                        createInstruction(OP, mul, tmp1, P4, tmp0),    // 4 * (2 / a)
+                        createInstruction(PRINT, tmp1)
+                ),
+                List.of(
+                        createInstruction(OP, mul, tmp1, a, P2),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp1, P8, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, mul, tmp1, a, P2),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp1, P8, a),
+                        createInstruction(PRINT, tmp1)
+                )
+        );
+    }
+
+    @Test
+    void optimizesDivAfterMul() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, mul, tmp0, a, P2),
+                        createInstruction(OP, div, tmp1, tmp0, P4),    // (a * 2) / 4
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, mul, tmp0, P2, a),
+                        createInstruction(OP, div, tmp1, tmp0, P4),    // (2 * a) / 4
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, mul, tmp0, a, P2),
+                        createInstruction(OP, div, tmp1, P4, tmp0),    // 4 / (a * 2)
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, mul, tmp0, P2, a),
+                        createInstruction(OP, div, tmp1, P4, tmp0),    // 4 / (2 * a)
+                        createInstruction(PRINT, tmp1)
+                ),
+                List.of(
+                        createInstruction(OP, div, tmp1, a, P2),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp1, a, P2),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp1, P2, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp1, P2, a),
+                        createInstruction(PRINT, tmp1)
+                )
+        );
+    }
+
+    @Test
+    void optimizesDivAfterDiv() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, div, tmp0, a, P2),
+                        createInstruction(OP, div, tmp1, tmp0, P4),    // (a / 2) / 4
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp0, P2, a),
+                        createInstruction(OP, div, tmp1, tmp0, P4),    // (2 / a) / 4
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp0, a, P2),
+                        createInstruction(OP, div, tmp1, P4, tmp0),    // 4 / (a / 2)
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp0, P2, a),
+                        createInstruction(OP, div, tmp1, P4, tmp0),    // 4 / (2 / a)
+                        createInstruction(PRINT, tmp1)
+                ),
+                List.of(
+                        createInstruction(OP, div, tmp1, a, P8),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp1, P0_5, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, div, tmp1, P8, a),
+                        createInstruction(PRINT, tmp1),
+                        createInstruction(OP, mul, tmp1, a, P2),
+                        createInstruction(PRINT, tmp1)
+                )
+        );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Self-references">
+    @Test
+    void handlesSelfReference() {
+        assertCompilesTo("""
+                        nextTick = nextTick + TICKS
+                        if @tick > nextTick + TICKS
+                            prevTick = @tick
+                            nextTick = prevTick + TICKS
+                            currTick = prevTick
+                        end
+                        print(nextTick, prevTick, currTick)
+                        """,
+                createInstruction(OP, "add", "nextTick", "nextTick", "TICKS"),
+                createInstruction(OP, "add", var(1), "nextTick", "TICKS"),
+                createInstruction(JUMP, var(1000), "lessThanEq", "@tick", var(1)),
+                createInstruction(SET, "prevTick", "@tick"),
+                createInstruction(OP, "add", "nextTick", "prevTick", "TICKS"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "nextTick"),
+                createInstruction(PRINT, "prevTick"),
+                createInstruction(PRINT, "prevTick"),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="External memory">
+    @Test
+    void optimizesMemoryAccess() {
+        assertCompilesTo("""
+                        if cell1[i] > cell1[i + 1]
+                            a = cell1[i]
+                            cell1[i] = cell1[i + 1]
+                            cell1[i + 1] = a
+                        end
+                        """,
+                createInstruction(READ, var(0), "cell1", "i"),
+                createInstruction(OP, "add", var(2), "i", "1"),
+                createInstruction(READ, var(1), "cell1", var(2)),
+                createInstruction(JUMP, var(1000), "lessThanEq", var(0), var(1)),
+                createInstruction(READ, "a", "cell1", "i"),
+                createInstruction(READ, var(6), "cell1", var(2)),
+                createInstruction(WRITE, var(6), "cell1", "i"),
+                createInstruction(WRITE, "a", "cell1", var(2)),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesMemoryWriteAccess() {
+        assertCompilesTo("""
+                        allocate heap in cell1
+                        $A = rand(10)
+                        print($A)
+                        """,
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(WRITE, var(0), "cell1", "0"),
+                createInstruction(READ, var(1), "cell1", "0"),
+                createInstruction(PRINT, var(1)),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
 }

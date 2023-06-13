@@ -32,6 +32,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
+    public boolean isConstant() {
+        return false;
+    }
+
+    @Override
     public boolean isUserVariable() {
         return getType() == ArgumentType.GLOBAL_VARIABLE || getType() == ArgumentType.LOCAL_VARIABLE;
     }

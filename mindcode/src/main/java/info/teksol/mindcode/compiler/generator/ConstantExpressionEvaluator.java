@@ -59,7 +59,7 @@ public class ConstantExpressionEvaluator {
 
     private AstNode evaluateBinaryOp(BinaryOp node) {
         Operation operation = Operation.fromMindcode(node.getOp());
-        if (ExpressionEvaluator.isDeterministic(operation)) {
+        if (operation.isDeterministic()) {
             OperationEval eval = ExpressionEvaluator.getOperation(operation);
             if (eval != null) {
                 Variable a = variableFromNode("a", evaluateInner(node.getLeft()));

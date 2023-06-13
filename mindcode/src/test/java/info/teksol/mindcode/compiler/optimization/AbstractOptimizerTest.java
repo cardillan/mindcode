@@ -3,19 +3,18 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.MindcodeMessage;
+import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
-import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.List;
 import java.util.function.Consumer;
 
 import static info.teksol.util.CollectionUtils.findFirstIndex;
+import static info.teksol.util.CollectionUtils.findLastIndex;
 
 public abstract class AbstractOptimizerTest<T extends Optimizer> extends AbstractGeneratorTest {
-    private static final AstContext STATIC_AST_CONTEXT = AstContext.createRootNode();
-
-    protected abstract Class<T> getTestedClass();
+        protected abstract Class<T> getTestedClass();
 
     protected abstract List<Optimization> getAllOptimizations();
 
@@ -27,7 +26,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         // rootAstContext is intentionally null
         // This method cannot be used to test optimizers that rely on AST context structure, because
         // at this moment the AST context is not built for manually created instructions
-        GeneratorOutput generatorOutput = new GeneratorOutput(instructions, null);
+        GeneratorOutput generatorOutput = new GeneratorOutput(CallGraph.createEmpty(), instructions, mockAstRootContext);
         List<LogicInstruction> actual = optimizeInstructions(profile, generatorOutput);
         assertLogicInstructionsMatch(expected, actual);
     }
@@ -73,7 +72,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     protected GeneratorOutput generateInstructions(CompilerProfile profile, String code) {
         GeneratorOutput generatorOutput = super.generateInstructions(profile, code);
         List<LogicInstruction> instructions = optimizeInstructions(profile, generatorOutput);
-        return new GeneratorOutput(instructions, generatorOutput.rootAstContext());
+        return new GeneratorOutput(generatorOutput.callGraph(), instructions, generatorOutput.rootAstContext());
     }
 
     private class FilteredDiffDebugPrinter extends DiffDebugPrinter {
@@ -108,9 +107,10 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
             if (testedClass == null) {
                 return diffLevel1();
             } else {
-                List<ProgramVersion> selected = diffLevel2();
-                int index = findFirstIndex(selected, v -> v.getOptimizerClass() == testedClass);
-                return index > 0 && index < selected.size()  ? selected.subList(index - 1, index + 1) : List.of();
+                List<ProgramVersion> selected = diffLevel3();
+                int from = findFirstIndex(selected, v -> v.getOptimizerClass() == testedClass);
+                int to = findLastIndex(selected, v -> v.getOptimizerClass() == testedClass);
+                return from > 0 && to >= from && to < selected.size()  ? selected.subList(from - 1, to) : List.of();
             }
         }
 

@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-06-16
+
+### Added
+
+* Added [Constant folding](doc/syntax/SYNTAX-5-OTHER.markdown#constant-folding) to Data flow optimization.
+* Added [Common subexpression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#common-subexpressions-optimization) 
+  to Data flow optimization.
+
+### Removed
+
+* Removed _Function call optimization_. This optimization was completely superseded by the
+  [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles all 
+  cases previously optimized by Function call optimization, and is able to identify more opportunities for 
+  optimization. The old optimization was removed because it became incompatible (i.e. produced wrong results) 
+  with the code produced by Data Flow optimization.
+
+### Deprecated
+
+* Deprecated [Return value optimization](doc/syntax/SYNTAX-5-OTHER.markdown#return-value-optimization). This 
+  optimization was completely superseded by the
+  [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles more cases 
+  than the old optimization. The Return value optimization will be removed when it becomes incompatible with 
+  further changes to code generation/optimization.  
+* Deprecated [Temporary inputs elimination](doc/syntax/SYNTAX-5-OTHER.markdown#temporary-inputs-elimination), for the 
+  same reasons as above. 
+
 ## 2023-06-11
 
 ### Added

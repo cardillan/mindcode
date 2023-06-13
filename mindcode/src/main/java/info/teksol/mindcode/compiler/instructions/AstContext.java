@@ -69,6 +69,13 @@ public final class AstContext {
         return child;
     }
 
+    public AstContext createSubcontext(String functionPrefix, AstSubcontextType subcontextType, double multiplier) {
+        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType,
+                this, weight * multiplier);
+        children.add(child);
+        return child;
+    }
+
     public Map<AstContext, AstContext> createDeepCopy() {
         Map<AstContext, AstContext> map = new IdentityHashMap<>(16);
         createDeepCopy(map, parent);

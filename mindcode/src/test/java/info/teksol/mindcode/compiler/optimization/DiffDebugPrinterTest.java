@@ -3,6 +3,8 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.GenerationGoal;
+import info.teksol.mindcode.compiler.MemoryModel;
+import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Assertions;
@@ -34,10 +36,14 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         public void setGoal(GenerationGoal goal) {
         }
 
+        @Override
+        public void setMemoryModel(MemoryModel memoryModel) {
+        }
+
         @Override public void setDebugPrinter(DebugPrinter debugPrinter) { }
 
         @Override
-        public void optimizeProgram(List<LogicInstruction> program, AstContext rootContext) { }
+        public void optimizeProgram(List<LogicInstruction> program, CallGraph callGraph, AstContext rootContext) { }
 
         @Override public void setMessageRecipient(Consumer<CompilerMessage> messageRecipient) { }
     };

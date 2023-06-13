@@ -1,5 +1,6 @@
 package info.teksol.mindcode.logic;
 
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.processor.MindustryValueType;
 
 import java.util.Map;
@@ -36,6 +37,11 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
+    public boolean isNull() {
+        return false;
+    }
+
+    @Override
     public String toMlog() {
         return literal;
     }
@@ -53,6 +59,22 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     @Override
     public Object getObject() {
         return null;
+    }
+
+    public LogicNumber negation() {
+        if (literal.equals("0")) return this;
+        if (literal.startsWith("-")) {
+            return get(literal.substring(1), -value);
+        } else {
+            return get("-" + literal, -value);
+        }
+    }
+
+    public LogicNumber reciprocal(InstructionProcessor instructionProcessor) {
+        if (literal.equals("1")) return this;
+        if (value == 0.0) return null;
+        double r = 1 / value;
+        return instructionProcessor.mlogFormat(r).map(s -> get(s, r)).orElse(null);
     }
 
     @Override

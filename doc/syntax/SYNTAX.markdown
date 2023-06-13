@@ -136,7 +136,7 @@ to Mindustry Logic compatible literal using these rules (first applicable rule i
 3. If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation 
    without using a decimal separator, using `float` precision (which will be used by Mindustry processor when 
    reading the literal as well). If the conversion to float causes loss of precision, a warning is produced.
-4. If none of the above rules is applicable, the conversion isn't possible and compilation error is produced. 
+4. If none of the above rules is applicable, the conversion isn't possible and a compilation error is produced. 
 
 Note: these rules are applied to the absolute value on the number being encoded. When the number is negative, a minus
 sign is then prepended to the encoded representation .

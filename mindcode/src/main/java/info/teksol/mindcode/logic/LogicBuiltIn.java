@@ -24,6 +24,11 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
         return name;
     }
 
+    @Override
+    public boolean isConstant() {
+        return !isVolatile();
+    }
+
     /**
      * Determines whether the identifier is a volatile variable, i.e. a variable whose value can change
      * independently of the program.
@@ -50,6 +55,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
         return new LogicBuiltIn(name);
     }
 
+    // @unit is volatile. It changes through the ubind instruction, but this is not known to the data flow optimizer.
     private static final Set<String> VOLATILE_NAMES = Set.of("counter", "time", "tick", "second", "minute",
-            "waveNumber", "waveTime");
+            "waveNumber", "waveTime", "unit", "links");
 }

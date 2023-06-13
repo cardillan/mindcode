@@ -105,6 +105,20 @@ public enum Operation implements LogicArgument {
         return deterministic;
     }
 
+    public boolean isAssociative() {
+        return switch(this) {
+            case ADD, MUL, LAND, OR, AND, XOR, MIN, MAX -> true;
+            default -> false;
+        };
+    }
+
+    public boolean isCommutative() {
+        return switch(this) {
+            case ADD, MUL, LAND, OR, AND, XOR, MIN, MAX -> true;
+            default -> false;
+        };
+    }
+
     public Condition toCondition() {
         return switch (this) {
             case EQUAL -> Condition.EQUAL;

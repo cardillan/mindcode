@@ -222,7 +222,7 @@ public class MindustryOpcodeVariants {
         // Virtual instructions
         add(list, V6, V7A, S, NONE, Opcode.LABEL,       label("label"));
         add(list, V6, V7A, S, NONE, Opcode.GOTOLABEL,   label("address"), label("marker"));
-        add(list, V6, V7A, S, NONE, Opcode.PUSH,        block("memory"), out("value"));
+        add(list, V6, V7A, S, NONE, Opcode.PUSH,        block("memory"), in("value"));
         add(list, V6, V7A, S, NONE, Opcode.POP,         block("memory"), out("value"));
         add(list, V6, V7A, S, NONE, Opcode.CALL,        label("callAddr"));
         add(list, V6, V7A, S, NONE, Opcode.CALLREC,     block("memory"), label("callAddr"), label("retAddr"));
