@@ -359,14 +359,47 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         for i in 0 ... SIZE - 1
                             min = cell1[i]
                         end
+                        print(min)
                         """,
                 createInstruction(OP, "sub", var(1), "SIZE", "1"),
                 createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "greaterThanEq", "0", var(1)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(READ, "min", "cell1", "i"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1001), "lessThan", "i", var(1)),
+                createInstruction(JUMP, var(1003), "lessThan", "i", var(1)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, "min"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesNestedLoops() {
+        assertCompilesTo("""
+                        for i = 0; i < 3; i += 1
+                            for j = 0; j < 3; j += 1
+                                print(i, j)
+                            end
+                        end 
+                        """,
+                createInstruction(SET, "i", "0"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(SET, "j", "0"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(PRINT, "i"),
+                createInstruction(PRINT, "j"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(OP, "add", "j", "j", "1"),
+                createInstruction(JUMP, var(1007), "lessThan", "j", "3"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1006), "lessThan", "i", "3"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
@@ -1021,11 +1054,12 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(JUMP, var(1000), "lessThanEq", "@tick", var(1)),
                 createInstruction(SET, "prevTick", "@tick"),
                 createInstruction(OP, "add", "nextTick", "prevTick", "TICKS"),
+                createInstruction(SET, "currTick", "prevTick"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "nextTick"),
                 createInstruction(PRINT, "prevTick"),
-                createInstruction(PRINT, "prevTick"),
+                createInstruction(PRINT, "currTick"),
                 createInstruction(END)
         );
     }

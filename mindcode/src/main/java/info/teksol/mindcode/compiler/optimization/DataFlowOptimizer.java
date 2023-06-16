@@ -19,7 +19,6 @@ import static info.teksol.mindcode.logic.Operation.*;
 
 public class DataFlowOptimizer extends BaseOptimizer {
     public static final boolean DEBUG = false;
-    public static final boolean DEBUG2 = false;
 
     /** Cached single instance for obtaining the results of evaluating expressions. */
     private final ExpressionValue expressionValue;
@@ -76,7 +75,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         uninitialized.clear();
         replacements.clear();
 
-        if (DEBUG || DEBUG2) {
+        if (DEBUG || DEBUG) {
             System.out.println("\n\n\n*** NEW ITERATION ***\n");
         }
 
@@ -240,10 +239,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
         for (int i = 0; i < 2; i++) {
             VariableStates initial = variableStates.copy();
+            if (DEBUG) {
+                System.out.println("=== Processing loop - iteration " + i);
+            }
 
             for (int j = start; j < children.size(); j++) {
                 // Do not propagate constants on first iteration...
-                variableStates = processContext(children.get(j), variableStates, i > 0);
+                variableStates = processContext(children.get(j), variableStates, propagateConstants && i > 0);
             }
             variableStates.merge(initial);
         }
@@ -391,14 +393,15 @@ public class DataFlowOptimizer extends BaseOptimizer {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
-        p(instruction);
-
-        // Altogether ignore push and pop instructions
+        // Altogether ignore labels and push/pop instructions
         // TODO Enhance analysis by considering pushed/popped values are unchanged by a function call
         //      Allow variable substitution in push instructions (additional optimization)
-        if (instruction instanceof PushOrPopInstruction) {
+        if (instruction instanceof PushOrPopInstruction || instruction instanceof LabelInstruction
+                || instruction instanceof GotoLabelInstruction) {
             return;
         }
+
+        p(instruction);
 
         // Process inputs first, to handle instructions reading and writing the same variable
         // Try to find possible replacements of input arguments to this instruction
@@ -429,7 +432,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             default -> null;
         };
 
-        if (DEBUG2) {
+        if (DEBUG) {
             if (!valueReplacements.isEmpty()) {
                 System.out.println("    Detected the following possible value replacements for current instruction:");
                 valueReplacements.forEach((k, v) -> System.out.println("       " + k.toMlog() + " --> " + v.toMlog()));
@@ -629,7 +632,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     }
 
     private void p(LogicInstruction instruction) {
-        if (DEBUG || DEBUG2) {
+        if (DEBUG || DEBUG) {
             System.out.println("Processing instruction #" + instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
         }
     }
@@ -722,7 +725,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         // Called when a variable value changes to purge all dependent expressions
         private void invalidateVariable(LogicVariable variable) {
-            if (DEBUG2) {
+            if (DEBUG) {
                 values.values().stream().filter(exp -> exp.dependsOn(variable))
                         .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
                 equivalences.entrySet().stream().filter(e -> e.getValue().equals(variable))
@@ -769,7 +772,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 // Find the oldest equivalent expression
                 for (VariableValue expression : values.values()) {
                     if (expression.isExpression() && expression.isEqual(instruction)) {
-                        if (DEBUG2) {
+                        if (DEBUG) {
                             System.out.println("    Adding inferred equivalence " + variable.getFullName() + " == " + expression.variable.getFullName());
                         }
                         equivalences.put(variable, expression.variable);
@@ -779,7 +782,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
                 if (instruction instanceof SetInstruction set) {
                     if (set.getResult() == variable && set.getValue() instanceof LogicVariable variable2) {
-                        if (DEBUG2) {
+                        if (DEBUG) {
                             System.out.println("    Adding direct equivalence " + variable.getFullName() + " == " + variable2.getFullName());
                         }
                         equivalences.put(variable, variable2);
@@ -881,6 +884,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
             for (LogicVariable variable : other.values.keySet()) {
                 if (!Objects.equals(values.get(variable), other.values.get(variable))) {
                     values.remove(variable);
+                }
+            }
+
+            // Only keep equivalences that are the same in both instances
+            equivalences.keySet().retainAll(other.equivalences.keySet());
+            for (LogicVariable variable : other.equivalences.keySet()) {
+                if (!Objects.equals(equivalences.get(variable), other.equivalences.get(variable))) {
+                    equivalences.remove(variable);
                 }
             }
 
