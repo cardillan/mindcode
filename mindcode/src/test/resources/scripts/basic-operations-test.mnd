@@ -71,6 +71,9 @@ eval(floor(d(2.5)), 2,      "floor")
 eval(ceil(d(2.5)),  3,      "ceil")
 eval(sqrt(d(16)),   4,      "sqrt")
 
+eval(angle(1, d(1)),        45, "angle")
+eval(angleDiff(45, d(135)), 90, "angleDiff")
+
 // Mindcode extensions
 eval(-d(8), -8, "unary minus")
 eval(!d(0),  1, "boolean negation")

@@ -11,8 +11,9 @@ The main focus of Mindcode design is two-fold:
 
 ## Latest development
 
-The latest significant enhancements to Mindcode are:
+Some of the latest enhancements to Mindcode are:
 
+* Added support for the new [`angleDiff` operation](doc/syntax/FUNCTIONS_V7.markdown#instruction-op) in Mindustry v145.
 * [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in 
   Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic, 
   either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the 

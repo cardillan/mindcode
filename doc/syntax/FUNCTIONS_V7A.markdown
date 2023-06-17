@@ -110,6 +110,7 @@ Perform an operation on 1-2 variables.
 |`result = max(a, b)`|`op max result a b`|
 |`result = min(a, b)`|`op min result a b`|
 |`result = angle(a, b)`|`op angle result a b`|
+|`result = angleDiff(a, b)`|`op angleDiff result a b`|
 |`result = len(a, b)`|`op len result a b`|
 |`result = noise(a, b)`|`op noise result a b`|
 |`result = abs(a)`|`op abs result a 0`|

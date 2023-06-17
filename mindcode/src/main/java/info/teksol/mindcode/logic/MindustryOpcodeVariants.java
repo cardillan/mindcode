@@ -90,6 +90,7 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7A, S, FUNC, Opcode.OP,         op("max"),          res("result"),  in("a"), in("b"));
         add(list, V6, V7A, S, FUNC, Opcode.OP,         op("min"),          res("result"),  in("a"), in("b"));
         add(list, V6, V7A, S, FUNC, Opcode.OP,         op("angle"),        res("result"),  in("a"), in("b"));
+        add(list, V7, V7A, S, FUNC, Opcode.OP,         op("angleDiff"),    res("result"),  in("a"), in("b"));
         add(list, V6, V7A, S, FUNC, Opcode.OP,         op("len"),          res("result"),  in("a"), in("b"));
         add(list, V6, V7A, S, FUNC, Opcode.OP,         op("noise"),        res("result"),  in("a"), in("b"));
         add(list, V6, V7A, S, FUNC, Opcode.OP,         op("abs"),          res("result"),  in("a"));

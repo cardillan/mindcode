@@ -88,6 +88,7 @@ public class ExpressionEvaluator {
         map.put(Operation.MAX,              (r, a, b) -> r.setDoubleValue(Math.max(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.MIN,              (r, a, b) -> r.setDoubleValue(Math.min(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.ANGLE,            (r, a, b) -> r.setDoubleValue(angle(a.getDoubleValue(), b.getDoubleValue())));
+        map.put(Operation.ANGLEDIFF,        (r, a, b) -> r.setDoubleValue(angleDiff(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.LEN,              (r, a, b) -> r.setDoubleValue(len(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.ABS,              (r, a, b) -> r.setDoubleValue(Math.abs(a.getDoubleValue())));
         map.put(Operation.LOG,              (r, a, b) -> r.setDoubleValue(Math.log(a.getDoubleValue())));
@@ -114,6 +115,7 @@ public class ExpressionEvaluator {
         map.put(Operation.MAX,          2);
         map.put(Operation.MIN,          2);
         map.put(Operation.ANGLE,        2);
+        map.put(Operation.ANGLEDIFF,    2);
         map.put(Operation.LEN,          2);
         map.put(Operation.ABS,          1);
         map.put(Operation.LOG,          1);
@@ -137,6 +139,16 @@ public class ExpressionEvaluator {
     private static double angle(double x, double y) {
         double result = Math.atan(y / x) * 180 / Math.PI;
         return (result < 0) ? result + 360 : result;
+    }
+
+    private static double angleDiff(double a, double b){
+        a = mod(a, 360.0);
+        b = mod(b, 360.0);
+        return Math.min((a - b) < 0 ? a - b + 360 : a - b, (b - a) < 0 ? b - a + 360 : b - a);
+    }
+
+    private static double mod(double f, double n){
+        return ((f % n) + n) % n;
     }
 
     private static double len(double x, double y) {

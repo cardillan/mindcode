@@ -67,6 +67,9 @@ eval(floor(2.5), 2,         "floor")
 eval(ceil(2.5),  3,         "ceil")
 eval(sqrt(16),   4,         "sqrt")
 
+eval(angle(1, 1),        45, "angle")
+eval(angleDiff(45, 135), 90, "angleDiff")
+
 // Mindcode extensions
 eval(-8, -8, "unary minus")
 eval(!0,  1, "boolean negation")
@@ -90,4 +93,4 @@ a = 1; eval(a &&= 0, false, "&&=")
 a = 1; eval(a &&= 2,  true, "&&=")
 a = 0; eval(a ||= 2,  true, "||=")
 
-// TODO: add angle, len, trig functions. Rand??
+// TODO: add len, trig functions. Rand??

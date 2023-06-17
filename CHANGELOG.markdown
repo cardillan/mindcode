@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-06-18
+
+### Added
+
+* Added support for the new [`angleDiff` operation](doc/syntax/FUNCTIONS_V7.markdown#instruction-op) in Mindustry v145.
+
 ## 2023-06-17
 
 ### Added
@@ -21,7 +27,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 * Fixed Data Flow optimization crashing when source code contained unused user defined functions
-  [#97](https://github.com/cardillan/mindcode/issues/97).
+  ([#97](https://github.com/cardillan/mindcode/issues/97)).
 * Fixed misspelled name of the `case-expression-optimizer` command-line and compiler directive option (was 
   `ease-expression-optimizer` before).
 

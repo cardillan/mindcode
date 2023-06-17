@@ -38,6 +38,7 @@ public enum Operation implements LogicArgument {
     MAX("max"),
     MIN("min"),
     ANGLE("angle"),
+    ANGLEDIFF("angleDiff"),
     LEN("len"),
     NOISE(false, "noise"),
     ABS("abs"),
