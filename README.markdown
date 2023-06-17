@@ -9,9 +9,9 @@ The main focus of Mindcode design is two-fold:
 * Provide language constructs that are not prohibitively expensive given the astonishingly slow speeds
   and limited instruction space of Mindustry processors.
 
-## Latest enhancements
+## Latest development
 
-The latest significant enhancements to Mindcode are
+The latest significant enhancements to Mindcode are:
 
 * [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in 
   Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic, 
@@ -19,7 +19,7 @@ The latest significant enhancements to Mindcode are
   code (specified in Mindcode or Mindustry Logic language) and linked blocks.
 * [Data flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
   and streamlines complex expressions, eliminates unnecessary variables and instructions, and reuses common cde 
-  fragments, significantly improving the quality of generated mlog code.
+  fragments, significantly improving the quality of the generated mlog code.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
 
@@ -660,7 +660,8 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 1. Install Java 17+, Maven 3.6, and PostgreSQL
 2. Create a database in PostgreSQL named `mindcode_development`
 
-> **Note**: If you install PostgreSQL locally, you won't be able to run Mindcode in Docker due to a port collision.
+Note: Docker configuration has been updated to allow running Mindcode in Docker alongside a local PostgreSQL 
+installation.  
 
 #### Windows 
 
@@ -677,7 +678,7 @@ You also need to set a `JAVA_HOME` variable pointing to the directory containing
 example (the exact path depends on the distribution and version of Java you've installed):
 
 ```
-JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17.0.6.10-hotspot
+SET JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17.0.6.10-hotspot
 ```
 
 (You can also set all these variables permanently in the _System Properties_ dialog, in the _Advanced_ tab, after 
