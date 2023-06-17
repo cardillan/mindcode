@@ -11,6 +11,11 @@ All notable changes to this project will be documented in this file.
 * Added elimination of variables never modified by a function from stack in
   [Stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
 
+### Fixed
+
+* Fixed misspelled name of the `case-expression-optimizer` command-line and compiler directive option (was 
+  `ease-expression-optimizer` before).
+
 ### Changed
 
 * Docker configuration updated to not expose the PostgreSQL port to the host machine. It is now possible to run 
