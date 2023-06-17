@@ -6,22 +6,22 @@ import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.compiler.optimization.DataFlowOptimizer.VariableStates.VariableValue;
-import info.teksol.mindcode.logic.*;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
-import info.teksol.mindcode.processor.MindustryValue;
+import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicBuiltIn;
+import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicLiteral;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
-import static info.teksol.mindcode.logic.Operation.*;
 
 public class DataFlowOptimizer extends BaseOptimizer {
-    public static final boolean DEBUG = false;
-
-    /** Cached single instance for obtaining the results of evaluating expressions. */
-    private final ExpressionValue expressionValue;
+    static final boolean DEBUG = false;
 
     /**
      * Instruction replacement map. All possible replacements are done after the data flow analysis is finished,
@@ -33,21 +33,21 @@ public class DataFlowOptimizer extends BaseOptimizer {
      * Set of instructions whose sole purpose is to set value to some variable. If the variable isn't subsequently
      * read, the instruction is useless and can be removed.
      */
-    private final Set<LogicInstruction> defines = Collections.newSetFromMap(new IdentityHashMap<>());
+    final Set<LogicInstruction> defines = Collections.newSetFromMap(new IdentityHashMap<>());
 
     /**
      * Set of variable producing instructions that were actually used in the program and need to be kept.
      */
-    private final Set<LogicInstruction> keep = Collections.newSetFromMap(new IdentityHashMap<>());
+    final Set<LogicInstruction> keep = Collections.newSetFromMap(new IdentityHashMap<>());
 
     /** Exceptions to the keep set */
-    private final Set<LogicInstruction> keepNot = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Set<LogicInstruction> useless = Collections.newSetFromMap(new IdentityHashMap<>());
 
     /**
-     * List of potentially uninitialized variables. In at least one branch the variable can be read without
+     * Set of potentially uninitialized variables. In at least one branch the variable can be read without
      * being assigned a value first.
      */
-    private final Set<LogicVariable> uninitialized = new HashSet<>();
+    final Set<LogicVariable> uninitialized = new HashSet<>();
 
     /**
      * Maps labels to their respective instructions. Rebuilt at the beginning of each iteration. Allows quickly
@@ -57,27 +57,29 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private Map<LogicLabel, LogicInstruction> labels;
 
     /** Maps function prefix to a list of variables directly or indirectly read by the function */
-    private Map<String, Set<LogicVariable>> functionReads;
+    Map<String, Set<LogicVariable>> functionReads;
 
     /** Maps function prefix to a list of variables directly or indirectly written by the function */
-    private Map<String, Set<LogicVariable>> functionWrites;
+    Map<String, Set<LogicVariable>> functionWrites;
+
+    private final DataFlowVariableStates dataFlowVariableStates;
+    private final DataFlowExpressionEvaluator expressionEvaluator;
 
     public DataFlowOptimizer(InstructionProcessor instructionProcessor) {
         super(instructionProcessor);
-        expressionValue = new ExpressionValue(instructionProcessor);
+        dataFlowVariableStates = new DataFlowVariableStates(this);
+        expressionEvaluator = new DataFlowExpressionEvaluator(instructionProcessor);
     }
 
     @Override
     protected boolean optimizeProgram() {
         defines.clear();
         keep.clear();
-        keepNot.clear();
+        useless.clear();
         uninitialized.clear();
         replacements.clear();
 
-        if (DEBUG) {
-            System.out.println("\n\n\n*** NEW ITERATION ***\n");
-        }
+        debug("\n\n\n*** NEW ITERATION ***\n");
 
         analyzeFunctionVariables();
 
@@ -93,7 +95,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             //      Will be used by the DeadCodeEliminator too!
             switch (instruction.getOpcode()) {
                 case SET, OP, PACKCOLOR, READ -> {
-                    if (!keep.contains(instruction) || keepNot.contains(instruction)) {
+                    if (!keep.contains(instruction) || useless.contains(instruction)) {
                         removeInstruction(instruction);
                     }
                 }
@@ -186,14 +188,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
     }
 
     private void processTopContext(AstContext context) {
-        VariableStates variableStates = new VariableStates();
+        VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.functionPrefix() != null) {
             Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
             function.getLogicParameters().forEach(variableStates::markInitialized);
         }
 
         variableStates = processContext(context, variableStates, true);
-        keepNot.addAll(variableStates.keepNot.values());
+        useless.addAll(variableStates.getUseless().values());
 
         if (context.functionPrefix() == null) {
             // This is the main program context.
@@ -237,9 +239,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
         for (int i = 0; i < 2; i++) {
             VariableStates initial = variableStates.copy();
-            if (DEBUG) {
-                System.out.println("=== Processing loop - iteration " + i);
-            }
+            debug("=== Processing loop - iteration " + i);
 
             for (int j = start; j < children.size(); j++) {
                 // Do not propagate constants on first iteration...
@@ -399,7 +399,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
             return;
         }
 
-        p(instruction);
+        if (DEBUG) {
+            System.out.println("Processing instruction #" + instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
+        }
 
         // Process inputs first, to handle instructions reading and writing the same variable
         // Try to find possible replacements of input arguments to this instruction
@@ -426,7 +428,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         LogicValue value = switch (replacements.getOrDefault(instruction, instruction)) {
             case SetInstruction set && set.getValue() instanceof LogicLiteral literal -> literal;
             case SetInstruction set && set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile() -> builtIn;
-            case OpInstruction op && op.getOperation().isDeterministic() -> evaluateOpInstruction(op);
+            case OpInstruction op && op.getOperation().isDeterministic() -> expressionEvaluator.evaluateOpInstruction(op);
             default -> null;
         };
 
@@ -464,9 +466,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 }
             } else if (instruction instanceof OpInstruction op && op.hasSecondOperand()) {
                 // Trying for extended evaluation
-                OpInstruction newInstruction = extendedEvaluate(variableStates, op);
+                OpInstruction newInstruction = expressionEvaluator.extendedEvaluate(variableStates, op);
                 if (newInstruction != null) {
-                    replacements.put(instruction, normalize(newInstruction));
+                    replacements.put(instruction, expressionEvaluator.normalize(newInstruction));
                 }
             }
         }
@@ -474,150 +476,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         variableStates.print("  after processing instruction");
     }
 
-    private LogicLiteral evaluateOpInstruction(OpInstruction op) {
-        if (op.hasSecondOperand()) {
-            return evaluateBinaryOpInstruction(op);
-        } else {
-            return evaluateUnaryOpInstruction(op);
-        }
-    }
-
-    private LogicLiteral evaluateUnaryOpInstruction(OpInstruction op) {
-        if (op.getX() instanceof LogicLiteral x && x.isNumericLiteral()) {
-            return evaluate(op.getOperation(), x, LogicNull.NULL);
-        }
-        return null;
-    }
-
-    private LogicLiteral evaluateBinaryOpInstruction(OpInstruction op) {
-        if (op.getX() instanceof LogicLiteral x && x.isNumericLiteral()
-                && op.getY() instanceof LogicLiteral y && y.isNumericLiteral()) {
-            return evaluate(op.getOperation(), x, y);
-        }
-        return null;
-    }
-
-    private OpInstruction extendedEvaluate(VariableStates variableStates, OpInstruction op1) {
-        LogicLiteral x1 = op1.getX() instanceof LogicLiteral l && l.isNumericLiteral() ? l : null;
-        LogicLiteral y1 = op1.getY() instanceof LogicLiteral l && l.isNumericLiteral() ? l : null;
-        // We need just one literal
-        if (x1 == null ^ y1 == null) {
-            LogicLiteral literal1 = x1 == null ? y1 : x1;
-            VariableValue variableValue = variableStates.findVariableValue(x1 == null ? op1.getX() : op1.getY());
-            if (variableValue != null && variableValue.isExpression()
-                    && variableValue.instruction instanceof OpInstruction op2 && op2.hasSecondOperand()) {
-                LogicLiteral x2 = op2.getX() instanceof LogicLiteral l && l.isNumericLiteral() ? l : null;
-                LogicLiteral y2 = op2.getY() instanceof LogicLiteral l && l.isNumericLiteral() ? l : null;
-
-                if (x2 == null ^ y2 == null) {
-                    LogicLiteral literal2 = x2 == null ? y2 : x2;
-                    LogicValue value = x2 == null ? op2.getX() : op2.getY();
-                    if (value instanceof LogicVariable variable) {
-                        if (op1.getOperation() == op2.getOperation() && op1.getOperation().isAssociative()) {
-                            // Perform the operation on the two literals
-                            LogicLiteral literal = evaluate(op1.getOperation(), literal1, literal2);
-                            if (literal != null) {
-                                // Construct the instruction
-                                return createOp(op1.getAstContext(), op1.getOperation(), op1.getResult(), variable, literal);
-                            }
-                        } else if (op1.getOperation() == ADD && op2.getOperation() == SUB) {
-                            return evaluateAddAfterSub(op1, ADD, SUB, x2 != null, literal1, literal2, variable);
-                        } else if (op1.getOperation() == SUB && op2.getOperation() == ADD) {
-                            return evaluateSubAfterAdd(op1, ADD, SUB, x1 != null, literal1, literal2, variable);
-                        } else if (op1.getOperation() == SUB && op2.getOperation() == SUB) {
-                            return evaluateSubAfterSub(op1, ADD, SUB, x1 != null, x2 != null, literal1, literal2, variable);
-                        } else if (op1.getOperation() == MUL && op2.getOperation() == DIV) {
-                            return evaluateAddAfterSub(op1, MUL, DIV, x2 != null, literal1, literal2, variable);
-                        } else if (op1.getOperation() == DIV && op2.getOperation() == MUL) {
-                            return evaluateSubAfterAdd(op1, MUL, DIV, x1 != null, literal1, literal2, variable);
-                        } else if (op1.getOperation() == DIV && op2.getOperation() == DIV) {
-                            return evaluateSubAfterSub(op1, MUL, DIV, x1 != null, x2 != null, literal1, literal2, variable);
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private OpInstruction evaluateAddAfterSub(OpInstruction op, Operation add, Operation sub,
-            boolean literal2first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
-        if (literal2first) {
-            LogicLiteral literal = evaluate(add, literal2, literal1);
-            return literal == null || literal.isNull() ? null
-                    : createOp(op.getAstContext(), sub, op.getResult(), literal, variable);
-        } else {
-            LogicLiteral literal = evaluate(sub, literal2, literal1);
-            return literal == null ? null
-                    : createOp(op.getAstContext(), sub, op.getResult(), variable, literal);
-        }
-    }
-
-    private OpInstruction evaluateSubAfterAdd(OpInstruction op, Operation add, Operation sub,
-            boolean literal1first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
-        LogicLiteral literal = evaluate(sub, literal1, literal2);
-        if (literal != null && !literal.isNull()) {
-            return literal1first
-                    ? createOp(op.getAstContext(), sub, op.getResult(), literal, variable)
-                    : createOp(op.getAstContext(), sub, op.getResult(), variable, literal);
-        }
-        return null;
-    }
-
-    private OpInstruction evaluateSubAfterSub(OpInstruction op, Operation add, Operation sub,
-            boolean literal1first, boolean literal2first, LogicLiteral literal1, LogicLiteral literal2, LogicVariable variable) {
-        LogicLiteral literal = literal2first
-                ? evaluate(sub, literal2, literal1)
-                : evaluate(add, literal2, literal1);
-
-        if (literal != null && !literal.isNull()) {
-            return literal1first == literal2first
-                    ? createOp(op.getAstContext(), sub, op.getResult(), variable, literal)
-                    : createOp(op.getAstContext(), sub, op.getResult(), literal, variable);
-        }
-        return null;
-    }
-
-    private OpInstruction normalize(OpInstruction op) {
-        switch (op.getOperation()) {
-            case SUB:
-                if (op.getY() instanceof LogicNumber l && l.getDoubleValue() < 0.0) {
-                    return createOp(op.getAstContext(), ADD, op.getResult(), op.getX(), l.negation());
-                }
-                break;
-
-            case DIV:
-                if (op.getY() instanceof LogicNumber l && l.getDoubleValue() != (long) l.getDoubleValue()) {
-                    LogicNumber reciprocal = l.reciprocal(instructionProcessor);
-                    if (reciprocal.toMlog().length() < l.toMlog().length()) {
-                        return createOp(op.getAstContext(), MUL, op.getResult(), op.getX(), reciprocal);
-                    }
-                }
-                break;
-
-            case MUL:
-                if (op.getX() instanceof LogicNumber number && op.getY() instanceof  LogicVariable variable) {
-                    return normalizeMul(op, variable, number);
-                } else if (op.getY() instanceof LogicNumber number && op.getX() instanceof  LogicVariable variable) {
-                    return normalizeMul(op, variable, number);
-                }
-                break;
-        }
-
-        return op;
-    }
-
-    private OpInstruction normalizeMul(OpInstruction op, LogicVariable variable, LogicNumber number) {
-        if (number.getDoubleValue() != (long) number.getDoubleValue()) {
-            LogicNumber reciprocal = number.reciprocal(instructionProcessor);
-            if (reciprocal.toMlog().length() < number.toMlog().length()) {
-                return createOp(op.getAstContext(), DIV, op.getResult(), variable, reciprocal);
-            }
-        }
-        return op;
-    }
-
-    private boolean canEliminate(LogicVariable variable) {
+    boolean canEliminate(LogicVariable variable) {
         // We need to protect return values of functions: when processing them, we have no information on
         // whether they're read. They're only useless if they aren't read at all, in which case they'll be removed
         // by DeadCodeEliminator.
@@ -629,9 +488,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
         };
     }
 
-    private void p(LogicInstruction instruction) {
+    private void debug(String text) {
         if (DEBUG) {
-            System.out.println("Processing instruction #" + instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
+            System.out.println(text);
         }
     }
 
@@ -664,422 +523,5 @@ public class DataFlowOptimizer extends BaseOptimizer {
             newBranch();
             return merged == null ? initial : merged;
         }
-    }
-
-    /**
-     * Describes known states of variables. Instances are primarily created by analysing code blocks, and then
-     * merged when two or more code branches merge. Merging operations may produce variables with multiple definitions.
-     * When merging two instances prescribing different values/expressions to the same variable, the values/expressions
-     * are purged.
-     */
-    class VariableStates {
-        /**
-         *  Maps variables to their known values, which might be a constant represented by a literal,
-         *  or an expression represented by an instruction.
-         */
-        private final Map<LogicVariable, VariableValue> values;
-
-        /**
-         * Maps variables to a list of instructions defining its current value (potentially more than one
-         * due to branching).
-         */
-        private final Map<LogicVariable, List<LogicInstruction>> definitions;
-
-        /** Maps variables to prior variables containing the same expression. */
-        private final Map<LogicVariable, LogicVariable> equivalences;
-
-        /** Set of initialized variables. */
-        private final Set<LogicVariable> initialized;
-
-        /** Identifies instructions that do not have to be kept, because they set identical value. */
-        private final Map<LogicVariable, LogicInstruction> keepNot;
-
-
-        public VariableStates() {
-            values = new LinkedHashMap<>();
-            definitions = new HashMap<>();
-            equivalences = new HashMap<>();
-            initialized = new HashSet<>();
-            keepNot = new HashMap<>();
-        }
-
-        private VariableStates(VariableStates other) {
-            values = new LinkedHashMap<>(other.values);
-            definitions = new HashMap<>(other.definitions);
-            equivalences = new HashMap<>(other.equivalences);
-            initialized = new HashSet<>(other.initialized);
-            keepNot = new HashMap<>(other.keepNot);
-        }
-
-        public VariableStates copy() {
-            return new VariableStates(this);
-        }
-
-        private void p(LogicInstruction instruction) {
-            if (DEBUG) {
-                System.out.println("   " + instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
-            }
-        }
-
-        // Called when a variable value changes to purge all dependent expressions
-        private void invalidateVariable(LogicVariable variable) {
-            if (DEBUG) {
-                values.values().stream().filter(exp -> exp.dependsOn(variable))
-                        .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
-                equivalences.entrySet().stream().filter(e -> e.getValue().equals(variable))
-                        .forEach(e -> System.out.println("   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
-            }
-            values.values().removeIf(exp -> exp.dependsOn(variable));
-            equivalences.keySet().removeIf(var -> var.equals(variable));
-            equivalences.values().removeIf(var -> var.equals(variable));
-        }
-
-        public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value) {
-            if (DEBUG) {
-                System.out.println("Value set: " + variable);
-                p(instruction);
-            }
-
-            if (canEliminate(variable)) {
-                // Only store the variable's value if it can be eliminated
-                // Otherwise the value itself could be used - we do not want this for global variables.
-                if (value == null) {
-                    values.remove(variable);
-                } else if (values.get(variable) != null && value.equals(values.get(variable).constantValue)) {
-                    AstSubcontextType type = instruction.getAstContext().subcontextType();
-                    if (type == OUT_OF_LINE_CALL || type == RECURSIVE_CALL) {
-                        // A function argument is being set to the same value it already has. Skip it.
-                        keepNot.put(variable, instruction);
-                    }
-                } else {
-                    values.put(variable, new VariableValue(variable, value));
-                }
-            } else {
-                keep.add(instruction);      // Ensure the instruction is kept
-            }
-
-            defines.add(instruction);
-            initialized.add(variable);
-            definitions.put(variable, List.of(instruction));
-
-            // Update expressions
-            invalidateVariable(variable);
-
-            // Handle expressions only if the value is not exactly known
-            if (value == null) {
-                // Find the oldest equivalent expression
-                for (VariableValue expression : values.values()) {
-                    if (expression.isExpression() && expression.isEqual(instruction)) {
-                        if (DEBUG) {
-                            System.out.println("    Adding inferred equivalence " + variable.getFullName() + " == " + expression.variable.getFullName());
-                        }
-                        equivalences.put(variable, expression.variable);
-                        break;
-                    }
-                }
-
-                if (instruction instanceof SetInstruction set) {
-                    if (set.getResult() == variable && set.getValue() instanceof LogicVariable variable2) {
-                        if (DEBUG) {
-                            System.out.println("    Adding direct equivalence " + variable.getFullName() + " == " + variable2.getFullName());
-                        }
-                        equivalences.put(variable, variable2);
-                    }
-                } else if (instruction.getOutputs() == 1) {
-                    VariableValue expression = new VariableValue(variable, instruction);
-                    // Do not reuse expressions with self-modifying variables (they effectively invalidate themselves)
-                    if (!expression.dependsOn(variable)) {
-                        values.put(variable, expression);
-                    }
-                }
-            }
-        }
-
-        public void markInitialized(LogicVariable variable) {
-            initialized.add(variable);
-        }
-
-        public void valueReset(LogicVariable variable) {
-            if (DEBUG) {
-                System.out.println("Value reset: " + variable);
-            }
-            values.remove(variable);
-            invalidateVariable(variable);
-        }
-
-        public void updateAfterFunctionCall(String localPrefix) {
-            functionReads.get(localPrefix).forEach(variable -> valueRead(variable, false));
-            functionWrites.get(localPrefix).forEach(this::valueReset);
-        }
-
-        public VariableValue findVariableValue(LogicValue variable) {
-            return variable instanceof LogicVariable v ? values.get(v) : null;
-        }
-
-        public LogicValue valueRead(LogicVariable variable) {
-            return valueRead(variable, true);
-        }
-
-        public LogicValue valueRead(LogicVariable variable, boolean markUninitialized) {
-            if (DEBUG) {
-                System.out.println("Value read: " + variable);
-            }
-            if (markUninitialized && !initialized.contains(variable)) {
-                uninitialized.add(variable);
-            }
-
-            if (definitions.containsKey(variable)) {
-                if (DEBUG) {
-                    definitions.get(variable).forEach(this::p);
-                }
-                keep.addAll(definitions.get(variable));     // We need to keep all defining instructions
-            }
-
-            VariableValue variableValue = values.get(variable);
-            return variableValue == null ? null : variableValue.constantValue;
-        }
-
-        public LogicVariable findEquivalent(LogicVariable value) {
-            return equivalences.get(value);
-        }
-
-        /**
-         * Merges two variable states. Each state was produced by a code path, and it isn't known which one was
-         * executed.
-         *
-         * @param other states to merge to this one.
-         */
-        public VariableStates merge(VariableStates other) {
-            print("*** Merge:\n  this: ");
-            other.print("  other:");
-
-            // Definitions are merged together
-            for (LogicVariable variable : other.definitions.keySet()) {
-                if (definitions.containsKey(variable)) {
-                    List<LogicInstruction> current = definitions.get(variable);
-                    List<LogicInstruction> theOther = other.definitions.get(variable);
-                    if (!sameInstances(current, theOther)) {
-                        // Merge the two lists
-                        if (current.size() == 1 && theOther.size() == 1) {
-                            definitions.put(variable, List.of(current.get(0), theOther.get(0)));
-                        } else {
-                            Set<LogicInstruction> union = Collections.newSetFromMap(new IdentityHashMap<>(current.size() + theOther.size()));
-                            union.addAll(current);
-                            union.addAll(theOther);
-                            definitions.put(variable, List.copyOf(union));
-                        }
-
-                        invalidateVariable(variable);
-                    }
-                } else {
-                    definitions.put(variable, other.definitions.get(variable));
-                    invalidateVariable(variable);
-                }
-            }
-
-            // Only keep values that are the same in both instances
-            values.keySet().retainAll(other.values.keySet());
-            for (LogicVariable variable : other.values.keySet()) {
-                if (!Objects.equals(values.get(variable), other.values.get(variable))) {
-                    values.remove(variable);
-                }
-            }
-
-            // Only keep equivalences that are the same in both instances
-            equivalences.keySet().retainAll(other.equivalences.keySet());
-            for (LogicVariable variable : other.equivalences.keySet()) {
-                if (!Objects.equals(equivalences.get(variable), other.equivalences.get(variable))) {
-                    equivalences.remove(variable);
-                }
-            }
-
-            // Variable is initialized only if it was initialized by both code paths
-            initialized.retainAll(other.initialized);
-
-            keepNot.keySet().retainAll(other.keepNot.keySet());
-            for (LogicVariable variable : other.keepNot.keySet()) {
-                if (values.get(variable) != other.values.get(variable)) {
-                    values.remove(variable);
-                }
-            }
-
-            print("  result:");
-
-            return this;
-        }
-
-        private void print(String title) {
-            if (DEBUG) {
-                System.out.println(title);
-                values.values().forEach(v -> System.out.println("    " + v));
-                definitions.forEach((k, v) -> {
-                    System.out.println("    Definitions of " + k.getFullName());
-                    v.forEach(ix -> System.out.println("      " + instructionIndex(ix)
-                            + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
-                });
-                equivalences.forEach((k, v) -> System.out.println("    Equivalence: " + k.getFullName() + " = " + v.getFullName()));
-                System.out.println("    Initialized: " + initialized.stream().map(LogicVariable::getFullName).collect(Collectors.joining(", ")));
-            }
-        }
-
-        private <E> boolean sameInstances(List<E> list1, List<E> list2) {
-            if (list1.size() != list2.size()) {
-                return false;
-            }
-
-            for (int i = 0; i < list1.size(); i++) {
-                if (list1.get(i) != list2.get(i)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        class VariableValue {
-            /** Variable containing the result of the expression. */
-            private final LogicVariable variable;
-
-            /** Constant value of the variable, if known */
-            private final LogicValue constantValue;
-
-            /** The instruction producing the expression. */
-            private final LogicInstruction instruction;
-
-            public VariableValue(LogicVariable variable, LogicValue constantValue) {
-                if (!constantValue.isConstant()) {
-                    throw new IllegalArgumentException("Non-constant value " + constantValue);
-                }
-                this.variable = Objects.requireNonNull(variable);
-                this.constantValue = Objects.requireNonNull(constantValue);
-                this.instruction = null;
-            }
-
-            public VariableValue(LogicVariable variable, LogicInstruction instruction) {
-                this.variable = Objects.requireNonNull(variable);
-                this.constantValue = null;
-                this.instruction = Objects.requireNonNull(instruction);
-            }
-
-            public boolean isExpression() {
-                return constantValue == null;
-            }
-
-            /**
-             * Determines whether the expression depends on the given variable.
-             *
-             * @param variable variable to inspect
-             * @return true if th expression reads the value of given variable
-             */
-            public boolean dependsOn(LogicVariable variable) {
-                return isExpression() && instruction.inputArgumentsStream().anyMatch(arg -> arg.equals(variable));
-            }
-
-            /**
-             * Determines whether this expression is equivalent to the one produced by the given instruction.
-             *
-             * @param instruction instruction defining the second expression
-             * @return true if the two expressions are equal
-             */
-            public boolean isEqual(LogicInstruction instruction) {
-                if (!isExpression() || this.instruction.getOpcode() != instruction.getOpcode()) {
-                    return false;
-                }
-
-                // Equivalence for SENSOR instruction is not supported. Sensed values are considered volatile.
-                return switch (instruction) {
-                    case OpInstruction op && op.getOperation().isDeterministic()
-                                                    -> isOpEqual((OpInstruction) this.instruction, op);
-                    case PackColorInstruction ix    -> isInstructionEqual(this.instruction, ix);
-                    //case ReadInstruction ix         -> isInstructionEqual(this.instruction, ix);
-                    default                         -> false;
-                };
-            }
-
-            private boolean isVolatile(LogicInstruction instruction) {
-                return isExpression() && instruction.inputArgumentsStream().anyMatch(LogicArgument::isVolatile);
-            }
-
-            @SuppressWarnings("SuspiciousMethodCalls")
-            public LogicArgument remap(LogicArgument value) {
-                return equivalences.containsKey(value) ? equivalences.get(value) : value;
-            }
-
-            private boolean isInstructionEqual(LogicInstruction first, LogicInstruction second) {
-                List<LogicArgument> args1 = first.getArgs();
-                List<LogicArgument> args2 = second.getArgs();
-
-                if (isVolatile(first) || args1.size() != args2.size()) {
-                    return false;
-                }
-
-                for (int i = 0; i < args1.size(); i++) {
-                    if (!first.getParam(i).isOutput() && !Objects.equals(remap(args1.get(i)), remap(args2.get(i)))) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            /**
-             * Determines whether two OP instructions produce the same expression. It is already known the first
-             * instruction operation is deterministic. THe obvious case is when the two instructions are completely
-             * identical. Additionally, commutative and inverse operations are handled.
-             *
-             * @param first first instruction to compare
-             * @param second second instruction to compare
-             * @return true if the two instructions produce the same expression
-             */
-            private boolean isOpEqual(OpInstruction first, OpInstruction second) {
-                if (isVolatile(first)) {
-                    return false;
-                }
-
-                LogicArgument x1 = remap(first.getX());
-                LogicArgument x2 = remap(second.getX());
-                LogicArgument y1 = first.hasSecondOperand() ? remap(first.getY()) : null;
-                LogicArgument y2 = second.hasSecondOperand() ? remap(second.getY()) : null;
-
-                if (first.getOperation() == second.getOperation() && Objects.equals(x1, x2) && Objects.equals(y1, y2)) {
-                    return true;
-                }
-
-                // For commutative operations, swapped arguments are equal
-                // For inverted operations, swapped arguments are also equal
-                if (first.getOperation() == second.getOperation() && first.getOperation().isCommutative()
-                        || first.getOperation().hasInverse() && first.getOperation().inverse() == second.getOperation()) {
-                    return Objects.equals(x1, y2) && Objects.equals(y1, x2);
-                }
-
-                return false;
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
-                VariableValue that = (VariableValue) o;
-                return this.variable.equals(that.variable) && this.instruction == that.instruction
-                        && Objects.equals(this.constantValue, that.constantValue);
-            }
-
-            @Override
-            public int hashCode() {
-                return Objects.hash(variable, constantValue, instruction);
-            }
-
-            @Override
-            public String toString() {
-                return "variable " + variable.getFullName() + ": " + (isExpression()
-                        ? " expression " + LogicInstructionPrinter.toString(instructionProcessor, instruction)
-                        : " constant " + constantValue);
-            }
-        }
-    }
-
-    private LogicLiteral evaluate(Operation operation, MindustryValue a, MindustryValue b) {
-        ExpressionEvaluator.getOperation(operation).execute(expressionValue, a, b);
-        return expressionValue.getLiteral();
     }
 }
