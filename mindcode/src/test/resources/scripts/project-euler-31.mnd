@@ -1,0 +1,25 @@
+allocate stack in bank1[16 ... 512]
+const COINS = 8
+int index = 0
+for value in (200, 100, 50, 20, 10, 5, 2, 1)
+    bank1[index] = value
+    index += 1
+end
+
+print(ways(20, 1))
+
+def ways(amount, index)
+    if amount == 0
+        return 1
+    end
+
+    result = 0
+    // TODO The optimizer should recognize it can use index instead of i in the loop, saving one variable
+    for i in index ... COINS
+        p = bank1[i]
+        if p <= amount
+            result += ways(amount - p, i)
+        end
+    end
+    result
+end

@@ -2,30 +2,40 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-06-17
 
 ### Added
 
 * Added elimination of useless `set` instructions (such as `set x x`) to
-  [Expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization).
+  [Expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization). Optimizes recursive 
+  function calls passing unchanged value of function argument to the next function call. 
 * Added elimination of variables never modified by a function from stack in
   [Stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
 * Added specific optimization for recursive function calls to the
   [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization):
   * The optimizer is aware when a variable value is preserved on stack and can reuse the variable state when 
-    analyzing code following a recursive function call.
+    optimizing code following a recursive function call.
   * Streamlining expressions when passing value derived from the current value of the function argument to the 
-    recursive call (e.g. calling `foo(n - 1)` in function `foo(n)`). 
+    recursive call (e.g. calling `foo(n - 1)` in function `foo(n)`).
 
 ### Fixed
 
+* Fixed Data Flow optimization crashing when source code contained unused user defined functions
+  [#97](https://github.com/cardillan/mindcode/issues/97).
 * Fixed misspelled name of the `case-expression-optimizer` command-line and compiler directive option (was 
   `ease-expression-optimizer` before).
 
 ### Changed
 
 * Docker configuration updated to not expose the PostgreSQL port to the host machine. It is now possible to run 
-  Mindcode in Docker even when PostgreSQL is also installed and running on the host machine.   
+  Mindcode in Docker even when PostgreSQL is also installed and running on the host machine.
+
+### Miscellaneous
+
+* Added processor unit tests based on Project Euler problem solutions.
+* Added statistics generation for processor unit test (captures size of the compiled program, number of steps to 
+  reach the solution, and code coverage in terms of mlog instructions). These should document improvements in 
+  quality of the generated code. 
 
 ## 2023-06-16
 

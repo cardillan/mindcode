@@ -6,6 +6,7 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicNumber;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ public class Processor {
     private final List<String> textBuffer = new ArrayList<>();
     private final Variable counter = IntVariable.newIntValue(false,"@counter", 0);
     private int steps = 0;
+    private int instructions = 0;
+    private final BitSet coverage = new BitSet();
 
     public Processor() {
         flags = EnumSet.allOf(ProcessorFlag.class);
@@ -52,6 +55,14 @@ public class Processor {
         return steps;
     }
 
+    public int getInstructions() {
+        return instructions;
+    }
+
+    public BitSet getCoverage() {
+        return coverage;
+    }
+
     public boolean getFlag(ProcessorFlag flag) {
         return flags.contains(flag);
     }
@@ -73,6 +84,7 @@ public class Processor {
         textBuffer.clear();
         counter.setIntValue(0);
         variables.put("@links", IntVariable.newIntValue(true, "@links", blocks.size()));
+        instructions = program.size();
 
         while (steps < stepLimit) {
             try {
@@ -88,6 +100,7 @@ public class Processor {
                     throw new ExecutionException(ERR_INVALID_COUNTER, "Value of @counter (" + index + ") outside valid range (0 to " + program.size() + ")");
                 }
 
+                coverage.set(index);
                 LogicInstruction instruction = program.get(index);
 
                 if (false) {

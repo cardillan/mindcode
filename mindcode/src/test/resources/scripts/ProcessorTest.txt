@@ -1,0 +1,13 @@
+Test computesPackColor:                          3 instructions,      3 steps, 100.0% coverage
+Test executesBasicEvaluations:                 507 instructions,    184 steps,  36.2% coverage
+Test executesBasicOperations:                  730 instructions,    524 steps,  55.6% coverage
+Test executesComplexCaseExpressions:            65 instructions,    844 steps, 100.0% coverage
+Test executesExpressionWithAssignments:          3 instructions,      3 steps, 100.0% coverage
+Test executesFixedBoundsRangedFor:               8 instructions,     35 steps, 100.0% coverage
+Test executesForEachLoopBreakContinue:          56 instructions,    307 steps,  96.4% coverage
+Test executesIteratedForLoopBreakContinue:      39 instructions,    459 steps, 100.0% coverage
+Test executesLoopsInConditions:                 20 instructions,     50 steps, 100.0% coverage
+Test executesRangedForLoopBreakContinue:        33 instructions,    141 steps, 100.0% coverage
+Test executesWhileLoop:                         28 instructions,     73 steps,  82.1% coverage
+Test handlesAssignmentsInConditions:             3 instructions,      3 steps, 100.0% coverage
+Test printsNumbersStringsObjects:                8 instructions,      8 steps, 100.0% coverage

@@ -14,6 +14,8 @@ import org.junit.jupiter.api.TestInfo;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -24,6 +26,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // Processor for execution is equipped with bank1 memory bank.
 // Additional blocks can be added
 public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
+
+    private static final String SCRIPTS_DIRECTORY = "src/test/resources/scripts";
+
+    private static final List<String> performance = new ArrayList<>();
+
+    static void init() {
+        performance.clear();
+    }
+
+    static void done(String className) throws IOException {
+        Path path = Path.of(SCRIPTS_DIRECTORY, className + ".txt");
+        Collections.sort(performance);
+        Files.write(path, performance);
+    }
+
+    private void logPerformance(Processor processor) {
+        int coverage = 1000 * processor.getCoverage().cardinality() / processor.getInstructions();
+        String info = String.format("Test %-40s %4d instructions, %6d steps, %3d.%01d%% coverage",
+                testInfo.getDisplayName().replaceAll("\\(\\)", "") + ":",
+                processor.getInstructions(), processor.getSteps(), coverage / 10, coverage % 10);
+        System.out.println(info);
+        performance.add(info);
+    }
 
     @Override
     protected Class<Optimizer> getTestedClass() {
@@ -46,7 +71,7 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
     }
 
     protected String readFile(String filename) throws IOException {
-        Path path = Path.of("src/test/resources/testcode", filename);
+        Path path = Path.of(SCRIPTS_DIRECTORY, filename);
         return Files.readString(path);
     }
 
@@ -72,7 +97,7 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
         List<LogicInstruction> instructions = compile(code);
         //System.out.println(prettyPrint(instructions));
         processor.run(instructions, MAX_STEPS);
-        System.out.printf("Test %-40s %6d steps%n", testInfo.getDisplayName() + ":", processor.getSteps());
+        logPerformance(processor);
         //System.out.println(String.join("", processor.getTextBuffer()));
         evaluator.accept(processor.getTextBuffer());
     }

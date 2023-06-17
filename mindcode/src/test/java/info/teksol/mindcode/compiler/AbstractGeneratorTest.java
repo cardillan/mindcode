@@ -29,7 +29,6 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected final List<CompilerMessage> messages = new ArrayList<>();
     protected final InstructionProcessor instructionProcessor = createInstructionProcessor(createCompilerProfile());
 
-
     protected void assertCompilesTo(CompilerProfile profile, Predicate<LogicInstruction> filter,
             String code, LogicInstruction... instructions) {
         List<LogicInstruction> expected = List.of(instructions);

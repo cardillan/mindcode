@@ -1,0 +1,18 @@
+const GOAL = 1001;
+const LIMIT = GOAL * GOAL
+sum = 1
+current = 3
+step = 2
+count = 1
+
+while current <= LIMIT
+    sum += current
+    current += step
+    count += 1
+    if count > 3
+        step += 2
+        count = 0
+    end
+end
+
+print(sum)

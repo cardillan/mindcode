@@ -1,5 +1,7 @@
 package info.teksol.mindcode.processor;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,9 +11,19 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-// Some Mindcode code tested in this class is can be quite complex and hard to maintain as a string constant.
-// Such code can be saved as a file in the src/test/resources/testcode directory.
+// Some Mindcode code tested in this class can be quite complex and hard to maintain as a string constant.
+// Such code can be saved as a file in the src/test/resources/scripts directory.
 public class ProcessorTest extends AbstractProcessorTest {
+
+    @BeforeAll
+    static void init() {
+        AbstractProcessorTest.init();
+    }
+
+    @AfterAll
+    static void done() throws IOException {
+        AbstractProcessorTest.done(ProcessorTest.class.getSimpleName());
+    }
 
     @Test
     void printsNumbersStringsObjects() {

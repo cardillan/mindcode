@@ -405,6 +405,36 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void handlesDescendingLoops() {
+        assertCompilesTo("""
+                        const LENGTH = 15
+                        for row = LENGTH - 2; row >= 0; row -= 1
+                            for col = row + 1; col >= 0; col -= 1
+                                print(col)
+                            end
+                        end
+                        """,
+                createInstruction(SET, "row", "13"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(OP, "add", "col", "row", "1"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(JUMP, var(1005), "lessThan", "col", "0"),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(PRINT, "col"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(OP, "sub", "col", "col", "1"),
+                createInstruction(JUMP, var(1007), "greaterThanEq", "col", "0"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "sub", "row", "row", "1"),
+                createInstruction(JUMP, var(1006), "greaterThanEq", "row", "0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Exit points">

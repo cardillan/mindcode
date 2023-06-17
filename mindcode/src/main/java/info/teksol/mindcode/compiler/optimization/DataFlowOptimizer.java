@@ -129,8 +129,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         boolean modified = false;
         for (Function function : callGraph.getFunctions()) {
             if (!function.isInline()) {
-                Set<LogicVariable> reads = functionReads.get(function.getLocalPrefix());
-                Set<LogicVariable> writes = functionWrites.get(function.getLocalPrefix());
+                Set<LogicVariable> reads = functionReads.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
+                Set<LogicVariable> writes = functionWrites.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
                 int size = reads.size() + writes.size();
                 function.getCalls().keySet().stream()
                         .filter(callGraph::containsFunction)            // Filter out built-in functions

@@ -1,0 +1,24 @@
+const LIMIT = 100
+max = 0;
+
+for i in 10 ... LIMIT
+    for j in i ... LIMIT
+        num = i * j
+        if num > max
+            if num == revert(num)
+                max = num
+            end
+        end
+    end
+end
+
+print(max)
+
+def revert(num)
+    res = 0
+    while num > 0
+        res = 10 * res + num % 10
+        num \= 10
+    end
+    res
+end

@@ -1,0 +1,16 @@
+Test computesProjectEuler04:                    22 instructions,  42899 steps, 100.0% coverage
+Test computesProjectEuler18:                   143 instructions,   1965 steps, 100.0% coverage
+Test computesProjectEuler26:                    35 instructions,   7362 steps,  94.2% coverage
+Test computesProjectEuler28:                    14 instructions,  11007 steps, 100.0% coverage
+Test computesProjectEuler31:                    75 instructions,  11098 steps, 100.0% coverage
+Test computesProjectEuler45:                    14 instructions, 265002 steps, 100.0% coverage
+Test computesRecursiveFibonacci:                30 instructions,   2476 steps, 100.0% coverage
+Test computesSumOfPrimes:                       64 instructions,   3128 steps,  96.8% coverage
+Test executeBitGetSetTest:                      25 instructions,    245 steps, 100.0% coverage
+Test executeBitReadTest:                         9 instructions,    106 steps, 100.0% coverage
+Test executeBubblesortTest:                     24 instructions,  19369 steps, 100.0% coverage
+Test executeHeapsortTest:                       47 instructions,  66804 steps, 100.0% coverage
+Test executeInsertsortTest:                     21 instructions,  25931 steps, 100.0% coverage
+Test executeQuicksortTest:                      63 instructions,  49293 steps, 100.0% coverage
+Test executeSelectsortTest:                     23 instructions,  35019 steps, 100.0% coverage
+Test readsAndWritesMemory:                       4 instructions,      4 steps, 100.0% coverage

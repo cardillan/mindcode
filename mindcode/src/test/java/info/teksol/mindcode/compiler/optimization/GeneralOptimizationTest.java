@@ -344,4 +344,18 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void ignoresUnusedFunctions() {
+        assertCompilesTo(
+                """
+                def foo()
+                    print("foo")
+                end
+                print(0)
+                """,
+                createInstruction(PRINT, "0"),
+                createInstruction(END)
+                );
+    }
 }

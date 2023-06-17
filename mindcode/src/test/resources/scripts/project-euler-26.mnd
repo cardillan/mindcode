@@ -1,0 +1,32 @@
+const LIMIT = 100
+maxlen = 0;
+maxnum = 0;
+for d in 2 .. LIMIT
+    len = getRepeatLength(d)
+    if len > maxlen
+        maxlen = len
+        maxnum = d
+    end
+end
+
+print(maxnum)
+
+def getRepeatLength(d)
+    n = d
+    while n % 5 == 0 n /= 5; end
+    while n % 2 == 0 n /= 2; end
+    if n < 2
+        return 0
+    end
+
+    power = 1
+    for i in 1 ... LIMIT
+        power = power * 10 % n
+        if power == 1
+            return i
+        end
+    end
+
+    print("Power of ten limit reached.")
+    end()
+end
