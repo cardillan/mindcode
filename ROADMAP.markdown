@@ -14,10 +14,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
     current implementation
 * Improve data flow optimization around function calls further:
-  * inspect push/pop instructions to correctly model variable state after function call to allow more optimizations
-    take place (push/pop pair means the variable is not changed by the call),
-  * create specialized optimizer for replacing variables inside push (pop?) instructions where possible.
-  * create global optimizer to handle functions with constant return values. Handle specific case of function
+  * Create specialized optimizer for replacing variables inside push (pop?) instructions where possible.
+  * Create global optimizer to handle functions with constant return values. Handle specific case of function
     always returning one of its input arguments.
 * Update ConditionalJumpsNormalizer to fully evaluate literal-based conditions. Data Flow optimizer can replace
   variables in conditional jumps with literals, allowing ConditionalJumpsNormalizer to process them.
@@ -46,11 +44,13 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * probably done by ExpressionOptimizer to avoid bloating of Data flow optimizer. Requires multiple optimization 
     passes.
 * Pulling invariant code out of loops/if branches.
-* Pushing branch-specific code into if branches.
 * Instruction reordering for better constant folding/subexpression optimization
   * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
     variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
     user variable instead of the temporary one.
+* Global variable type inferring.
+  * More precise might be obtained through data flow analysis. This will be a start.
+  * Temporary variables are typically single-use, global type inferring might work very well for them.
 * Creating additional processor tests - unit tests based on executing compiled code and comparing the output.
   They're extremely useful at detecting bugs caused by unforeseen interference of different optimizers. Some graph 
   algorithms perhaps?
@@ -63,12 +63,9 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * Generalized constant folding on expression tree, including factoring out constants from complex expressions
   * A theory-based approach is probably needed.  
 * Expression distribution:
-  * `print(value ? "a" : "b")` could be turned into `if value print("a") else print("b")`
+  * `print(value ? "a" : "b")` could be turned into `if value print("a") else print("b") end`
   * Might make sense for other instructions as well.
-  * Is useful when least one value produced by the if statement is a constant.  
-* Global variable type inferring.
-  * More precise might be obtained through data flow analysis. This will be a start.
-  * Temporary variables are typically single-use, global type inferring might work very well for them.
+  * Is useful when at least one value produced by the if statement is a constant.  
 * Inferring invariants: use global analysis/data flow analysis to infer invariants
   * Constraints on variable values inferred from conditions
     *  "non-null", "non-negative", "less than x", "boolean", "integer"
@@ -84,7 +81,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 ### Short-circuit boolean evaluation
 
 * The `and` and `or` operators will be subject to short-circuiting. All other, including `&&` and `||`, will always 
-be evaluated fully.
+  be evaluated fully.
 * Short-circuiting will be done by the compiler. Optimizers will look for opportunities to avoid short-circuiting 
   for smaller or faster code.
 * Short-circuiting will never be removed for:
@@ -100,8 +97,9 @@ be evaluated fully.
   * if all optimizations are impossible without reaching 1000 instructions limit, the most effective ones will be 
     selected (based on instruction frequency analysis or [`#use statement`](#use-statement) - explicit 
     `#use goal = speed` code blocks will be prioritized).
-* At least some optimizations (e.g. function inlining) will require AST tree node rebuild - it will probably be 
-  easier than a recompile. Loop unrolling, on the other hand, seems feasible for optimizers to realize.
+* At least some optimizations (e.g. function inlining) will require recompiling the AST tree node - it will probably 
+  be easier than manipulating the compiled code. Loop unrolling, on the other hand, seems feasible for optimizers to 
+  realize.
 
 ### Processor-variables backed arrays and loop optimizations
 
@@ -156,9 +154,15 @@ loop optimizations they might be very useful - and not so slow.
 * `break` and `continue` in `case` expressions: `break` to exit the expression, `continue` to skip to the next `when`
   branch (?)
 * Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`
-  * Perhaps a way could be found to declare a function as returning several values and parallel-assign them (e.g. 
-    `def func(x, out y, out z) return (x + 1, x - 1) end  a, b = func(7)`). The syntax looks just weird. What if we 
-    don't need some of the return values? 
+* Typed variables, parameters and function return values.
+  * This would allow better optimization and some special features, such as function pointers.
+  * Typed variables would have to be declared and could exist alongside untyped ones.
+  * Compiler directive could be used to require all variables to be typed.
+* Records.
+  * Requires typed variables.
+  * Just a way to bind several variables together. Only static allocation.
+  * Allows returning multiple values from functions.
+  * Will compile down to individual variables, which will then be optimized by Data Flow optimization.
 
 #### #use statement
 
@@ -184,15 +188,10 @@ means to compile different parts of code for size or speed.
   variables will make inspecting variables inside processors in Mindustry way easier.
 * Improved code generation
   * Memory/instruction jump table for case expressions where possible
-* Propagate constant string evaluation into inline functions.
-* Multiple optimization passes (?)
-* String constant distribution: `print("Answer is ", answer ? "yes" : "no")` would be turned into
-  `print(answer ? "Answer is yes" : "Answer is no")`, saving one `print` instruction.
+* Propagate constant string evaluation into inline functions (?).
 * More advanced optimizations:
-  * Common subexpressions optimizations (maybe including repeated array access).
-  * Loop unrolling, perhaps other loop optimizations.
   * Better jump threading / cross-jumping.
-  * Forward store for external variables / arrays.
+  * Forward store for external variables / arrays (?).
   * Tail recursion optimization.
 
 ### Further Data flow analysis enhancements
@@ -205,7 +204,7 @@ means to compile different parts of code for size or speed.
     of variable states between visits (probably quite complex.)
 * When an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`), instead of 
   push/pop protection, revert the operation after the function call returns. Implement strict/relaxed math model to 
-  let the user block this for cases where reversed operation produces result not equal to the original one. 
+  let the user block this in case the reversed operation produces result not equal to the original one. 
 
 ### Schematics Builder
 
@@ -218,7 +217,7 @@ means to compile different parts of code for size or speed.
   * the power grid having more than one segment (i.e. not fully connected)
   * distribution blocks prone to clogging
   * liquid containers being fed more than one kind of liquid
-  * determines item flow and unbalanced factory production/consumption ratios
+  * determine item flow and unbalanced factory production/consumption ratios
 * Automatically connect blocks to power nodes
   * by specifying an area in which all blocks will be connected,
   * by searching for optimal-ish distribution of connections among nodes. 
@@ -234,7 +233,7 @@ means to compile different parts of code for size or speed.
   * placing schematic into schematic
   * extending existing schematic by adding or removing content
 * Support for filling area with blocks
-* Support for external compilers to create code for processors.
+* Support for external compilers (mlogjs/pyndustric?) to create code for processors - must have command line compilers.
 
 ### User interface
 
@@ -245,7 +244,6 @@ means to compile different parts of code for size or speed.
 * Improve compiler error messages.
 * Warn developers when the generated code goes over 1000 Mindustry instructions.
 * Warn developers when potentially non-numeric value is being pushed to stack.
-* Warn developers when variable is read before being written to.
 * When the compiled program only contains basic instructions (including print and printflush), run it after 
   compilation and show the output on the web page. The same might be done for command-line compiler.
 * Render an image of built schematic to show it in the web application.
@@ -263,12 +261,6 @@ doing them isn't clear yet.
 
 * [Parallel comparison](#parallel-comparison)
 * Should case expressions use strict comparison (===)? 
-* Typed variables, parameters and function return values.
-  * This would allow better optimization and some special features, such as function pointers.
-  * Typed variables would have to be declared and could exist alongside untyped ones.
-  * Compiler directive could be used to require all variables to be typed.
-* Structures. Requires typed variables. All fields of a structure would be stored in separate processor variables. 
-  Would allow functions providing more output values. 
 * Function libraries. Now that inline and stackless functions are really useful, libraries might make sense.
 * Multiprocessing support - some kind of library or framework (probably) that could be used to
   provide high-level support for inter-processor communication using either memory cells/banks,

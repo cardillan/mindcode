@@ -3,7 +3,7 @@ ARRAY = bank2
 
 def quicksort(left, right) 
     if right > left
-        pivot_index = left + floor(rand(right - left + 1))
+        pivot_index = left + (right - left) \ 2
         new_pivot_index = partition(left, right, pivot_index)
         quicksort(left, new_pivot_index - 1)
         quicksort(new_pivot_index + 1, right)

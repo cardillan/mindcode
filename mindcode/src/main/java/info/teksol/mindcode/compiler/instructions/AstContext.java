@@ -119,6 +119,15 @@ public final class AstContext {
         return parent != null && parent.matchesRecursively(subcontextTypes);
     }
 
+    public boolean matchesRecursively(AstContextType... contextTypes) {
+        for (AstContextType contextType : contextTypes) {
+            if (matches(subcontextType)) {
+                return true;
+            }
+        }
+        return parent != null && parent.matchesRecursively(contextTypes);
+    }
+
     /**
      * Determines whether a local variable belongs to the same function as this context.
      *

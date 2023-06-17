@@ -51,15 +51,23 @@ public class IfExpressionOptimizer extends BaseOptimizer {
                 && res1.getResult().equals(res2.getResult())
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
-            if (invertedJump != null && trueBranch.size() == 1) {
-                moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
-                swappable = false;
-            } else if (falseBranch.size() == 1) {
-                moveFalseBranch(condition, trueBranch, falseBranch, jump);
-                swappable = false;
-            } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()) {
-                moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
-                swappable = false;
+            // Do not perform the optimization in recursive functions
+            // It might lead to more instructions being evaluated by moving assignment to the function return variable
+            // in front of the condition.
+            // TODO Activate this if an optimization to replace unconditional jump to return instruction with the
+            //      return itself is ever implemented.
+            if (true || res1.getAstContext().functionPrefix() == null
+                    || !getCallGraph().getFunctionByPrefix(res1.getAstContext().functionPrefix()).isRecursive()) {
+                if (invertedJump != null && trueBranch.size() == 1) {
+                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
+                    swappable = false;
+                } else if (falseBranch.size() == 1) {
+                    moveFalseBranch(condition, trueBranch, falseBranch, jump);
+                    swappable = false;
+                } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()) {
+                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
+                    swappable = false;
+                }
             }
 
             // Can we propagate writes?
