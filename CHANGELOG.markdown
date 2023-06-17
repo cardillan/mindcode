@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Added support for the [`unitHealth` function](doc/syntax/FUNCTIONS_V7.markdown#instruction-setrule).
+
 ## 2023-06-18
 
 ### Added

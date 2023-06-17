@@ -187,6 +187,7 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7A, W, FUNC, Opcode.SETRULE,   rule("ambientLight"),          in("value"));
         add(list, V7, V7A, W, FUNC, Opcode.SETRULE,   rule("solarMultiplier"),       in("value"));
         add(list, V7, V7A, W, FUNC, Opcode.SETRULE,   rule("buildSpeed"),            in("value"), in("team"));
+        add(list, V7, V7A, W, FUNC, Opcode.SETRULE,   rule("unitHealth"),            in("value"), in("team"));
         add(list, V7, V7A, W, FUNC, Opcode.SETRULE,   rule("unitBuildSpeed"),        in("value"), in("team"));
         add(list, V7, V7A, W, FUNC, Opcode.SETRULE,   rule("unitCost"),              in("value"), in("team"));
         add(list, V7, V7A, W, FUNC, Opcode.SETRULE,   rule("unitDamage"),            in("value"), in("team"));

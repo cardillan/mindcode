@@ -289,6 +289,7 @@ Set a game rule.
 |`setrule(ambientLight, value)`|`setrule ambientLight value 0 0 0 0`|
 |`setrule(solarMultiplier, value)`|`setrule solarMultiplier value 0 0 0 0`|
 |`setrule(buildSpeed, value, team)`|`setrule buildSpeed value team 0 0 0`|
+|`setrule(unitHealth, value, team)`|`setrule unitHealth value team 0 0 0`|
 |`setrule(unitBuildSpeed, value, team)`|`setrule unitBuildSpeed value team 0 0 0`|
 |`setrule(unitCost, value, team)`|`setrule unitCost value team 0 0 0`|
 |`setrule(unitDamage, value, team)`|`setrule unitDamage value team 0 0 0`|
