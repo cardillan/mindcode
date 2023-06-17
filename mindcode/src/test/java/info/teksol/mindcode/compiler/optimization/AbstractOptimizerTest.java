@@ -110,7 +110,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
                 List<ProgramVersion> selected = diffLevel3();
                 int from = findFirstIndex(selected, v -> v.getOptimizerClass() == testedClass);
                 int to = findLastIndex(selected, v -> v.getOptimizerClass() == testedClass);
-                return from > 0 && to >= from && to < selected.size()  ? selected.subList(from - 1, to) : List.of();
+                return from > 0 && to >= from && to < selected.size()  ? selected.subList(from - 1, to + 1) : List.of();
             }
         }
 

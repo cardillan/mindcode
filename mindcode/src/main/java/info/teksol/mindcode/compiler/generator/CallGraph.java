@@ -7,6 +7,7 @@ import info.teksol.mindcode.ast.StackAllocation;
 import info.teksol.mindcode.ast.VarRef;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -166,6 +167,7 @@ public final class CallGraph {
     private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, Function function) {
         function.setLabel(instructionProcessor.nextLabel());
         function.setLocalPrefix(instructionProcessor.nextLocalPrefix());
+        function.createParameters();
     }
 
     private final List<String> callStack = new ArrayList<>();
@@ -204,6 +206,7 @@ public final class CallGraph {
         private LogicLabel label;
         private String localPrefix;
         private int useCount = 0;
+        private List<LogicVariable> parameters;
 
         private Function(FunctionDeclaration declaration) {
             this.declaration = declaration;
@@ -232,6 +235,11 @@ public final class CallGraph {
         /** @return list of parameters of the function */
         public List<VarRef> getParams() {
             return declaration.getParams();
+        }
+
+        /** @return list of parameters of the function as LogicVariable */
+        public List<LogicVariable> getLogicParameters() {
+            return parameters;
         }
 
         /** @return number of function parameters */
@@ -319,6 +327,12 @@ public final class CallGraph {
 
         private  void setLocalPrefix(String localPrefix) {
             this.localPrefix = localPrefix;
+        }
+
+        private void createParameters() {
+            parameters = getParams().stream()
+                    .map(p -> LogicVariable.local(getName(), localPrefix, p.getName()))
+                    .toList();
         }
     }
 }

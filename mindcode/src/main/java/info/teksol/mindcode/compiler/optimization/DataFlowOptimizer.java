@@ -75,7 +75,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         uninitialized.clear();
         replacements.clear();
 
-        if (DEBUG || DEBUG) {
+        if (DEBUG) {
             System.out.println("\n\n\n*** NEW ITERATION ***\n");
         }
 
@@ -189,9 +189,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         VariableStates variableStates = new VariableStates();
         if (context.functionPrefix() != null) {
             Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
-            function.getDeclaration().getParams().stream()
-                    .map(p -> LogicVariable.local(function.getName(), context.functionPrefix(), p.getName()))
-                    .forEachOrdered(variableStates::markInitialized);
+            function.getLogicParameters().forEach(variableStates::markInitialized);
         }
 
         variableStates = processContext(context, variableStates, true);
@@ -632,7 +630,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     }
 
     private void p(LogicInstruction instruction) {
-        if (DEBUG || DEBUG) {
+        if (DEBUG) {
             System.out.println("Processing instruction #" + instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
         }
     }

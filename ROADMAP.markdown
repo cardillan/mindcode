@@ -4,8 +4,24 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
+* Remove Input Temp Elimination and the special protected class of temporary variables, which was only needed 
+  because of the Input Temp Elimination.
 * Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax 
   error reporting would be much preferable, but quite hard to implement). 
+* Multiple-passes optimization.
+  * At this point, there might already be benefits from additional passes.
+  * Some optimizers will only be run once after all passes (e.g. jump threading)
+  * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
+    current implementation
+* Improve data flow optimization around function calls further:
+  * inspect push/pop instructions to correctly model variable state after function call to allow more optimizations
+    take place (push/pop pair means the variable is not changed by the call),
+  * create specialized optimizer for replacing variables inside push (pop?) instructions where possible.
+  * create global optimizer to handle functions with constant return values. Handle specific case of function
+    always returning one of its input arguments.
+* Update ConditionalJumpsNormalizer to fully evaluate literal-based conditions. Data Flow optimizer can replace
+  variables in conditional jumps with literals, allowing ConditionalJumpsNormalizer to process them.
+* Loop unrolling - already possible and promising big returns.
 * External variable value reuse
   * When a value is read or written to a memory cell, store it and don't reread it if not necessary, unless the 
     memory cell was declared `volatile`.
@@ -24,14 +40,6 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * All sensed properties (already done - the entire `sensor` instruction is deemed volatile)
   * New compiler directive will allow to declare memory model for a memory block, linked block or built-in variable
     (`#declare variable [volatile | aliased | restriced]`).
-* Multiple-passes optimization.
-  * At this point, there might already be benefits from additional passes. 
-  * Some optimizers will only be run once after all passes (e.g. jump threading)
-  * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
-    current implementation
-* Update ConditionalJumpsNormalizer to fully evaluate literal-based conditions. Data Flow optimizer can replace 
-  variables in conditional jumps with literals, allowing ConditionalJumpsNormalizer to process them.   
-* Loop unrolling - already possible and promising big returns.
 * More expression optimizations:
   * replace addition/subtraction of 0 by assignment,
   * replace multiplication/division by 1 by assignment,
@@ -39,12 +47,6 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     passes.
 * Pulling invariant code out of loops/if branches.
 * Pushing branch-specific code into if branches.
-* Improve data flow optimization around function calls further:
-  * inspect push/pop instructions to correctly model variable state after function call to allow more optimizations
-    take place,
-  * create specialized optimizer for replacing variables inside push (pop?) instructions where possible.
-  * create global optimizer to handle functions with constant return values. Handle specific case of function
-    always returning one of its input arguments.
 * Instruction reordering for better constant folding/subexpression optimization
   * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
     variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
@@ -53,13 +55,17 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   They're extremely useful at detecting bugs caused by unforeseen interference of different optimizers. Some graph 
   algorithms perhaps?
   * Towers of Hanoi
-    
-## Intense contemplation
+
+## Planned
 
 ### Constant folding and common subexpression optimization
 
-* General constant folding on expression tree, including factoring out constants from complex expressions
+* Generalized constant folding on expression tree, including factoring out constants from complex expressions
   * A theory-based approach is probably needed.  
+* Expression distribution:
+  * `print(value ? "a" : "b")` could be turned into `if value print("a") else print("b")`
+  * Might make sense for other instructions as well.
+  * Is useful when least one value produced by the if statement is a constant.  
 * Global variable type inferring.
   * More precise might be obtained through data flow analysis. This will be a start.
   * Temporary variables are typically single-use, global type inferring might work very well for them.
@@ -103,7 +109,6 @@ Processor-variables backed arrays will always have a horrible performance, but w
 loop optimizations they might be very useful - and not so slow.
 
 * Optimizations unrelated to arrays
-  * Loop unrolling
   * Loop unrolling with fixed end condition: loops that have a computed start condition, but fixed end condition, 
     could be unrolled as a list of instructions without jumps. The loop will start by jumping to the instruction 
     corresponding to given start condition.
@@ -136,10 +141,6 @@ loop optimizations they might be very useful - and not so slow.
   * Possible support to modify the underlying array through the loop control variable, or specific syntax (`yield exp`)
   
 * Assign hints to AST Context nodes to be used by LoginInstructionGenerator in multi-pass compilation.  
- 
-## Planned
-
-Things being pondered on from time to time.
 
 ### Language syntax
 
@@ -174,10 +175,6 @@ means to compile different parts of code for size or speed.
 ### Code generation / optimization
 
 * Function calls:
-  * Circular variable assignment: when compiling recursive functions, circular assignments are sometimes generated
-    (e.g. `__tmpX = a; a = __tmpX`, the temporary variable can be a retval as well). These assignments will be just
-    removed.
-  * Parameters that are only passed to recursive calls and never modified won't be stored on stack.
   * Additional automatic inlining of non-recursive functions.
   * Replace jump to return instruction with the return instruction itself (increases code size).
 * Boolean expression optimizations: encode `a and not b` as `a > b`, `a or not b` as `a >= b`, if both values are 
@@ -197,6 +194,15 @@ means to compile different parts of code for size or speed.
   * Better jump threading / cross-jumping.
   * Forward store for external variables / arrays.
   * Tail recursion optimization.
+
+### Further Data flow analysis enhancements
+
+* Visit stackless functions on calls (??):
+  * Every result of a visit to stackless function would have to be merged together and then applied to optimizations
+    on that function.
+  * Could help keeping track of global variables and memory blocks.
+  * Could be used to create more versions of a function, possibly inlining some of them, based on (dis)similarities
+    of variable states between visits (probably quite complex.)
 
 ### Schematics Builder
 

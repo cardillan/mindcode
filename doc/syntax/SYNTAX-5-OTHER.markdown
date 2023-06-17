@@ -241,6 +241,7 @@ the following optimizations are available:
 * `floor` function called on a multiplication by a constant or a division. Combines the two operations into one
   integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the
   divisor in the `idiv` operation.
+* All set instructions assigning a variable to itself (e.g. `set x x`) are removed. 
 
 ## Case expression optimization
 
@@ -780,15 +781,17 @@ might make the produced code somewhat less readable.
 
 ## Stack optimization
 
-Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. Several
-independent optimizations are performed:
+Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. The following 
+optimizations are performed:
 
 * `push`/`pop` instruction elimination for variables that are not used anywhere apart from the push/pop instructions.
   This happens when variables are eliminated by other optimizations. The optimization is done globally, in a single 
   pass across the entire program.
-* `push`/`pop` instructions elimination for variables that are read neither by any instruction between the call 
+* `push`/`pop` instruction elimination for variables that are read neither by any instruction between the call 
   instruction and the end of the function, nor by any instruction which is part of the same loop as the call 
-  instruction. 
+  instruction. Implicit reads by recursive calls to the same function with the value of the parameter unchanged are 
+  also detected.
+* `push`/`pop` instruction elimination for variables that are never modified within the function.
 
 ## Return value optimization
 

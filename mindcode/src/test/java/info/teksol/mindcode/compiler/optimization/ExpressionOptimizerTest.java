@@ -115,4 +115,20 @@ public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOpt
                 createInstruction(END)
         );
     }
+
+    @Test
+    void optimizesUselessSet() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(SET, tmp0, tmp0),
+                        createInstruction(SET, tmp1, tmp0),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp1, tmp0),
+                        createInstruction(END)
+                )
+        );
+    }
 }

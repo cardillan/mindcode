@@ -17,6 +17,7 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     protected List<Optimization> getAllOptimizations() {
         return List.of(
                 Optimization.DEAD_CODE_ELIMINATION,
+                Optimization.EXPRESSION_OPTIMIZATION,
                 Optimization.STACK_USAGE_OPTIMIZATION
         );
     }
@@ -110,13 +111,10 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(JUMP, var(1005), "equal", "true", "false"),
                 createInstruction(SET, "__fn0_y", "__fn0_x"),
                 createInstruction(PRINT, "__fn0_y"),
-                createInstruction(PUSH, "bank1", "__fn0_x"),
                 createInstruction(PUSH, "bank1", "__fn0_y"),
-                createInstruction(SET, "__fn0_x", "__fn0_x"),
                 createInstruction(CALLREC, "bank1", var(1000), var(1006)),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(POP, "bank1", "__fn0_y"),
-                createInstruction(POP, "bank1", "__fn0_x"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
@@ -208,6 +206,74 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(LABEL, var(1004)),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(RETURN, "bank1"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void correctlyOptimizesQuicksort() {
+        // For the first call, y isn't read in the loop, but is read after the loop
+        assertCompilesTo("""
+                        allocate stack in bank1[0...512]
+                        ARRAY = bank2
+
+                        def quicksort(left, right)
+                            if right > left
+                                pivot_index = left + floor(rand(right - left + 1))
+                                new_pivot_index = partition(left, right, pivot_index)
+                                quicksort(left, new_pivot_index - 1)
+                                quicksort(new_pivot_index + 1, right)
+                            end
+                        end
+
+                        inline def partition(left, right, pivot_index)
+                            pivot_index
+                        end
+
+                        quicksort(0, SIZE - 1)
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(OP, "sub", var(0), "SIZE", "1"),
+                createInstruction(SET, "__fn0_left", "0"),
+                createInstruction(SET, "__fn0_right", var(0)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "greaterThan", var(2), "__fn0_right", "__fn0_left"),
+                createInstruction(JUMP, var(1003), "equal", var(2), "false"),
+                createInstruction(OP, "sub", var(4), "__fn0_right", "__fn0_left"),
+                createInstruction(OP, "add", var(5), var(4), "1"),
+                createInstruction(OP, "rand", var(6), var(5)),
+                createInstruction(OP, "floor", var(7), var(6)),
+                createInstruction(OP, "add", var(8), "__fn0_left", var(7)),
+                createInstruction(SET, "__fn0_pivot_index", var(8)),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(SET, "__fn1_pivot_index", "__fn0_pivot_index"),
+                createInstruction(SET, var(9), "__fn1_pivot_index"),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(SET, "__fn0_new_pivot_index", var(9)),
+                createInstruction(OP, "sub", var(10), "__fn0_new_pivot_index", "1"),
+                createInstruction(PUSH, "bank1", "__fn0_right"),
+                createInstruction(PUSH, "bank1", "__fn0_new_pivot_index"),
+                createInstruction(SET, "__fn0_right", var(10)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1007)),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(POP, "bank1", "__fn0_new_pivot_index"),
+                createInstruction(POP, "bank1", "__fn0_right"),
+                createInstruction(OP, "add", var(12), "__fn0_new_pivot_index", "1"),
+                createInstruction(SET, "__fn0_left", var(12)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1008)),
+                createInstruction(LABEL, var(1008)),
+                createInstruction(SET, var(13), "__fn0retval"),
+                createInstruction(SET, var(3), var(13)),
+                createInstruction(JUMP, var(1004), "always"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, var(3), "null"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(SET, "__fn0retval", var(3)),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)

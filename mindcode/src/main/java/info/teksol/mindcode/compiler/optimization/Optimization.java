@@ -29,7 +29,7 @@ public enum Optimization {
             ExpressionOptimizer::new,
             "optimizing some common mathematical expressions"),
 
-    CASE_EXPRESSION_OPTIMIZATION        ('c', "Ease Expression Optimization",
+    CASE_EXPRESSION_OPTIMIZATION        ('c', "Case Expression Optimization",
             CaseExpressionOptimizer::new,
             "eliminating temporary variables created to execute case expressions"),
     

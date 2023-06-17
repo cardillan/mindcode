@@ -75,7 +75,7 @@ Actions:
 ```
 usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
-                [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
+                [--case-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
                 [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
@@ -124,7 +124,7 @@ optimization levels:
                          instructions
   --expression-optimization LEVEL
                          optimization level of optimizing some common mathematical expressions
-  --ease-expression-optimization LEVEL
+  --case-expression-optimization LEVEL
                          optimization level of eliminating temporary variables created to execute case expressions
   --conditionals-optimization LEVEL
                          optimization level of  merging  an  op  instruction  producing  a  boolean  expression into the
@@ -165,7 +165,7 @@ debug output options:
 ```
 usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
-                [--ease-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
+                [--case-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
                 [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
@@ -215,7 +215,7 @@ optimization levels:
                          instructions
   --expression-optimization LEVEL
                          optimization level of optimizing some common mathematical expressions
-  --ease-expression-optimization LEVEL
+  --case-expression-optimization LEVEL
                          optimization level of eliminating temporary variables created to execute case expressions
   --conditionals-optimization LEVEL
                          optimization level of  merging  an  op  instruction  producing  a  boolean  expression into the

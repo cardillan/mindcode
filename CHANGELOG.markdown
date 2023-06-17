@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Added elimination of useless `set` instructions (such as `set x x`) to
+  [Expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization).
+* Added elimination of variables never modified by a function from stack in
+  [Stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
+
+### Changed
+
+* Docker configuration updated to not expose the PostgreSQL port to the host machine. It is now possible to run 
+  Mindcode in Docker even when PostgreSQL is also installed and running on the host machine.   
+
 ## 2023-06-16
 
 ### Added

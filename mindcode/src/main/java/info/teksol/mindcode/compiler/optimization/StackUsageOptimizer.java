@@ -1,11 +1,15 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.AstContextType;
+import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicVariable;
 
@@ -14,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Optimizes the stack usage -- eliminates push/pop instruction pairs determined to be unnecessary. Several
@@ -26,6 +31,9 @@ import java.util.stream.Collectors;
  * <ol><li>The variable isn't read by any instruction following the call instruction, up to the end of the function.
  * </li><li>The variable isn't read by any instruction in any loop shared with the call instruction.
  * </li></ol>
+ * <b>Note:</b> a variable may be read implicitly by a recursive call.
+ * </li><li>
+ * Eliminates push/pop instruction for variables that are not modified at all by the function.
  * </li></ul>
  */
 public class StackUsageOptimizer extends BaseOptimizer {
@@ -77,11 +85,10 @@ public class StackUsageOptimizer extends BaseOptimizer {
 
                     // 1. Preserve all variables that are read anywhere after the call
                     int callIndex = function.indexOf(ix -> ix == call);
-                    LogicList codeBlock = function.subList(callIndex, function.size());
-                    Set<LogicArgument> preserveVariables = codeBlock.stream()
+                    LogicList codeBlock = function.subList(callIndex + 1, function.size());
+                    Set<LogicVariable> preserveVariables = codeBlock.stream()
                             .filter(ix -> !(ix instanceof PushOrPopInstruction))
-                            .flatMap(LogicInstruction::inputArgumentsStream)
-                            .filter(LogicVariable.class::isInstance)
+                            .flatMap(this::readVariables)
                             .collect(Collectors.toCollection(HashSet::new));
 
                     // 2. Preserve all variables which are part of the same loop as the call. As the loops are
@@ -89,7 +96,19 @@ public class StackUsageOptimizer extends BaseOptimizer {
                     contextStream(call.findTopContextOfType(AstContextType.LOOP))
                             .filter(ix -> !(ix instanceof PushOrPopInstruction))
                             .flatMap(LogicInstruction::inputArgumentsStream)
+                            .filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast)
                             .forEachOrdered(preserveVariables::add);
+
+                    // 3. Remove all variables that are not written to in the entire function
+                    Set<LogicVariable> writtenVariables = function.stream()
+                            .filter(ix -> !(ix instanceof PushOrPopInstruction))
+                            .flatMap(LogicInstruction::outputArgumentsStream)
+                            .filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast)
+                            .collect(Collectors.toCollection(HashSet::new));
+                    // Only keep variables written to
+                    preserveVariables.retainAll(writtenVariables);
 
                     // Remove instructions from the function
                     function.stream()
@@ -100,5 +119,33 @@ public class StackUsageOptimizer extends BaseOptimizer {
                 }
             }
         }
+    }
+
+    private Stream<LogicVariable> readVariables(LogicInstruction instruction) {
+        if (instruction instanceof CallRecInstruction callRecInstruction) {
+            return implicitVariableReads(callRecInstruction).stream();
+        } else {
+            return instruction.inputArgumentsStream()
+                    .filter(LogicVariable.class::isInstance)
+                    .map(LogicVariable.class::cast);
+        }
+    }
+
+    private Set<LogicVariable> implicitVariableReads(CallRecInstruction instruction) {
+        AstContext subcontext = instruction.getAstContext();
+        if (subcontext.subcontextType() != AstSubcontextType.RECURSIVE_CALL) {
+            throw new MindcodeInternalError("Expected RECURSIVE_CALL subcontext, found " + subcontext);
+        }
+
+        Function function = getCallGraph().getFunctionByPrefix(subcontext.functionPrefix());
+        Set<LogicVariable> result = new HashSet<>(function.getLogicParameters());
+
+        contextStream(subcontext)
+                .filter(SetInstruction.class::isInstance)
+                .map(SetInstruction.class::cast)
+                .map(SetInstruction::getResult)
+                .forEach(result::remove);
+
+        return result;
     }
 }
