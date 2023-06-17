@@ -203,6 +203,9 @@ means to compile different parts of code for size or speed.
   * Could help keeping track of global variables and memory blocks.
   * Could be used to create more versions of a function, possibly inlining some of them, based on (dis)similarities
     of variable states between visits (probably quite complex.)
+* When an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`), instead of 
+  push/pop protection, revert the operation after the function call returns. Implement strict/relaxed math model to 
+  let the user block this for cases where reversed operation produces result not equal to the original one. 
 
 ### Schematics Builder
 

@@ -121,9 +121,23 @@ public class DataFlowVariableStates {
             }
         }
 
+        public void pushVariable(LogicVariable variable) {
+            debug("Pushing variable " + variable);
+            if (!stored.add(variable)) {
+                throw new MindcodeInternalError("Push called twice on " + variable.getFullName());
+            }
+        }
+
+        public void popVariable(LogicVariable variable) {
+            debug("Popping variable " + variable);
+            if (!stored.remove(variable)) {
+                throw new MindcodeInternalError("Pop without push on " + variable.getFullName());
+            }
+        }
+
         public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value) {
             if (stored.contains(variable)) {
-                debug("    Not setting value of variable " + variable.getFullName() + ", because it is stored on stack.");
+                debug("Not setting value of variable " + variable.getFullName() + ", because it is stored on stack.");
                 return;
             }
 

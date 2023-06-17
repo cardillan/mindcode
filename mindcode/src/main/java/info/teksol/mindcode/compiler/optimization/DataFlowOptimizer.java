@@ -7,6 +7,7 @@ import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
+import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates.VariableValue;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicBuiltIn;
@@ -178,8 +179,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .filter(v -> v.getType() != ArgumentType.BLOCK)
                 .filter(v -> !v.isGlobalVariable())
                 .map(LogicVariable::getFullName)
-                .sorted()
                 .distinct()
+                .sorted()
                 .collect(Collectors.joining(", "));
 
         if (!uninitializedList.isEmpty()) {
@@ -391,16 +392,16 @@ public class DataFlowOptimizer extends BaseOptimizer {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
-        // Altogether ignore labels and push/pop instructions
-        // TODO Enhance analysis by considering pushed/popped values are unchanged by a function call
-        //      Allow variable substitution in push instructions (additional optimization)
-        if (instruction instanceof PushOrPopInstruction || instruction instanceof LabelInstruction
-                || instruction instanceof GotoLabelInstruction) {
-            return;
-        }
-
         if (DEBUG) {
             System.out.println("Processing instruction #" + instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
+        }
+
+        switch (instruction) {
+            case PushInstruction ix:        variableStates.pushVariable(ix.getVariable()); return;
+            case PopInstruction ix:         variableStates.popVariable(ix.getVariable()); return;
+            case LabelInstruction ix:       return;
+            case GotoLabelInstruction ix:   return;
+            default:                        break;
         }
 
         // Process inputs first, to handle instructions reading and writing the same variable
@@ -469,6 +470,17 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 OpInstruction newInstruction = expressionEvaluator.extendedEvaluate(variableStates, op);
                 if (newInstruction != null) {
                     replacements.put(instruction, expressionEvaluator.normalize(newInstruction));
+                }
+            } else if (instruction instanceof SetInstruction set) {
+                // Specific optimization to streamline self-modifying statements in recursive calls
+                if (canEliminate(set.getResult()) && set.getValue().isTemporaryVariable()) {
+                    VariableValue val = variableStates.findVariableValue(set.getValue());
+                    if (val != null && val.isExpression() && val.getInstruction() instanceof OpInstruction op) {
+                        if (op.inputArgumentsStream().anyMatch(set.getResult()::equals)) {
+                            OpInstruction newInstruction = op.withContext(set.getAstContext()).withResult(set.getResult());
+                            replacements.put(instruction, expressionEvaluator.normalize(newInstruction));
+                        }
+                    }
                 }
             }
         }

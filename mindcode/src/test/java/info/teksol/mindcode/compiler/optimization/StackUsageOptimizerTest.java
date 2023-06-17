@@ -213,6 +213,53 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     }
 
     @Test
+    void removesUnmodifiedVariables() {
+        // For the first call, y isn't read in the loop, but is read after the loop
+        assertCompilesTo("""
+                        allocate stack in bank1[0...512]
+                        def foo(m, n)
+                            for i in 1 .. n
+                                print(n)
+                                printflush(m)
+                                foo(m, n - 1)
+                            end
+                        end
+                        foo(message1, 10)
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(SET, "__fn0_m", "message1"),
+                createInstruction(SET, "__fn0_n", "10"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, var(1), "__fn0_n"),
+                createInstruction(SET, "__fn0_i", "1"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(JUMP, var(1005), "greaterThan", "__fn0_i", var(1)),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(PRINTFLUSH, "__fn0_m"),
+                createInstruction(OP, "sub", var(2), "__fn0_n", "1"),
+                createInstruction(PUSH, "bank1", "__fn0_n"),
+                createInstruction(PUSH, "bank1", "__fn0_i"),
+                createInstruction(PUSH, "bank1", var(1)),
+                createInstruction(SET, "__fn0_n", var(2)),
+                createInstruction(CALLREC, "bank1", var(1000), var(1006)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(POP, "bank1", var(1)),
+                createInstruction(POP, "bank1", "__fn0_i"),
+                createInstruction(POP, "bank1", "__fn0_n"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
+                createInstruction(JUMP, var(1003), "always"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(RETURN, "bank1"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void correctlyOptimizesQuicksort() {
         // For the first call, y isn't read in the loop, but is read after the loop
         assertCompilesTo("""

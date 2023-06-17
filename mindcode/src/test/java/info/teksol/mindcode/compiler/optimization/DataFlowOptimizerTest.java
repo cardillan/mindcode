@@ -28,7 +28,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 Optimization.OUTPUT_TEMPS_ELIMINATION,
                 Optimization.LOOP_OPTIMIZATION,
                 Optimization.IF_EXPRESSION_OPTIMIZATION,
-                Optimization.DATA_FLOW_OPTIMIZATION
+                Optimization.DATA_FLOW_OPTIMIZATION,
+                Optimization.STACK_USAGE_OPTIMIZATION
         );
     }
 
@@ -383,7 +384,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             for j = 0; j < 3; j += 1
                                 print(i, j)
                             end
-                        end 
+                        end
                         """,
                 createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1000)),
@@ -689,21 +690,17 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(SET, "__fn0retval", "__fn0_n"),
                 createInstruction(JUMP, var(1004), "lessThan", "__fn0_n", "2"),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(OP, "sub", var(3), "__fn0_n", "1"),
                 createInstruction(PUSH, "bank1", "__fn0_n"),
-                createInstruction(SET, "__fn0_n", var(3)),
+                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
                 createInstruction(CALLREC, "bank1", var(1000), var(1005)),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(POP, "bank1", "__fn0_n"),
                 createInstruction(SET, var(4), "__fn0retval"),
-                createInstruction(OP, "sub", var(5), "__fn0_n", "2"),
-                createInstruction(PUSH, "bank1", "__fn0_n"),
                 createInstruction(PUSH, "bank1", var(4)),
-                createInstruction(SET, "__fn0_n", var(5)),
+                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "2"),
                 createInstruction(CALLREC, "bank1", var(1000), var(1006)),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(POP, "bank1", var(4)),
-                createInstruction(POP, "bank1", "__fn0_n"),
                 createInstruction(OP, "add", "__fn0retval", var(4), "__fn0retval"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(LABEL, var(1002)),
@@ -775,6 +772,82 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END)
+        );
+    }
+
+    @Test
+    public void preservesVariableStateAcrossPushAndPop() {
+        // Explanation of the test:
+        // The recursive call foo(m, n - 1) modifies __fn0_n (it is set to n - 1 when passing new value to the recursive call)
+        // Data Flow analysis of push/pop should determine the value of n remains unchanged after the call
+        // Because of this, it subsequently determines the __tmp1 variable in loop condition can be replaced by __fn0_n
+        assertCompilesTo("""
+                        allocate stack in bank1[0...512]
+                        def foo(n)
+                            if n > 0
+                                foo(n - 1)
+                            end
+                        end
+                        foo(10)
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(SET, "__fn0_n", "10"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0retval", "null"),
+                createInstruction(JUMP, var(1004), "lessThanEq", "__fn0_n", "0"),
+                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1005)),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(SET, "__fn0retval", "__fn0retval"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(RETURN, "bank1")
+        );
+    }
+
+    @Test
+    public void preservesVariableStateAcrossPushAndPopInLoop() {
+        // Explanation of the test:
+        // The recursive call foo(m, n - 1) modifies __fn0_n (it is set to n - 1 when passing new value to the recursive call)
+        // Data Flow analysis of push/pop should determine the value of n remains unchanged after the call
+        // Because of this, it subsequently determines the __tmp1 variable in loop condition can be replaced by __fn0_n
+        assertCompilesTo("""
+                        allocate stack in bank1[0...512]
+                        def foo(n)
+                            for i in 1 .. n
+                                print(n)
+                                foo(n - 1)
+                            end
+                        end
+                        foo(10)
+                        """,
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(SET, "__fn0_n", "10"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1001)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0_i", "1"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(JUMP, var(1005), "greaterThan", "1", "__fn0_n"),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(PUSH, "bank1", "__fn0_n"),
+                createInstruction(PUSH, "bank1", "__fn0_i"),
+                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
+                createInstruction(CALLREC, "bank1", var(1000), var(1006)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(POP, "bank1", "__fn0_i"),
+                createInstruction(POP, "bank1", "__fn0_n"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
+                createInstruction(JUMP, var(1007), "lessThanEq", "__fn0_i", "__fn0_n"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(RETURN, "bank1")
         );
     }
     //</editor-fold>

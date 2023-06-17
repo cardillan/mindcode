@@ -10,6 +10,12 @@ All notable changes to this project will be documented in this file.
   [Expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization).
 * Added elimination of variables never modified by a function from stack in
   [Stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
+* Added specific optimization for recursive function calls to the
+  [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization):
+  * The optimizer is aware when a variable value is preserved on stack and can reuse the variable state when 
+    analyzing code following a recursive function call.
+  * Streamlining expressions when passing value derived from the current value of the function argument to the 
+    recursive call (e.g. calling `foo(n - 1)` in function `foo(n)`). 
 
 ### Fixed
 
