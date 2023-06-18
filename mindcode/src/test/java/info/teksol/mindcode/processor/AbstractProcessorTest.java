@@ -41,11 +41,11 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
         Files.write(path, performance);
     }
 
-    private void logPerformance(Processor processor) {
+    private void logPerformance(String title, Processor processor) {
         int coverage = 1000 * processor.getCoverage().cardinality() / processor.getInstructions();
+        String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
         String info = String.format("Test %-40s %4d instructions, %6d steps, %3d.%01d%% coverage",
-                testInfo.getDisplayName().replaceAll("\\(\\)", "") + ":",
-                processor.getInstructions(), processor.getSteps(), coverage / 10, coverage % 10);
+                name + ":", processor.getInstructions(), processor.getSteps(), coverage / 10, coverage % 10);
         System.out.println(info);
         performance.add(info);
     }
@@ -90,22 +90,31 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
         return LogicInstructionLabelResolver.resolve(instructionProcessor, generateInstructions(code).instructions());
     }
 
-    protected void testAndEvaluateCode(String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {
+    protected void testAndEvaluateCode(String title, String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {
         Processor processor = new Processor();
         processor.addBlock(MindustryMemory.createMemoryBank("bank1"));
+        processor.addBlock(MindustryMemory.createMemoryBank("bank2"));
         blocks.forEach(processor::addBlock);
         List<LogicInstruction> instructions = compile(code);
         //System.out.println(prettyPrint(instructions));
         processor.run(instructions, MAX_STEPS);
-        logPerformance(processor);
+        logPerformance(title, processor);
         //System.out.println(String.join("", processor.getTextBuffer()));
         evaluator.accept(processor.getTextBuffer());
     }
 
-    protected void testCode(String code, List<MindustryObject> blocks, List<String> expectedOutputs) {
-        testAndEvaluateCode(code, blocks, outputs -> assertEquals(expectedOutputs, outputs,
+    protected void testAndEvaluateFile(String fileName, List<MindustryObject> blocks, Consumer<List<String>> evaluator) throws IOException {
+        testAndEvaluateCode(fileName, readFile(fileName), blocks, evaluator);
+    }
+
+    protected void testCode(String title, String code, List<MindustryObject> blocks, List<String> expectedOutputs) {
+        testAndEvaluateCode(title, code, blocks, outputs -> assertEquals(expectedOutputs, outputs,
                 () -> messages.stream().map(CompilerMessage::message)
                         .collect(Collectors.joining("\n", "\n", "\n"))));
+    }
+
+    protected void testCode(String code, List<MindustryObject> blocks, List<String> expectedOutputs) {
+        testCode(null, code, blocks, expectedOutputs);
     }
 
     protected void testCode(String code, String... expectedOutputs) {
@@ -113,7 +122,7 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
     }
 
     protected void testFile(String fileName, List<MindustryObject> blocks, List<String> expectedOutputs) throws IOException {
-        testCode(readFile(fileName), blocks, expectedOutputs);
+        testCode(fileName, readFile(fileName), blocks, expectedOutputs);
     }
 
     protected void testFile(String fileName, String... expectedOutputs) throws IOException {

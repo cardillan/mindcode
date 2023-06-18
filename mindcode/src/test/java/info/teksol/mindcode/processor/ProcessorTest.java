@@ -46,8 +46,7 @@ public class ProcessorTest extends AbstractProcessorTest {
 
     @Test
     void executesBasicOperations() throws IOException {
-        testAndEvaluateCode(
-                readFile("basic-operations-test.mnd"),
+        testAndEvaluateFile("basic-operations.mnd",
                 List.of(),
                 output -> {
                     assertTrue(output.size() > 10, "Test didn't produce enough output values (expected more than 10, got " + output.size() + ".");
@@ -60,8 +59,7 @@ public class ProcessorTest extends AbstractProcessorTest {
 
     @Test
     void executesBasicEvaluations() throws IOException {
-        testAndEvaluateCode(
-                readFile("basic-evaluations-test.mnd"),
+        testAndEvaluateFile("basic-evaluations.mnd",
                 List.of(),
                 output -> {
                     assertTrue(output.size() > 10, "Test didn't produce enough output values (expected more than 10, got " + output.size() + ".");

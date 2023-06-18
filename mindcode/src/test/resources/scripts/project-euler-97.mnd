@@ -1,0 +1,16 @@
+const START = 28433
+const LIMIT = 57862
+const DIGITS = 10 * 1000 * 1000 * 1000;
+const SHIFT = 20
+
+// TODO Compute with better modular arithmetics
+result = START
+count = LIMIT
+while count > SHIFT
+    result = (result << SHIFT) % DIGITS
+    count -= SHIFT
+end
+
+result = ((result << count) + 1) % DIGITS
+print(result)
+

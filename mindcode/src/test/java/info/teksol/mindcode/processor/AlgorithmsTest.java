@@ -2,11 +2,15 @@ package info.teksol.mindcode.processor;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -24,49 +28,18 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     }
 
     @Test
-    void readsAndWritesMemory() {
-        testCode("""
-                        allocate heap in bank1[0...512]
-                        $A = 10
-                        print($A)
-                        """,
-                "10"
-        );
-    }
-
-    @Test
-    void computesRecursiveFibonacci() {
-        testCode("""
-                        allocate stack in bank1[0...512]
-                        def fib(n)
-                            n < 2 ? n : fib(n - 1) + fib(n - 2)
-                        end
-                        print(fib(10))
-                        """,
-                "55"
-        );
-    }
-
-    @Test
-    void executeBitReadTest() throws IOException {
-        testFile("bit-read-test.mnd",
+    void memoryBitReadTest() throws IOException {
+        testFile("bitmap-get.mnd",
                 List.of(),
                 IntStream.range(0, 16).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
         );
     }
 
     @Test
-    void executeBitGetSetTest() throws IOException {
-        testFile("bitmap-get-set-test.mnd",
+    void memoryBitReadWriteTest() throws IOException {
+        testFile("bitmap-get-set.mnd",
                 List.of(),
                 IntStream.range(1, 17).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
-        );
-    }
-
-    @Test
-    void computesSumOfPrimes() throws IOException {
-        testFile("compute-sum-of-primes.mnd",
-                "21536"
         );
     }
 
@@ -76,64 +49,57 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         MindustryMemory memory = MindustryMemory.createMemoryBank("bank2", array);
 
         String code = "const SIZE = " + arrayLength + "\n" + readFile(fileName);
-        testCode(code,
+        testCode("sorting with " + fileName,
+                code,
                 List.of(memory),
                 Arrays.stream(array).mapToInt(d -> (int) d).sorted().mapToObj(String::valueOf).collect(Collectors.toList())
         );
     }
 
-    @Test
-    void executeBubblesortTest() throws IOException {
-        executeSortingAlgorithmTest("bubblesort.mnd", 64);
+    @TestFactory
+    public List<DynamicTest> sortsArrays() {
+        final List<DynamicTest> result = new ArrayList<>();
+        Map<String, Integer> definitions = Map.of(
+                 "bubble-sort.mnd", 64,
+                 "heap-sort.mnd",   512,
+                 "insert-sort.mnd", 128,
+                 "quick-sort.mnd",  512,
+                 "select-sort.mnd", 128
+        );
+
+        for (final String script : definitions.keySet()) {
+            result.add(DynamicTest.dynamicTest(script, null,
+                    () -> executeSortingAlgorithmTest(script, definitions.get(script))));
+        }
+
+        return result;
     }
 
-    @Test
-    void executeInsertsortTest() throws IOException {
-        executeSortingAlgorithmTest("insertsort.mnd", 128);
-    }
+    @TestFactory
+    public List<DynamicTest> computesScriptTests() {
+        final List<DynamicTest> result = new ArrayList<>();
+        final List<String> definitions = List.of(
+                 "memory-read-write.mnd",           "10",
+                 "compute-recursive-fibonacci.mnd", "55",
+                 "compute-sum-of-primes.mnd",       "21536",
+                 "project-euler-04.mnd",            "9009",
+                 "project-euler-18.mnd",            "1074",
+                 "project-euler-26.mnd",            "97",
+                 "project-euler-28.mnd",            "669171001",
+                 "project-euler-31.mnd",            "41",
+                 "project-euler-31b.mnd",           "73682",
+                 "project-euler-45.mnd",            "1533776805",
+                 "project-euler-97.mnd",            "7075090433"
+        );
 
-    @Test
-    void executeSelectsortTest() throws IOException {
-        executeSortingAlgorithmTest("selectsort.mnd", 128);
-    }
+        for (int i = 0; i < definitions.size(); i += 2) {
+            String fileName = definitions.get(i);
+            List<String> expectedOutput = List.of(definitions.get(i + 1));
+            List<MindustryObject> memory = List.of(MindustryMemory.createMemoryBank("bank2"));
+            result.add(DynamicTest.dynamicTest(fileName, null,
+                    () -> testFile(fileName, memory, expectedOutput)));
+        }
 
-    @Test
-    void executeHeapsortTest() throws IOException {
-        executeSortingAlgorithmTest("heapsort.mnd", 512);
-    }
-
-    @Test
-    void executeQuicksortTest() throws IOException {
-        executeSortingAlgorithmTest("quicksort.mnd", 512);
-    }
-
-    @Test
-    void computesProjectEuler04() throws IOException {
-        testFile("project-euler-04.mnd", "9009");
-    }
-
-    @Test
-    void computesProjectEuler18() throws IOException {
-        testFile("project-euler-18.mnd", "1074");
-    }
-
-    @Test
-    void computesProjectEuler26() throws IOException {
-        testFile("project-euler-26.mnd", "97");
-    }
-
-    @Test
-    void computesProjectEuler28() throws IOException {
-        testFile("project-euler-28.mnd", "669171001");
-    }
-
-    @Test
-    void computesProjectEuler31() throws IOException {
-        testFile("project-euler-31.mnd", "41");
-    }
-
-    @Test
-    void computesProjectEuler45() throws IOException {
-        testFile("project-euler-45.mnd", "1533776805");
+        return result;
     }
 }

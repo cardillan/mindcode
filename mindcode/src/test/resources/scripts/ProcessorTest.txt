@@ -1,6 +1,6 @@
+Test basic-evaluations.mnd:                    524 instructions,    190 steps,  36.2% coverage
+Test basic-operations.mnd:                     755 instructions,    542 steps,  55.6% coverage
 Test computesPackColor:                          3 instructions,      3 steps, 100.0% coverage
-Test executesBasicEvaluations:                 524 instructions,    190 steps,  36.2% coverage
-Test executesBasicOperations:                  755 instructions,    542 steps,  55.6% coverage
 Test executesComplexCaseExpressions:            65 instructions,    844 steps, 100.0% coverage
 Test executesExpressionWithAssignments:          3 instructions,      3 steps, 100.0% coverage
 Test executesFixedBoundsRangedFor:               8 instructions,     35 steps, 100.0% coverage
