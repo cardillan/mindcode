@@ -12,7 +12,8 @@ for i in 10 ... LIMIT
     end
 end
 
-print(max)
+expect(9009)
+actual(max)
 
 def revert(num)
     res = 0

@@ -15,6 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 // Such code can be saved as a file in the src/test/resources/scripts directory.
 public class ProcessorTest extends AbstractProcessorTest {
 
+    public static final String SCRIPTS_DIRECTORY = "src/test/resources/scripts";
+
+    protected String getScriptsDirectory() {
+        return SCRIPTS_DIRECTORY;
+    }
+
     @BeforeAll
     static void init() {
         AbstractProcessorTest.init();
@@ -22,7 +28,7 @@ public class ProcessorTest extends AbstractProcessorTest {
 
     @AfterAll
     static void done() throws IOException {
-        AbstractProcessorTest.done(ProcessorTest.class.getSimpleName());
+        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, ProcessorTest.class.getSimpleName());
     }
 
     @Test
@@ -211,10 +217,10 @@ public class ProcessorTest extends AbstractProcessorTest {
     void executesExpressionWithAssignments() {
         // The preferred output might be "3", "4": see #96
         testCode("""
-                        a = 1
-                        print(a + (a += 1))
-                        b = 1
-                        print((b += 1) + b)
+                        A = 1
+                        B = A
+                        print(A + (A += 1))
+                        print((B += 1) + B)
                         """,
                 "4", "4"
         );

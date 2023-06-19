@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
+import static info.teksol.util.CollectionUtils.in;
 
 public class DataFlowOptimizer extends BaseOptimizer {
     static final boolean DEBUG = false;
@@ -237,6 +238,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
             variableStates = processContext(children.get(start++), variableStates, propagateConstants);
         }
 
+        // If the body is before the condition, we don't merge initial states after the first iteration
+        // - we know the body will get executed.
+        boolean mergeInitial = children.stream()
+                .map(AstContext::subcontextType)
+                .filter(in(BODY, CONDITION))
+                .findFirst().get() == CONDITION;
+
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
         for (int i = 0; i < 2; i++) {
             VariableStates initial = variableStates.copy();
@@ -246,7 +254,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 // Do not propagate constants on first iteration...
                 variableStates = processContext(children.get(j), variableStates, propagateConstants && i > 0);
             }
-            variableStates.merge(initial);
+            if (mergeInitial) {
+                variableStates.merge(initial);
+            } else {
+                mergeInitial = true;
+            }
         }
 
         return variableStates;

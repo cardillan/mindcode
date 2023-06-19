@@ -3,14 +3,6 @@ Test bitmap-get.mnd:                             9 instructions,    106 steps, 1
 Test compute-recursive-fibonacci.mnd:           30 instructions,   2476 steps, 100.0% coverage
 Test compute-sum-of-primes.mnd:                 64 instructions,   3128 steps,  96.8% coverage
 Test memory-read-write.mnd:                      4 instructions,      4 steps, 100.0% coverage
-Test project-euler-04.mnd:                      22 instructions,  42899 steps, 100.0% coverage
-Test project-euler-18.mnd:                     143 instructions,   1965 steps, 100.0% coverage
-Test project-euler-26.mnd:                      35 instructions,   7362 steps,  94.2% coverage
-Test project-euler-28.mnd:                      14 instructions,  11007 steps, 100.0% coverage
-Test project-euler-31.mnd:                      75 instructions,  11098 steps, 100.0% coverage
-Test project-euler-31b.mnd:                     37 instructions,   8591 steps, 100.0% coverage
-Test project-euler-45.mnd:                      14 instructions, 265002 steps, 100.0% coverage
-Test project-euler-97.mnd:                      11 instructions,  11579 steps, 100.0% coverage
 Test sorting with bubble-sort.mnd:              24 instructions,  19369 steps, 100.0% coverage
 Test sorting with heap-sort.mnd:                47 instructions,  66804 steps, 100.0% coverage
 Test sorting with insert-sort.mnd:              21 instructions,  25931 steps, 100.0% coverage

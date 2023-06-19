@@ -20,14 +20,15 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // Base class for algorithm tests
 // Processor for execution is equipped with bank1 memory bank.
 // Additional blocks can be added
-public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
+public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
 
-    private static final String SCRIPTS_DIRECTORY = "src/test/resources/scripts";
+    protected abstract String getScriptsDirectory();
 
     private static final List<String> performance = new ArrayList<>();
 
@@ -35,8 +36,8 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
         performance.clear();
     }
 
-    static void done(String className) throws IOException {
-        Path path = Path.of(SCRIPTS_DIRECTORY, className + ".txt");
+    static void done(String scriptsDirectory, String className) throws IOException {
+        Path path = Path.of(scriptsDirectory, className + ".txt");
         Collections.sort(performance);
         Files.write(path, performance);
     }
@@ -71,7 +72,7 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
     }
 
     protected String readFile(String filename) throws IOException {
-        Path path = Path.of(SCRIPTS_DIRECTORY, filename);
+        Path path = Path.of(getScriptsDirectory(), filename);
         return Files.readString(path);
     }
 
@@ -86,21 +87,28 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
         return profile;
     }
 
-    protected List<LogicInstruction> compile(String code) {
-        return LogicInstructionLabelResolver.resolve(instructionProcessor, generateInstructions(code).instructions());
+    protected List<LogicInstruction> compile(TestCompiler compiler, String code) {
+        return LogicInstructionLabelResolver.resolve(compiler.processor, generateInstructions(compiler, code).instructions());
     }
 
-    protected void testAndEvaluateCode(String title, String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {
+    protected void testAndEvaluateCode(TestCompiler compiler, String title, String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {
         Processor processor = new Processor();
         processor.addBlock(MindustryMemory.createMemoryBank("bank1"));
         processor.addBlock(MindustryMemory.createMemoryBank("bank2"));
         blocks.forEach(processor::addBlock);
-        List<LogicInstruction> instructions = compile(code);
+        List<LogicInstruction> instructions = compile(compiler, code);
         //System.out.println(prettyPrint(instructions));
         processor.run(instructions, MAX_STEPS);
         logPerformance(title, processor);
         //System.out.println(String.join("", processor.getTextBuffer()));
-        evaluator.accept(processor.getTextBuffer());
+        assertAll(
+                () -> evaluator.accept(processor.getTextBuffer()),
+                () -> assertNoUnexpectedMessages(compiler, s -> false)
+        );
+    }
+
+    protected void testAndEvaluateCode(String title, String code, List<MindustryObject> blocks, Consumer<List<String>> evaluator) {
+        testAndEvaluateCode(createTestCompiler(), title, code, blocks, evaluator);
     }
 
     protected void testAndEvaluateFile(String fileName, List<MindustryObject> blocks, Consumer<List<String>> evaluator) throws IOException {
@@ -108,8 +116,9 @@ public class AbstractProcessorTest extends AbstractOptimizerTest<Optimizer> {
     }
 
     protected void testCode(String title, String code, List<MindustryObject> blocks, List<String> expectedOutputs) {
-        testAndEvaluateCode(title, code, blocks, outputs -> assertEquals(expectedOutputs, outputs,
-                () -> messages.stream().map(CompilerMessage::message)
+        TestCompiler compiler = createTestCompiler();
+        testAndEvaluateCode(compiler, title, code, blocks, outputs -> assertEquals(expectedOutputs, outputs,
+                () -> compiler.messages.stream().map(CompilerMessage::message)
                         .collect(Collectors.joining("\n", "\n", "\n"))));
     }
 

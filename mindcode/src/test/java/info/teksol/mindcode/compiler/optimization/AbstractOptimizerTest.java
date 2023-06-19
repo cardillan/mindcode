@@ -9,6 +9,7 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 import static info.teksol.util.CollectionUtils.findLastIndex;
@@ -22,17 +23,28 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         return new FilteredDiffDebugPrinter();
     }
 
-    protected void assertOptimizesTo(CompilerProfile profile, List<LogicInstruction> instructions, List<LogicInstruction> expected) {
+    protected void assertOptimizesTo(CompilerProfile profile, List<LogicInstruction> instructions,
+            List<LogicInstruction> expected, Predicate<String> ignoredMessageFilter) {
         // rootAstContext is intentionally null
         // This method cannot be used to test optimizers that rely on AST context structure, because
         // at this moment the AST context is not built for manually created instructions
+        TestCompiler compiler = createTestCompiler();
         GeneratorOutput generatorOutput = new GeneratorOutput(CallGraph.createEmpty(), instructions, mockAstRootContext);
-        List<LogicInstruction> actual = optimizeInstructions(profile, generatorOutput);
-        assertLogicInstructionsMatch(expected, actual);
+        List<LogicInstruction> actual = optimizeInstructions(compiler, generatorOutput);
+        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, ignoredMessageFilter);
+    }
+
+    protected void assertOptimizesTo(CompilerProfile profile, List<LogicInstruction> instructions, List<LogicInstruction> expected) {
+        assertOptimizesTo(profile, instructions, expected, s -> false);
     }
 
     protected void assertOptimizesTo(List<LogicInstruction> instructions, List<LogicInstruction> expected) {
         assertOptimizesTo(createCompilerProfile(), instructions, expected);
+    }
+
+    protected void assertOptimizesTo(List<LogicInstruction> instructions, List<LogicInstruction> expected,
+            Predicate<String> ignoredMessageFilter) {
+        assertOptimizesTo(createCompilerProfile(), instructions, expected, ignoredMessageFilter);
     }
 
     protected void assertDoesNotOptimize(CompilerProfile profile, LogicInstruction... instructions) {
@@ -54,24 +66,24 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         return profile;
     }
 
-    protected MindcodeOptimizer createMindcodeOptimizer(CompilerProfile profile) {
-        return new MindcodeOptimizer(instructionProcessor, profile, messages::add);
+    protected MindcodeOptimizer createMindcodeOptimizer(TestCompiler compiler) {
+        return new MindcodeOptimizer(compiler.processor, compiler.profile, compiler.messages::add);
     }
 
-    protected List<LogicInstruction> optimizeInstructions(CompilerProfile profile, GeneratorOutput generatorOutput) {
+    protected List<LogicInstruction> optimizeInstructions(TestCompiler compiler, GeneratorOutput generatorOutput) {
         final DebugPrinter debugPrinter = createDebugPrinter();
         final List<LogicInstruction> result;
-        final MindcodeOptimizer optimizer = createMindcodeOptimizer(profile);
+        final MindcodeOptimizer optimizer = createMindcodeOptimizer(compiler);
         optimizer.setDebugPrinter(debugPrinter);
         result = optimizer.optimize(generatorOutput);
-        debugPrinter.print(s -> messages.add(MindcodeMessage.debug(s)));
+        debugPrinter.print(s -> compiler.messages.add(MindcodeMessage.debug(s)));
         return result;
     }
 
     @Override
-    protected GeneratorOutput generateInstructions(CompilerProfile profile, String code) {
-        GeneratorOutput generatorOutput = super.generateInstructions(profile, code);
-        List<LogicInstruction> instructions = optimizeInstructions(profile, generatorOutput);
+    protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
+        GeneratorOutput generatorOutput = super.generateInstructions(compiler, code);
+        List<LogicInstruction> instructions = optimizeInstructions(compiler, generatorOutput);
         return new GeneratorOutput(generatorOutput.callGraph(), instructions, generatorOutput.rootAstContext());
     }
 

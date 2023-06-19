@@ -1,5 +1,6 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
 import info.teksol.mindcode.logic.LogicVariable;
 import org.antlr.v4.runtime.Token;
 
@@ -58,5 +59,10 @@ public class StackAllocation extends BaseAstNode {
                 "stack='" + stack + '\'' +
                 ", range=" + range +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.ALLOCATION;
     }
 }

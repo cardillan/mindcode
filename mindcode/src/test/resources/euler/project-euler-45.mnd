@@ -16,7 +16,9 @@ while true
         hn += h
         h += 4
     else
-        print(hn)
         break
     end
 end
+
+expect(1533776805)
+actual(hn)

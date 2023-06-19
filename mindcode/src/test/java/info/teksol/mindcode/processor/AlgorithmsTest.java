@@ -17,6 +17,12 @@ import java.util.stream.IntStream;
 
 public class AlgorithmsTest extends AbstractProcessorTest {
 
+    public static final String SCRIPTS_DIRECTORY = "src/test/resources/scripts";
+
+    protected String getScriptsDirectory() {
+        return SCRIPTS_DIRECTORY;
+    }
+
     @BeforeAll
     static void init() {
         AbstractProcessorTest.init();
@@ -24,7 +30,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
 
     @AfterAll
     static void done() throws IOException {
-        AbstractProcessorTest.done(AlgorithmsTest.class.getSimpleName());
+        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, AlgorithmsTest.class.getSimpleName());
     }
 
     @Test
@@ -81,15 +87,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         final List<String> definitions = List.of(
                  "memory-read-write.mnd",           "10",
                  "compute-recursive-fibonacci.mnd", "55",
-                 "compute-sum-of-primes.mnd",       "21536",
-                 "project-euler-04.mnd",            "9009",
-                 "project-euler-18.mnd",            "1074",
-                 "project-euler-26.mnd",            "97",
-                 "project-euler-28.mnd",            "669171001",
-                 "project-euler-31.mnd",            "41",
-                 "project-euler-31b.mnd",           "73682",
-                 "project-euler-45.mnd",            "1533776805",
-                 "project-euler-97.mnd",            "7075090433"
+                 "compute-sum-of-primes.mnd",       "21536"
         );
 
         for (int i = 0; i < definitions.size(); i += 2) {

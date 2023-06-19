@@ -1,11 +1,12 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.instructions.AstContextType;
 import org.antlr.v4.runtime.Token;
 
 import java.util.List;
 import java.util.Objects;
 
-public class Control extends ControlBlockAstNode {
+public class Control extends BaseAstNode {
     private final AstNode target;
     private final String property;
     private final List<AstNode> params;
@@ -51,5 +52,10 @@ public class Control extends ControlBlockAstNode {
                 ", property='" + property + '\'' +
                 ", params=" + params +
                 '}';
+    }
+
+    @Override
+    public AstContextType getContextType() {
+        return AstContextType.PROPERTY;
     }
 }

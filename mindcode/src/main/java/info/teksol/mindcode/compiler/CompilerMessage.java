@@ -16,6 +16,10 @@ public interface CompilerMessage {
         return level() == MessageLevel.WARNING;
     }
 
+    default boolean isErrorOrWarning() {
+        return isError() || isWarning();
+    }
+
     default boolean isInfo() {
         return level() == MessageLevel.INFO;
     }

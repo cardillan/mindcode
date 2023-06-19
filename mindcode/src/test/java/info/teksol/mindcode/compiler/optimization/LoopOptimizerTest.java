@@ -217,7 +217,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
 
     @Test
     void optimizesBitReadTest() {
-        assertCompilesTo(CompilerProfile.fullOptimizations(),
+        assertCompilesTo(createTestCompiler(CompilerProfile.fullOptimizations()),
                         """
                         def getBit(bitIndex)
                           bitIndex % 2

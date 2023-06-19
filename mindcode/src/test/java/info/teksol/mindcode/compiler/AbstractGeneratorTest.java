@@ -19,36 +19,97 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AbstractGeneratorTest extends AbstractAstTest {
 
-    protected final List<CompilerMessage> messages = new ArrayList<>();
-    protected final InstructionProcessor instructionProcessor = createInstructionProcessor(createCompilerProfile());
+    // TODO Merge with MindcodeOptimizer
+    protected class TestCompiler {
+        public final List<CompilerMessage> messages = new ArrayList<>();
+        public final CompilerProfile profile;
+        public final InstructionProcessor processor;
+        public final LogicInstructionGenerator generator;
 
-    protected void assertCompilesTo(CompilerProfile profile, Predicate<LogicInstruction> filter,
-            String code, LogicInstruction... instructions) {
+        public TestCompiler(CompilerProfile profile) {
+            this.profile = profile;
+            processor = createInstructionProcessor(profile, messages::add);
+            generator = new LogicInstructionGenerator(profile, processor, messages::add);
+        }
+
+        public TestCompiler() {
+            this(createCompilerProfile());
+        }
+    }
+
+    protected TestCompiler createTestCompiler() {
+        return new TestCompiler();
+    }
+
+    protected TestCompiler createTestCompiler(CompilerProfile profile) {
+        return new TestCompiler(profile);
+    }
+
+    protected Predicate<String> ignore(String... values) {
+        List<String> list = Arrays.stream(values).map(String::trim).toList();
+        return s -> list.contains(s.trim());
+    }
+
+    protected Predicate<String> ignoreRegex(String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        return s -> pattern.matcher(s.trim()).matches();
+    }
+
+    protected void assertCompilesToWithMessages(TestCompiler compiler, Predicate<LogicInstruction> filter,
+            Predicate<String> ignoredMessagesFilter, String code, LogicInstruction... instructions) {
         List<LogicInstruction> expected = List.of(instructions);
-        List<LogicInstruction> actual = generateInstructions(profile, code).instructions();
+        List<LogicInstruction> actual = generateInstructions(compiler, code).instructions();
         if (filter != null) {
             actual = actual.stream().filter(filter).toList();
         }
-        assertLogicInstructionsMatch(expected, actual);
+        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, ignoredMessagesFilter);
     }
 
-    protected void assertCompilesTo(CompilerProfile profile, String code, LogicInstruction... instructions) {
-        assertCompilesTo(profile, null, code, instructions);
+
+    protected void assertCompilesToWithMessages(TestCompiler compiler, Predicate<String> ignoredMessagesFilter,
+            String code, LogicInstruction... instructions) {
+        assertCompilesToWithMessages(compiler, null, ignoredMessagesFilter, code, instructions);
+    }
+
+    protected void assertCompilesToWithMessages(Predicate<LogicInstruction> filter, Predicate<String> ignoredMessagesFilter,
+            String code, LogicInstruction... instructions) {
+        assertCompilesToWithMessages(createTestCompiler(), filter, ignoredMessagesFilter, code, instructions);
+    }
+
+    protected void assertCompilesToWithMessages(Predicate<String> ignoredMessagesFilter, String code, LogicInstruction... instructions) {
+        assertCompilesToWithMessages(createTestCompiler(), null, ignoredMessagesFilter, code, instructions);
+    }
+
+    protected void assertCompilesTo(TestCompiler compiler, Predicate<LogicInstruction> filter,
+            String code, LogicInstruction... instructions) {
+        assertCompilesToWithMessages(compiler, filter, s -> false, code, instructions);
+    }
+
+    protected void assertCompilesTo(TestCompiler compiler, String code, LogicInstruction... instructions) {
+        assertCompilesToWithMessages(compiler, null, s -> false, code, instructions);
     }
 
     protected void assertCompilesTo(Predicate<LogicInstruction> filter, String code, LogicInstruction... instructions) {
-        assertCompilesTo(createCompilerProfile(), filter, code, instructions);
+        assertCompilesToWithMessages(createTestCompiler(), filter, s -> false, code, instructions);
     }
 
     protected void assertCompilesTo(String code, LogicInstruction... instructions) {
-        assertCompilesTo(createCompilerProfile(), null, code, instructions);
+        assertCompilesToWithMessages(createTestCompiler(), null, s -> false, code, instructions);
+    }
+
+    protected void assertGeneratesWarnings(String code, String expectedWarnings) {
+        TestCompiler compiler = createTestCompiler();
+        assertCompilesToWithMessages(compiler, ix ->false, s -> true, code);
+        assertEquals(expectedWarnings, extractWarnings(compiler.messages));
     }
 
     // General utility
@@ -98,8 +159,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
                 .setDebugLevel(3);
     }
 
-    protected InstructionProcessor createInstructionProcessor(CompilerProfile profile) {
-        return InstructionProcessorFactory.getInstructionProcessor(messages::add, profile);
+    protected InstructionProcessor createInstructionProcessor(CompilerProfile profile, Consumer<CompilerMessage> messageConsumer) {
+        return InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
     }
 
     // Code generation
@@ -110,14 +171,13 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     // This class always creates unoptimized code.
     // To test functions of optimizers, use AbstractOptimizerTest subclass.
-    protected GeneratorOutput generateInstructions(CompilerProfile profile, String code) {
+    protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
         Seq program = generateAstTree(code);
-        final LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor, messages::add);
-        return generator.generate(program);
+        return compiler.generator.generate(program);
     }
 
     protected GeneratorOutput generateInstructions(String code) {
-        return generateInstructions(createCompilerProfile(), code);
+        return generateInstructions(createTestCompiler(), code);
     }
 
     // Instruction creation
@@ -125,24 +185,26 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected final AstContext mockAstRootContext = AstContext.createRootNode();
     protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
 
+    protected final InstructionProcessor ip = createInstructionProcessor(createCompilerProfile(), s ->{});
+
     protected final LogicInstruction createInstruction(Opcode opcode) {
-        return instructionProcessor.createInstruction(mockAstContext, opcode);
+        return ip.createInstruction(mockAstContext, opcode);
     }
 
     protected final LogicInstruction createInstruction(Opcode opcode, String... args) {
-        return instructionProcessor.createInstruction(mockAstContext, opcode, _logic(args));
+        return ip.createInstruction(mockAstContext, opcode, _logic(args));
     }
 
     protected final LogicInstruction createInstructionStr(Opcode opcode, List<String> args) {
-        return instructionProcessor.createInstruction(mockAstContext, opcode, _logic(args));
+        return ip.createInstruction(mockAstContext, opcode, _logic(args));
     }
 
     protected final LogicInstruction createInstruction(Opcode opcode, LogicArgument... args) {
-        return instructionProcessor.createInstruction(mockAstContext, opcode, args);
+        return ip.createInstruction(mockAstContext, opcode, args);
     }
 
     protected final LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> args) {
-        return instructionProcessor.createInstruction(mockAstContext, opcode, args);
+        return ip.createInstruction(mockAstContext, opcode, args);
     }
 
     // Test evaluation
@@ -157,38 +219,38 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         return key;
     }
 
-    protected String formatMessages() {
-        return messages.isEmpty() ? "" : "\nGenerated messages:\n"
-                + messages.stream().map(CompilerMessage::message).collect(Collectors.joining("\n")) ;
+    protected String formatMessages(TestCompiler compiler) {
+        return compiler.messages.isEmpty() ? "" : "\nGenerated messages:\n"
+                + compiler.messages.stream().map(CompilerMessage::message).collect(Collectors.joining("\n")) ;
     }
 
-    protected String createDifferentCodeSizeMessage(List<LogicInstruction> actual) {
+    protected String createDifferentCodeSizeMessage(TestCompiler compiler, List<LogicInstruction> actual) {
         return "Generated code has unexpected number of instructions\n" +
-                formatMessages() + "\n" +
+                formatMessages(compiler) + "\n" +
                 formatAsCode(actual);
     }
 
-    protected String createDifferentOpcodeMessage(List<LogicInstruction> actual, int index) {
+    protected String createDifferentOpcodeMessage(TestCompiler compiler, List<LogicInstruction> actual, int index) {
         return "Generated code has different instruction opcodes at index " + index + ":\n" +
-                formatMessages() + "\n" +
+                formatMessages(compiler) + "\n" +
                 formatAsCode(actual);
     }
 
-    protected String createUnmatchedArgumentsMessage(List<LogicInstruction> actual, int index,
+    protected String createUnmatchedArgumentsMessage(TestCompiler compiler, List<LogicInstruction> actual, int index,
             LogicInstruction left, LogicInstruction right) {
         return "Expected\n" + left + "\nbut found\n" + right + "\non row index " + index + "\n" +
                 "expected->actual: " + expectedToActual + "\n" +
                 "actual->expected: " + actualToExpected + "\n" +
-                formatMessages() + "\n" +
+                formatMessages(compiler) + "\n" +
                 formatAsCode(actual);
     }
 
-    protected String createUnusedVarsMessage(List<LogicInstruction> actual, int index,
+    protected String createUnusedVarsMessage(TestCompiler compiler, List<LogicInstruction> actual, int index,
             LogicInstruction left, LogicInstruction right) {
         return "Expected\n" + left + "\nbut found\n" + right + "\non row index " + index + "\n" +
                 "expected->actual: " + expectedToActual + "\n" +
                 "actual->expected: " + actualToExpected + "\n" +
-                formatMessages() + "\n" +
+                formatMessages(compiler) + "\n" +
                 formatAsCode(actual);
     }
 
@@ -198,9 +260,9 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     // TODO Investigate whether it would be feasible to first build var maps and then compare the code.
     //      As it is now, if a difference is found early on, subsequent vars are not properly mapped.
-    protected void assertLogicInstructionsMatch(List<LogicInstruction> expected, List<LogicInstruction> actual) {
+    private void assertLogicInstructionsMatch0(TestCompiler compiler, List<LogicInstruction> expected, List<LogicInstruction> actual) {
         if (actual.size() != expected.size()) {
-            assertFailed(makeVarsIn(expected), actual, createDifferentCodeSizeMessage(actual));
+            assertFailed(makeVarsIn(expected), actual, createDifferentCodeSizeMessage(compiler, actual));
             return;
         }
 
@@ -209,11 +271,11 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             final LogicInstruction right = actual.get(index);
             if (left.getOpcode().equals(right.getOpcode())) {
                 if (!matchArgs(left, right)) {
-                    assertFailed(replaceVarsIn(expected), actual, createUnmatchedArgumentsMessage(actual, index, left, right));
+                    assertFailed(replaceVarsIn(expected), actual, createUnmatchedArgumentsMessage(compiler, actual, index, left, right));
                     return;
                 }
             } else {
-                assertFailed(replaceVarsIn(expected), actual, createDifferentOpcodeMessage(actual, index));
+                assertFailed(replaceVarsIn(expected), actual, createDifferentOpcodeMessage(compiler, actual, index));
                 return;
             }
         }
@@ -222,6 +284,33 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             // This is not a failed test, this is a bug in test code
             throw new RuntimeException("Expected all value holes to be used but some were not.");
         }
+    }
+
+    protected void assertNoUnexpectedMessages(TestCompiler compiler, Predicate<String> ignoredMessagesFilter) {
+        String messages = compiler.messages.stream()
+                .filter(CompilerMessage::isErrorOrWarning)
+                .map(CompilerMessage::message)
+                .filter(ignoredMessagesFilter.negate())
+                .collect(Collectors.joining("\n"));
+
+        if (!messages.isEmpty()) {
+            fail("Unexpected error or warning messages were generated:\n" + messages);
+        }
+    }
+
+    // TODO Investigate whether it would be feasible to first build var maps and then compare the code.
+    //      As it is now, if a difference is found early on, subsequent vars are not properly mapped.
+    protected void assertMessagesAndLogicInstructionsMatch(TestCompiler compiler, List<LogicInstruction> expected,
+            List<LogicInstruction> actual, Predicate<String> ignoredMessagesFilter) {
+        assertAll(
+                () -> assertLogicInstructionsMatch0(compiler, expected, actual),
+                () -> assertNoUnexpectedMessages(compiler, ignoredMessagesFilter)
+        );
+    }
+
+    protected void assertLogicInstructionsMatch(TestCompiler compiler, List<LogicInstruction> expected,
+            List<LogicInstruction> actual) {
+        assertMessagesAndLogicInstructionsMatch(compiler, expected, actual, s -> false);
     }
 
     private List<LogicInstruction> makeVarsIn(List<LogicInstruction> expected) {
@@ -318,6 +407,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     // Common constants for creating instructions
     protected static final Operation     add       = Operation.ADD;
     protected static final Operation     sub       = Operation.SUB;
+    protected static final Operation     rand      = Operation.RAND;
     protected static final Operation     div       = Operation.DIV;
     protected static final Operation     floor     = Operation.FLOOR;
     protected static final Operation     idiv      = Operation.IDIV;                          

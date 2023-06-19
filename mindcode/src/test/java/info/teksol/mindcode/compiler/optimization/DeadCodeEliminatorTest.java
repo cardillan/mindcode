@@ -1,13 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.Opcode.*;
-import static junit.framework.Assert.assertEquals;
 
 class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
 
@@ -65,7 +62,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
 
     @Test
     void preventsEliminationOfUradarUsages() {
-        assertCompilesTo("""
+        assertCompilesToWithMessages(ignore("List of uninitialized variables: MIN_TO_MAX, SHOOT."),
+                """
                         target = uradar(enemy, ground, any, health, MIN_TO_MAX)
                         if target != null
                             approach(target.x, target.y, 10)
@@ -100,7 +98,10 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
 
     @Test
     void preventsEliminationOfUlocateUsages() {
-        assertCompilesTo("""
+        assertCompilesToWithMessages(ignore(
+                        "List of unused variables: found, outbuilding.",
+                        "List of uninitialized variables: ENEMY."),
+                """
                         ulocate(ore, @surge-alloy, outx, outy)
                         approach(outx, outy, 4)
                         outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
@@ -124,7 +125,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
 
     @Test
     void completelyRemovesDeadCode() {
-        assertCompilesTo("""
+        assertCompilesToWithMessages(ignore("List of unused variables: n."),
+                """
                         n = 1
                         n = 1
                         """,
@@ -134,7 +136,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
 
     @Test
     void removesUnusedUlocate() {
-        assertCompilesTo("""
+        assertCompilesToWithMessages(ignore("List of unused variables: x, y."),
+                """
                         ulocate(ore, @surge-alloy, outx, outy)
                         ulocate(ore, @surge-alloy, x, y)
                         approach(outx, outy, 4)
@@ -147,7 +150,10 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
 
     @Test
     void preventsEliminationOfPartiallyUsedUlocate() {
-        assertCompilesTo("""
+        assertCompilesToWithMessages(ignore(
+                        "List of unused variables: found, outx, outy.",
+                        "List of uninitialized variables: ENEMY."),
+                """
                         outbuilding = ulocate(building, core, ENEMY, outx, outy, found)
                         print(outbuilding)
                         """,
@@ -158,69 +164,47 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
         );
     }
 
-    protected String extractWarnings(List<CompilerMessage> messages) {
-        return messages.stream()
-                .filter(CompilerMessage::isWarning)
-                .map(CompilerMessage::message)
-                .map(String::trim)
-                .collect(Collectors.joining("\n"));
-    }
-
     @Test
     void generatesUnusedWarning() {
-        generateInstructions("""
-                X = 10
-                """);
-
-        assertEquals(
-                "List of unused variables: X.",
-                extractWarnings(messages)
-        );
+        assertGeneratesWarnings("""
+                        X = 10
+                        """,
+                "List of unused variables: X.");
     }
 
     @Test
     void generatesUninitializedWarning() {
-        generateInstructions("""
-                print(X, Y)
-                """);
-
-        assertEquals(
-                "List of uninitialized variables: X, Y.",
-                extractWarnings(messages)
-        );
+        assertGeneratesWarnings("""
+                        print(X, Y)
+                        """,
+                "List of uninitialized variables: X, Y.");
     }
 
     @Test
     void generatesNoUnexpectedWarnings() {
-        generateInstructions("""
-                def foo(n)
-                    n = n + 1
-                end
-                z = foo(5)
-                print(z)
-                """);
-
-        assertEquals(
-                "",
-                extractWarnings(messages)
-        );
+        assertGeneratesWarnings("""
+                        def foo(n)
+                            n = n + 1
+                        end
+                        z = foo(5)
+                        print(z)
+                        """,
+                "");
     }
 
     @Test
     void generatesBothWarnings() {
-        generateInstructions("""
-                def foo(n)
-                    n = n + 1
-                end
-                z = foo(5)
-                print(Z)
-                """);
-
-        assertEquals(
+        assertGeneratesWarnings(
+                """
+                        def foo(n)
+                            n = n + 1
+                        end
+                        z = foo(5)
+                        print(Z)
+                        """,
                 """
                         List of unused variables: z.
-                        List of uninitialized variables: Z.""",
-                extractWarnings(messages)
+                        List of uninitialized variables: Z."""
         );
     }
 

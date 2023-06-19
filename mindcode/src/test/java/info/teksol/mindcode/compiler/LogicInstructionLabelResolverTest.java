@@ -10,7 +10,8 @@ import static info.teksol.mindcode.logic.Opcode.*;
 class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
     @Test
     void resolvesAbsoluteAddressesOfLabels() {
-        assertLogicInstructionsMatch(
+        TestCompiler compiler = createTestCompiler();
+        assertLogicInstructionsMatch(compiler,
                 List.of(
                         createInstruction(JUMP, "4", "equal", "true", "false"),
                         createInstruction(OP, "add", var(0), "n", "1"),
@@ -19,7 +20,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 LogicInstructionLabelResolver.resolve(
-                        instructionProcessor,
+                        compiler.processor,
                         generateInstructions("while true n = n + 1 end").instructions()
                 )
         );
@@ -27,7 +28,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
 
     @Test
     void resolvesVirtualInstructions() {
-        assertLogicInstructionsMatch(
+        TestCompiler compiler = createTestCompiler();
+        assertLogicInstructionsMatch(compiler,
                 List.of(
                         createInstruction(JUMP, "11", "always"),
                         createInstruction(WRITE, "a", "cell1", "__sp"),
@@ -43,7 +45,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(END)
                 ),
                 LogicInstructionLabelResolver.resolve(
-                        instructionProcessor,
+                        compiler.processor,
                         List.of(
                                 createInstruction(JUMP, label0, Condition.ALWAYS),
                                 createInstruction(PUSH, cell1, a),

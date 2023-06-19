@@ -1,9 +1,18 @@
 package info.teksol.util;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class CollectionUtils {
+
+    public static <T> Predicate<T> in(T... values) {
+        return Set.of(values)::contains;
+    }
+
+    public static <T> Predicate<T> notIn(T... values) {
+        return Predicate.not(Set.of(values)::contains);
+    }
 
     public static <E> int findFirstIndex(List<? extends E> list, int startIndex, Predicate<E> matcher) {
         if (startIndex < 0 || startIndex > list.size()) {

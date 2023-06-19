@@ -152,12 +152,12 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
         assertCompilesTo("""
                         level = nucleus1.resource
                         print(level)
-                        building.enabled = level < capacity
+                        conveyor1.enabled = level < 10
                         """,
                 createInstruction(SENSOR, "level", "nucleus1", "@resource"),
                 createInstruction(PRINT, "level"),
-                createInstruction(OP, "lessThan", var(0), "level", "capacity"),
-                createInstruction(CONTROL, "enabled", "building", var(0)),
+                createInstruction(OP, "lessThan", var(0), "level", "10"),
+                createInstruction(CONTROL, "enabled", "conveyor1", var(0)),
                 createInstruction(END)
         );
     }

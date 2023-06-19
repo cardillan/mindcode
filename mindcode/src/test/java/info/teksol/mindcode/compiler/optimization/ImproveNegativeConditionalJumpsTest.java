@@ -75,9 +75,11 @@ class ImproveNegativeConditionalJumpsTest extends AbstractOptimizerTest<ImproveN
 
     @Test
     void preservesUserVariables() {
-        assertCompilesTo(createCompilerProfile()
+        assertCompilesTo(createTestCompiler(
+                createCompilerProfile()
                         .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(OUTPUT_TEMPS_ELIMINATION, AGGRESSIVE),
+                        .setOptimizationLevel(OUTPUT_TEMPS_ELIMINATION, AGGRESSIVE)
+                ),
                 """
                         alive = @unit.dead === 0
                         if alive
@@ -97,9 +99,11 @@ class ImproveNegativeConditionalJumpsTest extends AbstractOptimizerTest<ImproveN
 
     @Test
     void preservesStrictEqualConditions() {
-        assertCompilesTo(createCompilerProfile()
+        assertCompilesTo(createTestCompiler(
+                createCompilerProfile()
                         .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(OUTPUT_TEMPS_ELIMINATION, AGGRESSIVE),
+                        .setOptimizationLevel(OUTPUT_TEMPS_ELIMINATION, AGGRESSIVE)
+                ),
                 """
                         if @unit.dead === 0
                             print(alive)

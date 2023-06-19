@@ -1,13 +1,17 @@
 const LENGTH = 15
 setup()
+run()
 
-for row = LENGTH - 2; row >= 0; row -= 1
-    for col = row + 1; col >= 0; col -= 1
-        w(row, col, r(row, col) + max(r(row + 1, col), r(row + 1, col + 1)))
+expect(1074)
+actual(r(0, 0))
+
+def run()
+    for row = LENGTH - 2; row >= 0; row -= 1
+        for col = row + 1; col >= 0; col -= 1
+            w(row, col, r(row, col) + max(r(row + 1, col), r(row + 1, col + 1)))
+        end
     end
 end
-
-print(r(0, 0))
 
 inline def w(row, col, num)
     bank1[16 * row + col] = num 

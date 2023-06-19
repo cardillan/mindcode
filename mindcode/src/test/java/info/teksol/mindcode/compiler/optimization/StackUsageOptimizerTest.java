@@ -262,9 +262,13 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
     @Test
     void correctlyOptimizesQuicksort() {
         // For the first call, y isn't read in the loop, but is read after the loop
-        assertCompilesTo("""
+        assertCompilesToWithMessages(
+                ignore(
+                        "List of unused variables: partition.left, partition.right.",
+                        "List of uninitialized variables: SIZE."
+                ),
+                """
                         allocate stack in bank1[0...512]
-                        ARRAY = bank2
 
                         def quicksort(left, right)
                             if right > left

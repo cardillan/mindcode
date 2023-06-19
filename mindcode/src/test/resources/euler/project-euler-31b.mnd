@@ -8,4 +8,5 @@ for i in (1, 2, 5, 10, 20, 50, 100, 200)
     end
 end
 
-print(bank2[AMOUNT])
+expect(73682)
+actual(bank2[AMOUNT])

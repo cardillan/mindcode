@@ -23,11 +23,13 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
 
     @Test
     void optimizesBreakInWhileLoop() {
-        assertCompilesTo(createCompilerProfile()
+        assertCompilesTo(createTestCompiler(
+                createCompilerProfile()
                         .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
                         .setOptimizationLevel(SINGLE_STEP_JUMP_ELIMINATION, AGGRESSIVE)
                         .setOptimizationLevel(INPUT_TEMPS_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(JUMP_OVER_JUMP_ELIMINATION, AGGRESSIVE),
+                        .setOptimizationLevel(JUMP_OVER_JUMP_ELIMINATION, AGGRESSIVE)
+                ),
                 """
                         while true
                             print("In loop")

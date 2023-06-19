@@ -15,4 +15,5 @@ while current <= LIMIT
     end
 end
 
-print(sum)
+expect(669171001)
+actual(sum)

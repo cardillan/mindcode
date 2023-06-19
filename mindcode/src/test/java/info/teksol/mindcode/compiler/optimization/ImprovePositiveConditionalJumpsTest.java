@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.Operation;
@@ -23,11 +22,11 @@ class ImprovePositiveConditionalJumpsTest extends AbstractOptimizerTest<ImproveP
     }
 
     @Override
-    protected MindcodeOptimizer createMindcodeOptimizer(CompilerProfile profile) {
-        return new MindcodeOptimizer(instructionProcessor, profile, messages::add) {
+    protected MindcodeOptimizer createMindcodeOptimizer(TestCompiler compiler) {
+        return new MindcodeOptimizer(compiler.processor, compiler.profile, compiler.messages::add) {
             @Override
             protected List<Optimizer> getOptimizers() {
-                return List.of(new ImprovePositiveConditionalJumps(instructionProcessor));
+                return List.of(new ImprovePositiveConditionalJumps(compiler.processor));
             }
         };
     }

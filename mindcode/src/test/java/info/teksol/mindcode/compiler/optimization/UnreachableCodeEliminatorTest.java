@@ -93,7 +93,8 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
 
     @Test
     void keepsUsedFunctions() {
-        assertCompilesTo("""
+        assertCompilesToWithMessages(ignore("List of unused variables: testa.n, testb.n, testc.n."),
+                """
                         allocate stack in cell1[0 .. 63]
                         def testa(n)
                             print("Start")

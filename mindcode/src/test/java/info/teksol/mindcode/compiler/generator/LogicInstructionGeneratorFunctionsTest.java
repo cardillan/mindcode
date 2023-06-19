@@ -771,6 +771,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
         // in this test, we're only concerned with whether the top of the stack is respected, and whether
         // the start of heap is respected. Everything else superfluous.
         assertLogicInstructionsMatch(
+                createTestCompiler(),
                 List.of(
                         createInstruction(SET, "__sp", "20"),
                         createInstruction(WRITE, "99", "cell3", "41")

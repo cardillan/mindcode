@@ -12,6 +12,13 @@ public enum AstContextType {
     LOOP            ("LOOP"),
     BREAK           ("BREA"),
     CONTINUE        ("CONT"),
+
+    // Non-control flow
+    ASSIGNMENT      ("ASGN"),
+    OPERATOR        ("OPER"),
+    PROPERTY        ("PROP"),
+    HEAP_ACCESS     ("HEAP"),
+    ALLOCATION      ("ALOC"),
     ;
 
     public final String text;

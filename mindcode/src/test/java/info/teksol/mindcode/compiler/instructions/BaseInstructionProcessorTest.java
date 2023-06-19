@@ -58,7 +58,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     void replacesAllArguments() {
         LogicInstruction original = createInstruction(DRAW, "clear", "0", "0", "0");
-        LogicInstruction replaced = instructionProcessor.replaceAllArgs(original, new BaseArgument("0"), new BaseArgument("255"));
+        LogicInstruction replaced = ip.replaceAllArgs(original, new BaseArgument("0"), new BaseArgument("255"));
         assertEquals(
                 createInstruction(DRAW, "clear", "255", "255", "255"),
                 replaced
@@ -86,18 +86,18 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     @Test
     public void testAvoidsPrecisionLoss() {
         List.of("0", "1", "123456.789", "1e10", "1e25", "123456E25", "3333333e-40", "33333333333e-20").forEach(number -> {
-            messages.clear();
-            instructionProcessor.mlogRewrite(number);
-            assertEquals(List.of(), messages);
+            TestCompiler compiler = createTestCompiler();
+            compiler.processor.mlogRewrite(number);
+            assertEquals(List.of(), compiler.messages);
         });
     }
 
     @Test
     public void testHasPrecisionLoss() {
         List.of("33333333e-40", "99999999e-40", "3333333333e-40", "7777777777e10").forEach(number -> {
-            messages.clear();
-            instructionProcessor.mlogRewrite(number);
-            if (messages.isEmpty()) {
+            TestCompiler compiler = createTestCompiler();
+            compiler.processor.mlogRewrite(number);
+            if (compiler.messages.isEmpty()) {
                 fail("No precision loss for number " + number);
             }
         });
@@ -120,11 +120,11 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
 
     private void checkDouble(String value) {
         assertEquals(Double.parseDouble(value),
-                Double.parseDouble(instructionProcessor.mlogRewrite(value).orElse("NaN")), 0.00001);
+                Double.parseDouble(ip.mlogRewrite(value).orElse("NaN")), 0.00001);
     }
 
     private void checkLong(String value) {
         assertEquals(Long.parseLong(value),
-                Long.parseLong(instructionProcessor.mlogRewrite(value).orElse("NaN")));
+                Long.parseLong(ip.mlogRewrite(value).orElse("NaN")));
     }
 }

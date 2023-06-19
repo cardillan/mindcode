@@ -9,7 +9,8 @@ for d in 2 .. LIMIT
     end
 end
 
-print(maxnum)
+expect(97)
+actual(maxnum)
 
 def getRepeatLength(d)
     n = d

@@ -12,5 +12,7 @@ while count > SHIFT
 end
 
 result = ((result << count) + 1) % DIGITS
-print(result)
+
+expect(7075090433)
+actual(result)
 
