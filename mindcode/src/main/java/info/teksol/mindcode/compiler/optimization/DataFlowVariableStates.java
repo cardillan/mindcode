@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.OUT_OF_LINE_CALL;
@@ -41,6 +42,8 @@ public class DataFlowVariableStates {
         return new VariableStates();
     }
 
+    private final AtomicInteger counter = new AtomicInteger();
+
     /**
      * Describes known states of variables. Instances are primarily created by analysing code blocks, and then
      * merged when two or more code branches merge. Merging operations may produce variables with multiple definitions.
@@ -48,6 +51,8 @@ public class DataFlowVariableStates {
      * are purged.
      */
     class VariableStates {
+        private final int id = counter.incrementAndGet();
+
         /**
          *  Maps variables to their known values, which might be a constant represented by a literal,
          *  or an expression represented by an instruction.
@@ -254,8 +259,8 @@ public class DataFlowVariableStates {
          *
          * @param other states to merge to this one.
          */
-        public VariableStates merge(VariableStates other) {
-            print("*** Merge:\n  this: ");
+        public VariableStates merge(VariableStates other, String reason) {
+            print("*** Merge " + reason + ":\n  this: ");
             other.print("  other:");
 
             if (!stored.isEmpty() || !other.stored.isEmpty()) {
@@ -320,6 +325,7 @@ public class DataFlowVariableStates {
         void print(String title) {
             if (DataFlowOptimizer.DEBUG) {
                 System.out.println(title);
+                System.out.println("    VariableStates instance #" + id);
                 values.values().forEach(v -> System.out.println("    " + v));
                 definitions.forEach((k, v) -> {
                     System.out.println("    Definitions of " + k.getFullName());

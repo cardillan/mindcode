@@ -460,6 +460,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         returnStack.enterFunction(returnLabel, returnValue);
         LogicValue result = visit(function.getBody());
         emit(createSet(returnValue, result));
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
         emit(createLabel(returnLabel));
         returnStack.exitFunction();
 
@@ -533,7 +534,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private LogicValue passReturnValue(Function function) {
         if (currentFunction.isRepeatedCall(function.getName())) {
-            // Copy default return variable to new temp, for the function is called multiple times
+            // Copy default return variable to new temp, for the function is called multiple times,
             // and we must not overwrite result of previous call(s) with this one
             //
             // Allocate 'return value' type temp variable for it, so that it won't be eliminated;
@@ -738,12 +739,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         loopStack.enterLoop(node.getLabel(), exitLabel, contLabel);
 
-        // Multiplier is set to 1: all instructions execute exactly once
-        setSubcontextType(AstSubcontextType.ITERATOR, 1.0);
-
         // All but the last value
         for (int i = 0; i < values.size() - 1; i++) {
+            // Multiplier is set to 1: all instructions execute exactly once
+            setSubcontextType(AstSubcontextType.ITERATOR, 1.0);
             LogicLabel nextValueLabel = nextLabel();
+
             // Setting the iterator first. It is possible to use continue in the value expression,
             // in which case the next iteration is performed.
             emit(createSetAddress(iterator, nextValueLabel));
@@ -753,6 +754,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         // Last value
+        setSubcontextType(AstSubcontextType.ITERATOR, 1.0);
         LogicLabel lastValueLabel = nextLabel();
         emit(createSetAddress(iterator, lastValueLabel));
         emit(createSet(variable, visit(values.get(values.size() - 1))));

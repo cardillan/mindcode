@@ -4,22 +4,23 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* Remove Input Temp Elimination and the special protected class of temporary variables, which was only needed 
-  because of the Input Temp Elimination.
-* Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax 
-  error reporting would be much preferable, but quite hard to implement). 
 * Multiple-passes optimization.
   * At this point, there might already be benefits from additional passes.
   * Some optimizers will only be run once after all passes (e.g. jump threading)
   * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
-    current implementation
+    current implementation. Multiple passes will solve that.
+* Update ConditionalJumpsNormalizer to fully evaluate literal-based conditions. Data Flow optimizer can replace
+  variables in conditional jumps with literals, allowing ConditionalJumpsNormalizer to process them.
+* Remove Input Temp Elimination and the special protected class of temporary variables, which was only needed 
+  because of the Input Temp Elimination.
+* Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax 
+  error reporting would be much more preferable, but quite hard to implement). 
 * Improve data flow optimization around function calls further:
   * Create specialized optimizer for replacing variables inside push (pop?) instructions where possible.
   * Create global optimizer to handle functions with constant return values. Handle specific case of function
     always returning one of its input arguments.
-* Update ConditionalJumpsNormalizer to fully evaluate literal-based conditions. Data Flow optimizer can replace
-  variables in conditional jumps with literals, allowing ConditionalJumpsNormalizer to process them.
 * Loop unrolling - already possible and promising big returns.
+* For each 
 * External variable value reuse
   * When a value is read or written to a memory cell, store it and don't reread it if not necessary, unless the 
     memory cell was declared `volatile`.

@@ -188,6 +188,13 @@ public final class AstContext {
         return children.stream().filter(c -> c.subcontextType == type).toList();
     }
 
+    public String hierarchy() {
+        String text = subcontextType == AstSubcontextType.BASIC
+            ? contextType.text : contextType.text + "[" +  subcontextType.text + "]";
+
+        return parent == null ? text : parent.hierarchy() + "/" + text;
+    }
+
     @Override
     public String toString() {
         return "AstContext{" +

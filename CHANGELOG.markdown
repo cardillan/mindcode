@@ -2,11 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-06-19
 
 ### Added
 
 * Added support for the [`unitHealth` function](doc/syntax/FUNCTIONS_V7.markdown#instruction-setrule).
+
+### Fixed
+
+* Fixed Data Flow optimization incorrectly handling `break`, `continue` and `return` statements 
+  ([#98](https://github.com/cardillan/mindcode/issues/98)).
+
+### Miscellaneous
+
+* Statistics about executions of processor-based unit tests are now collected and committed to the repository, 
+  allowing to track the evolution of the efficiency of generated code over time. 
 
 ## 2023-06-18
 

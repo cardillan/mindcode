@@ -348,6 +348,33 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
 
     @Test
+    void handlesForEachLoops() {
+        assertCompilesTo("""
+                        for i in (1, 2, 3)
+                            print(i)
+                        end
+                        """,
+                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(SET, "i", "1"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
+                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SET, "i", "2"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
+                createInstruction(SETADDR, var(0), var(1005)),
+                createInstruction(SET, "i", "3"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "i"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1005), "marker0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void handlesDoWhileLoops() {
         assertCompilesTo("""
                         i = 0
@@ -488,7 +515,17 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end
                         end
                         """,
-                // TODO fix wrongly generated code and update
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "mod", var(2), var(0), "2"),
+                createInstruction(JUMP, var(1002), "notEqual", var(2), "0"),
+                createInstruction(SET, var(1), "1"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, var(1), "null"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(1)),
                 createInstruction(END)
         );
     }

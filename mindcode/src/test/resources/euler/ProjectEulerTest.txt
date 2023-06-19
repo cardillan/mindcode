@@ -1,6 +1,6 @@
 Test project-euler-04.mnd:                      23 instructions,  42900 steps, 100.0% coverage
 Test project-euler-18.mnd:                     144 instructions,   1966 steps, 100.0% coverage
-Test project-euler-26.mnd:                      37 instructions,   7462 steps,  94.5% coverage
+Test project-euler-26.mnd:                      36 instructions,   7363 steps,  94.4% coverage
 Test project-euler-28.mnd:                      15 instructions,  11008 steps, 100.0% coverage
 Test project-euler-31.mnd:                      76 instructions,  11099 steps, 100.0% coverage
 Test project-euler-31b.mnd:                     38 instructions,   8592 steps, 100.0% coverage
