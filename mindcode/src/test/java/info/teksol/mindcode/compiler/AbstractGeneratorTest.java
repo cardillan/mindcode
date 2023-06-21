@@ -5,20 +5,10 @@ import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
-import info.teksol.mindcode.compiler.instructions.AstContext;
-import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -172,8 +162,15 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     // This class always creates unoptimized code.
     // To test functions of optimizers, use AbstractOptimizerTest subclass.
     protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
+        long parse = System.nanoTime();
         Seq program = generateAstTree(code);
-        return compiler.generator.generate(program);
+        compiler.messages.add(new TimingMessage("Parse", ((System.nanoTime() - parse) / 1_000_000L)));
+
+        long compile = System.nanoTime();
+        GeneratorOutput output = compiler.generator.generate(program);
+        compiler.messages.add(new TimingMessage("Compile", ((System.nanoTime() - compile) / 1_000_000L)));
+
+        return output;
     }
 
     protected GeneratorOutput generateInstructions(String code) {

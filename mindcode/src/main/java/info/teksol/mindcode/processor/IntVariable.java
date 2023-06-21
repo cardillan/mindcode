@@ -35,12 +35,12 @@ public class IntVariable extends AbstractVariable {
 
     @Override
     public void assign(Variable var) {
-        if (var.isObject()) {
-            setObject(var.getObject());
-        } else {
-            setDoubleValue(var.getDoubleValue());
+        MindustryValueType type = var.getMindustryValueType();
+        switch (type) {
+            case NULL, OBJECT -> setObject(var.getObject());
+            default -> setDoubleValue(var.getDoubleValue());
         }
-        setType(var.getMindustryValueType());
+        setType(type);
     }
 
     @Override

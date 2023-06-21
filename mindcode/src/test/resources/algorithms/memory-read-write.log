@@ -1,0 +1,9 @@
+     4 instructions before optimizations.
+     4 instructions after optimizations.
+
+Final code before resolving virtual instructions:
+
+write 10 bank1 0
+read __tmp0 bank1 0
+print __tmp0
+end

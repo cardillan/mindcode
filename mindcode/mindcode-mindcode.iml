@@ -3,7 +3,9 @@
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$" dumb="true">
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources/euler" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources/scripts" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources/algorithms" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources/processor" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/resources/optimizer" type="java-test-resource" />
     </content>
   </component>
 </module>

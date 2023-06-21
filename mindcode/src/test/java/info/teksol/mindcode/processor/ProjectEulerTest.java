@@ -40,16 +40,21 @@ public class ProjectEulerTest extends AbstractProcessorTest {
         Arrays.sort(files);
 
         for (final File file : files) {
-            String fileName = file.getName();
-            List<MindustryObject> memory = List.of(MindustryMemory.createMemoryBank("bank2"));
-            String code = readFile(fileName) + "\ndef expect(v) print(v) end def actual(v) print(v) end";
-            result.add(DynamicTest.dynamicTest(fileName, null,
-                    () -> testAndEvaluateCode(fileName, code, memory, output -> {
-                        assertEquals(2, output.size(), "Expected the script to generate two output values: expected and actual.");
-                        assertEquals(output.get(0), output.get(1));
-                    })));
+            processFile(result, file);
         }
 
         return result;
+    }
+
+    private void processFile(List<DynamicTest> result, File file) throws IOException {
+        String fileName = file.getName();
+        result.add(DynamicTest.dynamicTest(fileName, null, () -> testAndEvaluateFile(
+                fileName,
+                s -> s + "\ndef expect(v) print(v) end def actual(v) print(v) end",
+                List.of(MindustryMemory.createMemoryBank("bank2")),
+                output -> {
+                    assertEquals(2, output.size(), "Expected the script to generate two output values: expected and actual.");
+                    assertEquals(output.get(0), output.get(1));
+                })));
     }
 }

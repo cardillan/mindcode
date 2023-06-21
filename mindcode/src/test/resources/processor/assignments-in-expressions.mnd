@@ -1,0 +1,4 @@
+A = 1
+B = A
+print(A + (A += 1))
+print((B += 1) + B)

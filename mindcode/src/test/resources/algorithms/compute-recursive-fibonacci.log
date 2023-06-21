@@ -1,0 +1,176 @@
+    43 instructions before optimizations.
+     1 instructions eliminated by OutputTempEliminator.
+     1 instructions eliminated by ImproveNegativeConditionalJumps.
+     2 instructions eliminated by IfExpressionOptimizer.
+     4 instructions eliminated by DataFlowOptimizer (2 iterations).
+     1 instructions eliminated by UnreachableCodeEliminator (1 iterations).
+     4 instructions eliminated by StackUsageOptimizer.
+    30 instructions after optimizations.
+
+Modifications by OutputTempEliminator, iteration 1:
+ 
+    26 pop bank1 __retval4
+    27 pop bank1 __fn0_n
+    28 set __retval6 __fn0retval
+-    * op add __tmp7 __retval4 __retval6
+-    * set __tmp2 __tmp7
++   29 op add __tmp2 __retval4 __retval6
+    30 label __label4
+    31 set __fn0retval __tmp2
+    32 label __label2
+
+Modifications by ImproveNegativeConditionalJumps, iteration 1:
+ 
+     5 print __retval0
+     6 end
+     7 label __label0
+-    * op lessThan __tmp1 __fn0_n 2
+-    * jump __label3 equal __tmp1 false
++    8 jump __label3 greaterThanEq __fn0_n 2
+     9 set __tmp2 __fn0_n
+    10 jump __label4 always
+    11 label __label3
+
+Modifications by IfExpressionOptimizer, iteration 1:
+ 
+     5 print __retval0
+     6 end
+     7 label __label0
+-    * jump __label3 greaterThanEq __fn0_n 2
+-    * set __tmp2 __fn0_n
+-    * jump __label4 always
++    8 set __fn0retval __fn0_n
++    9 jump __label4 lessThan __fn0_n 2
+    10 label __label3
+    11 op sub __tmp3 __fn0_n 1
+    12 push bank1 __fn0_n
+ 
+    24 pop bank1 __retval4
+    25 pop bank1 __fn0_n
+    26 set __retval6 __fn0retval
+-    * op add __tmp2 __retval4 __retval6
++   27 op add __fn0retval __retval4 __retval6
+    28 label __label4
+-    * set __fn0retval __tmp2
+    29 label __label2
+    30 return bank1
+    31 end
+
+Modifications by DataFlowOptimizer, iteration 1:
+ 
+     2 callrec bank1 __label0 __label1
+     3 label __label1
+     4 set __retval0 __fn0retval
+-    * print __retval0
++    5 print __fn0retval
+     6 end
+     7 label __label0
+     8 set __fn0retval __fn0_n
+ 
+    10 label __label3
+    11 op sub __tmp3 __fn0_n 1
+    12 push bank1 __fn0_n
+-    * set __fn0_n __tmp3
++   13 op sub __fn0_n __fn0_n 1
+    14 callrec bank1 __label0 __label5
+    15 label __label5
+    16 pop bank1 __fn0_n
+ 
+    18 op sub __tmp5 __fn0_n 2
+    19 push bank1 __fn0_n
+    20 push bank1 __retval4
+-    * set __fn0_n __tmp5
++   21 op sub __fn0_n __fn0_n 2
+    22 callrec bank1 __label0 __label6
+    23 label __label6
+    24 pop bank1 __retval4
+    25 pop bank1 __fn0_n
+    26 set __retval6 __fn0retval
+-    * op add __fn0retval __retval4 __retval6
++   27 op add __fn0retval __retval4 __fn0retval
+    28 label __label4
+    29 label __label2
+    30 return bank1
+
+Modifications by DataFlowOptimizer, iteration 2:
+ 
+     1 set __fn0_n 10
+     2 callrec bank1 __label0 __label1
+     3 label __label1
+-    * set __retval0 __fn0retval
+     4 print __fn0retval
+     5 end
+     6 label __label0
+     7 set __fn0retval __fn0_n
+     8 jump __label4 lessThan __fn0_n 2
+     9 label __label3
+-    * op sub __tmp3 __fn0_n 1
+    10 push bank1 __fn0_n
+    11 op sub __fn0_n __fn0_n 1
+    12 callrec bank1 __label0 __label5
+    13 label __label5
+    14 pop bank1 __fn0_n
+    15 set __retval4 __fn0retval
+-    * op sub __tmp5 __fn0_n 2
+    16 push bank1 __fn0_n
+    17 push bank1 __retval4
+    18 op sub __fn0_n __fn0_n 2
+ 
+    20 label __label6
+    21 pop bank1 __retval4
+    22 pop bank1 __fn0_n
+-    * set __retval6 __fn0retval
+    23 op add __fn0retval __retval4 __fn0retval
+    24 label __label4
+    25 label __label2
+
+Modifications by UnreachableCodeEliminator, iteration 1:
+ 
+    24 label __label4
+    25 label __label2
+    26 return bank1
+-    * end
+
+Modifications by StackUsageOptimizer, iteration 1:
+ 
+    13 label __label5
+    14 pop bank1 __fn0_n
+    15 set __retval4 __fn0retval
+-    * push bank1 __fn0_n
+    16 push bank1 __retval4
+    17 op sub __fn0_n __fn0_n 2
+    18 callrec bank1 __label0 __label6
+    19 label __label6
+    20 pop bank1 __retval4
+-    * pop bank1 __fn0_n
+    21 op add __fn0retval __retval4 __fn0retval
+    22 label __label4
+    23 label __label2
+
+Final code before resolving virtual instructions:
+
+set __sp 0
+set __fn0_n 10
+callrec bank1 __label0 __label1
+label __label1
+print __fn0retval
+end
+label __label0
+set __fn0retval __fn0_n
+jump __label4 lessThan __fn0_n 2
+label __label3
+push bank1 __fn0_n
+op sub __fn0_n __fn0_n 1
+callrec bank1 __label0 __label5
+label __label5
+pop bank1 __fn0_n
+set __retval4 __fn0retval
+push bank1 __retval4
+op sub __fn0_n __fn0_n 2
+callrec bank1 __label0 __label6
+label __label6
+pop bank1 __retval4
+op add __fn0retval __retval4 __fn0retval
+label __label4
+label __label2
+return bank1

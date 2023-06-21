@@ -1,0 +1,120 @@
+// Adapted from https://github.com/mlogjs/mlogjs/blob/main/compiler/test/examples/breakout.js
+
+BRICKS = bank1
+DISPLAY = display1
+
+const size = 176
+
+// BRICKS
+const brickRows = 2;
+const brickCols = 3;
+const brickHeight = 10;
+const brickWidth = size / brickCols;
+const brickStartY = 176 - brickHeight * 5;
+const brickEndY = brickStartY - brickHeight * brickRows;
+const brickTotal = brickCols * brickRows;
+
+// paddle
+const paddleHeight = 5;
+const paddleY = 10;
+const paddleSpeed = 3;
+PADDLECONTROLLER = switch1
+
+// ball
+const ballMaxStartSpeed = 5;
+const ballSize = 5;
+const ballSizeMinus1 = ballSize - 1;
+
+color(255, 255, 255, 255);
+
+while true
+    paddleWidth = 40
+    paddleX = size / 2 - paddleWidth / 2
+
+    ballX = size / 2
+    ballY = size / 2
+    ballVX = rand(ballMaxStartSpeed * 2) - ballMaxStartSpeed
+    ballVY = rand(ballMaxStartSpeed * 2) - ballMaxStartSpeed
+
+    brickCount = brickTotal
+    for i in 0 ... brickTotal
+        BRICKS[i] = 1
+    end
+
+    while true
+        clear(0, 0, 0)
+        rect(paddleX, paddleY, paddleWidth, paddleHeight)
+        rect(ballX, ballY, ballSize, ballSize)
+
+        if PADDLECONTROLLER.enabled
+            if paddleX < size - paddleWidth
+                paddleX += paddleSpeed
+            end
+        elsif paddleX > 0
+            paddleX -= paddleSpeed
+        end
+
+        // update ball
+        ballX += ballVX;
+        ballY += ballVY;
+        // precompute end points
+        ballXEnd = ballX + ballSize;
+        ballYEnd = ballY + ballSize;
+
+        // handle ball-wall collision
+        if ballX < 0 || ballXEnd > size
+            ballVX *= -1
+        end
+        if ballYEnd > size
+            ballVY *= -1
+        end
+
+        // handle ball-paddle collision
+        if ballXEnd > paddleX && ballX < paddleX + paddleWidth && ballYEnd > paddleY && ballY < paddleY + paddleHeight
+            ballVY *= -1.1
+            ballVX += (ballX + ballSize / 2 - paddleX + paddleWidth / 2) / 10
+            paddleWidth -= 1
+        end
+
+        // render BRICKS and handle ball-brick collision
+        brickPtr = 0;
+        for y = brickStartY; y > brickEndY; y -= brickHeight
+            for x = 1; x < size; x += brickWidth
+                // check if brick exists
+                if BRICKS[brickPtr]
+                    // render the brick
+                    rect(x, y, brickWidth - 1, brickHeight - 1)
+
+                    // detect collision
+                    if (
+                        ballXEnd > x &&
+                        ballX < x + brickWidth &&
+                        ballYEnd > y &&
+                        ballY < y + brickHeight
+                    )
+                        BRICKS[brickPtr] = 0;
+                        brickCount -= 1;
+                        brickWidthPlusBallSizeMinus1 = brickWidth + ballSizeMinus1;
+                        if (
+                            ballX > x - ballSizeMinus1 &&
+                            ballX < x + brickWidthPlusBallSizeMinus1
+                        )
+                            ballVY *= -1;
+                        else
+                            ballVX *= -1;
+                        end
+                    end
+                end
+                brickPtr += 1;
+            end
+        end
+
+        // check game over
+        if ballY < 0 || brickCount == 0
+            break
+        end
+
+        // flush DISPLAY
+        drawflush(DISPLAY)
+    end
+end

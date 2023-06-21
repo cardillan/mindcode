@@ -1,0 +1,10 @@
+allocate stack in bank1[0...512]
+
+def foo(n)
+    if n > 0
+        foo(n - 1)
+    end
+
+end
+
+print(foo(1))

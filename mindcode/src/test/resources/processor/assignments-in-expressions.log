@@ -1,0 +1,16 @@
+    11 instructions before optimizations.
+    11 instructions after optimizations.
+
+Final code before resolving virtual instructions:
+
+set A 1
+set B A
+op add __tmp0 A 1
+set A __tmp0
+op add __tmp1 A __tmp0
+print __tmp1
+op add __tmp2 B 1
+set B __tmp2
+op add __tmp3 __tmp2 B
+print __tmp3
+end

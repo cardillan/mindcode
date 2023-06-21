@@ -1,0 +1,697 @@
+   173 instructions before optimizations.
+     1 instructions eliminated by ConditionalJumpsNormalizer.
+    30 instructions eliminated by DeadCodeEliminator (4 iterations).
+    10 instructions eliminated by SingleStepJumpEliminator (1 iterations).
+    11 instructions eliminated by OutputTempEliminator.
+     2 instructions eliminated by CaseExpressionOptimizer.
+     6 instructions eliminated by ImproveNegativeConditionalJumps.
+     7 instructions eliminated by JumpOverJumpEliminator.
+     2 instructions updated by PropagateJumpTargets.
+     1 instructions eliminated by UnreachableCodeEliminator (1 iterations).
+   105 instructions after optimizations.
+
+Modifications by ConditionalJumpsNormalizer, iteration 1:
+ 
+     5 set first_unit null
+     6 set index 1
+     7 label __label0
+-    * jump __label2 equal true false
+     8 sensor __tmp2 switch2 @enabled
+     9 jump __label3 equal __tmp2 false
+    10 set __ast0 UNIT
+
+Modifications by DeadCodeEliminator, iteration 1:
+ 
+    39 control enabled switch2 false
+    40 print UNIT
+    41 print ": gathering information..."
+-    * set __tmp3 ": gathering information..."
+    42 jump __label4 always
+    43 label __label3
+-    * set __tmp3 null
+    44 label __label4
+    45 ubind UNIT
+    46 op equal __tmp5 @unit null
+ 
+    48 print UNIT
+    49 print ": no active unit found."
+    50 printflush message1
+-    * set __tmp6 null
+    51 jump __label15 always
+    52 label __label14
+    53 op strictEqual __tmp7 @unit first_unit
+ 
+    66 label __label18
+    67 set __tmp12 null
+    68 label __label19
+-    * set __tmp10 __tmp12
+    69 jump __label17 always
+    70 label __label16
+-    * set __tmp10 null
+    71 label __label17
+    72 sensor __tmp13 @unit @controlled
+    73 set controlled __tmp13
+ 
+    81 op equal __tmp18 __tmp17 @this
+    82 jump __label20 equal __tmp18 false
+    83 set controlled 0
+-    * set __tmp19 0
+    84 jump __label21 always
+    85 label __label20
+-    * set __tmp19 null
+    86 label __label21
+    87 op notEqual __tmp20 flag 0
+    88 op greaterThan __tmp21 items 0
+ 
+   111 print x
+   112 print ";"
+   113 print y
+-    * set __tmp29 y
+   114 jump __label24 always
+   115 label __label25
+   116 jump __label28 equal __ast1 @ctrlPlayer
+   117 jump __label27 always
+   118 label __label28
+   119 print ", player"
+-    * set __tmp29 ", player"
+   120 jump __label24 always
+   121 label __label27
+   122 jump __label30 equal __ast1 @ctrlFormation
+   123 jump __label29 always
+   124 label __label30
+   125 print ", group"
+-    * set __tmp29 ", group"
+   126 jump __label24 always
+   127 label __label29
+-    * set __tmp29 null
+   128 label __label24
+   129 op notEqual __tmp35 flag 0
+   130 jump __label31 equal __tmp35 false
+   131 print ", F"
+   132 print flag
+-    * set __tmp36 flag
+   133 jump __label32 always
+   134 label __label31
+-    * set __tmp36 null
+   135 label __label32
+   136 op greaterThan __tmp37 items 0
+   137 jump __label33 equal __tmp37 false
+ 
+   144 label __label33
+   145 set __tmp38 null
+   146 label __label34
+-    * set __tmp28 __tmp38
+   147 jump __label23 always
+   148 label __label22
+-    * set __tmp28 null
+   149 label __label23
+   150 op equal __tmp39 controlled 0
+   151 sensor __tmp40 switch1 @enabled
+ 
+   186 label __label42
+   187 set __tmp44 __tmp50
+   188 label __label38
+-    * set __tmp42 __tmp44
+   189 jump __label36 always
+   190 label __label35
+-    * set __tmp42 null
+   191 label __label36
+   192 op add __tmp53 index 1
+   193 set index __tmp53
+-    * set __tmp6 __tmp53
+   194 label __label15
+   195 label __label1
+   196 jump __label0 always
+
+Modifications by DeadCodeEliminator, iteration 2:
+ 
+    61 sensor __tmp11 switch1 @enabled
+    62 jump __label18 equal __tmp11 false
+    63 print " (cleanup active)"
+-    * set __tmp12 " (cleanup active)"
+    64 jump __label19 always
+    65 label __label18
+-    * set __tmp12 null
+    66 label __label19
+    67 jump __label17 always
+    68 label __label16
+ 
+   137 print items
+   138 print " "
+   139 print item
+-    * set __tmp38 item
+   140 jump __label34 always
+   141 label __label33
+-    * set __tmp38 null
+   142 label __label34
+   143 jump __label23 always
+   144 label __label22
+ 
+   161 ucontrol approach CORE_X CORE_Y 4
+   162 set __tmp48 null
+   163 label __label40
+-    * set __tmp44 __tmp48
+   164 jump __label38 always
+   165 label __label37
+   166 op notEqual __tmp49 flag 0
+ 
+   179 label __label41
+   180 set __tmp50 null
+   181 label __label42
+-    * set __tmp44 __tmp50
+   182 label __label38
+   183 jump __label36 always
+   184 label __label35
+
+Modifications by DeadCodeEliminator, iteration 3:
+ 
+   155 ucontrol within CORE_X CORE_Y 8 __tmp47
+   156 jump __label39 equal __tmp47 false
+   157 ucontrol itemDrop CORE items
+-    * set __tmp48 null
+   158 jump __label40 always
+   159 label __label39
+   160 ucontrol approach CORE_X CORE_Y 4
+-    * set __tmp48 null
+   161 label __label40
+   162 jump __label38 always
+   163 label __label37
+ 
+   172 ucontrol approach THIS_X THIS_Y 4
+   173 set __tmp52 null
+   174 label __label44
+-    * set __tmp50 __tmp52
+   175 jump __label42 always
+   176 label __label41
+-    * set __tmp50 null
+   177 label __label42
+   178 label __label38
+   179 jump __label36 always
+
+Modifications by DeadCodeEliminator, iteration 4:
+ 
+   166 ucontrol within THIS_X THIS_Y 8 __tmp51
+   167 jump __label43 equal __tmp51 false
+   168 ucontrol flag 0
+-    * set __tmp52 null
+   169 jump __label44 always
+   170 label __label43
+   171 ucontrol approach THIS_X THIS_Y 4
+-    * set __tmp52 null
+   172 label __label44
+   173 jump __label42 always
+   174 label __label41
+
+Modifications by SingleStepJumpEliminator, iteration 1:
+ 
+    39 control enabled switch2 false
+    40 print UNIT
+    41 print ": gathering information..."
+-    * jump __label4 always
+    42 label __label3
+    43 label __label4
+    44 ubind UNIT
+ 
+    60 sensor __tmp11 switch1 @enabled
+    61 jump __label18 equal __tmp11 false
+    62 print " (cleanup active)"
+-    * jump __label19 always
+    63 label __label18
+    64 label __label19
+-    * jump __label17 always
+    65 label __label16
+    66 label __label17
+    67 sensor __tmp13 @unit @controlled
+ 
+    76 op equal __tmp18 __tmp17 @this
+    77 jump __label20 equal __tmp18 false
+    78 set controlled 0
+-    * jump __label21 always
+    79 label __label20
+    80 label __label21
+    81 op notEqual __tmp20 flag 0
+ 
+   117 jump __label29 always
+   118 label __label30
+   119 print ", group"
+-    * jump __label24 always
+   120 label __label29
+   121 label __label24
+   122 op notEqual __tmp35 flag 0
+   123 jump __label31 equal __tmp35 false
+   124 print ", F"
+   125 print flag
+-    * jump __label32 always
+   126 label __label31
+   127 label __label32
+   128 op greaterThan __tmp37 items 0
+ 
+   131 print items
+   132 print " "
+   133 print item
+-    * jump __label34 always
+   134 label __label33
+   135 label __label34
+-    * jump __label23 always
+   136 label __label22
+   137 label __label23
+   138 op equal __tmp39 controlled 0
+ 
+   162 label __label43
+   163 ucontrol approach THIS_X THIS_Y 4
+   164 label __label44
+-    * jump __label42 always
+   165 label __label41
+   166 label __label42
+   167 label __label38
+-    * jump __label36 always
+   168 label __label35
+   169 label __label36
+   170 op add __tmp53 index 1
+
+Modifications by OutputTempEliminator, iteration 1:
+     0 set UNIT @mega
+-    * sensor __tmp0 @this @x
+-    * set THIS_X __tmp0
+-    * sensor __tmp1 @this @y
+-    * set THIS_Y __tmp1
++    1 sensor THIS_X @this @x
++    2 sensor THIS_Y @this @y
+     3 set first_unit null
+     4 set index 1
+     5 label __label0
+ 
+    62 label __label19
+    63 label __label16
+    64 label __label17
+-    * sensor __tmp13 @unit @controlled
+-    * set controlled __tmp13
+-    * sensor __tmp14 @unit @flag
+-    * set flag __tmp14
+-    * sensor __tmp15 @unit @totalItems
+-    * set items __tmp15
+-    * sensor __tmp16 @unit @firstItem
+-    * set item __tmp16
++   65 sensor controlled @unit @controlled
++   66 sensor flag @unit @flag
++   67 sensor items @unit @totalItems
++   68 sensor item @unit @firstItem
+    69 sensor __tmp17 @unit @controller
+    70 op equal __tmp18 __tmp17 @this
+    71 jump __label20 equal __tmp18 false
+ 
+    87 jump __label26 equal __ast1 @ctrlProcessor
+    88 jump __label25 always
+    89 label __label26
+-    * sensor __tmp30 @unit @controller
+-    * set controller __tmp30
++   90 sensor controller @unit @controller
+    91 sensor __tmp31 controller @x
+-    * op floor __tmp32 __tmp31
+-    * set x __tmp32
++   92 op floor x __tmp31
+    93 sensor __tmp33 controller @y
+-    * op floor __tmp34 __tmp33
+-    * set y __tmp34
++   94 op floor y __tmp33
+    95 print ", "
+    96 print x
+    97 print ";"
+ 
+   133 op greaterThan __tmp43 items 0
+   134 jump __label37 equal __tmp43 false
+   135 ucontrol flag 1
+-    * ulocate building core false @copper CORE_X CORE_Y __tmp46 __tmp45
+-    * set CORE __tmp45
++  136 ulocate building core false @copper CORE_X CORE_Y __tmp46 CORE
+   137 ucontrol within CORE_X CORE_Y 8 __tmp47
+   138 jump __label39 equal __tmp47 false
+   139 ucontrol itemDrop CORE items
+ 
+   157 label __label38
+   158 label __label35
+   159 label __label36
+-    * op add __tmp53 index 1
+-    * set index __tmp53
++  160 op add index index 1
+   161 label __label15
+   162 label __label1
+   163 jump __label0 always
+
+Modifications by CaseExpressionOptimizer, iteration 1:
+ 
+     5 label __label0
+     6 sensor __tmp2 switch2 @enabled
+     7 jump __label3 equal __tmp2 false
+-    * set __ast0 UNIT
+-    * jump __label7 equal __ast0 @flare
++    8 jump __label7 equal UNIT @flare
+     9 jump __label6 always
+    10 label __label7
+    11 set __tmp4 @mono
+    12 jump __label5 always
+    13 label __label6
+-    * jump __label9 equal __ast0 @mono
++   14 jump __label9 equal UNIT @mono
+    15 jump __label8 always
+    16 label __label9
+    17 set __tmp4 @poly
+    18 jump __label5 always
+    19 label __label8
+-    * jump __label11 equal __ast0 @poly
++   20 jump __label11 equal UNIT @poly
+    21 jump __label10 always
+    22 label __label11
+    23 set __tmp4 @mega
+    24 jump __label5 always
+    25 label __label10
+-    * jump __label13 equal __ast0 @mega
++   26 jump __label13 equal UNIT @mega
+    27 jump __label12 always
+    28 label __label13
+    29 set __tmp4 @flare
+ 
+    82 jump __label22 equal __tmp27 false
+    83 print "\n"
+    84 print index
+-    * set __ast1 controlled
+-    * jump __label26 equal __ast1 @ctrlProcessor
++   85 jump __label26 equal controlled @ctrlProcessor
+    86 jump __label25 always
+    87 label __label26
+    88 sensor controller @unit @controller
+ 
+    96 print y
+    97 jump __label24 always
+    98 label __label25
+-    * jump __label28 equal __ast1 @ctrlPlayer
++   99 jump __label28 equal controlled @ctrlPlayer
+   100 jump __label27 always
+   101 label __label28
+   102 print ", player"
+   103 jump __label24 always
+   104 label __label27
+-    * jump __label30 equal __ast1 @ctrlFormation
++  105 jump __label30 equal controlled @ctrlFormation
+   106 jump __label29 always
+   107 label __label30
+   108 print ", group"
+
+Modifications by ImproveNegativeConditionalJumps, iteration 1:
+ 
+    39 label __label3
+    40 label __label4
+    41 ubind UNIT
+-    * op equal __tmp5 @unit null
+-    * jump __label14 equal __tmp5 false
++   42 jump __label14 notEqual @unit null
+    43 print UNIT
+    44 print ": no active unit found."
+    45 printflush message1
+ 
+    65 sensor items @unit @totalItems
+    66 sensor item @unit @firstItem
+    67 sensor __tmp17 @unit @controller
+-    * op equal __tmp18 __tmp17 @this
+-    * jump __label20 equal __tmp18 false
++   68 jump __label20 notEqual __tmp17 @this
+    69 set controlled 0
+    70 label __label20
+    71 label __label21
+ 
+   106 print ", group"
+   107 label __label29
+   108 label __label24
+-    * op notEqual __tmp35 flag 0
+-    * jump __label31 equal __tmp35 false
++  109 jump __label31 equal flag 0
+   110 print ", F"
+   111 print flag
+   112 label __label31
+   113 label __label32
+-    * op greaterThan __tmp37 items 0
+-    * jump __label33 equal __tmp37 false
++  114 jump __label33 lessThanEq items 0
+   115 print ", "
+   116 print items
+   117 print " "
+ 
+   124 sensor __tmp40 switch1 @enabled
+   125 op land __tmp41 __tmp39 __tmp40
+   126 jump __label35 equal __tmp41 false
+-    * op greaterThan __tmp43 items 0
+-    * jump __label37 equal __tmp43 false
++  127 jump __label37 lessThanEq items 0
+   128 ucontrol flag 1
+   129 ulocate building core false @copper CORE_X CORE_Y __tmp46 CORE
+   130 ucontrol within CORE_X CORE_Y 8 __tmp47
+ 
+   136 label __label40
+   137 jump __label38 always
+   138 label __label37
+-    * op notEqual __tmp49 flag 0
+-    * jump __label41 equal __tmp49 false
++  139 jump __label41 equal flag 0
+   140 ucontrol within THIS_X THIS_Y 8 __tmp51
+   141 jump __label43 equal __tmp51 false
+   142 ucontrol flag 0
+
+Modifications by JumpOverJumpEliminator, iteration 1:
+ 
+     5 label __label0
+     6 sensor __tmp2 switch2 @enabled
+     7 jump __label3 equal __tmp2 false
+-    * jump __label7 equal UNIT @flare
+-    * jump __label6 always
++    8 jump __label6 notEqual UNIT @flare
+     9 label __label7
+    10 set __tmp4 @mono
+    11 jump __label5 always
+    12 label __label6
+-    * jump __label9 equal UNIT @mono
+-    * jump __label8 always
++   13 jump __label8 notEqual UNIT @mono
+    14 label __label9
+    15 set __tmp4 @poly
+    16 jump __label5 always
+    17 label __label8
+-    * jump __label11 equal UNIT @poly
+-    * jump __label10 always
++   18 jump __label10 notEqual UNIT @poly
+    19 label __label11
+    20 set __tmp4 @mega
+    21 jump __label5 always
+    22 label __label10
+-    * jump __label13 equal UNIT @mega
+-    * jump __label12 always
++   23 jump __label12 notEqual UNIT @mega
+    24 label __label13
+    25 set __tmp4 @flare
+    26 jump __label5 always
+ 
+    76 jump __label22 equal __tmp27 false
+    77 print "\n"
+    78 print index
+-    * jump __label26 equal controlled @ctrlProcessor
+-    * jump __label25 always
++   79 jump __label25 notEqual controlled @ctrlProcessor
+    80 label __label26
+    81 sensor controller @unit @controller
+    82 sensor __tmp31 controller @x
+ 
+    89 print y
+    90 jump __label24 always
+    91 label __label25
+-    * jump __label28 equal controlled @ctrlPlayer
+-    * jump __label27 always
++   92 jump __label27 notEqual controlled @ctrlPlayer
+    93 label __label28
+    94 print ", player"
+    95 jump __label24 always
+    96 label __label27
+-    * jump __label30 equal controlled @ctrlFormation
+-    * jump __label29 always
++   97 jump __label29 notEqual controlled @ctrlFormation
+    98 label __label30
+    99 print ", group"
+   100 label __label29
+
+Modifications by PropagateJumpTargets, iteration 1:
+ 
+    39 print UNIT
+    40 print ": no active unit found."
+    41 printflush message1
+-    * jump __label15 always
++   42 jump __label0 always
+    43 label __label14
+    44 op strictEqual __tmp7 @unit first_unit
+    45 op strictEqual __tmp8 first_unit null
+ 
+   123 ucontrol within CORE_X CORE_Y 8 __tmp47
+   124 jump __label39 equal __tmp47 false
+   125 ucontrol itemDrop CORE items
+-    * jump __label40 always
++  126 jump __label38 always
+   127 label __label39
+   128 ucontrol approach CORE_X CORE_Y 4
+   129 label __label40
+
+Modifications by UnreachableCodeEliminator, iteration 1:
+ 
+   147 label __label1
+   148 jump __label0 always
+   149 label __label2
+-    * end
+
+Final code before resolving virtual instructions:
+
+set UNIT @mega
+sensor THIS_X @this @x
+sensor THIS_Y @this @y
+set first_unit null
+set index 1
+label __label0
+sensor __tmp2 switch2 @enabled
+jump __label3 equal __tmp2 false
+jump __label6 notEqual UNIT @flare
+label __label7
+set __tmp4 @mono
+jump __label5 always 0 0
+label __label6
+jump __label8 notEqual UNIT @mono
+label __label9
+set __tmp4 @poly
+jump __label5 always 0 0
+label __label8
+jump __label10 notEqual UNIT @poly
+label __label11
+set __tmp4 @mega
+jump __label5 always 0 0
+label __label10
+jump __label12 notEqual UNIT @mega
+label __label13
+set __tmp4 @flare
+jump __label5 always 0 0
+label __label12
+set __tmp4 null
+label __label5
+set UNIT __tmp4
+set first_unit null
+control enabled switch2 false 0 0 0
+print UNIT
+print ": gathering information..."
+label __label3
+label __label4
+ubind UNIT
+jump __label14 notEqual @unit null
+print UNIT
+print ": no active unit found."
+printflush message1
+jump __label0 always 0 0
+label __label14
+op strictEqual __tmp7 @unit first_unit
+op strictEqual __tmp8 first_unit null
+op or __tmp9 __tmp7 __tmp8
+jump __label16 equal __tmp9 false
+printflush message1
+set first_unit @unit
+set index 1
+print UNIT
+sensor __tmp11 switch1 @enabled
+jump __label18 equal __tmp11 false
+print " (cleanup active)"
+label __label18
+label __label19
+label __label16
+label __label17
+sensor controlled @unit @controlled
+sensor flag @unit @flag
+sensor items @unit @totalItems
+sensor item @unit @firstItem
+sensor __tmp17 @unit @controller
+jump __label20 notEqual __tmp17 @this
+set controlled 0
+label __label20
+label __label21
+op notEqual __tmp20 flag 0
+op greaterThan __tmp21 items 0
+op or __tmp22 __tmp20 __tmp21
+op notEqual __tmp23 controlled 0
+sensor __tmp24 @unit @controller
+op notEqual __tmp25 __tmp24 @this
+op land __tmp26 __tmp23 __tmp25
+op or __tmp27 __tmp22 __tmp26
+jump __label22 equal __tmp27 false
+print "\n"
+print index
+jump __label25 notEqual controlled @ctrlProcessor
+label __label26
+sensor controller @unit @controller
+sensor __tmp31 controller @x
+op floor x __tmp31 0
+sensor __tmp33 controller @y
+op floor y __tmp33 0
+print ", "
+print x
+print ";"
+print y
+jump __label24 always 0 0
+label __label25
+jump __label27 notEqual controlled @ctrlPlayer
+label __label28
+print ", player"
+jump __label24 always 0 0
+label __label27
+jump __label29 notEqual controlled @ctrlFormation
+label __label30
+print ", group"
+label __label29
+label __label24
+jump __label31 equal flag 0
+print ", F"
+print flag
+label __label31
+label __label32
+jump __label33 lessThanEq items 0
+print ", "
+print items
+print " "
+print item
+label __label33
+label __label34
+label __label22
+label __label23
+op equal __tmp39 controlled 0
+sensor __tmp40 switch1 @enabled
+op land __tmp41 __tmp39 __tmp40
+jump __label35 equal __tmp41 false
+jump __label37 lessThanEq items 0
+ucontrol flag 1 0 0 0 0
+ulocate building core false @copper CORE_X CORE_Y __tmp46 CORE
+ucontrol within CORE_X CORE_Y 8 __tmp47 0
+jump __label39 equal __tmp47 false
+ucontrol itemDrop CORE items 0 0 0
+jump __label38 always 0 0
+label __label39
+ucontrol approach CORE_X CORE_Y 4 0 0
+label __label40
+jump __label38 always 0 0
+label __label37
+jump __label41 equal flag 0
+ucontrol within THIS_X THIS_Y 8 __tmp51 0
+jump __label43 equal __tmp51 false
+ucontrol flag 0 0 0 0 0
+jump __label44 always 0 0
+label __label43
+ucontrol approach THIS_X THIS_Y 4 0 0
+label __label44
+label __label41
+label __label42
+label __label38
+label __label35
+label __label36
+op add index index 1
+label __label15
+label __label1
+jump __label0 always 0 0
+label __label2

@@ -1,0 +1,1056 @@
+   238 instructions before optimizations.
+    27 instructions eliminated by DeadCodeEliminator (4 iterations).
+     6 instructions eliminated by SingleStepJumpEliminator (1 iterations).
+    20 instructions eliminated by OutputTempEliminator.
+     9 instructions eliminated by ImproveNegativeConditionalJumps.
+     7 instructions eliminated by JumpOverJumpEliminator.
+     1 instructions eliminated by ImprovePositiveConditionalJumps.
+     3 loops improved by LoopOptimizer.
+     1 instructions added by LoopOptimizer.
+     3 instructions eliminated by IfExpressionOptimizer.
+     3 instructions eliminated by DataFlowOptimizer (2 iterations).
+     3 instructions updated by PropagateJumpTargets.
+     1 instructions eliminated by UnreachableCodeEliminator (1 iterations).
+     2 instructions eliminated by SingleStepJumpEliminator (1 iterations).
+     7 instructions eliminated by PrintMerger.
+   153 instructions after optimizations.
+
+Modifications by DeadCodeEliminator, iteration 1:
+ 
+    21 jump __label7 always
+    22 label __label8
+    23 set MESSAGE block
+-    * set __tmp4 block
+    24 jump __label6 always
+    25 label __label7
+    26 jump __label10 equal __ast0 @switch
+    27 jump __label9 always
+    28 label __label10
+    29 set SWITCH block
+-    * set __tmp4 block
+    30 jump __label6 always
+    31 label __label9
+    32 jump __label12 equal __ast0 @sorter
+ 
+    35 jump __label11 always
+    36 label __label12
+    37 set SORTER block
+-    * set __tmp4 block
+    38 jump __label6 always
+    39 label __label11
+    40 jump __label14 equal __ast0 @vault
+ 
+    49 set MAXIMUM @itemCapacity
+    50 op add __tmp5 n 1
+    51 set START __tmp5
+-    * set __tmp4 __tmp5
+    52 jump __label6 always
+    53 label __label13
+    54 jump __label16 equal __ast0 @liquid-tank
+ 
+    61 set MAXIMUM @liquidCapacity
+    62 op add __tmp6 n 1
+    63 set START __tmp6
+-    * set __tmp4 __tmp6
+    64 jump __label6 always
+    65 label __label15
+    66 jump __label18 equal __ast0 @battery
+ 
+    72 set MAXIMUM @powerCapacity
+    73 op add __tmp7 n 1
+    74 set START __tmp7
+-    * set __tmp4 __tmp7
+    75 jump __label6 always
+    76 label __label17
+    77 jump __label20 equal __ast0 @power-node
+ 
+    84 set MAXIMUM @powerNetCapacity
+    85 op add __tmp8 n 1
+    86 set START __tmp8
+-    * set __tmp4 __tmp8
+    87 jump __label6 always
+    88 label __label19
+-    * set __tmp4 null
+    89 label __label6
+    90 label __label4
+    91 jump __label3 always
+ 
+   106 jump __label21 equal __tmp9 false
+   107 print "No container."
+   108 print "\n"
+-    * set __tmp10 "No container."
+   109 jump __label22 always
+   110 label __label21
+-    * set __tmp10 null
+   111 label __label22
+   112 printflush MESSAGE
+   113 label __label1
+ 
+   138 label __label25
+   139 set __tmp16 null
+   140 label __label26
+-    * set __retval14 __tmp16
+   141 label __label24
+   142 set CYCLES 0
+   143 control enabled SWITCH 0
+ 
+   155 set item SENSOR
+   156 print "Measuring [gold]total[] in "
+   157 print CONTAINER
+-    * set __tmp26 null
+   158 jump __label33 always
+   159 label __label32
+   160 print "Measuring [gold]"
+   161 print item
+   162 print "[] in "
+   163 print CONTAINER
+-    * set __tmp26 null
+   164 label __label33
+   165 sensor __tmp27 CONTAINER MAXIMUM
+   166 set max __tmp27
+ 
+   194 label __label39
+   195 set __retval33 __tmp35
+   196 label __label37
+-    * set __tmp32 __retval33
+   197 jump __label35 always
+   198 label __label34
+   199 op greaterThanEq __tmp39 pct PCT_HIGH
+ 
+   226 label __label42
+   227 set __tmp40 null
+   228 label __label43
+-    * set __tmp32 __tmp40
+   229 label __label35
+   230 print "\nLevel: [gold]"
+   231 print pct
+ 
+   237 print "\nDeactivate below [salmon]"
+   238 print PCT_LOW
+   239 print "%[]"
+-    * set __tmp47 null
+   240 jump __label51 always
+   241 label __label50
+   242 print "\nActivate below [green]"
+ 
+   245 print "\nDeactivate above [salmon]"
+   246 print PCT_HIGH
+   247 print "%[]"
+-    * set __tmp47 null
+   248 label __label51
+   249 print ACTIVE_TEXT
+   250 set n START
+
+Modifications by DeadCodeEliminator, iteration 2:
+ 
+   133 set __tmp19 "\nCurrently inactive:[salmon]"
+   134 label __label28
+   135 set ACTIVE_TEXT __tmp19
+-    * set __tmp16 __tmp19
+   136 jump __label26 always
+   137 label __label25
+-    * set __tmp16 null
+   138 label __label26
+   139 label __label24
+   140 set CYCLES 0
+ 
+   190 label __label38
+   191 set __tmp35 null
+   192 label __label39
+-    * set __retval33 __tmp35
+   193 label __label37
+   194 jump __label35 always
+   195 label __label34
+ 
+   218 label __label47
+   219 set __retval41 __tmp43
+   220 label __label45
+-    * set __tmp40 __retval41
+   221 jump __label43 always
+   222 label __label42
+-    * set __tmp40 null
+   223 label __label43
+   224 label __label35
+   225 print "\nLevel: [gold]"
+
+Modifications by DeadCodeEliminator, iteration 3:
+ 
+   185 set __tmp38 "\nCurrently inactive:[salmon]"
+   186 label __label41
+   187 set ACTIVE_TEXT __tmp38
+-    * set __tmp35 __tmp38
+   188 jump __label39 always
+   189 label __label38
+-    * set __tmp35 null
+   190 label __label39
+   191 label __label37
+   192 jump __label35 always
+ 
+   214 label __label46
+   215 set __tmp43 null
+   216 label __label47
+-    * set __retval41 __tmp43
+   217 label __label45
+   218 jump __label43 always
+   219 label __label42
+
+Modifications by DeadCodeEliminator, iteration 4:
+ 
+   209 set __tmp46 "\nCurrently inactive:[salmon]"
+   210 label __label49
+   211 set ACTIVE_TEXT __tmp46
+-    * set __tmp43 __tmp46
+   212 jump __label47 always
+   213 label __label46
+-    * set __tmp43 null
+   214 label __label47
+   215 label __label45
+   216 jump __label43 always
+
+Modifications by SingleStepJumpEliminator, iteration 1:
+ 
+    84 set MAXIMUM @powerNetCapacity
+    85 op add __tmp8 n 1
+    86 set START __tmp8
+-    * jump __label6 always
+    87 label __label19
+    88 label __label6
+    89 label __label4
+ 
+   105 jump __label21 equal __tmp9 false
+   106 print "No container."
+   107 print "\n"
+-    * jump __label22 always
+   108 label __label21
+   109 label __label22
+   110 printflush MESSAGE
+ 
+   131 set __tmp19 "\nCurrently inactive:[salmon]"
+   132 label __label28
+   133 set ACTIVE_TEXT __tmp19
+-    * jump __label26 always
+   134 label __label25
+   135 label __label26
+   136 label __label24
+ 
+   182 set __tmp38 "\nCurrently inactive:[salmon]"
+   183 label __label41
+   184 set ACTIVE_TEXT __tmp38
+-    * jump __label39 always
+   185 label __label38
+   186 label __label39
+   187 label __label37
+ 
+   205 set __tmp46 "\nCurrently inactive:[salmon]"
+   206 label __label49
+   207 set ACTIVE_TEXT __tmp46
+-    * jump __label47 always
+   208 label __label46
+   209 label __label47
+   210 label __label45
+-    * jump __label43 always
+   211 label __label42
+   212 label __label43
+   213 label __label35
+
+Modifications by OutputTempEliminator, iteration 1:
+ 
+     8 label __label3
+     9 op greaterThan __tmp0 n 0
+    10 jump __label5 equal __tmp0 false
+-    * op sub __tmp1 n 1
+-    * set n __tmp1
+-    * getlink __tmp2 n
+-    * set block __tmp2
++   11 op sub n n 1
++   12 getlink block n
+    13 print "Found: "
+    14 print block
+    15 print "\n"
+-    * sensor __tmp3 block @type
+-    * set __ast0 __tmp3
++   16 sensor __ast0 block @type
+    17 jump __label8 equal __ast0 @message
+    18 jump __label7 always
+    19 label __label8
+ 
+    44 set CONTAINER block
+    45 set SENSOR @totalItems
+    46 set MAXIMUM @itemCapacity
+-    * op add __tmp5 n 1
+-    * set START __tmp5
++   47 op add START n 1
+    48 jump __label6 always
+    49 label __label13
+    50 jump __label16 equal __ast0 @liquid-tank
+ 
+    55 set CONTAINER block
+    56 set SENSOR @totalLiquids
+    57 set MAXIMUM @liquidCapacity
+-    * op add __tmp6 n 1
+-    * set START __tmp6
++   58 op add START n 1
+    59 jump __label6 always
+    60 label __label15
+    61 jump __label18 equal __ast0 @battery
+ 
+    65 set CONTAINER block
+    66 set SENSOR @totalPower
+    67 set MAXIMUM @powerCapacity
+-    * op add __tmp7 n 1
+-    * set START __tmp7
++   68 op add START n 1
+    69 jump __label6 always
+    70 label __label17
+    71 jump __label20 equal __ast0 @power-node
+ 
+    76 set CONTAINER block
+    77 set SENSOR @powerNetStored
+    78 set MAXIMUM @powerNetCapacity
+-    * op add __tmp8 n 1
+-    * set START __tmp8
++   79 op add START n 1
+    80 label __label19
+    81 label __label6
+    82 label __label4
+ 
+   106 jump __label0 notEqual __tmp11 false
+   107 label __label2
+   108 sensor __tmp12 SORTER @type
+-    * op strictEqual __tmp13 __tmp12 @inverted-sorter
+-    * set INVERTED __tmp13
++  109 op strictEqual INVERTED __tmp12 @inverted-sorter
+   110 label __label23
+   111 set __fn0_newState true
+   112 op notEqual __tmp15 STATE __fn0_newState
+   113 jump __label25 equal __tmp15 false
+   114 set STATE __fn0_newState
+-    * op add __tmp17 CYCLES 1
+-    * set CYCLES __tmp17
+-    * op xor __tmp18 INVERTED STATE
+-    * set ON __tmp18
++  115 op add CYCLES CYCLES 1
++  116 op xor ON INVERTED STATE
+   117 jump __label27 equal ON false
+   118 set __tmp19 "\nCurrently active:[green]"
+   119 jump __label28 always
+ 
+   131 op equal __tmp21 __tmp20 0
+   132 jump __label31 equal __tmp21 false
+   133 set start @time
+-    * sensor __tmp22 SORTER @config
+-    * set item __tmp22
++  134 sensor item SORTER @config
+   135 op equal __tmp23 item null
+   136 op notEqual __tmp24 SENSOR @totalItems
+   137 op or __tmp25 __tmp23 __tmp24
+ 
+   146 print "[] in "
+   147 print CONTAINER
+   148 label __label33
+-    * sensor __tmp27 CONTAINER MAXIMUM
+-    * set max __tmp27
+-    * sensor __tmp28 CONTAINER item
+-    * set amount __tmp28
++  149 sensor max CONTAINER MAXIMUM
++  150 sensor amount CONTAINER item
+   151 op mul __tmp29 100 amount
+-    * op idiv __tmp30 __tmp29 max
+-    * set pct __tmp30
++  152 op idiv pct __tmp29 max
+   153 op lessThanEq __tmp31 pct PCT_LOW
+   154 jump __label34 equal __tmp31 false
+   155 label __label36
+ 
+   157 op notEqual __tmp34 STATE __fn1_newState
+   158 jump __label38 equal __tmp34 false
+   159 set STATE __fn1_newState
+-    * op add __tmp36 CYCLES 1
+-    * set CYCLES __tmp36
+-    * op xor __tmp37 INVERTED STATE
+-    * set ON __tmp37
++  160 op add CYCLES CYCLES 1
++  161 op xor ON INVERTED STATE
+   162 jump __label40 equal ON false
+   163 set __tmp38 "\nCurrently active:[green]"
+   164 jump __label41 always
+ 
+   178 op notEqual __tmp42 STATE __fn2_newState
+   179 jump __label46 equal __tmp42 false
+   180 set STATE __fn2_newState
+-    * op add __tmp44 CYCLES 1
+-    * set CYCLES __tmp44
+-    * op xor __tmp45 INVERTED STATE
+-    * set ON __tmp45
++  181 op add CYCLES CYCLES 1
++  182 op xor ON INVERTED STATE
+   183 jump __label48 equal ON false
+   184 set __tmp46 "\nCurrently active:[green]"
+   185 jump __label49 always
+ 
+   217 label __label52
+   218 op lessThan __tmp48 n @links
+   219 jump __label54 equal __tmp48 false
+-    * getlink __tmp49 n
+-    * set block __tmp49
++  220 getlink block n
+   221 control enabled block ON
+   222 print "\n    "
+   223 print block
+-    * op add __tmp50 n 1
+-    * set n __tmp50
++  224 op add n n 1
+   225 label __label53
+   226 jump __label52 always
+   227 label __label54
+
+Modifications by ImproveNegativeConditionalJumps, iteration 1:
+ 
+     6 print "\n"
+     7 set n @links
+     8 label __label3
+-    * op greaterThan __tmp0 n 0
+-    * jump __label5 equal __tmp0 false
++    9 jump __label5 lessThanEq n 0
+    10 op sub n n 1
+    11 getlink block n
+    12 print "Found: "
+ 
+    93 print "Container: "
+    94 print CONTAINER
+    95 print "\n"
+-    * op equal __tmp9 CONTAINER null
+-    * jump __label21 equal __tmp9 false
++   96 jump __label21 notEqual CONTAINER null
+    97 print "No container."
+    98 print "\n"
+    99 label __label21
+ 
+   107 op strictEqual INVERTED __tmp12 @inverted-sorter
+   108 label __label23
+   109 set __fn0_newState true
+-    * op notEqual __tmp15 STATE __fn0_newState
+-    * jump __label25 equal __tmp15 false
++  110 jump __label25 equal STATE __fn0_newState
+   111 set STATE __fn0_newState
+   112 op add CYCLES CYCLES 1
+   113 op xor ON INVERTED STATE
+ 
+   125 control enabled SWITCH 0
+   126 label __label29
+   127 sensor __tmp20 SWITCH @enabled
+-    * op equal __tmp21 __tmp20 0
+-    * jump __label31 equal __tmp21 false
++  128 jump __label31 notEqual __tmp20 0
+   129 set start @time
+   130 sensor item SORTER @config
+   131 op equal __tmp23 item null
+ 
+   146 sensor amount CONTAINER item
+   147 op mul __tmp29 100 amount
+   148 op idiv pct __tmp29 max
+-    * op lessThanEq __tmp31 pct PCT_LOW
+-    * jump __label34 equal __tmp31 false
++  149 jump __label34 greaterThan pct PCT_LOW
+   150 label __label36
+   151 set __fn1_newState true
+-    * op notEqual __tmp34 STATE __fn1_newState
+-    * jump __label38 equal __tmp34 false
++  152 jump __label38 equal STATE __fn1_newState
+   153 set STATE __fn1_newState
+   154 op add CYCLES CYCLES 1
+   155 op xor ON INVERTED STATE
+ 
+   165 label __label37
+   166 jump __label35 always
+   167 label __label34
+-    * op greaterThanEq __tmp39 pct PCT_HIGH
+-    * jump __label42 equal __tmp39 false
++  168 jump __label42 lessThan pct PCT_HIGH
+   169 label __label44
+   170 set __fn2_newState false
+-    * op notEqual __tmp42 STATE __fn2_newState
+-    * jump __label46 equal __tmp42 false
++  171 jump __label46 equal STATE __fn2_newState
+   172 set STATE __fn2_newState
+   173 op add CYCLES CYCLES 1
+   174 op xor ON INVERTED STATE
+ 
+   207 print ACTIVE_TEXT
+   208 set n START
+   209 label __label52
+-    * op lessThan __tmp48 n @links
+-    * jump __label54 equal __tmp48 false
++  210 jump __label54 greaterThanEq n @links
+   211 getlink block n
+   212 control enabled block ON
+   213 print "\n    "
+
+Modifications by JumpOverJumpEliminator, iteration 1:
+ 
+    13 print block
+    14 print "\n"
+    15 sensor __ast0 block @type
+-    * jump __label8 equal __ast0 @message
+-    * jump __label7 always
++   16 jump __label7 notEqual __ast0 @message
+    17 label __label8
+    18 set MESSAGE block
+    19 jump __label6 always
+    20 label __label7
+-    * jump __label10 equal __ast0 @switch
+-    * jump __label9 always
++   21 jump __label9 notEqual __ast0 @switch
+    22 label __label10
+    23 set SWITCH block
+    24 jump __label6 always
+    25 label __label9
+    26 jump __label12 equal __ast0 @sorter
+    27 jump __label12 equal __ast0 @inverted-sorter
+-    * jump __label12 equal __ast0 @unloader
+-    * jump __label11 always
++   28 jump __label11 notEqual __ast0 @unloader
+    29 label __label12
+    30 set SORTER block
+    31 jump __label6 always
+ 
+    34 jump __label14 equal __ast0 @container
+    35 jump __label14 equal __ast0 @core-shard
+    36 jump __label14 equal __ast0 @core-foundation
+-    * jump __label14 equal __ast0 @core-nucleus
+-    * jump __label13 always
++   37 jump __label13 notEqual __ast0 @core-nucleus
+    38 label __label14
+    39 set CONTAINER block
+    40 set SENSOR @totalItems
+ 
+    44 label __label13
+    45 jump __label16 equal __ast0 @liquid-tank
+    46 jump __label16 equal __ast0 @liquid-container
+-    * jump __label16 equal __ast0 @liquid-router
+-    * jump __label15 always
++   47 jump __label15 notEqual __ast0 @liquid-router
+    48 label __label16
+    49 set CONTAINER block
+    50 set SENSOR @totalLiquids
+ 
+    53 jump __label6 always
+    54 label __label15
+    55 jump __label18 equal __ast0 @battery
+-    * jump __label18 equal __ast0 @battery-large
+-    * jump __label17 always
++   56 jump __label17 notEqual __ast0 @battery-large
+    57 label __label18
+    58 set CONTAINER block
+    59 set SENSOR @totalPower
+ 
+    63 label __label17
+    64 jump __label20 equal __ast0 @power-node
+    65 jump __label20 equal __ast0 @power-node-large
+-    * jump __label20 equal __ast0 @surge-tower
+-    * jump __label19 always
++   66 jump __label19 notEqual __ast0 @surge-tower
+    67 label __label20
+    68 set CONTAINER block
+    69 set SENSOR @powerNetStored
+
+Modifications by ImprovePositiveConditionalJumps, iteration 1:
+ 
+    93 label __label22
+    94 printflush MESSAGE
+    95 label __label1
+-    * op equal __tmp11 CONTAINER null
+-    * jump __label0 notEqual __tmp11 false
++   96 jump __label0 equal CONTAINER null
+    97 label __label2
+    98 sensor __tmp12 SORTER @type
+    99 op strictEqual INVERTED __tmp12 @inverted-sorter
+
+Modifications by LoopOptimizer, iteration 1:
+ 
+     7 set n @links
+     8 label __label3
+     9 jump __label5 lessThanEq n 0
++   10 label __label55
+    11 op sub n n 1
+    12 getlink block n
+    13 print "Found: "
+ 
+    73 label __label19
+    74 label __label6
+    75 label __label4
+-    * jump __label3 always
++   76 jump __label55 greaterThan n 0
+    77 label __label5
+    78 print "Message: "
+    79 print MESSAGE
+ 
+   119 label __label29
+   120 sensor __tmp20 SWITCH @enabled
+   121 jump __label31 notEqual __tmp20 0
++  122 label __label56
+   123 set start @time
+   124 sensor item SORTER @config
+   125 op equal __tmp23 item null
+ 
+   202 set n START
+   203 label __label52
+   204 jump __label54 greaterThanEq n @links
++  205 label __label57
+   206 getlink block n
+   207 control enabled block ON
+   208 print "\n    "
+   209 print block
+   210 op add n n 1
+   211 label __label53
+-    * jump __label52 always
++  212 jump __label57 lessThan n @links
+   213 label __label54
+   214 print "[]\n# of cycles: "
+   215 print CYCLES
+ 
+   220 print " ms"
+   221 printflush MESSAGE
+   222 label __label30
+-    * jump __label29 always
++  223 sensor __tmp20 SWITCH @enabled
++  224 jump __label56 equal __tmp20 0
+   225 label __label31
+   226 end
+
+Modifications by IfExpressionOptimizer, iteration 1:
+ 
+   104 set STATE __fn0_newState
+   105 op add CYCLES CYCLES 1
+   106 op xor ON INVERTED STATE
+-    * jump __label27 equal ON false
+-    * set __tmp19 "\nCurrently active:[green]"
++  107 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
++  108 jump __label28 equal ON false
++  109 set ACTIVE_TEXT "\nCurrently active:[green]"
+   110 jump __label28 always
+-    * label __label27
+-    * set __tmp19 "\nCurrently inactive:[salmon]"
+   111 label __label28
+-    * set ACTIVE_TEXT __tmp19
+   112 label __label25
+   113 label __label26
+   114 label __label24
+ 
+   145 set STATE __fn1_newState
+   146 op add CYCLES CYCLES 1
+   147 op xor ON INVERTED STATE
+-    * jump __label40 equal ON false
+-    * set __tmp38 "\nCurrently active:[green]"
++  148 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
++  149 jump __label41 equal ON false
++  150 set ACTIVE_TEXT "\nCurrently active:[green]"
+   151 jump __label41 always
+-    * label __label40
+-    * set __tmp38 "\nCurrently inactive:[salmon]"
+   152 label __label41
+-    * set ACTIVE_TEXT __tmp38
+   153 label __label38
+   154 label __label39
+   155 label __label37
+ 
+   162 set STATE __fn2_newState
+   163 op add CYCLES CYCLES 1
+   164 op xor ON INVERTED STATE
+-    * jump __label48 equal ON false
+-    * set __tmp46 "\nCurrently active:[green]"
++  165 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
++  166 jump __label49 equal ON false
++  167 set ACTIVE_TEXT "\nCurrently active:[green]"
+   168 jump __label49 always
+-    * label __label48
+-    * set __tmp46 "\nCurrently inactive:[salmon]"
+   169 label __label49
+-    * set ACTIVE_TEXT __tmp46
+   170 label __label46
+   171 label __label47
+   172 label __label45
+
+Modifications by DataFlowOptimizer, iteration 1:
+ 
+   100 op strictEqual INVERTED __tmp12 @inverted-sorter
+   101 label __label23
+   102 set __fn0_newState true
+-    * jump __label25 equal STATE __fn0_newState
+-    * set STATE __fn0_newState
++  103 jump __label25 equal STATE true
++  104 set STATE true
+   105 op add CYCLES CYCLES 1
+   106 op xor ON INVERTED STATE
+   107 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+ 
+   141 jump __label34 greaterThan pct PCT_LOW
+   142 label __label36
+   143 set __fn1_newState true
+-    * jump __label38 equal STATE __fn1_newState
+-    * set STATE __fn1_newState
++  144 jump __label38 equal STATE true
++  145 set STATE true
+   146 op add CYCLES CYCLES 1
+   147 op xor ON INVERTED STATE
+   148 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+ 
+   158 jump __label42 lessThan pct PCT_HIGH
+   159 label __label44
+   160 set __fn2_newState false
+-    * jump __label46 equal STATE __fn2_newState
+-    * set STATE __fn2_newState
++  161 jump __label46 equal STATE false
++  162 set STATE false
+   163 op add CYCLES CYCLES 1
+   164 op xor ON INVERTED STATE
+   165 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+ 
+   195 print ACTIVE_TEXT
+   196 set n START
+   197 label __label52
+-    * jump __label54 greaterThanEq n @links
++  198 jump __label54 greaterThanEq START @links
+   199 label __label57
+   200 getlink block n
+   201 control enabled block ON
+
+Modifications by DataFlowOptimizer, iteration 2:
+ 
+    99 sensor __tmp12 SORTER @type
+   100 op strictEqual INVERTED __tmp12 @inverted-sorter
+   101 label __label23
+-    * set __fn0_newState true
+   102 jump __label25 equal STATE true
+   103 set STATE true
+   104 op add CYCLES CYCLES 1
+ 
+   139 op idiv pct __tmp29 max
+   140 jump __label34 greaterThan pct PCT_LOW
+   141 label __label36
+-    * set __fn1_newState true
+   142 jump __label38 equal STATE true
+   143 set STATE true
+   144 op add CYCLES CYCLES 1
+ 
+   155 label __label34
+   156 jump __label42 lessThan pct PCT_HIGH
+   157 label __label44
+-    * set __fn2_newState false
+   158 jump __label46 equal STATE false
+   159 set STATE false
+   160 op add CYCLES CYCLES 1
+
+Modifications by PropagateJumpTargets, iteration 1:
+ 
+   139 op idiv pct __tmp29 max
+   140 jump __label34 greaterThan pct PCT_LOW
+   141 label __label36
+-    * jump __label38 equal STATE true
++  142 jump __label35 equal STATE true
+   143 set STATE true
+   144 op add CYCLES CYCLES 1
+   145 op xor ON INVERTED STATE
+   146 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+-    * jump __label41 equal ON false
++  147 jump __label35 equal ON false
+   148 set ACTIVE_TEXT "\nCurrently active:[green]"
+-    * jump __label41 always
++  149 jump __label35 always
+   150 label __label41
+   151 label __label38
+   152 label __label39
+
+Modifications by UnreachableCodeEliminator, iteration 1:
+ 
+   151 label __label38
+   152 label __label39
+   153 label __label37
+-    * jump __label35 always
+   154 label __label34
+   155 jump __label42 lessThan pct PCT_HIGH
+   156 label __label44
+
+Modifications by SingleStepJumpEliminator, iteration 1:
+ 
+   106 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   107 jump __label28 equal ON false
+   108 set ACTIVE_TEXT "\nCurrently active:[green]"
+-    * jump __label28 always
+   109 label __label28
+   110 label __label25
+   111 label __label26
+ 
+   160 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   161 jump __label49 equal ON false
+   162 set ACTIVE_TEXT "\nCurrently active:[green]"
+-    * jump __label49 always
+   163 label __label49
+   164 label __label46
+   165 label __label47
+
+Modifications by PrintMerger, iteration 1:
+ 
+     2 set CONTAINER null
+     3 set SORTER null
+     4 label __label0
+-    * print "Configuring regulator..."
+-    * print "\n"
++    5 print "Configuring regulator...\n"
+     6 set n @links
+     7 label __label3
+     8 jump __label5 lessThanEq n 0
+ 
+    76 label __label5
+    77 print "Message: "
+    78 print MESSAGE
+-    * print "\n"
+-    * print "Switch: "
++   79 print "\nSwitch: "
+    80 print SWITCH
+-    * print "\n"
+-    * print "Sorter: "
++   81 print "\nSorter: "
+    82 print SORTER
+-    * print "\n"
+-    * print "Container: "
++   83 print "\nContainer: "
+    84 print CONTAINER
+    85 print "\n"
+    86 jump __label21 notEqual CONTAINER null
+-    * print "No container."
+-    * print "\n"
++   87 print "No container.\n"
+    88 label __label21
+    89 label __label22
+    90 printflush MESSAGE
+ 
+   168 jump __label50 equal INVERTED false
+   169 print "\nActivate above [green]"
+   170 print PCT_HIGH
+-    * print "%[]"
+-    * print "\nDeactivate below [salmon]"
++  171 print "%[]\nDeactivate below [salmon]"
+   172 print PCT_LOW
+   173 print "%[]"
+   174 jump __label51 always
+   175 label __label50
+   176 print "\nActivate below [green]"
+   177 print PCT_LOW
+-    * print "%[]"
+-    * print "\nDeactivate above [salmon]"
++  178 print "%[]\nDeactivate above [salmon]"
+   179 print PCT_HIGH
+   180 print "%[]"
+   181 label __label51
+
+Final code before resolving virtual instructions:
+
+set PCT_LOW 60
+set PCT_HIGH 80
+set CONTAINER null
+set SORTER null
+label __label0
+print "Configuring regulator...\n"
+set n @links
+label __label3
+jump __label5 lessThanEq n 0
+label __label55
+op sub n n 1
+getlink block n
+print "Found: "
+print block
+print "\n"
+sensor __ast0 block @type
+jump __label7 notEqual __ast0 @message
+label __label8
+set MESSAGE block
+jump __label6 always 0 0
+label __label7
+jump __label9 notEqual __ast0 @switch
+label __label10
+set SWITCH block
+jump __label6 always 0 0
+label __label9
+jump __label12 equal __ast0 @sorter
+jump __label12 equal __ast0 @inverted-sorter
+jump __label11 notEqual __ast0 @unloader
+label __label12
+set SORTER block
+jump __label6 always 0 0
+label __label11
+jump __label14 equal __ast0 @vault
+jump __label14 equal __ast0 @container
+jump __label14 equal __ast0 @core-shard
+jump __label14 equal __ast0 @core-foundation
+jump __label13 notEqual __ast0 @core-nucleus
+label __label14
+set CONTAINER block
+set SENSOR @totalItems
+set MAXIMUM @itemCapacity
+op add START n 1
+jump __label6 always 0 0
+label __label13
+jump __label16 equal __ast0 @liquid-tank
+jump __label16 equal __ast0 @liquid-container
+jump __label15 notEqual __ast0 @liquid-router
+label __label16
+set CONTAINER block
+set SENSOR @totalLiquids
+set MAXIMUM @liquidCapacity
+op add START n 1
+jump __label6 always 0 0
+label __label15
+jump __label18 equal __ast0 @battery
+jump __label17 notEqual __ast0 @battery-large
+label __label18
+set CONTAINER block
+set SENSOR @totalPower
+set MAXIMUM @powerCapacity
+op add START n 1
+jump __label6 always 0 0
+label __label17
+jump __label20 equal __ast0 @power-node
+jump __label20 equal __ast0 @power-node-large
+jump __label19 notEqual __ast0 @surge-tower
+label __label20
+set CONTAINER block
+set SENSOR @powerNetStored
+set MAXIMUM @powerNetCapacity
+op add START n 1
+label __label19
+label __label6
+label __label4
+jump __label55 greaterThan n 0
+label __label5
+print "Message: "
+print MESSAGE
+print "\nSwitch: "
+print SWITCH
+print "\nSorter: "
+print SORTER
+print "\nContainer: "
+print CONTAINER
+print "\n"
+jump __label21 notEqual CONTAINER null
+print "No container.\n"
+label __label21
+label __label22
+printflush MESSAGE
+label __label1
+jump __label0 equal CONTAINER null
+label __label2
+sensor __tmp12 SORTER @type
+op strictEqual INVERTED __tmp12 @inverted-sorter
+label __label23
+jump __label25 equal STATE true
+set STATE true
+op add CYCLES CYCLES 1
+op xor ON INVERTED STATE
+set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+jump __label28 equal ON false
+set ACTIVE_TEXT "\nCurrently active:[green]"
+label __label28
+label __label25
+label __label26
+label __label24
+set CYCLES 0
+control enabled SWITCH 0 0 0 0
+label __label29
+sensor __tmp20 SWITCH @enabled
+jump __label31 notEqual __tmp20 0
+label __label56
+set start @time
+sensor item SORTER @config
+op equal __tmp23 item null
+op notEqual __tmp24 SENSOR @totalItems
+op or __tmp25 __tmp23 __tmp24
+jump __label32 equal __tmp25 false
+set item SENSOR
+print "Measuring [gold]total[] in "
+print CONTAINER
+jump __label33 always 0 0
+label __label32
+print "Measuring [gold]"
+print item
+print "[] in "
+print CONTAINER
+label __label33
+sensor max CONTAINER MAXIMUM
+sensor amount CONTAINER item
+op mul __tmp29 100 amount
+op idiv pct __tmp29 max
+jump __label34 greaterThan pct PCT_LOW
+label __label36
+jump __label35 equal STATE true
+set STATE true
+op add CYCLES CYCLES 1
+op xor ON INVERTED STATE
+set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+jump __label35 equal ON false
+set ACTIVE_TEXT "\nCurrently active:[green]"
+jump __label35 always 0 0
+label __label41
+label __label38
+label __label39
+label __label37
+label __label34
+jump __label42 lessThan pct PCT_HIGH
+label __label44
+jump __label46 equal STATE false
+set STATE false
+op add CYCLES CYCLES 1
+op xor ON INVERTED STATE
+set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+jump __label49 equal ON false
+set ACTIVE_TEXT "\nCurrently active:[green]"
+label __label49
+label __label46
+label __label47
+label __label45
+label __label42
+label __label43
+label __label35
+print "\nLevel: [gold]"
+print pct
+print "%[]"
+jump __label50 equal INVERTED false
+print "\nActivate above [green]"
+print PCT_HIGH
+print "%[]\nDeactivate below [salmon]"
+print PCT_LOW
+print "%[]"
+jump __label51 always 0 0
+label __label50
+print "\nActivate below [green]"
+print PCT_LOW
+print "%[]\nDeactivate above [salmon]"
+print PCT_HIGH
+print "%[]"
+label __label51
+print ACTIVE_TEXT
+set n START
+label __label52
+jump __label54 greaterThanEq START @links
+label __label57
+getlink block n
+control enabled block ON 0 0 0
+print "\n    "
+print block
+op add n n 1
+label __label53
+jump __label57 lessThan n @links
+label __label54
+print "[]\n# of cycles: "
+print CYCLES
+op sub __tmp51 @time start
+op floor __tmp52 __tmp51 0
+print "\n[lightgray]Loop: "
+print __tmp52
+print " ms"
+printflush MESSAGE
+label __label30
+sensor __tmp20 SWITCH @enabled
+jump __label56 equal __tmp20 0
+label __label31
+end

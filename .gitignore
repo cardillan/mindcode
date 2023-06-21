@@ -14,8 +14,8 @@ db/cluster
 Instruction_Samples_*.txt
 target
 tmp
-compiler/src/test/resources/scripts/*.log
 compiler/src/test/resources/scripts/*.mlog
+compiler/src/test/resources/euler/*.mlog
 
 out/
 .idea/templateLanguages.xml

@@ -4,6 +4,7 @@ import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicNumber;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -104,13 +105,15 @@ public class Processor {
                 LogicInstruction instruction = program.get(index);
 
                 if (false) {
-                    if (instruction instanceof PrintInstruction ix) {
-                        Variable var = getExistingVariable(ix.getValue());
-                        System.out.printf("Step: %d, counter: %d, instruction: %s *** Print %s%n", steps, index, instruction, var.toString());
-
-                    } else {
-                        System.out.printf("Step: %d, counter: %d, instruction: %s%n", steps, index, instruction);
-                    }
+                    System.out.printf("Step: %d, counter: %d, instruction: %s%n", steps, index, instruction);
+                    instruction.getArgs().stream()
+                            .filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast)
+                            .distinct()
+                            .map(a -> a.toMlog() + ": " + (variables.containsKey(a.toMlog())
+                                    ? getExistingVariable(a).toString()
+                                    : " [uninitialized]"))
+                            .forEach(v -> System.out.printf("   variable %s%n", v));
                 }
 
                 steps++;

@@ -1,0 +1,106 @@
+// Linked structures
+// switch1: initiate cleanup
+// switch2: change unit type
+// message1: unit status
+
+#set target = ML7A      // Using revised syntax for ulocate
+
+UNIT	= @mega
+
+const RADIUS_WITHIN		= 8
+const RADIUS_APPROACH   = 4
+
+THIS_X = @this.x
+THIS_Y = @this.y
+
+first_unit = null
+index = 1
+
+
+while true
+	if switch2.enabled
+		UNIT = case UNIT
+			when @flare		@mono
+			when @mono		@poly
+			when @poly		@mega
+			when @mega		@flare
+		end
+		first_unit = null
+		switch2.enabled = false
+		print(UNIT, ": gathering information...")
+	end
+
+	ubind(UNIT)
+	if @unit == null 
+		print(UNIT, ": no active unit found.")
+		printflush(message1)
+	else
+		// We're at the beginning of the cycle, or the first unit was destroyed
+		// First unit is not necessarily ours
+		if @unit === first_unit or first_unit === null
+			printflush(message1)
+			first_unit = @unit
+			index = 1
+			print(UNIT)
+			if switch1.enabled
+				print(" (cleanup active)")
+			end
+		end
+		
+		controlled = @unit.controlled
+		flag = @unit.flag
+		items = @unit.totalItems
+		item = @unit.firstItem
+		
+		// Do not count being controlled by this as 
+		if @unit.controller == @this
+			controlled = 0
+		end
+
+		if (flag != 0) or (items > 0) or ((controlled != 0) and (@unit.controller != @this))
+			print("\n", index)
+
+			case controlled
+				when @ctrlProcessor
+					controller = @unit.controller
+					x = floor(controller.x)
+					y = floor(controller.y)
+					print(", ", x, ";", y)
+				when @ctrlPlayer
+					print(", player")
+				when @ctrlFormation
+					print(", group")
+			end
+			
+			if (flag != 0)
+				print(", F", flag)
+			end
+			
+			if (items > 0)
+				print(", ", items, " ", item)
+			end
+		end
+		
+		if (controlled == 0) and switch1.enabled
+			if items > 0
+				flag(1)
+				CORE = ulocate(building, core, false, CORE_X, CORE_Y)
+				if within(CORE_X, CORE_Y, RADIUS_WITHIN)
+					itemDrop(CORE, items)
+				else
+					approach(CORE_X, CORE_Y, RADIUS_APPROACH)
+				end
+			else
+				if flag != 0
+					if within(THIS_X, THIS_Y, RADIUS_WITHIN)
+						flag(0)
+					else
+						approach(THIS_X, THIS_Y, RADIUS_APPROACH)
+					end
+				end
+			end
+		end
+
+		index += 1
+	end
+end

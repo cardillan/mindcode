@@ -1,0 +1,187 @@
+    33 instructions before optimizations.
+     2 instructions eliminated by DeadCodeEliminator (1 iterations).
+     1 instructions eliminated by SingleStepJumpEliminator (1 iterations).
+     3 instructions eliminated by OutputTempEliminator.
+     2 instructions eliminated by ImproveNegativeConditionalJumps.
+     1 instructions eliminated by JumpOverJumpEliminator.
+     3 loops improved by LoopOptimizer.
+     2 instructions eliminated by LoopOptimizer.
+     1 instructions eliminated by DataFlowOptimizer (2 iterations).
+    21 instructions after optimizations.
+
+Modifications by DeadCodeEliminator, iteration 1:
+ 
+    13 op lessThanEq __tmp4 __tmp3 item
+    14 jump __label6 equal __tmp4 false
+    15 jump __label5 always
+-    * set __tmp5 null
+    16 jump __label7 always
+    17 label __label6
+-    * set __tmp5 null
+    18 label __label7
+    19 op add __tmp6 j 1
+    20 write a ARRAY __tmp6
+
+Modifications by SingleStepJumpEliminator, iteration 1:
+ 
+    13 op lessThanEq __tmp4 __tmp3 item
+    14 jump __label6 equal __tmp4 false
+    15 jump __label5 always
+-    * jump __label7 always
+    16 label __label6
+    17 label __label7
+    18 op add __tmp6 j 1
+
+Modifications by OutputTempEliminator, iteration 1:
+ 
+     1 set i 1
+     2 label __label0
+     3 jump __label2 greaterThanEq i 128
+-    * read __tmp0 ARRAY i
+-    * set item __tmp0
+-    * op sub __tmp1 i 1
+-    * set j __tmp1
++    4 read item ARRAY i
++    5 op sub j i 1
+     6 label __label3
+     7 op greaterThanEq __tmp2 j 0
+     8 jump __label5 equal __tmp2 false
+ 
+    15 label __label7
+    16 op add __tmp6 j 1
+    17 write a ARRAY __tmp6
+-    * op sub __tmp7 j 1
+-    * set j __tmp7
++   18 op sub j j 1
+    19 label __label4
+    20 jump __label3 always
+    21 label __label5
+
+Modifications by ImproveNegativeConditionalJumps, iteration 1:
+ 
+     4 read item ARRAY i
+     5 op sub j i 1
+     6 label __label3
+-    * op greaterThanEq __tmp2 j 0
+-    * jump __label5 equal __tmp2 false
++    7 jump __label5 lessThan j 0
+     8 read __tmp3 ARRAY j
+     9 set a __tmp3
+-    * op lessThanEq __tmp4 __tmp3 item
+-    * jump __label6 equal __tmp4 false
++   10 jump __label6 greaterThan __tmp3 item
+    11 jump __label5 always
+    12 label __label6
+    13 label __label7
+
+Modifications by JumpOverJumpEliminator, iteration 1:
+ 
+     7 jump __label5 lessThan j 0
+     8 read __tmp3 ARRAY j
+     9 set a __tmp3
+-    * jump __label6 greaterThan __tmp3 item
+-    * jump __label5 always
++   10 jump __label5 lessThanEq __tmp3 item
+    11 label __label6
+    12 label __label7
+    13 op add __tmp6 j 1
+
+Modifications by LoopOptimizer, iteration 1:
+     0 set ARRAY bank2
+     1 set i 1
+     2 label __label0
+-    * jump __label2 greaterThanEq i 128
++    3 label __label11
+     4 read item ARRAY i
+     5 op sub j i 1
+     6 label __label3
+     7 jump __label5 lessThan j 0
++    8 label __label12
+     9 read __tmp3 ARRAY j
+    10 set a __tmp3
+    11 jump __label5 lessThanEq __tmp3 item
+ 
+    15 write a ARRAY __tmp6
+    16 op sub j j 1
+    17 label __label4
+-    * jump __label3 always
++   18 jump __label12 greaterThanEq j 0
+    19 label __label5
+    20 op add __tmp8 j 1
+    21 write item ARRAY __tmp8
+    22 label __label1
+    23 op add i i 1
+-    * jump __label0 always
++   24 jump __label11 lessThan i 128
+    25 label __label2
+    26 set i 0
+    27 label __label8
+-    * jump __label10 greaterThanEq i 128
++   28 label __label13
+    29 read __tmp9 ARRAY i
+    30 print __tmp9
+    31 label __label9
+    32 op add i i 1
+-    * jump __label8 always
++   33 jump __label13 lessThan i 128
+    34 label __label10
+    35 end
+
+Modifications by DataFlowOptimizer, iteration 1:
+ 
+    12 label __label6
+    13 label __label7
+    14 op add __tmp6 j 1
+-    * write a ARRAY __tmp6
++   15 write __tmp3 ARRAY __tmp6
+    16 op sub j j 1
+    17 label __label4
+    18 jump __label12 greaterThanEq j 0
+
+Modifications by DataFlowOptimizer, iteration 2:
+ 
+     7 jump __label5 lessThan j 0
+     8 label __label12
+     9 read __tmp3 ARRAY j
+-    * set a __tmp3
+    10 jump __label5 lessThanEq __tmp3 item
+    11 label __label6
+    12 label __label7
+
+Final code before resolving virtual instructions:
+
+set ARRAY bank2
+set i 1
+label __label0
+label __label11
+read item ARRAY i
+op sub j i 1
+label __label3
+jump __label5 lessThan j 0
+label __label12
+read __tmp3 ARRAY j
+jump __label5 lessThanEq __tmp3 item
+label __label6
+label __label7
+op add __tmp6 j 1
+write __tmp3 ARRAY __tmp6
+op sub j j 1
+label __label4
+jump __label12 greaterThanEq j 0
+label __label5
+op add __tmp8 j 1
+write item ARRAY __tmp8
+label __label1
+op add i i 1
+jump __label11 lessThan i 128
+label __label2
+set i 0
+label __label8
+label __label13
+read __tmp9 ARRAY i
+print __tmp9
+label __label9
+op add i i 1
+jump __label13 lessThan i 128
+label __label10
+end

@@ -1,0 +1,157 @@
+FROM_INDEX = 0
+TO_INDEX = 16
+CAPACITY = 120
+COLUMN_SIZE = 8
+
+DISPLAY = null
+MEMORY = null
+
+while DISPLAY == null
+	println("Mass Driver Monitor")
+	n = @links
+	while n > 0
+		n = n - 1
+		block = getlink(n)
+		println("Found: ", block)
+		case block.type
+			when @message
+				MESSAGE = block
+			when @switch
+				SWITCH = block
+			when @logic-display, @large-logic-display
+				DISPLAY = block
+			when @memory-bank, @memory-cell
+				MEMORY = block
+		end
+	end
+	
+	println("Message: ", MESSAGE)
+	println("Switch: ", SWITCH)
+	println("Memory: ", MEMORY)
+	println("Display: ", DISPLAY)
+	if DISPLAY == null
+		println("No display.")
+	end
+	printflush(MESSAGE)
+end
+
+if DISPLAY.type == @logic-display
+	OFFSET_X = 2
+	OFFSET_Y = 2
+	BAR_WIDTH = 14
+	BAR_LENGTH = 60
+	BAR_SPACE = 80
+	BAR_GAP = 20
+
+    crx = clx = 0
+    crw = clw = OFFSET_X + BAR_SPACE - 2
+    cry = cly = FROM_INDEX == 0 ? 0 : OFFSET_Y + FROM_INDEX * BAR_GAP
+    crh = clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly
+else
+	OFFSET_X = 5
+	OFFSET_Y = 4
+	BAR_WIDTH = 14
+	BAR_LENGTH = 60
+	BAR_SPACE = 88
+	BAR_GAP = 22
+
+    if FROM_INDEX >= 8
+        crx = clx = OFFSET_X + BAR_SPACE - 2
+        crw = clw = 176 - (OFFSET_X + BAR_SPACE) + 1
+        cry = cly = (FROM_INDEX % 8) == 0 ? 0 : OFFSET_Y + (FROM_INDEX % 8) * BAR_GAP
+        crh = clh = (TO_INDEX < 16 ? OFFSET_Y + (TO_INDEX % 8) * BAR_GAP : 176) - cry
+    else
+        crx = clx = 0
+        crw = clw = OFFSET_X + BAR_SPACE - 2
+        cry = cly = FROM_INDEX == 0 ? 0 : OFFSET_Y + FROM_INDEX * BAR_GAP
+        crh = clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly
+        if TO_INDEX >= 8
+            crx = OFFSET_X + BAR_SPACE - 2
+            crw = 176 - (OFFSET_X + BAR_SPACE) + 1
+            cry = 0
+            crh = (TO_INDEX < 16 ? OFFSET_Y + (TO_INDEX % 8) * BAR_GAP : 176) - cry
+        end
+    end
+end
+
+HALF_BAR = BAR_LENGTH \ 2
+
+MAX = CAPACITY
+MUL = BAR_LENGTH / MAX
+
+if MEMORY != null
+	for n = 0; n < @links; n += 1
+		MEMORY[n] = 0
+	end
+end
+
+SWITCH.enabled = 0
+
+while SWITCH.enabled == 0
+	start = @time
+
+    color(0, 0, 80, 255)
+    rect(clx, cly, clw, clh)
+    rect(crx, cry, crw, crh)
+
+	stroke(2)
+	
+	index = FROM_INDEX
+	for n = 0; n < @links; n = n + 1
+		driver = getlink(n)
+		if driver.type == @mass-driver
+			// Compute bar position
+			column = index \ COLUMN_SIZE
+			row = index % COLUMN_SIZE
+
+			x = OFFSET_X + column * BAR_SPACE
+			y = OFFSET_Y + row * BAR_GAP
+			color(0, 0, 80, 255)
+			rect(x - 1, y - 1, BAR_SPACE, 16)
+
+			color(255, 255, 255, 255)
+			image(x + 7, y + 7, @mass-driver, 16, 0)
+
+			x = x + 16
+
+			items = driver.totalItems
+			
+			maxx = max(MEMORY[n], items)
+			MEMORY[n] = maxx
+			
+			if maxx > MAX
+				MAX = 2 * CAPACITY
+				MUL = BAR_LENGTH / MAX
+			end
+			
+			if MAX <= CAPACITY
+				color(0,128,0,255)
+			else
+				color(128,128,0,255)
+			end
+			
+			rect(x, y, items * MUL, BAR_WIDTH)
+
+			if MEMORY != null
+				color(220,220,220,255)
+				lineRect(x, y, maxx * MUL, BAR_WIDTH)
+			end
+
+			if MAX <= CAPACITY
+				color(0,255,0,255)
+				lineRect(x, y, BAR_LENGTH, BAR_WIDTH)
+			else
+				color(255,255,0,255)
+				lineRect(x, y, HALF_BAR, BAR_WIDTH)
+				lineRect(x + HALF_BAR, y, HALF_BAR, BAR_WIDTH)
+			end
+			index = index + 1
+		end
+	end
+
+	drawflush(DISPLAY)
+
+	println("Mass Driver Monitor")
+	printf("[lightgray]Draw time: $ ms", floor(@time - start))
+	printflush(MESSAGE)
+end

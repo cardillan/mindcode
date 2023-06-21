@@ -63,6 +63,7 @@ public abstract class AbstractVariable implements Variable {
         if (fixed) {
             throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot assign to fixed variable " + getName());
         }
+        setLongValue(0);
         this.object = object;
         this.type = object == null ? MindustryValueType.NULL : MindustryValueType.OBJECT;
     }

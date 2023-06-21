@@ -1,0 +1,90 @@
+MIN_BATCH = 10
+MAX_BATCH = 1000
+
+lastCell = 0
+do
+    MEMORY = null
+    FIRST_BLOCK = @links
+    n = @links
+    while n > 0
+	    n -= 1
+		block = getlink(n)
+		case block.type
+			when @memory-cell
+				MEMORY = block
+				lastCell = 63
+			when @memory-bank
+				MEMORY = block
+				lastCell = 511
+			when @plastanium-conveyor
+			    FIRST_BLOCK = n
+		end
+	end
+
+	print("Item Counter\n[salmon]No memory attached.")
+	printflush(message1)
+loop while MEMORY == null
+
+total = MEMORY[0]
+BATCH_DURATION = 2000                // We aim for a batch to be completed in about 2 seconds
+MIN_BATCH = (max(MIN_BATCH, 10) \ 10) * 10
+MAX_BATCH = (max(MAX_BATCH, MIN_BATCH) \ 10) * 10
+BATCH_STEP = 10
+batch = MIN_BATCH
+startTime = @time           // Batch start time
+ratePerMin = 0
+limit = total + batch
+//totalStart = @time
+switch1.enabled = 0
+while switch1.enabled == 0
+	start = @time
+	n = FIRST_BLOCK
+	while n < @links
+		block = getlink(n)
+		n += 1
+		if block.type == @plastanium-conveyor
+			prev = MEMORY[n]
+			curr = block.totalItems
+			MEMORY[n] = curr
+			//printf("$n: $curr\n")
+			if curr < prev
+				total += 10
+				MEMORY[0] = total
+				if total > limit
+					duration = @time - startTime
+					startTime = @time
+					limit += batch
+					rate = batch / duration                             // items/ms
+					MEMORY[lastCell] = rate * (1000 / 60)               // items/tick
+					ratePerMin = floor(rate * 60000)                    // items/min
+					if duration <= BATCH_DURATION                       // too fast, increase batch time
+						batch = min(batch + BATCH_STEP, MAX_BATCH)
+					end
+				end
+			end
+		end
+	end
+	elapsed = floor(@time - startTime)
+	if elapsed >= 10000
+	    // Batch didn't complete in 10 seconds
+		batch = max((batch \ 90) * 10, MIN_BATCH)       // Divide batch size by 9, round to tens
+		MEMORY[lastCell] = 0
+		ratePerMin = 0
+		startTime = @time
+	end
+	printf("Item Counter                  \n")
+	printf("Total items: [gold]$total[]\n")
+	printf("Rate: [green]$ratePerMin[] items/min\n")
+	//printf("Overall rate: [green]$[] items/min\n", floor(total / (@time - totalStart) * 60000))
+	printf("Batch size: [green]$batch[]\n")
+	printf("Batch time: [gold]$elapsed[] ms\n")
+	printf("[lightgray]Loop time: $ ms", floor(@time - start))
+	printflush(message1)
+end
+switch1.enabled = 0
+MEMORY[lastCell] = 0
+n = 0
+while n < @links
+	MEMORY[n] = 0
+	n += 1
+end

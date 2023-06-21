@@ -1,0 +1,269 @@
+    41 instructions before optimizations.
+     6 instructions eliminated by DeadCodeEliminator (2 iterations).
+     2 instructions eliminated by SingleStepJumpEliminator (1 iterations).
+     3 instructions eliminated by OutputTempEliminator.
+     3 instructions eliminated by ImproveNegativeConditionalJumps.
+     3 loops improved by LoopOptimizer.
+     1 instructions eliminated by LoopOptimizer.
+     3 instructions eliminated by DataFlowOptimizer (2 iterations).
+    23 instructions after optimizations.
+
+Modifications by DeadCodeEliminator, iteration 1:
+ 
+    33 label __label13
+    34 set __tmp10 null
+    35 label __label14
+-    * set __tmp2 __tmp10
+    36 jump __label7 always
+    37 label __label6
+-    * set __tmp2 null
+    38 label __label7
+    39 label __label4
+    40 op add j j 1
+ 
+    47 label __label15
+    48 set __fn1_v 9009
+    49 print __fn1_v
+-    * set __retval11 __fn1_v
+    50 label __label16
+    51 label __label17
+    52 set __fn2_v max
+    53 print __fn2_v
+-    * set __retval12 __fn2_v
+    54 label __label18
+    55 end
+
+Modifications by DeadCodeEliminator, iteration 2:
+ 
+    28 op equal __tmp9 num __retval3
+    29 jump __label13 equal __tmp9 false
+    30 set max num
+-    * set __tmp10 num
+    31 jump __label14 always
+    32 label __label13
+-    * set __tmp10 null
+    33 label __label14
+    34 jump __label7 always
+    35 label __label6
+
+Modifications by SingleStepJumpEliminator, iteration 1:
+ 
+    28 op equal __tmp9 num __retval3
+    29 jump __label13 equal __tmp9 false
+    30 set max num
+-    * jump __label14 always
+    31 label __label13
+    32 label __label14
+-    * jump __label7 always
+    33 label __label6
+    34 label __label7
+    35 label __label4
+
+Modifications by OutputTempEliminator, iteration 1:
+ 
+     4 set j i
+     5 label __label3
+     6 jump __label5 greaterThanEq j 100
+-    * op mul __tmp0 i j
+-    * set num __tmp0
++    7 op mul num i j
+     8 op greaterThan __tmp1 num max
+     9 jump __label6 equal __tmp1 false
+    10 label __label8
+ 
+    15 jump __label12 equal __tmp4 false
+    16 op mul __tmp5 10 __fn0_res
+    17 op mod __tmp6 __fn0_num 10
+-    * op add __tmp7 __tmp5 __tmp6
+-    * set __fn0_res __tmp7
+-    * op idiv __tmp8 __fn0_num 10
+-    * set __fn0_num __tmp8
++   18 op add __fn0_res __tmp5 __tmp6
++   19 op idiv __fn0_num __fn0_num 10
+    20 label __label11
+    21 jump __label10 always
+    22 label __label12
+
+Modifications by ImproveNegativeConditionalJumps, iteration 1:
+ 
+     5 label __label3
+     6 jump __label5 greaterThanEq j 100
+     7 op mul num i j
+-    * op greaterThan __tmp1 num max
+-    * jump __label6 equal __tmp1 false
++    8 jump __label6 lessThanEq num max
+     9 label __label8
+    10 set __fn0_num num
+    11 set __fn0_res 0
+    12 label __label10
+-    * op greaterThan __tmp4 __fn0_num 0
+-    * jump __label12 equal __tmp4 false
++   13 jump __label12 lessThanEq __fn0_num 0
+    14 op mul __tmp5 10 __fn0_res
+    15 op mod __tmp6 __fn0_num 10
+    16 op add __fn0_res __tmp5 __tmp6
+ 
+    20 label __label12
+    21 set __retval3 __fn0_res
+    22 label __label9
+-    * op equal __tmp9 num __retval3
+-    * jump __label13 equal __tmp9 false
++   23 jump __label13 notEqual num __retval3
+    24 set max num
+    25 label __label13
+    26 label __label14
+
+Modifications by LoopOptimizer, iteration 1:
+     0 set max 0
+     1 set i 10
+     2 label __label0
+-    * jump __label2 greaterThanEq i 100
++    3 label __label19
+     4 set j i
+     5 label __label3
+     6 jump __label5 greaterThanEq j 100
++    7 label __label20
+     8 op mul num i j
+     9 jump __label6 lessThanEq num max
+    10 label __label8
+ 
+    12 set __fn0_res 0
+    13 label __label10
+    14 jump __label12 lessThanEq __fn0_num 0
++   15 label __label21
+    16 op mul __tmp5 10 __fn0_res
+    17 op mod __tmp6 __fn0_num 10
+    18 op add __fn0_res __tmp5 __tmp6
+    19 op idiv __fn0_num __fn0_num 10
+    20 label __label11
+-    * jump __label10 always
++   21 jump __label21 greaterThan __fn0_num 0
+    22 label __label12
+    23 set __retval3 __fn0_res
+    24 label __label9
+ 
+    30 label __label7
+    31 label __label4
+    32 op add j j 1
+-    * jump __label3 always
++   33 jump __label20 lessThan j 100
+    34 label __label5
+    35 label __label1
+    36 op add i i 1
+-    * jump __label0 always
++   37 jump __label19 lessThan i 100
+    38 label __label2
+    39 label __label15
+    40 set __fn1_v 9009
+
+Modifications by DataFlowOptimizer, iteration 1:
+ 
+     3 label __label19
+     4 set j i
+     5 label __label3
+-    * jump __label5 greaterThanEq j 100
++    6 jump __label5 greaterThanEq i 100
+     7 label __label20
+     8 op mul num i j
+     9 jump __label6 lessThanEq num max
+ 
+    11 set __fn0_num num
+    12 set __fn0_res 0
+    13 label __label10
+-    * jump __label12 lessThanEq __fn0_num 0
++   14 jump __label12 lessThanEq num 0
+    15 label __label21
+    16 op mul __tmp5 10 __fn0_res
+    17 op mod __tmp6 __fn0_num 10
+ 
+    22 label __label12
+    23 set __retval3 __fn0_res
+    24 label __label9
+-    * jump __label13 notEqual num __retval3
++   25 jump __label13 notEqual num __fn0_res
+    26 set max num
+    27 label __label13
+    28 label __label14
+ 
+    38 label __label2
+    39 label __label15
+    40 set __fn1_v 9009
+-    * print __fn1_v
++   41 print 9009
+    42 label __label16
+    43 label __label17
+    44 set __fn2_v max
+-    * print __fn2_v
++   45 print max
+    46 label __label18
+    47 end
+
+Modifications by DataFlowOptimizer, iteration 2:
+ 
+    20 label __label11
+    21 jump __label21 greaterThan __fn0_num 0
+    22 label __label12
+-    * set __retval3 __fn0_res
+    23 label __label9
+    24 jump __label13 notEqual num __fn0_res
+    25 set max num
+ 
+    36 jump __label19 lessThan i 100
+    37 label __label2
+    38 label __label15
+-    * set __fn1_v 9009
+    39 print 9009
+    40 label __label16
+    41 label __label17
+-    * set __fn2_v max
+    42 print max
+    43 label __label18
+    44 end
+
+Final code before resolving virtual instructions:
+
+set max 0
+set i 10
+label __label0
+label __label19
+set j i
+label __label3
+jump __label5 greaterThanEq i 100
+label __label20
+op mul num i j
+jump __label6 lessThanEq num max
+label __label8
+set __fn0_num num
+set __fn0_res 0
+label __label10
+jump __label12 lessThanEq num 0
+label __label21
+op mul __tmp5 10 __fn0_res
+op mod __tmp6 __fn0_num 10
+op add __fn0_res __tmp5 __tmp6
+op idiv __fn0_num __fn0_num 10
+label __label11
+jump __label21 greaterThan __fn0_num 0
+label __label12
+label __label9
+jump __label13 notEqual num __fn0_res
+set max num
+label __label13
+label __label14
+label __label6
+label __label7
+label __label4
+op add j j 1
+jump __label20 lessThan j 100
+label __label5
+label __label1
+op add i i 1
+jump __label19 lessThan i 100
+label __label2
+label __label15
+print 9009
+label __label16
+label __label17
+print max
+label __label18
+end

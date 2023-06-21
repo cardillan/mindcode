@@ -1,0 +1,265 @@
+FROM_INDEX = 0
+TO_INDEX = 16
+EXPECTED_BOOST = 1.5
+
+LIM1 = 33
+LIM2 = 66
+
+DISPLAY = null
+TYPE = null
+
+// TODO: Prevents uninitialized variable warning; improve detection and remove
+icon = null
+
+while DISPLAY == null || TYPE == null
+	println("Universal Factory Monitor")
+	n = @links
+	while n > 0
+		n = n - 1
+		block = getlink(n)
+		case block.type
+			when @message
+				MESSAGE = block
+			when @switch
+				SWITCH = block
+			when @logic-display, @large-logic-display
+				DISPLAY = block
+			when @silicon-factory
+				TYPE = @silicon-factory
+				CAPACITY = block.itemCapacity
+				RES1 = @sand
+				RES2 = @coal
+				RES3 = @itemCapacity
+				MUL1 = MUL2 = MUL3 = 100 / CAPACITY
+				OUTPUT = @silicon
+			when @silicon-crucible
+				TYPE = @silicon-crucible
+				CAPACITY = block.itemCapacity
+				RES1 = @sand
+				RES2 = @coal
+				RES3 = @pyratite
+				MUL1 = MUL2 = MUL3 = 100 / CAPACITY
+				OUTPUT = @silicon
+			when @kiln
+				TYPE = @kiln
+				CAPACITY = block.itemCapacity
+				RES1 = @sand
+				RES2 = @lead
+				RES3 = @itemCapacity
+				MUL1 = MUL2 = MUL3 = 100 / CAPACITY
+				OUTPUT = @metaglass
+			when @phase-weaver
+				TYPE = @phase-weaver
+				CAPACITY = block.itemCapacity
+				RES1 = @sand
+				RES2 = @thorium
+				RES3 = @itemCapacity
+				MUL1 = MUL2 = MUL3 = 100 / CAPACITY
+				OUTPUT = @phase-fabric
+			when @pyratite-mixer
+				TYPE = @pyratite-mixer
+				CAPACITY = block.itemCapacity
+				RES1 = @sand
+				RES2 = @coal
+				RES3 = @lead
+				MUL1 = MUL2 = MUL3 = 100 / CAPACITY
+				OUTPUT = @pyratite
+			when @blast-mixer
+				TYPE = @blast-mixer
+				CAPACITY = block.itemCapacity
+				RES1 = @pyratite
+				RES2 = @spore-pod
+				RES3 = @itemCapacity
+				MUL1 = MUL2 = MUL3 = 100 / CAPACITY
+				OUTPUT = @blast-compound
+			when @plastanium-compressor
+				TYPE = @plastanium-compressor
+				CAPACITY = block.itemCapacity
+				RES1 = @titanium
+				RES2 = @oil
+				RES3 = @itemCapacity
+				MUL1 = MUL3 = 100 / CAPACITY
+				MUL2 = 250 / block.liquidCapacity
+				OUTPUT = @plastanium
+			else
+				print("\n  ", block, " not supported")
+		end
+	end
+
+	println("Message: ", MESSAGE)
+	println("Switch: ", SWITCH)
+	println("Display: ", DISPLAY)
+	println("Monitoring: ", TYPE)
+	println("Capacity: ", CAPACITY)
+	println("Resource 1: ", RES1)
+	println("Resource 2: ", RES2)
+	println("Resource 3: ", RES3)
+	println("Output: ", OUTPUT)
+	if DISPLAY == null || TYPE == null
+		print("No block to monitor or display.")
+	end
+	printflush(MESSAGE)
+end
+
+if DISPLAY.type == @logic-display
+	OFFSET_X = 2
+	OFFSET_Y = 2
+	BAR_WIDTH = 14
+	BAR_LENGTH = 61
+	BAR_SPACE = 80
+	BAR_GAP = 20
+
+    crx = clx = 0
+    crw = clw = OFFSET_X + BAR_SPACE - 2
+    cry = cly = FROM_INDEX == 0 ? 0 : OFFSET_Y + FROM_INDEX * BAR_GAP
+    crh = clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly
+//
+//    crx = clx
+//    crw = clw
+//    cry = cly
+//    crh = clh
+else
+	OFFSET_X = 5
+	OFFSET_Y = 4
+	BAR_WIDTH = 14
+	BAR_LENGTH = 61
+	BAR_SPACE = 88
+	BAR_GAP = 22
+
+    if FROM_INDEX >= 8
+        crx = OFFSET_X + BAR_SPACE - 2
+        crw = 176 - (OFFSET_X + BAR_SPACE) + 1
+        cry = (FROM_INDEX % 8) == 0 ? 0 : OFFSET_Y + (FROM_INDEX % 8) * BAR_GAP
+        crh = (TO_INDEX < 16 ? OFFSET_Y + (TO_INDEX % 8) * BAR_GAP : 176) - cry
+
+        clx = crx
+        clw = crw
+        cly = cry
+        clh = crh
+    else
+        clx = 0
+        clw = OFFSET_X + BAR_SPACE - 2
+        cly = FROM_INDEX == 0 ? 0 : OFFSET_Y + FROM_INDEX * BAR_GAP
+        clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly
+        if TO_INDEX >= 8
+            crx = OFFSET_X + BAR_SPACE - 2
+            crw = 176 - (OFFSET_X + BAR_SPACE) + 1
+            cry = 0
+            crh = (TO_INDEX < 16 ? OFFSET_Y + (TO_INDEX % 8) * BAR_GAP : 176) - cry
+        else
+            crx = clx
+            crw = clw
+            cry = cly
+            crh = clh
+        end
+    end
+end
+
+SWITCH.enabled = 0
+
+while SWITCH.enabled == 0
+	start = @time
+
+	println("Universal Factory Monitor")
+    //printf("$clx, $cly, $clw, $clh\n")
+    //printf("$crx, $cry, $crw, $crh\n")
+	print("Monitoring: ", TYPE)
+
+    color(0, 0, 80, 255)
+    rect(clx, cly, clw, clh)
+    rect(crx, cry, crw, crh)
+
+    stroke(2)
+
+	index = FROM_INDEX
+	for n in 0 ... @links
+	    if index >= TO_INDEX break end
+		factory = getlink(n)
+		if factory.type == TYPE
+			minimum = 101
+			r1 = MUL1 * factory.sensor(RES1)
+			r2 = MUL2 * factory.sensor(RES2)
+			r3 = MUL3 * factory.sensor(RES3)
+			out = MUL1 * factory.sensor(OUTPUT)
+			e = factory.enabled
+			power = factory.totalPower
+			boost = factory.timescale
+			if r1 < minimum minimum = r1 icon = RES1 end
+			if r2 < minimum minimum = r2 icon = RES2 end
+			if r3 < minimum minimum = r3 icon = RES3 end
+			showout = out > LIM1 && 100 - out < minimum
+			if showout icon = OUTPUT end
+
+			// Compute bar position
+			column = index \ 8
+			row = index % 8
+
+			x = OFFSET_X + column * BAR_SPACE
+			y = OFFSET_Y + row * BAR_GAP
+
+			if minimum > LIM2 && !showout
+				icon = TYPE
+			end
+			
+			color(255, 255, 255, 255)
+			if e
+				if power > 0
+					image(x + 7, y + 7, icon, 16, 0)
+				else
+					color(255,80,80,255)
+					rect(x, y + 3, 14, 8)
+					color(0,0,0,255)
+					rect(x + 2, y + 5, 8, 4)
+					rect(x + 12, y + 3, 2, 2)
+					rect(x + 12, y + 9, 2, 2)
+					color(255,80,80,255)
+					rect(x + 4, y + 6, 2, 2)
+				end
+			else
+				color(255,80,80,255)
+				stroke(3)
+				line(x + 2, y + 12, x + 12, y + 2)
+				line(x + 2, y + 2, x + 12, y + 12)
+				color(0,0,0,255)
+				lineRect(x - 1, y - 1, 16, 16)
+				stroke(2)
+			end
+
+			x = x + 16
+
+			if power == 0 and e == 0
+				red = 255
+				green = 0
+				blue = 0
+			elsif showout 
+				red = 255 
+				green = 0
+				blue = 255
+				minimum = out
+			else
+				red = (minimum > LIM2 && boost >= EXPECTED_BOOST) ? 0 : 255
+				green = (minimum > LIM1) ? 255 : 0
+				blue = 0
+			end
+			
+			if boost > EXPECTED_BOOST
+				red = max(192, red)
+				green = max(192, green)
+				blue = max(192, blue)
+				boost = EXPECTED_BOOST
+			end
+			length = (BAR_LENGTH * boost) \ EXPECTED_BOOST
+
+			color(red, green, blue, 128)
+			rect(x, y, (minimum * length) \ 100, BAR_WIDTH)
+			color(red, green, blue, 255)
+			lineRect(x, y, length, BAR_WIDTH)
+			index = index + 1
+		end
+	end
+
+	drawflush(DISPLAY)
+
+	print("\nDraw time: ", floor(@time - start), " ms")
+	printflush(MESSAGE)
+end

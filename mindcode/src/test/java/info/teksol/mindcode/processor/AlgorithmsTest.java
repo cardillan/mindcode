@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.stream.IntStream;
 
 public class AlgorithmsTest extends AbstractProcessorTest {
 
-    public static final String SCRIPTS_DIRECTORY = "src/test/resources/scripts";
+    public static final String SCRIPTS_DIRECTORY = "src/test/resources/algorithms";
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;
@@ -35,30 +36,32 @@ public class AlgorithmsTest extends AbstractProcessorTest {
 
     @Test
     void memoryBitReadTest() throws IOException {
-        testFile("bitmap-get.mnd",
-                List.of(),
+        testAndEvaluateFile("bitmap-get.mnd",
                 IntStream.range(0, 16).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
         );
     }
 
     @Test
     void memoryBitReadWriteTest() throws IOException {
-        testFile("bitmap-get-set.mnd",
-                List.of(),
+        testAndEvaluateFile("bitmap-get-set.mnd",
                 IntStream.range(1, 17).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
         );
     }
 
     void executeSortingAlgorithmTest(String fileName, int arrayLength) throws IOException {
+        TestCompiler compiler = createTestCompiler();
         Random rnd = new Random(0);
         double[] array = rnd.ints().mapToDouble(i -> Math.abs(i) % 1000).limit(arrayLength).toArray();
-        MindustryMemory memory = MindustryMemory.createMemoryBank("bank2", array);
+        List<String> expectedOutput = Arrays.stream(array).mapToInt(d -> (int) d)
+                .sorted().mapToObj(String::valueOf).toList();
 
-        String code = "const SIZE = " + arrayLength + "\n" + readFile(fileName);
-        testCode("sorting with " + fileName,
-                code,
-                List.of(memory),
-                Arrays.stream(array).mapToInt(d -> (int) d).sorted().mapToObj(String::valueOf).collect(Collectors.toList())
+        testAndEvaluateCode(
+                compiler,
+                "sorting with " + fileName,
+                "const SIZE = " + arrayLength + "\n" + readFile(fileName),
+                List.of(MindustryMemory.createMemoryBank("bank2", array)),
+                createEvaluator(compiler, expectedOutput),
+                Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log")
         );
     }
 
@@ -66,11 +69,11 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     public List<DynamicTest> sortsArrays() {
         final List<DynamicTest> result = new ArrayList<>();
         Map<String, Integer> definitions = Map.of(
-                 "bubble-sort.mnd", 64,
-                 "heap-sort.mnd",   512,
-                 "insert-sort.mnd", 128,
-                 "quick-sort.mnd",  512,
-                 "select-sort.mnd", 128
+                "bubble-sort.mnd", 64,
+                "heap-sort.mnd", 512,
+                "insert-sort.mnd", 128,
+                "quick-sort.mnd", 512,
+                "select-sort.mnd", 128
         );
 
         for (final String script : definitions.keySet()) {
@@ -82,22 +85,27 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     }
 
     @TestFactory
-    public List<DynamicTest> computesScriptTests() {
+    public List<DynamicTest> computesScriptTests() throws IOException {
         final List<DynamicTest> result = new ArrayList<>();
         final List<String> definitions = List.of(
-                 "memory-read-write.mnd",           "10",
-                 "compute-recursive-fibonacci.mnd", "55",
-                 "compute-sum-of-primes.mnd",       "21536"
+                "memory-read-write.mnd", "10",
+                "compute-recursive-fibonacci.mnd", "55",
+                "compute-sum-of-primes.mnd", "21536"
         );
 
         for (int i = 0; i < definitions.size(); i += 2) {
-            String fileName = definitions.get(i);
-            List<String> expectedOutput = List.of(definitions.get(i + 1));
-            List<MindustryObject> memory = List.of(MindustryMemory.createMemoryBank("bank2"));
-            result.add(DynamicTest.dynamicTest(fileName, null,
-                    () -> testFile(fileName, memory, expectedOutput)));
+            processFile(result, definitions.get(i), definitions.get(i + 1));
         }
 
         return result;
+    }
+
+    private void processFile(List<DynamicTest> result, String fileName, String expectedOutput) throws IOException {
+        result.add(DynamicTest.dynamicTest(fileName, null, () -> testAndEvaluateFile(
+                fileName,
+                s -> s,
+                List.of(MindustryMemory.createMemoryBank("bank2")),
+                List.of(expectedOutput)
+        )));
     }
 }

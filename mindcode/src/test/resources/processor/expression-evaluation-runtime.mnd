@@ -1,0 +1,100 @@
+// Make sure possible future optimizations won't use constant expression evaluation 
+// and remove instructions we want to test
+def d(n) n end
+
+// There's no 1000 instruction limit on processor emulator
+inline def eval(actual, expected, operation)
+    if actual == expected
+        print("ok")
+    else 
+        print("Wrong operation ", operation, ": expected ", expected, ", but was ", actual, "\n")
+    end
+end
+
+eval(2 +  d(3), 5,          "add")
+eval(7 -  d(6), 1,          "sub")
+eval(3 *  d(2), 6,          "mul")
+eval(6 /  d(4), 1.5,        "div")
+eval(1 /  d(1e5), 1e-5,     "div exp")
+eval(6 \  d(4), 1,          "idiv")
+eval(6 %  d(4), 2,          "mod")
+eval(2 ** d(4), 16,         "pow")
+
+eval(5 == d(5), true,       "equal")
+eval(5 == d(6), false,      "equal")
+eval(0 == d(null), true,    "equal null")
+
+eval(5 != d(5), false,      "notEqual")
+eval(5 != d(6), true,       "notEqual")
+eval(0 != d(null), false,   "notEqual null")
+
+eval(1 and d(0), false,     "land")
+eval(1 and d(2), true,      "land")
+ 
+eval(0 <  d(1), true,       "lessThan")
+eval(1 <  d(0), false,      "lessThan")
+
+eval(1 <= d(1), true,       "lessThanEq")
+eval(1 <= d(0), false,      "lessThanEq")
+
+eval(2 >  d(1), true,       "greaterThan")
+eval(1 >  d(2), false,      "greaterThan")
+
+eval(1 >= d(1), true,       "greaterThanEq")
+eval(1 >= d(2), false,      "greaterThanEq")
+
+eval(0    === d(null), false,   "strictEqual")
+eval(null === d(null), true,    "strictEqual")
+
+eval(1 << d(2), 4,          "shl")
+eval(9 >> d(2), 2,          "shr")
+
+eval(1 |  d(2), 3,          "or")
+eval(3 &  d(2), 2,          "and")
+eval(3 ^  d(2), 1,          "xor")
+
+// Small values work because long is signed
+eval(~d(0),     -1,         "not")
+eval(~d(65535), -65536,     "not")
+
+a = 0xabcdefabcdefabc
+eval(~a, -(a + 1),          "not")
+
+eval(max(2, d(4)), 4,       "max")
+eval(min(2, d(4)), 2,       "min")
+
+eval(abs(d(-2)), 2,         "abs")
+eval(log(d(2.718281828459045)), 1, "log")
+eval(log10(d(10)),  1,      "log10")
+
+eval(floor(d(2.5)), 2,      "floor")
+eval(ceil(d(2.5)),  3,      "ceil")
+eval(sqrt(d(16)),   4,      "sqrt")
+
+eval(angle(1, d(1)),        45, "angle")
+eval(angleDiff(45, d(135)), 90, "angleDiff")
+
+// Mindcode extensions
+eval(-d(8), -8, "unary minus")
+eval(!d(0),  1, "boolean negation")
+eval(!d(1),  0, "boolean negation")
+eval(!d(2),  0, "boolean negation")
+
+// Compound assignments
+a = 2; eval(a **= d(4),     16, "**=")
+a = 2; eval(a *= d(4),       8, "*=")
+a = 6; eval(a /= d(4),     1.5, "/=")
+a = 6; eval(a \= d(4),       1, "\=")
+a = 6; eval(a %= d(4),       2, "%=")
+a = 4; eval(a += d(2),       6, "+=")
+a = 4; eval(a -= d(2),       2, "-=")
+a = 1; eval(a <<= d(2),      4, "<<=")
+a = 9; eval(a >>= d(2),      2, ">>=")
+a = 1; eval(a |= d(2),       3, "|=")
+a = 3; eval(a &= d(2),       2, "&=")
+a = 3; eval(a ^= d(2),       1, "^=")
+a = 1; eval(a &&= d(0),  false, "&&=")
+a = 1; eval(a &&= d(2),   true, "&&=")
+a = 0; eval(a ||= d(2),      2, "||=")
+
+// TODO: add angle, len, trig functions. Rand??

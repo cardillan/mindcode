@@ -1,0 +1,13 @@
+allocate stack in bank1[0...512]
+def d(n) n > 0 ? -d(-n) : n end
+for i in d(1) .. d(10)
+    str = case i
+        when d(1) then "A"
+        when d(2), d(3), 4 then "B"
+        when 5 then continue
+        when d(6) .. d(8) then "C"
+        when 10 then break
+        else "D"
+    end
+    print(str)
+end
