@@ -38,7 +38,7 @@ Modifications by DeadCodeEliminator, iteration 2:
     28 op equal __tmp9 num __retval3
     29 jump __label13 equal __tmp9 false
     30 set max num
--    * set __tmp10 num
+-    * set __tmp10 max
     31 jump __label14 always
     32 label __label13
 -    * set __tmp10 null

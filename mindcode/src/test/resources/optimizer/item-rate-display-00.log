@@ -1,7 +1,7 @@
-   197 instructions before optimizations.
+   198 instructions before optimizations.
     16 instructions eliminated by DeadCodeEliminator (1 iterations).
      8 instructions eliminated by SingleStepJumpEliminator (1 iterations).
-    34 instructions eliminated by OutputTempEliminator.
+    35 instructions eliminated by OutputTempEliminator.
     11 instructions eliminated by ImproveNegativeConditionalJumps.
      6 loops improved by LoopOptimizer.
      1 instructions eliminated by LoopOptimizer.
@@ -13,7 +13,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     24 jump __label0 equal __tmp5 false
     25 op add __tmp7 ptr SKIP_SIZE
     26 set ptr __tmp7
--    * set __tmp6 __tmp7
+-    * set __tmp6 ptr
     27 jump __label1 always
     28 label __label0
 -    * set __tmp6 null
@@ -24,7 +24,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     38 jump __label5 equal __tmp10 false
     39 op sub __tmp12 SIZE 1
     40 set ptr __tmp12
--    * set __tmp11 __tmp12
+-    * set __tmp11 ptr
     41 jump __label6 always
     42 label __label5
 -    * set __tmp11 null
@@ -32,71 +32,71 @@ Modifications by DeadCodeEliminator, iteration 1:
     44 read __tmp13 MEMORY ptr
     45 op max __tmp14 maximum __tmp13
  
-    75 set n __tmp24
-    76 jump __label12 always
-    77 label __label14
--    * set __tmp20 null
-    78 jump __label11 always
-    79 label __label10
--    * set __tmp20 null
-    80 label __label11
-    81 op div __tmp25 150 maximum
-    82 set scale __tmp25
+    76 set n __tmp25
+    77 jump __label12 always
+    78 label __label14
+-    * set __tmp21 null
+    79 jump __label11 always
+    80 label __label10
+-    * set __tmp21 null
+    81 label __label11
+    82 op div __tmp26 150 maximum
+    83 set scale __tmp26
  
-    98 jump __label15 equal __tmp30 false
-    99 op add __tmp32 head SKIP_SIZE
-   100 set head __tmp32
--    * set __tmp31 __tmp32
-   101 jump __label16 always
-   102 label __label15
--    * set __tmp31 null
-   103 label __label16
-   104 set tail head
-   105 set value 0
+    99 jump __label15 equal __tmp31 false
+   100 op add __tmp33 head SKIP_SIZE
+   101 set head __tmp33
+-    * set __tmp32 head
+   102 jump __label16 always
+   103 label __label15
+-    * set __tmp32 null
+   104 label __label16
+   105 set tail head
+   106 set value 0
  
-   116 jump __label20 equal __tmp37 false
-   117 op sub __tmp39 SIZE 1
-   118 set head __tmp39
--    * set __tmp38 __tmp39
-   119 jump __label21 always
-   120 label __label20
--    * set __tmp38 null
-   121 label __label21
-   122 label __label18
-   123 op add __tmp40 i 1
+   117 jump __label20 equal __tmp38 false
+   118 op sub __tmp40 SIZE 1
+   119 set head __tmp40
+-    * set __tmp39 head
+   120 jump __label21 always
+   121 label __label20
+-    * set __tmp39 null
+   122 label __label21
+   123 label __label18
+   124 op add __tmp41 i 1
  
-   146 jump __label25 equal __tmp48 false
-   147 op sub __tmp50 SIZE 1
-   148 set head __tmp50
--    * set __tmp49 __tmp50
-   149 jump __label26 always
-   150 label __label25
--    * set __tmp49 null
-   151 label __label26
-   152 op sub __tmp51 tail 1
-   153 set tail __tmp51
+   147 jump __label25 equal __tmp49 false
+   148 op sub __tmp51 SIZE 1
+   149 set head __tmp51
+-    * set __tmp50 head
+   150 jump __label26 always
+   151 label __label25
+-    * set __tmp50 null
+   152 label __label26
+   153 op sub __tmp52 tail 1
+   154 set tail __tmp52
  
-   155 jump __label27 equal __tmp52 false
-   156 op sub __tmp54 SIZE 1
-   157 set tail __tmp54
--    * set __tmp53 __tmp54
-   158 jump __label28 always
-   159 label __label27
--    * set __tmp53 null
-   160 label __label28
-   161 op mul __tmp55 value scale
-   162 op add __tmp56 10 __tmp55
+   156 jump __label27 equal __tmp53 false
+   157 op sub __tmp55 SIZE 1
+   158 set tail __tmp55
+-    * set __tmp54 tail
+   159 jump __label28 always
+   160 label __label27
+-    * set __tmp54 null
+   161 label __label28
+   162 op mul __tmp56 value scale
+   163 op add __tmp57 10 __tmp56
  
-   181 jump __label29 equal __tmp61 false
-   182 op mul __tmp63 1.5 newMax
-   183 set maximum __tmp63
--    * set __tmp62 __tmp63
-   184 jump __label30 always
-   185 label __label29
--    * set __tmp62 null
-   186 label __label30
-   187 write maximum COORD POSITION
-   188 op sub __tmp64 @time start
+   182 jump __label29 equal __tmp62 false
+   183 op mul __tmp64 1.5 newMax
+   184 set maximum __tmp64
+-    * set __tmp63 maximum
+   185 jump __label30 always
+   186 label __label29
+-    * set __tmp63 null
+   187 label __label30
+   188 write maximum COORD POSITION
+   189 op sub __tmp65 @time start
 
 Modifications by SingleStepJumpEliminator, iteration 1:
  
@@ -116,53 +116,53 @@ Modifications by SingleStepJumpEliminator, iteration 1:
     41 label __label6
     42 read __tmp13 MEMORY ptr
  
-    73 set n __tmp24
-    74 jump __label12 always
-    75 label __label14
+    74 set n __tmp25
+    75 jump __label12 always
+    76 label __label14
 -    * jump __label11 always
-    76 label __label10
-    77 label __label11
-    78 op div __tmp25 150 maximum
+    77 label __label10
+    78 label __label11
+    79 op div __tmp26 150 maximum
  
-    95 jump __label15 equal __tmp30 false
-    96 op add __tmp32 head SKIP_SIZE
-    97 set head __tmp32
+    96 jump __label15 equal __tmp31 false
+    97 op add __tmp33 head SKIP_SIZE
+    98 set head __tmp33
 -    * jump __label16 always
-    98 label __label15
-    99 label __label16
-   100 set tail head
+    99 label __label15
+   100 label __label16
+   101 set tail head
  
-   112 jump __label20 equal __tmp37 false
-   113 op sub __tmp39 SIZE 1
-   114 set head __tmp39
+   113 jump __label20 equal __tmp38 false
+   114 op sub __tmp40 SIZE 1
+   115 set head __tmp40
 -    * jump __label21 always
-   115 label __label20
-   116 label __label21
-   117 label __label18
+   116 label __label20
+   117 label __label21
+   118 label __label18
  
-   141 jump __label25 equal __tmp48 false
-   142 op sub __tmp50 SIZE 1
-   143 set head __tmp50
+   142 jump __label25 equal __tmp49 false
+   143 op sub __tmp51 SIZE 1
+   144 set head __tmp51
 -    * jump __label26 always
-   144 label __label25
-   145 label __label26
-   146 op sub __tmp51 tail 1
+   145 label __label25
+   146 label __label26
+   147 op sub __tmp52 tail 1
  
-   149 jump __label27 equal __tmp52 false
-   150 op sub __tmp54 SIZE 1
-   151 set tail __tmp54
+   150 jump __label27 equal __tmp53 false
+   151 op sub __tmp55 SIZE 1
+   152 set tail __tmp55
 -    * jump __label28 always
-   152 label __label27
-   153 label __label28
-   154 op mul __tmp55 value scale
+   153 label __label27
+   154 label __label28
+   155 op mul __tmp56 value scale
  
-   174 jump __label29 equal __tmp61 false
-   175 op mul __tmp63 1.5 newMax
-   176 set maximum __tmp63
+   175 jump __label29 equal __tmp62 false
+   176 op mul __tmp64 1.5 newMax
+   177 set maximum __tmp64
 -    * jump __label30 always
-   177 label __label29
-   178 label __label30
-   179 write maximum COORD POSITION
+   178 label __label29
+   179 label __label30
+   180 write maximum COORD POSITION
 
 Modifications by OutputTempEliminator, iteration 1:
  
@@ -216,123 +216,131 @@ Modifications by OutputTempEliminator, iteration 1:
     42 label __label7
     43 sensor __tmp16 switch1 @enabled
     44 op equal __tmp17 __tmp16 0
+    45 jump __label9 equal __tmp17 false
+    46 print "Item Rate Display"
+-    * set __tmp18 @time
+-    * set start __tmp18
++   47 set start @time
+    48 sensor __tmp19 COORD @dead
+    49 op strictEqual __tmp20 __tmp19 0
+    50 jump __label10 equal __tmp20 false
  
     52 label __label12
-    53 op lessThan __tmp21 n TOTAL
-    54 jump __label14 equal __tmp21 false
--    * read __tmp22 COORD n
--    * set m __tmp22
+    53 op lessThan __tmp22 n TOTAL
+    54 jump __label14 equal __tmp22 false
+-    * read __tmp23 COORD n
+-    * set m __tmp23
 +   55 read m COORD n
     56 print "\nCoord: [gold]"
     57 print m
     58 print "[]"
--    * op max __tmp23 maximum m
--    * set maximum __tmp23
+-    * op max __tmp24 maximum m
+-    * set maximum __tmp24
 +   59 op max maximum maximum m
     60 label __label13
--    * op add __tmp24 n 1
--    * set n __tmp24
+-    * op add __tmp25 n 1
+-    * set n __tmp25
 +   61 op add n n 1
     62 jump __label12 always
     63 label __label14
     64 label __label10
     65 label __label11
--    * op div __tmp25 150 maximum
--    * set scale __tmp25
+-    * op div __tmp26 150 maximum
+-    * set scale __tmp26
 +   66 op div scale 150 maximum
-    67 op ceil __tmp26 maximum
+    67 op ceil __tmp27 maximum
     68 print "\nMaximum: [green]"
-    69 print __tmp26
+    69 print __tmp27
  
     76 draw color 0 80 0 255
     77 draw rect 10 10 156 156
-    78 read __tmp28 MEMORY INDEX
--    * op sub __tmp29 __tmp28 SHIFT
--    * set head __tmp29
-+   79 op sub head __tmp28 SHIFT
-    80 op lessThan __tmp30 head INDEX
-    81 jump __label15 equal __tmp30 false
--    * op add __tmp32 head SKIP_SIZE
--    * set head __tmp32
+    78 read __tmp29 MEMORY INDEX
+-    * op sub __tmp30 __tmp29 SHIFT
+-    * set head __tmp30
++   79 op sub head __tmp29 SHIFT
+    80 op lessThan __tmp31 head INDEX
+    81 jump __label15 equal __tmp31 false
+-    * op add __tmp33 head SKIP_SIZE
+-    * set head __tmp33
 +   82 op add head head SKIP_SIZE
     83 label __label15
     84 label __label16
     85 set tail head
  
-    89 op lessThan __tmp33 i SMOOTH
-    90 jump __label19 equal __tmp33 false
-    91 read __tmp34 MEMORY head
--    * op add __tmp35 value __tmp34
--    * set value __tmp35
--    * op sub __tmp36 head 1
--    * set head __tmp36
-+   92 op add value value __tmp34
+    89 op lessThan __tmp34 i SMOOTH
+    90 jump __label19 equal __tmp34 false
+    91 read __tmp35 MEMORY head
+-    * op add __tmp36 value __tmp35
+-    * set value __tmp36
+-    * op sub __tmp37 head 1
+-    * set head __tmp37
++   92 op add value value __tmp35
 +   93 op sub head head 1
-    94 op lessThanEq __tmp37 head INDEX
-    95 jump __label20 equal __tmp37 false
--    * op sub __tmp39 SIZE 1
--    * set head __tmp39
+    94 op lessThanEq __tmp38 head INDEX
+    95 jump __label20 equal __tmp38 false
+-    * op sub __tmp40 SIZE 1
+-    * set head __tmp40
 +   96 op sub head SIZE 1
     97 label __label20
     98 label __label21
     99 label __label18
--    * op add __tmp40 i 1
--    * set i __tmp40
+-    * op add __tmp41 i 1
+-    * set i __tmp41
 +  100 op add i i 1
    101 jump __label17 always
    102 label __label19
-   103 op mul __tmp41 value scale
--    * op add __tmp42 10 __tmp41
--    * set last __tmp42
-+  104 op add last 10 __tmp41
+   103 op mul __tmp42 value scale
+-    * op add __tmp43 10 __tmp42
+-    * set last __tmp43
++  104 op add last 10 __tmp42
    105 set newMax value
    106 draw color 80 255 80 255
    107 set x 159
    108 set n 0
    109 label __label22
    110 jump __label24 greaterThanEq n 29
--    * read __tmp43 MEMORY tail
--    * set t __tmp43
--    * read __tmp44 MEMORY head
--    * set h __tmp44
+-    * read __tmp44 MEMORY tail
+-    * set t __tmp44
+-    * read __tmp45 MEMORY head
+-    * set h __tmp45
 +  111 read t MEMORY tail
 +  112 read h MEMORY head
-   113 op sub __tmp45 value t
--    * op add __tmp46 __tmp45 h
--    * set value __tmp46
--    * op sub __tmp47 head 1
--    * set head __tmp47
-+  114 op add value __tmp45 h
+   113 op sub __tmp46 value t
+-    * op add __tmp47 __tmp46 h
+-    * set value __tmp47
+-    * op sub __tmp48 head 1
+-    * set head __tmp48
++  114 op add value __tmp46 h
 +  115 op sub head head 1
-   116 op lessThanEq __tmp48 head INDEX
-   117 jump __label25 equal __tmp48 false
--    * op sub __tmp50 SIZE 1
--    * set head __tmp50
+   116 op lessThanEq __tmp49 head INDEX
+   117 jump __label25 equal __tmp49 false
+-    * op sub __tmp51 SIZE 1
+-    * set head __tmp51
 +  118 op sub head SIZE 1
    119 label __label25
    120 label __label26
--    * op sub __tmp51 tail 1
--    * set tail __tmp51
+-    * op sub __tmp52 tail 1
+-    * set tail __tmp52
 +  121 op sub tail tail 1
-   122 op lessThanEq __tmp52 tail INDEX
-   123 jump __label27 equal __tmp52 false
--    * op sub __tmp54 SIZE 1
--    * set tail __tmp54
+   122 op lessThanEq __tmp53 tail INDEX
+   123 jump __label27 equal __tmp53 false
+-    * op sub __tmp55 SIZE 1
+-    * set tail __tmp55
 +  124 op sub tail SIZE 1
    125 label __label27
    126 label __label28
-   127 op mul __tmp55 value scale
--    * op add __tmp56 10 __tmp55
--    * set y __tmp56
--    * op sub __tmp57 x 5
--    * set x1 __tmp57
-+  128 op add y 10 __tmp55
+   127 op mul __tmp56 value scale
+-    * op add __tmp57 10 __tmp56
+-    * set y __tmp57
+-    * op sub __tmp58 x 5
+-    * set x1 __tmp58
++  128 op add y 10 __tmp56
 +  129 op sub x1 x 5
    130 draw line x last x1 y
    131 set x x1
    132 set last y
--    * op max __tmp58 newMax value
--    * set newMax __tmp58
+-    * op max __tmp59 newMax value
+-    * set newMax __tmp59
 +  133 op max newMax newMax value
    134 label __label23
    135 op add n n 1
@@ -340,31 +348,31 @@ Modifications by OutputTempEliminator, iteration 1:
    137 label __label24
    138 draw color 255 255 255 255
    139 draw lineRect 10 10 156 156
--    * op max __tmp59 newMax maximum
--    * set maximum __tmp59
+-    * op max __tmp60 newMax maximum
+-    * set maximum __tmp60
 +  140 op max maximum newMax maximum
-   141 op mul __tmp60 3 newMax
-   142 op lessThan __tmp61 __tmp60 maximum
-   143 jump __label29 equal __tmp61 false
--    * op mul __tmp63 1.5 newMax
--    * set maximum __tmp63
+   141 op mul __tmp61 3 newMax
+   142 op lessThan __tmp62 __tmp61 maximum
+   143 jump __label29 equal __tmp62 false
+-    * op mul __tmp64 1.5 newMax
+-    * set maximum __tmp64
 +  144 op mul maximum 1.5 newMax
    145 label __label29
    146 label __label30
    147 write maximum COORD POSITION
  
    152 print " ms"
-   153 op div __tmp66 @time FREQ
-   154 op ceil __tmp67 __tmp66
--    * op mul __tmp68 FREQ __tmp67
--    * set wait __tmp68
-+  155 op mul wait FREQ __tmp67
+   153 op div __tmp67 @time FREQ
+   154 op ceil __tmp68 __tmp67
+-    * op mul __tmp69 FREQ __tmp68
+-    * set wait __tmp69
++  155 op mul wait FREQ __tmp68
    156 set loops 0
    157 label __label31
-   158 op lessThan __tmp69 @time wait
-   159 jump __label33 equal __tmp69 false
--    * op add __tmp70 loops 1
--    * set loops __tmp70
+   158 op lessThan __tmp70 @time wait
+   159 jump __label33 equal __tmp70 false
+-    * op add __tmp71 loops 1
+-    * set loops __tmp71
 +  160 op add loops loops 1
    161 label __label32
    162 jump __label31 always
@@ -400,23 +408,23 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
 +   42 jump __label9 notEqual __tmp16 0
     43 print "Item Rate Display"
     44 set start @time
-    45 sensor __tmp18 COORD @dead
+    45 sensor __tmp19 COORD @dead
  
-    47 jump __label10 equal __tmp19 false
+    47 jump __label10 equal __tmp20 false
     48 set n 0
     49 label __label12
--    * op lessThan __tmp21 n TOTAL
--    * jump __label14 equal __tmp21 false
+-    * op lessThan __tmp22 n TOTAL
+-    * jump __label14 equal __tmp22 false
 +   50 jump __label14 greaterThanEq n TOTAL
     51 read m COORD n
     52 print "\nCoord: [gold]"
     53 print m
  
     73 draw rect 10 10 156 156
-    74 read __tmp28 MEMORY INDEX
-    75 op sub head __tmp28 SHIFT
--    * op lessThan __tmp30 head INDEX
--    * jump __label15 equal __tmp30 false
+    74 read __tmp29 MEMORY INDEX
+    75 op sub head __tmp29 SHIFT
+-    * op lessThan __tmp31 head INDEX
+-    * jump __label15 equal __tmp31 false
 +   76 jump __label15 greaterThanEq head INDEX
     77 op add head head SKIP_SIZE
     78 label __label15
@@ -425,31 +433,31 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
     81 set value 0
     82 set i 0
     83 label __label17
--    * op lessThan __tmp33 i SMOOTH
--    * jump __label19 equal __tmp33 false
+-    * op lessThan __tmp34 i SMOOTH
+-    * jump __label19 equal __tmp34 false
 +   84 jump __label19 greaterThanEq i SMOOTH
-    85 read __tmp34 MEMORY head
-    86 op add value value __tmp34
+    85 read __tmp35 MEMORY head
+    86 op add value value __tmp35
     87 op sub head head 1
--    * op lessThanEq __tmp37 head INDEX
--    * jump __label20 equal __tmp37 false
+-    * op lessThanEq __tmp38 head INDEX
+-    * jump __label20 equal __tmp38 false
 +   88 jump __label20 greaterThan head INDEX
     89 op sub head SIZE 1
     90 label __label20
     91 label __label21
  
-   106 op sub __tmp45 value t
-   107 op add value __tmp45 h
+   106 op sub __tmp46 value t
+   107 op add value __tmp46 h
    108 op sub head head 1
--    * op lessThanEq __tmp48 head INDEX
--    * jump __label25 equal __tmp48 false
+-    * op lessThanEq __tmp49 head INDEX
+-    * jump __label25 equal __tmp49 false
 +  109 jump __label25 greaterThan head INDEX
    110 op sub head SIZE 1
    111 label __label25
    112 label __label26
    113 op sub tail tail 1
--    * op lessThanEq __tmp52 tail INDEX
--    * jump __label27 equal __tmp52 false
+-    * op lessThanEq __tmp53 tail INDEX
+-    * jump __label27 equal __tmp53 false
 +  114 jump __label27 greaterThan tail INDEX
    115 op sub tail SIZE 1
    116 label __label27
@@ -457,19 +465,19 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
    130 draw lineRect 10 10 156 156
    131 op max maximum newMax maximum
-   132 op mul __tmp60 3 newMax
--    * op lessThan __tmp61 __tmp60 maximum
--    * jump __label29 equal __tmp61 false
-+  133 jump __label29 greaterThanEq __tmp60 maximum
+   132 op mul __tmp61 3 newMax
+-    * op lessThan __tmp62 __tmp61 maximum
+-    * jump __label29 equal __tmp62 false
++  133 jump __label29 greaterThanEq __tmp61 maximum
    134 op mul maximum 1.5 newMax
    135 label __label29
    136 label __label30
  
-   145 op mul wait FREQ __tmp67
+   145 op mul wait FREQ __tmp68
    146 set loops 0
    147 label __label31
--    * op lessThan __tmp69 @time wait
--    * jump __label33 equal __tmp69 false
+-    * op lessThan __tmp70 @time wait
+-    * jump __label33 equal __tmp70 false
 +  148 jump __label33 greaterThanEq @time wait
    149 op add loops loops 1
    150 label __label32
@@ -499,7 +507,7 @@ Modifications by LoopOptimizer, iteration 1:
 +   43 label __label35
     44 print "Item Rate Display"
     45 set start @time
-    46 sensor __tmp18 COORD @dead
+    46 sensor __tmp19 COORD @dead
  
     49 set n 0
     50 label __label12
@@ -522,8 +530,8 @@ Modifications by LoopOptimizer, iteration 1:
     85 label __label17
     86 jump __label19 greaterThanEq i SMOOTH
 +   87 label __label37
-    88 read __tmp34 MEMORY head
-    89 op add value value __tmp34
+    88 read __tmp35 MEMORY head
+    89 op add value value __tmp35
     90 op sub head head 1
  
     94 label __label21
@@ -532,8 +540,8 @@ Modifications by LoopOptimizer, iteration 1:
 -    * jump __label17 always
 +   97 jump __label37 lessThan i SMOOTH
     98 label __label19
-    99 op mul __tmp41 value scale
-   100 op add last 10 __tmp41
+    99 op mul __tmp42 value scale
+   100 op add last 10 __tmp42
  
    103 set x 159
    104 set n 0
@@ -542,7 +550,7 @@ Modifications by LoopOptimizer, iteration 1:
 +  106 label __label38
    107 read t MEMORY tail
    108 read h MEMORY head
-   109 op sub __tmp45 value t
+   109 op sub __tmp46 value t
  
    127 op max newMax newMax value
    128 label __label23
@@ -576,7 +584,7 @@ Modifications by LoopOptimizer, iteration 1:
 
 Modifications by DataFlowOptimizer, iteration 1:
  
-    48 jump __label10 equal __tmp19 false
+    48 jump __label10 equal __tmp20 false
     49 set n 0
     50 label __label12
 -    * jump __label14 greaterThanEq n TOTAL
@@ -591,8 +599,8 @@ Modifications by DataFlowOptimizer, iteration 1:
 -    * jump __label19 greaterThanEq i SMOOTH
 +   86 jump __label19 greaterThanEq 0 SMOOTH
     87 label __label37
-    88 read __tmp34 MEMORY head
-    89 op add value value __tmp34
+    88 read __tmp35 MEMORY head
+    89 op add value value __tmp35
 
 Modifications by PrintMerger, iteration 1:
  
@@ -609,14 +617,14 @@ Modifications by PrintMerger, iteration 1:
     10 draw stroke 1
     11 set INDEX 256
  
-    63 op ceil __tmp26 maximum
+    63 op ceil __tmp27 maximum
     64 print "\nMaximum: [green]"
-    65 print __tmp26
+    65 print __tmp27
 -    * print "[]"
-    66 op floor __tmp27 scale
+    66 op floor __tmp28 scale
 -    * print "\nScale: [green]"
 +   67 print "[]\nScale: [green]"
-    68 print __tmp27
+    68 print __tmp28
     69 print "[]"
     70 draw clear 0 0 80
 
@@ -666,9 +674,9 @@ jump __label9 notEqual __tmp16 0
 label __label35
 print "Item Rate Display"
 set start @time
-sensor __tmp18 COORD @dead
-op strictEqual __tmp19 __tmp18 0
-jump __label10 equal __tmp19 false
+sensor __tmp19 COORD @dead
+op strictEqual __tmp20 __tmp19 0
+jump __label10 equal __tmp20 false
 set n 0
 label __label12
 jump __label14 greaterThanEq 0 TOTAL
@@ -685,18 +693,18 @@ label __label14
 label __label10
 label __label11
 op div scale 150 maximum
-op ceil __tmp26 maximum 0
+op ceil __tmp27 maximum 0
 print "\nMaximum: [green]"
-print __tmp26
-op floor __tmp27 scale 0
-print "[]\nScale: [green]"
 print __tmp27
+op floor __tmp28 scale 0
+print "[]\nScale: [green]"
+print __tmp28
 print "[]"
 draw clear 0 0 80 0 0 0
 draw color 0 80 0 255 0 0
 draw rect 10 10 156 156 0 0
-read __tmp28 MEMORY INDEX
-op sub head __tmp28 SHIFT
+read __tmp29 MEMORY INDEX
+op sub head __tmp29 SHIFT
 jump __label15 greaterThanEq head INDEX
 op add head head SKIP_SIZE
 label __label15
@@ -707,8 +715,8 @@ set i 0
 label __label17
 jump __label19 greaterThanEq 0 SMOOTH
 label __label37
-read __tmp34 MEMORY head
-op add value value __tmp34
+read __tmp35 MEMORY head
+op add value value __tmp35
 op sub head head 1
 jump __label20 greaterThan head INDEX
 op sub head SIZE 1
@@ -718,8 +726,8 @@ label __label18
 op add i i 1
 jump __label37 lessThan i SMOOTH
 label __label19
-op mul __tmp41 value scale
-op add last 10 __tmp41
+op mul __tmp42 value scale
+op add last 10 __tmp42
 set newMax value
 draw color 80 255 80 255 0 0
 set x 159
@@ -728,8 +736,8 @@ label __label22
 label __label38
 read t MEMORY tail
 read h MEMORY head
-op sub __tmp45 value t
-op add value __tmp45 h
+op sub __tmp46 value t
+op add value __tmp46 h
 op sub head head 1
 jump __label25 greaterThan head INDEX
 op sub head SIZE 1
@@ -740,8 +748,8 @@ jump __label27 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label27
 label __label28
-op mul __tmp55 value scale
-op add y 10 __tmp55
+op mul __tmp56 value scale
+op add y 10 __tmp56
 op sub x1 x 5
 draw line x last x1 y 0 0
 set x x1
@@ -754,20 +762,20 @@ label __label24
 draw color 255 255 255 255 0 0
 draw lineRect 10 10 156 156 0 0
 op max maximum newMax maximum
-op mul __tmp60 3 newMax
-jump __label29 greaterThanEq __tmp60 maximum
+op mul __tmp61 3 newMax
+jump __label29 greaterThanEq __tmp61 maximum
 op mul maximum 1.5 newMax
 label __label29
 label __label30
 write maximum COORD POSITION
-op sub __tmp64 @time start
-op floor __tmp65 __tmp64 0
+op sub __tmp65 @time start
+op floor __tmp66 __tmp65 0
 print "\n[lightgray]Loop time: "
-print __tmp65
+print __tmp66
 print " ms"
-op div __tmp66 @time FREQ
-op ceil __tmp67 __tmp66 0
-op mul wait FREQ __tmp67
+op div __tmp67 @time FREQ
+op ceil __tmp68 __tmp67 0
+op mul wait FREQ __tmp68
 set loops 0
 label __label31
 jump __label33 greaterThanEq @time wait

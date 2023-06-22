@@ -1,8 +1,8 @@
-   660 instructions before optimizations.
+   661 instructions before optimizations.
      1 instructions eliminated by ConditionalJumpsNormalizer.
     87 instructions eliminated by DeadCodeEliminator (4 iterations).
     28 instructions eliminated by SingleStepJumpEliminator (1 iterations).
-    72 instructions eliminated by OutputTempEliminator.
+    73 instructions eliminated by OutputTempEliminator.
      2 instructions eliminated by CaseExpressionOptimizer.
     25 instructions eliminated by ImproveNegativeConditionalJumps.
     11 instructions eliminated by JumpOverJumpEliminator.
@@ -18,743 +18,743 @@
 
 Modifications by ConditionalJumpsNormalizer, iteration 1:
  
-   129 op add __tmp29 @time DECOMMIT_DELAY
-   130 set nextDecommit __tmp29
-   131 label __label15
+   130 op add __tmp30 @time DECOMMIT_DELAY
+   131 set nextDecommit __tmp30
+   132 label __label15
 -    * jump __label17 equal true false
-   132 sensor __tmp30 battery1 @totalPower
-   133 op floor __tmp31 __tmp30
-   134 set battery_level __tmp31
+   133 sensor __tmp31 battery1 @totalPower
+   134 op floor __tmp32 __tmp31
+   135 set battery_level __tmp32
 
 Modifications by DeadCodeEliminator, iteration 1:
  
-    58 set START n
-    59 op add __tmp9 reactors 1
-    60 set reactors __tmp9
--    * set __tmp8 __tmp9
-    61 jump __label6 always
-    62 label __label7
-    63 jump __label10 equal __ast0 @overdrive-projector
+    59 set START n
+    60 op add __tmp10 reactors 1
+    61 set reactors __tmp10
+-    * set __tmp9 reactors
+    62 jump __label6 always
+    63 label __label7
+    64 jump __label10 equal __ast0 @overdrive-projector
  
-    65 jump __label9 always
-    66 label __label10
-    67 set START n
--    * set __tmp8 n
-    68 jump __label6 always
-    69 label __label9
--    * set __tmp8 null
-    70 label __label6
-    71 label __label4
-    72 jump __label3 always
+    66 jump __label9 always
+    67 label __label10
+    68 set START n
+-    * set __tmp9 START
+    69 jump __label6 always
+    70 label __label9
+-    * set __tmp9 null
+    71 label __label6
+    72 label __label4
+    73 jump __label3 always
  
-    77 op equal __tmp12 reactors 0
-    78 jump __label11 equal __tmp12 false
-    79 print "No reactor."
--    * set __tmp13 "No reactor."
-    80 jump __label12 always
-    81 label __label11
--    * set __tmp13 null
-    82 label __label12
-    83 printflush message1
-    84 label __label1
+    78 op equal __tmp13 reactors 0
+    79 jump __label11 equal __tmp13 false
+    80 print "No reactor."
+-    * set __tmp14 "No reactor."
+    81 jump __label12 always
+    82 label __label11
+-    * set __tmp14 null
+    83 label __label12
+    84 printflush message1
+    85 label __label1
  
-   110 op equal __tmp25 MODE SHUTDOWN
-   111 jump __label13 equal __tmp25 false
-   112 set REASON "Processor reset"
--    * set __tmp26 "Processor reset"
-   113 jump __label14 always
-   114 label __label13
-   115 set REASON "Reason unknown -- out of power?"
--    * set __tmp26 "Reason unknown -- out of power?"
-   116 label __label14
--    * sensor __tmp27 switch1 @enabled
--    * op notEqual __tmp28 MODE SHUTDOWN
-   117 set failure_cnt 0
-   118 set boosts 0
-   119 set nextStart 0
+   111 op equal __tmp26 MODE SHUTDOWN
+   112 jump __label13 equal __tmp26 false
+   113 set REASON "Processor reset"
+-    * set __tmp27 REASON
+   114 jump __label14 always
+   115 label __label13
+   116 set REASON "Reason unknown -- out of power?"
+-    * set __tmp27 REASON
+   117 label __label14
+-    * sensor __tmp28 switch1 @enabled
+-    * op notEqual __tmp29 MODE SHUTDOWN
+   118 set failure_cnt 0
+   119 set boosts 0
+   120 set nextStart 0
  
-   199 label __label23
-   200 set __tmp51 __tmp60
-   201 label __label21
--    * set __tmp48 __tmp51
-   202 jump __label19 always
-   203 label __label18
--    * set __tmp48 null
-   204 label __label19
-   205 set __ast1 MODE
-   206 jump __label28 equal __ast1 SHUTDOWN
+   200 label __label23
+   201 set __tmp52 __tmp61
+   202 label __label21
+-    * set __tmp49 __tmp52
+   203 jump __label19 always
+   204 label __label18
+-    * set __tmp49 null
+   205 label __label19
+   206 set __ast1 MODE
+   207 jump __label28 equal __ast1 SHUTDOWN
  
-   240 print " ([gold]"
-   241 print multiplier
-   242 print "x[])"
--    * set __tmp67 "x[])"
-   243 jump __label34 always
-   244 label __label33
--    * set __tmp67 null
-   245 label __label34
-   246 print "\n=================================="
-   247 sensor __tmp73 tank1 @totalLiquids
-   248 op lessThan __tmp74 __tmp73 COOLANT_CUTOFF
-   249 jump __label35 equal __tmp74 false
-   250 print "\n[salmon]Cryofluid level critical![]"
--    * set __tmp75 "\n[salmon]Cryofluid level critical![]"
-   251 jump __label36 always
-   252 label __label35
--    * set __tmp75 null
-   253 label __label36
-   254 sensor __tmp76 vault1 @blast-compound
-   255 op lessThan __tmp77 __tmp76 FUEL_CUTOFF
-   256 jump __label37 equal __tmp77 false
-   257 print "\n[salmon]Blast compound level critical![]"
--    * set __tmp78 "\n[salmon]Blast compound level critical![]"
-   258 jump __label38 always
-   259 label __label37
--    * set __tmp78 null
-   260 label __label38
-   261 op equal __tmp79 enough_battery false
-   262 jump __label39 equal __tmp79 false
+   241 print " ([gold]"
+   242 print multiplier
+   243 print "x[])"
+-    * set __tmp68 "x[])"
+   244 jump __label34 always
+   245 label __label33
+-    * set __tmp68 null
+   246 label __label34
+   247 print "\n=================================="
+   248 sensor __tmp74 tank1 @totalLiquids
+   249 op lessThan __tmp75 __tmp74 COOLANT_CUTOFF
+   250 jump __label35 equal __tmp75 false
+   251 print "\n[salmon]Cryofluid level critical![]"
+-    * set __tmp76 "\n[salmon]Cryofluid level critical![]"
+   252 jump __label36 always
+   253 label __label35
+-    * set __tmp76 null
+   254 label __label36
+   255 sensor __tmp77 vault1 @blast-compound
+   256 op lessThan __tmp78 __tmp77 FUEL_CUTOFF
+   257 jump __label37 equal __tmp78 false
+   258 print "\n[salmon]Blast compound level critical![]"
+-    * set __tmp79 "\n[salmon]Blast compound level critical![]"
+   259 jump __label38 always
+   260 label __label37
+-    * set __tmp79 null
+   261 label __label38
+   262 op equal __tmp80 enough_battery false
+   263 jump __label39 equal __tmp80 false
  
-   264 print "\nLink [gold]"
-   265 print missing_battery
-   266 print " K[] of additional storage to internal battery."
--    * set __tmp80 null
-   267 jump __label40 always
-   268 label __label39
--    * set __tmp80 null
-   269 label __label40
-   270 print "\nInternal battery:    [gold]"
-   271 print battery_level_str
- 
-   311 label __label44
-   312 set __tmp86 null
-   313 label __label45
--    * set __tmp81 __tmp86
-   314 jump __label41 always
-   315 label __label42
-   316 jump __label47 equal __ast2 STARTUP
- 
-   364 print "\nRequired power level: [gold]"
-   365 print neededPower
-   366 print "[]"
--    * set __tmp103 null
-   367 jump __label57 always
-   368 label __label56
--    * set __tmp103 null
-   369 label __label57
-   370 op greaterThan __tmp104 net_power 100
-   371 jump __label58 equal __tmp104 false
-   372 set OVERDRIVE true
--    * set __tmp105 true
-   373 jump __label59 always
-   374 label __label58
--    * set __tmp105 null
-   375 label __label59
-   376 op lessThan __tmp106 REACTORS_ON reactors
-   377 op greaterThan __tmp107 net_power 1000
- 
-   384 set OUTPUT_3 OUTPUT_2
-   385 set OUTPUT_2 OUTPUT_1
-   386 set OUTPUT_1 1
--    * set __tmp112 1
-   387 jump __label61 always
-   388 label __label60
--    * set __tmp112 null
-   389 label __label61
-   390 op equal __tmp113 OUTPUT_1 0
-   391 jump __label62 equal __tmp113 false
- 
-   402 label __label64
-   403 set __tmp118 null
-   404 label __label65
--    * set __tmp114 __tmp118
-   405 jump __label63 always
-   406 label __label62
--    * set __tmp114 null
-   407 label __label63
-   408 op greaterThan __tmp120 @time nextStart
-   409 op land __tmp121 canStart __tmp120
- 
-   421 set REACTORS_ON __tmp126
-   422 op add __tmp127 @time STARTUP_DELAY
-   423 set nextStart __tmp127
--    * set __tmp122 __tmp127
-   424 jump __label67 always
-   425 label __label66
--    * set __tmp122 null
-   426 label __label67
-   427 op greaterThanEq __tmp128 REACTORS_ON reactors
-   428 op greaterThan __tmp129 @time nextStart
- 
-   443 label __label71
-   444 set __tmp95 __tmp133
-   445 label __label53
--    * set __tmp81 __tmp95
-   446 jump __label41 always
-   447 label __label46
-   448 jump __label73 equal __ast2 RUNNING
- 
-   455 set MODE SHUTDOWN
-   456 control enabled switch1 false
-   457 set REASON "Cryo level too low"
--    * set __tmp138 "Cryo level too low"
-   458 jump __label75 always
-   459 label __label74
--    * set __tmp138 null
-   460 label __label75
-   461 sensor __tmp139 vault1 @blast-compound
-   462 op lessThan __tmp140 __tmp139 FUEL_CUTOFF
- 
-   465 set MODE SHUTDOWN
-   466 control enabled switch1 false
-   467 set REASON "Blast compound level too low"
--    * set __tmp142 "Blast compound level too low"
-   468 jump __label77 always
-   469 label __label76
--    * set __tmp142 null
-   470 label __label77
-   471 sensor __tmp143 tank1 @totalLiquids
-   472 op greaterThan __tmp144 __tmp143 COOLANT_SAT
- 
-   500 op idiv __tmp165 commit_level 1000
-   501 print "\nCommit threshold:   [gold]"
-   502 print __tmp165
--    * set __tmp157 __tmp165
-   503 jump __label81 always
-   504 label __label80
--    * set __tmp157 null
-   505 label __label81
-   506 op equal __tmp166 commit_level 0
-   507 jump __label82 equal __tmp166 false
-   508 op idiv __tmp168 min_level 1000
-   509 print "\nRestart threshold: [gold]"
-   510 print __tmp168
--    * set __tmp167 __tmp168
-   511 jump __label83 always
-   512 label __label82
--    * set __tmp167 null
-   513 label __label83
-   514 print "[] K"
-   515 op lessThan __tmp169 total_battery min_level
- 
-   533 jump __label86 equal __tmp179 false
-   534 op add __tmp181 @time DECOMMIT_DELAY
-   535 set nextDecommit __tmp181
--    * set __tmp180 __tmp181
-   536 jump __label87 always
-   537 label __label86
--    * set __tmp180 null
-   538 label __label87
-   539 op greaterThan __tmp182 @time nextDecommit
-   540 jump __label88 equal __tmp182 false
-   541 jump __label90 equal OVERDRIVE false
-   542 set OVERDRIVE false
--    * set __tmp184 false
-   543 jump __label91 always
-   544 label __label90
-   545 op sub __tmp185 REACTORS_ON 1
-   546 op max __tmp186 __tmp185 1
-   547 set REACTORS_ON __tmp186
-   548 set CAN_COMMIT true
--    * set __tmp184 true
-   549 label __label91
-   550 op add __tmp187 @time DECOMMIT_DELAY
-   551 set nextDecommit __tmp187
- 
-   568 label __label89
-   569 set __tmp173 __tmp183
-   570 label __label85
--    * set __tmp151 __tmp173
-   571 jump __label79 always
-   572 label __label78
-   573 sensor __tmp192 switch2 @enabled
-   574 jump __label94 equal __tmp192 false
-   575 print "\n[salmon]Load adapting not possible.[]"
--    * set __tmp193 "\n[salmon]Load adapting not possible.[]"
-   576 jump __label95 always
-   577 label __label94
-   578 print "\n[gold]Load adapting not active.[]"
--    * set __tmp193 "\n[gold]Load adapting not active.[]"
-   579 label __label95
-   580 set REACTORS_ON reactors
-   581 set OVERDRIVE true
--    * set __tmp151 true
-   582 label __label79
-   583 op mul __tmp194 PLANT_PROTECTION BATTERY_SAT
-   584 op lessThan __tmp195 total_battery __tmp194
-   585 jump __label96 equal __tmp195 false
-   586 set OUTPUT_2 0
-   587 set OUTPUT_3 0
--    * set __tmp196 0
-   588 jump __label97 always
-   589 label __label96
--    * set __tmp196 null
-   590 label __label97
-   591 op equal __tmp197 OUTPUT_2 0
-   592 jump __label98 equal __tmp197 false
- 
-   605 label __label98
-   606 set __tmp198 null
-   607 label __label99
--    * set __tmp81 __tmp198
-   608 jump __label41 always
-   609 label __label72
+   265 print "\nLink [gold]"
+   266 print missing_battery
+   267 print " K[] of additional storage to internal battery."
 -    * set __tmp81 null
-   610 label __label41
-   611 print "\n"
-   612 print STARTUPS
+   268 jump __label40 always
+   269 label __label39
+-    * set __tmp81 null
+   270 label __label40
+   271 print "\nInternal battery:    [gold]"
+   272 print battery_level_str
  
-   650 label __label108
-   651 set __tmp208 null
-   652 label __label109
--    * set __tmp205 __tmp208
-   653 jump __label105 always
-   654 label __label106
-   655 jump __label111 equal __ast3 @overdrive-projector
+   312 label __label44
+   313 set __tmp87 null
+   314 label __label45
+-    * set __tmp82 __tmp87
+   315 jump __label41 always
+   316 label __label42
+   317 jump __label47 equal __ast2 STARTUP
  
-   657 jump __label110 always
-   658 label __label111
-   659 control enabled block OVERDRIVE
--    * set __tmp205 OVERDRIVE
-   660 jump __label105 always
-   661 label __label110
-   662 jump __label113 equal __ast3 @conduit
+   365 print "\nRequired power level: [gold]"
+   366 print neededPower
+   367 print "[]"
+-    * set __tmp104 null
+   368 jump __label57 always
+   369 label __label56
+-    * set __tmp104 null
+   370 label __label57
+   371 op greaterThan __tmp105 net_power 100
+   372 jump __label58 equal __tmp105 false
+   373 set OVERDRIVE true
+-    * set __tmp106 OVERDRIVE
+   374 jump __label59 always
+   375 label __label58
+-    * set __tmp106 null
+   376 label __label59
+   377 op lessThan __tmp107 REACTORS_ON reactors
+   378 op greaterThan __tmp108 net_power 1000
  
-   669 jump __label112 always
-   670 label __label113
-   671 control enabled block startup
--    * set __tmp205 startup
-   672 jump __label105 always
-   673 label __label112
--    * set __tmp205 null
-   674 label __label105
-   675 label __label103
-   676 op add n n 1
+   385 set OUTPUT_3 OUTPUT_2
+   386 set OUTPUT_2 OUTPUT_1
+   387 set OUTPUT_1 1
+-    * set __tmp113 OUTPUT_1
+   388 jump __label61 always
+   389 label __label60
+-    * set __tmp113 null
+   390 label __label61
+   391 op equal __tmp114 OUTPUT_1 0
+   392 jump __label62 equal __tmp114 false
  
-   687 read __tmp215 cell2 CELL_BOOSTS
-   688 op add __tmp216 boosts __tmp215
-   689 set boosts __tmp216
--    * set __tmp212 __tmp216
-   690 jump __label115 always
-   691 label __label114
--    * set __tmp212 null
-   692 label __label115
-   693 op min __tmp217 REACTORS_ON reactors
-   694 set REACTORS_ON __tmp217
+   403 label __label64
+   404 set __tmp119 null
+   405 label __label65
+-    * set __tmp115 __tmp119
+   406 jump __label63 always
+   407 label __label62
+-    * set __tmp115 null
+   408 label __label63
+   409 op greaterThan __tmp121 @time nextStart
+   410 op land __tmp122 canStart __tmp121
  
-   697 set STARTUPS 0
-   698 set RESETS 0
-   699 set COMMITS 0
--    * set __tmp219 0
-   700 jump __label117 always
-   701 label __label116
-   702 write MODE cell1 0
+   422 set REACTORS_ON __tmp127
+   423 op add __tmp128 @time STARTUP_DELAY
+   424 set nextStart __tmp128
+-    * set __tmp123 nextStart
+   425 jump __label67 always
+   426 label __label66
+-    * set __tmp123 null
+   427 label __label67
+   428 op greaterThanEq __tmp129 REACTORS_ON reactors
+   429 op greaterThan __tmp130 @time nextStart
  
-   710 write STARTUPS cell1 8
-   711 write RESETS cell1 9
-   712 write COMMITS cell1 10
--    * set __tmp219 COMMITS
-   713 label __label117
-   714 label __label16
-   715 jump __label15 always
+   444 label __label71
+   445 set __tmp96 __tmp134
+   446 label __label53
+-    * set __tmp82 __tmp96
+   447 jump __label41 always
+   448 label __label46
+   449 jump __label73 equal __ast2 RUNNING
+ 
+   456 set MODE SHUTDOWN
+   457 control enabled switch1 false
+   458 set REASON "Cryo level too low"
+-    * set __tmp139 REASON
+   459 jump __label75 always
+   460 label __label74
+-    * set __tmp139 null
+   461 label __label75
+   462 sensor __tmp140 vault1 @blast-compound
+   463 op lessThan __tmp141 __tmp140 FUEL_CUTOFF
+ 
+   466 set MODE SHUTDOWN
+   467 control enabled switch1 false
+   468 set REASON "Blast compound level too low"
+-    * set __tmp143 REASON
+   469 jump __label77 always
+   470 label __label76
+-    * set __tmp143 null
+   471 label __label77
+   472 sensor __tmp144 tank1 @totalLiquids
+   473 op greaterThan __tmp145 __tmp144 COOLANT_SAT
+ 
+   501 op idiv __tmp166 commit_level 1000
+   502 print "\nCommit threshold:   [gold]"
+   503 print __tmp166
+-    * set __tmp158 __tmp166
+   504 jump __label81 always
+   505 label __label80
+-    * set __tmp158 null
+   506 label __label81
+   507 op equal __tmp167 commit_level 0
+   508 jump __label82 equal __tmp167 false
+   509 op idiv __tmp169 min_level 1000
+   510 print "\nRestart threshold: [gold]"
+   511 print __tmp169
+-    * set __tmp168 __tmp169
+   512 jump __label83 always
+   513 label __label82
+-    * set __tmp168 null
+   514 label __label83
+   515 print "[] K"
+   516 op lessThan __tmp170 total_battery min_level
+ 
+   534 jump __label86 equal __tmp180 false
+   535 op add __tmp182 @time DECOMMIT_DELAY
+   536 set nextDecommit __tmp182
+-    * set __tmp181 nextDecommit
+   537 jump __label87 always
+   538 label __label86
+-    * set __tmp181 null
+   539 label __label87
+   540 op greaterThan __tmp183 @time nextDecommit
+   541 jump __label88 equal __tmp183 false
+   542 jump __label90 equal OVERDRIVE false
+   543 set OVERDRIVE false
+-    * set __tmp185 OVERDRIVE
+   544 jump __label91 always
+   545 label __label90
+   546 op sub __tmp186 REACTORS_ON 1
+   547 op max __tmp187 __tmp186 1
+   548 set REACTORS_ON __tmp187
+   549 set CAN_COMMIT true
+-    * set __tmp185 CAN_COMMIT
+   550 label __label91
+   551 op add __tmp188 @time DECOMMIT_DELAY
+   552 set nextDecommit __tmp188
+ 
+   569 label __label89
+   570 set __tmp174 __tmp184
+   571 label __label85
+-    * set __tmp152 __tmp174
+   572 jump __label79 always
+   573 label __label78
+   574 sensor __tmp193 switch2 @enabled
+   575 jump __label94 equal __tmp193 false
+   576 print "\n[salmon]Load adapting not possible.[]"
+-    * set __tmp194 "\n[salmon]Load adapting not possible.[]"
+   577 jump __label95 always
+   578 label __label94
+   579 print "\n[gold]Load adapting not active.[]"
+-    * set __tmp194 "\n[gold]Load adapting not active.[]"
+   580 label __label95
+   581 set REACTORS_ON reactors
+   582 set OVERDRIVE true
+-    * set __tmp152 OVERDRIVE
+   583 label __label79
+   584 op mul __tmp195 PLANT_PROTECTION BATTERY_SAT
+   585 op lessThan __tmp196 total_battery __tmp195
+   586 jump __label96 equal __tmp196 false
+   587 set OUTPUT_2 0
+   588 set OUTPUT_3 0
+-    * set __tmp197 OUTPUT_3
+   589 jump __label97 always
+   590 label __label96
+-    * set __tmp197 null
+   591 label __label97
+   592 op equal __tmp198 OUTPUT_2 0
+   593 jump __label98 equal __tmp198 false
+ 
+   606 label __label98
+   607 set __tmp199 null
+   608 label __label99
+-    * set __tmp82 __tmp199
+   609 jump __label41 always
+   610 label __label72
+-    * set __tmp82 null
+   611 label __label41
+   612 print "\n"
+   613 print STARTUPS
+ 
+   651 label __label108
+   652 set __tmp209 null
+   653 label __label109
+-    * set __tmp206 __tmp209
+   654 jump __label105 always
+   655 label __label106
+   656 jump __label111 equal __ast3 @overdrive-projector
+ 
+   658 jump __label110 always
+   659 label __label111
+   660 control enabled block OVERDRIVE
+-    * set __tmp206 OVERDRIVE
+   661 jump __label105 always
+   662 label __label110
+   663 jump __label113 equal __ast3 @conduit
+ 
+   670 jump __label112 always
+   671 label __label113
+   672 control enabled block startup
+-    * set __tmp206 startup
+   673 jump __label105 always
+   674 label __label112
+-    * set __tmp206 null
+   675 label __label105
+   676 label __label103
+   677 op add n n 1
+ 
+   688 read __tmp216 cell2 CELL_BOOSTS
+   689 op add __tmp217 boosts __tmp216
+   690 set boosts __tmp217
+-    * set __tmp213 boosts
+   691 jump __label115 always
+   692 label __label114
+-    * set __tmp213 null
+   693 label __label115
+   694 op min __tmp218 REACTORS_ON reactors
+   695 set REACTORS_ON __tmp218
+ 
+   698 set STARTUPS 0
+   699 set RESETS 0
+   700 set COMMITS 0
+-    * set __tmp220 COMMITS
+   701 jump __label117 always
+   702 label __label116
+   703 write MODE cell1 0
+ 
+   711 write STARTUPS cell1 8
+   712 write RESETS cell1 9
+   713 write COMMITS cell1 10
+-    * set __tmp220 COMMITS
+   714 label __label117
+   715 label __label16
+   716 jump __label15 always
 
 Modifications by DeadCodeEliminator, iteration 2:
  
-   157 jump __label20 equal __tmp50 false
-   158 set MODE SHUTDOWN
-   159 set REASON "Manual power off"
--    * set __tmp51 "Manual power off"
-   160 jump __label21 always
-   161 label __label20
-   162 op mul __tmp52 REACTORS_ON MIN_CONS_REACTOR
+   158 jump __label20 equal __tmp51 false
+   159 set MODE SHUTDOWN
+   160 set REASON "Manual power off"
+-    * set __tmp52 REASON
+   161 jump __label21 always
+   162 label __label20
+   163 op mul __tmp53 REACTORS_ON MIN_CONS_REACTOR
  
-   196 set failure_cnt 0
-   197 set __tmp60 0
-   198 label __label23
--    * set __tmp51 __tmp60
-   199 label __label21
-   200 jump __label19 always
-   201 label __label18
+   197 set failure_cnt 0
+   198 set __tmp61 failure_cnt
+   199 label __label23
+-    * set __tmp52 __tmp61
+   200 label __label21
+   201 jump __label19 always
+   202 label __label18
  
-   304 set failure_cnt 0
-   305 set GENERATOR true
-   306 set REASON "Unknown -- out of power?"
--    * set __tmp86 "Unknown -- out of power?"
-   307 jump __label45 always
-   308 label __label44
--    * set __tmp86 null
-   309 label __label45
-   310 jump __label41 always
-   311 label __label42
+   305 set failure_cnt 0
+   306 set GENERATOR true
+   307 set REASON "Unknown -- out of power?"
+-    * set __tmp87 REASON
+   308 jump __label45 always
+   309 label __label44
+-    * set __tmp87 null
+   310 label __label45
+   311 jump __label41 always
+   312 label __label42
  
-   346 print " K[]"
-   347 set __tmp97 " K[]"
-   348 label __label55
--    * set __tmp95 __tmp97
-   349 jump __label53 always
-   350 label __label52
-   351 op add __tmp100 OUTPUT_1 OUTPUT_2
+   347 print " K[]"
+   348 set __tmp98 " K[]"
+   349 label __label55
+-    * set __tmp96 __tmp98
+   350 jump __label53 always
+   351 label __label52
+   352 op add __tmp101 OUTPUT_1 OUTPUT_2
  
-   392 jump __label64 equal __tmp117 false
-   393 op add __tmp119 @time STARTUP_DELAY
-   394 set nextStart __tmp119
--    * set __tmp118 __tmp119
-   395 jump __label65 always
-   396 label __label64
--    * set __tmp118 null
-   397 label __label65
-   398 jump __label63 always
-   399 label __label62
+   393 jump __label64 equal __tmp118 false
+   394 op add __tmp120 @time STARTUP_DELAY
+   395 set nextStart __tmp120
+-    * set __tmp119 nextStart
+   396 jump __label65 always
+   397 label __label64
+-    * set __tmp119 null
+   398 label __label65
+   399 jump __label63 always
+   400 label __label62
  
-   434 label __label70
-   435 set __tmp133 null
-   436 label __label71
--    * set __tmp95 __tmp133
-   437 label __label53
-   438 jump __label41 always
-   439 label __label46
+   435 label __label70
+   436 set __tmp134 null
+   437 label __label71
+-    * set __tmp96 __tmp134
+   438 label __label53
+   439 jump __label41 always
+   440 label __label46
  
-   516 set REACTORS_ON reactors
-   517 op add __tmp176 @time DECOMMIT_DELAY
-   518 set nextDecommit __tmp176
--    * set __tmp173 __tmp176
-   519 jump __label85 always
-   520 label __label84
-   521 op lessThan __tmp177 battery_level BATTERY_SAT
+   517 set REACTORS_ON reactors
+   518 op add __tmp177 @time DECOMMIT_DELAY
+   519 set nextDecommit __tmp177
+-    * set __tmp174 nextDecommit
+   520 jump __label85 always
+   521 label __label84
+   522 op lessThan __tmp178 battery_level BATTERY_SAT
  
-   557 label __label93
-   558 set __tmp183 __tmp189
-   559 label __label89
--    * set __tmp173 __tmp183
-   560 label __label85
-   561 jump __label79 always
-   562 label __label78
+   558 label __label93
+   559 set __tmp184 __tmp190
+   560 label __label89
+-    * set __tmp174 __tmp184
+   561 label __label85
+   562 jump __label79 always
+   563 label __label78
  
-   590 print "\n*** [gold]Surge tower 2 offline[] ***"
-   591 set __tmp200 "\n*** [gold]Surge tower 2 offline[] ***"
-   592 label __label101
--    * set __tmp198 __tmp200
-   593 jump __label99 always
-   594 label __label98
--    * set __tmp198 null
-   595 label __label99
-   596 jump __label41 always
-   597 label __label72
+   591 print "\n*** [gold]Surge tower 2 offline[] ***"
+   592 set __tmp201 "\n*** [gold]Surge tower 2 offline[] ***"
+   593 label __label101
+-    * set __tmp199 __tmp201
+   594 jump __label99 always
+   595 label __label98
+-    * set __tmp199 null
+   596 label __label99
+   597 jump __label41 always
+   598 label __label72
  
-   633 sensor __tmp209 block @timescale
-   634 op add __tmp210 boosts __tmp209
-   635 set boosts __tmp210
--    * set __tmp208 __tmp210
-   636 jump __label109 always
-   637 label __label108
--    * set __tmp208 null
-   638 label __label109
-   639 jump __label105 always
-   640 label __label106
+   634 sensor __tmp210 block @timescale
+   635 op add __tmp211 boosts __tmp210
+   636 set boosts __tmp211
+-    * set __tmp209 boosts
+   637 jump __label109 always
+   638 label __label108
+-    * set __tmp209 null
+   639 label __label109
+   640 jump __label105 always
+   641 label __label106
 
 Modifications by DeadCodeEliminator, iteration 3:
  
-   190 label __label24
-   191 set __tmp65 null
-   192 label __label25
--    * set __tmp60 __tmp65
-   193 jump __label23 always
-   194 label __label22
-   195 set failure_cnt 0
--    * set __tmp60 0
-   196 label __label23
-   197 label __label21
-   198 jump __label19 always
+   191 label __label24
+   192 set __tmp66 null
+   193 label __label25
+-    * set __tmp61 __tmp66
+   194 jump __label23 always
+   195 label __label22
+   196 set failure_cnt 0
+-    * set __tmp61 failure_cnt
+   197 label __label23
+   198 label __label21
+   199 jump __label19 always
  
-   335 set REACTORS_ON 1
-   336 op add __tmp98 @time STARTUP_DELAY
-   337 set nextStart __tmp98
--    * set __tmp97 __tmp98
-   338 jump __label55 always
-   339 label __label54
-   340 op idiv __tmp99 STARTUP_BAT_ENERGY 1000
-   341 print "\nRequired startup energy: [gold]"
-   342 print __tmp99
-   343 print " K[]"
--    * set __tmp97 " K[]"
-   344 label __label55
-   345 jump __label53 always
-   346 label __label52
+   336 set REACTORS_ON 1
+   337 op add __tmp99 @time STARTUP_DELAY
+   338 set nextStart __tmp99
+-    * set __tmp98 nextStart
+   339 jump __label55 always
+   340 label __label54
+   341 op idiv __tmp100 STARTUP_BAT_ENERGY 1000
+   342 print "\nRequired startup energy: [gold]"
+   343 print __tmp100
+   344 print " K[]"
+-    * set __tmp98 " K[]"
+   345 label __label55
+   346 jump __label53 always
+   347 label __label52
  
-   425 set COOLANT_FLAG 0
-   426 set FUEL_FLAG 0
-   427 set GENERATOR false
--    * set __tmp133 false
-   428 jump __label71 always
-   429 label __label70
--    * set __tmp133 null
-   430 label __label71
-   431 label __label53
-   432 jump __label41 always
+   426 set COOLANT_FLAG 0
+   427 set FUEL_FLAG 0
+   428 set GENERATOR false
+-    * set __tmp134 GENERATOR
+   429 jump __label71 always
+   430 label __label70
+-    * set __tmp134 null
+   431 label __label71
+   432 label __label53
+   433 jump __label41 always
  
-   534 label __label91
-   535 op add __tmp187 @time DECOMMIT_DELAY
-   536 set nextDecommit __tmp187
--    * set __tmp183 __tmp187
-   537 jump __label89 always
-   538 label __label88
-   539 op lessThan __tmp188 total_battery commit_level
+   535 label __label91
+   536 op add __tmp188 @time DECOMMIT_DELAY
+   537 set nextDecommit __tmp188
+-    * set __tmp184 nextDecommit
+   538 jump __label89 always
+   539 label __label88
+   540 op lessThan __tmp189 total_battery commit_level
  
-   548 label __label92
-   549 set __tmp189 null
-   550 label __label93
--    * set __tmp183 __tmp189
-   551 label __label89
-   552 label __label85
-   553 jump __label79 always
+   549 label __label92
+   550 set __tmp190 null
+   551 label __label93
+-    * set __tmp184 __tmp190
+   552 label __label89
+   553 label __label85
+   554 jump __label79 always
  
-   576 jump __label100 equal __tmp199 false
-   577 set OUTPUT_2 1
-   578 set OUTPUT_3 1
--    * set __tmp200 1
-   579 jump __label101 always
-   580 label __label100
-   581 print "\n*** [gold]Surge tower 2 offline[] ***"
--    * set __tmp200 "\n*** [gold]Surge tower 2 offline[] ***"
-   582 label __label101
-   583 jump __label99 always
-   584 label __label98
+   577 jump __label100 equal __tmp200 false
+   578 set OUTPUT_2 1
+   579 set OUTPUT_3 1
+-    * set __tmp201 OUTPUT_3
+   580 jump __label101 always
+   581 label __label100
+   582 print "\n*** [gold]Surge tower 2 offline[] ***"
+-    * set __tmp201 "\n*** [gold]Surge tower 2 offline[] ***"
+   583 label __label101
+   584 jump __label99 always
+   585 label __label98
 
 Modifications by DeadCodeEliminator, iteration 4:
  
-   185 print "\nMin. consumption: "
-   186 print min_consumption
-   187 printflush message2
--    * set __tmp65 null
-   188 jump __label25 always
-   189 label __label24
--    * set __tmp65 null
-   190 label __label25
-   191 jump __label23 always
-   192 label __label22
+   186 print "\nMin. consumption: "
+   187 print min_consumption
+   188 printflush message2
+-    * set __tmp66 null
+   189 jump __label25 always
+   190 label __label24
+-    * set __tmp66 null
+   191 label __label25
+   192 jump __label23 always
+   193 label __label22
  
-   541 op add __tmp191 COMMITS 1
-   542 set COMMITS __tmp191
-   543 set CAN_COMMIT false
--    * set __tmp189 false
-   544 jump __label93 always
-   545 label __label92
--    * set __tmp189 null
-   546 label __label93
-   547 label __label89
-   548 label __label85
+   542 op add __tmp192 COMMITS 1
+   543 set COMMITS __tmp192
+   544 set CAN_COMMIT false
+-    * set __tmp190 CAN_COMMIT
+   545 jump __label93 always
+   546 label __label92
+-    * set __tmp190 null
+   547 label __label93
+   548 label __label89
+   549 label __label85
 
 Modifications by SingleStepJumpEliminator, iteration 1:
  
-    65 jump __label9 always
-    66 label __label10
-    67 set START n
+    66 jump __label9 always
+    67 label __label10
+    68 set START n
 -    * jump __label6 always
-    68 label __label9
-    69 label __label6
-    70 label __label4
+    69 label __label9
+    70 label __label6
+    71 label __label4
  
-    76 op equal __tmp12 reactors 0
-    77 jump __label11 equal __tmp12 false
-    78 print "No reactor."
+    77 op equal __tmp13 reactors 0
+    78 jump __label11 equal __tmp13 false
+    79 print "No reactor."
 -    * jump __label12 always
-    79 label __label11
-    80 label __label12
-    81 printflush message1
+    80 label __label11
+    81 label __label12
+    82 printflush message1
  
-   183 print "\nMin. consumption: "
-   184 print min_consumption
-   185 printflush message2
+   184 print "\nMin. consumption: "
+   185 print min_consumption
+   186 printflush message2
 -    * jump __label25 always
-   186 label __label24
-   187 label __label25
-   188 jump __label23 always
+   187 label __label24
+   188 label __label25
+   189 jump __label23 always
  
-   190 set failure_cnt 0
-   191 label __label23
-   192 label __label21
+   191 set failure_cnt 0
+   192 label __label23
+   193 label __label21
 -    * jump __label19 always
-   193 label __label18
-   194 label __label19
-   195 set __ast1 MODE
+   194 label __label18
+   195 label __label19
+   196 set __ast1 MODE
  
-   230 print " ([gold]"
-   231 print multiplier
-   232 print "x[])"
+   231 print " ([gold]"
+   232 print multiplier
+   233 print "x[])"
 -    * jump __label34 always
-   233 label __label33
-   234 label __label34
-   235 print "\n=================================="
+   234 label __label33
+   235 label __label34
+   236 print "\n=================================="
  
-   237 op lessThan __tmp74 __tmp73 COOLANT_CUTOFF
-   238 jump __label35 equal __tmp74 false
-   239 print "\n[salmon]Cryofluid level critical![]"
+   238 op lessThan __tmp75 __tmp74 COOLANT_CUTOFF
+   239 jump __label35 equal __tmp75 false
+   240 print "\n[salmon]Cryofluid level critical![]"
 -    * jump __label36 always
-   240 label __label35
-   241 label __label36
-   242 sensor __tmp76 vault1 @blast-compound
-   243 op lessThan __tmp77 __tmp76 FUEL_CUTOFF
-   244 jump __label37 equal __tmp77 false
-   245 print "\n[salmon]Blast compound level critical![]"
+   241 label __label35
+   242 label __label36
+   243 sensor __tmp77 vault1 @blast-compound
+   244 op lessThan __tmp78 __tmp77 FUEL_CUTOFF
+   245 jump __label37 equal __tmp78 false
+   246 print "\n[salmon]Blast compound level critical![]"
 -    * jump __label38 always
-   246 label __label37
-   247 label __label38
-   248 op equal __tmp79 enough_battery false
+   247 label __label37
+   248 label __label38
+   249 op equal __tmp80 enough_battery false
  
-   251 print "\nLink [gold]"
-   252 print missing_battery
-   253 print " K[] of additional storage to internal battery."
+   252 print "\nLink [gold]"
+   253 print missing_battery
+   254 print " K[] of additional storage to internal battery."
 -    * jump __label40 always
-   254 label __label39
-   255 label __label40
-   256 print "\nInternal battery:    [gold]"
+   255 label __label39
+   256 label __label40
+   257 print "\nInternal battery:    [gold]"
  
-   292 set failure_cnt 0
-   293 set GENERATOR true
-   294 set REASON "Unknown -- out of power?"
+   293 set failure_cnt 0
+   294 set GENERATOR true
+   295 set REASON "Unknown -- out of power?"
 -    * jump __label45 always
-   295 label __label44
-   296 label __label45
-   297 jump __label41 always
+   296 label __label44
+   297 label __label45
+   298 jump __label41 always
  
-   344 print "\nRequired power level: [gold]"
-   345 print neededPower
-   346 print "[]"
+   345 print "\nRequired power level: [gold]"
+   346 print neededPower
+   347 print "[]"
 -    * jump __label57 always
-   347 label __label56
-   348 label __label57
-   349 op greaterThan __tmp104 net_power 100
-   350 jump __label58 equal __tmp104 false
-   351 set OVERDRIVE true
+   348 label __label56
+   349 label __label57
+   350 op greaterThan __tmp105 net_power 100
+   351 jump __label58 equal __tmp105 false
+   352 set OVERDRIVE true
 -    * jump __label59 always
-   352 label __label58
-   353 label __label59
-   354 op lessThan __tmp106 REACTORS_ON reactors
+   353 label __label58
+   354 label __label59
+   355 op lessThan __tmp107 REACTORS_ON reactors
  
-   362 set OUTPUT_3 OUTPUT_2
-   363 set OUTPUT_2 OUTPUT_1
-   364 set OUTPUT_1 1
+   363 set OUTPUT_3 OUTPUT_2
+   364 set OUTPUT_2 OUTPUT_1
+   365 set OUTPUT_1 1
 -    * jump __label61 always
-   365 label __label60
-   366 label __label61
-   367 op equal __tmp113 OUTPUT_1 0
+   366 label __label60
+   367 label __label61
+   368 op equal __tmp114 OUTPUT_1 0
  
-   374 jump __label64 equal __tmp117 false
-   375 op add __tmp119 @time STARTUP_DELAY
-   376 set nextStart __tmp119
+   375 jump __label64 equal __tmp118 false
+   376 op add __tmp120 @time STARTUP_DELAY
+   377 set nextStart __tmp120
 -    * jump __label65 always
-   377 label __label64
-   378 label __label65
+   378 label __label64
+   379 label __label65
 -    * jump __label63 always
-   379 label __label62
-   380 label __label63
-   381 op greaterThan __tmp120 @time nextStart
+   380 label __label62
+   381 label __label63
+   382 op greaterThan __tmp121 @time nextStart
  
-   394 set REACTORS_ON __tmp126
-   395 op add __tmp127 @time STARTUP_DELAY
-   396 set nextStart __tmp127
+   395 set REACTORS_ON __tmp127
+   396 op add __tmp128 @time STARTUP_DELAY
+   397 set nextStart __tmp128
 -    * jump __label67 always
-   397 label __label66
-   398 label __label67
-   399 op greaterThanEq __tmp128 REACTORS_ON reactors
+   398 label __label66
+   399 label __label67
+   400 op greaterThanEq __tmp129 REACTORS_ON reactors
  
-   408 set COOLANT_FLAG 0
-   409 set FUEL_FLAG 0
-   410 set GENERATOR false
+   409 set COOLANT_FLAG 0
+   410 set FUEL_FLAG 0
+   411 set GENERATOR false
 -    * jump __label71 always
-   411 label __label70
-   412 label __label71
-   413 label __label53
+   412 label __label70
+   413 label __label71
+   414 label __label53
  
-   423 set MODE SHUTDOWN
-   424 control enabled switch1 false
-   425 set REASON "Cryo level too low"
+   424 set MODE SHUTDOWN
+   425 control enabled switch1 false
+   426 set REASON "Cryo level too low"
 -    * jump __label75 always
-   426 label __label74
-   427 label __label75
-   428 sensor __tmp139 vault1 @blast-compound
+   427 label __label74
+   428 label __label75
+   429 sensor __tmp140 vault1 @blast-compound
  
-   432 set MODE SHUTDOWN
-   433 control enabled switch1 false
-   434 set REASON "Blast compound level too low"
+   433 set MODE SHUTDOWN
+   434 control enabled switch1 false
+   435 set REASON "Blast compound level too low"
 -    * jump __label77 always
-   435 label __label76
-   436 label __label77
-   437 sensor __tmp143 tank1 @totalLiquids
+   436 label __label76
+   437 label __label77
+   438 sensor __tmp144 tank1 @totalLiquids
  
-   466 op idiv __tmp165 commit_level 1000
-   467 print "\nCommit threshold:   [gold]"
-   468 print __tmp165
+   467 op idiv __tmp166 commit_level 1000
+   468 print "\nCommit threshold:   [gold]"
+   469 print __tmp166
 -    * jump __label81 always
-   469 label __label80
-   470 label __label81
-   471 op equal __tmp166 commit_level 0
+   470 label __label80
+   471 label __label81
+   472 op equal __tmp167 commit_level 0
  
-   473 op idiv __tmp168 min_level 1000
-   474 print "\nRestart threshold: [gold]"
-   475 print __tmp168
+   474 op idiv __tmp169 min_level 1000
+   475 print "\nRestart threshold: [gold]"
+   476 print __tmp169
 -    * jump __label83 always
-   476 label __label82
-   477 label __label83
-   478 print "[] K"
+   477 label __label82
+   478 label __label83
+   479 print "[] K"
  
-   496 jump __label86 equal __tmp179 false
-   497 op add __tmp181 @time DECOMMIT_DELAY
-   498 set nextDecommit __tmp181
+   497 jump __label86 equal __tmp180 false
+   498 op add __tmp182 @time DECOMMIT_DELAY
+   499 set nextDecommit __tmp182
 -    * jump __label87 always
-   499 label __label86
-   500 label __label87
-   501 op greaterThan __tmp182 @time nextDecommit
+   500 label __label86
+   501 label __label87
+   502 op greaterThan __tmp183 @time nextDecommit
  
-   520 op add __tmp191 COMMITS 1
-   521 set COMMITS __tmp191
-   522 set CAN_COMMIT false
+   521 op add __tmp192 COMMITS 1
+   522 set COMMITS __tmp192
+   523 set CAN_COMMIT false
 -    * jump __label93 always
-   523 label __label92
-   524 label __label93
-   525 label __label89
+   524 label __label92
+   525 label __label93
+   526 label __label89
  
-   541 jump __label96 equal __tmp195 false
-   542 set OUTPUT_2 0
-   543 set OUTPUT_3 0
+   542 jump __label96 equal __tmp196 false
+   543 set OUTPUT_2 0
+   544 set OUTPUT_3 0
 -    * jump __label97 always
-   544 label __label96
-   545 label __label97
-   546 op equal __tmp197 OUTPUT_2 0
+   545 label __label96
+   546 label __label97
+   547 op equal __tmp198 OUTPUT_2 0
  
-   553 label __label100
-   554 print "\n*** [gold]Surge tower 2 offline[] ***"
-   555 label __label101
+   554 label __label100
+   555 print "\n*** [gold]Surge tower 2 offline[] ***"
+   556 label __label101
 -    * jump __label99 always
-   556 label __label98
-   557 label __label99
+   557 label __label98
+   558 label __label99
 -    * jump __label41 always
-   558 label __label72
-   559 label __label41
-   560 print "\n"
+   559 label __label72
+   560 label __label41
+   561 print "\n"
  
-   594 sensor __tmp209 block @timescale
-   595 op add __tmp210 boosts __tmp209
-   596 set boosts __tmp210
+   595 sensor __tmp210 block @timescale
+   596 op add __tmp211 boosts __tmp210
+   597 set boosts __tmp211
 -    * jump __label109 always
-   597 label __label108
-   598 label __label109
-   599 jump __label105 always
+   598 label __label108
+   599 label __label109
+   600 jump __label105 always
  
-   615 jump __label112 always
-   616 label __label113
-   617 control enabled block startup
+   616 jump __label112 always
+   617 label __label113
+   618 control enabled block startup
 -    * jump __label105 always
-   618 label __label112
-   619 label __label105
-   620 label __label103
+   619 label __label112
+   620 label __label105
+   621 label __label103
  
-   632 read __tmp215 cell2 CELL_BOOSTS
-   633 op add __tmp216 boosts __tmp215
-   634 set boosts __tmp216
+   633 read __tmp216 cell2 CELL_BOOSTS
+   634 op add __tmp217 boosts __tmp216
+   635 set boosts __tmp217
 -    * jump __label115 always
-   635 label __label114
-   636 label __label115
-   637 op min __tmp217 REACTORS_ON reactors
+   636 label __label114
+   637 label __label115
+   638 op min __tmp218 REACTORS_ON reactors
 
 Modifications by OutputTempEliminator, iteration 1:
  
@@ -771,28 +771,32 @@ Modifications by OutputTempEliminator, iteration 1:
     35 set reactors 0
     36 label __label0
     37 op equal __tmp3 reactors 0
- 
+    38 jump __label2 equal __tmp3 false
+    39 set reactors 0
+-    * set __tmp4 @links
+-    * set n __tmp4
++   40 set n @links
     41 label __label3
-    42 op greaterThan __tmp4 n 0
-    43 jump __label5 equal __tmp4 false
--    * op sub __tmp5 n 1
--    * set n __tmp5
--    * getlink __tmp6 n
--    * set block __tmp6
+    42 op greaterThan __tmp5 n 0
+    43 jump __label5 equal __tmp5 false
+-    * op sub __tmp6 n 1
+-    * set n __tmp6
+-    * getlink __tmp7 n
+-    * set block __tmp7
 +   44 op sub n n 1
 +   45 getlink block n
     46 print "Found: "
     47 print block
     48 print "\n"
--    * sensor __tmp7 block @type
--    * set __ast0 __tmp7
+-    * sensor __tmp8 block @type
+-    * set __ast0 __tmp8
 +   49 sensor __ast0 block @type
     50 jump __label8 equal __ast0 @impact-reactor
     51 jump __label7 always
     52 label __label8
     53 set START n
--    * op add __tmp9 reactors 1
--    * set reactors __tmp9
+-    * op add __tmp10 reactors 1
+-    * set reactors __tmp10
 +   54 op add reactors reactors 1
     55 jump __label6 always
     56 label __label7
@@ -800,39 +804,39 @@ Modifications by OutputTempEliminator, iteration 1:
  
     65 jump __label3 always
     66 label __label5
-    67 read __tmp10 cell2 CELL_REMOTE_REACTORS
--    * op add __tmp11 reactors __tmp10
--    * set reactors __tmp11
-+   68 op add reactors reactors __tmp10
-    69 op equal __tmp12 reactors 0
-    70 jump __label11 equal __tmp12 false
+    67 read __tmp11 cell2 CELL_REMOTE_REACTORS
+-    * op add __tmp12 reactors __tmp11
+-    * set reactors __tmp12
++   68 op add reactors reactors __tmp11
+    69 op equal __tmp13 reactors 0
+    70 jump __label11 equal __tmp13 false
     71 print "No reactor."
  
     75 label __label1
     76 jump __label0 always
     77 label __label2
--    * read __tmp14 cell1 0
--    * set MODE __tmp14
--    * read __tmp15 cell1 1
--    * set OUTPUT_1 __tmp15
--    * read __tmp16 cell1 2
--    * set OUTPUT_2 __tmp16
--    * read __tmp17 cell1 3
--    * set OUTPUT_3 __tmp17
--    * read __tmp18 cell1 4
--    * set REACTORS_ON __tmp18
--    * read __tmp19 cell1 5
--    * set OVERDRIVE __tmp19
--    * read __tmp20 cell1 6
--    * set GENERATOR __tmp20
--    * read __tmp21 cell1 7
--    * set CAN_COMMIT __tmp21
--    * read __tmp22 cell1 8
--    * set STARTUPS __tmp22
--    * read __tmp23 cell1 9
--    * set RESETS __tmp23
--    * read __tmp24 cell1 10
--    * set COMMITS __tmp24
+-    * read __tmp15 cell1 0
+-    * set MODE __tmp15
+-    * read __tmp16 cell1 1
+-    * set OUTPUT_1 __tmp16
+-    * read __tmp17 cell1 2
+-    * set OUTPUT_2 __tmp17
+-    * read __tmp18 cell1 3
+-    * set OUTPUT_3 __tmp18
+-    * read __tmp19 cell1 4
+-    * set REACTORS_ON __tmp19
+-    * read __tmp20 cell1 5
+-    * set OVERDRIVE __tmp20
+-    * read __tmp21 cell1 6
+-    * set GENERATOR __tmp21
+-    * read __tmp22 cell1 7
+-    * set CAN_COMMIT __tmp22
+-    * read __tmp23 cell1 8
+-    * set STARTUPS __tmp23
+-    * read __tmp24 cell1 9
+-    * set RESETS __tmp24
+-    * read __tmp25 cell1 10
+-    * set COMMITS __tmp25
 +   78 read MODE cell1 0
 +   79 read OUTPUT_1 cell1 1
 +   80 read OUTPUT_2 cell1 2
@@ -845,45 +849,45 @@ Modifications by OutputTempEliminator, iteration 1:
 +   87 read RESETS cell1 9
 +   88 read COMMITS cell1 10
     89 set reactors REACTORS_ON
-    90 op equal __tmp25 MODE SHUTDOWN
-    91 jump __label13 equal __tmp25 false
+    90 op equal __tmp26 MODE SHUTDOWN
+    91 jump __label13 equal __tmp26 false
  
     97 set failure_cnt 0
     98 set boosts 0
     99 set nextStart 0
--    * op add __tmp29 @time DECOMMIT_DELAY
--    * set nextDecommit __tmp29
+-    * op add __tmp30 @time DECOMMIT_DELAY
+-    * set nextDecommit __tmp30
 +  100 op add nextDecommit @time DECOMMIT_DELAY
    101 label __label15
-   102 sensor __tmp30 battery1 @totalPower
--    * op floor __tmp31 __tmp30
--    * set battery_level __tmp31
--    * op idiv __tmp32 battery_level 1000
--    * set battery_level_str __tmp32
-+  103 op floor battery_level __tmp30
+   102 sensor __tmp31 battery1 @totalPower
+-    * op floor __tmp32 __tmp31
+-    * set battery_level __tmp32
+-    * op idiv __tmp33 battery_level 1000
+-    * set battery_level_str __tmp33
++  103 op floor battery_level __tmp31
 +  104 op idiv battery_level_str battery_level 1000
-   105 sensor __tmp33 battery1 @powerNetStored
--    * op floor __tmp34 __tmp33
--    * set total_battery __tmp34
--    * op idiv __tmp35 total_battery 1000
--    * set total_battery_str __tmp35
--    * sensor __tmp36 battery1 @powerNetOut
--    * set consumption __tmp36
--    * read __tmp37 bank1 PRODUCTION_INDEX
--    * set production __tmp37
--    * read __tmp38 bank1 NET_POWER_INDEX
--    * set net_power __tmp38
--    * read __tmp39 bank1 BATTERY_CHANGE_INDEX
--    * set battery_change __tmp39
--    * sensor __tmp40 battery1 @powerNetCapacity
--    * set total_capacity __tmp40
--    * op idiv __tmp41 total_capacity 1000
--    * set total_capacity_str __tmp41
--    * op mul __tmp42 BATTERY_PER_REACTOR reactors
--    * set required_capacity __tmp42
--    * op greaterThanEq __tmp43 total_capacity required_capacity
--    * set enough_battery __tmp43
-+  106 op floor total_battery __tmp33
+   105 sensor __tmp34 battery1 @powerNetStored
+-    * op floor __tmp35 __tmp34
+-    * set total_battery __tmp35
+-    * op idiv __tmp36 total_battery 1000
+-    * set total_battery_str __tmp36
+-    * sensor __tmp37 battery1 @powerNetOut
+-    * set consumption __tmp37
+-    * read __tmp38 bank1 PRODUCTION_INDEX
+-    * set production __tmp38
+-    * read __tmp39 bank1 NET_POWER_INDEX
+-    * set net_power __tmp39
+-    * read __tmp40 bank1 BATTERY_CHANGE_INDEX
+-    * set battery_change __tmp40
+-    * sensor __tmp41 battery1 @powerNetCapacity
+-    * set total_capacity __tmp41
+-    * op idiv __tmp42 total_capacity 1000
+-    * set total_capacity_str __tmp42
+-    * op mul __tmp43 BATTERY_PER_REACTOR reactors
+-    * set required_capacity __tmp43
+-    * op greaterThanEq __tmp44 total_capacity required_capacity
+-    * set enough_battery __tmp44
++  106 op floor total_battery __tmp34
 +  107 op idiv total_battery_str total_battery 1000
 +  108 sensor consumption battery1 @powerNetOut
 +  109 read production bank1 PRODUCTION_INDEX
@@ -893,240 +897,240 @@ Modifications by OutputTempEliminator, iteration 1:
 +  113 op idiv total_capacity_str total_capacity 1000
 +  114 op mul required_capacity BATTERY_PER_REACTOR reactors
 +  115 op greaterThanEq enough_battery total_capacity required_capacity
-   116 op sub __tmp44 required_capacity total_capacity
-   117 op div __tmp45 __tmp44 1000
--    * op ceil __tmp46 __tmp45
--    * set missing_battery __tmp46
-+  118 op ceil missing_battery __tmp45
-   119 op notEqual __tmp47 MODE SHUTDOWN
-   120 jump __label18 equal __tmp47 false
-   121 sensor __tmp49 switch1 @enabled
+   116 op sub __tmp45 required_capacity total_capacity
+   117 op div __tmp46 __tmp45 1000
+-    * op ceil __tmp47 __tmp46
+-    * set missing_battery __tmp47
++  118 op ceil missing_battery __tmp46
+   119 op notEqual __tmp48 MODE SHUTDOWN
+   120 jump __label18 equal __tmp48 false
+   121 sensor __tmp50 switch1 @enabled
  
    125 set REASON "Manual power off"
    126 jump __label21 always
    127 label __label20
--    * op mul __tmp52 REACTORS_ON MIN_CONS_REACTOR
--    * set min_consumption __tmp52
--    * op lessThan __tmp53 consumption min_consumption
--    * set failure1 __tmp53
+-    * op mul __tmp53 REACTORS_ON MIN_CONS_REACTOR
+-    * set min_consumption __tmp53
+-    * op lessThan __tmp54 consumption min_consumption
+-    * set failure1 __tmp54
 +  128 op mul min_consumption REACTORS_ON MIN_CONS_REACTOR
 +  129 op lessThan failure1 consumption min_consumption
-   130 op equal __tmp54 battery_level 0
-   131 op greaterThan __tmp55 consumption 0
-   132 op land __tmp56 __tmp54 __tmp55
-   133 op equal __tmp57 production 0
--    * op land __tmp58 __tmp56 __tmp57
--    * set failure2 __tmp58
-+  134 op land failure2 __tmp56 __tmp57
-   135 op or __tmp59 failure1 failure2
-   136 jump __label22 equal __tmp59 false
--    * op add __tmp61 failure_cnt 1
--    * set failure_cnt __tmp61
+   130 op equal __tmp55 battery_level 0
+   131 op greaterThan __tmp56 consumption 0
+   132 op land __tmp57 __tmp55 __tmp56
+   133 op equal __tmp58 production 0
+-    * op land __tmp59 __tmp57 __tmp58
+-    * set failure2 __tmp59
++  134 op land failure2 __tmp57 __tmp58
+   135 op or __tmp60 failure1 failure2
+   136 jump __label22 equal __tmp60 false
+-    * op add __tmp62 failure_cnt 1
+-    * set failure_cnt __tmp62
 +  137 op add failure_cnt failure_cnt 1
-   138 read __tmp62 cell2 CELL_REMOTE_REACTORS
-   139 op add __tmp63 10 __tmp62
-   140 op greaterThan __tmp64 failure_cnt __tmp63
+   138 read __tmp63 cell2 CELL_REMOTE_REACTORS
+   139 op add __tmp64 10 __tmp63
+   140 op greaterThan __tmp65 failure_cnt __tmp64
  
-   189 op div __tmp69 __tmp68 REACTORS_ON
-   190 op add __tmp70 __tmp69 0.5
-   191 op floor __tmp71 __tmp70
--    * op div __tmp72 __tmp71 100
--    * set multiplier __tmp72
-+  192 op div multiplier __tmp71 100
+   189 op div __tmp70 __tmp69 REACTORS_ON
+   190 op add __tmp71 __tmp70 0.5
+   191 op floor __tmp72 __tmp71
+-    * op div __tmp73 __tmp72 100
+-    * set multiplier __tmp73
++  192 op div multiplier __tmp72 100
    193 print " ([gold]"
    194 print multiplier
    195 print "x[])"
  
    241 set OUTPUT_3 0
-   242 op greaterThanEq __tmp82 net_power -150
-   243 op lessThan __tmp83 total_battery BATTERY_SAT
--    * op land __tmp84 __tmp82 __tmp83
--    * set GENERATOR __tmp84
-+  244 op land GENERATOR __tmp82 __tmp83
+   242 op greaterThanEq __tmp83 net_power -150
+   243 op lessThan __tmp84 total_battery BATTERY_SAT
+-    * op land __tmp85 __tmp83 __tmp84
+-    * set GENERATOR __tmp85
++  244 op land GENERATOR __tmp83 __tmp84
    245 print "\nShutdown reason: [gold]"
    246 print REASON
    247 print "[]"
-   248 sensor __tmp85 switch1 @enabled
-   249 jump __label44 equal __tmp85 false
+   248 sensor __tmp86 switch1 @enabled
+   249 jump __label44 equal __tmp86 false
    250 set MODE STARTUP
--    * op add __tmp87 STARTUPS 1
--    * set STARTUPS __tmp87
+-    * op add __tmp88 STARTUPS 1
+-    * set STARTUPS __tmp88
 +  251 op add STARTUPS STARTUPS 1
    252 set nextStart 0
    253 set failure_cnt 0
    254 set GENERATOR true
  
-   276 sensor __tmp90 nextBattery @powerNetOut
-   277 op mul __tmp91 __tmp90 POWER_MARGIN
-   278 op floor __tmp92 __tmp91
--    * op max __tmp93 __tmp92 1000
--    * set neededPower __tmp93
-+  279 op max neededPower __tmp92 1000
-   280 op equal __tmp94 REACTORS_ON 0
-   281 jump __label52 equal __tmp94 false
-   282 op greaterThanEq __tmp96 total_battery STARTUP_BAT_ENERGY
-   283 jump __label54 equal __tmp96 false
+   276 sensor __tmp91 nextBattery @powerNetOut
+   277 op mul __tmp92 __tmp91 POWER_MARGIN
+   278 op floor __tmp93 __tmp92
+-    * op max __tmp94 __tmp93 1000
+-    * set neededPower __tmp94
++  279 op max neededPower __tmp93 1000
+   280 op equal __tmp95 REACTORS_ON 0
+   281 jump __label52 equal __tmp95 false
+   282 op greaterThanEq __tmp97 total_battery STARTUP_BAT_ENERGY
+   283 jump __label54 equal __tmp97 false
    284 set REACTORS_ON 1
--    * op add __tmp98 @time STARTUP_DELAY
--    * set nextStart __tmp98
+-    * op add __tmp99 @time STARTUP_DELAY
+-    * set nextStart __tmp99
 +  285 op add nextStart @time STARTUP_DELAY
    286 jump __label55 always
    287 label __label54
-   288 op idiv __tmp99 STARTUP_BAT_ENERGY 1000
+   288 op idiv __tmp100 STARTUP_BAT_ENERGY 1000
  
    293 jump __label53 always
    294 label __label52
-   295 op add __tmp100 OUTPUT_1 OUTPUT_2
--    * op add __tmp101 __tmp100 OUTPUT_3
--    * set outputs __tmp101
-+  296 op add outputs __tmp100 OUTPUT_3
+   295 op add __tmp101 OUTPUT_1 OUTPUT_2
+-    * op add __tmp102 __tmp101 OUTPUT_3
+-    * set outputs __tmp102
++  296 op add outputs __tmp101 OUTPUT_3
    297 print "\n[gold]"
    298 print outputs
    299 print "[] surge tower(s) online"
  
-   313 op greaterThan __tmp107 net_power 1000
-   314 op land __tmp108 __tmp106 __tmp107
-   315 op greaterThanEq __tmp109 total_battery STARTUP_BAT_ENERGY
--    * op land __tmp110 __tmp108 __tmp109
--    * set canStart __tmp110
-+  316 op land canStart __tmp108 __tmp109
-   317 op greaterThanEq __tmp111 net_power neededPower
-   318 jump __label60 equal __tmp111 false
+   313 op greaterThan __tmp108 net_power 1000
+   314 op land __tmp109 __tmp107 __tmp108
+   315 op greaterThanEq __tmp110 total_battery STARTUP_BAT_ENERGY
+-    * op land __tmp111 __tmp109 __tmp110
+-    * set canStart __tmp111
++  316 op land canStart __tmp109 __tmp110
+   317 op greaterThanEq __tmp112 net_power neededPower
+   318 jump __label60 equal __tmp112 false
    319 set OUTPUT_3 OUTPUT_2
  
    323 label __label61
-   324 op equal __tmp113 OUTPUT_1 0
-   325 jump __label62 equal __tmp113 false
--    * op mul __tmp115 REACTOR_OUTPUT boosts
--    * set availablePower __tmp115
--    * op div __tmp116 neededPower availablePower
--    * set ratio __tmp116
+   324 op equal __tmp114 OUTPUT_1 0
+   325 jump __label62 equal __tmp114 false
+-    * op mul __tmp116 REACTOR_OUTPUT boosts
+-    * set availablePower __tmp116
+-    * op div __tmp117 neededPower availablePower
+-    * set ratio __tmp117
 +  326 op mul availablePower REACTOR_OUTPUT boosts
 +  327 op div ratio neededPower availablePower
-   328 op lessThan __tmp117 ratio 1
-   329 jump __label64 equal __tmp117 false
--    * op add __tmp119 @time STARTUP_DELAY
--    * set nextStart __tmp119
+   328 op lessThan __tmp118 ratio 1
+   329 jump __label64 equal __tmp118 false
+-    * op add __tmp120 @time STARTUP_DELAY
+-    * set nextStart __tmp120
 +  330 op add nextStart @time STARTUP_DELAY
    331 label __label64
    332 label __label65
    333 label __label62
  
-   336 op land __tmp121 canStart __tmp120
-   337 jump __label66 equal __tmp121 false
+   336 op land __tmp122 canStart __tmp121
+   337 jump __label66 equal __tmp122 false
    338 jump __label68 equal FAST_START false
--    * op idiv __tmp124 total_battery STARTUP_BAT_ENERGY
--    * set __tmp123 __tmp124
-+  339 op idiv __tmp123 total_battery STARTUP_BAT_ENERGY
+-    * op idiv __tmp125 total_battery STARTUP_BAT_ENERGY
+-    * set __tmp124 __tmp125
++  339 op idiv __tmp124 total_battery STARTUP_BAT_ENERGY
    340 jump __label69 always
    341 label __label68
-   342 set __tmp123 1
+   342 set __tmp124 1
    343 label __label69
-   344 set start_at_once __tmp123
-   345 op add __tmp125 REACTORS_ON start_at_once
--    * op min __tmp126 __tmp125 reactors
--    * set REACTORS_ON __tmp126
--    * op add __tmp127 @time STARTUP_DELAY
--    * set nextStart __tmp127
-+  346 op min REACTORS_ON __tmp125 reactors
+   344 set start_at_once __tmp124
+   345 op add __tmp126 REACTORS_ON start_at_once
+-    * op min __tmp127 __tmp126 reactors
+-    * set REACTORS_ON __tmp127
+-    * op add __tmp128 @time STARTUP_DELAY
+-    * set nextStart __tmp128
++  346 op min REACTORS_ON __tmp126 reactors
 +  347 op add nextStart @time STARTUP_DELAY
    348 label __label66
    349 label __label67
-   350 op greaterThanEq __tmp128 REACTORS_ON reactors
+   350 op greaterThanEq __tmp129 REACTORS_ON reactors
  
-   354 op land __tmp132 __tmp130 __tmp131
-   355 jump __label70 equal __tmp132 false
+   354 op land __tmp133 __tmp131 __tmp132
+   355 jump __label70 equal __tmp133 false
    356 set MODE RUNNING
--    * op add __tmp134 @time DECOMMIT_DELAY
--    * set nextDecommit __tmp134
+-    * op add __tmp135 @time DECOMMIT_DELAY
+-    * set nextDecommit __tmp135
 +  357 op add nextDecommit @time DECOMMIT_DELAY
    358 set COOLANT_FLAG 0
    359 set FUEL_FLAG 0
    360 set GENERATOR false
  
    386 label __label77
-   387 sensor __tmp143 tank1 @totalLiquids
-   388 op greaterThan __tmp144 __tmp143 COOLANT_SAT
--    * op or __tmp145 COOLANT_FLAG __tmp144
--    * set COOLANT_FLAG __tmp145
-+  389 op or COOLANT_FLAG COOLANT_FLAG __tmp144
-   390 sensor __tmp146 vault1 @blast-compound
-   391 op greaterThan __tmp147 __tmp146 FUEL_SAT
--    * op or __tmp148 FUEL_FLAG __tmp147
--    * set FUEL_FLAG __tmp148
-+  392 op or FUEL_FLAG FUEL_FLAG __tmp147
-   393 sensor __tmp149 switch2 @enabled
-   394 op land __tmp150 enough_battery __tmp149
-   395 jump __label78 equal __tmp150 false
--    * op mul __tmp152 BATTERY_CRITICAL required_capacity
--    * set min_level __tmp152
+   387 sensor __tmp144 tank1 @totalLiquids
+   388 op greaterThan __tmp145 __tmp144 COOLANT_SAT
+-    * op or __tmp146 COOLANT_FLAG __tmp145
+-    * set COOLANT_FLAG __tmp146
++  389 op or COOLANT_FLAG COOLANT_FLAG __tmp145
+   390 sensor __tmp147 vault1 @blast-compound
+   391 op greaterThan __tmp148 __tmp147 FUEL_SAT
+-    * op or __tmp149 FUEL_FLAG __tmp148
+-    * set FUEL_FLAG __tmp149
++  392 op or FUEL_FLAG FUEL_FLAG __tmp148
+   393 sensor __tmp150 switch2 @enabled
+   394 op land __tmp151 enough_battery __tmp150
+   395 jump __label78 equal __tmp151 false
+-    * op mul __tmp153 BATTERY_CRITICAL required_capacity
+-    * set min_level __tmp153
 +  396 op mul min_level BATTERY_CRITICAL required_capacity
    397 set commit_level 0
-   398 op lessThan __tmp153 battery_change 0
-   399 op land __tmp154 CAN_COMMIT __tmp153
+   398 op lessThan __tmp154 battery_change 0
+   399 op land __tmp155 CAN_COMMIT __tmp154
  
-   401 op land __tmp156 __tmp154 __tmp155
-   402 jump __label80 equal __tmp156 false
-   403 op sub __tmp158 battery_change OWN_CONSUMPTION
--    * op sub __tmp159 __tmp158 SAFETY_MARGIN
--    * set p __tmp159
-+  404 op sub p __tmp158 SAFETY_MARGIN
-   405 op mul __tmp160 p COEF_A2
-   406 op add __tmp161 COEF_A1 __tmp160
-   407 op mul __tmp162 p __tmp161
--    * op add __tmp163 STARTUP_BAT_ENERGY __tmp162
--    * set commit_margin __tmp163
--    * op add __tmp164 min_level commit_margin
--    * set commit_level __tmp164
-+  408 op add commit_margin STARTUP_BAT_ENERGY __tmp162
+   401 op land __tmp157 __tmp155 __tmp156
+   402 jump __label80 equal __tmp157 false
+   403 op sub __tmp159 battery_change OWN_CONSUMPTION
+-    * op sub __tmp160 __tmp159 SAFETY_MARGIN
+-    * set p __tmp160
++  404 op sub p __tmp159 SAFETY_MARGIN
+   405 op mul __tmp161 p COEF_A2
+   406 op add __tmp162 COEF_A1 __tmp161
+   407 op mul __tmp163 p __tmp162
+-    * op add __tmp164 STARTUP_BAT_ENERGY __tmp163
+-    * set commit_margin __tmp164
+-    * op add __tmp165 min_level commit_margin
+-    * set commit_level __tmp165
++  408 op add commit_margin STARTUP_BAT_ENERGY __tmp163
 +  409 op add commit_level min_level commit_margin
-   410 op idiv __tmp165 commit_level 1000
+   410 op idiv __tmp166 commit_level 1000
    411 print "\nCommit threshold:   [gold]"
-   412 print __tmp165
+   412 print __tmp166
  
-   426 op or __tmp172 __tmp169 __tmp171
-   427 jump __label84 equal __tmp172 false
-   428 op equal __tmp174 OVERDRIVE false
--    * op add __tmp175 RESETS __tmp174
--    * set RESETS __tmp175
-+  429 op add RESETS RESETS __tmp174
+   426 op or __tmp173 __tmp170 __tmp172
+   427 jump __label84 equal __tmp173 false
+   428 op equal __tmp175 OVERDRIVE false
+-    * op add __tmp176 RESETS __tmp175
+-    * set RESETS __tmp176
++  429 op add RESETS RESETS __tmp175
    430 set OVERDRIVE true
    431 set REACTORS_ON reactors
--    * op add __tmp176 @time DECOMMIT_DELAY
--    * set nextDecommit __tmp176
+-    * op add __tmp177 @time DECOMMIT_DELAY
+-    * set nextDecommit __tmp177
 +  432 op add nextDecommit @time DECOMMIT_DELAY
    433 jump __label85 always
    434 label __label84
-   435 op lessThan __tmp177 battery_level BATTERY_SAT
-   436 op lessThan __tmp178 battery_change -100
-   437 op or __tmp179 __tmp177 __tmp178
-   438 jump __label86 equal __tmp179 false
--    * op add __tmp181 @time DECOMMIT_DELAY
--    * set nextDecommit __tmp181
+   435 op lessThan __tmp178 battery_level BATTERY_SAT
+   436 op lessThan __tmp179 battery_change -100
+   437 op or __tmp180 __tmp178 __tmp179
+   438 jump __label86 equal __tmp180 false
+-    * op add __tmp182 @time DECOMMIT_DELAY
+-    * set nextDecommit __tmp182
 +  439 op add nextDecommit @time DECOMMIT_DELAY
    440 label __label86
    441 label __label87
-   442 op greaterThan __tmp182 @time nextDecommit
+   442 op greaterThan __tmp183 @time nextDecommit
  
    446 jump __label91 always
    447 label __label90
-   448 op sub __tmp185 REACTORS_ON 1
--    * op max __tmp186 __tmp185 1
--    * set REACTORS_ON __tmp186
-+  449 op max REACTORS_ON __tmp185 1
+   448 op sub __tmp186 REACTORS_ON 1
+-    * op max __tmp187 __tmp186 1
+-    * set REACTORS_ON __tmp187
++  449 op max REACTORS_ON __tmp186 1
    450 set CAN_COMMIT true
    451 label __label91
--    * op add __tmp187 @time DECOMMIT_DELAY
--    * set nextDecommit __tmp187
+-    * op add __tmp188 @time DECOMMIT_DELAY
+-    * set nextDecommit __tmp188
 +  452 op add nextDecommit @time DECOMMIT_DELAY
    453 jump __label89 always
    454 label __label88
-   455 op lessThan __tmp188 total_battery commit_level
-   456 jump __label92 equal __tmp188 false
--    * op add __tmp190 REACTORS_ON 1
--    * set REACTORS_ON __tmp190
--    * op add __tmp191 COMMITS 1
--    * set COMMITS __tmp191
+   455 op lessThan __tmp189 total_battery commit_level
+   456 jump __label92 equal __tmp189 false
+-    * op add __tmp191 REACTORS_ON 1
+-    * set REACTORS_ON __tmp191
+-    * op add __tmp192 COMMITS 1
+-    * set COMMITS __tmp192
 +  457 op add REACTORS_ON REACTORS_ON 1
 +  458 op add COMMITS COMMITS 1
    459 set CAN_COMMIT false
@@ -1136,8 +1140,8 @@ Modifications by OutputTempEliminator, iteration 1:
    506 control enabled diode3 OUTPUT_3
    507 control enabled generator1 GENERATOR
    508 control enabled generator2 GENERATOR
--    * op equal __tmp201 MODE STARTUP
--    * set startup __tmp201
+-    * op equal __tmp202 MODE STARTUP
+-    * set startup __tmp202
 +  509 op equal startup MODE STARTUP
    510 set reactors 0
    511 set boosts 0
@@ -1145,49 +1149,49 @@ Modifications by OutputTempEliminator, iteration 1:
  
    514 set n START
    515 label __label102
-   516 jump __label104 greaterThanEq n __tmp202
--    * getlink __tmp203 n
--    * set block __tmp203
--    * sensor __tmp204 block @type
--    * set __ast3 __tmp204
+   516 jump __label104 greaterThanEq n __tmp203
+-    * getlink __tmp204 n
+-    * set block __tmp204
+-    * sensor __tmp205 block @type
+-    * set __ast3 __tmp205
 +  517 getlink block n
 +  518 sensor __ast3 block @type
    519 jump __label107 equal __ast3 @impact-reactor
    520 jump __label106 always
    521 label __label107
--    * op add __tmp206 reactors 1
--    * set reactors __tmp206
--    * op lessThanEq __tmp207 reactors REACTORS_ON
--    * set enabled __tmp207
+-    * op add __tmp207 reactors 1
+-    * set reactors __tmp207
+-    * op lessThanEq __tmp208 reactors REACTORS_ON
+-    * set enabled __tmp208
 +  522 op add reactors reactors 1
 +  523 op lessThanEq enabled reactors REACTORS_ON
    524 control enabled block enabled
    525 jump __label108 equal enabled false
-   526 sensor __tmp209 block @timescale
--    * op add __tmp210 boosts __tmp209
--    * set boosts __tmp210
-+  527 op add boosts boosts __tmp209
+   526 sensor __tmp210 block @timescale
+-    * op add __tmp211 boosts __tmp210
+-    * set boosts __tmp211
++  527 op add boosts boosts __tmp210
    528 label __label108
    529 label __label109
    530 jump __label105 always
  
    558 write REACTORS_ON cell2 CELL_REACTORS_ON
    559 write OVERDRIVE cell2 CELL_OVERDRIVE
-   560 read __tmp213 cell2 CELL_REMOTE_REACTORS
--    * op add __tmp214 reactors __tmp213
--    * set reactors __tmp214
-+  561 op add reactors reactors __tmp213
-   562 read __tmp215 cell2 CELL_BOOSTS
--    * op add __tmp216 boosts __tmp215
--    * set boosts __tmp216
-+  563 op add boosts boosts __tmp215
+   560 read __tmp214 cell2 CELL_REMOTE_REACTORS
+-    * op add __tmp215 reactors __tmp214
+-    * set reactors __tmp215
++  561 op add reactors reactors __tmp214
+   562 read __tmp216 cell2 CELL_BOOSTS
+-    * op add __tmp217 boosts __tmp216
+-    * set boosts __tmp217
++  563 op add boosts boosts __tmp216
    564 label __label114
    565 label __label115
--    * op min __tmp217 REACTORS_ON reactors
--    * set REACTORS_ON __tmp217
+-    * op min __tmp218 REACTORS_ON reactors
+-    * set REACTORS_ON __tmp218
 +  566 op min REACTORS_ON REACTORS_ON reactors
-   567 op equal __tmp218 cell1 null
-   568 jump __label116 equal __tmp218 false
+   567 op equal __tmp219 cell1 null
+   568 jump __label116 equal __tmp219 false
    569 set STARTUPS 0
 
 Modifications by CaseExpressionOptimizer, iteration 1:
@@ -1200,21 +1204,21 @@ Modifications by CaseExpressionOptimizer, iteration 1:
 +  159 jump __label28 equal MODE SHUTDOWN
    160 jump __label27 always
    161 label __label28
-   162 set __tmp66 "[salmon]SHUTDOWN[]"
+   162 set __tmp67 "[salmon]SHUTDOWN[]"
    163 jump __label26 always
    164 label __label27
 -    * jump __label30 equal __ast1 STARTUP
 +  165 jump __label30 equal MODE STARTUP
    166 jump __label29 always
    167 label __label30
-   168 set __tmp66 "[gold]STARTUP[]"
+   168 set __tmp67 "[gold]STARTUP[]"
    169 jump __label26 always
    170 label __label29
 -    * jump __label32 equal __ast1 RUNNING
 +  171 jump __label32 equal MODE RUNNING
    172 jump __label31 always
    173 label __label32
-   174 set __tmp66 "[green]RUNNING[]"
+   174 set __tmp67 "[green]RUNNING[]"
  
    229 print "\nPower balance:       [gold]"
    230 print net_power
@@ -1242,7 +1246,7 @@ Modifications by CaseExpressionOptimizer, iteration 1:
 +  364 jump __label73 equal MODE RUNNING
    365 jump __label72 always
    366 label __label73
-   367 sensor __tmp135 tank1 @totalLiquids
+   367 sensor __tmp136 tank1 @totalLiquids
 
 Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
@@ -1255,18 +1259,18 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
     38 set reactors 0
     39 set n @links
     40 label __label3
--    * op greaterThan __tmp4 n 0
--    * jump __label5 equal __tmp4 false
+-    * op greaterThan __tmp5 n 0
+-    * jump __label5 equal __tmp5 false
 +   41 jump __label5 lessThanEq n 0
     42 op sub n n 1
     43 getlink block n
     44 print "Found: "
  
     64 label __label5
-    65 read __tmp10 cell2 CELL_REMOTE_REACTORS
-    66 op add reactors reactors __tmp10
--    * op equal __tmp12 reactors 0
--    * jump __label11 equal __tmp12 false
+    65 read __tmp11 cell2 CELL_REMOTE_REACTORS
+    66 op add reactors reactors __tmp11
+-    * op equal __tmp13 reactors 0
+-    * jump __label11 equal __tmp13 false
 +   67 jump __label11 notEqual reactors 0
     68 print "No reactor."
     69 label __label11
@@ -1275,67 +1279,67 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
     84 read RESETS cell1 9
     85 read COMMITS cell1 10
     86 set reactors REACTORS_ON
--    * op equal __tmp25 MODE SHUTDOWN
--    * jump __label13 equal __tmp25 false
+-    * op equal __tmp26 MODE SHUTDOWN
+-    * jump __label13 equal __tmp26 false
 +   87 jump __label13 notEqual MODE SHUTDOWN
     88 set REASON "Processor reset"
     89 jump __label14 always
     90 label __label13
  
-   112 op sub __tmp44 required_capacity total_capacity
-   113 op div __tmp45 __tmp44 1000
-   114 op ceil missing_battery __tmp45
--    * op notEqual __tmp47 MODE SHUTDOWN
--    * jump __label18 equal __tmp47 false
+   112 op sub __tmp45 required_capacity total_capacity
+   113 op div __tmp46 __tmp45 1000
+   114 op ceil missing_battery __tmp46
+-    * op notEqual __tmp48 MODE SHUTDOWN
+-    * jump __label18 equal __tmp48 false
 +  115 jump __label18 equal MODE SHUTDOWN
-   116 sensor __tmp49 switch1 @enabled
--    * op equal __tmp50 __tmp49 false
--    * jump __label20 equal __tmp50 false
-+  117 jump __label20 notEqual __tmp49 false
+   116 sensor __tmp50 switch1 @enabled
+-    * op equal __tmp51 __tmp50 false
+-    * jump __label20 equal __tmp51 false
++  117 jump __label20 notEqual __tmp50 false
    118 set MODE SHUTDOWN
    119 set REASON "Manual power off"
    120 jump __label21 always
  
    131 op add failure_cnt failure_cnt 1
-   132 read __tmp62 cell2 CELL_REMOTE_REACTORS
-   133 op add __tmp63 10 __tmp62
--    * op greaterThan __tmp64 failure_cnt __tmp63
--    * jump __label24 equal __tmp64 false
-+  134 jump __label24 lessThanEq failure_cnt __tmp63
+   132 read __tmp63 cell2 CELL_REMOTE_REACTORS
+   133 op add __tmp64 10 __tmp63
+-    * op greaterThan __tmp65 failure_cnt __tmp64
+-    * jump __label24 equal __tmp65 false
++  134 jump __label24 lessThanEq failure_cnt __tmp64
    135 set MODE SHUTDOWN
    136 control enabled switch1 false
    137 set REASON "Unknown -- out of power?"
  
    189 label __label34
    190 print "\n=================================="
-   191 sensor __tmp73 tank1 @totalLiquids
--    * op lessThan __tmp74 __tmp73 COOLANT_CUTOFF
--    * jump __label35 equal __tmp74 false
-+  192 jump __label35 greaterThanEq __tmp73 COOLANT_CUTOFF
+   191 sensor __tmp74 tank1 @totalLiquids
+-    * op lessThan __tmp75 __tmp74 COOLANT_CUTOFF
+-    * jump __label35 equal __tmp75 false
++  192 jump __label35 greaterThanEq __tmp74 COOLANT_CUTOFF
    193 print "\n[salmon]Cryofluid level critical![]"
    194 label __label35
    195 label __label36
-   196 sensor __tmp76 vault1 @blast-compound
--    * op lessThan __tmp77 __tmp76 FUEL_CUTOFF
--    * jump __label37 equal __tmp77 false
-+  197 jump __label37 greaterThanEq __tmp76 FUEL_CUTOFF
+   196 sensor __tmp77 vault1 @blast-compound
+-    * op lessThan __tmp78 __tmp77 FUEL_CUTOFF
+-    * jump __label37 equal __tmp78 false
++  197 jump __label37 greaterThanEq __tmp77 FUEL_CUTOFF
    198 print "\n[salmon]Blast compound level critical![]"
    199 label __label37
    200 label __label38
--    * op equal __tmp79 enough_battery false
--    * jump __label39 equal __tmp79 false
+-    * op equal __tmp80 enough_battery false
+-    * jump __label39 equal __tmp80 false
 +  201 jump __label39 notEqual enough_battery false
    202 print "\n[salmon]Insufficient battery storage![]"
    203 print "\nLink [gold]"
    204 print missing_battery
  
-   265 op mul __tmp91 __tmp90 POWER_MARGIN
-   266 op floor __tmp92 __tmp91
-   267 op max neededPower __tmp92 1000
--    * op equal __tmp94 REACTORS_ON 0
--    * jump __label52 equal __tmp94 false
--    * op greaterThanEq __tmp96 total_battery STARTUP_BAT_ENERGY
--    * jump __label54 equal __tmp96 false
+   265 op mul __tmp92 __tmp91 POWER_MARGIN
+   266 op floor __tmp93 __tmp92
+   267 op max neededPower __tmp93 1000
+-    * op equal __tmp95 REACTORS_ON 0
+-    * jump __label52 equal __tmp95 false
+-    * op greaterThanEq __tmp97 total_battery STARTUP_BAT_ENERGY
+-    * jump __label54 equal __tmp97 false
 +  268 jump __label52 notEqual REACTORS_ON 0
 +  269 jump __label54 lessThan total_battery STARTUP_BAT_ENERGY
    270 set REACTORS_ON 1
@@ -1345,59 +1349,59 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
    283 print "\n[gold]"
    284 print outputs
    285 print "[] surge tower(s) online"
--    * op equal __tmp102 OUTPUT_3 0
--    * jump __label56 equal __tmp102 false
+-    * op equal __tmp103 OUTPUT_3 0
+-    * jump __label56 equal __tmp103 false
 +  286 jump __label56 notEqual OUTPUT_3 0
    287 print "\nRequired power level: [gold]"
    288 print neededPower
    289 print "[]"
    290 label __label56
    291 label __label57
--    * op greaterThan __tmp104 net_power 100
--    * jump __label58 equal __tmp104 false
+-    * op greaterThan __tmp105 net_power 100
+-    * jump __label58 equal __tmp105 false
 +  292 jump __label58 lessThanEq net_power 100
    293 set OVERDRIVE true
    294 label __label58
    295 label __label59
  
-   298 op land __tmp108 __tmp106 __tmp107
-   299 op greaterThanEq __tmp109 total_battery STARTUP_BAT_ENERGY
-   300 op land canStart __tmp108 __tmp109
--    * op greaterThanEq __tmp111 net_power neededPower
--    * jump __label60 equal __tmp111 false
+   298 op land __tmp109 __tmp107 __tmp108
+   299 op greaterThanEq __tmp110 total_battery STARTUP_BAT_ENERGY
+   300 op land canStart __tmp109 __tmp110
+-    * op greaterThanEq __tmp112 net_power neededPower
+-    * jump __label60 equal __tmp112 false
 +  301 jump __label60 lessThan net_power neededPower
    302 set OUTPUT_3 OUTPUT_2
    303 set OUTPUT_2 OUTPUT_1
    304 set OUTPUT_1 1
    305 label __label60
    306 label __label61
--    * op equal __tmp113 OUTPUT_1 0
--    * jump __label62 equal __tmp113 false
+-    * op equal __tmp114 OUTPUT_1 0
+-    * jump __label62 equal __tmp114 false
 +  307 jump __label62 notEqual OUTPUT_1 0
    308 op mul availablePower REACTOR_OUTPUT boosts
    309 op div ratio neededPower availablePower
--    * op lessThan __tmp117 ratio 1
--    * jump __label64 equal __tmp117 false
+-    * op lessThan __tmp118 ratio 1
+-    * jump __label64 equal __tmp118 false
 +  310 jump __label64 greaterThanEq ratio 1
    311 op add nextStart @time STARTUP_DELAY
    312 label __label64
    313 label __label65
  
-   393 print __tmp165
+   393 print __tmp166
    394 label __label80
    395 label __label81
--    * op equal __tmp166 commit_level 0
--    * jump __label82 equal __tmp166 false
+-    * op equal __tmp167 commit_level 0
+-    * jump __label82 equal __tmp167 false
 +  396 jump __label82 notEqual commit_level 0
-   397 op idiv __tmp168 min_level 1000
+   397 op idiv __tmp169 min_level 1000
    398 print "\nRestart threshold: [gold]"
-   399 print __tmp168
+   399 print __tmp169
  
    419 op add nextDecommit @time DECOMMIT_DELAY
    420 label __label86
    421 label __label87
--    * op greaterThan __tmp182 @time nextDecommit
--    * jump __label88 equal __tmp182 false
+-    * op greaterThan __tmp183 @time nextDecommit
+-    * jump __label88 equal __tmp183 false
 +  422 jump __label88 lessThanEq @time nextDecommit
    423 jump __label90 equal OVERDRIVE false
    424 set OVERDRIVE false
@@ -1406,8 +1410,8 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
    431 op add nextDecommit @time DECOMMIT_DELAY
    432 jump __label89 always
    433 label __label88
--    * op lessThan __tmp188 total_battery commit_level
--    * jump __label92 equal __tmp188 false
+-    * op lessThan __tmp189 total_battery commit_level
+-    * jump __label92 equal __tmp189 false
 +  434 jump __label92 greaterThanEq total_battery commit_level
    435 op add REACTORS_ON REACTORS_ON 1
    436 op add COMMITS COMMITS 1
@@ -1415,18 +1419,18 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
    452 set OVERDRIVE true
    453 label __label79
-   454 op mul __tmp194 PLANT_PROTECTION BATTERY_SAT
--    * op lessThan __tmp195 total_battery __tmp194
--    * jump __label96 equal __tmp195 false
-+  455 jump __label96 greaterThanEq total_battery __tmp194
+   454 op mul __tmp195 PLANT_PROTECTION BATTERY_SAT
+-    * op lessThan __tmp196 total_battery __tmp195
+-    * jump __label96 equal __tmp196 false
++  455 jump __label96 greaterThanEq total_battery __tmp195
    456 set OUTPUT_2 0
    457 set OUTPUT_3 0
    458 label __label96
    459 label __label97
--    * op equal __tmp197 OUTPUT_2 0
--    * jump __label98 equal __tmp197 false
--    * op greaterThan __tmp199 total_battery BATTERY_SAT
--    * jump __label100 equal __tmp199 false
+-    * op equal __tmp198 OUTPUT_2 0
+-    * jump __label98 equal __tmp198 false
+-    * op greaterThan __tmp200 total_battery BATTERY_SAT
+-    * jump __label100 equal __tmp200 false
 +  460 jump __label98 notEqual OUTPUT_2 0
 +  461 jump __label100 lessThanEq total_battery BATTERY_SAT
    462 set OUTPUT_2 1
@@ -1436,8 +1440,8 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
    527 op add n n 1
    528 jump __label102 always
    529 label __label104
--    * op notEqual __tmp211 cell2 null
--    * jump __label114 equal __tmp211 false
+-    * op notEqual __tmp212 cell2 null
+-    * jump __label114 equal __tmp212 false
 +  530 jump __label114 equal cell2 null
    531 write reactors cell2 CELL_PRIOR_REACTORS
    532 write REACTORS_ON cell2 CELL_REACTORS_ON
@@ -1446,8 +1450,8 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
    538 label __label114
    539 label __label115
    540 op min REACTORS_ON REACTORS_ON reactors
--    * op equal __tmp218 cell1 null
--    * jump __label116 equal __tmp218 false
+-    * op equal __tmp219 cell1 null
+-    * jump __label116 equal __tmp219 false
 +  541 jump __label116 notEqual cell1 null
    542 set STARTUPS 0
    543 set RESETS 0
@@ -1481,21 +1485,21 @@ Modifications by JumpOverJumpEliminator, iteration 1:
 -    * jump __label27 always
 +  150 jump __label27 notEqual MODE SHUTDOWN
    151 label __label28
-   152 set __tmp66 "[salmon]SHUTDOWN[]"
+   152 set __tmp67 "[salmon]SHUTDOWN[]"
    153 jump __label26 always
    154 label __label27
 -    * jump __label30 equal MODE STARTUP
 -    * jump __label29 always
 +  155 jump __label29 notEqual MODE STARTUP
    156 label __label30
-   157 set __tmp66 "[gold]STARTUP[]"
+   157 set __tmp67 "[gold]STARTUP[]"
    158 jump __label26 always
    159 label __label29
 -    * jump __label32 equal MODE RUNNING
 -    * jump __label31 always
 +  160 jump __label31 notEqual MODE RUNNING
    161 label __label32
-   162 set __tmp66 "[green]RUNNING[]"
+   162 set __tmp67 "[green]RUNNING[]"
    163 jump __label26 always
  
    214 print "\nPower balance:       [gold]"
@@ -1525,10 +1529,10 @@ Modifications by JumpOverJumpEliminator, iteration 1:
 -    * jump __label72 always
 +  340 jump __label72 notEqual MODE RUNNING
    341 label __label73
-   342 sensor __tmp135 tank1 @totalLiquids
-   343 op lessThan __tmp136 __tmp135 COOLANT_CUTOFF
+   342 sensor __tmp136 tank1 @totalLiquids
+   343 op lessThan __tmp137 __tmp136 COOLANT_CUTOFF
  
-   483 jump __label104 greaterThanEq n __tmp202
+   483 jump __label104 greaterThanEq n __tmp203
    484 getlink block n
    485 sensor __ast3 block @type
 -    * jump __label107 equal __ast3 @impact-reactor
@@ -1580,8 +1584,8 @@ Modifications by LoopOptimizer, iteration 1:
 -    * jump __label3 always
 +   62 jump __label119 greaterThan n 0
     63 label __label5
-    64 read __tmp10 cell2 CELL_REMOTE_REACTORS
-    65 op add reactors reactors __tmp10
+    64 read __tmp11 cell2 CELL_REMOTE_REACTORS
+    65 op add reactors reactors __tmp11
  
     69 label __label12
     70 printflush message1
@@ -1594,7 +1598,7 @@ Modifications by LoopOptimizer, iteration 1:
  
    482 set n START
    483 label __label102
-   484 jump __label104 greaterThanEq n __tmp202
+   484 jump __label104 greaterThanEq n __tmp203
 +  485 label __label120
    486 getlink block n
    487 sensor __ast3 block @type
@@ -1604,7 +1608,7 @@ Modifications by LoopOptimizer, iteration 1:
    517 label __label103
    518 op add n n 1
 -    * jump __label102 always
-+  519 jump __label120 lessThan n __tmp202
++  519 jump __label120 lessThan n __tmp203
    520 label __label104
    521 jump __label114 equal cell2 null
    522 write reactors cell2 CELL_PRIOR_REACTORS
@@ -1630,7 +1634,7 @@ Modifications by IfExpressionOptimizer, iteration 1:
    243 label __label47
 -    * jump __label48 equal OUTPUT_1 false
 -    * jump __label50 equal OUTPUT_2 false
--    * set __tmp89 battery4
+-    * set __tmp90 battery4
 +  244 set nextBattery battery2
 +  245 jump __label49 equal OUTPUT_1 false
 +  246 set nextBattery battery3
@@ -1638,33 +1642,33 @@ Modifications by IfExpressionOptimizer, iteration 1:
 +  248 set nextBattery battery4
    249 jump __label51 always
 -    * label __label50
--    * set __tmp89 battery3
+-    * set __tmp90 battery3
    250 label __label51
--    * set __tmp88 __tmp89
+-    * set __tmp89 __tmp90
    251 jump __label49 always
 -    * label __label48
--    * set __tmp88 battery2
+-    * set __tmp89 battery2
    252 label __label49
--    * set nextBattery __tmp88
-   253 sensor __tmp90 nextBattery @powerNetOut
-   254 op mul __tmp91 __tmp90 POWER_MARGIN
-   255 op floor __tmp92 __tmp91
+-    * set nextBattery __tmp89
+   253 sensor __tmp91 nextBattery @powerNetOut
+   254 op mul __tmp92 __tmp91 POWER_MARGIN
+   255 op floor __tmp93 __tmp92
  
-   305 op greaterThan __tmp120 @time nextStart
-   306 op land __tmp121 canStart __tmp120
-   307 jump __label66 equal __tmp121 false
+   305 op greaterThan __tmp121 @time nextStart
+   306 op land __tmp122 canStart __tmp121
+   307 jump __label66 equal __tmp122 false
 -    * jump __label68 equal FAST_START false
--    * op idiv __tmp123 total_battery STARTUP_BAT_ENERGY
+-    * op idiv __tmp124 total_battery STARTUP_BAT_ENERGY
 +  308 set start_at_once 1
 +  309 jump __label69 equal FAST_START false
 +  310 op idiv start_at_once total_battery STARTUP_BAT_ENERGY
    311 jump __label69 always
 -    * label __label68
--    * set __tmp123 1
+-    * set __tmp124 1
    312 label __label69
--    * set start_at_once __tmp123
-   313 op add __tmp125 REACTORS_ON start_at_once
-   314 op min REACTORS_ON __tmp125 reactors
+-    * set start_at_once __tmp124
+   313 op add __tmp126 REACTORS_ON start_at_once
+   314 op min REACTORS_ON __tmp126 reactors
    315 op add nextStart @time STARTUP_DELAY
 
 Modifications by DataFlowOptimizer, iteration 1:
@@ -1681,11 +1685,11 @@ Modifications by DataFlowOptimizer, iteration 1:
    470 set reactors 0
    471 set boosts 0
 -    * set enabled true
-   472 set __tmp202 @links
+   472 set __tmp203 @links
    473 set n START
    474 label __label102
--    * jump __label104 greaterThanEq n __tmp202
-+  475 jump __label104 greaterThanEq START __tmp202
+-    * jump __label104 greaterThanEq n __tmp203
++  475 jump __label104 greaterThanEq START __tmp203
    476 label __label120
    477 getlink block n
    478 sensor __ast3 block @type
@@ -1693,19 +1697,19 @@ Modifications by DataFlowOptimizer, iteration 1:
 Modifications by PropagateJumpTargets, iteration 1:
  
    128 op add failure_cnt failure_cnt 1
-   129 read __tmp62 cell2 CELL_REMOTE_REACTORS
-   130 op add __tmp63 10 __tmp62
--    * jump __label24 lessThanEq failure_cnt __tmp63
-+  131 jump __label23 lessThanEq failure_cnt __tmp63
+   129 read __tmp63 cell2 CELL_REMOTE_REACTORS
+   130 op add __tmp64 10 __tmp63
+-    * jump __label24 lessThanEq failure_cnt __tmp64
++  131 jump __label23 lessThanEq failure_cnt __tmp64
    132 set MODE SHUTDOWN
    133 control enabled switch1 false
    134 set REASON "Unknown -- out of power?"
  
    227 print REASON
    228 print "[]"
-   229 sensor __tmp85 switch1 @enabled
--    * jump __label44 equal __tmp85 false
-+  230 jump __label41 equal __tmp85 false
+   229 sensor __tmp86 switch1 @enabled
+-    * jump __label44 equal __tmp86 false
++  230 jump __label41 equal __tmp86 false
    231 set MODE STARTUP
    232 op add STARTUPS STARTUPS 1
    233 set nextStart 0
@@ -1728,22 +1732,22 @@ Modifications by PropagateJumpTargets, iteration 1:
 -    * jump __label55 always
 +  260 jump __label41 always
    261 label __label54
-   262 op idiv __tmp99 STARTUP_BAT_ENERGY 1000
+   262 op idiv __tmp100 STARTUP_BAT_ENERGY 1000
    263 print "\nRequired startup energy: [gold]"
-   264 print __tmp99
+   264 print __tmp100
    265 print " K[]"
    266 label __label55
 -    * jump __label53 always
 +  267 jump __label41 always
    268 label __label52
-   269 op add __tmp100 OUTPUT_1 OUTPUT_2
-   270 op add outputs __tmp100 OUTPUT_3
+   269 op add __tmp101 OUTPUT_1 OUTPUT_2
+   270 op add outputs __tmp101 OUTPUT_3
  
-   319 op land __tmp130 __tmp128 __tmp129
-   320 op greaterThan __tmp131 OUTPUT_3 0
-   321 op land __tmp132 __tmp130 __tmp131
--    * jump __label70 equal __tmp132 false
-+  322 jump __label41 equal __tmp132 false
+   319 op land __tmp131 __tmp129 __tmp130
+   320 op greaterThan __tmp132 OUTPUT_3 0
+   321 op land __tmp133 __tmp131 __tmp132
+-    * jump __label70 equal __tmp133 false
++  322 jump __label41 equal __tmp133 false
    323 set MODE RUNNING
    324 op add nextDecommit @time DECOMMIT_DELAY
    325 set COOLANT_FLAG 0
@@ -1754,8 +1758,8 @@ Modifications by PropagateJumpTargets, iteration 1:
 -    * jump __label85 always
 +  398 jump __label79 always
    399 label __label84
-   400 op lessThan __tmp177 battery_level BATTERY_SAT
-   401 op lessThan __tmp178 battery_change -100
+   400 op lessThan __tmp178 battery_level BATTERY_SAT
+   401 op lessThan __tmp179 battery_change -100
  
    414 set CAN_COMMIT true
    415 label __label91
@@ -1774,8 +1778,8 @@ Modifications by PropagateJumpTargets, iteration 1:
    483 control enabled block enabled
 -    * jump __label108 equal enabled false
 +  484 jump __label105 equal enabled false
-   485 sensor __tmp209 block @timescale
-   486 op add boosts boosts __tmp209
+   485 sensor __tmp210 block @timescale
+   486 op add boosts boosts __tmp210
    487 label __label108
  
    524 set STARTUPS 0
@@ -1794,8 +1798,8 @@ Modifications by UnreachableCodeEliminator, iteration 1:
    249 label __label51
 -    * jump __label49 always
    250 label __label49
-   251 sensor __tmp90 nextBattery @powerNetOut
-   252 op mul __tmp91 __tmp90 POWER_MARGIN
+   251 sensor __tmp91 nextBattery @powerNetOut
+   252 op mul __tmp92 __tmp91 POWER_MARGIN
  
    540 label __label16
    541 jump __label15 always
@@ -1818,15 +1822,15 @@ Modifications by SingleStepJumpEliminator, iteration 1:
 -    * jump __label49 always
    247 label __label51
    248 label __label49
-   249 sensor __tmp90 nextBattery @powerNetOut
+   249 sensor __tmp91 nextBattery @powerNetOut
  
    304 set start_at_once 1
    305 jump __label69 equal FAST_START false
    306 op idiv start_at_once total_battery STARTUP_BAT_ENERGY
 -    * jump __label69 always
    307 label __label69
-   308 op add __tmp125 REACTORS_ON start_at_once
-   309 op min REACTORS_ON __tmp125 reactors
+   308 op add __tmp126 REACTORS_ON start_at_once
+   309 op min REACTORS_ON __tmp126 reactors
 
 Modifications by PrintMerger, iteration 1:
  
@@ -1909,8 +1913,8 @@ label __label6
 label __label4
 jump __label119 greaterThan n 0
 label __label5
-read __tmp10 cell2 CELL_REMOTE_REACTORS
-op add reactors reactors __tmp10
+read __tmp11 cell2 CELL_REMOTE_REACTORS
+op add reactors reactors __tmp11
 jump __label11 notEqual reactors 0
 print "No reactor."
 label __label11
@@ -1940,11 +1944,11 @@ set boosts 0
 set nextStart 0
 op add nextDecommit @time DECOMMIT_DELAY
 label __label15
-sensor __tmp30 battery1 @totalPower
-op floor battery_level __tmp30 0
+sensor __tmp31 battery1 @totalPower
+op floor battery_level __tmp31 0
 op idiv battery_level_str battery_level 1000
-sensor __tmp33 battery1 @powerNetStored
-op floor total_battery __tmp33 0
+sensor __tmp34 battery1 @powerNetStored
+op floor total_battery __tmp34 0
 op idiv total_battery_str total_battery 1000
 sensor consumption battery1 @powerNetOut
 read production bank1 PRODUCTION_INDEX
@@ -1954,29 +1958,29 @@ sensor total_capacity battery1 @powerNetCapacity
 op idiv total_capacity_str total_capacity 1000
 op mul required_capacity BATTERY_PER_REACTOR reactors
 op greaterThanEq enough_battery total_capacity required_capacity
-op sub __tmp44 required_capacity total_capacity
-op div __tmp45 __tmp44 1000
-op ceil missing_battery __tmp45 0
+op sub __tmp45 required_capacity total_capacity
+op div __tmp46 __tmp45 1000
+op ceil missing_battery __tmp46 0
 jump __label18 equal MODE SHUTDOWN
-sensor __tmp49 switch1 @enabled
-jump __label20 notEqual __tmp49 false
+sensor __tmp50 switch1 @enabled
+jump __label20 notEqual __tmp50 false
 set MODE SHUTDOWN
 set REASON "Manual power off"
 jump __label21 always 0 0
 label __label20
 op mul min_consumption REACTORS_ON MIN_CONS_REACTOR
 op lessThan failure1 consumption min_consumption
-op equal __tmp54 battery_level 0
-op greaterThan __tmp55 consumption 0
-op land __tmp56 __tmp54 __tmp55
-op equal __tmp57 production 0
-op land failure2 __tmp56 __tmp57
-op or __tmp59 failure1 failure2
-jump __label22 equal __tmp59 false
+op equal __tmp55 battery_level 0
+op greaterThan __tmp56 consumption 0
+op land __tmp57 __tmp55 __tmp56
+op equal __tmp58 production 0
+op land failure2 __tmp57 __tmp58
+op or __tmp60 failure1 failure2
+jump __label22 equal __tmp60 false
 op add failure_cnt failure_cnt 1
-read __tmp62 cell2 CELL_REMOTE_REACTORS
-op add __tmp63 10 __tmp62
-jump __label23 lessThanEq failure_cnt __tmp63
+read __tmp63 cell2 CELL_REMOTE_REACTORS
+op add __tmp64 10 __tmp63
+jump __label23 lessThanEq failure_cnt __tmp64
 set MODE SHUTDOWN
 control enabled switch1 false 0 0 0
 set REASON "Unknown -- out of power?"
@@ -1996,22 +2000,22 @@ label __label18
 label __label19
 jump __label27 notEqual MODE SHUTDOWN
 label __label28
-set __tmp66 "[salmon]SHUTDOWN[]"
+set __tmp67 "[salmon]SHUTDOWN[]"
 jump __label26 always 0 0
 label __label27
 jump __label29 notEqual MODE STARTUP
 label __label30
-set __tmp66 "[gold]STARTUP[]"
+set __tmp67 "[gold]STARTUP[]"
 jump __label26 always 0 0
 label __label29
 jump __label31 notEqual MODE RUNNING
 label __label32
-set __tmp66 "[green]RUNNING[]"
+set __tmp67 "[green]RUNNING[]"
 jump __label26 always 0 0
 label __label31
-set __tmp66 null
+set __tmp67 null
 label __label26
-set STR_MODE __tmp66
+set STR_MODE __tmp67
 print STR_MODE
 print ", reactors [green]"
 print REACTORS_ON
@@ -2019,24 +2023,24 @@ print "/"
 print reactors
 print "[]"
 jump __label33 equal OVERDRIVE false
-op mul __tmp68 100 boosts
-op div __tmp69 __tmp68 REACTORS_ON
-op add __tmp70 __tmp69 0.5
-op floor __tmp71 __tmp70 0
-op div multiplier __tmp71 100
+op mul __tmp69 100 boosts
+op div __tmp70 __tmp69 REACTORS_ON
+op add __tmp71 __tmp70 0.5
+op floor __tmp72 __tmp71 0
+op div multiplier __tmp72 100
 print " ([gold]"
 print multiplier
 print "x[])"
 label __label33
 label __label34
 print "\n=================================="
-sensor __tmp73 tank1 @totalLiquids
-jump __label35 greaterThanEq __tmp73 COOLANT_CUTOFF
+sensor __tmp74 tank1 @totalLiquids
+jump __label35 greaterThanEq __tmp74 COOLANT_CUTOFF
 print "\n[salmon]Cryofluid level critical![]"
 label __label35
 label __label36
-sensor __tmp76 vault1 @blast-compound
-jump __label37 greaterThanEq __tmp76 FUEL_CUTOFF
+sensor __tmp77 vault1 @blast-compound
+jump __label37 greaterThanEq __tmp77 FUEL_CUTOFF
 print "\n[salmon]Blast compound level critical![]"
 label __label37
 label __label38
@@ -2066,14 +2070,14 @@ set OVERDRIVE 0
 set OUTPUT_1 0
 set OUTPUT_2 0
 set OUTPUT_3 0
-op greaterThanEq __tmp82 net_power -150
-op lessThan __tmp83 total_battery BATTERY_SAT
-op land GENERATOR __tmp82 __tmp83
+op greaterThanEq __tmp83 net_power -150
+op lessThan __tmp84 total_battery BATTERY_SAT
+op land GENERATOR __tmp83 __tmp84
 print "\nShutdown reason: [gold]"
 print REASON
 print "[]"
-sensor __tmp85 switch1 @enabled
-jump __label41 equal __tmp85 false
+sensor __tmp86 switch1 @enabled
+jump __label41 equal __tmp86 false
 set MODE STARTUP
 op add STARTUPS STARTUPS 1
 set nextStart 0
@@ -2093,25 +2097,25 @@ jump __label49 equal OUTPUT_2 false
 set nextBattery battery4
 label __label51
 label __label49
-sensor __tmp90 nextBattery @powerNetOut
-op mul __tmp91 __tmp90 POWER_MARGIN
-op floor __tmp92 __tmp91 0
-op max neededPower __tmp92 1000
+sensor __tmp91 nextBattery @powerNetOut
+op mul __tmp92 __tmp91 POWER_MARGIN
+op floor __tmp93 __tmp92 0
+op max neededPower __tmp93 1000
 jump __label52 notEqual REACTORS_ON 0
 jump __label54 lessThan total_battery STARTUP_BAT_ENERGY
 set REACTORS_ON 1
 op add nextStart @time STARTUP_DELAY
 jump __label41 always 0 0
 label __label54
-op idiv __tmp99 STARTUP_BAT_ENERGY 1000
+op idiv __tmp100 STARTUP_BAT_ENERGY 1000
 print "\nRequired startup energy: [gold]"
-print __tmp99
+print __tmp100
 print " K[]"
 label __label55
 jump __label41 always 0 0
 label __label52
-op add __tmp100 OUTPUT_1 OUTPUT_2
-op add outputs __tmp100 OUTPUT_3
+op add __tmp101 OUTPUT_1 OUTPUT_2
+op add outputs __tmp101 OUTPUT_3
 print "\n[gold]"
 print outputs
 print "[] surge tower(s) online"
@@ -2125,11 +2129,11 @@ jump __label58 lessThanEq net_power 100
 set OVERDRIVE true
 label __label58
 label __label59
-op lessThan __tmp106 REACTORS_ON reactors
-op greaterThan __tmp107 net_power 1000
-op land __tmp108 __tmp106 __tmp107
-op greaterThanEq __tmp109 total_battery STARTUP_BAT_ENERGY
-op land canStart __tmp108 __tmp109
+op lessThan __tmp107 REACTORS_ON reactors
+op greaterThan __tmp108 net_power 1000
+op land __tmp109 __tmp107 __tmp108
+op greaterThanEq __tmp110 total_battery STARTUP_BAT_ENERGY
+op land canStart __tmp109 __tmp110
 jump __label60 lessThan net_power neededPower
 set OUTPUT_3 OUTPUT_2
 set OUTPUT_2 OUTPUT_1
@@ -2145,24 +2149,24 @@ label __label64
 label __label65
 label __label62
 label __label63
-op greaterThan __tmp120 @time nextStart
-op land __tmp121 canStart __tmp120
-jump __label66 equal __tmp121 false
+op greaterThan __tmp121 @time nextStart
+op land __tmp122 canStart __tmp121
+jump __label66 equal __tmp122 false
 set start_at_once 1
 jump __label69 equal FAST_START false
 op idiv start_at_once total_battery STARTUP_BAT_ENERGY
 label __label69
-op add __tmp125 REACTORS_ON start_at_once
-op min REACTORS_ON __tmp125 reactors
+op add __tmp126 REACTORS_ON start_at_once
+op min REACTORS_ON __tmp126 reactors
 op add nextStart @time STARTUP_DELAY
 label __label66
 label __label67
-op greaterThanEq __tmp128 REACTORS_ON reactors
-op greaterThan __tmp129 @time nextStart
-op land __tmp130 __tmp128 __tmp129
-op greaterThan __tmp131 OUTPUT_3 0
-op land __tmp132 __tmp130 __tmp131
-jump __label41 equal __tmp132 false
+op greaterThanEq __tmp129 REACTORS_ON reactors
+op greaterThan __tmp130 @time nextStart
+op land __tmp131 __tmp129 __tmp130
+op greaterThan __tmp132 OUTPUT_3 0
+op land __tmp133 __tmp131 __tmp132
+jump __label41 equal __tmp133 false
 set MODE RUNNING
 op add nextDecommit @time DECOMMIT_DELAY
 set COOLANT_FLAG 0
@@ -2175,75 +2179,75 @@ jump __label41 always 0 0
 label __label46
 jump __label72 notEqual MODE RUNNING
 label __label73
-sensor __tmp135 tank1 @totalLiquids
-op lessThan __tmp136 __tmp135 COOLANT_CUTOFF
-op land __tmp137 COOLANT_FLAG __tmp136
-jump __label74 equal __tmp137 false
+sensor __tmp136 tank1 @totalLiquids
+op lessThan __tmp137 __tmp136 COOLANT_CUTOFF
+op land __tmp138 COOLANT_FLAG __tmp137
+jump __label74 equal __tmp138 false
 set MODE SHUTDOWN
 control enabled switch1 false 0 0 0
 set REASON "Cryo level too low"
 label __label74
 label __label75
-sensor __tmp139 vault1 @blast-compound
-op lessThan __tmp140 __tmp139 FUEL_CUTOFF
-op land __tmp141 FUEL_FLAG __tmp140
-jump __label76 equal __tmp141 false
+sensor __tmp140 vault1 @blast-compound
+op lessThan __tmp141 __tmp140 FUEL_CUTOFF
+op land __tmp142 FUEL_FLAG __tmp141
+jump __label76 equal __tmp142 false
 set MODE SHUTDOWN
 control enabled switch1 false 0 0 0
 set REASON "Blast compound level too low"
 label __label76
 label __label77
-sensor __tmp143 tank1 @totalLiquids
-op greaterThan __tmp144 __tmp143 COOLANT_SAT
-op or COOLANT_FLAG COOLANT_FLAG __tmp144
-sensor __tmp146 vault1 @blast-compound
-op greaterThan __tmp147 __tmp146 FUEL_SAT
-op or FUEL_FLAG FUEL_FLAG __tmp147
-sensor __tmp149 switch2 @enabled
-op land __tmp150 enough_battery __tmp149
-jump __label78 equal __tmp150 false
+sensor __tmp144 tank1 @totalLiquids
+op greaterThan __tmp145 __tmp144 COOLANT_SAT
+op or COOLANT_FLAG COOLANT_FLAG __tmp145
+sensor __tmp147 vault1 @blast-compound
+op greaterThan __tmp148 __tmp147 FUEL_SAT
+op or FUEL_FLAG FUEL_FLAG __tmp148
+sensor __tmp150 switch2 @enabled
+op land __tmp151 enough_battery __tmp150
+jump __label78 equal __tmp151 false
 op mul min_level BATTERY_CRITICAL required_capacity
 set commit_level 0
-op lessThan __tmp153 battery_change 0
-op land __tmp154 CAN_COMMIT __tmp153
-op lessThan __tmp155 REACTORS_ON reactors
-op land __tmp156 __tmp154 __tmp155
-jump __label80 equal __tmp156 false
-op sub __tmp158 battery_change OWN_CONSUMPTION
-op sub p __tmp158 SAFETY_MARGIN
-op mul __tmp160 p COEF_A2
-op add __tmp161 COEF_A1 __tmp160
-op mul __tmp162 p __tmp161
-op add commit_margin STARTUP_BAT_ENERGY __tmp162
+op lessThan __tmp154 battery_change 0
+op land __tmp155 CAN_COMMIT __tmp154
+op lessThan __tmp156 REACTORS_ON reactors
+op land __tmp157 __tmp155 __tmp156
+jump __label80 equal __tmp157 false
+op sub __tmp159 battery_change OWN_CONSUMPTION
+op sub p __tmp159 SAFETY_MARGIN
+op mul __tmp161 p COEF_A2
+op add __tmp162 COEF_A1 __tmp161
+op mul __tmp163 p __tmp162
+op add commit_margin STARTUP_BAT_ENERGY __tmp163
 op add commit_level min_level commit_margin
-op idiv __tmp165 commit_level 1000
+op idiv __tmp166 commit_level 1000
 print "\nCommit threshold:   [gold]"
-print __tmp165
+print __tmp166
 label __label80
 label __label81
 jump __label82 notEqual commit_level 0
-op idiv __tmp168 min_level 1000
+op idiv __tmp169 min_level 1000
 print "\nRestart threshold: [gold]"
-print __tmp168
+print __tmp169
 label __label82
 label __label83
 print "[] K"
-op lessThan __tmp169 total_battery min_level
-op mul __tmp170 REACTORS_ON PANIC_ENERGY_DROP
-op lessThan __tmp171 battery_change __tmp170
-op or __tmp172 __tmp169 __tmp171
-jump __label84 equal __tmp172 false
-op equal __tmp174 OVERDRIVE false
-op add RESETS RESETS __tmp174
+op lessThan __tmp170 total_battery min_level
+op mul __tmp171 REACTORS_ON PANIC_ENERGY_DROP
+op lessThan __tmp172 battery_change __tmp171
+op or __tmp173 __tmp170 __tmp172
+jump __label84 equal __tmp173 false
+op equal __tmp175 OVERDRIVE false
+op add RESETS RESETS __tmp175
 set OVERDRIVE true
 set REACTORS_ON reactors
 op add nextDecommit @time DECOMMIT_DELAY
 jump __label79 always 0 0
 label __label84
-op lessThan __tmp177 battery_level BATTERY_SAT
-op lessThan __tmp178 battery_change -100
-op or __tmp179 __tmp177 __tmp178
-jump __label86 equal __tmp179 false
+op lessThan __tmp178 battery_level BATTERY_SAT
+op lessThan __tmp179 battery_change -100
+op or __tmp180 __tmp178 __tmp179
+jump __label86 equal __tmp180 false
 op add nextDecommit @time DECOMMIT_DELAY
 label __label86
 label __label87
@@ -2252,8 +2256,8 @@ jump __label90 equal OVERDRIVE false
 set OVERDRIVE false
 jump __label91 always 0 0
 label __label90
-op sub __tmp185 REACTORS_ON 1
-op max REACTORS_ON __tmp185 1
+op sub __tmp186 REACTORS_ON 1
+op max REACTORS_ON __tmp186 1
 set CAN_COMMIT true
 label __label91
 op add nextDecommit @time DECOMMIT_DELAY
@@ -2269,8 +2273,8 @@ label __label89
 label __label85
 jump __label79 always 0 0
 label __label78
-sensor __tmp192 switch2 @enabled
-jump __label94 equal __tmp192 false
+sensor __tmp193 switch2 @enabled
+jump __label94 equal __tmp193 false
 print "\n[salmon]Load adapting not possible.[]"
 jump __label95 always 0 0
 label __label94
@@ -2279,8 +2283,8 @@ label __label95
 set REACTORS_ON reactors
 set OVERDRIVE true
 label __label79
-op mul __tmp194 PLANT_PROTECTION BATTERY_SAT
-jump __label96 greaterThanEq total_battery __tmp194
+op mul __tmp195 PLANT_PROTECTION BATTERY_SAT
+jump __label96 greaterThanEq total_battery __tmp195
 set OUTPUT_2 0
 set OUTPUT_3 0
 label __label96
@@ -2312,10 +2316,10 @@ control enabled generator2 GENERATOR 0 0 0
 op equal startup MODE STARTUP
 set reactors 0
 set boosts 0
-set __tmp202 @links
+set __tmp203 @links
 set n START
 label __label102
-jump __label104 greaterThanEq START __tmp202
+jump __label104 greaterThanEq START __tmp203
 label __label120
 getlink block n
 sensor __ast3 block @type
@@ -2325,8 +2329,8 @@ op add reactors reactors 1
 op lessThanEq enabled reactors REACTORS_ON
 control enabled block enabled 0 0 0
 jump __label105 equal enabled false
-sensor __tmp209 block @timescale
-op add boosts boosts __tmp209
+sensor __tmp210 block @timescale
+op add boosts boosts __tmp210
 label __label108
 label __label109
 jump __label105 always 0 0
@@ -2350,16 +2354,16 @@ label __label112
 label __label105
 label __label103
 op add n n 1
-jump __label120 lessThan n __tmp202
+jump __label120 lessThan n __tmp203
 label __label104
 jump __label114 equal cell2 null
 write reactors cell2 CELL_PRIOR_REACTORS
 write REACTORS_ON cell2 CELL_REACTORS_ON
 write OVERDRIVE cell2 CELL_OVERDRIVE
-read __tmp213 cell2 CELL_REMOTE_REACTORS
-op add reactors reactors __tmp213
-read __tmp215 cell2 CELL_BOOSTS
-op add boosts boosts __tmp215
+read __tmp214 cell2 CELL_REMOTE_REACTORS
+op add reactors reactors __tmp214
+read __tmp216 cell2 CELL_BOOSTS
+op add boosts boosts __tmp216
 label __label114
 label __label115
 op min REACTORS_ON REACTORS_ON reactors

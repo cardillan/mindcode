@@ -12,7 +12,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     14 jump __label6 equal __tmp3 false
     15 set min curr
     16 set min_index j
--    * set __tmp4 j
+-    * set __tmp4 min_index
     17 jump __label7 always
     18 label __label6
 -    * set __tmp4 null

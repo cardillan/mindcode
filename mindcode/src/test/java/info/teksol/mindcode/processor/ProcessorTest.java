@@ -52,6 +52,16 @@ public class ProcessorTest extends AbstractProcessorTest {
     }
 
     @Test
+    void handlesChainedAssignments() {
+        testCode("""
+                        a = b = @counter
+                        print(a == b)
+                        """,
+                "1"
+        );
+    }
+
+    @Test
     void handlesAssignmentsInConditions() {
         testCode("""
                         if res = 2 < 3

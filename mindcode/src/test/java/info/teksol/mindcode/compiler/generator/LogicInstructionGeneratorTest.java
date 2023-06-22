@@ -143,7 +143,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(WRITE, "true", "cell1", "4"),
                 createInstruction(OP, "add", var(3), "n", "1"),
                 createInstruction(SET, "n", var(3)),
-                createInstruction(SET, var(2), var(3)),
+                createInstruction(SET, var(2), "n"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(SET, "value", var(2)),
                 createInstruction(END)
@@ -209,7 +209,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(LABEL, var(1000)),
                 createInstruction(GETLINK, var(0), "n"),
                 createInstruction(SET, "reactor", var(0)),
-                createInstruction(OP, "notEqual", var(1), var(0), "null"),
+                createInstruction(OP, "notEqual", var(1), "reactor", "null"),
                 createInstruction(JUMP, var(1002), "equal", var(1), "false"),
                 createInstruction(SENSOR, var(2), "reactor", "@liquidCapacity"),
                 createInstruction(OP, "greaterThan", var(3), var(2), "0"),
@@ -274,7 +274,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(JUMP, var(1000), "equal", var(1), "false"),
                 createInstruction(OP, "add", var(3), "n", "1"),
                 createInstruction(SET, "n", var(3)),
-                createInstruction(SET, var(2), var(3)),
+                createInstruction(SET, var(2), "n"),
                 createInstruction(JUMP, var(1001), "always"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, var(2), "null"),
@@ -408,7 +408,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertCompilesTo(
                 "a = b = 42",
                 createInstruction(SET, "b", "42"),
-                createInstruction(SET, "a", "42"),
+                createInstruction(SET, "a", "b"),
                 createInstruction(END)
         );
     }
@@ -771,7 +771,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(OP, "lessThan", var(2), var(0), var(1)),
                 createInstruction(JUMP, var(1000), "equal", var(2), "false"),
                 createInstruction(SET, "foo", "true"),
-                createInstruction(SET, var(3), "true"),
+                createInstruction(SET, var(3), "foo"),
                 createInstruction(JUMP, var(1001), "always"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, var(3), "null"),
@@ -873,7 +873,7 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(SET, "a", var(1)),
                 createInstruction(OP, "mul", var(2), "e", "f"),
                 createInstruction(SET, "e", var(2)),
-                createInstruction(OP, "mul", var(3), "-1", var(2)),
+                createInstruction(OP, "mul", var(3), "-1", "e"),
                 createInstruction(OP, "add", var(4), "d", var(3)),
                 createInstruction(SET, "d", var(4)),
                 createInstruction(END)
@@ -1061,22 +1061,22 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         do
                           n -= 1
                           block = getlink(n)
-                          print("\\n", block)
+                          print(block)
                         loop while n > 0
                         printflush(message1)
                         """,
-                createInstruction(PRINT, "\"Blocks:\""),
-                createInstruction(SET, "n", "@links"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(OP, "sub", var(0), "n", "1"),
+                createInstruction(PRINT, q("Blocks:")),
+                createInstruction(SET, var(0), "@links"),
                 createInstruction(SET, "n", var(0)),
-                createInstruction(GETLINK, var(1), "n"),
-                createInstruction(SET, "block", var(1)),
-                createInstruction(PRINT, "\"\\n\""),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "sub", var(1), "n", "1"),
+                createInstruction(SET, "n", var(1)),
+                createInstruction(GETLINK, var(2), "n"),
+                createInstruction(SET, "block", var(2)),
                 createInstruction(PRINT, "block"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(OP, "greaterThan", var(2), "n", "0"),
-                createInstruction(JUMP, var(1000), "notEqual", var(2), "false"),
+                createInstruction(OP, "greaterThan", var(3), "n", "0"),
+                createInstruction(JUMP, var(1000), "notEqual", var(3), "false"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINTFLUSH, "message1"),
                 createInstruction(END)

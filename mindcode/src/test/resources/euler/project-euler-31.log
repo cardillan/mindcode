@@ -40,7 +40,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     85 set __retval11 __fn0retval
     86 op add __tmp12 __fn0_result __retval11
     87 set __fn0_result __tmp12
--    * set __tmp9 __tmp12
+-    * set __tmp9 __fn0_result
     88 jump __label24 always
     89 label __label23
 -    * set __tmp9 null

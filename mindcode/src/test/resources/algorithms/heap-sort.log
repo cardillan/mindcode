@@ -1,21 +1,22 @@
     82 instructions before optimizations.
     10 instructions eliminated by DeadCodeEliminator (2 iterations).
      2 instructions eliminated by SingleStepJumpEliminator (1 iterations).
-     9 instructions eliminated by OutputTempEliminator.
+    10 instructions eliminated by OutputTempEliminator.
      7 instructions eliminated by ImproveNegativeConditionalJumps.
      5 loops improved by LoopOptimizer.
-     3 instructions eliminated by DataFlowOptimizer (4 iterations).
+     1 instructions eliminated by LoopOptimizer.
+     2 instructions eliminated by DataFlowOptimizer (3 iterations).
      2 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by UnreachableCodeEliminator (1 iterations).
      2 instructions eliminated by SingleStepJumpEliminator (1 iterations).
-    47 instructions after optimizations.
+    46 instructions after optimizations.
 
 Modifications by DeadCodeEliminator, iteration 1:
  
     18 write __fn0_pv ARRAY __fn0_index
     19 write __fn0_iv ARRAY __fn0_parent
     20 set __fn0_index __fn0_parent
--    * set __tmp7 __fn0_parent
+-    * set __tmp7 __fn0_index
     21 jump __label9 always
     22 label __label8
     23 jump __label7 always
@@ -43,7 +44,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     77 write __fn1_cv ARRAY __fn1_parent
     78 write __fn1_pv ARRAY __fn1_child
     79 set __fn1_parent __fn1_child
--    * set __tmp27 __fn1_child
+-    * set __tmp27 __fn1_parent
     80 jump __label23 always
     81 label __label22
     82 jump __label17 always
@@ -62,7 +63,7 @@ Modifications by DeadCodeEliminator, iteration 2:
     62 set __fn1_child __tmp23
     63 read __tmp24 ARRAY __fn1_child
     64 set __fn1_cv __tmp24
--    * set __tmp22 __tmp24
+-    * set __tmp22 __fn1_cv
     65 jump __label21 always
     66 label __label20
 -    * set __tmp22 null
@@ -116,35 +117,38 @@ Modifications by OutputTempEliminator, iteration 1:
     39 label __label13
     40 set __fn1_index index
     41 set __fn1_parent 0
- 
-    45 set __fn1_child __tmp14
-    46 op lessThanEq __tmp15 __tmp14 __fn1_index
-    47 jump __label17 equal __tmp15 false
+    42 label __label15
+    43 op mul __tmp13 __fn1_parent 2
+-    * op add __tmp14 __tmp13 1
+-    * set __fn1_child __tmp14
++   44 op add __fn1_child __tmp13 1
+    45 op lessThanEq __tmp15 __fn1_child __fn1_index
+    46 jump __label17 equal __tmp15 false
 -    * read __tmp16 ARRAY __fn1_child
 -    * set __fn1_cv __tmp16
-+   48 read __fn1_cv ARRAY __fn1_child
-    49 op lessThan __tmp17 __fn1_child __fn1_index
-    50 jump __label18 equal __tmp17 false
-    51 op add __tmp20 __fn1_child 1
-    52 read __tmp19 ARRAY __tmp20
-    53 op lessThan __tmp21 __fn1_cv __tmp19
-    54 jump __label20 equal __tmp21 false
++   47 read __fn1_cv ARRAY __fn1_child
+    48 op lessThan __tmp17 __fn1_child __fn1_index
+    49 jump __label18 equal __tmp17 false
+    50 op add __tmp20 __fn1_child 1
+    51 read __tmp19 ARRAY __tmp20
+    52 op lessThan __tmp21 __fn1_cv __tmp19
+    53 jump __label20 equal __tmp21 false
 -    * op add __tmp23 __fn1_child 1
 -    * set __fn1_child __tmp23
 -    * read __tmp24 ARRAY __fn1_child
 -    * set __fn1_cv __tmp24
-+   55 op add __fn1_child __fn1_child 1
-+   56 read __fn1_cv ARRAY __fn1_child
-    57 label __label20
-    58 label __label21
-    59 label __label18
-    60 label __label19
++   54 op add __fn1_child __fn1_child 1
++   55 read __fn1_cv ARRAY __fn1_child
+    56 label __label20
+    57 label __label21
+    58 label __label18
+    59 label __label19
 -    * read __tmp25 ARRAY __fn1_parent
 -    * set __fn1_pv __tmp25
-+   61 read __fn1_pv ARRAY __fn1_parent
-    62 op lessThan __tmp26 __fn1_pv __fn1_cv
-    63 jump __label22 equal __tmp26 false
-    64 write __fn1_cv ARRAY __fn1_parent
++   60 read __fn1_pv ARRAY __fn1_parent
+    61 op lessThan __tmp26 __fn1_pv __fn1_cv
+    62 jump __label22 equal __tmp26 false
+    63 write __fn1_cv ARRAY __fn1_parent
 
 Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
@@ -175,34 +179,34 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
     32 read __tmp10 ARRAY index
     33 write __tmp10 ARRAY 0
  
+    39 label __label15
     40 op mul __tmp13 __fn1_parent 2
-    41 op add __tmp14 __tmp13 1
-    42 set __fn1_child __tmp14
--    * op lessThanEq __tmp15 __tmp14 __fn1_index
+    41 op add __fn1_child __tmp13 1
+-    * op lessThanEq __tmp15 __fn1_child __fn1_index
 -    * jump __label17 equal __tmp15 false
-+   43 jump __label17 greaterThan __tmp14 __fn1_index
-    44 read __fn1_cv ARRAY __fn1_child
++   42 jump __label17 greaterThan __fn1_child __fn1_index
+    43 read __fn1_cv ARRAY __fn1_child
 -    * op lessThan __tmp17 __fn1_child __fn1_index
 -    * jump __label18 equal __tmp17 false
-+   45 jump __label18 greaterThanEq __fn1_child __fn1_index
-    46 op add __tmp20 __fn1_child 1
-    47 read __tmp19 ARRAY __tmp20
++   44 jump __label18 greaterThanEq __fn1_child __fn1_index
+    45 op add __tmp20 __fn1_child 1
+    46 read __tmp19 ARRAY __tmp20
 -    * op lessThan __tmp21 __fn1_cv __tmp19
 -    * jump __label20 equal __tmp21 false
-+   48 jump __label20 greaterThanEq __fn1_cv __tmp19
-    49 op add __fn1_child __fn1_child 1
-    50 read __fn1_cv ARRAY __fn1_child
-    51 label __label20
++   47 jump __label20 greaterThanEq __fn1_cv __tmp19
+    48 op add __fn1_child __fn1_child 1
+    49 read __fn1_cv ARRAY __fn1_child
+    50 label __label20
  
-    53 label __label18
-    54 label __label19
-    55 read __fn1_pv ARRAY __fn1_parent
+    52 label __label18
+    53 label __label19
+    54 read __fn1_pv ARRAY __fn1_parent
 -    * op lessThan __tmp26 __fn1_pv __fn1_cv
 -    * jump __label22 equal __tmp26 false
-+   56 jump __label22 greaterThanEq __fn1_pv __fn1_cv
-    57 write __fn1_cv ARRAY __fn1_parent
-    58 write __fn1_pv ARRAY __fn1_child
-    59 set __fn1_parent __fn1_child
++   55 jump __label22 greaterThanEq __fn1_pv __fn1_cv
+    56 write __fn1_cv ARRAY __fn1_parent
+    57 write __fn1_pv ARRAY __fn1_child
+    58 set __fn1_parent __fn1_child
 
 Modifications by LoopOptimizer, iteration 1:
      0 set ARRAY bank2
@@ -239,40 +243,39 @@ Modifications by LoopOptimizer, iteration 1:
     33 read __tmp10 ARRAY index
     34 write __tmp10 ARRAY 0
  
-    42 op add __tmp14 __tmp13 1
-    43 set __fn1_child __tmp14
-    44 jump __label17 greaterThan __tmp14 __fn1_index
-+   45 label __label30
-    46 read __fn1_cv ARRAY __fn1_child
-    47 jump __label18 greaterThanEq __fn1_child __fn1_index
-    48 op add __tmp20 __fn1_child 1
+    41 op mul __tmp13 __fn1_parent 2
+    42 op add __fn1_child __tmp13 1
+    43 jump __label17 greaterThan __fn1_child __fn1_index
++   44 label __label30
+    45 read __fn1_cv ARRAY __fn1_child
+    46 jump __label18 greaterThanEq __fn1_child __fn1_index
+    47 op add __tmp20 __fn1_child 1
  
-    64 jump __label17 always
-    65 label __label23
-    66 label __label16
+    63 jump __label17 always
+    64 label __label23
+    65 label __label16
 -    * jump __label15 always
-+   67 op mul __tmp13 __fn1_parent 2
-+   68 op add __tmp14 __tmp13 1
-+   69 set __fn1_child __tmp14
-+   70 jump __label30 lessThanEq __tmp14 __fn1_index
-    71 label __label17
-    72 label __label14
-    73 label __label11
++   66 op mul __tmp13 __fn1_parent 2
++   67 op add __fn1_child __tmp13 1
++   68 jump __label30 lessThanEq __fn1_child __fn1_index
+    69 label __label17
+    70 label __label14
+    71 label __label11
 -    * jump __label10 always
-+   74 jump __label29 greaterThan index 0
-    75 label __label12
-    76 set i 0
-    77 label __label24
++   72 jump __label29 greaterThan index 0
+    73 label __label12
+    74 set i 0
+    75 label __label24
 -    * jump __label26 greaterThanEq i 512
-+   78 label __label31
-    79 read __tmp28 ARRAY i
-    80 print __tmp28
-    81 label __label25
-    82 op add i i 1
++   76 label __label31
+    77 read __tmp28 ARRAY i
+    78 print __tmp28
+    79 label __label25
+    80 op add i i 1
 -    * jump __label24 always
-+   83 jump __label31 lessThan i 512
-    84 label __label26
-    85 end
++   81 jump __label31 lessThan i 512
+    82 label __label26
+    83 end
 
 Modifications by DataFlowOptimizer, iteration 1:
  
@@ -290,26 +293,25 @@ Modifications by DataFlowOptimizer, iteration 1:
     40 label __label15
 -    * op mul __tmp13 __fn1_parent 2
 +   41 op mul __tmp13 0 2
-    42 op add __tmp14 __tmp13 1
-    43 set __fn1_child __tmp14
--    * jump __label17 greaterThan __tmp14 __fn1_index
-+   44 jump __label17 greaterThan __tmp14 index
-    45 label __label30
-    46 read __fn1_cv ARRAY __fn1_child
+    42 op add __fn1_child __tmp13 1
+-    * jump __label17 greaterThan __fn1_child __fn1_index
++   43 jump __label17 greaterThan __fn1_child index
+    44 label __label30
+    45 read __fn1_cv ARRAY __fn1_child
 -    * jump __label18 greaterThanEq __fn1_child __fn1_index
-+   47 jump __label18 greaterThanEq __fn1_child index
-    48 op add __tmp20 __fn1_child 1
-    49 read __tmp19 ARRAY __tmp20
-    50 jump __label20 greaterThanEq __fn1_cv __tmp19
++   46 jump __label18 greaterThanEq __fn1_child index
+    47 op add __tmp20 __fn1_child 1
+    48 read __tmp19 ARRAY __tmp20
+    49 jump __label20 greaterThanEq __fn1_cv __tmp19
  
-    67 op mul __tmp13 __fn1_parent 2
-    68 op add __tmp14 __tmp13 1
-    69 set __fn1_child __tmp14
--    * jump __label30 lessThanEq __tmp14 __fn1_index
-+   70 jump __label30 lessThanEq __tmp14 index
-    71 label __label17
-    72 label __label14
-    73 label __label11
+    65 label __label16
+    66 op mul __tmp13 __fn1_parent 2
+    67 op add __fn1_child __tmp13 1
+-    * jump __label30 lessThanEq __fn1_child __fn1_index
++   68 jump __label30 lessThanEq __fn1_child index
+    69 label __label17
+    70 label __label14
+    71 label __label11
 
 Modifications by DataFlowOptimizer, iteration 2:
  
@@ -320,11 +322,11 @@ Modifications by DataFlowOptimizer, iteration 2:
     38 set __fn1_parent 0
     39 label __label15
     40 op mul __tmp13 0 2
--    * op add __tmp14 __tmp13 1
-+   41 op add __tmp14 0 1
-    42 set __fn1_child __tmp14
-    43 jump __label17 greaterThan __tmp14 index
-    44 label __label30
+-    * op add __fn1_child __tmp13 1
++   41 op add __fn1_child 0 1
+    42 jump __label17 greaterThan __fn1_child index
+    43 label __label30
+    44 read __fn1_cv ARRAY __fn1_child
 
 Modifications by DataFlowOptimizer, iteration 3:
  
@@ -332,24 +334,12 @@ Modifications by DataFlowOptimizer, iteration 3:
     38 set __fn1_parent 0
     39 label __label15
 -    * op mul __tmp13 0 2
-    40 op add __tmp14 0 1
--    * set __fn1_child __tmp14
--    * jump __label17 greaterThan __tmp14 index
-+   41 set __fn1_child 1
-+   42 jump __label17 greaterThan 1 index
-    43 label __label30
-    44 read __fn1_cv ARRAY __fn1_child
-    45 jump __label18 greaterThanEq __fn1_child index
-
-Modifications by DataFlowOptimizer, iteration 4:
- 
-    37 label __label13
-    38 set __fn1_parent 0
-    39 label __label15
--    * op add __tmp14 0 1
-    40 set __fn1_child 1
-    41 jump __label17 greaterThan 1 index
+    40 op add __fn1_child 0 1
+-    * jump __label17 greaterThan __fn1_child index
++   41 jump __label17 greaterThan 1 index
     42 label __label30
+    43 read __fn1_cv ARRAY __fn1_child
+    44 jump __label18 greaterThanEq __fn1_child index
 
 Modifications by PropagateJumpTargets, iteration 1:
  
@@ -447,7 +437,7 @@ op sub index index 1
 label __label13
 set __fn1_parent 0
 label __label15
-set __fn1_child 1
+op add __fn1_child 0 1
 jump __label17 greaterThan 1 index
 label __label30
 read __fn1_cv ARRAY __fn1_child
@@ -470,9 +460,8 @@ label __label22
 label __label23
 label __label16
 op mul __tmp13 __fn1_parent 2
-op add __tmp14 __tmp13 1
-set __fn1_child __tmp14
-jump __label30 lessThanEq __tmp14 index
+op add __fn1_child __tmp13 1
+jump __label30 lessThanEq __fn1_child index
 label __label17
 label __label14
 label __label11

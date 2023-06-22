@@ -268,11 +268,11 @@ public class AbstractGeneratorTest extends AbstractAstTest {
             final LogicInstruction right = actual.get(index);
             if (left.getOpcode().equals(right.getOpcode())) {
                 if (!matchArgs(left, right)) {
-                    assertFailed(replaceVarsIn(expected), actual, createUnmatchedArgumentsMessage(compiler, actual, index, left, right));
+                    assertFailed(makeVarsIn(expected), actual, createUnmatchedArgumentsMessage(compiler, actual, index, left, right));
                     return;
                 }
             } else {
-                assertFailed(replaceVarsIn(expected), actual, createDifferentOpcodeMessage(compiler, actual, index));
+                assertFailed(makeVarsIn(expected), actual, createDifferentOpcodeMessage(compiler, actual, index));
                 return;
             }
         }

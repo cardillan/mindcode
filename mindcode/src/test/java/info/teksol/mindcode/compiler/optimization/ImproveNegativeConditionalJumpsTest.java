@@ -38,7 +38,7 @@ class ImproveNegativeConditionalJumpsTest extends AbstractOptimizerTest<ImproveN
                 createInstruction(WRITE, "true", "cell1", "4"),
                 createInstruction(OP, "add", var(3), "n", "1"),
                 createInstruction(SET, "n", var(3)),
-                createInstruction(SET, var(2), var(3)),
+                createInstruction(SET, var(2), "n"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(SET, "value", var(2)),
                 createInstruction(END)

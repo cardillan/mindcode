@@ -1226,11 +1226,15 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Self-references">
+    //<editor-fold desc="Assignments">
     @Test
     void handlesSelfReference() {
-        assertCompilesToWithMessages(ignoreRegex("List of uninitialized variables:.*"),
-                """
+        assertCompilesTo("""
+                        TICKS = 100
+                        nextTick = @tick
+                        prevTick = @tick
+                        currTick = @tick
+
                         nextTick = nextTick + TICKS
                         if @tick > nextTick + TICKS
                             prevTick = @tick
@@ -1239,6 +1243,10 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         end
                         print(nextTick, prevTick, currTick)
                         """,
+                createInstruction(SET, "TICKS", "100"),
+                createInstruction(SET, "nextTick", "@tick"),
+                createInstruction(SET, "prevTick", "@tick"),
+                createInstruction(SET, "currTick", "@tick"),
                 createInstruction(OP, "add", "nextTick", "nextTick", "TICKS"),
                 createInstruction(OP, "add", var(1), "nextTick", "TICKS"),
                 createInstruction(JUMP, var(1000), "lessThanEq", "@tick", var(1)),
@@ -1250,6 +1258,26 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "nextTick"),
                 createInstruction(PRINT, "prevTick"),
                 createInstruction(PRINT, "currTick"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesChainAssignment() {
+        assertCompilesTo("""
+                        FROM_INDEX = 0
+                        OFFSET_Y = 2
+                        cry = cly = FROM_INDEX == 0 ? 0 : OFFSET_Y
+                        print(cry, cly)
+                        """,
+                createInstruction(SET, "FROM_INDEX", "0"),
+                createInstruction(SET, "OFFSET_Y", "2"),
+                createInstruction(SET, var(1), "OFFSET_Y"),
+                createInstruction(JUMP, var(1001), "notEqual", "FROM_INDEX", "0"),
+                createInstruction(SET, var(1), "0"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(1)),
+                createInstruction(PRINT, var(1)),
                 createInstruction(END)
         );
     }

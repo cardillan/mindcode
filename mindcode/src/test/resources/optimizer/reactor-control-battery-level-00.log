@@ -1,8 +1,8 @@
-   117 instructions before optimizations.
+   120 instructions before optimizations.
      1 instructions eliminated by ConditionalJumpsNormalizer.
      2 instructions eliminated by DeadCodeEliminator (1 iterations).
      1 instructions eliminated by SingleStepJumpEliminator (1 iterations).
-    20 instructions eliminated by OutputTempEliminator.
+    23 instructions eliminated by OutputTempEliminator.
      1 instructions eliminated by ImproveNegativeConditionalJumps.
      2 loops improved by LoopOptimizer.
      2 instructions added by LoopOptimizer.
@@ -13,36 +13,36 @@
 
 Modifications by ConditionalJumpsNormalizer, iteration 1:
  
-    28 set loops 0
-    29 set wait @time
-    30 label __label3
+    29 set __tmp3 @time
+    30 set wait __tmp3
+    31 label __label3
 -    * jump __label5 equal true false
-    31 op equal __tmp3 loops 0
-    32 jump __label6 equal __tmp3 false
-    33 set wait @time
+    32 op equal __tmp4 loops 0
+    33 jump __label6 equal __tmp4 false
+    34 set __tmp6 @time
 
 Modifications by DeadCodeEliminator, iteration 1:
  
-    31 op equal __tmp3 loops 0
-    32 jump __label6 equal __tmp3 false
-    33 set wait @time
--    * set __tmp4 @time
-    34 jump __label7 always
-    35 label __label6
--    * set __tmp4 null
-    36 label __label7
-    37 op add __tmp5 wait DELAY
-    38 set wait __tmp5
+    33 jump __label6 equal __tmp4 false
+    34 set __tmp6 @time
+    35 set wait __tmp6
+-    * set __tmp5 wait
+    36 jump __label7 always
+    37 label __label6
+-    * set __tmp5 null
+    38 label __label7
+    39 op add __tmp7 wait DELAY
+    40 set wait __tmp7
 
 Modifications by SingleStepJumpEliminator, iteration 1:
  
-    31 op equal __tmp3 loops 0
-    32 jump __label6 equal __tmp3 false
-    33 set wait @time
+    33 jump __label6 equal __tmp4 false
+    34 set __tmp6 @time
+    35 set wait __tmp6
 -    * jump __label7 always
-    34 label __label6
-    35 label __label7
-    36 op add __tmp5 wait DELAY
+    36 label __label6
+    37 label __label7
+    38 op add __tmp7 wait DELAY
 
 Modifications by OutputTempEliminator, iteration 1:
  
@@ -59,91 +59,105 @@ Modifications by OutputTempEliminator, iteration 1:
 +   24 op div SECONDS __tmp1 1000
     25 set index 0
     26 set loops 0
-    27 set wait @time
- 
-    31 set wait @time
+-    * set __tmp3 @time
+-    * set wait __tmp3
++   27 set wait @time
+    28 label __label3
+    29 op equal __tmp4 loops 0
+    30 jump __label6 equal __tmp4 false
+-    * set __tmp6 @time
+-    * set wait __tmp6
++   31 set wait @time
     32 label __label6
     33 label __label7
--    * op add __tmp5 wait DELAY
--    * set wait __tmp5
--    * sensor __tmp6 battery1 @powerNetIn
--    * set powerNetIn __tmp6
--    * sensor __tmp7 battery1 @powerNetOut
--    * set powerNetOut __tmp7
--    * sensor __tmp8 battery1 @powerNetStored
--    * set powerNetStored __tmp8
+-    * op add __tmp7 wait DELAY
+-    * set wait __tmp7
+-    * sensor __tmp8 battery1 @powerNetIn
+-    * set powerNetIn __tmp8
+-    * sensor __tmp9 battery1 @powerNetOut
+-    * set powerNetOut __tmp9
+-    * sensor __tmp10 battery1 @powerNetStored
+-    * set powerNetStored __tmp10
 +   34 op add wait wait DELAY
 +   35 sensor powerNetIn battery1 @powerNetIn
 +   36 sensor powerNetOut battery1 @powerNetOut
 +   37 sensor powerNetStored battery1 @powerNetStored
     38 set tmp index
-    39 read __tmp9 bank1 tmp
--    * op sub __tmp10 ACCU_CONS __tmp9
--    * set ACCU_CONS __tmp10
--    * op add __tmp11 ACCU_CONS powerNetOut
--    * set ACCU_CONS __tmp11
-+   40 op sub ACCU_CONS ACCU_CONS __tmp9
+    39 read __tmp11 bank1 tmp
+-    * op sub __tmp12 ACCU_CONS __tmp11
+-    * set ACCU_CONS __tmp12
+-    * op add __tmp13 ACCU_CONS powerNetOut
+-    * set ACCU_CONS __tmp13
++   40 op sub ACCU_CONS ACCU_CONS __tmp11
 +   41 op add ACCU_CONS ACCU_CONS powerNetOut
     42 write powerNetOut bank1 tmp
-    43 op div __tmp12 ACCU_CONS SAMPLES
-    44 op add __tmp13 __tmp12 HALF
--    * op floor __tmp14 __tmp13
--    * set consumption __tmp14
-+   45 op floor consumption __tmp13
+    43 op div __tmp14 ACCU_CONS SAMPLES
+    44 op add __tmp15 __tmp14 HALF
+-    * op floor __tmp16 __tmp15
+-    * set consumption __tmp16
++   45 op floor consumption __tmp15
     46 write consumption bank1 CONSUMPTION_INDEX
--    * op add __tmp15 tmp SPACING
--    * set tmp __tmp15
+-    * op add __tmp17 tmp SPACING
+-    * set tmp __tmp17
 +   47 op add tmp tmp SPACING
-    48 read __tmp16 bank1 tmp
--    * op sub __tmp17 ACCU_PROD __tmp16
--    * set ACCU_PROD __tmp17
--    * op add __tmp18 ACCU_PROD powerNetIn
--    * set ACCU_PROD __tmp18
-+   49 op sub ACCU_PROD ACCU_PROD __tmp16
+    48 read __tmp18 bank1 tmp
+-    * op sub __tmp19 ACCU_PROD __tmp18
+-    * set ACCU_PROD __tmp19
+-    * op add __tmp20 ACCU_PROD powerNetIn
+-    * set ACCU_PROD __tmp20
++   49 op sub ACCU_PROD ACCU_PROD __tmp18
 +   50 op add ACCU_PROD ACCU_PROD powerNetIn
     51 write powerNetIn bank1 tmp
-    52 op div __tmp19 ACCU_PROD SAMPLES
-    53 op add __tmp20 __tmp19 HALF
--    * op floor __tmp21 __tmp20
--    * set production __tmp21
-+   54 op floor production __tmp20
+    52 op div __tmp21 ACCU_PROD SAMPLES
+    53 op add __tmp22 __tmp21 HALF
+-    * op floor __tmp23 __tmp22
+-    * set production __tmp23
++   54 op floor production __tmp22
     55 write production bank1 PRODUCTION_INDEX
-    56 op sub __tmp22 ACCU_PROD ACCU_CONS
-    57 op div __tmp23 __tmp22 SAMPLES
-    58 op add __tmp24 __tmp23 HALF
--    * op floor __tmp25 __tmp24
--    * set net_power __tmp25
-+   59 op floor net_power __tmp24
+    56 op sub __tmp24 ACCU_PROD ACCU_CONS
+    57 op div __tmp25 __tmp24 SAMPLES
+    58 op add __tmp26 __tmp25 HALF
+-    * op floor __tmp27 __tmp26
+-    * set net_power __tmp27
++   59 op floor net_power __tmp26
     60 write net_power bank1 NET_POWER_INDEX
--    * op add __tmp26 tmp SPACING
--    * set tmp __tmp26
--    * read __tmp27 bank1 tmp
--    * set last __tmp27
+-    * op add __tmp28 tmp SPACING
+-    * set tmp __tmp28
+-    * read __tmp29 bank1 tmp
+-    * set last __tmp29
 +   61 op add tmp tmp SPACING
 +   62 read last bank1 tmp
     63 write powerNetStored bank1 tmp
--    * op sub __tmp28 powerNetStored last
--    * set diff __tmp28
+-    * op sub __tmp30 powerNetStored last
+-    * set diff __tmp30
 +   64 op sub diff powerNetStored last
-    65 op div __tmp29 diff SECONDS
-    66 op add __tmp30 __tmp29 HALF
--    * op floor __tmp31 __tmp30
--    * set battery_change __tmp31
-+   67 op floor battery_change __tmp30
+    65 op div __tmp31 diff SECONDS
+    66 op add __tmp32 __tmp31 HALF
+-    * op floor __tmp33 __tmp32
+-    * set battery_change __tmp33
++   67 op floor battery_change __tmp32
     68 write battery_change bank1 BATTERY_CHANGE_INDEX
-    69 op add __tmp32 index 1
--    * op mod __tmp33 __tmp32 SAMPLES
--    * set index __tmp33
-+   70 op mod index __tmp32 SAMPLES
+    69 op add __tmp34 index 1
+-    * op mod __tmp35 __tmp34 SAMPLES
+-    * set index __tmp35
++   70 op mod index __tmp34 SAMPLES
     71 print "Measured interval: [green]"
     72 print SECONDS
     73 print "[] seconds\n"
  
-    90 op lessThan __tmp35 @time wait
-    91 op land __tmp36 __tmp34 __tmp35
-    92 jump __label10 equal __tmp36 false
--    * op add __tmp37 loops 1
--    * set loops __tmp37
+    84 print battery_change
+    85 print "[]"
+    86 set loops 0
+-    * set __tmp36 @time
+-    * set start __tmp36
++   87 set start @time
+    88 label __label8
+    89 op greaterThanEq __tmp37 @time start
+    90 op lessThan __tmp38 @time wait
+    91 op land __tmp39 __tmp37 __tmp38
+    92 jump __label10 equal __tmp39 false
+-    * op add __tmp40 loops 1
+-    * set loops __tmp40
 +   93 op add loops loops 1
     94 label __label9
     95 jump __label8 always
@@ -154,8 +168,8 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
     26 set loops 0
     27 set wait @time
     28 label __label3
--    * op equal __tmp3 loops 0
--    * jump __label6 equal __tmp3 false
+-    * op equal __tmp4 loops 0
+-    * jump __label6 equal __tmp4 false
 +   29 jump __label6 notEqual loops 0
     30 set wait @time
     31 label __label6
@@ -177,17 +191,17 @@ Modifications by LoopOptimizer, iteration 1:
     13 set CONSUMPTION_INDEX 508
     14 set PRODUCTION_INDEX 509
  
-    89 op lessThan __tmp35 @time wait
-    90 op land __tmp36 __tmp34 __tmp35
-    91 jump __label10 equal __tmp36 false
+    89 op lessThan __tmp38 @time wait
+    90 op land __tmp39 __tmp37 __tmp38
+    91 jump __label10 equal __tmp39 false
 +   92 label __label12
     93 op add loops loops 1
     94 label __label9
 -    * jump __label8 always
-+   95 op greaterThanEq __tmp34 @time start
-+   96 op lessThan __tmp35 @time wait
-+   97 op land __tmp36 __tmp34 __tmp35
-+   98 jump __label12 notEqual __tmp36 false
++   95 op greaterThanEq __tmp37 @time start
++   96 op lessThan __tmp38 @time wait
++   97 op land __tmp39 __tmp37 __tmp38
++   98 jump __label12 notEqual __tmp39 false
     99 label __label10
    100 print "\n[lightgray]Loops: "
    101 print loops
@@ -205,20 +219,20 @@ Modifications by DataFlowOptimizer, iteration 1:
     34 sensor powerNetOut battery1 @powerNetOut
     35 sensor powerNetStored battery1 @powerNetStored
     36 set tmp index
--    * read __tmp9 bank1 tmp
-+   37 read __tmp9 bank1 index
-    38 op sub ACCU_CONS ACCU_CONS __tmp9
+-    * read __tmp11 bank1 tmp
++   37 read __tmp11 bank1 index
+    38 op sub ACCU_CONS ACCU_CONS __tmp11
     39 op add ACCU_CONS ACCU_CONS powerNetOut
 -    * write powerNetOut bank1 tmp
 +   40 write powerNetOut bank1 index
-    41 op div __tmp12 ACCU_CONS SAMPLES
-    42 op add __tmp13 __tmp12 HALF
-    43 op floor consumption __tmp13
+    41 op div __tmp14 ACCU_CONS SAMPLES
+    42 op add __tmp15 __tmp14 HALF
+    43 op floor consumption __tmp15
     44 write consumption bank1 CONSUMPTION_INDEX
 -    * op add tmp tmp SPACING
 +   45 op add tmp index SPACING
-    46 read __tmp16 bank1 tmp
-    47 op sub ACCU_PROD ACCU_PROD __tmp16
+    46 read __tmp18 bank1 tmp
+    47 op sub ACCU_PROD ACCU_PROD __tmp18
     48 op add ACCU_PROD ACCU_PROD powerNetIn
 
 Modifications by DataFlowOptimizer, iteration 2:
@@ -227,8 +241,8 @@ Modifications by DataFlowOptimizer, iteration 2:
     34 sensor powerNetOut battery1 @powerNetOut
     35 sensor powerNetStored battery1 @powerNetStored
 -    * set tmp index
-    36 read __tmp9 bank1 index
-    37 op sub ACCU_CONS ACCU_CONS __tmp9
+    36 read __tmp11 bank1 index
+    37 op sub ACCU_CONS ACCU_CONS __tmp11
     38 op add ACCU_CONS ACCU_CONS powerNetOut
 
 Modifications by UnreachableCodeEliminator, iteration 1:
@@ -240,7 +254,7 @@ Modifications by UnreachableCodeEliminator, iteration 1:
 
 Modifications by PrintMerger, iteration 1:
  
-    67 op mod index __tmp32 SAMPLES
+    67 op mod index __tmp34 SAMPLES
     68 print "Measured interval: [green]"
     69 print SECONDS
 -    * print "[] seconds\n"
@@ -300,38 +314,38 @@ op add wait wait DELAY
 sensor powerNetIn battery1 @powerNetIn
 sensor powerNetOut battery1 @powerNetOut
 sensor powerNetStored battery1 @powerNetStored
-read __tmp9 bank1 index
-op sub ACCU_CONS ACCU_CONS __tmp9
+read __tmp11 bank1 index
+op sub ACCU_CONS ACCU_CONS __tmp11
 op add ACCU_CONS ACCU_CONS powerNetOut
 write powerNetOut bank1 index
-op div __tmp12 ACCU_CONS SAMPLES
-op add __tmp13 __tmp12 HALF
-op floor consumption __tmp13 0
+op div __tmp14 ACCU_CONS SAMPLES
+op add __tmp15 __tmp14 HALF
+op floor consumption __tmp15 0
 write consumption bank1 CONSUMPTION_INDEX
 op add tmp index SPACING
-read __tmp16 bank1 tmp
-op sub ACCU_PROD ACCU_PROD __tmp16
+read __tmp18 bank1 tmp
+op sub ACCU_PROD ACCU_PROD __tmp18
 op add ACCU_PROD ACCU_PROD powerNetIn
 write powerNetIn bank1 tmp
-op div __tmp19 ACCU_PROD SAMPLES
-op add __tmp20 __tmp19 HALF
-op floor production __tmp20 0
+op div __tmp21 ACCU_PROD SAMPLES
+op add __tmp22 __tmp21 HALF
+op floor production __tmp22 0
 write production bank1 PRODUCTION_INDEX
-op sub __tmp22 ACCU_PROD ACCU_CONS
-op div __tmp23 __tmp22 SAMPLES
-op add __tmp24 __tmp23 HALF
-op floor net_power __tmp24 0
+op sub __tmp24 ACCU_PROD ACCU_CONS
+op div __tmp25 __tmp24 SAMPLES
+op add __tmp26 __tmp25 HALF
+op floor net_power __tmp26 0
 write net_power bank1 NET_POWER_INDEX
 op add tmp tmp SPACING
 read last bank1 tmp
 write powerNetStored bank1 tmp
 op sub diff powerNetStored last
-op div __tmp29 diff SECONDS
-op add __tmp30 __tmp29 HALF
-op floor battery_change __tmp30 0
+op div __tmp31 diff SECONDS
+op add __tmp32 __tmp31 HALF
+op floor battery_change __tmp32 0
 write battery_change bank1 BATTERY_CHANGE_INDEX
-op add __tmp32 index 1
-op mod index __tmp32 SAMPLES
+op add __tmp34 index 1
+op mod index __tmp34 SAMPLES
 print "Measured interval: [green]"
 print SECONDS
 print "[] seconds\nConsumption: [green]"
@@ -346,17 +360,17 @@ print "[]"
 set loops 0
 set start @time
 label __label8
-op greaterThanEq __tmp34 @time start
-op lessThan __tmp35 @time wait
-op land __tmp36 __tmp34 __tmp35
-jump __label10 equal __tmp36 false
+op greaterThanEq __tmp37 @time start
+op lessThan __tmp38 @time wait
+op land __tmp39 __tmp37 __tmp38
+jump __label10 equal __tmp39 false
 label __label12
 op add loops loops 1
 label __label9
-op greaterThanEq __tmp34 @time start
-op lessThan __tmp35 @time wait
-op land __tmp36 __tmp34 __tmp35
-jump __label12 notEqual __tmp36 false
+op greaterThanEq __tmp37 @time start
+op lessThan __tmp38 @time wait
+op land __tmp39 __tmp37 __tmp38
+jump __label12 notEqual __tmp39 false
 label __label10
 print "\n[lightgray]Loops: "
 print loops

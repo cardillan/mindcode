@@ -1,50 +1,51 @@
-   119 instructions before optimizations.
+   121 instructions before optimizations.
      4 instructions eliminated by DeadCodeEliminator (1 iterations).
      1 instructions eliminated by SingleStepJumpEliminator (1 iterations).
-    19 instructions eliminated by OutputTempEliminator.
+    20 instructions eliminated by OutputTempEliminator.
      1 instructions eliminated by ExpressionOptimizer.
      3 instructions eliminated by ImproveNegativeConditionalJumps.
      1 loops improved by LoopOptimizer.
      1 instructions eliminated by DataFlowOptimizer (2 iterations).
      1 instructions updated by PropagateJumpTargets.
+     1 instructions eliminated by InputTempEliminator.
      1 instructions eliminated by PrintMerger.
     89 instructions after optimizations.
 
 Modifications by DeadCodeEliminator, iteration 1:
  
-    55 print "Wait reset\n"
-    56 op add __tmp21 start DELAY
-    57 set wait __tmp21
--    * set __tmp20 __tmp21
-    58 jump __label7 always
-    59 label __label6
--    * set __tmp20 null
-    60 label __label7
-    61 read __tmp22 BANK IND_SHIPPED
-    62 set shipped __tmp22
+    56 print "Wait reset\n"
+    57 op add __tmp22 start DELAY
+    58 set wait __tmp22
+-    * set __tmp21 wait
+    59 jump __label7 always
+    60 label __label6
+-    * set __tmp21 null
+    61 label __label7
+    62 read __tmp23 BANK IND_SHIPPED
+    63 set shipped __tmp23
  
-    70 set MILLIS __tmp27
-    71 op mul __tmp28 MULTIPLIER MILLIS
-    72 set SIGN_MILLIS __tmp28
--    * set __tmp26 __tmp28
-    73 jump __label9 always
-    74 label __label8
-    75 read __tmp29 BANK index
-    76 set last_total __tmp29
--    * set __tmp26 __tmp29
-    77 label __label9
-    78 write total BANK index
-    79 op sub __tmp30 total last_total
+    71 set MILLIS __tmp28
+    72 op mul __tmp29 MULTIPLIER MILLIS
+    73 set SIGN_MILLIS __tmp29
+-    * set __tmp27 SIGN_MILLIS
+    74 jump __label9 always
+    75 label __label8
+    76 read __tmp30 BANK index
+    77 set last_total __tmp30
+-    * set __tmp27 last_total
+    78 label __label9
+    79 write total BANK index
+    80 op sub __tmp31 total last_total
 
 Modifications by SingleStepJumpEliminator, iteration 1:
  
-    55 print "Wait reset\n"
-    56 op add __tmp21 start DELAY
-    57 set wait __tmp21
+    56 print "Wait reset\n"
+    57 op add __tmp22 start DELAY
+    58 set wait __tmp22
 -    * jump __label7 always
-    58 label __label6
-    59 label __label7
-    60 read __tmp22 BANK IND_SHIPPED
+    59 label __label6
+    60 label __label7
+    61 read __tmp23 BANK IND_SHIPPED
 
 Modifications by OutputTempEliminator, iteration 1:
  
@@ -77,97 +78,101 @@ Modifications by OutputTempEliminator, iteration 1:
     31 set index 0
     32 set MILLIS 0
  
+    42 op strictEqual __tmp16 SESSION_KEY __tmp15
     43 op land __tmp17 __tmp14 __tmp16
     44 jump __label5 equal __tmp17 false
-    45 set start @time
--    * op add __tmp18 wait DELAY
--    * set wait __tmp18
+-    * set __tmp18 @time
+-    * set start __tmp18
+-    * op add __tmp19 wait DELAY
+-    * set wait __tmp19
++   45 set start @time
 +   46 op add wait wait DELAY
-    47 op greaterThan __tmp19 start wait
-    48 jump __label6 equal __tmp19 false
+    47 op greaterThan __tmp20 start wait
+    48 jump __label6 equal __tmp20 false
     49 print "Wait reset\n"
--    * op add __tmp21 start DELAY
--    * set wait __tmp21
+-    * op add __tmp22 start DELAY
+-    * set wait __tmp22
 +   50 op add wait start DELAY
     51 label __label6
     52 label __label7
--    * read __tmp22 BANK IND_SHIPPED
--    * set shipped __tmp22
--    * sensor __tmp23 SORTER @config
--    * set item __tmp23
--    * op add __tmp24 level shipped
--    * set total __tmp24
+-    * read __tmp23 BANK IND_SHIPPED
+-    * set shipped __tmp23
+-    * sensor __tmp24 SORTER @config
+-    * set item __tmp24
+-    * op add __tmp25 level shipped
+-    * set total __tmp25
 +   53 read shipped BANK IND_SHIPPED
 +   54 sensor item SORTER @config
 +   55 op add total level shipped
-    56 op lessThan __tmp25 MILLIS TOTAL_MILLIS
-    57 jump __label8 equal __tmp25 false
--    * op add __tmp27 MILLIS DELAY
--    * set MILLIS __tmp27
--    * op mul __tmp28 MULTIPLIER MILLIS
--    * set SIGN_MILLIS __tmp28
+    56 op lessThan __tmp26 MILLIS TOTAL_MILLIS
+    57 jump __label8 equal __tmp26 false
+-    * op add __tmp28 MILLIS DELAY
+-    * set MILLIS __tmp28
+-    * op mul __tmp29 MULTIPLIER MILLIS
+-    * set SIGN_MILLIS __tmp29
 +   58 op add MILLIS MILLIS DELAY
 +   59 op mul SIGN_MILLIS MULTIPLIER MILLIS
     60 jump __label9 always
     61 label __label8
--    * read __tmp29 BANK index
--    * set last_total __tmp29
+-    * read __tmp30 BANK index
+-    * set last_total __tmp30
 +   62 read last_total BANK index
     63 label __label9
     64 write total BANK index
-    65 op sub __tmp30 total last_total
--    * op div __tmp31 __tmp30 SIGN_MILLIS
--    * set flow_rate __tmp31
-+   66 op div flow_rate __tmp30 SIGN_MILLIS
+    65 op sub __tmp31 total last_total
+-    * op div __tmp32 __tmp31 SIGN_MILLIS
+-    * set flow_rate __tmp32
++   66 op div flow_rate __tmp31 SIGN_MILLIS
     67 write flow_rate BANK IND_FLOW_RATE
-    68 write @time BANK IND_TIME
-    69 op add __tmp32 index 1
--    * op mod __tmp33 __tmp32 SAMPLES
--    * set index __tmp33
-+   70 op mod index __tmp32 SAMPLES
-    71 op mul __tmp34 60000 flow_rate
--    * op floor __tmp35 __tmp34
--    * set flow_rate_str __tmp35
--    * op div __tmp36 MILLIS 1000
--    * set seconds __tmp36
--    * op sub __tmp37 @time start
--    * set elapsed __tmp37
-+   72 op floor flow_rate_str __tmp34
-+   73 op div seconds MILLIS 1000
-+   74 op sub elapsed @time start
-    75 print "Measured interval: "
-    76 print seconds
-    77 print " sec"
+    68 set __tmp33 @time
+    69 write __tmp33 BANK IND_TIME
+    70 op add __tmp34 index 1
+-    * op mod __tmp35 __tmp34 SAMPLES
+-    * set index __tmp35
++   71 op mod index __tmp34 SAMPLES
+    72 op mul __tmp36 60000 flow_rate
+-    * op floor __tmp37 __tmp36
+-    * set flow_rate_str __tmp37
+-    * op div __tmp38 MILLIS 1000
+-    * set seconds __tmp38
+-    * op sub __tmp39 @time start
+-    * set elapsed __tmp39
++   73 op floor flow_rate_str __tmp36
++   74 op div seconds MILLIS 1000
++   75 op sub elapsed @time start
+    76 print "Measured interval: "
+    77 print seconds
+    78 print " sec"
  
-    97 label __label10
-    98 op lessThan __tmp38 @time wait
-    99 jump __label12 equal __tmp38 false
--    * op add __tmp39 loops 1
--    * set loops __tmp39
-+  100 op add loops loops 1
-   101 label __label11
-   102 jump __label10 always
-   103 label __label12
+    98 label __label10
+    99 op lessThan __tmp40 @time wait
+   100 jump __label12 equal __tmp40 false
+-    * op add __tmp41 loops 1
+-    * set loops __tmp41
++  101 op add loops loops 1
+   102 label __label11
+   103 jump __label10 always
+   104 label __label12
 
 Modifications by ExpressionOptimizer, iteration 1:
  
-    68 write @time BANK IND_TIME
-    69 op add __tmp32 index 1
-    70 op mod index __tmp32 SAMPLES
--    * op mul __tmp34 60000 flow_rate
--    * op floor flow_rate_str __tmp34
-+   71 op idiv flow_rate_str flow_rate 0.000016666666666666667
-    72 op div seconds MILLIS 1000
-    73 op sub elapsed @time start
-    74 print "Measured interval: "
+    69 write __tmp33 BANK IND_TIME
+    70 op add __tmp34 index 1
+    71 op mod index __tmp34 SAMPLES
+-    * op mul __tmp36 60000 flow_rate
+-    * op floor flow_rate_str __tmp36
++   72 op idiv flow_rate_str flow_rate 0.000016666666666666667
+    73 op div seconds MILLIS 1000
+    74 op sub elapsed @time start
+    75 print "Measured interval: "
 
 Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
     44 jump __label5 equal __tmp17 false
     45 set start @time
     46 op add wait wait DELAY
--    * op greaterThan __tmp19 start wait
--    * jump __label6 equal __tmp19 false
+-    * op greaterThan __tmp20 start wait
+-    * jump __label6 equal __tmp20 false
 +   47 jump __label6 lessThanEq start wait
     48 print "Wait reset\n"
     49 op add wait start DELAY
@@ -176,36 +181,36 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
     52 read shipped BANK IND_SHIPPED
     53 sensor item SORTER @config
     54 op add total level shipped
--    * op lessThan __tmp25 MILLIS TOTAL_MILLIS
--    * jump __label8 equal __tmp25 false
+-    * op lessThan __tmp26 MILLIS TOTAL_MILLIS
+-    * jump __label8 equal __tmp26 false
 +   55 jump __label8 greaterThanEq MILLIS TOTAL_MILLIS
     56 op add MILLIS MILLIS DELAY
     57 op mul SIGN_MILLIS MULTIPLIER MILLIS
     58 jump __label9 always
  
-    92 printflush message1
-    93 set loops 0
-    94 label __label10
--    * op lessThan __tmp38 @time wait
--    * jump __label12 equal __tmp38 false
-+   95 jump __label12 greaterThanEq @time wait
-    96 op add loops loops 1
-    97 label __label11
-    98 jump __label10 always
+    93 printflush message1
+    94 set loops 0
+    95 label __label10
+-    * op lessThan __tmp40 @time wait
+-    * jump __label12 equal __tmp40 false
++   96 jump __label12 greaterThanEq @time wait
+    97 op add loops loops 1
+    98 label __label11
+    99 jump __label10 always
 
 Modifications by LoopOptimizer, iteration 1:
  
-    93 set loops 0
-    94 label __label10
-    95 jump __label12 greaterThanEq @time wait
-+   96 label __label13
-    97 op add loops loops 1
-    98 label __label11
+    94 set loops 0
+    95 label __label10
+    96 jump __label12 greaterThanEq @time wait
++   97 label __label13
+    98 op add loops loops 1
+    99 label __label11
 -    * jump __label10 always
-+   99 jump __label13 lessThan @time wait
-   100 label __label12
-   101 label __label4
-   102 jump __label3 always
++  100 jump __label13 lessThan @time wait
+   101 label __label12
+   102 label __label4
+   103 jump __label3 always
 
 Modifications by DataFlowOptimizer, iteration 1:
  
@@ -218,14 +223,14 @@ Modifications by DataFlowOptimizer, iteration 1:
     56 op add MILLIS MILLIS DELAY
     57 op mul SIGN_MILLIS MULTIPLIER MILLIS
  
-    77 print "\nItems shipped: "
-    78 print shipped
-    79 print "\nContainer level: "
+    78 print "\nItems shipped: "
+    79 print shipped
+    80 print "\nContainer level: "
 -    * print level
-+   80 print 0
-    81 print "\nFlow rate: "
-    82 print flow_rate_str
-    83 print "\nTotal: "
++   81 print 0
+    82 print "\nFlow rate: "
+    83 print flow_rate_str
+    84 print "\nTotal: "
 
 Modifications by DataFlowOptimizer, iteration 2:
  
@@ -239,14 +244,26 @@ Modifications by DataFlowOptimizer, iteration 2:
 
 Modifications by PropagateJumpTargets, iteration 1:
  
-    91 printflush message1
-    92 set loops 0
-    93 label __label10
+    92 printflush message1
+    93 set loops 0
+    94 label __label10
 -    * jump __label12 greaterThanEq @time wait
-+   94 jump __label3 greaterThanEq @time wait
-    95 label __label13
-    96 op add loops loops 1
-    97 label __label11
++   95 jump __label3 greaterThanEq @time wait
+    96 label __label13
+    97 op add loops loops 1
+    98 label __label11
+
+Modifications by InputTempEliminator, iteration 1:
+ 
+    62 op sub __tmp31 total last_total
+    63 op div flow_rate __tmp31 SIGN_MILLIS
+    64 write flow_rate BANK IND_FLOW_RATE
+-    * set __tmp33 @time
+-    * write __tmp33 BANK IND_TIME
++   65 write @time BANK IND_TIME
+    66 op add __tmp34 index 1
+    67 op mod index __tmp34 SAMPLES
+    68 op idiv flow_rate_str flow_rate 0.000016666666666666667
 
 Modifications by PrintMerger, iteration 1:
  
@@ -324,12 +341,12 @@ label __label8
 read last_total BANK index
 label __label9
 write total BANK index
-op sub __tmp30 total last_total
-op div flow_rate __tmp30 SIGN_MILLIS
+op sub __tmp31 total last_total
+op div flow_rate __tmp31 SIGN_MILLIS
 write flow_rate BANK IND_FLOW_RATE
 write @time BANK IND_TIME
-op add __tmp32 index 1
-op mod index __tmp32 SAMPLES
+op add __tmp34 index 1
+op mod index __tmp34 SAMPLES
 op idiv flow_rate_str flow_rate 0.000016666666666666667
 op div seconds MILLIS 1000
 op sub elapsed @time start

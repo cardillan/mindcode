@@ -1,8 +1,8 @@
-   217 instructions before optimizations.
+   221 instructions before optimizations.
      1 instructions eliminated by ConditionalJumpsNormalizer.
     17 instructions eliminated by DeadCodeEliminator (1 iterations).
      4 instructions eliminated by SingleStepJumpEliminator (1 iterations).
-    18 instructions eliminated by OutputTempEliminator.
+    22 instructions eliminated by OutputTempEliminator.
      6 instructions eliminated by ImproveNegativeConditionalJumps.
      8 instructions eliminated by JumpOverJumpEliminator.
      3 loops improved by LoopOptimizer.
@@ -25,151 +25,151 @@ Modifications by ConditionalJumpsNormalizer, iteration 1:
 
 Modifications by DeadCodeEliminator, iteration 1:
  
-    35 jump __label7 always
-    36 label __label8
-    37 set MESSAGE block
--    * set __tmp12 block
-    38 jump __label6 always
-    39 label __label7
-    40 jump __label10 equal __ast0 @switch
-    41 jump __label9 always
-    42 label __label10
-    43 set SWITCH block
--    * set __tmp12 block
-    44 jump __label6 always
-    45 label __label9
-    46 jump __label12 equal __ast0 @memory-bank
+    36 jump __label7 always
+    37 label __label8
+    38 set MESSAGE block
+-    * set __tmp13 MESSAGE
+    39 jump __label6 always
+    40 label __label7
+    41 jump __label10 equal __ast0 @switch
+    42 jump __label9 always
+    43 label __label10
+    44 set SWITCH block
+-    * set __tmp13 SWITCH
+    45 jump __label6 always
+    46 label __label9
+    47 jump __label12 equal __ast0 @memory-bank
  
-    50 set START_INDEX 264
-    51 set END_INDEX 511
-    52 set SIZE 248
--    * set __tmp12 248
-    53 jump __label6 always
-    54 label __label11
-    55 jump __label14 equal __ast0 @memory-cell
+    51 set START_INDEX 264
+    52 set END_INDEX 511
+    53 set SIZE 248
+-    * set __tmp13 SIZE
+    54 jump __label6 always
+    55 label __label11
+    56 jump __label14 equal __ast0 @memory-cell
  
-    59 set START_INDEX 40
-    60 set END_INDEX 63
-    61 set SIZE 24
--    * set __tmp12 24
-    62 jump __label6 always
-    63 label __label13
-    64 jump __label16 equal __ast0 @vault
+    60 set START_INDEX 40
+    61 set END_INDEX 63
+    62 set SIZE 24
+-    * set __tmp13 SIZE
+    63 jump __label6 always
+    64 label __label13
+    65 jump __label16 equal __ast0 @vault
  
-    74 set R1 80
-    75 set G1 255
-    76 set B1 80
--    * set __tmp12 80
-    77 jump __label6 always
-    78 label __label15
-    79 jump __label18 equal __ast0 @battery
+    75 set R1 80
+    76 set G1 255
+    77 set B1 80
+-    * set __tmp13 B1
+    78 jump __label6 always
+    79 label __label15
+    80 jump __label18 equal __ast0 @battery
  
-    89 set R1 255
-    90 set G1 255
-    91 set B1 80
--    * set __tmp12 80
-    92 jump __label6 always
-    93 label __label17
-    94 jump __label20 equal __ast0 @liquid-tank
+    90 set R1 255
+    91 set G1 255
+    92 set B1 80
+-    * set __tmp13 B1
+    93 jump __label6 always
+    94 label __label17
+    95 jump __label20 equal __ast0 @liquid-tank
  
-   104 set R1 192
-   105 set G1 192
-   106 set B1 255
--    * set __tmp12 255
-   107 jump __label6 always
-   108 label __label19
-   109 jump __label22 equal __ast0 @power-node
+   105 set R1 192
+   106 set G1 192
+   107 set B1 255
+-    * set __tmp13 B1
+   108 jump __label6 always
+   109 label __label19
+   110 jump __label22 equal __ast0 @power-node
  
-   120 set R1 255
-   121 set G1 255
-   122 set B1 80
--    * set __tmp12 80
-   123 jump __label6 always
-   124 label __label21
--    * set __tmp12 null
-   125 label __label6
-   126 label __label4
-   127 jump __label3 always
+   121 set R1 255
+   122 set G1 255
+   123 set B1 80
+-    * set __tmp13 B1
+   124 jump __label6 always
+   125 label __label21
+-    * set __tmp13 null
+   126 label __label6
+   127 label __label4
+   128 jump __label3 always
  
-   140 jump __label23 equal __tmp15 false
-   141 print "\nNo memory or container."
-   142 printflush MESSAGE
--    * set __tmp16 null
-   143 jump __label24 always
-   144 label __label23
-   145 printflush MESSAGE
-   146 jump __label2 always
--    * set __tmp16 null
-   147 label __label24
-   148 label __label1
-   149 jump __label0 always
+   141 jump __label23 equal __tmp16 false
+   142 print "\nNo memory or container."
+   143 printflush MESSAGE
+-    * set __tmp17 null
+   144 jump __label24 always
+   145 label __label23
+   146 printflush MESSAGE
+   147 jump __label2 always
+-    * set __tmp17 null
+   148 label __label24
+   149 label __label1
+   150 jump __label0 always
  
-   176 set prevTick @tick
-   177 op add __tmp26 prevTick TICKS
-   178 set nextTick __tmp26
--    * set __tmp25 __tmp26
-   179 jump __label29 always
-   180 label __label28
--    * set __tmp25 null
-   181 label __label29
-   182 label __label30
-   183 op lessThan __tmp27 @tick nextTick
+   180 set prevTick __tmp29
+   181 op add __tmp30 prevTick TICKS
+   182 set nextTick __tmp30
+-    * set __tmp28 nextTick
+   183 jump __label29 always
+   184 label __label28
+-    * set __tmp28 null
+   185 label __label29
+   186 label __label30
+   187 op lessThan __tmp31 @tick nextTick
  
-   185 op lessThan __tmp28 @tick prevTick
-   186 jump __label33 equal __tmp28 false
-   187 end
--    * set __tmp29 null
-   188 jump __label34 always
-   189 label __label33
--    * set __tmp29 null
-   190 label __label34
-   191 label __label31
-   192 jump __label30 always
+   189 op lessThan __tmp32 @tick prevTick
+   190 jump __label33 equal __tmp32 false
+   191 end
+-    * set __tmp33 null
+   192 jump __label34 always
+   193 label __label33
+-    * set __tmp33 null
+   194 label __label34
+   195 label __label31
+   196 jump __label30 always
  
-   204 op greaterThan __tmp36 index END_INDEX
-   205 jump __label35 equal __tmp36 false
-   206 set index START_INDEX
--    * set __tmp37 START_INDEX
-   207 jump __label36 always
-   208 label __label35
--    * set __tmp37 null
-   209 label __label36
-   210 write index MEMORY M_START_INDEX
-   211 write scaled MEMORY index
+   208 op greaterThan __tmp40 index END_INDEX
+   209 jump __label35 equal __tmp40 false
+   210 set index START_INDEX
+-    * set __tmp41 index
+   211 jump __label36 always
+   212 label __label35
+-    * set __tmp41 null
+   213 label __label36
+   214 write index MEMORY M_START_INDEX
+   215 write scaled MEMORY index
 
 Modifications by SingleStepJumpEliminator, iteration 1:
  
-   120 set R1 255
-   121 set G1 255
-   122 set B1 80
+   121 set R1 255
+   122 set G1 255
+   123 set B1 80
 -    * jump __label6 always
-   123 label __label21
-   124 label __label6
-   125 label __label4
+   124 label __label21
+   125 label __label6
+   126 label __label4
  
-   175 set prevTick @tick
-   176 op add __tmp26 prevTick TICKS
-   177 set nextTick __tmp26
+   179 set prevTick __tmp29
+   180 op add __tmp30 prevTick TICKS
+   181 set nextTick __tmp30
 -    * jump __label29 always
-   178 label __label28
-   179 label __label29
-   180 label __label30
+   182 label __label28
+   183 label __label29
+   184 label __label30
  
-   183 op lessThan __tmp28 @tick prevTick
-   184 jump __label33 equal __tmp28 false
-   185 end
+   187 op lessThan __tmp32 @tick prevTick
+   188 jump __label33 equal __tmp32 false
+   189 end
 -    * jump __label34 always
-   186 label __label33
-   187 label __label34
-   188 label __label31
+   190 label __label33
+   191 label __label34
+   192 label __label31
  
-   201 op greaterThan __tmp36 index END_INDEX
-   202 jump __label35 equal __tmp36 false
-   203 set index START_INDEX
+   205 op greaterThan __tmp40 index END_INDEX
+   206 jump __label35 equal __tmp40 false
+   207 set index START_INDEX
 -    * jump __label36 always
-   204 label __label35
-   205 label __label36
-   206 write index MEMORY M_START_INDEX
+   208 label __label35
+   209 label __label36
+   210 write index MEMORY M_START_INDEX
 
 Modifications by OutputTempEliminator, iteration 1:
      0 set TICKS 60
@@ -201,47 +201,57 @@ Modifications by OutputTempEliminator, iteration 1:
     10 label __label0
     11 print "Item/Liquid/Energy Level Meter"
     12 set CONTAINER null
- 
+    13 set MEMORY null
+-    * set __tmp8 @links
+-    * set n __tmp8
++   14 set n @links
     15 label __label3
-    16 op greaterThan __tmp8 n 0
-    17 jump __label5 equal __tmp8 false
--    * op sub __tmp9 n 1
--    * set n __tmp9
--    * getlink __tmp10 n
--    * set block __tmp10
+    16 op greaterThan __tmp9 n 0
+    17 jump __label5 equal __tmp9 false
+-    * op sub __tmp10 n 1
+-    * set n __tmp10
+-    * getlink __tmp11 n
+-    * set block __tmp11
 +   18 op sub n n 1
 +   19 getlink block n
     20 print "\nFound: "
     21 print block
--    * sensor __tmp11 block @type
--    * set __ast0 __tmp11
+-    * sensor __tmp12 block @type
+-    * set __ast0 __tmp12
 +   22 sensor __ast0 block @type
     23 jump __label8 equal __ast0 @message
     24 jump __label7 always
     25 label __label8
  
    146 write B1 MEMORY M_B1
-   147 read __tmp17 MEMORY M_CURRENT_INDEX
-   148 op max __tmp18 START_INDEX __tmp17
--    * op min __tmp19 __tmp18 END_INDEX
--    * set index __tmp19
-+  149 op min index __tmp18 END_INDEX
-   150 set nextTick @tick
+   147 read __tmp18 MEMORY M_CURRENT_INDEX
+   148 op max __tmp19 START_INDEX __tmp18
+-    * op min __tmp20 __tmp19 END_INDEX
+-    * set index __tmp20
+-    * set __tmp21 @tick
+-    * set nextTick __tmp21
++  149 op min index __tmp19 END_INDEX
++  150 set nextTick @tick
    151 control enabled SWITCH 0
    152 label __label25
- 
-   155 jump __label27 equal __tmp21 false
-   156 set startTime @time
+   153 sensor __tmp22 SWITCH @enabled
+   154 op equal __tmp23 __tmp22 0
+   155 jump __label27 equal __tmp23 false
+-    * set __tmp24 @time
+-    * set startTime __tmp24
++  156 set startTime @time
    157 set prevTick nextTick
--    * op add __tmp22 nextTick TICKS
--    * set nextTick __tmp22
+-    * op add __tmp25 nextTick TICKS
+-    * set nextTick __tmp25
 +  158 op add nextTick nextTick TICKS
-   159 op add __tmp23 nextTick TICKS
-   160 op greaterThan __tmp24 @tick __tmp23
-   161 jump __label28 equal __tmp24 false
-   162 set prevTick @tick
--    * op add __tmp26 prevTick TICKS
--    * set nextTick __tmp26
+   159 op add __tmp26 nextTick TICKS
+   160 op greaterThan __tmp27 @tick __tmp26
+   161 jump __label28 equal __tmp27 false
+-    * set __tmp29 @tick
+-    * set prevTick __tmp29
+-    * op add __tmp30 prevTick TICKS
+-    * set nextTick __tmp30
++  162 set prevTick @tick
 +  163 op add nextTick prevTick TICKS
    164 label __label28
    165 label __label29
@@ -250,22 +260,22 @@ Modifications by OutputTempEliminator, iteration 1:
    174 label __label31
    175 jump __label30 always
    176 label __label32
--    * sensor __tmp30 CONTAINER SENSOR
--    * set amount __tmp30
--    * sensor __tmp31 CONTAINER MAXIMUM
--    * set max __tmp31
+-    * sensor __tmp34 CONTAINER SENSOR
+-    * set amount __tmp34
+-    * sensor __tmp35 CONTAINER MAXIMUM
+-    * set max __tmp35
 +  177 sensor amount CONTAINER SENSOR
 +  178 sensor max CONTAINER MAXIMUM
-   179 op mul __tmp32 amount 150
-   180 op div __tmp33 __tmp32 max
--    * op add __tmp34 10 __tmp33
--    * set scaled __tmp34
--    * op add __tmp35 index 1
--    * set index __tmp35
-+  181 op add scaled 10 __tmp33
+   179 op mul __tmp36 amount 150
+   180 op div __tmp37 __tmp36 max
+-    * op add __tmp38 10 __tmp37
+-    * set scaled __tmp38
+-    * op add __tmp39 index 1
+-    * set index __tmp39
++  181 op add scaled 10 __tmp37
 +  182 op add index index 1
-   183 op greaterThan __tmp36 index END_INDEX
-   184 jump __label35 equal __tmp36 false
+   183 op greaterThan __tmp40 index END_INDEX
+   184 jump __label35 equal __tmp40 false
    185 set index START_INDEX
 
 Modifications by ImproveNegativeConditionalJumps, iteration 1:
@@ -273,8 +283,8 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
     13 set MEMORY null
     14 set n @links
     15 label __label3
--    * op greaterThan __tmp8 n 0
--    * jump __label5 equal __tmp8 false
+-    * op greaterThan __tmp9 n 0
+-    * jump __label5 equal __tmp9 false
 +   16 jump __label5 lessThanEq n 0
     17 op sub n n 1
     18 getlink block n
@@ -282,37 +292,37 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
    150 control enabled SWITCH 0
    151 label __label25
-   152 sensor __tmp20 SWITCH @enabled
--    * op equal __tmp21 __tmp20 0
--    * jump __label27 equal __tmp21 false
-+  153 jump __label27 notEqual __tmp20 0
+   152 sensor __tmp22 SWITCH @enabled
+-    * op equal __tmp23 __tmp22 0
+-    * jump __label27 equal __tmp23 false
++  153 jump __label27 notEqual __tmp22 0
    154 set startTime @time
    155 set prevTick nextTick
    156 op add nextTick nextTick TICKS
-   157 op add __tmp23 nextTick TICKS
--    * op greaterThan __tmp24 @tick __tmp23
--    * jump __label28 equal __tmp24 false
-+  158 jump __label28 lessThanEq @tick __tmp23
+   157 op add __tmp26 nextTick TICKS
+-    * op greaterThan __tmp27 @tick __tmp26
+-    * jump __label28 equal __tmp27 false
++  158 jump __label28 lessThanEq @tick __tmp26
    159 set prevTick @tick
    160 op add nextTick prevTick TICKS
    161 label __label28
    162 label __label29
    163 label __label30
--    * op lessThan __tmp27 @tick nextTick
--    * jump __label32 equal __tmp27 false
--    * op lessThan __tmp28 @tick prevTick
--    * jump __label33 equal __tmp28 false
+-    * op lessThan __tmp31 @tick nextTick
+-    * jump __label32 equal __tmp31 false
+-    * op lessThan __tmp32 @tick prevTick
+-    * jump __label33 equal __tmp32 false
 +  164 jump __label32 greaterThanEq @tick nextTick
 +  165 jump __label33 greaterThanEq @tick prevTick
    166 end
    167 label __label33
    168 label __label34
  
-   175 op div __tmp33 __tmp32 max
-   176 op add scaled 10 __tmp33
+   175 op div __tmp37 __tmp36 max
+   176 op add scaled 10 __tmp37
    177 op add index index 1
--    * op greaterThan __tmp36 index END_INDEX
--    * jump __label35 equal __tmp36 false
+-    * op greaterThan __tmp40 index END_INDEX
+-    * jump __label35 equal __tmp40 false
 +  178 jump __label35 lessThanEq index END_INDEX
    179 set index START_INDEX
    180 label __label35
@@ -414,8 +424,8 @@ Modifications by LoopOptimizer, iteration 1:
    110 print MESSAGE
  
    144 label __label25
-   145 sensor __tmp20 SWITCH @enabled
-   146 jump __label27 notEqual __tmp20 0
+   145 sensor __tmp22 SWITCH @enabled
+   146 jump __label27 notEqual __tmp22 0
 +  147 label __label38
    148 set startTime @time
    149 set prevTick nextTick
@@ -440,8 +450,8 @@ Modifications by LoopOptimizer, iteration 1:
    198 printflush MESSAGE
    199 label __label26
 -    * jump __label25 always
-+  200 sensor __tmp20 SWITCH @enabled
-+  201 jump __label38 equal __tmp20 0
++  200 sensor __tmp22 SWITCH @enabled
++  201 jump __label38 equal __tmp22 0
    202 label __label27
    203 end
 
@@ -507,7 +517,7 @@ Modifications by DataFlowOptimizer, iteration 3:
 
 Modifications by PropagateJumpTargets, iteration 1:
  
-   120 jump __label23 equal __tmp15 false
+   120 jump __label23 equal __tmp16 false
    121 print "\nNo memory or container."
    122 printflush MESSAGE
 -    * jump __label24 always
@@ -554,10 +564,10 @@ Modifications by PrintMerger, iteration 1:
 +  186 print "\nScaled: "
    187 print scaled
 -    * print "\n"
-   188 op sub __tmp39 @time startTime
+   188 op sub __tmp43 @time startTime
 -    * print "Elapsed: "
 +  189 print "\nElapsed: "
-   190 print __tmp39
+   190 print __tmp43
    191 print "\n"
    192 printflush MESSAGE
 
@@ -680,10 +690,10 @@ print "\nMemory: "
 print MEMORY
 print "\nContainer: "
 print CONTAINER
-op equal __tmp13 CONTAINER null
-op equal __tmp14 MEMORY null
-op or __tmp15 __tmp13 __tmp14
-jump __label23 equal __tmp15 false
+op equal __tmp14 CONTAINER null
+op equal __tmp15 MEMORY null
+op or __tmp16 __tmp14 __tmp15
+jump __label23 equal __tmp16 false
 print "\nNo memory or container."
 printflush MESSAGE
 jump __label0 always 0 0
@@ -700,20 +710,20 @@ write B0 MEMORY M_B0
 write R1 MEMORY M_R1
 write G1 MEMORY M_G1
 write B1 MEMORY M_B1
-read __tmp17 MEMORY M_CURRENT_INDEX
-op max __tmp18 START_INDEX __tmp17
-op min index __tmp18 END_INDEX
+read __tmp18 MEMORY M_CURRENT_INDEX
+op max __tmp19 START_INDEX __tmp18
+op min index __tmp19 END_INDEX
 set nextTick @tick
 control enabled SWITCH 0 0 0 0
 label __label25
-sensor __tmp20 SWITCH @enabled
-jump __label27 notEqual __tmp20 0
+sensor __tmp22 SWITCH @enabled
+jump __label27 notEqual __tmp22 0
 label __label38
 set startTime @time
 set prevTick nextTick
 op add nextTick nextTick TICKS
-op add __tmp23 nextTick TICKS
-jump __label28 lessThanEq @tick __tmp23
+op add __tmp26 nextTick TICKS
+jump __label28 lessThanEq @tick __tmp26
 set prevTick @tick
 op add nextTick prevTick TICKS
 label __label28
@@ -730,9 +740,9 @@ jump __label39 lessThan @tick nextTick
 label __label32
 sensor amount CONTAINER SENSOR
 sensor max CONTAINER MAXIMUM
-op mul __tmp32 amount 150
-op div __tmp33 __tmp32 max
-op add scaled 10 __tmp33
+op mul __tmp36 amount 150
+op div __tmp37 __tmp36 max
+op add scaled 10 __tmp37
 op add index index 1
 jump __label35 lessThanEq index END_INDEX
 set index START_INDEX
@@ -740,8 +750,8 @@ label __label35
 label __label36
 write index MEMORY M_START_INDEX
 write scaled MEMORY index
-op sub __tmp38 index SIZE
-write scaled MEMORY __tmp38
+op sub __tmp42 index SIZE
+write scaled MEMORY __tmp42
 print "Item/Liquid/Energy Level Meter\n"
 print "StartIndex: "
 print START_INDEX
@@ -751,13 +761,13 @@ print "\nAmount: "
 print amount
 print "\nScaled: "
 print scaled
-op sub __tmp39 @time startTime
+op sub __tmp43 @time startTime
 print "\nElapsed: "
-print __tmp39
+print __tmp43
 print "\n"
 printflush MESSAGE
 label __label26
-sensor __tmp20 SWITCH @enabled
-jump __label38 equal __tmp20 0
+sensor __tmp22 SWITCH @enabled
+jump __label38 equal __tmp22 0
 label __label27
 end

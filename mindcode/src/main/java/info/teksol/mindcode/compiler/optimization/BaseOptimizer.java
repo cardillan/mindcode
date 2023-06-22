@@ -338,6 +338,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         int index = labeledInstructionIndex(label);
         return index < 0 ? null : instructionAt(index);
     }
+
     /**
      * Return an independent list of instructions matching predicate.
      *
@@ -346,6 +347,15 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      */
     protected List<LogicInstruction> instructions(Predicate<LogicInstruction> matcher) {
         return program.stream().filter(matcher).toList();
+    }
+    /**
+     * Return a number of instructions matching predicate.
+     *
+     * @param matcher predicate matching sought instructions
+     * @return number of matching instructions;
+     */
+    protected int instructionCount(Predicate<LogicInstruction> matcher) {
+        return (int) program.stream().filter(matcher).count();
     }
     //</editor-fold>
 

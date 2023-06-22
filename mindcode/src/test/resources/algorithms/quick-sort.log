@@ -44,7 +44,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     53 label __label18
     54 op add __tmp19 __fn1_index 1
     55 set __fn1_index __tmp19
--    * set __tmp15 __tmp19
+-    * set __tmp15 __fn1_index
     56 jump __label16 always
     57 label __label15
 -    * set __tmp15 null

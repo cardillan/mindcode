@@ -1,11 +1,11 @@
     36 instructions before optimizations.
-     1 instructions eliminated by OutputTempEliminator.
+     3 instructions eliminated by OutputTempEliminator.
      1 instructions eliminated by ImproveNegativeConditionalJumps.
      1 instructions eliminated by ImprovePositiveConditionalJumps.
      2 loops improved by LoopOptimizer.
      1 instructions eliminated by LoopOptimizer.
      1 instructions eliminated by IfExpressionOptimizer.
-     6 instructions eliminated by DataFlowOptimizer (2 iterations).
+     4 instructions eliminated by DataFlowOptimizer (2 iterations).
      1 instructions eliminated by SingleStepJumpEliminator (1 iterations).
     24 instructions after optimizations.
 
@@ -19,30 +19,43 @@ Modifications by OutputTempEliminator, iteration 1:
      4 set sorted true
      5 set __tmp1 n
      6 set i 0
+ 
+    11 set __fn0_i i
+    12 set __fn0_j __tmp2
+    13 set __fn0_sorted sorted
+-    * read __tmp4 ARRAY __fn0_i
+-    * set __fn0_a __tmp4
+-    * read __tmp5 ARRAY __fn0_j
+-    * set __fn0_b __tmp5
++   14 read __fn0_a ARRAY __fn0_i
++   15 read __fn0_b ARRAY __fn0_j
+    16 op greaterThan __tmp6 __fn0_a __fn0_b
+    17 jump __label8 equal __tmp6 false
+    18 write __fn0_b ARRAY __fn0_i
 
 Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
-    15 set __fn0_a __tmp4
-    16 read __tmp5 ARRAY __fn0_j
-    17 set __fn0_b __tmp5
--    * op greaterThan __tmp6 __tmp4 __tmp5
+    13 set __fn0_sorted sorted
+    14 read __fn0_a ARRAY __fn0_i
+    15 read __fn0_b ARRAY __fn0_j
+-    * op greaterThan __tmp6 __fn0_a __fn0_b
 -    * jump __label8 equal __tmp6 false
-+   18 jump __label8 lessThanEq __tmp4 __tmp5
-    19 write __fn0_b ARRAY __fn0_i
-    20 write __fn0_a ARRAY __fn0_j
-    21 set __tmp7 false
++   16 jump __label8 lessThanEq __fn0_a __fn0_b
+    17 write __fn0_b ARRAY __fn0_i
+    18 write __fn0_a ARRAY __fn0_j
+    19 set __tmp7 false
 
 Modifications by ImprovePositiveConditionalJumps, iteration 1:
  
-    31 jump __label3 always
-    32 label __label5
-    33 label __label1
+    29 jump __label3 always
+    30 label __label5
+    31 label __label1
 -    * op equal __tmp8 sorted false
 -    * jump __label0 notEqual __tmp8 false
-+   34 jump __label0 equal sorted false
-    35 label __label2
-    36 set i 0
-    37 label __label10
++   32 jump __label0 equal sorted false
+    33 label __label2
+    34 set i 0
+    35 label __label10
 
 Modifications by LoopOptimizer, iteration 1:
  
@@ -54,27 +67,27 @@ Modifications by LoopOptimizer, iteration 1:
     11 label __label6
     12 set __fn0_i i
  
-    29 set sorted __retval3
-    30 label __label4
-    31 op add i i 1
+    27 set sorted __retval3
+    28 label __label4
+    29 op add i i 1
 -    * jump __label3 always
-+   32 jump __label13 lessThan i __tmp1
-    33 label __label5
-    34 label __label1
-    35 jump __label0 equal sorted false
-    36 label __label2
-    37 set i 0
-    38 label __label10
++   30 jump __label13 lessThan i __tmp1
+    31 label __label5
+    32 label __label1
+    33 jump __label0 equal sorted false
+    34 label __label2
+    35 set i 0
+    36 label __label10
 -    * jump __label12 greaterThanEq i 64
-+   39 label __label14
-    40 read __tmp9 ARRAY i
-    41 print __tmp9
-    42 label __label11
-    43 op add i i 1
++   37 label __label14
+    38 read __tmp9 ARRAY i
+    39 print __tmp9
+    40 label __label11
+    41 op add i i 1
 -    * jump __label10 always
-+   44 jump __label14 lessThan i 64
-    45 label __label12
-    46 end
++   42 jump __label14 lessThan i 64
+    43 label __label12
+    44 end
 
 Modifications by IfExpressionOptimizer, iteration 1:
  
@@ -82,24 +95,22 @@ Modifications by IfExpressionOptimizer, iteration 1:
     13 set __fn0_j __tmp2
     14 set __fn0_sorted sorted
 +   15 set __retval3 __fn0_sorted
-    16 read __tmp4 ARRAY __fn0_i
-    17 set __fn0_a __tmp4
-    18 read __tmp5 ARRAY __fn0_j
-    19 set __fn0_b __tmp5
--    * jump __label8 lessThanEq __tmp4 __tmp5
-+   20 jump __label9 lessThanEq __tmp4 __tmp5
-    21 write __fn0_b ARRAY __fn0_i
-    22 write __fn0_a ARRAY __fn0_j
+    16 read __fn0_a ARRAY __fn0_i
+    17 read __fn0_b ARRAY __fn0_j
+-    * jump __label8 lessThanEq __fn0_a __fn0_b
++   18 jump __label9 lessThanEq __fn0_a __fn0_b
+    19 write __fn0_b ARRAY __fn0_i
+    20 write __fn0_a ARRAY __fn0_j
 -    * set __tmp7 false
-+   23 set __retval3 false
-    24 jump __label9 always
++   21 set __retval3 false
+    22 jump __label9 always
 -    * label __label8
 -    * set __tmp7 __fn0_sorted
-    25 label __label9
+    23 label __label9
 -    * set __retval3 __tmp7
-    26 label __label7
-    27 set sorted __retval3
-    28 label __label4
+    24 label __label7
+    25 set sorted __retval3
+    26 label __label4
 
 Modifications by DataFlowOptimizer, iteration 1:
  
@@ -115,30 +126,28 @@ Modifications by DataFlowOptimizer, iteration 1:
     13 set __fn0_j __tmp2
     14 set __fn0_sorted sorted
 -    * set __retval3 __fn0_sorted
--    * read __tmp4 ARRAY __fn0_i
+-    * read __fn0_a ARRAY __fn0_i
+-    * read __fn0_b ARRAY __fn0_j
 +   15 set __retval3 sorted
-+   16 read __tmp4 ARRAY i
-    17 set __fn0_a __tmp4
--    * read __tmp5 ARRAY __fn0_j
-+   18 read __tmp5 ARRAY __tmp2
-    19 set __fn0_b __tmp5
-    20 jump __label9 lessThanEq __tmp4 __tmp5
++   16 read __fn0_a ARRAY i
++   17 read __fn0_b ARRAY __tmp2
+    18 jump __label9 lessThanEq __fn0_a __fn0_b
 -    * write __fn0_b ARRAY __fn0_i
 -    * write __fn0_a ARRAY __fn0_j
-+   21 write __tmp5 ARRAY i
-+   22 write __tmp4 ARRAY __tmp2
-    23 set __retval3 false
-    24 jump __label9 always
-    25 label __label9
++   19 write __fn0_b ARRAY i
++   20 write __fn0_a ARRAY __tmp2
+    21 set __retval3 false
+    22 jump __label9 always
+    23 label __label9
  
-    27 set sorted __retval3
-    28 label __label4
-    29 op add i i 1
+    25 set sorted __retval3
+    26 label __label4
+    27 op add i i 1
 -    * jump __label13 lessThan i __tmp1
-+   30 jump __label13 lessThan i n
-    31 label __label5
-    32 label __label1
-    33 jump __label0 equal sorted false
++   28 jump __label13 lessThan i n
+    29 label __label5
+    30 label __label1
+    31 jump __label0 equal sorted false
 
 Modifications by DataFlowOptimizer, iteration 2:
  
@@ -156,18 +165,13 @@ Modifications by DataFlowOptimizer, iteration 2:
 -    * set __fn0_j __tmp2
 -    * set __fn0_sorted sorted
     11 set __retval3 sorted
-    12 read __tmp4 ARRAY i
--    * set __fn0_a __tmp4
-    13 read __tmp5 ARRAY __tmp2
--    * set __fn0_b __tmp5
-    14 jump __label9 lessThanEq __tmp4 __tmp5
-    15 write __tmp5 ARRAY i
-    16 write __tmp4 ARRAY __tmp2
+    12 read __fn0_a ARRAY i
+    13 read __fn0_b ARRAY __tmp2
 
 Modifications by SingleStepJumpEliminator, iteration 1:
  
-    15 write __tmp5 ARRAY i
-    16 write __tmp4 ARRAY __tmp2
+    15 write __fn0_b ARRAY i
+    16 write __fn0_a ARRAY __tmp2
     17 set __retval3 false
 -    * jump __label9 always
     18 label __label9
@@ -188,11 +192,11 @@ label __label13
 op add __tmp2 i 1
 label __label6
 set __retval3 sorted
-read __tmp4 ARRAY i
-read __tmp5 ARRAY __tmp2
-jump __label9 lessThanEq __tmp4 __tmp5
-write __tmp5 ARRAY i
-write __tmp4 ARRAY __tmp2
+read __fn0_a ARRAY i
+read __fn0_b ARRAY __tmp2
+jump __label9 lessThanEq __fn0_a __fn0_b
+write __fn0_b ARRAY i
+write __fn0_a ARRAY __tmp2
 set __retval3 false
 label __label9
 label __label7

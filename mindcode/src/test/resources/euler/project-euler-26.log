@@ -35,7 +35,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     57 jump __label18 equal __tmp13 false
     58 set maxlen len
     59 set maxnum d
--    * set __tmp14 d
+-    * set __tmp14 maxnum
     60 jump __label19 always
     61 label __label18
 -    * set __tmp14 null

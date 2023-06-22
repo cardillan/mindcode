@@ -1,16 +1,30 @@
     11 instructions before optimizations.
-    11 instructions after optimizations.
+     2 instructions eliminated by OutputTempEliminator.
+     9 instructions after optimizations.
+
+Modifications by OutputTempEliminator, iteration 1:
+     0 set A 1
+     1 set B A
+-    * op add __tmp0 A 1
+-    * set A __tmp0
++    2 op add A A 1
+     3 op add __tmp1 A A
+     4 print __tmp1
+-    * op add __tmp2 B 1
+-    * set B __tmp2
++    5 op add B B 1
+     6 op add __tmp3 B B
+     7 print __tmp3
+     8 end
 
 Final code before resolving virtual instructions:
 
 set A 1
 set B A
-op add __tmp0 A 1
-set A __tmp0
-op add __tmp1 A __tmp0
+op add A A 1
+op add __tmp1 A A
 print __tmp1
-op add __tmp2 B 1
-set B __tmp2
-op add __tmp3 __tmp2 B
+op add B B 1
+op add __tmp3 B B
 print __tmp3
 end

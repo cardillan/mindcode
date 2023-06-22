@@ -51,7 +51,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     65 jump __label15 equal __tmp21 false
     66 op mul __tmp23 ballVX -1
     67 set ballVX __tmp23
--    * set __tmp22 __tmp23
+-    * set __tmp22 ballVX
     68 jump __label16 always
     69 label __label15
 -    * set __tmp22 null
@@ -60,7 +60,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     72 jump __label17 equal __tmp24 false
     73 op mul __tmp26 ballVY -1
     74 set ballVY __tmp26
--    * set __tmp25 __tmp26
+-    * set __tmp25 ballVY
     75 jump __label18 always
     76 label __label17
 -    * set __tmp25 null
@@ -71,7 +71,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     95 set ballVX __tmp42
     96 op sub __tmp43 paddleWidth 1
     97 set paddleWidth __tmp43
--    * set __tmp35 __tmp43
+-    * set __tmp35 paddleWidth
     98 jump __label20 always
     99 label __label19
 -    * set __tmp35 null
@@ -106,7 +106,7 @@ Modifications by DeadCodeEliminator, iteration 2:
     34 jump __label11 equal __tmp9 false
     35 op add __tmp11 paddleX 3
     36 set paddleX __tmp11
--    * set __tmp10 __tmp11
+-    * set __tmp10 paddleX
     37 jump __label12 always
     38 label __label11
 -    * set __tmp10 null
@@ -117,7 +117,7 @@ Modifications by DeadCodeEliminator, iteration 2:
     43 jump __label13 equal __tmp12 false
     44 op sub __tmp14 paddleX 3
     45 set paddleX __tmp14
--    * set __tmp13 __tmp14
+-    * set __tmp13 paddleX
     46 jump __label14 always
     47 label __label13
 -    * set __tmp13 null
@@ -126,7 +126,7 @@ Modifications by DeadCodeEliminator, iteration 2:
     50 op add __tmp15 ballX ballVX
  
    135 set ballVX __tmp66
-   136 set __tmp64 __tmp66
+   136 set __tmp64 ballVX
    137 label __label32
 -    * set __tmp57 __tmp64
    138 jump __label30 always
@@ -141,12 +141,12 @@ Modifications by DeadCodeEliminator, iteration 3:
    128 jump __label31 equal __tmp63 false
    129 op mul __tmp65 ballVY -1
    130 set ballVY __tmp65
--    * set __tmp64 __tmp65
+-    * set __tmp64 ballVY
    131 jump __label32 always
    132 label __label31
    133 op mul __tmp66 ballVX -1
    134 set ballVX __tmp66
--    * set __tmp64 __tmp66
+-    * set __tmp64 ballVX
    135 label __label32
    136 jump __label30 always
    137 label __label29

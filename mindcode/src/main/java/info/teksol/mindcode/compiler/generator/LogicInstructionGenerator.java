@@ -662,7 +662,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitAssignment(Assignment node) {
-        final LogicValue rvalue = visit(node.getValue());
+        final LogicValue eval = visit(node.getValue());
+        final LogicValue rvalue;
+
+        // Reusing volatile variables might assign different values to each variable in chain
+        if (eval.isVolatile()) {
+            LogicVariable tmp = nextTemp();
+            emit(createSet(tmp, eval));
+            rvalue = tmp;
+        } else {
+            rvalue = eval;
+        }
 
         switch (node.getVar()) {
             case HeapAccess heapAccess -> {
@@ -689,9 +699,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 if (target instanceof LogicVariable variable) {
                     if (target.getType() != ArgumentType.BLOCK) {
                         emit(createSet(variable, rvalue));
-                        // Returning rvalue causes temp variable to be used twice
-                        // This is not accounted for in some optimizations, but the impact seems to be minimal
-                        // Decided not to switch to returning "variable" instead
+                        return target;
                     } else {
                         throw new MindcodeException("Assignment to variable '" + target + "' not allowed (name reserved for linked blocks).");
                     }

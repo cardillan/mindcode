@@ -47,6 +47,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     }
 
     private void logTiming(String title, List<CompilerMessage> messages) {
+        String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
         String timings = messages.stream()
                 .filter(TimingMessage.class::isInstance)
                 .map(TimingMessage.class::cast)
@@ -54,7 +55,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
                         100 * ((50 + m.milliseconds()) / 100)))
                 .collect(Collectors.joining(", "));
 
-        String text = String.format("%-40s: %s", title + ":", timings.toLowerCase());
+        String text = String.format("%-40s: %s", name + ":", timings.toLowerCase());
         timing.add(text);
     }
 

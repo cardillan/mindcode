@@ -132,7 +132,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(OP, "add", var(1), "count", "1"),
                 createInstruction(SET, "count", var(1)),
-                createInstruction(PRINT, var(1)),
+                createInstruction(PRINT, "count"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(SENSOR, var(0), "switch1", "@enabled"),
                 createInstruction(JUMP, var(1003), "notEqual", var(0), "false"),

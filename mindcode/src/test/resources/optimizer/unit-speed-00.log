@@ -1,5 +1,5 @@
-    95 instructions before optimizations.
-     4 instructions eliminated by OutputTempEliminator.
+    97 instructions before optimizations.
+     6 instructions eliminated by OutputTempEliminator.
      1 instructions eliminated by ExpressionOptimizer.
      6 instructions eliminated by ImproveNegativeConditionalJumps.
      6 loops improved by LoopOptimizer.
@@ -29,33 +29,53 @@ Modifications by OutputTempEliminator, iteration 1:
     14 label __label0
     15 op equal __tmp9 @unit null
  
-    76 op div __tmp23 __tmp22 2
-    77 ucontrol move __tmp20 __tmp23
+    57 label __label11
+    58 print "Moving to destination"
+    59 printflush message1
+-    * set __tmp16 @time
+-    * set start __tmp16
++   60 set start @time
+    61 ucontrol move DX DY
+    62 label __label12
+    63 ucontrol within DX DY 1 __tmp17
+ 
+    67 label __label13
+    68 jump __label12 always
+    69 label __label14
+-    * set __tmp19 @time
+-    * set finish __tmp19
++   70 set finish @time
+    71 op sub __tmp20 SX DX
+    72 op abs __tmp21 __tmp20
+    73 op div __tmp22 __tmp21 2
+ 
+    76 op div __tmp25 __tmp24 2
+    77 ucontrol move __tmp22 __tmp25
     78 ucontrol flag 0
--    * op sub __tmp24 finish start
--    * set elapsed __tmp24
+-    * op sub __tmp26 finish start
+-    * set elapsed __tmp26
 +   79 op sub elapsed finish start
-    80 op div __tmp25 distance elapsed
-    81 op mul __tmp26 __tmp25 100000
-    82 op floor __tmp27 __tmp26
--    * op div __tmp28 __tmp27 100
--    * set speed __tmp28
-+   83 op div speed __tmp27 100
+    80 op div __tmp27 distance elapsed
+    81 op mul __tmp28 __tmp27 100000
+    82 op floor __tmp29 __tmp28
+-    * op div __tmp30 __tmp29 100
+-    * set speed __tmp30
++   83 op div speed __tmp29 100
     84 label __label15
-    85 sensor __tmp29 switch1 @enabled
-    86 op equal __tmp30 __tmp29 false
+    85 sensor __tmp31 switch1 @enabled
+    86 op equal __tmp32 __tmp31 false
 
 Modifications by ExpressionOptimizer, iteration 1:
  
     78 ucontrol flag 0
     79 op sub elapsed finish start
-    80 op div __tmp25 distance elapsed
--    * op mul __tmp26 __tmp25 100000
--    * op floor __tmp27 __tmp26
-+   81 op idiv __tmp27 __tmp25 0.00001
-    82 op div speed __tmp27 100
+    80 op div __tmp27 distance elapsed
+-    * op mul __tmp28 __tmp27 100000
+-    * op floor __tmp29 __tmp28
++   81 op idiv __tmp29 __tmp27 0.00001
+    82 op div speed __tmp29 100
     83 label __label15
-    84 sensor __tmp29 switch1 @enabled
+    84 sensor __tmp31 switch1 @enabled
 
 Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
@@ -101,20 +121,20 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
     57 ucontrol move DX DY
     58 label __label12
-    59 ucontrol within DX DY 1 __tmp16
--    * op equal __tmp17 __tmp16 false
--    * jump __label14 equal __tmp17 false
-+   60 jump __label14 notEqual __tmp16 false
+    59 ucontrol within DX DY 1 __tmp17
+-    * op equal __tmp18 __tmp17 false
+-    * jump __label14 equal __tmp18 false
++   60 jump __label14 notEqual __tmp17 false
     61 ucontrol move DX DY
     62 label __label13
     63 jump __label12 always
  
-    77 op div speed __tmp27 100
+    77 op div speed __tmp29 100
     78 label __label15
-    79 sensor __tmp29 switch1 @enabled
--    * op equal __tmp30 __tmp29 false
--    * jump __label17 equal __tmp30 false
-+   80 jump __label17 notEqual __tmp29 false
+    79 sensor __tmp31 switch1 @enabled
+-    * op equal __tmp32 __tmp31 false
+-    * jump __label17 equal __tmp32 false
++   80 jump __label17 notEqual __tmp31 false
     81 print "Measurement results ("
     82 print UNIT
     83 print "):"
@@ -177,21 +197,21 @@ Modifications by LoopOptimizer, iteration 1:
     62 printflush message1
  
     65 label __label12
-    66 ucontrol within DX DY 1 __tmp16
-    67 jump __label14 notEqual __tmp16 false
+    66 ucontrol within DX DY 1 __tmp17
+    67 jump __label14 notEqual __tmp17 false
 +   68 label __label22
     69 ucontrol move DX DY
     70 label __label13
 -    * jump __label12 always
-+   71 ucontrol within DX DY 1 __tmp16
-+   72 jump __label22 equal __tmp16 false
++   71 ucontrol within DX DY 1 __tmp17
++   72 jump __label22 equal __tmp17 false
     73 label __label14
     74 set finish @time
-    75 op sub __tmp18 SX DX
+    75 op sub __tmp20 SX DX
  
     87 label __label15
-    88 sensor __tmp29 switch1 @enabled
-    89 jump __label17 notEqual __tmp29 false
+    88 sensor __tmp31 switch1 @enabled
+    89 jump __label17 notEqual __tmp31 false
 +   90 label __label23
     91 print "Measurement results ("
     92 print UNIT
@@ -201,8 +221,8 @@ Modifications by LoopOptimizer, iteration 1:
    107 printflush message1
    108 label __label16
 -    * jump __label15 always
-+  109 sensor __tmp29 switch1 @enabled
-+  110 jump __label23 equal __tmp29 false
++  109 sensor __tmp31 switch1 @enabled
++  110 jump __label23 equal __tmp31 false
    111 label __label17
    112 end
 
@@ -230,7 +250,7 @@ Modifications by PrintMerger, iteration 1:
 +  103 print "tiles/s\nPress button to repeat"
    104 printflush message1
    105 label __label16
-   106 sensor __tmp29 switch1 @enabled
+   106 sensor __tmp31 switch1 @enabled
 
 Final code before resolving virtual instructions:
 
@@ -300,30 +320,30 @@ printflush message1
 set start @time
 ucontrol move DX DY 0 0 0
 label __label12
-ucontrol within DX DY 1 __tmp16 0
-jump __label14 notEqual __tmp16 false
+ucontrol within DX DY 1 __tmp17 0
+jump __label14 notEqual __tmp17 false
 label __label22
 ucontrol move DX DY 0 0 0
 label __label13
-ucontrol within DX DY 1 __tmp16 0
-jump __label22 equal __tmp16 false
+ucontrol within DX DY 1 __tmp17 0
+jump __label22 equal __tmp17 false
 label __label14
 set finish @time
-op sub __tmp18 SX DX
-op abs __tmp19 __tmp18 0
-op div __tmp20 __tmp19 2
-op sub __tmp21 SY DY
-op abs __tmp22 __tmp21 0
-op div __tmp23 __tmp22 2
-ucontrol move __tmp20 __tmp23 0 0 0
+op sub __tmp20 SX DX
+op abs __tmp21 __tmp20 0
+op div __tmp22 __tmp21 2
+op sub __tmp23 SY DY
+op abs __tmp24 __tmp23 0
+op div __tmp25 __tmp24 2
+ucontrol move __tmp22 __tmp25 0 0 0
 ucontrol flag 0 0 0 0 0
 op sub elapsed finish start
-op div __tmp25 distance elapsed
-op idiv __tmp27 __tmp25 0.00001
-op div speed __tmp27 100
+op div __tmp27 distance elapsed
+op idiv __tmp29 __tmp27 0.00001
+op div speed __tmp29 100
 label __label15
-sensor __tmp29 switch1 @enabled
-jump __label17 notEqual __tmp29 false
+sensor __tmp31 switch1 @enabled
+jump __label17 notEqual __tmp31 false
 label __label23
 print "Measurement results ("
 print UNIT
@@ -340,7 +360,7 @@ print speed
 print "tiles/s\nPress button to repeat"
 printflush message1
 label __label16
-sensor __tmp29 switch1 @enabled
-jump __label23 equal __tmp29 false
+sensor __tmp31 switch1 @enabled
+jump __label23 equal __tmp31 false
 label __label17
 end

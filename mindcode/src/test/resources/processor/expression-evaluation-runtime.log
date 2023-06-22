@@ -1,7 +1,8 @@
   1419 instructions before optimizations.
    189 instructions eliminated by DeadCodeEliminator (2 iterations).
+    15 instructions eliminated by OutputTempEliminator.
     63 instructions eliminated by ImproveNegativeConditionalJumps.
-   305 instructions eliminated by DataFlowOptimizer (20 iterations).
+   290 instructions eliminated by DataFlowOptimizer (20 iterations).
    107 instructions eliminated by PrintMerger.
    755 instructions after optimizations.
 
@@ -1521,6 +1522,158 @@ Modifications by DeadCodeEliminator, iteration 2:
   1539 label __label312
   1540 end
 
+Modifications by OutputTempEliminator, iteration 1:
+ 
+  1153 call __label0
+  1154 gotolabel __label240 __fn0
+  1155 set __retval241 __fn0retval
+-    * op pow __tmp242 a __retval241
+-    * set a __tmp242
++ 1156 op pow a a __retval241
+  1157 label __label241
+  1158 set __fn49_actual a
+  1159 set __fn49_expected 16
+ 
+  1178 call __label0
+  1179 gotolabel __label245 __fn0
+  1180 set __retval246 __fn0retval
+-    * op mul __tmp247 a __retval246
+-    * set a __tmp247
++ 1181 op mul a a __retval246
+  1182 label __label246
+  1183 set __fn50_actual a
+  1184 set __fn50_expected 8
+ 
+  1203 call __label0
+  1204 gotolabel __label250 __fn0
+  1205 set __retval251 __fn0retval
+-    * op div __tmp252 a __retval251
+-    * set a __tmp252
++ 1206 op div a a __retval251
+  1207 label __label251
+  1208 set __fn51_actual a
+  1209 set __fn51_expected 1.5
+ 
+  1228 call __label0
+  1229 gotolabel __label255 __fn0
+  1230 set __retval256 __fn0retval
+-    * op idiv __tmp257 a __retval256
+-    * set a __tmp257
++ 1231 op idiv a a __retval256
+  1232 label __label256
+  1233 set __fn52_actual a
+  1234 set __fn52_expected 1
+ 
+  1253 call __label0
+  1254 gotolabel __label260 __fn0
+  1255 set __retval261 __fn0retval
+-    * op mod __tmp262 a __retval261
+-    * set a __tmp262
++ 1256 op mod a a __retval261
+  1257 label __label261
+  1258 set __fn53_actual a
+  1259 set __fn53_expected 2
+ 
+  1278 call __label0
+  1279 gotolabel __label265 __fn0
+  1280 set __retval266 __fn0retval
+-    * op add __tmp267 a __retval266
+-    * set a __tmp267
++ 1281 op add a a __retval266
+  1282 label __label266
+  1283 set __fn54_actual a
+  1284 set __fn54_expected 6
+ 
+  1303 call __label0
+  1304 gotolabel __label270 __fn0
+  1305 set __retval271 __fn0retval
+-    * op sub __tmp272 a __retval271
+-    * set a __tmp272
++ 1306 op sub a a __retval271
+  1307 label __label271
+  1308 set __fn55_actual a
+  1309 set __fn55_expected 2
+ 
+  1328 call __label0
+  1329 gotolabel __label275 __fn0
+  1330 set __retval276 __fn0retval
+-    * op shl __tmp277 a __retval276
+-    * set a __tmp277
++ 1331 op shl a a __retval276
+  1332 label __label276
+  1333 set __fn56_actual a
+  1334 set __fn56_expected 4
+ 
+  1353 call __label0
+  1354 gotolabel __label280 __fn0
+  1355 set __retval281 __fn0retval
+-    * op shr __tmp282 a __retval281
+-    * set a __tmp282
++ 1356 op shr a a __retval281
+  1357 label __label281
+  1358 set __fn57_actual a
+  1359 set __fn57_expected 2
+ 
+  1378 call __label0
+  1379 gotolabel __label285 __fn0
+  1380 set __retval286 __fn0retval
+-    * op or __tmp287 a __retval286
+-    * set a __tmp287
++ 1381 op or a a __retval286
+  1382 label __label286
+  1383 set __fn58_actual a
+  1384 set __fn58_expected 3
+ 
+  1403 call __label0
+  1404 gotolabel __label290 __fn0
+  1405 set __retval291 __fn0retval
+-    * op and __tmp292 a __retval291
+-    * set a __tmp292
++ 1406 op and a a __retval291
+  1407 label __label291
+  1408 set __fn59_actual a
+  1409 set __fn59_expected 2
+ 
+  1428 call __label0
+  1429 gotolabel __label295 __fn0
+  1430 set __retval296 __fn0retval
+-    * op xor __tmp297 a __retval296
+-    * set a __tmp297
++ 1431 op xor a a __retval296
+  1432 label __label296
+  1433 set __fn60_actual a
+  1434 set __fn60_expected 1
+ 
+  1453 call __label0
+  1454 gotolabel __label300 __fn0
+  1455 set __retval301 __fn0retval
+-    * op land __tmp302 a __retval301
+-    * set a __tmp302
++ 1456 op land a a __retval301
+  1457 label __label301
+  1458 set __fn61_actual a
+  1459 set __fn61_expected false
+ 
+  1478 call __label0
+  1479 gotolabel __label305 __fn0
+  1480 set __retval306 __fn0retval
+-    * op land __tmp307 a __retval306
+-    * set a __tmp307
++ 1481 op land a a __retval306
+  1482 label __label306
+  1483 set __fn62_actual a
+  1484 set __fn62_expected true
+ 
+  1503 call __label0
+  1504 gotolabel __label310 __fn0
+  1505 set __retval311 __fn0retval
+-    * op or __tmp312 a __retval311
+-    * set a __tmp312
++ 1506 op or a a __retval311
+  1507 label __label311
+  1508 set __fn63_actual a
+  1509 set __fn63_expected 2
+
 Modifications by ImproveNegativeConditionalJumps, iteration 1:
  
      7 set __fn1_actual __tmp1
@@ -2003,155 +2156,155 @@ Modifications by ImproveNegativeConditionalJumps, iteration 1:
   1091 jump __label239 always
   1092 label __label238
  
-  1111 set __fn49_actual __tmp242
-  1112 set __fn49_expected 16
-  1113 set __fn49_operation "**="
+  1110 set __fn49_actual a
+  1111 set __fn49_expected 16
+  1112 set __fn49_operation "**="
 -    * op equal __tmp244 __fn49_actual __fn49_expected
 -    * jump __label243 equal __tmp244 false
-+ 1114 jump __label243 notEqual __fn49_actual __fn49_expected
-  1115 print "ok"
-  1116 jump __label244 always
-  1117 label __label243
++ 1113 jump __label243 notEqual __fn49_actual __fn49_expected
+  1114 print "ok"
+  1115 jump __label244 always
+  1116 label __label243
  
-  1136 set __fn50_actual __tmp247
-  1137 set __fn50_expected 8
-  1138 set __fn50_operation "*="
+  1134 set __fn50_actual a
+  1135 set __fn50_expected 8
+  1136 set __fn50_operation "*="
 -    * op equal __tmp249 __fn50_actual __fn50_expected
 -    * jump __label248 equal __tmp249 false
-+ 1139 jump __label248 notEqual __fn50_actual __fn50_expected
-  1140 print "ok"
-  1141 jump __label249 always
-  1142 label __label248
++ 1137 jump __label248 notEqual __fn50_actual __fn50_expected
+  1138 print "ok"
+  1139 jump __label249 always
+  1140 label __label248
  
-  1161 set __fn51_actual __tmp252
-  1162 set __fn51_expected 1.5
-  1163 set __fn51_operation "/="
+  1158 set __fn51_actual a
+  1159 set __fn51_expected 1.5
+  1160 set __fn51_operation "/="
 -    * op equal __tmp254 __fn51_actual __fn51_expected
 -    * jump __label253 equal __tmp254 false
-+ 1164 jump __label253 notEqual __fn51_actual __fn51_expected
-  1165 print "ok"
-  1166 jump __label254 always
-  1167 label __label253
++ 1161 jump __label253 notEqual __fn51_actual __fn51_expected
+  1162 print "ok"
+  1163 jump __label254 always
+  1164 label __label253
  
-  1186 set __fn52_actual __tmp257
-  1187 set __fn52_expected 1
-  1188 set __fn52_operation "\="
+  1182 set __fn52_actual a
+  1183 set __fn52_expected 1
+  1184 set __fn52_operation "\="
 -    * op equal __tmp259 __fn52_actual __fn52_expected
 -    * jump __label258 equal __tmp259 false
-+ 1189 jump __label258 notEqual __fn52_actual __fn52_expected
-  1190 print "ok"
-  1191 jump __label259 always
-  1192 label __label258
++ 1185 jump __label258 notEqual __fn52_actual __fn52_expected
+  1186 print "ok"
+  1187 jump __label259 always
+  1188 label __label258
  
-  1211 set __fn53_actual __tmp262
-  1212 set __fn53_expected 2
-  1213 set __fn53_operation "%="
+  1206 set __fn53_actual a
+  1207 set __fn53_expected 2
+  1208 set __fn53_operation "%="
 -    * op equal __tmp264 __fn53_actual __fn53_expected
 -    * jump __label263 equal __tmp264 false
-+ 1214 jump __label263 notEqual __fn53_actual __fn53_expected
-  1215 print "ok"
-  1216 jump __label264 always
-  1217 label __label263
++ 1209 jump __label263 notEqual __fn53_actual __fn53_expected
+  1210 print "ok"
+  1211 jump __label264 always
+  1212 label __label263
  
-  1236 set __fn54_actual __tmp267
-  1237 set __fn54_expected 6
-  1238 set __fn54_operation "+="
+  1230 set __fn54_actual a
+  1231 set __fn54_expected 6
+  1232 set __fn54_operation "+="
 -    * op equal __tmp269 __fn54_actual __fn54_expected
 -    * jump __label268 equal __tmp269 false
-+ 1239 jump __label268 notEqual __fn54_actual __fn54_expected
-  1240 print "ok"
-  1241 jump __label269 always
-  1242 label __label268
++ 1233 jump __label268 notEqual __fn54_actual __fn54_expected
+  1234 print "ok"
+  1235 jump __label269 always
+  1236 label __label268
  
-  1261 set __fn55_actual __tmp272
-  1262 set __fn55_expected 2
-  1263 set __fn55_operation "-="
+  1254 set __fn55_actual a
+  1255 set __fn55_expected 2
+  1256 set __fn55_operation "-="
 -    * op equal __tmp274 __fn55_actual __fn55_expected
 -    * jump __label273 equal __tmp274 false
-+ 1264 jump __label273 notEqual __fn55_actual __fn55_expected
-  1265 print "ok"
-  1266 jump __label274 always
-  1267 label __label273
++ 1257 jump __label273 notEqual __fn55_actual __fn55_expected
+  1258 print "ok"
+  1259 jump __label274 always
+  1260 label __label273
  
-  1286 set __fn56_actual __tmp277
-  1287 set __fn56_expected 4
-  1288 set __fn56_operation "<<="
+  1278 set __fn56_actual a
+  1279 set __fn56_expected 4
+  1280 set __fn56_operation "<<="
 -    * op equal __tmp279 __fn56_actual __fn56_expected
 -    * jump __label278 equal __tmp279 false
-+ 1289 jump __label278 notEqual __fn56_actual __fn56_expected
-  1290 print "ok"
-  1291 jump __label279 always
-  1292 label __label278
++ 1281 jump __label278 notEqual __fn56_actual __fn56_expected
+  1282 print "ok"
+  1283 jump __label279 always
+  1284 label __label278
  
-  1311 set __fn57_actual __tmp282
-  1312 set __fn57_expected 2
-  1313 set __fn57_operation ">>="
+  1302 set __fn57_actual a
+  1303 set __fn57_expected 2
+  1304 set __fn57_operation ">>="
 -    * op equal __tmp284 __fn57_actual __fn57_expected
 -    * jump __label283 equal __tmp284 false
-+ 1314 jump __label283 notEqual __fn57_actual __fn57_expected
-  1315 print "ok"
-  1316 jump __label284 always
-  1317 label __label283
++ 1305 jump __label283 notEqual __fn57_actual __fn57_expected
+  1306 print "ok"
+  1307 jump __label284 always
+  1308 label __label283
  
-  1336 set __fn58_actual __tmp287
-  1337 set __fn58_expected 3
-  1338 set __fn58_operation "|="
+  1326 set __fn58_actual a
+  1327 set __fn58_expected 3
+  1328 set __fn58_operation "|="
 -    * op equal __tmp289 __fn58_actual __fn58_expected
 -    * jump __label288 equal __tmp289 false
-+ 1339 jump __label288 notEqual __fn58_actual __fn58_expected
-  1340 print "ok"
-  1341 jump __label289 always
-  1342 label __label288
++ 1329 jump __label288 notEqual __fn58_actual __fn58_expected
+  1330 print "ok"
+  1331 jump __label289 always
+  1332 label __label288
  
-  1361 set __fn59_actual __tmp292
-  1362 set __fn59_expected 2
-  1363 set __fn59_operation "&="
+  1350 set __fn59_actual a
+  1351 set __fn59_expected 2
+  1352 set __fn59_operation "&="
 -    * op equal __tmp294 __fn59_actual __fn59_expected
 -    * jump __label293 equal __tmp294 false
-+ 1364 jump __label293 notEqual __fn59_actual __fn59_expected
-  1365 print "ok"
-  1366 jump __label294 always
-  1367 label __label293
++ 1353 jump __label293 notEqual __fn59_actual __fn59_expected
+  1354 print "ok"
+  1355 jump __label294 always
+  1356 label __label293
  
-  1386 set __fn60_actual __tmp297
-  1387 set __fn60_expected 1
-  1388 set __fn60_operation "^="
+  1374 set __fn60_actual a
+  1375 set __fn60_expected 1
+  1376 set __fn60_operation "^="
 -    * op equal __tmp299 __fn60_actual __fn60_expected
 -    * jump __label298 equal __tmp299 false
-+ 1389 jump __label298 notEqual __fn60_actual __fn60_expected
-  1390 print "ok"
-  1391 jump __label299 always
-  1392 label __label298
++ 1377 jump __label298 notEqual __fn60_actual __fn60_expected
+  1378 print "ok"
+  1379 jump __label299 always
+  1380 label __label298
  
-  1411 set __fn61_actual __tmp302
-  1412 set __fn61_expected false
-  1413 set __fn61_operation "&&="
+  1398 set __fn61_actual a
+  1399 set __fn61_expected false
+  1400 set __fn61_operation "&&="
 -    * op equal __tmp304 __fn61_actual __fn61_expected
 -    * jump __label303 equal __tmp304 false
-+ 1414 jump __label303 notEqual __fn61_actual __fn61_expected
-  1415 print "ok"
-  1416 jump __label304 always
-  1417 label __label303
++ 1401 jump __label303 notEqual __fn61_actual __fn61_expected
+  1402 print "ok"
+  1403 jump __label304 always
+  1404 label __label303
  
-  1436 set __fn62_actual __tmp307
-  1437 set __fn62_expected true
-  1438 set __fn62_operation "&&="
+  1422 set __fn62_actual a
+  1423 set __fn62_expected true
+  1424 set __fn62_operation "&&="
 -    * op equal __tmp309 __fn62_actual __fn62_expected
 -    * jump __label308 equal __tmp309 false
-+ 1439 jump __label308 notEqual __fn62_actual __fn62_expected
-  1440 print "ok"
-  1441 jump __label309 always
-  1442 label __label308
++ 1425 jump __label308 notEqual __fn62_actual __fn62_expected
+  1426 print "ok"
+  1427 jump __label309 always
+  1428 label __label308
  
-  1461 set __fn63_actual __tmp312
-  1462 set __fn63_expected 2
-  1463 set __fn63_operation "||="
+  1446 set __fn63_actual a
+  1447 set __fn63_expected 2
+  1448 set __fn63_operation "||="
 -    * op equal __tmp314 __fn63_actual __fn63_expected
 -    * jump __label313 equal __tmp314 false
-+ 1464 jump __label313 notEqual __fn63_actual __fn63_expected
-  1465 print "ok"
-  1466 jump __label314 always
-  1467 label __label313
++ 1449 jump __label313 notEqual __fn63_actual __fn63_expected
+  1450 print "ok"
+  1451 jump __label314 always
+  1452 label __label313
 
 Modifications by DataFlowOptimizer, iteration 1:
  
@@ -3454,15 +3607,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1105 call __label0
   1106 gotolabel __label240 __fn0
   1107 set __retval241 __fn0retval
--    * op pow __tmp242 a __retval241
--    * set a __tmp242
-+ 1108 op pow __tmp242 2 __fn0retval
+-    * op pow a a __retval241
++ 1108 op pow a 2 __fn0retval
   1109 label __label241
-  1110 set __fn49_actual __tmp242
+  1110 set __fn49_actual a
   1111 set __fn49_expected 16
   1112 set __fn49_operation "**="
 -    * jump __label243 notEqual __fn49_actual __fn49_expected
-+ 1113 jump __label243 notEqual __tmp242 16
++ 1113 jump __label243 notEqual a 16
   1114 print "ok"
   1115 jump __label244 always
   1116 label __label243
@@ -3474,7 +3626,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1120 print 16
   1121 print ", but was "
 -    * print __fn49_actual
-+ 1122 print __tmp242
++ 1122 print a
   1123 print "\n"
   1124 label __label244
   1125 label __label242
@@ -3482,15 +3634,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1129 call __label0
   1130 gotolabel __label245 __fn0
   1131 set __retval246 __fn0retval
--    * op mul __tmp247 a __retval246
--    * set a __tmp247
-+ 1132 op mul __tmp247 2 __fn0retval
+-    * op mul a a __retval246
++ 1132 op mul a 2 __fn0retval
   1133 label __label246
-  1134 set __fn50_actual __tmp247
+  1134 set __fn50_actual a
   1135 set __fn50_expected 8
   1136 set __fn50_operation "*="
 -    * jump __label248 notEqual __fn50_actual __fn50_expected
-+ 1137 jump __label248 notEqual __tmp247 8
++ 1137 jump __label248 notEqual a 8
   1138 print "ok"
   1139 jump __label249 always
   1140 label __label248
@@ -3502,7 +3653,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1144 print 8
   1145 print ", but was "
 -    * print __fn50_actual
-+ 1146 print __tmp247
++ 1146 print a
   1147 print "\n"
   1148 label __label249
   1149 label __label247
@@ -3510,15 +3661,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1153 call __label0
   1154 gotolabel __label250 __fn0
   1155 set __retval251 __fn0retval
--    * op div __tmp252 a __retval251
--    * set a __tmp252
-+ 1156 op div __tmp252 6 __fn0retval
+-    * op div a a __retval251
++ 1156 op div a 6 __fn0retval
   1157 label __label251
-  1158 set __fn51_actual __tmp252
+  1158 set __fn51_actual a
   1159 set __fn51_expected 1.5
   1160 set __fn51_operation "/="
 -    * jump __label253 notEqual __fn51_actual __fn51_expected
-+ 1161 jump __label253 notEqual __tmp252 1.5
++ 1161 jump __label253 notEqual a 1.5
   1162 print "ok"
   1163 jump __label254 always
   1164 label __label253
@@ -3530,7 +3680,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1168 print 1.5
   1169 print ", but was "
 -    * print __fn51_actual
-+ 1170 print __tmp252
++ 1170 print a
   1171 print "\n"
   1172 label __label254
   1173 label __label252
@@ -3538,15 +3688,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1177 call __label0
   1178 gotolabel __label255 __fn0
   1179 set __retval256 __fn0retval
--    * op idiv __tmp257 a __retval256
--    * set a __tmp257
-+ 1180 op idiv __tmp257 6 __fn0retval
+-    * op idiv a a __retval256
++ 1180 op idiv a 6 __fn0retval
   1181 label __label256
-  1182 set __fn52_actual __tmp257
+  1182 set __fn52_actual a
   1183 set __fn52_expected 1
   1184 set __fn52_operation "\="
 -    * jump __label258 notEqual __fn52_actual __fn52_expected
-+ 1185 jump __label258 notEqual __tmp257 1
++ 1185 jump __label258 notEqual a 1
   1186 print "ok"
   1187 jump __label259 always
   1188 label __label258
@@ -3558,7 +3707,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1192 print 1
   1193 print ", but was "
 -    * print __fn52_actual
-+ 1194 print __tmp257
++ 1194 print a
   1195 print "\n"
   1196 label __label259
   1197 label __label257
@@ -3566,15 +3715,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1201 call __label0
   1202 gotolabel __label260 __fn0
   1203 set __retval261 __fn0retval
--    * op mod __tmp262 a __retval261
--    * set a __tmp262
-+ 1204 op mod __tmp262 6 __fn0retval
+-    * op mod a a __retval261
++ 1204 op mod a 6 __fn0retval
   1205 label __label261
-  1206 set __fn53_actual __tmp262
+  1206 set __fn53_actual a
   1207 set __fn53_expected 2
   1208 set __fn53_operation "%="
 -    * jump __label263 notEqual __fn53_actual __fn53_expected
-+ 1209 jump __label263 notEqual __tmp262 2
++ 1209 jump __label263 notEqual a 2
   1210 print "ok"
   1211 jump __label264 always
   1212 label __label263
@@ -3586,7 +3734,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1216 print 2
   1217 print ", but was "
 -    * print __fn53_actual
-+ 1218 print __tmp262
++ 1218 print a
   1219 print "\n"
   1220 label __label264
   1221 label __label262
@@ -3594,15 +3742,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1225 call __label0
   1226 gotolabel __label265 __fn0
   1227 set __retval266 __fn0retval
--    * op add __tmp267 a __retval266
--    * set a __tmp267
-+ 1228 op add __tmp267 4 __fn0retval
+-    * op add a a __retval266
++ 1228 op add a 4 __fn0retval
   1229 label __label266
-  1230 set __fn54_actual __tmp267
+  1230 set __fn54_actual a
   1231 set __fn54_expected 6
   1232 set __fn54_operation "+="
 -    * jump __label268 notEqual __fn54_actual __fn54_expected
-+ 1233 jump __label268 notEqual __tmp267 6
++ 1233 jump __label268 notEqual a 6
   1234 print "ok"
   1235 jump __label269 always
   1236 label __label268
@@ -3614,7 +3761,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1240 print 6
   1241 print ", but was "
 -    * print __fn54_actual
-+ 1242 print __tmp267
++ 1242 print a
   1243 print "\n"
   1244 label __label269
   1245 label __label267
@@ -3622,15 +3769,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1249 call __label0
   1250 gotolabel __label270 __fn0
   1251 set __retval271 __fn0retval
--    * op sub __tmp272 a __retval271
--    * set a __tmp272
-+ 1252 op sub __tmp272 4 __fn0retval
+-    * op sub a a __retval271
++ 1252 op sub a 4 __fn0retval
   1253 label __label271
-  1254 set __fn55_actual __tmp272
+  1254 set __fn55_actual a
   1255 set __fn55_expected 2
   1256 set __fn55_operation "-="
 -    * jump __label273 notEqual __fn55_actual __fn55_expected
-+ 1257 jump __label273 notEqual __tmp272 2
++ 1257 jump __label273 notEqual a 2
   1258 print "ok"
   1259 jump __label274 always
   1260 label __label273
@@ -3642,7 +3788,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1264 print 2
   1265 print ", but was "
 -    * print __fn55_actual
-+ 1266 print __tmp272
++ 1266 print a
   1267 print "\n"
   1268 label __label274
   1269 label __label272
@@ -3650,15 +3796,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1273 call __label0
   1274 gotolabel __label275 __fn0
   1275 set __retval276 __fn0retval
--    * op shl __tmp277 a __retval276
--    * set a __tmp277
-+ 1276 op shl __tmp277 1 __fn0retval
+-    * op shl a a __retval276
++ 1276 op shl a 1 __fn0retval
   1277 label __label276
-  1278 set __fn56_actual __tmp277
+  1278 set __fn56_actual a
   1279 set __fn56_expected 4
   1280 set __fn56_operation "<<="
 -    * jump __label278 notEqual __fn56_actual __fn56_expected
-+ 1281 jump __label278 notEqual __tmp277 4
++ 1281 jump __label278 notEqual a 4
   1282 print "ok"
   1283 jump __label279 always
   1284 label __label278
@@ -3670,7 +3815,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1288 print 4
   1289 print ", but was "
 -    * print __fn56_actual
-+ 1290 print __tmp277
++ 1290 print a
   1291 print "\n"
   1292 label __label279
   1293 label __label277
@@ -3678,15 +3823,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1297 call __label0
   1298 gotolabel __label280 __fn0
   1299 set __retval281 __fn0retval
--    * op shr __tmp282 a __retval281
--    * set a __tmp282
-+ 1300 op shr __tmp282 9 __fn0retval
+-    * op shr a a __retval281
++ 1300 op shr a 9 __fn0retval
   1301 label __label281
-  1302 set __fn57_actual __tmp282
+  1302 set __fn57_actual a
   1303 set __fn57_expected 2
   1304 set __fn57_operation ">>="
 -    * jump __label283 notEqual __fn57_actual __fn57_expected
-+ 1305 jump __label283 notEqual __tmp282 2
++ 1305 jump __label283 notEqual a 2
   1306 print "ok"
   1307 jump __label284 always
   1308 label __label283
@@ -3698,7 +3842,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1312 print 2
   1313 print ", but was "
 -    * print __fn57_actual
-+ 1314 print __tmp282
++ 1314 print a
   1315 print "\n"
   1316 label __label284
   1317 label __label282
@@ -3706,15 +3850,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1321 call __label0
   1322 gotolabel __label285 __fn0
   1323 set __retval286 __fn0retval
--    * op or __tmp287 a __retval286
--    * set a __tmp287
-+ 1324 op or __tmp287 1 __fn0retval
+-    * op or a a __retval286
++ 1324 op or a 1 __fn0retval
   1325 label __label286
-  1326 set __fn58_actual __tmp287
+  1326 set __fn58_actual a
   1327 set __fn58_expected 3
   1328 set __fn58_operation "|="
 -    * jump __label288 notEqual __fn58_actual __fn58_expected
-+ 1329 jump __label288 notEqual __tmp287 3
++ 1329 jump __label288 notEqual a 3
   1330 print "ok"
   1331 jump __label289 always
   1332 label __label288
@@ -3726,7 +3869,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1336 print 3
   1337 print ", but was "
 -    * print __fn58_actual
-+ 1338 print __tmp287
++ 1338 print a
   1339 print "\n"
   1340 label __label289
   1341 label __label287
@@ -3734,15 +3877,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1345 call __label0
   1346 gotolabel __label290 __fn0
   1347 set __retval291 __fn0retval
--    * op and __tmp292 a __retval291
--    * set a __tmp292
-+ 1348 op and __tmp292 3 __fn0retval
+-    * op and a a __retval291
++ 1348 op and a 3 __fn0retval
   1349 label __label291
-  1350 set __fn59_actual __tmp292
+  1350 set __fn59_actual a
   1351 set __fn59_expected 2
   1352 set __fn59_operation "&="
 -    * jump __label293 notEqual __fn59_actual __fn59_expected
-+ 1353 jump __label293 notEqual __tmp292 2
++ 1353 jump __label293 notEqual a 2
   1354 print "ok"
   1355 jump __label294 always
   1356 label __label293
@@ -3754,7 +3896,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1360 print 2
   1361 print ", but was "
 -    * print __fn59_actual
-+ 1362 print __tmp292
++ 1362 print a
   1363 print "\n"
   1364 label __label294
   1365 label __label292
@@ -3762,15 +3904,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1369 call __label0
   1370 gotolabel __label295 __fn0
   1371 set __retval296 __fn0retval
--    * op xor __tmp297 a __retval296
--    * set a __tmp297
-+ 1372 op xor __tmp297 3 __fn0retval
+-    * op xor a a __retval296
++ 1372 op xor a 3 __fn0retval
   1373 label __label296
-  1374 set __fn60_actual __tmp297
+  1374 set __fn60_actual a
   1375 set __fn60_expected 1
   1376 set __fn60_operation "^="
 -    * jump __label298 notEqual __fn60_actual __fn60_expected
-+ 1377 jump __label298 notEqual __tmp297 1
++ 1377 jump __label298 notEqual a 1
   1378 print "ok"
   1379 jump __label299 always
   1380 label __label298
@@ -3782,7 +3923,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1384 print 1
   1385 print ", but was "
 -    * print __fn60_actual
-+ 1386 print __tmp297
++ 1386 print a
   1387 print "\n"
   1388 label __label299
   1389 label __label297
@@ -3790,15 +3931,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1393 call __label0
   1394 gotolabel __label300 __fn0
   1395 set __retval301 __fn0retval
--    * op land __tmp302 a __retval301
--    * set a __tmp302
-+ 1396 op land __tmp302 1 __fn0retval
+-    * op land a a __retval301
++ 1396 op land a 1 __fn0retval
   1397 label __label301
-  1398 set __fn61_actual __tmp302
+  1398 set __fn61_actual a
   1399 set __fn61_expected false
   1400 set __fn61_operation "&&="
 -    * jump __label303 notEqual __fn61_actual __fn61_expected
-+ 1401 jump __label303 notEqual __tmp302 false
++ 1401 jump __label303 notEqual a false
   1402 print "ok"
   1403 jump __label304 always
   1404 label __label303
@@ -3810,7 +3950,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1408 print false
   1409 print ", but was "
 -    * print __fn61_actual
-+ 1410 print __tmp302
++ 1410 print a
   1411 print "\n"
   1412 label __label304
   1413 label __label302
@@ -3818,15 +3958,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1417 call __label0
   1418 gotolabel __label305 __fn0
   1419 set __retval306 __fn0retval
--    * op land __tmp307 a __retval306
--    * set a __tmp307
-+ 1420 op land __tmp307 1 __fn0retval
+-    * op land a a __retval306
++ 1420 op land a 1 __fn0retval
   1421 label __label306
-  1422 set __fn62_actual __tmp307
+  1422 set __fn62_actual a
   1423 set __fn62_expected true
   1424 set __fn62_operation "&&="
 -    * jump __label308 notEqual __fn62_actual __fn62_expected
-+ 1425 jump __label308 notEqual __tmp307 true
++ 1425 jump __label308 notEqual a true
   1426 print "ok"
   1427 jump __label309 always
   1428 label __label308
@@ -3838,7 +3977,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1432 print true
   1433 print ", but was "
 -    * print __fn62_actual
-+ 1434 print __tmp307
++ 1434 print a
   1435 print "\n"
   1436 label __label309
   1437 label __label307
@@ -3848,15 +3987,14 @@ Modifications by DataFlowOptimizer, iteration 1:
   1440 call __label0
   1441 gotolabel __label310 __fn0
   1442 set __retval311 __fn0retval
--    * op or __tmp312 a __retval311
--    * set a __tmp312
-+ 1443 op or __tmp312 0 __fn0retval
+-    * op or a a __retval311
++ 1443 op or a 0 __fn0retval
   1444 label __label311
-  1445 set __fn63_actual __tmp312
+  1445 set __fn63_actual a
   1446 set __fn63_expected 2
   1447 set __fn63_operation "||="
 -    * jump __label313 notEqual __fn63_actual __fn63_expected
-+ 1448 jump __label313 notEqual __tmp312 2
++ 1448 jump __label313 notEqual a 2
   1449 print "ok"
   1450 jump __label314 always
   1451 label __label313
@@ -3868,7 +4006,7 @@ Modifications by DataFlowOptimizer, iteration 1:
 + 1455 print 2
   1456 print ", but was "
 -    * print __fn63_actual
-+ 1457 print __tmp312
++ 1457 print a
   1458 print "\n"
   1459 label __label314
   1460 label __label312
@@ -4522,12 +4660,12 @@ Modifications by DataFlowOptimizer, iteration 2:
    912 call __label0
    913 gotolabel __label240 __fn0
 -    * set __retval241 __fn0retval
-   914 op pow __tmp242 2 __fn0retval
+   914 op pow a 2 __fn0retval
    915 label __label241
--    * set __fn49_actual __tmp242
+-    * set __fn49_actual a
 -    * set __fn49_expected 16
 -    * set __fn49_operation "**="
-   916 jump __label243 notEqual __tmp242 16
+   916 jump __label243 notEqual a 16
    917 print "ok"
    918 jump __label244 always
  
@@ -4540,12 +4678,12 @@ Modifications by DataFlowOptimizer, iteration 2:
    931 call __label0
    932 gotolabel __label245 __fn0
 -    * set __retval246 __fn0retval
-   933 op mul __tmp247 2 __fn0retval
+   933 op mul a 2 __fn0retval
    934 label __label246
--    * set __fn50_actual __tmp247
+-    * set __fn50_actual a
 -    * set __fn50_expected 8
 -    * set __fn50_operation "*="
-   935 jump __label248 notEqual __tmp247 8
+   935 jump __label248 notEqual a 8
    936 print "ok"
    937 jump __label249 always
  
@@ -4558,12 +4696,12 @@ Modifications by DataFlowOptimizer, iteration 2:
    950 call __label0
    951 gotolabel __label250 __fn0
 -    * set __retval251 __fn0retval
-   952 op div __tmp252 6 __fn0retval
+   952 op div a 6 __fn0retval
    953 label __label251
--    * set __fn51_actual __tmp252
+-    * set __fn51_actual a
 -    * set __fn51_expected 1.5
 -    * set __fn51_operation "/="
-   954 jump __label253 notEqual __tmp252 1.5
+   954 jump __label253 notEqual a 1.5
    955 print "ok"
    956 jump __label254 always
  
@@ -4576,12 +4714,12 @@ Modifications by DataFlowOptimizer, iteration 2:
    969 call __label0
    970 gotolabel __label255 __fn0
 -    * set __retval256 __fn0retval
-   971 op idiv __tmp257 6 __fn0retval
+   971 op idiv a 6 __fn0retval
    972 label __label256
--    * set __fn52_actual __tmp257
+-    * set __fn52_actual a
 -    * set __fn52_expected 1
 -    * set __fn52_operation "\="
-   973 jump __label258 notEqual __tmp257 1
+   973 jump __label258 notEqual a 1
    974 print "ok"
    975 jump __label259 always
  
@@ -4594,12 +4732,12 @@ Modifications by DataFlowOptimizer, iteration 2:
    988 call __label0
    989 gotolabel __label260 __fn0
 -    * set __retval261 __fn0retval
-   990 op mod __tmp262 6 __fn0retval
+   990 op mod a 6 __fn0retval
    991 label __label261
--    * set __fn53_actual __tmp262
+-    * set __fn53_actual a
 -    * set __fn53_expected 2
 -    * set __fn53_operation "%="
-   992 jump __label263 notEqual __tmp262 2
+   992 jump __label263 notEqual a 2
    993 print "ok"
    994 jump __label264 always
  
@@ -4612,12 +4750,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1007 call __label0
   1008 gotolabel __label265 __fn0
 -    * set __retval266 __fn0retval
-  1009 op add __tmp267 4 __fn0retval
+  1009 op add a 4 __fn0retval
   1010 label __label266
--    * set __fn54_actual __tmp267
+-    * set __fn54_actual a
 -    * set __fn54_expected 6
 -    * set __fn54_operation "+="
-  1011 jump __label268 notEqual __tmp267 6
+  1011 jump __label268 notEqual a 6
   1012 print "ok"
   1013 jump __label269 always
  
@@ -4630,12 +4768,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1026 call __label0
   1027 gotolabel __label270 __fn0
 -    * set __retval271 __fn0retval
-  1028 op sub __tmp272 4 __fn0retval
+  1028 op sub a 4 __fn0retval
   1029 label __label271
--    * set __fn55_actual __tmp272
+-    * set __fn55_actual a
 -    * set __fn55_expected 2
 -    * set __fn55_operation "-="
-  1030 jump __label273 notEqual __tmp272 2
+  1030 jump __label273 notEqual a 2
   1031 print "ok"
   1032 jump __label274 always
  
@@ -4648,12 +4786,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1045 call __label0
   1046 gotolabel __label275 __fn0
 -    * set __retval276 __fn0retval
-  1047 op shl __tmp277 1 __fn0retval
+  1047 op shl a 1 __fn0retval
   1048 label __label276
--    * set __fn56_actual __tmp277
+-    * set __fn56_actual a
 -    * set __fn56_expected 4
 -    * set __fn56_operation "<<="
-  1049 jump __label278 notEqual __tmp277 4
+  1049 jump __label278 notEqual a 4
   1050 print "ok"
   1051 jump __label279 always
  
@@ -4666,12 +4804,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1064 call __label0
   1065 gotolabel __label280 __fn0
 -    * set __retval281 __fn0retval
-  1066 op shr __tmp282 9 __fn0retval
+  1066 op shr a 9 __fn0retval
   1067 label __label281
--    * set __fn57_actual __tmp282
+-    * set __fn57_actual a
 -    * set __fn57_expected 2
 -    * set __fn57_operation ">>="
-  1068 jump __label283 notEqual __tmp282 2
+  1068 jump __label283 notEqual a 2
   1069 print "ok"
   1070 jump __label284 always
  
@@ -4684,12 +4822,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1083 call __label0
   1084 gotolabel __label285 __fn0
 -    * set __retval286 __fn0retval
-  1085 op or __tmp287 1 __fn0retval
+  1085 op or a 1 __fn0retval
   1086 label __label286
--    * set __fn58_actual __tmp287
+-    * set __fn58_actual a
 -    * set __fn58_expected 3
 -    * set __fn58_operation "|="
-  1087 jump __label288 notEqual __tmp287 3
+  1087 jump __label288 notEqual a 3
   1088 print "ok"
   1089 jump __label289 always
  
@@ -4702,12 +4840,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1102 call __label0
   1103 gotolabel __label290 __fn0
 -    * set __retval291 __fn0retval
-  1104 op and __tmp292 3 __fn0retval
+  1104 op and a 3 __fn0retval
   1105 label __label291
--    * set __fn59_actual __tmp292
+-    * set __fn59_actual a
 -    * set __fn59_expected 2
 -    * set __fn59_operation "&="
-  1106 jump __label293 notEqual __tmp292 2
+  1106 jump __label293 notEqual a 2
   1107 print "ok"
   1108 jump __label294 always
  
@@ -4720,12 +4858,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1120 call __label0
   1121 gotolabel __label295 __fn0
 -    * set __retval296 __fn0retval
-  1122 op xor __tmp297 3 __fn0retval
+  1122 op xor a 3 __fn0retval
   1123 label __label296
--    * set __fn60_actual __tmp297
+-    * set __fn60_actual a
 -    * set __fn60_expected 1
 -    * set __fn60_operation "^="
-  1124 jump __label298 notEqual __tmp297 1
+  1124 jump __label298 notEqual a 1
   1125 print "ok"
   1126 jump __label299 always
  
@@ -4738,12 +4876,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1139 call __label0
   1140 gotolabel __label300 __fn0
 -    * set __retval301 __fn0retval
-  1141 op land __tmp302 1 __fn0retval
+  1141 op land a 1 __fn0retval
   1142 label __label301
--    * set __fn61_actual __tmp302
+-    * set __fn61_actual a
 -    * set __fn61_expected false
 -    * set __fn61_operation "&&="
-  1143 jump __label303 notEqual __tmp302 false
+  1143 jump __label303 notEqual a false
   1144 print "ok"
   1145 jump __label304 always
  
@@ -4756,12 +4894,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1158 call __label0
   1159 gotolabel __label305 __fn0
 -    * set __retval306 __fn0retval
-  1160 op land __tmp307 1 __fn0retval
+  1160 op land a 1 __fn0retval
   1161 label __label306
--    * set __fn62_actual __tmp307
+-    * set __fn62_actual a
 -    * set __fn62_expected true
 -    * set __fn62_operation "&&="
-  1162 jump __label308 notEqual __tmp307 true
+  1162 jump __label308 notEqual a true
   1163 print "ok"
   1164 jump __label309 always
  
@@ -4773,12 +4911,12 @@ Modifications by DataFlowOptimizer, iteration 2:
   1176 call __label0
   1177 gotolabel __label310 __fn0
 -    * set __retval311 __fn0retval
-  1178 op or __tmp312 0 __fn0retval
+  1178 op or a 0 __fn0retval
   1179 label __label311
--    * set __fn63_actual __tmp312
+-    * set __fn63_actual a
 -    * set __fn63_expected 2
 -    * set __fn63_operation "||="
-  1180 jump __label313 notEqual __tmp312 2
+  1180 jump __label313 notEqual a 2
   1181 print "ok"
   1182 jump __label314 always
 
@@ -5511,7 +5649,7 @@ Modifications by PrintMerger, iteration 1:
 +  831 print "Wrong operation **=: expected "
    832 print 16
    833 print ", but was "
-   834 print __tmp242
+   834 print a
  
    844 print "ok"
    845 jump __label249 always
@@ -5522,7 +5660,7 @@ Modifications by PrintMerger, iteration 1:
 +  847 print "Wrong operation *=: expected "
    848 print 8
    849 print ", but was "
-   850 print __tmp247
+   850 print a
  
    860 print "ok"
    861 jump __label254 always
@@ -5533,7 +5671,7 @@ Modifications by PrintMerger, iteration 1:
 +  863 print "Wrong operation /=: expected "
    864 print 1.5
    865 print ", but was "
-   866 print __tmp252
+   866 print a
  
    876 print "ok"
    877 jump __label259 always
@@ -5544,7 +5682,7 @@ Modifications by PrintMerger, iteration 1:
 +  879 print "Wrong operation \=: expected "
    880 print 1
    881 print ", but was "
-   882 print __tmp257
+   882 print a
  
    892 print "ok"
    893 jump __label264 always
@@ -5555,7 +5693,7 @@ Modifications by PrintMerger, iteration 1:
 +  895 print "Wrong operation %=: expected "
    896 print 2
    897 print ", but was "
-   898 print __tmp262
+   898 print a
  
    909 print "ok"
    910 jump __label269 always
@@ -5566,7 +5704,7 @@ Modifications by PrintMerger, iteration 1:
 +  912 print "Wrong operation +=: expected "
    913 print 6
    914 print ", but was "
-   915 print __tmp267
+   915 print a
  
    925 print "ok"
    926 jump __label274 always
@@ -5577,7 +5715,7 @@ Modifications by PrintMerger, iteration 1:
 +  928 print "Wrong operation -=: expected "
    929 print 2
    930 print ", but was "
-   931 print __tmp272
+   931 print a
  
    941 print "ok"
    942 jump __label279 always
@@ -5588,7 +5726,7 @@ Modifications by PrintMerger, iteration 1:
 +  944 print "Wrong operation <<=: expected "
    945 print 4
    946 print ", but was "
-   947 print __tmp277
+   947 print a
  
    957 print "ok"
    958 jump __label284 always
@@ -5599,7 +5737,7 @@ Modifications by PrintMerger, iteration 1:
 +  960 print "Wrong operation >>=: expected "
    961 print 2
    962 print ", but was "
-   963 print __tmp282
+   963 print a
  
    973 print "ok"
    974 jump __label289 always
@@ -5610,7 +5748,7 @@ Modifications by PrintMerger, iteration 1:
 +  976 print "Wrong operation |=: expected "
    977 print 3
    978 print ", but was "
-   979 print __tmp287
+   979 print a
  
    989 print "ok"
    990 jump __label294 always
@@ -5621,7 +5759,7 @@ Modifications by PrintMerger, iteration 1:
 +  992 print "Wrong operation &=: expected "
    993 print 2
    994 print ", but was "
-   995 print __tmp292
+   995 print a
  
   1005 print "ok"
   1006 jump __label299 always
@@ -5632,7 +5770,7 @@ Modifications by PrintMerger, iteration 1:
 + 1008 print "Wrong operation ^=: expected "
   1009 print 1
   1010 print ", but was "
-  1011 print __tmp297
+  1011 print a
  
   1022 print "ok"
   1023 jump __label304 always
@@ -5643,7 +5781,7 @@ Modifications by PrintMerger, iteration 1:
 + 1025 print "Wrong operation &&=: expected "
   1026 print false
   1027 print ", but was "
-  1028 print __tmp302
+  1028 print a
  
   1039 print "ok"
   1040 jump __label309 always
@@ -5654,7 +5792,7 @@ Modifications by PrintMerger, iteration 1:
 + 1042 print "Wrong operation &&=: expected "
   1043 print true
   1044 print ", but was "
-  1045 print __tmp307
+  1045 print a
  
   1055 print "ok"
   1056 jump __label314 always
@@ -5665,7 +5803,7 @@ Modifications by PrintMerger, iteration 1:
 + 1058 print "Wrong operation ||=: expected "
   1059 print 2
   1060 print ", but was "
-  1061 print __tmp312
+  1061 print a
 
 Final code before resolving virtual instructions:
 
@@ -6494,80 +6632,80 @@ set __fn0_n 4
 setaddr __fn0retaddr __label240
 call __label0
 gotolabel __label240 __fn0
-op pow __tmp242 2 __fn0retval
+op pow a 2 __fn0retval
 label __label241
-jump __label243 notEqual __tmp242 16
+jump __label243 notEqual a 16
 print "ok"
 jump __label244 always 0 0
 label __label243
 print "Wrong operation **=: expected "
 print 16
 print ", but was "
-print __tmp242
+print a
 print "\n"
 label __label244
 label __label242
 setaddr __fn0retaddr __label245
 call __label0
 gotolabel __label245 __fn0
-op mul __tmp247 2 __fn0retval
+op mul a 2 __fn0retval
 label __label246
-jump __label248 notEqual __tmp247 8
+jump __label248 notEqual a 8
 print "ok"
 jump __label249 always 0 0
 label __label248
 print "Wrong operation *=: expected "
 print 8
 print ", but was "
-print __tmp247
+print a
 print "\n"
 label __label249
 label __label247
 setaddr __fn0retaddr __label250
 call __label0
 gotolabel __label250 __fn0
-op div __tmp252 6 __fn0retval
+op div a 6 __fn0retval
 label __label251
-jump __label253 notEqual __tmp252 1.5
+jump __label253 notEqual a 1.5
 print "ok"
 jump __label254 always 0 0
 label __label253
 print "Wrong operation /=: expected "
 print 1.5
 print ", but was "
-print __tmp252
+print a
 print "\n"
 label __label254
 label __label252
 setaddr __fn0retaddr __label255
 call __label0
 gotolabel __label255 __fn0
-op idiv __tmp257 6 __fn0retval
+op idiv a 6 __fn0retval
 label __label256
-jump __label258 notEqual __tmp257 1
+jump __label258 notEqual a 1
 print "ok"
 jump __label259 always 0 0
 label __label258
 print "Wrong operation \=: expected "
 print 1
 print ", but was "
-print __tmp257
+print a
 print "\n"
 label __label259
 label __label257
 setaddr __fn0retaddr __label260
 call __label0
 gotolabel __label260 __fn0
-op mod __tmp262 6 __fn0retval
+op mod a 6 __fn0retval
 label __label261
-jump __label263 notEqual __tmp262 2
+jump __label263 notEqual a 2
 print "ok"
 jump __label264 always 0 0
 label __label263
 print "Wrong operation %=: expected "
 print 2
 print ", but was "
-print __tmp262
+print a
 print "\n"
 label __label264
 label __label262
@@ -6575,112 +6713,112 @@ set __fn0_n 2
 setaddr __fn0retaddr __label265
 call __label0
 gotolabel __label265 __fn0
-op add __tmp267 4 __fn0retval
+op add a 4 __fn0retval
 label __label266
-jump __label268 notEqual __tmp267 6
+jump __label268 notEqual a 6
 print "ok"
 jump __label269 always 0 0
 label __label268
 print "Wrong operation +=: expected "
 print 6
 print ", but was "
-print __tmp267
+print a
 print "\n"
 label __label269
 label __label267
 setaddr __fn0retaddr __label270
 call __label0
 gotolabel __label270 __fn0
-op sub __tmp272 4 __fn0retval
+op sub a 4 __fn0retval
 label __label271
-jump __label273 notEqual __tmp272 2
+jump __label273 notEqual a 2
 print "ok"
 jump __label274 always 0 0
 label __label273
 print "Wrong operation -=: expected "
 print 2
 print ", but was "
-print __tmp272
+print a
 print "\n"
 label __label274
 label __label272
 setaddr __fn0retaddr __label275
 call __label0
 gotolabel __label275 __fn0
-op shl __tmp277 1 __fn0retval
+op shl a 1 __fn0retval
 label __label276
-jump __label278 notEqual __tmp277 4
+jump __label278 notEqual a 4
 print "ok"
 jump __label279 always 0 0
 label __label278
 print "Wrong operation <<=: expected "
 print 4
 print ", but was "
-print __tmp277
+print a
 print "\n"
 label __label279
 label __label277
 setaddr __fn0retaddr __label280
 call __label0
 gotolabel __label280 __fn0
-op shr __tmp282 9 __fn0retval
+op shr a 9 __fn0retval
 label __label281
-jump __label283 notEqual __tmp282 2
+jump __label283 notEqual a 2
 print "ok"
 jump __label284 always 0 0
 label __label283
 print "Wrong operation >>=: expected "
 print 2
 print ", but was "
-print __tmp282
+print a
 print "\n"
 label __label284
 label __label282
 setaddr __fn0retaddr __label285
 call __label0
 gotolabel __label285 __fn0
-op or __tmp287 1 __fn0retval
+op or a 1 __fn0retval
 label __label286
-jump __label288 notEqual __tmp287 3
+jump __label288 notEqual a 3
 print "ok"
 jump __label289 always 0 0
 label __label288
 print "Wrong operation |=: expected "
 print 3
 print ", but was "
-print __tmp287
+print a
 print "\n"
 label __label289
 label __label287
 setaddr __fn0retaddr __label290
 call __label0
 gotolabel __label290 __fn0
-op and __tmp292 3 __fn0retval
+op and a 3 __fn0retval
 label __label291
-jump __label293 notEqual __tmp292 2
+jump __label293 notEqual a 2
 print "ok"
 jump __label294 always 0 0
 label __label293
 print "Wrong operation &=: expected "
 print 2
 print ", but was "
-print __tmp292
+print a
 print "\n"
 label __label294
 label __label292
 setaddr __fn0retaddr __label295
 call __label0
 gotolabel __label295 __fn0
-op xor __tmp297 3 __fn0retval
+op xor a 3 __fn0retval
 label __label296
-jump __label298 notEqual __tmp297 1
+jump __label298 notEqual a 1
 print "ok"
 jump __label299 always 0 0
 label __label298
 print "Wrong operation ^=: expected "
 print 1
 print ", but was "
-print __tmp297
+print a
 print "\n"
 label __label299
 label __label297
@@ -6688,16 +6826,16 @@ set __fn0_n 0
 setaddr __fn0retaddr __label300
 call __label0
 gotolabel __label300 __fn0
-op land __tmp302 1 __fn0retval
+op land a 1 __fn0retval
 label __label301
-jump __label303 notEqual __tmp302 false
+jump __label303 notEqual a false
 print "ok"
 jump __label304 always 0 0
 label __label303
 print "Wrong operation &&=: expected "
 print false
 print ", but was "
-print __tmp302
+print a
 print "\n"
 label __label304
 label __label302
@@ -6705,32 +6843,32 @@ set __fn0_n 2
 setaddr __fn0retaddr __label305
 call __label0
 gotolabel __label305 __fn0
-op land __tmp307 1 __fn0retval
+op land a 1 __fn0retval
 label __label306
-jump __label308 notEqual __tmp307 true
+jump __label308 notEqual a true
 print "ok"
 jump __label309 always 0 0
 label __label308
 print "Wrong operation &&=: expected "
 print true
 print ", but was "
-print __tmp307
+print a
 print "\n"
 label __label309
 label __label307
 setaddr __fn0retaddr __label310
 call __label0
 gotolabel __label310 __fn0
-op or __tmp312 0 __fn0retval
+op or a 0 __fn0retval
 label __label311
-jump __label313 notEqual __tmp312 2
+jump __label313 notEqual a 2
 print "ok"
 jump __label314 always 0 0
 label __label313
 print "Wrong operation ||=: expected "
 print 2
 print ", but was "
-print __tmp312
+print a
 print "\n"
 label __label314
 label __label312

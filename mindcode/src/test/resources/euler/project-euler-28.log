@@ -12,7 +12,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     15 op add __tmp6 step 2
     16 set step __tmp6
     17 set count 0
--    * set __tmp5 0
+-    * set __tmp5 count
     18 jump __label4 always
     19 label __label3
 -    * set __tmp5 null

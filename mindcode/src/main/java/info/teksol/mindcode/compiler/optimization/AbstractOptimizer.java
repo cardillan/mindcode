@@ -69,6 +69,12 @@ public abstract class AbstractOptimizer implements Optimizer {
         messageRecipient.accept(new MindcodeMessage(level, String.format(format, args)));
     }
 
+    //<editor-fold desc="Inspecting instructions">
+    protected boolean isVolatile(LogicInstruction instruction) {
+        return instruction.inputArgumentsStream().anyMatch(LogicArgument::isVolatile);
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Instruction creation">
     protected CallInstruction createCallStackless(AstContext astContext, LogicAddress address) {
         return instructionProcessor.createCallStackless(astContext, address);

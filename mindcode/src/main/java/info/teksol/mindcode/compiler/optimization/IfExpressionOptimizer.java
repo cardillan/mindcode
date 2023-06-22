@@ -47,8 +47,8 @@ public class IfExpressionOptimizer extends BaseOptimizer {
 
         // Can we rearrange branches?
         // Expensive tests last
-        if (lastTrue instanceof LogicResultInstruction res1 && lastFalse instanceof LogicResultInstruction res2
-                && res1.getResult().equals(res2.getResult())
+        if (lastTrue instanceof LogicResultInstruction resTrue && lastFalse instanceof LogicResultInstruction resFalse
+                && resTrue.getResult().equals(resFalse.getResult())
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
             // Do not perform the optimization in recursive functions
@@ -56,26 +56,29 @@ public class IfExpressionOptimizer extends BaseOptimizer {
             // in front of the condition.
             // TODO Activate this if an optimization to replace unconditional jump to return instruction with the
             //      return itself is ever implemented.
-            if (true || res1.getAstContext().functionPrefix() == null
-                    || !getCallGraph().getFunctionByPrefix(res1.getAstContext().functionPrefix()).isRecursive()) {
-                if (invertedJump != null && trueBranch.size() == 1) {
+            if (true || resTrue.getAstContext().functionPrefix() == null
+                    || !getCallGraph().getFunctionByPrefix(resTrue.getAstContext().functionPrefix()).isRecursive()) {
+                if (invertedJump != null && trueBranch.size() == 1 && !isVolatile(resTrue)) {
                     moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
                     swappable = false;
-                } else if (falseBranch.size() == 1) {
+                } else if (falseBranch.size() == 1 && !isVolatile(resFalse)) {
                     moveFalseBranch(condition, trueBranch, falseBranch, jump);
                     swappable = false;
-                } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()) {
+                } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()
+                        && !isVolatile(resTrue)) {
                     moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
                     swappable = false;
                 }
             }
 
-            // Can we propagate writes?
-            if (res1.getResult().isTemporaryVariable()
+            // Replace the temporary variable with the actual target
+            // Only if the temporary variable is not reused anywhere
+            if (resTrue.getResult().isTemporaryVariable()
                     && instructionAfter(ifExpression) instanceof SetInstruction finalSet
-                    && finalSet.getValue().equals(res1.getResult())) {
-                replaceInstruction(res1, res1.withResult(finalSet.getResult()));
-                replaceInstruction(res2, res2.withResult(finalSet.getResult()));
+                    && finalSet.getValue().equals(resTrue.getResult())
+                    && instructionCount(ix -> ix.inputArgumentsStream().anyMatch(resTrue.getResult()::equals)) == 1) {
+                replaceInstruction(resTrue, resTrue.withResult(finalSet.getResult()));
+                replaceInstruction(resFalse, resFalse.withResult(finalSet.getResult()));
                 removeInstruction(finalSet);
             }
         }
@@ -98,7 +101,8 @@ public class IfExpressionOptimizer extends BaseOptimizer {
                 && condition.getFromEnd(1) instanceof OpInstruction op
                 && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
                 && jump.getCondition() == Condition.EQUAL && jump.getX().equals(op.getResult())
-                && jump.getY().equals(LogicBoolean.FALSE)) {
+                && jump.getY().equals(LogicBoolean.FALSE)
+                && instructionCount(ix -> ix.inputArgumentsStream().anyMatch(op.getResult()::equals)) == 1) {
 
             return createJump(jump.getAstContext(), jump.getTarget(), op.getOperation().toCondition(), op.getX(), op.getY());
         } else {

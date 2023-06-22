@@ -216,4 +216,41 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(END)
         );
     }
+
+    @Test
+    void optimizesChainedAssignments() {
+        assertCompilesTo("""
+                        a = b = rand(10) > 5 ? 1 : 2
+                        print(a, b)
+                        """,
+                createInstruction(SET, "b", "2"),
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(JUMP, var(1001), "lessThanEq", var(0), "5"),
+                createInstruction(SET, "b", "1"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(SET, "a", "b"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesChainedAssignments2() {
+        assertCompilesTo("""
+                        a = print(b = rand(10) > 5 ? 1 : 2)
+                        print(a, b)
+                        """,
+                createInstruction(SET, "b", "2"),
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(JUMP, var(1001), "lessThanEq", var(0), "5"),
+                createInstruction(SET, "b", "1"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "b"),
+                createInstruction(SET, "a", "b"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
 }

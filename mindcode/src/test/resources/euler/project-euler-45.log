@@ -23,7 +23,7 @@ Modifications by DeadCodeEliminator, iteration 1:
     23 set pn __tmp14
     24 op add __tmp15 p 3
     25 set p __tmp15
--    * set __tmp13 __tmp15
+-    * set __tmp13 p
     26 jump __label4 always
     27 label __label3
     28 op lessThan __tmp16 hn pn
@@ -53,7 +53,7 @@ Modifications by DeadCodeEliminator, iteration 2:
     31 set hn __tmp18
     32 op add __tmp19 h 4
     33 set h __tmp19
--    * set __tmp17 __tmp19
+-    * set __tmp17 h
     34 jump __label6 always
     35 label __label5
     36 jump __label2 always
