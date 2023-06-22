@@ -14,6 +14,8 @@ public interface Optimizer {
 
     String getName();
 
+    Optimization getOptimization();
+
     void setLevel(OptimizationLevel level);
 
     void setGoal(GenerationGoal goal);
@@ -24,5 +26,8 @@ public interface Optimizer {
 
     void setDebugPrinter(DebugPrinter debugPrinter);
 
-    void optimizeProgram(List<LogicInstruction> program, CallGraph callGraph, AstContext rootContext);
+    boolean optimizeProgram(OptimizationPhase phase, int pass, List<LogicInstruction> program, CallGraph callGraph,
+            AstContext rootContext);
+
+    void generateFinalMessages();
 }

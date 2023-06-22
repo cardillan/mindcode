@@ -139,7 +139,7 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
         assertEquals(ProcessorVersion.V6, actual.getProcessorVersion());
-        assertEquals(OptimizationLevel.OFF, actual.getOptimizationLevel(Optimization.RETURN_VALUE_OPTIMIZATION));
+        assertEquals(OptimizationLevel.OFF, actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
         assertEquals(1, actual.getParseTreeLevel());
         assertEquals(3, actual.getDebugLevel());
         assertEquals(GenerationGoal.SIZE, actual.getGoal());
@@ -155,7 +155,7 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
 
         assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
         assertEquals(expected.getProcessorVersion(), actual.getProcessorVersion());
-        assertEquals(expected.getOptimizationLevel(Optimization.RETURN_VALUE_OPTIMIZATION), actual.getOptimizationLevel(Optimization.RETURN_VALUE_OPTIMIZATION));
+        assertEquals(expected.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION), actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
         assertEquals(expected.getParseTreeLevel(), actual.getParseTreeLevel());
         assertEquals(expected.getDebugLevel(), actual.getDebugLevel());
         assertEquals(expected.getGoal(), actual.getGoal());

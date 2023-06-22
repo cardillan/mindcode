@@ -15,7 +15,6 @@ public enum ArgumentType {
     GLOBAL_VARIABLE,
     LOCAL_VARIABLE,
     TMP_VARIABLE,
-    PROTECTED_VARIABLE,     // Variable that must not be replaced
     AST_VARIABLE,
     STORED_RETVAL,
     FUNCTION_RETVAL,

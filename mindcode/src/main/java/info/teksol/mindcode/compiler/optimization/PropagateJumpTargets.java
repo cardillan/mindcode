@@ -32,14 +32,14 @@ import java.util.Set;
 class PropagateJumpTargets extends BaseOptimizer {
     private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
     private boolean startLabelUsed = false;
+    int count = 0;
     
     public PropagateJumpTargets(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.JUMP_TARGET_PROPAGATION, instructionProcessor);
     }
     
     @Override
-    protected boolean optimizeProgram() {
-        int count = 0;
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         try (LogicIterator it = createIterator()) {
             it.add(createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
             while (it.hasNext()) {
@@ -61,11 +61,14 @@ class PropagateJumpTargets extends BaseOptimizer {
             removeInstruction(0);
         }
 
+        return false;
+    }
+
+    @Override
+    public void generateFinalMessages() {
         if (count > 0) {
             emitMessage(MessageLevel.INFO, "%6d instructions updated by %s.", count, getClass().getSimpleName());
         }
-
-        return false;
     }
 
     // Determines the final target of given jump

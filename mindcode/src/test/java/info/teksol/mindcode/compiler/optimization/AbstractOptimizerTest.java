@@ -12,11 +12,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static info.teksol.util.CollectionUtils.findFirstIndex;
-import static info.teksol.util.CollectionUtils.findLastIndex;
-
 public abstract class AbstractOptimizerTest<T extends Optimizer> extends AbstractGeneratorTest {
-        protected abstract Class<T> getTestedClass();
+    protected abstract Class<T> getTestedClass();
 
     protected abstract List<Optimization> getAllOptimizations();
 
@@ -102,8 +99,8 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         }
 
         @Override
-        public void registerIteration(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
-            super.registerIteration(optimizer, iteration, program);
+        public void registerIteration(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program) {
+            super.registerIteration(optimizer, pass, iteration, program);
             if (optimizer != null && optimizer.getClass() == testedClass) {
                 activated = true;
             }
@@ -114,18 +111,11 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
             if (testedClass != null && !activated) {
                 throw new RuntimeException("No instructions processed by " + testedClass.getSimpleName() + ".");
             }
-            super.print(messageConsumer);
-        }
-
-        @Override
-        protected List<ProgramVersion> selectProgramVersions() {
-            if (testedClass == null) {
-                return diffLevel1();
-            } else {
-                List<ProgramVersion> selected = diffLevel3();
-                int from = findFirstIndex(selected, v -> v.getOptimizerClass() == testedClass);
-                int to = findLastIndex(selected, v -> v.getOptimizerClass() == testedClass);
-                return from > 0 && to >= from && to < selected.size()  ? selected.subList(from - 1, to + 1) : List.of();
+            List<ProgramVersion> sel = diffLevel3();
+            for (int i = 1; i < sel.size(); i++) {
+                if (sel.get(i).getOptimizerClass() == testedClass) {
+                    printDiff(messageConsumer, sel.get(i).getTitle(), sel.get(i - 1).getProgram(), sel.get(i).getProgram());
+                }
             }
         }
 

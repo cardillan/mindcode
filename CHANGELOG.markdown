@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Added support for executing multiple optimization passes. This allows individual optimizers to incrementally 
+  improve the code while benefiting from changes made by other optimizers.
+
+### Fixed
+
+* Fixed incorrect handling of chained assignments ([#100](https://github.com/cardillan/mindcode/issues/100)). Two
+  separate problems were fixed:
+  * Chain-assigning a result of ternary operator/if expression could be compiled incorrectly.
+  * Chain-assigning a volatile value (such as `@tick` or `@time`) could result in different values being written to
+    variables.
+* Fixed a bug in the processor emulator that incorrectly assigned some values to variables. New unit tests uncovered
+  the bug; processor emulator is not used in production code at the moment.
+
+### Changed
+
+* The [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) now properly handles 
+  control flows that result into a branch being terminated (such as `break`, `continue` and `return` statements, or 
+  the `end()` function). 
+
+### Removed
+
+* Removed _Return value optimization_ and _Temporary inputs elimination_. These optimizations were completely 
+  superseded by the [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization).
+* Removed the old command-line compiler and the `mindcode` / `mindcode.bat` files in the `bin` directory.
+
 ## 2023-06-19
 
 ### Added
@@ -77,13 +106,11 @@ All notable changes to this project will be documented in this file.
 
 ### Deprecated
 
-* Deprecated [Return value optimization](doc/syntax/SYNTAX-5-OTHER.markdown#return-value-optimization). This 
-  optimization was completely superseded by the
+* Deprecated _Return value optimization_. This optimization was completely superseded by the
   [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles more cases 
   than the old optimization. The Return value optimization will be removed when it becomes incompatible with 
   further changes to code generation/optimization.  
-* Deprecated [Temporary inputs elimination](doc/syntax/SYNTAX-5-OTHER.markdown#temporary-inputs-elimination), for the 
-  same reasons as above. 
+* Deprecated _Temporary inputs elimination_, for the same reasons as above. 
 
 ## 2023-06-11
 
@@ -274,8 +301,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added [return value optimizer](doc/syntax/SYNTAX-5-OTHER.markdown#return-value-optimization). Improves processing 
-  return values from function calls. 
+* Added _Return value optimizer_. Improves processing return values from function calls. 
 * Added [section about using units](doc/syntax/MINDUSTRY-TIPS-N-TRICKS.markdown#using-units) to Mindustry Tips 
   and Tricks.
 * Added warnings when constant expression evaluation or Mindcode numeric literal cannot be compiled to mlog without 

@@ -18,7 +18,7 @@ public interface DebugPrinter {
      * @param iteration number of the performed iteration
      * @param program state of the program after the iteration was performed
      */
-    void registerIteration(Optimizer optimizer, int iteration, List<LogicInstruction> program);
+    void registerIteration(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program);
 
     /**
      * Processes and outputs collected information for later analysis.

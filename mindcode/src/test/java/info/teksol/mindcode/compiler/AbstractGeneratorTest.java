@@ -295,8 +295,6 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         }
     }
 
-    // TODO Investigate whether it would be feasible to first build var maps and then compare the code.
-    //      As it is now, if a difference is found early on, subsequent vars are not properly mapped.
     protected void assertMessagesAndLogicInstructionsMatch(TestCompiler compiler, List<LogicInstruction> expected,
             List<LogicInstruction> actual, Predicate<String> ignoredMessagesFilter) {
         assertAll(

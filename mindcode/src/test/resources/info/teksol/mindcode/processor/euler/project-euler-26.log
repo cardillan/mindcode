@@ -1,0 +1,371 @@
+    60 instructions before optimizations.
+     3 instructions eliminated by Tmp Variables Elimination (3 iterations).
+     8 instructions eliminated by Dead Code Elimination (3 iterations).
+     5 instructions eliminated by Conditional Jump Optimization (3 iterations).
+     3 instructions eliminated by Single Step Elimination (4 iterations).
+     4 instructions added by Loop Optimization (2 iterations).
+     4 loops improved by LoopOptimizer.
+     5 instructions eliminated by Data Flow Optimization (5 iterations).
+    36 instructions after optimizations.
+
+Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+ 
+     9 op mod __tmp1 __fn0_n 5
+    10 op equal __tmp2 __tmp1 0
+    11 jump __label7 equal __tmp2 false
+-    * op div __tmp3 __fn0_n 5
+-    * set __fn0_n __tmp3
++   12 op div __fn0_n __fn0_n 5
+    13 label __label6
+    14 jump __label5 always
+    15 label __label7
+ 
+    17 op mod __tmp4 __fn0_n 2
+    18 op equal __tmp5 __tmp4 0
+    19 jump __label10 equal __tmp5 false
+-    * op div __tmp6 __fn0_n 2
+-    * set __fn0_n __tmp6
++   20 op div __fn0_n __fn0_n 2
+    21 label __label9
+    22 jump __label8 always
+    23 label __label10
+ 
+    35 label __label13
+    36 jump __label15 greaterThanEq __fn0_i 100
+    37 op mul __tmp9 __fn0_power 10
+-    * op mod __tmp10 __tmp9 __fn0_n
+-    * set __fn0_power __tmp10
++   38 op mod __fn0_power __tmp9 __fn0_n
+    39 op equal __tmp11 __fn0_power 1
+    40 jump __label16 equal __tmp11 false
+    41 set __retval0 __fn0_i
+
+Modifications by Dead Code Elimination, pass 1, iteration 1:
+ 
+    25 jump __label11 equal __tmp7 false
+    26 set __retval0 0
+    27 jump __label4 always
+-    * set __tmp8 null
+    28 jump __label12 always
+    29 label __label11
+-    * set __tmp8 null
+    30 label __label12
+    31 set __fn0_power 1
+    32 set __fn0_i 1
+ 
+    38 jump __label16 equal __tmp11 false
+    39 set __retval0 __fn0_i
+    40 jump __label4 always
+-    * set __tmp12 null
+    41 jump __label17 always
+    42 label __label16
+-    * set __tmp12 null
+    43 label __label17
+    44 label __label14
+    45 op add __fn0_i __fn0_i 1
+ 
+    54 jump __label18 equal __tmp13 false
+    55 set maxlen len
+    56 set maxnum d
+-    * set __tmp14 maxnum
+    57 jump __label19 always
+    58 label __label18
+-    * set __tmp14 null
+    59 label __label19
+    60 label __label1
+    61 op add d d 1
+ 
+    64 label __label20
+    65 set __fn1_v 97
+    66 print __fn1_v
+-    * set __retval15 __fn1_v
+    67 label __label21
+    68 label __label22
+    69 set __fn2_v maxnum
+    70 print __fn2_v
+-    * set __retval16 __fn2_v
+    71 label __label23
+    72 end
+
+Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+ 
+     7 set __fn0_n __fn0_d
+     8 label __label5
+     9 op mod __tmp1 __fn0_n 5
+-    * op equal __tmp2 __tmp1 0
+-    * jump __label7 equal __tmp2 false
++   10 jump __label7 notEqual __tmp1 0
+    11 op div __fn0_n __fn0_n 5
+    12 label __label6
+    13 jump __label5 always
+    14 label __label7
+    15 label __label8
+    16 op mod __tmp4 __fn0_n 2
+-    * op equal __tmp5 __tmp4 0
+-    * jump __label10 equal __tmp5 false
++   17 jump __label10 notEqual __tmp4 0
+    18 op div __fn0_n __fn0_n 2
+    19 label __label9
+    20 jump __label8 always
+    21 label __label10
+-    * op lessThan __tmp7 __fn0_n 2
+-    * jump __label11 equal __tmp7 false
++   22 jump __label11 greaterThanEq __fn0_n 2
+    23 set __retval0 0
+    24 jump __label4 always
+    25 jump __label12 always
+ 
+    31 jump __label15 greaterThanEq __fn0_i 100
+    32 op mul __tmp9 __fn0_power 10
+    33 op mod __fn0_power __tmp9 __fn0_n
+-    * op equal __tmp11 __fn0_power 1
+-    * jump __label16 equal __tmp11 false
++   34 jump __label16 notEqual __fn0_power 1
+    35 set __retval0 __fn0_i
+    36 jump __label4 always
+    37 jump __label17 always
+ 
+    46 set __retval0 null
+    47 label __label4
+    48 set len __retval0
+-    * op greaterThan __tmp13 len maxlen
+-    * jump __label18 equal __tmp13 false
++   49 jump __label18 lessThanEq len maxlen
+    50 set maxlen len
+    51 set maxnum d
+    52 jump __label19 always
+
+Modifications by Single Step Elimination, pass 2, iteration 1:
+ 
+    22 jump __label11 greaterThanEq __fn0_n 2
+    23 set __retval0 0
+    24 jump __label4 always
+-    * jump __label12 always
+    25 label __label11
+    26 label __label12
+    27 set __fn0_power 1
+ 
+    33 jump __label16 notEqual __fn0_power 1
+    34 set __retval0 __fn0_i
+    35 jump __label4 always
+-    * jump __label17 always
+    36 label __label16
+    37 label __label17
+    38 label __label14
+ 
+    47 jump __label18 lessThanEq len maxlen
+    48 set maxlen len
+    49 set maxnum d
+-    * jump __label19 always
+    50 label __label18
+    51 label __label19
+    52 label __label1
+
+Modifications by Loop Optimization, pass 2, iteration 1:
+ 
+     1 set maxnum 0
+     2 set d 2
+     3 label __label0
+-    * jump __label2 greaterThan d 100
++    4 label __label24
+     5 label __label3
+     6 set __fn0_d d
+     7 set __fn0_n __fn0_d
+     8 label __label5
+     9 op mod __tmp1 __fn0_n 5
+    10 jump __label7 notEqual __tmp1 0
++   11 label __label25
+    12 op div __fn0_n __fn0_n 5
+    13 label __label6
+-    * jump __label5 always
++   14 op mod __tmp1 __fn0_n 5
++   15 jump __label25 equal __tmp1 0
+    16 label __label7
+    17 label __label8
+    18 op mod __tmp4 __fn0_n 2
+    19 jump __label10 notEqual __tmp4 0
++   20 label __label26
+    21 op div __fn0_n __fn0_n 2
+    22 label __label9
+-    * jump __label8 always
++   23 op mod __tmp4 __fn0_n 2
++   24 jump __label26 equal __tmp4 0
+    25 label __label10
+    26 jump __label11 greaterThanEq __fn0_n 2
+    27 set __retval0 0
+ 
+    31 set __fn0_power 1
+    32 set __fn0_i 1
+    33 label __label13
+-    * jump __label15 greaterThanEq __fn0_i 100
++   34 label __label27
+    35 op mul __tmp9 __fn0_power 10
+    36 op mod __fn0_power __tmp9 __fn0_n
+    37 jump __label16 notEqual __fn0_power 1
+ 
+    41 label __label17
+    42 label __label14
+    43 op add __fn0_i __fn0_i 1
+-    * jump __label13 always
++   44 jump __label27 lessThan __fn0_i 100
+    45 label __label15
+    46 print "Power of ten limit reached."
+    47 end
+ 
+    55 label __label19
+    56 label __label1
+    57 op add d d 1
+-    * jump __label0 always
++   58 jump __label24 lessThanEq d 100
+    59 label __label2
+    60 label __label20
+    61 set __fn1_v 97
+
+Modifications by Data Flow Optimization, pass 2, iteration 1:
+ 
+     4 label __label24
+     5 label __label3
+     6 set __fn0_d d
+-    * set __fn0_n __fn0_d
++    7 set __fn0_n d
+     8 label __label5
+-    * op mod __tmp1 __fn0_n 5
++    9 op mod __tmp1 __fn0_d 5
+    10 jump __label7 notEqual __tmp1 0
+    11 label __label25
+    12 op div __fn0_n __fn0_n 5
+ 
+    45 label __label15
+    46 print "Power of ten limit reached."
+    47 end
+-    * set __retval0 null
+    48 label __label4
+    49 set len __retval0
+-    * jump __label18 lessThanEq len maxlen
+-    * set maxlen len
++   50 jump __label18 lessThanEq __retval0 maxlen
++   51 set maxlen __retval0
+    52 set maxnum d
+    53 label __label18
+    54 label __label19
+ 
+    58 label __label2
+    59 label __label20
+    60 set __fn1_v 97
+-    * print __fn1_v
++   61 print 97
+    62 label __label21
+    63 label __label22
+    64 set __fn2_v maxnum
+-    * print __fn2_v
++   65 print maxnum
+    66 label __label23
+    67 end
+
+Modifications by Data Flow Optimization, pass 2, iteration 2:
+ 
+     6 set __fn0_d d
+     7 set __fn0_n d
+     8 label __label5
+-    * op mod __tmp1 __fn0_d 5
++    9 op mod __tmp1 d 5
+    10 jump __label7 notEqual __tmp1 0
+    11 label __label25
+    12 op div __fn0_n __fn0_n 5
+ 
+    46 print "Power of ten limit reached."
+    47 end
+    48 label __label4
+-    * set len __retval0
+    49 jump __label18 lessThanEq __retval0 maxlen
+    50 set maxlen __retval0
+    51 set maxnum d
+ 
+    56 jump __label24 lessThanEq d 100
+    57 label __label2
+    58 label __label20
+-    * set __fn1_v 97
+    59 print 97
+    60 label __label21
+    61 label __label22
+-    * set __fn2_v maxnum
+    62 print maxnum
+    63 label __label23
+    64 end
+
+Modifications by Data Flow Optimization, pass 2, iteration 3:
+ 
+     3 label __label0
+     4 label __label24
+     5 label __label3
+-    * set __fn0_d d
+     6 set __fn0_n d
+     7 label __label5
+     8 op mod __tmp1 d 5
+
+Final code before resolving virtual instructions:
+
+set maxlen 0
+set maxnum 0
+set d 2
+label __label0
+label __label24
+label __label3
+set __fn0_n d
+label __label5
+op mod __tmp1 d 5
+jump __label7 notEqual __tmp1 0
+label __label25
+op div __fn0_n __fn0_n 5
+label __label6
+op mod __tmp1 __fn0_n 5
+jump __label25 equal __tmp1 0
+label __label7
+label __label8
+op mod __tmp4 __fn0_n 2
+jump __label10 notEqual __tmp4 0
+label __label26
+op div __fn0_n __fn0_n 2
+label __label9
+op mod __tmp4 __fn0_n 2
+jump __label26 equal __tmp4 0
+label __label10
+jump __label11 greaterThanEq __fn0_n 2
+set __retval0 0
+jump __label4 always 0 0
+label __label11
+label __label12
+set __fn0_power 1
+set __fn0_i 1
+label __label13
+label __label27
+op mul __tmp9 __fn0_power 10
+op mod __fn0_power __tmp9 __fn0_n
+jump __label16 notEqual __fn0_power 1
+set __retval0 __fn0_i
+jump __label4 always 0 0
+label __label16
+label __label17
+label __label14
+op add __fn0_i __fn0_i 1
+jump __label27 lessThan __fn0_i 100
+label __label15
+print "Power of ten limit reached."
+end
+label __label4
+jump __label18 lessThanEq __retval0 maxlen
+set maxlen __retval0
+set maxnum d
+label __label18
+label __label19
+label __label1
+op add d d 1
+jump __label24 lessThanEq d 100
+label __label2
+label __label20
+print 97
+label __label21
+label __label22
+print maxnum
+label __label23
+end

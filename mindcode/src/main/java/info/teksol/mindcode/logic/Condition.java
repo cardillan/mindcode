@@ -49,4 +49,17 @@ public enum Condition implements LogicArgument {
             default -> throw new MindcodeInternalError(this + " has no inverse.");
         };
     }
+
+    public Operation toOperation() {
+        return switch (this) {
+            case EQUAL -> Operation.EQUAL;
+            case NOT_EQUAL -> Operation.NOT_EQUAL;
+            case LESS_THAN -> Operation.LESS_THAN;
+            case LESS_THAN_EQ -> Operation.LESS_THAN_EQ;
+            case GREATER_THAN -> Operation.GREATER_THAN;
+            case GREATER_THAN_EQ -> Operation.GREATER_THAN_EQ;
+            case STRICT_EQUAL -> Operation.STRICT_EQUAL;
+            default -> null;
+        };
+    }
 }

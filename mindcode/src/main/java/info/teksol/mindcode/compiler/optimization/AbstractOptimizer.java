@@ -19,21 +19,29 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class AbstractOptimizer implements Optimizer {
+    protected final Optimization optimization;
     protected final InstructionProcessor instructionProcessor;
-    private final String name = getClass().getSimpleName();  // TODO: use name from Optimization enum
+    private final String name;
     protected OptimizationLevel level = OptimizationLevel.AGGRESSIVE;
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
     private Consumer<CompilerMessage> messageRecipient = s -> {};
 
-    public AbstractOptimizer(InstructionProcessor instructionProcessor) {
+    public AbstractOptimizer(Optimization optimization, InstructionProcessor instructionProcessor) {
+        this.optimization = optimization;
         this.instructionProcessor = instructionProcessor;
+        this.name = optimization.getName();
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Optimization getOptimization() {
+        return optimization;
     }
 
     @Override
@@ -160,11 +168,11 @@ public abstract class AbstractOptimizer implements Optimizer {
         return instructionProcessor.createWrite(astContext, value, memory, index);
     }
 
-    protected LogicInstruction replaceAllArgs(LogicInstruction instruction, LogicArgument oldArg, LogicArgument newArg) {
+    protected <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg) {
         return instructionProcessor.replaceAllArgs(instruction, oldArg, newArg);
     }
 
-    protected LogicInstruction replaceArgs(LogicInstruction instruction, List<LogicArgument> newArgs) {
+    protected <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
         return instructionProcessor.replaceArgs(instruction, newArgs);
     }
     //</editor-fold>

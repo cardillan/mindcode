@@ -33,8 +33,8 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     @Override
-    public void registerIteration(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
-        versions.add(new ProgramVersion(optimizer, iteration, List.copyOf(program)));
+    public void registerIteration(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program) {
+        versions.add(new ProgramVersion(optimizer, pass, iteration, List.copyOf(program)));
     }
 
     public int getDiffMargin() {
@@ -93,7 +93,7 @@ public class DiffDebugPrinter implements DebugPrinter {
 
     // Prints diff between the "before" and "after" versions. Instructions in the output are numbered
     // according to the after list.
-    private void printDiff(Consumer<String> messageConsumer, String title, List<LogicInstruction> before,
+    protected void printDiff(Consumer<String> messageConsumer, String title, List<LogicInstruction> before,
             List<LogicInstruction> after) {
         // Do not print steps that didn't change anything
         if (before.equals(after) && !printAll()) {
@@ -185,10 +185,12 @@ public class DiffDebugPrinter implements DebugPrinter {
         private final List<LogicInstruction> program;
         private String title;
 
-        public ProgramVersion(Optimizer optimizer, int iteration, List<LogicInstruction> program) {
+        public ProgramVersion(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program) {
             this.optimizerClass = optimizer == null ? null : optimizer.getClass();
             this.program = program;
-            this.title = optimizer == null ? "" : optimizer.getName() + ", iteration " + iteration;
+            this.title = optimizer == null ? "" : pass == 0
+                    ? "%s, iteration %d".formatted(optimizer.getName(), iteration)
+                    : "%s, pass %d, iteration %d".formatted(optimizer.getName(), pass, iteration);
         }
 
         public Class<? extends Optimizer> getOptimizerClass() {
@@ -204,6 +206,11 @@ public class DiffDebugPrinter implements DebugPrinter {
         }
 
         String getTitle() {
+            return title;
+        }
+
+        @Override
+        public String toString() {
             return title;
         }
     }

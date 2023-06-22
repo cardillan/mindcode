@@ -57,11 +57,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
-    public boolean isProtectedVariable() {
-        return getType() == ArgumentType.PROTECTED_VARIABLE;
-    }
-
-    @Override
     public boolean isFunctionVariable() {
         return getType() == ArgumentType.LOCAL_VARIABLE && functionPrefix != null;
     }
@@ -115,10 +110,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable temporary(String name) {
         return new LogicVariable(ArgumentType.TMP_VARIABLE, name);
-    }
-
-    public static LogicVariable protectedTemporary(String name) {
-        return new LogicVariable(ArgumentType.PROTECTED_VARIABLE, name);
     }
 
     public static LogicVariable ast(String name) {

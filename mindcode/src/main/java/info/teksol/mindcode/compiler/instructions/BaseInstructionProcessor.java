@@ -63,11 +63,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public LogicVariable nextProtectedTemp() {
-        return LogicVariable.protectedTemporary(getTempPrefix() + tmpIndex++);
-    }
-
-    @Override
     public LogicVariable nextReturnValue() {
         return LogicVariable.retval( getRetValPrefix() + tmpIndex++);
     }
@@ -288,7 +283,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public LogicInstruction replaceAllArgs(LogicInstruction instruction, LogicArgument oldArg, LogicArgument newArg) {
+    public <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg) {
         List<LogicArgument> args = instruction.getArgs().stream()
                 .map(arg -> arg.equals(oldArg) ? newArg : arg)
                 .toList();
@@ -296,8 +291,8 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public LogicInstruction replaceArgs(LogicInstruction instruction, List<LogicArgument> newArgs) {
-        return createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
+    public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
+        return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
     }
 
     @Override

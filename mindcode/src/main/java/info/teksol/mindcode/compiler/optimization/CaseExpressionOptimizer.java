@@ -30,11 +30,11 @@ import java.util.List;
 
 class CaseExpressionOptimizer extends BaseOptimizer {
     public CaseExpressionOptimizer(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.CASE_EXPRESSION_OPTIMIZATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()){
                 if (it.next() instanceof SetInstruction ix && ix.getResult().getType() == ArgumentType.AST_VARIABLE) {

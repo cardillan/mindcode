@@ -19,11 +19,11 @@ import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
 public class IfExpressionOptimizer extends BaseOptimizer {
 
     public IfExpressionOptimizer(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.IF_EXPRESSION_OPTIMIZATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         forEachContext(AstContextType.IF, BASIC, this::optimizeIfExpression);
         return false;
     }
@@ -51,11 +51,11 @@ public class IfExpressionOptimizer extends BaseOptimizer {
                 && resTrue.getResult().equals(resFalse.getResult())
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
+            // TODO Remove the "true ||" if an optimization to replace unconditional jump to return instruction with the
+            //      return itself is ever implemented.
             // Do not perform the optimization in recursive functions
             // It might lead to more instructions being evaluated by moving assignment to the function return variable
             // in front of the condition.
-            // TODO Activate this if an optimization to replace unconditional jump to return instruction with the
-            //      return itself is ever implemented.
             if (true || resTrue.getAstContext().functionPrefix() == null
                     || !getCallGraph().getFunctionByPrefix(resTrue.getAstContext().functionPrefix()).isRecursive()) {
                 if (invertedJump != null && trueBranch.size() == 1 && !isVolatile(resTrue)) {

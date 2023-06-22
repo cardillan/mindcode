@@ -318,6 +318,18 @@ end
 * Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, 
   but the behavior might change in the future.
 
+# `end()` function
+
+The `end()` function maps to the `end` instruction, and as such has a special meaning - it resets the execution of 
+the program and starts at the beginning again. In this sense, the `end()` function is one of control flow statements.
+The function may be called from anywhere, even from a recursive function. The following rules apply when the 
+function is invoked: 
+
+* the processor starts executing the program from the beginning,
+* values of existing variables are preserved (the last value written to any global or main variable before `end()` is 
+  called is preserved),
+* the call stack is reset - calling recursive functions starts from the topmost level again.
+
 ---
 
 [« Previous: Expressions](SYNTAX-2-EXPRESSIONS.markdown) &nbsp; | &nbsp; [Next: Functions »](SYNTAX-4-FUNCTIONS.markdown)

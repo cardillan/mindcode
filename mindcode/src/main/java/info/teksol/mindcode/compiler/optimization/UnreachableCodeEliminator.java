@@ -1,10 +1,17 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.CallInstruction;
+import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
+import info.teksol.mindcode.compiler.instructions.EndInstruction;
+import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.ReturnInstruction;
+import info.teksol.mindcode.compiler.instructions.SetAddressInstruction;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,21 +31,18 @@ import java.util.stream.Stream;
  * Labels - even inactive ones - are never removed.
  */
 class UnreachableCodeEliminator extends BaseOptimizer {
-    private Set<LogicLabel> activeLabels = new HashSet<>();
-
     public UnreachableCodeEliminator(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.UNREACHABLE_CODE_ELIMINATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
-        findActiveLabels();
-        removeUnreachableInstructions();
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+        removeUnreachableInstructions(findActiveLabels());
         return true;
     }
 
-    private void findActiveLabels() {
-        activeLabels = instructionStream()
+    private Set<LogicLabel> findActiveLabels() {
+        return instructionStream()
                 .flatMap(this::extractLabelReference)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
@@ -54,7 +58,7 @@ class UnreachableCodeEliminator extends BaseOptimizer {
         };
     }
 
-    private void removeUnreachableInstructions() {
+    private void removeUnreachableInstructions(Set<LogicLabel> activeLabels) {
         boolean accessible = true;
 
         try (LogicIterator it = createIterator()) {

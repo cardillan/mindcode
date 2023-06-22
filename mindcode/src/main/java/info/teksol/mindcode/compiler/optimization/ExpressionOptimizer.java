@@ -34,11 +34,11 @@ import java.util.Optional;
  */
 public class ExpressionOptimizer extends BaseOptimizer {
     public ExpressionOptimizer(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.EXPRESSION_OPTIMIZATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         // Cannot use for-each due to modifications of the underlying list in the loop
         try (LogicIterator it = createIterator()) {
             while(it.hasNext()) {

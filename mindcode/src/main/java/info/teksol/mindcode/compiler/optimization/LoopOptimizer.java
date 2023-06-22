@@ -13,8 +13,6 @@ import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLabel;
-import info.teksol.mindcode.logic.LogicLiteral;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -38,20 +36,27 @@ import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
  */
 public class LoopOptimizer extends BaseOptimizer {
 
+    private final OptimizerExpressionEvaluator expressionEvaluator;
+
     public LoopOptimizer(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.LOOP_OPTIMIZATION, instructionProcessor);
+        expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
     }
 
-    private int count;
+    private int count = 0;
 
     @Override
-    protected boolean optimizeProgram() {
-        count = 0;
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         forEachContext(AstContextType.LOOP, BASIC, this::optimizeLoop);
+        return false;
+    }
+
+    @Override
+    public void generateFinalMessages() {
+        super.generateFinalMessages();
         if (count > 0) {
             emitMessage(MessageLevel.INFO, "%6d loops improved by %s.", count, getClass().getSimpleName());
         }
-        return false;
     }
 
     private void optimizeLoop(AstContext loop) {
@@ -117,14 +122,13 @@ public class LoopOptimizer extends BaseOptimizer {
                 // 4. The jump evaluates to false (i.e. doesn't skip over the loop) for the initial
                 //    value of the loop control variable
                 //
-                // This only handles the simplest cases. More complex cases will be resolved when multiple pass
-                // optimization is implemented.
+                // TODO This only handles the simplest cases. More complex ones should be handled by Data Flow Optimizer
                 if (aggressive() && condition.size() == 2
                         && loopSetup instanceof SetInstruction set && set.getValue().isNumericLiteral()
                         && jump.getArgs().contains(set.getResult())) {
                     // Replace the loop control variable with its initial value and evaluate
-                    LogicInstruction test = replaceAllArgs(jump, set.getResult(), set.getValue());
-                    if (alwaysNegative((JumpInstruction) test)) {
+                    JumpInstruction test = replaceAllArgs(jump, set.getResult(), set.getValue());
+                    if (expressionEvaluator.evaluateJump(test) == LogicBoolean.FALSE) {
                         removeInstruction(jump);
                     }
                 }
@@ -144,25 +148,5 @@ public class LoopOptimizer extends BaseOptimizer {
         // Use real instruction size for the test
         int size = conditionEvaluation.stream().mapToInt(LogicInstruction::getRealSize).sum();
         return size == 0 || goal == GenerationGoal.SPEED && size <= 3;
-    }
-
-    // TODO Move to a utility class for expression evaluation shared among optimizers
-    private boolean alwaysNegative(JumpInstruction jump) {
-        if (jump.getX() instanceof LogicLiteral xLiteral && xLiteral.isNumericLiteral()
-                && jump.getY() instanceof LogicLiteral yLiteral && yLiteral.isNumericLiteral()) {
-            double x = xLiteral.getDoubleValue();
-            double y = yLiteral.getDoubleValue();
-            boolean value = switch (jump.getCondition()) {
-                case ALWAYS             -> true;
-                case EQUAL,STRICT_EQUAL -> ExpressionEvaluator.equals(x, y);
-                case NOT_EQUAL          -> !ExpressionEvaluator.equals(x, y);
-                case GREATER_THAN       -> x > y;
-                case GREATER_THAN_EQ    -> x >= y;
-                case LESS_THAN          -> x < y;
-                case LESS_THAN_EQ       -> x <= y;
-            };
-            return !value;
-        }
-        return false;
     }
 }

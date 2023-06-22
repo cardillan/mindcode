@@ -31,11 +31,11 @@ import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 public class JumpOverJumpEliminator extends BaseOptimizer {
 
     public JumpOverJumpEliminator(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.JUMP_OVER_JUMP_ELIMINATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump

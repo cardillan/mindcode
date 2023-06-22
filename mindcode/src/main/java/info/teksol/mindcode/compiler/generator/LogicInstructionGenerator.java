@@ -277,12 +277,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return nodeContext.registerVariable(instructionProcessor.nextTemp());
     }
 
-    // Allocates a new temporary variable whose scope is limited to a node (i.e. not needed outside that node)
-    // but is protected - must not be optimized away
-    private LogicVariable nextProtectedTemp() {
-        return nodeContext.registerVariable(instructionProcessor.nextProtectedTemp());
-    }
-
     // Allocates a new temporary variable which holds the evaluated value of a node
     private LogicVariable nextNodeResult() {
         return parentContext.registerVariable(instructionProcessor.nextTemp());
@@ -804,7 +798,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         if (upperValue.isLiteral()) {
             fixedUpperBound = upperValue;
         } else {
-            LogicVariable tmp = nextProtectedTemp();
+            LogicVariable tmp = nextTemp();
             emit(createSet(tmp, upperValue));
             fixedUpperBound = tmp;
         }

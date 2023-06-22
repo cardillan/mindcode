@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ProjectEulerTest extends AbstractProcessorTest {
 
-    public static final String SCRIPTS_DIRECTORY = "src/test/resources/euler";
+    public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/mindcode/processor/euler";
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;

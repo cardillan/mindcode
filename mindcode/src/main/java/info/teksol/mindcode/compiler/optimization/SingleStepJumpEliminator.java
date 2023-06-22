@@ -2,7 +2,6 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.LogicLabel;
@@ -23,11 +22,11 @@ import java.util.List;
 class SingleStepJumpEliminator extends BaseOptimizer {
 
     public SingleStepJumpEliminator(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.SINGLE_STEP_JUMP_ELIMINATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         List<JumpInstruction> removableJumps = new ArrayList<>();
 
         try (LogicIterator iterator = createIterator()) {

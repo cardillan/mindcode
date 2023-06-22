@@ -1,0 +1,277 @@
+    35 instructions before optimizations.
+     2 instructions eliminated by Tmp Variables Elimination (4 iterations).
+     2 instructions eliminated by Jump Normalization (4 iterations).
+     1 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     3 instructions eliminated by Single Step Elimination (5 iterations).
+     2 instructions added by Loop Optimization (3 iterations).
+     2 loops improved by LoopOptimizer.
+     2 instructions eliminated by If Expression Optimization (3 iterations).
+     8 instructions eliminated by Data Flow Optimization (6 iterations).
+    18 instructions after optimizations.
+
+Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+ 
+     4 set __fn0_i 0
+     5 label __label2
+     6 jump __label4 greaterThanEq __fn0_i __tmp1
+-    * op add __tmp2 __fn0_c __fn0_i
+-    * set __fn0_c __tmp2
++    7 op add __fn0_c __fn0_c __fn0_i
+     8 label __label3
+     9 op add __fn0_i __fn0_i 1
+    10 jump __label2 always
+ 
+    21 set __fn1_i 0
+    22 label __label7
+    23 jump __label9 greaterThanEq __fn1_i __tmp4
+-    * op add __tmp5 __fn1_c __fn1_i
+-    * set __fn1_c __tmp5
++   24 op add __fn1_c __fn1_c __fn1_i
+    25 label __label8
+    26 op add __fn1_i __fn1_i 1
+    27 jump __label7 always
+
+Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+ 
+    31 jump __label6 always
+    32 set __retval3 null
+    33 label __label6
+-    * op lessThan __tmp6 __retval0 __retval3
+-    * jump __label10 equal __tmp6 false
++   34 jump __label10 greaterThanEq __retval0 __retval3
+    35 print "Less"
+    36 set __tmp7 0
+    37 jump __label11 always
+
+Modifications by Loop Optimization, pass 2, iteration 1:
+ 
+     4 set __fn0_i 0
+     5 label __label2
+     6 jump __label4 greaterThanEq __fn0_i __tmp1
++    7 label __label12
+     8 op add __fn0_c __fn0_c __fn0_i
+     9 label __label3
+    10 op add __fn0_i __fn0_i 1
+-    * jump __label2 always
++   11 jump __label12 lessThan __fn0_i __tmp1
+    12 label __label4
+    13 print __fn0_c
+    14 set __retval0 __fn0_c
+ 
+    22 set __fn1_i 0
+    23 label __label7
+    24 jump __label9 greaterThanEq __fn1_i __tmp4
++   25 label __label13
+    26 op add __fn1_c __fn1_c __fn1_i
+    27 label __label8
+    28 op add __fn1_i __fn1_i 1
+-    * jump __label7 always
++   29 jump __label13 lessThan __fn1_i __tmp4
+    30 label __label9
+    31 print __fn1_c
+    32 set __retval3 __fn1_c
+
+Modifications by If Expression Optimization, pass 2, iteration 1:
++    0 set result 1
+     1 label __label0
+     2 set __fn0_n 4
+     3 set __fn0_c 0
+ 
+    34 jump __label6 always
+    35 set __retval3 null
+    36 label __label6
+-    * jump __label10 greaterThanEq __retval0 __retval3
++   37 jump __label11 greaterThanEq __retval0 __retval3
+    38 print "Less"
+-    * set __tmp7 0
++   39 set result 0
+    40 jump __label11 always
+-    * label __label10
+-    * set __tmp7 1
+    41 label __label11
+-    * set result __tmp7
+    42 print result
+    43 end
+
+Modifications by Data Flow Optimization, pass 2, iteration 1:
+ 
+     1 label __label0
+     2 set __fn0_n 4
+     3 set __fn0_c 0
+-    * set __tmp1 __fn0_n
++    4 set __tmp1 4
+     5 set __fn0_i 0
+     6 label __label2
+-    * jump __label4 greaterThanEq __fn0_i __tmp1
++    7 jump __label4 greaterThanEq 0 __fn0_n
+     8 label __label12
+     9 op add __fn0_c __fn0_c __fn0_i
+    10 label __label3
+    11 op add __fn0_i __fn0_i 1
+-    * jump __label12 lessThan __fn0_i __tmp1
++   12 jump __label12 lessThan __fn0_i __fn0_n
+    13 label __label4
+    14 print __fn0_c
+    15 set __retval0 __fn0_c
+    16 jump __label1 always
+-    * set __retval0 null
+    17 label __label1
+    18 label __label5
+    19 set __fn1_n 8
+    20 set __fn1_c 0
+-    * set __tmp4 __fn1_n
++   21 set __tmp4 8
+    22 set __fn1_i 0
+    23 label __label7
+-    * jump __label9 greaterThanEq __fn1_i __tmp4
++   24 jump __label9 greaterThanEq 0 __fn1_n
+    25 label __label13
+    26 op add __fn1_c __fn1_c __fn1_i
+    27 label __label8
+    28 op add __fn1_i __fn1_i 1
+-    * jump __label13 lessThan __fn1_i __tmp4
++   29 jump __label13 lessThan __fn1_i __fn1_n
+    30 label __label9
+    31 print __fn1_c
+    32 set __retval3 __fn1_c
+    33 jump __label6 always
+-    * set __retval3 null
+    34 label __label6
+-    * jump __label11 greaterThanEq __retval0 __retval3
++   35 jump __label11 greaterThanEq __fn0_c __fn1_c
+    36 print "Less"
+    37 set result 0
+    38 jump __label11 always
+
+Modifications by Data Flow Optimization, pass 2, iteration 2:
+ 
+     1 label __label0
+     2 set __fn0_n 4
+     3 set __fn0_c 0
+-    * set __tmp1 4
+     4 set __fn0_i 0
+     5 label __label2
+-    * jump __label4 greaterThanEq 0 __fn0_n
++    6 jump __label4 greaterThanEq 0 4
+     7 label __label12
+     8 op add __fn0_c __fn0_c __fn0_i
+     9 label __label3
+    10 op add __fn0_i __fn0_i 1
+-    * jump __label12 lessThan __fn0_i __fn0_n
++   11 jump __label12 lessThan __fn0_i 4
+    12 label __label4
+    13 print __fn0_c
+-    * set __retval0 __fn0_c
+    14 jump __label1 always
+    15 label __label1
+    16 label __label5
+    17 set __fn1_n 8
+    18 set __fn1_c 0
+-    * set __tmp4 8
+    19 set __fn1_i 0
+    20 label __label7
+-    * jump __label9 greaterThanEq 0 __fn1_n
++   21 jump __label9 greaterThanEq 0 8
+    22 label __label13
+    23 op add __fn1_c __fn1_c __fn1_i
+    24 label __label8
+    25 op add __fn1_i __fn1_i 1
+-    * jump __label13 lessThan __fn1_i __fn1_n
++   26 jump __label13 lessThan __fn1_i 8
+    27 label __label9
+    28 print __fn1_c
+-    * set __retval3 __fn1_c
+    29 jump __label6 always
+    30 label __label6
+    31 jump __label11 greaterThanEq __fn0_c __fn1_c
+
+Modifications by Data Flow Optimization, pass 2, iteration 3:
+     0 set result 1
+     1 label __label0
+-    * set __fn0_n 4
+     2 set __fn0_c 0
+     3 set __fn0_i 0
+     4 label __label2
+ 
+    13 jump __label1 always
+    14 label __label1
+    15 label __label5
+-    * set __fn1_n 8
+    16 set __fn1_c 0
+    17 set __fn1_i 0
+    18 label __label7
+
+Modifications by Jump Normalization, pass 3, iteration 1:
+ 
+     2 set __fn0_c 0
+     3 set __fn0_i 0
+     4 label __label2
+-    * jump __label4 greaterThanEq 0 4
+     5 label __label12
+     6 op add __fn0_c __fn0_c __fn0_i
+     7 label __label3
+ 
+    15 set __fn1_c 0
+    16 set __fn1_i 0
+    17 label __label7
+-    * jump __label9 greaterThanEq 0 8
+    18 label __label13
+    19 op add __fn1_c __fn1_c __fn1_i
+    20 label __label8
+
+Modifications by Single Step Elimination, pass 3, iteration 1:
+ 
+     9 jump __label12 lessThan __fn0_i 4
+    10 label __label4
+    11 print __fn0_c
+-    * jump __label1 always
+    12 label __label1
+    13 label __label5
+    14 set __fn1_c 0
+ 
+    21 jump __label13 lessThan __fn1_i 8
+    22 label __label9
+    23 print __fn1_c
+-    * jump __label6 always
+    24 label __label6
+    25 jump __label11 greaterThanEq __fn0_c __fn1_c
+    26 print "Less"
+    27 set result 0
+-    * jump __label11 always
+    28 label __label11
+    29 print result
+    30 end
+
+Final code before resolving virtual instructions:
+
+set result 1
+label __label0
+set __fn0_c 0
+set __fn0_i 0
+label __label2
+label __label12
+op add __fn0_c __fn0_c __fn0_i
+label __label3
+op add __fn0_i __fn0_i 1
+jump __label12 lessThan __fn0_i 4
+label __label4
+print __fn0_c
+label __label1
+label __label5
+set __fn1_c 0
+set __fn1_i 0
+label __label7
+label __label13
+op add __fn1_c __fn1_c __fn1_i
+label __label8
+op add __fn1_i __fn1_i 1
+jump __label13 lessThan __fn1_i 8
+label __label9
+print __fn1_c
+label __label6
+jump __label11 greaterThanEq __fn0_c __fn1_c
+print "Less"
+set result 0
+label __label11
+print result
+end

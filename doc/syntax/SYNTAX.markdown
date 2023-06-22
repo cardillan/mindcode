@@ -139,7 +139,7 @@ to Mindustry Logic compatible literal using these rules (first applicable rule i
 4. If none of the above rules is applicable, the conversion isn't possible and a compilation error is produced. 
 
 Note: these rules are applied to the absolute value on the number being encoded. When the number is negative, a minus
-sign is then prepended to the encoded representation .
+sign is then prepended to the created mlog representation.
 
 This processing ensures that numbers within a reasonable range are encoded to use maximal available precision, 
 without producing mlog representations that would be unreasonably long. 

@@ -21,35 +21,41 @@ class DeadCodeEliminator extends BaseOptimizer {
     private final Map<LogicVariable, List<LogicInstruction>> writes = new HashMap<>();
     private final Set<LogicVariable> eliminations = new HashSet<>();
 
+    private String eliminated = "";
+    private String uninitialized = "";
+
     DeadCodeEliminator(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.DEAD_CODE_ELIMINATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         analyzeDataflow();
         removeUselessWrites();
+
+        if (phase == OptimizationPhase.FINAL) {
+            eliminated = eliminations.stream()
+                    .filter(LogicVariable::isUserVariable)
+                    .map(LogicVariable::getFullName)
+                    .sorted()
+                    .distinct()
+                    .collect(Collectors.joining(", "));
+
+            uninitialized = reads.stream()
+                    .filter(s -> s.getType() != ArgumentType.BLOCK && !writes.containsKey(s))
+                    .filter(LogicVariable::isGlobalVariable)        // Non-global variables are handled by Data Flow Optimization
+                    .map(LogicVariable::getFullName)
+                    .sorted()
+                    .distinct()
+                    .collect(Collectors.joining(", "));
+        }
+
         return true;
     }
 
     @Override
-    protected void generateFinalMessages() {
+    public void generateFinalMessages() {
         super.generateFinalMessages();
-        
-        String eliminated = eliminations.stream()
-                .filter(LogicVariable::isUserVariable)
-                .map(LogicVariable::getFullName)
-                .sorted()
-                .distinct()
-                .collect(Collectors.joining(", "));
-        
-        String uninitialized = reads.stream()
-                .filter(s -> s.getType() != ArgumentType.BLOCK && !writes.containsKey(s))
-                .filter(LogicVariable::isGlobalVariable)        // Non-global variables are handled by Data Flow Optimization
-                .map(LogicVariable::getFullName)
-                .sorted()
-                .distinct()
-                .collect(Collectors.joining(", "));
         
         if (!eliminated.isEmpty()) {
             emitMessage(MessageLevel.WARNING, "       List of unused variables: %s.", eliminated);

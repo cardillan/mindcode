@@ -39,13 +39,15 @@ import static info.teksol.mindcode.logic.ArgumentType.STRING_LITERAL;
 class PrintMerger extends BaseOptimizer {
 
     public PrintMerger(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.PRINT_TEXT_MERGING, instructionProcessor);
     }
 
-    private PrintInstruction previous = null;
+    private PrintInstruction previous;
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+        previous = null;
+
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 switch (iterator.next()) {

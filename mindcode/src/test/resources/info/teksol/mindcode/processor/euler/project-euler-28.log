@@ -1,0 +1,180 @@
+    28 instructions before optimizations.
+     4 instructions eliminated by Tmp Variables Elimination (4 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
+     4 instructions eliminated by Dead Code Elimination (3 iterations).
+     2 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instructions added by Loop Optimization (3 iterations).
+     1 loops improved by LoopOptimizer.
+     2 instructions eliminated by Data Flow Optimization (5 iterations).
+    14 instructions after optimizations.
+
+Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+ 
+     4 label __label0
+     5 op lessThanEq __tmp0 current 1002001
+     6 jump __label2 equal __tmp0 false
+-    * op add __tmp1 sum current
+-    * set sum __tmp1
+-    * op add __tmp2 current step
+-    * set current __tmp2
+-    * op add __tmp3 count 1
+-    * set count __tmp3
++    7 op add sum sum current
++    8 op add current current step
++    9 op add count count 1
+    10 op greaterThan __tmp4 count 3
+    11 jump __label3 equal __tmp4 false
+-    * op add __tmp6 step 2
+-    * set step __tmp6
++   12 op add step step 2
+    13 set count 0
+    14 set __tmp5 count
+    15 jump __label4 always
+
+Modifications by Dead Code Elimination, pass 1, iteration 1:
+ 
+    11 jump __label3 equal __tmp4 false
+    12 op add step step 2
+    13 set count 0
+-    * set __tmp5 count
+    14 jump __label4 always
+    15 label __label3
+-    * set __tmp5 null
+    16 label __label4
+    17 label __label1
+    18 jump __label0 always
+ 
+    20 label __label5
+    21 set __fn0_v 669171001
+    22 print __fn0_v
+-    * set __retval7 __fn0_v
+    23 label __label6
+    24 label __label7
+    25 set __fn1_v sum
+    26 print __fn1_v
+-    * set __retval8 __fn1_v
+    27 label __label8
+    28 end
+
+Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+ 
+     2 set step 2
+     3 set count 1
+     4 label __label0
+-    * op lessThanEq __tmp0 current 1002001
+-    * jump __label2 equal __tmp0 false
++    5 jump __label2 greaterThan current 1002001
+     6 op add sum sum current
+     7 op add current current step
+     8 op add count count 1
+-    * op greaterThan __tmp4 count 3
+-    * jump __label3 equal __tmp4 false
++    9 jump __label3 lessThanEq count 3
+    10 op add step step 2
+    11 set count 0
+    12 jump __label4 always
+
+Modifications by Single Step Elimination, pass 2, iteration 1:
+ 
+     9 jump __label3 lessThanEq count 3
+    10 op add step step 2
+    11 set count 0
+-    * jump __label4 always
+    12 label __label3
+    13 label __label4
+    14 label __label1
+
+Modifications by Loop Optimization, pass 2, iteration 1:
+ 
+     3 set count 1
+     4 label __label0
+     5 jump __label2 greaterThan current 1002001
++    6 label __label9
+     7 op add sum sum current
+     8 op add current current step
+     9 op add count count 1
+ 
+    13 label __label3
+    14 label __label4
+    15 label __label1
+-    * jump __label0 always
++   16 jump __label9 lessThanEq current 1002001
+    17 label __label2
+    18 label __label5
+    19 set __fn0_v 669171001
+
+Modifications by Data Flow Optimization, pass 2, iteration 1:
+ 
+     2 set step 2
+     3 set count 1
+     4 label __label0
+-    * jump __label2 greaterThan current 1002001
++    5 jump __label2 greaterThan 3 1002001
+     6 label __label9
+     7 op add sum sum current
+     8 op add current current step
+ 
+    17 label __label2
+    18 label __label5
+    19 set __fn0_v 669171001
+-    * print __fn0_v
++   20 print 669171001
+    21 label __label6
+    22 label __label7
+    23 set __fn1_v sum
+-    * print __fn1_v
++   24 print sum
+    25 label __label8
+    26 end
+
+Modifications by Data Flow Optimization, pass 2, iteration 2:
+ 
+    16 jump __label9 lessThanEq current 1002001
+    17 label __label2
+    18 label __label5
+-    * set __fn0_v 669171001
+    19 print 669171001
+    20 label __label6
+    21 label __label7
+-    * set __fn1_v sum
+    22 print sum
+    23 label __label8
+    24 end
+
+Modifications by Jump Normalization, pass 3, iteration 1:
+ 
+     2 set step 2
+     3 set count 1
+     4 label __label0
+-    * jump __label2 greaterThan 3 1002001
+     5 label __label9
+     6 op add sum sum current
+     7 op add current current step
+
+Final code before resolving virtual instructions:
+
+set sum 1
+set current 3
+set step 2
+set count 1
+label __label0
+label __label9
+op add sum sum current
+op add current current step
+op add count count 1
+jump __label3 lessThanEq count 3
+op add step step 2
+set count 0
+label __label3
+label __label4
+label __label1
+jump __label9 lessThanEq current 1002001
+label __label2
+label __label5
+print 669171001
+label __label6
+label __label7
+print sum
+label __label8
+end

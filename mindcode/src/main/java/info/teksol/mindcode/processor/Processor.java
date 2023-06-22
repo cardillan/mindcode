@@ -211,8 +211,6 @@ public class Processor {
     }
 
     private boolean executeWrite(WriteInstruction ix) {
-        // TODO: both an address and a variable can be pushed to stack
-        //       need to properly support both alternatives
         Variable source = getExistingVariable(ix.getArg(0));
         Variable block = getExistingVariable(ix.getMemory());
         Variable index = getExistingVariable(ix.getIndex());

@@ -4,23 +4,56 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* Multiple-passes optimization.
-  * At this point, there might already be benefits from additional passes.
-  * Some optimizers will only be run once after all passes (e.g. jump threading)
-  * Some optimizers need to be run multiple times (e.g. single step jump elimination), this is not well handled in
-    current implementation. Multiple passes will solve that.
-* Update ConditionalJumpsNormalizer to fully evaluate literal-based conditions. Data Flow optimizer can replace
-  variables in conditional jumps with literals, allowing ConditionalJumpsNormalizer to process them.
-* Remove Input Temp Elimination and the special protected class of temporary variables, which was only needed 
-  because of the Input Temp Elimination.
+* When an uninitialized temporary variable is found by Dead Code Eliminator, generate compilation error. This happens 
+  as a result of some optimizer bug. 
+* Optimization for speed
+  * Alter optimizers to collect statistics about possible speedups and their costs (in terms of instructions added 
+    per percentage of executions step avoided, weighed by the node weight) - only in the ITERATED phase. It would make 
+    sense to allow optimizers to offer alternatives, complicating the optimal selection problem slightly.
+  * At the end of the phase, count available instruction space and if not all speedups can be realized, 
+    choose the most efficient ones until available space is exhausted (this is a knapsack problem).
+  * In the next phase, individual optimizers will realize the accepted optimizations first. Reported cost must be 
+    conservative - an optimization must not create more additional instructions than predicted. They may then
+    re-optimize the resulting code and propose additional optimizations (it is expected that actual code increases  
+    will be smaller than anticipated, since the newly generated code may be further optimized by other optimizers).
+  * ITERATED phase end when no optimizer modified the code, and none of proposed optimizations is feasible. Also, 
+    new compiler option to limit the number of passes - 3 for the web app, 25(?) for the command line tool by default. 
+  * Possible optimizations for speed:
+    * Inlining: a special case. If an inlining optimization is elected, the instruction list will be rebuilt from
+      the AST tree marking the function inlined, re-running all optimizations from start. Maximum number of inlining 
+      rounds should be limited (say, 1 or 2, or a compiler option). 
+    * Loop unrolling:
+      * Full loop unrolling fixed bounds loops
+      * Loop peeling - unroll first n iterations (with conditions in between), followed by the loop.
+      * Jump-to-middle loop unrolling for loops with fixed end condition
+      * Jump-to-middle loop unrolling for loops with fixed start that can run in the opposite direction (e.g.
+        `for i in 0 .. n cell1[i] = 0 end` - jump to position corresponding to `n` and proceed to `0`).
+      * Loop unswitching (if in loop --> loops in if)
+      * Loop fusion???
+    * Switched case expression
+      * All or a subset of when branches can be rearranged and an in-memory jump table created. 
+    * Return optimization: replace jump to return instruction with the return instruction itself.
+* Optimization for size: when the goal is set to `size`, selected optimizers may try to replace code with smaller, 
+  slower alternatives
+  * Case expressions: if each branch of a case expression provides just the expression value, rearrange each branch 
+    to setting the expression value to the output variable and jump out if the branch was selected. Saves one jump 
+    per branch, at most 1/3 instructions. Doubles execution time in average case. 
 * Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax 
   error reporting would be much more preferable, but quite hard to implement). 
 * Improve data flow optimization around function calls further:
-  * Create specialized optimizer for replacing variables inside push (pop?) instructions where possible.
+  * Values pushed to stack need not be assigned to their proper variables first, a temp can be stored instead.
   * Create global optimizer to handle functions with constant return values. Handle specific case of function
     always returning one of its input arguments.
 * Loop unrolling - already possible and promising big returns.
-* For each 
+* Stack optimizer: when an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`),
+  instead of push/pop protection, revert the operation after the function call returns. Implement strict/relaxed 
+  math model to let the user block this in case the reversed operation produces result not equal to the original one.
+* `math-model` compiler option: `strict` or `relaxed`. Under the `strict` model, the following will apply:
+  * Loss of precision during numeric literal conversion is disallowed. If such a literal is found in the source code,
+    the compilation will fail. Optimizations that would cause precision loss will be blocked.
+  * Restoring variable value by inverting the operation performed on it will be disallowed.
+  * Assumptions such as `x < x + 1` for a general value of `x` won't be made (for large values of `x`, this might 
+    not be computationally true: `x = 10 ** 20; y = x + 1; print(x == y)` gives `1`).
 * External variable value reuse
   * When a value is read or written to a memory cell, store it and don't reread it if not necessary, unless the 
     memory cell was declared `volatile`.
@@ -42,7 +75,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * More expression optimizations:
   * replace addition/subtraction of 0 by assignment,
   * replace multiplication/division by 1 by assignment,
-  * probably done by ExpressionOptimizer to avoid bloating of Data flow optimizer. Requires multiple optimization 
+  * probably done by ExpressionOptimizer to avoid bloating of Data Flow optimizer. Requires multiple optimization 
     passes.
 * Pulling invariant code out of loops/if branches.
 * Instruction reordering for better constant folding/subexpression optimization
@@ -52,16 +85,12 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * Global variable type inferring.
   * More precise might be obtained through data flow analysis. This will be a start.
   * Temporary variables are typically single-use, global type inferring might work very well for them.
-* Creating additional processor tests - unit tests based on executing compiled code and comparing the output.
-  They're extremely useful at detecting bugs caused by unforeseen interference of different optimizers. Some graph 
-  algorithms perhaps?
-  * Towers of Hanoi
 
 ## Planned
 
 ### Constant folding and common subexpression optimization
 
-* Generalized constant folding on expression tree, including factoring out constants from complex expressions
+* Generalized constant folding on expression tree, including factoring constants out of complex expressions.
   * A theory-based approach is probably needed.  
 * Expression distribution:
   * `print(value ? "a" : "b")` could be turned into `if value print("a") else print("b") end`
@@ -203,9 +232,6 @@ means to compile different parts of code for size or speed.
   * Could help keeping track of global variables and memory blocks.
   * Could be used to create more versions of a function, possibly inlining some of them, based on (dis)similarities
     of variable states between visits (probably quite complex.)
-* When an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`), instead of 
-  push/pop protection, revert the operation after the function call returns. Implement strict/relaxed math model to 
-  let the user block this in case the reversed operation produces result not equal to the original one. 
 
 ### Schematics Builder
 
@@ -244,7 +270,7 @@ means to compile different parts of code for size or speed.
   * warn about alloy-smelter --> surge-smelter V6 --> V7 name change.
 * Improve compiler error messages.
 * Warn developers when the generated code goes over 1000 Mindustry instructions.
-* Warn developers when potentially non-numeric value is being pushed to stack.
+* Warn developers when potentially non-numeric value is being pushed on the stack.
 * When the compiled program only contains basic instructions (including print and printflush), run it after 
   compilation and show the output on the web page. The same might be done for command-line compiler.
 * Render an image of built schematic to show it in the web application.
@@ -302,6 +328,10 @@ Possibly in boolean expressions in general, although in those the utility is dou
 
 There are no plans to do any of these. We keep them around just in case.
 
+* Virtual no-op instruction. Will be resolved to nothing. Instructions to be removed will be replaced with this
+  instruction instead, allowing the optimizers to remove instructions while preserving AST context structure of the
+  program (unreachable code elimination, jump normalization).
+  * Was tried in a preliminary implementation and doesn't seem to bring about any benefit at all.
 * Support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * #17 `if` operator: `break if some_cond` is equivalent to `if some_cond break end`. It's just a less verbose way of
   doing it.

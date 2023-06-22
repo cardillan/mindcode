@@ -14,7 +14,6 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -39,11 +38,11 @@ import java.util.stream.Stream;
 public class StackUsageOptimizer extends BaseOptimizer {
 
     StackUsageOptimizer(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.STACK_USAGE_OPTIMIZATION, instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         // Both optimizations handle the program body and user functions at once. The program body can contain call
         // instructions, but no push or pop instructions, so the optimizations won't do anything on them,
         // even if processing the program body might be a bit ineffective.
@@ -56,18 +55,16 @@ public class StackUsageOptimizer extends BaseOptimizer {
 
     private void removeUnusedVariables() {
         // Collects all variables from the entire program except push or pop instructions
-        List<LogicArgument> list = instructionStream()
+        Set<LogicArgument> variables = instructionStream()
                 .filter(Predicate.not(PushOrPopInstruction.class::isInstance))
                 .flatMap(LogicInstruction::inputOutputArgumentsStream)
                 .filter(LogicVariable.class::isInstance)
-                .toList();
+                .collect(Collectors.toSet());
 
-        variables.addAll(list);
-
-        removeMatchingInstructions(this::uselessStackOperation);
+        removeMatchingInstructions(ix -> uselessStackOperation(variables, ix));
     }
 
-    private boolean uselessStackOperation(LogicInstruction instruction) {
+    private boolean uselessStackOperation(Set<LogicArgument> variables, LogicInstruction instruction) {
         return instruction instanceof PushOrPopInstruction ix && !variables.contains(ix.getVariable());
     }
 

@@ -39,13 +39,15 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     private List<LogicInstruction> program;
     private CallGraph callGraph;
     private AstContext rootContext;
+    private int passes = 0;
     private int iterations = 0;
     private int modifications = 0;
-    private int initialCount;
-    private int finalCount;
+    private int insertions = 0;
+    private int deletions = 0;
+    private boolean updated;
 
-    public BaseOptimizer(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+    public BaseOptimizer(Optimization optimization, InstructionProcessor instructionProcessor) {
+        super(optimization, instructionProcessor);
     }
 
     // Optimization logic
@@ -54,7 +56,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * Performs one iteration of the optimization. Return true to run another iteration, false when done.
      * @return true to re-run the optimization
      */
-    protected abstract boolean optimizeProgram();
+    protected abstract boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration);
 
     protected void setProgram(List<LogicInstruction> program) {
         this.program = program;
@@ -65,42 +67,49 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     }
 
     @Override
-    public void optimizeProgram(List<LogicInstruction> input, CallGraph callGraph, AstContext rootContext) {
-        this.rootContext = rootContext;
+    public boolean optimizeProgram(OptimizationPhase phase, int pass, List<LogicInstruction> input, CallGraph callGraph,
+            AstContext rootContext) {
+        this.rootContext = Objects.requireNonNull(rootContext);
         this.program = Objects.requireNonNull(input);
         this.callGraph = Objects.requireNonNull(callGraph);
 
-        initialCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-
         boolean repeat;
+        boolean modified = false;
+        int iteration = 1;
         do {
-            modifications = 0;
-            repeat = optimizeProgram();
+            updated = false;
+            repeat = optimizeProgram(phase, pass, iteration);
+
             if (!iterators.isEmpty()) {
                 throw new IllegalStateException("Unclosed iterators.");
             }
-            if (modifications > 0 && rootContext != null) {
+
+            if (updated) {
+                modified = true;
                 rebuildAstContextTree();
             }
 
-            debugPrinter.registerIteration(this, ++iterations, program);
-        } while (repeat && modifications > 0);
+            debugPrinter.registerIteration(this, pass, iteration, program);
+            iteration++;
+            iterations++;
+        } while (repeat && updated);
 
-        finalCount = program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        if (modified) {
+            passes++;
+        }
 
-        generateFinalMessages();
+        return modified;
     }
 
-    protected void generateFinalMessages() {
-        if (finalCount != initialCount) {
-            String verb = finalCount < initialCount ? "eliminated" : "added";
-            if (iterations > 1) {
-                emitMessage(MessageLevel.INFO, "%6d instructions %s by %s (%d iterations).",
-                        Math.abs(initialCount - finalCount), verb, getClass().getSimpleName(), iterations - 1);
-            } else {
-                emitMessage(MessageLevel.INFO, "%6d instructions %s by %s.",
-                        Math.abs(initialCount - finalCount), verb, getClass().getSimpleName());
-            }
+    public void generateFinalMessages() {
+        String verb = insertions == deletions ? "modified" : insertions < deletions ? "eliminated" : "added";
+        int count = insertions == deletions ? modifications : Math.abs(insertions - deletions);
+        if (count > 0) {
+            String visits = passes > 1 ? " (" + passes + " passes, " + iterations + " iterations)"
+                    : iterations > 1 ? " (" + iterations + " iterations)" : "";
+
+            emitMessage(MessageLevel.INFO, "%6d instructions %s by %s%s.",
+                    count, verb, getName(), visits);
         }
     }
 
@@ -450,7 +459,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
         iterators.forEach(iterator -> iterator.instructionAdded(index));
         program.add(index, instruction);
-        modifications++;
+        updated = true;
+        insertions++;
     }
 
     /**
@@ -487,6 +497,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
             }
         }
         program.set(index, instruction);
+        updated = true;
         modifications++;
     }
 
@@ -498,7 +509,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     protected void removeInstruction(int index) {
         iterators.forEach(iterator -> iterator.instructionRemoved(index));
         program.remove(index);
-        modifications++;
+        updated = true;
+        deletions++;
     }
 
     /**
@@ -643,7 +655,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * regardless of how the modification was done (i.e. even modifications made though
      * different LogicIterator instance, or by calling BaseOptimizer methods).
      * <p>
-     * LogicIterator instances can be only allocated from within the {@link #optimizeProgram()} method
+     * LogicIterator instances can be only allocated from within the {@link #optimizeProgram(OptimizationPhase, int, int)} method
      * and must be closed before the method finishes.
      */
     protected class LogicIterator implements ListIterator<LogicInstruction>, AutoCloseable {

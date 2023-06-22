@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OptimizerTest extends AbstractProcessorTest {
 
-    public static final String SCRIPTS_DIRECTORY = "src/test/resources/optimizer";
+    public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/mindcode/processor/optimizer";
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;

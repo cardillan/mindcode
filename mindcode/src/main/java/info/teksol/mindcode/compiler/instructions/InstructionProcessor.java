@@ -17,7 +17,7 @@ public interface InstructionProcessor {
 
     LogicLabel nextLabel();
     LogicVariable nextTemp();
-    LogicVariable nextProtectedTemp();
+
     LogicVariable nextReturnValue();
     String nextLocalPrefix();
 
@@ -73,9 +73,9 @@ public interface InstructionProcessor {
      * @param newArg new value for the arguments equal to the old value
      * @return a modified instruction
      */
-    LogicInstruction replaceAllArgs(LogicInstruction instruction, LogicArgument oldArg, LogicArgument newArg);
+    <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg);
 
-    LogicInstruction replaceArgs(LogicInstruction instruction, List<LogicArgument> newArgs);
+    <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs);
     /**
      * Determines the number of arguments needed to print the instruction
      *

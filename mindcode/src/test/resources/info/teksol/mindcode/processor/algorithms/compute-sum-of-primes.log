@@ -1,0 +1,686 @@
+   116 instructions before optimizations.
+    17 instructions eliminated by Tmp Variables Elimination (4 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
+    13 instructions eliminated by Dead Code Elimination (4 iterations).
+     6 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     6 instructions eliminated by Single Step Elimination (5 iterations).
+     3 instructions added by Loop Optimization (3 iterations).
+     3 loops improved by LoopOptimizer.
+    10 instructions eliminated by Data Flow Optimization (7 iterations).
+    63 instructions after optimizations.
+
+Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+ 
+     4 set __fn2_sum 5
+     5 set __fn2_i 5
+     6 op sqrt __tmp1 __fn2_maximum
+-    * op ceil __tmp2 __tmp1
+-    * set __fn2_sqrtMax __tmp2
++    7 op ceil __fn2_sqrtMax __tmp1
+     8 label __label4
+     9 op lessThanEq __tmp3 __fn2_i __fn2_sqrtMax
+    10 jump __label6 equal __tmp3 false
+ 
+    15 gotolabel __label7 __fn0
+    16 set __retval4 __fn0retval
+    17 jump __label8 equal __retval4 false
+-    * op add __tmp6 __fn2_sum __fn2_i
+-    * set __fn2_sum __tmp6
++   18 op add __fn2_sum __fn2_sum __fn2_i
+    19 set __tmp5 __fn2_sum
+    20 jump __label9 always
+    21 label __label8
+    22 set __tmp5 null
+    23 label __label9
+-    * op add __tmp7 __fn2_i 2
+-    * set __fn2_i __tmp7
++   24 op add __fn2_i __fn2_i 2
+    25 set __fn0_n __fn2_i
+    26 set __fn0_maximum __fn2_maximum
+    27 setaddr __fn0retaddr __label10
+ 
+    29 gotolabel __label10 __fn0
+    30 set __retval8 __fn0retval
+    31 jump __label11 equal __retval8 false
+-    * op add __tmp10 __fn2_sum __fn2_i
+-    * set __fn2_sum __tmp10
++   32 op add __fn2_sum __fn2_sum __fn2_i
+    33 set __tmp9 __fn2_sum
+    34 jump __label12 always
+    35 label __label11
+    36 set __tmp9 null
+    37 label __label12
+-    * op add __tmp11 __fn2_i 4
+-    * set __fn2_i __tmp11
++   38 op add __fn2_i __fn2_i 4
+    39 label __label5
+    40 jump __label4 always
+    41 label __label6
+    42 label __label13
+    43 op lessThanEq __tmp12 __fn2_i __fn2_maximum
+    44 jump __label15 equal __tmp12 false
+-    * op idiv __tmp13 __fn2_i 2
+-    * set __fn1_bitIndex __tmp13
++   45 op idiv __fn1_bitIndex __fn2_i 2
+    46 setaddr __fn1retaddr __label16
+    47 call __label1
+    48 gotolabel __label16 __fn1
+    49 set __retval14 __fn1retval
+    50 op equal __tmp15 __retval14 false
+    51 jump __label17 equal __tmp15 false
+-    * op add __tmp17 __fn2_sum __fn2_i
+-    * set __fn2_sum __tmp17
++   52 op add __fn2_sum __fn2_sum __fn2_i
+    53 set __tmp16 __fn2_sum
+    54 jump __label18 always
+    55 label __label17
+    56 set __tmp16 null
+    57 label __label18
+-    * op add __tmp18 __fn2_i 2
+-    * set __fn2_i __tmp18
+-    * op idiv __tmp19 __fn2_i 2
+-    * set __fn1_bitIndex __tmp19
++   58 op add __fn2_i __fn2_i 2
++   59 op idiv __fn1_bitIndex __fn2_i 2
+    60 setaddr __fn1retaddr __label19
+    61 call __label1
+    62 gotolabel __label19 __fn1
+ 
+    65 jump __label20 equal __tmp21 false
+    66 op lessThanEq __tmp23 __fn2_i __fn2_maximum
+    67 jump __label22 equal __tmp23 false
+-    * op add __tmp25 __fn2_sum __fn2_i
+-    * set __fn2_sum __tmp25
++   68 op add __fn2_sum __fn2_sum __fn2_i
+    69 set __tmp24 __fn2_sum
+    70 jump __label23 always
+    71 label __label22
+ 
+    76 label __label20
+    77 set __tmp22 null
+    78 label __label21
+-    * op add __tmp26 __fn2_i 4
+-    * set __fn2_i __tmp26
++   79 op add __fn2_i __fn2_i 4
+    80 label __label14
+    81 jump __label13 always
+    82 label __label15
+ 
+    85 print __retval0
+    86 end
+    87 label __label0
+-    * op idiv __tmp27 __fn0_n 2
+-    * set __fn1_bitIndex __tmp27
++   88 op idiv __fn1_bitIndex __fn0_n 2
+    89 setaddr __fn1retaddr __label25
+    90 call __label1
+    91 gotolabel __label25 __fn1
+-    * op equal __tmp28 __fn1retval false
+-    * set __fn0_result __tmp28
++   92 op equal __fn0_result __fn1retval false
+    93 jump __label26 equal __fn0_result false
+-    * op idiv __tmp30 __fn0_maximum 2
+-    * set __fn0_max __tmp30
++   94 op idiv __fn0_max __fn0_maximum 2
+    95 op mul __tmp31 __fn0_n __fn0_n
+-    * op idiv __tmp32 __tmp31 2
+-    * set __fn0_i __tmp32
++   96 op idiv __fn0_i __tmp31 2
+    97 label __label28
+    98 op lessThanEq __tmp33 __fn0_i __fn0_max
+    99 jump __label30 equal __tmp33 false
+ 
+   109 set __retval34 __tmp39
+   110 label __label32
+   111 label __label29
+-    * op add __tmp41 __fn0_i __fn0_n
+-    * set __fn0_i __tmp41
++  112 op add __fn0_i __fn0_i __fn0_n
+   113 jump __label28 always
+   114 label __label30
+   115 set __tmp29 null
+ 
+   126 read __tmp42 BITMAP __tmp43
+   127 op mod __tmp44 __fn1_bitIndex MOD
+   128 op shl __tmp45 1 __tmp44
+-    * op and __tmp46 __tmp42 __tmp45
+-    * set __fn1retval __tmp46
++  129 op and __fn1retval __tmp42 __tmp45
+   130 label __label33
+   131 goto __fn1retaddr __fn1
+   132 end
+
+Modifications by Dead Code Elimination, pass 1, iteration 1:
+ 
+    16 set __retval4 __fn0retval
+    17 jump __label8 equal __retval4 false
+    18 op add __fn2_sum __fn2_sum __fn2_i
+-    * set __tmp5 __fn2_sum
+    19 jump __label9 always
+    20 label __label8
+-    * set __tmp5 null
+    21 label __label9
+    22 op add __fn2_i __fn2_i 2
+    23 set __fn0_n __fn2_i
+ 
+    28 set __retval8 __fn0retval
+    29 jump __label11 equal __retval8 false
+    30 op add __fn2_sum __fn2_sum __fn2_i
+-    * set __tmp9 __fn2_sum
+    31 jump __label12 always
+    32 label __label11
+-    * set __tmp9 null
+    33 label __label12
+    34 op add __fn2_i __fn2_i 4
+    35 label __label5
+ 
+    46 op equal __tmp15 __retval14 false
+    47 jump __label17 equal __tmp15 false
+    48 op add __fn2_sum __fn2_sum __fn2_i
+-    * set __tmp16 __fn2_sum
+    49 jump __label18 always
+    50 label __label17
+-    * set __tmp16 null
+    51 label __label18
+    52 op add __fn2_i __fn2_i 2
+    53 op idiv __fn1_bitIndex __fn2_i 2
+ 
+    65 label __label22
+    66 set __tmp24 null
+    67 label __label23
+-    * set __tmp22 __tmp24
+    68 jump __label21 always
+    69 label __label20
+-    * set __tmp22 null
+    70 label __label21
+    71 op add __fn2_i __fn2_i 4
+    72 label __label14
+ 
+    98 op or __tmp39 __tmp35 __tmp38
+    99 op idiv __tmp40 __fn3_bitIndex MOD
+   100 write __tmp39 BITMAP __tmp40
+-    * set __retval34 __tmp39
+   101 label __label32
+   102 label __label29
+   103 op add __fn0_i __fn0_i __fn0_n
+   104 jump __label28 always
+   105 label __label30
+-    * set __tmp29 null
+   106 jump __label27 always
+   107 label __label26
+-    * set __tmp29 null
+   108 label __label27
+   109 set __fn0retval __fn0_result
+   110 label __label24
+
+Modifications by Dead Code Elimination, pass 1, iteration 2:
+ 
+    60 op lessThanEq __tmp23 __fn2_i __fn2_maximum
+    61 jump __label22 equal __tmp23 false
+    62 op add __fn2_sum __fn2_sum __fn2_i
+-    * set __tmp24 __fn2_sum
+    63 jump __label23 always
+    64 label __label22
+-    * set __tmp24 null
+    65 label __label23
+    66 jump __label21 always
+    67 label __label20
+
+Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+ 
+     6 op sqrt __tmp1 __fn2_maximum
+     7 op ceil __fn2_sqrtMax __tmp1
+     8 label __label4
+-    * op lessThanEq __tmp3 __fn2_i __fn2_sqrtMax
+-    * jump __label6 equal __tmp3 false
++    9 jump __label6 greaterThan __fn2_i __fn2_sqrtMax
+    10 set __fn0_n __fn2_i
+    11 set __fn0_maximum __fn2_maximum
+    12 setaddr __fn0retaddr __label7
+ 
+    35 jump __label4 always
+    36 label __label6
+    37 label __label13
+-    * op lessThanEq __tmp12 __fn2_i __fn2_maximum
+-    * jump __label15 equal __tmp12 false
++   38 jump __label15 greaterThan __fn2_i __fn2_maximum
+    39 op idiv __fn1_bitIndex __fn2_i 2
+    40 setaddr __fn1retaddr __label16
+    41 call __label1
+    42 gotolabel __label16 __fn1
+    43 set __retval14 __fn1retval
+-    * op equal __tmp15 __retval14 false
+-    * jump __label17 equal __tmp15 false
++   44 jump __label17 notEqual __retval14 false
+    45 op add __fn2_sum __fn2_sum __fn2_i
+    46 jump __label18 always
+    47 label __label17
+ 
+    52 call __label1
+    53 gotolabel __label19 __fn1
+    54 set __retval20 __fn1retval
+-    * op equal __tmp21 __retval20 false
+-    * jump __label20 equal __tmp21 false
+-    * op lessThanEq __tmp23 __fn2_i __fn2_maximum
+-    * jump __label22 equal __tmp23 false
++   55 jump __label20 notEqual __retval20 false
++   56 jump __label22 greaterThan __fn2_i __fn2_maximum
+    57 op add __fn2_sum __fn2_sum __fn2_i
+    58 jump __label23 always
+    59 label __label22
+ 
+    80 op mul __tmp31 __fn0_n __fn0_n
+    81 op idiv __fn0_i __tmp31 2
+    82 label __label28
+-    * op lessThanEq __tmp33 __fn0_i __fn0_max
+-    * jump __label30 equal __tmp33 false
++   83 jump __label30 greaterThan __fn0_i __fn0_max
+    84 label __label31
+    85 set __fn3_bitIndex __fn0_i
+    86 op idiv __tmp36 __fn3_bitIndex MOD
+
+Modifications by Single Step Elimination, pass 2, iteration 1:
+ 
+    15 set __retval4 __fn0retval
+    16 jump __label8 equal __retval4 false
+    17 op add __fn2_sum __fn2_sum __fn2_i
+-    * jump __label9 always
+    18 label __label8
+    19 label __label9
+    20 op add __fn2_i __fn2_i 2
+ 
+    26 set __retval8 __fn0retval
+    27 jump __label11 equal __retval8 false
+    28 op add __fn2_sum __fn2_sum __fn2_i
+-    * jump __label12 always
+    29 label __label11
+    30 label __label12
+    31 op add __fn2_i __fn2_i 4
+ 
+    41 set __retval14 __fn1retval
+    42 jump __label17 notEqual __retval14 false
+    43 op add __fn2_sum __fn2_sum __fn2_i
+-    * jump __label18 always
+    44 label __label17
+    45 label __label18
+    46 op add __fn2_i __fn2_i 2
+ 
+    52 jump __label20 notEqual __retval20 false
+    53 jump __label22 greaterThan __fn2_i __fn2_maximum
+    54 op add __fn2_sum __fn2_sum __fn2_i
+-    * jump __label23 always
+    55 label __label22
+    56 label __label23
+-    * jump __label21 always
+    57 label __label20
+    58 label __label21
+    59 op add __fn2_i __fn2_i 4
+ 
+    90 op add __fn0_i __fn0_i __fn0_n
+    91 jump __label28 always
+    92 label __label30
+-    * jump __label27 always
+    93 label __label26
+    94 label __label27
+    95 set __fn0retval __fn0_result
+
+Modifications by Loop Optimization, pass 2, iteration 1:
+ 
+     7 op ceil __fn2_sqrtMax __tmp1
+     8 label __label4
+     9 jump __label6 greaterThan __fn2_i __fn2_sqrtMax
++   10 label __label34
+    11 set __fn0_n __fn2_i
+    12 set __fn0_maximum __fn2_maximum
+    13 setaddr __fn0retaddr __label7
+ 
+    31 label __label12
+    32 op add __fn2_i __fn2_i 4
+    33 label __label5
+-    * jump __label4 always
++   34 jump __label34 lessThanEq __fn2_i __fn2_sqrtMax
+    35 label __label6
+    36 label __label13
+    37 jump __label15 greaterThan __fn2_i __fn2_maximum
++   38 label __label35
+    39 op idiv __fn1_bitIndex __fn2_i 2
+    40 setaddr __fn1retaddr __label16
+    41 call __label1
+ 
+    60 label __label21
+    61 op add __fn2_i __fn2_i 4
+    62 label __label14
+-    * jump __label13 always
++   63 jump __label35 lessThanEq __fn2_i __fn2_maximum
+    64 label __label15
+    65 set __retval0 __fn2_sum
+    66 label __label3
+ 
+    78 op idiv __fn0_i __tmp31 2
+    79 label __label28
+    80 jump __label30 greaterThan __fn0_i __fn0_max
++   81 label __label36
+    82 label __label31
+    83 set __fn3_bitIndex __fn0_i
+    84 op idiv __tmp36 __fn3_bitIndex MOD
+ 
+    91 label __label32
+    92 label __label29
+    93 op add __fn0_i __fn0_i __fn0_n
+-    * jump __label28 always
++   94 jump __label36 lessThanEq __fn0_i __fn0_max
+    95 label __label30
+    96 label __label26
+    97 label __label27
+
+Modifications by Data Flow Optimization, pass 2, iteration 1:
+ 
+     3 set __fn2_maximum 500
+     4 set __fn2_sum 5
+     5 set __fn2_i 5
+-    * op sqrt __tmp1 __fn2_maximum
++    6 op sqrt __tmp1 500
+     7 op ceil __fn2_sqrtMax __tmp1
+     8 label __label4
+-    * jump __label6 greaterThan __fn2_i __fn2_sqrtMax
++    9 jump __label6 greaterThan 5 __fn2_sqrtMax
+    10 label __label34
+    11 set __fn0_n __fn2_i
+-    * set __fn0_maximum __fn2_maximum
++   12 set __fn0_maximum 500
+    13 setaddr __fn0retaddr __label7
+    14 call __label0
+    15 gotolabel __label7 __fn0
+    16 set __retval4 __fn0retval
+-    * jump __label8 equal __retval4 false
++   17 jump __label8 equal __fn0retval false
+    18 op add __fn2_sum __fn2_sum __fn2_i
+    19 label __label8
+    20 label __label9
+    21 op add __fn2_i __fn2_i 2
+    22 set __fn0_n __fn2_i
+-    * set __fn0_maximum __fn2_maximum
++   23 set __fn0_maximum 500
+    24 setaddr __fn0retaddr __label10
+    25 call __label0
+    26 gotolabel __label10 __fn0
+    27 set __retval8 __fn0retval
+-    * jump __label11 equal __retval8 false
++   28 jump __label11 equal __fn0retval false
+    29 op add __fn2_sum __fn2_sum __fn2_i
+    30 label __label11
+    31 label __label12
+ 
+    34 jump __label34 lessThanEq __fn2_i __fn2_sqrtMax
+    35 label __label6
+    36 label __label13
+-    * jump __label15 greaterThan __fn2_i __fn2_maximum
++   37 jump __label15 greaterThan __fn2_i 500
+    38 label __label35
+    39 op idiv __fn1_bitIndex __fn2_i 2
+    40 setaddr __fn1retaddr __label16
+    41 call __label1
+    42 gotolabel __label16 __fn1
+    43 set __retval14 __fn1retval
+-    * jump __label17 notEqual __retval14 false
++   44 jump __label17 notEqual __fn1retval false
+    45 op add __fn2_sum __fn2_sum __fn2_i
+    46 label __label17
+    47 label __label18
+ 
+    51 call __label1
+    52 gotolabel __label19 __fn1
+    53 set __retval20 __fn1retval
+-    * jump __label20 notEqual __retval20 false
+-    * jump __label22 greaterThan __fn2_i __fn2_maximum
++   54 jump __label20 notEqual __fn1retval false
++   55 jump __label22 greaterThan __fn2_i 500
+    56 op add __fn2_sum __fn2_sum __fn2_i
+    57 label __label22
+    58 label __label23
+ 
+    60 label __label21
+    61 op add __fn2_i __fn2_i 4
+    62 label __label14
+-    * jump __label35 lessThanEq __fn2_i __fn2_maximum
++   63 jump __label35 lessThanEq __fn2_i 500
+    64 label __label15
+    65 set __retval0 __fn2_sum
+    66 label __label3
+-    * print __retval0
++   67 print __fn2_sum
+    68 end
+    69 label __label0
+    70 op idiv __fn1_bitIndex __fn0_n 2
+ 
+    81 label __label36
+    82 label __label31
+    83 set __fn3_bitIndex __fn0_i
+-    * op idiv __tmp36 __fn3_bitIndex MOD
++   84 op idiv __tmp36 __fn0_i MOD
+    85 read __tmp35 BITMAP __tmp36
+-    * op mod __tmp37 __fn3_bitIndex MOD
++   86 op mod __tmp37 __fn0_i MOD
+    87 op shl __tmp38 1 __tmp37
+    88 op or __tmp39 __tmp35 __tmp38
+-    * op idiv __tmp40 __fn3_bitIndex MOD
+-    * write __tmp39 BITMAP __tmp40
++   89 op idiv __tmp40 __fn0_i MOD
++   90 write __tmp39 BITMAP __tmp36
+    91 label __label32
+    92 label __label29
+    93 op add __fn0_i __fn0_i __fn0_n
+
+Modifications by Data Flow Optimization, pass 2, iteration 2:
+     0 set MOD 48
+     1 set BITMAP bank1
+     2 label __label2
+-    * set __fn2_maximum 500
+     3 set __fn2_sum 5
+     4 set __fn2_i 5
+     5 op sqrt __tmp1 500
+-    * op ceil __fn2_sqrtMax __tmp1
++    6 op ceil __fn2_sqrtMax 22.360679774997898
+     7 label __label4
+     8 jump __label6 greaterThan 5 __fn2_sqrtMax
+     9 label __label34
+ 
+    12 setaddr __fn0retaddr __label7
+    13 call __label0
+    14 gotolabel __label7 __fn0
+-    * set __retval4 __fn0retval
+    15 jump __label8 equal __fn0retval false
+    16 op add __fn2_sum __fn2_sum __fn2_i
+    17 label __label8
+ 
+    22 setaddr __fn0retaddr __label10
+    23 call __label0
+    24 gotolabel __label10 __fn0
+-    * set __retval8 __fn0retval
+    25 jump __label11 equal __fn0retval false
+    26 op add __fn2_sum __fn2_sum __fn2_i
+    27 label __label11
+ 
+    37 setaddr __fn1retaddr __label16
+    38 call __label1
+    39 gotolabel __label16 __fn1
+-    * set __retval14 __fn1retval
+    40 jump __label17 notEqual __fn1retval false
+    41 op add __fn2_sum __fn2_sum __fn2_i
+    42 label __label17
+ 
+    46 setaddr __fn1retaddr __label19
+    47 call __label1
+    48 gotolabel __label19 __fn1
+-    * set __retval20 __fn1retval
+    49 jump __label20 notEqual __fn1retval false
+    50 jump __label22 greaterThan __fn2_i 500
+    51 op add __fn2_sum __fn2_sum __fn2_i
+ 
+    57 label __label14
+    58 jump __label35 lessThanEq __fn2_i 500
+    59 label __label15
+-    * set __retval0 __fn2_sum
+    60 label __label3
+    61 print __fn2_sum
+    62 end
+ 
+    74 jump __label30 greaterThan __fn0_i __fn0_max
+    75 label __label36
+    76 label __label31
+-    * set __fn3_bitIndex __fn0_i
+    77 op idiv __tmp36 __fn0_i MOD
+    78 read __tmp35 BITMAP __tmp36
+    79 op mod __tmp37 __fn0_i MOD
+    80 op shl __tmp38 1 __tmp37
+    81 op or __tmp39 __tmp35 __tmp38
+-    * op idiv __tmp40 __fn0_i MOD
+    82 write __tmp39 BITMAP __tmp36
+    83 label __label32
+    84 label __label29
+
+Modifications by Data Flow Optimization, pass 2, iteration 3:
+ 
+     2 label __label2
+     3 set __fn2_sum 5
+     4 set __fn2_i 5
+-    * op sqrt __tmp1 500
+     5 op ceil __fn2_sqrtMax 22.360679774997898
+     6 label __label4
+-    * jump __label6 greaterThan 5 __fn2_sqrtMax
++    7 jump __label6 greaterThan 5 23
+     8 label __label34
+     9 set __fn0_n __fn2_i
+    10 set __fn0_maximum 500
+ 
+    27 label __label12
+    28 op add __fn2_i __fn2_i 4
+    29 label __label5
+-    * jump __label34 lessThanEq __fn2_i __fn2_sqrtMax
++   30 jump __label34 lessThanEq __fn2_i 23
+    31 label __label6
+    32 label __label13
+    33 jump __label15 greaterThan __fn2_i 500
+
+Modifications by Data Flow Optimization, pass 2, iteration 4:
+ 
+     2 label __label2
+     3 set __fn2_sum 5
+     4 set __fn2_i 5
+-    * op ceil __fn2_sqrtMax 22.360679774997898
+     5 label __label4
+     6 jump __label6 greaterThan 5 23
+     7 label __label34
+
+Modifications by Jump Normalization, pass 3, iteration 1:
+ 
+     3 set __fn2_sum 5
+     4 set __fn2_i 5
+     5 label __label4
+-    * jump __label6 greaterThan 5 23
+     6 label __label34
+     7 set __fn0_n __fn2_i
+     8 set __fn0_maximum 500
+
+Final code before resolving virtual instructions:
+
+set MOD 48
+set BITMAP bank1
+label __label2
+set __fn2_sum 5
+set __fn2_i 5
+label __label4
+label __label34
+set __fn0_n __fn2_i
+set __fn0_maximum 500
+setaddr __fn0retaddr __label7
+call __label0
+gotolabel __label7 __fn0
+jump __label8 equal __fn0retval false
+op add __fn2_sum __fn2_sum __fn2_i
+label __label8
+label __label9
+op add __fn2_i __fn2_i 2
+set __fn0_n __fn2_i
+set __fn0_maximum 500
+setaddr __fn0retaddr __label10
+call __label0
+gotolabel __label10 __fn0
+jump __label11 equal __fn0retval false
+op add __fn2_sum __fn2_sum __fn2_i
+label __label11
+label __label12
+op add __fn2_i __fn2_i 4
+label __label5
+jump __label34 lessThanEq __fn2_i 23
+label __label6
+label __label13
+jump __label15 greaterThan __fn2_i 500
+label __label35
+op idiv __fn1_bitIndex __fn2_i 2
+setaddr __fn1retaddr __label16
+call __label1
+gotolabel __label16 __fn1
+jump __label17 notEqual __fn1retval false
+op add __fn2_sum __fn2_sum __fn2_i
+label __label17
+label __label18
+op add __fn2_i __fn2_i 2
+op idiv __fn1_bitIndex __fn2_i 2
+setaddr __fn1retaddr __label19
+call __label1
+gotolabel __label19 __fn1
+jump __label20 notEqual __fn1retval false
+jump __label22 greaterThan __fn2_i 500
+op add __fn2_sum __fn2_sum __fn2_i
+label __label22
+label __label23
+label __label20
+label __label21
+op add __fn2_i __fn2_i 4
+label __label14
+jump __label35 lessThanEq __fn2_i 500
+label __label15
+label __label3
+print __fn2_sum
+end
+label __label0
+op idiv __fn1_bitIndex __fn0_n 2
+setaddr __fn1retaddr __label25
+call __label1
+gotolabel __label25 __fn1
+op equal __fn0_result __fn1retval false
+jump __label26 equal __fn0_result false
+op idiv __fn0_max __fn0_maximum 2
+op mul __tmp31 __fn0_n __fn0_n
+op idiv __fn0_i __tmp31 2
+label __label28
+jump __label30 greaterThan __fn0_i __fn0_max
+label __label36
+label __label31
+op idiv __tmp36 __fn0_i MOD
+read __tmp35 BITMAP __tmp36
+op mod __tmp37 __fn0_i MOD
+op shl __tmp38 1 __tmp37
+op or __tmp39 __tmp35 __tmp38
+write __tmp39 BITMAP __tmp36
+label __label32
+label __label29
+op add __fn0_i __fn0_i __fn0_n
+jump __label36 lessThanEq __fn0_i __fn0_max
+label __label30
+label __label26
+label __label27
+set __fn0retval __fn0_result
+label __label24
+goto __fn0retaddr __fn0
+end
+label __label1
+op idiv __tmp43 __fn1_bitIndex MOD
+read __tmp42 BITMAP __tmp43
+op mod __tmp44 __fn1_bitIndex MOD
+op shl __tmp45 1 __tmp44
+op and __fn1retval __tmp42 __tmp45
+label __label33
+goto __fn1retaddr __fn1
+end

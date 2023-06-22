@@ -73,13 +73,13 @@ Actions:
 ## Compile Mindcode action help
 
 ```
-usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
-                [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
-                [--case-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
-                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
+usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--tmp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
+                [--conditional-jump-optimization LEVEL] [--single-step-elimination LEVEL]
+                [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}]
+                [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
                 [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a mindcode source file into text mlog file.
@@ -111,43 +111,39 @@ optimization levels:
 
   -o, --optimization LEVEL
                          sets global optimization level for all optimizers
+  --tmp-variables-elimination LEVEL
+                         optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
+                         instructions
+  --case-expression-optimization LEVEL
+                         optimization level of eliminating temporary variables created to execute case expressions
   --jump-normalization LEVEL
                          optimization level  of  replacing  always  true  conditional  jumps  with  unconditional  ones,
                          removing always false jumps
   --dead-code-elimination LEVEL
                          optimization level of eliminating writes to  compiler-  or  user-defined variables that are not
                          used
-  --single-step-elimination LEVEL
-                         optimization level of eliminating jumps to the next instruction
-  --output-temp-elimination LEVEL
-                         optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
-                         instructions
-  --expression-optimization LEVEL
-                         optimization level of optimizing some common mathematical expressions
-  --case-expression-optimization LEVEL
-                         optimization level of eliminating temporary variables created to execute case expressions
-  --conditionals-optimization LEVEL
+  --conditional-jump-optimization LEVEL
                          optimization level of  merging  an  op  instruction  producing  a  boolean  expression into the
                          following conditional jump
-  --jump-straightening LEVEL
-                         optimization level of simplifying sequences of intertwined jumps
+  --single-step-elimination LEVEL
+                         optimization level of eliminating jumps to the next instruction
+  --expression-optimization LEVEL
+                         optimization level of optimizing some common mathematical expressions
   --loop-optimization LEVEL
                          optimization level of improving loops
   --if-expression-optimization LEVEL
                          optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL
                          optimization level of improving variable assignments and and expressions
-  --jump-threading LEVEL
-                         optimization level of eliminating chained jumps
   --unreachable-code-elimination LEVEL
                          optimization level of  eliminating  instructions  made  unreachable  by  optimizations or false
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack
-  --return-value-optimization LEVEL
-                         optimization level of optimizing passing return values from functions
-  --input-temp-elimination LEVEL
-                         optimization level of eliminating temporary variables created to pass values into instructions
+  --jump-straightening LEVEL
+                         optimization level of simplifying sequences of intertwined jumps
+  --jump-threading LEVEL
+                         optimization level of eliminating chained jumps
   --print-merging LEVEL  optimization level of merging consecutive print statements outputting text literals
 
 debug output options:
@@ -163,13 +159,13 @@ debug output options:
 ## Compile Schema action help
 
 ```
-usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
-                [--single-step-elimination LEVEL] [--output-temp-elimination LEVEL] [--expression-optimization LEVEL]
-                [--case-expression-optimization LEVEL] [--conditionals-optimization LEVEL] [--jump-straightening LEVEL]
-                [--loop-optimization LEVEL] [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--return-value-optimization LEVEL] [--input-temp-elimination LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w,7as,7aw}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
+usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--tmp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
+                [--conditional-jump-optimization LEVEL] [--single-step-elimination LEVEL]
+                [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}]
+                [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
                 [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
 
 Compile a schema definition file into binary msch file.
@@ -202,43 +198,39 @@ optimization levels:
 
   -o, --optimization LEVEL
                          sets global optimization level for all optimizers
+  --tmp-variables-elimination LEVEL
+                         optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
+                         instructions
+  --case-expression-optimization LEVEL
+                         optimization level of eliminating temporary variables created to execute case expressions
   --jump-normalization LEVEL
                          optimization level  of  replacing  always  true  conditional  jumps  with  unconditional  ones,
                          removing always false jumps
   --dead-code-elimination LEVEL
                          optimization level of eliminating writes to  compiler-  or  user-defined variables that are not
                          used
-  --single-step-elimination LEVEL
-                         optimization level of eliminating jumps to the next instruction
-  --output-temp-elimination LEVEL
-                         optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
-                         instructions
-  --expression-optimization LEVEL
-                         optimization level of optimizing some common mathematical expressions
-  --case-expression-optimization LEVEL
-                         optimization level of eliminating temporary variables created to execute case expressions
-  --conditionals-optimization LEVEL
+  --conditional-jump-optimization LEVEL
                          optimization level of  merging  an  op  instruction  producing  a  boolean  expression into the
                          following conditional jump
-  --jump-straightening LEVEL
-                         optimization level of simplifying sequences of intertwined jumps
+  --single-step-elimination LEVEL
+                         optimization level of eliminating jumps to the next instruction
+  --expression-optimization LEVEL
+                         optimization level of optimizing some common mathematical expressions
   --loop-optimization LEVEL
                          optimization level of improving loops
   --if-expression-optimization LEVEL
                          optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL
                          optimization level of improving variable assignments and and expressions
-  --jump-threading LEVEL
-                         optimization level of eliminating chained jumps
   --unreachable-code-elimination LEVEL
                          optimization level of  eliminating  instructions  made  unreachable  by  optimizations or false
                          conditions
   --stack-optimization LEVEL
                          optimization level of optimizing variable storage on stack
-  --return-value-optimization LEVEL
-                         optimization level of optimizing passing return values from functions
-  --input-temp-elimination LEVEL
-                         optimization level of eliminating temporary variables created to pass values into instructions
+  --jump-straightening LEVEL
+                         optimization level of simplifying sequences of intertwined jumps
+  --jump-threading LEVEL
+                         optimization level of eliminating chained jumps
   --print-merging LEVEL  optimization level of merging consecutive print statements outputting text literals
 
 debug output options:

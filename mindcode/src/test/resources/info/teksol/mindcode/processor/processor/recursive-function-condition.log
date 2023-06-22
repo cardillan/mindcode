@@ -1,0 +1,153 @@
+    28 instructions before optimizations.
+     1 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instructions eliminated by Expression Optimization (3 iterations).
+     2 instructions eliminated by If Expression Optimization (3 iterations).
+     3 instructions eliminated by Data Flow Optimization (5 iterations).
+     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     2 instructions eliminated by Stack Optimization.
+    16 instructions after optimizations.
+
+Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+ 
+     5 print __retval0
+     6 end
+     7 label __label0
+-    * op greaterThan __tmp1 __fn0_n 0
+-    * jump __label3 equal __tmp1 false
++    8 jump __label3 lessThanEq __fn0_n 0
+     9 op sub __tmp3 __fn0_n 1
+    10 push bank1 __fn0_n
+    11 set __fn0_n __tmp3
+
+Modifications by If Expression Optimization, pass 2, iteration 1:
+ 
+     5 print __retval0
+     6 end
+     7 label __label0
+-    * jump __label3 lessThanEq __fn0_n 0
++    8 set __fn0retval null
++    9 jump __label4 lessThanEq __fn0_n 0
+    10 op sub __tmp3 __fn0_n 1
+    11 push bank1 __fn0_n
+    12 set __fn0_n __tmp3
+ 
+    14 label __label5
+    15 pop bank1 __fn0_n
+    16 set __retval4 __fn0retval
+-    * set __tmp2 __retval4
++   17 set __fn0retval __retval4
+    18 jump __label4 always
+-    * label __label3
+-    * set __tmp2 null
+    19 label __label4
+-    * set __fn0retval __tmp2
+    20 label __label2
+    21 return bank1
+    22 end
+
+Modifications by Data Flow Optimization, pass 2, iteration 1:
+ 
+     2 callrec bank1 __label0 __label1
+     3 label __label1
+     4 set __retval0 __fn0retval
+-    * print __retval0
++    5 print __fn0retval
+     6 end
+     7 label __label0
+     8 set __fn0retval null
+     9 jump __label4 lessThanEq __fn0_n 0
+    10 op sub __tmp3 __fn0_n 1
+    11 push bank1 __fn0_n
+-    * set __fn0_n __tmp3
++   12 op sub __fn0_n __fn0_n 1
+    13 callrec bank1 __label0 __label5
+    14 label __label5
+    15 pop bank1 __fn0_n
+    16 set __retval4 __fn0retval
+-    * set __fn0retval __retval4
++   17 set __fn0retval __fn0retval
+    18 jump __label4 always
+    19 label __label4
+    20 label __label2
+
+Modifications by Data Flow Optimization, pass 2, iteration 2:
+ 
+     1 set __fn0_n 1
+     2 callrec bank1 __label0 __label1
+     3 label __label1
+-    * set __retval0 __fn0retval
+     4 print __fn0retval
+     5 end
+     6 label __label0
+     7 set __fn0retval null
+     8 jump __label4 lessThanEq __fn0_n 0
+-    * op sub __tmp3 __fn0_n 1
+     9 push bank1 __fn0_n
+    10 op sub __fn0_n __fn0_n 1
+    11 callrec bank1 __label0 __label5
+    12 label __label5
+    13 pop bank1 __fn0_n
+-    * set __retval4 __fn0retval
+    14 set __fn0retval __fn0retval
+    15 jump __label4 always
+    16 label __label4
+
+Modifications by Single Step Elimination, pass 3, iteration 1:
+ 
+    12 label __label5
+    13 pop bank1 __fn0_n
+    14 set __fn0retval __fn0retval
+-    * jump __label4 always
+    15 label __label4
+    16 label __label2
+    17 return bank1
+
+Modifications by Expression Optimization, pass 3, iteration 1:
+ 
+    11 callrec bank1 __label0 __label5
+    12 label __label5
+    13 pop bank1 __fn0_n
+-    * set __fn0retval __fn0retval
+    14 label __label4
+    15 label __label2
+    16 return bank1
+
+Modifications by Unreachable Code Elimination, pass 4, iteration 1:
+ 
+    14 label __label4
+    15 label __label2
+    16 return bank1
+-    * end
+
+Modifications by Stack Optimization, pass 4, iteration 1:
+ 
+     6 label __label0
+     7 set __fn0retval null
+     8 jump __label4 lessThanEq __fn0_n 0
+-    * push bank1 __fn0_n
+     9 op sub __fn0_n __fn0_n 1
+    10 callrec bank1 __label0 __label5
+    11 label __label5
+-    * pop bank1 __fn0_n
+    12 label __label4
+    13 label __label2
+    14 return bank1
+
+Final code before resolving virtual instructions:
+
+set __sp 0
+set __fn0_n 1
+callrec bank1 __label0 __label1
+label __label1
+print __fn0retval
+end
+label __label0
+set __fn0retval null
+jump __label4 lessThanEq __fn0_n 0
+op sub __fn0_n __fn0_n 1
+callrec bank1 __label0 __label5
+label __label5
+label __label4
+label __label2
+return bank1

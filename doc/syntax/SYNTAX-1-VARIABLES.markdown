@@ -10,7 +10,7 @@ Mindustry Logic. Once set, processor variables are preserved (even across game s
 is modified or the processor is destroyed.
 
 > **Note**: Mindustry Logic stores numbers as `double`, a 64-bit floating point value. To perform bitwise operations,
-> such as `&` or `<<`, the value is converted to a 64bit integer (a Java `long`), the operation is performed and the 
+> such as `&` or `<<`, the value is converted to a 64-bit integer (a Java `long`), the operation is performed and the 
 > result is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold 
 > only about 52 bits or so.
 
@@ -21,40 +21,51 @@ is used as-is in Mindustry code. It might be therefore useful to put assignments
 at the front of the program, so that it can be easily modified in compiled code without the need of recompilation:
 
 ```
-COUNT = 10
-WARNING = false
-ITEM = @coal
-print(COUNT, WARNING, ITEM)
+count = 10
+warning = false
+item = @coal
+print(count, warning, item)
 ```
 
 produces 
 
 ```
-set COUNT 10
-set WARNING false
-set ITEM @coal
-print COUNT
-print WARNING
-print ITEM
+set count 10
+set warning false
+set item @coal
+print count
+print warning
+print item
 ```
 
-Mindcode optimizations won't remove used main variables or code depending on them. In the following code
+When you compile a program using Mindcode, it is obviously possible to manually modify the compiled code. Mindcode 
+anticipates this and to better support this option, keeps variable names identical in the compiled code as in 
+the source code as much as possible.
+
+Mindcode is also aware of the actual values you assign to variables. In some cases, knowing the actual value allows 
+Mindcode to perform specific code optimizations that are only valid for the value you've assigned to the variable in 
+the source code. This, however, can interfere with the possibility to modify the compiled code directly.
+
+The [Data Flow optimization](SYNTAX-5-OTHER.markdown#data-flow-optimization) performs the optimizations described 
+above. When its optimization level is set to `basic`, the optimizer leaves main variables alone and produces code 
+which fully supports making changes to them. When the optimization level is set to `aggressive`, assignments of 
+constants to main variables may be completely removed from code and parts of the code specific to other values of 
+the variable can get completely removed:
 
 ```
-DEBUG = false
-...
-if DEBUG
+debug = false
+
+if debug
     println("State: ", state)
     println("Item count: ", @unit.totalItems)
 end
 ```
 
-both the `DEBUG` variable and the debugging code is compiled as-is, even if the `DEBUG` variable is not changed 
-anywhere else in the code. You can therefore assign `true` to the variable and activate the debugging code after 
-pasting it to Mindustry processor.
+When compiled with Data Flow optimization level set to `agressive`, all of the above code will be eliminated, as the 
+debugging information isn't printed out.
 
-> **Note**: unused main variables, i.e. variables that are never read, can get removed from the compiled code.
-> This is why we had to include `print(COUNT, WARNING, ITEM)` in the example above.
+[Global variables](#global-variables) are never optimized in his fashion regardless of optimization level and are 
+safe to use for parametrization of the compiled code. 
 
 # Local variables
 
@@ -68,11 +79,14 @@ end
 
 both `x` and `y` are local variables, not accessible outside the function `foo`.
 
+In compiled code, names of these variables are appended to a unique function prefix. Recognizing names of local 
+variables in compiled code might be a bit cumbersome.  
+
 # Global variables
 
 Global variables are common to all user functions and the main program body. Use names that don't contain any
-lowercase letters, such as `MAIN` or `_9` (this is not a good name for a variable, btw.), to create global variables.
-Variables whose name contains at least one lowercase letter are local. For example, the following code
+lowercase letters, such as `MAIN` or `_9` (this is actually not a particularly good name for a variable), to create 
+global variables. Variables whose name contains at least one lowercase letter are local. For example, the following code
 
 ```
 def foo(x)
@@ -93,11 +107,15 @@ examples), since both `x` and `local` in the `foo` function are local variables 
 
 Using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed.
 
+Unlike main variables, global variables are never optimized away from the code. This also means that their use makes 
+the code a bit less friendly towards optimization, and you should limit their use to situations where they're really 
+needed (i.e. for variables accessed from different functions, or for compile-in parameters).  
+
 # External memory
 
-Mindcode supports storing variables in external memory (memory cells or memory banks linked to the processor). These 
+Mindcode supports storing variables in external memory - memory cells or memory banks linked to the processor. These 
 variables are stored independently of the processor and can be used to share values between processors, or to keep 
-values even when the processor is destroyed or its code recompiled.
+values even when the processor is destroyed or its code altered.
 
 On the other hand, only numeric values can be stored in external memory. It is therefore not possible to use it to 
 store strings, buildings or item types there. This -- quite restrictive -- limitation is unfortunately imposed by 
@@ -128,27 +146,26 @@ copy(bank1, bank2, 512)
 
 ## External variables
 
-You can also have Mindcode assign identifiers to external variables. 
-For that, you need to allocate a heap within a Memory Cell or a Memory Bank.
-This allocation tells the Mindcode compiler where to store the external variables.
-A heap is simply a region of external memory.
-The heap is allocated using the following Mindcode:
+You can also have Mindcode assign identifiers to external variables. For that, you need to allocate a heap within a 
+Memory Cell or a Memory Bank. This allocation tells the Mindcode compiler where to store the external variables. A 
+heap is simply a region of external memory. The heap is allocated using the following Mindcode:
 
 ```
 allocate heap in cell4[50 ... 64]
 ```
 
 This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 (note the
-exclusive range). If you declare more external variables than you have allocated space for, compilation will fail with an
-`OutOfHeapSpaceException`. In that case, allocate more space for the heap in your cell, or switch to a Memory Bank and
-allocate more space to your heap.
+exclusive range). If you declare more external variables than you have allocated space for, compilation will fail 
+with an `OutOfHeapSpaceException`. In that case, allocate more space for the heap in your cell, or switch to a 
+Memory Bank and allocate more space to your heap.
 
-Once the heap is allocated, you can use external variables. External variables are identified by the `$` (dollar-sign) prefix:
+Once the heap is allocated, you can use external variables. External variables are identified by the `$` 
+(dollar-sign) prefix: 
 
 ```
 allocate heap in cell4[32 ... 64]
 
-$dx = 1 // this is a global variable assignment
+$dx = 1 // this is an external variable assignment
 $dy = 1
 $ne_x = 90
 $ne_y = 90
@@ -167,7 +184,7 @@ cell4[36] = cell4[37] = 50
 cell4[38] = cell4[39] = 50
 ```
 
-**Note**: global variables are allocated on a first-come, first-served basis. If you had the following code:
+**Note**: external variables are allocated on a first-come, first-served basis. If you had the following code:
 
 ```
 allocate heap in cell2[61 .. 63]
@@ -188,14 +205,15 @@ $flag = rand(10000)
 ```
 
 then all addresses in the heap would be reallocated. `$targetx` would be stored in memory cell 61, rather than `$flag`.
-To fix this issue, you can either reset your heap to all zeroes on startup, or destroy and re-create your Memory
-Cell/Memory Bank.
+To fix this issue, you can either reset your heap to all zeroes on startup, or destroy and re-create your memory
+cell/memory bank.
 
 ## Stack
 
 When using recursive functions, some of their local variables and parameters may have to be stored on a stack.
 As Mindustry Logic doesn't provide a built-in stack, external memory is used instead. This places the same limitations
-on local variables and parameters of recursive functions as on arrays and external variables (that is, only numeric values are supported).
+on local variables and parameters of recursive functions as on arrays and external variables (that is, only numeric 
+values are supported).
 
 Stack needs to be allocated similarly to heap:
 
@@ -203,17 +221,16 @@ Stack needs to be allocated similarly to heap:
 allocate stack in bank1[256...512]
 ```
 
-When a function is not recursive, it won't store anything on a stack,
-even when it is called from or it itself calls a recursive function.
-If your code contains a recursive function, it won't compile unless the stack is allocated.
-Therefore, if your code compiles without the `allocate stack` statement,
-you don't need to worry about your functions not supporting non-numeric variables or parameters.
+When a function is not recursive, it won't store anything on a stack, even when it is called from or it itself calls 
+a recursive function. If your code contains a recursive function, it won't compile unless the stack is allocated. 
+Therefore, if your code compiles without the `allocate stack` statement, you don't need to worry about your 
+functions not supporting non-numeric variables or parameters.
 
 ## Heap and stack indirection
 
-When you build your Mindcode scripts, the actual Memory Cell and Memory Bank that you use may be different from the ones
-you use when playing the game. To that end, you also have the option of referencing your heap and stack through the use
-of a variable, like this:
+When you build your Mindcode scripts, the actual Memory Cell and Memory Bank that you use may be different from the 
+ones you use when playing the game. To that end, you also have the option of referencing your heap and stack through 
+the use of a variable, like this:
 
 ```
 HEAPPTR = cell3
@@ -228,9 +245,9 @@ set HEAPPTR cell3
 write 0 HEAPPTR 0
 ```
 
-Since the very first instruction of the Logic code will be the global variable assignment, you can easily change the
-actual cell or bank your will use, without having to do a global search & replace within the Logic code. This introduces
-more avenues for code sharing.
+Since the very first instruction of the compiled code will be the global variable assignment, you can easily change the
+actual cell or bank your will use, without having to do a global search & replace within the compiled code. This 
+introduces more avenues for code sharing.
 
 It is possible to allocate stack and heap in the same memory block, and/or in one statement:
 
@@ -257,25 +274,26 @@ Mindcode allows you to read these variables, but it is not possible to assign a 
 Some of them are constant during the lifetime of the processor, but others do - or at least may - change (`@time`, 
 `@counter` or `@links`).
 
-`@unit` is a very special variable - it always contains the unit currently controlled by the processor. The only way 
-to assign a new unit to this variable is to use the `ubind()` function. All unit control commands are sent to this unit.
-See also [Using units](/doc/syntax/MINDUSTRY-TIPS-N-TRICKS.markdown#using-units).
+`@unit` is a very special variable - it always contains the unit currently controlled by the processor. The only way
+to assign a new unit to this variable is to use the `ubind()` function. All unit control commands are sent to this
+unit. See also [Using units](/doc/syntax/MINDUSTRY-TIPS-N-TRICKS.markdown#using-units).
 
 My experience shows that the value of time variables (`@tick`, `@time` and so on) can actually decrease when loading a 
-game from a save file. Take it into account especially when programming loops.   
+game from a save file. Take it into account especially when programming loops that should terminate at some 
+predetermined time.   
 
 # Linked blocks
 
-When a block/building (e.g. a factory, a turret or a memory cell) is linked to a processor, an object representing 
-the linked blocks is created. This object is named using the short name of the linked block and an integer index, e.
-g. `cell1`, `switch3` or `smelter16`. These objects allow the code to directly control or query linked blocks. Names 
-of linked blocks are reserved and cannot be used by any variable. If a variable with the same name existed earlier, 
-it is removed from the processor. Assignments to a variable named after a linked block are silently ignored by the 
-processor.
+When a block/building (e.g. a factory, a turret or a memory cell) is linked to a processor, an object representing
+the linked blocks is created. This object is named using the short name of the linked block and an integer index,
+e.g. `cell1`, `switch3` or `smelter16`. These objects allow the code to directly control or query linked blocks.
+Names of linked blocks are reserved and cannot be used by any variable. If a variable with the same name existed
+earlier, it is removed from the processor. Assignments to a variable named after a linked block are silently ignored
+by the processor.
 
 The compiler doesn't know which blocks will be linked to the processor when compiling the code. To avoid generating 
-code that wouldn't work when blocks are linked to the processor, all possible names of linked blocks are specially 
-handled: 
+code that might stop working when blocks are linked to the processor, all possible names of linked blocks are 
+specially handled: 
 
 * it is not possible to assign values to variables with these names,
 * these variables are implicitly global.
@@ -396,7 +414,7 @@ If a numeric value is assigned to a constant, and it isn't possible to
 [encode the value into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), a compilation error 
 occurs.  
 
-A name used for a constant cannot be used for a global or local variable.
+A name used for a constant cannot be used for a main, global or local variable.
 
 Unlike variables, constants aren't kept in processor variables, and their values therefore cannot be changed in 
 compiled code. It also means that in the following code
@@ -423,9 +441,9 @@ onto a String literal containing their corresponding Unicode character.
 Printing an icon is as easy as this:
 
 ```
-printf("$ITEM-LEAD $\n", vault1.lead)
-printf("$ITEM-COAL $\n", vault1.coal)
-printf("$ITEM-BLAST-COMPOUND $\n", vault1.blast-compound)
+print(ITEM-LEAD, " ", vault1.lead, "\n")
+print(ITEM-COAL, " ", vault1.coal, "\n")
+print(ITEM-BLAST-COMPOUND, " ", vault1.blast-compound)
 printflush(message1)
 ```
 
@@ -530,12 +548,12 @@ The list of all existing icons is quite huge:
 * `BLOCK-DACITE-WALL`
 * `BLOCK-DAGGER-FACTORY`
 * `BLOCK-DARK-METAL`
-* `BLOCK-DARK-PANEL-`1
-* `BLOCK-DARK-PANEL-`2
-* `BLOCK-DARK-PANEL-`3
-* `BLOCK-DARK-PANEL-`4
-* `BLOCK-DARK-PANEL-`5
-* `BLOCK-DARK-PANEL-`6
+* `BLOCK-DARK-PANEL-1`
+* `BLOCK-DARK-PANEL-2`
+* `BLOCK-DARK-PANEL-3`
+* `BLOCK-DARK-PANEL-4`
+* `BLOCK-DARK-PANEL-5`
+* `BLOCK-DARK-PANEL-6`
 * `BLOCK-DARKSAND`
 * `BLOCK-DARKSAND-TAINTED-WATER`
 * `BLOCK-DARKSAND-WATER`
@@ -652,10 +670,10 @@ The list of all existing icons is quite huge:
 * `BLOCK-MENDER`
 * `BLOCK-MESSAGE`
 * `BLOCK-METAL-FLOOR`
-* `BLOCK-METAL-FLOOR-`2
-* `BLOCK-METAL-FLOOR-`3
-* `BLOCK-METAL-FLOOR-`4
-* `BLOCK-METAL-FLOOR-`5
+* `BLOCK-METAL-FLOOR-2`
+* `BLOCK-METAL-FLOOR-3`
+* `BLOCK-METAL-FLOOR-4`
+* `BLOCK-METAL-FLOOR-5`
 * `BLOCK-METAL-FLOOR-DAMAGED`
 * `BLOCK-MICRO-PROCESSOR`
 * `BLOCK-MOLTEN-SLAG`

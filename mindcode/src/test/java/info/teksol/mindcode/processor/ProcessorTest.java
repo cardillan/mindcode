@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 // Such code can be saved as a file in the src/test/resources/scripts directory.
 public class ProcessorTest extends AbstractProcessorTest {
 
-    public static final String SCRIPTS_DIRECTORY = "src/test/resources/processor";
+    public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/mindcode/processor/processor";
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;

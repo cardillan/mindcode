@@ -117,25 +117,23 @@ Not all optimizations support the `aggressive` level. For those the level `aggre
 The complete list of available optimizations, including the option name for setting the level of given optimization
 and availability of the aggressive optimization level is:
 
-| Optimization                                                    | Option name                  | Aggressive |
-|-----------------------------------------------------------------|------------------------------|:----------:|
-| [Jump normalization](#jump-normalization)                       | jump-normalization           |     N      |
-| [Dead code elimination](#dead-code-elimination)                 | dead-code-elimination        |     Y      |
-| [Single step elimination](#single-step-elimination)             | single-step-elimination      |     N      |
-| [Temporary inputs elimination](#temporary-inputs-elimination)   | input-temp-elimination       |     N      |
-| [Temporary outputs elimination](#temporary-outputs-elimination) | output-temp-elimination      |     N      |
-| [Expression optimization](#expression-optimization)             | expression-optimization      |     N      |
-| [Case expression optimization](#case-expression-optimization)   | case-expression-optimization |     N      |
-| [Conditional jump optimization](#conditional-jump-optimization) | conditionals-optimization    |     N      |
-| [Jump straightening](#jump-straightening)                       | jump-straightening           |     N      |
-| [Loop optimization](#loop-optimization)                         | loop-optimization            |     Y      |
-| [If expression optimization](#if-expression-optimization)       | if-expression-optimization   |     N      |
-| [Data flow optimization](#data-flow-optimization)               | data-flow-optimization       |     Y      |
-| [Jump threading](#jump-threading)                               | jump-threading               |     Y      |
-| [Unreachable code elimination](#unreachable-code-elimination)   | unreachable-code-elimination |     Y      |
-| [Stack optimization](#stack-optimization)                       | stack-optimization           |     N      |
-| [Return value optimization](#return-value-optimization)         | return-value-optimization    |     N      |
-| [Print merging](#print-merging)                                 | print-merging                |     Y      |
+| Optimization                                                        | Option name                  | Aggressive |
+|---------------------------------------------------------------------|------------------------------|:----------:|
+| [Jump normalization](#jump-normalization)                           | jump-normalization           |     N      |
+| [Dead code elimination](#dead-code-elimination)                     | dead-code-elimination        |     Y      |
+| [Single step elimination](#single-step-elimination)                 | single-step-elimination      |     N      |
+| [Temporary variables elimination](#temporary-variables-elimination) | tmp-variables-elimination    |     N      |
+| [Expression optimization](#expression-optimization)                 | expression-optimization      |     N      |
+| [Case expression optimization](#case-expression-optimization)       | case-expression-optimization |     N      |
+| [Conditional jump optimization](#conditional-jump-optimization)     | conditionals-optimization    |     N      |
+| [Jump straightening](#jump-straightening)                           | jump-straightening           |     N      |
+| [Loop optimization](#loop-optimization)                             | loop-optimization            |     Y      |
+| [If expression optimization](#if-expression-optimization)           | if-expression-optimization   |     N      |
+| [Data flow optimization](#data-flow-optimization)                   | data-flow-optimization       |     Y      |
+| [Jump threading](#jump-threading)                                   | jump-threading               |     Y      |
+| [Unreachable code elimination](#unreachable-code-elimination)       | unreachable-code-elimination |     Y      |
+| [Stack optimization](#stack-optimization)                           | stack-optimization           |     N      |
+| [Print merging](#print-merging)                                     | print-merging                |     Y      |
 
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
 deactivating it might allow you to use Mindcode until a fix is available. Partially activated optimizations
@@ -149,24 +147,25 @@ so turning off some optimizations might render other optimizations ineffective. 
 # Compiler optimization
 
 Code optimization runs on compiled (ML) code. The compiled code is inspected for sequences of instructions
-which can be removed or replaced by faster but equivalent ML code.
+which can be removed or replaced by equivalent, but superior sequence of instructions. The new sequence might be 
+smaller than the original one, or even larger than the original one, if it is executing faster
+(see the [`goal` option](#option-goal)).  
 
-The information on compiler optimizations is a bit technical.
-It might be useful if you're trying to better understand how Mindcode generates the ML code.
+The information on compiler optimizations is a bit technical. It might be useful if you're trying to better 
+understand how Mindcode generates the ML code.
 
 ## Jump normalization
 
-This optimization handles conditional jumps whose condition is constant:
+This optimization handles conditional jumps whose condition can be fully evaluated:
 
 * always false conditional jumps are removed,
 * always true conditional jumps are converted to unconditional ones.
 
+A condition can be fully evaluated constant if both of its operands are literals, or if they're variables whose values 
+were determined to be constant by the data flow analysis. 
+
 The first case reduces the code size and speeds up execution. The second one in itself improves neither size not speed,
 but allows those jumps to be handled by other optimizations aimed at unconditional jumps.
-
-These conditional jumps will only be generated by explicit code, e.g. `while false` or `while true`.
-(Note that `if false ... end` won't even get compiled since constant expression evaluation was introduced.)
-If a variable is involved -- `ACTIVE = false; if ACTIVE ... end` -- the jump won't be removed/replaced.
 
 ## Dead code elimination
 
@@ -174,13 +173,15 @@ This optimization inspects the entire code and removes all instructions that wri
 if none of the variables written to are actually read anywhere in the code.
 
 This optimization support `basic` and `aggressive` levels of optimization. On the `aggressive` level,
-the optimization removes all unused assignment, even assignments to main variables.
+the optimization removes all unused assignment, even assignments to a global or a main variable.
 
 Dead code eliminator also inspects your code and prints out suspicious variables:
 * _Unused variables_: those are the variables that were, or could be, eliminated. On `basic` level,
   some unused variables might not be reported.
 * _Uninitialized variables_: those are variables that are read by the program, but never written to.
-  (Mindcode doesn't - yet - detects situations where variable is read before it is first written to.)
+  (The Data Flow optimization performs a more thorough analysis which is able to detect variables that might be 
+  read by the program before they were first written to. A single variable might be therefore reported as 
+  uninitialized twice.)
 
 Both cases deserve closer inspection, as they might be a result of a typo in a variable name.
 
@@ -198,26 +199,7 @@ Technically, if we have a sequence
 we could eliminate both jumps. This optimization will only remove the second jump, because before that removal the first
 one doesn't target the next instruction. However, such sequences aren't typically generated by the compiler.
 
-## Temporary inputs elimination
-
-The compiler sometimes creates temporary variables whose only function is to pass value to another instruction. This 
-optimization removes all assignments to temporary variables that are only used as arguments in a subsequent 
-instruction. The `set` instruction is removed, while the other instruction is updated to replace the temp variable 
-with the value used in the set statement.
-
-The optimization is performed only when the following conditions are met:
-1. The `set` instruction assigns to a `__tmp` variable.
-2. The `__tmp` variable is used in exactly one other instruction, which follows the `set` instruction
-   (the check is based on absolute instruction sequence in the program, not on the actual program flow).
-3. All arguments of the other instruction referencing the `__tmp` variable are input ones.
-
-`push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
-are removed by the stack usage optimization down the line.
-
-Note: changes to the way unoptimized code is generated rendered this particular optimizer ineffective. Furthermore, if 
-there was possible optimization, it could be done by Data flow optimizer instead.
-
-## Temporary outputs elimination
+## Temporary variables elimination
 
 The compiler sometimes creates temporary variables whose only function is to store output value of an instruction 
 before passing it somewhere else. This optimization removes all assignments to temporary variables that carry over 
@@ -225,10 +207,10 @@ the output value of the preceding instruction. The `set` instruction is removed,
 updated to replace the temp variable with the target variable used in the set statement.
 
 The optimization is performed only when the following conditions are met:
-1. The `set` instruction assigns from a `__tmp` variable.
-2. The `__tmp` variable is used in exactly one other instruction. The other instruction 
-   immediately precedes the instruction producing the `__tmp` variable 
-3. All arguments of the other instruction referencing the `__tmp` variable are output ones.
+1. The `set` instruction assigns from a temporary variable.
+2. The temporary variable is used in exactly one other instruction. The other instruction 
+   immediately precedes the instruction producing the temporary variable 
+3. All arguments of the other instruction referencing the temporary variable are output ones.
 
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
 are removed by the stack usage optimization down the line.
@@ -245,16 +227,17 @@ the following optimizations are available:
 
 ## Case expression optimization
 
-Case expressions allocate temporary variable to hold the value of the input expression.
-This optimization removes unnecessary case expression variable (`__ast`) and replaces it with the original
-variable containing the value of the case expression. The set instruction is removed, while the other instructions
-are updated to replace the `__ast` variable with the one used in the set statement.
+Case expressions allocate temporary variable to hold the value of the input expression, even if the input expression 
+is actually a user defined variable. This optimization detects these instances, removes the temporary variable 
+and replaces it with the original variable containing the value of the input expression. The set instruction is 
+removed, while the other instructions are updated to replace the temporary variable with the one used in the set 
+statement.
 
 The optimization is performed only when the following conditions are met:
-1. The set instruction assigns to an `__ast` variable.
-2. The set instruction is the first of all those using the `__ast` variable (the check is based on absolute
+1. The set instruction assigns to a case-expression temporary variable.
+2. The set instruction is the first of all those using the temporary variable (the check is based on absolute
    instruction sequence in the program, not on the actual program flow).
-3. Each subsequent instruction using the `__ast` variable conforms to the code generated by the compiler
+3. Each subsequent instruction using the temporary variable conforms to the code generated by the compiler
    (i.e. has the form of `jump target <condition> __astX testValue`)
 
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
@@ -262,26 +245,26 @@ are removed by the stack usage optimization down the line.
 
 ## Conditional jump optimization
 
-Conditional jumps are sometimes compiled into an `op` instruction evaluating a boolean expression,
-and a conditional jump acting on the value of the expression.
+Conditional jumps are sometimes compiled into an `op` instruction evaluating a boolean expression, and a conditional 
+jump acting on the value of the expression.
 
 This optimization turns the following sequence of instructions:
 ```
-   op <comparison> var1 A B
-   jump label equal var2 false
+   op <comparison> var A B
+   jump label equal/notEqual var false
 ```
 
 into
 
 ```
-   jump label <inverse of comparison> A B
+   jump label <inverse of comparison>/<comparison> A B
 ```
 
 Requirements:
-1. `jump` is an equal comparison to `false`
-2. `var1` and `var2` are identical
-3. `var1` is a `__tmp` variable
-4. `<comparison>` has an inverse
+1. `jump` is an `equal`/`notEqual` comparison to `false`
+2. `var` is a temporary variable
+3. `var` is not used anywhere in the program except these two instructions
+4. `<comparison>` has an inverse/`<comparison>` exists as a condition
 
 ## Jump straightening
 
@@ -315,7 +298,7 @@ end
 
 ## Loop optimization
 
-The loop optimizers improves loops with the condition at the beginning by performing these modifications:
+The loop optimization improves loops with the condition at the beginning by performing these modifications:
 
 * If the loop jump condition is invertible, the unconditional jump at the end of the loop to the loop condition is 
   replaced by a conditional jump with inverted loop condition targeting the first instruction of the loop body. This 
@@ -328,7 +311,7 @@ The loop optimizers improves loops with the condition at the beginning by perfor
   Only the simplest cases, where the loop control variable is set by an instruction immediately preceding the front 
   jump and the jump condition compares the control variable to a constant, are handled. Many loop conditions fit these 
   criteria though, namely all constant-range iteration loops.
-* If the loop conditions is a complex expression spanning several instructions, it can still be replicated at the 
+* Loop conditions that are a complex expression spanning several instructions can still be replicated at the 
   end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). Since this 
   increases the code size, at most three instructions are copied in this way. One instruction execution per loop is 
   still saved this way, at the price of increased code size.
@@ -562,7 +545,7 @@ understandable, but the optimizer would have to be more complex and therefore mo
 > level is set to `aggressive`. In this case, main variables can be completely removed by the program, and even if
 > they stay in the compiled code, changing the value assigned to a main variable may not produce the same effect as 
 > compiling the program with the other value. In other words, changing a value assigned to main variable in the 
-> compiled code may make the program faulty.  
+> compiled code may break the compiled program.  
 
 ### Detection of uninitialized variables
 
@@ -746,10 +729,8 @@ at all in Mindcode.
 
 Data flow analysis, with some restrictions, is also applied to stackless and recursive function calls. Optimizations 
 are applied to function arguments and return values. This optimization has completely replaced earlier _Function call 
-optimization_, and superseded the [Return value optimization](#return-value-optimization) - all optimizations that 
-could be performed by Return value optimization (and some that couldn't) are performed by this optimizer now. Return 
-value optimization will eventually be removed; it is kept for now as a backup solution if you needed to disable Data 
-flow optimization for some reason.
+optimization_ and _Return value optimization_ - all optimizations that could be performed by those optimizations 
+(and some that couldn't) are performed by Data Flow optimization now.
 
 ## Jump threading
 
@@ -784,37 +765,14 @@ might make the produced code somewhat less readable.
 Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. The following 
 optimizations are performed:
 
-* `push`/`pop` instruction elimination for variables that are not used anywhere apart from the push/pop instructions.
-  This happens when variables are eliminated by other optimizations. The optimization is done globally, in a single 
-  pass across the entire program.
-* `push`/`pop` instruction elimination for variables that are read neither by any instruction between the call 
-  instruction and the end of the function, nor by any instruction which is part of the same loop as the call 
+* `push`/`pop` instruction elimination for function variables that are not used anywhere apart from the push/pop 
+  instructions. This happens when variables are eliminated by other optimizations. The optimization is done globally,
+  in a single pass across the entire program.
+* `push`/`pop` instruction elimination for function variables that are read neither by any instruction between the 
+  call instruction and the end of the function, nor by any instruction which is part of the same loop as the call 
   instruction. Implicit reads by recursive calls to the same function with the value of the parameter unchanged are 
   also detected.
-* `push`/`pop` instruction elimination for variables that are never modified within the function.
-
-## Return value optimization
-
-Optimizes passing return values to callers.
-
-Function return values are carried by `__retval` variables instead of `__tmp` ones, because the original variable 
-providing the return value -- `__fnXretval` -- might get overwritten during another function call before the return 
-value is used. Standard temporary variable optimizations are not applied to `__retval`s.
-
-This optimizer looks for a set instruction in the form `set __retvalX variable`. The `__retvalX` is expected to be 
-used by one other instruction. The optimizer removes the set instruction and replaces the `__retvalX` by `variable`
-in the other instruction if the following conditions are met:
-
-1. The `__retval` variable is used in exactly one other instruction, which follows the set instruction (the check is 
-   based on absolute instruction sequence in the program, not on the actual program flow). Push and pop instructions 
-   aren't considered.
-2. The block of code between the `set` instruction and the other instruction is localized (doesn't contain jumps into 
-   the code block from the outside -- function calls aren't considered). Range iteration loop may produce such code.
-3. The other variable is not modified in the code block.
-4. If the variable is a `__fnXretval`: the code block must not contain any function calls - not just calls to the 
-   `__fnX` function, but calls to any function - we don't know what may happen inside a function call.
-5. If the variable is not a `__fnXretval`: the variable must not be volatile, and if it is global, the code block 
-   must not contain any function calls.
+* `push`/`pop` instruction elimination for function parameters/variables that are never modified within the function.
 
 ## Print merging
 

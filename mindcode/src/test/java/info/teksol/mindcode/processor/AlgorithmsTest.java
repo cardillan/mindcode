@@ -1,24 +1,16 @@
 package info.teksol.mindcode.processor;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class AlgorithmsTest extends AbstractProcessorTest {
 
-    public static final String SCRIPTS_DIRECTORY = "src/test/resources/algorithms";
+    public static final String SCRIPTS_DIRECTORY = "src/test/resources/info/teksol/mindcode/processor/algorithms";
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;

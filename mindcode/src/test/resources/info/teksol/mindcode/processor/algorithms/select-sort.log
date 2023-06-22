@@ -1,0 +1,147 @@
+    32 instructions before optimizations.
+     3 instructions eliminated by Tmp Variables Elimination (3 iterations).
+     2 instructions eliminated by Dead Code Elimination (3 iterations).
+     1 instructions eliminated by Conditional Jump Optimization (3 iterations).
+     1 instructions eliminated by Single Step Elimination (4 iterations).
+     1 instructions added by Loop Optimization (2 iterations).
+     3 loops improved by LoopOptimizer.
+    23 instructions after optimizations.
+
+Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+ 
+     1 set i 0
+     2 label __label0
+     3 jump __label2 greaterThanEq i 127
+-    * read __tmp0 ARRAY i
+-    * set min __tmp0
++    4 read min ARRAY i
+     5 set min_index i
+-    * op add __tmp1 i 1
+-    * set j __tmp1
++    6 op add j i 1
+     7 label __label3
+     8 jump __label5 greaterThanEq j 128
+-    * read __tmp2 ARRAY j
+-    * set curr __tmp2
++    9 read curr ARRAY j
+    10 op lessThan __tmp3 curr min
+    11 jump __label6 equal __tmp3 false
+    12 set min curr
+
+Modifications by Dead Code Elimination, pass 1, iteration 1:
+ 
+    11 jump __label6 equal __tmp3 false
+    12 set min curr
+    13 set min_index j
+-    * set __tmp4 min_index
+    14 jump __label7 always
+    15 label __label6
+-    * set __tmp4 null
+    16 label __label7
+    17 label __label4
+    18 op add j j 1
+
+Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+ 
+     7 label __label3
+     8 jump __label5 greaterThanEq j 128
+     9 read curr ARRAY j
+-    * op lessThan __tmp3 curr min
+-    * jump __label6 equal __tmp3 false
++   10 jump __label6 greaterThanEq curr min
+    11 set min curr
+    12 set min_index j
+    13 jump __label7 always
+
+Modifications by Single Step Elimination, pass 2, iteration 1:
+ 
+    10 jump __label6 greaterThanEq curr min
+    11 set min curr
+    12 set min_index j
+-    * jump __label7 always
+    13 label __label6
+    14 label __label7
+    15 label __label4
+
+Modifications by Loop Optimization, pass 2, iteration 1:
+     0 set ARRAY bank2
+     1 set i 0
+     2 label __label0
+-    * jump __label2 greaterThanEq i 127
++    3 label __label11
+     4 read min ARRAY i
+     5 set min_index i
+     6 op add j i 1
+     7 label __label3
+     8 jump __label5 greaterThanEq j 128
++    9 label __label12
+    10 read curr ARRAY j
+    11 jump __label6 greaterThanEq curr min
+    12 set min curr
+ 
+    15 label __label7
+    16 label __label4
+    17 op add j j 1
+-    * jump __label3 always
++   18 jump __label12 lessThan j 128
+    19 label __label5
+    20 read __tmp5 ARRAY i
+    21 write __tmp5 ARRAY min_index
+    22 write min ARRAY i
+    23 label __label1
+    24 op add i i 1
+-    * jump __label0 always
++   25 jump __label11 lessThan i 127
+    26 label __label2
+    27 set i 0
+    28 label __label8
+-    * jump __label10 greaterThanEq i 128
++   29 label __label13
+    30 read __tmp6 ARRAY i
+    31 print __tmp6
+    32 label __label9
+    33 op add i i 1
+-    * jump __label8 always
++   34 jump __label13 lessThan i 128
+    35 label __label10
+    36 end
+
+Final code before resolving virtual instructions:
+
+set ARRAY bank2
+set i 0
+label __label0
+label __label11
+read min ARRAY i
+set min_index i
+op add j i 1
+label __label3
+jump __label5 greaterThanEq j 128
+label __label12
+read curr ARRAY j
+jump __label6 greaterThanEq curr min
+set min curr
+set min_index j
+label __label6
+label __label7
+label __label4
+op add j j 1
+jump __label12 lessThan j 128
+label __label5
+read __tmp5 ARRAY i
+write __tmp5 ARRAY min_index
+write min ARRAY i
+label __label1
+op add i i 1
+jump __label11 lessThan i 127
+label __label2
+set i 0
+label __label8
+label __label13
+read __tmp6 ARRAY i
+print __tmp6
+label __label9
+op add i i 1
+jump __label13 lessThan i 128
+label __label10
+end

@@ -298,14 +298,14 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
     }
 
 
-    protected class DummyOptimizer extends BaseOptimizer {
+    protected static class DummyOptimizer extends BaseOptimizer {
         public DummyOptimizer(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
-            super(instructionProcessor);
+            super(Optimization.PRINT_TEXT_MERGING, instructionProcessor);
             setProgram(instructions);
         }
 
         @Override
-        protected boolean optimizeProgram() {
+        protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
             return false;
         }
     }

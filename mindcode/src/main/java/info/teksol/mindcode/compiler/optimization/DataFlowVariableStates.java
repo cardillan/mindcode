@@ -12,16 +12,9 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.OUT_OF_LINE_CALL;
@@ -77,6 +70,13 @@ public class DataFlowVariableStates {
         /** Set of variables stored on stack. */
         private final Set<LogicVariable> stored;
 
+        /**
+         * Indicates the program flow of this instance is terminated: an unconditional jump outside local context
+         * was encountered. A new copy was created to be merged at the jump target was created, and this copy must
+         * be discarded in merges down the line.
+         */
+        private boolean dead;
+
         public VariableStates() {
             values = new LinkedHashMap<>();
             definitions = new HashMap<>();
@@ -93,14 +93,38 @@ public class DataFlowVariableStates {
             useless = new HashMap<>(other.useless);
             initialized = new HashSet<>(other.initialized);
             stored = new HashSet<>(other.stored);
+            dead = other.dead;
         }
 
         public Map<LogicVariable, LogicInstruction> getUseless() {
             return useless;
         }
 
-        public VariableStates copy() {
-            return new VariableStates(this);
+        public VariableStates copy(String reason) {
+            VariableStates copy = new VariableStates(this);
+            debug(() -> "*** " + reason + ": created VariableStates instance #" + copy.id + " as a copy of #" + id);
+            return copy;
+        }
+
+        /**
+         * Marks this instance dead - current execution path was terminated (either by an unconditional jump,
+         * or by the END instruction). The context will be ignored upon merging. If the path was terminated by a jump,
+         * a copy of this context must have been created to be joined at the target label.
+         *
+         * @param markRead when set to true, all active definitions of user defined variables will be preserved.
+         *                To be used with the END instruction to make sure the assignments to user defined variables
+         *                won't be removed.
+         * @return this instance marked as dead.
+         */
+        public VariableStates setDead(boolean markRead) {
+            if (markRead) {
+                definitions.entrySet().stream()
+                        .filter(e -> e.getKey().isMainVariable())
+                        .forEachOrdered(e -> optimizer.orphans.computeIfAbsent(e.getKey(),
+                                l -> new ArrayList<>()).addAll(e.getValue()));
+            }
+            dead = true;
+            return this;
         }
 
         private void printInstruction(LogicInstruction instruction) {
@@ -112,13 +136,13 @@ public class DataFlowVariableStates {
         // Called when a variable value changes to purge all dependent expressions
         private void invalidateVariable(LogicVariable variable) {
             if (stored.contains(variable)) {
-                debug("    Not invalidating variable " + variable.getFullName() + ", because it is stored on stack.");
+                debug(() -> "    Not invalidating variable " + variable.toMlog() + ", because it is stored on stack.");
             } else {
                 if (DataFlowOptimizer.DEBUG) {
                     values.values().stream().filter(exp -> exp.dependsOn(variable))
-                            .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.getFullName() + ": " + exp.instruction));
+                            .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
                     equivalences.entrySet().stream().filter(e -> e.getValue().equals(variable))
-                            .forEach(e -> System.out.println("   Invalidating equivalence: " + e.getKey().getFullName() + ": " + e.getValue().getFullName()));
+                            .forEach(e -> System.out.println("   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
                 }
                 values.values().removeIf(exp -> exp.dependsOn(variable));
                 equivalences.keySet().removeIf(var -> var.equals(variable));
@@ -126,27 +150,29 @@ public class DataFlowVariableStates {
             }
         }
 
-        public void pushVariable(LogicVariable variable) {
-            debug("Pushing variable " + variable);
+        public VariableStates pushVariable(LogicVariable variable) {
+            debug(() -> "Pushing variable " + variable);
             if (!stored.add(variable)) {
-                throw new MindcodeInternalError("Push called twice on " + variable.getFullName());
+                throw new MindcodeInternalError("Push called twice on " + variable.toMlog());
             }
+            return this;
         }
 
-        public void popVariable(LogicVariable variable) {
-            debug("Popping variable " + variable);
+        public VariableStates popVariable(LogicVariable variable) {
+            debug(() -> "Popping variable " + variable);
             if (!stored.remove(variable)) {
-                throw new MindcodeInternalError("Pop without push on " + variable.getFullName());
+                throw new MindcodeInternalError("Pop without push on " + variable.toMlog());
             }
+            return this;
         }
 
         public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value) {
             if (stored.contains(variable)) {
-                debug("Not setting value of variable " + variable.getFullName() + ", because it is stored on stack.");
+                debug(() -> "Not setting value of variable " + variable.toMlog() + ", because it is stored on stack.");
                 return;
             }
 
-            debug("Value set: " + variable);
+            debug(() -> "Value set: " + variable);
             printInstruction(instruction);
 
             if (optimizer.canEliminate(variable)) {
@@ -181,7 +207,7 @@ public class DataFlowVariableStates {
                 for (VariableValue expression : values.values()) {
                     if (expression.isExpression() && expression.isEqual(instruction)) {
                         if (DataFlowOptimizer.DEBUG) {
-                            System.out.println("    Adding inferred equivalence " + variable.getFullName() + " == " + expression.variable.getFullName());
+                            System.out.println("    Adding inferred equivalence " + variable.toMlog() + " == " + expression.variable.toMlog());
                         }
                         equivalences.put(variable, expression.variable);
                         break;
@@ -190,7 +216,7 @@ public class DataFlowVariableStates {
 
                 if (instruction instanceof SetInstruction set) {
                     if (set.getResult() == variable && set.getValue() instanceof LogicVariable variable2) {
-                        debug("    Adding direct equivalence " + variable.getFullName() + " == " + variable2.getFullName());
+                        debug(() -> "    Adding direct equivalence " + variable.toMlog() + " == " + variable2.toMlog());
                         equivalences.put(variable, variable2);
                     }
                 } else if (instruction.getOutputs() == 1) {
@@ -209,9 +235,9 @@ public class DataFlowVariableStates {
 
         public void valueReset(LogicVariable variable) {
             if (stored.contains(variable)) {
-                debug("Variable " + variable + " not reset after function call, because it is stored on stack.");
+                debug(() -> "Variable " + variable + " not reset after function call, because it is stored on stack.");
             } else {
-                debug("Value reset: " + variable);
+                debug(() -> "Value reset: " + variable);
                 values.remove(variable);
                 invalidateVariable(variable);
             }
@@ -231,9 +257,10 @@ public class DataFlowVariableStates {
         }
 
         public LogicValue valueRead(LogicVariable variable, boolean markUninitialized) {
-            debug("Value read: " + variable);
+            debug(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!)" : ")"));
 
             if (markUninitialized && !initialized.contains(variable)) {
+                debug(() -> "*** Detected uninitialized read of " + variable.toMlog());
                 optimizer.uninitialized.add(variable);
             }
 
@@ -265,6 +292,14 @@ public class DataFlowVariableStates {
 
             if (!stored.isEmpty() || !other.stored.isEmpty()) {
                 throw new MindcodeInternalError("Trying to merge variable states with variables on stack.");
+            }
+
+            if (other.dead) {
+                print("  result:");
+                return this;        // Merging two dead ends produces dead end again
+            } else if (dead) {
+                other.print("  result:");
+                return other;
             }
 
             // Definitions are merged together
@@ -325,15 +360,15 @@ public class DataFlowVariableStates {
         void print(String title) {
             if (DataFlowOptimizer.DEBUG) {
                 System.out.println(title);
-                System.out.println("    VariableStates instance #" + id);
+                System.out.println("    VariableStates instance #" + id + (dead ? " DEAD!" : ""));
                 values.values().forEach(v -> System.out.println("    " + v));
                 definitions.forEach((k, v) -> {
-                    System.out.println("    Definitions of " + k.getFullName());
+                    System.out.println("    Definitions of " + k.toMlog());
                     v.forEach(ix -> System.out.println("      " + optimizer.instructionIndex(ix)
                             + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
                 });
-                equivalences.forEach((k, v) -> System.out.println("    Equivalence: " + k.getFullName() + " = " + v.getFullName()));
-                System.out.println("    Initialized: " + initialized.stream().map(LogicVariable::getFullName).collect(Collectors.joining(", ")));
+                equivalences.forEach((k, v) -> System.out.println("    Equivalence: " + k.toMlog() + " = " + v.toMlog()));
+                System.out.println("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
             }
         }
 
@@ -490,16 +525,16 @@ public class DataFlowVariableStates {
 
             @Override
             public String toString() {
-                return "variable " + variable.getFullName() + ": " + (isExpression()
+                return "variable " + variable.toMlog() + ": " + (isExpression()
                         ? " expression " + LogicInstructionPrinter.toString(instructionProcessor, instruction)
                         : " constant " + constantValue);
             }
         }
     }
 
-    private void debug(String text) {
+    private void debug(Supplier<String> text) {
         if (DataFlowOptimizer.DEBUG) {
-            System.out.println(text);
+            System.out.println(text.get());
         }
     }
 }

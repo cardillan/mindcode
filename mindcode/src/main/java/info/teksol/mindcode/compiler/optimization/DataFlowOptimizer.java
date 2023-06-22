@@ -17,6 +17,7 @@ import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
@@ -41,6 +42,16 @@ public class DataFlowOptimizer extends BaseOptimizer {
      * Set of variable producing instructions that were actually used in the program and need to be kept.
      */
     final Set<LogicInstruction> keep = Collections.newSetFromMap(new IdentityHashMap<>());
+
+    /**
+     * When an END instruction is encountered, the optimizer accumulates current variable definitions here. Definitions
+     * from this structure are kept for uninitialized variables, so that any values written before the END instruction
+     * executions are preserved.
+     * <p/>
+     * Only main variables are stored here. Global variable writes are always preserved, and local variables are not
+     * expected to keep their value between function calls.
+     */
+    final Map<LogicVariable, List<LogicInstruction>> orphans = new HashMap<>();
 
     /** Exceptions to the keep set */
     private final Set<LogicInstruction> useless = Collections.newSetFromMap(new IdentityHashMap<>());
@@ -73,24 +84,25 @@ public class DataFlowOptimizer extends BaseOptimizer {
     Map<String, Set<LogicVariable>> functionWrites;
 
     private final DataFlowVariableStates dataFlowVariableStates;
-    private final DataFlowExpressionEvaluator expressionEvaluator;
+    private final OptimizerExpressionEvaluator expressionEvaluator;
 
     public DataFlowOptimizer(InstructionProcessor instructionProcessor) {
-        super(instructionProcessor);
+        super(Optimization.DATA_FLOW_OPTIMIZATION, instructionProcessor);
         dataFlowVariableStates = new DataFlowVariableStates(this);
-        expressionEvaluator = new DataFlowExpressionEvaluator(instructionProcessor);
+        expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
     }
 
     @Override
-    protected boolean optimizeProgram() {
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         defines.clear();
         keep.clear();
+        orphans.clear();
         useless.clear();
         uninitialized.clear();
         replacements.clear();
         labelStates.clear();
 
-        debug("\n\n\n*** NEW ITERATION ***\n");
+        debug(() -> "\n\n\n*** PASS " + pass + ", ITERATION " + iteration + " ***\n");
 
         analyzeFunctionVariables();
 
@@ -100,6 +112,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .collect(Collectors.toMap(LabelInstruction::getLabel, ix -> ix));
 
         getRootContext().children().forEach(this::processTopContext);
+
+        // Keep defining instructions for orphaned, uninitialized variables.
+        orphans.entrySet().stream()
+                .filter(e -> uninitialized.contains(e.getKey()))
+                .forEachOrdered(e -> keep.addAll(e.getValue()));
 
         for (LogicInstruction instruction : defines) {
             // TODO create mechanism to identify instructions without side effects
@@ -182,7 +199,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         functionWrites.put(context.functionPrefix(), writes);
     }
 
-    protected void generateFinalMessages() {
+    public void generateFinalMessages() {
         super.generateFinalMessages();
 
         String uninitializedList = uninitialized.stream()
@@ -228,7 +245,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private VariableStates processContext(AstContext context, AstContext localContext, VariableStates variableStates,
             boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
-        debug(">>> Entering context " + context.hierarchy());
+        debug(() -> ">>> Entering context " + context.hierarchy());
         final VariableStates result;
         if (!context.matches(BASIC)) {
             result = processDefaultContext(context, localContext, variableStates, modifyInstructions);
@@ -240,7 +257,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 default     -> processDefaultContext(context, localContext, variableStates, modifyInstructions);
             };
         }
-        debug("<<< Exiting  context " + context.hierarchy());
+        debug(() -> "<<< Exiting  context " + context.hierarchy());
         return result;
     }
 
@@ -259,9 +276,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
             variableStates = processContext(children.get(start++), context, variableStates, modifyInstructions);
 
             while (start < children.size() && children.get(start).matches(ITERATOR)) {
-                VariableStates copy = variableStates.copy();
+                VariableStates copy = variableStates.copy("loop iterator");
                 variableStates = processContext(children.get(start++), context, variableStates, modifyInstructions);
-                variableStates.merge(copy, "iterator loop");
+                variableStates = variableStates.merge(copy, "iterator loop");
             }
         } else {
             if (!children.isEmpty() && children.get(0).matches(INIT)) {
@@ -287,15 +304,16 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
         for (int i = 0; i < 2; i++) {
-            VariableStates initial = variableStates.copy();
-            debug("=== Processing loop - iteration " + i);
+            VariableStates initial = variableStates.copy("loop initial state");
+            final int iteration = i;
+            debug(() -> "=== Processing loop - iteration " + iteration);
 
             for (int j = start; j < children.size(); j++) {
                 // Do not propagate constants on first iteration...
                 variableStates = processContext(children.get(j), context, variableStates, modifyInstructions && i > 0);
             }
             if (mergeInitial) {
-                variableStates.merge(initial, " inside loop");
+                variableStates = variableStates.merge(initial, " inside loop");
             } else {
                 mergeInitial = true;
             }
@@ -412,14 +430,20 @@ public class DataFlowOptimizer extends BaseOptimizer {
         int index = 0;
         while (index < instructions.size()) {
             LogicInstruction instruction = instructions.get(index);
+            // This needs to be done for each active context
+            // Do not move into processInstruction
             if (instruction instanceof JumpInstruction jump && !labels.get(jump.getTarget()).belongsTo(localContext)) {
-                VariableStates copy = variableStates.copy();
+                VariableStates copy = variableStates.copy("nonlocal jump");
                 copy.print("*** Storing variable states for label " + jump.getTarget().toMlog());
                 labelStates.computeIfAbsent(jump.getTarget(), ix -> new ArrayList<>()).add(copy);
+                if (jump.isUnconditional()) {
+                    variableStates.setDead(false);
+                }
             }
 
             if (instruction.getAstContext() == context) {
-                processInstruction(variableStates, instruction, modifyInstructions);
+                variableStates = processInstruction(variableStates, instruction, modifyInstructions);
+                variableStates.print("  after processing instruction");
                 index++;
             } else {
                 AstContext childContext = context.findMatchingChild(instruction.getAstContext());
@@ -435,28 +459,31 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
-    private void resolveLabel(VariableStates variableStates, LogicLabel label) {
+    private VariableStates resolveLabel(VariableStates variableStates, LogicLabel label) {
         List<VariableStates> states = labelStates.remove(label);
         if (states != null) {
-            states.forEach(s -> variableStates.merge(s, "states for label " + label.toMlog()));
+            for (VariableStates state : states) {
+                variableStates = variableStates.merge(state, "states for label " + label.toMlog());
+            }
         }
+        return variableStates;
     }
 
-    private void processInstruction(VariableStates variableStates, LogicInstruction instruction, boolean modifyInstructions) {
+    private VariableStates processInstruction(VariableStates variableStates, LogicInstruction instruction, boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
         if (DEBUG) {
             System.out.println("Processing instruction #" + instructionIndex(instruction) +
-//                    " " + instruction.getAstContext().hierarchy() +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
         }
 
         switch (instruction) {
-            case PushInstruction ix:        variableStates.pushVariable(ix.getVariable()); return;
-            case PopInstruction ix:         variableStates.popVariable(ix.getVariable()); return;
-            case LabelInstruction ix:       resolveLabel(variableStates, ix.getLabel()); return;
-            case GotoLabelInstruction ix:   resolveLabel(variableStates, ix.getLabel()); return;
+            case PushInstruction ix:        return variableStates.pushVariable(ix.getVariable());
+            case PopInstruction ix:         return variableStates.popVariable(ix.getVariable());
+            case LabelInstruction ix:       return resolveLabel(variableStates, ix.getLabel());
+            case GotoLabelInstruction ix:   return resolveLabel(variableStates, ix.getLabel());
+            case EndInstruction ix:         return variableStates.setDead(true);
             default:                        break;
         }
 
@@ -541,7 +568,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        variableStates.print("  after processing instruction");
+        return variableStates;
     }
 
     boolean canEliminate(LogicVariable variable) {
@@ -556,9 +583,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
         };
     }
 
-    private void debug(String text) {
+    private void debug(Supplier<String> text) {
         if (DEBUG) {
-            System.out.println(text);
+            System.out.println(text.get());
         }
     }
 
@@ -575,7 +602,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             if (current != null) {
                 merged = merged == null ? current : merged.merge(current, " old branch before starting new branch");
             }
-            current = initial.copy();
+            current = initial.copy("new conditional branch");
         }
 
         public void appendToInitialContext(AstContext context, AstContext localContext, boolean modifyInstructions) {
@@ -584,7 +611,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         public void processContext(AstContext context, AstContext localContext, boolean modifyInstructions) {
             current = DataFlowOptimizer.this.processContext(context, localContext,
-                    current == null ? initial.copy() : current, modifyInstructions);
+                    current == null ? initial.copy("new conditional branch") : current, modifyInstructions);
         }
 
         public VariableStates getFinalStates() {

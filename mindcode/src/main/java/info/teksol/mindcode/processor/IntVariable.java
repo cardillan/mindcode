@@ -38,7 +38,7 @@ public class IntVariable extends AbstractVariable {
         MindustryValueType type = var.getMindustryValueType();
         switch (type) {
             case NULL, OBJECT -> setObject(var.getObject());
-            default -> setDoubleValue(var.getDoubleValue());
+            default -> setIntValue(var.getIntValue());
         }
         setType(type);
     }

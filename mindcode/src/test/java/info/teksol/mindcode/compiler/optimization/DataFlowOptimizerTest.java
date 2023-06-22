@@ -17,19 +17,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        return List.of(
-                Optimization.DEAD_CODE_ELIMINATION,
-                Optimization.CONDITIONAL_JUMPS_IMPROVEMENT,
-                Optimization.SINGLE_STEP_JUMP_ELIMINATION,
-                Optimization.JUMP_OVER_JUMP_ELIMINATION,
-                Optimization.UNREACHABLE_CODE_ELIMINATION,
-                Optimization.INPUT_TEMPS_ELIMINATION,
-                Optimization.OUTPUT_TEMPS_ELIMINATION,
-                Optimization.LOOP_OPTIMIZATION,
-                Optimization.IF_EXPRESSION_OPTIMIZATION,
-                Optimization.DATA_FLOW_OPTIMIZATION,
-                Optimization.STACK_USAGE_OPTIMIZATION
-        );
+        // Need to test interactions with all optimizers
+        return Optimization.LIST;
     }
 
     @Override
@@ -123,8 +112,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         i = j + 2
                         print(i, j)
                         """,
-                createInstruction(PRINT, "17"),
-                createInstruction(PRINT, "15"),
+                createInstruction(PRINT, q("1715")),
                 createInstruction(END)
         );
     }
@@ -210,12 +198,10 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         end
                         print(a, b)
                         """,
-                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
-                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                createInstruction(SET, "a", "1"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "a", "2"),
+                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
+                createInstruction(JUMP, var(1001), "equal", var(0), "false"),
+                createInstruction(SET, "a", "1"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "a"),
                 createInstruction(PRINT, "1"),
@@ -249,11 +235,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         a = 10
                         print(a > 5 ? "High" : "Low")
                         """,
-                createInstruction(SET, var(1), q("Low")),
-                createInstruction(JUMP, var(1001), "lessThanEq", "10", "5"),
-                createInstruction(SET, var(1), q("High")),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, var(1)),
+                createInstruction(PRINT, q("High")),
                 createInstruction(END)
         );
     }
@@ -288,6 +271,25 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void optimizesAssignmentsInConditions() {
+        assertCompilesTo("""
+                        if result = !rand(10)
+                            print("A")
+                        end
+                        print(result)
+                        """,
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(OP, "equal", var(1), var(0), "false"),
+                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                createInstruction(PRINT, q("A")),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(1)),
+                createInstruction(END)
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Case statements">
@@ -309,7 +311,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(SET, var(1), "10"),
                 createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1005), "lessThan", "__ast0", "10"),
+                createInstruction(JUMP, var(1003), "lessThan", "__ast0", "10"),
                 createInstruction(JUMP, var(1004), "lessThanEq", "__ast0", "20"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(JUMP, var(1003), "always"),
@@ -483,6 +485,62 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void handlesContinueInLoops() {
+        assertCompilesTo("""
+                        for i in 1 ... 10
+                            if i == 5
+                                continue
+                            else
+                                str = i
+                            end
+                            print(str)
+                        end
+                        """,
+                createInstruction(SET, "i", "1"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(JUMP, var(1001), "equal", "i", "5"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(PRINT, "i"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1005), "lessThan", "i", "10"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesDeadEnds() {
+        assertCompilesTo("""
+                        for i in 1 ... 10
+                            print(i)
+                            if i == 5
+                                continue
+                            else
+                                break
+                            end
+                            print(i + 1)
+                        end
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SET, "i", "1"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(PRINT, "i"),
+                createInstruction(JUMP, "__start__", "notEqual", "i", "5"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1005), "lessThan", "i", "10"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Exit points">
@@ -496,9 +554,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         print(foo(4))
                         """,
                 createInstruction(LABEL, var(1000)),
-                createInstruction(SET, var(0), "4"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, var(0)),
+                createInstruction(PRINT, "4"),
                 createInstruction(END)
         );
     }
@@ -526,6 +583,55 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(SET, var(1), "null"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, var(1)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesEndInFunction() {
+        assertCompilesTo("""
+                        def foo(n)
+                            if n > 0
+                                return n
+                            end
+                            end()
+                        end
+                        print(foo(rand(10)))
+                        """,
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, var(1001), "greaterThan", var(0), "0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(0)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesReturnInLoop() {
+        assertCompilesTo(new TestCompiler(CompilerProfile.fullOptimizations()),
+                        """
+                        if UNIT_S1 == null UNIT_S1 = findUnit() end
+                        inline def findUnit()
+                            while true
+                                return @unit
+                            end
+                        end
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(JUMP, "__start__", "notEqual", "UNIT_S1", "null"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(SET, var(2), "@unit"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, "UNIT_S1", var(2)),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, var(1001)),
                 createInstruction(END)
         );
     }
@@ -700,11 +806,10 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         end
                         """,
                 createInstruction(LABEL, var(1000)),
-                createInstruction(PRINT, q("\\n[green]Silicon[] status:\\n")),
                 createInstruction(SENSOR, "__fn0_level", "dome1", "@silicon"),
-                createInstruction(PRINT, q("  dome:  [green]")),
+                createInstruction(PRINT, q("\n[green]Silicon[] status:\n  dome:  [green]")),
                 createInstruction(PRINT, "__fn0_level"),
-                createInstruction(PRINT, q("[]\\n")),
+                createInstruction(PRINT, q("[]\n")),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(END)
         );
@@ -892,12 +997,13 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                                 foo(n - 1)
                             end
                         end
-                        foo(10)
+                        print(foo(10))
                         """,
                 createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "__fn0_n", "10"),
                 createInstruction(CALLREC, "bank1", var(1000), var(1001)),
                 createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "__fn0retval"),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0retval", "null"),
@@ -905,7 +1011,6 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
                 createInstruction(CALLREC, "bank1", var(1000), var(1005)),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(SET, "__fn0retval", "__fn0retval"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1")
@@ -1294,10 +1399,11 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             cell1[i + 1] = a
                         end
                         """,
+                createInstruction(LABEL, "__start__"),
                 createInstruction(READ, var(0), "cell1", "i"),
                 createInstruction(OP, "add", var(2), "i", "1"),
                 createInstruction(READ, var(1), "cell1", var(2)),
-                createInstruction(JUMP, var(1000), "lessThanEq", var(0), var(1)),
+                createInstruction(JUMP, "__start__", "lessThanEq", var(0), var(1)),
                 createInstruction(READ, "a", "cell1", "i"),
                 createInstruction(READ, var(6), "cell1", var(2)),
                 createInstruction(WRITE, var(6), "cell1", "i"),
