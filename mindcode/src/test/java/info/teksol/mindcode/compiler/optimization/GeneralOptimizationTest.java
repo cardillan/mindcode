@@ -293,23 +293,23 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     @Test
     void optimizesLoopsInConditions() {
         assertCompilesTo("""
-                inline def sum(n)
-                  c = 0
-                  for i in 0 ... n
-                    c += cell1[i]
-                  end
-                  return c
-                end
-                
-                result = if sum(4) < sum(8)
-                    print("Less")
-                    0
-                else
-                    1
-                end
-                print(result)
-                """,
-                createInstruction(SET, "result", "1"),
+                        inline def sum(n)
+                          c = 0
+                          for i in 0 ... n
+                            c += cell1[i]
+                          end
+                          return c
+                        end
+                        
+                        result = if sum(1000) < sum(2000)
+                            print("Less")
+                            0
+                        else
+                            1
+                        end
+                        print(result)
+                        """,
+                createInstruction(SET, var(9), "1"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "__fn0_c", "0"),
                 createInstruction(SET, "__fn0_i", "0"),
@@ -319,7 +319,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(OP, "add", "__fn0_c", "__fn0_c", var(2)),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
-                createInstruction(JUMP, var(1012), "lessThan", "__fn0_i", "4"),
+                createInstruction(JUMP, var(1012), "lessThan", "__fn0_i", "1000"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(LABEL, var(1005)),
@@ -331,29 +331,28 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(OP, "add", "__fn1_c", "__fn1_c", var(6)),
                 createInstruction(LABEL, var(1008)),
                 createInstruction(OP, "add", "__fn1_i", "__fn1_i", "1"),
-                createInstruction(JUMP, var(1013), "lessThan", "__fn1_i", "8"),
+                createInstruction(JUMP, var(1013), "lessThan", "__fn1_i", "2000"),
                 createInstruction(LABEL, var(1009)),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(JUMP, var(1011), "greaterThanEq", "__fn0_c", "__fn1_c"),
                 createInstruction(PRINT, q("Less")),
-                createInstruction(SET, "result", "0"),
+                createInstruction(SET, var(9), "0"),
                 createInstruction(LABEL, var(1011)),
-                createInstruction(PRINT, "result"),
+                createInstruction(PRINT, var(9)),
                 createInstruction(END)
         );
     }
 
     @Test
     void ignoresUnusedFunctions() {
-        assertCompilesTo(
-                """
-                def foo()
-                    print("foo")
-                end
-                print(0)
-                """,
+        assertCompilesTo("""
+                        def foo()
+                            print("foo")
+                        end
+                        print(0)
+                        """,
                 createInstruction(PRINT, "0"),
                 createInstruction(END)
-                );
+        );
     }
 }

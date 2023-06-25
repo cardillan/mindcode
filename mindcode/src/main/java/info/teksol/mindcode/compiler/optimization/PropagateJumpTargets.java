@@ -2,12 +2,8 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
-import info.teksol.mindcode.compiler.instructions.EndInstruction;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
 
@@ -34,8 +30,8 @@ class PropagateJumpTargets extends BaseOptimizer {
     private boolean startLabelUsed = false;
     int count = 0;
     
-    public PropagateJumpTargets(InstructionProcessor instructionProcessor) {
-        super(Optimization.JUMP_TARGET_PROPAGATION, instructionProcessor);
+    public PropagateJumpTargets(OptimizationContext optimizationContext) {
+        super(Optimization.JUMP_TARGET_PROPAGATION, optimizationContext);
     }
     
     @Override

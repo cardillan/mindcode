@@ -91,6 +91,19 @@ public class DirectiveProcessor {
         }
     }
 
+    private void setOptimizationPasses(CompilerProfile compilerProfile, String strPasses) {
+        try {
+            int passes = Integer.parseInt(strPasses);
+            if (passes >= 1 && passes <= CompilerProfile.MAX_PASSES) {
+                compilerProfile.setOptimizationPasses(passes);
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            // Do nothing
+        }
+        error("Invalid value '%s' of compiler directive 'passes' (expected integer between 1 and  " + CompilerProfile.MAX_PASSES + ").", strPasses);
+    }
+
     private void setGenerationGoal(CompilerProfile compilerProfile, String strGoal) {
         for (GenerationGoal goal : GenerationGoal.values()) {
             if (goal.name().equalsIgnoreCase(strGoal)) {
@@ -118,6 +131,7 @@ public class DirectiveProcessor {
         map.put("target", this::setTarget);
         map.put("optimization", this::setAllOptimizationsLevel);
         map.put("booleanEval", this::setShortCircuitEval);
+        map.put("passes", this::setOptimizationPasses);
         map.put("goal", this::setGenerationGoal);
         map.put("memory-model", this::setMemoryModel);
         for (Optimization opt : Optimization.values()) {

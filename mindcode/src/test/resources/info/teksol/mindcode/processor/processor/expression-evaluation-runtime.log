@@ -1,15 +1,14 @@
   1419 instructions before optimizations.
-    15 instructions eliminated by Temp Variables Elimination (4 iterations).
+    15 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Jump Normalization (4 iterations).
    189 instructions eliminated by Dead Code Elimination (4 iterations).
     63 instructions eliminated by Conditional Jump Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
    290 instructions eliminated by Data Flow Optimization (23 iterations).
      7 instructions eliminated by Unreachable Code Elimination (2 iterations).
-   105 instructions eliminated by Print Merging.
-   748 instructions after optimizations.
+   853 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 instructions):
  
   1297 call __label0
   1298 gotolabel __label240 __fn0
@@ -161,7 +160,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
   1694 set __fn63_actual a
   1695 set __fn63_expected 2
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-63 instructions):
  
     22 print "\n"
     23 set __tmp4 "\n"
@@ -667,7 +666,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
   1651 end
   1652 label __label0
 
-Modifications by Dead Code Elimination, pass 1, iteration 2:
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-126 instructions):
  
     10 op equal __tmp3 __fn1_actual __fn1_expected
     11 jump __label4 equal __tmp3 false
@@ -1677,7 +1676,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 2:
   1524 label __label312
   1525 end
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-63 instructions):
  
      7 set __fn1_actual __tmp1
      8 set __fn1_expected 5
@@ -2309,7 +2308,7 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
   1451 jump __label314 always
   1452 label __label313
 
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
      2 call __label0
      3 gotolabel __label1 __fn0
@@ -3204,12 +3203,15 @@ Modifications by Data Flow Optimization, pass 2, iteration 1:
    759 set a 0xabcdefabcdefabc
 -    * op not __tmp165 a
 -    * op add __tmp166 a 1
+-    * op mul __tmp167 -1 __tmp166
 +  760 op not __tmp165 0xabcdefabcdefabc
 +  761 op add __tmp166 0xabcdefabcdefabc 1
-   762 op mul __tmp167 -1 __tmp166
++  762 op mul __tmp167 -1 773738404492802690
    763 label __label166
-   764 set __fn34_actual __tmp165
-   765 set __fn34_expected __tmp167
+-    * set __fn34_actual __tmp165
+-    * set __fn34_expected __tmp167
++  764 set __fn34_actual -773738404492802690
++  765 set __fn34_expected -773738404492802690
    766 set __fn34_operation "not"
 -    * jump __label168 notEqual __fn34_actual __fn34_expected
 +  767 jump __label168 notEqual __tmp165 __tmp167
@@ -4014,7 +4016,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 1:
   1459 label __label314
   1460 label __label312
 
-Modifications by Data Flow Optimization, pass 2, iteration 2:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-269 instructions):
  
      1 setaddr __fn0retaddr __label1
      2 call __label0
@@ -4450,519 +4452,500 @@ Modifications by Data Flow Optimization, pass 2, iteration 2:
    626 label __label163
 -    * set a 0xabcdefabcdefabc
    627 op not __tmp165 0xabcdefabcdefabc
-   628 op add __tmp166 0xabcdefabcdefabc 1
--    * op mul __tmp167 -1 __tmp166
-+  629 op mul __tmp167 -1 773738404492802690
-   630 label __label166
--    * set __fn34_actual __tmp165
--    * set __fn34_expected __tmp167
+-    * op add __tmp166 0xabcdefabcdefabc 1
+   628 op mul __tmp167 -1 773738404492802690
+   629 label __label166
+-    * set __fn34_actual -773738404492802690
+-    * set __fn34_expected -773738404492802690
 -    * set __fn34_operation "not"
 -    * jump __label168 notEqual __tmp165 __tmp167
-+  631 jump __label168 notEqual -773738404492802690 __tmp167
-   632 print "ok"
-   633 jump __label169 always
-   634 label __label168
- 
-   637 print ": expected "
-   638 print __tmp167
-   639 print ", but was "
++  630 jump __label168 notEqual -773738404492802690 -773738404492802690
+   631 print "ok"
+   632 jump __label169 always
+   633 label __label168
+   634 print "Wrong operation "
+   635 print "not"
+   636 print ": expected "
+-    * print __tmp167
++  637 print -773738404492802690
+   638 print ", but was "
 -    * print __tmp165
-+  640 print -773738404492802690
-   641 print "\n"
-   642 label __label169
-   643 label __label167
++  639 print -773738404492802690
+   640 print "\n"
+   641 label __label169
+   642 label __label167
  
-   645 setaddr __fn0retaddr __label170
-   646 call __label0
-   647 gotolabel __label170 __fn0
+   644 setaddr __fn0retaddr __label170
+   645 call __label0
+   646 gotolabel __label170 __fn0
 -    * set __retval171 __fn0retval
-   648 op max __tmp172 2 __fn0retval
-   649 label __label171
+   647 op max __tmp172 2 __fn0retval
+   648 label __label171
 -    * set __fn35_actual __tmp172
 -    * set __fn35_expected 4
 -    * set __fn35_operation "max"
-   650 jump __label173 notEqual __tmp172 4
-   651 print "ok"
-   652 jump __label174 always
+   649 jump __label173 notEqual __tmp172 4
+   650 print "ok"
+   651 jump __label174 always
  
-   664 setaddr __fn0retaddr __label175
-   665 call __label0
-   666 gotolabel __label175 __fn0
+   663 setaddr __fn0retaddr __label175
+   664 call __label0
+   665 gotolabel __label175 __fn0
 -    * set __retval176 __fn0retval
-   667 op min __tmp177 2 __fn0retval
-   668 label __label176
+   666 op min __tmp177 2 __fn0retval
+   667 label __label176
 -    * set __fn36_actual __tmp177
 -    * set __fn36_expected 2
 -    * set __fn36_operation "min"
-   669 jump __label178 notEqual __tmp177 2
-   670 print "ok"
-   671 jump __label179 always
+   668 jump __label178 notEqual __tmp177 2
+   669 print "ok"
+   670 jump __label179 always
  
-   683 setaddr __fn0retaddr __label180
-   684 call __label0
-   685 gotolabel __label180 __fn0
+   682 setaddr __fn0retaddr __label180
+   683 call __label0
+   684 gotolabel __label180 __fn0
 -    * set __retval181 __fn0retval
-   686 op abs __tmp182 __fn0retval
-   687 label __label181
+   685 op abs __tmp182 __fn0retval
+   686 label __label181
 -    * set __fn37_actual __tmp182
 -    * set __fn37_expected 2
 -    * set __fn37_operation "abs"
-   688 jump __label183 notEqual __tmp182 2
-   689 print "ok"
-   690 jump __label184 always
+   687 jump __label183 notEqual __tmp182 2
+   688 print "ok"
+   689 jump __label184 always
  
-   702 setaddr __fn0retaddr __label185
-   703 call __label0
-   704 gotolabel __label185 __fn0
+   701 setaddr __fn0retaddr __label185
+   702 call __label0
+   703 gotolabel __label185 __fn0
 -    * set __retval186 __fn0retval
-   705 op log __tmp187 __fn0retval
-   706 label __label186
+   704 op log __tmp187 __fn0retval
+   705 label __label186
 -    * set __fn38_actual __tmp187
 -    * set __fn38_expected 1
 -    * set __fn38_operation "log"
-   707 jump __label188 notEqual __tmp187 1
-   708 print "ok"
-   709 jump __label189 always
+   706 jump __label188 notEqual __tmp187 1
+   707 print "ok"
+   708 jump __label189 always
  
-   721 setaddr __fn0retaddr __label190
-   722 call __label0
-   723 gotolabel __label190 __fn0
+   720 setaddr __fn0retaddr __label190
+   721 call __label0
+   722 gotolabel __label190 __fn0
 -    * set __retval191 __fn0retval
-   724 op log10 __tmp192 __fn0retval
-   725 label __label191
+   723 op log10 __tmp192 __fn0retval
+   724 label __label191
 -    * set __fn39_actual __tmp192
 -    * set __fn39_expected 1
 -    * set __fn39_operation "log10"
-   726 jump __label193 notEqual __tmp192 1
-   727 print "ok"
-   728 jump __label194 always
+   725 jump __label193 notEqual __tmp192 1
+   726 print "ok"
+   727 jump __label194 always
  
-   740 setaddr __fn0retaddr __label195
-   741 call __label0
-   742 gotolabel __label195 __fn0
+   739 setaddr __fn0retaddr __label195
+   740 call __label0
+   741 gotolabel __label195 __fn0
 -    * set __retval196 __fn0retval
-   743 op floor __tmp197 __fn0retval
-   744 label __label196
+   742 op floor __tmp197 __fn0retval
+   743 label __label196
 -    * set __fn40_actual __tmp197
 -    * set __fn40_expected 2
 -    * set __fn40_operation "floor"
-   745 jump __label198 notEqual __tmp197 2
-   746 print "ok"
-   747 jump __label199 always
+   744 jump __label198 notEqual __tmp197 2
+   745 print "ok"
+   746 jump __label199 always
  
-   759 setaddr __fn0retaddr __label200
-   760 call __label0
-   761 gotolabel __label200 __fn0
+   758 setaddr __fn0retaddr __label200
+   759 call __label0
+   760 gotolabel __label200 __fn0
 -    * set __retval201 __fn0retval
-   762 op ceil __tmp202 __fn0retval
-   763 label __label201
+   761 op ceil __tmp202 __fn0retval
+   762 label __label201
 -    * set __fn41_actual __tmp202
 -    * set __fn41_expected 3
 -    * set __fn41_operation "ceil"
-   764 jump __label203 notEqual __tmp202 3
-   765 print "ok"
-   766 jump __label204 always
+   763 jump __label203 notEqual __tmp202 3
+   764 print "ok"
+   765 jump __label204 always
  
-   778 setaddr __fn0retaddr __label205
-   779 call __label0
-   780 gotolabel __label205 __fn0
+   777 setaddr __fn0retaddr __label205
+   778 call __label0
+   779 gotolabel __label205 __fn0
 -    * set __retval206 __fn0retval
-   781 op sqrt __tmp207 __fn0retval
-   782 label __label206
+   780 op sqrt __tmp207 __fn0retval
+   781 label __label206
 -    * set __fn42_actual __tmp207
 -    * set __fn42_expected 4
 -    * set __fn42_operation "sqrt"
-   783 jump __label208 notEqual __tmp207 4
-   784 print "ok"
-   785 jump __label209 always
+   782 jump __label208 notEqual __tmp207 4
+   783 print "ok"
+   784 jump __label209 always
  
-   797 setaddr __fn0retaddr __label210
-   798 call __label0
-   799 gotolabel __label210 __fn0
+   796 setaddr __fn0retaddr __label210
+   797 call __label0
+   798 gotolabel __label210 __fn0
 -    * set __retval211 __fn0retval
-   800 op angle __tmp212 1 __fn0retval
-   801 label __label211
+   799 op angle __tmp212 1 __fn0retval
+   800 label __label211
 -    * set __fn43_actual __tmp212
 -    * set __fn43_expected 45
 -    * set __fn43_operation "angle"
-   802 jump __label213 notEqual __tmp212 45
-   803 print "ok"
-   804 jump __label214 always
+   801 jump __label213 notEqual __tmp212 45
+   802 print "ok"
+   803 jump __label214 always
  
-   816 setaddr __fn0retaddr __label215
-   817 call __label0
-   818 gotolabel __label215 __fn0
+   815 setaddr __fn0retaddr __label215
+   816 call __label0
+   817 gotolabel __label215 __fn0
 -    * set __retval216 __fn0retval
-   819 op angleDiff __tmp217 45 __fn0retval
-   820 label __label216
+   818 op angleDiff __tmp217 45 __fn0retval
+   819 label __label216
 -    * set __fn44_actual __tmp217
 -    * set __fn44_expected 90
 -    * set __fn44_operation "angleDiff"
-   821 jump __label218 notEqual __tmp217 90
-   822 print "ok"
-   823 jump __label219 always
+   820 jump __label218 notEqual __tmp217 90
+   821 print "ok"
+   822 jump __label219 always
  
-   835 setaddr __fn0retaddr __label220
-   836 call __label0
-   837 gotolabel __label220 __fn0
+   834 setaddr __fn0retaddr __label220
+   835 call __label0
+   836 gotolabel __label220 __fn0
 -    * set __retval221 __fn0retval
-   838 op mul __tmp222 -1 __fn0retval
-   839 label __label221
+   837 op mul __tmp222 -1 __fn0retval
+   838 label __label221
 -    * set __fn45_actual __tmp222
 -    * set __fn45_expected -8
 -    * set __fn45_operation "unary minus"
-   840 jump __label223 notEqual __tmp222 -8
-   841 print "ok"
-   842 jump __label224 always
+   839 jump __label223 notEqual __tmp222 -8
+   840 print "ok"
+   841 jump __label224 always
  
-   854 setaddr __fn0retaddr __label225
-   855 call __label0
-   856 gotolabel __label225 __fn0
+   853 setaddr __fn0retaddr __label225
+   854 call __label0
+   855 gotolabel __label225 __fn0
 -    * set __retval226 __fn0retval
-   857 op equal __tmp227 __fn0retval false
-   858 label __label226
+   856 op equal __tmp227 __fn0retval false
+   857 label __label226
 -    * set __fn46_actual __tmp227
 -    * set __fn46_expected 1
 -    * set __fn46_operation "boolean negation"
-   859 jump __label228 notEqual __tmp227 1
-   860 print "ok"
-   861 jump __label229 always
+   858 jump __label228 notEqual __tmp227 1
+   859 print "ok"
+   860 jump __label229 always
  
-   873 setaddr __fn0retaddr __label230
-   874 call __label0
-   875 gotolabel __label230 __fn0
+   872 setaddr __fn0retaddr __label230
+   873 call __label0
+   874 gotolabel __label230 __fn0
 -    * set __retval231 __fn0retval
-   876 op equal __tmp232 __fn0retval false
-   877 label __label231
+   875 op equal __tmp232 __fn0retval false
+   876 label __label231
 -    * set __fn47_actual __tmp232
 -    * set __fn47_expected 0
 -    * set __fn47_operation "boolean negation"
-   878 jump __label233 notEqual __tmp232 0
-   879 print "ok"
-   880 jump __label234 always
+   877 jump __label233 notEqual __tmp232 0
+   878 print "ok"
+   879 jump __label234 always
  
-   892 setaddr __fn0retaddr __label235
-   893 call __label0
-   894 gotolabel __label235 __fn0
+   891 setaddr __fn0retaddr __label235
+   892 call __label0
+   893 gotolabel __label235 __fn0
 -    * set __retval236 __fn0retval
-   895 op equal __tmp237 __fn0retval false
-   896 label __label236
+   894 op equal __tmp237 __fn0retval false
+   895 label __label236
 -    * set __fn48_actual __tmp237
 -    * set __fn48_expected 0
 -    * set __fn48_operation "boolean negation"
-   897 jump __label238 notEqual __tmp237 0
-   898 print "ok"
-   899 jump __label239 always
+   896 jump __label238 notEqual __tmp237 0
+   897 print "ok"
+   898 jump __label239 always
  
-   907 print "\n"
-   908 label __label239
-   909 label __label237
+   906 print "\n"
+   907 label __label239
+   908 label __label237
 -    * set a 2
-   910 set __fn0_n 4
-   911 setaddr __fn0retaddr __label240
-   912 call __label0
-   913 gotolabel __label240 __fn0
+   909 set __fn0_n 4
+   910 setaddr __fn0retaddr __label240
+   911 call __label0
+   912 gotolabel __label240 __fn0
 -    * set __retval241 __fn0retval
-   914 op pow a 2 __fn0retval
-   915 label __label241
+   913 op pow a 2 __fn0retval
+   914 label __label241
 -    * set __fn49_actual a
 -    * set __fn49_expected 16
 -    * set __fn49_operation "**="
-   916 jump __label243 notEqual a 16
-   917 print "ok"
-   918 jump __label244 always
+   915 jump __label243 notEqual a 16
+   916 print "ok"
+   917 jump __label244 always
  
-   926 print "\n"
-   927 label __label244
-   928 label __label242
+   925 print "\n"
+   926 label __label244
+   927 label __label242
 -    * set a 2
-   929 set __fn0_n 4
-   930 setaddr __fn0retaddr __label245
-   931 call __label0
-   932 gotolabel __label245 __fn0
+   928 set __fn0_n 4
+   929 setaddr __fn0retaddr __label245
+   930 call __label0
+   931 gotolabel __label245 __fn0
 -    * set __retval246 __fn0retval
-   933 op mul a 2 __fn0retval
-   934 label __label246
+   932 op mul a 2 __fn0retval
+   933 label __label246
 -    * set __fn50_actual a
 -    * set __fn50_expected 8
 -    * set __fn50_operation "*="
-   935 jump __label248 notEqual a 8
-   936 print "ok"
-   937 jump __label249 always
+   934 jump __label248 notEqual a 8
+   935 print "ok"
+   936 jump __label249 always
  
-   945 print "\n"
-   946 label __label249
-   947 label __label247
+   944 print "\n"
+   945 label __label249
+   946 label __label247
 -    * set a 6
-   948 set __fn0_n 4
-   949 setaddr __fn0retaddr __label250
-   950 call __label0
-   951 gotolabel __label250 __fn0
+   947 set __fn0_n 4
+   948 setaddr __fn0retaddr __label250
+   949 call __label0
+   950 gotolabel __label250 __fn0
 -    * set __retval251 __fn0retval
-   952 op div a 6 __fn0retval
-   953 label __label251
+   951 op div a 6 __fn0retval
+   952 label __label251
 -    * set __fn51_actual a
 -    * set __fn51_expected 1.5
 -    * set __fn51_operation "/="
-   954 jump __label253 notEqual a 1.5
-   955 print "ok"
-   956 jump __label254 always
+   953 jump __label253 notEqual a 1.5
+   954 print "ok"
+   955 jump __label254 always
  
-   964 print "\n"
-   965 label __label254
-   966 label __label252
+   963 print "\n"
+   964 label __label254
+   965 label __label252
 -    * set a 6
-   967 set __fn0_n 4
-   968 setaddr __fn0retaddr __label255
-   969 call __label0
-   970 gotolabel __label255 __fn0
+   966 set __fn0_n 4
+   967 setaddr __fn0retaddr __label255
+   968 call __label0
+   969 gotolabel __label255 __fn0
 -    * set __retval256 __fn0retval
-   971 op idiv a 6 __fn0retval
-   972 label __label256
+   970 op idiv a 6 __fn0retval
+   971 label __label256
 -    * set __fn52_actual a
 -    * set __fn52_expected 1
 -    * set __fn52_operation "\="
-   973 jump __label258 notEqual a 1
-   974 print "ok"
-   975 jump __label259 always
+   972 jump __label258 notEqual a 1
+   973 print "ok"
+   974 jump __label259 always
  
-   983 print "\n"
-   984 label __label259
-   985 label __label257
+   982 print "\n"
+   983 label __label259
+   984 label __label257
 -    * set a 6
-   986 set __fn0_n 4
-   987 setaddr __fn0retaddr __label260
-   988 call __label0
-   989 gotolabel __label260 __fn0
+   985 set __fn0_n 4
+   986 setaddr __fn0retaddr __label260
+   987 call __label0
+   988 gotolabel __label260 __fn0
 -    * set __retval261 __fn0retval
-   990 op mod a 6 __fn0retval
-   991 label __label261
+   989 op mod a 6 __fn0retval
+   990 label __label261
 -    * set __fn53_actual a
 -    * set __fn53_expected 2
 -    * set __fn53_operation "%="
-   992 jump __label263 notEqual a 2
-   993 print "ok"
-   994 jump __label264 always
+   991 jump __label263 notEqual a 2
+   992 print "ok"
+   993 jump __label264 always
  
-  1002 print "\n"
-  1003 label __label264
-  1004 label __label262
+  1001 print "\n"
+  1002 label __label264
+  1003 label __label262
 -    * set a 4
-  1005 set __fn0_n 2
-  1006 setaddr __fn0retaddr __label265
-  1007 call __label0
-  1008 gotolabel __label265 __fn0
+  1004 set __fn0_n 2
+  1005 setaddr __fn0retaddr __label265
+  1006 call __label0
+  1007 gotolabel __label265 __fn0
 -    * set __retval266 __fn0retval
-  1009 op add a 4 __fn0retval
-  1010 label __label266
+  1008 op add a 4 __fn0retval
+  1009 label __label266
 -    * set __fn54_actual a
 -    * set __fn54_expected 6
 -    * set __fn54_operation "+="
-  1011 jump __label268 notEqual a 6
-  1012 print "ok"
-  1013 jump __label269 always
+  1010 jump __label268 notEqual a 6
+  1011 print "ok"
+  1012 jump __label269 always
  
-  1021 print "\n"
-  1022 label __label269
-  1023 label __label267
+  1020 print "\n"
+  1021 label __label269
+  1022 label __label267
 -    * set a 4
-  1024 set __fn0_n 2
-  1025 setaddr __fn0retaddr __label270
-  1026 call __label0
-  1027 gotolabel __label270 __fn0
+  1023 set __fn0_n 2
+  1024 setaddr __fn0retaddr __label270
+  1025 call __label0
+  1026 gotolabel __label270 __fn0
 -    * set __retval271 __fn0retval
-  1028 op sub a 4 __fn0retval
-  1029 label __label271
+  1027 op sub a 4 __fn0retval
+  1028 label __label271
 -    * set __fn55_actual a
 -    * set __fn55_expected 2
 -    * set __fn55_operation "-="
-  1030 jump __label273 notEqual a 2
-  1031 print "ok"
-  1032 jump __label274 always
+  1029 jump __label273 notEqual a 2
+  1030 print "ok"
+  1031 jump __label274 always
  
-  1040 print "\n"
-  1041 label __label274
-  1042 label __label272
+  1039 print "\n"
+  1040 label __label274
+  1041 label __label272
 -    * set a 1
-  1043 set __fn0_n 2
-  1044 setaddr __fn0retaddr __label275
-  1045 call __label0
-  1046 gotolabel __label275 __fn0
+  1042 set __fn0_n 2
+  1043 setaddr __fn0retaddr __label275
+  1044 call __label0
+  1045 gotolabel __label275 __fn0
 -    * set __retval276 __fn0retval
-  1047 op shl a 1 __fn0retval
-  1048 label __label276
+  1046 op shl a 1 __fn0retval
+  1047 label __label276
 -    * set __fn56_actual a
 -    * set __fn56_expected 4
 -    * set __fn56_operation "<<="
-  1049 jump __label278 notEqual a 4
-  1050 print "ok"
-  1051 jump __label279 always
+  1048 jump __label278 notEqual a 4
+  1049 print "ok"
+  1050 jump __label279 always
  
-  1059 print "\n"
-  1060 label __label279
-  1061 label __label277
+  1058 print "\n"
+  1059 label __label279
+  1060 label __label277
 -    * set a 9
-  1062 set __fn0_n 2
-  1063 setaddr __fn0retaddr __label280
-  1064 call __label0
-  1065 gotolabel __label280 __fn0
+  1061 set __fn0_n 2
+  1062 setaddr __fn0retaddr __label280
+  1063 call __label0
+  1064 gotolabel __label280 __fn0
 -    * set __retval281 __fn0retval
-  1066 op shr a 9 __fn0retval
-  1067 label __label281
+  1065 op shr a 9 __fn0retval
+  1066 label __label281
 -    * set __fn57_actual a
 -    * set __fn57_expected 2
 -    * set __fn57_operation ">>="
-  1068 jump __label283 notEqual a 2
-  1069 print "ok"
-  1070 jump __label284 always
+  1067 jump __label283 notEqual a 2
+  1068 print "ok"
+  1069 jump __label284 always
  
-  1078 print "\n"
-  1079 label __label284
-  1080 label __label282
+  1077 print "\n"
+  1078 label __label284
+  1079 label __label282
 -    * set a 1
-  1081 set __fn0_n 2
-  1082 setaddr __fn0retaddr __label285
-  1083 call __label0
-  1084 gotolabel __label285 __fn0
+  1080 set __fn0_n 2
+  1081 setaddr __fn0retaddr __label285
+  1082 call __label0
+  1083 gotolabel __label285 __fn0
 -    * set __retval286 __fn0retval
-  1085 op or a 1 __fn0retval
-  1086 label __label286
+  1084 op or a 1 __fn0retval
+  1085 label __label286
 -    * set __fn58_actual a
 -    * set __fn58_expected 3
 -    * set __fn58_operation "|="
-  1087 jump __label288 notEqual a 3
-  1088 print "ok"
-  1089 jump __label289 always
+  1086 jump __label288 notEqual a 3
+  1087 print "ok"
+  1088 jump __label289 always
  
-  1097 print "\n"
-  1098 label __label289
-  1099 label __label287
+  1096 print "\n"
+  1097 label __label289
+  1098 label __label287
 -    * set a 3
-  1100 set __fn0_n 2
-  1101 setaddr __fn0retaddr __label290
-  1102 call __label0
-  1103 gotolabel __label290 __fn0
+  1099 set __fn0_n 2
+  1100 setaddr __fn0retaddr __label290
+  1101 call __label0
+  1102 gotolabel __label290 __fn0
 -    * set __retval291 __fn0retval
-  1104 op and a 3 __fn0retval
-  1105 label __label291
+  1103 op and a 3 __fn0retval
+  1104 label __label291
 -    * set __fn59_actual a
 -    * set __fn59_expected 2
 -    * set __fn59_operation "&="
-  1106 jump __label293 notEqual a 2
-  1107 print "ok"
-  1108 jump __label294 always
+  1105 jump __label293 notEqual a 2
+  1106 print "ok"
+  1107 jump __label294 always
  
-  1116 print "\n"
-  1117 label __label294
-  1118 label __label292
+  1115 print "\n"
+  1116 label __label294
+  1117 label __label292
 -    * set a 3
 -    * set __fn0_n 2
-  1119 setaddr __fn0retaddr __label295
-  1120 call __label0
-  1121 gotolabel __label295 __fn0
+  1118 setaddr __fn0retaddr __label295
+  1119 call __label0
+  1120 gotolabel __label295 __fn0
 -    * set __retval296 __fn0retval
-  1122 op xor a 3 __fn0retval
-  1123 label __label296
+  1121 op xor a 3 __fn0retval
+  1122 label __label296
 -    * set __fn60_actual a
 -    * set __fn60_expected 1
 -    * set __fn60_operation "^="
-  1124 jump __label298 notEqual a 1
-  1125 print "ok"
-  1126 jump __label299 always
+  1123 jump __label298 notEqual a 1
+  1124 print "ok"
+  1125 jump __label299 always
  
-  1134 print "\n"
-  1135 label __label299
-  1136 label __label297
+  1133 print "\n"
+  1134 label __label299
+  1135 label __label297
 -    * set a 1
-  1137 set __fn0_n 0
-  1138 setaddr __fn0retaddr __label300
-  1139 call __label0
-  1140 gotolabel __label300 __fn0
+  1136 set __fn0_n 0
+  1137 setaddr __fn0retaddr __label300
+  1138 call __label0
+  1139 gotolabel __label300 __fn0
 -    * set __retval301 __fn0retval
-  1141 op land a 1 __fn0retval
-  1142 label __label301
+  1140 op land a 1 __fn0retval
+  1141 label __label301
 -    * set __fn61_actual a
 -    * set __fn61_expected false
 -    * set __fn61_operation "&&="
-  1143 jump __label303 notEqual a false
-  1144 print "ok"
-  1145 jump __label304 always
+  1142 jump __label303 notEqual a false
+  1143 print "ok"
+  1144 jump __label304 always
  
-  1153 print "\n"
-  1154 label __label304
-  1155 label __label302
+  1152 print "\n"
+  1153 label __label304
+  1154 label __label302
 -    * set a 1
-  1156 set __fn0_n 2
-  1157 setaddr __fn0retaddr __label305
-  1158 call __label0
-  1159 gotolabel __label305 __fn0
+  1155 set __fn0_n 2
+  1156 setaddr __fn0retaddr __label305
+  1157 call __label0
+  1158 gotolabel __label305 __fn0
 -    * set __retval306 __fn0retval
-  1160 op land a 1 __fn0retval
-  1161 label __label306
+  1159 op land a 1 __fn0retval
+  1160 label __label306
 -    * set __fn62_actual a
 -    * set __fn62_expected true
 -    * set __fn62_operation "&&="
-  1162 jump __label308 notEqual a true
-  1163 print "ok"
-  1164 jump __label309 always
+  1161 jump __label308 notEqual a true
+  1162 print "ok"
+  1163 jump __label309 always
  
-  1172 print "\n"
-  1173 label __label309
-  1174 label __label307
+  1171 print "\n"
+  1172 label __label309
+  1173 label __label307
 -    * set a 0
-  1175 setaddr __fn0retaddr __label310
-  1176 call __label0
-  1177 gotolabel __label310 __fn0
+  1174 setaddr __fn0retaddr __label310
+  1175 call __label0
+  1176 gotolabel __label310 __fn0
 -    * set __retval311 __fn0retval
-  1178 op or a 0 __fn0retval
-  1179 label __label311
+  1177 op or a 0 __fn0retval
+  1178 label __label311
 -    * set __fn63_actual a
 -    * set __fn63_expected 2
 -    * set __fn63_operation "||="
-  1180 jump __label313 notEqual a 2
-  1181 print "ok"
-  1182 jump __label314 always
+  1179 jump __label313 notEqual a 2
+  1180 print "ok"
+  1181 jump __label314 always
 
-Modifications by Data Flow Optimization, pass 2, iteration 3:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
    624 print "\n"
    625 label __label165
    626 label __label163
 -    * op not __tmp165 0xabcdefabcdefabc
--    * op add __tmp166 0xabcdefabcdefabc 1
-   627 op mul __tmp167 -1 773738404492802690
-   628 label __label166
--    * jump __label168 notEqual -773738404492802690 __tmp167
-+  629 jump __label168 notEqual -773738404492802690 -773738404492802690
-   630 print "ok"
-   631 jump __label169 always
-   632 label __label168
-   633 print "Wrong operation "
-   634 print "not"
-   635 print ": expected "
--    * print __tmp167
-+  636 print -773738404492802690
-   637 print ", but was "
-   638 print -773738404492802690
-   639 print "\n"
- 
-  1095 print "\n"
-  1096 label __label289
-  1097 label __label287
--    * set __fn0_n 2
-  1098 setaddr __fn0retaddr __label290
-  1099 call __label0
-  1100 gotolabel __label290 __fn0
-
-Modifications by Data Flow Optimization, pass 2, iteration 4:
- 
-   624 print "\n"
-   625 label __label165
-   626 label __label163
 -    * op mul __tmp167 -1 773738404492802690
    627 label __label166
    628 jump __label168 notEqual -773738404492802690 -773738404492802690
    629 print "ok"
+ 
+  1094 print "\n"
+  1095 label __label289
+  1096 label __label287
+-    * set __fn0_n 2
+  1097 setaddr __fn0retaddr __label290
+  1098 call __label0
+  1099 gotolabel __label290 __fn0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
  
   1075 print "\n"
   1076 label __label284
@@ -4972,7 +4955,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 4:
   1079 call __label0
   1080 gotolabel __label285 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 5:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
  
   1056 print "\n"
   1057 label __label279
@@ -4982,7 +4965,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 5:
   1060 call __label0
   1061 gotolabel __label280 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 6:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1 instructions):
  
   1037 print "\n"
   1038 label __label274
@@ -4992,7 +4975,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 6:
   1041 call __label0
   1042 gotolabel __label275 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 7:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 7 (-1 instructions):
  
   1018 print "\n"
   1019 label __label269
@@ -5002,7 +4985,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 7:
   1022 call __label0
   1023 gotolabel __label270 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 8:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 8 (-1 instructions):
  
    980 print "\n"
    981 label __label259
@@ -5012,7 +4995,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 8:
    984 call __label0
    985 gotolabel __label260 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 9:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 9 (-1 instructions):
  
    961 print "\n"
    962 label __label254
@@ -5022,7 +5005,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 9:
    965 call __label0
    966 gotolabel __label255 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 10:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 10 (-1 instructions):
  
    942 print "\n"
    943 label __label249
@@ -5032,7 +5015,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 10:
    946 call __label0
    947 gotolabel __label250 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 11:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 11 (-1 instructions):
  
    923 print "\n"
    924 label __label244
@@ -5042,7 +5025,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 11:
    927 call __label0
    928 gotolabel __label245 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 12:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 12 (-1 instructions):
  
    752 print "\n"
    753 label __label199
@@ -5052,7 +5035,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 12:
    756 call __label0
    757 gotolabel __label200 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 13:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 13 (-1 instructions):
  
    657 print "\n"
    658 label __label174
@@ -5062,7 +5045,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 13:
    661 call __label0
    662 gotolabel __label175 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 14:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 14 (-1 instructions):
  
    567 print "\n"
    568 label __label150
@@ -5072,7 +5055,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 14:
    571 call __label0
    572 gotolabel __label151 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 15:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 15 (-1 instructions):
  
    548 print "\n"
    549 label __label145
@@ -5082,7 +5065,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 15:
    552 call __label0
    553 gotolabel __label146 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 16:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 16 (-1 instructions):
  
    529 print "\n"
    530 label __label140
@@ -5092,7 +5075,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 16:
    533 call __label0
    534 gotolabel __label141 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 17:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 17 (-1 instructions):
  
    510 print "\n"
    511 label __label135
@@ -5102,7 +5085,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 17:
    514 call __label0
    515 gotolabel __label136 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 18:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 18 (-1 instructions):
  
    472 print "\n"
    473 label __label125
@@ -5112,7 +5095,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 18:
    476 call __label0
    477 gotolabel __label126 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 19:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 19 (-1 instructions):
  
    130 print "\n"
    131 label __label35
@@ -5122,7 +5105,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 19:
    134 call __label0
    135 gotolabel __label36 __fn0
 
-Modifications by Data Flow Optimization, pass 2, iteration 20:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 20 (-1 instructions):
  
    111 print "\n"
    112 label __label30
@@ -5132,7 +5115,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 20:
    115 call __label0
    116 gotolabel __label31 __fn0
 
-Modifications by Jump Normalization, pass 3, iteration 1:
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
    618 label __label165
    619 label __label163
@@ -5142,7 +5125,7 @@ Modifications by Jump Normalization, pass 3, iteration 1:
    622 jump __label169 always
    623 label __label168
 
-Modifications by Unreachable Code Elimination, pass 4, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-7 instructions):
  
    621 print "ok"
    622 jump __label169 always
@@ -5158,7 +5141,7 @@ Modifications by Unreachable Code Elimination, pass 4, iteration 1:
    625 label __label167
    626 set __fn0_n 4
 
-Modifications by Single Step Elimination, pass 4, iteration 1:
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
    619 label __label163
    620 label __label166
@@ -5167,671 +5150,6 @@ Modifications by Single Step Elimination, pass 4, iteration 1:
    622 label __label168
    623 label __label169
    624 label __label167
-
-Modifications by Print Merging, pass 4, iteration 1:
- 
-     7 print "ok"
-     8 jump __label5 always
-     9 label __label4
--    * print "Wrong operation "
--    * print "add"
--    * print ": expected "
-+   10 print "Wrong operation add: expected "
-    11 print 5
-    12 print ", but was "
-    13 print __tmp1
- 
-    24 print "ok"
-    25 jump __label10 always
-    26 label __label9
--    * print "Wrong operation "
--    * print "sub"
--    * print ": expected "
-+   27 print "Wrong operation sub: expected "
-    28 print 1
-    29 print ", but was "
-    30 print __tmp6
- 
-    41 print "ok"
-    42 jump __label15 always
-    43 label __label14
--    * print "Wrong operation "
--    * print "mul"
--    * print ": expected "
-+   44 print "Wrong operation mul: expected "
-    45 print 6
-    46 print ", but was "
-    47 print __tmp11
- 
-    58 print "ok"
-    59 jump __label20 always
-    60 label __label19
--    * print "Wrong operation "
--    * print "div"
--    * print ": expected "
-+   61 print "Wrong operation div: expected "
-    62 print 1.5
-    63 print ", but was "
-    64 print __tmp16
- 
-    75 print "ok"
-    76 jump __label25 always
-    77 label __label24
--    * print "Wrong operation "
--    * print "div exp"
--    * print ": expected "
-+   78 print "Wrong operation div exp: expected "
-    79 print 0.00001
-    80 print ", but was "
-    81 print __tmp21
- 
-    92 print "ok"
-    93 jump __label30 always
-    94 label __label29
--    * print "Wrong operation "
--    * print "idiv"
--    * print ": expected "
-+   95 print "Wrong operation idiv: expected "
-    96 print 1
-    97 print ", but was "
-    98 print __tmp26
- 
-   108 print "ok"
-   109 jump __label35 always
-   110 label __label34
--    * print "Wrong operation "
--    * print "mod"
--    * print ": expected "
-+  111 print "Wrong operation mod: expected "
-   112 print 2
-   113 print ", but was "
-   114 print __tmp31
- 
-   124 print "ok"
-   125 jump __label40 always
-   126 label __label39
--    * print "Wrong operation "
--    * print "pow"
--    * print ": expected "
-+  127 print "Wrong operation pow: expected "
-   128 print 16
-   129 print ", but was "
-   130 print __tmp36
- 
-   141 print "ok"
-   142 jump __label45 always
-   143 label __label44
--    * print "Wrong operation "
--    * print "equal"
--    * print ": expected "
-+  144 print "Wrong operation equal: expected "
-   145 print true
-   146 print ", but was "
-   147 print __tmp41
- 
-   158 print "ok"
-   159 jump __label50 always
-   160 label __label49
--    * print "Wrong operation "
--    * print "equal"
--    * print ": expected "
-+  161 print "Wrong operation equal: expected "
-   162 print false
-   163 print ", but was "
-   164 print __tmp46
- 
-   175 print "ok"
-   176 jump __label55 always
-   177 label __label54
--    * print "Wrong operation "
--    * print "equal null"
-+  178 print "Wrong operation equal null"
-   179 print ": expected "
-   180 print true
-   181 print ", but was "
- 
-   193 print "ok"
-   194 jump __label60 always
-   195 label __label59
--    * print "Wrong operation "
--    * print "notEqual"
-+  196 print "Wrong operation notEqual"
-   197 print ": expected "
-   198 print false
-   199 print ", but was "
- 
-   211 print "ok"
-   212 jump __label65 always
-   213 label __label64
--    * print "Wrong operation "
--    * print "notEqual"
-+  214 print "Wrong operation notEqual"
-   215 print ": expected "
-   216 print true
-   217 print ", but was "
- 
-   229 print "ok"
-   230 jump __label70 always
-   231 label __label69
--    * print "Wrong operation "
--    * print "notEqual null"
-+  232 print "Wrong operation notEqual null"
-   233 print ": expected "
-   234 print false
-   235 print ", but was "
- 
-   247 print "ok"
-   248 jump __label75 always
-   249 label __label74
--    * print "Wrong operation "
--    * print "land"
--    * print ": expected "
-+  250 print "Wrong operation land: expected "
-   251 print false
-   252 print ", but was "
-   253 print __tmp71
- 
-   264 print "ok"
-   265 jump __label80 always
-   266 label __label79
--    * print "Wrong operation "
--    * print "land"
--    * print ": expected "
-+  267 print "Wrong operation land: expected "
-   268 print true
-   269 print ", but was "
-   270 print __tmp76
- 
-   281 print "ok"
-   282 jump __label85 always
-   283 label __label84
--    * print "Wrong operation "
--    * print "lessThan"
-+  284 print "Wrong operation lessThan"
-   285 print ": expected "
-   286 print true
-   287 print ", but was "
- 
-   299 print "ok"
-   300 jump __label90 always
-   301 label __label89
--    * print "Wrong operation "
--    * print "lessThan"
-+  302 print "Wrong operation lessThan"
-   303 print ": expected "
-   304 print false
-   305 print ", but was "
- 
-   317 print "ok"
-   318 jump __label95 always
-   319 label __label94
--    * print "Wrong operation "
--    * print "lessThanEq"
-+  320 print "Wrong operation lessThanEq"
-   321 print ": expected "
-   322 print true
-   323 print ", but was "
- 
-   335 print "ok"
-   336 jump __label100 always
-   337 label __label99
--    * print "Wrong operation "
--    * print "lessThanEq"
-+  338 print "Wrong operation lessThanEq"
-   339 print ": expected "
-   340 print false
-   341 print ", but was "
- 
-   353 print "ok"
-   354 jump __label105 always
-   355 label __label104
--    * print "Wrong operation "
--    * print "greaterThan"
-+  356 print "Wrong operation greaterThan"
-   357 print ": expected "
-   358 print true
-   359 print ", but was "
- 
-   371 print "ok"
-   372 jump __label110 always
-   373 label __label109
--    * print "Wrong operation "
--    * print "greaterThan"
-+  374 print "Wrong operation greaterThan"
-   375 print ": expected "
-   376 print false
-   377 print ", but was "
- 
-   389 print "ok"
-   390 jump __label115 always
-   391 label __label114
--    * print "Wrong operation "
--    * print "greaterThanEq"
-+  392 print "Wrong operation greaterThanEq"
-   393 print ": expected "
-   394 print true
-   395 print ", but was "
- 
-   407 print "ok"
-   408 jump __label120 always
-   409 label __label119
--    * print "Wrong operation "
--    * print "greaterThanEq"
-+  410 print "Wrong operation greaterThanEq"
-   411 print ": expected "
-   412 print false
-   413 print ", but was "
- 
-   425 print "ok"
-   426 jump __label125 always
-   427 label __label124
--    * print "Wrong operation "
--    * print "strictEqual"
-+  428 print "Wrong operation strictEqual"
-   429 print ": expected "
-   430 print false
-   431 print ", but was "
- 
-   442 print "ok"
-   443 jump __label130 always
-   444 label __label129
--    * print "Wrong operation "
--    * print "strictEqual"
-+  445 print "Wrong operation strictEqual"
-   446 print ": expected "
-   447 print true
-   448 print ", but was "
- 
-   460 print "ok"
-   461 jump __label135 always
-   462 label __label134
--    * print "Wrong operation "
--    * print "shl"
--    * print ": expected "
-+  463 print "Wrong operation shl: expected "
-   464 print 4
-   465 print ", but was "
-   466 print __tmp131
- 
-   476 print "ok"
-   477 jump __label140 always
-   478 label __label139
--    * print "Wrong operation "
--    * print "shr"
--    * print ": expected "
-+  479 print "Wrong operation shr: expected "
-   480 print 2
-   481 print ", but was "
-   482 print __tmp136
- 
-   492 print "ok"
-   493 jump __label145 always
-   494 label __label144
--    * print "Wrong operation "
--    * print "or"
--    * print ": expected "
-+  495 print "Wrong operation or: expected "
-   496 print 3
-   497 print ", but was "
-   498 print __tmp141
- 
-   508 print "ok"
-   509 jump __label150 always
-   510 label __label149
--    * print "Wrong operation "
--    * print "and"
--    * print ": expected "
-+  511 print "Wrong operation and: expected "
-   512 print 2
-   513 print ", but was "
-   514 print __tmp146
- 
-   524 print "ok"
-   525 jump __label155 always
-   526 label __label154
--    * print "Wrong operation "
--    * print "xor"
--    * print ": expected "
-+  527 print "Wrong operation xor: expected "
-   528 print 1
-   529 print ", but was "
-   530 print __tmp151
- 
-   541 print "ok"
-   542 jump __label160 always
-   543 label __label159
--    * print "Wrong operation "
--    * print "not"
--    * print ": expected "
-+  544 print "Wrong operation not: expected "
-   545 print -1
-   546 print ", but was "
-   547 print __tmp156
- 
-   558 print "ok"
-   559 jump __label165 always
-   560 label __label164
--    * print "Wrong operation "
--    * print "not"
--    * print ": expected "
-+  561 print "Wrong operation not: expected "
-   562 print -65536
-   563 print ", but was "
-   564 print __tmp161
- 
-   580 print "ok"
-   581 jump __label174 always
-   582 label __label173
--    * print "Wrong operation "
--    * print "max"
--    * print ": expected "
-+  583 print "Wrong operation max: expected "
-   584 print 4
-   585 print ", but was "
-   586 print __tmp172
- 
-   596 print "ok"
-   597 jump __label179 always
-   598 label __label178
--    * print "Wrong operation "
--    * print "min"
--    * print ": expected "
-+  599 print "Wrong operation min: expected "
-   600 print 2
-   601 print ", but was "
-   602 print __tmp177
- 
-   613 print "ok"
-   614 jump __label184 always
-   615 label __label183
--    * print "Wrong operation "
--    * print "abs"
--    * print ": expected "
-+  616 print "Wrong operation abs: expected "
-   617 print 2
-   618 print ", but was "
-   619 print __tmp182
- 
-   630 print "ok"
-   631 jump __label189 always
-   632 label __label188
--    * print "Wrong operation "
--    * print "log"
--    * print ": expected "
-+  633 print "Wrong operation log: expected "
-   634 print 1
-   635 print ", but was "
-   636 print __tmp187
- 
-   647 print "ok"
-   648 jump __label194 always
-   649 label __label193
--    * print "Wrong operation "
--    * print "log10"
--    * print ": expected "
-+  650 print "Wrong operation log10: expected "
-   651 print 1
-   652 print ", but was "
-   653 print __tmp192
- 
-   664 print "ok"
-   665 jump __label199 always
-   666 label __label198
--    * print "Wrong operation "
--    * print "floor"
--    * print ": expected "
-+  667 print "Wrong operation floor: expected "
-   668 print 2
-   669 print ", but was "
-   670 print __tmp197
- 
-   680 print "ok"
-   681 jump __label204 always
-   682 label __label203
--    * print "Wrong operation "
--    * print "ceil"
--    * print ": expected "
-+  683 print "Wrong operation ceil: expected "
-   684 print 3
-   685 print ", but was "
-   686 print __tmp202
- 
-   697 print "ok"
-   698 jump __label209 always
-   699 label __label208
--    * print "Wrong operation "
--    * print "sqrt"
--    * print ": expected "
-+  700 print "Wrong operation sqrt: expected "
-   701 print 4
-   702 print ", but was "
-   703 print __tmp207
- 
-   714 print "ok"
-   715 jump __label214 always
-   716 label __label213
--    * print "Wrong operation "
--    * print "angle"
--    * print ": expected "
-+  717 print "Wrong operation angle: expected "
-   718 print 45
-   719 print ", but was "
-   720 print __tmp212
- 
-   731 print "ok"
-   732 jump __label219 always
-   733 label __label218
--    * print "Wrong operation "
--    * print "angleDiff"
-+  734 print "Wrong operation angleDiff"
-   735 print ": expected "
-   736 print 90
-   737 print ", but was "
- 
-   749 print "ok"
-   750 jump __label224 always
-   751 label __label223
--    * print "Wrong operation "
--    * print "unary minus"
-+  752 print "Wrong operation unary minus"
-   753 print ": expected "
-   754 print -8
-   755 print ", but was "
- 
-   767 print "ok"
-   768 jump __label229 always
-   769 label __label228
--    * print "Wrong operation "
--    * print "boolean negation"
-+  770 print "Wrong operation boolean negation"
-   771 print ": expected "
-   772 print 1
-   773 print ", but was "
- 
-   785 print "ok"
-   786 jump __label234 always
-   787 label __label233
--    * print "Wrong operation "
--    * print "boolean negation"
-+  788 print "Wrong operation boolean negation"
-   789 print ": expected "
-   790 print 0
-   791 print ", but was "
- 
-   803 print "ok"
-   804 jump __label239 always
-   805 label __label238
--    * print "Wrong operation "
--    * print "boolean negation"
-+  806 print "Wrong operation boolean negation"
-   807 print ": expected "
-   808 print 0
-   809 print ", but was "
- 
-   821 print "ok"
-   822 jump __label244 always
-   823 label __label243
--    * print "Wrong operation "
--    * print "**="
--    * print ": expected "
-+  824 print "Wrong operation **=: expected "
-   825 print 16
-   826 print ", but was "
-   827 print a
- 
-   837 print "ok"
-   838 jump __label249 always
-   839 label __label248
--    * print "Wrong operation "
--    * print "*="
--    * print ": expected "
-+  840 print "Wrong operation *=: expected "
-   841 print 8
-   842 print ", but was "
-   843 print a
- 
-   853 print "ok"
-   854 jump __label254 always
-   855 label __label253
--    * print "Wrong operation "
--    * print "/="
--    * print ": expected "
-+  856 print "Wrong operation /=: expected "
-   857 print 1.5
-   858 print ", but was "
-   859 print a
- 
-   869 print "ok"
-   870 jump __label259 always
-   871 label __label258
--    * print "Wrong operation "
--    * print "\="
--    * print ": expected "
-+  872 print "Wrong operation \=: expected "
-   873 print 1
-   874 print ", but was "
-   875 print a
- 
-   885 print "ok"
-   886 jump __label264 always
-   887 label __label263
--    * print "Wrong operation "
--    * print "%="
--    * print ": expected "
-+  888 print "Wrong operation %=: expected "
-   889 print 2
-   890 print ", but was "
-   891 print a
- 
-   902 print "ok"
-   903 jump __label269 always
-   904 label __label268
--    * print "Wrong operation "
--    * print "+="
--    * print ": expected "
-+  905 print "Wrong operation +=: expected "
-   906 print 6
-   907 print ", but was "
-   908 print a
- 
-   918 print "ok"
-   919 jump __label274 always
-   920 label __label273
--    * print "Wrong operation "
--    * print "-="
--    * print ": expected "
-+  921 print "Wrong operation -=: expected "
-   922 print 2
-   923 print ", but was "
-   924 print a
- 
-   934 print "ok"
-   935 jump __label279 always
-   936 label __label278
--    * print "Wrong operation "
--    * print "<<="
--    * print ": expected "
-+  937 print "Wrong operation <<=: expected "
-   938 print 4
-   939 print ", but was "
-   940 print a
- 
-   950 print "ok"
-   951 jump __label284 always
-   952 label __label283
--    * print "Wrong operation "
--    * print ">>="
--    * print ": expected "
-+  953 print "Wrong operation >>=: expected "
-   954 print 2
-   955 print ", but was "
-   956 print a
- 
-   966 print "ok"
-   967 jump __label289 always
-   968 label __label288
--    * print "Wrong operation "
--    * print "|="
--    * print ": expected "
-+  969 print "Wrong operation |=: expected "
-   970 print 3
-   971 print ", but was "
-   972 print a
- 
-   982 print "ok"
-   983 jump __label294 always
-   984 label __label293
--    * print "Wrong operation "
--    * print "&="
--    * print ": expected "
-+  985 print "Wrong operation &=: expected "
-   986 print 2
-   987 print ", but was "
-   988 print a
- 
-   998 print "ok"
-   999 jump __label299 always
-  1000 label __label298
--    * print "Wrong operation "
--    * print "^="
--    * print ": expected "
-+ 1001 print "Wrong operation ^=: expected "
-  1002 print 1
-  1003 print ", but was "
-  1004 print a
- 
-  1015 print "ok"
-  1016 jump __label304 always
-  1017 label __label303
--    * print "Wrong operation "
--    * print "&&="
--    * print ": expected "
-+ 1018 print "Wrong operation &&=: expected "
-  1019 print false
-  1020 print ", but was "
-  1021 print a
- 
-  1032 print "ok"
-  1033 jump __label309 always
-  1034 label __label308
--    * print "Wrong operation "
--    * print "&&="
--    * print ": expected "
-+ 1035 print "Wrong operation &&=: expected "
-  1036 print true
-  1037 print ", but was "
-  1038 print a
- 
-  1048 print "ok"
-  1049 jump __label314 always
-  1050 label __label313
--    * print "Wrong operation "
--    * print "||="
--    * print ": expected "
-+ 1051 print "Wrong operation ||=: expected "
-  1052 print 2
-  1053 print ", but was "
-  1054 print a
 
 Final code before resolving virtual instructions:
 
@@ -5845,7 +5163,9 @@ jump __label4 notEqual __tmp1 5
 print "ok"
 jump __label5 always 0 0
 label __label4
-print "Wrong operation add: expected "
+print "Wrong operation "
+print "add"
+print ": expected "
 print 5
 print ", but was "
 print __tmp1
@@ -5862,7 +5182,9 @@ jump __label9 notEqual __tmp6 1
 print "ok"
 jump __label10 always 0 0
 label __label9
-print "Wrong operation sub: expected "
+print "Wrong operation "
+print "sub"
+print ": expected "
 print 1
 print ", but was "
 print __tmp6
@@ -5879,7 +5201,9 @@ jump __label14 notEqual __tmp11 6
 print "ok"
 jump __label15 always 0 0
 label __label14
-print "Wrong operation mul: expected "
+print "Wrong operation "
+print "mul"
+print ": expected "
 print 6
 print ", but was "
 print __tmp11
@@ -5896,7 +5220,9 @@ jump __label19 notEqual __tmp16 1.5
 print "ok"
 jump __label20 always 0 0
 label __label19
-print "Wrong operation div: expected "
+print "Wrong operation "
+print "div"
+print ": expected "
 print 1.5
 print ", but was "
 print __tmp16
@@ -5913,7 +5239,9 @@ jump __label24 notEqual __tmp21 0.00001
 print "ok"
 jump __label25 always 0 0
 label __label24
-print "Wrong operation div exp: expected "
+print "Wrong operation "
+print "div exp"
+print ": expected "
 print 0.00001
 print ", but was "
 print __tmp21
@@ -5930,7 +5258,9 @@ jump __label29 notEqual __tmp26 1
 print "ok"
 jump __label30 always 0 0
 label __label29
-print "Wrong operation idiv: expected "
+print "Wrong operation "
+print "idiv"
+print ": expected "
 print 1
 print ", but was "
 print __tmp26
@@ -5946,7 +5276,9 @@ jump __label34 notEqual __tmp31 2
 print "ok"
 jump __label35 always 0 0
 label __label34
-print "Wrong operation mod: expected "
+print "Wrong operation "
+print "mod"
+print ": expected "
 print 2
 print ", but was "
 print __tmp31
@@ -5962,7 +5294,9 @@ jump __label39 notEqual __tmp36 16
 print "ok"
 jump __label40 always 0 0
 label __label39
-print "Wrong operation pow: expected "
+print "Wrong operation "
+print "pow"
+print ": expected "
 print 16
 print ", but was "
 print __tmp36
@@ -5979,7 +5313,9 @@ jump __label44 notEqual __tmp41 true
 print "ok"
 jump __label45 always 0 0
 label __label44
-print "Wrong operation equal: expected "
+print "Wrong operation "
+print "equal"
+print ": expected "
 print true
 print ", but was "
 print __tmp41
@@ -5996,7 +5332,9 @@ jump __label49 notEqual __tmp46 false
 print "ok"
 jump __label50 always 0 0
 label __label49
-print "Wrong operation equal: expected "
+print "Wrong operation "
+print "equal"
+print ": expected "
 print false
 print ", but was "
 print __tmp46
@@ -6013,7 +5351,8 @@ jump __label54 notEqual __tmp51 true
 print "ok"
 jump __label55 always 0 0
 label __label54
-print "Wrong operation equal null"
+print "Wrong operation "
+print "equal null"
 print ": expected "
 print true
 print ", but was "
@@ -6031,7 +5370,8 @@ jump __label59 notEqual __tmp56 false
 print "ok"
 jump __label60 always 0 0
 label __label59
-print "Wrong operation notEqual"
+print "Wrong operation "
+print "notEqual"
 print ": expected "
 print false
 print ", but was "
@@ -6049,7 +5389,8 @@ jump __label64 notEqual __tmp61 true
 print "ok"
 jump __label65 always 0 0
 label __label64
-print "Wrong operation notEqual"
+print "Wrong operation "
+print "notEqual"
 print ": expected "
 print true
 print ", but was "
@@ -6067,7 +5408,8 @@ jump __label69 notEqual __tmp66 false
 print "ok"
 jump __label70 always 0 0
 label __label69
-print "Wrong operation notEqual null"
+print "Wrong operation "
+print "notEqual null"
 print ": expected "
 print false
 print ", but was "
@@ -6085,7 +5427,9 @@ jump __label74 notEqual __tmp71 false
 print "ok"
 jump __label75 always 0 0
 label __label74
-print "Wrong operation land: expected "
+print "Wrong operation "
+print "land"
+print ": expected "
 print false
 print ", but was "
 print __tmp71
@@ -6102,7 +5446,9 @@ jump __label79 notEqual __tmp76 true
 print "ok"
 jump __label80 always 0 0
 label __label79
-print "Wrong operation land: expected "
+print "Wrong operation "
+print "land"
+print ": expected "
 print true
 print ", but was "
 print __tmp76
@@ -6119,7 +5465,8 @@ jump __label84 notEqual __tmp81 true
 print "ok"
 jump __label85 always 0 0
 label __label84
-print "Wrong operation lessThan"
+print "Wrong operation "
+print "lessThan"
 print ": expected "
 print true
 print ", but was "
@@ -6137,7 +5484,8 @@ jump __label89 notEqual __tmp86 false
 print "ok"
 jump __label90 always 0 0
 label __label89
-print "Wrong operation lessThan"
+print "Wrong operation "
+print "lessThan"
 print ": expected "
 print false
 print ", but was "
@@ -6155,7 +5503,8 @@ jump __label94 notEqual __tmp91 true
 print "ok"
 jump __label95 always 0 0
 label __label94
-print "Wrong operation lessThanEq"
+print "Wrong operation "
+print "lessThanEq"
 print ": expected "
 print true
 print ", but was "
@@ -6173,7 +5522,8 @@ jump __label99 notEqual __tmp96 false
 print "ok"
 jump __label100 always 0 0
 label __label99
-print "Wrong operation lessThanEq"
+print "Wrong operation "
+print "lessThanEq"
 print ": expected "
 print false
 print ", but was "
@@ -6191,7 +5541,8 @@ jump __label104 notEqual __tmp101 true
 print "ok"
 jump __label105 always 0 0
 label __label104
-print "Wrong operation greaterThan"
+print "Wrong operation "
+print "greaterThan"
 print ": expected "
 print true
 print ", but was "
@@ -6209,7 +5560,8 @@ jump __label109 notEqual __tmp106 false
 print "ok"
 jump __label110 always 0 0
 label __label109
-print "Wrong operation greaterThan"
+print "Wrong operation "
+print "greaterThan"
 print ": expected "
 print false
 print ", but was "
@@ -6227,7 +5579,8 @@ jump __label114 notEqual __tmp111 true
 print "ok"
 jump __label115 always 0 0
 label __label114
-print "Wrong operation greaterThanEq"
+print "Wrong operation "
+print "greaterThanEq"
 print ": expected "
 print true
 print ", but was "
@@ -6245,7 +5598,8 @@ jump __label119 notEqual __tmp116 false
 print "ok"
 jump __label120 always 0 0
 label __label119
-print "Wrong operation greaterThanEq"
+print "Wrong operation "
+print "greaterThanEq"
 print ": expected "
 print false
 print ", but was "
@@ -6263,7 +5617,8 @@ jump __label124 notEqual __tmp121 false
 print "ok"
 jump __label125 always 0 0
 label __label124
-print "Wrong operation strictEqual"
+print "Wrong operation "
+print "strictEqual"
 print ": expected "
 print false
 print ", but was "
@@ -6280,7 +5635,8 @@ jump __label129 notEqual __tmp126 true
 print "ok"
 jump __label130 always 0 0
 label __label129
-print "Wrong operation strictEqual"
+print "Wrong operation "
+print "strictEqual"
 print ": expected "
 print true
 print ", but was "
@@ -6298,7 +5654,9 @@ jump __label134 notEqual __tmp131 4
 print "ok"
 jump __label135 always 0 0
 label __label134
-print "Wrong operation shl: expected "
+print "Wrong operation "
+print "shl"
+print ": expected "
 print 4
 print ", but was "
 print __tmp131
@@ -6314,7 +5672,9 @@ jump __label139 notEqual __tmp136 2
 print "ok"
 jump __label140 always 0 0
 label __label139
-print "Wrong operation shr: expected "
+print "Wrong operation "
+print "shr"
+print ": expected "
 print 2
 print ", but was "
 print __tmp136
@@ -6330,7 +5690,9 @@ jump __label144 notEqual __tmp141 3
 print "ok"
 jump __label145 always 0 0
 label __label144
-print "Wrong operation or: expected "
+print "Wrong operation "
+print "or"
+print ": expected "
 print 3
 print ", but was "
 print __tmp141
@@ -6346,7 +5708,9 @@ jump __label149 notEqual __tmp146 2
 print "ok"
 jump __label150 always 0 0
 label __label149
-print "Wrong operation and: expected "
+print "Wrong operation "
+print "and"
+print ": expected "
 print 2
 print ", but was "
 print __tmp146
@@ -6362,7 +5726,9 @@ jump __label154 notEqual __tmp151 1
 print "ok"
 jump __label155 always 0 0
 label __label154
-print "Wrong operation xor: expected "
+print "Wrong operation "
+print "xor"
+print ": expected "
 print 1
 print ", but was "
 print __tmp151
@@ -6379,7 +5745,9 @@ jump __label159 notEqual __tmp156 -1
 print "ok"
 jump __label160 always 0 0
 label __label159
-print "Wrong operation not: expected "
+print "Wrong operation "
+print "not"
+print ": expected "
 print -1
 print ", but was "
 print __tmp156
@@ -6396,7 +5764,9 @@ jump __label164 notEqual __tmp161 -65536
 print "ok"
 jump __label165 always 0 0
 label __label164
-print "Wrong operation not: expected "
+print "Wrong operation "
+print "not"
+print ": expected "
 print -65536
 print ", but was "
 print __tmp161
@@ -6418,7 +5788,9 @@ jump __label173 notEqual __tmp172 4
 print "ok"
 jump __label174 always 0 0
 label __label173
-print "Wrong operation max: expected "
+print "Wrong operation "
+print "max"
+print ": expected "
 print 4
 print ", but was "
 print __tmp172
@@ -6434,7 +5806,9 @@ jump __label178 notEqual __tmp177 2
 print "ok"
 jump __label179 always 0 0
 label __label178
-print "Wrong operation min: expected "
+print "Wrong operation "
+print "min"
+print ": expected "
 print 2
 print ", but was "
 print __tmp177
@@ -6451,7 +5825,9 @@ jump __label183 notEqual __tmp182 2
 print "ok"
 jump __label184 always 0 0
 label __label183
-print "Wrong operation abs: expected "
+print "Wrong operation "
+print "abs"
+print ": expected "
 print 2
 print ", but was "
 print __tmp182
@@ -6468,7 +5844,9 @@ jump __label188 notEqual __tmp187 1
 print "ok"
 jump __label189 always 0 0
 label __label188
-print "Wrong operation log: expected "
+print "Wrong operation "
+print "log"
+print ": expected "
 print 1
 print ", but was "
 print __tmp187
@@ -6485,7 +5863,9 @@ jump __label193 notEqual __tmp192 1
 print "ok"
 jump __label194 always 0 0
 label __label193
-print "Wrong operation log10: expected "
+print "Wrong operation "
+print "log10"
+print ": expected "
 print 1
 print ", but was "
 print __tmp192
@@ -6502,7 +5882,9 @@ jump __label198 notEqual __tmp197 2
 print "ok"
 jump __label199 always 0 0
 label __label198
-print "Wrong operation floor: expected "
+print "Wrong operation "
+print "floor"
+print ": expected "
 print 2
 print ", but was "
 print __tmp197
@@ -6518,7 +5900,9 @@ jump __label203 notEqual __tmp202 3
 print "ok"
 jump __label204 always 0 0
 label __label203
-print "Wrong operation ceil: expected "
+print "Wrong operation "
+print "ceil"
+print ": expected "
 print 3
 print ", but was "
 print __tmp202
@@ -6535,7 +5919,9 @@ jump __label208 notEqual __tmp207 4
 print "ok"
 jump __label209 always 0 0
 label __label208
-print "Wrong operation sqrt: expected "
+print "Wrong operation "
+print "sqrt"
+print ": expected "
 print 4
 print ", but was "
 print __tmp207
@@ -6552,7 +5938,9 @@ jump __label213 notEqual __tmp212 45
 print "ok"
 jump __label214 always 0 0
 label __label213
-print "Wrong operation angle: expected "
+print "Wrong operation "
+print "angle"
+print ": expected "
 print 45
 print ", but was "
 print __tmp212
@@ -6569,7 +5957,8 @@ jump __label218 notEqual __tmp217 90
 print "ok"
 jump __label219 always 0 0
 label __label218
-print "Wrong operation angleDiff"
+print "Wrong operation "
+print "angleDiff"
 print ": expected "
 print 90
 print ", but was "
@@ -6587,7 +5976,8 @@ jump __label223 notEqual __tmp222 -8
 print "ok"
 jump __label224 always 0 0
 label __label223
-print "Wrong operation unary minus"
+print "Wrong operation "
+print "unary minus"
 print ": expected "
 print -8
 print ", but was "
@@ -6605,7 +5995,8 @@ jump __label228 notEqual __tmp227 1
 print "ok"
 jump __label229 always 0 0
 label __label228
-print "Wrong operation boolean negation"
+print "Wrong operation "
+print "boolean negation"
 print ": expected "
 print 1
 print ", but was "
@@ -6623,7 +6014,8 @@ jump __label233 notEqual __tmp232 0
 print "ok"
 jump __label234 always 0 0
 label __label233
-print "Wrong operation boolean negation"
+print "Wrong operation "
+print "boolean negation"
 print ": expected "
 print 0
 print ", but was "
@@ -6641,7 +6033,8 @@ jump __label238 notEqual __tmp237 0
 print "ok"
 jump __label239 always 0 0
 label __label238
-print "Wrong operation boolean negation"
+print "Wrong operation "
+print "boolean negation"
 print ": expected "
 print 0
 print ", but was "
@@ -6659,7 +6052,9 @@ jump __label243 notEqual a 16
 print "ok"
 jump __label244 always 0 0
 label __label243
-print "Wrong operation **=: expected "
+print "Wrong operation "
+print "**="
+print ": expected "
 print 16
 print ", but was "
 print a
@@ -6675,7 +6070,9 @@ jump __label248 notEqual a 8
 print "ok"
 jump __label249 always 0 0
 label __label248
-print "Wrong operation *=: expected "
+print "Wrong operation "
+print "*="
+print ": expected "
 print 8
 print ", but was "
 print a
@@ -6691,7 +6088,9 @@ jump __label253 notEqual a 1.5
 print "ok"
 jump __label254 always 0 0
 label __label253
-print "Wrong operation /=: expected "
+print "Wrong operation "
+print "/="
+print ": expected "
 print 1.5
 print ", but was "
 print a
@@ -6707,7 +6106,9 @@ jump __label258 notEqual a 1
 print "ok"
 jump __label259 always 0 0
 label __label258
-print "Wrong operation \=: expected "
+print "Wrong operation "
+print "\="
+print ": expected "
 print 1
 print ", but was "
 print a
@@ -6723,7 +6124,9 @@ jump __label263 notEqual a 2
 print "ok"
 jump __label264 always 0 0
 label __label263
-print "Wrong operation %=: expected "
+print "Wrong operation "
+print "%="
+print ": expected "
 print 2
 print ", but was "
 print a
@@ -6740,7 +6143,9 @@ jump __label268 notEqual a 6
 print "ok"
 jump __label269 always 0 0
 label __label268
-print "Wrong operation +=: expected "
+print "Wrong operation "
+print "+="
+print ": expected "
 print 6
 print ", but was "
 print a
@@ -6756,7 +6161,9 @@ jump __label273 notEqual a 2
 print "ok"
 jump __label274 always 0 0
 label __label273
-print "Wrong operation -=: expected "
+print "Wrong operation "
+print "-="
+print ": expected "
 print 2
 print ", but was "
 print a
@@ -6772,7 +6179,9 @@ jump __label278 notEqual a 4
 print "ok"
 jump __label279 always 0 0
 label __label278
-print "Wrong operation <<=: expected "
+print "Wrong operation "
+print "<<="
+print ": expected "
 print 4
 print ", but was "
 print a
@@ -6788,7 +6197,9 @@ jump __label283 notEqual a 2
 print "ok"
 jump __label284 always 0 0
 label __label283
-print "Wrong operation >>=: expected "
+print "Wrong operation "
+print ">>="
+print ": expected "
 print 2
 print ", but was "
 print a
@@ -6804,7 +6215,9 @@ jump __label288 notEqual a 3
 print "ok"
 jump __label289 always 0 0
 label __label288
-print "Wrong operation |=: expected "
+print "Wrong operation "
+print "|="
+print ": expected "
 print 3
 print ", but was "
 print a
@@ -6820,7 +6233,9 @@ jump __label293 notEqual a 2
 print "ok"
 jump __label294 always 0 0
 label __label293
-print "Wrong operation &=: expected "
+print "Wrong operation "
+print "&="
+print ": expected "
 print 2
 print ", but was "
 print a
@@ -6836,7 +6251,9 @@ jump __label298 notEqual a 1
 print "ok"
 jump __label299 always 0 0
 label __label298
-print "Wrong operation ^=: expected "
+print "Wrong operation "
+print "^="
+print ": expected "
 print 1
 print ", but was "
 print a
@@ -6853,7 +6270,9 @@ jump __label303 notEqual a false
 print "ok"
 jump __label304 always 0 0
 label __label303
-print "Wrong operation &&=: expected "
+print "Wrong operation "
+print "&&="
+print ": expected "
 print false
 print ", but was "
 print a
@@ -6870,7 +6289,9 @@ jump __label308 notEqual a true
 print "ok"
 jump __label309 always 0 0
 label __label308
-print "Wrong operation &&=: expected "
+print "Wrong operation "
+print "&&="
+print ": expected "
 print true
 print ", but was "
 print a
@@ -6886,7 +6307,9 @@ jump __label313 notEqual a 2
 print "ok"
 jump __label314 always 0 0
 label __label313
-print "Wrong operation ||=: expected "
+print "Wrong operation "
+print "||="
+print ": expected "
 print 2
 print ", but was "
 print a

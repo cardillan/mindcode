@@ -5,11 +5,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.grammar.MindcodeBaseVisitor;
 import info.teksol.mindcode.grammar.MindcodeParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public static final String AST_PREFIX = "__ast";
@@ -604,7 +600,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         return new FunctionDeclaration(ctx.getStart(),
                 ctx.fundecl().inline != null,
                 ctx.fundecl().name.getText(),
-                params.stream().map(a -> (VarRef)a).toList(),
+                params.stream().map(VarRef.class::cast).toList(),
                 visit(ctx.fundecl().body)
         );
     }

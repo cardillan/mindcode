@@ -5,13 +5,7 @@ import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates.VariableValue;
-import info.teksol.mindcode.logic.LogicBoolean;
-import info.teksol.mindcode.logic.LogicLiteral;
-import info.teksol.mindcode.logic.LogicNull;
-import info.teksol.mindcode.logic.LogicNumber;
-import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 import info.teksol.mindcode.processor.MindustryValue;
 
@@ -172,12 +166,12 @@ public class OptimizerExpressionEvaluator {
         return op;
     }
 
-    private LogicLiteral evaluate(Operation operation, MindustryValue a, MindustryValue b) {
+    public LogicLiteral evaluate(Operation operation, MindustryValue a, MindustryValue b) {
         ExpressionEvaluator.getOperation(operation).execute(expressionValue, a, b);
         return expressionValue.getLiteral();
     }
 
-    public LogicBoolean evaluateJump(JumpInstruction jump) {
+    public LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
         if (jump.isUnconditional()) {
             return LogicBoolean.TRUE;
         } else if (jump.getX() instanceof LogicLiteral x && jump.getY() instanceof LogicLiteral y) {

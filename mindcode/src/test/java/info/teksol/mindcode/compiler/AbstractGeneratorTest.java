@@ -20,15 +20,25 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     // TODO Merge with MindcodeOptimizer
     protected class TestCompiler {
-        public final List<CompilerMessage> messages = new ArrayList<>();
+        private final List<CompilerMessage> messages = new ArrayList<>();
+        private final List<CompilerMessage> readOnlyMessages = Collections.unmodifiableList(messages);
         public final CompilerProfile profile;
         public final InstructionProcessor processor;
         public final LogicInstructionGenerator generator;
 
         public TestCompiler(CompilerProfile profile) {
             this.profile = profile;
-            processor = createInstructionProcessor(profile, messages::add);
-            generator = new LogicInstructionGenerator(profile, processor, messages::add);
+            processor = createInstructionProcessor(profile, this::addMessage);
+            generator = new LogicInstructionGenerator(profile, processor, this::addMessage);
+        }
+
+        public void addMessage(CompilerMessage message) {
+            //System.out.println(message.message());
+            messages.add(message);
+        }
+
+        public List<CompilerMessage> getMessages() {
+            return readOnlyMessages;
         }
 
         public TestCompiler() {
@@ -99,7 +109,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected void assertGeneratesWarnings(String code, String expectedWarnings) {
         TestCompiler compiler = createTestCompiler();
         assertCompilesToWithMessages(compiler, ix ->false, s -> true, code);
-        assertEquals(expectedWarnings, extractWarnings(compiler.messages));
+        assertEquals(expectedWarnings, extractWarnings(compiler.getMessages()));
     }
 
     // General utility
@@ -164,11 +174,11 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
         long parse = System.nanoTime();
         Seq program = generateAstTree(code);
-        compiler.messages.add(new TimingMessage("Parse", ((System.nanoTime() - parse) / 1_000_000L)));
+        compiler.addMessage(new TimingMessage("Parse", ((System.nanoTime() - parse) / 1_000_000L)));
 
         long compile = System.nanoTime();
         GeneratorOutput output = compiler.generator.generate(program);
-        compiler.messages.add(new TimingMessage("Compile", ((System.nanoTime() - compile) / 1_000_000L)));
+        compiler.addMessage(new TimingMessage("Compile", ((System.nanoTime() - compile) / 1_000_000L)));
 
         return output;
     }
@@ -217,8 +227,8 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     protected String formatMessages(TestCompiler compiler) {
-        return compiler.messages.isEmpty() ? "" : "\nGenerated messages:\n"
-                + compiler.messages.stream().map(CompilerMessage::message).collect(Collectors.joining("\n")) ;
+        return compiler.getMessages().isEmpty() ? "" : "\nGenerated messages:\n"
+                + compiler.getMessages().stream().map(CompilerMessage::message).collect(Collectors.joining("\n")) ;
     }
 
     protected String createDifferentCodeSizeMessage(TestCompiler compiler, List<LogicInstruction> actual) {
@@ -284,7 +294,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     protected void assertNoUnexpectedMessages(TestCompiler compiler, Predicate<String> ignoredMessagesFilter) {
-        String messages = compiler.messages.stream()
+        String messages = compiler.getMessages().stream()
                 .filter(CompilerMessage::isErrorOrWarning)
                 .map(CompilerMessage::message)
                 .filter(ignoredMessagesFilter.negate())

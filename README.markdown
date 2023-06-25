@@ -13,12 +13,14 @@ The main focus of Mindcode design is two-fold:
 
 Some of the latest enhancements to Mindcode are:
 
+* [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling), a powerful optimization which converts 
+  loops with fixed number of iterations into linear series of instructions.
 * Added support for the new [`angleDiff` operation](doc/syntax/FUNCTIONS_V7.markdown#instruction-op) in Mindustry v145.
 * [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in 
   Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic, 
   either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the 
   code (specified in Mindcode or Mindustry Logic language) and linked blocks.
-* [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
+* [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
   and streamlines complex expressions, eliminates unnecessary variables and instructions, and reuses common cde 
   fragments, significantly improving the quality of the generated mlog code.
 
@@ -688,6 +690,12 @@ pressing the _Environment Variables..._ button.)
 Then, using the same console window, run:
 
 ```
+mvnw.cmd install
+```
+
+to build the app, and then
+
+```
 bin\webapp.bat
 ```
 
@@ -705,7 +713,13 @@ export SPRING_DATASOURCE_PASSWORD=postgres_password
 
 Then run:
 
+```bash
+mvnw install
 ```
+
+to build the app, and then
+
+```bash
 bin/run-local
 ```
 

@@ -46,7 +46,7 @@ Mindcode is also aware of the actual values you assign to variables. In some cas
 Mindcode to perform specific code optimizations that are only valid for the value you've assigned to the variable in 
 the source code. This, however, can interfere with the possibility to modify the compiled code directly.
 
-The [Data Flow optimization](SYNTAX-5-OTHER.markdown#data-flow-optimization) performs the optimizations described 
+The [Data Flow Optimization](SYNTAX-5-OTHER.markdown#data-flow-optimization) performs the optimizations described 
 above. When its optimization level is set to `basic`, the optimizer leaves main variables alone and produces code 
 which fully supports making changes to them. When the optimization level is set to `aggressive`, assignments of 
 constants to main variables may be completely removed from code and parts of the code specific to other values of 
@@ -61,7 +61,7 @@ if debug
 end
 ```
 
-When compiled with Data Flow optimization level set to `agressive`, all of the above code will be eliminated, as the 
+When compiled with Data Flow Optimization level set to `agressive`, all of the above code will be eliminated, as the 
 debugging information isn't printed out.
 
 [Global variables](#global-variables) are never optimized in his fashion regardless of optimization level and are 

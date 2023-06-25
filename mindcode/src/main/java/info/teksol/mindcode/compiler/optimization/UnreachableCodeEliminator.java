@@ -1,14 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.CallInstruction;
-import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
-import info.teksol.mindcode.compiler.instructions.EndInstruction;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.ReturnInstruction;
-import info.teksol.mindcode.compiler.instructions.SetAddressInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 
@@ -31,14 +24,14 @@ import java.util.stream.Stream;
  * Labels - even inactive ones - are never removed.
  */
 class UnreachableCodeEliminator extends BaseOptimizer {
-    public UnreachableCodeEliminator(InstructionProcessor instructionProcessor) {
-        super(Optimization.UNREACHABLE_CODE_ELIMINATION, instructionProcessor);
+    public UnreachableCodeEliminator(OptimizationContext optimizationContext) {
+        super(Optimization.UNREACHABLE_CODE_ELIMINATION, optimizationContext);
     }
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         removeUnreachableInstructions(findActiveLabels());
-        return true;
+        return wasUpdated();
     }
 
     private Set<LogicLabel> findActiveLabels() {

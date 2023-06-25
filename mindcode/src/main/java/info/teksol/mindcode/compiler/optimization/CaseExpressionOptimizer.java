@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicVariable;
 
@@ -29,14 +29,14 @@ import java.util.List;
  */
 
 class CaseExpressionOptimizer extends BaseOptimizer {
-    public CaseExpressionOptimizer(InstructionProcessor instructionProcessor) {
-        super(Optimization.CASE_EXPRESSION_OPTIMIZATION, instructionProcessor);
+    public CaseExpressionOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.CASE_EXPRESSION_OPTIMIZATION, optimizationContext);
     }
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
         try (LogicIterator it = createIterator()) {
-            while (it.hasNext()){
+            while (it.hasNext()) {
                 if (it.next() instanceof SetInstruction ix && ix.getResult().getType() == ArgumentType.AST_VARIABLE) {
                     LogicVariable result = ix.getResult();
                     List<LogicInstruction> list = instructions(

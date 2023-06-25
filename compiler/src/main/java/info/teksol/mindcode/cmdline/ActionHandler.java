@@ -15,14 +15,10 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
 
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -61,6 +57,12 @@ abstract class ActionHandler {
                         " version 7 rev. A with standard processor or world processor)")
                 .choices("6", "7s", "7w", "7as", "7aw")
                 .setDefault("7w");
+
+        subparser.addArgument("-e", "--passes")
+                .help("sets maximal number of optimization passes to be made")
+                .choices(Arguments.range(1, CompilerProfile.MAX_PASSES))
+                .type(Integer.class)
+                .setDefault(CompilerProfile.DEFAULT_CMDLINE_PASSES);
 
         subparser.addArgument("-g", "--goal")
                 .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
@@ -119,6 +121,7 @@ abstract class ActionHandler {
 
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
         profile.setDebugLevel(arguments.getInt("debug_messages"));
+        profile.setOptimizationPasses(arguments.get("passes"));
         profile.setGoal(arguments.get("goal"));
         profile.setMemoryModel(arguments.get("memory_model"));
         profile.setFinalCodeOutput(arguments.get("print_unresolved"));

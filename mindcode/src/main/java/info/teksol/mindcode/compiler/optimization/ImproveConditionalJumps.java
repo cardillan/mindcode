@@ -1,10 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.Operation;
 
@@ -33,8 +33,8 @@ import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
  */
 public class ImproveConditionalJumps extends BaseOptimizer {
 
-    ImproveConditionalJumps(InstructionProcessor instructionProcessor) {
-        super(Optimization.CONDITIONAL_JUMPS_IMPROVEMENT, instructionProcessor);
+    ImproveConditionalJumps(OptimizationContext optimizationContext) {
+        super(Optimization.CONDITIONAL_JUMPS_IMPROVEMENT, optimizationContext);
     }
 
     @Override

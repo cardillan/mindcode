@@ -5,11 +5,7 @@ import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.Operation;
 import info.teksol.mindcode.mimex.Icons;
-import info.teksol.mindcode.processor.DoubleVariable;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
-import info.teksol.mindcode.processor.OperationEval;
-import info.teksol.mindcode.processor.StringVariable;
-import info.teksol.mindcode.processor.Variable;
+import info.teksol.mindcode.processor.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -126,8 +122,8 @@ public class ConstantExpressionEvaluator {
         if (eval != null && numArgs == node.getParams().size()) {
             List<ConstantAstNode> evaluated = node.getParams().stream()
                     .map(this::evaluateInner)
-                    .filter(n -> n instanceof ConstantAstNode)
-                    .map(n -> (ConstantAstNode) n)
+                    .filter(ConstantAstNode.class::isInstance)
+                    .map(ConstantAstNode.class::cast)
                     .toList();
 
             if (evaluated.size() == numArgs) {

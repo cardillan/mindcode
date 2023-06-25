@@ -1,8 +1,8 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 
 /**
  * This optimizer detects situations where a conditional jump skips a following, unconditional one and replaces it
@@ -30,8 +30,8 @@ import info.teksol.mindcode.compiler.instructions.LabelInstruction;
  */
 public class JumpOverJumpEliminator extends BaseOptimizer {
 
-    public JumpOverJumpEliminator(InstructionProcessor instructionProcessor) {
-        super(Optimization.JUMP_OVER_JUMP_ELIMINATION, instructionProcessor);
+    public JumpOverJumpEliminator(OptimizationContext optimizationContext) {
+        super(Optimization.JUMP_OVER_JUMP_ELIMINATION, optimizationContext);
     }
 
     @Override

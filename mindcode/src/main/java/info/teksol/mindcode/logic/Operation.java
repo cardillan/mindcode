@@ -115,7 +115,7 @@ public enum Operation implements LogicArgument {
 
     public boolean isCommutative() {
         return switch(this) {
-            case ADD, MUL, LAND, OR, AND, XOR, MIN, MAX -> true;
+            case EQUAL, NOT_EQUAL, STRICT_EQUAL, ADD, MUL, LAND, OR, AND, XOR, MIN, MAX -> true;
             default -> false;
         };
     }

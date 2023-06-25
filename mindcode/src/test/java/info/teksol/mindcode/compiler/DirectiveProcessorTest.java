@@ -31,6 +31,15 @@ class DirectiveProcessorTest {
     }
 
     @Test
+    void processesDirectivePasses() {
+        CompilerProfile profile = CompilerProfile.noOptimizations();
+        profile.setOptimizationPasses(1);
+        Seq seq = new Seq(null, new Directive(null, "passes", "10"));
+        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        assertEquals(10, profile.getOptimizationPasses());
+    }
+
+    @Test
     void processesDirectiveGoal() {
         CompilerProfile profile = CompilerProfile.noOptimizations();
         profile.setGoal(GenerationGoal.SIZE);

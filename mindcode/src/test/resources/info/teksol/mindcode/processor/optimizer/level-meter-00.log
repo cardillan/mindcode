@@ -1,11 +1,11 @@
    221 instructions before optimizations.
-    22 instructions eliminated by Temp Variables Elimination (3 iterations).
+    22 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Jump Normalization (3 iterations).
     17 instructions eliminated by Dead Code Elimination (3 iterations).
      6 instructions eliminated by Conditional Jump Optimization (3 iterations).
      5 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
-     4 instructions added by Loop Optimization (2 iterations).
-     3 loops improved by LoopOptimizer.
+     1 instructions added by Loop Optimization (2 iterations).
+     3 loops improved by Loop Optimization.
     17 instructions modified by Data Flow Optimization (5 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      8 instructions eliminated by Jump Straightening.
@@ -13,7 +13,10 @@
      4 instructions eliminated by Print Merging.
    158 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Pass 1: speed optimization selection (cost limit 829):
+  * Loop Optimization: replicate condition at line 116 cost   1, benefit       25,0, efficiency       25,0
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-22 instructions):
      0 set TICKS 60
      1 set M_START_INDEX 0
 -    * op add __tmp0 M_START_INDEX 1
@@ -121,7 +124,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
    203 jump __label35 equal __tmp40 false
    204 set index START_INDEX
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-17 instructions):
  
     25 jump __label7 always
     26 label __label8
@@ -235,7 +238,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
    193 write index MEMORY M_START_INDEX
    194 write scaled MEMORY index
 
-Modifications by Jump Normalization, pass 2, iteration 1:
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
      8 op add M_G1 M_R1 1
      9 op add M_B1 M_G1 1
@@ -245,7 +248,7 @@ Modifications by Jump Normalization, pass 2, iteration 1:
     12 set CONTAINER null
     13 set MEMORY null
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-6 instructions):
  
     13 set MEMORY null
     14 set n @links
@@ -296,7 +299,7 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
    183 jump __label36 always
    184 label __label35
 
-Modifications by Single Step Elimination, pass 2, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-4 instructions):
  
    108 set R1 255
    109 set G1 255
@@ -329,58 +332,7 @@ Modifications by Single Step Elimination, pass 2, iteration 1:
    181 label __label36
    182 write index MEMORY M_START_INDEX
 
-Modifications by Loop Optimization, pass 2, iteration 1:
- 
-    14 set n @links
-    15 label __label3
-    16 jump __label5 lessThanEq n 0
-+   17 label __label37
-    18 op sub n n 1
-    19 getlink block n
-    20 print "\nFound: "
- 
-   112 label __label21
-   113 label __label6
-   114 label __label4
--    * jump __label3 always
-+  115 jump __label37 greaterThan n 0
-   116 label __label5
-   117 print "\nMessage: "
-   118 print MESSAGE
- 
-   152 label __label25
-   153 sensor __tmp22 SWITCH @enabled
-   154 jump __label27 notEqual __tmp22 0
-+  155 label __label38
-   156 set startTime @time
-   157 set prevTick nextTick
-   158 op add nextTick nextTick TICKS
- 
-   164 label __label29
-   165 label __label30
-   166 jump __label32 greaterThanEq @tick nextTick
-+  167 label __label39
-   168 jump __label33 greaterThanEq @tick prevTick
-   169 end
-   170 label __label33
-   171 label __label34
-   172 label __label31
--    * jump __label30 always
-+  173 jump __label39 lessThan @tick nextTick
-   174 label __label32
-   175 sensor amount CONTAINER SENSOR
-   176 sensor max CONTAINER MAXIMUM
- 
-   205 print "\n"
-   206 printflush MESSAGE
-   207 label __label26
--    * jump __label25 always
-+  208 sensor __tmp22 SWITCH @enabled
-+  209 jump __label38 equal __tmp22 0
-   210 label __label27
-   211 end
-
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set TICKS 60
      1 set M_START_INDEX 0
      2 op add M_CURRENT_INDEX M_START_INDEX 1
@@ -402,7 +354,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 1:
     11 print "Item/Liquid/Energy Level Meter"
     12 set CONTAINER null
 
-Modifications by Data Flow Optimization, pass 2, iteration 2:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
      1 set M_START_INDEX 0
      2 op add M_CURRENT_INDEX M_START_INDEX 1
@@ -423,7 +375,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 2:
     11 print "Item/Liquid/Energy Level Meter"
     12 set CONTAINER null
 
-Modifications by Data Flow Optimization, pass 2, iteration 3:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  
      3 op add M_END_INDEX M_START_INDEX 2
      4 op add M_R0 M_START_INDEX 3
@@ -440,7 +392,60 @@ Modifications by Data Flow Optimization, pass 2, iteration 3:
     11 print "Item/Liquid/Energy Level Meter"
     12 set CONTAINER null
 
-Modifications by Jump Straightening, pass 3, iteration 1:
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    14 set n @links
+    15 label __label3
+    16 jump __label5 lessThanEq n 0
++   17 label __label37
+    18 op sub n n 1
+    19 getlink block n
+    20 print "\nFound: "
+ 
+   112 label __label21
+   113 label __label6
+   114 label __label4
+-    * jump __label3 always
++  115 jump __label37 greaterThan n 0
+   116 label __label5
+   117 print "\nMessage: "
+   118 print MESSAGE
+ 
+   163 label __label29
+   164 label __label30
+   165 jump __label32 greaterThanEq @tick nextTick
++  166 label __label38
+   167 jump __label33 greaterThanEq @tick prevTick
+   168 end
+   169 label __label33
+   170 label __label34
+   171 label __label31
+-    * jump __label30 always
++  172 jump __label38 lessThan @tick nextTick
+   173 label __label32
+   174 sensor amount CONTAINER SENSOR
+   175 sensor max CONTAINER MAXIMUM
+
+Modifications by Loop Optimization: replicate condition at line 116 (+1 instructions):
+ 
+   152 label __label25
+   153 sensor __tmp22 SWITCH @enabled
+   154 jump __label27 notEqual __tmp22 0
++  155 label __label39
+   156 set startTime @time
+   157 set prevTick nextTick
+   158 op add nextTick nextTick TICKS
+ 
+   205 print "\n"
+   206 printflush MESSAGE
+   207 label __label26
+-    * jump __label25 always
++  208 sensor __tmp22 SWITCH @enabled
++  209 jump __label39 equal __tmp22 0
+   210 label __label27
+   211 end
+
+Modifications by Final phase, Jump Straightening, iteration 1 (-8 instructions):
  
     20 print "\nFound: "
     21 print block
@@ -516,7 +521,7 @@ Modifications by Jump Straightening, pass 3, iteration 1:
     95 set CONTAINER block
     96 set SENSOR @powerNetStored
 
-Modifications by Jump Threading, pass 3, iteration 1:
+Modifications by Final phase, Jump Threading, iteration 1:
  
    120 jump __label23 equal __tmp16 false
    121 print "\nNo memory or container."
@@ -527,7 +532,7 @@ Modifications by Jump Threading, pass 3, iteration 1:
    125 printflush MESSAGE
    126 jump __label2 always
 
-Modifications by Unreachable Code Elimination, pass 3, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
    126 jump __label2 always
    127 label __label24
@@ -537,7 +542,7 @@ Modifications by Unreachable Code Elimination, pass 3, iteration 1:
    130 write START_INDEX MEMORY M_START_INDEX
    131 write END_INDEX MEMORY M_END_INDEX
 
-Modifications by Single Step Elimination, pass 3, iteration 1:
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
    123 jump __label0 always
    124 label __label23
@@ -547,7 +552,7 @@ Modifications by Single Step Elimination, pass 3, iteration 1:
    127 label __label1
    128 label __label2
 
-Modifications by Print Merging, pass 3, iteration 1:
+Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
    179 print "Item/Liquid/Energy Level Meter\n"
    180 print "StartIndex: "
@@ -719,7 +724,7 @@ control enabled SWITCH 0 0 0 0
 label __label25
 sensor __tmp22 SWITCH @enabled
 jump __label27 notEqual __tmp22 0
-label __label38
+label __label39
 set startTime @time
 set prevTick nextTick
 op add nextTick nextTick TICKS
@@ -731,13 +736,13 @@ label __label28
 label __label29
 label __label30
 jump __label32 greaterThanEq @tick nextTick
-label __label39
+label __label38
 jump __label33 greaterThanEq @tick prevTick
 end
 label __label33
 label __label34
 label __label31
-jump __label39 lessThan @tick nextTick
+jump __label38 lessThan @tick nextTick
 label __label32
 sensor amount CONTAINER SENSOR
 sensor max CONTAINER MAXIMUM
@@ -769,6 +774,6 @@ print "\n"
 printflush MESSAGE
 label __label26
 sensor __tmp22 SWITCH @enabled
-jump __label38 equal __tmp22 0
+jump __label39 equal __tmp22 0
 label __label27
 end

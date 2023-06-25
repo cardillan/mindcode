@@ -1,19 +1,13 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.GenerationGoal;
 import info.teksol.mindcode.compiler.MessageLevel;
-import info.teksol.mindcode.compiler.instructions.AstContext;
-import info.teksol.mindcode.compiler.instructions.AstContextType;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.OpInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLabel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -35,38 +29,43 @@ import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
  * of the body as a jump having the op condition. In this case, execution of two instructions per loop is avoided.
  */
 public class LoopOptimizer extends BaseOptimizer {
-
-    private final OptimizerExpressionEvaluator expressionEvaluator;
-
-    public LoopOptimizer(InstructionProcessor instructionProcessor) {
-        super(Optimization.LOOP_OPTIMIZATION, instructionProcessor);
-        expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
+    public LoopOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.LOOP_OPTIMIZATION, optimizationContext);
     }
 
     private int count = 0;
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
-        forEachContext(AstContextType.LOOP, BASIC, this::optimizeLoop);
-        return false;
-    }
-
-    @Override
     public void generateFinalMessages() {
         super.generateFinalMessages();
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d loops improved by %s.", count, getClass().getSimpleName());
+            emitMessage(MessageLevel.INFO, "%6d loops improved by %s.", count, getName());
         }
     }
 
-    private void optimizeLoop(AstContext loop) {
+    @Override
+    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+        forEachContext(AstContextType.LOOP, BASIC, loop -> processLoop(loop, true, 0));
+        return false;
+    }
+
+    private List<OptimizationAction> actions;
+
+    @Override
+    public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
+        actions = new ArrayList<>();
+        forEachContext(AstContextType.LOOP, BASIC, loop -> processLoop(loop, false, costLimit));
+        return actions;
+    }
+
+    private OptimizationResult processLoop(AstContext loop, boolean optimize, int costLimit) {
         List<AstContext> conditions = loop.findSubcontexts(CONDITION);
-        if (conditions.size() != 1) return;     // Either malformed, or already optimized.
+        if (conditions.size() != 1) return OptimizationResult.INVALID;
 
         LogicList condition = contextInstructions(conditions.get(0));
         LogicList next = contextInstructions(loop.findSubcontext(FLOW_CONTROL));
         if (condition.isEmpty() || next.isEmpty() || !hasConditionAtFront(loop)) {
-            return;
+            return OptimizationResult.INVALID;
         }
 
         if (condition.get(0) instanceof LabelInstruction conditionLabel
@@ -78,6 +77,9 @@ public class LoopOptimizer extends BaseOptimizer {
                 && backJump.isUnconditional()) {
 
             LogicInstruction loopSetup = instructionBefore(conditionLabel);
+
+            // Remove the opening jump, if the loop is known to be executed at least once
+            boolean removeOriginal = evaluateLoopConditionJump(jump, loop) == LogicBoolean.FALSE;
 
             // Gather condition instructions without the label and jump (possibly empty)
             final LogicList conditionEvaluation;
@@ -95,47 +97,34 @@ public class LoopOptimizer extends BaseOptimizer {
             } else {
                 if (!jump.getCondition().hasInverse()) {
                     // Inverting the condition wouldn't save execution time
-                    return;
+                    return OptimizationResult.INVALID;
                 }
                 conditionEvaluation = condition.subList(1, condition.size() - 1);
                 newJumpCreator = (astContext, target) -> createJump(astContext, target,
                         jump.getCondition().inverse(), jump.getX(), jump.getY());
             }
 
-            // Can we duplicate the additional condition instructions? If not, nothing to do
-            if (canDuplicate(conditionEvaluation)) {
-                LogicLabel bodyLabel = obtainContextLabel(loop.findSubcontext(BODY));
-                LogicList copy = conditionEvaluation.duplicate();
-
-                // Replace the last jump first, then insert the rest of the code *before* it
-                int index = instructionIndex(backJump);
-                replaceInstruction(index, newJumpCreator.apply(copy.getAstContext(),bodyLabel));
-                insertInstructions(index, copy);
-
-                // Remove the opening jump, if the loop is known to be executed at least once
-                // and the optimization level is aggressive.
-                // Preconditions:
-                // 1. The condition consists of the condition label and the jump only (i.e. not inverted).
-                // 2. The loop control variable is initialized by a set immediately preceding
-                //    the loop
-                // 3. The jump instruction compares the loop control variable to a constant
-                // 4. The jump evaluates to false (i.e. doesn't skip over the loop) for the initial
-                //    value of the loop control variable
-                //
-                // TODO This only handles the simplest cases. More complex ones should be handled by Data Flow Optimizer
-                if (aggressive() && condition.size() == 2
-                        && loopSetup instanceof SetInstruction set && set.getValue().isNumericLiteral()
-                        && jump.getArgs().contains(set.getResult())) {
-                    // Replace the loop control variable with its initial value and evaluate
-                    JumpInstruction test = replaceAllArgs(jump, set.getResult(), set.getValue());
-                    if (expressionEvaluator.evaluateJump(test) == LogicBoolean.FALSE) {
-                        removeInstruction(jump);
-                    }
+            if (optimize) {
+                // Perform the optimization now
+                // Can we duplicate the additional condition instructions? If not, nothing to do
+                if (removeOriginal || canDuplicate(conditionEvaluation, costLimit)) {
+                    duplicateCondition(loop, jump, backJump, conditionEvaluation, removeOriginal, newJumpCreator);
+                    count++;
+                    return OptimizationResult.REALIZED;
+                } else {
+                    return OptimizationResult.OVER_LIMIT;
                 }
-
-                count++;
+            } else {
+                int cost = duplicationCost(conditionEvaluation);
+                if (cost <= costLimit) {
+                    actions.add(new DuplicateConditionAction(conditions.get(0), cost,
+                            backJump.getAstContext().weight(), 2));
+                }
+                return OptimizationResult.REALIZED;
             }
         }
+
+        return OptimizationResult.INVALID;
     }
 
     private boolean hasConditionAtFront(AstContext loop) {
@@ -144,9 +133,51 @@ public class LoopOptimizer extends BaseOptimizer {
                 || children.get(0).subcontextType() == INIT && children.get(1).subcontextType() == CONDITION);
     }
 
-    private boolean canDuplicate(LogicList conditionEvaluation) {
+    private int duplicationCost(LogicList conditionEvaluation) {
         // Use real instruction size for the test
-        int size = conditionEvaluation.stream().mapToInt(LogicInstruction::getRealSize).sum();
-        return size == 0 || goal == GenerationGoal.SPEED && size <= 3;
+        return conditionEvaluation.stream().mapToInt(LogicInstruction::getRealSize).sum();
+    }
+
+    private boolean canDuplicate(LogicList conditionEvaluation, int costLimit) {
+        return duplicationCost(conditionEvaluation) <= costLimit;
+    }
+
+    private void duplicateCondition(AstContext loop, JumpInstruction jump, JumpInstruction backJump,
+            LogicList conditionEvaluation, boolean removeOriginal,
+            BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator) {
+        LogicLabel bodyLabel = obtainContextLabel(loop.findSubcontext(BODY));
+        LogicList copy = conditionEvaluation.duplicate();
+
+        // Replace the last jump first, then insert the rest of the code *before* it
+        int index = instructionIndex(backJump);
+        replaceInstruction(index, newJumpCreator.apply(copy.getAstContext(), bodyLabel));
+        insertInstructions(index, copy);
+
+        if (removeOriginal) {
+            removeInstruction(jump);
+        }
+    }
+
+    @Override
+    public OptimizationResult applyOptimizationInternal(OptimizationAction optimization, int costLimit) {
+        return switch (optimization) {
+            case DuplicateConditionAction a -> duplicateCondition(a, costLimit);
+            default                         -> OptimizationResult.INVALID;
+        };
+    }
+
+    private OptimizationResult duplicateCondition(DuplicateConditionAction optimization, int costLimit) {
+        return processLoop(optimization.astContext().parent(), true, costLimit);
+    }
+
+    private class DuplicateConditionAction extends AbstractOptimizationAction {
+        public DuplicateConditionAction(AstContext astContext, int cost, double benefit, int codeMultiplication) {
+            super(astContext, cost, benefit, codeMultiplication);
+        }
+
+        @Override
+        public String toString() {
+            return getName() + ": replicate condition at line " + astContext.parent().node().startToken().getLine();
+        }
     }
 }

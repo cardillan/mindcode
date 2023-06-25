@@ -61,20 +61,21 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         for (Optimization optimization : getAllOptimizations()) {
             profile.setOptimizationLevel(optimization, OptimizationLevel.AGGRESSIVE);
         }
+        profile.setOptimizationPasses(100);
         return profile;
     }
 
-    protected MindcodeOptimizer createMindcodeOptimizer(TestCompiler compiler) {
-        return new MindcodeOptimizer(compiler.processor, compiler.profile, compiler.messages::add);
+    protected OptimizationCoordinator createMindcodeOptimizer(TestCompiler compiler) {
+        return new OptimizationCoordinator(compiler.processor, compiler.profile, compiler::addMessage);
     }
 
     protected List<LogicInstruction> optimizeInstructions(TestCompiler compiler, GeneratorOutput generatorOutput) {
         final DebugPrinter debugPrinter = createDebugPrinter();
         final List<LogicInstruction> result;
-        final MindcodeOptimizer optimizer = createMindcodeOptimizer(compiler);
+        final OptimizationCoordinator optimizer = createMindcodeOptimizer(compiler);
         optimizer.setDebugPrinter(debugPrinter);
         result = optimizer.optimize(generatorOutput);
-        debugPrinter.print(s -> compiler.messages.add(MindcodeMessage.debug(s)));
+        debugPrinter.print(s -> compiler.addMessage(MindcodeMessage.debug(s)));
         return result;
     }
 
@@ -82,8 +83,10 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
         GeneratorOutput generatorOutput = super.generateInstructions(compiler, code);
         long optimize = System.nanoTime();
+//        compiler.messages.add(MindcodeMessage.info("\nCode before optimizations:\n"));
+//        compiler.messages.add(MindcodeMessage.info(LogicInstructionPrinter.toString(compiler.processor, generatorOutput.instructions())));
         List<LogicInstruction> instructions = optimizeInstructions(compiler, generatorOutput);
-        compiler.messages.add(new TimingMessage("Optimize", ((System.nanoTime() - optimize) / 1_000_000L)));
+        compiler.addMessage(new TimingMessage("Optimize", ((System.nanoTime() - optimize) / 1_000_000L)));
         return new GeneratorOutput(generatorOutput.callGraph(), instructions, generatorOutput.rootAstContext());
     }
 
@@ -99,8 +102,8 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         }
 
         @Override
-        public void registerIteration(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program) {
-            super.registerIteration(optimizer, pass, iteration, program);
+        public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
+            super.registerIteration(optimizer, title, program);
             if (optimizer != null && optimizer.getClass() == testedClass) {
                 activated = true;
             }

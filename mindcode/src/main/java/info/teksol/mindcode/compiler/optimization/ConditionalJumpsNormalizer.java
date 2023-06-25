@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.LogicBoolean;
 
 import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
@@ -15,8 +15,8 @@ class ConditionalJumpsNormalizer extends BaseOptimizer {
 
     private final OptimizerExpressionEvaluator expressionEvaluator;
 
-    public ConditionalJumpsNormalizer(InstructionProcessor instructionProcessor) {
-        super(Optimization.CONDITIONAL_JUMPS_NORMALIZATION, instructionProcessor);
+    public ConditionalJumpsNormalizer(OptimizationContext optimizationContext) {
+        super(Optimization.CONDITIONAL_JUMPS_NORMALIZATION, optimizationContext);
         expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
     }
 
@@ -25,7 +25,7 @@ class ConditionalJumpsNormalizer extends BaseOptimizer {
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump && jump.isConditional()) {
-                    LogicBoolean result = expressionEvaluator.evaluateJump(jump);
+                    LogicBoolean result = expressionEvaluator.evaluateJumpInstruction(jump);
 
                     if (result == TRUE) {
                         iterator.set(createJumpUnconditional(jump.getAstContext(), jump.getTarget()));

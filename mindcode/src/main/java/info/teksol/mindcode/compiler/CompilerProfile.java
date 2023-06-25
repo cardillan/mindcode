@@ -15,10 +15,15 @@ import java.util.stream.Collectors;
  * Holds parameters pertaining to both Mindustry Compiler and Schematics Builder in one place.
  */
 public class CompilerProfile {
+    public static final int MAX_PASSES = 1000;
+    public static final int DEFAULT_WEBAPP_PASSES = 3;
+    public static final int DEFAULT_CMDLINE_PASSES = 25;
+
     private final Map<Optimization, OptimizationLevel> levels;
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
-    private GenerationGoal goal = GenerationGoal.SPEED;
+    private int optimizationPasses = 3;
+    private GenerationGoal goal = GenerationGoal.AUTO;
     private MemoryModel memoryModel = MemoryModel.VOLATILE;
     private boolean shortCircuitEval = false;
     private FinalCodeOutput finalCodeOutput = null;
@@ -96,6 +101,15 @@ public class CompilerProfile {
 
     public boolean optimizationsActive() {
         return levels.values().stream().anyMatch(l -> l != OptimizationLevel.OFF);
+    }
+
+    public int getOptimizationPasses() {
+        return optimizationPasses;
+    }
+
+    public CompilerProfile setOptimizationPasses(int optimizationPasses) {
+        this.optimizationPasses = optimizationPasses;
+        return this;
     }
 
     public GenerationGoal getGoal() {

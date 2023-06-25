@@ -4,56 +4,20 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* When an uninitialized temporary variable is found by Dead Code Eliminator, generate compilation error. This happens 
-  as a result of some optimizer bug. 
-* Optimization for speed
-  * Alter optimizers to collect statistics about possible speedups and their costs (in terms of instructions added 
-    per percentage of executions step avoided, weighed by the node weight) - only in the ITERATED phase. It would make 
-    sense to allow optimizers to offer alternatives, complicating the optimal selection problem slightly.
-  * At the end of the phase, count available instruction space and if not all speedups can be realized, 
-    choose the most efficient ones until available space is exhausted (this is a knapsack problem).
-  * In the next phase, individual optimizers will realize the accepted optimizations first. Reported cost must be 
-    conservative - an optimization must not create more additional instructions than predicted. They may then
-    re-optimize the resulting code and propose additional optimizations (it is expected that actual code increases  
-    will be smaller than anticipated, since the newly generated code may be further optimized by other optimizers).
-  * ITERATED phase end when no optimizer modified the code, and none of proposed optimizations is feasible. Also, 
-    new compiler option to limit the number of passes - 3 for the web app, 25(?) for the command line tool by default. 
-  * Possible optimizations for speed:
-    * Inlining: a special case. If an inlining optimization is elected, the instruction list will be rebuilt from
-      the AST tree marking the function inlined, re-running all optimizations from start. Maximum number of inlining 
-      rounds should be limited (say, 1 or 2, or a compiler option). 
-    * Loop unrolling:
-      * Full loop unrolling fixed bounds loops
-      * Loop peeling - unroll first n iterations (with conditions in between), followed by the loop.
-      * Jump-to-middle loop unrolling for loops with fixed end condition
-      * Jump-to-middle loop unrolling for loops with fixed start that can run in the opposite direction (e.g.
-        `for i in 0 .. n cell1[i] = 0 end` - jump to position corresponding to `n` and proceed to `0`).
-      * Loop unswitching (if in loop --> loops in if)
-      * Loop fusion???
-    * Switched case expression
-      * All or a subset of when branches can be rearranged and an in-memory jump table created. 
-    * Return optimization: replace jump to return instruction with the return instruction itself.
-* Optimization for size: when the goal is set to `size`, selected optimizers may try to replace code with smaller, 
-  slower alternatives
-  * Case expressions: if each branch of a case expression provides just the expression value, rearrange each branch 
-    to setting the expression value to the output variable and jump out if the branch was selected. Saves one jump 
-    per branch, at most 1/3 instructions. Doubles execution time in average case. 
-* Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax 
-  error reporting would be much more preferable, but quite hard to implement). 
-* Improve data flow optimization around function calls further:
-  * Values pushed to stack need not be assigned to their proper variables first, a temp can be stored instead.
-  * Create global optimizer to handle functions with constant return values. Handle specific case of function
-    always returning one of its input arguments.
-* Loop unrolling - already possible and promising big returns.
-* Stack optimizer: when an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`),
-  instead of push/pop protection, revert the operation after the function call returns. Implement strict/relaxed 
-  math model to let the user block this in case the reversed operation produces result not equal to the original one.
-* `math-model` compiler option: `strict` or `relaxed`. Under the `strict` model, the following will apply:
-  * Loss of precision during numeric literal conversion is disallowed. If such a literal is found in the source code,
-    the compilation will fail. Optimizations that would cause precision loss will be blocked.
-  * Restoring variable value by inverting the operation performed on it will be disallowed.
-  * Assumptions such as `x < x + 1` for a general value of `x` won't be made (for large values of `x`, this might 
-    not be computationally true: `x = 10 ** 20; y = x + 1; print(x == y)` gives `1`).
+* Improve Unreachable Code Elimination
+  * In `while true print(1) end while true print(2) end`, the second loop can never be executed. Unreachable Code
+    Elimination doesn't remove the second loop - the jump to the beginning of the loop keeps it active. Some kind of
+    control flow analysis will do it.
+* Additional optimizations for speed:
+  * Inlining: inlining will be done by the optimizer, no rebuilding of the AST tree. 
+  * Switched case expression: all or a subset of `when` branches with constant conditions can be rearranged and an 
+    in-memory jump table created. 
+  * Return optimization: replace jump to return instruction with the return instruction itself.
+  * Only recreate OptimizationActions of the action's contexts are affected by previous optimizations. 
+* When an uninitialized temporary variable is found by Dead Code Eliminator, generate compilation error -- if it 
+  happens, it is an optimizer bug.
+* Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
+  error reporting would be much more preferable, but quite hard to implement).
 * External variable value reuse
   * When a value is read or written to a memory cell, store it and don't reread it if not necessary, unless the 
     memory cell was declared `volatile`.
@@ -72,26 +36,59 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * All sensed properties (already done - the entire `sensor` instruction is deemed volatile)
   * New compiler directive will allow to declare memory model for a memory block, linked block or built-in variable
     (`#declare variable [volatile | aliased | restriced]`).
+* Variable type inferring.
+  * Either global, or via data flow analysis.
+  * Temporary variables are typically single-use, global type inferring might work very well for them.
+  * Hopefully will help with some boolean conditions.
 * More expression optimizations:
   * replace addition/subtraction of 0 by assignment,
   * replace multiplication/division by 1 by assignment,
-  * probably done by ExpressionOptimizer to avoid bloating of Data Flow optimizer. Requires multiple optimization 
+  * probably done by ExpressionOptimizer to avoid bloating of Data Flow optimizer. Requires multiple optimization
     passes.
-* Pulling invariant code out of loops/if branches.
-* Instruction reordering for better constant folding/subexpression optimization
-  * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
-    variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
-    user variable instead of the temporary one.
-* Global variable type inferring.
-  * More precise might be obtained through data flow analysis. This will be a start.
-  * Temporary variables are typically single-use, global type inferring might work very well for them.
 
 ## Planned
 
 ### Constant folding and common subexpression optimization
 
+* Optimization for speed
+  * Currently, the optimizer realizes speed optimizations one by one, always choosing the highest benefit. Better
+    utilization of instruction space _might_ be achieved by searching for a solution of the knapsack problem.
+* Improve data flow optimization around function calls further:
+  * Values pushed to stack need not be assigned to their proper variables first, a temp can be stored instead.
+  * Create global optimizer to handle functions with constant return values. Handle specific case of function
+    always returning one of its input arguments.
+* Stack optimizer: when an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`),
+  instead of push/pop protection, revert the operation after the function call returns. Implement strict/relaxed
+  math model to let the user block this in case the reversed operation produces result not equal to the original one.
+* Optimization for size: when the goal is set to `size`, selected optimizers may try to replace code with smaller,
+  slower alternatives
+  * Case expressions: if each branch of a case expression provides just the expression value, rearrange each branch
+    to setting the expression value to the output variable and jump out if the branch was selected. Saves one jump
+    per branch, at most 1/3 instructions. Doubles execution time in average case.
+* `math-model` compiler option: `strict` or `relaxed`. Under the `strict` model, the following will apply:
+  * Loss of precision during numeric literal conversion is disallowed. If such a literal is found in the source code,
+    the compilation will fail. Optimizations that would cause precision loss will be blocked.
+  * Restoring variable value by inverting the operation performed on it will be disallowed.
+  * Assumptions such as `x < x + 1` for a general value of `x` won't be made (for large values of `x`, this might
+    not be computationally true: `x = 10 ** 20; y = x + 1; print(x == y)` gives `1`).
+* Complex loop unrolling
+  * Might require data flow analysis for obtaining variable values at the beginning of the loop. Needs to handle
+    various kinds of loop control variable updates - quite possibly by simulated evaluation? (See the math model.)
+  * Loop peeling - unroll first n iterations (with conditions in between), followed by the loop.
+  * Jump-to-middle loop unrolling
+  * Loops with fixed end condition
+  * Loops with fixed start that can run backwards (e.g. `for i in 0 .. n cell1[i] = 0 end` - jump to position
+  corresponding to `n` and proceed to `0`).
+  * Requires constant iteration size - might be difficult to enforce if other optimizers touch the code.
+  * Loop unswitching (if in loop --> loops in if)
+  * Loop fusion???
 * Generalized constant folding on expression tree, including factoring constants out of complex expressions.
   * A theory-based approach is probably needed.  
+  * Pulling invariant code out of loops/if branches.
+  * Instruction reordering for better constant folding/subexpression optimization
+    * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
+      variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
+      user variable instead of the temporary one.
 * Expression distribution:
   * `print(value ? "a" : "b")` could be turned into `if value print("a") else print("b") end`
   * Might make sense for other instructions as well.
@@ -119,28 +116,11 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     which opcodes do affect the world.)
   * Useful (as determined by data flow analysis) assignments to variables.
 
-### Optimizing code for speed 
-
-* It is already done in loop optimization
-* A general approach:
-  * all opportunities for speed optimizations will be identified and gathered,
-  * if all optimizations are impossible without reaching 1000 instructions limit, the most effective ones will be 
-    selected (based on instruction frequency analysis or [`#use statement`](#use-statement) - explicit 
-    `#use goal = speed` code blocks will be prioritized).
-* At least some optimizations (e.g. function inlining) will require recompiling the AST tree node - it will probably 
-  be easier than manipulating the compiled code. Loop unrolling, on the other hand, seems feasible for optimizers to 
-  realize.
-
-### Processor-variables backed arrays and loop optimizations
+### Processor-variables backed arrays
 
 Processor-variables backed arrays will always have a horrible performance, but when designed together with loops and 
 loop optimizations they might be very useful - and not so slow.
 
-* Optimizations unrelated to arrays
-  * Loop unrolling with fixed end condition: loops that have a computed start condition, but fixed end condition, 
-    could be unrolled as a list of instructions without jumps. The loop will start by jumping to the instruction 
-    corresponding to given start condition.
-    * Needs fixed-size (in terms of the number of instructions) iterations. 
 * The arrays
   * Declared at fixed size
   * Arrays, not lists - no add/remove, no inherent size
@@ -164,11 +144,9 @@ loop optimizations they might be very useful - and not so slow.
     * If the loop variable is used solely to access the array, transform the loop from loop over indexes to loop 
       over function access pointers (see also linear transformation of loop variable)
     * If the variable is dual-use, but simple iteration, use shadow variable for array access
-    * Loop unrolling still possible, just with jump-out tests after each iteration
+      * Advanced expression optimization involving moving invariant code out of loop could do this.
 * For each syntax over arrays
   * Possible support to modify the underlying array through the loop control variable, or specific syntax (`yield exp`)
-  
-* Assign hints to AST Context nodes to be used by LoginInstructionGenerator in multi-pass compilation.  
 
 ### Language syntax
 
@@ -192,7 +170,17 @@ loop optimizations they might be very useful - and not so slow.
   * Requires typed variables.
   * Just a way to bind several variables together. Only static allocation.
   * Allows returning multiple values from functions.
-  * Will compile down to individual variables, which will then be optimized by Data Flow optimization.
+  * Will compile down to individual variables, which will then be optimized by Data Flow Optimization.
+
+#### Enums
+* Possible syntax:
+  * `enum name(id1, id2, id3)`
+  * `enum name id1, id2, id3 end`
+* Mindcode assigns values to the enums as it sees fit. There are no guarantees on the numbers whatsoever.
+  They could be instruction addresses inside a case expression, for example, if there's just one case expression.
+* Mindcode provides functions to access enum properties (e.g. enum.name, enum.next, enum.previous).
+* Support for enums in list iteration Loops: `for i in enumname`.
+* Enum will internally be a new type of LogicLiteral.
 
 #### #use statement
 

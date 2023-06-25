@@ -46,7 +46,7 @@ public class ProjectEulerTest extends AbstractProcessorTest {
         return result;
     }
 
-    private void processFile(List<DynamicTest> result, File file) throws IOException {
+    private void processFile(List<DynamicTest> result, File file) {
         String fileName = file.getName();
         result.add(DynamicTest.dynamicTest(fileName, null, () -> testAndEvaluateFile(
                 fileName,

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
 import org.junit.jupiter.api.Test;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
@@ -137,7 +139,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         index = 0
                         b = rand(10)
                         index = 0
-                        while index < 10
+                        while index < 1000
                             print(b)
                             index = index + 1
                         end
@@ -149,7 +151,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "b"),
                 createInstruction(OP, "add", "index", "index", "1"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1003), "lessThan", "index", "10"),
+                createInstruction(JUMP, var(1003), "lessThan", "index", "1000"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
@@ -181,6 +183,41 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "2"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void evaluatesConstantIfsFully() {
+        assertCompilesTo("""
+                        i = 1
+                        print(i % 2 == 0 ? 1 : 2)
+                        """,
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(2)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void evaluatesConstantIfsInLoopFully() {
+        assertCompilesTo("""
+                        def getBit(bitIndex)
+                          bitIndex % 2
+                        end
+                        
+                        for i in 1 ... 2
+                            print(getBit(i) ? 1 : 0)
+                        end
+                        """,
+                createInstruction(LABEL, var(1008)),
+                createInstruction(LABEL, var(1009)),
+                createInstruction(LABEL, var(1010)),
+                createInstruction(LABEL, var(1011)),
+                createInstruction(LABEL, var(1012)),
+                createInstruction(PRINT, "1"),
+                createInstruction(LABEL, var(1013)),
+                createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
     }
@@ -332,7 +369,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void handlesWhileLoops() {
         assertCompilesTo("""
                         i = 0
-                        while i < 10
+                        while i < 1000
                             i = i + 1
                         end
                         print(i)
@@ -342,7 +379,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1003), "lessThan", "i", "10"),
+                createInstruction(JUMP, var(1003), "lessThan", "i", "1000"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, "i"),
                 createInstruction(END)
@@ -383,7 +420,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         do
                             min = cell1[i]
                             i += 1
-                        loop while i < 10
+                        loop while i < 1000
                         print(min)
                         """,
                 createInstruction(SET, "i", "0"),
@@ -391,7 +428,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(READ, "min", "cell1", "i"),
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1000), "lessThan", "i", "10"),
+                createInstruction(JUMP, var(1000), "lessThan", "i", "1000"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, "min"),
                 createInstruction(END)
@@ -430,8 +467,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesNestedLoops() {
         assertCompilesTo("""
-                        for i = 0; i < 3; i += 1
-                            for j = 0; j < 3; j += 1
+                        for i = 0; i < 1000; i += 1
+                            for j = 0; j < 1000; j += 1
                                 print(i, j)
                             end
                         end
@@ -446,11 +483,11 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "j"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(OP, "add", "j", "j", "1"),
-                createInstruction(JUMP, var(1007), "lessThan", "j", "3"),
+                createInstruction(JUMP, var(1007), "lessThan", "j", "1000"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1006), "lessThan", "i", "3"),
+                createInstruction(JUMP, var(1006), "lessThan", "i", "1000"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
@@ -459,14 +496,14 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesDescendingLoops() {
         assertCompilesTo("""
-                        const LENGTH = 15
+                        const LENGTH = 1500
                         for row = LENGTH - 2; row >= 0; row -= 1
                             for col = row + 1; col >= 0; col -= 1
                                 print(col)
                             end
                         end
                         """,
-                createInstruction(SET, "row", "13"),
+                createInstruction(SET, "row", "1498"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(OP, "add", "col", "row", "1"),
@@ -489,7 +526,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesContinueInLoops() {
         assertCompilesTo("""
-                        for i in 1 ... 10
+                        for i in 1 ... 1000
                             if i == 5
                                 continue
                             else
@@ -507,7 +544,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "i"),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1005), "lessThan", "i", "10"),
+                createInstruction(JUMP, var(1005), "lessThan", "i", "1000"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
@@ -516,7 +553,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesDeadEnds() {
         assertCompilesTo("""
-                        for i in 1 ... 10
+                        for i in 1 ... 1000
                             print(i)
                             if i == 5
                                 continue
@@ -536,8 +573,35 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(LABEL, var(1004)),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1005), "lessThan", "i", "10"),
+                createInstruction(JUMP, var(1005), "lessThan", "i", "1000"),
                 createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void optimizesDataFlowAfterLoopOptimization() {
+        assertCompilesTo("""
+                        index = rand(10)
+                        parent = 0
+                        while (child = parent * 2 + 1) <= index
+                            parent = child
+                        end
+                        print(parent)
+                        """,
+                createInstruction(OP, "rand", "index", "10"),
+                createInstruction(SET, "parent", "0"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "add", "child", "0", "1"),
+                createInstruction(JUMP, var(1002), "greaterThan", "1", "index"),
+                createInstruction(LABEL, var(1003)),
+                createInstruction(SET, "parent", "child"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "mul", var(1), "child", "2"),
+                createInstruction(OP, "add", "child", var(1), "1"),
+                createInstruction(JUMP, var(1003), "lessThanEq", "child", "index"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, "parent"),
                 createInstruction(END)
         );
     }
@@ -736,7 +800,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     public void preservesModifiedVariables() {
         assertCompilesTo("""
                         inline def bar(n)
-                            while n < 10
+                            while n < 1000
                                 n += 1
                                 print(n)
                             end
@@ -750,7 +814,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(OP, "add", "__fn0_n", "__fn0_n", "1"),
                 createInstruction(PRINT, "__fn0_n"),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(JUMP, var(1005), "lessThan", "__fn0_n", "10"),
+                createInstruction(JUMP, var(1005), "lessThan", "__fn0_n", "1000"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(LABEL, var(1001)),
                 createInstruction(END)
@@ -824,7 +888,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                           bitIndex * 2
                         end
                                                 
-                        for n in 1 .. 10
+                        for n in 1 .. 1000
                             print(getBit(n \\ 2))
                         end
                         getBit(0)
@@ -839,7 +903,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "__fn0retval"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(OP, "add", "n", "n", "1"),
-                createInstruction(JUMP, var(1007), "lessThanEq", "n", "10"),
+                createInstruction(JUMP, var(1007), "lessThanEq", "n", "1000"),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(SET, "__fn0_bitIndex", "0"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1005)),
@@ -1203,6 +1267,23 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
 
     @Test
+    void optimizesSubAfterAdd0() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, rand, a, P10),
+                        createInstruction(OP, add, tmp0, a, P1),
+                        createInstruction(OP, sub, tmp1, tmp0, P10),    // (a + 1) - 10
+                        createInstruction(PRINT, tmp1)
+                ),
+                List.of(
+                        createInstruction(OP, rand, a, P10),
+                        createInstruction(OP, sub, tmp1, a, P9),
+                        createInstruction(PRINT, tmp1)
+                )
+        );
+    }
+
+    @Test
     void optimizesSubAfterSub() {
         assertOptimizesTo(
                 List.of(
@@ -1385,6 +1466,31 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, var(1)),
                 createInstruction(END)
         );
+    }
+
+    // This test makes sure the assignments were all fully evaluated in one iteration.
+    @Test
+    void handlesAssignmentSequences() {
+        TestCompiler compiler = createTestCompiler();
+        assertCompilesTo(compiler,
+                """
+                        i = 0
+                        print(i)
+                        i += 1
+                        print(i)
+                        i += 1
+                        print(i)
+                        """,
+                createInstruction(PRINT, q("012")),
+                createInstruction(END)
+        );
+
+        String message = compiler.getMessages().stream()
+                .map(CompilerMessage::message)
+                .filter(m -> m.contains("instructions eliminated by Data Flow Optimization"))
+                .findFirst().orElse("No Data Flow Optimization message found.");
+
+        assertEquals("3 instructions eliminated by Data Flow Optimization (4 iterations).", message.trim());
     }
     //</editor-fold>
 

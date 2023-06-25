@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.instructions;
 import info.teksol.mindcode.logic.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -72,10 +73,23 @@ public interface InstructionProcessor {
      * @param oldArg value of arguments to find
      * @param newArg new value for the arguments equal to the old value
      * @return a modified instruction
+     * @param <T> type of instruction being processed
      */
     <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg);
 
     <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs);
+
+    /**
+     * Replaces all label arguments of the instruction contained in the label map with the label the original
+     * is mapped to. Used when duplication sections of code containing labels.
+     *
+     * @param instruction instructions to modify
+     * @param labelMap map assigning new labels to the old ones
+     * @return a modified instruction (original one if modification wasn't necessary)
+     * @param <T> type of instruction being processed
+     */
+    <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap);
+
     /**
      * Determines the number of arguments needed to print the instruction
      *

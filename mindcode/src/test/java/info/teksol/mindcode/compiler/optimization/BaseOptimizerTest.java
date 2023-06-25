@@ -2,15 +2,10 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.NoOp;
-import info.teksol.mindcode.compiler.instructions.AstContext;
-import info.teksol.mindcode.compiler.instructions.AstContextType;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
-import info.teksol.mindcode.compiler.optimization.BaseOptimizer.LogicList;
+import info.teksol.mindcode.compiler.generator.CallGraph;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.BaseOptimizerTest.DummyOptimizer;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.Opcode;
 import org.junit.jupiter.api.Test;
@@ -37,8 +32,9 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
     private final LogicInstruction ix2 = ip.createInstruction(testContext, Opcode.SET, c, P0);
     private final LogicInstruction ix3 = ip.createInstruction(testContext, Opcode.SET, d, P0);
     private final List<LogicInstruction> instructions = new ArrayList<>(List.of(ix0, ix1, ix2));
-    private final DummyOptimizer test = new DummyOptimizer(ip, instructions);
-
+    private final OptimizationContext oc = new OptimizationContext(ip, instructions,
+            CallGraph.createEmpty(), AstContext.createRootNode());
+    private final DummyOptimizer test = new DummyOptimizer(oc);
 
     @Test
     void handlesInstructionAt() {
@@ -215,7 +211,8 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
     void handlesInsertInstructions() {
         LogicList list = test.contextInstructions(mockAstContext).duplicate();
         test.insertInstructions(1, list);
-        assertEquals(List.of(ix0, ix0, ix1, ix2, ix1, ix2), instructions);
+        LabelInstruction duplicatedLabel = test.createLabel(mockAstContext, LogicLabel.symbolic("__label0"));
+        assertEquals(List.of(ix0, ix0, duplicatedLabel, ix2, ix1, ix2), instructions);
     }
 
     @Test
@@ -274,7 +271,7 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
 
     @Test
     void handlesRemoveMatchingInstructions() {
-        test.removeMatchingInstructions(ix -> ix instanceof LabelInstruction);
+        test.removeMatchingInstructions(LabelInstruction.class::isInstance);
         assertEquals(List.of(ix0, ix2), instructions);
     }
 
@@ -299,9 +296,8 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
 
 
     protected static class DummyOptimizer extends BaseOptimizer {
-        public DummyOptimizer(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
-            super(Optimization.PRINT_TEXT_MERGING, instructionProcessor);
-            setProgram(instructions);
+        public DummyOptimizer(OptimizationContext optimizationContext) {
+            super(Optimization.PRINT_TEXT_MERGING, optimizationContext);
         }
 
         @Override

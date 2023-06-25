@@ -6,14 +6,7 @@ import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicNumber;
 import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static info.teksol.mindcode.processor.ProcessorFlag.*;
@@ -77,7 +70,7 @@ public class Processor {
     }
 
     public void run(List<LogicInstruction> program, int stepLimit) {
-        if (!getFlag(STOP_PROCESSOR_OPTIONAL) && program.stream().noneMatch(ix -> ix instanceof StopInstruction)) {
+        if (!getFlag(STOP_PROCESSOR_OPTIONAL) && program.stream().noneMatch(StopInstruction.class::isInstance)) {
             throw new ExecutionException(STOP_PROCESSOR_OPTIONAL, "A stop instruction not present in given program.");            
         }
 
@@ -263,7 +256,7 @@ public class Processor {
 
     private static Map<Condition, ConditionEval> createConditionsMap() {
         Map<Condition, ConditionEval> map = new HashMap<>();
-        map.put(Condition.EQUAL,           (a,  b) -> ExpressionEvaluator.equals(a, b));
+        map.put(Condition.EQUAL,           ExpressionEvaluator::equals);
         map.put(Condition.NOT_EQUAL,       (a,  b) -> !ExpressionEvaluator.equals(a, b));
         map.put(Condition.LESS_THAN,       (a,  b) -> a.getDoubleValue() <  b.getDoubleValue());
         map.put(Condition.LESS_THAN_EQ,    (a,  b) -> a.getDoubleValue() <= b.getDoubleValue());

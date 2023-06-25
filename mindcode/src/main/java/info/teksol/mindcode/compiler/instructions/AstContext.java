@@ -4,11 +4,7 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class AstContext {
@@ -55,7 +51,7 @@ public final class AstContext {
         return child;
     }
 
-    public AstContext createFunctionDeclaration(String functionPrefix, AstNode node, AstContextType contextType) {
+    public AstContext createFunctionDeclaration(String functionPrefix, AstNode node, AstContextType contextType, double weight) {
         AstContext child = new AstContext(functionPrefix, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);
@@ -91,6 +87,15 @@ public final class AstContext {
         return copy;
     }
 
+    public Map<AstContext, AstContext> copyChildrenTo(AstContext newParent) {
+        Map<AstContext, AstContext> map = new IdentityHashMap<>(16);
+        children.stream()
+                .map(c -> c.createDeepCopy(map, newParent))
+                .forEachOrdered(newParent.children::add);
+        map.put(this, newParent);
+        return map;
+    }
+
     /**
      * This context belongs to another context when they're the same instance, or when this context is a direct child
      * of the other context.
@@ -110,18 +115,25 @@ public final class AstContext {
         return this.subcontextType == subcontextType;
     }
 
-    public boolean matchesRecursively(AstSubcontextType... subcontextTypes) {
+    public boolean matches(AstSubcontextType... subcontextTypes) {
         for (AstSubcontextType subcontextType : subcontextTypes) {
-            if (matches(subcontextType)) {
+            if (this.subcontextType == subcontextType) {
                 return true;
             }
+        }
+        return false;
+    }
+
+    public boolean matchesRecursively(AstSubcontextType... subcontextTypes) {
+        if (matches(subcontextTypes)) {
+            return true;
         }
         return parent != null && parent.matchesRecursively(subcontextTypes);
     }
 
     public boolean matchesRecursively(AstContextType... contextTypes) {
         for (AstContextType contextType : contextTypes) {
-            if (matches(subcontextType)) {
+            if (this.contextType == contextType) {
                 return true;
             }
         }
@@ -177,8 +189,17 @@ public final class AstContext {
 
     public AstContext findSubcontext(AstSubcontextType type) {
         for (AstContext child : children) {
-            if (child.node == node && child.subcontextType == type) {
+            if (child.subcontextType == type) {
                 return child;
+            }
+        }
+        return null;
+    }
+
+    public AstContext findLastSubcontext(AstSubcontextType type) {
+        for (int i = children.size() - 1; i >= 0; i--) {
+            if (child(i).subcontextType == type) {
+                return child(i);
             }
         }
         return null;
@@ -243,6 +264,14 @@ public final class AstContext {
         return children.get(index);
     }
 
+    public AstContext firstChild() {
+        return children.get(0);
+    }
+
+    public AstContext lastChild() {
+        return children.get(children.size() - 1);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -259,7 +288,7 @@ public final class AstContext {
 
     @Override
     public int hashCode() {
-        return Objects.hash(level, node, contextType, subcontextType, parent, weight, children);
+        return Objects.hash(level, node, contextType, subcontextType, weight);
     }
 
 }

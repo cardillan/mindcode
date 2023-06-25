@@ -33,8 +33,8 @@ public class DiffDebugPrinter implements DebugPrinter {
     }
 
     @Override
-    public void registerIteration(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program) {
-        versions.add(new ProgramVersion(optimizer, pass, iteration, List.copyOf(program)));
+    public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
+        versions.add(new ProgramVersion(optimizer, title, List.copyOf(program)));
     }
 
     public int getDiffMargin() {
@@ -100,9 +100,13 @@ public class DiffDebugPrinter implements DebugPrinter {
             return;
         }
 
+        int sizeBefore = before.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        int sizeAfter = after.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        String sizeChange = sizeBefore == sizeAfter ? "" : " (%+d instructions)".formatted(sizeAfter - sizeBefore);
+
         List<String> output = new ArrayList<>();
         messageConsumer.accept("");
-        messageConsumer.accept("Modifications by " + title + ":");
+        messageConsumer.accept("Modifications by " + title + sizeChange + ":");
 
         int index1 = 0;
         int index2 = 0;
@@ -185,12 +189,10 @@ public class DiffDebugPrinter implements DebugPrinter {
         private final List<LogicInstruction> program;
         private String title;
 
-        public ProgramVersion(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program) {
+        public ProgramVersion(Optimizer optimizer, String title, List<LogicInstruction> program) {
             this.optimizerClass = optimizer == null ? null : optimizer.getClass();
+            this.title = title;
             this.program = program;
-            this.title = optimizer == null ? "" : pass == 0
-                    ? "%s, iteration %d".formatted(optimizer.getName(), iteration)
-                    : "%s, pass %d, iteration %d".formatted(optimizer.getName(), pass, iteration);
         }
 
         public Class<? extends Optimizer> getOptimizerClass() {

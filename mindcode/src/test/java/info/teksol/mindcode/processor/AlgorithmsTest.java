@@ -50,7 +50,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         testAndEvaluateCode(
                 compiler,
                 "sorting with " + fileName,
-                "const SIZE = " + arrayLength + "\n" + readFile(fileName),
+                "SIZE = " + arrayLength + "\n" + readFile(fileName),
                 List.of(MindustryMemory.createMemoryBank("bank2", array)),
                 createEvaluator(compiler, expectedOutput),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log")
@@ -68,6 +68,10 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 "select-sort.mnd", 128
         );
 
+//        Map<String, Integer> definitions = Map.of(
+//                "heap-sort.mnd", 512
+//        );
+
         for (final String script : definitions.keySet()) {
             result.add(DynamicTest.dynamicTest(script, null,
                     () -> executeSortingAlgorithmTest(script, definitions.get(script))));
@@ -77,7 +81,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     }
 
     @TestFactory
-    public List<DynamicTest> computesScriptTests() throws IOException {
+    public List<DynamicTest> computesScriptTests() {
         final List<DynamicTest> result = new ArrayList<>();
         final List<String> definitions = List.of(
                 "memory-read-write.mnd", "10",
@@ -92,7 +96,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         return result;
     }
 
-    private void processFile(List<DynamicTest> result, String fileName, String expectedOutput) throws IOException {
+    private void processFile(List<DynamicTest> result, String fileName, String expectedOutput) {
         result.add(DynamicTest.dynamicTest(fileName, null, () -> testAndEvaluateFile(
                 fileName,
                 s -> s,

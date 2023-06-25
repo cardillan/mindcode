@@ -1,5 +1,8 @@
 package info.teksol.mindcode.processor;
 
+import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.optimization.Optimization;
+import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,6 +33,11 @@ public class ProcessorTest extends AbstractProcessorTest {
     @AfterAll
     static void done() throws IOException {
         AbstractProcessorTest.done(SCRIPTS_DIRECTORY, ProcessorTest.class.getSimpleName());
+    }
+
+    @Override
+    protected CompilerProfile createCompilerProfile() {
+        return super.createCompilerProfile().setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.OFF);
     }
 
     @Test
@@ -112,6 +120,7 @@ public class ProcessorTest extends AbstractProcessorTest {
                 List.of("null"));
     }
 
+    @Test
     void executesForEachLoopBreakContinue() throws IOException {
         testAndEvaluateFile("for-each-loop-break-continue.mnd",
                 List.of("1", "2", "5", "8", "12"));

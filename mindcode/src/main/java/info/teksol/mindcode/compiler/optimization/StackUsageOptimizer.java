@@ -2,14 +2,9 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.generator.CallGraph.Function;
-import info.teksol.mindcode.compiler.instructions.AstContext;
-import info.teksol.mindcode.compiler.instructions.AstContextType;
-import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
-import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicVariable;
 
@@ -37,8 +32,8 @@ import java.util.stream.Stream;
  */
 public class StackUsageOptimizer extends BaseOptimizer {
 
-    StackUsageOptimizer(InstructionProcessor instructionProcessor) {
-        super(Optimization.STACK_USAGE_OPTIMIZATION, instructionProcessor);
+    StackUsageOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.STACK_USAGE_OPTIMIZATION, optimizationContext);
     }
 
     @Override

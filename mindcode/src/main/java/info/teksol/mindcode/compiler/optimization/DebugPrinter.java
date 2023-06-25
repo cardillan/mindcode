@@ -15,10 +15,10 @@ public interface DebugPrinter {
      * Called by global optimizers at the end of each iteration performed.
      *
      * @param optimizer instance of the optimizer (null for unoptimized code)
-     * @param iteration number of the performed iteration
+     * @param title title for the iteration being registered
      * @param program state of the program after the iteration was performed
      */
-    void registerIteration(Optimizer optimizer, int pass, int iteration, List<LogicInstruction> program);
+    void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program);
 
     /**
      * Processes and outputs collected information for later analysis.

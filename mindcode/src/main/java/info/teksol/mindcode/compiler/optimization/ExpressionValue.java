@@ -20,11 +20,7 @@ public class ExpressionValue implements MindustryResult {
     @Override
     public void setDoubleValue(double value) {
         Optional<String> strValue = instructionProcessor.mlogFormat(value);
-        if (strValue.isPresent()) {
-            literal = LogicNumber.create(strValue.get(), value);
-        } else {
-            literal = null;
-        }
+        literal = strValue.map(s -> LogicNumber.create(s, value)).orElse(null);
     }
 
     @Override

@@ -1,5 +1,5 @@
    149 instructions before optimizations.
-    14 instructions eliminated by Temp Variables Elimination (3 iterations).
+    14 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Jump Normalization (3 iterations).
     30 instructions eliminated by Dead Code Elimination (4 iterations).
     10 instructions eliminated by Conditional Jump Optimization (3 iterations).
@@ -9,7 +9,7 @@
      2 instructions eliminated by Print Merging.
     71 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 instructions):
      0 set LINK_ID 1
 -    * op add __tmp0 99999900 LINK_ID
 -    * set QUERY_FLAG __tmp0
@@ -134,7 +134,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
    156 jump __label42 always
    157 label __label41
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
  
     22 label __label5
     23 set __tmp11 null
@@ -216,7 +216,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
    152 print "Remote vault [gold]#"
    153 print LINK_ID
 
-Modifications by Dead Code Elimination, pass 1, iteration 2:
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-20 instructions):
  
     17 jump __label5 equal __tmp10 false
     18 ucontrol flag ANSWER_FLAG
@@ -328,7 +328,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 2:
    131 label __label40
    132 print "Remote vault [gold]#"
 
-Modifications by Jump Normalization, pass 2, iteration 1:
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
      7 op add ANSWER_FLAG position LINK_ID
      8 set SERVICED 0
@@ -338,7 +338,7 @@ Modifications by Jump Normalization, pass 2, iteration 1:
     11 label __label3
     12 set __fn0_unit @mono
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-10 instructions):
  
     12 set __fn0_unit @mono
     13 ubind __fn0_unit
@@ -440,7 +440,7 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
    116 op add SERVICED SERVICED 1
    117 jump __label42 always
 
-Modifications by Single Step Elimination, pass 2, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-10 instructions):
  
     15 jump __label5 notEqual __tmp9 QUERY_FLAG
     16 ucontrol flag ANSWER_FLAG
@@ -522,7 +522,7 @@ Modifications by Single Step Elimination, pass 2, iteration 1:
    109 label __label42
    110 label __label40
 
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     10 set start @time
     11 label __label3
@@ -614,7 +614,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 1:
    105 jump __label41 notEqual __tmp54 QUERY_FLAG
    106 ucontrol flag ANSWER_FLAG
 
-Modifications by Data Flow Optimization, pass 2, iteration 2:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-10 instructions):
  
      9 label __label0
     10 set start @time
@@ -696,14 +696,14 @@ Modifications by Data Flow Optimization, pass 2, iteration 2:
     94 sensor __tmp54 @unit @flag
     95 jump __label41 notEqual __tmp54 QUERY_FLAG
 
-Modifications by Unreachable Code Elimination, pass 3, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
    113 label __label1
    114 jump __label0 always
    115 label __label2
 -    * end
 
-Modifications by Print Merging, pass 3, iteration 1:
+Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
  
    100 label __label40
    101 print "Remote vault [gold]#"

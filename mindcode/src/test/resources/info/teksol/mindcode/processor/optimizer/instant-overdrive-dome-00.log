@@ -1,19 +1,27 @@
    993 instructions before optimizations.
-    35 instructions eliminated by Temp Variables Elimination (4 iterations).
+    35 instructions eliminated by Temp Variables Elimination.
      9 instructions eliminated by Jump Normalization (4 iterations).
    178 instructions eliminated by Dead Code Elimination (6 iterations).
     64 instructions eliminated by Conditional Jump Optimization (4 iterations).
     41 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     5 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by LoopOptimizer.
+     2 instructions added by Loop Optimization (3 iterations).
+     3 loops improved by Loop Optimization.
      2 instructions eliminated by If Expression Optimization (3 iterations).
     26 instructions eliminated by Data Flow Optimization (5 iterations).
      4 instructions eliminated by Unreachable Code Elimination (2 iterations).
      2 instructions eliminated by Jump Straightening.
      8 instructions updated by PropagateJumpTargets.
-   634 instructions after optimizations.
+     1 instructions eliminated by Print Merging.
+   633 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Pass 1: speed optimization selection (cost limit 358):
+  * Loop Optimization: replicate condition at line 38  cost   1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 115 cost   1, benefit       25,0, efficiency       25,0
+
+Pass 1: speed optimization selection (cost limit 357):
+  * Loop Optimization: replicate condition at line 115 cost   1, benefit       25,0, efficiency       25,0
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 instructions):
  
     31 ubind UNIT
     32 op notEqual __tmp4 @unit null
@@ -291,7 +299,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
   1184 set SUPPLY_P_FIRST __tmp341
   1185 set __tmp283 SUPPLY_P_FIRST
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instructions):
  
     33 jump __label11 equal __tmp4 false
     34 set __fn0_first_unit @unit
@@ -856,7 +864,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
   1098 op sub __tmp346 @time start
   1099 op floor __tmp347 __tmp346
 
-Modifications by Dead Code Elimination, pass 1, iteration 2:
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instructions):
  
     57 op notEqual __tmp13 UNIT_S2 null
     58 jump __label18 equal __tmp13 false
@@ -1229,7 +1237,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 2:
   1006 jump __label231 always
   1007 label __label230
 
-Modifications by Dead Code Elimination, pass 1, iteration 3:
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-24 instructions):
  
    378 op equal __tmp124 __tmp123 0
    379 jump __label99 equal __tmp124 false
@@ -1387,7 +1395,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 3:
    970 jump __label233 always
    971 label __label232
 
-Modifications by Dead Code Elimination, pass 1, iteration 4:
+Modifications by Initial phase, Dead Code Elimination, iteration 4 (-8 instructions):
  
    385 ucontrol within CORE_X CORE_Y 8 __tmp126
    386 jump __label101 equal __tmp126 false
@@ -1433,7 +1441,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 4:
    907 label __label221
    908 label __label219
 
-Modifications by Jump Normalization, pass 2, iteration 1:
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 instructions):
  
     27 set UNIT_S1 UNIT_P1
     28 set __fn0_count 0
@@ -1507,7 +1515,7 @@ Modifications by Jump Normalization, pass 2, iteration 1:
    846 op equal __tmp293 @unit null
    847 jump __label212 equal __tmp293 false
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-64 instructions):
      0 set UNIT @flare
      1 set DOME dome1
      2 label __label0
@@ -2059,7 +2067,7 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
    916 print __fn13_distance
    917 print "[] sec\n"
 
-Modifications by Single Step Elimination, pass 2, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-37 instructions):
  
     29 jump __label11 equal @unit null
     30 set __fn0_first_unit @unit
@@ -2340,7 +2348,366 @@ Modifications by Single Step Elimination, pass 2, iteration 1:
    901 label __label202
    902 op sub __tmp346 @time start
 
-Modifications by Loop Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+   575 set UNIT_S2 __retval162
+   576 jump __label158 equal SUPPLY_S_FIRST false
+   577 sensor __tmp219 UNIT_S1 @totalItems
+-    * op greaterThan __tmp218 __tmp219 0
++  578 op greaterThan SUPPLY_S_FIRST __tmp219 0
+   579 jump __label159 always
+   580 label __label158
+   581 sensor __tmp221 UNIT_S2 @totalItems
+-    * op equal __tmp218 __tmp221 0
++  582 op equal SUPPLY_S_FIRST __tmp221 0
+   583 label __label159
+-    * set SUPPLY_S_FIRST __tmp218
+   584 label __label119
+   585 label __label120
+   586 label __label160
+ 
+   889 set UNIT_P2 __retval285
+   890 jump __label240 equal SUPPLY_P_FIRST false
+   891 sensor __tmp342 UNIT_P1 @totalItems
+-    * op greaterThan __tmp341 __tmp342 0
++  892 op greaterThan SUPPLY_P_FIRST __tmp342 0
+   893 jump __label241 always
+   894 label __label240
+   895 sensor __tmp344 UNIT_P2 @totalItems
+-    * op equal __tmp341 __tmp344 0
++  896 op equal SUPPLY_P_FIRST __tmp344 0
+   897 label __label241
+-    * set SUPPLY_P_FIRST __tmp341
+   898 label __label201
+   899 label __label202
+   900 op sub __tmp346 @time start
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5 instructions):
+ 
+    27 label __label8
+    28 ubind UNIT
+    29 jump __label11 equal @unit null
+-    * set __fn0_first_unit @unit
+    30 jump __label10 always
+    31 label __label11
+    32 label __label12
+ 
+   261 sensor __tmp94 UNIT_P1 @totalItems
+   262 sensor __tmp95 UNIT_P2 @totalItems
+   263 op lessThan __tmp96 __tmp94 __tmp95
+-    * op or SUPPLY_P_FIRST __tmp93 __tmp96
++  264 op or SUPPLY_P_FIRST __tmp88 __tmp96
+   265 label __label75
+   266 sensor __tmp98 switch1 @enabled
+   267 jump __label77 equal __tmp98 false
+ 
+   271 label __label78
+   272 set __fn5_item @silicon
+   273 set __fn5_text "\n[green]Silicon[] status:\n"
+-    * print __fn5_text
+-    * sensor __fn5_level DOME __fn5_item
++  274 print "\n[green]Silicon[] status:\n"
++  275 sensor __fn5_level DOME @silicon
+   276 jump __label80 lessThanEq __fn5_level 3
+   277 print "  dome:  [green]"
+   278 print __fn5_level
+ 
+   289 set __fn6_item @silicon
+   290 set __fn6_group GROUP1
+   291 set __fn6_supply SUPPLY_S_FIRST
+-    * ubind __fn6_unit
++  292 ubind UNIT_S1
+   293 sensor __tmp105 @unit @dead
+   294 op strictEqual __tmp106 __tmp105 0
+   295 sensor __tmp107 @unit @controller
+ 
+   327 set __fn6_color "gold"
+   328 jump __label95 notEqual __fn6_state 1
+   329 sensor __tmp120 @unit @firstItem
+-    * jump __label97 notEqual __tmp120 __fn6_item
++  330 jump __label97 notEqual __tmp120 @silicon
+   331 set __fn6_state 3
+   332 jump __label98 always
+   333 label __label97
+ 
+   350 jump __label103 notEqual __fn6_state 2
+   351 ucontrol within CORE_X CORE_Y 8 __tmp130
+   352 jump __label105 equal __tmp130 false
+-    * ucontrol itemTake CORE __fn6_item UNIT_CAPACITY
++  353 ucontrol itemTake CORE @silicon UNIT_CAPACITY
+   354 sensor __tmp132 @unit @totalItems
+   355 jump __label107 lessThan __tmp132 UNIT_CAPACITY
+   356 ucontrol approach DOME_X DOME_Y 6
+ 
+   376 jump __label109 notEqual __fn6_state 3
+   377 ucontrol within DOME_X DOME_Y 8 __tmp144
+   378 jump __label111 equal __tmp144 false
+-    * jump __label113 equal __fn6_supply false
++  379 jump __label113 equal SUPPLY_S_FIRST false
+   380 ucontrol itemDrop DOME UNIT_CAPACITY
+   381 set MSG ", supplying\n"
+   382 set __fn6_color "green"
+ 
+   408 ucontrol flag __fn6_state
+   409 sensor __tmp157 @unit @totalItems
+   410 print "  "
+-    * print __fn6_group
++  411 print GROUP1
+   412 print ": ["
+   413 print __fn6_color
+   414 print "]"
+ 
+   424 label __label118
+   425 set __retval104 @unit
+   426 jump __label83 always
+-    * set __retval104 null
+   427 label __label83
+   428 set UNIT_S1 __retval104
+   429 jump __label119 equal FOUR_UNITS false
+ 
+   433 set __fn8_item @silicon
+   434 set __fn8_group GROUP2
+   435 set __fn8_supply __tmp161
+-    * ubind __fn8_unit
++  436 ubind UNIT_S2
+   437 sensor __tmp163 @unit @dead
+   438 op strictEqual __tmp164 __tmp163 0
+   439 sensor __tmp165 @unit @controller
+ 
+   471 set __fn8_color "gold"
+   472 jump __label134 notEqual __fn8_state 1
+   473 sensor __tmp178 @unit @firstItem
+-    * jump __label136 notEqual __tmp178 __fn8_item
++  474 jump __label136 notEqual __tmp178 @silicon
+   475 set __fn8_state 3
+   476 jump __label137 always
+   477 label __label136
+ 
+   494 jump __label142 notEqual __fn8_state 2
+   495 ucontrol within CORE_X CORE_Y 8 __tmp188
+   496 jump __label144 equal __tmp188 false
+-    * ucontrol itemTake CORE __fn8_item UNIT_CAPACITY
++  497 ucontrol itemTake CORE @silicon UNIT_CAPACITY
+   498 sensor __tmp190 @unit @totalItems
+   499 jump __label146 lessThan __tmp190 UNIT_CAPACITY
+   500 ucontrol approach DOME_X DOME_Y 6
+ 
+   520 jump __label148 notEqual __fn8_state 3
+   521 ucontrol within DOME_X DOME_Y 8 __tmp202
+   522 jump __label150 equal __tmp202 false
+-    * jump __label152 equal __fn8_supply false
++  523 jump __label152 equal __tmp161 false
+   524 ucontrol itemDrop DOME UNIT_CAPACITY
+   525 set MSG ", supplying\n"
+   526 set __fn8_color "green"
+ 
+   552 ucontrol flag __fn8_state
+   553 sensor __tmp215 @unit @totalItems
+   554 print "  "
+-    * print __fn8_group
++  555 print GROUP2
+   556 print ": ["
+   557 print __fn8_color
+   558 print "]"
+ 
+   568 label __label157
+   569 set __retval162 @unit
+   570 jump __label122 always
+-    * set __retval162 null
+   571 label __label122
+   572 set UNIT_S2 __retval162
+   573 jump __label158 equal SUPPLY_S_FIRST false
+ 
+   583 label __label160
+   584 set __fn10_item @phase-fabric
+   585 set __fn10_text "\n[green]Phase fabric[] status:\n"
+-    * print __fn10_text
+-    * sensor __fn10_level DOME __fn10_item
++  586 print "\n[green]Phase fabric[] status:\n"
++  587 sensor __fn10_level DOME @phase-fabric
+   588 jump __label162 lessThanEq __fn10_level 3
+   589 print "  dome:  [green]"
+   590 print __fn10_level
+ 
+   601 set __fn11_item @phase-fabric
+   602 set __fn11_group GROUP1
+   603 set __fn11_supply SUPPLY_P_FIRST
+-    * ubind __fn11_unit
++  604 ubind UNIT_P1
+   605 sensor __tmp228 @unit @dead
+   606 op strictEqual __tmp229 __tmp228 0
+   607 sensor __tmp230 @unit @controller
+ 
+   639 set __fn11_color "gold"
+   640 jump __label177 notEqual __fn11_state 1
+   641 sensor __tmp243 @unit @firstItem
+-    * jump __label179 notEqual __tmp243 __fn11_item
++  642 jump __label179 notEqual __tmp243 @phase-fabric
+   643 set __fn11_state 3
+   644 jump __label180 always
+   645 label __label179
+ 
+   662 jump __label185 notEqual __fn11_state 2
+   663 ucontrol within CORE_X CORE_Y 8 __tmp253
+   664 jump __label187 equal __tmp253 false
+-    * ucontrol itemTake CORE __fn11_item UNIT_CAPACITY
++  665 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
+   666 sensor __tmp255 @unit @totalItems
+   667 jump __label189 lessThan __tmp255 UNIT_CAPACITY
+   668 ucontrol approach DOME_X DOME_Y 6
+ 
+   688 jump __label191 notEqual __fn11_state 3
+   689 ucontrol within DOME_X DOME_Y 8 __tmp267
+   690 jump __label193 equal __tmp267 false
+-    * jump __label195 equal __fn11_supply false
++  691 jump __label195 equal SUPPLY_P_FIRST false
+   692 ucontrol itemDrop DOME UNIT_CAPACITY
+   693 set MSG ", supplying\n"
+   694 set __fn11_color "green"
+ 
+   720 ucontrol flag __fn11_state
+   721 sensor __tmp280 @unit @totalItems
+   722 print "  "
+-    * print __fn11_group
++  723 print GROUP1
+   724 print ": ["
+   725 print __fn11_color
+   726 print "]"
+ 
+   736 label __label200
+   737 set __retval227 @unit
+   738 jump __label165 always
+-    * set __retval227 null
+   739 label __label165
+   740 set UNIT_P1 __retval227
+   741 jump __label201 equal FOUR_UNITS false
+ 
+   745 set __fn13_item @phase-fabric
+   746 set __fn13_group GROUP2
+   747 set __fn13_supply __tmp284
+-    * ubind __fn13_unit
++  748 ubind UNIT_P2
+   749 sensor __tmp286 @unit @dead
+   750 op strictEqual __tmp287 __tmp286 0
+   751 sensor __tmp288 @unit @controller
+ 
+   783 set __fn13_color "gold"
+   784 jump __label216 notEqual __fn13_state 1
+   785 sensor __tmp301 @unit @firstItem
+-    * jump __label218 notEqual __tmp301 __fn13_item
++  786 jump __label218 notEqual __tmp301 @phase-fabric
+   787 set __fn13_state 3
+   788 jump __label219 always
+   789 label __label218
+ 
+   806 jump __label224 notEqual __fn13_state 2
+   807 ucontrol within CORE_X CORE_Y 8 __tmp311
+   808 jump __label226 equal __tmp311 false
+-    * ucontrol itemTake CORE __fn13_item UNIT_CAPACITY
++  809 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
+   810 sensor __tmp313 @unit @totalItems
+   811 jump __label228 lessThan __tmp313 UNIT_CAPACITY
+   812 ucontrol approach DOME_X DOME_Y 6
+ 
+   832 jump __label230 notEqual __fn13_state 3
+   833 ucontrol within DOME_X DOME_Y 8 __tmp325
+   834 jump __label232 equal __tmp325 false
+-    * jump __label234 equal __fn13_supply false
++  835 jump __label234 equal __tmp284 false
+   836 ucontrol itemDrop DOME UNIT_CAPACITY
+   837 set MSG ", supplying\n"
+   838 set __fn13_color "green"
+ 
+   864 ucontrol flag __fn13_state
+   865 sensor __tmp338 @unit @totalItems
+   866 print "  "
+-    * print __fn13_group
++  867 print GROUP2
+   868 print ": ["
+   869 print __fn13_color
+   870 print "]"
+ 
+   880 label __label239
+   881 set __retval285 @unit
+   882 jump __label204 always
+-    * set __retval285 null
+   883 label __label204
+   884 set UNIT_P2 __retval285
+   885 jump __label240 equal SUPPLY_P_FIRST false
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-21 instructions):
+ 
+   257 sensor __tmp90 UNIT_S2 @totalItems
+   258 op lessThan __tmp91 __tmp89 __tmp90
+   259 op or SUPPLY_S_FIRST __tmp88 __tmp91
+-    * op equal __tmp93 FOUR_UNITS false
+   260 sensor __tmp94 UNIT_P1 @totalItems
+   261 sensor __tmp95 UNIT_P2 @totalItems
+   262 op lessThan __tmp96 __tmp94 __tmp95
+ 
+   268 print " === [gold]Supplying Overdrive Dome[] === "
+   269 print "\n"
+   270 label __label78
+-    * set __fn5_item @silicon
+-    * set __fn5_text "\n[green]Silicon[] status:\n"
+   271 print "\n[green]Silicon[] status:\n"
+   272 sensor __fn5_level DOME @silicon
+   273 jump __label80 lessThanEq __fn5_level 3
+ 
+   282 label __label81
+   283 label __label79
+   284 label __label82
+-    * set __fn6_unit UNIT_S1
+-    * set __fn6_item @silicon
+-    * set __fn6_group GROUP1
+-    * set __fn6_supply SUPPLY_S_FIRST
+   285 ubind UNIT_S1
+   286 sensor __tmp105 @unit @dead
+   287 op strictEqual __tmp106 __tmp105 0
+ 
+   422 jump __label119 equal FOUR_UNITS false
+   423 op equal __tmp161 SUPPLY_S_FIRST false
+   424 label __label121
+-    * set __fn8_unit UNIT_S2
+-    * set __fn8_item @silicon
+-    * set __fn8_group GROUP2
+-    * set __fn8_supply __tmp161
+   425 ubind UNIT_S2
+   426 sensor __tmp163 @unit @dead
+   427 op strictEqual __tmp164 __tmp163 0
+ 
+   570 label __label119
+   571 label __label120
+   572 label __label160
+-    * set __fn10_item @phase-fabric
+-    * set __fn10_text "\n[green]Phase fabric[] status:\n"
+   573 print "\n[green]Phase fabric[] status:\n"
+   574 sensor __fn10_level DOME @phase-fabric
+   575 jump __label162 lessThanEq __fn10_level 3
+ 
+   584 label __label163
+   585 label __label161
+   586 label __label164
+-    * set __fn11_unit UNIT_P1
+-    * set __fn11_item @phase-fabric
+-    * set __fn11_group GROUP1
+-    * set __fn11_supply SUPPLY_P_FIRST
+   587 ubind UNIT_P1
+   588 sensor __tmp228 @unit @dead
+   589 op strictEqual __tmp229 __tmp228 0
+ 
+   724 jump __label201 equal FOUR_UNITS false
+   725 op equal __tmp284 SUPPLY_P_FIRST false
+   726 label __label203
+-    * set __fn13_unit UNIT_P2
+-    * set __fn13_item @phase-fabric
+-    * set __fn13_group GROUP2
+-    * set __fn13_supply __tmp284
+   727 ubind UNIT_P2
+   728 sensor __tmp286 @unit @dead
+   729 op strictEqual __tmp287 __tmp286 0
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
      1 set DOME dome1
      2 label __label0
@@ -2355,6 +2722,11 @@ Modifications by Loop Optimization, pass 2, iteration 1:
     10 label __label2
     11 label __label3
     12 sensor __tmp1 switch1 @enabled
+
+Modifications by Loop Optimization: replicate condition at line 38 (+1 instructions):
+ 
+    11 label __label3
+    12 sensor __tmp1 switch1 @enabled
     13 jump __label5 notEqual __tmp1 false
 +   14 label __label243
     15 print "[coral]Activate switch to begin supplying overdrive dome..."
@@ -2367,384 +2739,27 @@ Modifications by Loop Optimization, pass 2, iteration 1:
     21 label __label5
     22 print "[gold]Binding units..."
     23 printflush message1
- 
-   269 label __label75
-   270 sensor __tmp98 switch1 @enabled
-   271 jump __label77 equal __tmp98 false
-+  272 label __label244
-   273 set start @time
-   274 print " === [gold]Supplying Overdrive Dome[] === "
-   275 print "\n"
- 
-   910 print " ms"
-   911 printflush message1
-   912 label __label76
--    * jump __label75 always
-+  913 sensor __tmp98 switch1 @enabled
-+  914 jump __label244 notEqual __tmp98 false
-   915 label __label77
-   916 end
 
-Modifications by If Expression Optimization, pass 2, iteration 1:
+Modifications by Loop Optimization: replicate condition at line 115 (+1 instructions):
  
-   579 set UNIT_S2 __retval162
-   580 jump __label158 equal SUPPLY_S_FIRST false
-   581 sensor __tmp219 UNIT_S1 @totalItems
--    * op greaterThan __tmp218 __tmp219 0
-+  582 op greaterThan SUPPLY_S_FIRST __tmp219 0
-   583 jump __label159 always
-   584 label __label158
-   585 sensor __tmp221 UNIT_S2 @totalItems
--    * op equal __tmp218 __tmp221 0
-+  586 op equal SUPPLY_S_FIRST __tmp221 0
-   587 label __label159
--    * set SUPPLY_S_FIRST __tmp218
-   588 label __label119
-   589 label __label120
-   590 label __label160
- 
-   893 set UNIT_P2 __retval285
-   894 jump __label240 equal SUPPLY_P_FIRST false
-   895 sensor __tmp342 UNIT_P1 @totalItems
--    * op greaterThan __tmp341 __tmp342 0
-+  896 op greaterThan SUPPLY_P_FIRST __tmp342 0
-   897 jump __label241 always
-   898 label __label240
-   899 sensor __tmp344 UNIT_P2 @totalItems
--    * op equal __tmp341 __tmp344 0
-+  900 op equal SUPPLY_P_FIRST __tmp344 0
-   901 label __label241
--    * set SUPPLY_P_FIRST __tmp341
-   902 label __label201
-   903 label __label202
-   904 op sub __tmp346 @time start
-
-Modifications by Data Flow Optimization, pass 2, iteration 1:
- 
-    30 label __label8
-    31 ubind UNIT
-    32 jump __label11 equal @unit null
--    * set __fn0_first_unit @unit
-    33 jump __label10 always
-    34 label __label11
-    35 label __label12
- 
-   264 sensor __tmp94 UNIT_P1 @totalItems
-   265 sensor __tmp95 UNIT_P2 @totalItems
-   266 op lessThan __tmp96 __tmp94 __tmp95
--    * op or SUPPLY_P_FIRST __tmp93 __tmp96
-+  267 op or SUPPLY_P_FIRST __tmp88 __tmp96
-   268 label __label75
-   269 sensor __tmp98 switch1 @enabled
-   270 jump __label77 equal __tmp98 false
- 
-   275 label __label78
-   276 set __fn5_item @silicon
-   277 set __fn5_text "\n[green]Silicon[] status:\n"
--    * print __fn5_text
--    * sensor __fn5_level DOME __fn5_item
-+  278 print "\n[green]Silicon[] status:\n"
-+  279 sensor __fn5_level DOME @silicon
-   280 jump __label80 lessThanEq __fn5_level 3
-   281 print "  dome:  [green]"
-   282 print __fn5_level
- 
-   293 set __fn6_item @silicon
-   294 set __fn6_group GROUP1
-   295 set __fn6_supply SUPPLY_S_FIRST
--    * ubind __fn6_unit
-+  296 ubind UNIT_S1
-   297 sensor __tmp105 @unit @dead
-   298 op strictEqual __tmp106 __tmp105 0
-   299 sensor __tmp107 @unit @controller
- 
-   331 set __fn6_color "gold"
-   332 jump __label95 notEqual __fn6_state 1
-   333 sensor __tmp120 @unit @firstItem
--    * jump __label97 notEqual __tmp120 __fn6_item
-+  334 jump __label97 notEqual __tmp120 @silicon
-   335 set __fn6_state 3
-   336 jump __label98 always
-   337 label __label97
- 
-   354 jump __label103 notEqual __fn6_state 2
-   355 ucontrol within CORE_X CORE_Y 8 __tmp130
-   356 jump __label105 equal __tmp130 false
--    * ucontrol itemTake CORE __fn6_item UNIT_CAPACITY
-+  357 ucontrol itemTake CORE @silicon UNIT_CAPACITY
-   358 sensor __tmp132 @unit @totalItems
-   359 jump __label107 lessThan __tmp132 UNIT_CAPACITY
-   360 ucontrol approach DOME_X DOME_Y 6
- 
-   380 jump __label109 notEqual __fn6_state 3
-   381 ucontrol within DOME_X DOME_Y 8 __tmp144
-   382 jump __label111 equal __tmp144 false
--    * jump __label113 equal __fn6_supply false
-+  383 jump __label113 equal SUPPLY_S_FIRST false
-   384 ucontrol itemDrop DOME UNIT_CAPACITY
-   385 set MSG ", supplying\n"
-   386 set __fn6_color "green"
- 
-   412 ucontrol flag __fn6_state
-   413 sensor __tmp157 @unit @totalItems
-   414 print "  "
--    * print __fn6_group
-+  415 print GROUP1
-   416 print ": ["
-   417 print __fn6_color
-   418 print "]"
- 
-   428 label __label118
-   429 set __retval104 @unit
-   430 jump __label83 always
--    * set __retval104 null
-   431 label __label83
-   432 set UNIT_S1 __retval104
-   433 jump __label119 equal FOUR_UNITS false
- 
-   437 set __fn8_item @silicon
-   438 set __fn8_group GROUP2
-   439 set __fn8_supply __tmp161
--    * ubind __fn8_unit
-+  440 ubind UNIT_S2
-   441 sensor __tmp163 @unit @dead
-   442 op strictEqual __tmp164 __tmp163 0
-   443 sensor __tmp165 @unit @controller
- 
-   475 set __fn8_color "gold"
-   476 jump __label134 notEqual __fn8_state 1
-   477 sensor __tmp178 @unit @firstItem
--    * jump __label136 notEqual __tmp178 __fn8_item
-+  478 jump __label136 notEqual __tmp178 @silicon
-   479 set __fn8_state 3
-   480 jump __label137 always
-   481 label __label136
- 
-   498 jump __label142 notEqual __fn8_state 2
-   499 ucontrol within CORE_X CORE_Y 8 __tmp188
-   500 jump __label144 equal __tmp188 false
--    * ucontrol itemTake CORE __fn8_item UNIT_CAPACITY
-+  501 ucontrol itemTake CORE @silicon UNIT_CAPACITY
-   502 sensor __tmp190 @unit @totalItems
-   503 jump __label146 lessThan __tmp190 UNIT_CAPACITY
-   504 ucontrol approach DOME_X DOME_Y 6
- 
-   524 jump __label148 notEqual __fn8_state 3
-   525 ucontrol within DOME_X DOME_Y 8 __tmp202
-   526 jump __label150 equal __tmp202 false
--    * jump __label152 equal __fn8_supply false
-+  527 jump __label152 equal __tmp161 false
-   528 ucontrol itemDrop DOME UNIT_CAPACITY
-   529 set MSG ", supplying\n"
-   530 set __fn8_color "green"
- 
-   556 ucontrol flag __fn8_state
-   557 sensor __tmp215 @unit @totalItems
-   558 print "  "
--    * print __fn8_group
-+  559 print GROUP2
-   560 print ": ["
-   561 print __fn8_color
-   562 print "]"
- 
-   572 label __label157
-   573 set __retval162 @unit
-   574 jump __label122 always
--    * set __retval162 null
-   575 label __label122
-   576 set UNIT_S2 __retval162
-   577 jump __label158 equal SUPPLY_S_FIRST false
- 
-   587 label __label160
-   588 set __fn10_item @phase-fabric
-   589 set __fn10_text "\n[green]Phase fabric[] status:\n"
--    * print __fn10_text
--    * sensor __fn10_level DOME __fn10_item
-+  590 print "\n[green]Phase fabric[] status:\n"
-+  591 sensor __fn10_level DOME @phase-fabric
-   592 jump __label162 lessThanEq __fn10_level 3
-   593 print "  dome:  [green]"
-   594 print __fn10_level
- 
-   605 set __fn11_item @phase-fabric
-   606 set __fn11_group GROUP1
-   607 set __fn11_supply SUPPLY_P_FIRST
--    * ubind __fn11_unit
-+  608 ubind UNIT_P1
-   609 sensor __tmp228 @unit @dead
-   610 op strictEqual __tmp229 __tmp228 0
-   611 sensor __tmp230 @unit @controller
- 
-   643 set __fn11_color "gold"
-   644 jump __label177 notEqual __fn11_state 1
-   645 sensor __tmp243 @unit @firstItem
--    * jump __label179 notEqual __tmp243 __fn11_item
-+  646 jump __label179 notEqual __tmp243 @phase-fabric
-   647 set __fn11_state 3
-   648 jump __label180 always
-   649 label __label179
- 
-   666 jump __label185 notEqual __fn11_state 2
-   667 ucontrol within CORE_X CORE_Y 8 __tmp253
-   668 jump __label187 equal __tmp253 false
--    * ucontrol itemTake CORE __fn11_item UNIT_CAPACITY
-+  669 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
-   670 sensor __tmp255 @unit @totalItems
-   671 jump __label189 lessThan __tmp255 UNIT_CAPACITY
-   672 ucontrol approach DOME_X DOME_Y 6
- 
-   692 jump __label191 notEqual __fn11_state 3
-   693 ucontrol within DOME_X DOME_Y 8 __tmp267
-   694 jump __label193 equal __tmp267 false
--    * jump __label195 equal __fn11_supply false
-+  695 jump __label195 equal SUPPLY_P_FIRST false
-   696 ucontrol itemDrop DOME UNIT_CAPACITY
-   697 set MSG ", supplying\n"
-   698 set __fn11_color "green"
- 
-   724 ucontrol flag __fn11_state
-   725 sensor __tmp280 @unit @totalItems
-   726 print "  "
--    * print __fn11_group
-+  727 print GROUP1
-   728 print ": ["
-   729 print __fn11_color
-   730 print "]"
- 
-   740 label __label200
-   741 set __retval227 @unit
-   742 jump __label165 always
--    * set __retval227 null
-   743 label __label165
-   744 set UNIT_P1 __retval227
-   745 jump __label201 equal FOUR_UNITS false
- 
-   749 set __fn13_item @phase-fabric
-   750 set __fn13_group GROUP2
-   751 set __fn13_supply __tmp284
--    * ubind __fn13_unit
-+  752 ubind UNIT_P2
-   753 sensor __tmp286 @unit @dead
-   754 op strictEqual __tmp287 __tmp286 0
-   755 sensor __tmp288 @unit @controller
- 
-   787 set __fn13_color "gold"
-   788 jump __label216 notEqual __fn13_state 1
-   789 sensor __tmp301 @unit @firstItem
--    * jump __label218 notEqual __tmp301 __fn13_item
-+  790 jump __label218 notEqual __tmp301 @phase-fabric
-   791 set __fn13_state 3
-   792 jump __label219 always
-   793 label __label218
- 
-   810 jump __label224 notEqual __fn13_state 2
-   811 ucontrol within CORE_X CORE_Y 8 __tmp311
-   812 jump __label226 equal __tmp311 false
--    * ucontrol itemTake CORE __fn13_item UNIT_CAPACITY
-+  813 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
-   814 sensor __tmp313 @unit @totalItems
-   815 jump __label228 lessThan __tmp313 UNIT_CAPACITY
-   816 ucontrol approach DOME_X DOME_Y 6
- 
-   836 jump __label230 notEqual __fn13_state 3
-   837 ucontrol within DOME_X DOME_Y 8 __tmp325
-   838 jump __label232 equal __tmp325 false
--    * jump __label234 equal __fn13_supply false
-+  839 jump __label234 equal __tmp284 false
-   840 ucontrol itemDrop DOME UNIT_CAPACITY
-   841 set MSG ", supplying\n"
-   842 set __fn13_color "green"
- 
-   868 ucontrol flag __fn13_state
-   869 sensor __tmp338 @unit @totalItems
-   870 print "  "
--    * print __fn13_group
-+  871 print GROUP2
-   872 print ": ["
-   873 print __fn13_color
-   874 print "]"
- 
-   884 label __label239
-   885 set __retval285 @unit
-   886 jump __label204 always
--    * set __retval285 null
-   887 label __label204
-   888 set UNIT_P2 __retval285
-   889 jump __label240 equal SUPPLY_P_FIRST false
-
-Modifications by Data Flow Optimization, pass 2, iteration 2:
- 
-   260 sensor __tmp90 UNIT_S2 @totalItems
-   261 op lessThan __tmp91 __tmp89 __tmp90
-   262 op or SUPPLY_S_FIRST __tmp88 __tmp91
--    * op equal __tmp93 FOUR_UNITS false
-   263 sensor __tmp94 UNIT_P1 @totalItems
-   264 sensor __tmp95 UNIT_P2 @totalItems
-   265 op lessThan __tmp96 __tmp94 __tmp95
- 
+   267 label __label75
+   268 sensor __tmp98 switch1 @enabled
+   269 jump __label77 equal __tmp98 false
++  270 label __label244
+   271 set start @time
    272 print " === [gold]Supplying Overdrive Dome[] === "
    273 print "\n"
-   274 label __label78
--    * set __fn5_item @silicon
--    * set __fn5_text "\n[green]Silicon[] status:\n"
-   275 print "\n[green]Silicon[] status:\n"
-   276 sensor __fn5_level DOME @silicon
-   277 jump __label80 lessThanEq __fn5_level 3
  
-   286 label __label81
-   287 label __label79
-   288 label __label82
--    * set __fn6_unit UNIT_S1
--    * set __fn6_item @silicon
--    * set __fn6_group GROUP1
--    * set __fn6_supply SUPPLY_S_FIRST
-   289 ubind UNIT_S1
-   290 sensor __tmp105 @unit @dead
-   291 op strictEqual __tmp106 __tmp105 0
- 
-   426 jump __label119 equal FOUR_UNITS false
-   427 op equal __tmp161 SUPPLY_S_FIRST false
-   428 label __label121
--    * set __fn8_unit UNIT_S2
--    * set __fn8_item @silicon
--    * set __fn8_group GROUP2
--    * set __fn8_supply __tmp161
-   429 ubind UNIT_S2
-   430 sensor __tmp163 @unit @dead
-   431 op strictEqual __tmp164 __tmp163 0
- 
-   574 label __label119
-   575 label __label120
-   576 label __label160
--    * set __fn10_item @phase-fabric
--    * set __fn10_text "\n[green]Phase fabric[] status:\n"
-   577 print "\n[green]Phase fabric[] status:\n"
-   578 sensor __fn10_level DOME @phase-fabric
-   579 jump __label162 lessThanEq __fn10_level 3
- 
-   588 label __label163
-   589 label __label161
-   590 label __label164
--    * set __fn11_unit UNIT_P1
--    * set __fn11_item @phase-fabric
--    * set __fn11_group GROUP1
--    * set __fn11_supply SUPPLY_P_FIRST
-   591 ubind UNIT_P1
-   592 sensor __tmp228 @unit @dead
-   593 op strictEqual __tmp229 __tmp228 0
- 
-   728 jump __label201 equal FOUR_UNITS false
-   729 op equal __tmp284 SUPPLY_P_FIRST false
-   730 label __label203
--    * set __fn13_unit UNIT_P2
--    * set __fn13_item @phase-fabric
--    * set __fn13_group GROUP2
--    * set __fn13_supply __tmp284
-   731 ubind UNIT_P2
-   732 sensor __tmp286 @unit @dead
-   733 op strictEqual __tmp287 __tmp286 0
+   882 print " ms"
+   883 printflush message1
+   884 label __label76
+-    * jump __label75 always
++  885 sensor __tmp98 switch1 @enabled
++  886 jump __label244 notEqual __tmp98 false
+   887 label __label77
+   888 end
 
-Modifications by Single Step Elimination, pass 3, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-4 instructions):
  
    420 print MSG
    421 label __label118
@@ -2778,7 +2793,7 @@ Modifications by Single Step Elimination, pass 3, iteration 1:
    863 set UNIT_P2 __retval285
    864 jump __label240 equal SUPPLY_P_FIRST false
 
-Modifications by Jump Straightening, pass 4, iteration 1:
+Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
  
     29 set __fn0_count 0
     30 label __label8
@@ -2800,7 +2815,7 @@ Modifications by Jump Straightening, pass 4, iteration 1:
     54 label __label19
     55 label __label16
 
-Modifications by Jump Threading, pass 4, iteration 1:
+Modifications by Final phase, Jump Threading, iteration 1:
  
    350 jump __label107 lessThan __tmp132 UNIT_CAPACITY
    351 ucontrol approach DOME_X DOME_Y 6
@@ -2874,7 +2889,7 @@ Modifications by Jump Threading, pass 4, iteration 1:
    825 set __fn13_state 2
    826 label __label236
 
-Modifications by Unreachable Code Elimination, pass 4, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 instructions):
  
     89 label __label25
     90 jump __label24 always
@@ -2907,6 +2922,19 @@ Modifications by Unreachable Code Elimination, pass 4, iteration 1:
    214 label __label63
    215 set UNIT_P2 __retval70
    216 label __label60
+
+Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
+ 
+   264 label __label244
+   265 set start @time
+   266 print " === [gold]Supplying Overdrive Dome[] === "
+-    * print "\n"
+   267 label __label78
+-    * print "\n[green]Silicon[] status:\n"
++  268 print "\n\n[green]Silicon[] status:\n"
+   269 sensor __fn5_level DOME @silicon
+   270 jump __label80 lessThanEq __fn5_level 3
+   271 print "  dome:  [green]"
 
 Final code before resolving virtual instructions:
 
@@ -3177,9 +3205,8 @@ jump __label77 equal __tmp98 false
 label __label244
 set start @time
 print " === [gold]Supplying Overdrive Dome[] === "
-print "\n"
 label __label78
-print "\n[green]Silicon[] status:\n"
+print "\n\n[green]Silicon[] status:\n"
 sensor __fn5_level DOME @silicon
 jump __label80 lessThanEq __fn5_level 3
 print "  dome:  [green]"

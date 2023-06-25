@@ -1,15 +1,29 @@
    198 instructions before optimizations.
-    35 instructions eliminated by Temp Variables Elimination (3 iterations).
+    35 instructions eliminated by Temp Variables Elimination.
     16 instructions eliminated by Dead Code Elimination (3 iterations).
-    11 instructions eliminated by Conditional Jump Optimization (3 iterations).
-     8 instructions eliminated by Single Step Elimination (4 iterations).
-     5 instructions added by Loop Optimization (2 iterations).
-     6 loops improved by LoopOptimizer.
-     2 instructions modified by Data Flow Optimization (3 iterations).
+    11 instructions eliminated by Conditional Jump Optimization (5 iterations).
+    10 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     1 instructions eliminated by Loop Optimization (4 iterations).
+     6 loops improved by Loop Optimization.
+   670 instructions added by Loop Unrolling (7 iterations).
+     2 loops unrolled by Loop Unrolling.
+   124 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      3 instructions eliminated by Print Merging.
-   124 instructions after optimizations.
+   668 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Pass 1: speed optimization selection (cost limit 874):
+    Loop Optimization: replicate condition at line 32  cost   1, benefit       25,0, efficiency       25,0
+    Loop Unrolling: unroll loop at line 24             cost 145, benefit     1450,0, efficiency       10,0
+  * Loop Unrolling: unroll loop at line 65             cost 493, benefit    36250,0, efficiency       73,5
+
+Pass 1: speed optimization selection (cost limit 371):
+  * Loop Optimization: replicate condition at line 32  cost   1, benefit       25,0, efficiency       25,0
+    Loop Unrolling: unroll loop at line 24             cost 145, benefit     1450,0, efficiency       10,0
+
+Pass 1: speed optimization selection (cost limit 370):
+  * Loop Unrolling: unroll loop at line 24             cost 145, benefit     1450,0, efficiency       10,0
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 instructions):
  
     13 set INDEX 256
     14 set SIZE 511
@@ -241,7 +255,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
    186 jump __label31 always
    187 label __label33
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-16 instructions):
  
     20 op lessThan __tmp5 ptr INDEX
     21 jump __label0 equal __tmp5 false
@@ -329,7 +343,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
    155 write maximum COORD POSITION
    156 op sub __tmp65 @time start
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-11 instructions):
  
     17 op mul SHIFT POSITION 30
     18 read __tmp3 MEMORY INDEX
@@ -435,7 +449,7 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
    158 label __label32
    159 jump __label31 always
 
-Modifications by Single Step Elimination, pass 2, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-8 instructions):
  
     19 op sub ptr __tmp3 SHIFT
     20 jump __label0 greaterThanEq ptr INDEX
@@ -499,7 +513,7 @@ Modifications by Single Step Elimination, pass 2, iteration 1:
    136 label __label30
    137 write maximum COORD POSITION
 
-Modifications by Loop Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
  
     24 read maximum MEMORY ptr
     25 set n 0
@@ -518,107 +532,3155 @@ Modifications by Loop Optimization, pass 2, iteration 1:
     38 label __label4
     39 op mul maximum maximum SMOOTH
     40 label __label7
+ 
+    48 set n 0
+    49 label __label12
+    50 jump __label14 greaterThanEq n TOTAL
++   51 label __label35
+    52 read m COORD n
+    53 print "\nCoord: [gold]"
+    54 print m
+ 
+    56 op max maximum maximum m
+    57 label __label13
+    58 op add n n 1
+-    * jump __label12 always
++   59 jump __label35 lessThan n TOTAL
+    60 label __label14
+    61 label __label10
+    62 label __label11
+ 
+    83 set i 0
+    84 label __label17
+    85 jump __label19 greaterThanEq i SMOOTH
++   86 label __label36
+    87 read __tmp35 MEMORY head
+    88 op add value value __tmp35
+    89 op sub head head 1
+ 
+    93 label __label21
+    94 label __label18
+    95 op add i i 1
+-    * jump __label17 always
++   96 jump __label36 lessThan i SMOOTH
+    97 label __label19
+    98 op mul __tmp42 value scale
+    99 op add last 10 __tmp42
+ 
+   102 set x 159
+   103 set n 0
+   104 label __label22
+-    * jump __label24 greaterThanEq n 29
++  105 label __label37
+   106 read t MEMORY tail
+   107 read h MEMORY head
+   108 op sub __tmp46 value t
+ 
+   126 op max newMax newMax value
+   127 label __label23
+   128 op add n n 1
+-    * jump __label22 always
++  129 jump __label37 lessThan n 29
+   130 label __label24
+   131 draw color 255 255 255 255
+   132 draw lineRect 10 10 156 156
+ 
+   148 set loops 0
+   149 label __label31
+   150 jump __label33 greaterThanEq @time wait
++  151 label __label38
+   152 op add loops loops 1
+   153 label __label32
+-    * jump __label31 always
++  154 jump __label38 lessThan @time wait
+   155 label __label33
+   156 drawflush display1
+   157 print "\nLoops: "
+
+Modifications by Loop Unrolling: unroll loop at line 65 (+503 instructions):
+ 
+   100 set newMax value
+   101 draw color 80 255 80 255
+   102 set x 159
+-    * set n 0
+-    * label __label22
+-    * label __label37
+-    * read t MEMORY tail
+-    * read h MEMORY head
+-    * op sub __tmp46 value t
+-    * op add value __tmp46 h
+-    * op sub head head 1
+-    * jump __label25 greaterThan head INDEX
+-    * op sub head SIZE 1
+-    * label __label25
+-    * label __label26
+-    * op sub tail tail 1
+-    * jump __label27 greaterThan tail INDEX
+-    * op sub tail SIZE 1
+-    * label __label27
+-    * label __label28
+-    * op mul __tmp56 value scale
+-    * op add y 10 __tmp56
+-    * op sub x1 x 5
+-    * draw line x last x1 y
+-    * set x x1
+-    * set last y
+-    * op max newMax newMax value
+-    * label __label23
+-    * op add n n 1
+-    * jump __label37 lessThan n 29
+-    * label __label24
++  103 set n 0
++  104 label __label39
++  105 label __label40
++  106 read t MEMORY tail
++  107 read h MEMORY head
++  108 op sub __tmp46 value t
++  109 op add value __tmp46 h
++  110 op sub head head 1
++  111 jump __label41 greaterThan head INDEX
++  112 op sub head SIZE 1
++  113 label __label41
++  114 label __label42
++  115 op sub tail tail 1
++  116 jump __label43 greaterThan tail INDEX
++  117 op sub tail SIZE 1
++  118 label __label43
++  119 label __label44
++  120 op mul __tmp56 value scale
++  121 op add y 10 __tmp56
++  122 op sub x1 x 5
++  123 draw line x last x1 y
++  124 set x x1
++  125 set last y
++  126 op max newMax newMax value
++  127 label __label45
++  128 op add n n 1
++  129 label __label46
++  130 read t MEMORY tail
++  131 read h MEMORY head
++  132 op sub __tmp46 value t
++  133 op add value __tmp46 h
++  134 op sub head head 1
++  135 jump __label47 greaterThan head INDEX
++  136 op sub head SIZE 1
++  137 label __label47
++  138 label __label48
++  139 op sub tail tail 1
++  140 jump __label49 greaterThan tail INDEX
++  141 op sub tail SIZE 1
++  142 label __label49
++  143 label __label50
++  144 op mul __tmp56 value scale
++  145 op add y 10 __tmp56
++  146 op sub x1 x 5
++  147 draw line x last x1 y
++  148 set x x1
++  149 set last y
++  150 op max newMax newMax value
++  151 label __label51
++  152 op add n n 1
++  153 label __label52
++  154 read t MEMORY tail
++  155 read h MEMORY head
++  156 op sub __tmp46 value t
++  157 op add value __tmp46 h
++  158 op sub head head 1
++  159 jump __label53 greaterThan head INDEX
++  160 op sub head SIZE 1
++  161 label __label53
++  162 label __label54
++  163 op sub tail tail 1
++  164 jump __label55 greaterThan tail INDEX
++  165 op sub tail SIZE 1
++  166 label __label55
++  167 label __label56
++  168 op mul __tmp56 value scale
++  169 op add y 10 __tmp56
++  170 op sub x1 x 5
++  171 draw line x last x1 y
++  172 set x x1
++  173 set last y
++  174 op max newMax newMax value
++  175 label __label57
++  176 op add n n 1
++  177 label __label58
++  178 read t MEMORY tail
++  179 read h MEMORY head
++  180 op sub __tmp46 value t
++  181 op add value __tmp46 h
++  182 op sub head head 1
++  183 jump __label59 greaterThan head INDEX
++  184 op sub head SIZE 1
++  185 label __label59
++  186 label __label60
++  187 op sub tail tail 1
++  188 jump __label61 greaterThan tail INDEX
++  189 op sub tail SIZE 1
++  190 label __label61
++  191 label __label62
++  192 op mul __tmp56 value scale
++  193 op add y 10 __tmp56
++  194 op sub x1 x 5
++  195 draw line x last x1 y
++  196 set x x1
++  197 set last y
++  198 op max newMax newMax value
++  199 label __label63
++  200 op add n n 1
++  201 label __label64
++  202 read t MEMORY tail
++  203 read h MEMORY head
++  204 op sub __tmp46 value t
++  205 op add value __tmp46 h
++  206 op sub head head 1
++  207 jump __label65 greaterThan head INDEX
++  208 op sub head SIZE 1
++  209 label __label65
++  210 label __label66
++  211 op sub tail tail 1
++  212 jump __label67 greaterThan tail INDEX
++  213 op sub tail SIZE 1
++  214 label __label67
++  215 label __label68
++  216 op mul __tmp56 value scale
++  217 op add y 10 __tmp56
++  218 op sub x1 x 5
++  219 draw line x last x1 y
++  220 set x x1
++  221 set last y
++  222 op max newMax newMax value
++  223 label __label69
++  224 op add n n 1
++  225 label __label70
++  226 read t MEMORY tail
++  227 read h MEMORY head
++  228 op sub __tmp46 value t
++  229 op add value __tmp46 h
++  230 op sub head head 1
++  231 jump __label71 greaterThan head INDEX
++  232 op sub head SIZE 1
++  233 label __label71
++  234 label __label72
++  235 op sub tail tail 1
++  236 jump __label73 greaterThan tail INDEX
++  237 op sub tail SIZE 1
++  238 label __label73
++  239 label __label74
++  240 op mul __tmp56 value scale
++  241 op add y 10 __tmp56
++  242 op sub x1 x 5
++  243 draw line x last x1 y
++  244 set x x1
++  245 set last y
++  246 op max newMax newMax value
++  247 label __label75
++  248 op add n n 1
++  249 label __label76
++  250 read t MEMORY tail
++  251 read h MEMORY head
++  252 op sub __tmp46 value t
++  253 op add value __tmp46 h
++  254 op sub head head 1
++  255 jump __label77 greaterThan head INDEX
++  256 op sub head SIZE 1
++  257 label __label77
++  258 label __label78
++  259 op sub tail tail 1
++  260 jump __label79 greaterThan tail INDEX
++  261 op sub tail SIZE 1
++  262 label __label79
++  263 label __label80
++  264 op mul __tmp56 value scale
++  265 op add y 10 __tmp56
++  266 op sub x1 x 5
++  267 draw line x last x1 y
++  268 set x x1
++  269 set last y
++  270 op max newMax newMax value
++  271 label __label81
++  272 op add n n 1
++  273 label __label82
++  274 read t MEMORY tail
++  275 read h MEMORY head
++  276 op sub __tmp46 value t
++  277 op add value __tmp46 h
++  278 op sub head head 1
++  279 jump __label83 greaterThan head INDEX
++  280 op sub head SIZE 1
++  281 label __label83
++  282 label __label84
++  283 op sub tail tail 1
++  284 jump __label85 greaterThan tail INDEX
++  285 op sub tail SIZE 1
++  286 label __label85
++  287 label __label86
++  288 op mul __tmp56 value scale
++  289 op add y 10 __tmp56
++  290 op sub x1 x 5
++  291 draw line x last x1 y
++  292 set x x1
++  293 set last y
++  294 op max newMax newMax value
++  295 label __label87
++  296 op add n n 1
++  297 label __label88
++  298 read t MEMORY tail
++  299 read h MEMORY head
++  300 op sub __tmp46 value t
++  301 op add value __tmp46 h
++  302 op sub head head 1
++  303 jump __label89 greaterThan head INDEX
++  304 op sub head SIZE 1
++  305 label __label89
++  306 label __label90
++  307 op sub tail tail 1
++  308 jump __label91 greaterThan tail INDEX
++  309 op sub tail SIZE 1
++  310 label __label91
++  311 label __label92
++  312 op mul __tmp56 value scale
++  313 op add y 10 __tmp56
++  314 op sub x1 x 5
++  315 draw line x last x1 y
++  316 set x x1
++  317 set last y
++  318 op max newMax newMax value
++  319 label __label93
++  320 op add n n 1
++  321 label __label94
++  322 read t MEMORY tail
++  323 read h MEMORY head
++  324 op sub __tmp46 value t
++  325 op add value __tmp46 h
++  326 op sub head head 1
++  327 jump __label95 greaterThan head INDEX
++  328 op sub head SIZE 1
++  329 label __label95
++  330 label __label96
++  331 op sub tail tail 1
++  332 jump __label97 greaterThan tail INDEX
++  333 op sub tail SIZE 1
++  334 label __label97
++  335 label __label98
++  336 op mul __tmp56 value scale
++  337 op add y 10 __tmp56
++  338 op sub x1 x 5
++  339 draw line x last x1 y
++  340 set x x1
++  341 set last y
++  342 op max newMax newMax value
++  343 label __label99
++  344 op add n n 1
++  345 label __label100
++  346 read t MEMORY tail
++  347 read h MEMORY head
++  348 op sub __tmp46 value t
++  349 op add value __tmp46 h
++  350 op sub head head 1
++  351 jump __label101 greaterThan head INDEX
++  352 op sub head SIZE 1
++  353 label __label101
++  354 label __label102
++  355 op sub tail tail 1
++  356 jump __label103 greaterThan tail INDEX
++  357 op sub tail SIZE 1
++  358 label __label103
++  359 label __label104
++  360 op mul __tmp56 value scale
++  361 op add y 10 __tmp56
++  362 op sub x1 x 5
++  363 draw line x last x1 y
++  364 set x x1
++  365 set last y
++  366 op max newMax newMax value
++  367 label __label105
++  368 op add n n 1
++  369 label __label106
++  370 read t MEMORY tail
++  371 read h MEMORY head
++  372 op sub __tmp46 value t
++  373 op add value __tmp46 h
++  374 op sub head head 1
++  375 jump __label107 greaterThan head INDEX
++  376 op sub head SIZE 1
++  377 label __label107
++  378 label __label108
++  379 op sub tail tail 1
++  380 jump __label109 greaterThan tail INDEX
++  381 op sub tail SIZE 1
++  382 label __label109
++  383 label __label110
++  384 op mul __tmp56 value scale
++  385 op add y 10 __tmp56
++  386 op sub x1 x 5
++  387 draw line x last x1 y
++  388 set x x1
++  389 set last y
++  390 op max newMax newMax value
++  391 label __label111
++  392 op add n n 1
++  393 label __label112
++  394 read t MEMORY tail
++  395 read h MEMORY head
++  396 op sub __tmp46 value t
++  397 op add value __tmp46 h
++  398 op sub head head 1
++  399 jump __label113 greaterThan head INDEX
++  400 op sub head SIZE 1
++  401 label __label113
++  402 label __label114
++  403 op sub tail tail 1
++  404 jump __label115 greaterThan tail INDEX
++  405 op sub tail SIZE 1
++  406 label __label115
++  407 label __label116
++  408 op mul __tmp56 value scale
++  409 op add y 10 __tmp56
++  410 op sub x1 x 5
++  411 draw line x last x1 y
++  412 set x x1
++  413 set last y
++  414 op max newMax newMax value
++  415 label __label117
++  416 op add n n 1
++  417 label __label118
++  418 read t MEMORY tail
++  419 read h MEMORY head
++  420 op sub __tmp46 value t
++  421 op add value __tmp46 h
++  422 op sub head head 1
++  423 jump __label119 greaterThan head INDEX
++  424 op sub head SIZE 1
++  425 label __label119
++  426 label __label120
++  427 op sub tail tail 1
++  428 jump __label121 greaterThan tail INDEX
++  429 op sub tail SIZE 1
++  430 label __label121
++  431 label __label122
++  432 op mul __tmp56 value scale
++  433 op add y 10 __tmp56
++  434 op sub x1 x 5
++  435 draw line x last x1 y
++  436 set x x1
++  437 set last y
++  438 op max newMax newMax value
++  439 label __label123
++  440 op add n n 1
++  441 label __label124
++  442 read t MEMORY tail
++  443 read h MEMORY head
++  444 op sub __tmp46 value t
++  445 op add value __tmp46 h
++  446 op sub head head 1
++  447 jump __label125 greaterThan head INDEX
++  448 op sub head SIZE 1
++  449 label __label125
++  450 label __label126
++  451 op sub tail tail 1
++  452 jump __label127 greaterThan tail INDEX
++  453 op sub tail SIZE 1
++  454 label __label127
++  455 label __label128
++  456 op mul __tmp56 value scale
++  457 op add y 10 __tmp56
++  458 op sub x1 x 5
++  459 draw line x last x1 y
++  460 set x x1
++  461 set last y
++  462 op max newMax newMax value
++  463 label __label129
++  464 op add n n 1
++  465 label __label130
++  466 read t MEMORY tail
++  467 read h MEMORY head
++  468 op sub __tmp46 value t
++  469 op add value __tmp46 h
++  470 op sub head head 1
++  471 jump __label131 greaterThan head INDEX
++  472 op sub head SIZE 1
++  473 label __label131
++  474 label __label132
++  475 op sub tail tail 1
++  476 jump __label133 greaterThan tail INDEX
++  477 op sub tail SIZE 1
++  478 label __label133
++  479 label __label134
++  480 op mul __tmp56 value scale
++  481 op add y 10 __tmp56
++  482 op sub x1 x 5
++  483 draw line x last x1 y
++  484 set x x1
++  485 set last y
++  486 op max newMax newMax value
++  487 label __label135
++  488 op add n n 1
++  489 label __label136
++  490 read t MEMORY tail
++  491 read h MEMORY head
++  492 op sub __tmp46 value t
++  493 op add value __tmp46 h
++  494 op sub head head 1
++  495 jump __label137 greaterThan head INDEX
++  496 op sub head SIZE 1
++  497 label __label137
++  498 label __label138
++  499 op sub tail tail 1
++  500 jump __label139 greaterThan tail INDEX
++  501 op sub tail SIZE 1
++  502 label __label139
++  503 label __label140
++  504 op mul __tmp56 value scale
++  505 op add y 10 __tmp56
++  506 op sub x1 x 5
++  507 draw line x last x1 y
++  508 set x x1
++  509 set last y
++  510 op max newMax newMax value
++  511 label __label141
++  512 op add n n 1
++  513 label __label142
++  514 read t MEMORY tail
++  515 read h MEMORY head
++  516 op sub __tmp46 value t
++  517 op add value __tmp46 h
++  518 op sub head head 1
++  519 jump __label143 greaterThan head INDEX
++  520 op sub head SIZE 1
++  521 label __label143
++  522 label __label144
++  523 op sub tail tail 1
++  524 jump __label145 greaterThan tail INDEX
++  525 op sub tail SIZE 1
++  526 label __label145
++  527 label __label146
++  528 op mul __tmp56 value scale
++  529 op add y 10 __tmp56
++  530 op sub x1 x 5
++  531 draw line x last x1 y
++  532 set x x1
++  533 set last y
++  534 op max newMax newMax value
++  535 label __label147
++  536 op add n n 1
++  537 label __label148
++  538 read t MEMORY tail
++  539 read h MEMORY head
++  540 op sub __tmp46 value t
++  541 op add value __tmp46 h
++  542 op sub head head 1
++  543 jump __label149 greaterThan head INDEX
++  544 op sub head SIZE 1
++  545 label __label149
++  546 label __label150
++  547 op sub tail tail 1
++  548 jump __label151 greaterThan tail INDEX
++  549 op sub tail SIZE 1
++  550 label __label151
++  551 label __label152
++  552 op mul __tmp56 value scale
++  553 op add y 10 __tmp56
++  554 op sub x1 x 5
++  555 draw line x last x1 y
++  556 set x x1
++  557 set last y
++  558 op max newMax newMax value
++  559 label __label153
++  560 op add n n 1
++  561 label __label154
++  562 read t MEMORY tail
++  563 read h MEMORY head
++  564 op sub __tmp46 value t
++  565 op add value __tmp46 h
++  566 op sub head head 1
++  567 jump __label155 greaterThan head INDEX
++  568 op sub head SIZE 1
++  569 label __label155
++  570 label __label156
++  571 op sub tail tail 1
++  572 jump __label157 greaterThan tail INDEX
++  573 op sub tail SIZE 1
++  574 label __label157
++  575 label __label158
++  576 op mul __tmp56 value scale
++  577 op add y 10 __tmp56
++  578 op sub x1 x 5
++  579 draw line x last x1 y
++  580 set x x1
++  581 set last y
++  582 op max newMax newMax value
++  583 label __label159
++  584 op add n n 1
++  585 label __label160
++  586 read t MEMORY tail
++  587 read h MEMORY head
++  588 op sub __tmp46 value t
++  589 op add value __tmp46 h
++  590 op sub head head 1
++  591 jump __label161 greaterThan head INDEX
++  592 op sub head SIZE 1
++  593 label __label161
++  594 label __label162
++  595 op sub tail tail 1
++  596 jump __label163 greaterThan tail INDEX
++  597 op sub tail SIZE 1
++  598 label __label163
++  599 label __label164
++  600 op mul __tmp56 value scale
++  601 op add y 10 __tmp56
++  602 op sub x1 x 5
++  603 draw line x last x1 y
++  604 set x x1
++  605 set last y
++  606 op max newMax newMax value
++  607 label __label165
++  608 op add n n 1
++  609 label __label166
++  610 read t MEMORY tail
++  611 read h MEMORY head
++  612 op sub __tmp46 value t
++  613 op add value __tmp46 h
++  614 op sub head head 1
++  615 jump __label167 greaterThan head INDEX
++  616 op sub head SIZE 1
++  617 label __label167
++  618 label __label168
++  619 op sub tail tail 1
++  620 jump __label169 greaterThan tail INDEX
++  621 op sub tail SIZE 1
++  622 label __label169
++  623 label __label170
++  624 op mul __tmp56 value scale
++  625 op add y 10 __tmp56
++  626 op sub x1 x 5
++  627 draw line x last x1 y
++  628 set x x1
++  629 set last y
++  630 op max newMax newMax value
++  631 label __label171
++  632 op add n n 1
++  633 label __label172
++  634 read t MEMORY tail
++  635 read h MEMORY head
++  636 op sub __tmp46 value t
++  637 op add value __tmp46 h
++  638 op sub head head 1
++  639 jump __label173 greaterThan head INDEX
++  640 op sub head SIZE 1
++  641 label __label173
++  642 label __label174
++  643 op sub tail tail 1
++  644 jump __label175 greaterThan tail INDEX
++  645 op sub tail SIZE 1
++  646 label __label175
++  647 label __label176
++  648 op mul __tmp56 value scale
++  649 op add y 10 __tmp56
++  650 op sub x1 x 5
++  651 draw line x last x1 y
++  652 set x x1
++  653 set last y
++  654 op max newMax newMax value
++  655 label __label177
++  656 op add n n 1
++  657 label __label178
++  658 read t MEMORY tail
++  659 read h MEMORY head
++  660 op sub __tmp46 value t
++  661 op add value __tmp46 h
++  662 op sub head head 1
++  663 jump __label179 greaterThan head INDEX
++  664 op sub head SIZE 1
++  665 label __label179
++  666 label __label180
++  667 op sub tail tail 1
++  668 jump __label181 greaterThan tail INDEX
++  669 op sub tail SIZE 1
++  670 label __label181
++  671 label __label182
++  672 op mul __tmp56 value scale
++  673 op add y 10 __tmp56
++  674 op sub x1 x 5
++  675 draw line x last x1 y
++  676 set x x1
++  677 set last y
++  678 op max newMax newMax value
++  679 label __label183
++  680 op add n n 1
++  681 label __label184
++  682 read t MEMORY tail
++  683 read h MEMORY head
++  684 op sub __tmp46 value t
++  685 op add value __tmp46 h
++  686 op sub head head 1
++  687 jump __label185 greaterThan head INDEX
++  688 op sub head SIZE 1
++  689 label __label185
++  690 label __label186
++  691 op sub tail tail 1
++  692 jump __label187 greaterThan tail INDEX
++  693 op sub tail SIZE 1
++  694 label __label187
++  695 label __label188
++  696 op mul __tmp56 value scale
++  697 op add y 10 __tmp56
++  698 op sub x1 x 5
++  699 draw line x last x1 y
++  700 set x x1
++  701 set last y
++  702 op max newMax newMax value
++  703 label __label189
++  704 op add n n 1
++  705 label __label190
++  706 read t MEMORY tail
++  707 read h MEMORY head
++  708 op sub __tmp46 value t
++  709 op add value __tmp46 h
++  710 op sub head head 1
++  711 jump __label191 greaterThan head INDEX
++  712 op sub head SIZE 1
++  713 label __label191
++  714 label __label192
++  715 op sub tail tail 1
++  716 jump __label193 greaterThan tail INDEX
++  717 op sub tail SIZE 1
++  718 label __label193
++  719 label __label194
++  720 op mul __tmp56 value scale
++  721 op add y 10 __tmp56
++  722 op sub x1 x 5
++  723 draw line x last x1 y
++  724 set x x1
++  725 set last y
++  726 op max newMax newMax value
++  727 label __label195
++  728 op add n n 1
++  729 label __label196
++  730 read t MEMORY tail
++  731 read h MEMORY head
++  732 op sub __tmp46 value t
++  733 op add value __tmp46 h
++  734 op sub head head 1
++  735 jump __label197 greaterThan head INDEX
++  736 op sub head SIZE 1
++  737 label __label197
++  738 label __label198
++  739 op sub tail tail 1
++  740 jump __label199 greaterThan tail INDEX
++  741 op sub tail SIZE 1
++  742 label __label199
++  743 label __label200
++  744 op mul __tmp56 value scale
++  745 op add y 10 __tmp56
++  746 op sub x1 x 5
++  747 draw line x last x1 y
++  748 set x x1
++  749 set last y
++  750 op max newMax newMax value
++  751 label __label201
++  752 op add n n 1
++  753 label __label202
++  754 read t MEMORY tail
++  755 read h MEMORY head
++  756 op sub __tmp46 value t
++  757 op add value __tmp46 h
++  758 op sub head head 1
++  759 jump __label203 greaterThan head INDEX
++  760 op sub head SIZE 1
++  761 label __label203
++  762 label __label204
++  763 op sub tail tail 1
++  764 jump __label205 greaterThan tail INDEX
++  765 op sub tail SIZE 1
++  766 label __label205
++  767 label __label206
++  768 op mul __tmp56 value scale
++  769 op add y 10 __tmp56
++  770 op sub x1 x 5
++  771 draw line x last x1 y
++  772 set x x1
++  773 set last y
++  774 op max newMax newMax value
++  775 label __label207
++  776 op add n n 1
++  777 label __label208
++  778 read t MEMORY tail
++  779 read h MEMORY head
++  780 op sub __tmp46 value t
++  781 op add value __tmp46 h
++  782 op sub head head 1
++  783 jump __label209 greaterThan head INDEX
++  784 op sub head SIZE 1
++  785 label __label209
++  786 label __label210
++  787 op sub tail tail 1
++  788 jump __label211 greaterThan tail INDEX
++  789 op sub tail SIZE 1
++  790 label __label211
++  791 label __label212
++  792 op mul __tmp56 value scale
++  793 op add y 10 __tmp56
++  794 op sub x1 x 5
++  795 draw line x last x1 y
++  796 set x x1
++  797 set last y
++  798 op max newMax newMax value
++  799 label __label213
++  800 op add n n 1
++  801 label __label24
+   802 draw color 255 255 255 255
+   803 draw lineRect 10 10 156 156
+   804 op max maximum newMax maximum
+
+Modifications by Loop Optimization: replicate condition at line 32 (+1 instructions):
+ 
+    40 label __label7
     41 sensor __tmp16 switch1 @enabled
     42 jump __label9 notEqual __tmp16 0
-+   43 label __label35
++   43 label __label214
     44 print "Item Rate Display"
     45 set start @time
     46 sensor __tmp19 COORD @dead
  
-    49 set n 0
-    50 label __label12
-    51 jump __label14 greaterThanEq n TOTAL
-+   52 label __label36
-    53 read m COORD n
-    54 print "\nCoord: [gold]"
-    55 print m
- 
-    57 op max maximum maximum m
-    58 label __label13
-    59 op add n n 1
--    * jump __label12 always
-+   60 jump __label36 lessThan n TOTAL
-    61 label __label14
-    62 label __label10
-    63 label __label11
- 
-    84 set i 0
-    85 label __label17
-    86 jump __label19 greaterThanEq i SMOOTH
-+   87 label __label37
-    88 read __tmp35 MEMORY head
-    89 op add value value __tmp35
-    90 op sub head head 1
- 
-    94 label __label21
-    95 label __label18
-    96 op add i i 1
--    * jump __label17 always
-+   97 jump __label37 lessThan i SMOOTH
-    98 label __label19
-    99 op mul __tmp42 value scale
-   100 op add last 10 __tmp42
- 
-   103 set x 159
-   104 set n 0
-   105 label __label22
--    * jump __label24 greaterThanEq n 29
-+  106 label __label38
-   107 read t MEMORY tail
-   108 read h MEMORY head
-   109 op sub __tmp46 value t
- 
-   127 op max newMax newMax value
-   128 label __label23
-   129 op add n n 1
--    * jump __label22 always
-+  130 jump __label38 lessThan n 29
-   131 label __label24
-   132 draw color 255 255 255 255
-   133 draw lineRect 10 10 156 156
- 
-   149 set loops 0
-   150 label __label31
-   151 jump __label33 greaterThanEq @time wait
-+  152 label __label39
-   153 op add loops loops 1
-   154 label __label32
--    * jump __label31 always
-+  155 jump __label39 lessThan @time wait
-   156 label __label33
-   157 drawflush display1
-   158 print "\nLoops: "
-   159 print loops
-   160 printflush message1
-   161 label __label8
+   830 print loops
+   831 printflush message1
+   832 label __label8
 -    * jump __label7 always
-+  162 sensor __tmp16 switch1 @enabled
-+  163 jump __label35 equal __tmp16 0
-   164 label __label9
-   165 control enabled switch1 0
-   166 end
++  833 sensor __tmp16 switch1 @enabled
++  834 jump __label214 equal __tmp16 0
+   835 label __label9
+   836 control enabled switch1 0
+   837 end
 
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Loop Unrolling: unroll loop at line 24 (+167 instructions):
  
-    48 jump __label10 equal __tmp20 false
-    49 set n 0
-    50 label __label12
+    22 label __label0
+    23 label __label1
+    24 read maximum MEMORY ptr
+-    * set n 0
+-    * label __label2
+-    * label __label34
+-    * op sub ptr ptr 1
+-    * jump __label5 greaterThan ptr INDEX
+-    * op sub ptr SIZE 1
+-    * label __label5
+-    * label __label6
+-    * read __tmp13 MEMORY ptr
+-    * op max maximum maximum __tmp13
+-    * label __label3
+-    * op add n n 1
+-    * jump __label34 lessThan n 29
+-    * label __label4
++   25 set n 0
++   26 label __label215
++   27 label __label216
++   28 op sub ptr ptr 1
++   29 jump __label217 greaterThan ptr INDEX
++   30 op sub ptr SIZE 1
++   31 label __label217
++   32 label __label218
++   33 read __tmp13 MEMORY ptr
++   34 op max maximum maximum __tmp13
++   35 label __label219
++   36 op add n n 1
++   37 label __label220
++   38 op sub ptr ptr 1
++   39 jump __label221 greaterThan ptr INDEX
++   40 op sub ptr SIZE 1
++   41 label __label221
++   42 label __label222
++   43 read __tmp13 MEMORY ptr
++   44 op max maximum maximum __tmp13
++   45 label __label223
++   46 op add n n 1
++   47 label __label224
++   48 op sub ptr ptr 1
++   49 jump __label225 greaterThan ptr INDEX
++   50 op sub ptr SIZE 1
++   51 label __label225
++   52 label __label226
++   53 read __tmp13 MEMORY ptr
++   54 op max maximum maximum __tmp13
++   55 label __label227
++   56 op add n n 1
++   57 label __label228
++   58 op sub ptr ptr 1
++   59 jump __label229 greaterThan ptr INDEX
++   60 op sub ptr SIZE 1
++   61 label __label229
++   62 label __label230
++   63 read __tmp13 MEMORY ptr
++   64 op max maximum maximum __tmp13
++   65 label __label231
++   66 op add n n 1
++   67 label __label232
++   68 op sub ptr ptr 1
++   69 jump __label233 greaterThan ptr INDEX
++   70 op sub ptr SIZE 1
++   71 label __label233
++   72 label __label234
++   73 read __tmp13 MEMORY ptr
++   74 op max maximum maximum __tmp13
++   75 label __label235
++   76 op add n n 1
++   77 label __label236
++   78 op sub ptr ptr 1
++   79 jump __label237 greaterThan ptr INDEX
++   80 op sub ptr SIZE 1
++   81 label __label237
++   82 label __label238
++   83 read __tmp13 MEMORY ptr
++   84 op max maximum maximum __tmp13
++   85 label __label239
++   86 op add n n 1
++   87 label __label240
++   88 op sub ptr ptr 1
++   89 jump __label241 greaterThan ptr INDEX
++   90 op sub ptr SIZE 1
++   91 label __label241
++   92 label __label242
++   93 read __tmp13 MEMORY ptr
++   94 op max maximum maximum __tmp13
++   95 label __label243
++   96 op add n n 1
++   97 label __label244
++   98 op sub ptr ptr 1
++   99 jump __label245 greaterThan ptr INDEX
++  100 op sub ptr SIZE 1
++  101 label __label245
++  102 label __label246
++  103 read __tmp13 MEMORY ptr
++  104 op max maximum maximum __tmp13
++  105 label __label247
++  106 op add n n 1
++  107 label __label248
++  108 op sub ptr ptr 1
++  109 jump __label249 greaterThan ptr INDEX
++  110 op sub ptr SIZE 1
++  111 label __label249
++  112 label __label250
++  113 read __tmp13 MEMORY ptr
++  114 op max maximum maximum __tmp13
++  115 label __label251
++  116 op add n n 1
++  117 label __label252
++  118 op sub ptr ptr 1
++  119 jump __label253 greaterThan ptr INDEX
++  120 op sub ptr SIZE 1
++  121 label __label253
++  122 label __label254
++  123 read __tmp13 MEMORY ptr
++  124 op max maximum maximum __tmp13
++  125 label __label255
++  126 op add n n 1
++  127 label __label256
++  128 op sub ptr ptr 1
++  129 jump __label257 greaterThan ptr INDEX
++  130 op sub ptr SIZE 1
++  131 label __label257
++  132 label __label258
++  133 read __tmp13 MEMORY ptr
++  134 op max maximum maximum __tmp13
++  135 label __label259
++  136 op add n n 1
++  137 label __label260
++  138 op sub ptr ptr 1
++  139 jump __label261 greaterThan ptr INDEX
++  140 op sub ptr SIZE 1
++  141 label __label261
++  142 label __label262
++  143 read __tmp13 MEMORY ptr
++  144 op max maximum maximum __tmp13
++  145 label __label263
++  146 op add n n 1
++  147 label __label264
++  148 op sub ptr ptr 1
++  149 jump __label265 greaterThan ptr INDEX
++  150 op sub ptr SIZE 1
++  151 label __label265
++  152 label __label266
++  153 read __tmp13 MEMORY ptr
++  154 op max maximum maximum __tmp13
++  155 label __label267
++  156 op add n n 1
++  157 label __label268
++  158 op sub ptr ptr 1
++  159 jump __label269 greaterThan ptr INDEX
++  160 op sub ptr SIZE 1
++  161 label __label269
++  162 label __label270
++  163 read __tmp13 MEMORY ptr
++  164 op max maximum maximum __tmp13
++  165 label __label271
++  166 op add n n 1
++  167 label __label272
++  168 op sub ptr ptr 1
++  169 jump __label273 greaterThan ptr INDEX
++  170 op sub ptr SIZE 1
++  171 label __label273
++  172 label __label274
++  173 read __tmp13 MEMORY ptr
++  174 op max maximum maximum __tmp13
++  175 label __label275
++  176 op add n n 1
++  177 label __label276
++  178 op sub ptr ptr 1
++  179 jump __label277 greaterThan ptr INDEX
++  180 op sub ptr SIZE 1
++  181 label __label277
++  182 label __label278
++  183 read __tmp13 MEMORY ptr
++  184 op max maximum maximum __tmp13
++  185 label __label279
++  186 op add n n 1
++  187 label __label280
++  188 op sub ptr ptr 1
++  189 jump __label281 greaterThan ptr INDEX
++  190 op sub ptr SIZE 1
++  191 label __label281
++  192 label __label282
++  193 read __tmp13 MEMORY ptr
++  194 op max maximum maximum __tmp13
++  195 label __label283
++  196 op add n n 1
++  197 label __label284
++  198 op sub ptr ptr 1
++  199 jump __label285 greaterThan ptr INDEX
++  200 op sub ptr SIZE 1
++  201 label __label285
++  202 label __label286
++  203 read __tmp13 MEMORY ptr
++  204 op max maximum maximum __tmp13
++  205 label __label287
++  206 op add n n 1
++  207 label __label288
++  208 op sub ptr ptr 1
++  209 jump __label289 greaterThan ptr INDEX
++  210 op sub ptr SIZE 1
++  211 label __label289
++  212 label __label290
++  213 read __tmp13 MEMORY ptr
++  214 op max maximum maximum __tmp13
++  215 label __label291
++  216 op add n n 1
++  217 label __label292
++  218 op sub ptr ptr 1
++  219 jump __label293 greaterThan ptr INDEX
++  220 op sub ptr SIZE 1
++  221 label __label293
++  222 label __label294
++  223 read __tmp13 MEMORY ptr
++  224 op max maximum maximum __tmp13
++  225 label __label295
++  226 op add n n 1
++  227 label __label296
++  228 op sub ptr ptr 1
++  229 jump __label297 greaterThan ptr INDEX
++  230 op sub ptr SIZE 1
++  231 label __label297
++  232 label __label298
++  233 read __tmp13 MEMORY ptr
++  234 op max maximum maximum __tmp13
++  235 label __label299
++  236 op add n n 1
++  237 label __label300
++  238 op sub ptr ptr 1
++  239 jump __label301 greaterThan ptr INDEX
++  240 op sub ptr SIZE 1
++  241 label __label301
++  242 label __label302
++  243 read __tmp13 MEMORY ptr
++  244 op max maximum maximum __tmp13
++  245 label __label303
++  246 op add n n 1
++  247 label __label304
++  248 op sub ptr ptr 1
++  249 jump __label305 greaterThan ptr INDEX
++  250 op sub ptr SIZE 1
++  251 label __label305
++  252 label __label306
++  253 read __tmp13 MEMORY ptr
++  254 op max maximum maximum __tmp13
++  255 label __label307
++  256 op add n n 1
++  257 label __label308
++  258 op sub ptr ptr 1
++  259 jump __label309 greaterThan ptr INDEX
++  260 op sub ptr SIZE 1
++  261 label __label309
++  262 label __label310
++  263 read __tmp13 MEMORY ptr
++  264 op max maximum maximum __tmp13
++  265 label __label311
++  266 op add n n 1
++  267 label __label312
++  268 op sub ptr ptr 1
++  269 jump __label313 greaterThan ptr INDEX
++  270 op sub ptr SIZE 1
++  271 label __label313
++  272 label __label314
++  273 read __tmp13 MEMORY ptr
++  274 op max maximum maximum __tmp13
++  275 label __label315
++  276 op add n n 1
++  277 label __label316
++  278 op sub ptr ptr 1
++  279 jump __label317 greaterThan ptr INDEX
++  280 op sub ptr SIZE 1
++  281 label __label317
++  282 label __label318
++  283 read __tmp13 MEMORY ptr
++  284 op max maximum maximum __tmp13
++  285 label __label319
++  286 op add n n 1
++  287 label __label320
++  288 op sub ptr ptr 1
++  289 jump __label321 greaterThan ptr INDEX
++  290 op sub ptr SIZE 1
++  291 label __label321
++  292 label __label322
++  293 read __tmp13 MEMORY ptr
++  294 op max maximum maximum __tmp13
++  295 label __label323
++  296 op add n n 1
++  297 label __label324
++  298 op sub ptr ptr 1
++  299 jump __label325 greaterThan ptr INDEX
++  300 op sub ptr SIZE 1
++  301 label __label325
++  302 label __label326
++  303 read __tmp13 MEMORY ptr
++  304 op max maximum maximum __tmp13
++  305 label __label327
++  306 op add n n 1
++  307 label __label328
++  308 op sub ptr ptr 1
++  309 jump __label329 greaterThan ptr INDEX
++  310 op sub ptr SIZE 1
++  311 label __label329
++  312 label __label330
++  313 read __tmp13 MEMORY ptr
++  314 op max maximum maximum __tmp13
++  315 label __label331
++  316 op add n n 1
++  317 label __label4
+   318 op mul maximum maximum SMOOTH
+   319 label __label7
+   320 sensor __tmp16 switch1 @enabled
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-6 instructions):
+ 
+    33 read __tmp13 MEMORY ptr
+    34 op max maximum maximum __tmp13
+    35 label __label219
+-    * op add n n 1
++   36 op add n 0 1
+    37 label __label220
+    38 op sub ptr ptr 1
+    39 jump __label221 greaterThan ptr INDEX
+ 
+    43 read __tmp13 MEMORY ptr
+    44 op max maximum maximum __tmp13
+    45 label __label223
+-    * op add n n 1
++   46 op add n 1 1
+    47 label __label224
+    48 op sub ptr ptr 1
+    49 jump __label225 greaterThan ptr INDEX
+ 
+    53 read __tmp13 MEMORY ptr
+    54 op max maximum maximum __tmp13
+    55 label __label227
+-    * op add n n 1
++   56 op add n 2 1
+    57 label __label228
+    58 op sub ptr ptr 1
+    59 jump __label229 greaterThan ptr INDEX
+ 
+    63 read __tmp13 MEMORY ptr
+    64 op max maximum maximum __tmp13
+    65 label __label231
+-    * op add n n 1
++   66 op add n 3 1
+    67 label __label232
+    68 op sub ptr ptr 1
+    69 jump __label233 greaterThan ptr INDEX
+ 
+    73 read __tmp13 MEMORY ptr
+    74 op max maximum maximum __tmp13
+    75 label __label235
+-    * op add n n 1
++   76 op add n 4 1
+    77 label __label236
+    78 op sub ptr ptr 1
+    79 jump __label237 greaterThan ptr INDEX
+ 
+    83 read __tmp13 MEMORY ptr
+    84 op max maximum maximum __tmp13
+    85 label __label239
+-    * op add n n 1
++   86 op add n 5 1
+    87 label __label240
+    88 op sub ptr ptr 1
+    89 jump __label241 greaterThan ptr INDEX
+ 
+    93 read __tmp13 MEMORY ptr
+    94 op max maximum maximum __tmp13
+    95 label __label243
+-    * op add n n 1
++   96 op add n 6 1
+    97 label __label244
+    98 op sub ptr ptr 1
+    99 jump __label245 greaterThan ptr INDEX
+ 
+   103 read __tmp13 MEMORY ptr
+   104 op max maximum maximum __tmp13
+   105 label __label247
+-    * op add n n 1
++  106 op add n 7 1
+   107 label __label248
+   108 op sub ptr ptr 1
+   109 jump __label249 greaterThan ptr INDEX
+ 
+   113 read __tmp13 MEMORY ptr
+   114 op max maximum maximum __tmp13
+   115 label __label251
+-    * op add n n 1
++  116 op add n 8 1
+   117 label __label252
+   118 op sub ptr ptr 1
+   119 jump __label253 greaterThan ptr INDEX
+ 
+   123 read __tmp13 MEMORY ptr
+   124 op max maximum maximum __tmp13
+   125 label __label255
+-    * op add n n 1
++  126 op add n 9 1
+   127 label __label256
+   128 op sub ptr ptr 1
+   129 jump __label257 greaterThan ptr INDEX
+ 
+   133 read __tmp13 MEMORY ptr
+   134 op max maximum maximum __tmp13
+   135 label __label259
+-    * op add n n 1
++  136 op add n 10 1
+   137 label __label260
+   138 op sub ptr ptr 1
+   139 jump __label261 greaterThan ptr INDEX
+ 
+   143 read __tmp13 MEMORY ptr
+   144 op max maximum maximum __tmp13
+   145 label __label263
+-    * op add n n 1
++  146 op add n 11 1
+   147 label __label264
+   148 op sub ptr ptr 1
+   149 jump __label265 greaterThan ptr INDEX
+ 
+   153 read __tmp13 MEMORY ptr
+   154 op max maximum maximum __tmp13
+   155 label __label267
+-    * op add n n 1
++  156 op add n 12 1
+   157 label __label268
+   158 op sub ptr ptr 1
+   159 jump __label269 greaterThan ptr INDEX
+ 
+   163 read __tmp13 MEMORY ptr
+   164 op max maximum maximum __tmp13
+   165 label __label271
+-    * op add n n 1
++  166 op add n 13 1
+   167 label __label272
+   168 op sub ptr ptr 1
+   169 jump __label273 greaterThan ptr INDEX
+ 
+   173 read __tmp13 MEMORY ptr
+   174 op max maximum maximum __tmp13
+   175 label __label275
+-    * op add n n 1
++  176 op add n 14 1
+   177 label __label276
+   178 op sub ptr ptr 1
+   179 jump __label277 greaterThan ptr INDEX
+ 
+   183 read __tmp13 MEMORY ptr
+   184 op max maximum maximum __tmp13
+   185 label __label279
+-    * op add n n 1
++  186 op add n 15 1
+   187 label __label280
+   188 op sub ptr ptr 1
+   189 jump __label281 greaterThan ptr INDEX
+ 
+   193 read __tmp13 MEMORY ptr
+   194 op max maximum maximum __tmp13
+   195 label __label283
+-    * op add n n 1
++  196 op add n 16 1
+   197 label __label284
+   198 op sub ptr ptr 1
+   199 jump __label285 greaterThan ptr INDEX
+ 
+   203 read __tmp13 MEMORY ptr
+   204 op max maximum maximum __tmp13
+   205 label __label287
+-    * op add n n 1
++  206 op add n 17 1
+   207 label __label288
+   208 op sub ptr ptr 1
+   209 jump __label289 greaterThan ptr INDEX
+ 
+   213 read __tmp13 MEMORY ptr
+   214 op max maximum maximum __tmp13
+   215 label __label291
+-    * op add n n 1
++  216 op add n 18 1
+   217 label __label292
+   218 op sub ptr ptr 1
+   219 jump __label293 greaterThan ptr INDEX
+ 
+   223 read __tmp13 MEMORY ptr
+   224 op max maximum maximum __tmp13
+   225 label __label295
+-    * op add n n 1
++  226 op add n 19 1
+   227 label __label296
+   228 op sub ptr ptr 1
+   229 jump __label297 greaterThan ptr INDEX
+ 
+   233 read __tmp13 MEMORY ptr
+   234 op max maximum maximum __tmp13
+   235 label __label299
+-    * op add n n 1
++  236 op add n 20 1
+   237 label __label300
+   238 op sub ptr ptr 1
+   239 jump __label301 greaterThan ptr INDEX
+ 
+   243 read __tmp13 MEMORY ptr
+   244 op max maximum maximum __tmp13
+   245 label __label303
+-    * op add n n 1
++  246 op add n 21 1
+   247 label __label304
+   248 op sub ptr ptr 1
+   249 jump __label305 greaterThan ptr INDEX
+ 
+   253 read __tmp13 MEMORY ptr
+   254 op max maximum maximum __tmp13
+   255 label __label307
+-    * op add n n 1
++  256 op add n 22 1
+   257 label __label308
+   258 op sub ptr ptr 1
+   259 jump __label309 greaterThan ptr INDEX
+ 
+   263 read __tmp13 MEMORY ptr
+   264 op max maximum maximum __tmp13
+   265 label __label311
+-    * op add n n 1
++  266 op add n 23 1
+   267 label __label312
+   268 op sub ptr ptr 1
+   269 jump __label313 greaterThan ptr INDEX
+ 
+   273 read __tmp13 MEMORY ptr
+   274 op max maximum maximum __tmp13
+   275 label __label315
+-    * op add n n 1
++  276 op add n 24 1
+   277 label __label316
+   278 op sub ptr ptr 1
+   279 jump __label317 greaterThan ptr INDEX
+ 
+   283 read __tmp13 MEMORY ptr
+   284 op max maximum maximum __tmp13
+   285 label __label319
+-    * op add n n 1
++  286 op add n 25 1
+   287 label __label320
+   288 op sub ptr ptr 1
+   289 jump __label321 greaterThan ptr INDEX
+ 
+   293 read __tmp13 MEMORY ptr
+   294 op max maximum maximum __tmp13
+   295 label __label323
+-    * op add n n 1
++  296 op add n 26 1
+   297 label __label324
+   298 op sub ptr ptr 1
+   299 jump __label325 greaterThan ptr INDEX
+ 
+   303 read __tmp13 MEMORY ptr
+   304 op max maximum maximum __tmp13
+   305 label __label327
+-    * op add n n 1
++  306 op add n 27 1
+   307 label __label328
+   308 op sub ptr ptr 1
+   309 jump __label329 greaterThan ptr INDEX
+ 
+   313 read __tmp13 MEMORY ptr
+   314 op max maximum maximum __tmp13
+   315 label __label331
+-    * op add n n 1
+   316 label __label4
+   317 op mul maximum maximum SMOOTH
+   318 label __label7
+ 
+   326 jump __label10 equal __tmp20 false
+   327 set n 0
+   328 label __label12
 -    * jump __label14 greaterThanEq n TOTAL
-+   51 jump __label14 greaterThanEq 0 TOTAL
-    52 label __label36
-    53 read m COORD n
-    54 print "\nCoord: [gold]"
++  329 jump __label14 greaterThanEq 0 TOTAL
+   330 label __label35
+   331 read m COORD n
+   332 print "\nCoord: [gold]"
  
-    83 set value 0
-    84 set i 0
-    85 label __label17
+   361 set value 0
+   362 set i 0
+   363 label __label17
 -    * jump __label19 greaterThanEq i SMOOTH
-+   86 jump __label19 greaterThanEq 0 SMOOTH
-    87 label __label37
-    88 read __tmp35 MEMORY head
-    89 op add value value __tmp35
++  364 jump __label19 greaterThanEq 0 SMOOTH
+   365 label __label36
+   366 read __tmp35 MEMORY head
+   367 op add value value __tmp35
+ 
+   398 label __label44
+   399 op mul __tmp56 value scale
+   400 op add y 10 __tmp56
+-    * op sub x1 x 5
+-    * draw line x last x1 y
+-    * set x x1
++  401 op sub x1 159 5
++  402 draw line 159 last 154 y
++  403 set x 154
+   404 set last y
+   405 op max newMax newMax value
+   406 label __label45
+-    * op add n n 1
++  407 op add n 0 1
+   408 label __label46
+   409 read t MEMORY tail
+   410 read h MEMORY head
+ 
+   422 label __label50
+   423 op mul __tmp56 value scale
+   424 op add y 10 __tmp56
+-    * op sub x1 x 5
++  425 op sub x1 x1 5
+   426 draw line x last x1 y
+   427 set x x1
+   428 set last y
+   429 op max newMax newMax value
+   430 label __label51
+-    * op add n n 1
++  431 op add n 1 1
+   432 label __label52
+   433 read t MEMORY tail
+   434 read h MEMORY head
+ 
+   446 label __label56
+   447 op mul __tmp56 value scale
+   448 op add y 10 __tmp56
+-    * op sub x1 x 5
++  449 op sub x1 x1 5
+   450 draw line x last x1 y
+   451 set x x1
+   452 set last y
+   453 op max newMax newMax value
+   454 label __label57
+-    * op add n n 1
++  455 op add n 2 1
+   456 label __label58
+   457 read t MEMORY tail
+   458 read h MEMORY head
+ 
+   470 label __label62
+   471 op mul __tmp56 value scale
+   472 op add y 10 __tmp56
+-    * op sub x1 x 5
++  473 op sub x1 x1 5
+   474 draw line x last x1 y
+   475 set x x1
+   476 set last y
+   477 op max newMax newMax value
+   478 label __label63
+-    * op add n n 1
++  479 op add n 3 1
+   480 label __label64
+   481 read t MEMORY tail
+   482 read h MEMORY head
+ 
+   494 label __label68
+   495 op mul __tmp56 value scale
+   496 op add y 10 __tmp56
+-    * op sub x1 x 5
++  497 op sub x1 x1 5
+   498 draw line x last x1 y
+   499 set x x1
+   500 set last y
+   501 op max newMax newMax value
+   502 label __label69
+-    * op add n n 1
++  503 op add n 4 1
+   504 label __label70
+   505 read t MEMORY tail
+   506 read h MEMORY head
+ 
+   518 label __label74
+   519 op mul __tmp56 value scale
+   520 op add y 10 __tmp56
+-    * op sub x1 x 5
++  521 op sub x1 x1 5
+   522 draw line x last x1 y
+   523 set x x1
+   524 set last y
+   525 op max newMax newMax value
+   526 label __label75
+-    * op add n n 1
++  527 op add n 5 1
+   528 label __label76
+   529 read t MEMORY tail
+   530 read h MEMORY head
+ 
+   542 label __label80
+   543 op mul __tmp56 value scale
+   544 op add y 10 __tmp56
+-    * op sub x1 x 5
++  545 op sub x1 x1 5
+   546 draw line x last x1 y
+   547 set x x1
+   548 set last y
+   549 op max newMax newMax value
+   550 label __label81
+-    * op add n n 1
++  551 op add n 6 1
+   552 label __label82
+   553 read t MEMORY tail
+   554 read h MEMORY head
+ 
+   566 label __label86
+   567 op mul __tmp56 value scale
+   568 op add y 10 __tmp56
+-    * op sub x1 x 5
++  569 op sub x1 x1 5
+   570 draw line x last x1 y
+   571 set x x1
+   572 set last y
+   573 op max newMax newMax value
+   574 label __label87
+-    * op add n n 1
++  575 op add n 7 1
+   576 label __label88
+   577 read t MEMORY tail
+   578 read h MEMORY head
+ 
+   590 label __label92
+   591 op mul __tmp56 value scale
+   592 op add y 10 __tmp56
+-    * op sub x1 x 5
++  593 op sub x1 x1 5
+   594 draw line x last x1 y
+   595 set x x1
+   596 set last y
+   597 op max newMax newMax value
+   598 label __label93
+-    * op add n n 1
++  599 op add n 8 1
+   600 label __label94
+   601 read t MEMORY tail
+   602 read h MEMORY head
+ 
+   614 label __label98
+   615 op mul __tmp56 value scale
+   616 op add y 10 __tmp56
+-    * op sub x1 x 5
++  617 op sub x1 x1 5
+   618 draw line x last x1 y
+   619 set x x1
+   620 set last y
+   621 op max newMax newMax value
+   622 label __label99
+-    * op add n n 1
++  623 op add n 9 1
+   624 label __label100
+   625 read t MEMORY tail
+   626 read h MEMORY head
+ 
+   638 label __label104
+   639 op mul __tmp56 value scale
+   640 op add y 10 __tmp56
+-    * op sub x1 x 5
++  641 op sub x1 x1 5
+   642 draw line x last x1 y
+   643 set x x1
+   644 set last y
+   645 op max newMax newMax value
+   646 label __label105
+-    * op add n n 1
++  647 op add n 10 1
+   648 label __label106
+   649 read t MEMORY tail
+   650 read h MEMORY head
+ 
+   662 label __label110
+   663 op mul __tmp56 value scale
+   664 op add y 10 __tmp56
+-    * op sub x1 x 5
++  665 op sub x1 x1 5
+   666 draw line x last x1 y
+   667 set x x1
+   668 set last y
+   669 op max newMax newMax value
+   670 label __label111
+-    * op add n n 1
++  671 op add n 11 1
+   672 label __label112
+   673 read t MEMORY tail
+   674 read h MEMORY head
+ 
+   686 label __label116
+   687 op mul __tmp56 value scale
+   688 op add y 10 __tmp56
+-    * op sub x1 x 5
++  689 op sub x1 x1 5
+   690 draw line x last x1 y
+   691 set x x1
+   692 set last y
+   693 op max newMax newMax value
+   694 label __label117
+-    * op add n n 1
++  695 op add n 12 1
+   696 label __label118
+   697 read t MEMORY tail
+   698 read h MEMORY head
+ 
+   710 label __label122
+   711 op mul __tmp56 value scale
+   712 op add y 10 __tmp56
+-    * op sub x1 x 5
++  713 op sub x1 x1 5
+   714 draw line x last x1 y
+   715 set x x1
+   716 set last y
+   717 op max newMax newMax value
+   718 label __label123
+-    * op add n n 1
++  719 op add n 13 1
+   720 label __label124
+   721 read t MEMORY tail
+   722 read h MEMORY head
+ 
+   734 label __label128
+   735 op mul __tmp56 value scale
+   736 op add y 10 __tmp56
+-    * op sub x1 x 5
++  737 op sub x1 x1 5
+   738 draw line x last x1 y
+   739 set x x1
+   740 set last y
+   741 op max newMax newMax value
+   742 label __label129
+-    * op add n n 1
++  743 op add n 14 1
+   744 label __label130
+   745 read t MEMORY tail
+   746 read h MEMORY head
+ 
+   758 label __label134
+   759 op mul __tmp56 value scale
+   760 op add y 10 __tmp56
+-    * op sub x1 x 5
++  761 op sub x1 x1 5
+   762 draw line x last x1 y
+   763 set x x1
+   764 set last y
+   765 op max newMax newMax value
+   766 label __label135
+-    * op add n n 1
++  767 op add n 15 1
+   768 label __label136
+   769 read t MEMORY tail
+   770 read h MEMORY head
+ 
+   782 label __label140
+   783 op mul __tmp56 value scale
+   784 op add y 10 __tmp56
+-    * op sub x1 x 5
++  785 op sub x1 x1 5
+   786 draw line x last x1 y
+   787 set x x1
+   788 set last y
+   789 op max newMax newMax value
+   790 label __label141
+-    * op add n n 1
++  791 op add n 16 1
+   792 label __label142
+   793 read t MEMORY tail
+   794 read h MEMORY head
+ 
+   806 label __label146
+   807 op mul __tmp56 value scale
+   808 op add y 10 __tmp56
+-    * op sub x1 x 5
++  809 op sub x1 x1 5
+   810 draw line x last x1 y
+   811 set x x1
+   812 set last y
+   813 op max newMax newMax value
+   814 label __label147
+-    * op add n n 1
++  815 op add n 17 1
+   816 label __label148
+   817 read t MEMORY tail
+   818 read h MEMORY head
+ 
+   830 label __label152
+   831 op mul __tmp56 value scale
+   832 op add y 10 __tmp56
+-    * op sub x1 x 5
++  833 op sub x1 x1 5
+   834 draw line x last x1 y
+   835 set x x1
+   836 set last y
+   837 op max newMax newMax value
+   838 label __label153
+-    * op add n n 1
++  839 op add n 18 1
+   840 label __label154
+   841 read t MEMORY tail
+   842 read h MEMORY head
+ 
+   854 label __label158
+   855 op mul __tmp56 value scale
+   856 op add y 10 __tmp56
+-    * op sub x1 x 5
++  857 op sub x1 x1 5
+   858 draw line x last x1 y
+   859 set x x1
+   860 set last y
+   861 op max newMax newMax value
+   862 label __label159
+-    * op add n n 1
++  863 op add n 19 1
+   864 label __label160
+   865 read t MEMORY tail
+   866 read h MEMORY head
+ 
+   878 label __label164
+   879 op mul __tmp56 value scale
+   880 op add y 10 __tmp56
+-    * op sub x1 x 5
++  881 op sub x1 x1 5
+   882 draw line x last x1 y
+   883 set x x1
+   884 set last y
+   885 op max newMax newMax value
+   886 label __label165
+-    * op add n n 1
++  887 op add n 20 1
+   888 label __label166
+   889 read t MEMORY tail
+   890 read h MEMORY head
+ 
+   902 label __label170
+   903 op mul __tmp56 value scale
+   904 op add y 10 __tmp56
+-    * op sub x1 x 5
++  905 op sub x1 x1 5
+   906 draw line x last x1 y
+   907 set x x1
+   908 set last y
+   909 op max newMax newMax value
+   910 label __label171
+-    * op add n n 1
++  911 op add n 21 1
+   912 label __label172
+   913 read t MEMORY tail
+   914 read h MEMORY head
+ 
+   926 label __label176
+   927 op mul __tmp56 value scale
+   928 op add y 10 __tmp56
+-    * op sub x1 x 5
++  929 op sub x1 x1 5
+   930 draw line x last x1 y
+   931 set x x1
+   932 set last y
+   933 op max newMax newMax value
+   934 label __label177
+-    * op add n n 1
++  935 op add n 22 1
+   936 label __label178
+   937 read t MEMORY tail
+   938 read h MEMORY head
+ 
+   950 label __label182
+   951 op mul __tmp56 value scale
+   952 op add y 10 __tmp56
+-    * op sub x1 x 5
++  953 op sub x1 x1 5
+   954 draw line x last x1 y
+   955 set x x1
+   956 set last y
+   957 op max newMax newMax value
+   958 label __label183
+-    * op add n n 1
++  959 op add n 23 1
+   960 label __label184
+   961 read t MEMORY tail
+   962 read h MEMORY head
+ 
+   974 label __label188
+   975 op mul __tmp56 value scale
+   976 op add y 10 __tmp56
+-    * op sub x1 x 5
++  977 op sub x1 x1 5
+   978 draw line x last x1 y
+   979 set x x1
+   980 set last y
+   981 op max newMax newMax value
+   982 label __label189
+-    * op add n n 1
++  983 op add n 24 1
+   984 label __label190
+   985 read t MEMORY tail
+   986 read h MEMORY head
+ 
+   998 label __label194
+   999 op mul __tmp56 value scale
+  1000 op add y 10 __tmp56
+-    * op sub x1 x 5
++ 1001 op sub x1 x1 5
+  1002 draw line x last x1 y
+  1003 set x x1
+  1004 set last y
+  1005 op max newMax newMax value
+  1006 label __label195
+-    * op add n n 1
++ 1007 op add n 25 1
+  1008 label __label196
+  1009 read t MEMORY tail
+  1010 read h MEMORY head
+ 
+  1022 label __label200
+  1023 op mul __tmp56 value scale
+  1024 op add y 10 __tmp56
+-    * op sub x1 x 5
++ 1025 op sub x1 x1 5
+  1026 draw line x last x1 y
+  1027 set x x1
+  1028 set last y
+  1029 op max newMax newMax value
+  1030 label __label201
+-    * op add n n 1
++ 1031 op add n 26 1
+  1032 label __label202
+  1033 read t MEMORY tail
+  1034 read h MEMORY head
+ 
+  1046 label __label206
+  1047 op mul __tmp56 value scale
+  1048 op add y 10 __tmp56
+-    * op sub x1 x 5
++ 1049 op sub x1 x1 5
+  1050 draw line x last x1 y
+  1051 set x x1
+  1052 set last y
+  1053 op max newMax newMax value
+  1054 label __label207
+-    * op add n n 1
++ 1055 op add n 27 1
+  1056 label __label208
+  1057 read t MEMORY tail
+  1058 read h MEMORY head
+ 
+  1060 op add value __tmp46 h
+  1061 op sub head head 1
+  1062 jump __label209 greaterThan head INDEX
+-    * op sub head SIZE 1
+  1063 label __label209
+  1064 label __label210
+  1065 op sub tail tail 1
+  1066 jump __label211 greaterThan tail INDEX
+-    * op sub tail SIZE 1
+  1067 label __label211
+  1068 label __label212
+  1069 op mul __tmp56 value scale
+  1070 op add y 10 __tmp56
+-    * op sub x1 x 5
++ 1071 op sub x1 x1 5
+  1072 draw line x last x1 y
+-    * set x x1
+-    * set last y
+  1073 op max newMax newMax value
+  1074 label __label213
+-    * op add n n 1
+  1075 label __label24
+  1076 draw color 255 255 255 255
+  1077 draw lineRect 10 10 156 156
 
-Modifications by Print Merging, pass 3, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-59 instructions):
+ 
+    22 label __label0
+    23 label __label1
+    24 read maximum MEMORY ptr
+-    * set n 0
+    25 label __label215
+    26 label __label216
+    27 op sub ptr ptr 1
+ 
+    32 read __tmp13 MEMORY ptr
+    33 op max maximum maximum __tmp13
+    34 label __label219
+-    * op add n 0 1
+    35 label __label220
+    36 op sub ptr ptr 1
+    37 jump __label221 greaterThan ptr INDEX
+ 
+    41 read __tmp13 MEMORY ptr
+    42 op max maximum maximum __tmp13
+    43 label __label223
+-    * op add n 1 1
+    44 label __label224
+    45 op sub ptr ptr 1
+    46 jump __label225 greaterThan ptr INDEX
+ 
+    50 read __tmp13 MEMORY ptr
+    51 op max maximum maximum __tmp13
+    52 label __label227
+-    * op add n 2 1
+    53 label __label228
+    54 op sub ptr ptr 1
+    55 jump __label229 greaterThan ptr INDEX
+ 
+    59 read __tmp13 MEMORY ptr
+    60 op max maximum maximum __tmp13
+    61 label __label231
+-    * op add n 3 1
+    62 label __label232
+    63 op sub ptr ptr 1
+    64 jump __label233 greaterThan ptr INDEX
+ 
+    68 read __tmp13 MEMORY ptr
+    69 op max maximum maximum __tmp13
+    70 label __label235
+-    * op add n 4 1
+    71 label __label236
+    72 op sub ptr ptr 1
+    73 jump __label237 greaterThan ptr INDEX
+ 
+    77 read __tmp13 MEMORY ptr
+    78 op max maximum maximum __tmp13
+    79 label __label239
+-    * op add n 5 1
+    80 label __label240
+    81 op sub ptr ptr 1
+    82 jump __label241 greaterThan ptr INDEX
+ 
+    86 read __tmp13 MEMORY ptr
+    87 op max maximum maximum __tmp13
+    88 label __label243
+-    * op add n 6 1
+    89 label __label244
+    90 op sub ptr ptr 1
+    91 jump __label245 greaterThan ptr INDEX
+ 
+    95 read __tmp13 MEMORY ptr
+    96 op max maximum maximum __tmp13
+    97 label __label247
+-    * op add n 7 1
+    98 label __label248
+    99 op sub ptr ptr 1
+   100 jump __label249 greaterThan ptr INDEX
+ 
+   104 read __tmp13 MEMORY ptr
+   105 op max maximum maximum __tmp13
+   106 label __label251
+-    * op add n 8 1
+   107 label __label252
+   108 op sub ptr ptr 1
+   109 jump __label253 greaterThan ptr INDEX
+ 
+   113 read __tmp13 MEMORY ptr
+   114 op max maximum maximum __tmp13
+   115 label __label255
+-    * op add n 9 1
+   116 label __label256
+   117 op sub ptr ptr 1
+   118 jump __label257 greaterThan ptr INDEX
+ 
+   122 read __tmp13 MEMORY ptr
+   123 op max maximum maximum __tmp13
+   124 label __label259
+-    * op add n 10 1
+   125 label __label260
+   126 op sub ptr ptr 1
+   127 jump __label261 greaterThan ptr INDEX
+ 
+   131 read __tmp13 MEMORY ptr
+   132 op max maximum maximum __tmp13
+   133 label __label263
+-    * op add n 11 1
+   134 label __label264
+   135 op sub ptr ptr 1
+   136 jump __label265 greaterThan ptr INDEX
+ 
+   140 read __tmp13 MEMORY ptr
+   141 op max maximum maximum __tmp13
+   142 label __label267
+-    * op add n 12 1
+   143 label __label268
+   144 op sub ptr ptr 1
+   145 jump __label269 greaterThan ptr INDEX
+ 
+   149 read __tmp13 MEMORY ptr
+   150 op max maximum maximum __tmp13
+   151 label __label271
+-    * op add n 13 1
+   152 label __label272
+   153 op sub ptr ptr 1
+   154 jump __label273 greaterThan ptr INDEX
+ 
+   158 read __tmp13 MEMORY ptr
+   159 op max maximum maximum __tmp13
+   160 label __label275
+-    * op add n 14 1
+   161 label __label276
+   162 op sub ptr ptr 1
+   163 jump __label277 greaterThan ptr INDEX
+ 
+   167 read __tmp13 MEMORY ptr
+   168 op max maximum maximum __tmp13
+   169 label __label279
+-    * op add n 15 1
+   170 label __label280
+   171 op sub ptr ptr 1
+   172 jump __label281 greaterThan ptr INDEX
+ 
+   176 read __tmp13 MEMORY ptr
+   177 op max maximum maximum __tmp13
+   178 label __label283
+-    * op add n 16 1
+   179 label __label284
+   180 op sub ptr ptr 1
+   181 jump __label285 greaterThan ptr INDEX
+ 
+   185 read __tmp13 MEMORY ptr
+   186 op max maximum maximum __tmp13
+   187 label __label287
+-    * op add n 17 1
+   188 label __label288
+   189 op sub ptr ptr 1
+   190 jump __label289 greaterThan ptr INDEX
+ 
+   194 read __tmp13 MEMORY ptr
+   195 op max maximum maximum __tmp13
+   196 label __label291
+-    * op add n 18 1
+   197 label __label292
+   198 op sub ptr ptr 1
+   199 jump __label293 greaterThan ptr INDEX
+ 
+   203 read __tmp13 MEMORY ptr
+   204 op max maximum maximum __tmp13
+   205 label __label295
+-    * op add n 19 1
+   206 label __label296
+   207 op sub ptr ptr 1
+   208 jump __label297 greaterThan ptr INDEX
+ 
+   212 read __tmp13 MEMORY ptr
+   213 op max maximum maximum __tmp13
+   214 label __label299
+-    * op add n 20 1
+   215 label __label300
+   216 op sub ptr ptr 1
+   217 jump __label301 greaterThan ptr INDEX
+ 
+   221 read __tmp13 MEMORY ptr
+   222 op max maximum maximum __tmp13
+   223 label __label303
+-    * op add n 21 1
+   224 label __label304
+   225 op sub ptr ptr 1
+   226 jump __label305 greaterThan ptr INDEX
+ 
+   230 read __tmp13 MEMORY ptr
+   231 op max maximum maximum __tmp13
+   232 label __label307
+-    * op add n 22 1
+   233 label __label308
+   234 op sub ptr ptr 1
+   235 jump __label309 greaterThan ptr INDEX
+ 
+   239 read __tmp13 MEMORY ptr
+   240 op max maximum maximum __tmp13
+   241 label __label311
+-    * op add n 23 1
+   242 label __label312
+   243 op sub ptr ptr 1
+   244 jump __label313 greaterThan ptr INDEX
+ 
+   248 read __tmp13 MEMORY ptr
+   249 op max maximum maximum __tmp13
+   250 label __label315
+-    * op add n 24 1
+   251 label __label316
+   252 op sub ptr ptr 1
+   253 jump __label317 greaterThan ptr INDEX
+ 
+   257 read __tmp13 MEMORY ptr
+   258 op max maximum maximum __tmp13
+   259 label __label319
+-    * op add n 25 1
+   260 label __label320
+   261 op sub ptr ptr 1
+   262 jump __label321 greaterThan ptr INDEX
+ 
+   266 read __tmp13 MEMORY ptr
+   267 op max maximum maximum __tmp13
+   268 label __label323
+-    * op add n 26 1
+   269 label __label324
+   270 op sub ptr ptr 1
+   271 jump __label325 greaterThan ptr INDEX
+ 
+   275 read __tmp13 MEMORY ptr
+   276 op max maximum maximum __tmp13
+   277 label __label327
+-    * op add n 27 1
+   278 label __label328
+   279 op sub ptr ptr 1
+   280 jump __label329 greaterThan ptr INDEX
+ 
+   349 op add last 10 __tmp42
+   350 set newMax value
+   351 draw color 80 255 80 255
+-    * set x 159
+-    * set n 0
+   352 label __label39
+   353 label __label40
+   354 read t MEMORY tail
+ 
+   373 set last y
+   374 op max newMax newMax value
+   375 label __label45
+-    * op add n 0 1
+   376 label __label46
+   377 read t MEMORY tail
+   378 read h MEMORY head
+ 
+   390 label __label50
+   391 op mul __tmp56 value scale
+   392 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  393 op sub x1 154 5
++  394 draw line 154 last 149 y
++  395 set x 149
+   396 set last y
+   397 op max newMax newMax value
+   398 label __label51
+-    * op add n 1 1
+   399 label __label52
+   400 read t MEMORY tail
+   401 read h MEMORY head
+ 
+   413 label __label56
+   414 op mul __tmp56 value scale
+   415 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  416 op sub x1 149 5
++  417 draw line x last 144 y
++  418 set x 144
+   419 set last y
+   420 op max newMax newMax value
+   421 label __label57
+-    * op add n 2 1
+   422 label __label58
+   423 read t MEMORY tail
+   424 read h MEMORY head
+ 
+   436 label __label62
+   437 op mul __tmp56 value scale
+   438 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  439 op sub x1 144 5
++  440 draw line x last 139 y
++  441 set x 139
+   442 set last y
+   443 op max newMax newMax value
+   444 label __label63
+-    * op add n 3 1
+   445 label __label64
+   446 read t MEMORY tail
+   447 read h MEMORY head
+ 
+   459 label __label68
+   460 op mul __tmp56 value scale
+   461 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  462 op sub x1 139 5
++  463 draw line x last 134 y
++  464 set x 134
+   465 set last y
+   466 op max newMax newMax value
+   467 label __label69
+-    * op add n 4 1
+   468 label __label70
+   469 read t MEMORY tail
+   470 read h MEMORY head
+ 
+   482 label __label74
+   483 op mul __tmp56 value scale
+   484 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  485 op sub x1 134 5
++  486 draw line x last 129 y
++  487 set x 129
+   488 set last y
+   489 op max newMax newMax value
+   490 label __label75
+-    * op add n 5 1
+   491 label __label76
+   492 read t MEMORY tail
+   493 read h MEMORY head
+ 
+   505 label __label80
+   506 op mul __tmp56 value scale
+   507 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  508 op sub x1 129 5
++  509 draw line x last 124 y
++  510 set x 124
+   511 set last y
+   512 op max newMax newMax value
+   513 label __label81
+-    * op add n 6 1
+   514 label __label82
+   515 read t MEMORY tail
+   516 read h MEMORY head
+ 
+   528 label __label86
+   529 op mul __tmp56 value scale
+   530 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  531 op sub x1 124 5
++  532 draw line x last 119 y
++  533 set x 119
+   534 set last y
+   535 op max newMax newMax value
+   536 label __label87
+-    * op add n 7 1
+   537 label __label88
+   538 read t MEMORY tail
+   539 read h MEMORY head
+ 
+   551 label __label92
+   552 op mul __tmp56 value scale
+   553 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  554 op sub x1 119 5
++  555 draw line x last 114 y
++  556 set x 114
+   557 set last y
+   558 op max newMax newMax value
+   559 label __label93
+-    * op add n 8 1
+   560 label __label94
+   561 read t MEMORY tail
+   562 read h MEMORY head
+ 
+   574 label __label98
+   575 op mul __tmp56 value scale
+   576 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  577 op sub x1 114 5
++  578 draw line x last 109 y
++  579 set x 109
+   580 set last y
+   581 op max newMax newMax value
+   582 label __label99
+-    * op add n 9 1
+   583 label __label100
+   584 read t MEMORY tail
+   585 read h MEMORY head
+ 
+   597 label __label104
+   598 op mul __tmp56 value scale
+   599 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  600 op sub x1 109 5
++  601 draw line x last 104 y
++  602 set x 104
+   603 set last y
+   604 op max newMax newMax value
+   605 label __label105
+-    * op add n 10 1
+   606 label __label106
+   607 read t MEMORY tail
+   608 read h MEMORY head
+ 
+   620 label __label110
+   621 op mul __tmp56 value scale
+   622 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  623 op sub x1 104 5
++  624 draw line x last 99 y
++  625 set x 99
+   626 set last y
+   627 op max newMax newMax value
+   628 label __label111
+-    * op add n 11 1
+   629 label __label112
+   630 read t MEMORY tail
+   631 read h MEMORY head
+ 
+   643 label __label116
+   644 op mul __tmp56 value scale
+   645 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  646 op sub x1 99 5
++  647 draw line x last 94 y
++  648 set x 94
+   649 set last y
+   650 op max newMax newMax value
+   651 label __label117
+-    * op add n 12 1
+   652 label __label118
+   653 read t MEMORY tail
+   654 read h MEMORY head
+ 
+   666 label __label122
+   667 op mul __tmp56 value scale
+   668 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  669 op sub x1 94 5
++  670 draw line x last 89 y
++  671 set x 89
+   672 set last y
+   673 op max newMax newMax value
+   674 label __label123
+-    * op add n 13 1
+   675 label __label124
+   676 read t MEMORY tail
+   677 read h MEMORY head
+ 
+   689 label __label128
+   690 op mul __tmp56 value scale
+   691 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  692 op sub x1 89 5
++  693 draw line x last 84 y
++  694 set x 84
+   695 set last y
+   696 op max newMax newMax value
+   697 label __label129
+-    * op add n 14 1
+   698 label __label130
+   699 read t MEMORY tail
+   700 read h MEMORY head
+ 
+   712 label __label134
+   713 op mul __tmp56 value scale
+   714 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  715 op sub x1 84 5
++  716 draw line x last 79 y
++  717 set x 79
+   718 set last y
+   719 op max newMax newMax value
+   720 label __label135
+-    * op add n 15 1
+   721 label __label136
+   722 read t MEMORY tail
+   723 read h MEMORY head
+ 
+   735 label __label140
+   736 op mul __tmp56 value scale
+   737 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  738 op sub x1 79 5
++  739 draw line x last 74 y
++  740 set x 74
+   741 set last y
+   742 op max newMax newMax value
+   743 label __label141
+-    * op add n 16 1
+   744 label __label142
+   745 read t MEMORY tail
+   746 read h MEMORY head
+ 
+   758 label __label146
+   759 op mul __tmp56 value scale
+   760 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  761 op sub x1 74 5
++  762 draw line x last 69 y
++  763 set x 69
+   764 set last y
+   765 op max newMax newMax value
+   766 label __label147
+-    * op add n 17 1
+   767 label __label148
+   768 read t MEMORY tail
+   769 read h MEMORY head
+ 
+   781 label __label152
+   782 op mul __tmp56 value scale
+   783 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  784 op sub x1 69 5
++  785 draw line x last 64 y
++  786 set x 64
+   787 set last y
+   788 op max newMax newMax value
+   789 label __label153
+-    * op add n 18 1
+   790 label __label154
+   791 read t MEMORY tail
+   792 read h MEMORY head
+ 
+   804 label __label158
+   805 op mul __tmp56 value scale
+   806 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  807 op sub x1 64 5
++  808 draw line x last 59 y
++  809 set x 59
+   810 set last y
+   811 op max newMax newMax value
+   812 label __label159
+-    * op add n 19 1
+   813 label __label160
+   814 read t MEMORY tail
+   815 read h MEMORY head
+ 
+   827 label __label164
+   828 op mul __tmp56 value scale
+   829 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  830 op sub x1 59 5
++  831 draw line x last 54 y
++  832 set x 54
+   833 set last y
+   834 op max newMax newMax value
+   835 label __label165
+-    * op add n 20 1
+   836 label __label166
+   837 read t MEMORY tail
+   838 read h MEMORY head
+ 
+   850 label __label170
+   851 op mul __tmp56 value scale
+   852 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  853 op sub x1 54 5
++  854 draw line x last 49 y
++  855 set x 49
+   856 set last y
+   857 op max newMax newMax value
+   858 label __label171
+-    * op add n 21 1
+   859 label __label172
+   860 read t MEMORY tail
+   861 read h MEMORY head
+ 
+   873 label __label176
+   874 op mul __tmp56 value scale
+   875 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  876 op sub x1 49 5
++  877 draw line x last 44 y
++  878 set x 44
+   879 set last y
+   880 op max newMax newMax value
+   881 label __label177
+-    * op add n 22 1
+   882 label __label178
+   883 read t MEMORY tail
+   884 read h MEMORY head
+ 
+   896 label __label182
+   897 op mul __tmp56 value scale
+   898 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  899 op sub x1 44 5
++  900 draw line x last 39 y
++  901 set x 39
+   902 set last y
+   903 op max newMax newMax value
+   904 label __label183
+-    * op add n 23 1
+   905 label __label184
+   906 read t MEMORY tail
+   907 read h MEMORY head
+ 
+   919 label __label188
+   920 op mul __tmp56 value scale
+   921 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  922 op sub x1 39 5
++  923 draw line x last 34 y
++  924 set x 34
+   925 set last y
+   926 op max newMax newMax value
+   927 label __label189
+-    * op add n 24 1
+   928 label __label190
+   929 read t MEMORY tail
+   930 read h MEMORY head
+ 
+   942 label __label194
+   943 op mul __tmp56 value scale
+   944 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  945 op sub x1 34 5
++  946 draw line x last 29 y
++  947 set x 29
+   948 set last y
+   949 op max newMax newMax value
+   950 label __label195
+-    * op add n 25 1
+   951 label __label196
+   952 read t MEMORY tail
+   953 read h MEMORY head
+ 
+   965 label __label200
+   966 op mul __tmp56 value scale
+   967 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  968 op sub x1 29 5
++  969 draw line x last 24 y
++  970 set x 24
+   971 set last y
+   972 op max newMax newMax value
+   973 label __label201
+-    * op add n 26 1
+   974 label __label202
+   975 read t MEMORY tail
+   976 read h MEMORY head
+ 
+   988 label __label206
+   989 op mul __tmp56 value scale
+   990 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
+-    * set x x1
++  991 op sub x1 24 5
++  992 draw line x last 19 y
++  993 set x 19
+   994 set last y
+   995 op max newMax newMax value
+   996 label __label207
+-    * op add n 27 1
+   997 label __label208
+   998 read t MEMORY tail
+   999 read h MEMORY head
+ 
+  1009 label __label212
+  1010 op mul __tmp56 value scale
+  1011 op add y 10 __tmp56
+-    * op sub x1 x1 5
+-    * draw line x last x1 y
++ 1012 op sub x1 19 5
++ 1013 draw line x last 14 y
+  1014 op max newMax newMax value
+  1015 label __label213
+  1016 label __label24
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-30 instructions):
+ 
+   367 label __label44
+   368 op mul __tmp56 value scale
+   369 op add y 10 __tmp56
+-    * op sub x1 159 5
+   370 draw line 159 last 154 y
+-    * set x 154
+   371 set last y
+   372 op max newMax newMax value
+   373 label __label45
+ 
+   388 label __label50
+   389 op mul __tmp56 value scale
+   390 op add y 10 __tmp56
+-    * op sub x1 154 5
+   391 draw line 154 last 149 y
+   392 set x 149
+   393 set last y
+ 
+   410 label __label56
+   411 op mul __tmp56 value scale
+   412 op add y 10 __tmp56
+-    * op sub x1 149 5
+-    * draw line x last 144 y
++  413 draw line 149 last 144 y
+   414 set x 144
+   415 set last y
+   416 op max newMax newMax value
+ 
+   432 label __label62
+   433 op mul __tmp56 value scale
+   434 op add y 10 __tmp56
+-    * op sub x1 144 5
+-    * draw line x last 139 y
++  435 draw line 144 last 139 y
+   436 set x 139
+   437 set last y
+   438 op max newMax newMax value
+ 
+   454 label __label68
+   455 op mul __tmp56 value scale
+   456 op add y 10 __tmp56
+-    * op sub x1 139 5
+-    * draw line x last 134 y
++  457 draw line 139 last 134 y
+   458 set x 134
+   459 set last y
+   460 op max newMax newMax value
+ 
+   476 label __label74
+   477 op mul __tmp56 value scale
+   478 op add y 10 __tmp56
+-    * op sub x1 134 5
+-    * draw line x last 129 y
++  479 draw line 134 last 129 y
+   480 set x 129
+   481 set last y
+   482 op max newMax newMax value
+ 
+   498 label __label80
+   499 op mul __tmp56 value scale
+   500 op add y 10 __tmp56
+-    * op sub x1 129 5
+-    * draw line x last 124 y
++  501 draw line 129 last 124 y
+   502 set x 124
+   503 set last y
+   504 op max newMax newMax value
+ 
+   520 label __label86
+   521 op mul __tmp56 value scale
+   522 op add y 10 __tmp56
+-    * op sub x1 124 5
+-    * draw line x last 119 y
++  523 draw line 124 last 119 y
+   524 set x 119
+   525 set last y
+   526 op max newMax newMax value
+ 
+   542 label __label92
+   543 op mul __tmp56 value scale
+   544 op add y 10 __tmp56
+-    * op sub x1 119 5
+-    * draw line x last 114 y
++  545 draw line 119 last 114 y
+   546 set x 114
+   547 set last y
+   548 op max newMax newMax value
+ 
+   564 label __label98
+   565 op mul __tmp56 value scale
+   566 op add y 10 __tmp56
+-    * op sub x1 114 5
+-    * draw line x last 109 y
++  567 draw line 114 last 109 y
+   568 set x 109
+   569 set last y
+   570 op max newMax newMax value
+ 
+   586 label __label104
+   587 op mul __tmp56 value scale
+   588 op add y 10 __tmp56
+-    * op sub x1 109 5
+-    * draw line x last 104 y
++  589 draw line 109 last 104 y
+   590 set x 104
+   591 set last y
+   592 op max newMax newMax value
+ 
+   608 label __label110
+   609 op mul __tmp56 value scale
+   610 op add y 10 __tmp56
+-    * op sub x1 104 5
+-    * draw line x last 99 y
++  611 draw line 104 last 99 y
+   612 set x 99
+   613 set last y
+   614 op max newMax newMax value
+ 
+   630 label __label116
+   631 op mul __tmp56 value scale
+   632 op add y 10 __tmp56
+-    * op sub x1 99 5
+-    * draw line x last 94 y
++  633 draw line 99 last 94 y
+   634 set x 94
+   635 set last y
+   636 op max newMax newMax value
+ 
+   652 label __label122
+   653 op mul __tmp56 value scale
+   654 op add y 10 __tmp56
+-    * op sub x1 94 5
+-    * draw line x last 89 y
++  655 draw line 94 last 89 y
+   656 set x 89
+   657 set last y
+   658 op max newMax newMax value
+ 
+   674 label __label128
+   675 op mul __tmp56 value scale
+   676 op add y 10 __tmp56
+-    * op sub x1 89 5
+-    * draw line x last 84 y
++  677 draw line 89 last 84 y
+   678 set x 84
+   679 set last y
+   680 op max newMax newMax value
+ 
+   696 label __label134
+   697 op mul __tmp56 value scale
+   698 op add y 10 __tmp56
+-    * op sub x1 84 5
+-    * draw line x last 79 y
++  699 draw line 84 last 79 y
+   700 set x 79
+   701 set last y
+   702 op max newMax newMax value
+ 
+   718 label __label140
+   719 op mul __tmp56 value scale
+   720 op add y 10 __tmp56
+-    * op sub x1 79 5
+-    * draw line x last 74 y
++  721 draw line 79 last 74 y
+   722 set x 74
+   723 set last y
+   724 op max newMax newMax value
+ 
+   740 label __label146
+   741 op mul __tmp56 value scale
+   742 op add y 10 __tmp56
+-    * op sub x1 74 5
+-    * draw line x last 69 y
++  743 draw line 74 last 69 y
+   744 set x 69
+   745 set last y
+   746 op max newMax newMax value
+ 
+   762 label __label152
+   763 op mul __tmp56 value scale
+   764 op add y 10 __tmp56
+-    * op sub x1 69 5
+-    * draw line x last 64 y
++  765 draw line 69 last 64 y
+   766 set x 64
+   767 set last y
+   768 op max newMax newMax value
+ 
+   784 label __label158
+   785 op mul __tmp56 value scale
+   786 op add y 10 __tmp56
+-    * op sub x1 64 5
+-    * draw line x last 59 y
++  787 draw line 64 last 59 y
+   788 set x 59
+   789 set last y
+   790 op max newMax newMax value
+ 
+   806 label __label164
+   807 op mul __tmp56 value scale
+   808 op add y 10 __tmp56
+-    * op sub x1 59 5
+-    * draw line x last 54 y
++  809 draw line 59 last 54 y
+   810 set x 54
+   811 set last y
+   812 op max newMax newMax value
+ 
+   828 label __label170
+   829 op mul __tmp56 value scale
+   830 op add y 10 __tmp56
+-    * op sub x1 54 5
+-    * draw line x last 49 y
++  831 draw line 54 last 49 y
+   832 set x 49
+   833 set last y
+   834 op max newMax newMax value
+ 
+   850 label __label176
+   851 op mul __tmp56 value scale
+   852 op add y 10 __tmp56
+-    * op sub x1 49 5
+-    * draw line x last 44 y
++  853 draw line 49 last 44 y
+   854 set x 44
+   855 set last y
+   856 op max newMax newMax value
+ 
+   872 label __label182
+   873 op mul __tmp56 value scale
+   874 op add y 10 __tmp56
+-    * op sub x1 44 5
+-    * draw line x last 39 y
++  875 draw line 44 last 39 y
+   876 set x 39
+   877 set last y
+   878 op max newMax newMax value
+ 
+   894 label __label188
+   895 op mul __tmp56 value scale
+   896 op add y 10 __tmp56
+-    * op sub x1 39 5
+-    * draw line x last 34 y
++  897 draw line 39 last 34 y
+   898 set x 34
+   899 set last y
+   900 op max newMax newMax value
+ 
+   916 label __label194
+   917 op mul __tmp56 value scale
+   918 op add y 10 __tmp56
+-    * op sub x1 34 5
+-    * draw line x last 29 y
++  919 draw line 34 last 29 y
+   920 set x 29
+   921 set last y
+   922 op max newMax newMax value
+ 
+   938 label __label200
+   939 op mul __tmp56 value scale
+   940 op add y 10 __tmp56
+-    * op sub x1 29 5
+-    * draw line x last 24 y
++  941 draw line 29 last 24 y
+   942 set x 24
+   943 set last y
+   944 op max newMax newMax value
+ 
+   960 label __label206
+   961 op mul __tmp56 value scale
+   962 op add y 10 __tmp56
+-    * op sub x1 24 5
+-    * draw line x last 19 y
++  963 draw line 24 last 19 y
+   964 set x 19
+   965 set last y
+   966 op max newMax newMax value
+ 
+   980 label __label212
+   981 op mul __tmp56 value scale
+   982 op add y 10 __tmp56
+-    * op sub x1 19 5
+-    * draw line x last 14 y
++  983 draw line 19 last 14 y
+   984 op max newMax newMax value
+   985 label __label213
+   986 label __label24
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 4 (-27 instructions):
+ 
+   389 op mul __tmp56 value scale
+   390 op add y 10 __tmp56
+   391 draw line 154 last 149 y
+-    * set x 149
+   392 set last y
+   393 op max newMax newMax value
+   394 label __label51
+ 
+   410 op mul __tmp56 value scale
+   411 op add y 10 __tmp56
+   412 draw line 149 last 144 y
+-    * set x 144
+   413 set last y
+   414 op max newMax newMax value
+   415 label __label57
+ 
+   431 op mul __tmp56 value scale
+   432 op add y 10 __tmp56
+   433 draw line 144 last 139 y
+-    * set x 139
+   434 set last y
+   435 op max newMax newMax value
+   436 label __label63
+ 
+   452 op mul __tmp56 value scale
+   453 op add y 10 __tmp56
+   454 draw line 139 last 134 y
+-    * set x 134
+   455 set last y
+   456 op max newMax newMax value
+   457 label __label69
+ 
+   473 op mul __tmp56 value scale
+   474 op add y 10 __tmp56
+   475 draw line 134 last 129 y
+-    * set x 129
+   476 set last y
+   477 op max newMax newMax value
+   478 label __label75
+ 
+   494 op mul __tmp56 value scale
+   495 op add y 10 __tmp56
+   496 draw line 129 last 124 y
+-    * set x 124
+   497 set last y
+   498 op max newMax newMax value
+   499 label __label81
+ 
+   515 op mul __tmp56 value scale
+   516 op add y 10 __tmp56
+   517 draw line 124 last 119 y
+-    * set x 119
+   518 set last y
+   519 op max newMax newMax value
+   520 label __label87
+ 
+   536 op mul __tmp56 value scale
+   537 op add y 10 __tmp56
+   538 draw line 119 last 114 y
+-    * set x 114
+   539 set last y
+   540 op max newMax newMax value
+   541 label __label93
+ 
+   557 op mul __tmp56 value scale
+   558 op add y 10 __tmp56
+   559 draw line 114 last 109 y
+-    * set x 109
+   560 set last y
+   561 op max newMax newMax value
+   562 label __label99
+ 
+   578 op mul __tmp56 value scale
+   579 op add y 10 __tmp56
+   580 draw line 109 last 104 y
+-    * set x 104
+   581 set last y
+   582 op max newMax newMax value
+   583 label __label105
+ 
+   599 op mul __tmp56 value scale
+   600 op add y 10 __tmp56
+   601 draw line 104 last 99 y
+-    * set x 99
+   602 set last y
+   603 op max newMax newMax value
+   604 label __label111
+ 
+   620 op mul __tmp56 value scale
+   621 op add y 10 __tmp56
+   622 draw line 99 last 94 y
+-    * set x 94
+   623 set last y
+   624 op max newMax newMax value
+   625 label __label117
+ 
+   641 op mul __tmp56 value scale
+   642 op add y 10 __tmp56
+   643 draw line 94 last 89 y
+-    * set x 89
+   644 set last y
+   645 op max newMax newMax value
+   646 label __label123
+ 
+   662 op mul __tmp56 value scale
+   663 op add y 10 __tmp56
+   664 draw line 89 last 84 y
+-    * set x 84
+   665 set last y
+   666 op max newMax newMax value
+   667 label __label129
+ 
+   683 op mul __tmp56 value scale
+   684 op add y 10 __tmp56
+   685 draw line 84 last 79 y
+-    * set x 79
+   686 set last y
+   687 op max newMax newMax value
+   688 label __label135
+ 
+   704 op mul __tmp56 value scale
+   705 op add y 10 __tmp56
+   706 draw line 79 last 74 y
+-    * set x 74
+   707 set last y
+   708 op max newMax newMax value
+   709 label __label141
+ 
+   725 op mul __tmp56 value scale
+   726 op add y 10 __tmp56
+   727 draw line 74 last 69 y
+-    * set x 69
+   728 set last y
+   729 op max newMax newMax value
+   730 label __label147
+ 
+   746 op mul __tmp56 value scale
+   747 op add y 10 __tmp56
+   748 draw line 69 last 64 y
+-    * set x 64
+   749 set last y
+   750 op max newMax newMax value
+   751 label __label153
+ 
+   767 op mul __tmp56 value scale
+   768 op add y 10 __tmp56
+   769 draw line 64 last 59 y
+-    * set x 59
+   770 set last y
+   771 op max newMax newMax value
+   772 label __label159
+ 
+   788 op mul __tmp56 value scale
+   789 op add y 10 __tmp56
+   790 draw line 59 last 54 y
+-    * set x 54
+   791 set last y
+   792 op max newMax newMax value
+   793 label __label165
+ 
+   809 op mul __tmp56 value scale
+   810 op add y 10 __tmp56
+   811 draw line 54 last 49 y
+-    * set x 49
+   812 set last y
+   813 op max newMax newMax value
+   814 label __label171
+ 
+   830 op mul __tmp56 value scale
+   831 op add y 10 __tmp56
+   832 draw line 49 last 44 y
+-    * set x 44
+   833 set last y
+   834 op max newMax newMax value
+   835 label __label177
+ 
+   851 op mul __tmp56 value scale
+   852 op add y 10 __tmp56
+   853 draw line 44 last 39 y
+-    * set x 39
+   854 set last y
+   855 op max newMax newMax value
+   856 label __label183
+ 
+   872 op mul __tmp56 value scale
+   873 op add y 10 __tmp56
+   874 draw line 39 last 34 y
+-    * set x 34
+   875 set last y
+   876 op max newMax newMax value
+   877 label __label189
+ 
+   893 op mul __tmp56 value scale
+   894 op add y 10 __tmp56
+   895 draw line 34 last 29 y
+-    * set x 29
+   896 set last y
+   897 op max newMax newMax value
+   898 label __label195
+ 
+   914 op mul __tmp56 value scale
+   915 op add y 10 __tmp56
+   916 draw line 29 last 24 y
+-    * set x 24
+   917 set last y
+   918 op max newMax newMax value
+   919 label __label201
+ 
+   935 op mul __tmp56 value scale
+   936 op add y 10 __tmp56
+   937 draw line 24 last 19 y
+-    * set x 19
+   938 set last y
+   939 op max newMax newMax value
+   940 label __label207
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
+ 
+   944 op sub __tmp46 value t
+   945 op add value __tmp46 h
+   946 op sub head head 1
+-    * jump __label209 greaterThan head INDEX
+   947 label __label209
+   948 label __label210
+   949 op sub tail tail 1
+-    * jump __label211 greaterThan tail INDEX
+   950 label __label211
+   951 label __label212
+   952 op mul __tmp56 value scale
+
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1 (-2 instructions):
+ 
+   943 read h MEMORY head
+   944 op sub __tmp46 value t
+   945 op add value __tmp46 h
+-    * op sub head head 1
+   946 label __label209
+   947 label __label210
+-    * op sub tail tail 1
+   948 label __label211
+   949 label __label212
+   950 op mul __tmp56 value scale
+
+Modifications by Final phase, Print Merging, iteration 1 (-3 instructions):
  
      4 set TOTAL 1
      5 set FREQ 1000
@@ -633,16 +3695,16 @@ Modifications by Print Merging, pass 3, iteration 1:
     10 draw stroke 1
     11 set INDEX 256
  
-    63 op ceil __tmp27 maximum
-    64 print "\nMaximum: [green]"
-    65 print __tmp27
+   312 op ceil __tmp27 maximum
+   313 print "\nMaximum: [green]"
+   314 print __tmp27
 -    * print "[]"
-    66 op floor __tmp28 scale
+   315 op floor __tmp28 scale
 -    * print "\nScale: [green]"
-+   67 print "[]\nScale: [green]"
-    68 print __tmp28
-    69 print "[]"
-    70 draw clear 0 0 80
++  316 print "[]\nScale: [green]"
+   317 print __tmp28
+   318 print "[]"
+   319 draw clear 0 0 80
 
 Final code before resolving virtual instructions:
 
@@ -669,25 +3731,274 @@ op add ptr ptr SKIP_SIZE
 label __label0
 label __label1
 read maximum MEMORY ptr
-set n 0
-label __label2
-label __label34
+label __label215
+label __label216
 op sub ptr ptr 1
-jump __label5 greaterThan ptr INDEX
+jump __label217 greaterThan ptr INDEX
 op sub ptr SIZE 1
-label __label5
-label __label6
+label __label217
+label __label218
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label3
-op add n n 1
-jump __label34 lessThan n 29
+label __label219
+label __label220
+op sub ptr ptr 1
+jump __label221 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label221
+label __label222
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label223
+label __label224
+op sub ptr ptr 1
+jump __label225 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label225
+label __label226
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label227
+label __label228
+op sub ptr ptr 1
+jump __label229 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label229
+label __label230
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label231
+label __label232
+op sub ptr ptr 1
+jump __label233 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label233
+label __label234
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label235
+label __label236
+op sub ptr ptr 1
+jump __label237 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label237
+label __label238
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label239
+label __label240
+op sub ptr ptr 1
+jump __label241 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label241
+label __label242
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label243
+label __label244
+op sub ptr ptr 1
+jump __label245 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label245
+label __label246
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label247
+label __label248
+op sub ptr ptr 1
+jump __label249 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label249
+label __label250
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label251
+label __label252
+op sub ptr ptr 1
+jump __label253 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label253
+label __label254
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label255
+label __label256
+op sub ptr ptr 1
+jump __label257 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label257
+label __label258
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label259
+label __label260
+op sub ptr ptr 1
+jump __label261 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label261
+label __label262
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label263
+label __label264
+op sub ptr ptr 1
+jump __label265 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label265
+label __label266
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label267
+label __label268
+op sub ptr ptr 1
+jump __label269 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label269
+label __label270
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label271
+label __label272
+op sub ptr ptr 1
+jump __label273 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label273
+label __label274
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label275
+label __label276
+op sub ptr ptr 1
+jump __label277 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label277
+label __label278
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label279
+label __label280
+op sub ptr ptr 1
+jump __label281 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label281
+label __label282
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label283
+label __label284
+op sub ptr ptr 1
+jump __label285 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label285
+label __label286
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label287
+label __label288
+op sub ptr ptr 1
+jump __label289 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label289
+label __label290
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label291
+label __label292
+op sub ptr ptr 1
+jump __label293 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label293
+label __label294
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label295
+label __label296
+op sub ptr ptr 1
+jump __label297 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label297
+label __label298
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label299
+label __label300
+op sub ptr ptr 1
+jump __label301 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label301
+label __label302
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label303
+label __label304
+op sub ptr ptr 1
+jump __label305 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label305
+label __label306
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label307
+label __label308
+op sub ptr ptr 1
+jump __label309 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label309
+label __label310
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label311
+label __label312
+op sub ptr ptr 1
+jump __label313 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label313
+label __label314
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label315
+label __label316
+op sub ptr ptr 1
+jump __label317 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label317
+label __label318
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label319
+label __label320
+op sub ptr ptr 1
+jump __label321 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label321
+label __label322
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label323
+label __label324
+op sub ptr ptr 1
+jump __label325 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label325
+label __label326
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label327
+label __label328
+op sub ptr ptr 1
+jump __label329 greaterThan ptr INDEX
+op sub ptr SIZE 1
+label __label329
+label __label330
+read __tmp13 MEMORY ptr
+op max maximum maximum __tmp13
+label __label331
 label __label4
 op mul maximum maximum SMOOTH
 label __label7
 sensor __tmp16 switch1 @enabled
 jump __label9 notEqual __tmp16 0
-label __label35
+label __label214
 print "Item Rate Display"
 set start @time
 sensor __tmp19 COORD @dead
@@ -696,7 +4007,7 @@ jump __label10 equal __tmp20 false
 set n 0
 label __label12
 jump __label14 greaterThanEq 0 TOTAL
-label __label36
+label __label35
 read m COORD n
 print "\nCoord: [gold]"
 print m
@@ -704,7 +4015,7 @@ print "[]"
 op max maximum maximum m
 label __label13
 op add n n 1
-jump __label36 lessThan n TOTAL
+jump __label35 lessThan n TOTAL
 label __label14
 label __label10
 label __label11
@@ -730,7 +4041,7 @@ set value 0
 set i 0
 label __label17
 jump __label19 greaterThanEq 0 SMOOTH
-label __label37
+label __label36
 read __tmp35 MEMORY head
 op add value value __tmp35
 op sub head head 1
@@ -740,40 +4051,615 @@ label __label20
 label __label21
 label __label18
 op add i i 1
-jump __label37 lessThan i SMOOTH
+jump __label36 lessThan i SMOOTH
 label __label19
 op mul __tmp42 value scale
 op add last 10 __tmp42
 set newMax value
 draw color 80 255 80 255 0 0
-set x 159
-set n 0
-label __label22
-label __label38
+label __label39
+label __label40
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
 op add value __tmp46 h
 op sub head head 1
-jump __label25 greaterThan head INDEX
+jump __label41 greaterThan head INDEX
 op sub head SIZE 1
-label __label25
-label __label26
+label __label41
+label __label42
 op sub tail tail 1
-jump __label27 greaterThan tail INDEX
+jump __label43 greaterThan tail INDEX
 op sub tail SIZE 1
-label __label27
-label __label28
+label __label43
+label __label44
 op mul __tmp56 value scale
 op add y 10 __tmp56
-op sub x1 x 5
-draw line x last x1 y 0 0
-set x x1
+draw line 159 last 154 y 0 0
 set last y
 op max newMax newMax value
-label __label23
-op add n n 1
-jump __label38 lessThan n 29
+label __label45
+label __label46
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label47 greaterThan head INDEX
+op sub head SIZE 1
+label __label47
+label __label48
+op sub tail tail 1
+jump __label49 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label49
+label __label50
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 154 last 149 y 0 0
+set last y
+op max newMax newMax value
+label __label51
+label __label52
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label53 greaterThan head INDEX
+op sub head SIZE 1
+label __label53
+label __label54
+op sub tail tail 1
+jump __label55 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label55
+label __label56
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 149 last 144 y 0 0
+set last y
+op max newMax newMax value
+label __label57
+label __label58
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label59 greaterThan head INDEX
+op sub head SIZE 1
+label __label59
+label __label60
+op sub tail tail 1
+jump __label61 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label61
+label __label62
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 144 last 139 y 0 0
+set last y
+op max newMax newMax value
+label __label63
+label __label64
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label65 greaterThan head INDEX
+op sub head SIZE 1
+label __label65
+label __label66
+op sub tail tail 1
+jump __label67 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label67
+label __label68
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 139 last 134 y 0 0
+set last y
+op max newMax newMax value
+label __label69
+label __label70
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label71 greaterThan head INDEX
+op sub head SIZE 1
+label __label71
+label __label72
+op sub tail tail 1
+jump __label73 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label73
+label __label74
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 134 last 129 y 0 0
+set last y
+op max newMax newMax value
+label __label75
+label __label76
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label77 greaterThan head INDEX
+op sub head SIZE 1
+label __label77
+label __label78
+op sub tail tail 1
+jump __label79 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label79
+label __label80
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 129 last 124 y 0 0
+set last y
+op max newMax newMax value
+label __label81
+label __label82
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label83 greaterThan head INDEX
+op sub head SIZE 1
+label __label83
+label __label84
+op sub tail tail 1
+jump __label85 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label85
+label __label86
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 124 last 119 y 0 0
+set last y
+op max newMax newMax value
+label __label87
+label __label88
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label89 greaterThan head INDEX
+op sub head SIZE 1
+label __label89
+label __label90
+op sub tail tail 1
+jump __label91 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label91
+label __label92
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 119 last 114 y 0 0
+set last y
+op max newMax newMax value
+label __label93
+label __label94
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label95 greaterThan head INDEX
+op sub head SIZE 1
+label __label95
+label __label96
+op sub tail tail 1
+jump __label97 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label97
+label __label98
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 114 last 109 y 0 0
+set last y
+op max newMax newMax value
+label __label99
+label __label100
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label101 greaterThan head INDEX
+op sub head SIZE 1
+label __label101
+label __label102
+op sub tail tail 1
+jump __label103 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label103
+label __label104
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 109 last 104 y 0 0
+set last y
+op max newMax newMax value
+label __label105
+label __label106
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label107 greaterThan head INDEX
+op sub head SIZE 1
+label __label107
+label __label108
+op sub tail tail 1
+jump __label109 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label109
+label __label110
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 104 last 99 y 0 0
+set last y
+op max newMax newMax value
+label __label111
+label __label112
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label113 greaterThan head INDEX
+op sub head SIZE 1
+label __label113
+label __label114
+op sub tail tail 1
+jump __label115 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label115
+label __label116
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 99 last 94 y 0 0
+set last y
+op max newMax newMax value
+label __label117
+label __label118
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label119 greaterThan head INDEX
+op sub head SIZE 1
+label __label119
+label __label120
+op sub tail tail 1
+jump __label121 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label121
+label __label122
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 94 last 89 y 0 0
+set last y
+op max newMax newMax value
+label __label123
+label __label124
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label125 greaterThan head INDEX
+op sub head SIZE 1
+label __label125
+label __label126
+op sub tail tail 1
+jump __label127 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label127
+label __label128
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 89 last 84 y 0 0
+set last y
+op max newMax newMax value
+label __label129
+label __label130
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label131 greaterThan head INDEX
+op sub head SIZE 1
+label __label131
+label __label132
+op sub tail tail 1
+jump __label133 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label133
+label __label134
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 84 last 79 y 0 0
+set last y
+op max newMax newMax value
+label __label135
+label __label136
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label137 greaterThan head INDEX
+op sub head SIZE 1
+label __label137
+label __label138
+op sub tail tail 1
+jump __label139 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label139
+label __label140
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 79 last 74 y 0 0
+set last y
+op max newMax newMax value
+label __label141
+label __label142
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label143 greaterThan head INDEX
+op sub head SIZE 1
+label __label143
+label __label144
+op sub tail tail 1
+jump __label145 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label145
+label __label146
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 74 last 69 y 0 0
+set last y
+op max newMax newMax value
+label __label147
+label __label148
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label149 greaterThan head INDEX
+op sub head SIZE 1
+label __label149
+label __label150
+op sub tail tail 1
+jump __label151 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label151
+label __label152
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 69 last 64 y 0 0
+set last y
+op max newMax newMax value
+label __label153
+label __label154
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label155 greaterThan head INDEX
+op sub head SIZE 1
+label __label155
+label __label156
+op sub tail tail 1
+jump __label157 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label157
+label __label158
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 64 last 59 y 0 0
+set last y
+op max newMax newMax value
+label __label159
+label __label160
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label161 greaterThan head INDEX
+op sub head SIZE 1
+label __label161
+label __label162
+op sub tail tail 1
+jump __label163 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label163
+label __label164
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 59 last 54 y 0 0
+set last y
+op max newMax newMax value
+label __label165
+label __label166
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label167 greaterThan head INDEX
+op sub head SIZE 1
+label __label167
+label __label168
+op sub tail tail 1
+jump __label169 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label169
+label __label170
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 54 last 49 y 0 0
+set last y
+op max newMax newMax value
+label __label171
+label __label172
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label173 greaterThan head INDEX
+op sub head SIZE 1
+label __label173
+label __label174
+op sub tail tail 1
+jump __label175 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label175
+label __label176
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 49 last 44 y 0 0
+set last y
+op max newMax newMax value
+label __label177
+label __label178
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label179 greaterThan head INDEX
+op sub head SIZE 1
+label __label179
+label __label180
+op sub tail tail 1
+jump __label181 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label181
+label __label182
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 44 last 39 y 0 0
+set last y
+op max newMax newMax value
+label __label183
+label __label184
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label185 greaterThan head INDEX
+op sub head SIZE 1
+label __label185
+label __label186
+op sub tail tail 1
+jump __label187 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label187
+label __label188
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 39 last 34 y 0 0
+set last y
+op max newMax newMax value
+label __label189
+label __label190
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label191 greaterThan head INDEX
+op sub head SIZE 1
+label __label191
+label __label192
+op sub tail tail 1
+jump __label193 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label193
+label __label194
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 34 last 29 y 0 0
+set last y
+op max newMax newMax value
+label __label195
+label __label196
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label197 greaterThan head INDEX
+op sub head SIZE 1
+label __label197
+label __label198
+op sub tail tail 1
+jump __label199 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label199
+label __label200
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 29 last 24 y 0 0
+set last y
+op max newMax newMax value
+label __label201
+label __label202
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+op sub head head 1
+jump __label203 greaterThan head INDEX
+op sub head SIZE 1
+label __label203
+label __label204
+op sub tail tail 1
+jump __label205 greaterThan tail INDEX
+op sub tail SIZE 1
+label __label205
+label __label206
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 24 last 19 y 0 0
+set last y
+op max newMax newMax value
+label __label207
+label __label208
+read t MEMORY tail
+read h MEMORY head
+op sub __tmp46 value t
+op add value __tmp46 h
+label __label209
+label __label210
+label __label211
+label __label212
+op mul __tmp56 value scale
+op add y 10 __tmp56
+draw line 19 last 14 y 0 0
+op max newMax newMax value
+label __label213
 label __label24
 draw color 255 255 255 255 0 0
 draw lineRect 10 10 156 156 0 0
@@ -795,10 +4681,10 @@ op mul wait FREQ __tmp68
 set loops 0
 label __label31
 jump __label33 greaterThanEq @time wait
-label __label39
+label __label38
 op add loops loops 1
 label __label32
-jump __label39 lessThan @time wait
+jump __label38 lessThan @time wait
 label __label33
 drawflush display1
 print "\nLoops: "
@@ -806,7 +4692,7 @@ print loops
 printflush message1
 label __label8
 sensor __tmp16 switch1 @enabled
-jump __label35 equal __tmp16 0
+jump __label214 equal __tmp16 0
 label __label9
 control enabled switch1 0 0 0 0
 end

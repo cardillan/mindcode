@@ -1,11 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.GotoLabelInstruction;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.PrintInstruction;
-import info.teksol.mindcode.compiler.instructions.PrintflushInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
@@ -38,8 +34,8 @@ import static info.teksol.mindcode.logic.ArgumentType.STRING_LITERAL;
  */
 class PrintMerger extends BaseOptimizer {
 
-    public PrintMerger(InstructionProcessor instructionProcessor) {
-        super(Optimization.PRINT_TEXT_MERGING, instructionProcessor);
+    public PrintMerger(OptimizationContext optimizationContext) {
+        super(Optimization.PRINT_TEXT_MERGING, optimizationContext);
     }
 
     private PrintInstruction previous;
@@ -91,10 +87,10 @@ class PrintMerger extends BaseOptimizer {
         previous = current;
     }
 
-    // TODO find or create a function for this in BaseOptimizer
+    // TODO find or create a function for this in OptimizationContext
     //      This might miss some active labels
     private boolean isActive(LabelInstruction ix) {
-        return firstInstructionIndex(ixx -> ixx.getArgs().stream()
+        return firstInstructionIndex(ixx -> ixx != ix && ixx.getArgs().stream()
                 .anyMatch(a -> a instanceof LogicLabel la && la.equals(ix.getLabel()))) >= 0;
     }
 }

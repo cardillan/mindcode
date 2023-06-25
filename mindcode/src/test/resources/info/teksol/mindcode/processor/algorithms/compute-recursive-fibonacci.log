@@ -1,13 +1,13 @@
     43 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (3 iterations).
+     1 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Conditional Jump Optimization (3 iterations).
      2 instructions eliminated by If Expression Optimization (2 iterations).
      4 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
-     2 instructions eliminated by Stack Optimization.
+     4 instructions eliminated by Stack Optimization.
     30 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
     26 pop bank1 __retval4
     27 pop bank1 __fn0_n
@@ -19,7 +19,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
     31 set __fn0retval __tmp2
     32 label __label2
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
      5 print __retval0
      6 end
@@ -31,7 +31,7 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
     10 jump __label4 always
     11 label __label3
 
-Modifications by If Expression Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
      5 print __retval0
      6 end
@@ -56,7 +56,7 @@ Modifications by If Expression Optimization, pass 2, iteration 1:
     30 return bank1
     31 end
 
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      2 callrec bank1 __label0 __label1
      3 label __label1
@@ -92,7 +92,7 @@ Modifications by Data Flow Optimization, pass 2, iteration 1:
     29 label __label2
     30 return bank1
 
-Modifications by Data Flow Optimization, pass 2, iteration 2:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
      1 set __fn0_n 10
      2 callrec bank1 __label0 __label1
@@ -124,14 +124,14 @@ Modifications by Data Flow Optimization, pass 2, iteration 2:
     24 label __label4
     25 label __label2
 
-Modifications by Unreachable Code Elimination, pass 3, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
     24 label __label4
     25 label __label2
     26 return bank1
 -    * end
 
-Modifications by Stack Optimization, pass 3, iteration 1:
+Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
  
     13 label __label5
     14 pop bank1 __fn0_n

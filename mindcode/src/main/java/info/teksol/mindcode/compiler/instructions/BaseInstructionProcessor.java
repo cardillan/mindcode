@@ -9,12 +9,9 @@ import info.teksol.mindcode.logic.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -291,8 +288,16 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
         return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
+    }
+
+    @Override
+    public <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap) {
+        Function<LogicArgument, LogicArgument> mapper =
+                arg -> arg instanceof LogicLabel label ? labelMap.getOrDefault(label, label) : arg;
+        return replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
     }
 
     @Override

@@ -1,11 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
-import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.MemoryModel;
-import info.teksol.mindcode.compiler.generator.CallGraph;
-import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,43 +16,21 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
     private final DiffDebugPrinter printer = new DiffDebugPrinter(1);
     private final List<String> messages = new ArrayList<>();
 
-    private final Optimizer optimizer = new Optimizer() {
+    private final Optimizer optimizer = new AbstractOptimizer(null) {
         @Override
         public String getName() {
             return "Dummy";
         }
 
         @Override
-        public Optimization getOptimization() {
-            return null;
-        }
-
-        @Override
-        public void setLevel(OptimizationLevel level) {
-        }
-
-        @Override
-        public void setGoal(GenerationGoal goal) {
-        }
-
-        @Override
-        public void setMemoryModel(MemoryModel memoryModel) {
-        }
-
-        @Override public void setDebugPrinter(DebugPrinter debugPrinter) { }
-
-        @Override
-        public boolean optimizeProgram(OptimizationPhase phase, int pass, List<LogicInstruction> program,
-                CallGraph callGraph, AstContext rootContext) {
+        public boolean optimize(OptimizationPhase phase, int pass) {
             return false;
         }
 
         @Override
-        public void generateFinalMessages() {
-
+        public OptimizationResult applyOptimization(OptimizationAction optimization, int costLimit) {
+            return OptimizationResult.INVALID;
         }
-
-        @Override public void setMessageRecipient(Consumer<CompilerMessage> messageRecipient) { }
     };
 
     @Test
@@ -70,8 +42,8 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(PRINT, "c"));
         program.add(createInstruction(END));
 
-        printer.registerIteration(optimizer, 0,1, program);
-        printer.registerIteration(optimizer, 0,2, program);
+        printer.registerIteration(optimizer, "Iteration 1", program);
+        printer.registerIteration(optimizer, "Iteration 2", program);
         printer.print(messages::add);
 
         Assertions.assertTrue(messages.isEmpty());
@@ -86,14 +58,14 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(PRINT, "c"));
         program.add(createInstruction(END));
 
-        printer.registerIteration(optimizer, 0,1, program);
+        printer.registerIteration(optimizer, "Iteration 1", program);
         program.remove(3);
-        printer.registerIteration(optimizer, 0,2, program);
+        printer.registerIteration(optimizer, "Iteration 2", program);
         printer.print(messages::add);
 
         assertEquals("""
 
-                        Modifications by all optimizers:
+                        Modifications by all optimizers (-1 instructions):
                              0 set a 1
                              1 set b 2
                              2 op add c a b
@@ -110,14 +82,14 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(OP, "add", "c", "a", "b"));
         program.add(createInstruction(END));
 
-        printer.registerIteration(optimizer, 0,1, program);
+        printer.registerIteration(optimizer, "Iteration 1", program);
         program.add(3, createInstruction(PRINT, "c"));
-        printer.registerIteration(optimizer, 0,2, program);
+        printer.registerIteration(optimizer, "Iteration 2", program);
         printer.print(messages::add);
 
         assertEquals("""
 
-                        Modifications by all optimizers:
+                        Modifications by all optimizers (+1 instructions):
                              0 set a 1
                              1 set b 2
                              2 op add c a b
@@ -135,9 +107,9 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         program.add(createInstruction(PRINT, "c"));
         program.add(createInstruction(END));
 
-        printer.registerIteration(optimizer, 0,1, program);
+        printer.registerIteration(optimizer, "Iteration 1", program);
         Collections.swap(program, 0, 1);
-        printer.registerIteration(optimizer, 0,2, program);
+        printer.registerIteration(optimizer, "Iteration 2", program);
         printer.print(messages::add);
 
         assertEquals("""

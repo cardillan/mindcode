@@ -4,24 +4,15 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.processor.MindustryValue;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static info.teksol.util.CollectionUtils.findFirstIndex;
-import static info.teksol.util.CollectionUtils.findLastIndex;
 
 /**
  * Base class for optimizers. Contains methods to access and modify instructions of the program being processed
@@ -36,18 +27,14 @@ import static info.teksol.util.CollectionUtils.findLastIndex;
  * instruction not in a program, an error occurs.
  */
 abstract class BaseOptimizer extends AbstractOptimizer {
-    private List<LogicInstruction> program;
-    private CallGraph callGraph;
-    private AstContext rootContext;
-    private int passes = 0;
-    private int iterations = 0;
-    private int modifications = 0;
-    private int insertions = 0;
-    private int deletions = 0;
-    private boolean updated;
+    protected int modifications = 0;
+    protected int insertions = 0;
+    protected int deletions = 0;
+    protected int passes = 0;
+    protected int iterations = 0;
 
-    public BaseOptimizer(Optimization optimization, InstructionProcessor instructionProcessor) {
-        super(optimization, instructionProcessor);
+    public BaseOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
+        super(optimization, optimizationContext);
     }
 
     // Optimization logic
@@ -58,47 +45,60 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      */
     protected abstract boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration);
 
-    protected void setProgram(List<LogicInstruction> program) {
-        this.program = program;
-    }
-
-    public CallGraph getCallGraph() {
-        return callGraph;
-    }
-
     @Override
-    public boolean optimizeProgram(OptimizationPhase phase, int pass, List<LogicInstruction> input, CallGraph callGraph,
-            AstContext rootContext) {
-        this.rootContext = Objects.requireNonNull(rootContext);
-        this.program = Objects.requireNonNull(input);
-        this.callGraph = Objects.requireNonNull(callGraph);
-
+    public boolean optimize(OptimizationPhase phase, int pass) {
         boolean repeat;
         boolean modified = false;
         int iteration = 1;
         do {
-            updated = false;
+            optimizationContext.prepare();
             repeat = optimizeProgram(phase, pass, iteration);
+            optimizationContext.finish();
 
-            if (!iterators.isEmpty()) {
-                throw new IllegalStateException("Unclosed iterators.");
-            }
+            modifications += optimizationContext.getModifications();
+            insertions += optimizationContext.getInsertions();
+            deletions += optimizationContext.getDeletions();
+            modified |= optimizationContext.isUpdated();
 
-            if (updated) {
-                modified = true;
-                rebuildAstContextTree();
-            }
+            String title = pass == 0
+                    ? "%s phase, %s, iteration %d".formatted(phase.name, getName(), iteration)
+                    : "%s phase, %s, pass %d, iteration %d".formatted(phase.name, getName(), pass, iteration);
 
-            debugPrinter.registerIteration(this, pass, iteration, program);
+            debugPrinter.registerIteration(this, title, optimizationContext.getProgram());
             iteration++;
             iterations++;
-        } while (repeat && updated);
+        } while (repeat);
 
         if (modified) {
             passes++;
         }
 
         return modified;
+    }
+
+    boolean wasUpdated() {
+        return optimizationContext.isUpdated();
+    }
+
+    public CallGraph getCallGraph() {
+        return optimizationContext.getCallGraph();
+    }
+
+    protected OptimizationResult applyOptimizationInternal(OptimizationAction optimization, int costLimit) {
+        return OptimizationResult.INVALID;
+    }
+
+
+    @Override
+    public OptimizationResult applyOptimization(OptimizationAction optimization, int costLimit) {
+        optimizationContext.prepare();
+        OptimizationResult result = applyOptimizationInternal(optimization, costLimit);
+        optimizationContext.finish();
+
+        modifications += optimizationContext.getModifications();
+        insertions += optimizationContext.getInsertions();
+        deletions += optimizationContext.getDeletions();
+        return result;
     }
 
     public void generateFinalMessages() {
@@ -113,35 +113,61 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         }
     }
 
-    private void rebuildAstContextTree() {
-        eraseChildren(rootContext);
-        program.forEach(ix -> eraseChildren(ix.getAstContext()));  // Erase children of nodes that aren't part of the tree yet
-        program.forEach(ix -> ensureChildInParent(ix.getAstContext()));
+    //<editor-fold desc="Label & variable tracking">
+    public LabelInstruction getLabelInstruction(LogicLabel label) {
+        return optimizationContext.getLabelInstruction(label);
     }
 
-    private void eraseChildren(AstContext context) {
-        context.children().forEach(this::eraseChildren);
-        context.children().clear();
+    public void putVariableStates(LogicInstruction instruction, DataFlowVariableStates.VariableStates variableStates) {
+        optimizationContext.putVariableStates(instruction, variableStates);
     }
 
-    private void ensureChildInParent(AstContext context) {
-        if (context.parent() != null) {
-            ensureChildInParent(context.parent());
-            List<AstContext> children = context.parent().children();
-            if (children.isEmpty()) {
-                children.add(context);
-            } else if (children.get(children.size() - 1) != context) {
-                for (AstContext ctx : children) {
-                    if (context == ctx) {
-                        // Some optimization moved instructions in such a way that
-                        // instructions in this context do not form continuous region.
-                        throw new MindcodeInternalError("Discontinuous AST context " + context);
-                    }
-                }
-                children.add(context);
-            }
-        }
+    public DataFlowVariableStates.VariableStates getVariableStates(LogicInstruction instruction) {
+        return optimizationContext.getVariableStates(instruction);
     }
+
+    public DataFlowVariableStates.VariableStates getConditionVariables(AstContext conditionContext) {
+        return optimizationContext.getLoopVariables(conditionContext);
+    }
+
+    public void clearVariableStates() {
+        optimizationContext.clearVariableStates();
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Expression evaluation">
+    public OptimizerExpressionEvaluator getExpressionEvaluator() {
+        return optimizationContext.getExpressionEvaluator();
+    }
+
+    public LogicLiteral evaluateOpInstruction(OpInstruction op) {
+        return optimizationContext.evaluateOpInstruction(op);
+    }
+
+    public OpInstruction extendedEvaluate(DataFlowVariableStates.VariableStates variableStates, OpInstruction op1) {
+        return optimizationContext.extendedEvaluate(variableStates, op1);
+    }
+
+    public OpInstruction normalize(OpInstruction op) {
+        return optimizationContext.normalize(op);
+    }
+
+    public OpInstruction normalizeMul(OpInstruction op, LogicVariable variable, LogicNumber number) {
+        return optimizationContext.normalizeMul(op, variable, number);
+    }
+
+    public LogicLiteral evaluate(Operation operation, MindustryValue a, MindustryValue b) {
+        return optimizationContext.evaluate(operation, a, b);
+    }
+
+    public LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
+        return optimizationContext.evaluateJumpInstruction(jump);
+    }
+
+    public LogicBoolean evaluateLoopConditionJump(JumpInstruction jump, AstContext loopContext) {
+        return optimizationContext.evaluateLoopConditionJump(jump, loopContext);
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Finding instructions by position">
     /**
@@ -151,7 +177,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return the instruction at given index
      */
     protected LogicInstruction instructionAt(int index) {
-        return program.get(index);
+        return optimizationContext.instructionAt(index);
     }
 
     /**
@@ -163,8 +189,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return instruction before the reference instruction
      */
     protected LogicInstruction instructionBefore(LogicInstruction instruction) {
-        int index = existingInstructionIndex(instruction);
-        return index == 0 ? null : instructionAt(index - 1);
+        return optimizationContext.instructionBefore(instruction);
     }
 
     /**
@@ -176,8 +201,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return instruction after the reference instruction
      */
     protected LogicInstruction instructionAfter(LogicInstruction instruction) {
-        int index = existingInstructionIndex(instruction) + 1;
-        return index == program.size() ? null : instructionAt(index);
+        return optimizationContext.instructionAfter(instruction);
     }
 
     /**
@@ -189,7 +213,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return a List containing given instructions.
      */
     protected List<LogicInstruction> instructionSubList(int fromIndex, int toIndex) {
-        return List.copyOf(program.subList(fromIndex, toIndex));
+        return optimizationContext.instructionSubList(fromIndex, toIndex);
     }
 
     /**
@@ -198,7 +222,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return an instruction stream
      */
     protected Stream<LogicInstruction> instructionStream() {
-        return program.stream();
+        return optimizationContext.instructionStream();
     }
 
     /**
@@ -209,22 +233,12 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return index of the instruction, or -1 if the instruction isn't found.
      */
     protected int instructionIndex(LogicInstruction instruction) {
-        for (int i = 0; i < program.size(); i++) {
-            if (instruction == program.get(i)) {
-                return i;
-            }
-        }
-        return -1;
+        return optimizationContext.instructionIndex(instruction);
     }
 
     /** Returns the index of given instruction. When the instruction isn't found, an exception is thrown. */
     protected int existingInstructionIndex(LogicInstruction instruction) {
-        for (int i = 0; i < program.size(); i++) {
-            if (instruction == program.get(i)) {
-                return i;
-            }
-        }
-        throw new NoSuchElementException("Instruction not found in program.\nInstruction: " + instruction);
+        return optimizationContext.existingInstructionIndex(instruction);
     }
     //</editor-fold>
 
@@ -239,7 +253,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return index of the first instruction matching the predicate
      */
     protected int firstInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
-        return findFirstIndex(program, startIndex, matcher);
+        return optimizationContext.firstInstructionIndex(startIndex, matcher);
     }
 
     /**
@@ -250,7 +264,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return index of the first instruction matching the predicate
      */
     protected int firstInstructionIndex(Predicate<LogicInstruction> matcher) {
-        return findFirstIndex(program, 0, matcher);
+        return optimizationContext.firstInstructionIndex(matcher);
     }
 
     /**
@@ -262,7 +276,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return index of the last instruction matching the predicate, up to the specified index
      */
     protected int lastInstructionIndex(int startIndex, Predicate<LogicInstruction> matcher) {
-        return findLastIndex(program, startIndex, matcher);
+        return optimizationContext.lastInstructionIndex(startIndex, matcher);
     }
 
     /**
@@ -273,7 +287,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return index of the last instruction matching the predicate
      */
     protected int lastInstructionIndex(Predicate<LogicInstruction> matcher) {
-        return findLastIndex(program, program.size() - 1, matcher);
+        return optimizationContext.lastInstructionIndex(matcher);
     }
 
     /**
@@ -285,11 +299,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return first non-label instruction following the label
      */
     protected int labeledInstructionIndex(LogicLabel label) {
-        int labelIndex = firstInstructionIndex(ix -> ix instanceof LabeledInstruction li && li.getLabel().equals(label));
-        if (labelIndex < 0) {
-            throw new MindcodeInternalError("Label not found in program.\nLabel: " + label);
-        }
-        return firstInstructionIndex(labelIndex + 1, ix -> !(ix instanceof LabeledInstruction));
+        return optimizationContext.labeledInstructionIndex(label);
     }
 
     /**
@@ -300,8 +310,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return the first instruction matching the predicate
      */
     protected LogicInstruction firstInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
-        int result = firstInstructionIndex(startIndex, matcher);
-        return result < 0 ? null : program.get(result);
+        return optimizationContext.firstInstruction(startIndex, matcher);
     }
 
     /**
@@ -311,8 +320,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return the first instruction in the entire program matching the predicate
      */
     protected LogicInstruction firstInstruction(Predicate<LogicInstruction> matcher) {
-        int result = firstInstructionIndex(matcher);
-        return result < 0 ? null : program.get(result);
+        return optimizationContext.firstInstruction(matcher);
     }
 
     /**
@@ -324,8 +332,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return index of the last instruction matching the predicate, up to the specified index
      */
     protected LogicInstruction lastInstruction(int startIndex, Predicate<LogicInstruction> matcher) {
-        int result = lastInstructionIndex(startIndex, matcher);
-        return result < 0 ? null : program.get(result);
+        return optimizationContext.lastInstruction(startIndex, matcher);
     }
 
     /**
@@ -335,8 +342,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return the last instruction matching the predicate
      */
     protected LogicInstruction lastInstruction(Predicate<LogicInstruction> matcher) {
-        int result = lastInstructionIndex(matcher);
-        return result < 0 ? null : program.get(result);
+        return optimizationContext.lastInstruction(matcher);
     }
 
     /**
@@ -344,8 +350,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * Return null when not found
      */
     protected LogicInstruction labeledInstruction(LogicLabel label) {
-        int index = labeledInstructionIndex(label);
-        return index < 0 ? null : instructionAt(index);
+        return optimizationContext.labeledInstruction(label);
     }
 
     /**
@@ -355,7 +360,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return list of all instructions matching the predicate.
      */
     protected List<LogicInstruction> instructions(Predicate<LogicInstruction> matcher) {
-        return program.stream().filter(matcher).toList();
+        return optimizationContext.instructions(matcher);
     }
     /**
      * Return a number of instructions matching predicate.
@@ -364,33 +369,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return number of matching instructions;
      */
     protected int instructionCount(Predicate<LogicInstruction> matcher) {
-        return (int) program.stream().filter(matcher).count();
+        return optimizationContext.instructionCount(matcher);
     }
     //</editor-fold>
 
     //<editor-fold desc="General code structure methods">
-    /**
-     * Determines whether the code block is isolated, i.e. all effects that can happen inside the block are contained
-     * in the block itself. In other word, all jumps that target a label inside the code block originate
-     * in the code block.
-     *
-     * @param codeBlock code block to inspect
-     * @return true if the block is localized
-     */
-    // TODO it would probably be better to reimplement the logic depending on this to use AST contexts
-    protected boolean isIsolated(List<LogicInstruction> codeBlock) {
-        Set<LogicLabel> localLabels = codeBlock.stream()
-                .filter(ix -> ix instanceof LabeledInstruction)
-                .map(ix -> ((LabeledInstruction) ix).getLabel())
-                .collect(Collectors.toSet());
-
-        // Get jump/goto instructions targeting any of local labels
-        // If all of them are local to the code block, the code block is linear
-        return instructionStream()
-                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
-                .filter(ix -> getPossibleTargetLabels(ix).anyMatch(localLabels::contains))
-                .allMatch(ix -> codeBlock.stream().anyMatch(local -> local == ix));
-    }
 
     /**
      * Determines whether the given code block is contained, meaning it doesn't contain jumps outside.
@@ -400,20 +383,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return true if the code block always exits though its last instruction.
      */
     protected boolean isContained(List<LogicInstruction> codeBlock) {
-        Set<LogicLabel> localLabels = codeBlock.stream()
-                .filter(LabelInstruction.class::isInstance)
-                .map(LabelInstruction.class::cast)
-                .map(LabelInstruction::getLabel)
-                .collect(Collectors.toSet());
-
-        // No end/return instructions
-        // All jump/goto instructions from this context must target only local labels
-        return codeBlock.stream()
-                .noneMatch(ix -> ix instanceof ReturnInstruction ||
-                        ix instanceof EndInstruction && !ix.getAstContext().matches(AstSubcontextType.END))
-                && codeBlock.stream()
-                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
-                .allMatch(ix -> getPossibleTargetLabels(ix).allMatch(localLabels::contains));
+        return optimizationContext.isContained(codeBlock);
     }
 
     /**
@@ -424,23 +394,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return true if the code block always exits though its last instruction.
      */
     protected boolean isContained(LogicList logicList) {
-        return isContained(logicList.instructions);
-    }
-
-    private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
-        return switch (instruction) {
-            case JumpInstruction ix -> Stream.of(ix.getTarget());
-            case GotoInstruction ix -> instructionStream()
-                    .filter(in -> in instanceof GotoLabelInstruction gl && gl.matches(ix))
-                    .map(in -> (GotoLabelInstruction) in)
-                    .map(GotoLabelInstruction::getLabel);
-            default -> Stream.empty();
-        };
+        return optimizationContext.isContained(logicList);
     }
     //</editor-fold>
 
     //<editor-fold desc="Program modification">
-
     /**
      * Inserts a new instruction at given index. The instruction must be assigned an AST context suitable for its
      * position in the program. An instruction must not be placed into the program twice; when an instruction
@@ -451,16 +409,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
      */
     protected void insertInstruction(int index, LogicInstruction instruction) {
-        for (LogicInstruction logicInstruction : program) {
-            if (logicInstruction == instruction) {
-                throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + instruction);
-            }
-        }
-
-        iterators.forEach(iterator -> iterator.instructionAdded(index));
-        program.add(index, instruction);
-        updated = true;
-        insertions++;
+        optimizationContext.insertInstruction(index,instruction);
     }
 
     /**
@@ -472,9 +421,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @throws MindcodeInternalError when any of the new instructions is already present elsewhere in the program
      */
     protected void insertInstructions(int index, LogicList instructions) {
-        for (LogicInstruction instruction : instructions) {
-            insertInstruction(index++, instruction);
-        }
+        optimizationContext.insertInstructions(index, instructions);
     }
 
     /**
@@ -491,14 +438,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * instruction is already present elsewhere in the program
      */
     protected void replaceInstruction(int index, LogicInstruction instruction) {
-        for (LogicInstruction logicInstruction : program) {
-            if (logicInstruction == instruction) {
-                throw new MindcodeInternalError("Trying to insert the same instruction twice.\n" + instruction);
-            }
-        }
-        program.set(index, instruction);
-        updated = true;
-        modifications++;
+        optimizationContext.replaceInstruction(index, instruction);
     }
 
     /**
@@ -507,10 +447,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param index index of an instruction to be removed
      */
     protected void removeInstruction(int index) {
-        iterators.forEach(iterator -> iterator.instructionRemoved(index));
-        program.remove(index);
-        updated = true;
-        deletions++;
+        optimizationContext.removeInstruction(index);
     }
 
     /**
@@ -525,7 +462,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param inserted instruction to add
      */
     protected void insertBefore(LogicInstruction anchor, LogicInstruction inserted) {
-        insertInstruction(existingInstructionIndex(anchor), inserted);
+        optimizationContext.insertBefore(anchor, inserted);
     }
 
     /**
@@ -540,7 +477,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param inserted instruction to add
      */
     protected void insertAfter(LogicInstruction anchor, LogicInstruction inserted) {
-        insertInstruction(existingInstructionIndex(anchor) + 1, inserted);
+        optimizationContext.insertAfter(anchor, inserted);
     }
 
     /**
@@ -554,11 +491,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param replaced new instruction for given index
      */
     protected void replaceInstruction(LogicInstruction original, LogicInstruction replaced) {
-        replaceInstruction(existingInstructionIndex(original), replaced);
+        optimizationContext.replaceInstruction(original, replaced);
     }
 
     protected void replaceInstructionArguments(LogicInstruction instruction, List<LogicArgument> newArgs) {
-        replaceInstruction(instruction,  replaceArgs(instruction, newArgs));
+        optimizationContext.replaceInstructionArguments(instruction, newArgs);
     }
 
 
@@ -568,7 +505,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param instruction instruction to be removed
      */
     protected void removeInstruction(LogicInstruction instruction) {
-        removeInstruction(existingInstructionIndex(instruction));
+        optimizationContext.removeInstruction(instruction);
     }
 
     /**
@@ -578,7 +515,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param anchor the reference instruction
      */
     protected void removePrevious(LogicInstruction anchor) {
-        removeInstruction(existingInstructionIndex(anchor) - 1);
+        optimizationContext.removePrevious(anchor);
     }
 
     /**
@@ -588,7 +525,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param anchor the reference instruction
      */
     protected void removeFollowing(LogicInstruction anchor) {
-        removeInstruction(existingInstructionIndex(anchor) + 1);
+        optimizationContext.removeFollowing(anchor);
     }
 
     /**
@@ -597,12 +534,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @param matcher predicate to match instructions to be removed
      */
     protected void removeMatchingInstructions(Predicate<LogicInstruction> matcher) {
-        for (int index = 0; index < program.size(); index++) {
-            if (matcher.test(program.get(index))) {
-                removeInstruction(index);
-                index--;
-            }
-        }
+        optimizationContext.removeMatchingInstructions(matcher);
     }
     //</editor-fold>
 
@@ -614,27 +546,18 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * with subcontexts a subcontext should be always provided.
      */
     protected LogicLabel obtainContextLabel(AstContext astContext) {
-        LogicInstruction instruction = firstInstruction(astContext);
-        if (instruction instanceof LabelInstruction label && label.getAstContext() == astContext) {
-            return label.getLabel();
-        } else {
-            LogicLabel label = instructionProcessor.nextLabel();
-            insertBefore(instruction, createLabel(astContext, label));
-            return label;
-        }
+        return optimizationContext.obtainContextLabel(astContext);
     }
     //</editor-fold>
 
     //<editor-fold desc="Logic iterator">
-    private final List<LogicIterator> iterators = new ArrayList<>();
-
     /**
      * Creates a new LogicIterator positioned at the start of the program.
      *
      * @return a new LogicIterator instance
      */
     protected LogicIterator createIterator() {
-        return createIterator(0);
+        return optimizationContext.createIterator();
     }
 
     /**
@@ -644,275 +567,34 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return LogicIterator positioned at given instruction
      */
     protected LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
-        return createIterator(existingInstructionIndex(instruction));
-    }
-
-    /**
-     * This class is modelled after ListIterator. Provides read-only functions at the moment.
-     * All instances of ListIterator reflect changes to the underlying program (if possible).
-     * When ListIterator points at certain instruction, if keeps pointing to it even though
-     * some instructions are removed or added at positions preceding that of the LogicIterator,
-     * regardless of how the modification was done (i.e. even modifications made though
-     * different LogicIterator instance, or by calling BaseOptimizer methods).
-     * <p>
-     * LogicIterator instances can be only allocated from within the {@link #optimizeProgram(OptimizationPhase, int, int)} method
-     * and must be closed before the method finishes.
-     */
-    protected class LogicIterator implements ListIterator<LogicInstruction>, AutoCloseable {
-        private int cursor;
-        private boolean closed = false;
-        private int lastRet = -1;
-
-        private LogicIterator(int cursor) {
-            this.cursor = cursor;
-        }
-
-        /**
-         * Closes the LogicIterator.
-         */
-        @Override
-        public void close() {
-            closed = true;
-            closeIterator(this);
-        }
-
-        /**
-         * Creates an independent LogicIterator instance positioned at the same instruction as this instance.
-         *
-         * @return a new LogicIterator instance
-         */
-        public LogicIterator copy() {
-            return createIterator(cursor);
-        }
-
-        /**
-         * Returns the instruction at given offset from current position. Both positive and negative offsets are valid,
-         * offset 0 returns the instruction that would be returned by calling {@link #next()}. If the resulting
-         * instruction position lies outside the program range, null is returned and no exception is thrown.
-         *
-         * @param offset offset relative to current position
-         * @return instruction at given offset relative to current position, or null
-         */
-        public LogicInstruction peek(int offset) {
-            return instructionAt(cursor + offset);
-        }
-
-        /**
-         * @return true if there's a next instruction.
-         */
-        public boolean hasNext() {
-            checkClosed();
-            return cursor < program.size();
-        }
-
-        /**
-         * @return the next instruction
-         * @throws NoSuchElementException when at the end of the program
-         */
-        public LogicInstruction next() {
-            checkClosed();
-            int i = cursor;
-            if (i >= program.size()) {
-                throw new NoSuchElementException();
-            }
-            cursor = i + 1;
-            return program.get(lastRet = i);
-        }
-
-        /**
-         * @return the index of the next instruction
-         */
-        @Override
-        public int nextIndex() {
-            checkClosed();
-            return cursor;
-        }
-
-        /**
-         * @return true if there's a previous instruction.
-         */
-        @Override
-        public boolean hasPrevious() {
-            checkClosed();
-            return cursor != 0;
-        }
-
-        /**
-         * @return the previous instruction
-         * @throws NoSuchElementException when at the start of the program
-         */
-        public LogicInstruction previous() {
-            checkClosed();
-            int i = cursor - 1;
-            if (i < 0) {
-                throw new NoSuchElementException();
-            }
-            cursor = i;
-            return program.get(lastRet = i);
-        }
-
-        /**
-         * @return the index of the previous instruction
-         */
-        public int previousIndex() {
-            checkClosed();
-            return cursor - 1;
-        }
-
-        /**
-         * Removes the last returned instruction. If no instruction was returned, or it was already removed,
-         * an exception is thrown.
-         */
-        public void remove() {
-            checkClosed();
-            if (lastRet < 0) {
-                throw new IllegalStateException();
-            }
-            removeInstruction(lastRet);
-            // Cursor will be updated in instructionRemoved
-            lastRet = -1;
-        }
-
-        /**
-         * Replaces the last returned instruction with given instruction. If no instruction was returned,
-         * or it was removed in the meantime, an exception is thrown.
-         *
-         * @param instruction instruction with which to replace the last returned instruction
-         */
-        @Override
-        public void set(LogicInstruction instruction) {
-            checkClosed();
-            if (lastRet < 0) {
-                throw new IllegalStateException();
-            }
-            replaceInstruction(lastRet, instruction);
-        }
-
-        /**
-         * Inserts the specified instruction into the list.
-         * The instruction is inserted immediately before the element that
-         * would be returned by {@link #next}, if any, and after the element
-         * that would be returned by {@link #previous}, if any.
-         * The new element is inserted before the implicit
-         * cursor: a subsequent call to {@code next} would be unaffected, and a
-         * subsequent call to {@code previous} would return the new element.
-         *
-         * @param instruction the instruction to insert
-         */
-        @Override
-        public void add(LogicInstruction instruction) {
-            checkClosed();
-            int index = cursor;
-            insertInstruction(index, instruction);
-            // Cursor will be updated in instructionAdded
-            lastRet = -1;
-        }
-
-        /**
-         * Provides a stream of instructions between this and upTo (inclusive at this, exclusive at end)
-         */
-        public Stream<LogicInstruction> between(LogicIterator upTo) {
-            checkClosed();
-            upTo.checkClosed();
-            return program.subList(cursor, upTo.cursor).stream();
-        }
-
-        private void instructionRemoved(int index) {
-            if (cursor > index) {
-                cursor--;
-            }
-            if (lastRet == index) {
-                lastRet = -1;
-            } else if (lastRet > index) { // Cannot happen if it is -1
-                lastRet--;
-            }
-        }
-
-        private void instructionAdded(int index) {
-            // When an instruction is added, the lastRet doesn't change.
-            if (cursor >= index) {
-                cursor++;
-            }
-            if (lastRet >= index) {  // Cannot happen if it is -1
-                lastRet++;
-            }
-        }
-
-        private void checkClosed() {
-            if (closed) {
-                throw new IllegalStateException("Trying to access closed iterator.");
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "LogicIterator{" +
-                    "cursor=" + cursor +
-                    ", closed=" + closed +
-                    ", lastRet=" + lastRet +
-                    '}';
-        }
-    }
-
-    private LogicIterator createIterator(int index) {
-        LogicIterator iterator = new LogicIterator(index);
-        iterators.add(iterator);
-        return iterator;
-    }
-
-    private void closeIterator(LogicIterator iterator) {
-        if (!iterators.remove(iterator)) {
-            throw new IllegalStateException("Trying to close unknown iterator.");
-        }
+        return optimizationContext.createIteratorAtInstruction(instruction);
     }
     //</editor-fold>
 
     //<editor-fold desc="Finding contexts">
     protected AstContext getRootContext() {
-        return rootContext;
+        return optimizationContext.getRootContext();
     }
 
     protected boolean hasSubcontexts(AstContext context, AstSubcontextType... types) {
-        if (context.children().size() == types.length) {
-            for (int i = 0; i < types.length; i++) {
-                if (context.child(i).subcontextType() != types[i]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private void forEachContext(AstContext astContext, Predicate<AstContext> matcher, Consumer<AstContext> action) {
-        if (matcher.test(astContext)) {
-            action.accept(astContext);
-        }
-        astContext.children().forEach(c -> forEachContext(c, matcher, action));
+        return optimizationContext.hasSubcontexts(context, types);
     }
 
     protected void forEachContext(Predicate<AstContext> matcher, Consumer<AstContext> action) {
-        forEachContext(rootContext, matcher, action);
+        optimizationContext.forEachContext(matcher, action);
     }
 
     protected void forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
             Consumer<AstContext> action) {
-        forEachContext(rootContext, c -> c.matches(contextType, subcontextType), action);
+        optimizationContext.forEachContext(contextType, subcontextType, action);
     }
 
     protected List<AstContext> contexts(Predicate<AstContext> matcher) {
-        List<AstContext> contexts = new ArrayList<>();
-        forEachContext(rootContext, matcher, contexts::add);
-        return List.copyOf(contexts);
+        return optimizationContext.contexts(matcher);
     }
 
     protected AstContext context(Predicate<AstContext> matcher) {
-        List<AstContext> contexts = contexts(matcher);
-        return switch (contexts.size()) {
-            case 0 -> null;
-            case 1 -> contexts.get(0);
-            default -> throw new MindcodeInternalError("More than one context found.");
-        };
+        return optimizationContext.context(matcher);
     }
 
     /**
@@ -921,156 +603,50 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @return list of inline function node contexts
      */
     protected List<AstContext> getInlineFunctions() {
-        return contexts(c -> c.subcontextType() == AstSubcontextType.INLINE_CALL);
+        return optimizationContext.getInlineFunctions();
     }
 
     protected List<AstContext> getOutOfLineFunctions() {
-        return contexts(c -> c.contextType() == AstContextType.FUNCTION);
+        return optimizationContext.getOutOfLineFunctions();
     }
     //</editor-fold>
 
 
     //<editor-fold desc="Finding instructions by context">
     protected LogicList contextInstructions(AstContext astContext) {
-        return astContext == null ? EMPTY :
-                new LogicList(astContext, List.copyOf(instructionStream().filter(ix -> ix.belongsTo(astContext)).toList()));
+        return optimizationContext.contextInstructions(astContext);
     }
 
     protected Stream<LogicInstruction> contextStream(AstContext astContext) {
-        return astContext == null ? Stream.empty() : instructionStream().filter(ix -> ix.belongsTo(astContext));
+        return optimizationContext.contextStream(astContext);
     }
 
     protected LogicInstruction firstInstruction(AstContext astContext) {
-        return firstInstruction(ix -> ix.belongsTo(astContext));
+        return optimizationContext.firstInstruction(astContext);
+    }
+
+    protected int firstInstructionIndex(AstContext astContext) {
+        return optimizationContext.firstInstructionIndex(astContext);
     }
 
     protected LogicInstruction lastInstruction(AstContext astContext) {
-        return lastInstruction(ix -> ix.belongsTo(astContext));
+        return optimizationContext.lastInstruction(astContext);
     }
 
+    protected int lastInstructionIndex(AstContext astContext) {
+        return optimizationContext.lastInstructionIndex(astContext);
+    }
 
     protected LogicInstruction instructionBefore(AstContext astContext) {
-        return instructionAt(firstInstructionIndex(ix -> ix.belongsTo(astContext)) - 1);
+        return optimizationContext.instructionBefore(astContext);
     }
 
     protected LogicInstruction instructionAfter(AstContext astContext) {
-        return instructionAt(lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1);
+        return optimizationContext.instructionAfter(astContext);
     }
     //</editor-fold>
 
-    //<editor-fold desc="Logic list">
-    private static final LogicList EMPTY = new LogicList(null, java.util.List.of());
-
-    /**
-     * Class for accessing context instructions in an organized manner.
-     * Is always created from a specific AST context.
-     * <p>
-     * TODO allow modifications to be done to the LogicList - a block of code could be created in LogicList
-     *      and then inserted into the program.
-     */
-    protected static class LogicList implements Iterable<LogicInstruction> {
-        private final AstContext astContext;
-        private final List<LogicInstruction> instructions;
-
-        private LogicList(AstContext astContext, List<LogicInstruction> instructions) {
-            this.astContext = astContext;
-            this.instructions = instructions;
-        }
-
-        public AstContext getAstContext() {
-            return astContext;
-        }
-
-        public int size() {
-            return instructions.size();
-        }
-
-        public boolean isEmpty() {
-            return instructions.isEmpty();
-        }
-
-        public Iterator<LogicInstruction> iterator() {
-            return instructions.iterator();
-        }
-
-        public LogicInstruction get(int index) {
-            return index >= 0 && index < size() ? instructions.get(index) : null;
-        }
-
-        public LogicInstruction getFirst() {
-            return isEmpty() ? null : get(0);
-        }
-
-        public LogicInstruction getLast() {
-            return isEmpty() ? null : get(size() - 1);
-        }
-
-        public LogicInstruction getFromEnd(int index) {
-            return index >= 0 && index < size() ? instructions.get(size() - index - 1) : null;
-        }
-
-        public int indexOf(LogicInstruction o) {
-            return instructions.indexOf(o);
-        }
-
-        public int indexOf(Predicate<LogicInstruction> matcher) {
-            for (int i = 0; i < size(); i++) {
-                if (matcher.test(get(i))) {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        public int lastIndexOf(Predicate<LogicInstruction> matcher) {
-            for (int i = size() - 1; i >= 0; i--) {
-                if (matcher.test(get(i))) {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        public int lastIndexOf(LogicInstruction o) {
-            return instructions.lastIndexOf(o);
-        }
-
-        public ListIterator<LogicInstruction> listIterator() {
-            return instructions.listIterator();
-        }
-
-        public LogicList subList(int fromIndex, int toIndex) {
-            return new LogicList(astContext, instructions.subList(fromIndex, toIndex));
-        }
-
-        public List<LogicInstruction> toList() {
-            return instructions;
-        }
-
-        public Stream<LogicInstruction> stream() {
-            return instructions.stream();
-        }
-
-        public void forEach(Consumer<? super LogicInstruction> action) {
-            instructions.forEach(action);
-        }
-
-        /**
-         * Duplicates this logic list including the context structure. This <b>must</b> be used when duplicating
-         * existing instructions, as reusing existing contexts might lead to context discontinuity (even when placing
-         * the copy right before or after the original - in this case, encompassing context will be continuous, but
-         * child contexts might not be).
-         *
-         * @return LogicList containing duplicated code.
-         */
-        public LogicList duplicate() {
-            Map<AstContext, AstContext> contextMap = astContext.createDeepCopy();
-            return new LogicList(contextMap.get(astContext),
-                    stream().map(ix -> ix.withContext(contextMap.get(ix.getAstContext()))).toList());
-        }
-
+    protected LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
+        return optimizationContext.buildLogicList(context, instructions);
     }
-    //</editor-fold>
 }

@@ -1,14 +1,14 @@
     47 instructions before optimizations.
-     9 instructions eliminated by Temp Variables Elimination (3 iterations).
+     9 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Jump Normalization (3 iterations).
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Conditional Jump Optimization (3 iterations).
-    12 instructions eliminated by Data Flow Optimization (8 iterations).
+    12 instructions eliminated by Data Flow Optimization (4 iterations).
      2 instructions eliminated by Unreachable Code Elimination (2 iterations).
      3 instructions updated by PropagateJumpTargets.
     15 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-9 instructions):
      0 set p 165
      1 set h 143
 -    * op add __tmp0 p 1
@@ -58,7 +58,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
     28 jump __label6 always
     29 label __label5
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
     17 jump __label3 equal __tmp12 false
     18 op add pn pn p
@@ -88,7 +88,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
     43 label __label10
     44 end
 
-Modifications by Dead Code Elimination, pass 1, iteration 2:
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
     23 jump __label5 equal __tmp16 false
     24 op add hn hn h
@@ -102,7 +102,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 2:
     30 label __label4
     31 label __label1
 
-Modifications by Jump Normalization, pass 2, iteration 1:
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
     12 op mul __tmp10 4 h
     13 op add h __tmp10 1
@@ -112,7 +112,7 @@ Modifications by Jump Normalization, pass 2, iteration 1:
     16 jump __label3 equal __tmp12 false
     17 op add pn pn p
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
     12 op mul __tmp10 4 h
     13 op add h __tmp10 1
@@ -131,28 +131,36 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
     22 op add h h 4
     23 jump __label6 always
 
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set p 165
      1 set h 143
 -    * op add p p 1
-+    2 op add p 165 1
-     3 op mul __tmp1 3 p
-     4 op sub __tmp2 __tmp1 1
-     5 op mul __tmp3 p __tmp2
-     6 op idiv pn __tmp3 2
+-    * op mul __tmp1 3 p
+-    * op sub __tmp2 __tmp1 1
+-    * op mul __tmp3 p __tmp2
+-    * op idiv pn __tmp3 2
 -    * op mul __tmp5 2 h
-+    7 op mul __tmp5 2 143
-     8 op sub __tmp6 __tmp5 1
+-    * op sub __tmp6 __tmp5 1
 -    * op mul hn h __tmp6
-+    9 op mul hn 143 __tmp6
-    10 op mul __tmp8 3 p
+-    * op mul __tmp8 3 p
 -    * op add p __tmp8 1
 -    * op mul __tmp10 4 h
-+   11 op add p __tmp1 1
+-    * op add h __tmp10 1
++    2 op add p 165 1
++    3 op mul __tmp1 3 166
++    4 op sub __tmp2 498 1
++    5 op mul __tmp3 166 497
++    6 op idiv pn 82502 2
++    7 op mul __tmp5 2 143
++    8 op sub __tmp6 286 1
++    9 op mul hn 143 285
++   10 op mul __tmp8 3 166
++   11 op add p 498 1
 +   12 op mul __tmp10 4 143
-    13 op add h __tmp10 1
++   13 op add h 572 1
     14 label __label0
     15 jump __label3 greaterThanEq pn hn
+    16 op add pn pn p
  
     30 label __label2
     31 label __label7
@@ -167,86 +175,37 @@ Modifications by Data Flow Optimization, pass 2, iteration 1:
     38 label __label10
     39 end
 
-Modifications by Data Flow Optimization, pass 2, iteration 2:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
 -    * set p 165
 -    * set h 143
-     0 op add p 165 1
--    * op mul __tmp1 3 p
-+    1 op mul __tmp1 3 166
-     2 op sub __tmp2 __tmp1 1
--    * op mul __tmp3 p __tmp2
-+    3 op mul __tmp3 166 __tmp2
-     4 op idiv pn __tmp3 2
-     5 op mul __tmp5 2 143
--    * op sub __tmp6 __tmp5 1
-+    6 op sub __tmp6 286 1
-     7 op mul hn 143 __tmp6
--    * op mul __tmp8 3 p
-     8 op add p __tmp1 1
-     9 op mul __tmp10 4 143
--    * op add h __tmp10 1
-+   10 op add h 572 1
-    11 label __label0
-    12 jump __label3 greaterThanEq pn hn
-    13 op add pn pn p
- 
-    26 jump __label0 always
-    27 label __label2
-    28 label __label7
--    * set __fn0_v 1533776805
-    29 print 1533776805
-    30 label __label8
-    31 label __label9
--    * set __fn1_v hn
-    32 print hn
-    33 label __label10
-    34 end
-
-Modifications by Data Flow Optimization, pass 2, iteration 3:
 -    * op add p 165 1
-     0 op mul __tmp1 3 166
--    * op sub __tmp2 __tmp1 1
-+    1 op sub __tmp2 498 1
-     2 op mul __tmp3 166 __tmp2
-     3 op idiv pn __tmp3 2
--    * op mul __tmp5 2 143
-     4 op sub __tmp6 286 1
--    * op mul hn 143 __tmp6
--    * op add p __tmp1 1
--    * op mul __tmp10 4 143
-+    5 op mul hn 143 285
-+    6 op add p 498 1
-     7 op add h 572 1
-     8 label __label0
-     9 jump __label3 greaterThanEq pn hn
-
-Modifications by Data Flow Optimization, pass 2, iteration 4:
 -    * op mul __tmp1 3 166
-     0 op sub __tmp2 498 1
--    * op mul __tmp3 166 __tmp2
-+    1 op mul __tmp3 166 497
-     2 op idiv pn __tmp3 2
--    * op sub __tmp6 286 1
-     3 op mul hn 143 285
-     4 op add p 498 1
-     5 op add h 572 1
-
-Modifications by Data Flow Optimization, pass 2, iteration 5:
 -    * op sub __tmp2 498 1
-     0 op mul __tmp3 166 497
--    * op idiv pn __tmp3 2
-+    1 op idiv pn 82502 2
-     2 op mul hn 143 285
-     3 op add p 498 1
-     4 op add h 572 1
-
-Modifications by Data Flow Optimization, pass 2, iteration 6:
 -    * op mul __tmp3 166 497
      0 op idiv pn 82502 2
+-    * op mul __tmp5 2 143
+-    * op sub __tmp6 286 1
      1 op mul hn 143 285
+-    * op mul __tmp8 3 166
      2 op add p 498 1
+-    * op mul __tmp10 4 143
+     3 op add h 572 1
+     4 label __label0
+     5 jump __label3 greaterThanEq pn hn
+ 
+    19 jump __label0 always
+    20 label __label2
+    21 label __label7
+-    * set __fn0_v 1533776805
+    22 print 1533776805
+    23 label __label8
+    24 label __label9
+-    * set __fn1_v hn
+    25 print hn
+    26 label __label10
+    27 end
 
-Modifications by Jump Threading, pass 3, iteration 1:
+Modifications by Final phase, Jump Threading, iteration 1:
  
      5 jump __label3 greaterThanEq pn hn
      6 op add pn pn p
@@ -264,7 +223,7 @@ Modifications by Jump Threading, pass 3, iteration 1:
     15 jump __label2 always
     16 label __label6
 
-Modifications by Unreachable Code Elimination, pass 3, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
  
     12 op add h h 4
     13 jump __label0 always

@@ -1,20 +1,62 @@
    578 instructions before optimizations.
-    39 instructions eliminated by Temp Variables Elimination (4 iterations).
+    39 instructions eliminated by Temp Variables Elimination.
      5 instructions eliminated by Jump Normalization (4 iterations).
     84 instructions eliminated by Dead Code Elimination (6 iterations).
     42 instructions eliminated by Conditional Jump Optimization (4 iterations).
     28 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
-    16 instructions added by Loop Optimization (3 iterations).
-     7 loops improved by LoopOptimizer.
-     6 instructions eliminated by If Expression Optimization (3 iterations).
-     1 instructions modified by Data Flow Optimization (4 iterations).
+    18 instructions added by Loop Optimization (3 iterations).
+     9 loops improved by Loop Optimization.
+     3 instructions eliminated by If Expression Optimization (3 iterations).
+     2 instructions modified by Data Flow Optimization (2 passes, 5 iterations).
      3 instructions eliminated by Unreachable Code Elimination (2 iterations).
      5 instructions eliminated by Jump Straightening.
      6 instructions updated by PropagateJumpTargets.
      8 instructions eliminated by Print Merging.
-   370 instructions after optimizations.
+   379 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Pass 1: speed optimization selection (cost limit 617):
+  * Loop Optimization: replicate condition at line 44  cost   1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 52  cost   2, benefit       25,0, efficiency       12,5
+    Loop Optimization: replicate condition at line 103 cost   4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112 cost   5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131 cost   3, benefit       25,0, efficiency        8,3
+    Loop Optimization: replicate condition at line 306 cost   2, benefit       25,0, efficiency       12,5
+    Loop Optimization: replicate condition at line 316 cost   1, benefit       12,5, efficiency       12,5
+
+Pass 1: speed optimization selection (cost limit 616):
+    Loop Optimization: replicate condition at line 52  cost   2, benefit       25,0, efficiency       12,5
+    Loop Optimization: replicate condition at line 103 cost   4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112 cost   5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131 cost   3, benefit       25,0, efficiency        8,3
+    Loop Optimization: replicate condition at line 306 cost   2, benefit       25,0, efficiency       12,5
+  * Loop Optimization: replicate condition at line 316 cost   1, benefit       12,5, efficiency       12,5
+
+Pass 1: speed optimization selection (cost limit 615):
+  * Loop Optimization: replicate condition at line 52  cost   2, benefit       25,0, efficiency       12,5
+    Loop Optimization: replicate condition at line 103 cost   4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112 cost   5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131 cost   3, benefit       25,0, efficiency        8,3
+    Loop Optimization: replicate condition at line 306 cost   2, benefit       25,0, efficiency       12,5
+
+Pass 1: speed optimization selection (cost limit 613):
+    Loop Optimization: replicate condition at line 103 cost   4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112 cost   5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131 cost   3, benefit       25,0, efficiency        8,3
+  * Loop Optimization: replicate condition at line 306 cost   2, benefit       25,0, efficiency       12,5
+
+Pass 1: speed optimization selection (cost limit 611):
+    Loop Optimization: replicate condition at line 103 cost   4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112 cost   5, benefit        6,3, efficiency        1,3
+  * Loop Optimization: replicate condition at line 131 cost   3, benefit       25,0, efficiency        8,3
+
+Pass 1: speed optimization selection (cost limit 608):
+  * Loop Optimization: replicate condition at line 103 cost   4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112 cost   5, benefit        6,3, efficiency        1,3
+
+Pass 1: speed optimization selection (cost limit 604):
+  * Loop Optimization: replicate condition at line 112 cost   5, benefit        6,3, efficiency        1,3
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-39 instructions):
  
      1 set LINK_ID 0
      2 set LOCAL_LIMIT 100
@@ -293,7 +335,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
    629 jump __label68 always
    630 label __label70
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instructions):
  
     29 jump __label11 equal __tmp8 false
     30 set __fn0_first_unit @unit
@@ -600,7 +642,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
    620 label __label131
    621 end
 
-Modifications by Dead Code Elimination, pass 1, iteration 2:
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instructions):
  
     74 print "[salmon]Looking for a free "
     75 print UNIT
@@ -734,7 +776,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 2:
    551 jump __label108 always
    552 label __label107
 
-Modifications by Dead Code Elimination, pass 1, iteration 3:
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-8 instructions):
  
    186 op notEqual __tmp63 b_type @vault
    187 jump __label49 equal __tmp63 false
@@ -787,7 +829,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 3:
    429 jump __label104 always
    430 label __label103
 
-Modifications by Dead Code Elimination, pass 1, iteration 4:
+Modifications by Initial phase, Dead Code Elimination, iteration 4 (-2 instructions):
  
    374 ucontrol within DROP_X DROP_Y 8 __tmp134
    375 jump __label93 equal __tmp134 false
@@ -800,7 +842,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 4:
    380 label __label92
    381 label __label90
 
-Modifications by Jump Normalization, pass 2, iteration 1:
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-5 instructions):
  
     23 label __label6
     24 set __fn0_first_unit null
@@ -842,7 +884,7 @@ Modifications by Jump Normalization, pass 2, iteration 1:
    307 op equal __tmp116 @unit null
    308 jump __label78 equal __tmp116 false
 
-Modifications by Conditional Jump Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-42 instructions):
  
      5 op max REMOTE_LIMIT REMOTE_LIMIT 20
      6 label __label0
@@ -1230,7 +1272,7 @@ Modifications by Conditional Jump Optimization, pass 2, iteration 1:
    531 print "\n"
    532 print "[gold]Please fix and press button to reinitialize."
 
-Modifications by Single Step Elimination, pass 2, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-22 instructions):
  
     25 jump __label11 equal @unit null
     26 set __fn0_first_unit @unit
@@ -1387,12 +1429,103 @@ Modifications by Single Step Elimination, pass 2, iteration 1:
    519 label __label131
    520 end
 
-Modifications by Loop Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
+ 
+   210 op idiv DROP_LEVEL __tmp81 100
+   211 set LOCAL_MARGIN DROP_LEVEL
+   212 set REMOTE_MARGIN LOAD_LEVEL
+-    * jump __label60 notEqual LINK_ID 0
+-    * set __tmp84 "[] from core"
++  213 set DIRECTION "[] from vault #"
++  214 jump __label61 notEqual LINK_ID 0
++  215 set DIRECTION "[] from core"
+   216 jump __label61 always
+-    * label __label60
+-    * set __tmp84 "[] from vault #"
+   217 label __label61
+-    * set DIRECTION __tmp84
+   218 jump __label59 always
+   219 label __label58
+   220 op greaterThan SHOW_REMOTE_LEVEL LINK_ID 0
+ 
+   232 op add DROP_LEVEL __tmp92 __tmp94
+   233 set LOCAL_MARGIN LOAD_LEVEL
+   234 set REMOTE_MARGIN DROP_LEVEL
+-    * jump __label62 notEqual LINK_ID 0
+-    * set __tmp97 "[] to core"
++  235 set DIRECTION "[] to vault #"
++  236 jump __label63 notEqual LINK_ID 0
++  237 set DIRECTION "[] to core"
+   238 jump __label63 always
+-    * label __label62
+-    * set __tmp97 "[] to vault #"
+   239 label __label63
+-    * set DIRECTION __tmp97
+   240 label __label59
+-    * jump __label64 notEqual LINK_ID 0
+-    * set __tmp99 ""
++  241 set LINK_TXT LINK_ID
++  242 jump __label65 notEqual LINK_ID 0
++  243 set LINK_TXT ""
+   244 jump __label65 always
+-    * label __label64
+-    * set __tmp99 LINK_ID
+   245 label __label65
+-    * set LINK_TXT __tmp99
+   246 sensor SRC_X SRC @x
+   247 sensor SRC_Y SRC @y
+   248 sensor DST_X DST @x
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   138 printflush message1
+   139 op add QUERY_FLAG 99999900 LINK_ID
+   140 set flag QUERY_FLAG
+-    * ucontrol flag flag
++  141 ucontrol flag QUERY_FLAG
+   142 label __label41
+   143 op equal __tmp46 flag QUERY_FLAG
+   144 sensor __tmp47 @unit @dead
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    88 set n @links
+    89 label __label30
+    90 jump __label32 lessThanEq n 0
++   91 label __label135
+    92 op sub n n 1
+    93 getlink block n
+    94 sensor __tmp31 block @itemCapacity
+ 
+    98 label __label33
+    99 label __label34
+   100 label __label31
+-    * jump __label30 always
++  101 jump __label135 greaterThan n 0
+   102 label __label32
+   103 jump __label35 notEqual CONTAINER null
+   104 print "[salmon]No destination."
+ 
+   301 jump __label82 equal ITEM LAST_ITEM
+   302 label __label84
+   303 jump __label86 notEqual ITEM null
++  304 label __label136
+   305 print "[salmon]No item type selected for transport."
+   306 printflush message1
+   307 sensor ITEM SORTER @config
+   308 label __label85
+-    * jump __label84 always
++  309 jump __label136 equal ITEM null
+   310 label __label86
+   311 set LAST_ITEM ITEM
+   312 set state 1
+
+Modifications by Loop Optimization: replicate condition at line 44 (+1 instructions):
  
      6 label __label0
      7 sensor __tmp2 switch1 @enabled
      8 jump __label2 notEqual __tmp2 false
-+    9 label __label135
++    9 label __label137
     10 print "Unit Transport - Single"
     11 print "\n"
     12 print "Activate switch to start."
@@ -1401,13 +1534,37 @@ Modifications by Loop Optimization, pass 2, iteration 1:
     15 label __label1
 -    * jump __label0 always
 +   16 sensor __tmp2 switch1 @enabled
-+   17 jump __label135 equal __tmp2 false
++   17 jump __label137 equal __tmp2 false
     18 label __label2
     19 label __label3
     20 sensor __tmp4 @unit @dead
+
+Modifications by Loop Optimization: replicate condition at line 316 (+1 instructions):
+ 
+   504 label __label132
+   505 sensor __tmp210 switch1 @enabled
+   506 jump __label134 notEqual __tmp210 false
++  507 label __label138
+   508 print "[salmon]Local or remote container became invalid."
+   509 print "\n"
+   510 print "[gold]Please fix and press button to reinitialize."
+ 
+   512 printflush message1
+   513 printflush message2
+   514 label __label133
+-    * jump __label132 always
++  515 sensor __tmp210 switch1 @enabled
++  516 jump __label138 equal __tmp210 false
+   517 label __label134
+   518 label __label130
+   519 label __label131
+
+Modifications by Loop Optimization: replicate condition at line 52 (+2 instructions):
+ 
+    20 sensor __tmp4 @unit @dead
     21 op strictEqual __tmp5 __tmp4 0
     22 jump __label5 notEqual __tmp5 false
-+   23 label __label136
++   23 label __label139
     24 label __label6
     25 set __fn0_first_unit null
     26 label __label8
@@ -1418,32 +1575,38 @@ Modifications by Loop Optimization, pass 2, iteration 1:
 -    * jump __label3 always
 +   82 sensor __tmp4 @unit @dead
 +   83 op strictEqual __tmp5 __tmp4 0
-+   84 jump __label136 equal __tmp5 false
++   84 jump __label139 equal __tmp5 false
     85 label __label5
     86 sensor UNIT_CAPACITY @unit @itemCapacity
     87 sensor __tmp25 @unit @speed
+
+Modifications by Loop Optimization: replicate condition at line 306 (+2 instructions):
  
-    93 set n @links
-    94 label __label30
-    95 jump __label32 lessThanEq n 0
-+   96 label __label137
-    97 op sub n n 1
-    98 getlink block n
-    99 sensor __tmp31 block @itemCapacity
+   485 sensor __tmp199 SORTER @dead
+   486 op strictEqual __tmp200 __tmp199 0
+   487 jump __label129 notEqual __tmp200 false
++  488 label __label140
+   489 print "[salmon]sorter1 is missing!"
+   490 print "\n"
+   491 print "[gold]Please place and link sorter or inverted sorter to the processor."
  
-   103 label __label33
-   104 label __label34
-   105 label __label31
--    * jump __label30 always
-+  106 jump __label137 greaterThan n 0
-   107 label __label32
-   108 jump __label35 notEqual CONTAINER null
-   109 print "[salmon]No destination."
+   494 printflush message2
+   495 set SORTER sorter1
+   496 label __label128
+-    * jump __label127 always
++  497 sensor __tmp199 SORTER @dead
++  498 op strictEqual __tmp200 __tmp199 0
++  499 jump __label140 equal __tmp200 false
+   500 label __label129
+   501 sensor __tmp202 SRC @dead
+   502 op strictEqual __tmp203 __tmp202 0
+
+Modifications by Loop Optimization: replicate condition at line 131 (+3 instructions):
  
    190 op notEqual __tmp69 sorter_type @inverted-sorter
    191 op land __tmp70 __tmp68 __tmp69
    192 jump __label55 equal __tmp70 false
-+  193 label __label138
++  193 label __label141
    194 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
    195 print "\n"
    196 jump __label56 equal SORTER null
@@ -1455,145 +1618,85 @@ Modifications by Loop Optimization, pass 2, iteration 1:
 +  205 op notEqual __tmp68 sorter_type @sorter
 +  206 op notEqual __tmp69 sorter_type @inverted-sorter
 +  207 op land __tmp70 __tmp68 __tmp69
-+  208 jump __label138 notEqual __tmp70 false
++  208 jump __label141 notEqual __tmp70 false
    209 label __label55
    210 jump __label58 notEqual sorter_type @sorter
    211 set SHOW_REMOTE_LEVEL true
- 
-   316 jump __label82 equal ITEM LAST_ITEM
-   317 label __label84
-   318 jump __label86 notEqual ITEM null
-+  319 label __label139
-   320 print "[salmon]No item type selected for transport."
-   321 printflush message1
-   322 sensor ITEM SORTER @config
-   323 label __label85
--    * jump __label84 always
-+  324 jump __label139 equal ITEM null
-   325 label __label86
-   326 set LAST_ITEM ITEM
-   327 set state 1
- 
-   495 sensor __tmp199 SORTER @dead
-   496 op strictEqual __tmp200 __tmp199 0
-   497 jump __label129 notEqual __tmp200 false
-+  498 label __label140
-   499 print "[salmon]sorter1 is missing!"
-   500 print "\n"
-   501 print "[gold]Please place and link sorter or inverted sorter to the processor."
- 
-   504 printflush message2
-   505 set SORTER sorter1
-   506 label __label128
--    * jump __label127 always
-+  507 sensor __tmp199 SORTER @dead
-+  508 op strictEqual __tmp200 __tmp199 0
-+  509 jump __label140 equal __tmp200 false
-   510 label __label129
-   511 sensor __tmp202 SRC @dead
-   512 op strictEqual __tmp203 __tmp202 0
- 
-   520 label __label132
-   521 sensor __tmp210 switch1 @enabled
-   522 jump __label134 notEqual __tmp210 false
-+  523 label __label141
-   524 print "[salmon]Local or remote container became invalid."
-   525 print "\n"
-   526 print "[gold]Please fix and press button to reinitialize."
- 
-   528 printflush message1
-   529 printflush message2
-   530 label __label133
--    * jump __label132 always
-+  531 sensor __tmp210 switch1 @enabled
-+  532 jump __label141 equal __tmp210 false
-   533 label __label134
-   534 label __label130
-   535 label __label131
 
-Modifications by If Expression Optimization, pass 2, iteration 1:
+Modifications by Loop Optimization: replicate condition at line 103 (+4 instructions):
  
-   220 op idiv DROP_LEVEL __tmp81 100
-   221 set LOCAL_MARGIN DROP_LEVEL
-   222 set REMOTE_MARGIN LOAD_LEVEL
--    * jump __label60 notEqual LINK_ID 0
--    * set __tmp84 "[] from core"
-+  223 set DIRECTION "[] from vault #"
-+  224 jump __label61 notEqual LINK_ID 0
-+  225 set DIRECTION "[] from core"
-   226 jump __label61 always
--    * label __label60
--    * set __tmp84 "[] from vault #"
-   227 label __label61
--    * set DIRECTION __tmp84
-   228 jump __label59 always
-   229 label __label58
-   230 op greaterThan SHOW_REMOTE_LEVEL LINK_ID 0
- 
-   242 op add DROP_LEVEL __tmp92 __tmp94
-   243 set LOCAL_MARGIN LOAD_LEVEL
-   244 set REMOTE_MARGIN DROP_LEVEL
--    * jump __label62 notEqual LINK_ID 0
--    * set __tmp97 "[] to core"
-+  245 set DIRECTION "[] to vault #"
-+  246 jump __label63 notEqual LINK_ID 0
-+  247 set DIRECTION "[] to core"
-   248 jump __label63 always
--    * label __label62
--    * set __tmp97 "[] to vault #"
-   249 label __label63
--    * set DIRECTION __tmp97
-   250 label __label59
--    * jump __label64 notEqual LINK_ID 0
--    * set __tmp99 ""
-+  251 set LINK_TXT LINK_ID
-+  252 jump __label65 notEqual LINK_ID 0
-+  253 set LINK_TXT ""
-   254 jump __label65 always
--    * label __label64
--    * set __tmp99 LINK_ID
-   255 label __label65
--    * set LINK_TXT __tmp99
-   256 sensor SRC_X SRC @x
-   257 sensor SRC_Y SRC @y
-   258 sensor DST_X DST @x
+   151 op strictEqual __tmp48 __tmp47 0
+   152 op land __tmp49 __tmp46 __tmp48
+   153 jump __label43 equal __tmp49 false
++  154 label __label142
+   155 ucontrol stop
+   156 sensor flag @unit @flag
+   157 label __label42
+-    * jump __label41 always
++  158 op equal __tmp46 flag QUERY_FLAG
++  159 sensor __tmp47 @unit @dead
++  160 op strictEqual __tmp48 __tmp47 0
++  161 op land __tmp49 __tmp46 __tmp48
++  162 jump __label142 notEqual __tmp49 false
+   163 label __label43
+   164 jump __label44 equal flag QUERY_FLAG
+   165 op idiv position flag 100
 
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Loop Optimization: replicate condition at line 112 (+5 instructions):
  
-   144 printflush message1
-   145 op add QUERY_FLAG 99999900 LINK_ID
-   146 set flag QUERY_FLAG
--    * ucontrol flag flag
-+  147 ucontrol flag QUERY_FLAG
-   148 label __label41
-   149 op equal __tmp46 flag QUERY_FLAG
-   150 sensor __tmp47 @unit @dead
+   172 op equal __tmp59 __tmp58 0
+   173 op land __tmp60 __tmp57 __tmp59
+   174 jump __label48 equal __tmp60 false
++  175 label __label143
+   176 ucontrol approach CORE_X CORE_Y 6
+   177 label __label47
+-    * jump __label46 always
++  178 ucontrol within CORE_X CORE_Y 8 __tmp56
++  179 op equal __tmp57 __tmp56 false
++  180 sensor __tmp58 @unit @dead
++  181 op equal __tmp59 __tmp58 0
++  182 op land __tmp60 __tmp57 __tmp59
++  183 jump __label143 notEqual __tmp60 false
+   184 label __label48
+   185 ucontrol getBlock CORE_X CORE_Y b_type CORE __tmp62
+   186 jump __label49 equal b_type @vault
 
-Modifications by Single Step Elimination, pass 3, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-3 instructions):
  
-   223 set DIRECTION "[] from vault #"
-   224 jump __label61 notEqual LINK_ID 0
-   225 set DIRECTION "[] from core"
+   234 set DIRECTION "[] from vault #"
+   235 jump __label61 notEqual LINK_ID 0
+   236 set DIRECTION "[] from core"
 -    * jump __label61 always
-   226 label __label61
-   227 jump __label59 always
-   228 label __label58
+   237 label __label61
+   238 jump __label59 always
+   239 label __label58
  
-   244 set DIRECTION "[] to vault #"
-   245 jump __label63 notEqual LINK_ID 0
-   246 set DIRECTION "[] to core"
+   255 set DIRECTION "[] to vault #"
+   256 jump __label63 notEqual LINK_ID 0
+   257 set DIRECTION "[] to core"
 -    * jump __label63 always
-   247 label __label63
-   248 label __label59
-   249 set LINK_TXT LINK_ID
-   250 jump __label65 notEqual LINK_ID 0
-   251 set LINK_TXT ""
+   258 label __label63
+   259 label __label59
+   260 set LINK_TXT LINK_ID
+   261 jump __label65 notEqual LINK_ID 0
+   262 set LINK_TXT ""
 -    * jump __label65 always
-   252 label __label65
-   253 sensor SRC_X SRC @x
-   254 sensor SRC_Y SRC @y
+   263 label __label65
+   264 sensor SRC_X SRC @x
+   265 sensor SRC_Y SRC @y
 
-Modifications by Jump Straightening, pass 4, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+ 
+   146 set flag QUERY_FLAG
+   147 ucontrol flag QUERY_FLAG
+   148 label __label41
+-    * op equal __tmp46 flag QUERY_FLAG
++  149 op equal __tmp46 QUERY_FLAG QUERY_FLAG
+   150 sensor __tmp47 @unit @dead
+   151 op strictEqual __tmp48 __tmp47 0
+   152 op land __tmp49 __tmp46 __tmp48
+
+Modifications by Final phase, Jump Straightening, iteration 1 (-5 instructions):
  
     39 label __label10
     40 label __label13
@@ -1605,35 +1708,35 @@ Modifications by Jump Straightening, pass 4, iteration 1:
     44 label __label17
     45 ubind UNIT
  
-   454 print "\n"
-   455 printflush message1
-   456 sensor __tmp185 switch1 @enabled
+   465 print "\n"
+   466 printflush message1
+   467 sensor __tmp185 switch1 @enabled
 -    * jump __label119 notEqual __tmp185 0
 -    * jump __label70 always
-+  457 jump __label70 equal __tmp185 0
-   458 label __label119
-   459 label __label120
-   460 sensor __tmp188 SRC @dead
++  468 jump __label70 equal __tmp185 0
+   469 label __label119
+   470 label __label120
+   471 sensor __tmp188 SRC @dead
 -    * jump __label121 equal __tmp188 0
 -    * jump __label70 always
-+  461 jump __label70 notEqual __tmp188 0
-   462 label __label121
-   463 label __label122
-   464 sensor __tmp191 DST @dead
++  472 jump __label70 notEqual __tmp188 0
+   473 label __label121
+   474 label __label122
+   475 sensor __tmp191 DST @dead
 -    * jump __label123 equal __tmp191 0
 -    * jump __label70 always
-+  465 jump __label70 notEqual __tmp191 0
-   466 label __label123
-   467 label __label124
-   468 sensor __tmp194 SORTER @dead
++  476 jump __label70 notEqual __tmp191 0
+   477 label __label123
+   478 label __label124
+   479 sensor __tmp194 SORTER @dead
 -    * jump __label125 equal __tmp194 0
 -    * jump __label70 always
-+  469 jump __label70 notEqual __tmp194 0
-   470 label __label125
-   471 label __label126
-   472 jump __label108 always
++  480 jump __label70 notEqual __tmp194 0
+   481 label __label125
+   482 label __label126
+   483 jump __label108 always
 
-Modifications by Jump Threading, pass 4, iteration 1:
+Modifications by Final phase, Jump Threading, iteration 1:
  
     62 jump __label24 always
     63 label __label23
@@ -1653,43 +1756,43 @@ Modifications by Jump Threading, pass 4, iteration 1:
    118 print CONTAINER
    119 print "\n"
  
-   220 set LOCAL_MARGIN DROP_LEVEL
-   221 set REMOTE_MARGIN LOAD_LEVEL
-   222 set DIRECTION "[] from vault #"
+   231 set LOCAL_MARGIN DROP_LEVEL
+   232 set REMOTE_MARGIN LOAD_LEVEL
+   233 set DIRECTION "[] from vault #"
 -    * jump __label61 notEqual LINK_ID 0
-+  223 jump __label59 notEqual LINK_ID 0
-   224 set DIRECTION "[] from core"
-   225 label __label61
-   226 jump __label59 always
++  234 jump __label59 notEqual LINK_ID 0
+   235 set DIRECTION "[] from core"
+   236 label __label61
+   237 jump __label59 always
  
-   284 jump __label79 always
-   285 label __label78
-   286 sensor __tmp118 @unit @controlled
+   295 jump __label79 always
+   296 label __label78
+   297 sensor __tmp118 @unit @controlled
 -    * jump __label80 equal __tmp118 0
-+  287 jump __label74 equal __tmp118 0
-   288 print "[salmon]Looking for a free "
-   289 print UNIT
-   290 print "..."
++  298 jump __label74 equal __tmp118 0
+   299 print "[salmon]Looking for a free "
+   300 print UNIT
+   301 print "..."
  
-   350 sensor __tmp143 @unit @totalItems
-   351 jump __label99 lessThan __tmp143 UNIT_CAPACITY
-   352 set state 3
+   361 sensor __tmp143 @unit @totalItems
+   362 jump __label99 lessThan __tmp143 UNIT_CAPACITY
+   363 set state 3
 -    * jump __label100 always
-+  353 jump __label98 always
-   354 label __label99
-   355 set MSG "\nLoading items: [green]"
-   356 label __label100
++  364 jump __label98 always
+   365 label __label99
+   366 set MSG "\nLoading items: [green]"
+   367 label __label100
  
-   373 jump __label105 greaterThan __tmp153 0
-   374 set state 2
-   375 ucontrol approach SRC_X SRC_Y 6
+   384 jump __label105 greaterThan __tmp153 0
+   385 set state 2
+   386 ucontrol approach SRC_X SRC_Y 6
 -    * jump __label106 always
-+  376 jump __label104 always
-   377 label __label105
-   378 set MSG "\nDropping items: [green]"
-   379 label __label106
++  387 jump __label104 always
+   388 label __label105
+   389 set MSG "\nDropping items: [green]"
+   390 label __label106
 
-Modifications by Unreachable Code Elimination, pass 4, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-3 instructions):
  
     68 print "..."
     69 jump __label26 always
@@ -1707,15 +1810,15 @@ Modifications by Unreachable Code Elimination, pass 4, iteration 1:
    126 label __label36
    127 printflush message1
  
-   288 print "..."
-   289 jump __label81 always
-   290 label __label80
+   299 print "..."
+   300 jump __label81 always
+   301 label __label80
 -    * jump __label74 always
-   291 label __label81
-   292 label __label79
-   293 printflush message1
+   302 label __label81
+   303 label __label79
+   304 printflush message1
 
-Modifications by Single Step Elimination, pass 4, iteration 1:
+Modifications by Final phase, Single Step Elimination, iteration 1 (-3 instructions):
  
     66 print "[salmon]Looking for a free "
     67 print UNIT
@@ -1733,19 +1836,19 @@ Modifications by Single Step Elimination, pass 4, iteration 1:
    123 label __label38
    124 label __label36
  
-   284 print "[salmon]Looking for a free "
-   285 print UNIT
-   286 print "..."
+   295 print "[salmon]Looking for a free "
+   296 print UNIT
+   297 print "..."
 -    * jump __label81 always
-   287 label __label80
-   288 label __label81
-   289 label __label79
+   298 label __label80
+   299 label __label81
+   300 label __label79
 
-Modifications by Print Merging, pass 4, iteration 1:
+Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
      7 sensor __tmp2 switch1 @enabled
      8 jump __label2 notEqual __tmp2 false
-     9 label __label135
+     9 label __label137
 -    * print "Unit Transport - Single"
 -    * print "\n"
 -    * print "Activate switch to start."
@@ -1756,7 +1859,7 @@ Modifications by Print Merging, pass 4, iteration 1:
     13 label __label1
     14 sensor __tmp2 switch1 @enabled
  
-   101 jump __label137 greaterThan n 0
+   101 jump __label135 greaterThan n 0
    102 label __label32
    103 jump __label35 notEqual CONTAINER null
 -    * print "[salmon]No destination."
@@ -1776,46 +1879,46 @@ Modifications by Print Merging, pass 4, iteration 1:
    116 print "\n"
    117 print "[salmon]Item dump must be a container or a vault!"
  
-   381 print ITEM
-   382 print DIRECTION
-   383 print LINK_TXT
+   392 print ITEM
+   393 print DIRECTION
+   394 print LINK_TXT
 -    * print "\n"
-   384 sensor __tmp158 CONTAINER ITEM
+   395 sensor __tmp158 CONTAINER ITEM
 -    * print "Local items: [gold]"
-+  385 print "\nLocal items: [gold]"
-   386 print __tmp158
-   387 print "[]"
-   388 jump __label109 greaterThanEq LOCAL_LIMIT 100
++  396 print "\nLocal items: [gold]"
+   397 print __tmp158
+   398 print "[]"
+   399 jump __label109 greaterThanEq LOCAL_LIMIT 100
  
-   407 sensor __tmp165 @unit @totalItems
-   408 print MSG
-   409 print __tmp165
+   418 sensor __tmp165 @unit @totalItems
+   419 print MSG
+   420 print __tmp165
 -    * print "[]"
 -    * print "\n"
-+  410 print "[]\n"
-   411 jump __label115 notEqual show_state 2
-   412 sensor __tmp168 @unit @x
-   413 op sub __tmp169 SRC_X __tmp168
++  421 print "[]\n"
+   422 jump __label115 notEqual show_state 2
+   423 sensor __tmp168 @unit @x
+   424 op sub __tmp169 SRC_X __tmp168
  
-   438 op floor __tmp184 loop_time
-   439 print "[lightgray]Loop time: "
-   440 print __tmp184
+   449 op floor __tmp184 loop_time
+   450 print "[lightgray]Loop time: "
+   451 print __tmp184
 -    * print " ms[]"
 -    * print "\n"
-+  441 print " ms[]\n"
-   442 printflush message1
-   443 sensor __tmp185 switch1 @enabled
-   444 jump __label70 equal __tmp185 0
++  452 print " ms[]\n"
+   453 printflush message1
+   454 sensor __tmp185 switch1 @enabled
+   455 jump __label70 equal __tmp185 0
  
-   469 op strictEqual __tmp200 __tmp199 0
-   470 jump __label129 notEqual __tmp200 false
-   471 label __label140
+   480 op strictEqual __tmp200 __tmp199 0
+   481 jump __label129 notEqual __tmp200 false
+   482 label __label140
 -    * print "[salmon]sorter1 is missing!"
 -    * print "\n"
-+  472 print "[salmon]sorter1 is missing!\n"
-   473 print "[gold]Please place and link sorter or inverted sorter to the processor."
-   474 print "\n"
-   475 printflush message1
++  483 print "[salmon]sorter1 is missing!\n"
+   484 print "[gold]Please place and link sorter or inverted sorter to the processor."
+   485 print "\n"
+   486 printflush message1
 
 Final code before resolving virtual instructions:
 
@@ -1828,19 +1931,19 @@ op max REMOTE_LIMIT REMOTE_LIMIT 20
 label __label0
 sensor __tmp2 switch1 @enabled
 jump __label2 notEqual __tmp2 false
-label __label135
+label __label137
 print "Unit Transport - Single\n"
 print "Activate switch to start.\n"
 printflush message1
 label __label1
 sensor __tmp2 switch1 @enabled
-jump __label135 equal __tmp2 false
+jump __label137 equal __tmp2 false
 label __label2
 label __label3
 sensor __tmp4 @unit @dead
 op strictEqual __tmp5 __tmp4 0
 jump __label5 notEqual __tmp5 false
-label __label136
+label __label139
 label __label6
 set __fn0_first_unit null
 label __label8
@@ -1898,7 +2001,7 @@ label __label7
 label __label4
 sensor __tmp4 @unit @dead
 op strictEqual __tmp5 __tmp4 0
-jump __label136 equal __tmp5 false
+jump __label139 equal __tmp5 false
 label __label5
 sensor UNIT_CAPACITY @unit @itemCapacity
 sensor __tmp25 @unit @speed
@@ -1910,7 +2013,7 @@ set DROP_TARGET null
 set n @links
 label __label30
 jump __label32 lessThanEq n 0
-label __label137
+label __label135
 op sub n n 1
 getlink block n
 sensor __tmp31 block @itemCapacity
@@ -1920,7 +2023,7 @@ set CONTAINER block
 label __label33
 label __label34
 label __label31
-jump __label137 greaterThan n 0
+jump __label135 greaterThan n 0
 label __label32
 jump __label35 notEqual CONTAINER null
 print "[salmon]No destination.\n"
@@ -1959,15 +2062,20 @@ op add QUERY_FLAG 99999900 LINK_ID
 set flag QUERY_FLAG
 ucontrol flag QUERY_FLAG 0 0 0 0
 label __label41
-op equal __tmp46 flag QUERY_FLAG
+op equal __tmp46 QUERY_FLAG QUERY_FLAG
 sensor __tmp47 @unit @dead
 op strictEqual __tmp48 __tmp47 0
 op land __tmp49 __tmp46 __tmp48
 jump __label43 equal __tmp49 false
+label __label142
 ucontrol stop 0 0 0 0 0
 sensor flag @unit @flag
 label __label42
-jump __label41 always 0 0
+op equal __tmp46 flag QUERY_FLAG
+sensor __tmp47 @unit @dead
+op strictEqual __tmp48 __tmp47 0
+op land __tmp49 __tmp46 __tmp48
+jump __label142 notEqual __tmp49 false
 label __label43
 jump __label44 equal flag QUERY_FLAG
 op idiv position flag 100
@@ -1980,9 +2088,15 @@ sensor __tmp58 @unit @dead
 op equal __tmp59 __tmp58 0
 op land __tmp60 __tmp57 __tmp59
 jump __label48 equal __tmp60 false
+label __label143
 ucontrol approach CORE_X CORE_Y 6 0 0
 label __label47
-jump __label46 always 0 0
+ucontrol within CORE_X CORE_Y 8 __tmp56 0
+op equal __tmp57 __tmp56 false
+sensor __tmp58 @unit @dead
+op equal __tmp59 __tmp58 0
+op land __tmp60 __tmp57 __tmp59
+jump __label143 notEqual __tmp60 false
 label __label48
 ucontrol getBlock CORE_X CORE_Y b_type CORE __tmp62
 jump __label49 equal b_type @vault
@@ -2003,7 +2117,7 @@ op notEqual __tmp68 sorter_type @sorter
 op notEqual __tmp69 sorter_type @inverted-sorter
 op land __tmp70 __tmp68 __tmp69
 jump __label55 equal __tmp70 false
-label __label138
+label __label141
 print "[salmon]Block sorter1 is neither a sorter, nor an inverted sorter."
 print "\n"
 jump __label56 equal SORTER null
@@ -2018,7 +2132,7 @@ label __label54
 op notEqual __tmp68 sorter_type @sorter
 op notEqual __tmp69 sorter_type @inverted-sorter
 op land __tmp70 __tmp68 __tmp69
-jump __label138 notEqual __tmp70 false
+jump __label141 notEqual __tmp70 false
 label __label55
 jump __label58 notEqual sorter_type @sorter
 set SHOW_REMOTE_LEVEL true
@@ -2118,12 +2232,12 @@ sensor ITEM SORTER @config
 jump __label82 equal ITEM LAST_ITEM
 label __label84
 jump __label86 notEqual ITEM null
-label __label139
+label __label136
 print "[salmon]No item type selected for transport."
 printflush message1
 sensor ITEM SORTER @config
 label __label85
-jump __label139 equal ITEM null
+jump __label136 equal ITEM null
 label __label86
 set LAST_ITEM ITEM
 set state 1
@@ -2314,7 +2428,7 @@ control enabled switch1 false 0 0 0
 label __label132
 sensor __tmp210 switch1 @enabled
 jump __label134 notEqual __tmp210 false
-label __label141
+label __label138
 print "[salmon]Local or remote container became invalid."
 print "\n"
 print "[gold]Please fix and press button to reinitialize."
@@ -2323,7 +2437,7 @@ printflush message1
 printflush message2
 label __label133
 sensor __tmp210 switch1 @enabled
-jump __label141 equal __tmp210 false
+jump __label138 equal __tmp210 false
 label __label134
 label __label130
 label __label131

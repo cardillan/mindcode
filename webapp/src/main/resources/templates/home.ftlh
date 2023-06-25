@@ -8,7 +8,7 @@
 <p class="my-2 text-lg"><strong>Mindcode</strong> is a high-level language that compiles down to Mindustry Logic.
  Mindcode includes higher-level constructs, such as expressions, user-defined functions, control statements, or "direct" memory access.<p>
 <#if model.sample != "">
-    <p class="my-2 text-lg">Mindcode now comes with <strong>significantly improved code generation</strong>;
+    <p class="my-2 text-lg">Mindcode now comes with <strong>significantly improved code generation</strong>, including <strong>data flow analysis</strong> and <strong>loop unrolling</strong>;
      for a list of recent changes, see <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown">changelog</a>.<p>
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">

@@ -10,16 +10,11 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mindcode.compiler.optimization.DiffDebugPrinter;
-import info.teksol.mindcode.compiler.optimization.MindcodeOptimizer;
 import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
+import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -132,7 +127,7 @@ public class MindcodeCompiler implements Compiler<String> {
         final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
                 ? new DiffDebugPrinter(profile.getDebugLevel()) : new NullDebugPrinter();
 
-        MindcodeOptimizer optimizer = new MindcodeOptimizer(instructionProcessor, profile, messages::add);
+        OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messages::add);
         optimizer.setDebugPrinter(debugPrinter);
         List<LogicInstruction> result = optimizer.optimize(generatorOutput);
         debugPrinter.print(this::debug);

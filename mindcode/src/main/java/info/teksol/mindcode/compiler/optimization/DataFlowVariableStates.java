@@ -2,12 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
-import info.teksol.mindcode.compiler.instructions.AstSubcontextType;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.OpInstruction;
-import info.teksol.mindcode.compiler.instructions.PackColorInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
@@ -44,7 +39,7 @@ public class DataFlowVariableStates {
      * are purged.
      */
     class VariableStates {
-        private final int id = counter.incrementAndGet();
+        private final int id;
 
         /**
          *  Maps variables to their known values, which might be a constant represented by a literal,
@@ -77,7 +72,10 @@ public class DataFlowVariableStates {
          */
         private boolean dead;
 
+        private boolean isolated;
+
         public VariableStates() {
+            id = counter.incrementAndGet();
             values = new LinkedHashMap<>();
             definitions = new HashMap<>();
             equivalences = new HashMap<>();
@@ -86,9 +84,11 @@ public class DataFlowVariableStates {
             stored = new HashSet<>();
         }
 
-        private VariableStates(VariableStates other) {
+        private VariableStates(VariableStates other, int id, boolean isolated) {
+            this.id = id;
+            this.isolated = isolated;
             values = new LinkedHashMap<>(other.values);
-            definitions = new HashMap<>(other.definitions);
+            definitions = deepCopy(other.definitions);
             equivalences = new HashMap<>(other.equivalences);
             useless = new HashMap<>(other.useless);
             initialized = new HashSet<>(other.initialized);
@@ -96,14 +96,27 @@ public class DataFlowVariableStates {
             dead = other.dead;
         }
 
+        private static Map<LogicVariable, List<LogicInstruction>> deepCopy(Map<LogicVariable, List<LogicInstruction>> original) {
+            return original.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+                    e -> new ArrayList<>(e.getValue())));
+        }
+
         public Map<LogicVariable, LogicInstruction> getUseless() {
             return useless;
         }
 
         public VariableStates copy(String reason) {
-            VariableStates copy = new VariableStates(this);
+            VariableStates copy = new VariableStates(this, counter.incrementAndGet(), isolated);
             debug(() -> "*** " + reason + ": created VariableStates instance #" + copy.id + " as a copy of #" + id);
             return copy;
+        }
+
+        public VariableStates isolatedCopy() {
+            return new VariableStates(this, id, true);
+        }
+
+        public boolean isIsolated() {
+            return isolated;
         }
 
         /**
@@ -117,7 +130,7 @@ public class DataFlowVariableStates {
          * @return this instance marked as dead.
          */
         public VariableStates setDead(boolean markRead) {
-            if (markRead) {
+            if (markRead && !isolated) {
                 definitions.entrySet().stream()
                         .filter(e -> e.getKey().isMainVariable())
                         .forEachOrdered(e -> optimizer.orphans.computeIfAbsent(e.getKey(),
@@ -189,12 +202,14 @@ public class DataFlowVariableStates {
                 } else {
                     values.put(variable, new VariableValue(variable, value));
                 }
-            } else {
+            } else if (!isolated) {
                 // Variable cannot be eliminated --> its instruction needs to be kept
                 optimizer.keep.add(instruction);      // Ensure the instruction is kept
             }
 
-            optimizer.defines.add(instruction);
+            if (!isolated) {
+                optimizer.defines.add(instruction);
+            }
             initialized.add(variable);
             definitions.put(variable, List.of(instruction));
 
@@ -243,8 +258,8 @@ public class DataFlowVariableStates {
             }
         }
 
-        public void updateAfterFunctionCall(String localPrefix) {
-            optimizer.functionReads.get(localPrefix).forEach(variable -> valueRead(variable, false));
+        public void updateAfterFunctionCall(String localPrefix, LogicInstruction instruction) {
+            optimizer.functionReads.get(localPrefix).forEach(variable -> valueRead(variable, instruction, false));
             optimizer.functionWrites.get(localPrefix).forEach(this::valueReset);
         }
 
@@ -253,13 +268,17 @@ public class DataFlowVariableStates {
         }
 
         public LogicValue valueRead(LogicVariable variable) {
-            return valueRead(variable, true);
+            return valueRead(variable, null, true);
         }
 
-        public LogicValue valueRead(LogicVariable variable, boolean markUninitialized) {
+        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction) {
+            return valueRead(variable, instruction, true);
+        }
+
+        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean markUninitialized) {
             debug(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!)" : ")"));
 
-            if (markUninitialized && !initialized.contains(variable)) {
+            if (markUninitialized && !initialized.contains(variable) && !isolated) {
                 debug(() -> "*** Detected uninitialized read of " + variable.toMlog());
                 optimizer.uninitialized.add(variable);
             }
@@ -269,7 +288,13 @@ public class DataFlowVariableStates {
                     definitions.get(variable).forEach(this::printInstruction);
                 }
                 // Variable value was read, keep all instructions that define its value
-                optimizer.keep.addAll(definitions.get(variable));
+                if (!isolated) {
+                    optimizer.keep.addAll(definitions.get(variable));
+                }
+            }
+
+            if (instruction != null && !isolated) {
+                optimizer.references.computeIfAbsent(variable, v -> new ArrayList<>()).add(instruction);
             }
 
             VariableValue variableValue = values.get(variable);
@@ -302,29 +327,7 @@ public class DataFlowVariableStates {
                 return other;
             }
 
-            // Definitions are merged together
-            for (LogicVariable variable : other.definitions.keySet()) {
-                if (definitions.containsKey(variable)) {
-                    List<LogicInstruction> current = definitions.get(variable);
-                    List<LogicInstruction> theOther = other.definitions.get(variable);
-                    if (!sameInstances(current, theOther)) {
-                        // Merge the two lists
-                        if (current.size() == 1 && theOther.size() == 1) {
-                            definitions.put(variable, List.of(current.get(0), theOther.get(0)));
-                        } else {
-                            Set<LogicInstruction> union = Collections.newSetFromMap(new IdentityHashMap<>(current.size() + theOther.size()));
-                            union.addAll(current);
-                            union.addAll(theOther);
-                            definitions.put(variable, List.copyOf(union));
-                        }
-
-                        invalidateVariable(variable);
-                    }
-                } else {
-                    definitions.put(variable, other.definitions.get(variable));
-                    invalidateVariable(variable);
-                }
-            }
+            merge(definitions,other.definitions, true);
 
             // Only keep values that are the same in both instances
             values.keySet().retainAll(other.values.keySet());
@@ -357,18 +360,35 @@ public class DataFlowVariableStates {
             return this;
         }
 
-        void print(String title) {
-            if (DataFlowOptimizer.DEBUG) {
-                System.out.println(title);
-                System.out.println("    VariableStates instance #" + id + (dead ? " DEAD!" : ""));
-                values.values().forEach(v -> System.out.println("    " + v));
-                definitions.forEach((k, v) -> {
-                    System.out.println("    Definitions of " + k.toMlog());
-                    v.forEach(ix -> System.out.println("      " + optimizer.instructionIndex(ix)
-                            + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
-                });
-                equivalences.forEach((k, v) -> System.out.println("    Equivalence: " + k.toMlog() + " = " + v.toMlog()));
-                System.out.println("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
+        private void merge(Map<LogicVariable, List<LogicInstruction>> map1, Map<LogicVariable, List<LogicInstruction>> map2,
+                boolean invalidateVariables) {
+            for (LogicVariable variable : map2.keySet()) {
+                if (map1.containsKey(variable)) {
+                    List<LogicInstruction> current = map1.get(variable);
+                    List<LogicInstruction> theOther = map2.get(variable);
+                    if (!sameInstances(current, theOther)) {
+                        // Merge the two lists
+                        if (current.size() == 1 && theOther.size() == 1) {
+                            ArrayList<LogicInstruction> union = new ArrayList<>();
+                            union.add(current.get(0));
+                            union.add(theOther.get(0));
+                            map1.put(variable, union);
+                        } else {
+                            Set<LogicInstruction> union = createIdentitySet(current.size() + theOther.size());
+                            union.addAll(current);
+                            union.addAll(theOther);
+                            map1.put(variable, new ArrayList<>(union));
+                        }
+                        if (invalidateVariables) {
+                            invalidateVariable(variable);
+                        }
+                    }
+                } else {
+                    map1.put(variable, map2.get(variable));
+                    if (invalidateVariables) {
+                        invalidateVariable(variable);
+                    }
+                }
             }
         }
 
@@ -384,6 +404,21 @@ public class DataFlowVariableStates {
             }
 
             return true;
+        }
+
+        void print(String title) {
+            if (DataFlowOptimizer.DEBUG) {
+                System.out.println(title);
+                System.out.println("    VariableStates instance #" + id + (dead ? " DEAD!" : ""));
+                values.values().forEach(v -> System.out.println("    " + v));
+                definitions.forEach((k, v) -> {
+                    System.out.println("    Definitions of " + k.toMlog());
+                    v.forEach(ix -> System.out.println("      " + optimizer.instructionIndex(ix)
+                            + ": " + LogicInstructionPrinter.toString(instructionProcessor, ix)));
+                });
+                equivalences.forEach((k, v) -> System.out.println("    Equivalence: " + k.toMlog() + " = " + v.toMlog()));
+                System.out.println("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
+            }
         }
 
         class VariableValue {
@@ -413,6 +448,10 @@ public class DataFlowVariableStates {
 
             public LogicInstruction getInstruction() {
                 return instruction;
+            }
+
+            public LogicValue getConstantValue() {
+                return constantValue;
             }
 
             public boolean isExpression() {
@@ -536,5 +575,9 @@ public class DataFlowVariableStates {
         if (DataFlowOptimizer.DEBUG) {
             System.out.println(text.get());
         }
+    }
+
+    private static <T> Set<T> createIdentitySet(int size) {
+        return Collections.newSetFromMap(new IdentityHashMap<>(size));
     }
 }

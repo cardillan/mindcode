@@ -2,14 +2,21 @@ package info.teksol.util;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class CollectionUtils {
 
+    @SafeVarargs
     public static <T> Predicate<T> in(T... values) {
         return Set.of(values)::contains;
     }
 
+    public static <T, R> Predicate<T> in(Function<T, R> mapping,  R... values) {
+        return t -> Set.of(values).contains(mapping.apply(t));
+    }
+
+    @SafeVarargs
     public static <T> Predicate<T> notIn(T... values) {
         return Predicate.not(Set.of(values)::contains);
     }

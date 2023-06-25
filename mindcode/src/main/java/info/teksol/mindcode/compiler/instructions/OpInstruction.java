@@ -1,12 +1,7 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicParameter;
-import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
@@ -35,6 +30,16 @@ public class OpInstruction extends BaseInstruction implements LogicResultInstruc
         return hasSecondOperand()
                 ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getParams())
                 : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getParams());
+    }
+
+    public OpInstruction withX(LogicValue x) {
+        return hasSecondOperand()
+                ? new OpInstruction(astContext, List.of(getArg(0), getArg(1), x, getArg(3)), getParams())
+                : new OpInstruction(astContext, List.of(getArg(0), getArg(1), x), getParams());
+    }
+
+    public OpInstruction withY(LogicValue y) {
+        return new OpInstruction(astContext, List.of(getArg(0), getArg(1), getArg(2), y), getParams());
     }
 
     public boolean hasSecondOperand() {

@@ -147,7 +147,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o off -p 1 -d 3 -u source -s -g size -m restricted");
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o off -p 1 -d 3 -u source -s -g size -e 100 -m restricted");
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
@@ -155,6 +155,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(OptimizationLevel.OFF, actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
         assertEquals(1, actual.getParseTreeLevel());
         assertEquals(3, actual.getDebugLevel());
+        assertEquals(100, actual.getOptimizationPasses());
         assertEquals(GenerationGoal.SIZE, actual.getGoal());
         assertEquals(MemoryModel.RESTRICTED, actual.getMemoryModel());
         assertEquals(FinalCodeOutput.SOURCE, actual.getFinalCodeOutput());
@@ -172,6 +173,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(expected.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION), actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
         assertEquals(expected.getParseTreeLevel(), actual.getParseTreeLevel());
         assertEquals(expected.getDebugLevel(), actual.getDebugLevel());
+        assertEquals(CompilerProfile.DEFAULT_CMDLINE_PASSES, actual.getOptimizationPasses());
         assertEquals(expected.getGoal(), actual.getGoal());
         assertEquals(expected.getMemoryModel(), actual.getMemoryModel());
         assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());

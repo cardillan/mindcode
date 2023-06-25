@@ -1,16 +1,12 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.Tuple2;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
-import info.teksol.mindcode.logic.LogicLiteral;
-import info.teksol.mindcode.logic.LogicNumber;
-import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +29,8 @@ import java.util.Optional;
  * </li></ul>
  */
 public class ExpressionOptimizer extends BaseOptimizer {
-    public ExpressionOptimizer(InstructionProcessor instructionProcessor) {
-        super(Optimization.EXPRESSION_OPTIMIZATION, instructionProcessor);
+    public ExpressionOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.EXPRESSION_OPTIMIZATION, optimizationContext);
     }
 
     @Override

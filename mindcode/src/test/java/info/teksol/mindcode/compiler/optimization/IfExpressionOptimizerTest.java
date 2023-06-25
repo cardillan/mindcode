@@ -253,4 +253,24 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(END)
         );
     }
+
+    @Test
+    void preservesDecisionVarialbe() {
+        assertCompilesTo("""
+                        i = rand(10)
+                        i = i % 2 ? 5 : 6
+                        print(i)
+                        """,
+                createInstruction(OP, "rand", "i", "10"),
+                createInstruction(OP, "mod", var(1), "i", "2"),
+                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
+                createInstruction(SET, "i", "5"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "i", "6"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "i"),
+                createInstruction(END)
+        );
+    }
 }

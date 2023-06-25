@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-07-06
+
+### Added
+
+* Added general [optimization for speed](doc/syntax/SYNTAX-5-OTHER.markdown#optimization-for-speed) mechanism. 
+  Various opportunities for optimizations that improve execution speed at the price of code size increase are 
+  identified and realized in the order of decreasing efficiency until the opportunities or the available instruction 
+  space are exhausted.   
+* Added [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling) optimization.
+* Added [compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-passes) to limit the number of performed 
+  optimization passes.
+
+### Fixed
+
+* Fixed If Expression optimization failing to preserve variable value
+  ([#101](https://github.com/cardillan/mindcode/issues/101)).
+* Fixed `mcc.bat` and `webapp.bat` files missing in the `bin` directory.
+
+### Changed
+
+* Changed [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) to optimize [main 
+  variables](doc/syntax/SYNTAX-1-VARIABLES.markdown#main-variables) even on `basic` level. Only final assignments to 
+  main variables are preserved on `basic` level, other assignments can be optimized away. This change allows the Loop 
+  Unrolling optimization to be functional even on `basic` optimization level.
+* Changed condition duplication by Loop Optimization to employ the general
+  [optimization for speed](doc/syntax/SYNTAX-5-OTHER.markdown#optimization-for-speed) mechanism.   
+* Changed various optimizations for minor improvements:
+  * Number of times the Data Flow Optimization has to process loops was reduced.
+  * Jumps Normalization now recognizes always true/always false conditional jumps based on known variable 
+    values.
+  * Improved handling of complex conditions in Loop Optimization.
+  * Print Merging can merge print instructions across inactive jump labels.
+
 ## 2023-07-01
 
 ### Added
@@ -21,14 +54,14 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* The [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) now properly handles 
+* The [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) now properly handles 
   assignments to uninitialized variables made before calling the
   [`end()` function](doc/syntax/SYNTAX-5-OTHER.markdown#handling-of-uninitialized-variables). 
 
 ### Removed
 
 * Removed _Return value optimization_ and _Temporary inputs elimination_. These optimizations were completely 
-  superseded by the [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization).
+  superseded by the [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization).
 * Removed the old command-line compiler and the `mindcode` / `mindcode.bat` files in the `bin` directory.
 
 ## 2023-06-19
@@ -39,7 +72,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-* Fixed Data Flow optimization incorrectly handling `break`, `continue` and `return` statements 
+* Fixed Data Flow Optimization incorrectly handling `break`, `continue` and `return` statements 
   ([#98](https://github.com/cardillan/mindcode/issues/98)).
 
 ### Miscellaneous
@@ -63,7 +96,7 @@ All notable changes to this project will be documented in this file.
 * Added elimination of variables never modified by a function from stack in
   [Stack Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
 * Added specific optimization for recursive function calls to the
-  [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization):
+  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization):
   * The optimizer is aware when a variable value is preserved on stack and can reuse the variable state when 
     optimizing code following a recursive function call.
   * Streamlining expressions when passing value derived from the current value of the function argument to the 
@@ -71,7 +104,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-* Fixed Data Flow optimization crashing when source code contained unused user defined functions
+* Fixed Data Flow Optimization crashing when source code contained unused user defined functions
   ([#97](https://github.com/cardillan/mindcode/issues/97)).
 * Fixed misspelled name of the `case-expression-optimizer` command-line and compiler directive option (was 
   `ease-expression-optimizer` before).
@@ -92,22 +125,22 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added [Constant folding](doc/syntax/SYNTAX-5-OTHER.markdown#constant-folding) to Data Flow optimization.
+* Added [Constant folding](doc/syntax/SYNTAX-5-OTHER.markdown#constant-folding) to Data Flow Optimization.
 * Added [Common subexpression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#common-subexpressions-optimization) 
-  to Data Flow optimization.
+  to Data Flow Optimization.
 
 ### Removed
 
 * Removed _Function call optimization_. This optimization was completely superseded by the
-  [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles all 
+  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles all 
   cases previously optimized by Function call optimization, and is able to identify more opportunities for 
   optimization. The old optimization was removed because it became incompatible (i.e. produced wrong results) 
-  with the code produced by Data Flow optimization.
+  with the code produced by Data Flow Optimization.
 
 ### Deprecated
 
 * Deprecated _Return value optimization_. This optimization was completely superseded by the
-  [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles more cases 
+  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles more cases 
   than the old optimization. The Return value optimization will be removed when it becomes incompatible with 
   further changes to code generation/optimization.  
 * Deprecated _Temporary inputs elimination_, for the same reasons as above. 
@@ -116,7 +149,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could 
+* Added [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could 
   remove user defined variables from compiled code - see the documentation for details. 
 
 ### Fixed

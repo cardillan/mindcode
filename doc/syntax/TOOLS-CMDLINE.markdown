@@ -76,9 +76,10 @@ Actions:
 usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--conditional-jump-optimization LEVEL] [--single-step-elimination LEVEL]
-                [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}]
+                [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--loop-unrolling LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-e {1..1000}]
                 [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
                 [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
@@ -90,6 +91,8 @@ named arguments:
   -t, --target {6,7s,7w,7as,7aw}
                          selects target processor version and edition (version  6,  version 7 with standard processor or
                          world processor, version 7 rev. A with standard processor or world processor)
+  -e, --passes {1..1000}
+                         sets maximal number of optimization passes to be made
   -g, --goal {SIZE,SPEED,AUTO}
                          sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
                          automatically
@@ -131,6 +134,8 @@ optimization levels:
                          optimization level of optimizing some common mathematical expressions
   --loop-optimization LEVEL
                          optimization level of improving loops
+  --loop-unrolling LEVEL
+                         optimization level of unrolls loops with constant number of iterations
   --if-expression-optimization LEVEL
                          optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL
@@ -162,9 +167,10 @@ debug output options:
 usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--conditional-jump-optimization LEVEL] [--single-step-elimination LEVEL]
-                [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}]
+                [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--loop-unrolling LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-e {1..1000}]
                 [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
                 [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
 
@@ -176,6 +182,8 @@ named arguments:
   -t, --target {6,7s,7w,7as,7aw}
                          selects target processor version and edition (version  6,  version 7 with standard processor or
                          world processor, version 7 rev. A with standard processor or world processor)
+  -e, --passes {1..1000}
+                         sets maximal number of optimization passes to be made
   -g, --goal {SIZE,SPEED,AUTO}
                          sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
                          automatically
@@ -218,6 +226,8 @@ optimization levels:
                          optimization level of optimizing some common mathematical expressions
   --loop-optimization LEVEL
                          optimization level of improving loops
+  --loop-unrolling LEVEL
+                         optimization level of unrolls loops with constant number of iterations
   --if-expression-optimization LEVEL
                          optimization level of improving ternary/if expressions
   --data-flow-optimization LEVEL

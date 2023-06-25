@@ -1,9 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
@@ -24,8 +24,8 @@ import java.util.List;
  * eliminated variables later on.
  */
 class TempVariableEliminator extends BaseOptimizer {
-    public TempVariableEliminator(InstructionProcessor instructionProcessor) {
-        super(Optimization.TEMP_VARIABLES_ELIMINATION, instructionProcessor);
+    public TempVariableEliminator(OptimizationContext optimizationContext) {
+        super(Optimization.TEMP_VARIABLES_ELIMINATION, optimizationContext);
     }
 
     @Override

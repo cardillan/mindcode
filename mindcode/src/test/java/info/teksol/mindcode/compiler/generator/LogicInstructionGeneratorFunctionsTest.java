@@ -477,7 +477,7 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     void doesNotPushInlineFunctionVariables() {
         // Verifies that locals inside inline functions (which by definition are limited to the function scope)
         // aren't pushed to the stack in recursive functions
-        assertCompilesTo(ix -> ix instanceof PushOrPopInstruction,
+        assertCompilesTo(PushOrPopInstruction.class::isInstance,
                 """
                         allocate stack in bank1[0...512]
                         def foo(r)

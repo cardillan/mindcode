@@ -1,11 +1,11 @@
     42 instructions before optimizations.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions added by Loop Optimization (2 iterations).
-     1 loops improved by LoopOptimizer.
-     2 instructions eliminated by Data Flow Optimization (4 iterations).
+     1 instructions modified by Loop Optimization (3 iterations).
+     1 loops improved by Loop Optimization.
+     2 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
     38 instructions after optimizations.
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
     48 label __label14
     49 set __fn0_v 73682
@@ -20,7 +20,38 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
     56 label __label17
     57 end
 
-Modifications by Loop Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    47 label __label2
+    48 label __label14
+    49 set __fn0_v 73682
+-    * print __fn0_v
++   50 print 73682
+    51 label __label15
+    52 read __tmp6 bank2 200
+    53 label __label16
+    54 set __fn1_v __tmp6
+-    * print __fn1_v
++   55 print __tmp6
+    56 label __label17
+    57 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+    46 gotolabel __label10 marker0
+    47 label __label2
+    48 label __label14
+-    * set __fn0_v 73682
+    49 print 73682
+    50 label __label15
+    51 read __tmp6 bank2 200
+    52 label __label16
+-    * set __fn1_v __tmp6
+    53 print __tmp6
+    54 label __label17
+    55 end
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
     32 set j i
     33 label __label11
@@ -39,7 +70,7 @@ Modifications by Loop Optimization, pass 2, iteration 1:
     45 label __label0
     46 goto __tmp0 marker0
 
-Modifications by Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
     31 label __label1
     32 set j i
@@ -49,35 +80,6 @@ Modifications by Data Flow Optimization, pass 2, iteration 1:
     35 label __label18
     36 read __tmp1 bank2 j
     37 op sub __tmp3 j i
- 
-    48 label __label2
-    49 label __label14
-    50 set __fn0_v 73682
--    * print __fn0_v
-+   51 print 73682
-    52 label __label15
-    53 read __tmp6 bank2 200
-    54 label __label16
-    55 set __fn1_v __tmp6
--    * print __fn1_v
-+   56 print __tmp6
-    57 label __label17
-    58 end
-
-Modifications by Data Flow Optimization, pass 2, iteration 2:
- 
-    47 gotolabel __label10 marker0
-    48 label __label2
-    49 label __label14
--    * set __fn0_v 73682
-    50 print 73682
-    51 label __label15
-    52 read __tmp6 bank2 200
-    53 label __label16
--    * set __fn1_v __tmp6
-    54 print __tmp6
-    55 label __label17
-    56 end
 
 Final code before resolving virtual instructions:
 

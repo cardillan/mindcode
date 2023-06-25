@@ -1,18 +1,12 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.MessageLevel;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -24,8 +18,8 @@ class DeadCodeEliminator extends BaseOptimizer {
     private String eliminated = "";
     private String uninitialized = "";
 
-    DeadCodeEliminator(InstructionProcessor instructionProcessor) {
-        super(Optimization.DEAD_CODE_ELIMINATION, instructionProcessor);
+    DeadCodeEliminator(OptimizationContext optimizationContext) {
+        super(Optimization.DEAD_CODE_ELIMINATION, optimizationContext);
     }
 
     @Override
@@ -50,7 +44,7 @@ class DeadCodeEliminator extends BaseOptimizer {
                     .collect(Collectors.joining(", "));
         }
 
-        return true;
+        return wasUpdated();
     }
 
     @Override

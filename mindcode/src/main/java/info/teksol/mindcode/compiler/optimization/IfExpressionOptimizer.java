@@ -1,16 +1,10 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.AstContext;
-import info.teksol.mindcode.compiler.instructions.AstContextType;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.JumpInstruction;
-import info.teksol.mindcode.compiler.instructions.LabelInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicResultInstruction;
-import info.teksol.mindcode.compiler.instructions.OpInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.List;
 
@@ -18,8 +12,8 @@ import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
 
 public class IfExpressionOptimizer extends BaseOptimizer {
 
-    public IfExpressionOptimizer(InstructionProcessor instructionProcessor) {
-        super(Optimization.IF_EXPRESSION_OPTIMIZATION, instructionProcessor);
+    public IfExpressionOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.IF_EXPRESSION_OPTIMIZATION, optimizationContext);
     }
 
     @Override
@@ -51,41 +45,56 @@ public class IfExpressionOptimizer extends BaseOptimizer {
                 && resTrue.getResult().equals(resFalse.getResult())
                 && isContained(trueBranch.toList()) && isContained(falseBranch.toList())) {
 
-            // TODO Remove the "true ||" if an optimization to replace unconditional jump to return instruction with the
-            //      return itself is ever implemented.
-            // Do not perform the optimization in recursive functions
-            // It might lead to more instructions being evaluated by moving assignment to the function return variable
-            // in front of the condition.
-            if (true || resTrue.getAstContext().functionPrefix() == null
-                    || !getCallGraph().getFunctionByPrefix(resTrue.getAstContext().functionPrefix()).isRecursive()) {
-                if (invertedJump != null && trueBranch.size() == 1 && !isVolatile(resTrue)) {
-                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
-                    swappable = false;
-                } else if (falseBranch.size() == 1 && !isVolatile(resFalse)) {
-                    moveFalseBranch(condition, trueBranch, falseBranch, jump);
-                    swappable = false;
-                } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()
-                        && !isVolatile(resTrue)) {
-                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
-                    swappable = false;
-                }
-            }
+            LogicVariable resVar = resTrue.getResult();
 
             // Replace the temporary variable with the actual target
             // Only if the temporary variable is not reused anywhere
-            if (resTrue.getResult().isTemporaryVariable()
+            if (resVar.isTemporaryVariable()
                     && instructionAfter(ifExpression) instanceof SetInstruction finalSet
-                    && finalSet.getValue().equals(resTrue.getResult())
-                    && instructionCount(ix -> ix.inputArgumentsStream().anyMatch(resTrue.getResult()::equals)) == 1) {
-                replaceInstruction(resTrue, resTrue.withResult(finalSet.getResult()));
-                replaceInstruction(resFalse, resFalse.withResult(finalSet.getResult()));
+                    && finalSet.getValue().equals(resVar)
+                    && instructionCount(ix -> ix.inputArgumentsStream().anyMatch(resVar::equals)) == 1) {
+                resTrue = replaceAndGet(resTrue, resTrue.withResult(finalSet.getResult()));
+                resFalse = replaceAndGet(resFalse, resFalse.withResult(finalSet.getResult()));
                 removeInstruction(finalSet);
+
+                trueBranch = contextInstructions(ifExpression.child(1));
+                falseBranch = contextInstructions(ifExpression.child(3));
+            }
+
+            LogicVariable updatedResVar = resTrue.getResult();
+
+            // Do not perform the optimization if the condition depends on the resulting variable
+            if (condition.stream().noneMatch(ix -> ix.inputArgumentsStream().anyMatch(updatedResVar::equals))) {
+                // TODO Remove the "true ||" if an optimization to replace unconditional jump to return instruction with the
+                //      return itself is ever implemented.
+                // Do not perform the optimization in recursive functions
+                // It might lead to more instructions being evaluated by moving assignment to the function return variable
+                // in front of the condition.
+                if (true || resTrue.getAstContext().functionPrefix() == null
+                        || !getCallGraph().getFunctionByPrefix(resTrue.getAstContext().functionPrefix()).isRecursive()) {
+                    if (invertedJump != null && trueBranch.size() == 1 && !isVolatile(resTrue)) {
+                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
+                        swappable = false;
+                    } else if (falseBranch.size() == 1 && !isVolatile(resFalse)) {
+                        moveFalseBranch(condition, trueBranch, falseBranch, jump);
+                        swappable = false;
+                    } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()
+                            && !isVolatile(resTrue)) {
+                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
+                        swappable = false;
+                    }
+                }
             }
         }
 
         if (swappable && invertedJump != null) {
             swapBranches(condition, trueBranch, falseBranch, invertedJump);
         }
+    }
+
+    private LogicResultInstruction replaceAndGet(LogicResultInstruction original, LogicResultInstruction replaced) {
+        replaceInstruction(original, replaced);
+        return replaced;
     }
 
     private boolean hasExpectedStructure(AstContext ifExpression) {

@@ -10,25 +10,16 @@ import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.optimization.MindcodeOptimizer;
+import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
 import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +35,7 @@ class SamplesTest {
     private static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
         LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor, s -> {});
         GeneratorOutput generatorOutput  = generator.generate(program);
-        MindcodeOptimizer optimizer = new MindcodeOptimizer(instructionProcessor, profile, s -> {});
+        OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, s -> {});
         return optimizer.optimize(generatorOutput);
     }
 

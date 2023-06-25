@@ -4,19 +4,14 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.CallGraph;
-import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
-import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates.VariableValue;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicBuiltIn;
-import info.teksol.mindcode.logic.LogicLabel;
-import info.teksol.mindcode.logic.LogicLiteral;
-import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import info.teksol.mindcode.logic.*;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -27,10 +22,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
     static final boolean DEBUG = false;
 
     /**
-     * Instruction replacement map. All possible replacements are done after the data flow analysis is finished,
-     * to avoid concurrent modification exceptions while updating the program during the analysis.
+     * Stores possible replacement values to each input argument of a replaceable instruction.
      */
-    private final Map<LogicInstruction, LogicInstruction> replacements = new IdentityHashMap<>();
+    private final Map<LogicInstruction, Map<LogicVariable, LogicValue>> replacements = new IdentityHashMap<>();
 
     /**
      * Set of instructions whose sole purpose is to set value to some variable. If the variable isn't subsequently
@@ -63,11 +57,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
     final Set<LogicVariable> uninitialized = new HashSet<>();
 
     /**
-     * Maps labels to their respective instructions. Rebuilt at the beginning of each iteration. Allows quickly
-     * determine the context of the label instruction and therefore jumps that lead outside their respective context
-     * (non-localized jumps). Non-localized jumps are the product of break, continue or return statements.
+     * Instructions referencing each variable.
      */
-    private Map<LogicLabel, LogicInstruction> labels;
+    final Map<LogicVariable, List<LogicInstruction>> references = new HashMap<>();
 
     /**
      * When a jump outside its context is encountered, current variable state is copied and assigned to the target
@@ -84,12 +76,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
     Map<String, Set<LogicVariable>> functionWrites;
 
     private final DataFlowVariableStates dataFlowVariableStates;
-    private final OptimizerExpressionEvaluator expressionEvaluator;
 
-    public DataFlowOptimizer(InstructionProcessor instructionProcessor) {
-        super(Optimization.DATA_FLOW_OPTIMIZATION, instructionProcessor);
+    public DataFlowOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.DATA_FLOW_OPTIMIZATION, optimizationContext);
         dataFlowVariableStates = new DataFlowVariableStates(this);
-        expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
     }
 
     @Override
@@ -100,16 +90,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
         useless.clear();
         uninitialized.clear();
         replacements.clear();
+        references.clear();
         labelStates.clear();
+
+        clearVariableStates();
 
         debug(() -> "\n\n\n*** PASS " + pass + ", ITERATION " + iteration + " ***\n");
 
         analyzeFunctionVariables();
-
-        labels = instructionStream()
-                .filter(LabelInstruction.class::isInstance)
-                .map(LabelInstruction.class::cast)
-                .collect(Collectors.toMap(LabelInstruction::getLabel, ix -> ix));
 
         getRootContext().children().forEach(this::processTopContext);
 
@@ -130,14 +118,75 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        replacements.forEach((original, replacement) -> {
-            int index = instructionIndex(original);
-            if (index >= 0) {
-                replaceInstruction(index, replacement);
-            }
-        });
+        instructionStream()
+                .filter(ix -> replacements.containsKey(ix) || getVariableStates(ix) != null)
+                .forEachOrdered(this::replaceInstruction);
 
-        return true;
+        return wasUpdated();
+    }
+
+    private void replaceInstruction(LogicInstruction instruction) {
+        int index = instructionIndex(instruction);
+        if (index < 0) return;
+
+        Map<LogicVariable, LogicValue> valueReplacements = replacements.get(instruction);
+        if (valueReplacements != null) {
+            boolean updated = false;
+            List<LogicArgument> arguments = new ArrayList<>(instruction.getArgs());
+            for (int i = 0; i < arguments.size(); i++) {
+                LogicValue replacement;
+                if (instruction.getParam(i).isInput() && arguments.get(i) instanceof LogicVariable variable
+                        && (replacement = valueReplacements.get(variable)) != null) {
+                    arguments.set(i, replacement);
+                    updated = true;
+                }
+            }
+
+            if (updated) {
+                replaceInstruction(index, replaceArgs(instruction, arguments));
+            }
+        } else if (instruction instanceof OpInstruction op && op.hasSecondOperand()) {
+            // Trying for extended evaluation
+            VariableStates variableStates = Objects.requireNonNull(getVariableStates(instruction));
+            OpInstruction newInstruction = extendedEvaluate(variableStates, op);
+            if (newInstruction != null && canReplace(instruction, newInstruction)) {
+                replaceInstruction(index, normalize(newInstruction));
+            }
+        } else if (instruction instanceof SetInstruction set) {
+            // Specific optimization to streamline self-modifying statements in recursive calls
+            VariableStates variableStates = Objects.requireNonNull(getVariableStates(instruction));
+            if (canEliminate(set.getResult()) && set.getValue().isTemporaryVariable()) {
+                VariableStates.VariableValue val = variableStates.findVariableValue(set.getValue());
+                if (val != null && val.isExpression() && val.getInstruction() instanceof OpInstruction op) {
+                    if (op.inputArgumentsStream().anyMatch(set.getResult()::equals)) {
+                        OpInstruction newInstruction = op.withContext(set.getAstContext()).withResult(set.getResult());
+                        replaceInstruction(index, normalize(newInstruction));
+                    }
+                }
+            }
+        }
+    }
+
+    private int countReferences(LogicVariable variable) {
+        return references.containsKey(variable) ? references.get(variable).size() : 0;
+    }
+
+    private boolean canReplace(LogicInstruction original, LogicInstruction replacement) {
+        int maxOriginal = original.inputArgumentsStream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .filter(Predicate.not(replacement.getArgs()::contains))
+                .mapToInt(this::countReferences)
+                .max().orElse(0);
+
+        int maxReplacement = replacement.inputArgumentsStream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .filter(Predicate.not(original.getArgs()::contains))
+                .mapToInt(this::countReferences)
+                .max().orElse(0);
+
+        return maxReplacement >= maxOriginal || maxOriginal < 2;
     }
 
     private void analyzeFunctionVariables() {
@@ -154,7 +203,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private boolean propagateFunctionReadsAndWrites() {
         CallGraph callGraph = getCallGraph();
         boolean modified = false;
-        for (Function function : callGraph.getFunctions()) {
+        for (CallGraph.Function function : callGraph.getFunctions()) {
             if (!function.isInline()) {
                 Set<LogicVariable> reads = functionReads.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
                 Set<LogicVariable> writes = functionWrites.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
@@ -162,7 +211,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 function.getCalls().keySet().stream()
                         .filter(callGraph::containsFunction)            // Filter out built-in functions
                         .map(callGraph::getFunction)
-                        .map(Function::getLocalPrefix)
+                        .map(CallGraph.Function::getLocalPrefix)
                         .filter(Objects::nonNull)                       // Filter out main function
                         .forEachOrdered(callee -> {
                             reads.addAll(functionReads.get(callee));
@@ -218,7 +267,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private void processTopContext(AstContext context) {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.functionPrefix() != null) {
-            Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
+            CallGraph.Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
             function.getLogicParameters().forEach(variableStates::markInitialized);
         }
 
@@ -231,6 +280,20 @@ public class DataFlowOptimizer extends BaseOptimizer {
             // on program restart (when reaching an end of instruction list/end instruction).
             // Marking them as read now will preserve the last assigned value.
             List.copyOf(uninitialized).forEach(variableStates::valueRead);
+
+            if (!aggressive()) {
+                // On basic optimization level, provide some protection to main variables.
+                // Specifically, latest values assigned to main variables are preserved.
+                // Variables that were part of unrolled loops are NOT preserved, regardless of their other use.
+                contextStream(context)
+                        .flatMap(ix -> ix.outputArgumentsStream())
+                        .filter(LogicVariable.class::isInstance)
+                        .map(LogicVariable.class::cast)
+                        .filter(LogicVariable::isMainVariable)
+                        .filter(variable -> !optimizationContext.isUnrolledVariable(variable))
+                        .distinct()
+                        .forEachOrdered(variableStates::valueRead);
+            }
         }
 
         variableStates.print("Final states after processing top level context");
@@ -266,7 +329,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         int start = 0;
         boolean mergeInitial = false;
 
-        if (children.stream().map(AstContext::subcontextType).anyMatch(t -> t == ITERATOR)) {
+        if (children.stream().anyMatch(ctx -> ctx.matches(ITERATOR))) {
             if (!children.get(0).matches(ITERATOR)) {
                 // We can't just ignore code we don't understand
                 throw new MindcodeInternalError("Unexpected structure of for-each loop");
@@ -286,6 +349,16 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 start++;
             }
 
+            if (children.get(start).matches(CONDITION)) {
+                // Evaluate the initial condition context fully for LoopOptimizer
+                VariableStates copy = processDefaultContext(children.get(start), context,
+                        variableStates.isolatedCopy(), false);
+                optimizationContext.storeLoopVariables(context, copy);
+            } else {
+                // Store variable states right before enttering the body for the first time
+                optimizationContext.storeLoopVariables(context, variableStates.isolatedCopy());
+            }
+
             // If there are two CONDITION contexts, the first one gets executed only once
             if (children.stream().filter(ctx -> ctx.matches(CONDITION)).count() > 1) {
                 if (!children.get(start).matches(CONDITION)) {
@@ -303,7 +376,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
 
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
-        for (int i = 0; i < 2; i++) {
+        // Only perform the two-pass analysis when the outer loop is doing the second (and final) pass
+        for (int i = 0; i < (modifyInstructions ? 2 : 1); i++) {
             VariableStates initial = variableStates.copy("loop initial state");
             final int iteration = i;
             debug(() -> "=== Processing loop - iteration " + iteration);
@@ -324,21 +398,50 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
     private VariableStates processIfContext(AstContext context, VariableStates variableStates, boolean modifyInstructions) {
         Iterator<AstContext> children = context.children().iterator();
-        boolean foundCondition = false;
+        AstContext condition = null;
+        boolean bodyBefore = false;
 
         // Process all contexts up to the condition
         while (children.hasNext()) {
             AstContext child = children.next();
             variableStates = processContext(child, context, variableStates, modifyInstructions);
             if (child.matches(CONDITION)) {
-                foundCondition = true;
+                condition = child;
                 break;
+            }
+            if (child.matches(BODY)) {
+                bodyBefore = true;
             }
         }
 
         // We got a degenerated If context - the condition might have been removed by constant expression optimization.
-        if (!foundCondition) {
+        if (condition == null) {
             return variableStates;
+        }
+
+        // Data flow optimization might have fixed the value of the condition. It has two possible outcomes: either
+        // the condition was false, in which case the jump in the condition is turned to unconditional jump, or the
+        // condition was true, in which case the jump was entirely removed. We want to only process the body
+        // corresponding to the actual value of the condition: first one if the condition was true, and second one
+        // if the condition was false.
+        boolean[] process = { true, true };
+        boolean avoidMerge;
+
+        // TODO Will need better condition processing after implementing short-circuit boolean eval
+        LogicInstruction conditionIx = lastInstruction(condition);
+
+        if (conditionIx instanceof JumpInstruction jump) {
+            // Process first body only if jump is conditional
+            process[0] = jump.isConditional();
+
+            // If the jump is unconditional, the control flow is linear - do not merge branches
+            avoidMerge = jump.isUnconditional();
+        } else {
+            // No jump: don't process second body
+            process[1] = false;
+
+            // The control flow is linear - do not merge branches
+            avoidMerge = true;
         }
 
         BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
@@ -352,8 +455,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
                     if (wasBody) {
                         throw new MindcodeInternalError("Expected FLOW_CONTROL, found BODY subcontext in IF context %s", context);
                     }
-                    branchedStates.newBranch();
-                    branchedStates.processContext(child, context, modifyInstructions);
+                    if (process[bodies]) {
+                        branchedStates.newBranch();
+                        branchedStates.processContext(child, context, modifyInstructions);
+                    }
                     wasBody = true;
                     bodies++;
                 }
@@ -363,6 +468,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 }
                 default -> throw new MindcodeInternalError("Unexpected subcontext %s in IF context", child);
             }
+        }
+
+        if (avoidMerge) {
+            return branchedStates.getCurrentStates();
         }
 
         // If there's only one body, start a new, empty branch. This will merge the initial state
@@ -432,7 +541,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
             LogicInstruction instruction = instructions.get(index);
             // This needs to be done for each active context
             // Do not move into processInstruction
-            if (instruction instanceof JumpInstruction jump && !labels.get(jump.getTarget()).belongsTo(localContext)) {
+            if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
+                    && !getLabelInstruction(jump.getTarget()).belongsTo(localContext)) {
                 VariableStates copy = variableStates.copy("nonlocal jump");
                 copy.print("*** Storing variable states for label " + jump.getTarget().toMlog());
                 labelStates.computeIfAbsent(jump.getTarget(), ix -> new ArrayList<>()).add(copy);
@@ -495,9 +605,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .filter(this::canEliminate)
                 .toList();
 
+        // This needs to be done even when not modifying instructions, because it keeps track of read variables.
         Map<LogicVariable, LogicValue> valueReplacements = new HashMap<>();
         for (LogicVariable variable : inputs) {
-            LogicValue constantValue = variableStates.valueRead(variable);
+            LogicValue constantValue = variableStates.valueRead(variable, instruction);
             if (constantValue != null) {
                 valueReplacements.put(variable, constantValue);
             } else {
@@ -508,20 +619,22 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        // We're not evaluating PackColor, because the result can never be converted to mlog representation.
-        LogicValue value = switch (replacements.getOrDefault(instruction, instruction)) {
-            case SetInstruction set && set.getValue() instanceof LogicLiteral literal -> literal;
-            case SetInstruction set && set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile() -> builtIn;
-            case OpInstruction op && op.getOperation().isDeterministic() -> expressionEvaluator.evaluateOpInstruction(op);
-            default -> null;
-        };
-
-        if (DEBUG) {
-            if (!valueReplacements.isEmpty()) {
+        if (modifyInstructions && !valueReplacements.isEmpty()) {
+            replacements.put(instruction, valueReplacements);
+            if (DEBUG) {
                 System.out.println("    Detected the following possible value replacements for current instruction:");
                 valueReplacements.forEach((k, v) -> System.out.println("       " + k.toMlog() + " --> " + v.toMlog()));
             }
         }
+
+        // We're not evaluating PackColor, because the result can never be converted to mlog representation.
+        LogicValue value = switch (instruction) {
+            case SetInstruction set && set.getValue() instanceof LogicLiteral literal -> literal;
+            case SetInstruction set && set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile() -> builtIn;
+            case OpInstruction op && op.getOperation().isDeterministic() -> evaluateOpInstruction(op,
+                    modifyInstructions || variableStates.isIsolated() ? valueReplacements : Map.of());
+            default -> null;
+        };
 
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
@@ -530,41 +643,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         switch (instruction.getOpcode()) {
             case CALL, CALLREC ->
-                    variableStates.updateAfterFunctionCall(instruction.getAstContext().functionPrefix());
+                    variableStates.updateAfterFunctionCall(instruction.getAstContext().functionPrefix(), instruction);
         }
 
         if (modifyInstructions) {
-            if (valueReplacements.values().stream().anyMatch(Objects::nonNull)) {
-                List<LogicArgument> arguments = new ArrayList<>(instruction.getArgs());
-                boolean updated = false;
-                for (int i = 0; i < arguments.size(); i++) {
-                    if (instruction.getParam(i).isInput() && arguments.get(i) instanceof LogicVariable variable
-                            && valueReplacements.get(variable) != null) {
-                        arguments.set(i, valueReplacements.get(variable));
-                        updated = true;
-                    }
-                }
-
-                if (updated) {
-                    replacements.put(instruction, replaceArgs(instruction, arguments));
-                }
-            } else if (instruction instanceof OpInstruction op && op.hasSecondOperand()) {
-                // Trying for extended evaluation
-                OpInstruction newInstruction = expressionEvaluator.extendedEvaluate(variableStates, op);
-                if (newInstruction != null) {
-                    replacements.put(instruction, expressionEvaluator.normalize(newInstruction));
-                }
-            } else if (instruction instanceof SetInstruction set) {
-                // Specific optimization to streamline self-modifying statements in recursive calls
-                if (canEliminate(set.getResult()) && set.getValue().isTemporaryVariable()) {
-                    VariableValue val = variableStates.findVariableValue(set.getValue());
-                    if (val != null && val.isExpression() && val.getInstruction() instanceof OpInstruction op) {
-                        if (op.inputArgumentsStream().anyMatch(set.getResult()::equals)) {
-                            OpInstruction newInstruction = op.withContext(set.getAstContext()).withResult(set.getResult());
-                            replacements.put(instruction, expressionEvaluator.normalize(newInstruction));
-                        }
-                    }
-                }
+            if (instruction instanceof OpInstruction op && op.hasSecondOperand()
+                    || instruction instanceof SetInstruction
+                    || instruction instanceof JumpInstruction) {
+                putVariableStates(instruction, variableStates.isolatedCopy());
             }
         }
 
@@ -578,9 +664,28 @@ public class DataFlowOptimizer extends BaseOptimizer {
         // STORED_RETVAL is removed, if possible, by ReturnValueOptimizer
         return switch (variable.getType()) {
             case COMPILER, FUNCTION_RETADDR, FUNCTION_RETVAL, GLOBAL_VARIABLE -> false;
-            case LOCAL_VARIABLE -> aggressive() || !variable.isMainVariable();
             default -> true;
         };
+    }
+
+    private LogicLiteral evaluateOpInstruction(OpInstruction op, Map<LogicVariable, LogicValue> valueReplacements) {
+        OpInstruction op1 = tryReplace(op, valueReplacements, op::getX, op::withX);
+        OpInstruction op2 = op1.hasSecondOperand()
+                ? tryReplace(op1, valueReplacements, op1::getY, op1::withY)
+                : op1;
+
+        return evaluateOpInstruction(op2);
+    }
+
+    private OpInstruction tryReplace(OpInstruction op, Map<LogicVariable, LogicValue> valueReplacements,
+            Supplier<LogicValue> getArgument, Function<LogicValue, OpInstruction> replaceArgument) {
+        LogicValue value = getArgument.get();
+        if (value instanceof LogicVariable variable && valueReplacements.containsKey(variable)
+                && valueReplacements.get(variable).isNumericLiteral()) {
+            return replaceArgument.apply(valueReplacements.get(variable));
+        } else {
+            return op;
+        }
     }
 
     private void debug(Supplier<String> text) {
@@ -617,6 +722,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
         public VariableStates getFinalStates() {
             newBranch();
             return merged == null ? initial : merged;
+        }
+
+        public VariableStates getCurrentStates() {
+            return current == null ? initial : current;
         }
     }
 }

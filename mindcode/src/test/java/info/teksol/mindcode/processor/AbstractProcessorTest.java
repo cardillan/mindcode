@@ -46,13 +46,16 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         Files.write(path2, timing);
     }
 
+    /** Nearest multiple of millisecond to round timing to */
+    private static final int PRECISION = 200;
+
     private void logTiming(String title, List<CompilerMessage> messages) {
         String name = title != null ? title : testInfo.getDisplayName().replaceAll("\\(\\)", "");
         String timings = messages.stream()
                 .filter(TimingMessage.class::isInstance)
                 .map(TimingMessage.class::cast)
                 .map(m -> String.format(Locale.US, "%s: %,10d ms", m.phase(),
-                        100 * ((50 + m.milliseconds()) / 100)))
+                        PRECISION * ((PRECISION / 2 + m.milliseconds()) / PRECISION)))
                 .collect(Collectors.joining(", "));
 
         String text = String.format("%-40s: %s", name + ":", timings.toLowerCase());
@@ -128,7 +131,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
             return;
         }
 
-        List<String> data = compiler.messages.stream()
+        List<String> data = compiler.getMessages().stream()
                 .filter(m -> !(m instanceof TimingMessage))
                 .map(CompilerMessage::message)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -150,7 +153,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         assertNoUnexpectedMessages(compiler, s -> false);
         List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, unresolved);
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
-        logTiming(title, compiler.messages);
+        logTiming(title, compiler.getMessages());
         logCompilation(title, code, compiled, instructions.size());
         writeLogFile(logFile, compiler, unresolved);
     }
@@ -172,7 +175,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         //System.out.println(prettyPrint(instructions));
         processor.run(instructions, MAX_STEPS);
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
-        logTiming(title, compiler.messages);
+        logTiming(title, compiler.getMessages());
         logPerformance(title, code, compiled, processor);
         //System.out.println(String.join("", processor.getTextBuffer()));
 
@@ -184,7 +187,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
 
     protected Consumer<List<String>> createEvaluator(TestCompiler compiler, List<String> expectedOutput) {
         return (List<String> outputs) -> assertEquals(expectedOutput, outputs,
-                () -> compiler.messages.stream().map(CompilerMessage::message)
+                () -> compiler.getMessages().stream().map(CompilerMessage::message)
                         .collect(Collectors.joining("\n", "\n", "\n")));
     }
 

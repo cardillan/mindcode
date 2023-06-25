@@ -88,7 +88,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
         List.of("0", "1", "123456.789", "1e10", "1e25", "123456E25", "3333333e-40", "33333333333e-20").forEach(number -> {
             TestCompiler compiler = createTestCompiler();
             compiler.processor.mlogRewrite(number);
-            assertEquals(List.of(), compiler.messages);
+            assertEquals(List.of(), compiler.getMessages());
         });
     }
 
@@ -97,7 +97,7 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
         List.of("33333333e-40", "99999999e-40", "3333333333e-40", "7777777777e10").forEach(number -> {
             TestCompiler compiler = createTestCompiler();
             compiler.processor.mlogRewrite(number);
-            if (compiler.messages.isEmpty()) {
+            if (compiler.getMessages().isEmpty()) {
                 fail("No precision loss for number " + number);
             }
         });

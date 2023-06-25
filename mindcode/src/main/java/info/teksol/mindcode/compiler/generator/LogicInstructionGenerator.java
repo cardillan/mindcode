@@ -13,13 +13,7 @@ import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -123,8 +117,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private void enterFunctionAstNode(String functionPrefix, AstNode node) {
-        astContext = astContext.createFunctionDeclaration(functionPrefix, node, node.getContextType());
+    private void enterFunctionAstNode(String functionPrefix, AstNode node, double weight) {
+        astContext = astContext.createFunctionDeclaration(functionPrefix, node, node.getContextType(), weight);
     }
 
     private void exitAstNode(AstNode node) {
@@ -332,7 +326,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 continue;
             }
 
-            enterFunctionAstNode(function.getLocalPrefix(), function.getDeclaration());
+            enterFunctionAstNode(function.getLocalPrefix(), function.getDeclaration(), function.getCalls().size());
             currentFunction = function;
             localPrefix = function.getLocalPrefix();
             functionContext = new LocalContext();

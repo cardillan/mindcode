@@ -1,18 +1,8 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.MemoryModel;
-import info.teksol.mindcode.compiler.MessageLevel;
-import info.teksol.mindcode.compiler.MindcodeMessage;
+import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.Condition;
-import info.teksol.mindcode.logic.LogicAddress;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicLabel;
-import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.logic.Operation;
+import info.teksol.mindcode.logic.*;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.util.List;
@@ -20,23 +10,29 @@ import java.util.function.Consumer;
 
 public abstract class AbstractOptimizer implements Optimizer {
     protected final Optimization optimization;
+    protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
-    private final String name;
     protected OptimizationLevel level = OptimizationLevel.AGGRESSIVE;
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
     private Consumer<CompilerMessage> messageRecipient = s -> {};
 
-    public AbstractOptimizer(Optimization optimization, InstructionProcessor instructionProcessor) {
+    public AbstractOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
         this.optimization = optimization;
-        this.instructionProcessor = instructionProcessor;
-        this.name = optimization.getName();
+        this.optimizationContext = optimizationContext;
+        this.instructionProcessor = optimizationContext.getInstructionProcessor();
+    }
+
+    AbstractOptimizer(Optimization optimization) {
+        this.optimization = optimization;
+        this.optimizationContext = null;
+        this.instructionProcessor = null;
     }
 
     @Override
     public String getName() {
-        return name;
+        return optimization.getName();
     }
 
     @Override
@@ -76,6 +72,15 @@ public abstract class AbstractOptimizer implements Optimizer {
     protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {
         messageRecipient.accept(new MindcodeMessage(level, String.format(format, args)));
     }
+
+    @Override
+    public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
+        return List.of();
+    }
+
+    public void generateFinalMessages() {
+    }
+
 
     //<editor-fold desc="Inspecting instructions">
     protected boolean isVolatile(LogicInstruction instruction) {

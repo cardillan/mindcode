@@ -1,7 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -40,6 +38,10 @@ public enum Optimization {
             LoopOptimizer::new,
             "improving loops"),
 
+    LOOP_UNROLLING                      ("Loop Unrolling",
+            LoopUnroller::new,
+            "unrolls loops with constant number of iterations"),
+
     IF_EXPRESSION_OPTIMIZATION          ("If Expression Optimization",
             IfExpressionOptimizer::new,
             "improving ternary/if expressions"),
@@ -70,11 +72,11 @@ public enum Optimization {
     ;
 
     private final String name;
-    private final Function<InstructionProcessor, Optimizer> instanceCreator;
+    private final Function<OptimizationContext, Optimizer> instanceCreator;
     private final String optionName;
     private final String description;
 
-    Optimization(String name, Function<InstructionProcessor, Optimizer> instanceCreator, String description) {
+    Optimization(String name, Function<OptimizationContext, Optimizer> instanceCreator, String description) {
         this.name = name;
         this.optionName = name.toLowerCase().replace(' ', '-');
         this.instanceCreator = instanceCreator;
@@ -93,7 +95,7 @@ public enum Optimization {
         return description;
     }
 
-    public Function<InstructionProcessor, Optimizer> getInstanceCreator() {
+    public Function<OptimizationContext, Optimizer> getInstanceCreator() {
         return instanceCreator;
     }
 

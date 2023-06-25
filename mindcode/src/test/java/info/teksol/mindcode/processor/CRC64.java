@@ -5,7 +5,7 @@ package info.teksol.mindcode.processor;
  * implementation is based on the following publications:
  *
  * <ul>
- * <li>http://en.wikipedia.org/wiki/Cyclic_redundancy_check</li>
+ * <li><a href="http://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic redundancy check</a></li>
  * </ul>
  */
 public final class CRC64 {
@@ -77,8 +77,8 @@ public final class CRC64 {
     public static long hash2(final byte[] data) {
         long checksum = 0;
 
-        for (int i = 0; i < data.length; i++) {
-            final int lookupidx = ((int) checksum ^ data[i]) & 0xff;
+        for (byte datum : data) {
+            final int lookupidx = ((int) checksum ^ datum) & 0xff;
             checksum = (checksum >>> 8) ^ LOOKUPTABLE2[lookupidx];
         }
 

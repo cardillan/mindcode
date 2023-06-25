@@ -1,5 +1,5 @@
    251 instructions before optimizations.
-     3 instructions eliminated by Temp Variables Elimination (3 iterations).
+     3 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
      1 instructions eliminated by Jump Normalization (3 iterations).
     12 instructions eliminated by Dead Code Elimination (4 iterations).
@@ -10,7 +10,7 @@
     50 instructions eliminated by Print Merging.
    173 instructions after optimizations.
 
-Modifications by Temp Variables Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
      0 set page 0
      1 label __label0
      2 jump __label2 equal true false
@@ -30,7 +30,7 @@ Modifications by Temp Variables Elimination, pass 1, iteration 1:
     10 set __tmp3 false
     11 jump __label4 always
 
-Modifications by Case Expression Optimization, pass 1, iteration 1:
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
     23 sensor __tmp9 BLOCK @type
     24 print __tmp9
@@ -96,7 +96,7 @@ Modifications by Case Expression Optimization, pass 1, iteration 1:
    221 label __label21
    222 print "other:"
 
-Modifications by Dead Code Elimination, pass 1, iteration 1:
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
      7 op mod __tmp4 page 7
      8 op add page __tmp4 1
@@ -122,7 +122,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 1:
    260 printflush message1
    261 label __label1
 
-Modifications by Dead Code Elimination, pass 1, iteration 2:
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-8 instructions):
  
     47 print "liquidCapacity: "
     48 print __tmp16
@@ -183,7 +183,7 @@ Modifications by Dead Code Elimination, pass 1, iteration 2:
    247 jump __label6 always
    248 label __label5
 
-Modifications by Jump Normalization, pass 2, iteration 1:
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
      0 set page 0
      1 label __label0
 -    * jump __label2 equal true false
@@ -191,7 +191,7 @@ Modifications by Jump Normalization, pass 2, iteration 1:
      3 op max page page 1
      4 sensor __tmp2 switch1 @enabled
 
-Modifications by Single Step Elimination, pass 2, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
      6 op mod __tmp4 page 7
      7 op add page __tmp4 1
@@ -209,7 +209,7 @@ Modifications by Single Step Elimination, pass 2, iteration 1:
    243 label __label7
    244 jump __label6 always
 
-Modifications by If Expression Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
     14 print 7
     15 print "\n"
@@ -236,7 +236,7 @@ Modifications by If Expression Optimization, pass 2, iteration 1:
    248 printflush message1
    249 label __label1
 
-Modifications by Jump Straightening, pass 3, iteration 1:
+Modifications by Final phase, Jump Straightening, iteration 1 (-7 instructions):
  
     22 sensor __tmp9 BLOCK @type
     23 print __tmp9
@@ -308,14 +308,14 @@ Modifications by Jump Straightening, pass 3, iteration 1:
    208 print "other:"
    209 print "\n"
 
-Modifications by Unreachable Code Elimination, pass 3, iteration 1:
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
    242 label __label1
    243 jump __label0 always
    244 label __label2
 -    * end
 
-Modifications by Print Merging, pass 3, iteration 1:
+Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
  
     15 print "\n"
     16 sensor __tmp6 BLOCK @dead
