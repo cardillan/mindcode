@@ -81,7 +81,7 @@ class ImproveConditionalJumpsTest extends AbstractOptimizerTest<ImproveCondition
         assertCompilesTo(createTestCompiler(
                 createCompilerProfile()
                         .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(TMP_VARIABLES_ELIMINATION, AGGRESSIVE)
+                        .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, AGGRESSIVE)
                 ),
                 """
                         alive = @unit.dead === 0
@@ -105,7 +105,7 @@ class ImproveConditionalJumpsTest extends AbstractOptimizerTest<ImproveCondition
         assertCompilesTo(createTestCompiler(
                 createCompilerProfile()
                         .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(TMP_VARIABLES_ELIMINATION, AGGRESSIVE)
+                        .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, AGGRESSIVE)
                 ),
                 """
                         if @unit.dead === 0

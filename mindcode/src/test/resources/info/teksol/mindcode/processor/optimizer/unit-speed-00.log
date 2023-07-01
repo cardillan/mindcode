@@ -1,5 +1,5 @@
     97 instructions before optimizations.
-     6 instructions eliminated by Tmp Variables Elimination (3 iterations).
+     6 instructions eliminated by Temp Variables Elimination (3 iterations).
      6 instructions eliminated by Conditional Jump Optimization (3 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
     11 instructions added by Loop Optimization (2 iterations).
@@ -7,7 +7,7 @@
      3 instructions eliminated by Print Merging.
     86 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      1 set SX 10
      2 set SY 10

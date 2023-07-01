@@ -1,5 +1,5 @@
   1120 instructions before optimizations.
-   120 instructions eliminated by Tmp Variables Elimination (4 iterations).
+   120 instructions eliminated by Temp Variables Elimination (4 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Jump Normalization (4 iterations).
    126 instructions eliminated by Dead Code Elimination (5 iterations).
@@ -16,7 +16,7 @@
      1 instructions eliminated by Print Merging.
    728 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
     13 read __tmp2 cell1 0
     14 op equal __tmp3 __tmp2 2

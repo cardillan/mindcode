@@ -1,5 +1,5 @@
    157 instructions before optimizations.
-    20 instructions eliminated by Tmp Variables Elimination (3 iterations).
+    20 instructions eliminated by Temp Variables Elimination (3 iterations).
      2 instructions eliminated by Jump Normalization (3 iterations).
     20 instructions eliminated by Dead Code Elimination (5 iterations).
      5 instructions eliminated by Conditional Jump Optimization (3 iterations).
@@ -12,7 +12,7 @@
      2 instructions updated by PropagateJumpTargets.
     94 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      5 jump __label2 equal true false
      6 set paddleWidth 40

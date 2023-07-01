@@ -122,7 +122,7 @@ and availability of the aggressive optimization level is:
 | [Jump normalization](#jump-normalization)                           | jump-normalization           |     N      |
 | [Dead code elimination](#dead-code-elimination)                     | dead-code-elimination        |     Y      |
 | [Single step elimination](#single-step-elimination)                 | single-step-elimination      |     N      |
-| [Temporary variables elimination](#temporary-variables-elimination) | tmp-variables-elimination    |     N      |
+| [Temporary variables elimination](#temporary-variables-elimination) | temp-variables-elimination   |     N      |
 | [Expression optimization](#expression-optimization)                 | expression-optimization      |     N      |
 | [Case expression optimization](#case-expression-optimization)       | case-expression-optimization |     N      |
 | [Conditional jump optimization](#conditional-jump-optimization)     | conditionals-optimization    |     N      |
@@ -547,7 +547,7 @@ understandable, but the optimizer would have to be more complex and therefore mo
 > compiling the program with the other value. In other words, changing a value assigned to main variable in the 
 > compiled code may break the compiled program.  
 
-### Detection of uninitialized variables
+### Handling of uninitialized variables
 
 The data flow analysis reveals cases where variables might not be properly initialized, i.e. situations where a 
 value of a variable is read before it is known that some value has been written to the variable. Warnings are 
@@ -575,7 +575,40 @@ while true
 end
 ```
 
-Technically, this is not an optimization, as only warnings are generated for uninitialized variables.
+Data Flow optimization assumes that values assigned to uninitialized variables might be reused on the next program 
+execution. Assignments to uninitialized variables before calling the `end()` function are therefore protected, while 
+assignments to initialized variables aren't - they won't be overwritten on the next program execution anyway:
+
+```
+#set optimization = aggressive
+foo = rand(10)
+if initialized == 0
+print("Initializing...")
+// Do some initialization
+initialized = 1
+foo = 1
+end()
+end
+print("Doing actual work")
+print(initialized)
+print(foo)
+```
+
+produces this code:
+
+```
+op rand foo 10 0
+jump 5 notEqual initialized 0
+print "Initializing..."
+set initialized 1
+end
+print "Doing actual work"
+print initialized
+print foo
+end
+```
+
+See also [`end()` function](SYNTAX-3-STATEMENTS.markdown#end-function).
 
 ### Unnecessary assignment elimination
 
@@ -727,8 +760,9 @@ Variables and expressions passed as arguments to inline functions, as well as re
 processed in the same way as other local variables. Using an inlined function therefore doesn't incur any overhead 
 at all in Mindcode.
 
-Data flow analysis, with some restrictions, is also applied to stackless and recursive function calls. Optimizations 
-are applied to function arguments and return values. This optimization has completely replaced earlier _Function call 
+Data flow analysis, with some restrictions, is also applied to stackless and recursive function calls. Assignments 
+to global variables inside stackless and recursive functions are tracked and properly handled. Optimizations are 
+applied to function arguments and return values. This optimization has completely replaced earlier _Function call 
 optimization_ and _Return value optimization_ - all optimizations that could be performed by those optimizations 
 (and some that couldn't) are performed by Data Flow optimization now.
 

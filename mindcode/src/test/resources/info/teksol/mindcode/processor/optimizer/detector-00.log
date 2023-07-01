@@ -1,5 +1,5 @@
    251 instructions before optimizations.
-     3 instructions eliminated by Tmp Variables Elimination (3 iterations).
+     3 instructions eliminated by Temp Variables Elimination (3 iterations).
      1 instructions eliminated by Case Expression Optimization.
      1 instructions eliminated by Jump Normalization (3 iterations).
     12 instructions eliminated by Dead Code Elimination (4 iterations).
@@ -10,7 +10,7 @@
     50 instructions eliminated by Print Merging.
    173 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
      0 set page 0
      1 label __label0
      2 jump __label2 equal true false

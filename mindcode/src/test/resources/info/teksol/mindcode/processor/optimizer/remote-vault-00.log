@@ -1,5 +1,5 @@
    149 instructions before optimizations.
-    14 instructions eliminated by Tmp Variables Elimination (3 iterations).
+    14 instructions eliminated by Temp Variables Elimination (3 iterations).
      1 instructions eliminated by Jump Normalization (3 iterations).
     30 instructions eliminated by Dead Code Elimination (4 iterations).
     10 instructions eliminated by Conditional Jump Optimization (3 iterations).
@@ -9,7 +9,7 @@
      2 instructions eliminated by Print Merging.
     71 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
      0 set LINK_ID 1
 -    * op add __tmp0 99999900 LINK_ID
 -    * set QUERY_FLAG __tmp0

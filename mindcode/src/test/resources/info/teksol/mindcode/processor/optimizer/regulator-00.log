@@ -1,5 +1,5 @@
    240 instructions before optimizations.
-    22 instructions eliminated by Tmp Variables Elimination (4 iterations).
+    22 instructions eliminated by Temp Variables Elimination (4 iterations).
     27 instructions eliminated by Dead Code Elimination (6 iterations).
     10 instructions eliminated by Conditional Jump Optimization (4 iterations).
      9 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -12,7 +12,7 @@
      7 instructions eliminated by Print Merging.
    153 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      4 label __label0
      5 print "Configuring regulator..."

@@ -1,5 +1,5 @@
     82 instructions before optimizations.
-    10 instructions eliminated by Tmp Variables Elimination (3 iterations).
+    10 instructions eliminated by Temp Variables Elimination (3 iterations).
     10 instructions eliminated by Dead Code Elimination (4 iterations).
      7 instructions eliminated by Conditional Jump Optimization (3 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
@@ -10,7 +10,7 @@
      2 instructions updated by PropagateJumpTargets.
     46 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      7 op greaterThan __tmp1 __fn0_index 0
      8 jump __label7 equal __tmp1 false

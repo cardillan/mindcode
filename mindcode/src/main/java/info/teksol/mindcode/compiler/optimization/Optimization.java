@@ -8,7 +8,7 @@ import java.util.function.Function;
 // The optimizations are applied in the declared order, i.e. ConditionalJumpsNormalizer gets instructions from the
 // compiler, makes optimizations and passes them onto the next optimizer.
 public enum Optimization {
-    TMP_VARIABLES_ELIMINATION           ("Tmp Variables Elimination",
+    TEMP_VARIABLES_ELIMINATION          ("Temp Variables Elimination",
             TempVariableEliminator::new,
             "eliminating temporary variables created to extract values from instructions"),
 

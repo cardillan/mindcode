@@ -1,5 +1,5 @@
    174 instructions before optimizations.
-    12 instructions eliminated by Tmp Variables Elimination (3 iterations).
+    12 instructions eliminated by Temp Variables Elimination (3 iterations).
      2 instructions eliminated by Case Expression Optimization.
      1 instructions eliminated by Jump Normalization (3 iterations).
     30 instructions eliminated by Dead Code Elimination (6 iterations).
@@ -10,7 +10,7 @@
      2 instructions updated by PropagateJumpTargets.
    105 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
      0 set UNIT @mega
 -    * sensor __tmp0 @this @x
 -    * set THIS_X __tmp0

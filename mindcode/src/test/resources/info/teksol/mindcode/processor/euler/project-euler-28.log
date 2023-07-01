@@ -1,5 +1,5 @@
     28 instructions before optimizations.
-     4 instructions eliminated by Tmp Variables Elimination (4 iterations).
+     4 instructions eliminated by Temp Variables Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
      4 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Conditional Jump Optimization (4 iterations).
@@ -9,7 +9,7 @@
      2 instructions eliminated by Data Flow Optimization (5 iterations).
     14 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      4 label __label0
      5 op lessThanEq __tmp0 current 1002001

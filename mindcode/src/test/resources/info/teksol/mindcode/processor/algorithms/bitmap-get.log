@@ -1,5 +1,5 @@
     13 instructions before optimizations.
-     1 instructions eliminated by Tmp Variables Elimination (4 iterations).
+     1 instructions eliminated by Temp Variables Elimination (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by LoopOptimizer.
@@ -7,7 +7,7 @@
      1 instructions eliminated by Data Flow Optimization (5 iterations).
      9 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      2 jump __label2 greaterThanEq i 16
      3 label __label3

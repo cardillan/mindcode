@@ -1,5 +1,5 @@
    661 instructions before optimizations.
-    73 instructions eliminated by Tmp Variables Elimination (4 iterations).
+    73 instructions eliminated by Temp Variables Elimination (4 iterations).
      2 instructions eliminated by Case Expression Optimization.
      1 instructions eliminated by Jump Normalization (4 iterations).
     87 instructions eliminated by Dead Code Elimination (6 iterations).
@@ -15,7 +15,7 @@
      2 instructions eliminated by Print Merging.
    421 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
     29 set SAFETY_MARGIN 1000
     30 set STARTUP_TIME 5

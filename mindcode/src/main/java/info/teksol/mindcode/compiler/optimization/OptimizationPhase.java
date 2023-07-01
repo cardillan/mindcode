@@ -9,7 +9,7 @@ public enum OptimizationPhase {
      * Optimizers in this phase are run only once in the initial pass. Here should be optimizers completely independent
      * of other optimizers (i.e. they won't benefit from multiple passes).
      */
-    INITIAL(TMP_VARIABLES_ELIMINATION,
+    INITIAL(TEMP_VARIABLES_ELIMINATION,
             CASE_EXPRESSION_OPTIMIZATION,
             DEAD_CODE_ELIMINATION
     ),
@@ -25,7 +25,7 @@ public enum OptimizationPhase {
             LOOP_OPTIMIZATION,
             IF_EXPRESSION_OPTIMIZATION,
             DATA_FLOW_OPTIMIZATION,
-            TMP_VARIABLES_ELIMINATION       // TODO project-euler-45.mnd: make sure Data Flow Optimizer can make this change
+            TEMP_VARIABLES_ELIMINATION       // TODO project-euler-45.mnd: make sure Data Flow Optimizer can make this change
     ),
 
     /**

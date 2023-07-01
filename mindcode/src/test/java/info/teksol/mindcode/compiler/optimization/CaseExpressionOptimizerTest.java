@@ -18,7 +18,7 @@ public class CaseExpressionOptimizerTest extends AbstractOptimizerTest<CaseExpre
     @Override
     protected List<Optimization> getAllOptimizations() {
         return List.of(
-                Optimization.TMP_VARIABLES_ELIMINATION,
+                Optimization.TEMP_VARIABLES_ELIMINATION,
                 Optimization.JUMP_OVER_JUMP_ELIMINATION,
                 Optimization.CASE_EXPRESSION_OPTIMIZATION
         );

@@ -16,7 +16,7 @@ public class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariab
     @Override
     protected List<Optimization> getAllOptimizations() {
         return List.of(
-                Optimization.TMP_VARIABLES_ELIMINATION
+                Optimization.TEMP_VARIABLES_ELIMINATION
         );
     }
 

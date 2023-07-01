@@ -1,12 +1,12 @@
     11 instructions before optimizations.
-     1 instructions eliminated by Tmp Variables Elimination (4 iterations).
+     1 instructions eliminated by Temp Variables Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      1 loops improved by LoopOptimizer.
      2 instructions eliminated by Data Flow Optimization (6 iterations).
      7 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      3 set i a
      4 label __label0

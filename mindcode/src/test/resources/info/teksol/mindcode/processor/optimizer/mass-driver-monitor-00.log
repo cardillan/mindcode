@@ -1,5 +1,5 @@
    313 instructions before optimizations.
-    37 instructions eliminated by Tmp Variables Elimination (4 iterations).
+    37 instructions eliminated by Temp Variables Elimination (4 iterations).
     25 instructions eliminated by Dead Code Elimination (5 iterations).
     22 instructions eliminated by Conditional Jump Optimization (4 iterations).
     11 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -11,7 +11,7 @@
      6 instructions eliminated by Print Merging.
    197 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      8 jump __label2 equal __tmp0 false
      9 print "Mass Driver Monitor"

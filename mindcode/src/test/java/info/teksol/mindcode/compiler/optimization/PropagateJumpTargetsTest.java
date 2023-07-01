@@ -19,7 +19,7 @@ public class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJum
                 Optimization.DEAD_CODE_ELIMINATION,
                 Optimization.CONDITIONAL_JUMPS_IMPROVEMENT,
                 Optimization.JUMP_TARGET_PROPAGATION,
-                Optimization.TMP_VARIABLES_ELIMINATION
+                Optimization.TEMP_VARIABLES_ELIMINATION
         );
     }
 

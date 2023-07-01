@@ -25,7 +25,7 @@ import java.util.List;
  */
 class TempVariableEliminator extends BaseOptimizer {
     public TempVariableEliminator(InstructionProcessor instructionProcessor) {
-        super(Optimization.TMP_VARIABLES_ELIMINATION, instructionProcessor);
+        super(Optimization.TEMP_VARIABLES_ELIMINATION, instructionProcessor);
     }
 
     @Override

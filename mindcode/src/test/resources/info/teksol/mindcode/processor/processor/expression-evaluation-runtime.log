@@ -1,5 +1,5 @@
   1419 instructions before optimizations.
-    15 instructions eliminated by Tmp Variables Elimination (4 iterations).
+    15 instructions eliminated by Temp Variables Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
    189 instructions eliminated by Dead Code Elimination (4 iterations).
     63 instructions eliminated by Conditional Jump Optimization (4 iterations).
@@ -9,7 +9,7 @@
    105 instructions eliminated by Print Merging.
    748 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
   1297 call __label0
   1298 gotolabel __label240 __fn0

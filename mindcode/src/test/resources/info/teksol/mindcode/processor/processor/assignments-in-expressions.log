@@ -1,8 +1,8 @@
     11 instructions before optimizations.
-     2 instructions eliminated by Tmp Variables Elimination (2 iterations).
+     2 instructions eliminated by Temp Variables Elimination (2 iterations).
      9 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
      0 set A 1
      1 set B A
 -    * op add __tmp0 A 1

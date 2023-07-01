@@ -1,5 +1,5 @@
    993 instructions before optimizations.
-    35 instructions eliminated by Tmp Variables Elimination (4 iterations).
+    35 instructions eliminated by Temp Variables Elimination (4 iterations).
      9 instructions eliminated by Jump Normalization (4 iterations).
    178 instructions eliminated by Dead Code Elimination (6 iterations).
     64 instructions eliminated by Conditional Jump Optimization (4 iterations).
@@ -13,7 +13,7 @@
      8 instructions updated by PropagateJumpTargets.
    634 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
     31 ubind UNIT
     32 op notEqual __tmp4 @unit null

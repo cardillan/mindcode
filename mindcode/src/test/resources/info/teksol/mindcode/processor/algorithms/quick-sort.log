@@ -1,5 +1,5 @@
    123 instructions before optimizations.
-     4 instructions eliminated by Tmp Variables Elimination (4 iterations).
+     4 instructions eliminated by Temp Variables Elimination (4 iterations).
     11 instructions eliminated by Dead Code Elimination (2 passes, 4 iterations).
      5 instructions eliminated by Conditional Jump Optimization (4 iterations).
      6 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -12,7 +12,7 @@
     12 instructions eliminated by Stack Optimization.
     60 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
     19 jump __label6 equal __tmp2 false
     20 op sub __tmp4 __fn0_right __fn0_left

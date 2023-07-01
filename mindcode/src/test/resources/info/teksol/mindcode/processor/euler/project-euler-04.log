@@ -1,5 +1,5 @@
     41 instructions before optimizations.
-     3 instructions eliminated by Tmp Variables Elimination (3 iterations).
+     3 instructions eliminated by Temp Variables Elimination (3 iterations).
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      3 instructions eliminated by Conditional Jump Optimization (3 iterations).
      2 instructions eliminated by Single Step Elimination (4 iterations).
@@ -8,7 +8,7 @@
      3 instructions eliminated by Data Flow Optimization (4 iterations).
     23 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
      4 set j i
      5 label __label3

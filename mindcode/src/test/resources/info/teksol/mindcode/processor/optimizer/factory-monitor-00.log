@@ -1,5 +1,5 @@
    532 instructions before optimizations.
-    56 instructions eliminated by Tmp Variables Elimination (4 iterations).
+    56 instructions eliminated by Temp Variables Elimination (4 iterations).
     43 instructions eliminated by Dead Code Elimination (5 iterations).
     20 instructions eliminated by Conditional Jump Optimization (4 iterations).
     15 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
@@ -12,7 +12,7 @@
     10 instructions eliminated by Print Merging.
    357 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
     12 jump __label2 equal __tmp2 false
     13 print "Universal Factory Monitor"

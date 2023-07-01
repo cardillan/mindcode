@@ -1,5 +1,5 @@
    198 instructions before optimizations.
-    35 instructions eliminated by Tmp Variables Elimination (3 iterations).
+    35 instructions eliminated by Temp Variables Elimination (3 iterations).
     16 instructions eliminated by Dead Code Elimination (3 iterations).
     11 instructions eliminated by Conditional Jump Optimization (3 iterations).
      8 instructions eliminated by Single Step Elimination (4 iterations).
@@ -9,7 +9,7 @@
      3 instructions eliminated by Print Merging.
    124 instructions after optimizations.
 
-Modifications by Tmp Variables Elimination, pass 1, iteration 1:
+Modifications by Temp Variables Elimination, pass 1, iteration 1:
  
     13 set INDEX 256
     14 set SIZE 511

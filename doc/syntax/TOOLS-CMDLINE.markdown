@@ -73,7 +73,7 @@ Actions:
 ## Compile Mindcode action help
 
 ```
-usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--tmp-variables-elimination LEVEL]
+usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--conditional-jump-optimization LEVEL] [--single-step-elimination LEVEL]
                 [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--if-expression-optimization LEVEL]
@@ -111,7 +111,7 @@ optimization levels:
 
   -o, --optimization LEVEL
                          sets global optimization level for all optimizers
-  --tmp-variables-elimination LEVEL
+  --temp-variables-elimination LEVEL
                          optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
                          instructions
   --case-expression-optimization LEVEL
@@ -159,7 +159,7 @@ debug output options:
 ## Compile Schema action help
 
 ```
-usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--tmp-variables-elimination LEVEL]
+usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--jump-normalization LEVEL] [--dead-code-elimination LEVEL]
                 [--conditional-jump-optimization LEVEL] [--single-step-elimination LEVEL]
                 [--expression-optimization LEVEL] [--loop-optimization LEVEL] [--if-expression-optimization LEVEL]
@@ -198,7 +198,7 @@ optimization levels:
 
   -o, --optimization LEVEL
                          sets global optimization level for all optimizers
-  --tmp-variables-elimination LEVEL
+  --temp-variables-elimination LEVEL
                          optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
                          instructions
   --case-expression-optimization LEVEL
