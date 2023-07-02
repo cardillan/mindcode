@@ -119,21 +119,21 @@ and availability of the aggressive optimization level is:
 
 | Optimization                                                        | Option name                  | Aggressive |
 |---------------------------------------------------------------------|------------------------------|:----------:|
-| [Jump normalization](#jump-normalization)                           | jump-normalization           |     N      |
-| [Dead code elimination](#dead-code-elimination)                     | dead-code-elimination        |     Y      |
-| [Single step elimination](#single-step-elimination)                 | single-step-elimination      |     N      |
-| [Temporary variables elimination](#temporary-variables-elimination) | temp-variables-elimination   |     N      |
-| [Expression optimization](#expression-optimization)                 | expression-optimization      |     N      |
-| [Case expression optimization](#case-expression-optimization)       | case-expression-optimization |     N      |
-| [Conditional jump optimization](#conditional-jump-optimization)     | conditionals-optimization    |     N      |
-| [Jump straightening](#jump-straightening)                           | jump-straightening           |     N      |
-| [Loop optimization](#loop-optimization)                             | loop-optimization            |     Y      |
-| [If expression optimization](#if-expression-optimization)           | if-expression-optimization   |     N      |
-| [Data flow optimization](#data-flow-optimization)                   | data-flow-optimization       |     Y      |
-| [Jump threading](#jump-threading)                                   | jump-threading               |     Y      |
-| [Unreachable code elimination](#unreachable-code-elimination)       | unreachable-code-elimination |     Y      |
-| [Stack optimization](#stack-optimization)                           | stack-optimization           |     N      |
-| [Print merging](#print-merging)                                     | print-merging                |     Y      |
+| [Jump Normalization](#jump-normalization)                           | jump-normalization           |     N      |
+| [Dead Code Elimination](#dead-code-elimination)                     | dead-code-elimination        |     Y      |
+| [Single Step Elimination](#single-step-elimination)                 | single-step-elimination      |     N      |
+| [Temporary Variables Elimination](#temporary-variables-elimination) | temp-variables-elimination   |     N      |
+| [Expression Optimization](#expression-optimization)                 | expression-optimization      |     N      |
+| [Case Expression Optimization](#case-expression-optimization)       | case-expression-optimization |     N      |
+| [Conditional Jump Optimization](#conditional-jump-optimization)     | conditionals-optimization    |     N      |
+| [Jump Straightening](#jump-straightening)                           | jump-straightening           |     N      |
+| [Loop Optimization](#loop-optimization)                             | loop-optimization            |     Y      |
+| [If Expression Optimization](#if-expression-optimization)           | if-expression-optimization   |     N      |
+| [Data Flow optimization](#data-flow-optimization)                   | data-flow-optimization       |     Y      |
+| [Jump Threading](#jump-threading)                                   | jump-threading               |     Y      |
+| [Unreachable Code Elimination](#unreachable-code-elimination)       | unreachable-code-elimination |     Y      |
+| [Stack Optimization](#stack-optimization)                           | stack-optimization           |     N      |
+| [Print Merging](#print-merging)                                     | print-merging                |     Y      |
 
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
 deactivating it might allow you to use Mindcode until a fix is available. Partially activated optimizations
@@ -154,7 +154,7 @@ smaller than the original one, or even larger than the original one, if it is ex
 The information on compiler optimizations is a bit technical. It might be useful if you're trying to better 
 understand how Mindcode generates the ML code.
 
-## Jump normalization
+## Jump Normalization
 
 This optimization handles conditional jumps whose condition can be fully evaluated:
 
@@ -167,7 +167,7 @@ were determined to be constant by the data flow analysis.
 The first case reduces the code size and speeds up execution. The second one in itself improves neither size not speed,
 but allows those jumps to be handled by other optimizations aimed at unconditional jumps.
 
-## Dead code elimination
+## Dead Code Elimination
 
 This optimization inspects the entire code and removes all instructions that write to variables,
 if none of the variables written to are actually read anywhere in the code.
@@ -185,7 +185,7 @@ Dead code eliminator also inspects your code and prints out suspicious variables
 
 Both cases deserve closer inspection, as they might be a result of a typo in a variable name.
 
-## Single step elimination
+## Single Step Elimination
 
 The Mindcode compiler sometimes generates sequences of unconditional jumps where each jump targets the next instruction.
 This optimization finds them and removes all such jumps.
@@ -199,7 +199,7 @@ Technically, if we have a sequence
 we could eliminate both jumps. This optimization will only remove the second jump, because before that removal the first
 one doesn't target the next instruction. However, such sequences aren't typically generated by the compiler.
 
-## Temporary variables elimination
+## Temporary Variables Elimination
 
 The compiler sometimes creates temporary variables whose only function is to store output value of an instruction 
 before passing it somewhere else. This optimization removes all assignments to temporary variables that carry over 
@@ -215,7 +215,7 @@ The optimization is performed only when the following conditions are met:
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
 are removed by the stack usage optimization down the line.
 
-## Expression optimization
+## Expression Optimization
 
 This optimization looks for sequences of mathematical operations that can be performed more efficiently. Currently,
 the following optimizations are available:
@@ -225,7 +225,7 @@ the following optimizations are available:
   divisor in the `idiv` operation.
 * All set instructions assigning a variable to itself (e.g. `set x x`) are removed. 
 
-## Case expression optimization
+## Case Expression Optimization
 
 Case expressions allocate temporary variable to hold the value of the input expression, even if the input expression 
 is actually a user defined variable. This optimization detects these instances, removes the temporary variable 
@@ -243,7 +243,7 @@ The optimization is performed only when the following conditions are met:
 `push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables
 are removed by the stack usage optimization down the line.
 
-## Conditional jump optimization
+## Conditional Jump Optimization
 
 Conditional jumps are sometimes compiled into an `op` instruction evaluating a boolean expression, and a conditional 
 jump acting on the value of the expression.
@@ -266,7 +266,7 @@ Requirements:
 3. `var` is not used anywhere in the program except these two instructions
 4. `<comparison>` has an inverse/`<comparison>` exists as a condition
 
-## Jump straightening
+## Jump Straightening
 
 This optimization detects situations where a conditional jump skips a following, unconditional one and replaces it
 with a single conditional jump with a reversed condition and a target of the second jump. Example:
@@ -296,7 +296,7 @@ while true
 end
 ```
 
-## Loop optimization
+## Loop Optimization
 
 The loop optimization improves loops with the condition at the beginning by performing these modifications:
 
@@ -368,7 +368,7 @@ print "A switch has been reset."
 end
 ```
 
-## If expression optimization
+## If Expression Optimization
 
 This optimization consists of three types of modifications performed on blocks of code created by if/ternary 
 expressions. All possible optimizations are done independently.
@@ -419,7 +419,7 @@ Some conditional expressions can be rearranged to save instructions while keepin
 print(x < 0 ? "negative" : "positive")
 ```
 
-Without If expression optimization, the produced code is
+Without If Expression Optimization, the produced code is
 
 ```
 jump 3 greaterThanEq x 0
@@ -523,13 +523,13 @@ set y __tmp1
 end
 ```
 
-## Data flow optimization
+## Data Flow optimization
 
 This optimization inspects the actual data flow in the program and removes instructions and variables (both user 
 defined and temporary) that are dispensable or have no effect on the program execution. Each individual optimization 
 performed is described separately below.
 
-Data flow optimizations can have profound effect on the resulting code. User-defined variables can get completely 
+Data Flow optimizations can have profound effect on the resulting code. User-defined variables can get completely 
 eliminated, and variables in expressions can get replaced by different variables that were determined to hold the 
 same value. The goal of these replacements is to allow eliminating some instructions. The optimizer doesn't try to 
 avoid variable replacements that do not lead to instruction elimination - this would make the resulting code more 
@@ -577,7 +577,7 @@ end
 
 Data Flow optimization assumes that values assigned to uninitialized variables might be reused on the next program 
 execution. Assignments to uninitialized variables before calling the `end()` function are therefore protected, while 
-assignments to initialized variables aren't - they won't be overwritten on the next program execution anyway:
+assignments to initialized variables aren't - they will be overwritten on the next program execution anyway:
 
 ```
 #set optimization = aggressive
@@ -607,6 +607,8 @@ print initialized
 print foo
 end
 ```
+
+Notice the `initialized = 1` statement is preserved, while `foo = 1` is not.
 
 See also [`end()` function](SYNTAX-3-STATEMENTS.markdown#end-function).
 
@@ -687,7 +689,7 @@ Looks quite spectacular, doesn't it? Here's what happened:
 * The optimizer figured out that variables `a` and `b` are not needed, because they only hold a constant value.
 * Then it found out the `c = a + b` expression has a constant value too.
 * What was left was a sequence of print statements, each printing a constant value.
-  [Print merging optimization](#print-merging) on `aggressive` level then merged it all together.
+  [Print Merging optimization](#print-merging) on `aggressive` level then merged it all together.
 
 Not every opportunity for constant folding is detected at this moment. While `x = 1 + y + 2` is optimized to
 `op add x y 3`, `x = 1 + y + z + 2` it too complex to process as this moment and the constant values of `1` and `2` 
@@ -766,7 +768,7 @@ applied to function arguments and return values. This optimization has completel
 optimization_ and _Return value optimization_ - all optimizations that could be performed by those optimizations 
 (and some that couldn't) are performed by Data Flow optimization now.
 
-## Jump threading
+## Jump Threading
 
 If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
 to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
@@ -778,11 +780,11 @@ to the target of the second jump, repeated until the end of jump chain is reache
 
 No instructions are removed or added, but the execution of the code is faster.
 
-## Unreachable code elimination
+## Unreachable Code Elimination
 
 This optimizer removes instructions that are unreachable. There are several ways unreachable instructions might appear:
 
-1. Jump threading can create unreachable jumps that are no longer targeted.
+1. Jump Threading can create unreachable jumps that are no longer targeted.
 2. User-created unreachable regions, such as `while false ... end`.
 3. User defined functions which are called from an unreachable region.
 
@@ -794,7 +796,7 @@ The `end` instruction, even when not accessible, is not removed unless the optim
 Main body program and function definitions are each terminated by the `end` instruction and removing it
 might make the produced code somewhat less readable.
 
-## Stack optimization
+## Stack Optimization
 
 Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. The following 
 optimizations are performed:
@@ -808,7 +810,7 @@ optimizations are performed:
   also detected.
 * `push`/`pop` instruction elimination for function parameters/variables that are never modified within the function.
 
-## Print merging
+## Print Merging
 
 This optimization merges together print instructions with string literal arguments.
 The print instructions will get merged even if they aren't consecutive, assuming there aren't instructions

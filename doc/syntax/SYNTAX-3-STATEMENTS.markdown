@@ -326,9 +326,13 @@ The function may be called from anywhere, even from a recursive function. The fo
 function is invoked: 
 
 * the processor starts executing the program from the beginning,
-* values of existing variables are preserved (the last value written to any global or main variable before `end()` is 
-  called is preserved),
+* values of existing variables are preserved (the last value written to any uninitialized[^1] global or main variable 
+  before `end()` is called is preserved),
 * the call stack is reset - calling recursive functions starts from the topmost level again.
+
+[^1] Only uninitialized variables are handled this way. Any value assigned to an initialized variable before 
+calling `end()` would get overwritten with whatever value the variable is initialized to when the program execution is 
+restarted.  
 
 ---
 

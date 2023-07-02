@@ -22,8 +22,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 * The [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) now properly handles 
-  control flows that result into a branch being terminated (such as `break`, `continue` and `return` statements, or 
-  the `end()` function). 
+  assignments to uninitialized variables made before calling the
+  [`end()` function](doc/syntax/SYNTAX-5-OTHER.markdown#handling-of-uninitialized-variables). 
 
 ### Removed
 
@@ -58,10 +58,10 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Added elimination of useless `set` instructions (such as `set x x`) to
-  [Expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization). Optimizes recursive 
+  [Expression Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization). Optimizes recursive 
   function calls passing unchanged value of function argument to the next function call. 
 * Added elimination of variables never modified by a function from stack in
-  [Stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
+  [Stack Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
 * Added specific optimization for recursive function calls to the
   [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization):
   * The optimizer is aware when a variable value is preserved on stack and can reuse the variable state when 
@@ -92,9 +92,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added [Constant folding](doc/syntax/SYNTAX-5-OTHER.markdown#constant-folding) to Data flow optimization.
+* Added [Constant folding](doc/syntax/SYNTAX-5-OTHER.markdown#constant-folding) to Data Flow optimization.
 * Added [Common subexpression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#common-subexpressions-optimization) 
-  to Data flow optimization.
+  to Data Flow optimization.
 
 ### Removed
 
@@ -116,7 +116,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added [Data flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could 
+* Added [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could 
   remove user defined variables from compiled code - see the documentation for details. 
 
 ### Fixed
@@ -146,7 +146,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added [If expression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#if-expression-optimization). Sometimes 
+* Added [If Expression Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#if-expression-optimization). Sometimes 
   it only decreases the number of instructions by rearranging them, in other cases it can decrease number of executed 
   instructions. Only ternary expressions and if statements containing both true and false branch are affected. 
 

@@ -18,7 +18,7 @@ Some of the latest enhancements to Mindcode are:
   Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic, 
   either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the 
   code (specified in Mindcode or Mindustry Logic language) and linked blocks.
-* [Data flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
+* [Data Flow optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
   and streamlines complex expressions, eliminates unnecessary variables and instructions, and reuses common cde 
   fragments, significantly improving the quality of the generated mlog code.
 
