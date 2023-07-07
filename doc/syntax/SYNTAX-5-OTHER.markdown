@@ -556,7 +556,6 @@ Examples of loops that **cannot** be unrolled:
 ```
 // LIMIT is a global variable and as such the vslue assigned to it isn't considered constant
 // (see Data Flow Optimization)
-// On aggressive mode, the same would be true if the variable was   
 LIMIT = 10
 for i in 0 ... LIMIT
     cell1[i] = 0
@@ -569,7 +568,7 @@ while i < 10
     print(i)
     if i % 5 == 0
         i += 1
-        print("Even")
+        print("Five")
     end
 end
 
@@ -578,7 +577,8 @@ for i = 0, j = 10; i < j; i += 1, j -= 1
     print(i)
 end
 
-// The expression changing the loop control variable is too complex:
+// The expression changing the loop control variable is too complex.
+// (Rewriting the assignment to i *= 2, i += 1 would allow unrolling) 
 i = 0
 while i < 1000
   i = 2 * i + 1
@@ -586,7 +586,7 @@ while i < 1000
 end
 
 // This loop won't be unrolled. We know it ends after 5 iterations due to the break statement,
-// but Mindcode assumes 2000 iterations, too many for the instruction limit.  
+// but Mindcode assumes 2000 iterations, always reaching the instruction limit.  
 for i in 0 ... 2000
     if i > 5 break end
     print(i)

@@ -446,6 +446,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     38 read __fn1_curr ARRAY __fn1_i
     39 jump __label15 greaterThanEq __fn1_curr __fn1_pivot
 
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
+ 
+    85 label __label7
+    86 label __label5
+    87 return bank1
+-    * end
+
 Modifications by Final phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
     17 label __label4
@@ -455,13 +462,6 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-1 instruction
     20 jump __label7 lessThanEq __fn0_right __fn0_left
     21 op sub __tmp6 __fn0_right __fn0_left
     22 op idiv __tmp7 __tmp6 2
-
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
- 
-    84 label __label7
-    85 label __label5
-    86 return bank1
--    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-24 instructions):
  
