@@ -21,7 +21,7 @@ Some of the latest enhancements to Mindcode are:
   either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the 
   code (specified in Mindcode or Mindustry Logic language) and linked blocks.
 * [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
-  and streamlines complex expressions, eliminates unnecessary variables and instructions, and reuses common cde 
+  and streamlines complex expressions, eliminates unnecessary variables and instructions, and reuses common code 
   fragments, significantly improving the quality of the generated mlog code.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
@@ -39,7 +39,7 @@ the clipboard automatically if desired.
 
 ### Mindcode Syntax
 
-Please read the [syntax](doc/syntax/SYNTAX.markdown) document for the high-level information.
+Please read the [syntax](doc/syntax/SYNTAX.markdown) document for a complete description of Mindcode syntax.
 The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus
 always up-to-date with the most-recent version of Mindcode. If you programmed in any high-level language, you should
 feel right at home.

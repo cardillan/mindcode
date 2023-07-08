@@ -4,16 +4,6 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* New `yield` keyword for assigning values to variables in list iteration loop lists.
-* Unreachable code elimination improvements:
-  * Instead of removing instructions, replace them with a no-op (to preserve AST context structure). Only when an 
-    entire AST context (not just a subcontext) is unreachable, eliminate it altogether -- this could perhaps be done 
-    while rebuilding AST context structure.
-  * If and Loop handling in respective optimizers (including DFO) must be updated to cope with the possibility of 
-    no-op instructions.    
-  * After this change, it should be called in iteration phase, to free space for further speed optimizations.   
-  * Detect `end` instructions which are always executed in a user defined function and terminate the code path when 
-    such a function is called.  
 * Additional optimizations for speed:
   * List iteration loops unrolling.
   * Inlining: inlining will be done by the optimizer, no rebuilding of the AST tree. 
@@ -21,6 +11,23 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     in-memory jump table created. 
   * Return optimization: replace jump to return instruction with the return instruction itself.
   * Only recreate OptimizationActions of the action's contexts are affected by previous optimizations. 
+* Syntax Update
+  * Rewrite the syntax using lists of elements instead of chained elements where possible
+  * Allow empty bodies of ifs, loops, functions etc.
+  * New `yield` keyword for assigning values to variables in list iteration loop lists.
+  * Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
+    error reporting would be much more preferable, but quite hard to implement).
+* Unreachable code elimination improvements:
+  * Instead of removing instructions, replace them with a no-op (to preserve AST context structure). Only when an
+    entire AST context (not just a subcontext) is unreachable, eliminate it altogether -- this could perhaps be done
+    while rebuilding AST context structure.
+  * If and Loop handling in respective optimizers (including DFO) must be updated to cope with the possibility of
+    no-op instructions.
+  * After this change, it should be called in iteration phase, to free space for further speed optimizations.
+  * Detect `end` instructions which are **always** executed in a user defined function and terminate the code path 
+    when such a function is called.
+* When an uninitialized temporary variable is found by Data FLow Optimization, generate compilation error -- if it
+  happens, it is an optimization bug.
 * Function optimization of constant function parameters (i.e. not modified inside the function)
   * Detect situations where a read-only parameter is always passed the same argument value (either a literal, or a 
     variable) and globally replace the parameter with that literal/variable, saving the assignment.
@@ -28,10 +35,6 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     copy of the function for each distinct combination of the argument values and applying the above optimization to
     it.
   * Alternative to function inlining, should be resolved as a single optimization.
-* When an uninitialized temporary variable is found by Dead Code Eliminator, generate compilation error -- if it 
-  happens, it is an optimizer bug.
-* Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
-  error reporting would be much more preferable, but quite hard to implement).
 * External variable value reuse
   * When a value is read or written to a memory cell, store it and don't reread it if not necessary, unless the 
     memory cell was declared `volatile`.
@@ -67,7 +70,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * Optimization for speed
   * Currently, the optimizer realizes speed optimizations one by one, always choosing the highest benefit. Better
     utilization of instruction space _might_ be achieved by searching for a solution of the knapsack problem.
-* Improve data flow optimization around function calls further:
+* Improve Data Flow Optimization around function calls further:
   * Values pushed to stack need not be assigned to their proper variables first, a temp can be stored instead.
   * Create global optimizer to handle functions with constant return values. Handle specific case of function
     always returning one of its input arguments.
