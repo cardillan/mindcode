@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
@@ -278,7 +279,7 @@ public class DataFlowVariableStates {
         public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean markUninitialized) {
             debug(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!)" : ")"));
 
-            if (markUninitialized && !initialized.contains(variable) && !isolated) {
+            if (markUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
                 debug(() -> "*** Detected uninitialized read of " + variable.toMlog());
                 optimizer.uninitialized.add(variable);
             }

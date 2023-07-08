@@ -301,6 +301,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 // On basic optimization level, provide some protection to main variables.
                 // Specifically, latest values assigned to main variables are preserved.
                 // Variables that were part of unrolled loops are NOT preserved, regardless of their other use.
+                VariableStates finalVariableStates = variableStates;
                 contextStream(context)
                         .flatMap(LogicInstruction::outputArgumentsStream)
                         .filter(LogicVariable.class::isInstance)
@@ -308,7 +309,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                         .filter(LogicVariable::isMainVariable)
                         .filter(variable -> !optimizationContext.isUnrolledVariable(variable))
                         .distinct()
-                        .forEachOrdered(variableStates::valueRead);
+                        .forEachOrdered(v -> finalVariableStates.valueRead(v, null, false));
             }
         }
 

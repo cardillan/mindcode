@@ -102,6 +102,19 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 ""
         );
     }
+
+    @Test
+    void producesNoWarningsOnBasicLevel() {
+        assertGeneratesWarnings(createTestCompiler(CompilerProfile.standardOptimizations()),
+                """
+                        for n in 0 ... 1000
+                            j = switch1.enabled
+                            print(j)
+                        end
+                        """,
+                ""
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Main variables">
@@ -201,7 +214,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         def getBit(bitIndex)
                           bitIndex % 2
                         end
-                        
+                                                
                         for i in 1 ... 2
                             print(getBit(i) ? 1 : 0)
                         end
@@ -625,7 +638,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesReturnInLoop() {
         assertCompilesTo(new TestCompiler(CompilerProfile.fullOptimizations()),
-                        """
+                """
                         if UNIT_S1 == null UNIT_S1 = findUnit() end
                         inline def findUnit()
                             while true

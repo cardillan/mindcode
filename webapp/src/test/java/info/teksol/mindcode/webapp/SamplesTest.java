@@ -2,6 +2,7 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
+import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
@@ -23,24 +24,28 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SamplesTest {
     private static final boolean onWindowsPlatform = System.getProperty("os.name").toLowerCase().contains("win");
 
+    private static final List<CompilerMessage> messages = new ArrayList<>();
+
     private final InstructionProcessor instructionProcessor =
             InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V7, ProcessorEdition.WORLD_PROCESSOR);
 
     private static List<LogicInstruction> generateAndOptimize(InstructionProcessor instructionProcessor, Seq program, CompilerProfile profile) {
-        LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor, s -> {});
+        messages.clear();
+        LogicInstructionGenerator generator = new LogicInstructionGenerator(profile, instructionProcessor, messages::add);
         GeneratorOutput generatorOutput  = generator.generate(program);
-        OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, s -> {});
+        OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messages::add);
         return optimizer.optimize(generatorOutput);
     }
 
     private  List<LogicInstruction> generateAndOptimize(Seq program) {
-        return generateAndOptimize(instructionProcessor, program, CompilerProfile.fullOptimizations());
+        return generateAndOptimize(instructionProcessor, program, CompilerProfile.standardOptimizations());
     }
 
     private  List<LogicInstruction> generateUnoptimized(Seq program) {
@@ -116,6 +121,14 @@ class SamplesTest {
         final String opcodes = LogicInstructionPrinter.toString(instructionProcessor, result);
         assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + source);
         assertTrue(errors.isEmpty(), errors.toString());
+
+        assertTrue(messages.stream().noneMatch(CompilerMessage::isError),
+                "Unexpected error messages:\n" + messages.stream().filter(CompilerMessage::isError).map(CompilerMessage::message)
+                        .collect(Collectors.joining("\n")));
+
+        assertTrue(messages.stream().noneMatch(CompilerMessage::isWarning),
+                "Unexpected warning messages:\n" + messages.stream().filter(CompilerMessage::isWarning).map(CompilerMessage::message)
+                        .collect(Collectors.joining("\n")));
     }
 
     private static class ErrorListener extends BaseErrorListener {

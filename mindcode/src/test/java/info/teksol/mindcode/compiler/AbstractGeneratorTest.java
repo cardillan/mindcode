@@ -106,10 +106,13 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         assertCompilesToWithMessages(createTestCompiler(), null, s -> false, code, instructions);
     }
 
-    protected void assertGeneratesWarnings(String code, String expectedWarnings) {
-        TestCompiler compiler = createTestCompiler();
+    protected void assertGeneratesWarnings(TestCompiler compiler, String code, String expectedWarnings) {
         assertCompilesToWithMessages(compiler, ix ->false, s -> true, code);
         assertEquals(expectedWarnings, extractWarnings(compiler.getMessages()));
+    }
+
+    protected void assertGeneratesWarnings(String code, String expectedWarnings) {
+        assertGeneratesWarnings(createTestCompiler(), code, expectedWarnings);
     }
 
     // General utility

@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## 2023-07-08
 
+### Fixed
+
+* Fixed main variables being mistakenly reported as uninitialized by Data Flow Optimization on `basic` optimization 
+  level.
+
 ### Changed
 
 * Changed [Unreachable Code Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#unreachable-code-elimination) to perform 
