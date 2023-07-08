@@ -383,7 +383,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Test
     void handlesForEachLoops() {
-        assertCompilesTo("""
+        assertCompilesTo(createTestCompiler(
+                createCompilerProfile().setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.OFF)),
+                        """
                         for i in (1, 2, 3)
                             print(i)
                         end

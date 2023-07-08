@@ -9,11 +9,11 @@ import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
-class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
+class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
 
     @Override
-    protected Class<LoopOptimizer> getTestedClass() {
-        return LoopOptimizer.class;
+    protected Class<LoopUnroller> getTestedClass() {
+        return LoopUnroller.class;
     }
 
     @Override
@@ -187,6 +187,47 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         print(".")
                         """,
                 createInstruction(PRINT, q("01201234567.")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void unrollsListIterationLoops() {
+        assertCompilesTo(ix -> !(ix instanceof LabelInstruction),
+                """
+                        for i in (1, 2, 3)
+                            print(i)
+                        end
+                        """,
+                createInstruction(PRINT, q("123")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void unrollsListIterationLoopWithBreak() {
+        assertCompilesTo(ix -> !(ix instanceof LabelInstruction),
+                """
+                        for i in (1, 2, 3)
+                            print(i)
+                            if i == 2 break end
+                        end
+                        """,
+                createInstruction(PRINT, q("12")),
+                createInstruction(JUMP, "__start__", "always")
+        );
+    }
+
+    @Test
+    void unrollsListIterationLoopWithContinue() {
+        assertCompilesTo(ix -> !(ix instanceof LabelInstruction),
+                """
+                        for i in (1, 2, 3)
+                            if i == 2 continue end
+                            print(i)
+                        end
+                        """,
+                createInstruction(PRINT, q("13")),
                 createInstruction(END)
         );
     }
@@ -524,7 +565,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
     }
     
     @Test
-    void leavesNonintegerLoopsBasic() {
+    void leavesNonIntegerLoopsBasic() {
         assertCompilesTo(createTestCompiler(basicProfile),
                 """
                         for i = 0; i <= 1.0; i += 0.1

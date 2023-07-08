@@ -46,7 +46,7 @@ public class LoopUnroller extends BaseOptimizer {
         invocations++;
         List<OptimizationAction> actions = new ArrayList<>();
         forEachContext(AstContextType.LOOP, BASIC, loop -> {
-            UnrollLoopAction possibleUnrolling = findPossibleUnrolling(loop, costLimit);
+            OptimizationAction possibleUnrolling = findPossibleUnrolling(loop, costLimit);
             if (possibleUnrolling != null) {
                 actions.add(possibleUnrolling);
             }
@@ -59,12 +59,18 @@ public class LoopUnroller extends BaseOptimizer {
             CONDITION, "c",
             BODY, "b",
             UPDATE, "u",
-            FLOW_CONTROL, "f"
+            FLOW_CONTROL, "f",
+            ITERATOR, "t"
     );
 
     private boolean hasSupportedStructure(AstContext loop) {
         String structure = loop.children().stream().map(c -> SYMBOL_MAP.get(c.subcontextType())).collect(Collectors.joining());
         return structure.contains("b") && structure.matches("i?c?b?u?c?f");
+    }
+
+    private boolean hasSupportedIterationStructure(AstContext loop) {
+        String structure = loop.children().stream().map(c -> SYMBOL_MAP.get(c.subcontextType())).collect(Collectors.joining());
+        return structure.matches("t+bf");
     }
 
     private boolean hasConditionAtFront(AstContext loop) {
@@ -120,7 +126,11 @@ public class LoopUnroller extends BaseOptimizer {
         return result;
     }
 
-    private UnrollLoopAction findPossibleUnrolling(AstContext loop, int costLimit) {
+    private OptimizationAction findPossibleUnrolling(AstContext loop, int costLimit) {
+        if (loop.findSubcontext(ITERATOR) != null) {
+            return findPossibleIterationUnrolling(loop, costLimit);
+        }
+
         if (!hasSupportedStructure(loop)) {
             return null;
         }
@@ -308,16 +318,43 @@ public class LoopUnroller extends BaseOptimizer {
         return false;
     }
 
+    private OptimizationAction findPossibleIterationUnrolling(AstContext loop, int costLimit) {
+        if (!hasSupportedIterationStructure(loop)) {
+            return null;
+        }
+
+        List<AstContext> iterations = loop.findSubcontexts(ITERATOR);
+        LogicList body = contextInstructions(loop.findSubcontext(BODY));
+
+        int loops = iterations.size();
+        // Instructions saved per loop:
+        // Set address
+        // Jump to body (except the last iteration)
+        // Go to next iteration
+        int savings = (3 * loops - 1);
+
+        int size = body.stream().mapToInt(LogicInstruction::getRealSize).sum();
+
+        // Optimization cost could actually get negative
+        int cost = Math.max(size * loops - savings, 0);
+
+        return cost > costLimit ? null : new UnrollListIterationLoopAction(loop, cost,
+                loop.weight() * savings, loops - 1);
+    }
+
     @Override
     public OptimizationResult applyOptimizationInternal(OptimizationAction optimization, int costLimit) {
         return switch (optimization) {
-            case UnrollLoopAction a         -> unrollLoop(a, costLimit);
-            default                         -> OptimizationResult.INVALID;
+            case UnrollLoopAction a              -> unrollLoop(a, costLimit);
+            case UnrollListIterationLoopAction a -> unrollListLoop(a, costLimit);
+            default                              -> OptimizationResult.INVALID;
         };
     }
 
     private OptimizationResult unrollLoop(UnrollLoopAction optimization, int costLimit) {
         AstContext loop = optimization.astContext();
+        optimizationContext.addUnrolledVariable(optimization.getLoopControl());
+
         List<LogicList> initContexts = initInstructionContexts(loop);
         List<LogicList> iterationContexts = iterationInstructionContexts(loop);
         int loops = optimization.codeMultiplication() + 1;
@@ -338,6 +375,39 @@ public class LoopUnroller extends BaseOptimizer {
             }
         }
 
+        unrollFlowControlContext(loop, newContext, insertionPoint);
+        return OptimizationResult.REALIZED;
+    }
+
+    private OptimizationResult unrollListLoop(UnrollListIterationLoopAction optimization, int costLimit) {
+        AstContext loop = optimization.astContext();
+        List<AstContext> iterations = loop.findSubcontexts(ITERATOR);
+        LogicList body = contextInstructions(loop.findSubcontext(BODY));
+
+        // Create a new, non-loop context for unrolled instructions
+        AstContext newContext = loop.parent().createChild(loop.node(), AstContextType.BODY);
+        int insertionPoint = firstInstructionIndex(loop);
+        for (AstContext iteration : iterations) {
+            LogicList list = removeIteratorInstructions(contextInstructions(iteration));
+            insertInstructions(insertionPoint, list.duplicateToContext(newContext));
+            insertionPoint += list.size();
+
+            insertInstructions(insertionPoint, body.duplicateToContext(newContext));
+            insertionPoint += body.size();
+        }
+
+        // Save it before the original loop is erased
+        unrollFlowControlContext(loop, newContext, insertionPoint);
+        return OptimizationResult.REALIZED;
+    }
+
+    private LogicList removeIteratorInstructions(LogicList list) {
+        int begin = list.getFirst() instanceof SetAddressInstruction ? 1 : 0;
+        int end = list.getLast() instanceof GotoLabelInstruction && list.getFromEnd(1) instanceof JumpInstruction ? 2 : 0;
+        return list.subList(begin, list.size() - end);
+    }
+
+    private void unrollFlowControlContext(AstContext loop, AstContext newContext, int insertionPoint) {
         // Save it before the original loop is erased
         LogicList flowControl = contextInstructions(loop.findSubcontext(FLOW_CONTROL));
 
@@ -351,9 +421,7 @@ public class LoopUnroller extends BaseOptimizer {
             }
         }
 
-        optimizationContext.addUnrolledVariable(optimization.getLoopControl());
         count++;
-        return OptimizationResult.REALIZED;
     }
 
     private class UnrollLoopAction extends AbstractOptimizationAction {
@@ -371,6 +439,17 @@ public class LoopUnroller extends BaseOptimizer {
         @Override
         public String toString() {
             return getName() + ": unroll loop at line " + astContext.node().startToken().getLine();
+        }
+    }
+
+    private class UnrollListIterationLoopAction extends AbstractOptimizationAction {
+        public UnrollListIterationLoopAction(AstContext astContext, int cost, double benefit, int codeMultiplication) {
+            super(astContext, cost, benefit, codeMultiplication);
+        }
+
+        @Override
+        public String toString() {
+            return getName() + ": unroll iteration loop at line " + astContext.node().startToken().getLine();
         }
     }
 }

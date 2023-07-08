@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Added list iteration loop unrolling to [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling) 
+  optimization.
+
 ## 2023-07-08
 
 ### Fixed

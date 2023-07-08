@@ -4,7 +4,7 @@ computesPackColor:                          3 instructions,      3 steps, 100.0%
 expression-evaluation-compile-time.mnd:    64 instructions,     64 steps, 100.0% coverage, source CRC 8158D1BAA0F3E6F9, compiled CRC A948C0E6E9D303F9
 expression-evaluation-runtime.mnd:        852 instructions,    540 steps,  49.0% coverage, source CRC 8911E5AAD95EB858, compiled CRC 6FC7F1B81E820115
 fixed-bounds-ranged-for.mnd:                2 instructions,      2 steps, 100.0% coverage, source CRC BC4491F7A8168872, compiled CRC 666CB69F297D2C86
-for-each-loop-break-continue.mnd:          56 instructions,    307 steps,  96.4% coverage, source CRC 288A60F2E96404F1, compiled CRC 83F975E53DCB3AD3
+for-each-loop-break-continue.mnd:         103 instructions,    287 steps,  84.4% coverage, source CRC 288A60F2E96404F1, compiled CRC 2BC10AAA62606F89
 handlesAssignmentsInConditions:             3 instructions,      3 steps, 100.0% coverage, source CRC 7C45875B29123B36, compiled CRC F7AB5F89E9A64EBA
 handlesChainedAssignments:                  4 instructions,      4 steps, 100.0% coverage, source CRC 9DE8AD72EEC78FD7, compiled CRC 926A1C342CCEFE1C
 iterated-for-loop-break-continue.mnd:      48 instructions,    454 steps, 100.0% coverage, source CRC 8A07C522E6330C37, compiled CRC BA17CFB28915B0E9

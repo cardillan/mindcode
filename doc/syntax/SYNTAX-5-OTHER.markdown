@@ -442,9 +442,11 @@ propagation](#constant-propagation) and [constant folding](#constant-folding), a
 
 ### Loop unrolling preconditions
 
-In general, loop unrolling can be performed when Mindcode can determine the loop has a certain fixed number of 
-iterations and can infer other properties of the loop, such as a variable that controls the loop iterations. A loop 
-should be eligible for the unrolling when the following conditions are met:
+A list iteration loop can be always unrolled, if there's enough instruction space left. 
+
+For other loops, unrolling can generally be performed when Mindcode can determine the loop has a certain fixed
+number of iterations and can infer other properties of the loop, such as a variable that controls the loop 
+iterations. A loop should be eligible for the unrolling when the following conditions are met:
 
 * The loop is controlled by a single, non-global variable: the loop condition must consist of a variable which is 
   modified inside a loop, and a constant or an effectively constant variable. Loops based on global variables cannot 
@@ -457,8 +459,6 @@ should be eligible for the unrolling when the following conditions are met:
 * The loop control variable isn't a global variable.
 * The loop has a nonzero number of iterations. The upper limit of the number of iterations depends on available 
   instruction space, but generally can never exceed 1000 iterations.
-* The following kinds of loops are supported: while loop, do-while loop, range iteration loop, C-style loop. (A list 
-  iteration loop is not supported at this moment, although the support will be added.)
 
 Furthermore:
 

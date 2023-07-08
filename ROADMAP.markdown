@@ -5,12 +5,11 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 ## Current priorities
 
 * Additional optimizations for speed:
-  * List iteration loops unrolling.
   * Inlining: inlining will be done by the optimizer, no rebuilding of the AST tree. 
   * Switched case expression: all or a subset of `when` branches with constant conditions can be rearranged and an 
     in-memory jump table created. 
   * Return optimization: replace jump to return instruction with the return instruction itself.
-  * Only recreate OptimizationActions of the action's contexts are affected by previous optimizations. 
+  * Only recreate OptimizationActions of the action whose context(s) are affected by previous optimizations. 
 * Syntax Update
   * Rewrite the syntax using lists of elements instead of chained elements where possible
   * Allow empty bodies of ifs, loops, functions etc.

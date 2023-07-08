@@ -5,9 +5,14 @@
      2 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
-     5 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     2 instructions eliminated by Loop Unrolling (4 iterations).
+     1 loops unrolled by Loop Unrolling.
+    22 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
-    76 instructions after optimizations.
+    57 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 923):
+  * Loop Unrolling: unroll iteration loop at line 4    cost   0, benefit       23,0, efficiency   Infinity
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
@@ -226,63 +231,222 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     84 set __fn0retval __fn0_result
     85 label __label17
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Loop Unrolling: unroll iteration loop at line 4 (-2 instructions):
+     0 set __sp 16
+     1 set index 0
+-    * setaddr __tmp0 __label4
+-    * set value 200
+-    * jump __label2 always
+-    * gotolabel __label4 marker0
+-    * setaddr __tmp0 __label5
+-    * set value 100
+-    * jump __label2 always
+-    * gotolabel __label5 marker0
+-    * setaddr __tmp0 __label6
+-    * set value 50
+-    * jump __label2 always
+-    * gotolabel __label6 marker0
+-    * setaddr __tmp0 __label7
+-    * set value 20
+-    * jump __label2 always
+-    * gotolabel __label7 marker0
+-    * setaddr __tmp0 __label8
+-    * set value 10
+-    * jump __label2 always
+-    * gotolabel __label8 marker0
+-    * setaddr __tmp0 __label9
+-    * set value 5
+-    * jump __label2 always
+-    * gotolabel __label9 marker0
+-    * setaddr __tmp0 __label10
+-    * set value 2
+-    * jump __label2 always
+-    * gotolabel __label10 marker0
+-    * setaddr __tmp0 __label11
+-    * set value 1
+-    * label __label2
+-    * write value bank1 index
+-    * op add index index 1
+-    * label __label1
+-    * goto __tmp0 marker0
+-    * gotolabel __label11 marker0
+-    * label __label3
++    2 set value 200
++    3 label __label27
++    4 write value bank1 index
++    5 op add index index 1
++    6 label __label28
++    7 set value 100
++    8 label __label29
++    9 write value bank1 index
++   10 op add index index 1
++   11 label __label30
++   12 set value 50
++   13 label __label31
++   14 write value bank1 index
++   15 op add index index 1
++   16 label __label32
++   17 set value 20
++   18 label __label33
++   19 write value bank1 index
++   20 op add index index 1
++   21 label __label34
++   22 set value 10
++   23 label __label35
++   24 write value bank1 index
++   25 op add index index 1
++   26 label __label36
++   27 set value 5
++   28 label __label37
++   29 write value bank1 index
++   30 op add index index 1
++   31 label __label38
++   32 set value 2
++   33 label __label39
++   34 write value bank1 index
++   35 op add index index 1
++   36 label __label40
++   37 set value 1
++   38 label __label41
++   39 write value bank1 index
++   40 op add index index 1
++   41 label __label42
++   42 label __label3
+    43 label __label12
+    44 print 41
+    45 label __label13
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
-    56 set __fn0_result 0
-    57 set __fn0_i __fn0_index
-    58 label __label20
+     1 set index 0
+     2 set value 200
+     3 label __label27
+-    * write value bank1 index
+-    * op add index index 1
++    4 write 200 bank1 0
++    5 op add index 0 1
+     6 label __label28
+     7 set value 100
+     8 label __label29
+-    * write value bank1 index
+-    * op add index index 1
++    9 write 100 bank1 1
++   10 op add index 1 1
+    11 label __label30
+    12 set value 50
+    13 label __label31
+-    * write value bank1 index
+-    * op add index index 1
++   14 write 50 bank1 2
++   15 op add index 2 1
+    16 label __label32
+    17 set value 20
+    18 label __label33
+-    * write value bank1 index
+-    * op add index index 1
++   19 write 20 bank1 3
++   20 op add index 3 1
+    21 label __label34
+    22 set value 10
+    23 label __label35
+-    * write value bank1 index
+-    * op add index index 1
++   24 write 10 bank1 4
++   25 op add index 4 1
+    26 label __label36
+    27 set value 5
+    28 label __label37
+-    * write value bank1 index
+-    * op add index index 1
++   29 write 5 bank1 5
++   30 op add index 5 1
+    31 label __label38
+    32 set value 2
+    33 label __label39
+-    * write value bank1 index
+-    * op add index index 1
++   34 write 2 bank1 6
++   35 op add index 6 1
+    36 label __label40
+    37 set value 1
+    38 label __label41
+-    * write value bank1 index
+-    * op add index index 1
++   39 write 1 bank1 7
+    40 label __label42
+    41 label __label3
+    42 label __label12
+ 
+    59 set __fn0_result 0
+    60 set __fn0_i __fn0_index
+    61 label __label20
 -    * jump __label22 greaterThanEq __fn0_i 8
-+   59 jump __label22 greaterThanEq __fn0_index 8
-    60 label __label26
-    61 read __fn0_p bank1 __fn0_i
-    62 jump __label23 greaterThan __fn0_p __fn0_amount
++   62 jump __label22 greaterThanEq __fn0_index 8
+    63 label __label26
+    64 read __fn0_p bank1 __fn0_i
+    65 jump __label23 greaterThan __fn0_p __fn0_amount
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-16 instructions):
+     0 set __sp 16
+-    * set index 0
+-    * set value 200
+     1 label __label27
+     2 write 200 bank1 0
+-    * op add index 0 1
+     3 label __label28
+-    * set value 100
+     4 label __label29
+     5 write 100 bank1 1
+-    * op add index 1 1
+     6 label __label30
+-    * set value 50
+     7 label __label31
+     8 write 50 bank1 2
+-    * op add index 2 1
+     9 label __label32
+-    * set value 20
+    10 label __label33
+    11 write 20 bank1 3
+-    * op add index 3 1
+    12 label __label34
+-    * set value 10
+    13 label __label35
+    14 write 10 bank1 4
+-    * op add index 4 1
+    15 label __label36
+-    * set value 5
+    16 label __label37
+    17 write 5 bank1 5
+-    * op add index 5 1
+    18 label __label38
+-    * set value 2
+    19 label __label39
+    20 write 2 bank1 6
+-    * op add index 6 1
+    21 label __label40
+-    * set value 1
+    22 label __label41
+    23 write 1 bank1 7
+    24 label __label42
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-    84 set __fn0retval __fn0_result
-    85 label __label17
-    86 return bank1
+    71 set __fn0retval __fn0_result
+    72 label __label17
+    73 return bank1
 -    * end
 
 Final code before resolving virtual instructions:
 
 set __sp 16
-set index 0
-setaddr __tmp0 __label4
-set value 200
-jump __label2 always 0 0
-gotolabel __label4 marker0
-setaddr __tmp0 __label5
-set value 100
-jump __label2 always 0 0
-gotolabel __label5 marker0
-setaddr __tmp0 __label6
-set value 50
-jump __label2 always 0 0
-gotolabel __label6 marker0
-setaddr __tmp0 __label7
-set value 20
-jump __label2 always 0 0
-gotolabel __label7 marker0
-setaddr __tmp0 __label8
-set value 10
-jump __label2 always 0 0
-gotolabel __label8 marker0
-setaddr __tmp0 __label9
-set value 5
-jump __label2 always 0 0
-gotolabel __label9 marker0
-setaddr __tmp0 __label10
-set value 2
-jump __label2 always 0 0
-gotolabel __label10 marker0
-setaddr __tmp0 __label11
-set value 1
-label __label2
-write value bank1 index
-op add index index 1
-goto __tmp0 marker0
-gotolabel __label11 marker0
+write 200 bank1 0
+write 100 bank1 1
+write 50 bank1 2
+write 20 bank1 3
+write 10 bank1 4
+write 5 bank1 5
+write 2 bank1 6
+write 1 bank1 7
 print 41
 set __fn0_amount 20
 set __fn0_index 1

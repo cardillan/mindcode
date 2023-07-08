@@ -2,7 +2,7 @@ project-euler-04.mnd:                      23 instructions,  42900 steps, 100.0%
 project-euler-18.mnd:                     838 instructions,    838 steps, 100.0% coverage, source CRC FB357E8027C1567F, compiled CRC 9348331548048C68
 project-euler-26.mnd:                     521 instructions,   4924 steps,  68.7% coverage, source CRC 12162DF0D8E01232, compiled CRC D38ED06ECE2B2FCA
 project-euler-28.mnd:                      14 instructions,  11007 steps, 100.0% coverage, source CRC 292036081FF7459E, compiled CRC 29F887BEF65106BC
-project-euler-31.mnd:                      76 instructions,  11099 steps, 100.0% coverage, source CRC 0999967A141F7945, compiled CRC 5463AB10B6ED46E3
-project-euler-31b.mnd:                     38 instructions,   8592 steps, 100.0% coverage, source CRC E3C12A56D219A33B, compiled CRC E60CD922D784AFE8
+project-euler-31.mnd:                      57 instructions,  11059 steps, 100.0% coverage, source CRC 0999967A141F7945, compiled CRC 7887518464C0211E
+project-euler-31b.mnd:                    461 instructions,   8245 steps, 100.0% coverage, source CRC E3C12A56D219A33B, compiled CRC 3294C03AE0526624
 project-euler-45.mnd:                      15 instructions, 265003 steps, 100.0% coverage, source CRC D2F3E0D613CA9422, compiled CRC 2CD0191C300FFEAC
 project-euler-97.mnd:                      12 instructions,  11580 steps, 100.0% coverage, source CRC 5E79AE9DE5FAA749, compiled CRC 78BED7F990907E36
