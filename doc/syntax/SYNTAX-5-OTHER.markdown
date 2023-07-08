@@ -154,11 +154,9 @@ the optimization removes all dead assignment, even assignments to unused global 
 Dead Code Elimination also inspects your code and prints out suspicious variables:
 * _Unused variables_: those are the variables that were, or could be, eliminated. On `basic` level,
   some unused variables might not be reported.
-* _Uninitialized variables_: those are variables that are read by the program, but never written to.
-  (The [Data Flow Optimization](#data-flow-optimization) performs a more thorough analysis which is able to detect 
-  variables that might be read by the program before they were first written to. A single variable might be 
-  therefore reported as uninitialized twice.)
-
+* _Uninitialized variables_: those are global variables that are read by the program, but never written to.
+  (The [Data Flow Optimization](#data-flow-optimization) detects uninitialized local and function variables.)
+  
 Both cases deserve closer inspection, as they might be a result of a typo in a variable name.
 
 ## Single Step Elimination
@@ -933,6 +931,33 @@ end
 
 Notice the `initialized = 1` statement is preserved, while `foo = 1` is not.
 
+This protection is also applied to assignment to uninitialized variables made before calling a user function which, 
+directly or indirectly, calls the `end()` function:
+
+```
+print(foo)
+foo = 5
+bar()
+foo = 6
+bar()
+
+def bar()
+    end()
+end
+```
+
+preserves both assignments to `foo`:
+```
+print foo
+set foo 5
+jump 6 always 0 0
+set foo 6
+jump 6 always 0 0
+end
+end
+end
+```
+
 See also [`end()` function](SYNTAX-3-STATEMENTS.markdown#end-function).
 
 ### Unnecessary assignment elimination
@@ -1107,14 +1132,14 @@ No instructions are removed or added, but the execution of the code is faster.
 This optimizer removes instructions that are unreachable. There are several ways unreachable instructions might appear:
 
 1. Jump Threading can create unreachable jumps that are no longer targeted.
-2. User-created unreachable regions, such as `while false ... end`.
+2. User-created unreachable regions, such as `while false ... end`, or code following a `while true` loop.
 3. User defined functions which are called from an unreachable region.
 
-Instruction removal is done in loops until no instructions are removed. This way entire branches
-of unreachable code (i.e. all code inside the `while false ... end` statement) should be eliminated,
-assuming the unconditional jump normalization optimizer was also active.
+Instruction removal is done by analyzing the control flow of the program and removing instructions that are never 
+executed. When [Jump Normalization](#jump-normalization) is not active, some section of unreachable code may not be 
+recognized.
 
-The `end` instruction, even when not accessible, is not removed unless the optimization level is `aggressive`.
+The `end` instruction, even when not reachable, is not removed unless the optimization level is `aggressive`.
 Main body program and function definitions are each terminated by the `end` instruction and removing it
 might make the produced code somewhat less readable.
 

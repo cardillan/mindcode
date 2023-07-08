@@ -310,17 +310,14 @@ op floor __tmp6 __tmp5 0
 op div __tmp7 __tmp6 100
 op sub distance __tmp7 2
 ubind UNIT
-label __label0
 jump __label2 notEqual @unit null
 label __label18
 print UNIT
 print ": no active unit found."
 printflush message1
 ubind UNIT
-label __label1
 jump __label18 equal @unit null
 label __label2
-label __label3
 sensor __tmp10 switch1 @enabled
 jump __label5 notEqual __tmp10 false
 label __label19
@@ -328,12 +325,10 @@ print "Press button to start measuring "
 print UNIT
 print " speed."
 printflush message1
-label __label4
 sensor __tmp10 switch1 @enabled
 jump __label19 equal __tmp10 false
 label __label5
 control enabled switch1 false 0 0 0
-label __label6
 sensor __tmp12 @unit @controlled
 jump __label8 equal __tmp12 0
 label __label20
@@ -341,19 +336,16 @@ print "Searching free "
 print UNIT
 printflush message1
 ubind UNIT
-label __label7
 sensor __tmp12 @unit @controlled
 jump __label20 notEqual __tmp12 0
 label __label8
 ucontrol flag 1 0 0 0 0
-label __label9
 ucontrol within SX SY 1 __tmp14 0
 jump __label11 notEqual __tmp14 false
 label __label21
 print "Moving to start"
 printflush message1
 ucontrol move SX SY 0 0 0
-label __label10
 ucontrol within SX SY 1 __tmp14 0
 jump __label21 equal __tmp14 false
 label __label11
@@ -361,12 +353,10 @@ print "Moving to destination"
 printflush message1
 set start @time
 ucontrol move DX DY 0 0 0
-label __label12
 ucontrol within DX DY 1 __tmp17 0
 jump __label14 notEqual __tmp17 false
 label __label22
 ucontrol move DX DY 0 0 0
-label __label13
 ucontrol within DX DY 1 __tmp17 0
 jump __label22 equal __tmp17 false
 label __label14
@@ -383,7 +373,6 @@ op sub elapsed finish start
 op div __tmp27 distance elapsed
 op idiv __tmp29 __tmp27 0.00001
 op div speed __tmp29 100
-label __label15
 sensor __tmp31 switch1 @enabled
 jump __label17 notEqual __tmp31 false
 label __label23
@@ -401,7 +390,6 @@ print "\nSpeed: "
 print speed
 print "tiles/s\nPress button to repeat"
 printflush message1
-label __label16
 sensor __tmp31 switch1 @enabled
 jump __label23 equal __tmp31 false
 label __label17

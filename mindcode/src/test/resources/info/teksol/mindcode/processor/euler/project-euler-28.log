@@ -139,7 +139,6 @@ set sum 1
 set current 3
 set step 2
 set count 1
-label __label0
 label __label9
 op add sum sum current
 op add current current step
@@ -148,14 +147,7 @@ jump __label3 lessThanEq count 3
 op add step step 2
 set count 0
 label __label3
-label __label4
-label __label1
 jump __label9 lessThanEq current 1002001
-label __label2
-label __label5
 print 669171001
-label __label6
-label __label7
 print sum
-label __label8
 end

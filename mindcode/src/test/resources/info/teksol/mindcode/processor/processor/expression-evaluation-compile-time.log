@@ -5,7 +5,7 @@
     63 instructions eliminated by Conditional Jump Optimization (4 iterations).
     63 instructions eliminated by Single Step Elimination (5 iterations).
    223 instructions eliminated by Data Flow Optimization (6 iterations).
-   441 instructions eliminated by Unreachable Code Elimination (2 iterations).
+   441 instructions eliminated by Unreachable Code Elimination.
     64 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-13 instructions):
@@ -5110,10 +5110,10 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-63 in
    809 label __label250
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 instructions):
- 
+     0 label __label0
      1 print "ok"
      2 jump __label3 always
-     3 label __label2
+-    * label __label2
 -    * print "Wrong operation "
 -    * print "add"
 -    * print ": expected "
@@ -5121,12 +5121,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 5
 -    * print "\n"
-     4 label __label3
-     5 label __label1
-     6 label __label4
-     7 print "ok"
-     8 jump __label7 always
-     9 label __label6
+     3 label __label3
+     4 label __label1
+     5 label __label4
+     6 print "ok"
+     7 jump __label7 always
+-    * label __label6
 -    * print "Wrong operation "
 -    * print "sub"
 -    * print ": expected "
@@ -5134,12 +5134,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1
 -    * print "\n"
-    10 label __label7
-    11 label __label5
-    12 label __label8
-    13 print "ok"
-    14 jump __label11 always
-    15 label __label10
+     8 label __label7
+     9 label __label5
+    10 label __label8
+    11 print "ok"
+    12 jump __label11 always
+-    * label __label10
 -    * print "Wrong operation "
 -    * print "mul"
 -    * print ": expected "
@@ -5147,12 +5147,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 6
 -    * print "\n"
-    16 label __label11
-    17 label __label9
-    18 label __label12
-    19 print "ok"
-    20 jump __label15 always
-    21 label __label14
+    13 label __label11
+    14 label __label9
+    15 label __label12
+    16 print "ok"
+    17 jump __label15 always
+-    * label __label14
 -    * print "Wrong operation "
 -    * print "div"
 -    * print ": expected "
@@ -5160,12 +5160,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1.5
 -    * print "\n"
-    22 label __label15
-    23 label __label13
-    24 label __label16
-    25 print "ok"
-    26 jump __label19 always
-    27 label __label18
+    18 label __label15
+    19 label __label13
+    20 label __label16
+    21 print "ok"
+    22 jump __label19 always
+-    * label __label18
 -    * print "Wrong operation "
 -    * print "div exp"
 -    * print ": expected "
@@ -5173,12 +5173,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 0.00001
 -    * print "\n"
-    28 label __label19
-    29 label __label17
-    30 label __label20
-    31 print "ok"
-    32 jump __label23 always
-    33 label __label22
+    23 label __label19
+    24 label __label17
+    25 label __label20
+    26 print "ok"
+    27 jump __label23 always
+-    * label __label22
 -    * print "Wrong operation "
 -    * print "idiv"
 -    * print ": expected "
@@ -5186,12 +5186,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1
 -    * print "\n"
-    34 label __label23
-    35 label __label21
-    36 label __label24
-    37 print "ok"
-    38 jump __label27 always
-    39 label __label26
+    28 label __label23
+    29 label __label21
+    30 label __label24
+    31 print "ok"
+    32 jump __label27 always
+-    * label __label26
 -    * print "Wrong operation "
 -    * print "mod"
 -    * print ": expected "
@@ -5199,12 +5199,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-    40 label __label27
-    41 label __label25
-    42 label __label28
-    43 print "ok"
-    44 jump __label31 always
-    45 label __label30
+    33 label __label27
+    34 label __label25
+    35 label __label28
+    36 print "ok"
+    37 jump __label31 always
+-    * label __label30
 -    * print "Wrong operation "
 -    * print "pow"
 -    * print ": expected "
@@ -5212,12 +5212,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 16
 -    * print "\n"
-    46 label __label31
-    47 label __label29
-    48 label __label32
-    49 print "ok"
-    50 jump __label35 always
-    51 label __label34
+    38 label __label31
+    39 label __label29
+    40 label __label32
+    41 print "ok"
+    42 jump __label35 always
+-    * label __label34
 -    * print "Wrong operation "
 -    * print "equal"
 -    * print ": expected "
@@ -5225,12 +5225,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-    52 label __label35
-    53 label __label33
-    54 label __label36
-    55 print "ok"
-    56 jump __label39 always
-    57 label __label38
+    43 label __label35
+    44 label __label33
+    45 label __label36
+    46 print "ok"
+    47 jump __label39 always
+-    * label __label38
 -    * print "Wrong operation "
 -    * print "equal"
 -    * print ": expected "
@@ -5238,12 +5238,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-    58 label __label39
-    59 label __label37
-    60 label __label40
-    61 print "ok"
-    62 jump __label43 always
-    63 label __label42
+    48 label __label39
+    49 label __label37
+    50 label __label40
+    51 print "ok"
+    52 jump __label43 always
+-    * label __label42
 -    * print "Wrong operation "
 -    * print "equal null"
 -    * print ": expected "
@@ -5251,12 +5251,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-    64 label __label43
-    65 label __label41
-    66 label __label44
-    67 print "ok"
-    68 jump __label47 always
-    69 label __label46
+    53 label __label43
+    54 label __label41
+    55 label __label44
+    56 print "ok"
+    57 jump __label47 always
+-    * label __label46
 -    * print "Wrong operation "
 -    * print "notEqual"
 -    * print ": expected "
@@ -5264,12 +5264,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-    70 label __label47
-    71 label __label45
-    72 label __label48
-    73 print "ok"
-    74 jump __label51 always
-    75 label __label50
+    58 label __label47
+    59 label __label45
+    60 label __label48
+    61 print "ok"
+    62 jump __label51 always
+-    * label __label50
 -    * print "Wrong operation "
 -    * print "notEqual"
 -    * print ": expected "
@@ -5277,12 +5277,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-    76 label __label51
-    77 label __label49
-    78 label __label52
-    79 print "ok"
-    80 jump __label55 always
-    81 label __label54
+    63 label __label51
+    64 label __label49
+    65 label __label52
+    66 print "ok"
+    67 jump __label55 always
+-    * label __label54
 -    * print "Wrong operation "
 -    * print "notEqual null"
 -    * print ": expected "
@@ -5290,12 +5290,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-    82 label __label55
-    83 label __label53
-    84 label __label56
-    85 print "ok"
-    86 jump __label59 always
-    87 label __label58
+    68 label __label55
+    69 label __label53
+    70 label __label56
+    71 print "ok"
+    72 jump __label59 always
+-    * label __label58
 -    * print "Wrong operation "
 -    * print "land"
 -    * print ": expected "
@@ -5303,51 +5303,51 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-    88 label __label59
-    89 label __label57
-    90 label __label60
+    73 label __label59
+    74 label __label57
+    75 label __label60
+    76 print "ok"
+    77 jump __label63 always
+-    * label __label62
+-    * print "Wrong operation "
+-    * print "land"
+-    * print ": expected "
+-    * print true
+-    * print ", but was "
+-    * print true
+-    * print "\n"
+    78 label __label63
+    79 label __label61
+    80 label __label64
+    81 print "ok"
+    82 jump __label67 always
+-    * label __label66
+-    * print "Wrong operation "
+-    * print "lessThan"
+-    * print ": expected "
+-    * print true
+-    * print ", but was "
+-    * print true
+-    * print "\n"
+    83 label __label67
+    84 label __label65
+    85 label __label68
+    86 print "ok"
+    87 jump __label71 always
+-    * label __label70
+-    * print "Wrong operation "
+-    * print "lessThan"
+-    * print ": expected "
+-    * print false
+-    * print ", but was "
+-    * print false
+-    * print "\n"
+    88 label __label71
+    89 label __label69
+    90 label __label72
     91 print "ok"
-    92 jump __label63 always
-    93 label __label62
--    * print "Wrong operation "
--    * print "land"
--    * print ": expected "
--    * print true
--    * print ", but was "
--    * print true
--    * print "\n"
-    94 label __label63
-    95 label __label61
-    96 label __label64
-    97 print "ok"
-    98 jump __label67 always
-    99 label __label66
--    * print "Wrong operation "
--    * print "lessThan"
--    * print ": expected "
--    * print true
--    * print ", but was "
--    * print true
--    * print "\n"
-   100 label __label67
-   101 label __label65
-   102 label __label68
-   103 print "ok"
-   104 jump __label71 always
-   105 label __label70
--    * print "Wrong operation "
--    * print "lessThan"
--    * print ": expected "
--    * print false
--    * print ", but was "
--    * print false
--    * print "\n"
-   106 label __label71
-   107 label __label69
-   108 label __label72
-   109 print "ok"
-   110 jump __label75 always
-   111 label __label74
+    92 jump __label75 always
+-    * label __label74
 -    * print "Wrong operation "
 -    * print "lessThanEq"
 -    * print ": expected "
@@ -5355,12 +5355,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-   112 label __label75
-   113 label __label73
-   114 label __label76
-   115 print "ok"
-   116 jump __label79 always
-   117 label __label78
+    93 label __label75
+    94 label __label73
+    95 label __label76
+    96 print "ok"
+    97 jump __label79 always
+-    * label __label78
 -    * print "Wrong operation "
 -    * print "lessThanEq"
 -    * print ": expected "
@@ -5368,64 +5368,64 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-   118 label __label79
-   119 label __label77
-   120 label __label80
+    98 label __label79
+    99 label __label77
+   100 label __label80
+   101 print "ok"
+   102 jump __label83 always
+-    * label __label82
+-    * print "Wrong operation "
+-    * print "greaterThan"
+-    * print ": expected "
+-    * print true
+-    * print ", but was "
+-    * print true
+-    * print "\n"
+   103 label __label83
+   104 label __label81
+   105 label __label84
+   106 print "ok"
+   107 jump __label87 always
+-    * label __label86
+-    * print "Wrong operation "
+-    * print "greaterThan"
+-    * print ": expected "
+-    * print false
+-    * print ", but was "
+-    * print false
+-    * print "\n"
+   108 label __label87
+   109 label __label85
+   110 label __label88
+   111 print "ok"
+   112 jump __label91 always
+-    * label __label90
+-    * print "Wrong operation "
+-    * print "greaterThanEq"
+-    * print ": expected "
+-    * print true
+-    * print ", but was "
+-    * print true
+-    * print "\n"
+   113 label __label91
+   114 label __label89
+   115 label __label92
+   116 print "ok"
+   117 jump __label95 always
+-    * label __label94
+-    * print "Wrong operation "
+-    * print "greaterThanEq"
+-    * print ": expected "
+-    * print false
+-    * print ", but was "
+-    * print false
+-    * print "\n"
+   118 label __label95
+   119 label __label93
+   120 label __label96
    121 print "ok"
-   122 jump __label83 always
-   123 label __label82
--    * print "Wrong operation "
--    * print "greaterThan"
--    * print ": expected "
--    * print true
--    * print ", but was "
--    * print true
--    * print "\n"
-   124 label __label83
-   125 label __label81
-   126 label __label84
-   127 print "ok"
-   128 jump __label87 always
-   129 label __label86
--    * print "Wrong operation "
--    * print "greaterThan"
--    * print ": expected "
--    * print false
--    * print ", but was "
--    * print false
--    * print "\n"
-   130 label __label87
-   131 label __label85
-   132 label __label88
-   133 print "ok"
-   134 jump __label91 always
-   135 label __label90
--    * print "Wrong operation "
--    * print "greaterThanEq"
--    * print ": expected "
--    * print true
--    * print ", but was "
--    * print true
--    * print "\n"
-   136 label __label91
-   137 label __label89
-   138 label __label92
-   139 print "ok"
-   140 jump __label95 always
-   141 label __label94
--    * print "Wrong operation "
--    * print "greaterThanEq"
--    * print ": expected "
--    * print false
--    * print ", but was "
--    * print false
--    * print "\n"
-   142 label __label95
-   143 label __label93
-   144 label __label96
-   145 print "ok"
-   146 jump __label99 always
-   147 label __label98
+   122 jump __label99 always
+-    * label __label98
 -    * print "Wrong operation "
 -    * print "strictEqual 0"
 -    * print ": expected "
@@ -5433,12 +5433,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-   148 label __label99
-   149 label __label97
-   150 label __label100
-   151 print "ok"
-   152 jump __label103 always
-   153 label __label102
+   123 label __label99
+   124 label __label97
+   125 label __label100
+   126 print "ok"
+   127 jump __label103 always
+-    * label __label102
 -    * print "Wrong operation "
 -    * print "strictEqual null"
 -    * print ": expected "
@@ -5446,12 +5446,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-   154 label __label103
-   155 label __label101
-   156 label __label104
-   157 print "ok"
-   158 jump __label107 always
-   159 label __label106
+   128 label __label103
+   129 label __label101
+   130 label __label104
+   131 print "ok"
+   132 jump __label107 always
+-    * label __label106
 -    * print "Wrong operation "
 -    * print "shl"
 -    * print ": expected "
@@ -5459,12 +5459,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 4
 -    * print "\n"
-   160 label __label107
-   161 label __label105
-   162 label __label108
-   163 print "ok"
-   164 jump __label111 always
-   165 label __label110
+   133 label __label107
+   134 label __label105
+   135 label __label108
+   136 print "ok"
+   137 jump __label111 always
+-    * label __label110
 -    * print "Wrong operation "
 -    * print "shr"
 -    * print ": expected "
@@ -5472,12 +5472,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   166 label __label111
-   167 label __label109
-   168 label __label112
-   169 print "ok"
-   170 jump __label115 always
-   171 label __label114
+   138 label __label111
+   139 label __label109
+   140 label __label112
+   141 print "ok"
+   142 jump __label115 always
+-    * label __label114
 -    * print "Wrong operation "
 -    * print "or"
 -    * print ": expected "
@@ -5485,12 +5485,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 3
 -    * print "\n"
-   172 label __label115
-   173 label __label113
-   174 label __label116
-   175 print "ok"
-   176 jump __label119 always
-   177 label __label118
+   143 label __label115
+   144 label __label113
+   145 label __label116
+   146 print "ok"
+   147 jump __label119 always
+-    * label __label118
 -    * print "Wrong operation "
 -    * print "and"
 -    * print ": expected "
@@ -5498,12 +5498,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   178 label __label119
-   179 label __label117
-   180 label __label120
-   181 print "ok"
-   182 jump __label123 always
-   183 label __label122
+   148 label __label119
+   149 label __label117
+   150 label __label120
+   151 print "ok"
+   152 jump __label123 always
+-    * label __label122
 -    * print "Wrong operation "
 -    * print "xor"
 -    * print ": expected "
@@ -5511,12 +5511,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1
 -    * print "\n"
-   184 label __label123
-   185 label __label121
-   186 label __label124
-   187 print "ok"
-   188 jump __label127 always
-   189 label __label126
+   153 label __label123
+   154 label __label121
+   155 label __label124
+   156 print "ok"
+   157 jump __label127 always
+-    * label __label126
 -    * print "Wrong operation "
 -    * print "not"
 -    * print ": expected "
@@ -5524,12 +5524,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print -1
 -    * print "\n"
-   190 label __label127
-   191 label __label125
-   192 label __label128
-   193 print "ok"
-   194 jump __label131 always
-   195 label __label130
+   158 label __label127
+   159 label __label125
+   160 label __label128
+   161 print "ok"
+   162 jump __label131 always
+-    * label __label130
 -    * print "Wrong operation "
 -    * print "not"
 -    * print ": expected "
@@ -5537,12 +5537,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print -65536
 -    * print "\n"
-   196 label __label131
-   197 label __label129
-   198 label __label132
-   199 print "ok"
-   200 jump __label135 always
-   201 label __label134
+   163 label __label131
+   164 label __label129
+   165 label __label132
+   166 print "ok"
+   167 jump __label135 always
+-    * label __label134
 -    * print "Wrong operation "
 -    * print "not"
 -    * print ": expected "
@@ -5550,12 +5550,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print -773738404492802690
 -    * print "\n"
-   202 label __label135
-   203 label __label133
-   204 label __label136
-   205 print "ok"
-   206 jump __label139 always
-   207 label __label138
+   168 label __label135
+   169 label __label133
+   170 label __label136
+   171 print "ok"
+   172 jump __label139 always
+-    * label __label138
 -    * print "Wrong operation "
 -    * print "max"
 -    * print ": expected "
@@ -5563,12 +5563,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 4
 -    * print "\n"
-   208 label __label139
-   209 label __label137
-   210 label __label140
-   211 print "ok"
-   212 jump __label143 always
-   213 label __label142
+   173 label __label139
+   174 label __label137
+   175 label __label140
+   176 print "ok"
+   177 jump __label143 always
+-    * label __label142
 -    * print "Wrong operation "
 -    * print "min"
 -    * print ": expected "
@@ -5576,12 +5576,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   214 label __label143
-   215 label __label141
-   216 label __label144
-   217 print "ok"
-   218 jump __label147 always
-   219 label __label146
+   178 label __label143
+   179 label __label141
+   180 label __label144
+   181 print "ok"
+   182 jump __label147 always
+-    * label __label146
 -    * print "Wrong operation "
 -    * print "abs"
 -    * print ": expected "
@@ -5589,12 +5589,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   220 label __label147
-   221 label __label145
-   222 label __label148
-   223 print "ok"
-   224 jump __label151 always
-   225 label __label150
+   183 label __label147
+   184 label __label145
+   185 label __label148
+   186 print "ok"
+   187 jump __label151 always
+-    * label __label150
 -    * print "Wrong operation "
 -    * print "log"
 -    * print ": expected "
@@ -5602,12 +5602,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1
 -    * print "\n"
-   226 label __label151
-   227 label __label149
-   228 label __label152
-   229 print "ok"
-   230 jump __label155 always
-   231 label __label154
+   188 label __label151
+   189 label __label149
+   190 label __label152
+   191 print "ok"
+   192 jump __label155 always
+-    * label __label154
 -    * print "Wrong operation "
 -    * print "log10"
 -    * print ": expected "
@@ -5615,12 +5615,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1
 -    * print "\n"
-   232 label __label155
-   233 label __label153
-   234 label __label156
-   235 print "ok"
-   236 jump __label159 always
-   237 label __label158
+   193 label __label155
+   194 label __label153
+   195 label __label156
+   196 print "ok"
+   197 jump __label159 always
+-    * label __label158
 -    * print "Wrong operation "
 -    * print "floor"
 -    * print ": expected "
@@ -5628,12 +5628,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   238 label __label159
-   239 label __label157
-   240 label __label160
-   241 print "ok"
-   242 jump __label163 always
-   243 label __label162
+   198 label __label159
+   199 label __label157
+   200 label __label160
+   201 print "ok"
+   202 jump __label163 always
+-    * label __label162
 -    * print "Wrong operation "
 -    * print "ceil"
 -    * print ": expected "
@@ -5641,12 +5641,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 3
 -    * print "\n"
-   244 label __label163
-   245 label __label161
-   246 label __label164
-   247 print "ok"
-   248 jump __label167 always
-   249 label __label166
+   203 label __label163
+   204 label __label161
+   205 label __label164
+   206 print "ok"
+   207 jump __label167 always
+-    * label __label166
 -    * print "Wrong operation "
 -    * print "sqrt"
 -    * print ": expected "
@@ -5654,12 +5654,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 4
 -    * print "\n"
-   250 label __label167
-   251 label __label165
-   252 label __label168
-   253 print "ok"
-   254 jump __label171 always
-   255 label __label170
+   208 label __label167
+   209 label __label165
+   210 label __label168
+   211 print "ok"
+   212 jump __label171 always
+-    * label __label170
 -    * print "Wrong operation "
 -    * print "angle"
 -    * print ": expected "
@@ -5667,12 +5667,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 45
 -    * print "\n"
-   256 label __label171
-   257 label __label169
-   258 label __label172
-   259 print "ok"
-   260 jump __label175 always
-   261 label __label174
+   213 label __label171
+   214 label __label169
+   215 label __label172
+   216 print "ok"
+   217 jump __label175 always
+-    * label __label174
 -    * print "Wrong operation "
 -    * print "angleDiff"
 -    * print ": expected "
@@ -5680,12 +5680,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 90
 -    * print "\n"
-   262 label __label175
-   263 label __label173
-   264 label __label176
-   265 print "ok"
-   266 jump __label179 always
-   267 label __label178
+   218 label __label175
+   219 label __label173
+   220 label __label176
+   221 print "ok"
+   222 jump __label179 always
+-    * label __label178
 -    * print "Wrong operation "
 -    * print "unary minus"
 -    * print ": expected "
@@ -5693,12 +5693,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print -8
 -    * print "\n"
-   268 label __label179
-   269 label __label177
-   270 label __label180
-   271 print "ok"
-   272 jump __label183 always
-   273 label __label182
+   223 label __label179
+   224 label __label177
+   225 label __label180
+   226 print "ok"
+   227 jump __label183 always
+-    * label __label182
 -    * print "Wrong operation "
 -    * print "boolean negation"
 -    * print ": expected "
@@ -5706,12 +5706,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-   274 label __label183
-   275 label __label181
-   276 label __label184
-   277 print "ok"
-   278 jump __label187 always
-   279 label __label186
+   228 label __label183
+   229 label __label181
+   230 label __label184
+   231 print "ok"
+   232 jump __label187 always
+-    * label __label186
 -    * print "Wrong operation "
 -    * print "boolean negation"
 -    * print ": expected "
@@ -5719,12 +5719,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-   280 label __label187
-   281 label __label185
-   282 label __label188
-   283 print "ok"
-   284 jump __label191 always
-   285 label __label190
+   233 label __label187
+   234 label __label185
+   235 label __label188
+   236 print "ok"
+   237 jump __label191 always
+-    * label __label190
 -    * print "Wrong operation "
 -    * print "boolean negation"
 -    * print ": expected "
@@ -5732,12 +5732,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-   286 label __label191
-   287 label __label189
-   288 label __label192
-   289 print "ok"
-   290 jump __label195 always
-   291 label __label194
+   238 label __label191
+   239 label __label189
+   240 label __label192
+   241 print "ok"
+   242 jump __label195 always
+-    * label __label194
 -    * print "Wrong operation "
 -    * print "**="
 -    * print ": expected "
@@ -5745,12 +5745,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 16
 -    * print "\n"
-   292 label __label195
-   293 label __label193
-   294 label __label196
-   295 print "ok"
-   296 jump __label199 always
-   297 label __label198
+   243 label __label195
+   244 label __label193
+   245 label __label196
+   246 print "ok"
+   247 jump __label199 always
+-    * label __label198
 -    * print "Wrong operation "
 -    * print "*="
 -    * print ": expected "
@@ -5758,12 +5758,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 8
 -    * print "\n"
-   298 label __label199
-   299 label __label197
-   300 label __label200
-   301 print "ok"
-   302 jump __label203 always
-   303 label __label202
+   248 label __label199
+   249 label __label197
+   250 label __label200
+   251 print "ok"
+   252 jump __label203 always
+-    * label __label202
 -    * print "Wrong operation "
 -    * print "/="
 -    * print ": expected "
@@ -5771,12 +5771,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1.5
 -    * print "\n"
-   304 label __label203
-   305 label __label201
-   306 label __label204
-   307 print "ok"
-   308 jump __label207 always
-   309 label __label206
+   253 label __label203
+   254 label __label201
+   255 label __label204
+   256 print "ok"
+   257 jump __label207 always
+-    * label __label206
 -    * print "Wrong operation "
 -    * print "\="
 -    * print ": expected "
@@ -5784,12 +5784,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1
 -    * print "\n"
-   310 label __label207
-   311 label __label205
-   312 label __label208
-   313 print "ok"
-   314 jump __label211 always
-   315 label __label210
+   258 label __label207
+   259 label __label205
+   260 label __label208
+   261 print "ok"
+   262 jump __label211 always
+-    * label __label210
 -    * print "Wrong operation "
 -    * print "%="
 -    * print ": expected "
@@ -5797,12 +5797,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   316 label __label211
-   317 label __label209
-   318 label __label212
-   319 print "ok"
-   320 jump __label215 always
-   321 label __label214
+   263 label __label211
+   264 label __label209
+   265 label __label212
+   266 print "ok"
+   267 jump __label215 always
+-    * label __label214
 -    * print "Wrong operation "
 -    * print "+="
 -    * print ": expected "
@@ -5810,12 +5810,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 6
 -    * print "\n"
-   322 label __label215
-   323 label __label213
-   324 label __label216
-   325 print "ok"
-   326 jump __label219 always
-   327 label __label218
+   268 label __label215
+   269 label __label213
+   270 label __label216
+   271 print "ok"
+   272 jump __label219 always
+-    * label __label218
 -    * print "Wrong operation "
 -    * print "-="
 -    * print ": expected "
@@ -5823,12 +5823,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   328 label __label219
-   329 label __label217
-   330 label __label220
-   331 print "ok"
-   332 jump __label223 always
-   333 label __label222
+   273 label __label219
+   274 label __label217
+   275 label __label220
+   276 print "ok"
+   277 jump __label223 always
+-    * label __label222
 -    * print "Wrong operation "
 -    * print "<<="
 -    * print ": expected "
@@ -5836,12 +5836,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 4
 -    * print "\n"
-   334 label __label223
-   335 label __label221
-   336 label __label224
-   337 print "ok"
-   338 jump __label227 always
-   339 label __label226
+   278 label __label223
+   279 label __label221
+   280 label __label224
+   281 print "ok"
+   282 jump __label227 always
+-    * label __label226
 -    * print "Wrong operation "
 -    * print ">>="
 -    * print ": expected "
@@ -5849,12 +5849,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   340 label __label227
-   341 label __label225
-   342 label __label228
-   343 print "ok"
-   344 jump __label231 always
-   345 label __label230
+   283 label __label227
+   284 label __label225
+   285 label __label228
+   286 print "ok"
+   287 jump __label231 always
+-    * label __label230
 -    * print "Wrong operation "
 -    * print "|="
 -    * print ": expected "
@@ -5862,12 +5862,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 3
 -    * print "\n"
-   346 label __label231
-   347 label __label229
-   348 label __label232
-   349 print "ok"
-   350 jump __label235 always
-   351 label __label234
+   288 label __label231
+   289 label __label229
+   290 label __label232
+   291 print "ok"
+   292 jump __label235 always
+-    * label __label234
 -    * print "Wrong operation "
 -    * print "&="
 -    * print ": expected "
@@ -5875,12 +5875,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 2
 -    * print "\n"
-   352 label __label235
-   353 label __label233
-   354 label __label236
-   355 print "ok"
-   356 jump __label239 always
-   357 label __label238
+   293 label __label235
+   294 label __label233
+   295 label __label236
+   296 print "ok"
+   297 jump __label239 always
+-    * label __label238
 -    * print "Wrong operation "
 -    * print "^="
 -    * print ": expected "
@@ -5888,12 +5888,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print 1
 -    * print "\n"
-   358 label __label239
-   359 label __label237
-   360 label __label240
-   361 print "ok"
-   362 jump __label243 always
-   363 label __label242
+   298 label __label239
+   299 label __label237
+   300 label __label240
+   301 print "ok"
+   302 jump __label243 always
+-    * label __label242
 -    * print "Wrong operation "
 -    * print "&&="
 -    * print ": expected "
@@ -5901,12 +5901,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print false
 -    * print "\n"
-   364 label __label243
-   365 label __label241
-   366 label __label244
-   367 print "ok"
-   368 jump __label247 always
-   369 label __label246
+   303 label __label243
+   304 label __label241
+   305 label __label244
+   306 print "ok"
+   307 jump __label247 always
+-    * label __label246
 -    * print "Wrong operation "
 -    * print "&&="
 -    * print ": expected "
@@ -5914,12 +5914,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-   370 label __label247
-   371 label __label245
-   372 label __label248
-   373 print "ok"
-   374 jump __label251 always
-   375 label __label250
+   308 label __label247
+   309 label __label245
+   310 label __label248
+   311 print "ok"
+   312 jump __label251 always
+-    * label __label250
 -    * print "Wrong operation "
 -    * print "||="
 -    * print ": expected "
@@ -5927,705 +5927,391 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-441 in
 -    * print ", but was "
 -    * print true
 -    * print "\n"
-   376 label __label251
-   377 label __label249
-   378 end
+   313 label __label251
+   314 label __label249
+   315 end
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-63 instructions):
      0 label __label0
      1 print "ok"
 -    * jump __label3 always
-     2 label __label2
-     3 label __label3
-     4 label __label1
-     5 label __label4
-     6 print "ok"
+     2 label __label3
+     3 label __label1
+     4 label __label4
+     5 print "ok"
 -    * jump __label7 always
-     7 label __label6
-     8 label __label7
-     9 label __label5
-    10 label __label8
-    11 print "ok"
+     6 label __label7
+     7 label __label5
+     8 label __label8
+     9 print "ok"
 -    * jump __label11 always
-    12 label __label10
-    13 label __label11
-    14 label __label9
-    15 label __label12
-    16 print "ok"
+    10 label __label11
+    11 label __label9
+    12 label __label12
+    13 print "ok"
 -    * jump __label15 always
-    17 label __label14
-    18 label __label15
-    19 label __label13
-    20 label __label16
-    21 print "ok"
+    14 label __label15
+    15 label __label13
+    16 label __label16
+    17 print "ok"
 -    * jump __label19 always
-    22 label __label18
-    23 label __label19
-    24 label __label17
-    25 label __label20
-    26 print "ok"
+    18 label __label19
+    19 label __label17
+    20 label __label20
+    21 print "ok"
 -    * jump __label23 always
-    27 label __label22
-    28 label __label23
-    29 label __label21
-    30 label __label24
-    31 print "ok"
+    22 label __label23
+    23 label __label21
+    24 label __label24
+    25 print "ok"
 -    * jump __label27 always
-    32 label __label26
-    33 label __label27
-    34 label __label25
-    35 label __label28
-    36 print "ok"
+    26 label __label27
+    27 label __label25
+    28 label __label28
+    29 print "ok"
 -    * jump __label31 always
-    37 label __label30
-    38 label __label31
-    39 label __label29
-    40 label __label32
-    41 print "ok"
+    30 label __label31
+    31 label __label29
+    32 label __label32
+    33 print "ok"
 -    * jump __label35 always
-    42 label __label34
-    43 label __label35
-    44 label __label33
-    45 label __label36
-    46 print "ok"
+    34 label __label35
+    35 label __label33
+    36 label __label36
+    37 print "ok"
 -    * jump __label39 always
-    47 label __label38
-    48 label __label39
-    49 label __label37
-    50 label __label40
-    51 print "ok"
+    38 label __label39
+    39 label __label37
+    40 label __label40
+    41 print "ok"
 -    * jump __label43 always
-    52 label __label42
-    53 label __label43
-    54 label __label41
-    55 label __label44
-    56 print "ok"
+    42 label __label43
+    43 label __label41
+    44 label __label44
+    45 print "ok"
 -    * jump __label47 always
-    57 label __label46
-    58 label __label47
-    59 label __label45
-    60 label __label48
-    61 print "ok"
+    46 label __label47
+    47 label __label45
+    48 label __label48
+    49 print "ok"
 -    * jump __label51 always
-    62 label __label50
-    63 label __label51
-    64 label __label49
-    65 label __label52
-    66 print "ok"
+    50 label __label51
+    51 label __label49
+    52 label __label52
+    53 print "ok"
 -    * jump __label55 always
-    67 label __label54
-    68 label __label55
-    69 label __label53
-    70 label __label56
-    71 print "ok"
+    54 label __label55
+    55 label __label53
+    56 label __label56
+    57 print "ok"
 -    * jump __label59 always
-    72 label __label58
-    73 label __label59
-    74 label __label57
-    75 label __label60
-    76 print "ok"
+    58 label __label59
+    59 label __label57
+    60 label __label60
+    61 print "ok"
 -    * jump __label63 always
-    77 label __label62
-    78 label __label63
-    79 label __label61
-    80 label __label64
-    81 print "ok"
+    62 label __label63
+    63 label __label61
+    64 label __label64
+    65 print "ok"
 -    * jump __label67 always
-    82 label __label66
-    83 label __label67
-    84 label __label65
-    85 label __label68
-    86 print "ok"
+    66 label __label67
+    67 label __label65
+    68 label __label68
+    69 print "ok"
 -    * jump __label71 always
-    87 label __label70
-    88 label __label71
-    89 label __label69
-    90 label __label72
-    91 print "ok"
+    70 label __label71
+    71 label __label69
+    72 label __label72
+    73 print "ok"
 -    * jump __label75 always
-    92 label __label74
-    93 label __label75
-    94 label __label73
-    95 label __label76
-    96 print "ok"
+    74 label __label75
+    75 label __label73
+    76 label __label76
+    77 print "ok"
 -    * jump __label79 always
-    97 label __label78
-    98 label __label79
-    99 label __label77
-   100 label __label80
-   101 print "ok"
+    78 label __label79
+    79 label __label77
+    80 label __label80
+    81 print "ok"
 -    * jump __label83 always
-   102 label __label82
-   103 label __label83
-   104 label __label81
-   105 label __label84
-   106 print "ok"
+    82 label __label83
+    83 label __label81
+    84 label __label84
+    85 print "ok"
 -    * jump __label87 always
-   107 label __label86
-   108 label __label87
-   109 label __label85
-   110 label __label88
-   111 print "ok"
+    86 label __label87
+    87 label __label85
+    88 label __label88
+    89 print "ok"
 -    * jump __label91 always
-   112 label __label90
-   113 label __label91
-   114 label __label89
-   115 label __label92
-   116 print "ok"
+    90 label __label91
+    91 label __label89
+    92 label __label92
+    93 print "ok"
 -    * jump __label95 always
-   117 label __label94
-   118 label __label95
-   119 label __label93
-   120 label __label96
-   121 print "ok"
+    94 label __label95
+    95 label __label93
+    96 label __label96
+    97 print "ok"
 -    * jump __label99 always
-   122 label __label98
-   123 label __label99
-   124 label __label97
-   125 label __label100
-   126 print "ok"
+    98 label __label99
+    99 label __label97
+   100 label __label100
+   101 print "ok"
 -    * jump __label103 always
-   127 label __label102
-   128 label __label103
-   129 label __label101
-   130 label __label104
-   131 print "ok"
+   102 label __label103
+   103 label __label101
+   104 label __label104
+   105 print "ok"
 -    * jump __label107 always
-   132 label __label106
-   133 label __label107
-   134 label __label105
-   135 label __label108
-   136 print "ok"
+   106 label __label107
+   107 label __label105
+   108 label __label108
+   109 print "ok"
 -    * jump __label111 always
-   137 label __label110
-   138 label __label111
-   139 label __label109
-   140 label __label112
-   141 print "ok"
+   110 label __label111
+   111 label __label109
+   112 label __label112
+   113 print "ok"
 -    * jump __label115 always
-   142 label __label114
-   143 label __label115
-   144 label __label113
-   145 label __label116
-   146 print "ok"
+   114 label __label115
+   115 label __label113
+   116 label __label116
+   117 print "ok"
 -    * jump __label119 always
-   147 label __label118
-   148 label __label119
-   149 label __label117
-   150 label __label120
-   151 print "ok"
+   118 label __label119
+   119 label __label117
+   120 label __label120
+   121 print "ok"
 -    * jump __label123 always
-   152 label __label122
-   153 label __label123
-   154 label __label121
-   155 label __label124
-   156 print "ok"
+   122 label __label123
+   123 label __label121
+   124 label __label124
+   125 print "ok"
 -    * jump __label127 always
-   157 label __label126
-   158 label __label127
-   159 label __label125
-   160 label __label128
-   161 print "ok"
+   126 label __label127
+   127 label __label125
+   128 label __label128
+   129 print "ok"
 -    * jump __label131 always
-   162 label __label130
-   163 label __label131
-   164 label __label129
-   165 label __label132
-   166 print "ok"
+   130 label __label131
+   131 label __label129
+   132 label __label132
+   133 print "ok"
 -    * jump __label135 always
-   167 label __label134
-   168 label __label135
-   169 label __label133
-   170 label __label136
-   171 print "ok"
+   134 label __label135
+   135 label __label133
+   136 label __label136
+   137 print "ok"
 -    * jump __label139 always
-   172 label __label138
-   173 label __label139
-   174 label __label137
-   175 label __label140
-   176 print "ok"
+   138 label __label139
+   139 label __label137
+   140 label __label140
+   141 print "ok"
 -    * jump __label143 always
-   177 label __label142
-   178 label __label143
-   179 label __label141
-   180 label __label144
-   181 print "ok"
+   142 label __label143
+   143 label __label141
+   144 label __label144
+   145 print "ok"
 -    * jump __label147 always
-   182 label __label146
-   183 label __label147
-   184 label __label145
-   185 label __label148
-   186 print "ok"
+   146 label __label147
+   147 label __label145
+   148 label __label148
+   149 print "ok"
 -    * jump __label151 always
-   187 label __label150
-   188 label __label151
-   189 label __label149
-   190 label __label152
-   191 print "ok"
+   150 label __label151
+   151 label __label149
+   152 label __label152
+   153 print "ok"
 -    * jump __label155 always
-   192 label __label154
-   193 label __label155
-   194 label __label153
-   195 label __label156
-   196 print "ok"
+   154 label __label155
+   155 label __label153
+   156 label __label156
+   157 print "ok"
 -    * jump __label159 always
-   197 label __label158
-   198 label __label159
-   199 label __label157
-   200 label __label160
-   201 print "ok"
+   158 label __label159
+   159 label __label157
+   160 label __label160
+   161 print "ok"
 -    * jump __label163 always
-   202 label __label162
-   203 label __label163
-   204 label __label161
-   205 label __label164
-   206 print "ok"
+   162 label __label163
+   163 label __label161
+   164 label __label164
+   165 print "ok"
 -    * jump __label167 always
-   207 label __label166
-   208 label __label167
-   209 label __label165
-   210 label __label168
-   211 print "ok"
+   166 label __label167
+   167 label __label165
+   168 label __label168
+   169 print "ok"
 -    * jump __label171 always
-   212 label __label170
-   213 label __label171
-   214 label __label169
-   215 label __label172
-   216 print "ok"
+   170 label __label171
+   171 label __label169
+   172 label __label172
+   173 print "ok"
 -    * jump __label175 always
-   217 label __label174
-   218 label __label175
-   219 label __label173
-   220 label __label176
-   221 print "ok"
+   174 label __label175
+   175 label __label173
+   176 label __label176
+   177 print "ok"
 -    * jump __label179 always
-   222 label __label178
-   223 label __label179
-   224 label __label177
-   225 label __label180
-   226 print "ok"
+   178 label __label179
+   179 label __label177
+   180 label __label180
+   181 print "ok"
 -    * jump __label183 always
-   227 label __label182
-   228 label __label183
-   229 label __label181
-   230 label __label184
-   231 print "ok"
+   182 label __label183
+   183 label __label181
+   184 label __label184
+   185 print "ok"
 -    * jump __label187 always
-   232 label __label186
-   233 label __label187
-   234 label __label185
-   235 label __label188
-   236 print "ok"
+   186 label __label187
+   187 label __label185
+   188 label __label188
+   189 print "ok"
 -    * jump __label191 always
-   237 label __label190
-   238 label __label191
-   239 label __label189
-   240 label __label192
-   241 print "ok"
+   190 label __label191
+   191 label __label189
+   192 label __label192
+   193 print "ok"
 -    * jump __label195 always
-   242 label __label194
-   243 label __label195
-   244 label __label193
-   245 label __label196
-   246 print "ok"
+   194 label __label195
+   195 label __label193
+   196 label __label196
+   197 print "ok"
 -    * jump __label199 always
-   247 label __label198
-   248 label __label199
-   249 label __label197
-   250 label __label200
-   251 print "ok"
+   198 label __label199
+   199 label __label197
+   200 label __label200
+   201 print "ok"
 -    * jump __label203 always
-   252 label __label202
-   253 label __label203
-   254 label __label201
-   255 label __label204
-   256 print "ok"
+   202 label __label203
+   203 label __label201
+   204 label __label204
+   205 print "ok"
 -    * jump __label207 always
-   257 label __label206
-   258 label __label207
-   259 label __label205
-   260 label __label208
-   261 print "ok"
+   206 label __label207
+   207 label __label205
+   208 label __label208
+   209 print "ok"
 -    * jump __label211 always
-   262 label __label210
-   263 label __label211
-   264 label __label209
-   265 label __label212
-   266 print "ok"
+   210 label __label211
+   211 label __label209
+   212 label __label212
+   213 print "ok"
 -    * jump __label215 always
-   267 label __label214
-   268 label __label215
-   269 label __label213
-   270 label __label216
-   271 print "ok"
+   214 label __label215
+   215 label __label213
+   216 label __label216
+   217 print "ok"
 -    * jump __label219 always
-   272 label __label218
-   273 label __label219
-   274 label __label217
-   275 label __label220
-   276 print "ok"
+   218 label __label219
+   219 label __label217
+   220 label __label220
+   221 print "ok"
 -    * jump __label223 always
-   277 label __label222
-   278 label __label223
-   279 label __label221
-   280 label __label224
-   281 print "ok"
+   222 label __label223
+   223 label __label221
+   224 label __label224
+   225 print "ok"
 -    * jump __label227 always
-   282 label __label226
-   283 label __label227
-   284 label __label225
-   285 label __label228
-   286 print "ok"
+   226 label __label227
+   227 label __label225
+   228 label __label228
+   229 print "ok"
 -    * jump __label231 always
-   287 label __label230
-   288 label __label231
-   289 label __label229
-   290 label __label232
-   291 print "ok"
+   230 label __label231
+   231 label __label229
+   232 label __label232
+   233 print "ok"
 -    * jump __label235 always
-   292 label __label234
-   293 label __label235
-   294 label __label233
-   295 label __label236
-   296 print "ok"
+   234 label __label235
+   235 label __label233
+   236 label __label236
+   237 print "ok"
 -    * jump __label239 always
-   297 label __label238
-   298 label __label239
-   299 label __label237
-   300 label __label240
-   301 print "ok"
+   238 label __label239
+   239 label __label237
+   240 label __label240
+   241 print "ok"
 -    * jump __label243 always
-   302 label __label242
-   303 label __label243
-   304 label __label241
-   305 label __label244
-   306 print "ok"
+   242 label __label243
+   243 label __label241
+   244 label __label244
+   245 print "ok"
 -    * jump __label247 always
-   307 label __label246
-   308 label __label247
-   309 label __label245
-   310 label __label248
-   311 print "ok"
+   246 label __label247
+   247 label __label245
+   248 label __label248
+   249 print "ok"
 -    * jump __label251 always
-   312 label __label250
-   313 label __label251
-   314 label __label249
+   250 label __label251
+   251 label __label249
+   252 end
 
 Final code before resolving virtual instructions:
 
-label __label0
 print "ok"
-label __label2
-label __label3
-label __label1
-label __label4
 print "ok"
-label __label6
-label __label7
-label __label5
-label __label8
 print "ok"
-label __label10
-label __label11
-label __label9
-label __label12
 print "ok"
-label __label14
-label __label15
-label __label13
-label __label16
 print "ok"
-label __label18
-label __label19
-label __label17
-label __label20
 print "ok"
-label __label22
-label __label23
-label __label21
-label __label24
 print "ok"
-label __label26
-label __label27
-label __label25
-label __label28
 print "ok"
-label __label30
-label __label31
-label __label29
-label __label32
 print "ok"
-label __label34
-label __label35
-label __label33
-label __label36
 print "ok"
-label __label38
-label __label39
-label __label37
-label __label40
 print "ok"
-label __label42
-label __label43
-label __label41
-label __label44
 print "ok"
-label __label46
-label __label47
-label __label45
-label __label48
 print "ok"
-label __label50
-label __label51
-label __label49
-label __label52
 print "ok"
-label __label54
-label __label55
-label __label53
-label __label56
 print "ok"
-label __label58
-label __label59
-label __label57
-label __label60
 print "ok"
-label __label62
-label __label63
-label __label61
-label __label64
 print "ok"
-label __label66
-label __label67
-label __label65
-label __label68
 print "ok"
-label __label70
-label __label71
-label __label69
-label __label72
 print "ok"
-label __label74
-label __label75
-label __label73
-label __label76
 print "ok"
-label __label78
-label __label79
-label __label77
-label __label80
 print "ok"
-label __label82
-label __label83
-label __label81
-label __label84
 print "ok"
-label __label86
-label __label87
-label __label85
-label __label88
 print "ok"
-label __label90
-label __label91
-label __label89
-label __label92
 print "ok"
-label __label94
-label __label95
-label __label93
-label __label96
 print "ok"
-label __label98
-label __label99
-label __label97
-label __label100
 print "ok"
-label __label102
-label __label103
-label __label101
-label __label104
 print "ok"
-label __label106
-label __label107
-label __label105
-label __label108
 print "ok"
-label __label110
-label __label111
-label __label109
-label __label112
 print "ok"
-label __label114
-label __label115
-label __label113
-label __label116
 print "ok"
-label __label118
-label __label119
-label __label117
-label __label120
 print "ok"
-label __label122
-label __label123
-label __label121
-label __label124
 print "ok"
-label __label126
-label __label127
-label __label125
-label __label128
 print "ok"
-label __label130
-label __label131
-label __label129
-label __label132
 print "ok"
-label __label134
-label __label135
-label __label133
-label __label136
 print "ok"
-label __label138
-label __label139
-label __label137
-label __label140
 print "ok"
-label __label142
-label __label143
-label __label141
-label __label144
 print "ok"
-label __label146
-label __label147
-label __label145
-label __label148
 print "ok"
-label __label150
-label __label151
-label __label149
-label __label152
 print "ok"
-label __label154
-label __label155
-label __label153
-label __label156
 print "ok"
-label __label158
-label __label159
-label __label157
-label __label160
 print "ok"
-label __label162
-label __label163
-label __label161
-label __label164
 print "ok"
-label __label166
-label __label167
-label __label165
-label __label168
 print "ok"
-label __label170
-label __label171
-label __label169
-label __label172
 print "ok"
-label __label174
-label __label175
-label __label173
-label __label176
 print "ok"
-label __label178
-label __label179
-label __label177
-label __label180
 print "ok"
-label __label182
-label __label183
-label __label181
-label __label184
 print "ok"
-label __label186
-label __label187
-label __label185
-label __label188
 print "ok"
-label __label190
-label __label191
-label __label189
-label __label192
 print "ok"
-label __label194
-label __label195
-label __label193
-label __label196
 print "ok"
-label __label198
-label __label199
-label __label197
-label __label200
 print "ok"
-label __label202
-label __label203
-label __label201
-label __label204
 print "ok"
-label __label206
-label __label207
-label __label205
-label __label208
 print "ok"
-label __label210
-label __label211
-label __label209
-label __label212
 print "ok"
-label __label214
-label __label215
-label __label213
-label __label216
 print "ok"
-label __label218
-label __label219
-label __label217
-label __label220
 print "ok"
-label __label222
-label __label223
-label __label221
-label __label224
 print "ok"
-label __label226
-label __label227
-label __label225
-label __label228
 print "ok"
-label __label230
-label __label231
-label __label229
-label __label232
 print "ok"
-label __label234
-label __label235
-label __label233
-label __label236
 print "ok"
-label __label238
-label __label239
-label __label237
-label __label240
 print "ok"
-label __label242
-label __label243
-label __label241
-label __label244
 print "ok"
-label __label246
-label __label247
-label __label245
-label __label248
 print "ok"
-label __label250
-label __label251
-label __label249
 end

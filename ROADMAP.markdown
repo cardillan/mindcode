@@ -4,16 +4,30 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* Improve Unreachable Code Elimination
-  * In `while true print(1) end while true print(2) end`, the second loop can never be executed. Unreachable Code
-    Elimination doesn't remove the second loop - the jump to the beginning of the loop keeps it active. Some kind of
-    control flow analysis will do it.
+* New `yield` keyword for assigning values to variables in list iteration loop lists.
+* Unreachable code elimination improvements:
+  * Instead of removing instructions, replace them with a no-op (to preserve AST context structure). Only when an 
+    entire AST context (not just a subcontext) is unreachable, eliminate it altogether -- this could perhaps be done 
+    while rebuilding AST context structure.
+  * If and Loop handling in respective optimizers (including DFO) must be updated to cope with the possibility of 
+    no-op instructions.    
+  * After this change, it should be called in iteration phase, to free space for further speed optimizations.   
+  * Detect `end` instructions which are always executed in a user defined function and terminate the code path when 
+    such a function is called.  
 * Additional optimizations for speed:
+  * List iteration loops unrolling.
   * Inlining: inlining will be done by the optimizer, no rebuilding of the AST tree. 
   * Switched case expression: all or a subset of `when` branches with constant conditions can be rearranged and an 
     in-memory jump table created. 
   * Return optimization: replace jump to return instruction with the return instruction itself.
   * Only recreate OptimizationActions of the action's contexts are affected by previous optimizations. 
+* Function optimization of constant function parameters (i.e. not modified inside the function)
+  * Detect situations where a read-only parameter is always passed the same argument value (either a literal, or a 
+    variable) and globally replace the parameter with that literal/variable, saving the assignment.
+  * If there are several combinations of argument values, each used more than once, it might make sense to create a
+    copy of the function for each distinct combination of the argument values and applying the above optimization to
+    it.
+  * Alternative to function inlining, should be resolved as a single optimization.
 * When an uninitialized temporary variable is found by Dead Code Eliminator, generate compilation error -- if it 
   happens, it is an optimizer bug.
 * Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax

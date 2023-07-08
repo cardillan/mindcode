@@ -9,7 +9,7 @@
      3 loops improved by Loop Optimization.
      3 instructions eliminated by If Expression Optimization (3 iterations).
      2 instructions eliminated by Data Flow Optimization (2 passes, 5 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
     11 instructions eliminated by Jump Straightening.
     10 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Print Merging.
@@ -1821,9 +1821,10 @@ Modifications by Final phase, Jump Threading, iteration 1:
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
+   536 label __label117
    537 label __label16
    538 jump __label15 always
-   539 label __label17
+-    * label __label17
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
@@ -1879,11 +1880,9 @@ set RAMP_TIME 70
 op sub COEF_A1 0 STARTUP_TIME
 op mul __tmp1 MAX_PRODUCTION 2
 op div COEF_A2 RAMP_TIME __tmp1
-label __label0
 label __label118
 set reactors 0
 set n @links
-label __label3
 jump __label5 lessThanEq n 0
 label __label119
 op sub n n 1
@@ -1893,7 +1892,6 @@ print block
 print "\n"
 sensor __ast0 block @type
 jump __label7 notEqual __ast0 @impact-reactor
-label __label8
 set START n
 op add reactors reactors 1
 jump __label6 always 0 0
@@ -1904,7 +1902,6 @@ label __label10
 set START n
 label __label9
 label __label6
-label __label4
 jump __label119 greaterThan n 0
 label __label5
 read __tmp11 cell2 CELL_REMOTE_REACTORS
@@ -1912,11 +1909,8 @@ op add reactors reactors __tmp11
 jump __label11 notEqual reactors 0
 print "No reactor."
 label __label11
-label __label12
 printflush message1
-label __label1
 jump __label118 equal reactors 0
-label __label2
 read MODE cell1 0
 read OUTPUT_1 cell1 1
 read OUTPUT_2 cell1 2
@@ -1983,27 +1977,21 @@ print consumption
 print "\nMin. consumption: "
 print min_consumption
 printflush message2
-label __label24
-label __label25
 jump __label23 always 0 0
 label __label22
 set failure_cnt 0
 label __label23
 label __label21
 label __label18
-label __label19
 jump __label27 notEqual MODE SHUTDOWN
-label __label28
 set __tmp67 "[salmon]SHUTDOWN[]"
 jump __label26 always 0 0
 label __label27
 jump __label29 notEqual MODE STARTUP
-label __label30
 set __tmp67 "[gold]STARTUP[]"
 jump __label26 always 0 0
 label __label29
 jump __label31 notEqual MODE RUNNING
-label __label32
 set __tmp67 "[green]RUNNING[]"
 jump __label26 always 0 0
 label __label31
@@ -2026,25 +2014,21 @@ print " ([gold]"
 print multiplier
 print "x[])"
 label __label33
-label __label34
 print "\n=================================="
 sensor __tmp74 tank1 @totalLiquids
 jump __label35 greaterThanEq __tmp74 COOLANT_CUTOFF
 print "\n[salmon]Cryofluid level critical![]"
 label __label35
-label __label36
 sensor __tmp77 vault1 @blast-compound
 jump __label37 greaterThanEq __tmp77 FUEL_CUTOFF
 print "\n[salmon]Blast compound level critical![]"
 label __label37
-label __label38
 jump __label39 notEqual enough_battery false
 print "\n[salmon]Insufficient battery storage![]"
 print "\nLink [gold]"
 print missing_battery
 print " K[] of additional storage to internal battery."
 label __label39
-label __label40
 print "\nInternal battery:    [gold]"
 print battery_level_str
 print "[]/[green]50[] K"
@@ -2058,7 +2042,6 @@ print "[]\nPower balance:       [gold]"
 print net_power
 print "[]"
 jump __label42 notEqual MODE SHUTDOWN
-label __label43
 set REACTORS_ON 0
 set OVERDRIVE 0
 set OUTPUT_1 0
@@ -2078,12 +2061,9 @@ set nextStart 0
 set failure_cnt 0
 set GENERATOR true
 set REASON "Unknown -- out of power?"
-label __label44
-label __label45
 jump __label41 always 0 0
 label __label42
 jump __label46 notEqual MODE STARTUP
-label __label47
 set nextBattery battery2
 jump __label49 equal OUTPUT_1 false
 set nextBattery battery3
@@ -2105,7 +2085,6 @@ op idiv __tmp100 STARTUP_BAT_ENERGY 1000
 print "\nRequired startup energy: [gold]"
 print __tmp100
 print " K[]"
-label __label55
 jump __label41 always 0 0
 label __label52
 op add __tmp101 OUTPUT_1 OUTPUT_2
@@ -2118,11 +2097,9 @@ print "\nRequired power level: [gold]"
 print neededPower
 print "[]"
 label __label56
-label __label57
 jump __label58 lessThanEq net_power 100
 set OVERDRIVE true
 label __label58
-label __label59
 op lessThan __tmp107 REACTORS_ON reactors
 op greaterThan __tmp108 net_power 1000
 op land __tmp109 __tmp107 __tmp108
@@ -2133,16 +2110,13 @@ set OUTPUT_3 OUTPUT_2
 set OUTPUT_2 OUTPUT_1
 set OUTPUT_1 1
 label __label60
-label __label61
 jump __label62 notEqual OUTPUT_1 0
 op mul availablePower REACTOR_OUTPUT boosts
 op div ratio neededPower availablePower
 jump __label64 greaterThanEq ratio 1
 op add nextStart @time STARTUP_DELAY
 label __label64
-label __label65
 label __label62
-label __label63
 op greaterThan __tmp121 @time nextStart
 op land __tmp122 canStart __tmp121
 jump __label66 equal __tmp122 false
@@ -2154,7 +2128,6 @@ op add __tmp126 REACTORS_ON start_at_once
 op min REACTORS_ON __tmp126 reactors
 op add nextStart @time STARTUP_DELAY
 label __label66
-label __label67
 op greaterThanEq __tmp129 REACTORS_ON reactors
 op greaterThan __tmp130 @time nextStart
 op land __tmp131 __tmp129 __tmp130
@@ -2166,13 +2139,9 @@ op add nextDecommit @time DECOMMIT_DELAY
 set COOLANT_FLAG 0
 set FUEL_FLAG 0
 set GENERATOR false
-label __label70
-label __label71
-label __label53
 jump __label41 always 0 0
 label __label46
 jump __label72 notEqual MODE RUNNING
-label __label73
 sensor __tmp136 tank1 @totalLiquids
 op lessThan __tmp137 __tmp136 COOLANT_CUTOFF
 op land __tmp138 COOLANT_FLAG __tmp137
@@ -2181,7 +2150,6 @@ set MODE SHUTDOWN
 control enabled switch1 false 0 0 0
 set REASON "Cryo level too low"
 label __label74
-label __label75
 sensor __tmp140 vault1 @blast-compound
 op lessThan __tmp141 __tmp140 FUEL_CUTOFF
 op land __tmp142 FUEL_FLAG __tmp141
@@ -2190,7 +2158,6 @@ set MODE SHUTDOWN
 control enabled switch1 false 0 0 0
 set REASON "Blast compound level too low"
 label __label76
-label __label77
 sensor __tmp144 tank1 @totalLiquids
 op greaterThan __tmp145 __tmp144 COOLANT_SAT
 op or COOLANT_FLAG COOLANT_FLAG __tmp145
@@ -2218,13 +2185,11 @@ op idiv __tmp166 commit_level 1000
 print "\nCommit threshold:   [gold]"
 print __tmp166
 label __label80
-label __label81
 jump __label82 notEqual commit_level 0
 op idiv __tmp169 min_level 1000
 print "\nRestart threshold: [gold]"
 print __tmp169
 label __label82
-label __label83
 print "[] K"
 op lessThan __tmp170 total_battery min_level
 op mul __tmp171 REACTORS_ON PANIC_ENERGY_DROP
@@ -2244,7 +2209,6 @@ op or __tmp180 __tmp178 __tmp179
 jump __label86 equal __tmp180 false
 op add nextDecommit @time DECOMMIT_DELAY
 label __label86
-label __label87
 jump __label88 lessThanEq @time nextDecommit
 jump __label90 equal OVERDRIVE false
 set OVERDRIVE false
@@ -2261,10 +2225,6 @@ jump __label79 greaterThanEq total_battery commit_level
 op add REACTORS_ON REACTORS_ON 1
 op add COMMITS COMMITS 1
 set CAN_COMMIT false
-label __label92
-label __label93
-label __label89
-label __label85
 jump __label79 always 0 0
 label __label78
 sensor __tmp193 switch2 @enabled
@@ -2282,7 +2242,6 @@ jump __label96 greaterThanEq total_battery __tmp195
 set OUTPUT_2 0
 set OUTPUT_3 0
 label __label96
-label __label97
 jump __label98 notEqual OUTPUT_2 0
 jump __label100 lessThanEq total_battery BATTERY_SAT
 set OUTPUT_2 1
@@ -2292,7 +2251,6 @@ label __label100
 print "\n*** [gold]Surge tower 2 offline[] ***"
 label __label101
 label __label98
-label __label99
 label __label72
 label __label41
 print "\n"
@@ -2312,21 +2270,17 @@ set reactors 0
 set boosts 0
 set __tmp203 @links
 set n START
-label __label102
 jump __label104 greaterThanEq START __tmp203
 label __label120
 getlink block n
 sensor __ast3 block @type
 jump __label106 notEqual __ast3 @impact-reactor
-label __label107
 op add reactors reactors 1
 op lessThanEq enabled reactors REACTORS_ON
 control enabled block enabled 0 0 0
 jump __label105 equal enabled false
 sensor __tmp210 block @timescale
 op add boosts boosts __tmp210
-label __label108
-label __label109
 jump __label105 always 0 0
 label __label106
 jump __label111 equal __ast3 @overdrive-projector
@@ -2346,7 +2300,6 @@ label __label113
 control enabled block startup 0 0 0
 label __label112
 label __label105
-label __label103
 op add n n 1
 jump __label120 lessThan n __tmp203
 label __label104
@@ -2359,7 +2312,6 @@ op add reactors reactors __tmp214
 read __tmp216 cell2 CELL_BOOSTS
 op add boosts boosts __tmp216
 label __label114
-label __label115
 op min REACTORS_ON REACTORS_ON reactors
 jump __label116 notEqual cell1 null
 set STARTUPS 0
@@ -2378,7 +2330,4 @@ write CAN_COMMIT cell1 7
 write STARTUPS cell1 8
 write RESETS cell1 9
 write COMMITS cell1 10
-label __label117
-label __label16
 jump __label15 always 0 0
-label __label17

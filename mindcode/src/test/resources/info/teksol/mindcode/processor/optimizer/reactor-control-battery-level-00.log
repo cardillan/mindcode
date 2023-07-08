@@ -9,7 +9,7 @@
   1021 instructions added by Loop Unrolling (4 iterations).
      1 loops unrolled by Loop Unrolling.
    515 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
      4 instructions eliminated by Print Merging.
    595 instructions after optimizations.
 
@@ -7464,9 +7464,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-5
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
+  1630 printflush message1
   1631 label __label4
   1632 jump __label3 always
-  1633 label __label5
+-    * label __label5
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
@@ -7500,1544 +7501,518 @@ set SAMPLES 40
 printflush message1
 print "Initializing..."
 printflush message1
-label __label13
-label __label14
 write 0 bank1 0
-label __label15
-label __label16
 write 0 bank1 1
-label __label17
-label __label18
 write 0 bank1 2
-label __label19
-label __label20
 write 0 bank1 3
-label __label21
-label __label22
 write 0 bank1 4
-label __label23
-label __label24
 write 0 bank1 5
-label __label25
-label __label26
 write 0 bank1 6
-label __label27
-label __label28
 write 0 bank1 7
-label __label29
-label __label30
 write 0 bank1 8
-label __label31
-label __label32
 write 0 bank1 9
-label __label33
-label __label34
 write 0 bank1 10
-label __label35
-label __label36
 write 0 bank1 11
-label __label37
-label __label38
 write 0 bank1 12
-label __label39
-label __label40
 write 0 bank1 13
-label __label41
-label __label42
 write 0 bank1 14
-label __label43
-label __label44
 write 0 bank1 15
-label __label45
-label __label46
 write 0 bank1 16
-label __label47
-label __label48
 write 0 bank1 17
-label __label49
-label __label50
 write 0 bank1 18
-label __label51
-label __label52
 write 0 bank1 19
-label __label53
-label __label54
 write 0 bank1 20
-label __label55
-label __label56
 write 0 bank1 21
-label __label57
-label __label58
 write 0 bank1 22
-label __label59
-label __label60
 write 0 bank1 23
-label __label61
-label __label62
 write 0 bank1 24
-label __label63
-label __label64
 write 0 bank1 25
-label __label65
-label __label66
 write 0 bank1 26
-label __label67
-label __label68
 write 0 bank1 27
-label __label69
-label __label70
 write 0 bank1 28
-label __label71
-label __label72
 write 0 bank1 29
-label __label73
-label __label74
 write 0 bank1 30
-label __label75
-label __label76
 write 0 bank1 31
-label __label77
-label __label78
 write 0 bank1 32
-label __label79
-label __label80
 write 0 bank1 33
-label __label81
-label __label82
 write 0 bank1 34
-label __label83
-label __label84
 write 0 bank1 35
-label __label85
-label __label86
 write 0 bank1 36
-label __label87
-label __label88
 write 0 bank1 37
-label __label89
-label __label90
 write 0 bank1 38
-label __label91
-label __label92
 write 0 bank1 39
-label __label93
-label __label94
 write 0 bank1 40
-label __label95
-label __label96
 write 0 bank1 41
-label __label97
-label __label98
 write 0 bank1 42
-label __label99
-label __label100
 write 0 bank1 43
-label __label101
-label __label102
 write 0 bank1 44
-label __label103
-label __label104
 write 0 bank1 45
-label __label105
-label __label106
 write 0 bank1 46
-label __label107
-label __label108
 write 0 bank1 47
-label __label109
-label __label110
 write 0 bank1 48
-label __label111
-label __label112
 write 0 bank1 49
-label __label113
-label __label114
 write 0 bank1 50
-label __label115
-label __label116
 write 0 bank1 51
-label __label117
-label __label118
 write 0 bank1 52
-label __label119
-label __label120
 write 0 bank1 53
-label __label121
-label __label122
 write 0 bank1 54
-label __label123
-label __label124
 write 0 bank1 55
-label __label125
-label __label126
 write 0 bank1 56
-label __label127
-label __label128
 write 0 bank1 57
-label __label129
-label __label130
 write 0 bank1 58
-label __label131
-label __label132
 write 0 bank1 59
-label __label133
-label __label134
 write 0 bank1 60
-label __label135
-label __label136
 write 0 bank1 61
-label __label137
-label __label138
 write 0 bank1 62
-label __label139
-label __label140
 write 0 bank1 63
-label __label141
-label __label142
 write 0 bank1 64
-label __label143
-label __label144
 write 0 bank1 65
-label __label145
-label __label146
 write 0 bank1 66
-label __label147
-label __label148
 write 0 bank1 67
-label __label149
-label __label150
 write 0 bank1 68
-label __label151
-label __label152
 write 0 bank1 69
-label __label153
-label __label154
 write 0 bank1 70
-label __label155
-label __label156
 write 0 bank1 71
-label __label157
-label __label158
 write 0 bank1 72
-label __label159
-label __label160
 write 0 bank1 73
-label __label161
-label __label162
 write 0 bank1 74
-label __label163
-label __label164
 write 0 bank1 75
-label __label165
-label __label166
 write 0 bank1 76
-label __label167
-label __label168
 write 0 bank1 77
-label __label169
-label __label170
 write 0 bank1 78
-label __label171
-label __label172
 write 0 bank1 79
-label __label173
-label __label174
 write 0 bank1 80
-label __label175
-label __label176
 write 0 bank1 81
-label __label177
-label __label178
 write 0 bank1 82
-label __label179
-label __label180
 write 0 bank1 83
-label __label181
-label __label182
 write 0 bank1 84
-label __label183
-label __label184
 write 0 bank1 85
-label __label185
-label __label186
 write 0 bank1 86
-label __label187
-label __label188
 write 0 bank1 87
-label __label189
-label __label190
 write 0 bank1 88
-label __label191
-label __label192
 write 0 bank1 89
-label __label193
-label __label194
 write 0 bank1 90
-label __label195
-label __label196
 write 0 bank1 91
-label __label197
-label __label198
 write 0 bank1 92
-label __label199
-label __label200
 write 0 bank1 93
-label __label201
-label __label202
 write 0 bank1 94
-label __label203
-label __label204
 write 0 bank1 95
-label __label205
-label __label206
 write 0 bank1 96
-label __label207
-label __label208
 write 0 bank1 97
-label __label209
-label __label210
 write 0 bank1 98
-label __label211
-label __label212
 write 0 bank1 99
-label __label213
-label __label214
 write 0 bank1 100
-label __label215
-label __label216
 write 0 bank1 101
-label __label217
-label __label218
 write 0 bank1 102
-label __label219
-label __label220
 write 0 bank1 103
-label __label221
-label __label222
 write 0 bank1 104
-label __label223
-label __label224
 write 0 bank1 105
-label __label225
-label __label226
 write 0 bank1 106
-label __label227
-label __label228
 write 0 bank1 107
-label __label229
-label __label230
 write 0 bank1 108
-label __label231
-label __label232
 write 0 bank1 109
-label __label233
-label __label234
 write 0 bank1 110
-label __label235
-label __label236
 write 0 bank1 111
-label __label237
-label __label238
 write 0 bank1 112
-label __label239
-label __label240
 write 0 bank1 113
-label __label241
-label __label242
 write 0 bank1 114
-label __label243
-label __label244
 write 0 bank1 115
-label __label245
-label __label246
 write 0 bank1 116
-label __label247
-label __label248
 write 0 bank1 117
-label __label249
-label __label250
 write 0 bank1 118
-label __label251
-label __label252
 write 0 bank1 119
-label __label253
-label __label254
 write 0 bank1 120
-label __label255
-label __label256
 write 0 bank1 121
-label __label257
-label __label258
 write 0 bank1 122
-label __label259
-label __label260
 write 0 bank1 123
-label __label261
-label __label262
 write 0 bank1 124
-label __label263
-label __label264
 write 0 bank1 125
-label __label265
-label __label266
 write 0 bank1 126
-label __label267
-label __label268
 write 0 bank1 127
-label __label269
-label __label270
 write 0 bank1 128
-label __label271
-label __label272
 write 0 bank1 129
-label __label273
-label __label274
 write 0 bank1 130
-label __label275
-label __label276
 write 0 bank1 131
-label __label277
-label __label278
 write 0 bank1 132
-label __label279
-label __label280
 write 0 bank1 133
-label __label281
-label __label282
 write 0 bank1 134
-label __label283
-label __label284
 write 0 bank1 135
-label __label285
-label __label286
 write 0 bank1 136
-label __label287
-label __label288
 write 0 bank1 137
-label __label289
-label __label290
 write 0 bank1 138
-label __label291
-label __label292
 write 0 bank1 139
-label __label293
-label __label294
 write 0 bank1 140
-label __label295
-label __label296
 write 0 bank1 141
-label __label297
-label __label298
 write 0 bank1 142
-label __label299
-label __label300
 write 0 bank1 143
-label __label301
-label __label302
 write 0 bank1 144
-label __label303
-label __label304
 write 0 bank1 145
-label __label305
-label __label306
 write 0 bank1 146
-label __label307
-label __label308
 write 0 bank1 147
-label __label309
-label __label310
 write 0 bank1 148
-label __label311
-label __label312
 write 0 bank1 149
-label __label313
-label __label314
 write 0 bank1 150
-label __label315
-label __label316
 write 0 bank1 151
-label __label317
-label __label318
 write 0 bank1 152
-label __label319
-label __label320
 write 0 bank1 153
-label __label321
-label __label322
 write 0 bank1 154
-label __label323
-label __label324
 write 0 bank1 155
-label __label325
-label __label326
 write 0 bank1 156
-label __label327
-label __label328
 write 0 bank1 157
-label __label329
-label __label330
 write 0 bank1 158
-label __label331
-label __label332
 write 0 bank1 159
-label __label333
-label __label334
 write 0 bank1 160
-label __label335
-label __label336
 write 0 bank1 161
-label __label337
-label __label338
 write 0 bank1 162
-label __label339
-label __label340
 write 0 bank1 163
-label __label341
-label __label342
 write 0 bank1 164
-label __label343
-label __label344
 write 0 bank1 165
-label __label345
-label __label346
 write 0 bank1 166
-label __label347
-label __label348
 write 0 bank1 167
-label __label349
-label __label350
 write 0 bank1 168
-label __label351
-label __label352
 write 0 bank1 169
-label __label353
-label __label354
 write 0 bank1 170
-label __label355
-label __label356
 write 0 bank1 171
-label __label357
-label __label358
 write 0 bank1 172
-label __label359
-label __label360
 write 0 bank1 173
-label __label361
-label __label362
 write 0 bank1 174
-label __label363
-label __label364
 write 0 bank1 175
-label __label365
-label __label366
 write 0 bank1 176
-label __label367
-label __label368
 write 0 bank1 177
-label __label369
-label __label370
 write 0 bank1 178
-label __label371
-label __label372
 write 0 bank1 179
-label __label373
-label __label374
 write 0 bank1 180
-label __label375
-label __label376
 write 0 bank1 181
-label __label377
-label __label378
 write 0 bank1 182
-label __label379
-label __label380
 write 0 bank1 183
-label __label381
-label __label382
 write 0 bank1 184
-label __label383
-label __label384
 write 0 bank1 185
-label __label385
-label __label386
 write 0 bank1 186
-label __label387
-label __label388
 write 0 bank1 187
-label __label389
-label __label390
 write 0 bank1 188
-label __label391
-label __label392
 write 0 bank1 189
-label __label393
-label __label394
 write 0 bank1 190
-label __label395
-label __label396
 write 0 bank1 191
-label __label397
-label __label398
 write 0 bank1 192
-label __label399
-label __label400
 write 0 bank1 193
-label __label401
-label __label402
 write 0 bank1 194
-label __label403
-label __label404
 write 0 bank1 195
-label __label405
-label __label406
 write 0 bank1 196
-label __label407
-label __label408
 write 0 bank1 197
-label __label409
-label __label410
 write 0 bank1 198
-label __label411
-label __label412
 write 0 bank1 199
-label __label413
-label __label414
 write 0 bank1 200
-label __label415
-label __label416
 write 0 bank1 201
-label __label417
-label __label418
 write 0 bank1 202
-label __label419
-label __label420
 write 0 bank1 203
-label __label421
-label __label422
 write 0 bank1 204
-label __label423
-label __label424
 write 0 bank1 205
-label __label425
-label __label426
 write 0 bank1 206
-label __label427
-label __label428
 write 0 bank1 207
-label __label429
-label __label430
 write 0 bank1 208
-label __label431
-label __label432
 write 0 bank1 209
-label __label433
-label __label434
 write 0 bank1 210
-label __label435
-label __label436
 write 0 bank1 211
-label __label437
-label __label438
 write 0 bank1 212
-label __label439
-label __label440
 write 0 bank1 213
-label __label441
-label __label442
 write 0 bank1 214
-label __label443
-label __label444
 write 0 bank1 215
-label __label445
-label __label446
 write 0 bank1 216
-label __label447
-label __label448
 write 0 bank1 217
-label __label449
-label __label450
 write 0 bank1 218
-label __label451
-label __label452
 write 0 bank1 219
-label __label453
-label __label454
 write 0 bank1 220
-label __label455
-label __label456
 write 0 bank1 221
-label __label457
-label __label458
 write 0 bank1 222
-label __label459
-label __label460
 write 0 bank1 223
-label __label461
-label __label462
 write 0 bank1 224
-label __label463
-label __label464
 write 0 bank1 225
-label __label465
-label __label466
 write 0 bank1 226
-label __label467
-label __label468
 write 0 bank1 227
-label __label469
-label __label470
 write 0 bank1 228
-label __label471
-label __label472
 write 0 bank1 229
-label __label473
-label __label474
 write 0 bank1 230
-label __label475
-label __label476
 write 0 bank1 231
-label __label477
-label __label478
 write 0 bank1 232
-label __label479
-label __label480
 write 0 bank1 233
-label __label481
-label __label482
 write 0 bank1 234
-label __label483
-label __label484
 write 0 bank1 235
-label __label485
-label __label486
 write 0 bank1 236
-label __label487
-label __label488
 write 0 bank1 237
-label __label489
-label __label490
 write 0 bank1 238
-label __label491
-label __label492
 write 0 bank1 239
-label __label493
-label __label494
 write 0 bank1 240
-label __label495
-label __label496
 write 0 bank1 241
-label __label497
-label __label498
 write 0 bank1 242
-label __label499
-label __label500
 write 0 bank1 243
-label __label501
-label __label502
 write 0 bank1 244
-label __label503
-label __label504
 write 0 bank1 245
-label __label505
-label __label506
 write 0 bank1 246
-label __label507
-label __label508
 write 0 bank1 247
-label __label509
-label __label510
 write 0 bank1 248
-label __label511
-label __label512
 write 0 bank1 249
-label __label513
-label __label514
 write 0 bank1 250
-label __label515
-label __label516
 write 0 bank1 251
-label __label517
-label __label518
 write 0 bank1 252
-label __label519
-label __label520
 write 0 bank1 253
-label __label521
-label __label522
 write 0 bank1 254
-label __label523
-label __label524
 write 0 bank1 255
-label __label525
-label __label526
 write 0 bank1 256
-label __label527
-label __label528
 write 0 bank1 257
-label __label529
-label __label530
 write 0 bank1 258
-label __label531
-label __label532
 write 0 bank1 259
-label __label533
-label __label534
 write 0 bank1 260
-label __label535
-label __label536
 write 0 bank1 261
-label __label537
-label __label538
 write 0 bank1 262
-label __label539
-label __label540
 write 0 bank1 263
-label __label541
-label __label542
 write 0 bank1 264
-label __label543
-label __label544
 write 0 bank1 265
-label __label545
-label __label546
 write 0 bank1 266
-label __label547
-label __label548
 write 0 bank1 267
-label __label549
-label __label550
 write 0 bank1 268
-label __label551
-label __label552
 write 0 bank1 269
-label __label553
-label __label554
 write 0 bank1 270
-label __label555
-label __label556
 write 0 bank1 271
-label __label557
-label __label558
 write 0 bank1 272
-label __label559
-label __label560
 write 0 bank1 273
-label __label561
-label __label562
 write 0 bank1 274
-label __label563
-label __label564
 write 0 bank1 275
-label __label565
-label __label566
 write 0 bank1 276
-label __label567
-label __label568
 write 0 bank1 277
-label __label569
-label __label570
 write 0 bank1 278
-label __label571
-label __label572
 write 0 bank1 279
-label __label573
-label __label574
 write 0 bank1 280
-label __label575
-label __label576
 write 0 bank1 281
-label __label577
-label __label578
 write 0 bank1 282
-label __label579
-label __label580
 write 0 bank1 283
-label __label581
-label __label582
 write 0 bank1 284
-label __label583
-label __label584
 write 0 bank1 285
-label __label585
-label __label586
 write 0 bank1 286
-label __label587
-label __label588
 write 0 bank1 287
-label __label589
-label __label590
 write 0 bank1 288
-label __label591
-label __label592
 write 0 bank1 289
-label __label593
-label __label594
 write 0 bank1 290
-label __label595
-label __label596
 write 0 bank1 291
-label __label597
-label __label598
 write 0 bank1 292
-label __label599
-label __label600
 write 0 bank1 293
-label __label601
-label __label602
 write 0 bank1 294
-label __label603
-label __label604
 write 0 bank1 295
-label __label605
-label __label606
 write 0 bank1 296
-label __label607
-label __label608
 write 0 bank1 297
-label __label609
-label __label610
 write 0 bank1 298
-label __label611
-label __label612
 write 0 bank1 299
-label __label613
-label __label614
 write 0 bank1 300
-label __label615
-label __label616
 write 0 bank1 301
-label __label617
-label __label618
 write 0 bank1 302
-label __label619
-label __label620
 write 0 bank1 303
-label __label621
-label __label622
 write 0 bank1 304
-label __label623
-label __label624
 write 0 bank1 305
-label __label625
-label __label626
 write 0 bank1 306
-label __label627
-label __label628
 write 0 bank1 307
-label __label629
-label __label630
 write 0 bank1 308
-label __label631
-label __label632
 write 0 bank1 309
-label __label633
-label __label634
 write 0 bank1 310
-label __label635
-label __label636
 write 0 bank1 311
-label __label637
-label __label638
 write 0 bank1 312
-label __label639
-label __label640
 write 0 bank1 313
-label __label641
-label __label642
 write 0 bank1 314
-label __label643
-label __label644
 write 0 bank1 315
-label __label645
-label __label646
 write 0 bank1 316
-label __label647
-label __label648
 write 0 bank1 317
-label __label649
-label __label650
 write 0 bank1 318
-label __label651
-label __label652
 write 0 bank1 319
-label __label653
-label __label654
 write 0 bank1 320
-label __label655
-label __label656
 write 0 bank1 321
-label __label657
-label __label658
 write 0 bank1 322
-label __label659
-label __label660
 write 0 bank1 323
-label __label661
-label __label662
 write 0 bank1 324
-label __label663
-label __label664
 write 0 bank1 325
-label __label665
-label __label666
 write 0 bank1 326
-label __label667
-label __label668
 write 0 bank1 327
-label __label669
-label __label670
 write 0 bank1 328
-label __label671
-label __label672
 write 0 bank1 329
-label __label673
-label __label674
 write 0 bank1 330
-label __label675
-label __label676
 write 0 bank1 331
-label __label677
-label __label678
 write 0 bank1 332
-label __label679
-label __label680
 write 0 bank1 333
-label __label681
-label __label682
 write 0 bank1 334
-label __label683
-label __label684
 write 0 bank1 335
-label __label685
-label __label686
 write 0 bank1 336
-label __label687
-label __label688
 write 0 bank1 337
-label __label689
-label __label690
 write 0 bank1 338
-label __label691
-label __label692
 write 0 bank1 339
-label __label693
-label __label694
 write 0 bank1 340
-label __label695
-label __label696
 write 0 bank1 341
-label __label697
-label __label698
 write 0 bank1 342
-label __label699
-label __label700
 write 0 bank1 343
-label __label701
-label __label702
 write 0 bank1 344
-label __label703
-label __label704
 write 0 bank1 345
-label __label705
-label __label706
 write 0 bank1 346
-label __label707
-label __label708
 write 0 bank1 347
-label __label709
-label __label710
 write 0 bank1 348
-label __label711
-label __label712
 write 0 bank1 349
-label __label713
-label __label714
 write 0 bank1 350
-label __label715
-label __label716
 write 0 bank1 351
-label __label717
-label __label718
 write 0 bank1 352
-label __label719
-label __label720
 write 0 bank1 353
-label __label721
-label __label722
 write 0 bank1 354
-label __label723
-label __label724
 write 0 bank1 355
-label __label725
-label __label726
 write 0 bank1 356
-label __label727
-label __label728
 write 0 bank1 357
-label __label729
-label __label730
 write 0 bank1 358
-label __label731
-label __label732
 write 0 bank1 359
-label __label733
-label __label734
 write 0 bank1 360
-label __label735
-label __label736
 write 0 bank1 361
-label __label737
-label __label738
 write 0 bank1 362
-label __label739
-label __label740
 write 0 bank1 363
-label __label741
-label __label742
 write 0 bank1 364
-label __label743
-label __label744
 write 0 bank1 365
-label __label745
-label __label746
 write 0 bank1 366
-label __label747
-label __label748
 write 0 bank1 367
-label __label749
-label __label750
 write 0 bank1 368
-label __label751
-label __label752
 write 0 bank1 369
-label __label753
-label __label754
 write 0 bank1 370
-label __label755
-label __label756
 write 0 bank1 371
-label __label757
-label __label758
 write 0 bank1 372
-label __label759
-label __label760
 write 0 bank1 373
-label __label761
-label __label762
 write 0 bank1 374
-label __label763
-label __label764
 write 0 bank1 375
-label __label765
-label __label766
 write 0 bank1 376
-label __label767
-label __label768
 write 0 bank1 377
-label __label769
-label __label770
 write 0 bank1 378
-label __label771
-label __label772
 write 0 bank1 379
-label __label773
-label __label774
 write 0 bank1 380
-label __label775
-label __label776
 write 0 bank1 381
-label __label777
-label __label778
 write 0 bank1 382
-label __label779
-label __label780
 write 0 bank1 383
-label __label781
-label __label782
 write 0 bank1 384
-label __label783
-label __label784
 write 0 bank1 385
-label __label785
-label __label786
 write 0 bank1 386
-label __label787
-label __label788
 write 0 bank1 387
-label __label789
-label __label790
 write 0 bank1 388
-label __label791
-label __label792
 write 0 bank1 389
-label __label793
-label __label794
 write 0 bank1 390
-label __label795
-label __label796
 write 0 bank1 391
-label __label797
-label __label798
 write 0 bank1 392
-label __label799
-label __label800
 write 0 bank1 393
-label __label801
-label __label802
 write 0 bank1 394
-label __label803
-label __label804
 write 0 bank1 395
-label __label805
-label __label806
 write 0 bank1 396
-label __label807
-label __label808
 write 0 bank1 397
-label __label809
-label __label810
 write 0 bank1 398
-label __label811
-label __label812
 write 0 bank1 399
-label __label813
-label __label814
 write 0 bank1 400
-label __label815
-label __label816
 write 0 bank1 401
-label __label817
-label __label818
 write 0 bank1 402
-label __label819
-label __label820
 write 0 bank1 403
-label __label821
-label __label822
 write 0 bank1 404
-label __label823
-label __label824
 write 0 bank1 405
-label __label825
-label __label826
 write 0 bank1 406
-label __label827
-label __label828
 write 0 bank1 407
-label __label829
-label __label830
 write 0 bank1 408
-label __label831
-label __label832
 write 0 bank1 409
-label __label833
-label __label834
 write 0 bank1 410
-label __label835
-label __label836
 write 0 bank1 411
-label __label837
-label __label838
 write 0 bank1 412
-label __label839
-label __label840
 write 0 bank1 413
-label __label841
-label __label842
 write 0 bank1 414
-label __label843
-label __label844
 write 0 bank1 415
-label __label845
-label __label846
 write 0 bank1 416
-label __label847
-label __label848
 write 0 bank1 417
-label __label849
-label __label850
 write 0 bank1 418
-label __label851
-label __label852
 write 0 bank1 419
-label __label853
-label __label854
 write 0 bank1 420
-label __label855
-label __label856
 write 0 bank1 421
-label __label857
-label __label858
 write 0 bank1 422
-label __label859
-label __label860
 write 0 bank1 423
-label __label861
-label __label862
 write 0 bank1 424
-label __label863
-label __label864
 write 0 bank1 425
-label __label865
-label __label866
 write 0 bank1 426
-label __label867
-label __label868
 write 0 bank1 427
-label __label869
-label __label870
 write 0 bank1 428
-label __label871
-label __label872
 write 0 bank1 429
-label __label873
-label __label874
 write 0 bank1 430
-label __label875
-label __label876
 write 0 bank1 431
-label __label877
-label __label878
 write 0 bank1 432
-label __label879
-label __label880
 write 0 bank1 433
-label __label881
-label __label882
 write 0 bank1 434
-label __label883
-label __label884
 write 0 bank1 435
-label __label885
-label __label886
 write 0 bank1 436
-label __label887
-label __label888
 write 0 bank1 437
-label __label889
-label __label890
 write 0 bank1 438
-label __label891
-label __label892
 write 0 bank1 439
-label __label893
-label __label894
 write 0 bank1 440
-label __label895
-label __label896
 write 0 bank1 441
-label __label897
-label __label898
 write 0 bank1 442
-label __label899
-label __label900
 write 0 bank1 443
-label __label901
-label __label902
 write 0 bank1 444
-label __label903
-label __label904
 write 0 bank1 445
-label __label905
-label __label906
 write 0 bank1 446
-label __label907
-label __label908
 write 0 bank1 447
-label __label909
-label __label910
 write 0 bank1 448
-label __label911
-label __label912
 write 0 bank1 449
-label __label913
-label __label914
 write 0 bank1 450
-label __label915
-label __label916
 write 0 bank1 451
-label __label917
-label __label918
 write 0 bank1 452
-label __label919
-label __label920
 write 0 bank1 453
-label __label921
-label __label922
 write 0 bank1 454
-label __label923
-label __label924
 write 0 bank1 455
-label __label925
-label __label926
 write 0 bank1 456
-label __label927
-label __label928
 write 0 bank1 457
-label __label929
-label __label930
 write 0 bank1 458
-label __label931
-label __label932
 write 0 bank1 459
-label __label933
-label __label934
 write 0 bank1 460
-label __label935
-label __label936
 write 0 bank1 461
-label __label937
-label __label938
 write 0 bank1 462
-label __label939
-label __label940
 write 0 bank1 463
-label __label941
-label __label942
 write 0 bank1 464
-label __label943
-label __label944
 write 0 bank1 465
-label __label945
-label __label946
 write 0 bank1 466
-label __label947
-label __label948
 write 0 bank1 467
-label __label949
-label __label950
 write 0 bank1 468
-label __label951
-label __label952
 write 0 bank1 469
-label __label953
-label __label954
 write 0 bank1 470
-label __label955
-label __label956
 write 0 bank1 471
-label __label957
-label __label958
 write 0 bank1 472
-label __label959
-label __label960
 write 0 bank1 473
-label __label961
-label __label962
 write 0 bank1 474
-label __label963
-label __label964
 write 0 bank1 475
-label __label965
-label __label966
 write 0 bank1 476
-label __label967
-label __label968
 write 0 bank1 477
-label __label969
-label __label970
 write 0 bank1 478
-label __label971
-label __label972
 write 0 bank1 479
-label __label973
-label __label974
 write 0 bank1 480
-label __label975
-label __label976
 write 0 bank1 481
-label __label977
-label __label978
 write 0 bank1 482
-label __label979
-label __label980
 write 0 bank1 483
-label __label981
-label __label982
 write 0 bank1 484
-label __label983
-label __label984
 write 0 bank1 485
-label __label985
-label __label986
 write 0 bank1 486
-label __label987
-label __label988
 write 0 bank1 487
-label __label989
-label __label990
 write 0 bank1 488
-label __label991
-label __label992
 write 0 bank1 489
-label __label993
-label __label994
 write 0 bank1 490
-label __label995
-label __label996
 write 0 bank1 491
-label __label997
-label __label998
 write 0 bank1 492
-label __label999
-label __label1000
 write 0 bank1 493
-label __label1001
-label __label1002
 write 0 bank1 494
-label __label1003
-label __label1004
 write 0 bank1 495
-label __label1005
-label __label1006
 write 0 bank1 496
-label __label1007
-label __label1008
 write 0 bank1 497
-label __label1009
-label __label1010
 write 0 bank1 498
-label __label1011
-label __label1012
 write 0 bank1 499
-label __label1013
-label __label1014
 write 0 bank1 500
-label __label1015
-label __label1016
 write 0 bank1 501
-label __label1017
-label __label1018
 write 0 bank1 502
-label __label1019
-label __label1020
 write 0 bank1 503
-label __label1021
-label __label1022
 write 0 bank1 504
-label __label1023
-label __label1024
 write 0 bank1 505
-label __label1025
-label __label1026
 write 0 bank1 506
-label __label1027
-label __label1028
 write 0 bank1 507
-label __label1029
-label __label1030
 write 0 bank1 508
-label __label1031
-label __label1032
 write 0 bank1 509
-label __label1033
-label __label1034
 write 0 bank1 510
-label __label1035
-label __label1036
 write 0 bank1 511
-label __label1037
-label __label2
 set CONSUMPTION_INDEX 508
 set PRODUCTION_INDEX 509
 set NET_POWER_INDEX 510
@@ -9056,7 +8031,6 @@ label __label3
 jump __label6 notEqual loops 0
 set wait @time
 label __label6
-label __label7
 op add wait wait DELAY
 sensor powerNetIn battery1 @powerNetIn
 sensor powerNetOut battery1 @powerNetOut
@@ -9106,14 +8080,12 @@ print battery_change
 print "[]"
 set loops 0
 set start @time
-label __label8
 op greaterThanEq __tmp37 @time start
 op lessThan __tmp38 @time wait
 op land __tmp39 __tmp37 __tmp38
 jump __label10 equal __tmp39 false
 label __label12
 op add loops loops 1
-label __label9
 op greaterThanEq __tmp37 @time start
 op lessThan __tmp38 @time wait
 op land __tmp39 __tmp37 __tmp38
@@ -9122,6 +8094,4 @@ label __label10
 print "\n[lightgray]Loops: "
 print loops
 printflush message1
-label __label4
 jump __label3 always 0 0
-label __label5

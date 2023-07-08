@@ -184,14 +184,12 @@ set SIZE 128
 set ARRAY bank2
 op sub __tmp1 SIZE 1
 set i 0
-label __label0
 jump __label2 greaterThanEq 0 __tmp1
 label __label11
 read min ARRAY i
 set min_index i
 op add __tmp3 i 1
 set j __tmp3
-label __label3
 jump __label5 greaterThanEq __tmp3 SIZE
 label __label12
 read curr ARRAY j
@@ -199,25 +197,20 @@ jump __label6 greaterThanEq curr min
 set min curr
 set min_index j
 label __label6
-label __label7
-label __label4
 op add j j 1
 jump __label12 lessThan j SIZE
 label __label5
 read __tmp8 ARRAY i
 write __tmp8 ARRAY min_index
 write min ARRAY i
-label __label1
 op add i i 1
 jump __label11 lessThan i __tmp1
 label __label2
 set i 0
-label __label8
 jump __label10 greaterThanEq 0 SIZE
 label __label13
 read __tmp10 ARRAY i
 print __tmp10
-label __label9
 op add i i 1
 jump __label13 lessThan i SIZE
 label __label10

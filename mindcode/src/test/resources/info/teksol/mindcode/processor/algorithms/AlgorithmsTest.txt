@@ -1,7 +1,7 @@
 bitmap-get-set.mnd:                       192 instructions,    184 steps,  95.8% coverage, source CRC ACC9C404CF5599B5, compiled CRC 0ED6A6C9E0E3566C
 bitmap-get.mnd:                            17 instructions,     17 steps, 100.0% coverage, source CRC 81F2CEF472BFC1D7, compiled CRC B79348903502EBCF
 compute-recursive-fibonacci.mnd:           30 instructions,   2476 steps, 100.0% coverage, source CRC 02BB75CEC9BB4B9E, compiled CRC 91DAA98393205E61
-compute-sum-of-primes.mnd:                863 instructions,   2827 steps,  91.3% coverage, source CRC 63012225518E429A, compiled CRC BDBBB859C4461393
+compute-sum-of-primes.mnd:                861 instructions,   2827 steps,  91.5% coverage, source CRC 63012225518E429A, compiled CRC 5C9DB9CC701BECDA
 memory-read-write.mnd:                      4 instructions,      4 steps, 100.0% coverage, source CRC 1EE0E937A2481147, compiled CRC 83135E8BFCA7F7B7
 sorting with bubble-sort.mnd:              26 instructions,  19371 steps, 100.0% coverage, source CRC 9BA57DCBE09FBC39, compiled CRC B8B34B97055F3A04
 sorting with heap-sort.mnd:                50 instructions,  63534 steps, 100.0% coverage, source CRC 7A35E01E885F1343, compiled CRC 7A2259204B02700C

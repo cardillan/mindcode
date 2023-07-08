@@ -104,21 +104,14 @@ Final code before resolving virtual instructions:
 
 set result 28433
 set count 57862
-label __label0
 label __label7
 op shl __tmp1 result 20
 op mod result __tmp1 10000000000
 op sub count count 20
-label __label1
 jump __label7 greaterThan count 20
-label __label2
 op shl __tmp4 result count
 op add __tmp5 __tmp4 1
 op mod result __tmp5 10000000000
-label __label3
 print 7075090433
-label __label4
-label __label5
 print result
-label __label6
 end

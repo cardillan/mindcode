@@ -193,37 +193,29 @@ Final code before resolving virtual instructions:
 set SIZE 128
 set ARRAY bank2
 set i 1
-label __label0
 jump __label2 greaterThanEq 1 SIZE
 label __label11
 read item ARRAY i
 op sub j i 1
-label __label3
 jump __label5 lessThan j 0
 label __label12
 read a ARRAY j
 jump __label5 lessThanEq a item
-label __label6
-label __label7
 op add __tmp7 j 1
 write a ARRAY __tmp7
 op sub j j 1
-label __label4
 jump __label12 greaterThanEq j 0
 label __label5
 op add __tmp9 j 1
 write item ARRAY __tmp9
-label __label1
 op add i i 1
 jump __label11 lessThan i SIZE
 label __label2
 set i 0
-label __label8
 jump __label10 greaterThanEq 0 SIZE
 label __label13
 read __tmp11 ARRAY i
 print __tmp11
-label __label9
 op add i i 1
 jump __label13 lessThan i SIZE
 label __label10

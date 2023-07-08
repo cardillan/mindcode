@@ -230,7 +230,6 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, "__fn0_n"),
-                createInstruction(LABEL, var(1003)),
                 createInstruction(GOTO, "__fn0retaddr", "__fn0"),
                 createInstruction(END)
         );

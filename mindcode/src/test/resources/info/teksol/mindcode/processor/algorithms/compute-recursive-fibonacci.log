@@ -3,7 +3,7 @@
      1 instructions eliminated by Conditional Jump Optimization (3 iterations).
      2 instructions eliminated by If Expression Optimization (2 iterations).
      4 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
      4 instructions eliminated by Stack Optimization.
     30 instructions after optimizations.
 
@@ -158,7 +158,6 @@ end
 label __label0
 set __fn0retval __fn0_n
 jump __label4 lessThan __fn0_n 2
-label __label3
 push bank1 __fn0_n
 op sub __fn0_n __fn0_n 1
 callrec bank1 __label0 __label5
@@ -172,5 +171,4 @@ label __label6
 pop bank1 __retval4
 op add __fn0retval __retval4 __fn0retval
 label __label4
-label __label2
 return bank1

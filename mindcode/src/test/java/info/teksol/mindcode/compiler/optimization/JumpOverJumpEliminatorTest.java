@@ -40,16 +40,13 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
                         print("Out of loop")
                         """,
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1001), "equal", "true", "false"),
-                createInstruction(PRINT, "\"In loop\""),
+                createInstruction(JUMP, var(1002), "equal", "true", "false"),
+                createInstruction(PRINT, q("In loop")),
                 createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(JUMP, var(1001), "strictEqual", var(0), "0"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(LABEL, var(1010)),
+                createInstruction(JUMP, var(1002), "strictEqual", var(0), "0"),
                 createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "\"Out of loop\""),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, q("Out of loop")),
                 createInstruction(END)
         );
     }
@@ -67,7 +64,6 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
                 List.of(
                         createInstruction(LABEL, label0),
                         createInstruction(JUMP, label0, Condition.NOT_EQUAL, a, b),
-                        createInstruction(LABEL, label1),
                         createInstruction(END)
                 )
         );

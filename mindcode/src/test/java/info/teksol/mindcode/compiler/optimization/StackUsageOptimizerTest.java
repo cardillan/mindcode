@@ -45,7 +45,6 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(LABEL, var(1003)),
                 createInstruction(SET, var(2), "__fn0retval"),
                 createInstruction(SET, "__fn0retval", var(2)),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)
         );
@@ -76,7 +75,6 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(LABEL, var(1003)),
                 createInstruction(POP, "bank1", "__fn0_x"),
                 createInstruction(SET, "__fn0retval", "__fn0_x"),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)
         );
@@ -115,10 +113,8 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(CALLREC, "bank1", var(1000), var(1006)),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(POP, "bank1", "__fn0_y"),
-                createInstruction(LABEL, var(1004)),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)
         );
@@ -156,7 +152,6 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(LABEL, var(1006)),
                 createInstruction(POP, "bank1", "__fn0_y"),
                 createInstruction(POP, "bank1", "__fn0_x"),
-                createInstruction(LABEL, var(1004)),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(PRINT, "__fn0_y"),
@@ -165,7 +160,6 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(LABEL, var(1007)),
                 createInstruction(SET, var(3), "__fn0retval"),
                 createInstruction(SET, "__fn0retval", var(3)),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)
         );
@@ -203,10 +197,8 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(CALLREC, "bank1", var(1000), var(1006)),
                 createInstruction(LABEL, var(1006)),
                 createInstruction(POP, "bank1", "__fn0_x"),
-                createInstruction(LABEL, var(1004)),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)
         );
@@ -249,11 +241,9 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(POP, "bank1", var(1)),
                 createInstruction(POP, "bank1", "__fn0_i"),
                 createInstruction(POP, "bank1", "__fn0_n"),
-                createInstruction(LABEL, var(1004)),
                 createInstruction(OP, "add", "__fn0_i", "__fn0_i", "1"),
                 createInstruction(JUMP, var(1003), "always"),
                 createInstruction(LABEL, var(1005)),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)
         );
@@ -301,10 +291,8 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(OP, "floor", var(7), var(6)),
                 createInstruction(OP, "add", var(8), "__fn0_left", var(7)),
                 createInstruction(SET, "__fn0_pivot_index", var(8)),
-                createInstruction(LABEL, var(1005)),
                 createInstruction(SET, "__fn1_pivot_index", "__fn0_pivot_index"),
                 createInstruction(SET, var(9), "__fn1_pivot_index"),
-                createInstruction(LABEL, var(1006)),
                 createInstruction(SET, "__fn0_new_pivot_index", var(9)),
                 createInstruction(OP, "sub", var(10), "__fn0_new_pivot_index", "1"),
                 createInstruction(PUSH, "bank1", "__fn0_right"),
@@ -325,7 +313,6 @@ class StackUsageOptimizerTest extends AbstractOptimizerTest<StackUsageOptimizer>
                 createInstruction(SET, var(3), "null"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(SET, "__fn0retval", var(3)),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(RETURN, "bank1"),
                 createInstruction(END)
         );

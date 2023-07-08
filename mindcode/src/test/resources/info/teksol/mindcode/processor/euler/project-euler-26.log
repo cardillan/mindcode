@@ -3336,25 +3336,19 @@ Final code before resolving virtual instructions:
 set maxlen 0
 set maxnum 0
 set d 2
-label __label0
 label __label24
-label __label3
 set __fn0_n d
-label __label5
 op mod __tmp1 d 5
 jump __label7 notEqual __tmp1 0
 label __label26
 op div __fn0_n __fn0_n 5
-label __label6
 op mod __tmp1 __fn0_n 5
 jump __label26 equal __tmp1 0
 label __label7
-label __label8
 op mod __tmp4 __fn0_n 2
 jump __label10 notEqual __tmp4 0
 label __label27
 op div __fn0_n __fn0_n 2
-label __label9
 op mod __tmp4 __fn0_n 2
 jump __label27 equal __tmp4 0
 label __label10
@@ -3362,899 +3356,599 @@ jump __label11 greaterThanEq __fn0_n 2
 set __retval0 0
 jump __label4 always 0 0
 label __label11
-label __label12
-label __label28
-label __label29
 op mod __fn0_power 10 __fn0_n
 jump __label30 notEqual __fn0_power 1
 set __retval0 1
 jump __label4 always 0 0
 label __label30
-label __label31
-label __label32
-label __label33
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label34 notEqual __fn0_power 1
 set __retval0 2
 jump __label4 always 0 0
 label __label34
-label __label35
-label __label36
-label __label37
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label38 notEqual __fn0_power 1
 set __retval0 3
 jump __label4 always 0 0
 label __label38
-label __label39
-label __label40
-label __label41
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label42 notEqual __fn0_power 1
 set __retval0 4
 jump __label4 always 0 0
 label __label42
-label __label43
-label __label44
-label __label45
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label46 notEqual __fn0_power 1
 set __retval0 5
 jump __label4 always 0 0
 label __label46
-label __label47
-label __label48
-label __label49
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label50 notEqual __fn0_power 1
 set __retval0 6
 jump __label4 always 0 0
 label __label50
-label __label51
-label __label52
-label __label53
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label54 notEqual __fn0_power 1
 set __retval0 7
 jump __label4 always 0 0
 label __label54
-label __label55
-label __label56
-label __label57
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label58 notEqual __fn0_power 1
 set __retval0 8
 jump __label4 always 0 0
 label __label58
-label __label59
-label __label60
-label __label61
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label62 notEqual __fn0_power 1
 set __retval0 9
 jump __label4 always 0 0
 label __label62
-label __label63
-label __label64
-label __label65
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label66 notEqual __fn0_power 1
 set __retval0 10
 jump __label4 always 0 0
 label __label66
-label __label67
-label __label68
-label __label69
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label70 notEqual __fn0_power 1
 set __retval0 11
 jump __label4 always 0 0
 label __label70
-label __label71
-label __label72
-label __label73
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label74 notEqual __fn0_power 1
 set __retval0 12
 jump __label4 always 0 0
 label __label74
-label __label75
-label __label76
-label __label77
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label78 notEqual __fn0_power 1
 set __retval0 13
 jump __label4 always 0 0
 label __label78
-label __label79
-label __label80
-label __label81
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label82 notEqual __fn0_power 1
 set __retval0 14
 jump __label4 always 0 0
 label __label82
-label __label83
-label __label84
-label __label85
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label86 notEqual __fn0_power 1
 set __retval0 15
 jump __label4 always 0 0
 label __label86
-label __label87
-label __label88
-label __label89
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label90 notEqual __fn0_power 1
 set __retval0 16
 jump __label4 always 0 0
 label __label90
-label __label91
-label __label92
-label __label93
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label94 notEqual __fn0_power 1
 set __retval0 17
 jump __label4 always 0 0
 label __label94
-label __label95
-label __label96
-label __label97
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label98 notEqual __fn0_power 1
 set __retval0 18
 jump __label4 always 0 0
 label __label98
-label __label99
-label __label100
-label __label101
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label102 notEqual __fn0_power 1
 set __retval0 19
 jump __label4 always 0 0
 label __label102
-label __label103
-label __label104
-label __label105
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label106 notEqual __fn0_power 1
 set __retval0 20
 jump __label4 always 0 0
 label __label106
-label __label107
-label __label108
-label __label109
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label110 notEqual __fn0_power 1
 set __retval0 21
 jump __label4 always 0 0
 label __label110
-label __label111
-label __label112
-label __label113
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label114 notEqual __fn0_power 1
 set __retval0 22
 jump __label4 always 0 0
 label __label114
-label __label115
-label __label116
-label __label117
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label118 notEqual __fn0_power 1
 set __retval0 23
 jump __label4 always 0 0
 label __label118
-label __label119
-label __label120
-label __label121
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label122 notEqual __fn0_power 1
 set __retval0 24
 jump __label4 always 0 0
 label __label122
-label __label123
-label __label124
-label __label125
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label126 notEqual __fn0_power 1
 set __retval0 25
 jump __label4 always 0 0
 label __label126
-label __label127
-label __label128
-label __label129
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label130 notEqual __fn0_power 1
 set __retval0 26
 jump __label4 always 0 0
 label __label130
-label __label131
-label __label132
-label __label133
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label134 notEqual __fn0_power 1
 set __retval0 27
 jump __label4 always 0 0
 label __label134
-label __label135
-label __label136
-label __label137
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label138 notEqual __fn0_power 1
 set __retval0 28
 jump __label4 always 0 0
 label __label138
-label __label139
-label __label140
-label __label141
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label142 notEqual __fn0_power 1
 set __retval0 29
 jump __label4 always 0 0
 label __label142
-label __label143
-label __label144
-label __label145
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label146 notEqual __fn0_power 1
 set __retval0 30
 jump __label4 always 0 0
 label __label146
-label __label147
-label __label148
-label __label149
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label150 notEqual __fn0_power 1
 set __retval0 31
 jump __label4 always 0 0
 label __label150
-label __label151
-label __label152
-label __label153
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label154 notEqual __fn0_power 1
 set __retval0 32
 jump __label4 always 0 0
 label __label154
-label __label155
-label __label156
-label __label157
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label158 notEqual __fn0_power 1
 set __retval0 33
 jump __label4 always 0 0
 label __label158
-label __label159
-label __label160
-label __label161
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label162 notEqual __fn0_power 1
 set __retval0 34
 jump __label4 always 0 0
 label __label162
-label __label163
-label __label164
-label __label165
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label166 notEqual __fn0_power 1
 set __retval0 35
 jump __label4 always 0 0
 label __label166
-label __label167
-label __label168
-label __label169
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label170 notEqual __fn0_power 1
 set __retval0 36
 jump __label4 always 0 0
 label __label170
-label __label171
-label __label172
-label __label173
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label174 notEqual __fn0_power 1
 set __retval0 37
 jump __label4 always 0 0
 label __label174
-label __label175
-label __label176
-label __label177
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label178 notEqual __fn0_power 1
 set __retval0 38
 jump __label4 always 0 0
 label __label178
-label __label179
-label __label180
-label __label181
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label182 notEqual __fn0_power 1
 set __retval0 39
 jump __label4 always 0 0
 label __label182
-label __label183
-label __label184
-label __label185
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label186 notEqual __fn0_power 1
 set __retval0 40
 jump __label4 always 0 0
 label __label186
-label __label187
-label __label188
-label __label189
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label190 notEqual __fn0_power 1
 set __retval0 41
 jump __label4 always 0 0
 label __label190
-label __label191
-label __label192
-label __label193
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label194 notEqual __fn0_power 1
 set __retval0 42
 jump __label4 always 0 0
 label __label194
-label __label195
-label __label196
-label __label197
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label198 notEqual __fn0_power 1
 set __retval0 43
 jump __label4 always 0 0
 label __label198
-label __label199
-label __label200
-label __label201
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label202 notEqual __fn0_power 1
 set __retval0 44
 jump __label4 always 0 0
 label __label202
-label __label203
-label __label204
-label __label205
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label206 notEqual __fn0_power 1
 set __retval0 45
 jump __label4 always 0 0
 label __label206
-label __label207
-label __label208
-label __label209
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label210 notEqual __fn0_power 1
 set __retval0 46
 jump __label4 always 0 0
 label __label210
-label __label211
-label __label212
-label __label213
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label214 notEqual __fn0_power 1
 set __retval0 47
 jump __label4 always 0 0
 label __label214
-label __label215
-label __label216
-label __label217
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label218 notEqual __fn0_power 1
 set __retval0 48
 jump __label4 always 0 0
 label __label218
-label __label219
-label __label220
-label __label221
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label222 notEqual __fn0_power 1
 set __retval0 49
 jump __label4 always 0 0
 label __label222
-label __label223
-label __label224
-label __label225
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label226 notEqual __fn0_power 1
 set __retval0 50
 jump __label4 always 0 0
 label __label226
-label __label227
-label __label228
-label __label229
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label230 notEqual __fn0_power 1
 set __retval0 51
 jump __label4 always 0 0
 label __label230
-label __label231
-label __label232
-label __label233
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label234 notEqual __fn0_power 1
 set __retval0 52
 jump __label4 always 0 0
 label __label234
-label __label235
-label __label236
-label __label237
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label238 notEqual __fn0_power 1
 set __retval0 53
 jump __label4 always 0 0
 label __label238
-label __label239
-label __label240
-label __label241
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label242 notEqual __fn0_power 1
 set __retval0 54
 jump __label4 always 0 0
 label __label242
-label __label243
-label __label244
-label __label245
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label246 notEqual __fn0_power 1
 set __retval0 55
 jump __label4 always 0 0
 label __label246
-label __label247
-label __label248
-label __label249
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label250 notEqual __fn0_power 1
 set __retval0 56
 jump __label4 always 0 0
 label __label250
-label __label251
-label __label252
-label __label253
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label254 notEqual __fn0_power 1
 set __retval0 57
 jump __label4 always 0 0
 label __label254
-label __label255
-label __label256
-label __label257
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label258 notEqual __fn0_power 1
 set __retval0 58
 jump __label4 always 0 0
 label __label258
-label __label259
-label __label260
-label __label261
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label262 notEqual __fn0_power 1
 set __retval0 59
 jump __label4 always 0 0
 label __label262
-label __label263
-label __label264
-label __label265
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label266 notEqual __fn0_power 1
 set __retval0 60
 jump __label4 always 0 0
 label __label266
-label __label267
-label __label268
-label __label269
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label270 notEqual __fn0_power 1
 set __retval0 61
 jump __label4 always 0 0
 label __label270
-label __label271
-label __label272
-label __label273
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label274 notEqual __fn0_power 1
 set __retval0 62
 jump __label4 always 0 0
 label __label274
-label __label275
-label __label276
-label __label277
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label278 notEqual __fn0_power 1
 set __retval0 63
 jump __label4 always 0 0
 label __label278
-label __label279
-label __label280
-label __label281
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label282 notEqual __fn0_power 1
 set __retval0 64
 jump __label4 always 0 0
 label __label282
-label __label283
-label __label284
-label __label285
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label286 notEqual __fn0_power 1
 set __retval0 65
 jump __label4 always 0 0
 label __label286
-label __label287
-label __label288
-label __label289
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label290 notEqual __fn0_power 1
 set __retval0 66
 jump __label4 always 0 0
 label __label290
-label __label291
-label __label292
-label __label293
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label294 notEqual __fn0_power 1
 set __retval0 67
 jump __label4 always 0 0
 label __label294
-label __label295
-label __label296
-label __label297
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label298 notEqual __fn0_power 1
 set __retval0 68
 jump __label4 always 0 0
 label __label298
-label __label299
-label __label300
-label __label301
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label302 notEqual __fn0_power 1
 set __retval0 69
 jump __label4 always 0 0
 label __label302
-label __label303
-label __label304
-label __label305
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label306 notEqual __fn0_power 1
 set __retval0 70
 jump __label4 always 0 0
 label __label306
-label __label307
-label __label308
-label __label309
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label310 notEqual __fn0_power 1
 set __retval0 71
 jump __label4 always 0 0
 label __label310
-label __label311
-label __label312
-label __label313
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label314 notEqual __fn0_power 1
 set __retval0 72
 jump __label4 always 0 0
 label __label314
-label __label315
-label __label316
-label __label317
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label318 notEqual __fn0_power 1
 set __retval0 73
 jump __label4 always 0 0
 label __label318
-label __label319
-label __label320
-label __label321
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label322 notEqual __fn0_power 1
 set __retval0 74
 jump __label4 always 0 0
 label __label322
-label __label323
-label __label324
-label __label325
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label326 notEqual __fn0_power 1
 set __retval0 75
 jump __label4 always 0 0
 label __label326
-label __label327
-label __label328
-label __label329
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label330 notEqual __fn0_power 1
 set __retval0 76
 jump __label4 always 0 0
 label __label330
-label __label331
-label __label332
-label __label333
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label334 notEqual __fn0_power 1
 set __retval0 77
 jump __label4 always 0 0
 label __label334
-label __label335
-label __label336
-label __label337
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label338 notEqual __fn0_power 1
 set __retval0 78
 jump __label4 always 0 0
 label __label338
-label __label339
-label __label340
-label __label341
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label342 notEqual __fn0_power 1
 set __retval0 79
 jump __label4 always 0 0
 label __label342
-label __label343
-label __label344
-label __label345
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label346 notEqual __fn0_power 1
 set __retval0 80
 jump __label4 always 0 0
 label __label346
-label __label347
-label __label348
-label __label349
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label350 notEqual __fn0_power 1
 set __retval0 81
 jump __label4 always 0 0
 label __label350
-label __label351
-label __label352
-label __label353
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label354 notEqual __fn0_power 1
 set __retval0 82
 jump __label4 always 0 0
 label __label354
-label __label355
-label __label356
-label __label357
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label358 notEqual __fn0_power 1
 set __retval0 83
 jump __label4 always 0 0
 label __label358
-label __label359
-label __label360
-label __label361
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label362 notEqual __fn0_power 1
 set __retval0 84
 jump __label4 always 0 0
 label __label362
-label __label363
-label __label364
-label __label365
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label366 notEqual __fn0_power 1
 set __retval0 85
 jump __label4 always 0 0
 label __label366
-label __label367
-label __label368
-label __label369
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label370 notEqual __fn0_power 1
 set __retval0 86
 jump __label4 always 0 0
 label __label370
-label __label371
-label __label372
-label __label373
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label374 notEqual __fn0_power 1
 set __retval0 87
 jump __label4 always 0 0
 label __label374
-label __label375
-label __label376
-label __label377
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label378 notEqual __fn0_power 1
 set __retval0 88
 jump __label4 always 0 0
 label __label378
-label __label379
-label __label380
-label __label381
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label382 notEqual __fn0_power 1
 set __retval0 89
 jump __label4 always 0 0
 label __label382
-label __label383
-label __label384
-label __label385
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label386 notEqual __fn0_power 1
 set __retval0 90
 jump __label4 always 0 0
 label __label386
-label __label387
-label __label388
-label __label389
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label390 notEqual __fn0_power 1
 set __retval0 91
 jump __label4 always 0 0
 label __label390
-label __label391
-label __label392
-label __label393
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label394 notEqual __fn0_power 1
 set __retval0 92
 jump __label4 always 0 0
 label __label394
-label __label395
-label __label396
-label __label397
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label398 notEqual __fn0_power 1
 set __retval0 93
 jump __label4 always 0 0
 label __label398
-label __label399
-label __label400
-label __label401
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label402 notEqual __fn0_power 1
 set __retval0 94
 jump __label4 always 0 0
 label __label402
-label __label403
-label __label404
-label __label405
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label406 notEqual __fn0_power 1
 set __retval0 95
 jump __label4 always 0 0
 label __label406
-label __label407
-label __label408
-label __label409
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label410 notEqual __fn0_power 1
 set __retval0 96
 jump __label4 always 0 0
 label __label410
-label __label411
-label __label412
-label __label413
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label414 notEqual __fn0_power 1
 set __retval0 97
 jump __label4 always 0 0
 label __label414
-label __label415
-label __label416
-label __label417
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label418 notEqual __fn0_power 1
 set __retval0 98
 jump __label4 always 0 0
 label __label418
-label __label419
-label __label420
-label __label421
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label422 notEqual __fn0_power 1
 set __retval0 99
 jump __label4 always 0 0
 label __label422
-label __label423
-label __label424
-label __label15
 print "Power of ten limit reached."
 end
 label __label4
@@ -4262,15 +3956,8 @@ jump __label18 lessThanEq __retval0 maxlen
 set maxlen __retval0
 set maxnum d
 label __label18
-label __label19
-label __label1
 op add d d 1
 jump __label24 lessThanEq d 100
-label __label2
-label __label20
 print 97
-label __label21
-label __label22
 print maxnum
-label __label23
 end

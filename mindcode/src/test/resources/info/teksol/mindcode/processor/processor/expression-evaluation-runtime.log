@@ -5,8 +5,8 @@
     63 instructions eliminated by Conditional Jump Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
    290 instructions eliminated by Data Flow Optimization (23 iterations).
-     7 instructions eliminated by Unreachable Code Elimination (2 iterations).
-   853 instructions after optimizations.
+     8 instructions eliminated by Unreachable Code Elimination.
+   852 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 instructions):
  
@@ -5125,11 +5125,12 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
    622 jump __label169 always
    623 label __label168
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-7 instructions):
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-8 instructions):
  
+   620 label __label166
    621 print "ok"
    622 jump __label169 always
-   623 label __label168
+-    * label __label168
 -    * print "Wrong operation "
 -    * print "not"
 -    * print ": expected "
@@ -5137,9 +5138,14 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-7 inst
 -    * print ", but was "
 -    * print -773738404492802690
 -    * print "\n"
-   624 label __label169
-   625 label __label167
-   626 set __fn0_n 4
+   623 label __label169
+   624 label __label167
+   625 set __fn0_n 4
+ 
+  1165 set __fn0retval __fn0_n
+  1166 label __label315
+  1167 goto __fn0retaddr __fn0
+-    * end
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
@@ -5147,9 +5153,9 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructi
    620 label __label166
    621 print "ok"
 -    * jump __label169 always
-   622 label __label168
-   623 label __label169
-   624 label __label167
+   622 label __label169
+   623 label __label167
+   624 set __fn0_n 4
 
 Final code before resolving virtual instructions:
 
@@ -5158,7 +5164,6 @@ setaddr __fn0retaddr __label1
 call __label0
 gotolabel __label1 __fn0
 op add __tmp1 2 __fn0retval
-label __label2
 jump __label4 notEqual __tmp1 5
 print "ok"
 jump __label5 always 0 0
@@ -5171,13 +5176,11 @@ print ", but was "
 print __tmp1
 print "\n"
 label __label5
-label __label3
 set __fn0_n 6
 setaddr __fn0retaddr __label6
 call __label0
 gotolabel __label6 __fn0
 op sub __tmp6 7 __fn0retval
-label __label7
 jump __label9 notEqual __tmp6 1
 print "ok"
 jump __label10 always 0 0
@@ -5190,13 +5193,11 @@ print ", but was "
 print __tmp6
 print "\n"
 label __label10
-label __label8
 set __fn0_n 2
 setaddr __fn0retaddr __label11
 call __label0
 gotolabel __label11 __fn0
 op mul __tmp11 3 __fn0retval
-label __label12
 jump __label14 notEqual __tmp11 6
 print "ok"
 jump __label15 always 0 0
@@ -5209,13 +5210,11 @@ print ", but was "
 print __tmp11
 print "\n"
 label __label15
-label __label13
 set __fn0_n 4
 setaddr __fn0retaddr __label16
 call __label0
 gotolabel __label16 __fn0
 op div __tmp16 6 __fn0retval
-label __label17
 jump __label19 notEqual __tmp16 1.5
 print "ok"
 jump __label20 always 0 0
@@ -5228,13 +5227,11 @@ print ", but was "
 print __tmp16
 print "\n"
 label __label20
-label __label18
 set __fn0_n 100000
 setaddr __fn0retaddr __label21
 call __label0
 gotolabel __label21 __fn0
 op div __tmp21 1 __fn0retval
-label __label22
 jump __label24 notEqual __tmp21 0.00001
 print "ok"
 jump __label25 always 0 0
@@ -5247,13 +5244,11 @@ print ", but was "
 print __tmp21
 print "\n"
 label __label25
-label __label23
 set __fn0_n 4
 setaddr __fn0retaddr __label26
 call __label0
 gotolabel __label26 __fn0
 op idiv __tmp26 6 __fn0retval
-label __label27
 jump __label29 notEqual __tmp26 1
 print "ok"
 jump __label30 always 0 0
@@ -5266,12 +5261,10 @@ print ", but was "
 print __tmp26
 print "\n"
 label __label30
-label __label28
 setaddr __fn0retaddr __label31
 call __label0
 gotolabel __label31 __fn0
 op mod __tmp31 6 __fn0retval
-label __label32
 jump __label34 notEqual __tmp31 2
 print "ok"
 jump __label35 always 0 0
@@ -5284,12 +5277,10 @@ print ", but was "
 print __tmp31
 print "\n"
 label __label35
-label __label33
 setaddr __fn0retaddr __label36
 call __label0
 gotolabel __label36 __fn0
 op pow __tmp36 2 __fn0retval
-label __label37
 jump __label39 notEqual __tmp36 16
 print "ok"
 jump __label40 always 0 0
@@ -5302,13 +5293,11 @@ print ", but was "
 print __tmp36
 print "\n"
 label __label40
-label __label38
 set __fn0_n 5
 setaddr __fn0retaddr __label41
 call __label0
 gotolabel __label41 __fn0
 op equal __tmp41 5 __fn0retval
-label __label42
 jump __label44 notEqual __tmp41 true
 print "ok"
 jump __label45 always 0 0
@@ -5321,13 +5310,11 @@ print ", but was "
 print __tmp41
 print "\n"
 label __label45
-label __label43
 set __fn0_n 6
 setaddr __fn0retaddr __label46
 call __label0
 gotolabel __label46 __fn0
 op equal __tmp46 5 __fn0retval
-label __label47
 jump __label49 notEqual __tmp46 false
 print "ok"
 jump __label50 always 0 0
@@ -5340,13 +5327,11 @@ print ", but was "
 print __tmp46
 print "\n"
 label __label50
-label __label48
 set __fn0_n null
 setaddr __fn0retaddr __label51
 call __label0
 gotolabel __label51 __fn0
 op equal __tmp51 0 __fn0retval
-label __label52
 jump __label54 notEqual __tmp51 true
 print "ok"
 jump __label55 always 0 0
@@ -5359,13 +5344,11 @@ print ", but was "
 print __tmp51
 print "\n"
 label __label55
-label __label53
 set __fn0_n 5
 setaddr __fn0retaddr __label56
 call __label0
 gotolabel __label56 __fn0
 op notEqual __tmp56 5 __fn0retval
-label __label57
 jump __label59 notEqual __tmp56 false
 print "ok"
 jump __label60 always 0 0
@@ -5378,13 +5361,11 @@ print ", but was "
 print __tmp56
 print "\n"
 label __label60
-label __label58
 set __fn0_n 6
 setaddr __fn0retaddr __label61
 call __label0
 gotolabel __label61 __fn0
 op notEqual __tmp61 5 __fn0retval
-label __label62
 jump __label64 notEqual __tmp61 true
 print "ok"
 jump __label65 always 0 0
@@ -5397,13 +5378,11 @@ print ", but was "
 print __tmp61
 print "\n"
 label __label65
-label __label63
 set __fn0_n null
 setaddr __fn0retaddr __label66
 call __label0
 gotolabel __label66 __fn0
 op notEqual __tmp66 0 __fn0retval
-label __label67
 jump __label69 notEqual __tmp66 false
 print "ok"
 jump __label70 always 0 0
@@ -5416,13 +5395,11 @@ print ", but was "
 print __tmp66
 print "\n"
 label __label70
-label __label68
 set __fn0_n 0
 setaddr __fn0retaddr __label71
 call __label0
 gotolabel __label71 __fn0
 op land __tmp71 1 __fn0retval
-label __label72
 jump __label74 notEqual __tmp71 false
 print "ok"
 jump __label75 always 0 0
@@ -5435,13 +5412,11 @@ print ", but was "
 print __tmp71
 print "\n"
 label __label75
-label __label73
 set __fn0_n 2
 setaddr __fn0retaddr __label76
 call __label0
 gotolabel __label76 __fn0
 op land __tmp76 1 __fn0retval
-label __label77
 jump __label79 notEqual __tmp76 true
 print "ok"
 jump __label80 always 0 0
@@ -5454,13 +5429,11 @@ print ", but was "
 print __tmp76
 print "\n"
 label __label80
-label __label78
 set __fn0_n 1
 setaddr __fn0retaddr __label81
 call __label0
 gotolabel __label81 __fn0
 op lessThan __tmp81 0 __fn0retval
-label __label82
 jump __label84 notEqual __tmp81 true
 print "ok"
 jump __label85 always 0 0
@@ -5473,13 +5446,11 @@ print ", but was "
 print __tmp81
 print "\n"
 label __label85
-label __label83
 set __fn0_n 0
 setaddr __fn0retaddr __label86
 call __label0
 gotolabel __label86 __fn0
 op lessThan __tmp86 1 __fn0retval
-label __label87
 jump __label89 notEqual __tmp86 false
 print "ok"
 jump __label90 always 0 0
@@ -5492,13 +5463,11 @@ print ", but was "
 print __tmp86
 print "\n"
 label __label90
-label __label88
 set __fn0_n 1
 setaddr __fn0retaddr __label91
 call __label0
 gotolabel __label91 __fn0
 op lessThanEq __tmp91 1 __fn0retval
-label __label92
 jump __label94 notEqual __tmp91 true
 print "ok"
 jump __label95 always 0 0
@@ -5511,13 +5480,11 @@ print ", but was "
 print __tmp91
 print "\n"
 label __label95
-label __label93
 set __fn0_n 0
 setaddr __fn0retaddr __label96
 call __label0
 gotolabel __label96 __fn0
 op lessThanEq __tmp96 1 __fn0retval
-label __label97
 jump __label99 notEqual __tmp96 false
 print "ok"
 jump __label100 always 0 0
@@ -5530,13 +5497,11 @@ print ", but was "
 print __tmp96
 print "\n"
 label __label100
-label __label98
 set __fn0_n 1
 setaddr __fn0retaddr __label101
 call __label0
 gotolabel __label101 __fn0
 op greaterThan __tmp101 2 __fn0retval
-label __label102
 jump __label104 notEqual __tmp101 true
 print "ok"
 jump __label105 always 0 0
@@ -5549,13 +5514,11 @@ print ", but was "
 print __tmp101
 print "\n"
 label __label105
-label __label103
 set __fn0_n 2
 setaddr __fn0retaddr __label106
 call __label0
 gotolabel __label106 __fn0
 op greaterThan __tmp106 1 __fn0retval
-label __label107
 jump __label109 notEqual __tmp106 false
 print "ok"
 jump __label110 always 0 0
@@ -5568,13 +5531,11 @@ print ", but was "
 print __tmp106
 print "\n"
 label __label110
-label __label108
 set __fn0_n 1
 setaddr __fn0retaddr __label111
 call __label0
 gotolabel __label111 __fn0
 op greaterThanEq __tmp111 1 __fn0retval
-label __label112
 jump __label114 notEqual __tmp111 true
 print "ok"
 jump __label115 always 0 0
@@ -5587,13 +5548,11 @@ print ", but was "
 print __tmp111
 print "\n"
 label __label115
-label __label113
 set __fn0_n 2
 setaddr __fn0retaddr __label116
 call __label0
 gotolabel __label116 __fn0
 op greaterThanEq __tmp116 1 __fn0retval
-label __label117
 jump __label119 notEqual __tmp116 false
 print "ok"
 jump __label120 always 0 0
@@ -5606,13 +5565,11 @@ print ", but was "
 print __tmp116
 print "\n"
 label __label120
-label __label118
 set __fn0_n null
 setaddr __fn0retaddr __label121
 call __label0
 gotolabel __label121 __fn0
 op strictEqual __tmp121 0 __fn0retval
-label __label122
 jump __label124 notEqual __tmp121 false
 print "ok"
 jump __label125 always 0 0
@@ -5625,12 +5582,10 @@ print ", but was "
 print __tmp121
 print "\n"
 label __label125
-label __label123
 setaddr __fn0retaddr __label126
 call __label0
 gotolabel __label126 __fn0
 op strictEqual __tmp126 null __fn0retval
-label __label127
 jump __label129 notEqual __tmp126 true
 print "ok"
 jump __label130 always 0 0
@@ -5643,13 +5598,11 @@ print ", but was "
 print __tmp126
 print "\n"
 label __label130
-label __label128
 set __fn0_n 2
 setaddr __fn0retaddr __label131
 call __label0
 gotolabel __label131 __fn0
 op shl __tmp131 1 __fn0retval
-label __label132
 jump __label134 notEqual __tmp131 4
 print "ok"
 jump __label135 always 0 0
@@ -5662,12 +5615,10 @@ print ", but was "
 print __tmp131
 print "\n"
 label __label135
-label __label133
 setaddr __fn0retaddr __label136
 call __label0
 gotolabel __label136 __fn0
 op shr __tmp136 9 __fn0retval
-label __label137
 jump __label139 notEqual __tmp136 2
 print "ok"
 jump __label140 always 0 0
@@ -5680,12 +5631,10 @@ print ", but was "
 print __tmp136
 print "\n"
 label __label140
-label __label138
 setaddr __fn0retaddr __label141
 call __label0
 gotolabel __label141 __fn0
 op or __tmp141 1 __fn0retval
-label __label142
 jump __label144 notEqual __tmp141 3
 print "ok"
 jump __label145 always 0 0
@@ -5698,12 +5647,10 @@ print ", but was "
 print __tmp141
 print "\n"
 label __label145
-label __label143
 setaddr __fn0retaddr __label146
 call __label0
 gotolabel __label146 __fn0
 op and __tmp146 3 __fn0retval
-label __label147
 jump __label149 notEqual __tmp146 2
 print "ok"
 jump __label150 always 0 0
@@ -5716,12 +5663,10 @@ print ", but was "
 print __tmp146
 print "\n"
 label __label150
-label __label148
 setaddr __fn0retaddr __label151
 call __label0
 gotolabel __label151 __fn0
 op xor __tmp151 3 __fn0retval
-label __label152
 jump __label154 notEqual __tmp151 1
 print "ok"
 jump __label155 always 0 0
@@ -5734,13 +5679,11 @@ print ", but was "
 print __tmp151
 print "\n"
 label __label155
-label __label153
 set __fn0_n 0
 setaddr __fn0retaddr __label156
 call __label0
 gotolabel __label156 __fn0
 op not __tmp156 __fn0retval 0
-label __label157
 jump __label159 notEqual __tmp156 -1
 print "ok"
 jump __label160 always 0 0
@@ -5753,13 +5696,11 @@ print ", but was "
 print __tmp156
 print "\n"
 label __label160
-label __label158
 set __fn0_n 65535
 setaddr __fn0retaddr __label161
 call __label0
 gotolabel __label161 __fn0
 op not __tmp161 __fn0retval 0
-label __label162
 jump __label164 notEqual __tmp161 -65536
 print "ok"
 jump __label165 always 0 0
@@ -5772,18 +5713,12 @@ print ", but was "
 print __tmp161
 print "\n"
 label __label165
-label __label163
-label __label166
 print "ok"
-label __label168
-label __label169
-label __label167
 set __fn0_n 4
 setaddr __fn0retaddr __label170
 call __label0
 gotolabel __label170 __fn0
 op max __tmp172 2 __fn0retval
-label __label171
 jump __label173 notEqual __tmp172 4
 print "ok"
 jump __label174 always 0 0
@@ -5796,12 +5731,10 @@ print ", but was "
 print __tmp172
 print "\n"
 label __label174
-label __label172
 setaddr __fn0retaddr __label175
 call __label0
 gotolabel __label175 __fn0
 op min __tmp177 2 __fn0retval
-label __label176
 jump __label178 notEqual __tmp177 2
 print "ok"
 jump __label179 always 0 0
@@ -5814,13 +5747,11 @@ print ", but was "
 print __tmp177
 print "\n"
 label __label179
-label __label177
 set __fn0_n -2
 setaddr __fn0retaddr __label180
 call __label0
 gotolabel __label180 __fn0
 op abs __tmp182 __fn0retval 0
-label __label181
 jump __label183 notEqual __tmp182 2
 print "ok"
 jump __label184 always 0 0
@@ -5833,13 +5764,11 @@ print ", but was "
 print __tmp182
 print "\n"
 label __label184
-label __label182
 set __fn0_n 2.718281828459045
 setaddr __fn0retaddr __label185
 call __label0
 gotolabel __label185 __fn0
 op log __tmp187 __fn0retval 0
-label __label186
 jump __label188 notEqual __tmp187 1
 print "ok"
 jump __label189 always 0 0
@@ -5852,13 +5781,11 @@ print ", but was "
 print __tmp187
 print "\n"
 label __label189
-label __label187
 set __fn0_n 10
 setaddr __fn0retaddr __label190
 call __label0
 gotolabel __label190 __fn0
 op log10 __tmp192 __fn0retval 0
-label __label191
 jump __label193 notEqual __tmp192 1
 print "ok"
 jump __label194 always 0 0
@@ -5871,13 +5798,11 @@ print ", but was "
 print __tmp192
 print "\n"
 label __label194
-label __label192
 set __fn0_n 2.5
 setaddr __fn0retaddr __label195
 call __label0
 gotolabel __label195 __fn0
 op floor __tmp197 __fn0retval 0
-label __label196
 jump __label198 notEqual __tmp197 2
 print "ok"
 jump __label199 always 0 0
@@ -5890,12 +5815,10 @@ print ", but was "
 print __tmp197
 print "\n"
 label __label199
-label __label197
 setaddr __fn0retaddr __label200
 call __label0
 gotolabel __label200 __fn0
 op ceil __tmp202 __fn0retval 0
-label __label201
 jump __label203 notEqual __tmp202 3
 print "ok"
 jump __label204 always 0 0
@@ -5908,13 +5831,11 @@ print ", but was "
 print __tmp202
 print "\n"
 label __label204
-label __label202
 set __fn0_n 16
 setaddr __fn0retaddr __label205
 call __label0
 gotolabel __label205 __fn0
 op sqrt __tmp207 __fn0retval 0
-label __label206
 jump __label208 notEqual __tmp207 4
 print "ok"
 jump __label209 always 0 0
@@ -5927,13 +5848,11 @@ print ", but was "
 print __tmp207
 print "\n"
 label __label209
-label __label207
 set __fn0_n 1
 setaddr __fn0retaddr __label210
 call __label0
 gotolabel __label210 __fn0
 op angle __tmp212 1 __fn0retval
-label __label211
 jump __label213 notEqual __tmp212 45
 print "ok"
 jump __label214 always 0 0
@@ -5946,13 +5865,11 @@ print ", but was "
 print __tmp212
 print "\n"
 label __label214
-label __label212
 set __fn0_n 135
 setaddr __fn0retaddr __label215
 call __label0
 gotolabel __label215 __fn0
 op angleDiff __tmp217 45 __fn0retval
-label __label216
 jump __label218 notEqual __tmp217 90
 print "ok"
 jump __label219 always 0 0
@@ -5965,13 +5882,11 @@ print ", but was "
 print __tmp217
 print "\n"
 label __label219
-label __label217
 set __fn0_n 8
 setaddr __fn0retaddr __label220
 call __label0
 gotolabel __label220 __fn0
 op mul __tmp222 -1 __fn0retval
-label __label221
 jump __label223 notEqual __tmp222 -8
 print "ok"
 jump __label224 always 0 0
@@ -5984,13 +5899,11 @@ print ", but was "
 print __tmp222
 print "\n"
 label __label224
-label __label222
 set __fn0_n 0
 setaddr __fn0retaddr __label225
 call __label0
 gotolabel __label225 __fn0
 op equal __tmp227 __fn0retval false
-label __label226
 jump __label228 notEqual __tmp227 1
 print "ok"
 jump __label229 always 0 0
@@ -6003,13 +5916,11 @@ print ", but was "
 print __tmp227
 print "\n"
 label __label229
-label __label227
 set __fn0_n 1
 setaddr __fn0retaddr __label230
 call __label0
 gotolabel __label230 __fn0
 op equal __tmp232 __fn0retval false
-label __label231
 jump __label233 notEqual __tmp232 0
 print "ok"
 jump __label234 always 0 0
@@ -6022,13 +5933,11 @@ print ", but was "
 print __tmp232
 print "\n"
 label __label234
-label __label232
 set __fn0_n 2
 setaddr __fn0retaddr __label235
 call __label0
 gotolabel __label235 __fn0
 op equal __tmp237 __fn0retval false
-label __label236
 jump __label238 notEqual __tmp237 0
 print "ok"
 jump __label239 always 0 0
@@ -6041,13 +5950,11 @@ print ", but was "
 print __tmp237
 print "\n"
 label __label239
-label __label237
 set __fn0_n 4
 setaddr __fn0retaddr __label240
 call __label0
 gotolabel __label240 __fn0
 op pow a 2 __fn0retval
-label __label241
 jump __label243 notEqual a 16
 print "ok"
 jump __label244 always 0 0
@@ -6060,12 +5967,10 @@ print ", but was "
 print a
 print "\n"
 label __label244
-label __label242
 setaddr __fn0retaddr __label245
 call __label0
 gotolabel __label245 __fn0
 op mul a 2 __fn0retval
-label __label246
 jump __label248 notEqual a 8
 print "ok"
 jump __label249 always 0 0
@@ -6078,12 +5983,10 @@ print ", but was "
 print a
 print "\n"
 label __label249
-label __label247
 setaddr __fn0retaddr __label250
 call __label0
 gotolabel __label250 __fn0
 op div a 6 __fn0retval
-label __label251
 jump __label253 notEqual a 1.5
 print "ok"
 jump __label254 always 0 0
@@ -6096,12 +5999,10 @@ print ", but was "
 print a
 print "\n"
 label __label254
-label __label252
 setaddr __fn0retaddr __label255
 call __label0
 gotolabel __label255 __fn0
 op idiv a 6 __fn0retval
-label __label256
 jump __label258 notEqual a 1
 print "ok"
 jump __label259 always 0 0
@@ -6114,12 +6015,10 @@ print ", but was "
 print a
 print "\n"
 label __label259
-label __label257
 setaddr __fn0retaddr __label260
 call __label0
 gotolabel __label260 __fn0
 op mod a 6 __fn0retval
-label __label261
 jump __label263 notEqual a 2
 print "ok"
 jump __label264 always 0 0
@@ -6132,13 +6031,11 @@ print ", but was "
 print a
 print "\n"
 label __label264
-label __label262
 set __fn0_n 2
 setaddr __fn0retaddr __label265
 call __label0
 gotolabel __label265 __fn0
 op add a 4 __fn0retval
-label __label266
 jump __label268 notEqual a 6
 print "ok"
 jump __label269 always 0 0
@@ -6151,12 +6048,10 @@ print ", but was "
 print a
 print "\n"
 label __label269
-label __label267
 setaddr __fn0retaddr __label270
 call __label0
 gotolabel __label270 __fn0
 op sub a 4 __fn0retval
-label __label271
 jump __label273 notEqual a 2
 print "ok"
 jump __label274 always 0 0
@@ -6169,12 +6064,10 @@ print ", but was "
 print a
 print "\n"
 label __label274
-label __label272
 setaddr __fn0retaddr __label275
 call __label0
 gotolabel __label275 __fn0
 op shl a 1 __fn0retval
-label __label276
 jump __label278 notEqual a 4
 print "ok"
 jump __label279 always 0 0
@@ -6187,12 +6080,10 @@ print ", but was "
 print a
 print "\n"
 label __label279
-label __label277
 setaddr __fn0retaddr __label280
 call __label0
 gotolabel __label280 __fn0
 op shr a 9 __fn0retval
-label __label281
 jump __label283 notEqual a 2
 print "ok"
 jump __label284 always 0 0
@@ -6205,12 +6096,10 @@ print ", but was "
 print a
 print "\n"
 label __label284
-label __label282
 setaddr __fn0retaddr __label285
 call __label0
 gotolabel __label285 __fn0
 op or a 1 __fn0retval
-label __label286
 jump __label288 notEqual a 3
 print "ok"
 jump __label289 always 0 0
@@ -6223,12 +6112,10 @@ print ", but was "
 print a
 print "\n"
 label __label289
-label __label287
 setaddr __fn0retaddr __label290
 call __label0
 gotolabel __label290 __fn0
 op and a 3 __fn0retval
-label __label291
 jump __label293 notEqual a 2
 print "ok"
 jump __label294 always 0 0
@@ -6241,12 +6128,10 @@ print ", but was "
 print a
 print "\n"
 label __label294
-label __label292
 setaddr __fn0retaddr __label295
 call __label0
 gotolabel __label295 __fn0
 op xor a 3 __fn0retval
-label __label296
 jump __label298 notEqual a 1
 print "ok"
 jump __label299 always 0 0
@@ -6259,13 +6144,11 @@ print ", but was "
 print a
 print "\n"
 label __label299
-label __label297
 set __fn0_n 0
 setaddr __fn0retaddr __label300
 call __label0
 gotolabel __label300 __fn0
 op land a 1 __fn0retval
-label __label301
 jump __label303 notEqual a false
 print "ok"
 jump __label304 always 0 0
@@ -6278,13 +6161,11 @@ print ", but was "
 print a
 print "\n"
 label __label304
-label __label302
 set __fn0_n 2
 setaddr __fn0retaddr __label305
 call __label0
 gotolabel __label305 __fn0
 op land a 1 __fn0retval
-label __label306
 jump __label308 notEqual a true
 print "ok"
 jump __label309 always 0 0
@@ -6297,12 +6178,10 @@ print ", but was "
 print a
 print "\n"
 label __label309
-label __label307
 setaddr __fn0retaddr __label310
 call __label0
 gotolabel __label310 __fn0
 op or a 0 __fn0retval
-label __label311
 jump __label313 notEqual a 2
 print "ok"
 jump __label314 always 0 0
@@ -6315,10 +6194,7 @@ print ", but was "
 print a
 print "\n"
 label __label314
-label __label312
 end
 label __label0
 set __fn0retval __fn0_n
-label __label315
 goto __fn0retaddr __fn0
-end

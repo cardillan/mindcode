@@ -27,8 +27,7 @@ public class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<Condit
                         """,
                 createInstruction(LABEL, var(1000)),
                 createInstruction(JUMP, var(1002), "always"),
-                createInstruction(PRINT, "\"Here\""),
-                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, q("Here")),
                 createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1002)),
                 createInstruction(END)
@@ -43,9 +42,7 @@ public class ConditionalJumpsNormalizerTest extends AbstractOptimizerTest<Condit
                         end
                         """,
                 createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
     }

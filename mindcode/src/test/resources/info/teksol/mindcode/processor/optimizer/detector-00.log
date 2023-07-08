@@ -5,7 +5,7 @@
     12 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Single Step Elimination (4 iterations).
      1 instructions eliminated by If Expression Optimization (2 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
      7 instructions eliminated by Jump Straightening.
     50 instructions eliminated by Print Merging.
    173 instructions after optimizations.
@@ -310,9 +310,10 @@ Modifications by Final phase, Jump Straightening, iteration 1 (-7 instructions):
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
+   241 printflush message1
    242 label __label1
    243 jump __label0 always
-   244 label __label2
+-    * label __label2
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
@@ -597,7 +598,6 @@ op mod __tmp4 page 7
 op add page __tmp4 1
 control enabled switch1 false 0 0 0
 label __label3
-label __label4
 print "Property detector - page "
 print page
 print "/"
@@ -612,7 +612,6 @@ sensor __tmp9 BLOCK @type
 print __tmp9
 print " - "
 jump __label8 notEqual page 1
-label __label9
 sensor __tmp11 BLOCK @totalItems
 print "contents:\ntotalItems: "
 print __tmp11
@@ -633,7 +632,6 @@ print "\n"
 jump __label7 always 0 0
 label __label8
 jump __label10 notEqual page 2
-label __label11
 sensor __tmp17 BLOCK @totalPower
 op floor __tmp18 __tmp17 0
 print "power:\ntotalPower: "
@@ -660,7 +658,6 @@ print "\n"
 jump __label7 always 0 0
 label __label10
 jump __label12 notEqual page 3
-label __label13
 sensor __tmp27 BLOCK @ammo
 print "combat:\nammo: "
 print __tmp27
@@ -677,7 +674,6 @@ print "\n"
 jump __label7 always 0 0
 label __label12
 jump __label14 notEqual page 4
-label __label15
 sensor __tmp31 BLOCK @heat
 print "status:\nheat: "
 print __tmp31
@@ -697,7 +693,6 @@ print "\n"
 jump __label7 always 0 0
 label __label14
 jump __label16 notEqual page 5
-label __label17
 sensor __tmp36 BLOCK @rotation
 print "position:\nrotation: "
 print __tmp36
@@ -714,7 +709,6 @@ print "\n"
 jump __label7 always 0 0
 label __label16
 jump __label18 notEqual page 6
-label __label19
 sensor __tmp40 BLOCK @shootX
 print "unit:\nshootX: "
 print __tmp40
@@ -752,7 +746,6 @@ print "\n"
 jump __label7 always 0 0
 label __label18
 jump __label20 notEqual page 7
-label __label21
 sensor __tmp51 BLOCK @team
 print "other:\nteam: "
 print __tmp51
@@ -779,6 +772,4 @@ label __label20
 label __label7
 label __label6
 printflush message1
-label __label1
 jump __label0 always 0 0
-label __label2

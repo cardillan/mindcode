@@ -8,7 +8,7 @@
      2 loops improved by Loop Optimization.
      1 instructions eliminated by If Expression Optimization (3 iterations).
      8 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
     24 instructions eliminated by Stack Optimization.
     63 instructions after optimizations.
 
@@ -506,12 +506,10 @@ set __fn0_right __tmp0
 callrec bank1 __label0 __label1
 label __label1
 set i 0
-label __label2
 jump __label4 greaterThanEq 0 SIZE
 label __label23
 read __tmp3 ARRAY i
 print __tmp3
-label __label3
 op add i i 1
 jump __label23 lessThan i SIZE
 label __label4
@@ -521,17 +519,14 @@ jump __label7 lessThanEq __fn0_right __fn0_left
 op sub __tmp6 __fn0_right __fn0_left
 op idiv __tmp7 __tmp6 2
 op add __fn0_pivot_index __fn0_left __tmp7
-label __label8
 read __fn1_pivot ARRAY __fn0_pivot_index
 jump __label10 equal __fn0_pivot_index __fn0_right
 read __tmp13 ARRAY __fn0_right
 write __tmp13 ARRAY __fn0_pivot_index
 write __fn1_pivot ARRAY __fn0_right
 label __label10
-label __label11
 set __fn1_index __fn0_left
 set __fn1_i __fn0_left
-label __label12
 jump __label14 greaterThanEq __fn0_left __fn0_right
 label __label24
 read __fn1_curr ARRAY __fn1_i
@@ -541,11 +536,8 @@ read __tmp20 ARRAY __fn1_index
 write __tmp20 ARRAY __fn1_i
 write __fn1_curr ARRAY __fn1_index
 label __label17
-label __label18
 op add __fn1_index __fn1_index 1
 label __label15
-label __label16
-label __label13
 op add __fn1_i __fn1_i 1
 jump __label24 lessThan __fn1_i __fn0_right
 label __label14
@@ -554,8 +546,6 @@ read __tmp24 ARRAY __fn1_index
 write __tmp24 ARRAY __fn0_right
 write __fn1_pivot ARRAY __fn1_index
 label __label19
-label __label20
-label __label9
 set __fn0_new_pivot_index __fn1_index
 op sub __tmp25 __fn1_index 1
 push bank1 __fn0_right
@@ -570,5 +560,4 @@ set __fn0_left __tmp27
 callrec bank1 __label0 __label22
 label __label22
 label __label7
-label __label5
 return bank1

@@ -30,7 +30,6 @@ class SingleStepJumpEliminatorTest extends AbstractOptimizerTest<SingleStepJumpE
                 createInstruction(JUMP, var(1000), "equal", "x", "false"),
                 createInstruction(PRINT, "1"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(END)
         );
     }
@@ -44,9 +43,7 @@ class SingleStepJumpEliminatorTest extends AbstractOptimizerTest<SingleStepJumpE
                 createInstruction(JUMP, var(1002), "equal", "y", "false"),
                 createInstruction(PRINT, "1"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(END)
         );
     }

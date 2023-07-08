@@ -226,46 +226,31 @@ Final code before resolving virtual instructions:
 
 set max 0
 set i 10
-label __label0
 label __label19
 set j i
-label __label3
 jump __label5 greaterThanEq i 100
 label __label20
 op mul num i j
 jump __label6 lessThanEq num max
-label __label8
 set __fn0_num num
 set __fn0_res 0
-label __label10
 jump __label12 lessThanEq num 0
 label __label21
 op mul __tmp5 10 __fn0_res
 op mod __tmp6 __fn0_num 10
 op add __fn0_res __tmp5 __tmp6
 op idiv __fn0_num __fn0_num 10
-label __label11
 jump __label21 greaterThan __fn0_num 0
 label __label12
-label __label9
 jump __label13 notEqual num __fn0_res
 set max num
 label __label13
-label __label14
 label __label6
-label __label7
-label __label4
 op add j j 1
 jump __label20 lessThan j 100
 label __label5
-label __label1
 op add i i 1
 jump __label19 lessThan i 100
-label __label2
-label __label15
 print 9009
-label __label16
-label __label17
 print max
-label __label18
 end

@@ -75,6 +75,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
     /** Maps function prefix to a list of variables directly or indirectly written by the function */
     Map<String, Set<LogicVariable>> functionWrites;
 
+    /** Contains function prefix of functions that may directly or indirectly call the end() instruction. */
+    private Set<String> functionEnds;
+
+    private final List<VariableStates> functionEndStates = new ArrayList<>();
+
     private final DataFlowVariableStates dataFlowVariableStates;
 
     public DataFlowOptimizer(OptimizationContext optimizationContext) {
@@ -92,6 +97,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         replacements.clear();
         references.clear();
         labelStates.clear();
+        functionEndStates.clear();
 
         clearVariableStates();
 
@@ -192,38 +198,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private void analyzeFunctionVariables() {
         functionReads = new HashMap<>();
         functionWrites = new HashMap<>();
+        functionEnds = new HashSet<>();
 
         getRootContext().children().stream()
                 .filter(c -> c.functionPrefix() != null)
                 .forEachOrdered(this::analyzeFunctionVariables);
 
         while (propagateFunctionReadsAndWrites());
-    }
-
-    private boolean propagateFunctionReadsAndWrites() {
-        CallGraph callGraph = getCallGraph();
-        boolean modified = false;
-        for (CallGraph.Function function : callGraph.getFunctions()) {
-            if (!function.isInline()) {
-                Set<LogicVariable> reads = functionReads.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
-                Set<LogicVariable> writes = functionWrites.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
-                int size = reads.size() + writes.size();
-                function.getCalls().keySet().stream()
-                        .filter(callGraph::containsFunction)            // Filter out built-in functions
-                        .map(callGraph::getFunction)
-                        .map(CallGraph.Function::getLocalPrefix)
-                        .filter(Objects::nonNull)                       // Filter out main function
-                        .forEachOrdered(callee -> {
-                            reads.addAll(functionReads.get(callee));
-                            writes.addAll(functionWrites.get(callee));
-                        });
-
-                // Repeat if there are changes
-                modified |= size != reads.size() + writes.size();
-            }
-        }
-
-        return modified;
     }
 
     private void analyzeFunctionVariables(AstContext context) {
@@ -242,10 +223,44 @@ public class DataFlowOptimizer extends BaseOptimizer {
                             .filter(LogicVariable.class::isInstance)
                             .map(LogicVariable.class::cast)
                             .forEachOrdered(writes::add);
+
+                    if (ix instanceof EndInstruction) {
+                        functionEnds.add(context.functionPrefix());
+                    }
                 });
 
         functionReads.put(context.functionPrefix(), reads);
         functionWrites.put(context.functionPrefix(), writes);
+    }
+
+
+    private boolean propagateFunctionReadsAndWrites() {
+        CallGraph callGraph = getCallGraph();
+        boolean modified = false;
+        for (CallGraph.Function function : callGraph.getFunctions()) {
+            if (!function.isInline()) {
+                Set<LogicVariable> reads = functionReads.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
+                Set<LogicVariable> writes = functionWrites.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
+                int size = reads.size() + writes.size() + functionEnds.size();
+                function.getCalls().keySet().stream()
+                        .filter(callGraph::containsFunction)            // Filter out built-in functions
+                        .map(callGraph::getFunction)
+                        .map(CallGraph.Function::getLocalPrefix)
+                        .filter(Objects::nonNull)                       // Filter out main function
+                        .forEachOrdered(callee -> {
+                            reads.addAll(functionReads.get(callee));
+                            writes.addAll(functionWrites.get(callee));
+                            if (functionEnds.contains(callee)) {
+                                functionEnds.add(function.getLocalPrefix());
+                            }
+                        });
+
+                // Repeat if there are changes
+                modified |= size != reads.size() + writes.size() + functionEnds.size();
+            }
+        }
+
+        return modified;
     }
 
     public void generateFinalMessages() {
@@ -280,13 +295,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
             // on program restart (when reaching an end of instruction list/end instruction).
             // Marking them as read now will preserve the last assigned value.
             List.copyOf(uninitialized).forEach(variableStates::valueRead);
+            functionEndStates.forEach(vs -> List.copyOf(uninitialized).forEach(vs::valueRead));
 
             if (!aggressive()) {
                 // On basic optimization level, provide some protection to main variables.
                 // Specifically, latest values assigned to main variables are preserved.
                 // Variables that were part of unrolled loops are NOT preserved, regardless of their other use.
                 contextStream(context)
-                        .flatMap(ix -> ix.outputArgumentsStream())
+                        .flatMap(LogicInstruction::outputArgumentsStream)
                         .filter(LogicVariable.class::isInstance)
                         .map(LogicVariable.class::cast)
                         .filter(LogicVariable::isMainVariable)
@@ -591,8 +607,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         switch (instruction) {
             case PushInstruction ix:        return variableStates.pushVariable(ix.getVariable());
             case PopInstruction ix:         return variableStates.popVariable(ix.getVariable());
-            case LabelInstruction ix:       return resolveLabel(variableStates, ix.getLabel());
-            case GotoLabelInstruction ix:   return resolveLabel(variableStates, ix.getLabel());
+            case LabeledInstruction ix:     return resolveLabel(variableStates, ix.getLabel());
             case EndInstruction ix:         return variableStates.setDead(true);
             default:                        break;
         }
@@ -642,8 +657,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .forEach(arg -> variableStates.valueSet(arg, instruction, value));
 
         switch (instruction.getOpcode()) {
-            case CALL, CALLREC ->
-                    variableStates.updateAfterFunctionCall(instruction.getAstContext().functionPrefix(), instruction);
+            case CALL, CALLREC -> {
+                String functionPrefix = instruction.getAstContext().functionPrefix();
+                variableStates.updateAfterFunctionCall(functionPrefix, instruction);
+                if (modifyInstructions && functionEnds.contains(functionPrefix)) {
+                    functionEndStates.add(variableStates.copy("function end handling"));
+                }
+            }
         }
 
         if (modifyInstructions) {

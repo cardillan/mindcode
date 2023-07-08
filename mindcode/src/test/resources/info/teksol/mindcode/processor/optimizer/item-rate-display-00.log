@@ -3729,273 +3729,182 @@ op sub ptr __tmp3 SHIFT
 jump __label0 greaterThanEq ptr INDEX
 op add ptr ptr SKIP_SIZE
 label __label0
-label __label1
 read maximum MEMORY ptr
-label __label215
-label __label216
 op sub ptr ptr 1
 jump __label217 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label217
-label __label218
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label219
-label __label220
 op sub ptr ptr 1
 jump __label221 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label221
-label __label222
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label223
-label __label224
 op sub ptr ptr 1
 jump __label225 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label225
-label __label226
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label227
-label __label228
 op sub ptr ptr 1
 jump __label229 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label229
-label __label230
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label231
-label __label232
 op sub ptr ptr 1
 jump __label233 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label233
-label __label234
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label235
-label __label236
 op sub ptr ptr 1
 jump __label237 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label237
-label __label238
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label239
-label __label240
 op sub ptr ptr 1
 jump __label241 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label241
-label __label242
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label243
-label __label244
 op sub ptr ptr 1
 jump __label245 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label245
-label __label246
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label247
-label __label248
 op sub ptr ptr 1
 jump __label249 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label249
-label __label250
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label251
-label __label252
 op sub ptr ptr 1
 jump __label253 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label253
-label __label254
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label255
-label __label256
 op sub ptr ptr 1
 jump __label257 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label257
-label __label258
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label259
-label __label260
 op sub ptr ptr 1
 jump __label261 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label261
-label __label262
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label263
-label __label264
 op sub ptr ptr 1
 jump __label265 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label265
-label __label266
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label267
-label __label268
 op sub ptr ptr 1
 jump __label269 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label269
-label __label270
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label271
-label __label272
 op sub ptr ptr 1
 jump __label273 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label273
-label __label274
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label275
-label __label276
 op sub ptr ptr 1
 jump __label277 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label277
-label __label278
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label279
-label __label280
 op sub ptr ptr 1
 jump __label281 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label281
-label __label282
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label283
-label __label284
 op sub ptr ptr 1
 jump __label285 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label285
-label __label286
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label287
-label __label288
 op sub ptr ptr 1
 jump __label289 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label289
-label __label290
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label291
-label __label292
 op sub ptr ptr 1
 jump __label293 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label293
-label __label294
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label295
-label __label296
 op sub ptr ptr 1
 jump __label297 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label297
-label __label298
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label299
-label __label300
 op sub ptr ptr 1
 jump __label301 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label301
-label __label302
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label303
-label __label304
 op sub ptr ptr 1
 jump __label305 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label305
-label __label306
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label307
-label __label308
 op sub ptr ptr 1
 jump __label309 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label309
-label __label310
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label311
-label __label312
 op sub ptr ptr 1
 jump __label313 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label313
-label __label314
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label315
-label __label316
 op sub ptr ptr 1
 jump __label317 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label317
-label __label318
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label319
-label __label320
 op sub ptr ptr 1
 jump __label321 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label321
-label __label322
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label323
-label __label324
 op sub ptr ptr 1
 jump __label325 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label325
-label __label326
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label327
-label __label328
 op sub ptr ptr 1
 jump __label329 greaterThan ptr INDEX
 op sub ptr SIZE 1
 label __label329
-label __label330
 read __tmp13 MEMORY ptr
 op max maximum maximum __tmp13
-label __label331
-label __label4
 op mul maximum maximum SMOOTH
-label __label7
 sensor __tmp16 switch1 @enabled
 jump __label9 notEqual __tmp16 0
 label __label214
@@ -4005,7 +3914,6 @@ sensor __tmp19 COORD @dead
 op strictEqual __tmp20 __tmp19 0
 jump __label10 equal __tmp20 false
 set n 0
-label __label12
 jump __label14 greaterThanEq 0 TOTAL
 label __label35
 read m COORD n
@@ -4013,12 +3921,10 @@ print "\nCoord: [gold]"
 print m
 print "[]"
 op max maximum maximum m
-label __label13
 op add n n 1
 jump __label35 lessThan n TOTAL
 label __label14
 label __label10
-label __label11
 op div scale 150 maximum
 op ceil __tmp27 maximum 0
 print "\nMaximum: [green]"
@@ -4035,11 +3941,9 @@ op sub head __tmp29 SHIFT
 jump __label15 greaterThanEq head INDEX
 op add head head SKIP_SIZE
 label __label15
-label __label16
 set tail head
 set value 0
 set i 0
-label __label17
 jump __label19 greaterThanEq 0 SMOOTH
 label __label36
 read __tmp35 MEMORY head
@@ -4048,8 +3952,6 @@ op sub head head 1
 jump __label20 greaterThan head INDEX
 op sub head SIZE 1
 label __label20
-label __label21
-label __label18
 op add i i 1
 jump __label36 lessThan i SMOOTH
 label __label19
@@ -4057,8 +3959,6 @@ op mul __tmp42 value scale
 op add last 10 __tmp42
 set newMax value
 draw color 80 255 80 255 0 0
-label __label39
-label __label40
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4067,19 +3967,15 @@ op sub head head 1
 jump __label41 greaterThan head INDEX
 op sub head SIZE 1
 label __label41
-label __label42
 op sub tail tail 1
 jump __label43 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label43
-label __label44
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 159 last 154 y 0 0
 set last y
 op max newMax newMax value
-label __label45
-label __label46
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4088,19 +3984,15 @@ op sub head head 1
 jump __label47 greaterThan head INDEX
 op sub head SIZE 1
 label __label47
-label __label48
 op sub tail tail 1
 jump __label49 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label49
-label __label50
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 154 last 149 y 0 0
 set last y
 op max newMax newMax value
-label __label51
-label __label52
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4109,19 +4001,15 @@ op sub head head 1
 jump __label53 greaterThan head INDEX
 op sub head SIZE 1
 label __label53
-label __label54
 op sub tail tail 1
 jump __label55 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label55
-label __label56
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 149 last 144 y 0 0
 set last y
 op max newMax newMax value
-label __label57
-label __label58
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4130,19 +4018,15 @@ op sub head head 1
 jump __label59 greaterThan head INDEX
 op sub head SIZE 1
 label __label59
-label __label60
 op sub tail tail 1
 jump __label61 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label61
-label __label62
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 144 last 139 y 0 0
 set last y
 op max newMax newMax value
-label __label63
-label __label64
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4151,19 +4035,15 @@ op sub head head 1
 jump __label65 greaterThan head INDEX
 op sub head SIZE 1
 label __label65
-label __label66
 op sub tail tail 1
 jump __label67 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label67
-label __label68
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 139 last 134 y 0 0
 set last y
 op max newMax newMax value
-label __label69
-label __label70
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4172,19 +4052,15 @@ op sub head head 1
 jump __label71 greaterThan head INDEX
 op sub head SIZE 1
 label __label71
-label __label72
 op sub tail tail 1
 jump __label73 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label73
-label __label74
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 134 last 129 y 0 0
 set last y
 op max newMax newMax value
-label __label75
-label __label76
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4193,19 +4069,15 @@ op sub head head 1
 jump __label77 greaterThan head INDEX
 op sub head SIZE 1
 label __label77
-label __label78
 op sub tail tail 1
 jump __label79 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label79
-label __label80
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 129 last 124 y 0 0
 set last y
 op max newMax newMax value
-label __label81
-label __label82
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4214,19 +4086,15 @@ op sub head head 1
 jump __label83 greaterThan head INDEX
 op sub head SIZE 1
 label __label83
-label __label84
 op sub tail tail 1
 jump __label85 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label85
-label __label86
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 124 last 119 y 0 0
 set last y
 op max newMax newMax value
-label __label87
-label __label88
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4235,19 +4103,15 @@ op sub head head 1
 jump __label89 greaterThan head INDEX
 op sub head SIZE 1
 label __label89
-label __label90
 op sub tail tail 1
 jump __label91 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label91
-label __label92
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 119 last 114 y 0 0
 set last y
 op max newMax newMax value
-label __label93
-label __label94
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4256,19 +4120,15 @@ op sub head head 1
 jump __label95 greaterThan head INDEX
 op sub head SIZE 1
 label __label95
-label __label96
 op sub tail tail 1
 jump __label97 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label97
-label __label98
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 114 last 109 y 0 0
 set last y
 op max newMax newMax value
-label __label99
-label __label100
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4277,19 +4137,15 @@ op sub head head 1
 jump __label101 greaterThan head INDEX
 op sub head SIZE 1
 label __label101
-label __label102
 op sub tail tail 1
 jump __label103 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label103
-label __label104
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 109 last 104 y 0 0
 set last y
 op max newMax newMax value
-label __label105
-label __label106
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4298,19 +4154,15 @@ op sub head head 1
 jump __label107 greaterThan head INDEX
 op sub head SIZE 1
 label __label107
-label __label108
 op sub tail tail 1
 jump __label109 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label109
-label __label110
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 104 last 99 y 0 0
 set last y
 op max newMax newMax value
-label __label111
-label __label112
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4319,19 +4171,15 @@ op sub head head 1
 jump __label113 greaterThan head INDEX
 op sub head SIZE 1
 label __label113
-label __label114
 op sub tail tail 1
 jump __label115 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label115
-label __label116
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 99 last 94 y 0 0
 set last y
 op max newMax newMax value
-label __label117
-label __label118
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4340,19 +4188,15 @@ op sub head head 1
 jump __label119 greaterThan head INDEX
 op sub head SIZE 1
 label __label119
-label __label120
 op sub tail tail 1
 jump __label121 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label121
-label __label122
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 94 last 89 y 0 0
 set last y
 op max newMax newMax value
-label __label123
-label __label124
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4361,19 +4205,15 @@ op sub head head 1
 jump __label125 greaterThan head INDEX
 op sub head SIZE 1
 label __label125
-label __label126
 op sub tail tail 1
 jump __label127 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label127
-label __label128
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 89 last 84 y 0 0
 set last y
 op max newMax newMax value
-label __label129
-label __label130
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4382,19 +4222,15 @@ op sub head head 1
 jump __label131 greaterThan head INDEX
 op sub head SIZE 1
 label __label131
-label __label132
 op sub tail tail 1
 jump __label133 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label133
-label __label134
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 84 last 79 y 0 0
 set last y
 op max newMax newMax value
-label __label135
-label __label136
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4403,19 +4239,15 @@ op sub head head 1
 jump __label137 greaterThan head INDEX
 op sub head SIZE 1
 label __label137
-label __label138
 op sub tail tail 1
 jump __label139 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label139
-label __label140
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 79 last 74 y 0 0
 set last y
 op max newMax newMax value
-label __label141
-label __label142
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4424,19 +4256,15 @@ op sub head head 1
 jump __label143 greaterThan head INDEX
 op sub head SIZE 1
 label __label143
-label __label144
 op sub tail tail 1
 jump __label145 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label145
-label __label146
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 74 last 69 y 0 0
 set last y
 op max newMax newMax value
-label __label147
-label __label148
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4445,19 +4273,15 @@ op sub head head 1
 jump __label149 greaterThan head INDEX
 op sub head SIZE 1
 label __label149
-label __label150
 op sub tail tail 1
 jump __label151 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label151
-label __label152
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 69 last 64 y 0 0
 set last y
 op max newMax newMax value
-label __label153
-label __label154
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4466,19 +4290,15 @@ op sub head head 1
 jump __label155 greaterThan head INDEX
 op sub head SIZE 1
 label __label155
-label __label156
 op sub tail tail 1
 jump __label157 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label157
-label __label158
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 64 last 59 y 0 0
 set last y
 op max newMax newMax value
-label __label159
-label __label160
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4487,19 +4307,15 @@ op sub head head 1
 jump __label161 greaterThan head INDEX
 op sub head SIZE 1
 label __label161
-label __label162
 op sub tail tail 1
 jump __label163 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label163
-label __label164
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 59 last 54 y 0 0
 set last y
 op max newMax newMax value
-label __label165
-label __label166
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4508,19 +4324,15 @@ op sub head head 1
 jump __label167 greaterThan head INDEX
 op sub head SIZE 1
 label __label167
-label __label168
 op sub tail tail 1
 jump __label169 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label169
-label __label170
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 54 last 49 y 0 0
 set last y
 op max newMax newMax value
-label __label171
-label __label172
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4529,19 +4341,15 @@ op sub head head 1
 jump __label173 greaterThan head INDEX
 op sub head SIZE 1
 label __label173
-label __label174
 op sub tail tail 1
 jump __label175 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label175
-label __label176
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 49 last 44 y 0 0
 set last y
 op max newMax newMax value
-label __label177
-label __label178
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4550,19 +4358,15 @@ op sub head head 1
 jump __label179 greaterThan head INDEX
 op sub head SIZE 1
 label __label179
-label __label180
 op sub tail tail 1
 jump __label181 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label181
-label __label182
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 44 last 39 y 0 0
 set last y
 op max newMax newMax value
-label __label183
-label __label184
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4571,19 +4375,15 @@ op sub head head 1
 jump __label185 greaterThan head INDEX
 op sub head SIZE 1
 label __label185
-label __label186
 op sub tail tail 1
 jump __label187 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label187
-label __label188
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 39 last 34 y 0 0
 set last y
 op max newMax newMax value
-label __label189
-label __label190
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4592,19 +4392,15 @@ op sub head head 1
 jump __label191 greaterThan head INDEX
 op sub head SIZE 1
 label __label191
-label __label192
 op sub tail tail 1
 jump __label193 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label193
-label __label194
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 34 last 29 y 0 0
 set last y
 op max newMax newMax value
-label __label195
-label __label196
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4613,19 +4409,15 @@ op sub head head 1
 jump __label197 greaterThan head INDEX
 op sub head SIZE 1
 label __label197
-label __label198
 op sub tail tail 1
 jump __label199 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label199
-label __label200
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 29 last 24 y 0 0
 set last y
 op max newMax newMax value
-label __label201
-label __label202
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
@@ -4634,33 +4426,23 @@ op sub head head 1
 jump __label203 greaterThan head INDEX
 op sub head SIZE 1
 label __label203
-label __label204
 op sub tail tail 1
 jump __label205 greaterThan tail INDEX
 op sub tail SIZE 1
 label __label205
-label __label206
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 24 last 19 y 0 0
 set last y
 op max newMax newMax value
-label __label207
-label __label208
 read t MEMORY tail
 read h MEMORY head
 op sub __tmp46 value t
 op add value __tmp46 h
-label __label209
-label __label210
-label __label211
-label __label212
 op mul __tmp56 value scale
 op add y 10 __tmp56
 draw line 19 last 14 y 0 0
 op max newMax newMax value
-label __label213
-label __label24
 draw color 255 255 255 255 0 0
 draw lineRect 10 10 156 156 0 0
 op max maximum newMax maximum
@@ -4668,7 +4450,6 @@ op mul __tmp61 3 newMax
 jump __label29 greaterThanEq __tmp61 maximum
 op mul maximum 1.5 newMax
 label __label29
-label __label30
 write maximum COORD POSITION
 op sub __tmp65 @time start
 op floor __tmp66 __tmp65 0
@@ -4679,18 +4460,15 @@ op div __tmp67 @time FREQ
 op ceil __tmp68 __tmp67 0
 op mul wait FREQ __tmp68
 set loops 0
-label __label31
 jump __label33 greaterThanEq @time wait
 label __label38
 op add loops loops 1
-label __label32
 jump __label38 lessThan @time wait
 label __label33
 drawflush display1
 print "\nLoops: "
 print loops
 printflush message1
-label __label8
 sensor __tmp16 switch1 @enabled
 jump __label214 equal __tmp16 0
 label __label9

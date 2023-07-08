@@ -1,27 +1,26 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
-import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicLabel;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.ArrayDeque;
+import java.util.BitSet;
+import java.util.List;
+import java.util.Queue;
 
 /**
- * This optimizer removes instructions that are unreachable.
- * There are several ways unreachable instructions might appear:
+ * This optimizer removes instructions that are unreachable. There are several ways unreachable instructions might
+ * appear:
  * <ol>
  * <li>Jump target propagation can get unreachable jumps that are no longer targeted</li>
  * <li>User-created unreachable regions, such as {@code while false ... end}</li>
  * <li>User defined functions which are called from an unreachable region</li>
  * </ol>
- * Instruction removal is done in loops until no instructions are removed. This way entire branches
- * of unreachable code (i.e. code inside the {@code while false ... end} statement) should be eliminated,
- * assuming the unconditional jump normalization optimizer was on the pipeline.
- * Labels - even inactive ones - are never removed.
+ * The optimizer analyses the control flow of the program. It starts at the first instruction and visits
+ * every instruction reachable from there, either by advancing to the next instruction, or by a jump/goto/call.
+ * Visited instruction are marked as active and aren't inspected again. When all code paths have reached an
+ * end or an already visited instruction, the analysis stops and all unvisited instructions are removed.
+ * Only one iteration is performed.
  */
 class UnreachableCodeEliminator extends BaseOptimizer {
     public UnreachableCodeEliminator(OptimizationContext optimizationContext) {
@@ -30,53 +29,65 @@ class UnreachableCodeEliminator extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
-        removeUnreachableInstructions(findActiveLabels());
-        return wasUpdated();
-    }
+        // List of all instructions
+        List<LogicInstruction> program = optimizationContext.getProgram();
+        BitSet unused = new BitSet(program.size());
+        // Also serves as a data stop for reaching the end of instruction list naturally.
+        unused.set(0, program.size());
+        Queue<Integer> heads = new ArrayDeque<>();
+        heads.offer(0);
 
-    private Set<LogicLabel> findActiveLabels() {
-        return instructionStream()
-                .flatMap(this::extractLabelReference)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-    }
-
-    private Stream<LogicLabel> extractLabelReference(LogicInstruction instruction) {
-        return switch(instruction) {
-            case JumpInstruction       ix -> Stream.of(ix.getTarget());
-            case SetAddressInstruction ix -> Stream.of(ix.getLabel());
-            case CallInstruction       ix -> Stream.of(ix.getCallAddr());
-            case CallRecInstruction    ix -> ix.getAddresses().stream();
-            default -> null;
-        };
-    }
-
-    private void removeUnreachableInstructions(Set<LogicLabel> activeLabels) {
-        boolean accessible = true;
-
-        try (LogicIterator it = createIterator()) {
-            while(it.hasNext()) {
-                LogicInstruction instruction = it.next();
-                if (accessible) {
-                    // Unconditional jump makes the next instruction unreachable
-                    if (instruction instanceof JumpInstruction ix && ix.getCondition() == Condition.ALWAYS) {
-                        accessible = false;
-                    } else if (instruction instanceof ReturnInstruction) {
-                        accessible = false;
-                    } else if (instruction instanceof EndInstruction) {
-                        accessible = false;
+        MainLoop:
+        while (!heads.isEmpty()) {
+            int index = heads.poll();
+            while (unused.get(index)) {
+                unused.clear(index);
+                switch (program.get(index)) {
+                    case EndInstruction end -> {
+                        continue MainLoop;
                     }
-                } else {
-                    if (instruction instanceof LabeledInstruction ix) {
-                        // An active jump to here makes next instruction accessible
-                        accessible = activeLabels.contains(ix.getLabel());
-                    } else if (!(instruction instanceof EndInstruction) || aggressive()) {
-                        // Remove unreachable
-                        // Preserve end unless aggressive mode
-                        it.remove();
+                    case ReturnInstruction ret -> {
+                        continue MainLoop;
                     }
+                    case JumpInstruction jump -> {
+                        heads.offer(findLabelIndex(jump.getTarget()));
+                        if (jump.isUnconditional()) {
+                            continue MainLoop;
+                        }
+                    }
+                    case CallInstruction call -> {
+                        heads.offer(findLabelIndex(call.getCallAddr()));
+                    }
+                    case CallRecInstruction call -> {
+                        heads.offer(findLabelIndex(call.getCallAddr()));
+                        heads.offer(findLabelIndex(call.getRetAddr()));
+                        continue MainLoop;
+                    }
+                    case GotoInstruction gotoIx -> {
+                        for (int i = 0; i < program.size(); i++) {
+                            if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                heads.offer(i);
+                            }
+                        }
+                        continue MainLoop;
+                    }
+                    default -> {}
                 }
+
+                index++;
             }
         }
+
+        for (int index = program.size() - 1; index >= 0; index--) {
+            if (unused.get(index) && (aggressive() || !(program.get(index) instanceof EndInstruction))) {
+                removeInstruction(index);
+            }
+        }
+
+        return false;
+    }
+
+    int findLabelIndex(LogicLabel label) {
+        return firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
     }
 }

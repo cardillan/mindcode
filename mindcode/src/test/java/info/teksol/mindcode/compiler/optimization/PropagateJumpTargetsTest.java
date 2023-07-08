@@ -42,8 +42,6 @@ public class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJum
                 createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, "a"),
                 createInstruction(JUMP, "__start__", "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(END)
         );
     }
@@ -60,17 +58,14 @@ public class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJum
                         print("Done")
                         """,
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1001), "notEqual", "c", "null"),
+                createInstruction(JUMP, var(1002), "notEqual", "c", "null"),
                 createInstruction(GETLINK, "c", "1"),
-                createInstruction(JUMP, var(1001), "notEqual", "c", "null"),
-                createInstruction(PRINT, "\"Not found\""),
+                createInstruction(JUMP, var(1002), "notEqual", "c", "null"),
+                createInstruction(PRINT, q("Not found")),
+                createInstruction(JUMP, var(1000), "always"),
                 createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(LABEL, var(1010)),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "\"Done\""),
+                createInstruction(PRINT, q("Done")),
                 createInstruction(END)
         );
     }
@@ -87,17 +82,14 @@ public class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJum
                         print("Done")
                         """,
                 createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1001), "greaterThanEq", "@time", "wait"),
+                createInstruction(JUMP, var(1002), "greaterThanEq", "@time", "wait"),
                 createInstruction(OP, "add", "n", "n", "1"),
                 createInstruction(JUMP, var(1000), "greaterThanEq", "@time", "wait"),
-                createInstruction(PRINT, "\"Waiting\""),
+                createInstruction(PRINT, q("Waiting")),
+                createInstruction(JUMP, var(1000), "always"),
                 createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(LABEL, var(1010)),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "\"Done\""),
+                createInstruction(PRINT, q("Done")),
                 createInstruction(END)
         );
     }

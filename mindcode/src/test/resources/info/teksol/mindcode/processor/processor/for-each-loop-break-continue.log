@@ -5,7 +5,7 @@
      3 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
      7 instructions eliminated by Data Flow Optimization (5 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
      4 instructions eliminated by Stack Optimization.
      2 instructions eliminated by Jump Straightening.
     56 instructions after optimizations.
@@ -335,15 +335,11 @@ set __fn0_n i
 callrec bank1 __label0 __label14
 label __label14
 jump __label1 equal __fn0retval 3
-label __label15
-label __label16
 print i
 set __fn0_n i
 callrec bank1 __label0 __label17
 label __label17
 jump __label3 equal __fn0retval 12
-label __label18
-label __label19
 label __label1
 goto __tmp0 marker0
 gotolabel __label13 marker0
@@ -357,5 +353,4 @@ callrec bank1 __label0 __label23
 label __label23
 op mul __fn0retval -1 __fn0retval
 label __label22
-label __label20
 return bank1

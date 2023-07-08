@@ -8,7 +8,7 @@
      1 loops unrolled by Loop Unrolling.
      1 instructions modified by If Expression Optimization (4 iterations).
     58 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
-     8 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     8 instructions eliminated by Unreachable Code Elimination.
     17 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 990):
@@ -1356,102 +1356,20 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-8 instructi
 
 Final code before resolving virtual instructions:
 
-label __label8
-label __label9
-label __label10
-label __label11
-label __label12
 print 0
-label __label13
-label __label14
-label __label15
-label __label16
-label __label17
 print 1
-label __label18
-label __label19
-label __label20
-label __label21
-label __label22
 print 0
-label __label23
-label __label24
-label __label25
-label __label26
-label __label27
 print 1
-label __label28
-label __label29
-label __label30
-label __label31
-label __label32
 print 0
-label __label33
-label __label34
-label __label35
-label __label36
-label __label37
 print 1
-label __label38
-label __label39
-label __label40
-label __label41
-label __label42
 print 0
-label __label43
-label __label44
-label __label45
-label __label46
-label __label47
 print 1
-label __label48
-label __label49
-label __label50
-label __label51
-label __label52
 print 0
-label __label53
-label __label54
-label __label55
-label __label56
-label __label57
 print 1
-label __label58
-label __label59
-label __label60
-label __label61
-label __label62
 print 0
-label __label63
-label __label64
-label __label65
-label __label66
-label __label67
 print 1
-label __label68
-label __label69
-label __label70
-label __label71
-label __label72
 print 0
-label __label73
-label __label74
-label __label75
-label __label76
-label __label77
 print 1
-label __label78
-label __label79
-label __label80
-label __label81
-label __label82
 print 0
-label __label83
-label __label84
-label __label85
-label __label86
-label __label87
 print 1
-label __label88
-label __label2
 end

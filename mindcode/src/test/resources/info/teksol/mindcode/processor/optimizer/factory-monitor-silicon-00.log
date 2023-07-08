@@ -1500,7 +1500,6 @@ set clw 156
 label __label3
 set cly 0
 jump __label5 equal FROM_INDEX 0
-label __label4
 op mul __tmp6 FROM_INDEX 22
 op add cly 4 __tmp6
 label __label5
@@ -1516,7 +1515,6 @@ set flow_str null
 set expected_flow_str null
 set icon null
 control enabled switch1 0 0 0 0
-label __label8
 sensor __tmp13 switch1 @enabled
 jump __label10 notEqual __tmp13 0
 label __label73
@@ -1528,7 +1526,6 @@ draw rect 0 cly clw clh 0 0
 draw stroke 2 0 0 0 0 0
 set index FROM_INDEX
 set n 0
-label __label11
 jump __label13 greaterThanEq 0 @links
 label __label71
 getlink smelter n
@@ -1547,17 +1544,14 @@ jump __label16 greaterThanEq s 31
 set minimum s
 set icon @sand
 label __label16
-label __label17
 jump __label18 greaterThanEq c minimum
 set minimum c
 set icon @coal
 label __label18
-label __label19
 jump __label20 greaterThanEq p minimum
 set minimum p
 set icon @pyratite
 label __label20
-label __label21
 op greaterThan __tmp35 a 10
 op sub __tmp36 31 a
 op lessThan __tmp37 __tmp36 minimum
@@ -1565,7 +1559,6 @@ op land showa __tmp35 __tmp37
 jump __label22 equal showa false
 set icon @silicon
 label __label22
-label __label23
 op mul __tmp40 0 BAR_SPACE
 op add x 5 __tmp40
 op mul __tmp42 index 22
@@ -1580,7 +1573,6 @@ op land __tmp48 __tmp46 __tmp47
 jump __label24 equal __tmp48 false
 set icon @silicon-crucible
 label __label24
-label __label25
 draw color 255 255 255 255 0 0
 jump __label26 equal e false
 jump __label28 lessThanEq power 0
@@ -1604,7 +1596,6 @@ draw color 255 80 80 255 0 0
 op add __tmp62 x 4
 op add __tmp63 y 6
 draw rect __tmp62 __tmp63 2 2 0 0
-label __label29
 jump __label27 always 0 0
 label __label26
 draw color 255 80 80 255 0 0
@@ -1654,7 +1645,6 @@ op max green 192 green
 op max blue 192 blue
 set boost EXPECTED_BOOST
 label __label38
-label __label39
 op mul __tmp90 BAR_LENGTH boost
 op idiv length __tmp90 EXPECTED_BOOST
 draw color red green blue 128 0 0
@@ -1666,14 +1656,11 @@ draw lineRect x y length 14 0 0
 op add index index 1
 op add factories factories 1
 label __label14
-label __label15
-label __label12
 op add n n 1
 jump __label71 lessThan n @links
 label __label13
 set index FROM_INDEX
 set n 0
-label __label40
 jump __label42 greaterThanEq 0 @links
 label __label72
 getlink smelter n
@@ -1691,17 +1678,14 @@ jump __label45 greaterThanEq s 11
 set minimum s
 set icon @sand
 label __label45
-label __label46
 jump __label47 greaterThanEq c minimum
 set minimum c
 set icon @coal
 label __label47
-label __label48
 jump __label49 greaterThanEq l minimum
 set minimum l
 set icon @lead
 label __label49
-label __label50
 op mul __tmp115 1 BAR_SPACE
 op add x 5 __tmp115
 op mul __tmp117 index 22
@@ -1716,7 +1700,6 @@ op land __tmp123 __tmp121 __tmp122
 jump __label51 equal __tmp123 false
 set icon @pyratite-mixer
 label __label51
-label __label52
 draw color 255 255 255 255 0 0
 jump __label53 equal e false
 jump __label55 lessThanEq power 0
@@ -1740,7 +1723,6 @@ draw color 255 80 80 255 0 0
 op add __tmp137 x 4
 op add __tmp138 y 6
 draw rect __tmp137 __tmp138 2 2 0 0
-label __label56
 jump __label54 always 0 0
 label __label53
 draw color 255 80 80 255 0 0
@@ -1781,7 +1763,6 @@ op max green 192 green
 op max blue 192 0
 set boost EXPECTED_BOOST
 label __label63
-label __label64
 op mul __tmp164 BAR_LENGTH boost
 op idiv length __tmp164 EXPECTED_BOOST
 draw color red green blue 128 0 0
@@ -1792,8 +1773,6 @@ draw color red green blue 255 0 0
 draw lineRect x y length 14 0 0
 op add index index 1
 label __label43
-label __label44
-label __label41
 op add n n 1
 jump __label72 lessThan n @links
 label __label42
@@ -1830,16 +1809,13 @@ draw color 255 255 16 255 0 0
 draw triangle 156 pos1 164 pos 156 pos2
 op idiv flow_str rate 0.0002777777777777778
 label __label69
-label __label70
 label __label67
-label __label68
 print "\nNominal production: "
 print expected_flow_str
 print "/min\nActual production: "
 print flow_str
 print "/min"
 label __label65
-label __label66
 drawflush display1
 op sub __tmp191 @time start
 op floor __tmp192 __tmp191 0
@@ -1847,7 +1823,6 @@ print "\nUpdate time: "
 print __tmp192
 print " ms"
 printflush message1
-label __label9
 sensor __tmp13 switch1 @enabled
 jump __label73 equal __tmp13 0
 label __label10

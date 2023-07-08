@@ -857,7 +857,6 @@ set SORTER null
 label __label0
 print "Configuring regulator...\n"
 set n @links
-label __label3
 jump __label5 lessThanEq n 0
 label __label55
 op sub n n 1
@@ -867,12 +866,10 @@ print block
 print "\n"
 sensor __ast0 block @type
 jump __label7 notEqual __ast0 @message
-label __label8
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
 jump __label9 notEqual __ast0 @switch
-label __label10
 set SWITCH block
 jump __label6 always 0 0
 label __label9
@@ -924,7 +921,6 @@ set MAXIMUM @powerNetCapacity
 op add START n 1
 label __label19
 label __label6
-label __label4
 jump __label55 greaterThan n 0
 label __label5
 print "Message: "
@@ -939,14 +935,10 @@ print "\n"
 jump __label21 notEqual CONTAINER null
 print "No container.\n"
 label __label21
-label __label22
 printflush MESSAGE
-label __label1
 jump __label0 equal CONTAINER null
-label __label2
 sensor __tmp13 SORTER @type
 op strictEqual INVERTED __tmp13 @inverted-sorter
-label __label23
 jump __label25 equal STATE true
 set STATE true
 op add CYCLES CYCLES 1
@@ -956,11 +948,8 @@ jump __label28 equal ON false
 set ACTIVE_TEXT "\nCurrently active:[green]"
 label __label28
 label __label25
-label __label26
-label __label24
 set CYCLES 0
 control enabled SWITCH 0 0 0 0
-label __label29
 sensor __tmp21 SWITCH @enabled
 jump __label31 notEqual __tmp21 0
 label __label57
@@ -985,7 +974,6 @@ sensor amount CONTAINER item
 op mul __tmp31 100 amount
 op idiv pct __tmp31 max
 jump __label34 greaterThan pct PCT_LOW
-label __label36
 jump __label35 equal STATE true
 set STATE true
 op add CYCLES CYCLES 1
@@ -993,14 +981,9 @@ op xor ON INVERTED STATE
 set ACTIVE_TEXT "\nCurrently inactive:[salmon]"
 jump __label35 equal ON false
 set ACTIVE_TEXT "\nCurrently active:[green]"
-label __label41
-label __label38
-label __label39
-label __label37
 jump __label35 always 0 0
 label __label34
 jump __label42 lessThan pct PCT_HIGH
-label __label44
 jump __label46 equal STATE false
 set STATE false
 op add CYCLES CYCLES 1
@@ -1010,10 +993,7 @@ jump __label49 equal ON false
 set ACTIVE_TEXT "\nCurrently active:[green]"
 label __label49
 label __label46
-label __label47
-label __label45
 label __label42
-label __label43
 label __label35
 print "\nLevel: [gold]"
 print pct
@@ -1034,7 +1014,6 @@ print "%[]"
 label __label51
 print ACTIVE_TEXT
 set n START
-label __label52
 jump __label54 greaterThanEq START @links
 label __label56
 getlink block n
@@ -1042,7 +1021,6 @@ control enabled block ON 0 0 0
 print "\n    "
 print block
 op add n n 1
-label __label53
 jump __label56 lessThan n @links
 label __label54
 print "[]\n# of cycles: "
@@ -1053,7 +1031,6 @@ print "\n[lightgray]Loop: "
 print __tmp54
 print " ms"
 printflush MESSAGE
-label __label30
 sensor __tmp21 SWITCH @enabled
 jump __label57 equal __tmp21 0
 label __label31

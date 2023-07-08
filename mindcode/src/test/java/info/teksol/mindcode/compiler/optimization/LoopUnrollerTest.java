@@ -201,7 +201,6 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end
                         """,
                 createInstruction(SET, "i", "0"),
-                createInstruction(LABEL, var(1000)),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(SET, var(2), "2"),
                 createInstruction(OP, "mod", var(1), "i", "2"),
@@ -210,9 +209,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
                 createInstruction(LABEL, var(1004)),
                 createInstruction(OP, "add", "i", "i", var(2)),
                 createInstruction(PRINT, "i"),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(JUMP, var(1005), "lessThan", "i", "10"),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
     }
@@ -229,19 +226,14 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end
                         """,
                 createInstruction(SET, "i", "0"),
-                createInstruction(LABEL, var(1000)),
                 createInstruction(LABEL, var(1006)),
-                createInstruction(LABEL, var(1003)),
                 createInstruction(JUMP, var(1005), "greaterThanEq", "i", "5"),
                 createInstruction(LABEL, var(1007)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(LABEL, var(1004)),
                 createInstruction(JUMP, var(1007), "lessThan", "i", "5"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(PRINT, "i"),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(JUMP, var(1006), "lessThan", "i", "10"),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
     }
@@ -254,16 +246,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SET, "i", "-5"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, "__start__", "always"),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, q("a")),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1003), "lessThan", "i", "-10"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(END)
+                createInstruction(JUMP, "__start__", "always")
         );
     }
 
@@ -499,14 +482,11 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end
                         """,
                 createInstruction(SET, "k", "1"),
-                createInstruction(LABEL, var(1000)),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, q(" ")),
                 createInstruction(PRINT, "k"),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "shl", "k", "k", "1"),
                 createInstruction(JUMP, var(1003), "lessThan", "k", "100000"),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
     }
@@ -552,13 +532,10 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end
                         """,
                 createInstruction(SET, "i", "0"),
-                createInstruction(LABEL, var(1000)),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, "i"),
-                createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "add", "i", "i", "0.1"),
                 createInstruction(JUMP, var(1003), "lessThanEq", "i", "1"),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(END)
         );
     }

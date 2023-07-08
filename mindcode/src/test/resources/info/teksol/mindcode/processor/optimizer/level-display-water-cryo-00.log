@@ -339,7 +339,6 @@ set TANK_CRYO null
 set MESSAGE null
 set SWITCH null
 set DISPLAY null
-label __label0
 op equal __tmp0 TANK_CRYO null
 op equal __tmp1 TANK_WATER null
 op or __tmp2 __tmp0 __tmp1
@@ -349,7 +348,6 @@ jump __label2 equal __tmp4 false
 label __label24
 print "Water and Cryofluid Level Meter"
 set n @links
-label __label3
 jump __label5 lessThanEq n 0
 label __label22
 op sub n n 1
@@ -358,27 +356,22 @@ print "\nFound: "
 print block
 sensor __ast0 block @type
 jump __label7 notEqual __ast0 @message
-label __label8
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
 jump __label9 notEqual __ast0 @switch
-label __label10
 set SWITCH block
 jump __label6 always 0 0
 label __label9
 jump __label11 notEqual __ast0 @liquid-tank
-label __label12
 set TANK_CRYO TANK_WATER
 set TANK_WATER block
 jump __label6 always 0 0
 label __label11
 jump __label13 notEqual __ast0 @logic-display
-label __label14
 set DISPLAY block
 label __label13
 label __label6
-label __label4
 jump __label22 greaterThan n 0
 label __label5
 print "\nMessage: "
@@ -392,13 +385,10 @@ print TANK_CRYO
 jump __label15 notEqual TANK_CRYO null
 print "\nNo cryofluid or water tank."
 label __label15
-label __label16
 jump __label17 notEqual DISPLAY null
 print "\nNo display."
 label __label17
-label __label18
 printflush MESSAGE
-label __label1
 op equal __tmp0 TANK_CRYO null
 op equal __tmp1 TANK_WATER null
 op or __tmp2 __tmp0 __tmp1
@@ -408,7 +398,6 @@ jump __label24 notEqual __tmp4 false
 label __label2
 set MULTIPLIER 0.03666666666666667
 control enabled SWITCH 0 0 0 0
-label __label19
 sensor __tmp15 SWITCH @enabled
 jump __label21 notEqual __tmp15 0
 label __label23
@@ -451,7 +440,6 @@ op sub __tmp36 @time start_time
 print "\nElapsed: "
 print __tmp36
 printflush MESSAGE
-label __label20
 sensor __tmp15 SWITCH @enabled
 jump __label23 equal __tmp15 0
 label __label21

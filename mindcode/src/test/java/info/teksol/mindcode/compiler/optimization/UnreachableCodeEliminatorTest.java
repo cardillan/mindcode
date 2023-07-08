@@ -34,17 +34,13 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                             end
                         end
                         """,
+                createInstruction(LABEL, "__start__"),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(JUMP, var(1000), "equal", "a", "false"),
+                createInstruction(JUMP, "__start__", "equal", "a", "false"),
                 createInstruction(LABEL, var(1003)),
-                createInstruction(JUMP, var(1001), "equal", "b", "false"),
+                createInstruction(JUMP, var(1000), "equal", "b", "false"),
                 createInstruction(PRINT, "b"),
-                createInstruction(LABEL, var(1010)),
-                createInstruction(JUMP, var(1003), "always"),
-                createInstruction(LABEL, var(1011)),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(LABEL, var(1002))
+                createInstruction(JUMP, var(1003), "always")
         );
     }
 
@@ -58,9 +54,6 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                         print(c)
                         """,
                 createInstruction(PRINT, "a"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, "c"),
                 createInstruction(END)
         );
@@ -78,16 +71,8 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                         end
                         print("Done")
                         """,
-                createInstruction(LABEL, var(1001)),
-                createInstruction(GOTOLABEL, var(1004), "__fn0"),
-                createInstruction(GOTOLABEL, var(1005), "__fn0"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, q("Done")),
-                createInstruction(END),
-                // det a -- removed
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1006))
+                createInstruction(END)
         );
     }
 
@@ -123,11 +108,6 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                 createInstruction(CALL, var(1002)),
                 createInstruction(GOTOLABEL, var(1004), "__fn2"),
                 // if false + call testb -- removed
-                createInstruction(LABEL, var(1005)),
-                createInstruction(GOTOLABEL, var(1008), "__fn0"),
-                createInstruction(GOTOLABEL, var(1009), "__fn0"),
-                createInstruction(LABEL, var(1006)),
-                createInstruction(LABEL, var(1007)),
                 // call testc (2)
                 createInstruction(SETADDR, "__fn1retaddr", var(1010)),
                 createInstruction(CALL, var(1001)),
@@ -138,20 +118,30 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                 createInstruction(PRINTFLUSH, "message1"),
                 createInstruction(END),
                 // def testb -- removed
-                createInstruction(LABEL, var(1000)),
-                createInstruction(LABEL, var(1012)),
                 // def testc
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "\"End\""),
-                createInstruction(LABEL, var(1013)),
                 createInstruction(GOTO, "__fn1retaddr", "__fn1"),
-                createInstruction(END),
                 // def testa
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, "\"Start\""),
-                createInstruction(LABEL, var(1014)),
-                createInstruction(GOTO, "__fn2retaddr", "__fn2"),
-                createInstruction(END)
+                createInstruction(GOTO, "__fn2retaddr", "__fn2")
+        );
+    }
+
+    @Test
+    void eliminatesSelfReferencedJumps() {
+        assertCompilesTo("""
+                        while true
+                           print("foo")
+                           printflush(message1)
+                        end
+                        print("WooHoo!")
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, q("foo")),
+                createInstruction(PRINTFLUSH, "message1"),
+                createInstruction(JUMP, var(1000), "always")
         );
     }
 }

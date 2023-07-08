@@ -5,7 +5,7 @@
     10 instructions eliminated by Conditional Jump Optimization (3 iterations).
     10 instructions eliminated by Single Step Elimination (4 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
      2 instructions eliminated by Print Merging.
     71 instructions after optimizations.
 
@@ -698,9 +698,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
+   112 printflush message1
    113 label __label1
    114 jump __label0 always
-   115 label __label2
+-    * label __label2
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
@@ -734,96 +735,66 @@ op add ANSWER_FLAG position LINK_ID
 set SERVICED 0
 label __label0
 set start @time
-label __label3
 ubind @mono
 sensor __tmp9 @unit @flag
 jump __label5 notEqual __tmp9 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label5
-label __label6
-label __label4
-label __label7
 ubind @poly
 sensor __tmp14 @unit @flag
 jump __label9 notEqual __tmp14 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label9
-label __label10
-label __label8
-label __label11
 ubind @mega
 sensor __tmp19 @unit @flag
 jump __label13 notEqual __tmp19 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label13
-label __label14
-label __label12
-label __label15
 ubind @quad
 sensor __tmp24 @unit @flag
 jump __label17 notEqual __tmp24 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label17
-label __label18
-label __label16
-label __label19
 ubind @oct
 sensor __tmp29 @unit @flag
 jump __label21 notEqual __tmp29 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label21
-label __label22
-label __label20
-label __label23
 ubind @flare
 sensor __tmp34 @unit @flag
 jump __label25 notEqual __tmp34 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label25
-label __label26
-label __label24
-label __label27
 ubind @horizon
 sensor __tmp39 @unit @flag
 jump __label29 notEqual __tmp39 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label29
-label __label30
-label __label28
-label __label31
 ubind @zenith
 sensor __tmp44 @unit @flag
 jump __label33 notEqual __tmp44 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label33
-label __label34
-label __label32
-label __label35
 ubind @antumbra
 sensor __tmp49 @unit @flag
 jump __label37 notEqual __tmp49 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label37
-label __label38
-label __label36
-label __label39
 ubind @eclipse
 sensor __tmp54 @unit @flag
 jump __label41 notEqual __tmp54 QUERY_FLAG
 ucontrol flag ANSWER_FLAG 0 0 0 0
 op add SERVICED SERVICED 1
 label __label41
-label __label42
-label __label40
 print "Remote vault [gold]#"
 print LINK_ID
 print "[]\nQueries serviced: [green]"
@@ -834,6 +805,4 @@ print "[]\n[lightgray]Loop time: "
 print __tmp59
 print " ms"
 printflush message1
-label __label1
 jump __label0 always 0 0
-label __label2

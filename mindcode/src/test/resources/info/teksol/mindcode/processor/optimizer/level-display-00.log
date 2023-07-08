@@ -503,7 +503,6 @@ op add M_B0 M_START_INDEX 5
 op add M_R1 M_START_INDEX 6
 op add M_G1 M_START_INDEX 7
 op add M_B1 M_START_INDEX 8
-label __label0
 op equal __tmp7 MEMORY null
 op equal __tmp8 DISPLAY null
 op or __tmp9 __tmp7 __tmp8
@@ -511,7 +510,6 @@ jump __label2 equal __tmp9 false
 label __label32
 print "Item/Liquid/Energy Level Display"
 set n @links
-label __label3
 jump __label5 lessThanEq n 0
 label __label28
 op sub n n 1
@@ -520,31 +518,25 @@ print "\nFound: "
 print block
 sensor __ast0 block @type
 jump __label7 notEqual __ast0 @large-logic-display
-label __label8
 set DISPLAY block
 jump __label6 always 0 0
 label __label7
 jump __label9 notEqual __ast0 @message
-label __label10
 set MESSAGE block
 jump __label6 always 0 0
 label __label9
 jump __label11 notEqual __ast0 @switch
-label __label12
 set SWITCH block
 jump __label6 always 0 0
 label __label11
 jump __label13 notEqual __ast0 @memory-bank
-label __label14
 set MEMORY block
 jump __label6 always 0 0
 label __label13
 jump __label15 notEqual __ast0 @memory-cell
-label __label16
 set MEMORY block
 label __label15
 label __label6
-label __label4
 jump __label28 greaterThan n 0
 label __label5
 print "\nMessage: "
@@ -561,9 +553,7 @@ op or __tmp18 __tmp16 __tmp17
 jump __label17 equal __tmp18 false
 print "\nNo memory or display."
 label __label17
-label __label18
 printflush MESSAGE
-label __label1
 jump __label32 notEqual __tmp18 false
 label __label2
 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
@@ -574,7 +564,6 @@ read R1 MEMORY M_R1
 read G1 MEMORY M_G1
 read B1 MEMORY M_B1
 draw stroke 1 0 0 0 0 0
-label __label19
 sensor __tmp27 SWITCH @enabled
 jump __label21 notEqual __tmp27 0
 label __label31
@@ -591,7 +580,6 @@ print "\nValue: "
 print last
 draw color R1 G1 B1 255 0 0
 set x 159
-label __label22
 label __label29
 op sub head head 1
 read value MEMORY head
@@ -599,9 +587,7 @@ op sub x1 x 5
 draw line x last x1 value 0 0
 set x x1
 set last value
-label __label23
 jump __label29 greaterThan x1 10
-label __label24
 draw color 255 255 255 255 0 0
 draw lineRect 10 10 156 156 0 0
 op sub __tmp36 @time start
@@ -611,18 +597,15 @@ op div __tmp37 @time FREQ
 op ceil __tmp38 __tmp37 0
 op mul wait FREQ __tmp38
 set loops 0
-label __label25
 jump __label27 greaterThanEq @time wait
 label __label30
 op add loops loops 1
-label __label26
 jump __label30 lessThan @time wait
 label __label27
 drawflush DISPLAY
 print "\nWait loops: "
 print loops
 printflush MESSAGE
-label __label20
 sensor __tmp27 SWITCH @enabled
 jump __label31 equal __tmp27 0
 label __label21

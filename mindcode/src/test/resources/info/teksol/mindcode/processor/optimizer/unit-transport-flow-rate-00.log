@@ -326,7 +326,6 @@ op mul TOTAL_MILLIS DELAY SAMPLES
 set SORTER sorter1
 set VAULT vault1
 set BANK bank1
-label __label0
 op equal __tmp1 SORTER null
 op equal __tmp2 VAULT null
 op or __tmp3 __tmp1 __tmp2
@@ -339,7 +338,6 @@ printflush message1
 set SORTER sorter1
 set VAULT vault1
 set BANK bank1
-label __label1
 op equal __tmp1 SORTER null
 op equal __tmp2 VAULT null
 op or __tmp3 __tmp1 __tmp2
@@ -355,7 +353,6 @@ set last_total shipped
 set index 0
 set MILLIS 0
 set wait 0
-label __label3
 sensor __tmp10 SORTER @dead
 op strictEqual __tmp11 __tmp10 0
 sensor __tmp12 VAULT @dead
@@ -372,7 +369,6 @@ jump __label6 lessThanEq start wait
 print "Wait reset\n"
 op add wait start DELAY
 label __label6
-label __label7
 read shipped BANK IND_SHIPPED
 sensor item SORTER @config
 op add total 0 shipped
@@ -415,14 +411,11 @@ print elapsed
 print " ms"
 printflush message1
 set loops 0
-label __label10
 jump __label12 greaterThanEq @time wait
 label __label13
 op add loops loops 1
-label __label11
 jump __label13 lessThan @time wait
 label __label12
-label __label4
 sensor __tmp10 SORTER @dead
 op strictEqual __tmp11 __tmp10 0
 sensor __tmp12 VAULT @dead

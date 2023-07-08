@@ -6,7 +6,7 @@
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
      5 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
     76 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
@@ -281,30 +281,22 @@ set value 1
 label __label2
 write value bank1 index
 op add index index 1
-label __label1
 goto __tmp0 marker0
 gotolabel __label11 marker0
-label __label3
-label __label12
 print 41
-label __label13
 set __fn0_amount 20
 set __fn0_index 1
 callrec bank1 __label0 __label14
 label __label14
-label __label15
 print __fn0retval
-label __label16
 end
 label __label0
 jump __label18 notEqual __fn0_amount 0
 set __fn0retval 1
 jump __label17 always 0 0
 label __label18
-label __label19
 set __fn0_result 0
 set __fn0_i __fn0_index
-label __label20
 jump __label22 greaterThanEq __fn0_index 8
 label __label26
 read __fn0_p bank1 __fn0_i
@@ -325,8 +317,6 @@ pop bank1 __fn0_index
 pop bank1 __fn0_amount
 op add __fn0_result __fn0_result __fn0retval
 label __label23
-label __label24
-label __label21
 op add __fn0_i __fn0_i 1
 jump __label26 lessThan __fn0_i 8
 label __label22

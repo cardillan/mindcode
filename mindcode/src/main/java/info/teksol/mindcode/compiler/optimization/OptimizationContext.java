@@ -45,6 +45,12 @@ public class OptimizationContext {
      */
     private final Map<LogicLabel, LabelInstruction> labels;
 
+    /**
+     * Tracks all instructions that target a label. Unused labels (labels whose list of instructions would be empty)
+     * are removed from the program after each iteration finishes.
+     */
+    private final Map<LogicLabel, List<LogicInstruction>> labelReferences = new HashMap<>();
+
     private int modifications = 0;
     private int insertions = 0;
     private int deletions = 0;
@@ -62,6 +68,9 @@ public class OptimizationContext {
                 .filter(LabelInstruction.class::isInstance)
                 .map(LabelInstruction.class::cast)
                 .collect(Collectors.toMap(LabelInstruction::getLabel, ix -> ix));
+
+        /* Create label references */
+        instructionStream().forEachOrdered(this::addLabelReferences);
     }
 
     InstructionProcessor getInstructionProcessor() {
@@ -157,7 +166,6 @@ public class OptimizationContext {
     }
 
     private void addLabelInstruction(LabelInstruction instruction) {
-//        System.out.println("Adding label " + instruction.getLabel());
         if (labels.containsKey(instruction.getLabel())) {
             throw new MindcodeInternalError("Adding duplicate label %s.", instruction.getLabel());
         }
@@ -165,10 +173,71 @@ public class OptimizationContext {
     }
 
     private void removeLabelInstruction(LabelInstruction instruction) {
-//        System.out.println("Removing label " + instruction.getLabel());
         if (labels.remove(instruction.getLabel()) == null) {
             throw new MindcodeInternalError("Removing nonexistent label %s.", instruction.getLabel());
         }
+    }
+
+    private void addLabelReferences(LogicInstruction instruction) {
+        switch (instruction) {
+            case JumpInstruction ix         -> labelReferences.computeIfAbsent(ix.getTarget(), v -> new ArrayList<>()).add(ix);
+            case SetAddressInstruction ix   -> labelReferences.computeIfAbsent(ix.getLabel(), v -> new ArrayList<>()).add(ix);
+            case GotoInstruction ix         -> labelReferences.computeIfAbsent(ix.getMarker(), v -> new ArrayList<>()).add(ix);
+            case CallInstruction ix         -> labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
+            case CallRecInstruction ix      -> {
+                labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
+                labelReferences.computeIfAbsent(ix.getRetAddr(), v -> new ArrayList<>()).add(ix);
+            }
+            default -> {}
+        }
+    }
+
+    private void removeLabelReferences(LogicInstruction instruction) {
+        switch (instruction) {
+            case JumpInstruction ix         -> clearReferences(ix.getTarget(), ix);
+            case SetAddressInstruction ix   -> clearReferences(ix.getLabel(), ix);
+            case GotoInstruction ix         -> clearReferences(ix.getMarker(), ix);
+            case CallInstruction ix         -> clearReferences(ix.getCallAddr(), ix);
+            case CallRecInstruction ix      -> {
+                clearReferences(ix.getCallAddr(), ix);
+                clearReferences(ix.getRetAddr(), ix);
+            }
+            default -> {}
+        }
+    }
+
+    private void clearReferences(LogicLabel label, LogicInstruction reference) {
+        List<LogicInstruction> references = labelReferences.get(label);
+        references.removeIf(ix -> ix == reference);
+
+    }
+
+    public void removeInactiveLabels() {
+        try (LogicIterator it = createIterator()) {
+            while (it.hasNext()) {
+                switch (it.next()) {
+                    case LabelInstruction label -> {
+                        List<LogicInstruction> references = labelReferences.get(label.getLabel());
+                        if (references == null || references.isEmpty()) {
+                            it.remove();
+                        }
+                    }
+                    case GotoLabelInstruction gotoLabel -> {
+                        List<LogicInstruction> references = labelReferences.get(gotoLabel.getMarker());
+                        if (references == null || references.isEmpty()) {
+                            it.remove();
+                        }
+                    }
+                    default -> {
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean isActive(LogicLabel label) {
+        List<LogicInstruction> references = labelReferences.get(label);
+        return references != null && !references.isEmpty();
     }
 
     public boolean isUnrolledVariable(LogicVariable variable) {
@@ -546,6 +615,8 @@ public class OptimizationContext {
         if (instruction instanceof LabelInstruction label) {
             addLabelInstruction(label);
         }
+        addLabelReferences(instruction);
+
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
@@ -557,6 +628,8 @@ public class OptimizationContext {
         if (instruction instanceof LabelInstruction label) {
             removeLabelInstruction(label);
         }
+        removeLabelReferences(instruction);
+
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)

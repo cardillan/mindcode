@@ -1152,12 +1152,10 @@ set CAPACITY 120
 set COLUMN_SIZE 8
 set DISPLAY null
 set MEMORY null
-label __label0
 jump __label2 notEqual DISPLAY null
 label __label58
 print "Mass Driver Monitor\n"
 set n @links
-label __label3
 jump __label5 lessThanEq n 0
 label __label59
 op sub n n 1
@@ -1167,12 +1165,10 @@ print block
 print "\n"
 sensor __ast0 block @type
 jump __label7 notEqual __ast0 @message
-label __label8
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
 jump __label9 notEqual __ast0 @switch
-label __label10
 set SWITCH block
 jump __label6 always 0 0
 label __label9
@@ -1188,7 +1184,6 @@ label __label14
 set MEMORY block
 label __label13
 label __label6
-label __label4
 jump __label59 greaterThan n 0
 label __label5
 print "Message: "
@@ -1203,9 +1198,7 @@ print "\n"
 jump __label15 notEqual DISPLAY null
 print "No display.\n"
 label __label15
-label __label16
 printflush MESSAGE
-label __label1
 jump __label58 equal DISPLAY null
 label __label2
 sensor __tmp9 DISPLAY @type
@@ -1223,7 +1216,6 @@ op sub clw __tmp12 2
 set crw clw
 set cly 0
 jump __label20 equal FROM_INDEX 0
-label __label19
 op mul __tmp16 FROM_INDEX BAR_GAP
 op add cly OFFSET_Y __tmp16
 label __label20
@@ -1252,7 +1244,6 @@ set crw clw
 set cly 0
 op mod __tmp30 FROM_INDEX 8
 jump __label26 equal __tmp30 0
-label __label25
 op mul __tmp34 __tmp30 BAR_GAP
 op add cly OFFSET_Y __tmp34
 label __label26
@@ -1274,7 +1265,6 @@ op sub clw __tmp42 2
 set crw clw
 set cly 0
 jump __label30 equal FROM_INDEX 0
-label __label29
 op mul __tmp46 FROM_INDEX BAR_GAP
 op add cly OFFSET_Y __tmp46
 label __label30
@@ -1298,7 +1288,6 @@ op add __tmp61 OFFSET_Y __tmp63
 label __label36
 op sub crh __tmp61 0
 label __label33
-label __label34
 label __label24
 label __label18
 op idiv HALF_BAR BAR_LENGTH 2
@@ -1306,18 +1295,14 @@ set MAX CAPACITY
 op div MUL BAR_LENGTH MAX
 jump __label37 equal MEMORY null
 set n 0
-label __label39
 jump __label41 greaterThanEq 0 @links
 label __label60
 write 0 MEMORY n
-label __label40
 op add n n 1
 jump __label60 lessThan n @links
 label __label41
 label __label37
-label __label38
 control enabled SWITCH 0 0 0 0
-label __label42
 sensor __tmp72 SWITCH @enabled
 jump __label44 notEqual __tmp72 0
 label __label62
@@ -1328,7 +1313,6 @@ draw rect crx cry crw crh 0 0
 draw stroke 2 0 0 0 0 0
 set index FROM_INDEX
 set n 0
-label __label45
 jump __label47 greaterThanEq 0 @links
 label __label61
 getlink driver n
@@ -1357,7 +1341,6 @@ jump __label50 lessThanEq maxx MAX
 op mul MAX 2 CAPACITY
 op div MUL BAR_LENGTH MAX
 label __label50
-label __label51
 jump __label52 greaterThan MAX CAPACITY
 draw color 0 128 0 255 0 0
 jump __label53 always 0 0
@@ -1371,7 +1354,6 @@ draw color 220 220 220 255 0 0
 op mul __tmp103 maxx MUL
 draw lineRect x y __tmp103 BAR_WIDTH 0 0
 label __label54
-label __label55
 jump __label56 greaterThan MAX CAPACITY
 draw color 0 255 0 255 0 0
 draw lineRect x y BAR_LENGTH BAR_WIDTH 0 0
@@ -1384,8 +1366,6 @@ draw lineRect __tmp106 y HALF_BAR BAR_WIDTH 0 0
 label __label57
 op add index index 1
 label __label48
-label __label49
-label __label46
 op add n n 1
 jump __label61 lessThan n @links
 label __label47
@@ -1397,7 +1377,6 @@ print "[lightgray]Draw time: "
 print __tmp110
 print " ms"
 printflush MESSAGE
-label __label43
 sensor __tmp72 SWITCH @enabled
 jump __label62 equal __tmp72 0
 label __label44

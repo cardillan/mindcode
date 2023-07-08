@@ -5,7 +5,7 @@
     30 instructions eliminated by Dead Code Elimination (6 iterations).
      6 instructions eliminated by Conditional Jump Optimization (3 iterations).
     10 instructions eliminated by Single Step Elimination (4 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
      7 instructions eliminated by Jump Straightening.
      2 instructions updated by PropagateJumpTargets.
    105 instructions after optimizations.
@@ -548,9 +548,10 @@ Modifications by Final phase, Jump Threading, iteration 1:
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
+   146 label __label15
    147 label __label1
    148 jump __label0 always
-   149 label __label2
+-    * label __label2
 -    * end
 
 Final code before resolving virtual instructions:
@@ -564,22 +565,18 @@ label __label0
 sensor __tmp2 switch2 @enabled
 jump __label3 equal __tmp2 false
 jump __label6 notEqual UNIT @flare
-label __label7
 set __tmp4 @mono
 jump __label5 always 0 0
 label __label6
 jump __label8 notEqual UNIT @mono
-label __label9
 set __tmp4 @poly
 jump __label5 always 0 0
 label __label8
 jump __label10 notEqual UNIT @poly
-label __label11
 set __tmp4 @mega
 jump __label5 always 0 0
 label __label10
 jump __label12 notEqual UNIT @mega
-label __label13
 set __tmp4 @flare
 jump __label5 always 0 0
 label __label12
@@ -591,7 +588,6 @@ control enabled switch2 false 0 0 0
 print UNIT
 print ": gathering information..."
 label __label3
-label __label4
 ubind UNIT
 jump __label14 notEqual @unit null
 print UNIT
@@ -611,9 +607,7 @@ sensor __tmp12 switch1 @enabled
 jump __label18 equal __tmp12 false
 print " (cleanup active)"
 label __label18
-label __label19
 label __label16
-label __label17
 sensor controlled @unit @controlled
 sensor flag @unit @flag
 sensor items @unit @totalItems
@@ -622,7 +616,6 @@ sensor __tmp18 @unit @controller
 jump __label20 notEqual __tmp18 @this
 set controlled 0
 label __label20
-label __label21
 op notEqual __tmp21 flag 0
 op greaterThan __tmp22 items 0
 op or __tmp23 __tmp21 __tmp22
@@ -635,7 +628,6 @@ jump __label22 equal __tmp28 false
 print "\n"
 print index
 jump __label25 notEqual controlled @ctrlProcessor
-label __label26
 sensor controller @unit @controller
 sensor __tmp32 controller @x
 op floor x __tmp32 0
@@ -648,12 +640,10 @@ print y
 jump __label24 always 0 0
 label __label25
 jump __label27 notEqual controlled @ctrlPlayer
-label __label28
 print ", player"
 jump __label24 always 0 0
 label __label27
 jump __label29 notEqual controlled @ctrlFormation
-label __label30
 print ", group"
 label __label29
 label __label24
@@ -661,16 +651,13 @@ jump __label31 equal flag 0
 print ", F"
 print flag
 label __label31
-label __label32
 jump __label33 lessThanEq items 0
 print ", "
 print items
 print " "
 print item
 label __label33
-label __label34
 label __label22
-label __label23
 op equal __tmp40 controlled 0
 sensor __tmp41 switch1 @enabled
 op land __tmp42 __tmp40 __tmp41
@@ -684,7 +671,6 @@ ucontrol itemDrop CORE items 0 0 0
 jump __label38 always 0 0
 label __label39
 ucontrol approach CORE_X CORE_Y 4 0 0
-label __label40
 jump __label38 always 0 0
 label __label37
 jump __label41 equal flag 0
@@ -696,12 +682,7 @@ label __label43
 ucontrol approach THIS_X THIS_Y 4 0 0
 label __label44
 label __label41
-label __label42
 label __label38
 label __label35
-label __label36
 op add index index 1
-label __label15
-label __label1
 jump __label0 always 0 0
-label __label2

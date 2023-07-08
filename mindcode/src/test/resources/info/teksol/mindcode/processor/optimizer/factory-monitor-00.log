@@ -1640,7 +1640,6 @@ set LIM2 66
 set DISPLAY null
 set TYPE null
 set icon null
-label __label0
 op equal __tmp0 DISPLAY null
 op equal __tmp1 TYPE null
 op or __tmp2 __tmp0 __tmp1
@@ -1648,19 +1647,16 @@ jump __label2 equal __tmp2 false
 label __label86
 print "Universal Factory Monitor\n"
 set n @links
-label __label3
 jump __label5 lessThanEq n 0
 label __label83
 op sub n n 1
 getlink block n
 sensor __ast0 block @type
 jump __label7 notEqual __ast0 @message
-label __label8
 set MESSAGE block
 jump __label6 always 0 0
 label __label7
 jump __label9 notEqual __ast0 @switch
-label __label10
 set SWITCH block
 jump __label6 always 0 0
 label __label9
@@ -1671,7 +1667,6 @@ set DISPLAY block
 jump __label6 always 0 0
 label __label11
 jump __label13 notEqual __ast0 @silicon-factory
-label __label14
 set TYPE @silicon-factory
 sensor CAPACITY block @itemCapacity
 set RES1 @sand
@@ -1684,7 +1679,6 @@ set OUTPUT @silicon
 jump __label6 always 0 0
 label __label13
 jump __label15 notEqual __ast0 @silicon-crucible
-label __label16
 set TYPE @silicon-crucible
 sensor CAPACITY block @itemCapacity
 set RES1 @sand
@@ -1697,7 +1691,6 @@ set OUTPUT @silicon
 jump __label6 always 0 0
 label __label15
 jump __label17 notEqual __ast0 @kiln
-label __label18
 set TYPE @kiln
 sensor CAPACITY block @itemCapacity
 set RES1 @sand
@@ -1710,7 +1703,6 @@ set OUTPUT @metaglass
 jump __label6 always 0 0
 label __label17
 jump __label19 notEqual __ast0 @phase-weaver
-label __label20
 set TYPE @phase-weaver
 sensor CAPACITY block @itemCapacity
 set RES1 @sand
@@ -1723,7 +1715,6 @@ set OUTPUT @phase-fabric
 jump __label6 always 0 0
 label __label19
 jump __label21 notEqual __ast0 @pyratite-mixer
-label __label22
 set TYPE @pyratite-mixer
 sensor CAPACITY block @itemCapacity
 set RES1 @sand
@@ -1736,7 +1727,6 @@ set OUTPUT @pyratite
 jump __label6 always 0 0
 label __label21
 jump __label23 notEqual __ast0 @blast-mixer
-label __label24
 set TYPE @blast-mixer
 sensor CAPACITY block @itemCapacity
 set RES1 @pyratite
@@ -1749,7 +1739,6 @@ set OUTPUT @blast-compound
 jump __label6 always 0 0
 label __label23
 jump __label25 notEqual __ast0 @plastanium-compressor
-label __label26
 set TYPE @plastanium-compressor
 sensor CAPACITY block @itemCapacity
 set RES1 @titanium
@@ -1766,7 +1755,6 @@ print "\n  "
 print block
 print " not supported"
 label __label6
-label __label4
 jump __label83 greaterThan n 0
 label __label5
 print "Message: "
@@ -1794,9 +1782,7 @@ op or __tmp27 __tmp25 __tmp26
 jump __label27 equal __tmp27 false
 print "No block to monitor or display."
 label __label27
-label __label28
 printflush MESSAGE
-label __label1
 jump __label86 notEqual __tmp27 false
 label __label2
 sensor __tmp29 DISPLAY @type
@@ -1814,7 +1800,6 @@ op sub clw __tmp32 2
 set crw clw
 set cly 0
 jump __label32 equal FROM_INDEX 0
-label __label31
 op mul __tmp36 FROM_INDEX BAR_GAP
 op add cly OFFSET_Y __tmp36
 label __label32
@@ -1841,7 +1826,6 @@ op sub crw 177 __tmp45
 set cry 0
 op mod __tmp50 FROM_INDEX 8
 jump __label38 equal __tmp50 0
-label __label37
 op mul __tmp54 __tmp50 BAR_GAP
 op add cry OFFSET_Y __tmp54
 label __label38
@@ -1863,7 +1847,6 @@ op add __tmp62 OFFSET_X BAR_SPACE
 op sub clw __tmp62 2
 set cly 0
 jump __label42 equal FROM_INDEX 0
-label __label41
 op mul __tmp66 FROM_INDEX BAR_GAP
 op add cly OFFSET_Y __tmp66
 label __label42
@@ -1894,7 +1877,6 @@ label __label46
 label __label36
 label __label30
 control enabled SWITCH 0 0 0 0
-label __label49
 sensor __tmp86 SWITCH @enabled
 jump __label51 notEqual __tmp86 0
 label __label85
@@ -1909,12 +1891,9 @@ draw stroke 2 0 0 0 0 0
 set index FROM_INDEX
 set __tmp89 @links
 set n 0
-label __label52
 jump __label54 greaterThanEq 0 __tmp89
 label __label84
 jump __label54 greaterThanEq index TO_INDEX
-label __label55
-label __label56
 getlink factory n
 sensor __tmp93 factory @type
 jump __label57 notEqual __tmp93 TYPE
@@ -1934,17 +1913,14 @@ jump __label59 greaterThanEq r1 101
 set minimum r1
 set icon RES1
 label __label59
-label __label60
 jump __label61 greaterThanEq r2 minimum
 set minimum r2
 set icon RES2
 label __label61
-label __label62
 jump __label63 greaterThanEq r3 minimum
 set minimum r3
 set icon RES3
 label __label63
-label __label64
 op greaterThan __tmp113 out LIM1
 op sub __tmp114 100 out
 op lessThan __tmp115 __tmp114 minimum
@@ -1952,7 +1928,6 @@ op land showout __tmp113 __tmp115
 jump __label65 equal showout false
 set icon OUTPUT
 label __label65
-label __label66
 op idiv column index 8
 op mod row index 8
 op mul __tmp120 column BAR_SPACE
@@ -1965,7 +1940,6 @@ op land __tmp126 __tmp124 __tmp125
 jump __label67 equal __tmp126 false
 set icon TYPE
 label __label67
-label __label68
 draw color 255 255 255 255 0 0
 jump __label69 equal e false
 jump __label71 lessThanEq power 0
@@ -1989,7 +1963,6 @@ draw color 255 80 80 255 0 0
 op add __tmp140 x 4
 op add __tmp141 y 6
 draw rect __tmp140 __tmp141 2 2 0 0
-label __label72
 jump __label70 always 0 0
 label __label69
 draw color 255 80 80 255 0 0
@@ -2042,7 +2015,6 @@ op max green 192 green
 op max blue 192 blue
 set boost EXPECTED_BOOST
 label __label81
-label __label82
 op mul __tmp169 BAR_LENGTH boost
 op idiv length __tmp169 EXPECTED_BOOST
 draw color red green blue 128 0 0
@@ -2053,8 +2025,6 @@ draw color red green blue 255 0 0
 draw lineRect x y length BAR_WIDTH 0 0
 op add index index 1
 label __label57
-label __label58
-label __label53
 op add n n 1
 jump __label84 lessThan n __tmp89
 label __label54
@@ -2065,7 +2035,6 @@ print "\nDraw time: "
 print __tmp175
 print " ms"
 printflush MESSAGE
-label __label50
 sensor __tmp86 SWITCH @enabled
 jump __label85 equal __tmp86 0
 label __label51

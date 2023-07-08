@@ -211,11 +211,9 @@ label __label0
 op sub n n 1
 set sorted true
 set i 0
-label __label3
 jump __label5 greaterThanEq 0 n
 label __label13
 op add __tmp2 i 1
-label __label6
 set __retval3 sorted
 read __fn0_a ARRAY i
 read __fn0_b ARRAY __tmp2
@@ -224,22 +222,16 @@ write __fn0_b ARRAY i
 write __fn0_a ARRAY __tmp2
 set __retval3 false
 label __label9
-label __label7
 set sorted __retval3
-label __label4
 op add i i 1
 jump __label13 lessThan i n
 label __label5
-label __label1
 jump __label0 equal sorted false
-label __label2
 set i 0
-label __label10
 jump __label12 greaterThanEq 0 SIZE
 label __label14
 read __tmp10 ARRAY i
 print __tmp10
-label __label11
 op add i i 1
 jump __label14 lessThan i SIZE
 label __label12

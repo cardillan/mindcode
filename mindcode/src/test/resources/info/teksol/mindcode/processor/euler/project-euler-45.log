@@ -4,7 +4,7 @@
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Conditional Jump Optimization (3 iterations).
     12 instructions eliminated by Data Flow Optimization (4 iterations).
-     2 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     2 instructions eliminated by Unreachable Code Elimination.
      3 instructions updated by PropagateJumpTargets.
     15 instructions after optimizations.
 
@@ -225,17 +225,18 @@ Modifications by Final phase, Jump Threading, iteration 1:
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
  
+    11 op add hn hn h
     12 op add h h 4
     13 jump __label0 always
-    14 label __label5
+-    * label __label5
 -    * jump __label2 always
-    15 label __label6
-    16 label __label4
-    17 label __label1
+-    * label __label6
+-    * label __label4
+-    * label __label1
 -    * jump __label0 always
-    18 label __label2
-    19 label __label7
-    20 print 1533776805
+    14 label __label2
+    15 label __label7
+    16 print 1533776805
 
 Final code before resolving virtual instructions:
 
@@ -253,15 +254,7 @@ jump __label2 greaterThanEq hn pn
 op add hn hn h
 op add h h 4
 jump __label0 always 0 0
-label __label5
-label __label6
-label __label4
-label __label1
 label __label2
-label __label7
 print 1533776805
-label __label8
-label __label9
 print hn
-label __label10
 end

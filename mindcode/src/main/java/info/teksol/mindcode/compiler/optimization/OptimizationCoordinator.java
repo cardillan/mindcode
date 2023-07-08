@@ -87,6 +87,7 @@ public class OptimizationCoordinator {
                     profile.getOptimizationPasses()));
         }
 
+        optimizationContext.removeInactiveLabels();
         optimizationStatistics.forEach(messageRecipient);
 
         return List.copyOf(program);

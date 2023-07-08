@@ -7,7 +7,7 @@
      1 loops improved by Loop Optimization.
      1 instructions eliminated by If Expression Optimization (3 iterations).
     11 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     3 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     3 instructions eliminated by Unreachable Code Elimination.
      4 instructions eliminated by Stack Optimization.
      4 instructions eliminated by Jump Straightening.
      1 instructions updated by PropagateJumpTargets.
@@ -418,14 +418,12 @@ callrec bank1 __label0 __label2
 label __label2
 set __retval1 __fn0retval
 set i __retval0
-label __label3
 jump __label5 greaterThan __retval0 __fn0retval
 label __label27
 set __fn0_n 1
 callrec bank1 __label0 __label9
 label __label9
 jump __label7 notEqual i __fn0retval
-label __label8
 set __tmp3 "A"
 jump __label6 always 0 0
 label __label7
@@ -443,7 +441,6 @@ set __tmp3 "B"
 jump __label6 always 0 0
 label __label10
 jump __label14 notEqual i 5
-label __label15
 jump __label4 always 0 0
 label __label14
 set __fn0_n 6
@@ -454,14 +451,12 @@ set __fn0_n 8
 callrec bank1 __label0 __label20
 label __label20
 jump __label17 lessThanEq i __fn0retval
-label __label18
 jump __label16 always 0 0
 label __label17
 set __tmp3 "C"
 jump __label6 always 0 0
 label __label16
 jump __label21 notEqual i 10
-label __label22
 jump __label5 always 0 0
 label __label21
 set __tmp3 "D"
@@ -480,5 +475,4 @@ callrec bank1 __label0 __label26
 label __label26
 op mul __fn0retval -1 __fn0retval
 label __label25
-label __label23
 return bank1

@@ -239,27 +239,5 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2
 
 Final code before resolving virtual instructions:
 
-label __label4
-label __label5
-label __label6
-label __label7
-label __label8
-label __label9
-label __label10
-label __label11
-label __label12
-label __label13
-label __label14
-label __label15
-label __label16
-label __label17
-label __label18
-label __label19
-label __label20
-label __label21
-label __label22
-label __label23
-label __label24
-label __label2
 print 10
 end

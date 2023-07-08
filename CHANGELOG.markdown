@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-07-08
+
+### Changed
+
+* Changed [Unreachable Code Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#unreachable-code-elimination) to perform 
+  actual control flow analysis and remove all unreachable regions of code, instead of relying on active labels to 
+  detect reachable instructions. This change eliminates some unreachable code that was not recognized before, such 
+  as loops inside unreachable regions of code.
+* Changed Data Flow Optimization to protect assignment to uninitialized variables made before calling an out-of-line 
+  or recursive function that might call the
+  [`end()` function](doc/syntax/SYNTAX-5-OTHER.markdown#handling-of-uninitialized-variables). Hopefully all 
+  possible means of calling the `end()` function are finally covered.
+* Changed the printout of final list of unresolved instruction (activated by the `-u` command line option) to omit 
+  inactive labels.
+
 ## 2023-07-06
 
 ### Added

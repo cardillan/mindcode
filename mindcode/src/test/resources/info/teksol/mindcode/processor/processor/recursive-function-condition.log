@@ -4,7 +4,7 @@
      1 instructions eliminated by Expression Optimization (3 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
      3 instructions eliminated by Data Flow Optimization (5 iterations).
-     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
+     1 instructions eliminated by Unreachable Code Elimination.
      4 instructions eliminated by Stack Optimization.
     16 instructions after optimizations.
 
@@ -149,5 +149,4 @@ op sub __fn0_n __fn0_n 1
 callrec bank1 __label0 __label5
 label __label5
 label __label4
-label __label2
 return bank1

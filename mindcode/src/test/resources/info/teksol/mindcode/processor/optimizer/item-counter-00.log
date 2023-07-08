@@ -546,37 +546,30 @@ label __label0
 set MEMORY null
 set FIRST_BLOCK @links
 set n @links
-label __label3
 jump __label5 lessThanEq n 0
 label __label32
 op sub n n 1
 getlink block n
 sensor __ast0 block @type
 jump __label7 notEqual __ast0 @memory-cell
-label __label8
 set MEMORY block
 set lastCell 63
 jump __label6 always 0 0
 label __label7
 jump __label9 notEqual __ast0 @memory-bank
-label __label10
 set MEMORY block
 set lastCell 511
 jump __label6 always 0 0
 label __label9
 jump __label11 notEqual __ast0 @plastanium-conveyor
-label __label12
 set FIRST_BLOCK n
 label __label11
 label __label6
-label __label4
 jump __label32 greaterThan n 0
 label __label5
 print "Item Counter\n[salmon]No memory attached."
 printflush message1
-label __label1
 jump __label0 equal MEMORY null
-label __label2
 read total MEMORY 0
 set BATCH_DURATION 2000
 op max __tmp9 MIN_BATCH 10
@@ -591,13 +584,11 @@ set startTime @time
 set ratePerMin 0
 op add limit total MIN_BATCH
 control enabled switch1 0 0 0 0
-label __label13
 sensor __tmp17 switch1 @enabled
 jump __label15 notEqual __tmp17 0
 label __label35
 set start @time
 set n FIRST_BLOCK
-label __label16
 jump __label18 greaterThanEq FIRST_BLOCK @links
 label __label33
 getlink block n
@@ -622,14 +613,9 @@ jump __label25 greaterThan duration BATCH_DURATION
 op add __tmp42 batch BATCH_STEP
 op min batch __tmp42 MAX_BATCH
 label __label25
-label __label26
 label __label23
-label __label24
 label __label21
-label __label22
 label __label19
-label __label20
-label __label17
 jump __label33 lessThan n @links
 label __label18
 op sub __tmp44 @time startTime
@@ -642,7 +628,6 @@ write 0 MEMORY lastCell
 set ratePerMin 0
 set startTime @time
 label __label27
-label __label28
 print "Item Counter                  \n"
 print "Total items: [gold]"
 print total
@@ -658,19 +643,16 @@ print "[] ms\n[lightgray]Loop time: "
 print __tmp53
 print " ms"
 printflush message1
-label __label14
 sensor __tmp17 switch1 @enabled
 jump __label35 equal __tmp17 0
 label __label15
 control enabled switch1 0 0 0 0
 write 0 MEMORY lastCell
 set n 0
-label __label29
 jump __label31 greaterThanEq 0 @links
 label __label34
 write 0 MEMORY n
 op add n n 1
-label __label30
 jump __label34 lessThan n @links
 label __label31
 end
