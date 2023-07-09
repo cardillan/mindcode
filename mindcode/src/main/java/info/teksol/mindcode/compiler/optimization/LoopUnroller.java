@@ -44,14 +44,8 @@ public class LoopUnroller extends BaseOptimizer {
     @Override
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
         invocations++;
-        List<OptimizationAction> actions = new ArrayList<>();
-        forEachContext(AstContextType.LOOP, BASIC, loop -> {
-            OptimizationAction possibleUnrolling = findPossibleUnrolling(loop, costLimit);
-            if (possibleUnrolling != null) {
-                actions.add(possibleUnrolling);
-            }
-        });
-        return actions;
+        return forEachContext(AstContextType.LOOP, BASIC,
+                loop -> findPossibleUnrolling(loop, costLimit));
     }
 
     private static final Map<AstSubcontextType, String> SYMBOL_MAP = Map.of(
@@ -149,13 +143,13 @@ public class LoopUnroller extends BaseOptimizer {
 
         // Last jump in condition should contain loop control variable
         if (condition.getLast() instanceof JumpInstruction jump) {
-            LogicVariable loopControlVar = findLoopControl(loop, init, jump);
+            LogicVariable controlVariable = findLoopControl(loop, init, jump);
             var variables = optimizationContext.getLoopVariables(loop);
-            var initialValue = variables == null ? null : variables.findVariableValue(loopControlVar);
+            var initialValue = variables == null ? null : variables.findVariableValue(controlVariable);
             if (initialValue != null && initialValue.getConstantValue() instanceof LogicLiteral initLiteral && initLiteral.isNumericLiteral()) {
                 // List of instructions that will be duplicated
                 List<LogicInstruction> loopIxs = iterationContexts.stream().flatMap(LogicList::stream).toList();
-                List<LogicInstruction> controlIxs = loopIxs.stream().filter(ix -> ix.outputArgumentsStream().anyMatch(a -> a.equals(loopControlVar))).toList();
+                List<LogicInstruction> controlIxs = loopIxs.stream().filter(ix -> ix.outputArgumentsStream().anyMatch(a -> a.equals(controlVariable))).toList();
 
                 // Real size of one unrolled iteration. We ignore loop control updates (jump is already removed)
                 // Loop control updates will only be removed by Data Flow Optimization later on.
@@ -163,11 +157,11 @@ public class LoopUnroller extends BaseOptimizer {
                         - controlIxs.stream().mapToInt(LogicInstruction::getRealSize).sum();
 
                 int loopLimit = size <= 0 ? costLimit : costLimit / size;
-                int loops = findLoopCount(loop, jump, loopControlVar, initLiteral, controlIxs, loopLimit);
+                int loops = findLoopCount(loop, jump, controlVariable, initLiteral, controlIxs, loopLimit);
                 if (loops > 0 && loops <= loopLimit) {
                     // Compute benefit: unrolling avoids all control variable updates and the condition jump
                     double weight = controlIxs.stream().mapToDouble(ix -> ix.getAstContext().weight()).sum() + jump.getAstContext().weight();
-                    return new UnrollLoopAction(loop, loops * size, loops * weight, loops - 1, loopControlVar);
+                    return new UnrollLoopAction(loop, loops * size, loops * weight, loops, controlVariable);
                 }
             }
         }
@@ -337,27 +331,13 @@ public class LoopUnroller extends BaseOptimizer {
 
         // Optimization cost could actually get negative
         int cost = Math.max(size * loops - savings, 0);
-
-        return cost > costLimit ? null : new UnrollListIterationLoopAction(loop, cost,
-                loop.weight() * savings, loops - 1);
+        return cost > costLimit ? null : new UnrollListIterationLoopAction(loop, cost, loop.weight() * savings);
     }
 
-    @Override
-    public OptimizationResult applyOptimizationInternal(OptimizationAction optimization, int costLimit) {
-        return switch (optimization) {
-            case UnrollLoopAction a              -> unrollLoop(a, costLimit);
-            case UnrollListIterationLoopAction a -> unrollListLoop(a, costLimit);
-            default                              -> OptimizationResult.INVALID;
-        };
-    }
-
-    private OptimizationResult unrollLoop(UnrollLoopAction optimization, int costLimit) {
-        AstContext loop = optimization.astContext();
-        optimizationContext.addUnrolledVariable(optimization.getLoopControl());
-
+    private OptimizationResult unrollLoop(AstContext loop, LogicVariable loopControlVariable, int loops, int costLimit) {
+        optimizationContext.addUnrolledVariable(loopControlVariable);
         List<LogicList> initContexts = initInstructionContexts(loop);
         List<LogicList> iterationContexts = iterationInstructionContexts(loop);
-        int loops = optimization.codeMultiplication() + 1;
 
         // Create a new, non-loop context for unrolled instructions
         AstContext newContext = loop.parent().createChild(loop.node(), AstContextType.BODY);
@@ -379,8 +359,7 @@ public class LoopUnroller extends BaseOptimizer {
         return OptimizationResult.REALIZED;
     }
 
-    private OptimizationResult unrollListLoop(UnrollListIterationLoopAction optimization, int costLimit) {
-        AstContext loop = optimization.astContext();
+    private OptimizationResult unrollListLoop(AstContext loop, int costLimit) {
         List<AstContext> iterations = loop.findSubcontexts(ITERATOR);
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
@@ -425,15 +404,18 @@ public class LoopUnroller extends BaseOptimizer {
     }
 
     private class UnrollLoopAction extends AbstractOptimizationAction {
-        private final LogicVariable loopControl;
+        private final LogicVariable controlVariable;
+        private final int loops;
 
-        public UnrollLoopAction(AstContext astContext, int cost, double benefit, int codeMultiplication, LogicVariable loopControl) {
-            super(astContext, cost, benefit, codeMultiplication);
-            this.loopControl = loopControl;
+        public UnrollLoopAction(AstContext astContext, int cost, double benefit, int loops, LogicVariable controlVariable) {
+            super(astContext, cost, benefit);
+            this.loops = loops;
+            this.controlVariable = controlVariable;
         }
 
-        public LogicVariable getLoopControl() {
-            return loopControl;
+        @Override
+        public OptimizationResult apply(int costLimit) {
+            return applyOptimization(() -> unrollLoop(astContext, controlVariable, loops, costLimit), toString());
         }
 
         @Override
@@ -443,8 +425,13 @@ public class LoopUnroller extends BaseOptimizer {
     }
 
     private class UnrollListIterationLoopAction extends AbstractOptimizationAction {
-        public UnrollListIterationLoopAction(AstContext astContext, int cost, double benefit, int codeMultiplication) {
-            super(astContext, cost, benefit, codeMultiplication);
+        public UnrollListIterationLoopAction(AstContext astContext, int cost, double benefit) {
+            super(astContext, cost, benefit);
+        }
+
+        @Override
+        public OptimizationResult apply(int costLimit) {
+            return applyOptimization(() -> unrollListLoop(astContext(), costLimit), toString());
         }
 
         @Override

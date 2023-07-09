@@ -11,7 +11,9 @@ import info.teksol.mindcode.processor.MindustryValue;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -84,20 +86,17 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.getCallGraph();
     }
 
-    protected OptimizationResult applyOptimizationInternal(OptimizationAction optimization, int costLimit) {
-        return OptimizationResult.INVALID;
-    }
-
-
-    @Override
-    public OptimizationResult applyOptimization(OptimizationAction optimization, int costLimit) {
+    protected OptimizationResult applyOptimization(Supplier<OptimizationResult> optimization, String title) {
         optimizationContext.prepare();
-        OptimizationResult result = applyOptimizationInternal(optimization, costLimit);
+        OptimizationResult result = optimization.get();
         optimizationContext.finish();
 
-        modifications += optimizationContext.getModifications();
-        insertions += optimizationContext.getInsertions();
-        deletions += optimizationContext.getDeletions();
+        if (result == OptimizationResult.REALIZED) {
+            modifications += optimizationContext.getModifications();
+            insertions += optimizationContext.getInsertions();
+            deletions += optimizationContext.getDeletions();
+            debugPrinter.registerIteration(this, title, optimizationContext.getProgram());
+        }
         return result;
     }
 
@@ -580,13 +579,20 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.hasSubcontexts(context, types);
     }
 
-    protected void forEachContext(Predicate<AstContext> matcher, Consumer<AstContext> action) {
-        optimizationContext.forEachContext(matcher, action);
+    protected Function<AstContext, Void> returningNull(Consumer<AstContext> action) {
+        return context -> {
+            action.accept(context);
+            return null;
+        };
     }
 
-    protected void forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
-            Consumer<AstContext> action) {
-        optimizationContext.forEachContext(contextType, subcontextType, action);
+    protected <T> List<T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, T> action) {
+        return optimizationContext.forEachContext(matcher, action);
+    }
+
+    protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
+            Function<AstContext, T> action) {
+        return optimizationContext.forEachContext(contextType, subcontextType, action);
     }
 
     protected List<AstContext> contexts(Predicate<AstContext> matcher) {

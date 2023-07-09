@@ -1,17 +1,17 @@
    157 instructions before optimizations.
     20 instructions eliminated by Temp Variables Elimination.
-     2 instructions eliminated by Jump Normalization (4 iterations).
     20 instructions eliminated by Dead Code Elimination (5 iterations).
-     5 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     2 instructions eliminated by Jump Normalization (4 iterations).
+     5 instructions eliminated by Jump Optimization (4 iterations).
      8 instructions eliminated by Single Step Elimination (5 iterations).
+    51 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      3 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
    139 instructions added by Loop Unrolling (6 iterations).
      3 loops unrolled by Loop Unrolling.
-    51 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     2 instructions eliminated by Unreachable Code Elimination.
      1 instructions eliminated by Jump Straightening.
      2 instructions updated by PropagateJumpTargets.
+     2 instructions eliminated by Unreachable Code Elimination.
    184 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 903):
@@ -307,7 +307,7 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-2 ins
     25 draw rect paddleX 10 paddleWidth 5
     26 draw rect ballX ballY 5 5
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-5 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
  
     27 sensor __tmp6 PADDLECONTROLLER @enabled
     28 jump __label9 equal __tmp6 false

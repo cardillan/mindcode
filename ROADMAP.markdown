@@ -4,8 +4,9 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
+* Improve weight computations for user defined functions: weight if a function is a sum of weights of all function 
+  calls. 
 * Additional optimizations for speed:
-  * Inlining: inlining will be done by the optimizer, no rebuilding of the AST tree. 
   * Switched case expression: all or a subset of `when` branches with constant conditions can be rearranged and an 
     in-memory jump table created. 
   * Return optimization: replace jump to return instruction with the return instruction itself.
@@ -25,7 +26,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * After this change, it should be called in iteration phase, to free space for further speed optimizations.
   * Detect `end` instructions which are **always** executed in a user defined function and terminate the code path 
     when such a function is called.
-* When an uninitialized temporary variable is found by Data FLow Optimization, generate compilation error -- if it
+* When an uninitialized temporary variable is found by Data Flow Optimization, generate compilation error -- if it
   happens, it is an optimization bug.
 * Function optimization of constant function parameters (i.e. not modified inside the function)
   * Detect situations where a read-only parameter is always passed the same argument value (either a literal, or a 
@@ -52,10 +53,19 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * All sensed properties (already done - the entire `sensor` instruction is deemed volatile)
   * New compiler directive will allow to declare memory model for a memory block, linked block or built-in variable
     (`#declare variable [volatile | aliased | restriced]`).
-* Variable type inferring.
-  * Either global, or via data flow analysis.
-  * Temporary variables are typically single-use, global type inferring might work very well for them.
+* Variable type and invariant inferring.
+  * Probably via data flow analysis (not global).
   * Hopefully will help with some boolean conditions.
+  * Constraints on variable values inferred from conditions
+    *  "non-null", "non-negative", "less than x", "boolean", "integer"
+  * Constraints on relationships between variables
+    * Not equal/equal
+    * Less (or equal) than/greater (or equal) than
+    * Linear transformation (y = ax + b), with constant or even variable a/b.
+  * Inferred invariants will allow better expression optimization, especially with booleans
+    * Control loop variable aliasing: when a linearly transformed value of a control loop variable is used (say, for
+      array index access) and the control loop variable has no other uses, apply the linear transformation to the
+      loop variable, initialization code and condition.
 * More expression optimizations:
   * replace addition/subtraction of 0 by assignment,
   * replace multiplication/division by 1 by assignment,
@@ -64,18 +74,11 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Planned
 
-### Constant folding and common subexpression optimization
+### General ideas
 
 * Optimization for speed
   * Currently, the optimizer realizes speed optimizations one by one, always choosing the highest benefit. Better
     utilization of instruction space _might_ be achieved by searching for a solution of the knapsack problem.
-* Improve Data Flow Optimization around function calls further:
-  * Values pushed to stack need not be assigned to their proper variables first, a temp can be stored instead.
-  * Create global optimizer to handle functions with constant return values. Handle specific case of function
-    always returning one of its input arguments.
-* Stack optimizer: when an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`),
-  instead of push/pop protection, revert the operation after the function call returns. Implement strict/relaxed
-  math model to let the user block this in case the reversed operation produces result not equal to the original one.
 * Optimization for size: when the goal is set to `size`, selected optimizers may try to replace code with smaller,
   slower alternatives
   * Case expressions: if each branch of a case expression provides just the expression value, rearrange each branch
@@ -88,16 +91,25 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * Assumptions such as `x < x + 1` for a general value of `x` won't be made (for large values of `x`, this might
     not be computationally true: `x = 10 ** 20; y = x + 1; print(x == y)` gives `1`).
 * Complex loop unrolling
-  * Might require data flow analysis for obtaining variable values at the beginning of the loop. Needs to handle
-    various kinds of loop control variable updates - quite possibly by simulated evaluation? (See the math model.)
-  * Loop peeling - unroll first n iterations (with conditions in between), followed by the loop.
+  * Loop peeling - unroll first n iterations (possibly with conditions in between), followed by the loop. Especially 
+    useful if the loop is known to iterate at least n times.
   * Jump-to-middle loop unrolling
-  * Loops with fixed end condition
-  * Loops with fixed start that can run backwards (e.g. `for i in 0 .. n cell1[i] = 0 end` - jump to position
-  corresponding to `n` and proceed to `0`).
-  * Requires constant iteration size - might be difficult to enforce if other optimizers touch the code.
+    * Loops with fixed end condition
+    * Loops with fixed start that can run backwards (e.g. `for i in 0 .. n cell1[i] = 0 end` - jump to position
+      corresponding to `n` and proceed to `0`).
+    * Requires constant iteration size - might be difficult to enforce if other optimizers touch the code.
   * Loop unswitching (if in loop --> loops in if)
   * Loop fusion???
+
+### Constant folding and common subexpression optimization
+
+* Improve Data Flow Optimization around function calls further:
+  * Values pushed to stack need not be assigned to their proper variables first, a temp can be stored instead.
+  * Create global optimizer to handle functions with constant return values. Handle specific case of function
+    always returning one of its input arguments.
+* Stack optimizer: when an argument to recursive function call is modified in a reversible way (such as `foo(n - 1)`),
+  instead of push/pop protection, revert the operation after the function call returns. Implement strict/relaxed
+  math model to let the user block this in case the reversed operation produces result not equal to the original one.
 * Generalized constant folding on expression tree, including factoring constants out of complex expressions.
   * A theory-based approach is probably needed.  
   * Pulling invariant code out of loops/if branches.
@@ -109,17 +121,6 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * `print(value ? "a" : "b")` could be turned into `if value print("a") else print("b") end`
   * Might make sense for other instructions as well.
   * Is useful when at least one value produced by the if statement is a constant.  
-* Inferring invariants: use global analysis/data flow analysis to infer invariants
-  * Constraints on variable values inferred from conditions
-    *  "non-null", "non-negative", "less than x", "boolean", "integer"
-  * Constraints on relationships between variables
-    * Not equal/equal
-    * Less (or equal) than/greater (or equal) than
-    * Linear transformation (y = ax + b), with constant or even variable a/b.
-  * Inferred invariants will allow better expression optimization, especially with booleans
-    * Control loop variable aliasing: when a linearly transformed value of a control loop variable is used (say, for 
-      array index access) and the control loop variable has no other uses, apply the linear transformation to the 
-      loop variable, initialization code and condition.
 
 ### Short-circuit boolean evaluation
 
@@ -135,32 +136,23 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 ### Processor-variables backed arrays
 
 Processor-variables backed arrays will always have a horrible performance, but when designed together with loops and 
-loop optimizations they might be very useful - and not so slow.
+loop optimizations they might be very useful - and not so slow. Loop unrolling could make them as fast as regular 
+variables.
 
 * The arrays
-  * Declared at fixed size
+  * Declared at fixed size: `array A[] = (1, 2, 3)` or `array A[4]`
+  * Array name is not a variable - neither an l-value nor an r-value. 
+    * No pointers to arrays
   * Arrays, not lists - no add/remove, no inherent size
-  * No pointers to arrays
-  * Random access will be realized as an out-of-line function
-    * Compute function address from index (address = 2 * index + offset)
-    * For Writes: set value to be written to a transfer variable
-    * Make the call (set return address + jump)
-      * Perform read/write and jump back
-    * For reads: the read value is stored in a transfer variable
-  * Accessing an array item at constant index will be identical to accessing a normal variable
-  * Array access will be realized as a virtual instruction and resolved in the instruction resolution step
-    * If future common subexpression optimization finds out an index is constant, the instruction is resolved to
-      constant index access naturally
+  * Random access will be realized using out-of-line functions
+    * Read and write function for each array
+      * Switched case, `goto` instructions at each branch end
+    * Immediate benefit from existing optimizations (automatic inlining, loop unrolling etc.)
+    * Needs to update function inliner to estimate the cost of inlining constant index calls as zero.  
+      * Accessing an array item at constant index will be identical to accessing a normal variable
+  * Alternative: virtual instructions. Might allow better loop optimization without inlining.
   * Maybe array assignments, esp. for same sized arrays
-    * Perhaps by a library function that might be inlined if possible
   * Out-of-bound access checks: compiler directive
-* Arrays in loops optimizations
-  * Full loop unrolling for static loops 
-  * For dynamic loops:
-    * If the loop variable is used solely to access the array, transform the loop from loop over indexes to loop 
-      over function access pointers (see also linear transformation of loop variable)
-    * If the variable is dual-use, but simple iteration, use shadow variable for array access
-      * Advanced expression optimization involving moving invariant code out of loop could do this.
 * For each syntax over arrays
   * Possible support to modify the underlying array through the loop control variable, or specific syntax (`yield exp`)
 
@@ -332,6 +324,7 @@ Possibly in boolean expressions in general, although in those the utility is dou
 
 There are no plans to do any of these. We keep them around just in case.
 
+* Loop unrolling: generate new names for temporary variables inside the loop. Probably not needed at the moment.
 * Virtual no-op instruction. Will be resolved to nothing. Instructions to be removed will be replaced with this
   instruction instead, allowing the optimizers to remove instructions while preserving AST context structure of the
   program (unreachable code elimination, jump normalization).

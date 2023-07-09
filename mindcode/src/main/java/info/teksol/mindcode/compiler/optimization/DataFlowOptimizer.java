@@ -161,7 +161,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         } else if (instruction instanceof SetInstruction set) {
             // Specific optimization to streamline self-modifying statements in recursive calls
             VariableStates variableStates = Objects.requireNonNull(getVariableStates(instruction));
-            if (canEliminate(set.getResult()) && set.getValue().isTemporaryVariable()) {
+            if (canEliminate(set, set.getResult()) && set.getValue().isTemporaryVariable()) {
                 VariableStates.VariableValue val = variableStates.findVariableValue(set.getValue());
                 if (val != null && val.isExpression() && val.getInstruction() instanceof OpInstruction op) {
                     if (op.inputArgumentsStream().anyMatch(set.getResult()::equals)) {
@@ -618,7 +618,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         List<LogicVariable> inputs = instruction.inputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
-                .filter(this::canEliminate)
+                .filter(variable -> canEliminate(instruction, variable))
                 .toList();
 
         // This needs to be done even when not modifying instructions, because it keeps track of read variables.
@@ -678,13 +678,17 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
-    boolean canEliminate(LogicVariable variable) {
-        // We need to protect return values of functions: when processing them, we have no information on
-        // whether they're read. They're only useless if they aren't read at all, in which case they'll be removed
-        // by DeadCodeEliminator.
-        // STORED_RETVAL is removed, if possible, by ReturnValueOptimizer
+    boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
         return switch (variable.getType()) {
-            case COMPILER, FUNCTION_RETADDR, FUNCTION_RETVAL, GLOBAL_VARIABLE -> false;
+            case COMPILER, FUNCTION_RETADDR, GLOBAL_VARIABLE -> false;
+            case FUNCTION_RETVAL -> {
+                // Function return values cannot be eliminated inside their functions - at this point we have no
+                // information whether they're read somewhere. Outside their functions they're processed normally
+                // (can be optimized freely).
+                // If they aren't read at all in the entire program, they'll be removed by DeadCodeEliminator.
+                AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION);
+                yield functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix());
+            }
             default -> true;
         };
     }

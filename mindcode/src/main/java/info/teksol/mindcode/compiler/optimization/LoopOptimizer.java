@@ -7,7 +7,6 @@ import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
 import info.teksol.mindcode.logic.LogicLabel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -45,27 +44,27 @@ public class LoopOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
-        forEachContext(AstContextType.LOOP, BASIC, loop -> processLoop(loop, true, 0));
+        forEachContext(AstContextType.LOOP, BASIC, loop -> {
+            processLoop(loop, true, 0);
+            return null;
+        });
         return false;
     }
 
-    private List<OptimizationAction> actions;
-
     @Override
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
-        actions = new ArrayList<>();
-        forEachContext(AstContextType.LOOP, BASIC, loop -> processLoop(loop, false, costLimit));
-        return actions;
+        return forEachContext(AstContextType.LOOP, BASIC,
+                loop -> processLoop(loop, false, costLimit));
     }
 
-    private OptimizationResult processLoop(AstContext loop, boolean optimize, int costLimit) {
+    private OptimizationAction processLoop(AstContext loop, boolean optimize, int costLimit) {
         List<AstContext> conditions = loop.findSubcontexts(CONDITION);
-        if (conditions.size() != 1) return OptimizationResult.INVALID;
+        if (conditions.size() != 1) return null;
 
         LogicList condition = contextInstructions(conditions.get(0));
         LogicList next = contextInstructions(loop.findSubcontext(FLOW_CONTROL));
         if (condition.isEmpty() || next.isEmpty() || !hasConditionAtFront(loop)) {
-            return OptimizationResult.INVALID;
+            return null;
         }
 
         if (condition.get(0) instanceof LabelInstruction conditionLabel
@@ -76,14 +75,14 @@ public class LoopOptimizer extends BaseOptimizer {
                 && next.getFromEnd(1) instanceof JumpInstruction backJump
                 && backJump.isUnconditional()) {
 
-            LogicInstruction loopSetup = instructionBefore(conditionLabel);
-
             // Remove the opening jump, if the loop is known to be executed at least once
             boolean removeOriginal = evaluateLoopConditionJump(jump, loop) == LogicBoolean.FALSE;
 
-            // Gather condition instructions without the label and jump (possibly empty)
+            // Keeps condition instructions without the label and jump (possibly empty)
             final LogicList conditionEvaluation;
-            final BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator; // Creates the new jump when label is known
+
+            // Creates the new jump when label is known
+            final BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator;
 
             if (condition.getFromEnd(1) instanceof OpInstruction op
                     && op.getOperation().isCondition() && op.getResult().isTemporaryVariable()
@@ -97,34 +96,26 @@ public class LoopOptimizer extends BaseOptimizer {
             } else {
                 if (!jump.getCondition().hasInverse()) {
                     // Inverting the condition wouldn't save execution time
-                    return OptimizationResult.INVALID;
+                    return null;
                 }
                 conditionEvaluation = condition.subList(1, condition.size() - 1);
                 newJumpCreator = (astContext, target) -> createJump(astContext, target,
                         jump.getCondition().inverse(), jump.getX(), jump.getY());
             }
 
+            int cost = conditionEvaluation.stream().mapToInt(LogicInstruction::getRealSize).sum();
             if (optimize) {
                 // Perform the optimization now
-                // Can we duplicate the additional condition instructions? If not, nothing to do
-                if (removeOriginal || canDuplicate(conditionEvaluation, costLimit)) {
+                if (removeOriginal || cost <= costLimit) {
                     duplicateCondition(loop, jump, backJump, conditionEvaluation, removeOriginal, newJumpCreator);
-                    count++;
-                    return OptimizationResult.REALIZED;
-                } else {
-                    return OptimizationResult.OVER_LIMIT;
                 }
-            } else {
-                int cost = duplicationCost(conditionEvaluation);
-                if (cost <= costLimit) {
-                    actions.add(new DuplicateConditionAction(conditions.get(0), cost,
-                            backJump.getAstContext().weight(), 2));
-                }
-                return OptimizationResult.REALIZED;
+            } else if (cost <= costLimit) {
+                return new DuplicateConditionAction(loop, cost, backJump.getAstContext().weight(),
+                        jump, backJump, conditionEvaluation, removeOriginal, newJumpCreator);
             }
         }
 
-        return OptimizationResult.INVALID;
+        return null;
     }
 
     private boolean hasConditionAtFront(AstContext loop) {
@@ -133,16 +124,7 @@ public class LoopOptimizer extends BaseOptimizer {
                 || children.get(0).subcontextType() == INIT && children.get(1).subcontextType() == CONDITION);
     }
 
-    private int duplicationCost(LogicList conditionEvaluation) {
-        // Use real instruction size for the test
-        return conditionEvaluation.stream().mapToInt(LogicInstruction::getRealSize).sum();
-    }
-
-    private boolean canDuplicate(LogicList conditionEvaluation, int costLimit) {
-        return duplicationCost(conditionEvaluation) <= costLimit;
-    }
-
-    private void duplicateCondition(AstContext loop, JumpInstruction jump, JumpInstruction backJump,
+    private OptimizationResult duplicateCondition(AstContext loop, JumpInstruction jump, JumpInstruction backJump,
             LogicList conditionEvaluation, boolean removeOriginal,
             BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator) {
         LogicLabel bodyLabel = obtainContextLabel(loop.findSubcontext(BODY));
@@ -156,28 +138,38 @@ public class LoopOptimizer extends BaseOptimizer {
         if (removeOriginal) {
             removeInstruction(jump);
         }
-    }
 
-    @Override
-    public OptimizationResult applyOptimizationInternal(OptimizationAction optimization, int costLimit) {
-        return switch (optimization) {
-            case DuplicateConditionAction a -> duplicateCondition(a, costLimit);
-            default                         -> OptimizationResult.INVALID;
-        };
-    }
-
-    private OptimizationResult duplicateCondition(DuplicateConditionAction optimization, int costLimit) {
-        return processLoop(optimization.astContext().parent(), true, costLimit);
+        count++;
+        return OptimizationResult.REALIZED;
     }
 
     private class DuplicateConditionAction extends AbstractOptimizationAction {
-        public DuplicateConditionAction(AstContext astContext, int cost, double benefit, int codeMultiplication) {
-            super(astContext, cost, benefit, codeMultiplication);
+        private final JumpInstruction jump;
+        private final JumpInstruction backJump;
+        private final LogicList conditionEvaluation;
+        private final boolean removeOriginal;
+        private final BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator;
+
+        public DuplicateConditionAction(AstContext astContext, int cost, double benefit, JumpInstruction jump,
+                JumpInstruction backJump, LogicList conditionEvaluation, boolean removeOriginal, 
+                BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator) {
+            super(astContext, cost, benefit);
+            this.jump = jump;
+            this.backJump = backJump;
+            this.conditionEvaluation = conditionEvaluation;
+            this.removeOriginal = removeOriginal;
+            this.newJumpCreator = newJumpCreator;
+        }
+
+        @Override
+        public OptimizationResult apply(int costLimit) {
+            return applyOptimization(() -> duplicateCondition(astContext, jump, backJump,
+                    conditionEvaluation, removeOriginal, newJumpCreator), toString());
         }
 
         @Override
         public String toString() {
-            return getName() + ": replicate condition at line " + astContext.parent().node().startToken().getLine();
+            return getName() + ": replicate condition at line " + astContext.node().startToken().getLine();
         }
     }
 }

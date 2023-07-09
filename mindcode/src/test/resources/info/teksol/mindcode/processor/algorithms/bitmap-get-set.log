@@ -2,12 +2,12 @@
      1 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Dead Code Elimination (3 iterations).
     16 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instructions modified by If Expression Optimization (3 iterations).
+    40 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      2 instructions eliminated by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
    219 instructions added by Loop Unrolling (5 iterations).
      2 loops unrolled by Loop Unrolling.
-     1 instructions modified by If Expression Optimization (3 iterations).
-    40 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
    192 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 974):
@@ -23,10 +23,10 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
     28 op mod __tmp11 __fn1_bitIndex BITS
     29 op shl __tmp12 1 __tmp11
 -    * op and __tmp13 __tmp9 __tmp12
--    * set __retval8 __tmp13
-+   30 op and __retval8 __tmp9 __tmp12
+-    * set __tmp8 __tmp13
++   30 op and __tmp8 __tmp9 __tmp12
     31 label __label9
-    32 jump __label10 equal __retval8 false
+    32 jump __label10 equal __tmp8 false
     33 set __tmp14 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
@@ -34,7 +34,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
     12 op or __tmp6 __tmp2 __tmp5
     13 op idiv __tmp7 __fn0_bitIndex BITS
     14 write __tmp6 BITMAP __tmp7
--    * set __retval1 __tmp6
+-    * set __tmp1 __tmp6
     15 label __label4
     16 label __label1
     17 op add i i 1
@@ -50,10 +50,10 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     26 op idiv __tmp10 __fn1_bitIndex BITS
  
     29 op shl __tmp12 1 __tmp11
-    30 op and __retval8 __tmp9 __tmp12
+    30 op and __tmp8 __tmp9 __tmp12
     31 label __label9
--    * jump __label10 equal __retval8 false
-+   32 jump __label11 equal __retval8 false
+-    * jump __label10 equal __tmp8 false
++   32 jump __label11 equal __tmp8 false
     33 set __tmp14 1
     34 jump __label11 always
 -    * label __label10
@@ -91,7 +91,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op mod __tmp11 __fn1_bitIndex BITS
 +   28 op mod __tmp11 i BITS
     29 op shl __tmp12 1 __tmp11
-    30 op and __retval8 __tmp9 __tmp12
+    30 op and __tmp8 __tmp9 __tmp12
     31 label __label9
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
@@ -287,9 +287,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 -    * read __tmp9 BITMAP __tmp10
 -    * op mod __tmp11 i BITS
 -    * op shl __tmp12 1 __tmp11
--    * op and __retval8 __tmp9 __tmp12
+-    * op and __tmp8 __tmp9 __tmp12
 -    * label __label9
--    * jump __label11 equal __retval8 false
+-    * jump __label11 equal __tmp8 false
 -    * set __tmp14 1
 -    * jump __label11 always
 -    * label __label11
@@ -307,9 +307,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  107 read __tmp9 BITMAP __tmp10
 +  108 op mod __tmp11 i BITS
 +  109 op shl __tmp12 1 __tmp11
-+  110 op and __retval8 __tmp9 __tmp12
++  110 op and __tmp8 __tmp9 __tmp12
 +  111 label __label50
-+  112 jump __label51 equal __retval8 false
++  112 jump __label51 equal __tmp8 false
 +  113 set __tmp14 1
 +  114 jump __label51 always
 +  115 label __label51
@@ -323,9 +323,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  123 read __tmp9 BITMAP __tmp10
 +  124 op mod __tmp11 i BITS
 +  125 op shl __tmp12 1 __tmp11
-+  126 op and __retval8 __tmp9 __tmp12
++  126 op and __tmp8 __tmp9 __tmp12
 +  127 label __label55
-+  128 jump __label56 equal __retval8 false
++  128 jump __label56 equal __tmp8 false
 +  129 set __tmp14 1
 +  130 jump __label56 always
 +  131 label __label56
@@ -339,9 +339,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  139 read __tmp9 BITMAP __tmp10
 +  140 op mod __tmp11 i BITS
 +  141 op shl __tmp12 1 __tmp11
-+  142 op and __retval8 __tmp9 __tmp12
++  142 op and __tmp8 __tmp9 __tmp12
 +  143 label __label60
-+  144 jump __label61 equal __retval8 false
++  144 jump __label61 equal __tmp8 false
 +  145 set __tmp14 1
 +  146 jump __label61 always
 +  147 label __label61
@@ -355,9 +355,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  155 read __tmp9 BITMAP __tmp10
 +  156 op mod __tmp11 i BITS
 +  157 op shl __tmp12 1 __tmp11
-+  158 op and __retval8 __tmp9 __tmp12
++  158 op and __tmp8 __tmp9 __tmp12
 +  159 label __label65
-+  160 jump __label66 equal __retval8 false
++  160 jump __label66 equal __tmp8 false
 +  161 set __tmp14 1
 +  162 jump __label66 always
 +  163 label __label66
@@ -371,9 +371,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  171 read __tmp9 BITMAP __tmp10
 +  172 op mod __tmp11 i BITS
 +  173 op shl __tmp12 1 __tmp11
-+  174 op and __retval8 __tmp9 __tmp12
++  174 op and __tmp8 __tmp9 __tmp12
 +  175 label __label70
-+  176 jump __label71 equal __retval8 false
++  176 jump __label71 equal __tmp8 false
 +  177 set __tmp14 1
 +  178 jump __label71 always
 +  179 label __label71
@@ -387,9 +387,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  187 read __tmp9 BITMAP __tmp10
 +  188 op mod __tmp11 i BITS
 +  189 op shl __tmp12 1 __tmp11
-+  190 op and __retval8 __tmp9 __tmp12
++  190 op and __tmp8 __tmp9 __tmp12
 +  191 label __label75
-+  192 jump __label76 equal __retval8 false
++  192 jump __label76 equal __tmp8 false
 +  193 set __tmp14 1
 +  194 jump __label76 always
 +  195 label __label76
@@ -403,9 +403,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  203 read __tmp9 BITMAP __tmp10
 +  204 op mod __tmp11 i BITS
 +  205 op shl __tmp12 1 __tmp11
-+  206 op and __retval8 __tmp9 __tmp12
++  206 op and __tmp8 __tmp9 __tmp12
 +  207 label __label80
-+  208 jump __label81 equal __retval8 false
++  208 jump __label81 equal __tmp8 false
 +  209 set __tmp14 1
 +  210 jump __label81 always
 +  211 label __label81
@@ -419,9 +419,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  219 read __tmp9 BITMAP __tmp10
 +  220 op mod __tmp11 i BITS
 +  221 op shl __tmp12 1 __tmp11
-+  222 op and __retval8 __tmp9 __tmp12
++  222 op and __tmp8 __tmp9 __tmp12
 +  223 label __label85
-+  224 jump __label86 equal __retval8 false
++  224 jump __label86 equal __tmp8 false
 +  225 set __tmp14 1
 +  226 jump __label86 always
 +  227 label __label86
@@ -435,9 +435,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  235 read __tmp9 BITMAP __tmp10
 +  236 op mod __tmp11 i BITS
 +  237 op shl __tmp12 1 __tmp11
-+  238 op and __retval8 __tmp9 __tmp12
++  238 op and __tmp8 __tmp9 __tmp12
 +  239 label __label90
-+  240 jump __label91 equal __retval8 false
++  240 jump __label91 equal __tmp8 false
 +  241 set __tmp14 1
 +  242 jump __label91 always
 +  243 label __label91
@@ -451,9 +451,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  251 read __tmp9 BITMAP __tmp10
 +  252 op mod __tmp11 i BITS
 +  253 op shl __tmp12 1 __tmp11
-+  254 op and __retval8 __tmp9 __tmp12
++  254 op and __tmp8 __tmp9 __tmp12
 +  255 label __label95
-+  256 jump __label96 equal __retval8 false
++  256 jump __label96 equal __tmp8 false
 +  257 set __tmp14 1
 +  258 jump __label96 always
 +  259 label __label96
@@ -467,9 +467,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  267 read __tmp9 BITMAP __tmp10
 +  268 op mod __tmp11 i BITS
 +  269 op shl __tmp12 1 __tmp11
-+  270 op and __retval8 __tmp9 __tmp12
++  270 op and __tmp8 __tmp9 __tmp12
 +  271 label __label100
-+  272 jump __label101 equal __retval8 false
++  272 jump __label101 equal __tmp8 false
 +  273 set __tmp14 1
 +  274 jump __label101 always
 +  275 label __label101
@@ -483,9 +483,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  283 read __tmp9 BITMAP __tmp10
 +  284 op mod __tmp11 i BITS
 +  285 op shl __tmp12 1 __tmp11
-+  286 op and __retval8 __tmp9 __tmp12
++  286 op and __tmp8 __tmp9 __tmp12
 +  287 label __label105
-+  288 jump __label106 equal __retval8 false
++  288 jump __label106 equal __tmp8 false
 +  289 set __tmp14 1
 +  290 jump __label106 always
 +  291 label __label106
@@ -499,9 +499,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  299 read __tmp9 BITMAP __tmp10
 +  300 op mod __tmp11 i BITS
 +  301 op shl __tmp12 1 __tmp11
-+  302 op and __retval8 __tmp9 __tmp12
++  302 op and __tmp8 __tmp9 __tmp12
 +  303 label __label110
-+  304 jump __label111 equal __retval8 false
++  304 jump __label111 equal __tmp8 false
 +  305 set __tmp14 1
 +  306 jump __label111 always
 +  307 label __label111
@@ -515,9 +515,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  315 read __tmp9 BITMAP __tmp10
 +  316 op mod __tmp11 i BITS
 +  317 op shl __tmp12 1 __tmp11
-+  318 op and __retval8 __tmp9 __tmp12
++  318 op and __tmp8 __tmp9 __tmp12
 +  319 label __label115
-+  320 jump __label116 equal __retval8 false
++  320 jump __label116 equal __tmp8 false
 +  321 set __tmp14 1
 +  322 jump __label116 always
 +  323 label __label116
@@ -531,9 +531,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  331 read __tmp9 BITMAP __tmp10
 +  332 op mod __tmp11 i BITS
 +  333 op shl __tmp12 1 __tmp11
-+  334 op and __retval8 __tmp9 __tmp12
++  334 op and __tmp8 __tmp9 __tmp12
 +  335 label __label120
-+  336 jump __label121 equal __retval8 false
++  336 jump __label121 equal __tmp8 false
 +  337 set __tmp14 1
 +  338 jump __label121 always
 +  339 label __label121
@@ -547,9 +547,9 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  347 read __tmp9 BITMAP __tmp10
 +  348 op mod __tmp11 i BITS
 +  349 op shl __tmp12 1 __tmp11
-+  350 op and __retval8 __tmp9 __tmp12
++  350 op and __tmp8 __tmp9 __tmp12
 +  351 label __label125
-+  352 jump __label126 equal __retval8 false
++  352 jump __label126 equal __tmp8 false
 +  353 set __tmp14 1
 +  354 jump __label126 always
 +  355 label __label126
@@ -562,7 +562,7 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-16 instructions):
  
    111 label __label50
-   112 jump __label51 equal __retval8 false
+   112 jump __label51 equal __tmp8 false
    113 set __tmp14 1
 -    * jump __label51 always
    114 label __label51
@@ -570,7 +570,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    116 label __label52
  
    126 label __label55
-   127 jump __label56 equal __retval8 false
+   127 jump __label56 equal __tmp8 false
    128 set __tmp14 1
 -    * jump __label56 always
    129 label __label56
@@ -578,7 +578,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    131 label __label57
  
    141 label __label60
-   142 jump __label61 equal __retval8 false
+   142 jump __label61 equal __tmp8 false
    143 set __tmp14 1
 -    * jump __label61 always
    144 label __label61
@@ -586,7 +586,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    146 label __label62
  
    156 label __label65
-   157 jump __label66 equal __retval8 false
+   157 jump __label66 equal __tmp8 false
    158 set __tmp14 1
 -    * jump __label66 always
    159 label __label66
@@ -594,7 +594,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    161 label __label67
  
    171 label __label70
-   172 jump __label71 equal __retval8 false
+   172 jump __label71 equal __tmp8 false
    173 set __tmp14 1
 -    * jump __label71 always
    174 label __label71
@@ -602,7 +602,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    176 label __label72
  
    186 label __label75
-   187 jump __label76 equal __retval8 false
+   187 jump __label76 equal __tmp8 false
    188 set __tmp14 1
 -    * jump __label76 always
    189 label __label76
@@ -610,7 +610,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    191 label __label77
  
    201 label __label80
-   202 jump __label81 equal __retval8 false
+   202 jump __label81 equal __tmp8 false
    203 set __tmp14 1
 -    * jump __label81 always
    204 label __label81
@@ -618,7 +618,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    206 label __label82
  
    216 label __label85
-   217 jump __label86 equal __retval8 false
+   217 jump __label86 equal __tmp8 false
    218 set __tmp14 1
 -    * jump __label86 always
    219 label __label86
@@ -626,7 +626,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    221 label __label87
  
    231 label __label90
-   232 jump __label91 equal __retval8 false
+   232 jump __label91 equal __tmp8 false
    233 set __tmp14 1
 -    * jump __label91 always
    234 label __label91
@@ -634,7 +634,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    236 label __label92
  
    246 label __label95
-   247 jump __label96 equal __retval8 false
+   247 jump __label96 equal __tmp8 false
    248 set __tmp14 1
 -    * jump __label96 always
    249 label __label96
@@ -642,7 +642,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    251 label __label97
  
    261 label __label100
-   262 jump __label101 equal __retval8 false
+   262 jump __label101 equal __tmp8 false
    263 set __tmp14 1
 -    * jump __label101 always
    264 label __label101
@@ -650,7 +650,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    266 label __label102
  
    276 label __label105
-   277 jump __label106 equal __retval8 false
+   277 jump __label106 equal __tmp8 false
    278 set __tmp14 1
 -    * jump __label106 always
    279 label __label106
@@ -658,7 +658,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    281 label __label107
  
    291 label __label110
-   292 jump __label111 equal __retval8 false
+   292 jump __label111 equal __tmp8 false
    293 set __tmp14 1
 -    * jump __label111 always
    294 label __label111
@@ -666,7 +666,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    296 label __label112
  
    306 label __label115
-   307 jump __label116 equal __retval8 false
+   307 jump __label116 equal __tmp8 false
    308 set __tmp14 1
 -    * jump __label116 always
    309 label __label116
@@ -674,7 +674,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    311 label __label117
  
    321 label __label120
-   322 jump __label121 equal __retval8 false
+   322 jump __label121 equal __tmp8 false
    323 set __tmp14 1
 -    * jump __label121 always
    324 label __label121
@@ -682,7 +682,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    326 label __label122
  
    336 label __label125
-   337 jump __label126 equal __retval8 false
+   337 jump __label126 equal __tmp8 false
    338 set __tmp14 1
 -    * jump __label126 always
    339 label __label126
@@ -832,7 +832,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  107 op mod __tmp11 0 BITS
    108 op shl __tmp12 1 __tmp11
-   109 op and __retval8 __tmp9 __tmp12
+   109 op and __tmp8 __tmp9 __tmp12
    110 label __label50
  
    113 label __label51
@@ -849,7 +849,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  122 op mod __tmp11 1 BITS
    123 op shl __tmp12 1 __tmp11
-   124 op and __retval8 __tmp9 __tmp12
+   124 op and __tmp8 __tmp9 __tmp12
    125 label __label55
  
    128 label __label56
@@ -866,7 +866,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  137 op mod __tmp11 2 BITS
    138 op shl __tmp12 1 __tmp11
-   139 op and __retval8 __tmp9 __tmp12
+   139 op and __tmp8 __tmp9 __tmp12
    140 label __label60
  
    143 label __label61
@@ -883,7 +883,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  152 op mod __tmp11 3 BITS
    153 op shl __tmp12 1 __tmp11
-   154 op and __retval8 __tmp9 __tmp12
+   154 op and __tmp8 __tmp9 __tmp12
    155 label __label65
  
    158 label __label66
@@ -900,7 +900,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  167 op mod __tmp11 4 BITS
    168 op shl __tmp12 1 __tmp11
-   169 op and __retval8 __tmp9 __tmp12
+   169 op and __tmp8 __tmp9 __tmp12
    170 label __label70
  
    173 label __label71
@@ -917,7 +917,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  182 op mod __tmp11 5 BITS
    183 op shl __tmp12 1 __tmp11
-   184 op and __retval8 __tmp9 __tmp12
+   184 op and __tmp8 __tmp9 __tmp12
    185 label __label75
  
    188 label __label76
@@ -934,7 +934,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  197 op mod __tmp11 6 BITS
    198 op shl __tmp12 1 __tmp11
-   199 op and __retval8 __tmp9 __tmp12
+   199 op and __tmp8 __tmp9 __tmp12
    200 label __label80
  
    203 label __label81
@@ -951,7 +951,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  212 op mod __tmp11 7 BITS
    213 op shl __tmp12 1 __tmp11
-   214 op and __retval8 __tmp9 __tmp12
+   214 op and __tmp8 __tmp9 __tmp12
    215 label __label85
  
    218 label __label86
@@ -968,7 +968,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  227 op mod __tmp11 8 BITS
    228 op shl __tmp12 1 __tmp11
-   229 op and __retval8 __tmp9 __tmp12
+   229 op and __tmp8 __tmp9 __tmp12
    230 label __label90
  
    233 label __label91
@@ -985,7 +985,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  242 op mod __tmp11 9 BITS
    243 op shl __tmp12 1 __tmp11
-   244 op and __retval8 __tmp9 __tmp12
+   244 op and __tmp8 __tmp9 __tmp12
    245 label __label95
  
    248 label __label96
@@ -1002,7 +1002,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  257 op mod __tmp11 10 BITS
    258 op shl __tmp12 1 __tmp11
-   259 op and __retval8 __tmp9 __tmp12
+   259 op and __tmp8 __tmp9 __tmp12
    260 label __label100
  
    263 label __label101
@@ -1019,7 +1019,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  272 op mod __tmp11 11 BITS
    273 op shl __tmp12 1 __tmp11
-   274 op and __retval8 __tmp9 __tmp12
+   274 op and __tmp8 __tmp9 __tmp12
    275 label __label105
  
    278 label __label106
@@ -1036,7 +1036,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  287 op mod __tmp11 12 BITS
    288 op shl __tmp12 1 __tmp11
-   289 op and __retval8 __tmp9 __tmp12
+   289 op and __tmp8 __tmp9 __tmp12
    290 label __label110
  
    293 label __label111
@@ -1053,7 +1053,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  302 op mod __tmp11 13 BITS
    303 op shl __tmp12 1 __tmp11
-   304 op and __retval8 __tmp9 __tmp12
+   304 op and __tmp8 __tmp9 __tmp12
    305 label __label115
  
    308 label __label116
@@ -1070,7 +1070,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  317 op mod __tmp11 14 BITS
    318 op shl __tmp12 1 __tmp11
-   319 op and __retval8 __tmp9 __tmp12
+   319 op and __tmp8 __tmp9 __tmp12
    320 label __label120
  
    323 label __label121
@@ -1087,7 +1087,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 -    * op mod __tmp11 i BITS
 +  332 op mod __tmp11 15 BITS
    333 op shl __tmp12 1 __tmp11
-   334 op and __retval8 __tmp9 __tmp12
+   334 op and __tmp8 __tmp9 __tmp12
    335 label __label125
  
    338 label __label126
@@ -1303,9 +1303,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-3
    286 op mod __tmp11 14 BITS
 -    * op shl __tmp12 1 __tmp11
 +  287 op shl __tmp12 1 __tmp4
-   288 op and __retval8 __tmp9 __tmp12
+   288 op and __tmp8 __tmp9 __tmp12
    289 label __label120
-   290 jump __label121 equal __retval8 false
+   290 jump __label121 equal __tmp8 false
  
    292 label __label121
    293 print __tmp14
@@ -1324,10 +1324,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-2
    284 read __tmp9 BITMAP __tmp3
 -    * op mod __tmp11 14 BITS
    285 op shl __tmp12 1 __tmp4
--    * op and __retval8 __tmp9 __tmp12
-+  286 op and __retval8 __tmp9 __tmp5
+-    * op and __tmp8 __tmp9 __tmp12
++  286 op and __tmp8 __tmp9 __tmp5
    287 label __label120
-   288 jump __label121 equal __retval8 false
+   288 jump __label121 equal __tmp8 false
    289 set __tmp14 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 4 (-1 instructions):
@@ -1336,9 +1336,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 4 (-1
    283 label __label119
    284 read __tmp9 BITMAP __tmp3
 -    * op shl __tmp12 1 __tmp4
-   285 op and __retval8 __tmp9 __tmp5
+   285 op and __tmp8 __tmp9 __tmp5
    286 label __label120
-   287 jump __label121 equal __retval8 false
+   287 jump __label121 equal __tmp8 false
 
 Final code before resolving virtual instructions:
 
@@ -1397,8 +1397,8 @@ op idiv __tmp10 0 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 0 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label51 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label51 equal __tmp8 false
 set __tmp14 1
 label __label51
 print __tmp14
@@ -1407,8 +1407,8 @@ op idiv __tmp10 1 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 1 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label56 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label56 equal __tmp8 false
 set __tmp14 1
 label __label56
 print __tmp14
@@ -1417,8 +1417,8 @@ op idiv __tmp10 2 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 2 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label61 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label61 equal __tmp8 false
 set __tmp14 1
 label __label61
 print __tmp14
@@ -1427,8 +1427,8 @@ op idiv __tmp10 3 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 3 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label66 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label66 equal __tmp8 false
 set __tmp14 1
 label __label66
 print __tmp14
@@ -1437,8 +1437,8 @@ op idiv __tmp10 4 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 4 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label71 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label71 equal __tmp8 false
 set __tmp14 1
 label __label71
 print __tmp14
@@ -1447,8 +1447,8 @@ op idiv __tmp10 5 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 5 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label76 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label76 equal __tmp8 false
 set __tmp14 1
 label __label76
 print __tmp14
@@ -1457,8 +1457,8 @@ op idiv __tmp10 6 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 6 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label81 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label81 equal __tmp8 false
 set __tmp14 1
 label __label81
 print __tmp14
@@ -1467,8 +1467,8 @@ op idiv __tmp10 7 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 7 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label86 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label86 equal __tmp8 false
 set __tmp14 1
 label __label86
 print __tmp14
@@ -1477,8 +1477,8 @@ op idiv __tmp10 8 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 8 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label91 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label91 equal __tmp8 false
 set __tmp14 1
 label __label91
 print __tmp14
@@ -1487,8 +1487,8 @@ op idiv __tmp10 9 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 9 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label96 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label96 equal __tmp8 false
 set __tmp14 1
 label __label96
 print __tmp14
@@ -1497,8 +1497,8 @@ op idiv __tmp10 10 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 10 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label101 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label101 equal __tmp8 false
 set __tmp14 1
 label __label101
 print __tmp14
@@ -1507,8 +1507,8 @@ op idiv __tmp10 11 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 11 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label106 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label106 equal __tmp8 false
 set __tmp14 1
 label __label106
 print __tmp14
@@ -1517,8 +1517,8 @@ op idiv __tmp10 12 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 12 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label111 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label111 equal __tmp8 false
 set __tmp14 1
 label __label111
 print __tmp14
@@ -1527,15 +1527,15 @@ op idiv __tmp10 13 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 13 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label116 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label116 equal __tmp8 false
 set __tmp14 1
 label __label116
 print __tmp14
 set __tmp14 0
 read __tmp9 BITMAP __tmp3
-op and __retval8 __tmp9 __tmp5
-jump __label121 equal __retval8 false
+op and __tmp8 __tmp9 __tmp5
+jump __label121 equal __tmp8 false
 set __tmp14 1
 label __label121
 print __tmp14
@@ -1544,8 +1544,8 @@ op idiv __tmp10 15 BITS
 read __tmp9 BITMAP __tmp10
 op mod __tmp11 15 BITS
 op shl __tmp12 1 __tmp11
-op and __retval8 __tmp9 __tmp12
-jump __label126 equal __retval8 false
+op and __tmp8 __tmp9 __tmp12
+jump __label126 equal __tmp8 false
 set __tmp14 1
 label __label126
 print __tmp14

@@ -60,11 +60,6 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public LogicVariable nextReturnValue() {
-        return LogicVariable.retval( getRetValPrefix() + tmpIndex++);
-    }
-
-    @Override
     public String nextLocalPrefix() {
         return getLocalPrefix() + functionIndex++;
     }

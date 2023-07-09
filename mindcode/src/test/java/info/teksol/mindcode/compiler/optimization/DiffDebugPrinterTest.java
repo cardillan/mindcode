@@ -26,11 +26,6 @@ public class DiffDebugPrinterTest extends AbstractGeneratorTest {
         public boolean optimize(OptimizationPhase phase, int pass) {
             return false;
         }
-
-        @Override
-        public OptimizationResult applyOptimization(OptimizationAction optimization, int costLimit) {
-            return OptimizationResult.INVALID;
-        }
     };
 
     @Test

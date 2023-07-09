@@ -1,16 +1,16 @@
    578 instructions before optimizations.
     39 instructions eliminated by Temp Variables Elimination.
-     5 instructions eliminated by Jump Normalization (4 iterations).
     84 instructions eliminated by Dead Code Elimination (6 iterations).
-    42 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     5 instructions eliminated by Jump Normalization (4 iterations).
+    42 instructions eliminated by Jump Optimization (4 iterations).
     28 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
-    18 instructions added by Loop Optimization (3 iterations).
-     9 loops improved by Loop Optimization.
      3 instructions eliminated by If Expression Optimization (3 iterations).
      2 instructions modified by Data Flow Optimization (2 passes, 5 iterations).
-     3 instructions eliminated by Unreachable Code Elimination.
+    18 instructions added by Loop Optimization (3 iterations).
+     9 loops improved by Loop Optimization.
      5 instructions eliminated by Jump Straightening.
      6 instructions updated by PropagateJumpTargets.
+     3 instructions eliminated by Unreachable Code Elimination.
      8 instructions eliminated by Print Merging.
    379 instructions after optimizations.
 
@@ -351,7 +351,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instruct
     43 sensor __tmp11 @unit @controller
     44 op equal __tmp12 __tmp11 @this
     45 jump __label16 equal __tmp12 false
--    * set __retval7 null
+-    * set __tmp7 null
     46 jump __label7 always
 -    * set __tmp13 null
     47 jump __label17 always
@@ -378,9 +378,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instruct
     86 label __label21
  
     88 label __label22
-    89 set __retval18 null
+    89 set __tmp18 null
     90 label __label19
--    * set __retval7 __retval18
+-    * set __tmp7 __tmp18
     91 label __label7
     92 label __label4
     93 jump __label3 always
@@ -487,7 +487,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instruct
    335 set __tmp120 null
    336 jump __label81 always
    337 label __label80
--    * set __retval115 null
+-    * set __tmp115 null
    338 jump __label74 always
    339 set __tmp120 null
    340 label __label81
@@ -497,7 +497,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instruct
    343 label __label76
    344 jump __label75 always
    345 label __label77
--    * set __retval115 null
+-    * set __tmp115 null
    346 label __label74
    347 ucontrol flag 1
    348 set state 1
@@ -650,7 +650,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instruct
 -    * set __tmp23 null
     77 jump __label26 always
     78 label __label25
--    * set __retval18 null
+-    * set __tmp18 null
     79 jump __label19 always
 -    * set __tmp23 null
     80 label __label26
@@ -659,7 +659,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instruct
     83 label __label21
     84 jump __label20 always
     85 label __label22
--    * set __retval18 null
+-    * set __tmp18 null
     86 label __label19
     87 label __label7
     88 label __label4
@@ -884,7 +884,7 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-5 ins
    307 op equal __tmp116 @unit null
    308 jump __label78 equal __tmp116 false
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-42 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-42 instructions):
  
      5 op max REMOTE_LIMIT REMOTE_LIMIT 20
      6 label __label0

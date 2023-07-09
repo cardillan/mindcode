@@ -1,16 +1,16 @@
    993 instructions before optimizations.
     35 instructions eliminated by Temp Variables Elimination.
-     9 instructions eliminated by Jump Normalization (4 iterations).
    178 instructions eliminated by Dead Code Elimination (6 iterations).
-    64 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     9 instructions eliminated by Jump Normalization (4 iterations).
+    64 instructions eliminated by Jump Optimization (4 iterations).
     41 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     2 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
      2 instructions eliminated by If Expression Optimization (3 iterations).
     26 instructions eliminated by Data Flow Optimization (5 iterations).
-     4 instructions eliminated by Unreachable Code Elimination.
+     2 instructions added by Loop Optimization (3 iterations).
+     3 loops improved by Loop Optimization.
      2 instructions eliminated by Jump Straightening.
      8 instructions updated by PropagateJumpTargets.
+     4 instructions eliminated by Unreachable Code Elimination.
      1 instructions eliminated by Print Merging.
    633 instructions after optimizations.
 
@@ -197,7 +197,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 ins
    723 label __label151
    724 set __tmp201 __tmp203
  
-   753 set UNIT_S2 __retval162
+   753 set UNIT_S2 __tmp162
    754 jump __label158 equal SUPPLY_S_FIRST false
    755 sensor __tmp219 UNIT_S1 @totalItems
 -    * op greaterThan __tmp220 __tmp219 0
@@ -283,7 +283,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 ins
   1145 label __label233
   1146 set __tmp324 __tmp326
  
-  1175 set UNIT_P2 __retval285
+  1175 set UNIT_P2 __tmp285
   1176 jump __label240 equal SUPPLY_P_FIRST false
   1177 sensor __tmp342 UNIT_P1 @totalItems
 -    * op greaterThan __tmp343 __tmp342 0
@@ -326,9 +326,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
     73 op land __tmp18 __tmp15 __tmp17
     74 jump __label13 notEqual __tmp18 false
     75 label __label15
--    * set __retval3 __fn0_count
+-    * set __tmp3 __fn0_count
     76 jump __label7 always
--    * set __retval3 null
+-    * set __tmp3 null
     77 label __label7
     78 op equal __tmp19 UNIT_S1 null
     79 jump __label20 equal __tmp19 false
@@ -349,9 +349,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    106 printflush message1
    107 label __label25
  
-   110 set __retval21 null
+   110 set __tmp21 null
    111 label __label23
-   112 set UNIT_S1 __retval21
+   112 set UNIT_S1 __tmp21
 -    * set __tmp20 UNIT_S1
    113 jump __label21 always
    114 label __label20
@@ -376,9 +376,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    144 printflush message1
    145 label __label36
  
-   148 set __retval29 null
+   148 set __tmp29 null
    149 label __label34
-   150 set UNIT_P1 __retval29
+   150 set UNIT_P1 __tmp29
 -    * set __tmp28 UNIT_P1
    151 jump __label32 always
    152 label __label31
@@ -414,9 +414,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    216 printflush message1
    217 label __label54
  
-   220 set __retval62 null
+   220 set __tmp62 null
    221 label __label52
-   222 set UNIT_S2 __retval62
+   222 set UNIT_S2 __tmp62
 -    * set __tmp61 UNIT_S2
    223 jump __label50 always
    224 label __label49
@@ -441,9 +441,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    254 printflush message1
    255 label __label65
  
-   258 set __retval70 null
+   258 set __tmp70 null
    259 label __label63
-   260 set UNIT_P2 __retval70
+   260 set UNIT_P2 __tmp70
 -    * set __tmp69 UNIT_P2
    261 jump __label61 always
    262 label __label60
@@ -489,7 +489,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    331 print "[]\n"
    332 set __tmp103 null
    333 label __label81
--    * set __retval100 __tmp103
+-    * set __tmp100 __tmp103
    334 label __label79
    335 label __label82
    336 set __fn6_unit UNIT_S1
@@ -511,9 +511,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    374 label __label89
  
    376 label __label90
-   377 set __retval111 null
+   377 set __tmp111 null
    378 label __label87
--    * set __tmp110 __retval111
+-    * set __tmp110 __tmp111
    379 jump __label85 always
    380 label __label84
 -    * set __tmp110 null
@@ -576,7 +576,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    507 print MSG
 -    * set __tmp159 MSG
    508 label __label118
-   509 set __retval104 @unit
+   509 set __tmp104 @unit
    510 jump __label83 always
  
    534 print "[salmon]No unit of type "
@@ -596,9 +596,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    555 label __label128
  
    557 label __label129
-   558 set __retval169 null
+   558 set __tmp169 null
    559 label __label126
--    * set __tmp168 __retval169
+-    * set __tmp168 __tmp169
    560 jump __label124 always
    561 label __label123
 -    * set __tmp168 null
@@ -661,7 +661,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    688 print MSG
 -    * set __tmp217 MSG
    689 label __label157
-   690 set __retval162 @unit
+   690 set __tmp162 @unit
    691 jump __label122 always
  
    701 op equal __tmp218 __tmp221 0
@@ -678,7 +678,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    722 print "[]\n"
    723 set __tmp226 null
    724 label __label163
--    * set __retval223 __tmp226
+-    * set __tmp223 __tmp226
    725 label __label161
    726 label __label164
    727 set __fn11_unit UNIT_P1
@@ -700,9 +700,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    765 label __label171
  
    767 label __label172
-   768 set __retval234 null
+   768 set __tmp234 null
    769 label __label169
--    * set __tmp233 __retval234
+-    * set __tmp233 __tmp234
    770 jump __label167 always
    771 label __label166
 -    * set __tmp233 null
@@ -765,7 +765,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    898 print MSG
 -    * set __tmp282 MSG
    899 label __label200
-   900 set __retval227 @unit
+   900 set __tmp227 @unit
    901 jump __label165 always
  
    925 print "[salmon]No unit of type "
@@ -785,9 +785,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
    946 label __label210
  
    948 label __label211
-   949 set __retval292 null
+   949 set __tmp292 null
    950 label __label208
--    * set __tmp291 __retval292
+-    * set __tmp291 __tmp292
    951 jump __label206 always
    952 label __label205
 -    * set __tmp291 null
@@ -850,7 +850,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instruct
   1079 print MSG
 -    * set __tmp340 MSG
   1080 label __label239
-  1081 set __retval285 @unit
+  1081 set __tmp285 @unit
   1082 jump __label204 always
  
   1092 op equal __tmp341 __tmp344 0
@@ -884,7 +884,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
     95 jump __label30 always
     96 label __label29
     97 ucontrol flag 1
-    98 set __retval21 @unit
+    98 set __tmp21 @unit
     99 jump __label23 always
 -    * set __tmp26 null
    100 label __label30
@@ -898,7 +898,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    131 jump __label41 always
    132 label __label40
    133 ucontrol flag 1
-   134 set __retval29 @unit
+   134 set __tmp29 @unit
    135 jump __label34 always
 -    * set __tmp34 null
    136 label __label41
@@ -912,7 +912,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    201 jump __label59 always
    202 label __label58
    203 ucontrol flag 1
-   204 set __retval62 @unit
+   204 set __tmp62 @unit
    205 jump __label52 always
 -    * set __tmp67 null
    206 label __label59
@@ -926,7 +926,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    237 jump __label70 always
    238 label __label69
    239 ucontrol flag 1
-   240 set __retval70 @unit
+   240 set __tmp70 @unit
    241 jump __label63 always
 -    * set __tmp75 null
    242 label __label70
@@ -954,7 +954,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    352 jump __label94 always
    353 label __label93
    354 ucontrol flag 1
--    * set __retval111 @unit
+-    * set __tmp111 @unit
    355 jump __label87 always
 -    * set __tmp116 null
    356 label __label94
@@ -963,7 +963,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    359 label __label89
    360 jump __label88 always
    361 label __label90
--    * set __retval111 null
+-    * set __tmp111 null
    362 label __label87
    363 jump __label85 always
    364 label __label84
@@ -1023,7 +1023,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    523 jump __label133 always
    524 label __label132
    525 ucontrol flag 1
--    * set __retval169 @unit
+-    * set __tmp169 @unit
    526 jump __label126 always
 -    * set __tmp174 null
    527 label __label133
@@ -1032,7 +1032,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    530 label __label128
    531 jump __label127 always
    532 label __label129
--    * set __retval169 null
+-    * set __tmp169 null
    533 label __label126
    534 jump __label124 always
    535 label __label123
@@ -1106,7 +1106,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    721 jump __label176 always
    722 label __label175
    723 ucontrol flag 1
--    * set __retval234 @unit
+-    * set __tmp234 @unit
    724 jump __label169 always
 -    * set __tmp239 null
    725 label __label176
@@ -1115,7 +1115,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    728 label __label171
    729 jump __label170 always
    730 label __label172
--    * set __retval234 null
+-    * set __tmp234 null
    731 label __label169
    732 jump __label167 always
    733 label __label166
@@ -1175,7 +1175,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    892 jump __label215 always
    893 label __label214
    894 ucontrol flag 1
--    * set __retval292 @unit
+-    * set __tmp292 @unit
    895 jump __label208 always
 -    * set __tmp297 null
    896 label __label215
@@ -1184,7 +1184,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instruct
    899 label __label210
    900 jump __label209 always
    901 label __label211
--    * set __retval292 null
+-    * set __tmp292 null
    902 label __label208
    903 jump __label206 always
    904 label __label205
@@ -1515,7 +1515,7 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 ins
    846 op equal __tmp293 @unit null
    847 jump __label212 equal __tmp293 false
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-64 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-64 instructions):
      0 set UNIT @flare
      1 set DOME dome1
      2 label __label0
@@ -2096,17 +2096,17 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     66 jump __label20 notEqual UNIT_S1 null
     67 label __label22
  
-    92 set __retval21 null
+    92 set __tmp21 null
     93 label __label23
-    94 set UNIT_S1 __retval21
+    94 set UNIT_S1 __tmp21
 -    * jump __label21 always
     95 label __label20
     96 label __label21
     97 jump __label31 notEqual UNIT_P1 null
  
-   123 set __retval29 null
+   123 set __tmp29 null
    124 label __label34
-   125 set UNIT_P1 __retval29
+   125 set UNIT_P1 __tmp29
 -    * jump __label32 always
    126 label __label31
    127 label __label32
@@ -2120,17 +2120,17 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    138 label __label43
    139 sensor UNIT_CAPACITY UNIT_S1 @itemCapacity
  
-   186 set __retval62 null
+   186 set __tmp62 null
    187 label __label52
-   188 set UNIT_S2 __retval62
+   188 set UNIT_S2 __tmp62
 -    * jump __label50 always
    189 label __label49
    190 label __label50
    191 jump __label60 notEqual UNIT_P2 null
  
-   217 set __retval70 null
+   217 set __tmp70 null
    218 label __label63
-   219 set UNIT_P2 __retval70
+   219 set UNIT_P2 __tmp70
 -    * jump __label61 always
    220 label __label60
    221 label __label61
@@ -2350,7 +2350,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
-   575 set UNIT_S2 __retval162
+   575 set UNIT_S2 __tmp162
    576 jump __label158 equal SUPPLY_S_FIRST false
    577 sensor __tmp219 UNIT_S1 @totalItems
 -    * op greaterThan __tmp218 __tmp219 0
@@ -2366,7 +2366,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    585 label __label120
    586 label __label160
  
-   889 set UNIT_P2 __retval285
+   889 set UNIT_P2 __tmp285
    890 jump __label240 equal SUPPLY_P_FIRST false
    891 sensor __tmp342 UNIT_P1 @totalItems
 -    * op greaterThan __tmp341 __tmp342 0
@@ -2458,11 +2458,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5
    414 print "]"
  
    424 label __label118
-   425 set __retval104 @unit
+   425 set __tmp104 @unit
    426 jump __label83 always
--    * set __retval104 null
+-    * set __tmp104 null
    427 label __label83
-   428 set UNIT_S1 __retval104
+   428 set UNIT_S1 __tmp104
    429 jump __label119 equal FOUR_UNITS false
  
    433 set __fn8_item @silicon
@@ -2511,11 +2511,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5
    558 print "]"
  
    568 label __label157
-   569 set __retval162 @unit
+   569 set __tmp162 @unit
    570 jump __label122 always
--    * set __retval162 null
+-    * set __tmp162 null
    571 label __label122
-   572 set UNIT_S2 __retval162
+   572 set UNIT_S2 __tmp162
    573 jump __label158 equal SUPPLY_S_FIRST false
  
    583 label __label160
@@ -2575,11 +2575,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5
    726 print "]"
  
    736 label __label200
-   737 set __retval227 @unit
+   737 set __tmp227 @unit
    738 jump __label165 always
--    * set __retval227 null
+-    * set __tmp227 null
    739 label __label165
-   740 set UNIT_P1 __retval227
+   740 set UNIT_P1 __tmp227
    741 jump __label201 equal FOUR_UNITS false
  
    745 set __fn13_item @phase-fabric
@@ -2628,11 +2628,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5
    870 print "]"
  
    880 label __label239
-   881 set __retval285 @unit
+   881 set __tmp285 @unit
    882 jump __label204 always
--    * set __retval285 null
+-    * set __tmp285 null
    883 label __label204
-   884 set UNIT_P2 __retval285
+   884 set UNIT_P2 __tmp285
    885 jump __label240 equal SUPPLY_P_FIRST false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-21 instructions):
@@ -2763,34 +2763,34 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
  
    420 print MSG
    421 label __label118
-   422 set __retval104 @unit
+   422 set __tmp104 @unit
 -    * jump __label83 always
    423 label __label83
-   424 set UNIT_S1 __retval104
+   424 set UNIT_S1 __tmp104
    425 jump __label119 equal FOUR_UNITS false
  
    559 print MSG
    560 label __label157
-   561 set __retval162 @unit
+   561 set __tmp162 @unit
 -    * jump __label122 always
    562 label __label122
-   563 set UNIT_S2 __retval162
+   563 set UNIT_S2 __tmp162
    564 jump __label158 equal SUPPLY_S_FIRST false
  
    720 print MSG
    721 label __label200
-   722 set __retval227 @unit
+   722 set __tmp227 @unit
 -    * jump __label165 always
    723 label __label165
-   724 set UNIT_P1 __retval227
+   724 set UNIT_P1 __tmp227
    725 jump __label201 equal FOUR_UNITS false
  
    859 print MSG
    860 label __label239
-   861 set __retval285 @unit
+   861 set __tmp285 @unit
 -    * jump __label204 always
    862 label __label204
-   863 set UNIT_P2 __retval285
+   863 set UNIT_P2 __tmp285
    864 jump __label240 equal SUPPLY_P_FIRST false
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
@@ -2895,36 +2895,36 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 inst
     89 label __label25
     90 jump __label24 always
 -    * label __label26
--    * set __retval21 null
+-    * set __tmp21 null
     91 label __label23
-    92 set UNIT_S1 __retval21
+    92 set UNIT_S1 __tmp21
     93 label __label20
  
    117 printflush message1
    118 label __label36
    119 jump __label35 always
 -    * label __label37
--    * set __retval29 null
+-    * set __tmp29 null
    120 label __label34
-   121 set UNIT_P1 __retval29
+   121 set UNIT_P1 __tmp29
    122 label __label31
  
    178 printflush message1
    179 label __label54
    180 jump __label53 always
 -    * label __label55
--    * set __retval62 null
+-    * set __tmp62 null
    181 label __label52
-   182 set UNIT_S2 __retval62
+   182 set UNIT_S2 __tmp62
    183 label __label49
  
    207 printflush message1
    208 label __label65
    209 jump __label64 always
 -    * label __label66
--    * set __retval70 null
+-    * set __tmp70 null
    210 label __label63
-   211 set UNIT_P2 __retval70
+   211 set UNIT_P2 __tmp70
    212 label __label60
  
    305 printflush message1
@@ -3044,14 +3044,14 @@ print "..."
 jump __label30 always 0 0
 label __label29
 ucontrol flag 1 0 0 0 0
-set __retval21 @unit
+set __tmp21 @unit
 jump __label23 always 0 0
 label __label30
 label __label28
 printflush message1
 jump __label24 always 0 0
 label __label23
-set UNIT_S1 __retval21
+set UNIT_S1 __tmp21
 label __label20
 jump __label31 notEqual UNIT_P1 null
 label __label35
@@ -3070,14 +3070,14 @@ print "..."
 jump __label41 always 0 0
 label __label40
 ucontrol flag 1 0 0 0 0
-set __retval29 @unit
+set __tmp29 @unit
 jump __label34 always 0 0
 label __label41
 label __label39
 printflush message1
 jump __label35 always 0 0
 label __label34
-set UNIT_P1 __retval29
+set UNIT_P1 __tmp29
 label __label31
 sensor __tmp35 UNIT_S1 @firstItem
 op equal __tmp36 __tmp35 @phase-fabric
@@ -3125,14 +3125,14 @@ print "..."
 jump __label59 always 0 0
 label __label58
 ucontrol flag 1 0 0 0 0
-set __retval62 @unit
+set __tmp62 @unit
 jump __label52 always 0 0
 label __label59
 label __label57
 printflush message1
 jump __label53 always 0 0
 label __label52
-set UNIT_S2 __retval62
+set UNIT_S2 __tmp62
 label __label49
 jump __label60 notEqual UNIT_P2 null
 label __label64
@@ -3151,14 +3151,14 @@ print "..."
 jump __label70 always 0 0
 label __label69
 ucontrol flag 1 0 0 0 0
-set __retval70 @unit
+set __tmp70 @unit
 jump __label63 always 0 0
 label __label70
 label __label68
 printflush message1
 jump __label64 always 0 0
 label __label63
-set UNIT_P2 __retval70
+set UNIT_P2 __tmp70
 label __label60
 sensor __tmp76 UNIT_S1 @firstItem
 op equal __tmp77 __tmp76 @phase-fabric
@@ -3340,8 +3340,8 @@ jump __label118 always 0 0
 label __label117
 print MSG
 label __label118
-set __retval104 @unit
-set UNIT_S1 __retval104
+set __tmp104 @unit
+set UNIT_S1 __tmp104
 jump __label119 equal FOUR_UNITS false
 op equal __tmp161 SUPPLY_S_FIRST false
 ubind UNIT_S2
@@ -3466,8 +3466,8 @@ jump __label157 always 0 0
 label __label156
 print MSG
 label __label157
-set __retval162 @unit
-set UNIT_S2 __retval162
+set __tmp162 @unit
+set UNIT_S2 __tmp162
 jump __label158 equal SUPPLY_S_FIRST false
 sensor __tmp219 UNIT_S1 @totalItems
 op greaterThan SUPPLY_S_FIRST __tmp219 0
@@ -3611,8 +3611,8 @@ jump __label200 always 0 0
 label __label199
 print MSG
 label __label200
-set __retval227 @unit
-set UNIT_P1 __retval227
+set __tmp227 @unit
+set UNIT_P1 __tmp227
 jump __label201 equal FOUR_UNITS false
 op equal __tmp284 SUPPLY_P_FIRST false
 ubind UNIT_P2
@@ -3737,8 +3737,8 @@ jump __label239 always 0 0
 label __label238
 print MSG
 label __label239
-set __retval285 @unit
-set UNIT_P2 __retval285
+set __tmp285 @unit
+set UNIT_P2 __tmp285
 jump __label240 equal SUPPLY_P_FIRST false
 sensor __tmp342 UNIT_P1 @totalItems
 op greaterThan SUPPLY_P_FIRST __tmp342 0

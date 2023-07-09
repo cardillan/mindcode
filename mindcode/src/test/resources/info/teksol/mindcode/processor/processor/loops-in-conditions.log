@@ -1,14 +1,14 @@
     35 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Jump Normalization (5 iterations).
-     1 instructions eliminated by Conditional Jump Optimization (5 iterations).
+     1 instructions eliminated by Jump Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (6 iterations).
+     1 instructions eliminated by If Expression Optimization (4 iterations).
+    38 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      2 instructions eliminated by Loop Optimization (4 iterations).
      2 loops improved by Loop Optimization.
     18 instructions added by Loop Unrolling (6 iterations).
      2 loops unrolled by Loop Unrolling.
-     1 instructions eliminated by If Expression Optimization (4 iterations).
-    38 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      5 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 979):
@@ -40,14 +40,14 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
     26 op add __fn1_i __fn1_i 1
     27 jump __label7 always
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
     31 jump __label6 always
-    32 set __retval3 null
+    32 set __tmp3 null
     33 label __label6
--    * op lessThan __tmp6 __retval0 __retval3
+-    * op lessThan __tmp6 __tmp0 __tmp3
 -    * jump __label10 equal __tmp6 false
-+   34 jump __label10 greaterThanEq __retval0 __retval3
++   34 jump __label10 greaterThanEq __tmp0 __tmp3
     35 print "Less"
     36 set __tmp7 0
     37 jump __label11 always
@@ -59,10 +59,10 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
      3 set __fn0_c 0
  
     32 jump __label6 always
-    33 set __retval3 null
+    33 set __tmp3 null
     34 label __label6
--    * jump __label10 greaterThanEq __retval0 __retval3
-+   35 jump __label11 greaterThanEq __retval0 __retval3
+-    * jump __label10 greaterThanEq __tmp0 __tmp3
++   35 jump __label11 greaterThanEq __tmp0 __tmp3
     36 print "Less"
 -    * set __tmp7 0
 +   37 set result 0
@@ -90,9 +90,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
     10 op add __fn0_i __fn0_i 1
  
     13 print __fn0_c
-    14 set __retval0 __fn0_c
+    14 set __tmp0 __fn0_c
     15 jump __label1 always
--    * set __retval0 null
+-    * set __tmp0 null
     16 label __label1
     17 label __label5
     18 set __fn1_n 8
@@ -108,11 +108,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
     26 op add __fn1_i __fn1_i 1
  
     29 print __fn1_c
-    30 set __retval3 __fn1_c
+    30 set __tmp3 __fn1_c
     31 jump __label6 always
--    * set __retval3 null
+-    * set __tmp3 null
     32 label __label6
--    * jump __label11 greaterThanEq __retval0 __retval3
+-    * jump __label11 greaterThanEq __tmp0 __tmp3
 +   33 jump __label11 greaterThanEq __fn0_c __fn1_c
     34 print "Less"
     35 set result 0
@@ -134,7 +134,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     10 jump __label2 always
     11 label __label4
     12 print __fn0_c
--    * set __retval0 __fn0_c
+-    * set __tmp0 __fn0_c
     13 jump __label1 always
     14 label __label1
     15 label __label5
@@ -151,7 +151,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     24 jump __label7 always
     25 label __label9
     26 print __fn1_c
--    * set __retval3 __fn1_c
+-    * set __tmp3 __fn1_c
     27 jump __label6 always
     28 label __label6
     29 jump __label11 greaterThanEq __fn0_c __fn1_c

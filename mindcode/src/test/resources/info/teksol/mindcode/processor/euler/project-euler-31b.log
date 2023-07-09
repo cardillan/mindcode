@@ -1,39 +1,39 @@
     42 instructions before optimizations.
-     6 instructions eliminated by Jump Normalization (5 iterations).
      2 instructions eliminated by Dead Code Elimination (3 iterations).
+     6 instructions eliminated by Jump Normalization (5 iterations).
+   216 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      1 instructions modified by Loop Optimization (4 iterations).
      1 loops improved by Loop Optimization.
    643 instructions added by Loop Unrolling (7 iterations).
      3 loops unrolled by Loop Unrolling.
-   216 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
    461 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 962):
   * Loop Unrolling: unroll iteration loop at line 4    cost  49, benefit       23,0, efficiency        0,5
 
 Pass 2: speed optimization selection (cost limit 923):
-    Loop Unrolling: unroll loop at line 6              cost 905, benefit    72400,0, efficiency       80,0
-    Loop Unrolling: unroll loop at line 6              cost 755, benefit    60400,0, efficiency       80,0
-    Loop Unrolling: unroll loop at line 6              cost 505, benefit    40400,0, efficiency       80,0
-  * Loop Unrolling: unroll loop at line 6              cost   5, benefit      400,0, efficiency       80,0
+    Loop Unrolling: unroll loop at line 6              cost 905, benefit   226250,0, efficiency      250,0
+    Loop Unrolling: unroll loop at line 6              cost 755, benefit   188750,0, efficiency      250,0
+    Loop Unrolling: unroll loop at line 6              cost 505, benefit   126250,0, efficiency      250,0
+  * Loop Unrolling: unroll loop at line 6              cost   5, benefit     1250,0, efficiency      250,0
 
 Pass 2: speed optimization selection (cost limit 925):
-    Loop Unrolling: unroll loop at line 6              cost 905, benefit    72400,0, efficiency       80,0
-    Loop Unrolling: unroll loop at line 6              cost 755, benefit    60400,0, efficiency       80,0
-  * Loop Unrolling: unroll loop at line 6              cost 505, benefit    40400,0, efficiency       80,0
+    Loop Unrolling: unroll loop at line 6              cost 905, benefit   226250,0, efficiency      250,0
+    Loop Unrolling: unroll loop at line 6              cost 755, benefit   188750,0, efficiency      250,0
+  * Loop Unrolling: unroll loop at line 6              cost 505, benefit   126250,0, efficiency      250,0
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
     48 label __label14
     49 set __fn0_v 73682
     50 print __fn0_v
--    * set __retval5 __fn0_v
+-    * set __tmp5 __fn0_v
     51 label __label15
     52 read __tmp6 bank2 200
     53 label __label16
     54 set __fn1_v __tmp6
     55 print __fn1_v
--    * set __retval7 __fn1_v
+-    * set __tmp7 __fn1_v
     56 label __label17
     57 end
 

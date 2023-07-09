@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.OUT_OF_LINE_CALL;
+import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.PARAMETERS;
 import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.RECURSIVE_CALL;
 
 public class DataFlowVariableStates {
@@ -189,14 +189,14 @@ public class DataFlowVariableStates {
             debug(() -> "Value set: " + variable);
             printInstruction(instruction);
 
-            if (optimizer.canEliminate(variable)) {
+            if (optimizer.canEliminate(instruction, variable)) {
                 // Only store the variable's value if it can be eliminated
                 // Otherwise the value itself could be used - we do not want this for global variables.
                 if (value == null) {
                     values.remove(variable);
                 } else if (values.get(variable) != null && value.equals(values.get(variable).constantValue)) {
                     AstSubcontextType type = instruction.getAstContext().subcontextType();
-                    if (type == OUT_OF_LINE_CALL || type == RECURSIVE_CALL) {
+                    if (type == PARAMETERS || type == RECURSIVE_CALL) {
                         // A function argument is being set to the same value it already has. Skip it.
                         useless.put(variable, instruction);
                     }
@@ -262,6 +262,7 @@ public class DataFlowVariableStates {
         public void updateAfterFunctionCall(String localPrefix, LogicInstruction instruction) {
             optimizer.functionReads.get(localPrefix).forEach(variable -> valueRead(variable, instruction, false));
             optimizer.functionWrites.get(localPrefix).forEach(this::valueReset);
+            initialized.add(LogicVariable.fnRetVal(localPrefix));
         }
 
         public VariableValue findVariableValue(LogicValue variable) {

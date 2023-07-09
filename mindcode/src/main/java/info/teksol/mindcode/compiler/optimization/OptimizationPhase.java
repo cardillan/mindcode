@@ -21,13 +21,14 @@ public enum OptimizationPhase {
      */
     ITERATED("Iterated",
             CONDITIONAL_JUMPS_NORMALIZATION,
-            CONDITIONAL_JUMPS_IMPROVEMENT,
+            CONDITIONAL_JUMPS_OPTIMIZATION,
             SINGLE_STEP_JUMP_ELIMINATION,
             EXPRESSION_OPTIMIZATION,
             IF_EXPRESSION_OPTIMIZATION,
             DATA_FLOW_OPTIMIZATION,
             LOOP_OPTIMIZATION,
-            LOOP_UNROLLING
+            LOOP_UNROLLING,
+            FUNCTION_INLINING
     ),
 
     /**
@@ -37,7 +38,7 @@ public enum OptimizationPhase {
     FINAL("Final",
             CONDITIONAL_JUMPS_NORMALIZATION,
             JUMP_OVER_JUMP_ELIMINATION,
-            CONDITIONAL_JUMPS_IMPROVEMENT,
+            CONDITIONAL_JUMPS_OPTIMIZATION,
             JUMP_TARGET_PROPAGATION,
             UNREACHABLE_CODE_ELIMINATION,
             DEAD_CODE_ELIMINATION,

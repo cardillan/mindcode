@@ -19,8 +19,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        // Need to test interactions with all optimizers
-        return Optimization.LIST;
+        // Need to test interactions with all optimizers except function inlining
+        return Optimization.LIST.stream().filter(o -> o != Optimization.FUNCTION_INLINING).toList();
     }
 
     @Override

@@ -191,10 +191,10 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
                         .collect(Collectors.joining("\n", "\n", "\n")));
     }
 
-    protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
+    protected void testAndEvaluateFile(TestCompiler compiler, String fileName, Function<String, String> codeDecorator,
             List<MindustryObject> blocks, Consumer<List<String>> evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
-        testAndEvaluateCode(createTestCompiler(), fileName, codeDecorator.apply(readFile(fileName)),
+        testAndEvaluateCode(compiler, fileName, codeDecorator.apply(readFile(fileName)),
                 blocks, evaluator, logFile);
     }
 

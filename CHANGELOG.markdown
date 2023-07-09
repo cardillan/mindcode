@@ -2,13 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-07-10
 
 ### Added
 
 * Added list iteration loop unrolling to [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling) 
   optimization.
+* Added [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining). Stackless functions and even 
+  individual function calls may be selected for inlining based on expected benefit and available instruction space.
 
+### Fixed
+
+* Fixed incorrect weight computation of user defined functions. Currently, weight is based on a number of times a 
+  function is called in the program. This is still not quite correct, though - the weight should be computed by 
+  tracking call hierarchy and weights of contexts containing the calls.
+* Fixed incorrect weight computation of list-iteration loops. The weight was set to the actual number of loops, 
+  instead of the unified loop weight. 
+
+### Changed
+
+* Changed option name `conditional-jump-optimization` to `jump-optimization` to conform with 
+  [documentation](doc/syntax/SYNTAX-5-OTHER.markdown#jump-optimization).
+
+### Miscellaneous
+
+* Eliminated `STORED_RETVAL` variable type. Values returned from user defined function calls are now assigned to
+  standard temporary variables, as their usage is correctly tracked by Data Flow Optimizer and no longer requires 
+  special handling. 
+  
 ## 2023-07-08
 
 ### Fixed

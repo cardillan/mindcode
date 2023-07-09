@@ -18,6 +18,13 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.fullName = name;
     }
 
+    private LogicVariable(ArgumentType argumentType, String functionPrefix, String name) {
+        super(argumentType);
+        this.functionPrefix = Objects.requireNonNull(functionPrefix);
+        this.name = Objects.requireNonNull(name);
+        this.fullName = name;
+    }
+
     private LogicVariable(ArgumentType argumentType, String functionName, String functionPrefix, String name) {
         super(argumentType);
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
@@ -79,7 +86,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public String toMlog() {
-        return functionPrefix != null ? functionPrefix + "_" + name : name;
+        return functionPrefix != null && argumentType != ArgumentType.FUNCTION_RETVAL ? functionPrefix + "_" + name : name;
     }
 
     @Override
@@ -116,12 +123,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(ArgumentType.AST_VARIABLE, name);
     }
 
-    public static LogicVariable retval(String name) {
-        return new LogicVariable(ArgumentType.STORED_RETVAL, name);
-    }
-
     public static LogicVariable fnRetVal(String functionPrefix) {
-        return new LogicVariable(ArgumentType.FUNCTION_RETVAL, functionPrefix + RETURN_VALUE);
+        return new LogicVariable(ArgumentType.FUNCTION_RETVAL, functionPrefix, functionPrefix + RETURN_VALUE);
     }
 
     public static LogicVariable fnRetAddr(String functionPrefix) {

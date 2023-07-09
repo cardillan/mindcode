@@ -1,10 +1,11 @@
 assignments-in-expressions.mnd:         : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 complex-case-expression.mnd:            : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 computesPackColor:                      : parse:          0 ms, compile:          0 ms, optimize:          0 ms
-expression-evaluation-compile-time.mnd: : parse:          0 ms, compile:          0 ms, optimize:        200 ms
+expression-evaluation-compile-time.mnd: : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 expression-evaluation-runtime.mnd:      : parse:          0 ms, compile:          0 ms, optimize:        400 ms
 fixed-bounds-ranged-for.mnd:            : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 for-each-loop-break-continue.mnd:       : parse:          0 ms, compile:          0 ms, optimize:          0 ms
+function-inlining.mnd:                  : parse:          0 ms, compile:          0 ms, optimize:        400 ms
 handlesAssignmentsInConditions:         : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 handlesChainedAssignments:              : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 iterated-for-loop-break-continue.mnd:   : parse:          0 ms, compile:          0 ms, optimize:          0 ms

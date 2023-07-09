@@ -11,16 +11,16 @@ import static info.teksol.mindcode.compiler.optimization.Optimization.*;
 import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.AGGRESSIVE;
 import static info.teksol.mindcode.logic.Opcode.*;
 
-class ImproveConditionalJumpsTest extends AbstractOptimizerTest<ImproveConditionalJumps> {
+class ConditionalJumpsOptimizerTest extends AbstractOptimizerTest<ConditionalJumpsOptimizer> {
 
     @Override
-    protected Class<ImproveConditionalJumps> getTestedClass() {
-        return ImproveConditionalJumps.class;
+    protected Class<ConditionalJumpsOptimizer> getTestedClass() {
+        return ConditionalJumpsOptimizer.class;
     }
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        return List.of(CONDITIONAL_JUMPS_IMPROVEMENT);
+        return List.of(CONDITIONAL_JUMPS_OPTIMIZATION);
     }
 
     @Test

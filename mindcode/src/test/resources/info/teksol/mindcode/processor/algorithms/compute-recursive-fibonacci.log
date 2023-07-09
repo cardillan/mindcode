@@ -1,6 +1,6 @@
     43 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Conditional Jump Optimization (3 iterations).
+     1 instructions eliminated by Jump Optimization (3 iterations).
      2 instructions eliminated by If Expression Optimization (2 iterations).
      4 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
@@ -9,19 +9,19 @@
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-    26 pop bank1 __retval4
+    26 pop bank1 __tmp4
     27 pop bank1 __fn0_n
-    28 set __retval6 __fn0retval
--    * op add __tmp7 __retval4 __retval6
+    28 set __tmp6 __fn0retval
+-    * op add __tmp7 __tmp4 __tmp6
 -    * set __tmp2 __tmp7
-+   29 op add __tmp2 __retval4 __retval6
++   29 op add __tmp2 __tmp4 __tmp6
     30 label __label4
     31 set __fn0retval __tmp2
     32 label __label2
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
-     5 print __retval0
+     5 print __tmp0
      6 end
      7 label __label0
 -    * op lessThan __tmp1 __fn0_n 2
@@ -33,7 +33,7 @@ Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteratio
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
-     5 print __retval0
+     5 print __tmp0
      6 end
      7 label __label0
 -    * jump __label3 greaterThanEq __fn0_n 2
@@ -45,11 +45,11 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     11 op sub __tmp3 __fn0_n 1
     12 push bank1 __fn0_n
  
-    24 pop bank1 __retval4
+    24 pop bank1 __tmp4
     25 pop bank1 __fn0_n
-    26 set __retval6 __fn0retval
--    * op add __tmp2 __retval4 __retval6
-+   27 op add __fn0retval __retval4 __retval6
+    26 set __tmp6 __fn0retval
+-    * op add __tmp2 __tmp4 __tmp6
++   27 op add __fn0retval __tmp4 __tmp6
     28 label __label4
 -    * set __fn0retval __tmp2
     29 label __label2
@@ -60,8 +60,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      2 callrec bank1 __label0 __label1
      3 label __label1
-     4 set __retval0 __fn0retval
--    * print __retval0
+     4 set __tmp0 __fn0retval
+-    * print __tmp0
 +    5 print __fn0retval
      6 end
      7 label __label0
@@ -78,16 +78,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     18 op sub __tmp5 __fn0_n 2
     19 push bank1 __fn0_n
-    20 push bank1 __retval4
+    20 push bank1 __tmp4
 -    * set __fn0_n __tmp5
 +   21 op sub __fn0_n __fn0_n 2
     22 callrec bank1 __label0 __label6
     23 label __label6
-    24 pop bank1 __retval4
+    24 pop bank1 __tmp4
     25 pop bank1 __fn0_n
-    26 set __retval6 __fn0retval
--    * op add __fn0retval __retval4 __retval6
-+   27 op add __fn0retval __retval4 __fn0retval
+    26 set __tmp6 __fn0retval
+-    * op add __fn0retval __tmp4 __tmp6
++   27 op add __fn0retval __tmp4 __fn0retval
     28 label __label4
     29 label __label2
     30 return bank1
@@ -97,7 +97,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
      1 set __fn0_n 10
      2 callrec bank1 __label0 __label1
      3 label __label1
--    * set __retval0 __fn0retval
+-    * set __tmp0 __fn0retval
      4 print __fn0retval
      5 end
      6 label __label0
@@ -110,17 +110,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     12 callrec bank1 __label0 __label5
     13 label __label5
     14 pop bank1 __fn0_n
-    15 set __retval4 __fn0retval
+    15 set __tmp4 __fn0retval
 -    * op sub __tmp5 __fn0_n 2
     16 push bank1 __fn0_n
-    17 push bank1 __retval4
+    17 push bank1 __tmp4
     18 op sub __fn0_n __fn0_n 2
  
     20 label __label6
-    21 pop bank1 __retval4
+    21 pop bank1 __tmp4
     22 pop bank1 __fn0_n
--    * set __retval6 __fn0retval
-    23 op add __fn0retval __retval4 __fn0retval
+-    * set __tmp6 __fn0retval
+    23 op add __fn0retval __tmp4 __fn0retval
     24 label __label4
     25 label __label2
 
@@ -135,15 +135,15 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
  
     13 label __label5
     14 pop bank1 __fn0_n
-    15 set __retval4 __fn0retval
+    15 set __tmp4 __fn0retval
 -    * push bank1 __fn0_n
-    16 push bank1 __retval4
+    16 push bank1 __tmp4
     17 op sub __fn0_n __fn0_n 2
     18 callrec bank1 __label0 __label6
     19 label __label6
-    20 pop bank1 __retval4
+    20 pop bank1 __tmp4
 -    * pop bank1 __fn0_n
-    21 op add __fn0retval __retval4 __fn0retval
+    21 op add __fn0retval __tmp4 __fn0retval
     22 label __label4
     23 label __label2
 
@@ -163,12 +163,12 @@ op sub __fn0_n __fn0_n 1
 callrec bank1 __label0 __label5
 label __label5
 pop bank1 __fn0_n
-set __retval4 __fn0retval
-push bank1 __retval4
+set __tmp4 __fn0retval
+push bank1 __tmp4
 op sub __fn0_n __fn0_n 2
 callrec bank1 __label0 __label6
 label __label6
-pop bank1 __retval4
-op add __fn0retval __retval4 __fn0retval
+pop bank1 __tmp4
+op add __fn0retval __tmp4 __fn0retval
 label __label4
 return bank1

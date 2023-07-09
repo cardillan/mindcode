@@ -32,7 +32,7 @@ public class ProjectEulerTest extends AbstractProcessorTest {
     }
 
     @TestFactory
-    List<DynamicTest> runScripts() throws IOException {
+    List<DynamicTest> runScripts() {
         final List<DynamicTest> result = new ArrayList<>();
         final File[] files = new File(getScriptsDirectory()).listFiles((dir, name) -> name.endsWith(".mnd"));
         assertNotNull(files);
@@ -49,6 +49,7 @@ public class ProjectEulerTest extends AbstractProcessorTest {
     private void processFile(List<DynamicTest> result, File file) {
         String fileName = file.getName();
         result.add(DynamicTest.dynamicTest(fileName, null, () -> testAndEvaluateFile(
+                createTestCompiler(),
                 fileName,
                 s -> s + "\ndef expect(v) print(v) end def actual(v) print(v) end",
                 List.of(MindustryMemory.createMemoryBank("bank2")),

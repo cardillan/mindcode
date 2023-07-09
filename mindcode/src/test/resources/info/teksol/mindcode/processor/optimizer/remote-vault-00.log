@@ -1,8 +1,8 @@
    149 instructions before optimizations.
     14 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Jump Normalization (3 iterations).
     30 instructions eliminated by Dead Code Elimination (4 iterations).
-    10 instructions eliminated by Conditional Jump Optimization (3 iterations).
+     1 instructions eliminated by Jump Normalization (3 iterations).
+    10 instructions eliminated by Jump Optimization (3 iterations).
     10 instructions eliminated by Single Step Elimination (4 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
@@ -139,7 +139,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
     22 label __label5
     23 set __tmp11 null
     24 label __label6
--    * set __retval8 __tmp11
+-    * set __tmp8 __tmp11
     25 label __label4
     26 label __label7
     27 set __fn1_unit @poly
@@ -147,7 +147,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
     36 label __label9
     37 set __tmp16 null
     38 label __label10
--    * set __retval13 __tmp16
+-    * set __tmp13 __tmp16
     39 label __label8
     40 label __label11
     41 set __fn2_unit @mega
@@ -155,7 +155,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
     50 label __label13
     51 set __tmp21 null
     52 label __label14
--    * set __retval18 __tmp21
+-    * set __tmp18 __tmp21
     53 label __label12
     54 label __label15
     55 set __fn3_unit @quad
@@ -163,7 +163,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
     64 label __label17
     65 set __tmp26 null
     66 label __label18
--    * set __retval23 __tmp26
+-    * set __tmp23 __tmp26
     67 label __label16
     68 label __label19
     69 set __fn4_unit @oct
@@ -171,7 +171,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
     78 label __label21
     79 set __tmp31 null
     80 label __label22
--    * set __retval28 __tmp31
+-    * set __tmp28 __tmp31
     81 label __label20
     82 label __label23
     83 set __fn5_unit @flare
@@ -179,7 +179,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
     92 label __label25
     93 set __tmp36 null
     94 label __label26
--    * set __retval33 __tmp36
+-    * set __tmp33 __tmp36
     95 label __label24
     96 label __label27
     97 set __fn6_unit @horizon
@@ -187,7 +187,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
    106 label __label29
    107 set __tmp41 null
    108 label __label30
--    * set __retval38 __tmp41
+-    * set __tmp38 __tmp41
    109 label __label28
    110 label __label31
    111 set __fn7_unit @zenith
@@ -195,7 +195,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
    120 label __label33
    121 set __tmp46 null
    122 label __label34
--    * set __retval43 __tmp46
+-    * set __tmp43 __tmp46
    123 label __label32
    124 label __label35
    125 set __fn8_unit @antumbra
@@ -203,7 +203,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
    134 label __label37
    135 set __tmp51 null
    136 label __label38
--    * set __retval48 __tmp51
+-    * set __tmp48 __tmp51
    137 label __label36
    138 label __label39
    139 set __fn9_unit @eclipse
@@ -211,7 +211,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
    148 label __label41
    149 set __tmp56 null
    150 label __label42
--    * set __retval53 __tmp56
+-    * set __tmp53 __tmp56
    151 label __label40
    152 print "Remote vault [gold]#"
    153 print LINK_ID
@@ -338,7 +338,7 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
     11 label __label3
     12 set __fn0_unit @mono
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-10 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 instructions):
  
     12 set __fn0_unit @mono
     13 ubind __fn0_unit

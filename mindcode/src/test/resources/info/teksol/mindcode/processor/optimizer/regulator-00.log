@@ -1,12 +1,12 @@
    240 instructions before optimizations.
     22 instructions eliminated by Temp Variables Elimination.
     27 instructions eliminated by Dead Code Elimination (6 iterations).
-    10 instructions eliminated by Conditional Jump Optimization (4 iterations).
+    10 instructions eliminated by Jump Optimization (4 iterations).
      9 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions added by Loop Optimization (3 iterations).
-     3 loops improved by Loop Optimization.
      3 instructions eliminated by If Expression Optimization (3 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
+     1 instructions added by Loop Optimization (3 iterations).
+     3 loops improved by Loop Optimization.
      7 instructions eliminated by Jump Straightening.
      2 instructions updated by PropagateJumpTargets.
      7 instructions eliminated by Print Merging.
@@ -249,7 +249,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-17 instruct
    128 label __label25
    129 set __tmp17 null
    130 label __label26
--    * set __retval15 __tmp17
+-    * set __tmp15 __tmp17
    131 label __label24
    132 set CYCLES 0
    133 control enabled SWITCH 0
@@ -270,9 +270,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-17 instruct
    155 sensor amount CONTAINER item
  
    178 label __label39
-   179 set __retval35 __tmp37
+   179 set __tmp35 __tmp37
    180 label __label37
--    * set __tmp34 __retval35
+-    * set __tmp34 __tmp35
    181 jump __label35 always
    182 label __label34
    183 op greaterThanEq __tmp41 pct PCT_HIGH
@@ -317,15 +317,15 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-5 instructi
    174 label __label38
    175 set __tmp37 null
    176 label __label39
--    * set __retval35 __tmp37
+-    * set __tmp35 __tmp37
    177 label __label37
    178 jump __label35 always
    179 label __label34
  
    200 label __label47
-   201 set __retval43 __tmp45
+   201 set __tmp43 __tmp45
    202 label __label45
--    * set __tmp42 __retval43
+-    * set __tmp42 __tmp43
    203 jump __label43 always
    204 label __label42
 -    * set __tmp42 null
@@ -349,7 +349,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-3 instructi
    196 label __label46
    197 set __tmp45 null
    198 label __label47
--    * set __retval43 __tmp45
+-    * set __tmp43 __tmp45
    199 label __label45
    200 jump __label43 always
    201 label __label42
@@ -367,7 +367,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 4 (-2 instructi
    197 label __label45
    198 jump __label43 always
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-10 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 instructions):
  
      6 print "\n"
      7 set n @links

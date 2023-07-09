@@ -37,7 +37,8 @@ public class ProcessorTest extends AbstractProcessorTest {
 
     @Override
     protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile().setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.OFF);
+        return super.createCompilerProfile()
+                .setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.OFF);
     }
 
     @Test
@@ -83,16 +84,19 @@ public class ProcessorTest extends AbstractProcessorTest {
 
     @Test
     void expressionEvaluationRuntime() throws IOException {
-        executeMindcodeUnitTests("expression-evaluation-runtime.mnd");
+        executeMindcodeUnitTests(createTestCompiler(
+                createCompilerProfile().setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.OFF)),
+                "expression-evaluation-runtime.mnd");
     }
 
     @Test
     void expressionEvaluationCompileTime() throws IOException {
-        executeMindcodeUnitTests("expression-evaluation-compile-time.mnd");
+        executeMindcodeUnitTests(createTestCompiler(), "expression-evaluation-compile-time.mnd");
     }
 
-    void executeMindcodeUnitTests(String fileName) throws IOException {
-        testAndEvaluateFile(fileName,
+    void executeMindcodeUnitTests(TestCompiler compiler, String fileName) throws IOException {
+        testAndEvaluateFile(compiler,
+                fileName,
                 s -> s,
                 List.of(),
                 output -> {
@@ -136,6 +140,12 @@ public class ProcessorTest extends AbstractProcessorTest {
     void executesIteratedForLoopBreakContinue() throws IOException {
         testAndEvaluateFile("iterated-for-loop-break-continue.mnd",
                 List.of("0", "10", "2", "11", "6", "13", "8", "14", "10", "15"));
+    }
+
+    @Test
+    void executesFunctionInlining() throws IOException {
+        testAndEvaluateFile("function-inlining.mnd",
+                List.of("550", "1050", "1550", "2050", "600", "1100", "1600", "2100", "650", "1150", "1650", "2150", "700", "1200", "1700", "2200"));
     }
 
     @Test

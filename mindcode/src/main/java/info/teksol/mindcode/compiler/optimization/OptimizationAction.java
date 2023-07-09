@@ -58,14 +58,12 @@ public interface OptimizationAction {
     double benefit();
 
     /**
-     * Returns the code multiplication factor - number of times an existing code would be duplicated implementing this
-     * optimization. For example, if a loop is fully unrolled, this should be the number of iterations of the loop.
-     * If a loop is not unrolled fully, the original body needs to be accounted for too. If the optimization doesn't
-     * copy existing code, return 1.
+     * Performs the optimization represented by this action.
      *
-     * @return the number of original code copies after the optimization
+     * @param costLimit actual cost limit for performing this optimization
+     * @return result of the optimization action.
      */
-    int codeMultiplication();
+    OptimizationResult apply(int costLimit);
 
     /**
      * Returns the description of the optimization to be written to a log file for informational/debug purposes.

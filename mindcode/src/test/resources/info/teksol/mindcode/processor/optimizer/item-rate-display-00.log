@@ -1,13 +1,13 @@
    198 instructions before optimizations.
     35 instructions eliminated by Temp Variables Elimination.
     16 instructions eliminated by Dead Code Elimination (3 iterations).
-    11 instructions eliminated by Conditional Jump Optimization (5 iterations).
+    11 instructions eliminated by Jump Optimization (5 iterations).
     10 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+   124 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      6 loops improved by Loop Optimization.
    670 instructions added by Loop Unrolling (7 iterations).
      2 loops unrolled by Loop Unrolling.
-   124 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      3 instructions eliminated by Print Merging.
    668 instructions after optimizations.
 
@@ -343,7 +343,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-16 instruct
    155 write maximum COORD POSITION
    156 op sub __tmp65 @time start
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-11 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-11 instructions):
  
     17 op mul SHIFT POSITION 30
     18 read __tmp3 MEMORY INDEX

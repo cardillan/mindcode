@@ -18,7 +18,7 @@ public class IfExpressionOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
-        forEachContext(AstContextType.IF, BASIC, this::optimizeIfExpression);
+        forEachContext(AstContextType.IF, BASIC, returningNull(this::optimizeIfExpression));
         return false;
     }
 

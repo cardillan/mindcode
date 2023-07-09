@@ -1,11 +1,11 @@
     36 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     2 instructions eliminated by Jump Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
+     2 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      3 instructions modified by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-     2 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Jump Straightening.
     24 instructions after optimizations.
 
@@ -53,7 +53,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructi
     18 op add __tmp7 j 1
     19 write a ARRAY __tmp7
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
      6 read item ARRAY i
      7 op sub j i 1

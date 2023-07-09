@@ -234,7 +234,6 @@ If this happens, remove the `inline` keyword from some function definitions to g
 
 The compiler will automatically make a function inline when it is called just once in the entire program.
 This is safe, as in this case the program will always be both smaller and faster.
-Other non-recursive functions might also be compiled inline, if the instruction limit isn't reached.
 
 ## Recursive functions
 

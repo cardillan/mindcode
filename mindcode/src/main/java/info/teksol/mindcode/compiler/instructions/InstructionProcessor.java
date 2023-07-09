@@ -18,8 +18,6 @@ public interface InstructionProcessor {
 
     LogicLabel nextLabel();
     LogicVariable nextTemp();
-
-    LogicVariable nextReturnValue();
     String nextLocalPrefix();
 
     /**
@@ -132,10 +130,6 @@ public interface InstructionProcessor {
 
     default String getTempPrefix() {
         return "__tmp";
-    }
-
-    default String getRetValPrefix() {
-        return "__retval";
     }
 
     default String getLocalPrefix() {

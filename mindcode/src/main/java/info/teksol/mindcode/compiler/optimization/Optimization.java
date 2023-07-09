@@ -14,16 +14,16 @@ public enum Optimization {
             CaseExpressionOptimizer::new,
             "eliminating temporary variables created to execute case expressions"),
 
-    CONDITIONAL_JUMPS_NORMALIZATION     ("Jump Normalization",
-            ConditionalJumpsNormalizer::new,
-            "replacing always true conditional jumps with unconditional ones, removing always false jumps"),
-
     DEAD_CODE_ELIMINATION               ("Dead Code Elimination",
             DeadCodeEliminator::new,
             "eliminating writes to compiler- or user-defined variables that are not used"),
 
-    CONDITIONAL_JUMPS_IMPROVEMENT       ("Conditional Jump Optimization",
-            ImproveConditionalJumps::new,
+    CONDITIONAL_JUMPS_NORMALIZATION     ("Jump Normalization",
+            ConditionalJumpsNormalizer::new,
+            "replacing always true conditional jumps with unconditional ones, removing always false jumps"),
+
+    CONDITIONAL_JUMPS_OPTIMIZATION      ("Jump Optimization",
+            ConditionalJumpsOptimizer::new,
             "merging an op instruction producing a boolean expression into the following conditional jump"),
 
     SINGLE_STEP_JUMP_ELIMINATION        ("Single Step Elimination",
@@ -34,14 +34,6 @@ public enum Optimization {
             ExpressionOptimizer::new,
             "optimizing some common mathematical expressions"),
 
-    LOOP_OPTIMIZATION                   ("Loop Optimization",
-            LoopOptimizer::new,
-            "improving loops"),
-
-    LOOP_UNROLLING                      ("Loop Unrolling",
-            LoopUnroller::new,
-            "unrolls loops with constant number of iterations"),
-
     IF_EXPRESSION_OPTIMIZATION          ("If Expression Optimization",
             IfExpressionOptimizer::new,
             "improving ternary/if expressions"),
@@ -50,13 +42,17 @@ public enum Optimization {
             DataFlowOptimizer::new,
             "improving variable assignments and and expressions"),
 
-    UNREACHABLE_CODE_ELIMINATION       ("Unreachable Code Elimination",
-            UnreachableCodeEliminator::new,
-            "eliminating instructions made unreachable by optimizations or false conditions"),
+    LOOP_OPTIMIZATION                   ("Loop Optimization",
+            LoopOptimizer::new,
+            "improving loops"),
 
-    STACK_USAGE_OPTIMIZATION            ("Stack Optimization",
-            StackUsageOptimizer::new,
-            "optimizing variable storage on stack"),
+    LOOP_UNROLLING                      ("Loop Unrolling",
+            LoopUnroller::new,
+            "unrolls loops with constant number of iterations (optimization for speed)"),
+
+    FUNCTION_INLINING                   ("Function Inlining",
+            FunctionInliner::new,
+            "inlines stackless function calls (optimization for speed)"),
 
     JUMP_OVER_JUMP_ELIMINATION          ("Jump Straightening",
             JumpOverJumpEliminator::new,
@@ -65,6 +61,14 @@ public enum Optimization {
     JUMP_TARGET_PROPAGATION             ("Jump Threading",
             PropagateJumpTargets::new,
             "eliminating chained jumps"),
+
+    UNREACHABLE_CODE_ELIMINATION       ("Unreachable Code Elimination",
+            UnreachableCodeEliminator::new,
+            "eliminating instructions made unreachable by optimizations or false conditions"),
+
+    STACK_USAGE_OPTIMIZATION            ("Stack Optimization",
+            StackUsageOptimizer::new,
+            "optimizing variable storage on stack"),
 
     PRINT_TEXT_MERGING                  ("Print Merging",
             PrintMerger::new,

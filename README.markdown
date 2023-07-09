@@ -13,16 +13,15 @@ The main focus of Mindcode design is two-fold:
 
 Some of the latest enhancements to Mindcode are:
 
-* [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling), a powerful optimization which converts 
-  loops with fixed number of iterations into linear series of instructions.
+* A number of powerful code optimizations:
+  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization),
+  [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling) and
+  automatic [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining).
 * Added support for the new [`angleDiff` operation](doc/syntax/FUNCTIONS_V7.markdown#instruction-op) in Mindustry v145.
-* [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in 
-  Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic, 
-  either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the 
+* [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in
+  Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic,
+  either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the
   code (specified in Mindcode or Mindustry Logic language) and linked blocks.
-* [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization optimizes 
-  and streamlines complex expressions, eliminates unnecessary variables and instructions, and reuses common code 
-  fragments, significantly improving the quality of the generated mlog code.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
 

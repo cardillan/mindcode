@@ -1,21 +1,11 @@
 package info.teksol.mindcode.compiler.generator;
 
-import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.ast.FunctionDeclaration;
-import info.teksol.mindcode.ast.NoOp;
-import info.teksol.mindcode.ast.StackAllocation;
-import info.teksol.mindcode.ast.VarRef;
+import info.teksol.mindcode.ast.*;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -97,7 +87,7 @@ public final class CallGraph {
     /**
      * Returns true if at least one user-defined function is recursive. Declared but unused functions aren't
      * considered (a function is unused if it isn't reachable from the main body). When there is at least one
-     * recursive function, a stack needs to be set up.     *
+     * recursive function, a stack needs to be set up.
      *
      * @return true if there's a recursive function
      */
@@ -207,6 +197,7 @@ public final class CallGraph {
         private String localPrefix;
         private int useCount = 0;
         private List<LogicVariable> parameters;
+        private boolean inlined = false;
 
         private Function(FunctionDeclaration declaration) {
             this.declaration = declaration;
@@ -215,7 +206,7 @@ public final class CallGraph {
         /** @return true if this function should be inlined */
         public boolean isInline() {
             // Automatically inline all non-recursive functions called just once
-            return declaration.isInline() || !isRecursive() && getUseCount() == 1;
+            return inlined || declaration.isInline() || !isRecursive() && getUseCount() == 1;
         }
 
         public FunctionDeclaration getDeclaration() {
@@ -325,8 +316,12 @@ public final class CallGraph {
             this.label = label;
         }
 
-        private  void setLocalPrefix(String localPrefix) {
+        private void setLocalPrefix(String localPrefix) {
             this.localPrefix = localPrefix;
+        }
+
+        public void setInlined() {
+            inlined = true;
         }
 
         private void createParameters() {

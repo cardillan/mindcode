@@ -1,11 +1,11 @@
     47 instructions before optimizations.
      9 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Jump Normalization (3 iterations).
      6 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Conditional Jump Optimization (3 iterations).
+     1 instructions eliminated by Jump Normalization (3 iterations).
+     2 instructions eliminated by Jump Optimization (3 iterations).
     12 instructions eliminated by Data Flow Optimization (4 iterations).
-     2 instructions eliminated by Unreachable Code Elimination.
      3 instructions updated by PropagateJumpTargets.
+     2 instructions eliminated by Unreachable Code Elimination.
     15 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-9 instructions):
@@ -79,12 +79,12 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
     36 label __label7
     37 set __fn0_v 1533776805
     38 print __fn0_v
--    * set __retval20 __fn0_v
+-    * set __tmp20 __fn0_v
     39 label __label8
     40 label __label9
     41 set __fn1_v hn
     42 print __fn1_v
--    * set __retval21 __fn1_v
+-    * set __tmp21 __fn1_v
     43 label __label10
     44 end
 
@@ -112,7 +112,7 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
     16 jump __label3 equal __tmp12 false
     17 op add pn pn p
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
     12 op mul __tmp10 4 h
     13 op add h __tmp10 1

@@ -1,13 +1,13 @@
     86 instructions before optimizations.
     11 instructions eliminated by Temp Variables Elimination.
     10 instructions eliminated by Dead Code Elimination (4 iterations).
-     7 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     7 instructions eliminated by Jump Optimization (4 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     4 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      2 instructions added by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
-     4 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     2 instructions eliminated by Unreachable Code Elimination.
      2 instructions updated by PropagateJumpTargets.
+     2 instructions eliminated by Unreachable Code Elimination.
     50 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 947):
@@ -102,7 +102,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructi
     24 label __label6
     25 jump __label5 always
     26 label __label7
--    * set __retval1 null
+-    * set __tmp1 null
     27 label __label4
     28 label __label1
     29 op add i i 1
@@ -130,7 +130,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructi
     76 label __label16
     77 jump __label15 always
     78 label __label17
--    * set __retval14 null
+-    * set __tmp14 null
     79 label __label14
     80 label __label11
     81 jump __label10 always
@@ -148,7 +148,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructi
     61 jump __label19 always
     62 label __label18
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-7 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-7 instructions):
  
      6 label __label3
      7 set __fn0_index i

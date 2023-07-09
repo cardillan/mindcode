@@ -1,12 +1,12 @@
    121 instructions before optimizations.
     20 instructions eliminated by Temp Variables Elimination.
      4 instructions eliminated by Dead Code Elimination (3 iterations).
-     3 instructions eliminated by Conditional Jump Optimization (3 iterations).
+     3 instructions eliminated by Jump Optimization (3 iterations).
      1 instructions eliminated by Single Step Elimination (4 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
+     1 instructions eliminated by Data Flow Optimization (4 iterations).
     13 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
-     1 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Print Merging.
    103 instructions after optimizations.
 
@@ -154,7 +154,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
     65 write total BANK index
     66 op sub __tmp31 total last_total
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-3 instructions):
  
     44 jump __label5 equal __tmp17 false
     45 set start @time

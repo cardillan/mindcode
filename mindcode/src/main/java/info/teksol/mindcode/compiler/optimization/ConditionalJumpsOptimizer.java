@@ -31,10 +31,10 @@ import static info.teksol.mindcode.logic.LogicBoolean.FALSE;
  * <li>{@code <comparison>} can be converted to condition/has an inverse</li>
  * </ol>
  */
-public class ImproveConditionalJumps extends BaseOptimizer {
+public class ConditionalJumpsOptimizer extends BaseOptimizer {
 
-    ImproveConditionalJumps(OptimizationContext optimizationContext) {
-        super(Optimization.CONDITIONAL_JUMPS_IMPROVEMENT, optimizationContext);
+    ConditionalJumpsOptimizer(OptimizationContext optimizationContext) {
+        super(Optimization.CONDITIONAL_JUMPS_OPTIMIZATION, optimizationContext);
     }
 
     @Override

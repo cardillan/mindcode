@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -1073,20 +1074,31 @@ public class OptimizationContext {
         return false;
     }
 
-    private void forEachContext(AstContext astContext, Predicate<AstContext> matcher, Consumer<AstContext> action) {
+    private <T> void forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, T> action,
+            List<T> result) {
         if (matcher.test(astContext)) {
-            action.accept(astContext);
+            T applied = action.apply(astContext);
+            if (applied != null) {
+                result.add(applied);
+            }
         }
-        astContext.children().forEach(c -> forEachContext(c, matcher, action));
+        astContext.children().forEach(c -> forEachContext(c, matcher, action, result));
     }
 
-    protected void forEachContext(Predicate<AstContext> matcher, Consumer<AstContext> action) {
-        forEachContext(rootContext, matcher, action);
+
+    private <T> List<T> forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, T> action) {
+        List<T> result = new ArrayList<>();
+        forEachContext(astContext, matcher, action, result);
+        return List.copyOf(result);
     }
 
-    protected void forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
-            Consumer<AstContext> action) {
-        forEachContext(rootContext, c -> c.matches(contextType, subcontextType), action);
+    protected <T> List<T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, T> action) {
+        return forEachContext(rootContext, matcher, action);
+    }
+
+    protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
+            Function<AstContext, T> action) {
+        return forEachContext(rootContext, c -> c.matches(contextType, subcontextType), action);
     }
 
     protected List<AstContext> contexts(Predicate<AstContext> matcher) {

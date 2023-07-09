@@ -1,12 +1,12 @@
    313 instructions before optimizations.
     37 instructions eliminated by Temp Variables Elimination.
     25 instructions eliminated by Dead Code Elimination (5 iterations).
-    22 instructions eliminated by Conditional Jump Optimization (4 iterations).
+    22 instructions eliminated by Jump Optimization (4 iterations).
     11 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions added by Loop Optimization (3 iterations).
-     5 loops improved by Loop Optimization.
      6 instructions eliminated by If Expression Optimization (3 iterations).
      6 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     1 instructions added by Loop Optimization (3 iterations).
+     5 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening.
      6 instructions eliminated by Print Merging.
    197 instructions after optimizations.
@@ -444,7 +444,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructi
    196 label __label24
    197 label __label18
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-22 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-22 instructions):
  
      4 set DISPLAY null
      5 set MEMORY null

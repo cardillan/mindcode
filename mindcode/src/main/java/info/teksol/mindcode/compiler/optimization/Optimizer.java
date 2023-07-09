@@ -41,15 +41,5 @@ public interface Optimizer {
      */
     List<OptimizationAction> getPossibleOptimizations(int costLimit);
 
-    /**
-     * Called to apply the selected optimization to the program. Returns the result of the optimization. If the
-     * optimization became too costly, the coordinator will ask for a new list of optimizations and reassess the
-     * possibilities.
-     *
-     * @return the outcome of the optimization attempt
-     */
-    OptimizationResult applyOptimization(OptimizationAction optimization, int costLimit);
-
-
     void generateFinalMessages();
 }

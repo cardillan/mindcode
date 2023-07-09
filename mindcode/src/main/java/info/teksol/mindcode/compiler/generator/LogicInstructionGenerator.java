@@ -11,7 +11,6 @@ import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
-import info.teksol.mindcode.processor.ExpressionEvaluator;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -30,9 +29,7 @@ import static info.teksol.mindcode.logic.LogicNull.NULL;
  * LogicInstruction stands for Logic Instruction, the Mindustry assembly code.
  */
 public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
-
     private static final int LOOP_REPETITIONS = 25;             // Estimated number of repetitions for normal loops
-    private static final int INFINITE_LOOP_REPETITIONS = 25;    // Estimated number of repetitions for infinite loops
 
     private final CompilerProfile profile;
     private final Consumer<CompilerMessage> messageConsumer;
@@ -278,7 +275,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     // Allocates a new temporary variable which holds the return value of a function
     private LogicVariable nextReturnValue() {
-        return parentContext.registerVariable(instructionProcessor.nextReturnValue());
+        return parentContext.registerVariable(instructionProcessor.nextTemp());
     }
 
     private LogicLabel nextMarker() {
@@ -326,7 +323,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 continue;
             }
 
-            enterFunctionAstNode(function.getLocalPrefix(), function.getDeclaration(), function.getCalls().size());
+            enterFunctionAstNode(function.getLocalPrefix(), function.getDeclaration(), function.getUseCount());
             currentFunction = function;
             localPrefix = function.getLocalPrefix();
             functionContext = new LocalContext();
@@ -417,10 +414,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             if (function.isInline()) {
                 return handleInlineFunctionCall(function, arguments);
             } else if (!function.isRecursive()) {
-                setSubcontextType(function.getLocalPrefix(), AstSubcontextType.OUT_OF_LINE_CALL, 1.0);
                 return handleStacklessFunctionCall(function, arguments);
             } else {
-                setSubcontextType(function.getLocalPrefix(), AstSubcontextType.RECURSIVE_CALL, 1.0);
                 return handleRecursiveFunctionCall(function, arguments);
             }
         } finally {
@@ -459,8 +454,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicValue handleStacklessFunctionCall(Function function, List<LogicValue> paramValues) {
+        setSubcontextType(function.getLocalPrefix(), AstSubcontextType.PARAMETERS, 1.0);
         setupFunctionParameters(function, paramValues);
 
+        setSubcontextType(function.getLocalPrefix(), AstSubcontextType.OUT_OF_LINE_CALL, 1.0);
         final LogicLabel returnLabel = nextLabel();
         emit(createSetAddress(LogicVariable.fnRetAddr(localPrefix), returnLabel));
         emit(createCallStackless(function.getLabel()));
@@ -476,6 +473,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicValue handleRecursiveFunctionCall(Function function, List<LogicValue> paramValues) {
+        setSubcontextType(function.getLocalPrefix(), AstSubcontextType.RECURSIVE_CALL, 1.0);
         boolean useStack = currentFunction.isRecursiveCall(function.getName());
         List<LogicVariable> variables = useStack ? getContextVariables() : List.of();
 
@@ -755,13 +753,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createSetAddress(iterator, lastValueLabel));
         emit(createSet(variable, visit(values.get(values.size() - 1))));
 
-        setSubcontextType(AstSubcontextType.BODY, values.size());
+        setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         emit(createLabel(bodyLabel));
         visit(node.getBody());
 
         // Label for continue statements
         emit(createLabel(contLabel));
-        setSubcontextType(AstSubcontextType.FLOW_CONTROL, values.size());
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
         emit(createGoto(iterator, marker));
         emit(createGotoLabel(lastValueLabel, marker));
         emit(createLabel(exitLabel));
@@ -821,11 +819,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitWhileStatement(WhileExpression node) {
-        AstNode condition = expressionEvaluator.evaluate(node.getCondition());
-        int multiplier = condition instanceof ConstantAstNode c && !ExpressionEvaluator.equals(c.getAsDouble(), 0.0)
-                ? INFINITE_LOOP_REPETITIONS : LOOP_REPETITIONS;
-
-        setSubcontextType(AstSubcontextType.INIT, multiplier);
+        setSubcontextType(AstSubcontextType.INIT, LOOP_REPETITIONS);
         visit(node.getInitialization());
 
         final LogicLabel beginLabel = nextLabel();
@@ -833,16 +827,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
-        setSubcontextType(AstSubcontextType.CONDITION, multiplier);
+        setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         emit(createLabel(beginLabel));
         final LogicValue cond = visit(node.getCondition());
         emit(createJump(doneLabel, Condition.EQUAL, cond, FALSE));
-        setSubcontextType(AstSubcontextType.BODY, multiplier);
+        setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         visit(node.getBody());
         emit(createLabel(continueLabel));
-        setSubcontextType(AstSubcontextType.UPDATE, multiplier);
+        setSubcontextType(AstSubcontextType.UPDATE, LOOP_REPETITIONS);
         visit(node.getUpdate());
-        setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
         emit(createJumpUnconditional(beginLabel));
         emit(createLabel(doneLabel));
         loopStack.exitLoop(node.getLabel());
@@ -852,23 +846,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitDoWhileStatement(DoWhileExpression node) {
-        AstNode condition = expressionEvaluator.evaluate(node.getCondition());
-        int multiplier = condition instanceof ConstantAstNode c && !ExpressionEvaluator.equals(c.getAsDouble(), 0.0)
-                ? INFINITE_LOOP_REPETITIONS : LOOP_REPETITIONS;
-
         final LogicLabel beginLabel = nextLabel();
         final LogicLabel continueLabel = nextLabel();
         final LogicLabel doneLabel = nextLabel();
         // Not using try/finally to ensure stack consistency - any exception stops compilation anyway
         loopStack.enterLoop(node.getLabel(), doneLabel, continueLabel);
-        setSubcontextType(AstSubcontextType.BODY, multiplier);
+        setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         emit(createLabel(beginLabel));
         visit(node.getBody());
         emit(createLabel(continueLabel));
-        setSubcontextType(AstSubcontextType.CONDITION, multiplier);
+        setSubcontextType(AstSubcontextType.CONDITION, LOOP_REPETITIONS);
         final LogicValue cond = visit(node.getCondition());
         emit(createJump(beginLabel, Condition.NOT_EQUAL, cond, FALSE));
-        setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);
+        setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
         emit(createLabel(doneLabel));
         clearSubcontextType();
         loopStack.exitLoop(node.getLabel());

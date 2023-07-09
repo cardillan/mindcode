@@ -35,6 +35,9 @@ public enum AstSubcontextType {
     /** Code setting up arguments before a function call. */
     ARGUMENTS       ("ARGS"),
 
+    /** Code copying arguments to parameters before a function call. */
+    PARAMETERS      ("PRMS"),
+
     /**
      * Call to a system function (mapped to an instruction) or a built-in function.
      * Technically not a call, as it includes the entire function body.

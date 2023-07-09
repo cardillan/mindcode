@@ -1,6 +1,6 @@
     97 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination.
-     6 instructions eliminated by Conditional Jump Optimization (3 iterations).
+     6 instructions eliminated by Jump Optimization (3 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
      5 instructions added by Loop Optimization (2 iterations).
      6 loops improved by Loop Optimization.
@@ -90,7 +90,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 inst
     85 sensor __tmp31 switch1 @enabled
     86 op equal __tmp32 __tmp31 false
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-6 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 instructions):
  
     12 op sub distance __tmp7 2
     13 ubind UNIT

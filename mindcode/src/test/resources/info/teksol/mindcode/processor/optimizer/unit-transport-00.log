@@ -1,18 +1,18 @@
   1120 instructions before optimizations.
    120 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-     2 instructions eliminated by Jump Normalization (4 iterations).
    126 instructions eliminated by Dead Code Elimination (5 iterations).
-    62 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     2 instructions eliminated by Jump Normalization (4 iterations).
+    62 instructions eliminated by Jump Optimization (4 iterations).
     51 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
-    17 instructions added by Loop Optimization (3 iterations).
-    13 loops improved by Loop Optimization.
      4 instructions eliminated by If Expression Optimization (3 iterations).
      8 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
-     2 instructions eliminated by Unreachable Code Elimination.
+    17 instructions added by Loop Optimization (3 iterations).
+    13 loops improved by Loop Optimization.
     21 instructions eliminated by Jump Straightening.
      7 instructions updated by PropagateJumpTargets.
+     2 instructions eliminated by Unreachable Code Elimination.
      1 instructions eliminated by Print Merging.
    737 instructions after optimizations.
 
@@ -465,7 +465,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-120 in
    522 label __label89
  
    626 label __label91
-   627 set ITEM_ICON __retval177
+   627 set ITEM_ICON __tmp177
    628 set STATE_LIMIT 1
 -    * sensor __tmp179 CONTAINER ITEM
 -    * set last_level __tmp179
@@ -1675,7 +1675,7 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-2 ins
    404 label __label70
    405 op equal __tmp152 @unit null
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-62 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-62 instructions):
  
      8 set OVERALLOCATION_HIGH 0.75
      9 set STABILIZATION false
@@ -2791,9 +2791,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    535 set __tmp178 "[]"
  
    539 label __label92
-   540 set __retval177 __tmp178
+   540 set __tmp177 __tmp178
    541 label __label91
--    * set ITEM_ICON __retval177
+-    * set ITEM_ICON __tmp177
 +  542 set ITEM_ICON __tmp178
    543 set STATE_LIMIT 1
    544 sensor last_level CONTAINER ITEM
@@ -2863,7 +2863,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
    531 label __label123
    532 set __tmp178 null
    533 label __label92
--    * set __retval177 __tmp178
+-    * set __tmp177 __tmp178
    534 label __label91
    535 set ITEM_ICON __tmp178
    536 set STATE_LIMIT 1

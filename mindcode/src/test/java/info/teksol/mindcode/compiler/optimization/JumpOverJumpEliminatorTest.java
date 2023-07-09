@@ -27,7 +27,7 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
                 createCompilerProfile()
                         .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
                         .setOptimizationLevel(SINGLE_STEP_JUMP_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(CONDITIONAL_JUMPS_IMPROVEMENT, AGGRESSIVE)
+                        .setOptimizationLevel(CONDITIONAL_JUMPS_OPTIMIZATION, AGGRESSIVE)
                         .setOptimizationLevel(JUMP_OVER_JUMP_ELIMINATION, AGGRESSIVE)
                 ),
                 """

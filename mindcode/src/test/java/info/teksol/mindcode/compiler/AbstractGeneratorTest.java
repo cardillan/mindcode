@@ -467,5 +467,4 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     protected static final LogicVariable tmp0      = LogicVariable.temporary("__tmp0");      
     protected static final LogicVariable tmp1      = LogicVariable.temporary("__tmp1");      
     protected static final LogicVariable fn0retval = LogicVariable.fnRetVal("__fn0retval");
-    protected static final LogicVariable retval0   = LogicVariable.retval("__retval0");   
 }

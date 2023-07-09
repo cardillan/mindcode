@@ -38,11 +38,13 @@ public class StackUsageOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
-        // Both optimizations handle the program body and user functions at once. The program body can contain call
-        // instructions, but no push or pop instructions, so the optimizations won't do anything on them,
-        // even if processing the program body might be a bit ineffective.
-        removeUnusedVariables();
-        removeUnnecessaryPushes();
+        if (getCallGraph().containsRecursiveFunction()) {
+            // Both optimizations handle the program body and user functions at once. The program body can contain call
+            // instructions, but no push or pop instructions, so the optimizations won't do anything on them,
+            // even if processing the program body might be a bit ineffective.
+            removeUnusedVariables();
+            removeUnnecessaryPushes();
+        }
         return false;
     }
 
@@ -99,6 +101,7 @@ public class StackUsageOptimizer extends BaseOptimizer {
                             .filter(LogicVariable.class::isInstance)
                             .map(LogicVariable.class::cast)
                             .collect(Collectors.toCollection(HashSet::new));
+
                     // Only keep variables written to
                     preserveVariables.retainAll(writtenVariables);
 

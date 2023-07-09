@@ -16,7 +16,6 @@ public enum ArgumentType {
     LOCAL_VARIABLE,
     TMP_VARIABLE,
     AST_VARIABLE,
-    STORED_RETVAL,
     FUNCTION_RETVAL,
     FUNCTION_RETADDR,
     COMPILER,                // Compiler variables, e.g. stack pointer(s)

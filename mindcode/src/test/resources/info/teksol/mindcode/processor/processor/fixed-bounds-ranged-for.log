@@ -1,10 +1,10 @@
     11 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
+    24 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
     17 instructions added by Loop Unrolling (4 iterations).
      1 loops unrolled by Loop Unrolling.
-    24 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      2 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 993):

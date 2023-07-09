@@ -1,13 +1,13 @@
     60 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination.
      8 instructions eliminated by Dead Code Elimination (3 iterations).
-     5 instructions eliminated by Conditional Jump Optimization (4 iterations).
+     5 instructions eliminated by Jump Optimization (4 iterations).
      3 instructions eliminated by Single Step Elimination (5 iterations).
+   107 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      4 instructions modified by Loop Optimization (3 iterations).
      4 loops improved by Loop Optimization.
    587 instructions added by Loop Unrolling (6 iterations).
      1 loops unrolled by Loop Unrolling.
-   107 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
    521 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 966):
@@ -52,12 +52,12 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
 +   38 op mod __fn0_power __tmp9 __fn0_n
     39 op equal __tmp11 __fn0_power 1
     40 jump __label16 equal __tmp11 false
-    41 set __retval0 __fn0_i
+    41 set __tmp0 __fn0_i
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
  
     25 jump __label11 equal __tmp7 false
-    26 set __retval0 0
+    26 set __tmp0 0
     27 jump __label4 always
 -    * set __tmp8 null
     28 jump __label12 always
@@ -68,7 +68,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructi
     32 set __fn0_i 1
  
     38 jump __label16 equal __tmp11 false
-    39 set __retval0 __fn0_i
+    39 set __tmp0 __fn0_i
     40 jump __label4 always
 -    * set __tmp12 null
     41 jump __label17 always
@@ -92,16 +92,16 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructi
     64 label __label20
     65 set __fn1_v 97
     66 print __fn1_v
--    * set __retval15 __fn1_v
+-    * set __tmp15 __fn1_v
     67 label __label21
     68 label __label22
     69 set __fn2_v maxnum
     70 print __fn2_v
--    * set __retval16 __fn2_v
+-    * set __tmp16 __fn2_v
     71 label __label23
     72 end
 
-Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteration 1 (-5 instructions):
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
  
      7 set __fn0_n __fn0_d
      8 label __label5
@@ -125,7 +125,7 @@ Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteratio
 -    * op lessThan __tmp7 __fn0_n 2
 -    * jump __label11 equal __tmp7 false
 +   22 jump __label11 greaterThanEq __fn0_n 2
-    23 set __retval0 0
+    23 set __tmp0 0
     24 jump __label4 always
     25 jump __label12 always
  
@@ -135,13 +135,13 @@ Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteratio
 -    * op equal __tmp11 __fn0_power 1
 -    * jump __label16 equal __tmp11 false
 +   34 jump __label16 notEqual __fn0_power 1
-    35 set __retval0 __fn0_i
+    35 set __tmp0 __fn0_i
     36 jump __label4 always
     37 jump __label17 always
  
-    46 set __retval0 null
+    46 set __tmp0 null
     47 label __label4
-    48 set len __retval0
+    48 set len __tmp0
 -    * op greaterThan __tmp13 len maxlen
 -    * jump __label18 equal __tmp13 false
 +   49 jump __label18 lessThanEq len maxlen
@@ -152,7 +152,7 @@ Modifications by Iterated phase, Conditional Jump Optimization, pass 1, iteratio
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-3 instructions):
  
     22 jump __label11 greaterThanEq __fn0_n 2
-    23 set __retval0 0
+    23 set __tmp0 0
     24 jump __label4 always
 -    * jump __label12 always
     25 label __label11
@@ -160,7 +160,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     27 set __fn0_power 1
  
     33 jump __label16 notEqual __fn0_power 1
-    34 set __retval0 __fn0_i
+    34 set __tmp0 __fn0_i
     35 jump __label4 always
 -    * jump __label17 always
     36 label __label16
@@ -189,13 +189,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     41 label __label15
     42 print "Power of ten limit reached."
     43 end
--    * set __retval0 null
+-    * set __tmp0 null
     44 label __label4
-    45 set len __retval0
+    45 set len __tmp0
 -    * jump __label18 lessThanEq len maxlen
 -    * set maxlen len
-+   46 jump __label18 lessThanEq __retval0 maxlen
-+   47 set maxlen __retval0
++   46 jump __label18 lessThanEq __tmp0 maxlen
++   47 set maxlen __tmp0
     48 set maxnum d
     49 label __label18
     50 label __label19
@@ -226,9 +226,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     41 print "Power of ten limit reached."
     42 end
     43 label __label4
--    * set len __retval0
-    44 jump __label18 lessThanEq __retval0 maxlen
-    45 set maxlen __retval0
+-    * set len __tmp0
+    44 jump __label18 lessThanEq __tmp0 maxlen
+    45 set maxlen __tmp0
     46 set maxnum d
  
     51 jump __label0 always
@@ -309,7 +309,7 @@ Modifications by Loop Optimization: replicate condition at line 18 (+1 instructi
 +   23 jump __label27 equal __tmp4 0
     24 label __label10
     25 jump __label11 greaterThanEq __fn0_n 2
-    26 set __retval0 0
+    26 set __tmp0 0
 
 Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
  
@@ -322,7 +322,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 -    * op mul __tmp9 __fn0_power 10
 -    * op mod __fn0_power __tmp9 __fn0_n
 -    * jump __label16 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
+-    * set __tmp0 __fn0_i
 -    * jump __label4 always
 -    * label __label16
 -    * label __label17
@@ -336,7 +336,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +   34 op mul __tmp9 __fn0_power 10
 +   35 op mod __fn0_power __tmp9 __fn0_n
 +   36 jump __label30 notEqual __fn0_power 1
-+   37 set __retval0 __fn0_i
++   37 set __tmp0 __fn0_i
 +   38 jump __label4 always
 +   39 label __label30
 +   40 label __label31
@@ -346,7 +346,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +   44 op mul __tmp9 __fn0_power 10
 +   45 op mod __fn0_power __tmp9 __fn0_n
 +   46 jump __label34 notEqual __fn0_power 1
-+   47 set __retval0 __fn0_i
++   47 set __tmp0 __fn0_i
 +   48 jump __label4 always
 +   49 label __label34
 +   50 label __label35
@@ -356,7 +356,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +   54 op mul __tmp9 __fn0_power 10
 +   55 op mod __fn0_power __tmp9 __fn0_n
 +   56 jump __label38 notEqual __fn0_power 1
-+   57 set __retval0 __fn0_i
++   57 set __tmp0 __fn0_i
 +   58 jump __label4 always
 +   59 label __label38
 +   60 label __label39
@@ -366,7 +366,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +   64 op mul __tmp9 __fn0_power 10
 +   65 op mod __fn0_power __tmp9 __fn0_n
 +   66 jump __label42 notEqual __fn0_power 1
-+   67 set __retval0 __fn0_i
++   67 set __tmp0 __fn0_i
 +   68 jump __label4 always
 +   69 label __label42
 +   70 label __label43
@@ -376,7 +376,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +   74 op mul __tmp9 __fn0_power 10
 +   75 op mod __fn0_power __tmp9 __fn0_n
 +   76 jump __label46 notEqual __fn0_power 1
-+   77 set __retval0 __fn0_i
++   77 set __tmp0 __fn0_i
 +   78 jump __label4 always
 +   79 label __label46
 +   80 label __label47
@@ -386,7 +386,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +   84 op mul __tmp9 __fn0_power 10
 +   85 op mod __fn0_power __tmp9 __fn0_n
 +   86 jump __label50 notEqual __fn0_power 1
-+   87 set __retval0 __fn0_i
++   87 set __tmp0 __fn0_i
 +   88 jump __label4 always
 +   89 label __label50
 +   90 label __label51
@@ -396,7 +396,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +   94 op mul __tmp9 __fn0_power 10
 +   95 op mod __fn0_power __tmp9 __fn0_n
 +   96 jump __label54 notEqual __fn0_power 1
-+   97 set __retval0 __fn0_i
++   97 set __tmp0 __fn0_i
 +   98 jump __label4 always
 +   99 label __label54
 +  100 label __label55
@@ -406,7 +406,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  104 op mul __tmp9 __fn0_power 10
 +  105 op mod __fn0_power __tmp9 __fn0_n
 +  106 jump __label58 notEqual __fn0_power 1
-+  107 set __retval0 __fn0_i
++  107 set __tmp0 __fn0_i
 +  108 jump __label4 always
 +  109 label __label58
 +  110 label __label59
@@ -416,7 +416,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  114 op mul __tmp9 __fn0_power 10
 +  115 op mod __fn0_power __tmp9 __fn0_n
 +  116 jump __label62 notEqual __fn0_power 1
-+  117 set __retval0 __fn0_i
++  117 set __tmp0 __fn0_i
 +  118 jump __label4 always
 +  119 label __label62
 +  120 label __label63
@@ -426,7 +426,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  124 op mul __tmp9 __fn0_power 10
 +  125 op mod __fn0_power __tmp9 __fn0_n
 +  126 jump __label66 notEqual __fn0_power 1
-+  127 set __retval0 __fn0_i
++  127 set __tmp0 __fn0_i
 +  128 jump __label4 always
 +  129 label __label66
 +  130 label __label67
@@ -436,7 +436,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  134 op mul __tmp9 __fn0_power 10
 +  135 op mod __fn0_power __tmp9 __fn0_n
 +  136 jump __label70 notEqual __fn0_power 1
-+  137 set __retval0 __fn0_i
++  137 set __tmp0 __fn0_i
 +  138 jump __label4 always
 +  139 label __label70
 +  140 label __label71
@@ -446,7 +446,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  144 op mul __tmp9 __fn0_power 10
 +  145 op mod __fn0_power __tmp9 __fn0_n
 +  146 jump __label74 notEqual __fn0_power 1
-+  147 set __retval0 __fn0_i
++  147 set __tmp0 __fn0_i
 +  148 jump __label4 always
 +  149 label __label74
 +  150 label __label75
@@ -456,7 +456,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  154 op mul __tmp9 __fn0_power 10
 +  155 op mod __fn0_power __tmp9 __fn0_n
 +  156 jump __label78 notEqual __fn0_power 1
-+  157 set __retval0 __fn0_i
++  157 set __tmp0 __fn0_i
 +  158 jump __label4 always
 +  159 label __label78
 +  160 label __label79
@@ -466,7 +466,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  164 op mul __tmp9 __fn0_power 10
 +  165 op mod __fn0_power __tmp9 __fn0_n
 +  166 jump __label82 notEqual __fn0_power 1
-+  167 set __retval0 __fn0_i
++  167 set __tmp0 __fn0_i
 +  168 jump __label4 always
 +  169 label __label82
 +  170 label __label83
@@ -476,7 +476,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  174 op mul __tmp9 __fn0_power 10
 +  175 op mod __fn0_power __tmp9 __fn0_n
 +  176 jump __label86 notEqual __fn0_power 1
-+  177 set __retval0 __fn0_i
++  177 set __tmp0 __fn0_i
 +  178 jump __label4 always
 +  179 label __label86
 +  180 label __label87
@@ -486,7 +486,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  184 op mul __tmp9 __fn0_power 10
 +  185 op mod __fn0_power __tmp9 __fn0_n
 +  186 jump __label90 notEqual __fn0_power 1
-+  187 set __retval0 __fn0_i
++  187 set __tmp0 __fn0_i
 +  188 jump __label4 always
 +  189 label __label90
 +  190 label __label91
@@ -496,7 +496,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  194 op mul __tmp9 __fn0_power 10
 +  195 op mod __fn0_power __tmp9 __fn0_n
 +  196 jump __label94 notEqual __fn0_power 1
-+  197 set __retval0 __fn0_i
++  197 set __tmp0 __fn0_i
 +  198 jump __label4 always
 +  199 label __label94
 +  200 label __label95
@@ -506,7 +506,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  204 op mul __tmp9 __fn0_power 10
 +  205 op mod __fn0_power __tmp9 __fn0_n
 +  206 jump __label98 notEqual __fn0_power 1
-+  207 set __retval0 __fn0_i
++  207 set __tmp0 __fn0_i
 +  208 jump __label4 always
 +  209 label __label98
 +  210 label __label99
@@ -516,7 +516,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  214 op mul __tmp9 __fn0_power 10
 +  215 op mod __fn0_power __tmp9 __fn0_n
 +  216 jump __label102 notEqual __fn0_power 1
-+  217 set __retval0 __fn0_i
++  217 set __tmp0 __fn0_i
 +  218 jump __label4 always
 +  219 label __label102
 +  220 label __label103
@@ -526,7 +526,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  224 op mul __tmp9 __fn0_power 10
 +  225 op mod __fn0_power __tmp9 __fn0_n
 +  226 jump __label106 notEqual __fn0_power 1
-+  227 set __retval0 __fn0_i
++  227 set __tmp0 __fn0_i
 +  228 jump __label4 always
 +  229 label __label106
 +  230 label __label107
@@ -536,7 +536,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  234 op mul __tmp9 __fn0_power 10
 +  235 op mod __fn0_power __tmp9 __fn0_n
 +  236 jump __label110 notEqual __fn0_power 1
-+  237 set __retval0 __fn0_i
++  237 set __tmp0 __fn0_i
 +  238 jump __label4 always
 +  239 label __label110
 +  240 label __label111
@@ -546,7 +546,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  244 op mul __tmp9 __fn0_power 10
 +  245 op mod __fn0_power __tmp9 __fn0_n
 +  246 jump __label114 notEqual __fn0_power 1
-+  247 set __retval0 __fn0_i
++  247 set __tmp0 __fn0_i
 +  248 jump __label4 always
 +  249 label __label114
 +  250 label __label115
@@ -556,7 +556,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  254 op mul __tmp9 __fn0_power 10
 +  255 op mod __fn0_power __tmp9 __fn0_n
 +  256 jump __label118 notEqual __fn0_power 1
-+  257 set __retval0 __fn0_i
++  257 set __tmp0 __fn0_i
 +  258 jump __label4 always
 +  259 label __label118
 +  260 label __label119
@@ -566,7 +566,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  264 op mul __tmp9 __fn0_power 10
 +  265 op mod __fn0_power __tmp9 __fn0_n
 +  266 jump __label122 notEqual __fn0_power 1
-+  267 set __retval0 __fn0_i
++  267 set __tmp0 __fn0_i
 +  268 jump __label4 always
 +  269 label __label122
 +  270 label __label123
@@ -576,7 +576,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  274 op mul __tmp9 __fn0_power 10
 +  275 op mod __fn0_power __tmp9 __fn0_n
 +  276 jump __label126 notEqual __fn0_power 1
-+  277 set __retval0 __fn0_i
++  277 set __tmp0 __fn0_i
 +  278 jump __label4 always
 +  279 label __label126
 +  280 label __label127
@@ -586,7 +586,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  284 op mul __tmp9 __fn0_power 10
 +  285 op mod __fn0_power __tmp9 __fn0_n
 +  286 jump __label130 notEqual __fn0_power 1
-+  287 set __retval0 __fn0_i
++  287 set __tmp0 __fn0_i
 +  288 jump __label4 always
 +  289 label __label130
 +  290 label __label131
@@ -596,7 +596,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  294 op mul __tmp9 __fn0_power 10
 +  295 op mod __fn0_power __tmp9 __fn0_n
 +  296 jump __label134 notEqual __fn0_power 1
-+  297 set __retval0 __fn0_i
++  297 set __tmp0 __fn0_i
 +  298 jump __label4 always
 +  299 label __label134
 +  300 label __label135
@@ -606,7 +606,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  304 op mul __tmp9 __fn0_power 10
 +  305 op mod __fn0_power __tmp9 __fn0_n
 +  306 jump __label138 notEqual __fn0_power 1
-+  307 set __retval0 __fn0_i
++  307 set __tmp0 __fn0_i
 +  308 jump __label4 always
 +  309 label __label138
 +  310 label __label139
@@ -616,7 +616,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  314 op mul __tmp9 __fn0_power 10
 +  315 op mod __fn0_power __tmp9 __fn0_n
 +  316 jump __label142 notEqual __fn0_power 1
-+  317 set __retval0 __fn0_i
++  317 set __tmp0 __fn0_i
 +  318 jump __label4 always
 +  319 label __label142
 +  320 label __label143
@@ -626,7 +626,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  324 op mul __tmp9 __fn0_power 10
 +  325 op mod __fn0_power __tmp9 __fn0_n
 +  326 jump __label146 notEqual __fn0_power 1
-+  327 set __retval0 __fn0_i
++  327 set __tmp0 __fn0_i
 +  328 jump __label4 always
 +  329 label __label146
 +  330 label __label147
@@ -636,7 +636,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  334 op mul __tmp9 __fn0_power 10
 +  335 op mod __fn0_power __tmp9 __fn0_n
 +  336 jump __label150 notEqual __fn0_power 1
-+  337 set __retval0 __fn0_i
++  337 set __tmp0 __fn0_i
 +  338 jump __label4 always
 +  339 label __label150
 +  340 label __label151
@@ -646,7 +646,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  344 op mul __tmp9 __fn0_power 10
 +  345 op mod __fn0_power __tmp9 __fn0_n
 +  346 jump __label154 notEqual __fn0_power 1
-+  347 set __retval0 __fn0_i
++  347 set __tmp0 __fn0_i
 +  348 jump __label4 always
 +  349 label __label154
 +  350 label __label155
@@ -656,7 +656,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  354 op mul __tmp9 __fn0_power 10
 +  355 op mod __fn0_power __tmp9 __fn0_n
 +  356 jump __label158 notEqual __fn0_power 1
-+  357 set __retval0 __fn0_i
++  357 set __tmp0 __fn0_i
 +  358 jump __label4 always
 +  359 label __label158
 +  360 label __label159
@@ -666,7 +666,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  364 op mul __tmp9 __fn0_power 10
 +  365 op mod __fn0_power __tmp9 __fn0_n
 +  366 jump __label162 notEqual __fn0_power 1
-+  367 set __retval0 __fn0_i
++  367 set __tmp0 __fn0_i
 +  368 jump __label4 always
 +  369 label __label162
 +  370 label __label163
@@ -676,7 +676,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  374 op mul __tmp9 __fn0_power 10
 +  375 op mod __fn0_power __tmp9 __fn0_n
 +  376 jump __label166 notEqual __fn0_power 1
-+  377 set __retval0 __fn0_i
++  377 set __tmp0 __fn0_i
 +  378 jump __label4 always
 +  379 label __label166
 +  380 label __label167
@@ -686,7 +686,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  384 op mul __tmp9 __fn0_power 10
 +  385 op mod __fn0_power __tmp9 __fn0_n
 +  386 jump __label170 notEqual __fn0_power 1
-+  387 set __retval0 __fn0_i
++  387 set __tmp0 __fn0_i
 +  388 jump __label4 always
 +  389 label __label170
 +  390 label __label171
@@ -696,7 +696,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  394 op mul __tmp9 __fn0_power 10
 +  395 op mod __fn0_power __tmp9 __fn0_n
 +  396 jump __label174 notEqual __fn0_power 1
-+  397 set __retval0 __fn0_i
++  397 set __tmp0 __fn0_i
 +  398 jump __label4 always
 +  399 label __label174
 +  400 label __label175
@@ -706,7 +706,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  404 op mul __tmp9 __fn0_power 10
 +  405 op mod __fn0_power __tmp9 __fn0_n
 +  406 jump __label178 notEqual __fn0_power 1
-+  407 set __retval0 __fn0_i
++  407 set __tmp0 __fn0_i
 +  408 jump __label4 always
 +  409 label __label178
 +  410 label __label179
@@ -716,7 +716,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  414 op mul __tmp9 __fn0_power 10
 +  415 op mod __fn0_power __tmp9 __fn0_n
 +  416 jump __label182 notEqual __fn0_power 1
-+  417 set __retval0 __fn0_i
++  417 set __tmp0 __fn0_i
 +  418 jump __label4 always
 +  419 label __label182
 +  420 label __label183
@@ -726,7 +726,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  424 op mul __tmp9 __fn0_power 10
 +  425 op mod __fn0_power __tmp9 __fn0_n
 +  426 jump __label186 notEqual __fn0_power 1
-+  427 set __retval0 __fn0_i
++  427 set __tmp0 __fn0_i
 +  428 jump __label4 always
 +  429 label __label186
 +  430 label __label187
@@ -736,7 +736,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  434 op mul __tmp9 __fn0_power 10
 +  435 op mod __fn0_power __tmp9 __fn0_n
 +  436 jump __label190 notEqual __fn0_power 1
-+  437 set __retval0 __fn0_i
++  437 set __tmp0 __fn0_i
 +  438 jump __label4 always
 +  439 label __label190
 +  440 label __label191
@@ -746,7 +746,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  444 op mul __tmp9 __fn0_power 10
 +  445 op mod __fn0_power __tmp9 __fn0_n
 +  446 jump __label194 notEqual __fn0_power 1
-+  447 set __retval0 __fn0_i
++  447 set __tmp0 __fn0_i
 +  448 jump __label4 always
 +  449 label __label194
 +  450 label __label195
@@ -756,7 +756,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  454 op mul __tmp9 __fn0_power 10
 +  455 op mod __fn0_power __tmp9 __fn0_n
 +  456 jump __label198 notEqual __fn0_power 1
-+  457 set __retval0 __fn0_i
++  457 set __tmp0 __fn0_i
 +  458 jump __label4 always
 +  459 label __label198
 +  460 label __label199
@@ -766,7 +766,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  464 op mul __tmp9 __fn0_power 10
 +  465 op mod __fn0_power __tmp9 __fn0_n
 +  466 jump __label202 notEqual __fn0_power 1
-+  467 set __retval0 __fn0_i
++  467 set __tmp0 __fn0_i
 +  468 jump __label4 always
 +  469 label __label202
 +  470 label __label203
@@ -776,7 +776,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  474 op mul __tmp9 __fn0_power 10
 +  475 op mod __fn0_power __tmp9 __fn0_n
 +  476 jump __label206 notEqual __fn0_power 1
-+  477 set __retval0 __fn0_i
++  477 set __tmp0 __fn0_i
 +  478 jump __label4 always
 +  479 label __label206
 +  480 label __label207
@@ -786,7 +786,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  484 op mul __tmp9 __fn0_power 10
 +  485 op mod __fn0_power __tmp9 __fn0_n
 +  486 jump __label210 notEqual __fn0_power 1
-+  487 set __retval0 __fn0_i
++  487 set __tmp0 __fn0_i
 +  488 jump __label4 always
 +  489 label __label210
 +  490 label __label211
@@ -796,7 +796,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  494 op mul __tmp9 __fn0_power 10
 +  495 op mod __fn0_power __tmp9 __fn0_n
 +  496 jump __label214 notEqual __fn0_power 1
-+  497 set __retval0 __fn0_i
++  497 set __tmp0 __fn0_i
 +  498 jump __label4 always
 +  499 label __label214
 +  500 label __label215
@@ -806,7 +806,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  504 op mul __tmp9 __fn0_power 10
 +  505 op mod __fn0_power __tmp9 __fn0_n
 +  506 jump __label218 notEqual __fn0_power 1
-+  507 set __retval0 __fn0_i
++  507 set __tmp0 __fn0_i
 +  508 jump __label4 always
 +  509 label __label218
 +  510 label __label219
@@ -816,7 +816,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  514 op mul __tmp9 __fn0_power 10
 +  515 op mod __fn0_power __tmp9 __fn0_n
 +  516 jump __label222 notEqual __fn0_power 1
-+  517 set __retval0 __fn0_i
++  517 set __tmp0 __fn0_i
 +  518 jump __label4 always
 +  519 label __label222
 +  520 label __label223
@@ -826,7 +826,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  524 op mul __tmp9 __fn0_power 10
 +  525 op mod __fn0_power __tmp9 __fn0_n
 +  526 jump __label226 notEqual __fn0_power 1
-+  527 set __retval0 __fn0_i
++  527 set __tmp0 __fn0_i
 +  528 jump __label4 always
 +  529 label __label226
 +  530 label __label227
@@ -836,7 +836,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  534 op mul __tmp9 __fn0_power 10
 +  535 op mod __fn0_power __tmp9 __fn0_n
 +  536 jump __label230 notEqual __fn0_power 1
-+  537 set __retval0 __fn0_i
++  537 set __tmp0 __fn0_i
 +  538 jump __label4 always
 +  539 label __label230
 +  540 label __label231
@@ -846,7 +846,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  544 op mul __tmp9 __fn0_power 10
 +  545 op mod __fn0_power __tmp9 __fn0_n
 +  546 jump __label234 notEqual __fn0_power 1
-+  547 set __retval0 __fn0_i
++  547 set __tmp0 __fn0_i
 +  548 jump __label4 always
 +  549 label __label234
 +  550 label __label235
@@ -856,7 +856,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  554 op mul __tmp9 __fn0_power 10
 +  555 op mod __fn0_power __tmp9 __fn0_n
 +  556 jump __label238 notEqual __fn0_power 1
-+  557 set __retval0 __fn0_i
++  557 set __tmp0 __fn0_i
 +  558 jump __label4 always
 +  559 label __label238
 +  560 label __label239
@@ -866,7 +866,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  564 op mul __tmp9 __fn0_power 10
 +  565 op mod __fn0_power __tmp9 __fn0_n
 +  566 jump __label242 notEqual __fn0_power 1
-+  567 set __retval0 __fn0_i
++  567 set __tmp0 __fn0_i
 +  568 jump __label4 always
 +  569 label __label242
 +  570 label __label243
@@ -876,7 +876,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  574 op mul __tmp9 __fn0_power 10
 +  575 op mod __fn0_power __tmp9 __fn0_n
 +  576 jump __label246 notEqual __fn0_power 1
-+  577 set __retval0 __fn0_i
++  577 set __tmp0 __fn0_i
 +  578 jump __label4 always
 +  579 label __label246
 +  580 label __label247
@@ -886,7 +886,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  584 op mul __tmp9 __fn0_power 10
 +  585 op mod __fn0_power __tmp9 __fn0_n
 +  586 jump __label250 notEqual __fn0_power 1
-+  587 set __retval0 __fn0_i
++  587 set __tmp0 __fn0_i
 +  588 jump __label4 always
 +  589 label __label250
 +  590 label __label251
@@ -896,7 +896,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  594 op mul __tmp9 __fn0_power 10
 +  595 op mod __fn0_power __tmp9 __fn0_n
 +  596 jump __label254 notEqual __fn0_power 1
-+  597 set __retval0 __fn0_i
++  597 set __tmp0 __fn0_i
 +  598 jump __label4 always
 +  599 label __label254
 +  600 label __label255
@@ -906,7 +906,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  604 op mul __tmp9 __fn0_power 10
 +  605 op mod __fn0_power __tmp9 __fn0_n
 +  606 jump __label258 notEqual __fn0_power 1
-+  607 set __retval0 __fn0_i
++  607 set __tmp0 __fn0_i
 +  608 jump __label4 always
 +  609 label __label258
 +  610 label __label259
@@ -916,7 +916,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  614 op mul __tmp9 __fn0_power 10
 +  615 op mod __fn0_power __tmp9 __fn0_n
 +  616 jump __label262 notEqual __fn0_power 1
-+  617 set __retval0 __fn0_i
++  617 set __tmp0 __fn0_i
 +  618 jump __label4 always
 +  619 label __label262
 +  620 label __label263
@@ -926,7 +926,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  624 op mul __tmp9 __fn0_power 10
 +  625 op mod __fn0_power __tmp9 __fn0_n
 +  626 jump __label266 notEqual __fn0_power 1
-+  627 set __retval0 __fn0_i
++  627 set __tmp0 __fn0_i
 +  628 jump __label4 always
 +  629 label __label266
 +  630 label __label267
@@ -936,7 +936,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  634 op mul __tmp9 __fn0_power 10
 +  635 op mod __fn0_power __tmp9 __fn0_n
 +  636 jump __label270 notEqual __fn0_power 1
-+  637 set __retval0 __fn0_i
++  637 set __tmp0 __fn0_i
 +  638 jump __label4 always
 +  639 label __label270
 +  640 label __label271
@@ -946,7 +946,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  644 op mul __tmp9 __fn0_power 10
 +  645 op mod __fn0_power __tmp9 __fn0_n
 +  646 jump __label274 notEqual __fn0_power 1
-+  647 set __retval0 __fn0_i
++  647 set __tmp0 __fn0_i
 +  648 jump __label4 always
 +  649 label __label274
 +  650 label __label275
@@ -956,7 +956,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  654 op mul __tmp9 __fn0_power 10
 +  655 op mod __fn0_power __tmp9 __fn0_n
 +  656 jump __label278 notEqual __fn0_power 1
-+  657 set __retval0 __fn0_i
++  657 set __tmp0 __fn0_i
 +  658 jump __label4 always
 +  659 label __label278
 +  660 label __label279
@@ -966,7 +966,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  664 op mul __tmp9 __fn0_power 10
 +  665 op mod __fn0_power __tmp9 __fn0_n
 +  666 jump __label282 notEqual __fn0_power 1
-+  667 set __retval0 __fn0_i
++  667 set __tmp0 __fn0_i
 +  668 jump __label4 always
 +  669 label __label282
 +  670 label __label283
@@ -976,7 +976,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  674 op mul __tmp9 __fn0_power 10
 +  675 op mod __fn0_power __tmp9 __fn0_n
 +  676 jump __label286 notEqual __fn0_power 1
-+  677 set __retval0 __fn0_i
++  677 set __tmp0 __fn0_i
 +  678 jump __label4 always
 +  679 label __label286
 +  680 label __label287
@@ -986,7 +986,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  684 op mul __tmp9 __fn0_power 10
 +  685 op mod __fn0_power __tmp9 __fn0_n
 +  686 jump __label290 notEqual __fn0_power 1
-+  687 set __retval0 __fn0_i
++  687 set __tmp0 __fn0_i
 +  688 jump __label4 always
 +  689 label __label290
 +  690 label __label291
@@ -996,7 +996,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  694 op mul __tmp9 __fn0_power 10
 +  695 op mod __fn0_power __tmp9 __fn0_n
 +  696 jump __label294 notEqual __fn0_power 1
-+  697 set __retval0 __fn0_i
++  697 set __tmp0 __fn0_i
 +  698 jump __label4 always
 +  699 label __label294
 +  700 label __label295
@@ -1006,7 +1006,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  704 op mul __tmp9 __fn0_power 10
 +  705 op mod __fn0_power __tmp9 __fn0_n
 +  706 jump __label298 notEqual __fn0_power 1
-+  707 set __retval0 __fn0_i
++  707 set __tmp0 __fn0_i
 +  708 jump __label4 always
 +  709 label __label298
 +  710 label __label299
@@ -1016,7 +1016,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  714 op mul __tmp9 __fn0_power 10
 +  715 op mod __fn0_power __tmp9 __fn0_n
 +  716 jump __label302 notEqual __fn0_power 1
-+  717 set __retval0 __fn0_i
++  717 set __tmp0 __fn0_i
 +  718 jump __label4 always
 +  719 label __label302
 +  720 label __label303
@@ -1026,7 +1026,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  724 op mul __tmp9 __fn0_power 10
 +  725 op mod __fn0_power __tmp9 __fn0_n
 +  726 jump __label306 notEqual __fn0_power 1
-+  727 set __retval0 __fn0_i
++  727 set __tmp0 __fn0_i
 +  728 jump __label4 always
 +  729 label __label306
 +  730 label __label307
@@ -1036,7 +1036,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  734 op mul __tmp9 __fn0_power 10
 +  735 op mod __fn0_power __tmp9 __fn0_n
 +  736 jump __label310 notEqual __fn0_power 1
-+  737 set __retval0 __fn0_i
++  737 set __tmp0 __fn0_i
 +  738 jump __label4 always
 +  739 label __label310
 +  740 label __label311
@@ -1046,7 +1046,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  744 op mul __tmp9 __fn0_power 10
 +  745 op mod __fn0_power __tmp9 __fn0_n
 +  746 jump __label314 notEqual __fn0_power 1
-+  747 set __retval0 __fn0_i
++  747 set __tmp0 __fn0_i
 +  748 jump __label4 always
 +  749 label __label314
 +  750 label __label315
@@ -1056,7 +1056,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  754 op mul __tmp9 __fn0_power 10
 +  755 op mod __fn0_power __tmp9 __fn0_n
 +  756 jump __label318 notEqual __fn0_power 1
-+  757 set __retval0 __fn0_i
++  757 set __tmp0 __fn0_i
 +  758 jump __label4 always
 +  759 label __label318
 +  760 label __label319
@@ -1066,7 +1066,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  764 op mul __tmp9 __fn0_power 10
 +  765 op mod __fn0_power __tmp9 __fn0_n
 +  766 jump __label322 notEqual __fn0_power 1
-+  767 set __retval0 __fn0_i
++  767 set __tmp0 __fn0_i
 +  768 jump __label4 always
 +  769 label __label322
 +  770 label __label323
@@ -1076,7 +1076,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  774 op mul __tmp9 __fn0_power 10
 +  775 op mod __fn0_power __tmp9 __fn0_n
 +  776 jump __label326 notEqual __fn0_power 1
-+  777 set __retval0 __fn0_i
++  777 set __tmp0 __fn0_i
 +  778 jump __label4 always
 +  779 label __label326
 +  780 label __label327
@@ -1086,7 +1086,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  784 op mul __tmp9 __fn0_power 10
 +  785 op mod __fn0_power __tmp9 __fn0_n
 +  786 jump __label330 notEqual __fn0_power 1
-+  787 set __retval0 __fn0_i
++  787 set __tmp0 __fn0_i
 +  788 jump __label4 always
 +  789 label __label330
 +  790 label __label331
@@ -1096,7 +1096,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  794 op mul __tmp9 __fn0_power 10
 +  795 op mod __fn0_power __tmp9 __fn0_n
 +  796 jump __label334 notEqual __fn0_power 1
-+  797 set __retval0 __fn0_i
++  797 set __tmp0 __fn0_i
 +  798 jump __label4 always
 +  799 label __label334
 +  800 label __label335
@@ -1106,7 +1106,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  804 op mul __tmp9 __fn0_power 10
 +  805 op mod __fn0_power __tmp9 __fn0_n
 +  806 jump __label338 notEqual __fn0_power 1
-+  807 set __retval0 __fn0_i
++  807 set __tmp0 __fn0_i
 +  808 jump __label4 always
 +  809 label __label338
 +  810 label __label339
@@ -1116,7 +1116,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  814 op mul __tmp9 __fn0_power 10
 +  815 op mod __fn0_power __tmp9 __fn0_n
 +  816 jump __label342 notEqual __fn0_power 1
-+  817 set __retval0 __fn0_i
++  817 set __tmp0 __fn0_i
 +  818 jump __label4 always
 +  819 label __label342
 +  820 label __label343
@@ -1126,7 +1126,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  824 op mul __tmp9 __fn0_power 10
 +  825 op mod __fn0_power __tmp9 __fn0_n
 +  826 jump __label346 notEqual __fn0_power 1
-+  827 set __retval0 __fn0_i
++  827 set __tmp0 __fn0_i
 +  828 jump __label4 always
 +  829 label __label346
 +  830 label __label347
@@ -1136,7 +1136,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  834 op mul __tmp9 __fn0_power 10
 +  835 op mod __fn0_power __tmp9 __fn0_n
 +  836 jump __label350 notEqual __fn0_power 1
-+  837 set __retval0 __fn0_i
++  837 set __tmp0 __fn0_i
 +  838 jump __label4 always
 +  839 label __label350
 +  840 label __label351
@@ -1146,7 +1146,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  844 op mul __tmp9 __fn0_power 10
 +  845 op mod __fn0_power __tmp9 __fn0_n
 +  846 jump __label354 notEqual __fn0_power 1
-+  847 set __retval0 __fn0_i
++  847 set __tmp0 __fn0_i
 +  848 jump __label4 always
 +  849 label __label354
 +  850 label __label355
@@ -1156,7 +1156,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  854 op mul __tmp9 __fn0_power 10
 +  855 op mod __fn0_power __tmp9 __fn0_n
 +  856 jump __label358 notEqual __fn0_power 1
-+  857 set __retval0 __fn0_i
++  857 set __tmp0 __fn0_i
 +  858 jump __label4 always
 +  859 label __label358
 +  860 label __label359
@@ -1166,7 +1166,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  864 op mul __tmp9 __fn0_power 10
 +  865 op mod __fn0_power __tmp9 __fn0_n
 +  866 jump __label362 notEqual __fn0_power 1
-+  867 set __retval0 __fn0_i
++  867 set __tmp0 __fn0_i
 +  868 jump __label4 always
 +  869 label __label362
 +  870 label __label363
@@ -1176,7 +1176,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  874 op mul __tmp9 __fn0_power 10
 +  875 op mod __fn0_power __tmp9 __fn0_n
 +  876 jump __label366 notEqual __fn0_power 1
-+  877 set __retval0 __fn0_i
++  877 set __tmp0 __fn0_i
 +  878 jump __label4 always
 +  879 label __label366
 +  880 label __label367
@@ -1186,7 +1186,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  884 op mul __tmp9 __fn0_power 10
 +  885 op mod __fn0_power __tmp9 __fn0_n
 +  886 jump __label370 notEqual __fn0_power 1
-+  887 set __retval0 __fn0_i
++  887 set __tmp0 __fn0_i
 +  888 jump __label4 always
 +  889 label __label370
 +  890 label __label371
@@ -1196,7 +1196,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  894 op mul __tmp9 __fn0_power 10
 +  895 op mod __fn0_power __tmp9 __fn0_n
 +  896 jump __label374 notEqual __fn0_power 1
-+  897 set __retval0 __fn0_i
++  897 set __tmp0 __fn0_i
 +  898 jump __label4 always
 +  899 label __label374
 +  900 label __label375
@@ -1206,7 +1206,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  904 op mul __tmp9 __fn0_power 10
 +  905 op mod __fn0_power __tmp9 __fn0_n
 +  906 jump __label378 notEqual __fn0_power 1
-+  907 set __retval0 __fn0_i
++  907 set __tmp0 __fn0_i
 +  908 jump __label4 always
 +  909 label __label378
 +  910 label __label379
@@ -1216,7 +1216,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  914 op mul __tmp9 __fn0_power 10
 +  915 op mod __fn0_power __tmp9 __fn0_n
 +  916 jump __label382 notEqual __fn0_power 1
-+  917 set __retval0 __fn0_i
++  917 set __tmp0 __fn0_i
 +  918 jump __label4 always
 +  919 label __label382
 +  920 label __label383
@@ -1226,7 +1226,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  924 op mul __tmp9 __fn0_power 10
 +  925 op mod __fn0_power __tmp9 __fn0_n
 +  926 jump __label386 notEqual __fn0_power 1
-+  927 set __retval0 __fn0_i
++  927 set __tmp0 __fn0_i
 +  928 jump __label4 always
 +  929 label __label386
 +  930 label __label387
@@ -1236,7 +1236,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  934 op mul __tmp9 __fn0_power 10
 +  935 op mod __fn0_power __tmp9 __fn0_n
 +  936 jump __label390 notEqual __fn0_power 1
-+  937 set __retval0 __fn0_i
++  937 set __tmp0 __fn0_i
 +  938 jump __label4 always
 +  939 label __label390
 +  940 label __label391
@@ -1246,7 +1246,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  944 op mul __tmp9 __fn0_power 10
 +  945 op mod __fn0_power __tmp9 __fn0_n
 +  946 jump __label394 notEqual __fn0_power 1
-+  947 set __retval0 __fn0_i
++  947 set __tmp0 __fn0_i
 +  948 jump __label4 always
 +  949 label __label394
 +  950 label __label395
@@ -1256,7 +1256,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  954 op mul __tmp9 __fn0_power 10
 +  955 op mod __fn0_power __tmp9 __fn0_n
 +  956 jump __label398 notEqual __fn0_power 1
-+  957 set __retval0 __fn0_i
++  957 set __tmp0 __fn0_i
 +  958 jump __label4 always
 +  959 label __label398
 +  960 label __label399
@@ -1266,7 +1266,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  964 op mul __tmp9 __fn0_power 10
 +  965 op mod __fn0_power __tmp9 __fn0_n
 +  966 jump __label402 notEqual __fn0_power 1
-+  967 set __retval0 __fn0_i
++  967 set __tmp0 __fn0_i
 +  968 jump __label4 always
 +  969 label __label402
 +  970 label __label403
@@ -1276,7 +1276,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  974 op mul __tmp9 __fn0_power 10
 +  975 op mod __fn0_power __tmp9 __fn0_n
 +  976 jump __label406 notEqual __fn0_power 1
-+  977 set __retval0 __fn0_i
++  977 set __tmp0 __fn0_i
 +  978 jump __label4 always
 +  979 label __label406
 +  980 label __label407
@@ -1286,7 +1286,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  984 op mul __tmp9 __fn0_power 10
 +  985 op mod __fn0_power __tmp9 __fn0_n
 +  986 jump __label410 notEqual __fn0_power 1
-+  987 set __retval0 __fn0_i
++  987 set __tmp0 __fn0_i
 +  988 jump __label4 always
 +  989 label __label410
 +  990 label __label411
@@ -1296,7 +1296,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 +  994 op mul __tmp9 __fn0_power 10
 +  995 op mod __fn0_power __tmp9 __fn0_n
 +  996 jump __label414 notEqual __fn0_power 1
-+  997 set __retval0 __fn0_i
++  997 set __tmp0 __fn0_i
 +  998 jump __label4 always
 +  999 label __label414
 + 1000 label __label415
@@ -1306,7 +1306,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 + 1004 op mul __tmp9 __fn0_power 10
 + 1005 op mod __fn0_power __tmp9 __fn0_n
 + 1006 jump __label418 notEqual __fn0_power 1
-+ 1007 set __retval0 __fn0_i
++ 1007 set __tmp0 __fn0_i
 + 1008 jump __label4 always
 + 1009 label __label418
 + 1010 label __label419
@@ -1316,7 +1316,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
 + 1014 op mul __tmp9 __fn0_power 10
 + 1015 op mod __fn0_power __tmp9 __fn0_n
 + 1016 jump __label422 notEqual __fn0_power 1
-+ 1017 set __retval0 __fn0_i
++ 1017 set __tmp0 __fn0_i
 + 1018 jump __label4 always
 + 1019 label __label422
 + 1020 label __label423
@@ -1346,8 +1346,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 +   34 op mul __tmp9 1 10
 +   35 op mod __fn0_power 10 __fn0_n
     36 jump __label30 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+   37 set __retval0 1
+-    * set __tmp0 __fn0_i
++   37 set __tmp0 1
     38 jump __label4 always
     39 label __label30
     40 label __label31
@@ -1358,8 +1358,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
     44 op mul __tmp9 __fn0_power 10
     45 op mod __fn0_power __tmp9 __fn0_n
     46 jump __label34 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+   47 set __retval0 2
+-    * set __tmp0 __fn0_i
++   47 set __tmp0 2
     48 jump __label4 always
     49 label __label34
     50 label __label35
@@ -1370,8 +1370,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
     54 op mul __tmp9 __fn0_power 10
     55 op mod __fn0_power __tmp9 __fn0_n
     56 jump __label38 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+   57 set __retval0 3
+-    * set __tmp0 __fn0_i
++   57 set __tmp0 3
     58 jump __label4 always
     59 label __label38
     60 label __label39
@@ -1382,8 +1382,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
     64 op mul __tmp9 __fn0_power 10
     65 op mod __fn0_power __tmp9 __fn0_n
     66 jump __label42 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+   67 set __retval0 4
+-    * set __tmp0 __fn0_i
++   67 set __tmp0 4
     68 jump __label4 always
     69 label __label42
     70 label __label43
@@ -1394,8 +1394,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
     74 op mul __tmp9 __fn0_power 10
     75 op mod __fn0_power __tmp9 __fn0_n
     76 jump __label46 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+   77 set __retval0 5
+-    * set __tmp0 __fn0_i
++   77 set __tmp0 5
     78 jump __label4 always
     79 label __label46
     80 label __label47
@@ -1406,8 +1406,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
     84 op mul __tmp9 __fn0_power 10
     85 op mod __fn0_power __tmp9 __fn0_n
     86 jump __label50 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+   87 set __retval0 6
+-    * set __tmp0 __fn0_i
++   87 set __tmp0 6
     88 jump __label4 always
     89 label __label50
     90 label __label51
@@ -1418,8 +1418,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
     94 op mul __tmp9 __fn0_power 10
     95 op mod __fn0_power __tmp9 __fn0_n
     96 jump __label54 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+   97 set __retval0 7
+-    * set __tmp0 __fn0_i
++   97 set __tmp0 7
     98 jump __label4 always
     99 label __label54
    100 label __label55
@@ -1430,8 +1430,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    104 op mul __tmp9 __fn0_power 10
    105 op mod __fn0_power __tmp9 __fn0_n
    106 jump __label58 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  107 set __retval0 8
+-    * set __tmp0 __fn0_i
++  107 set __tmp0 8
    108 jump __label4 always
    109 label __label58
    110 label __label59
@@ -1442,8 +1442,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    114 op mul __tmp9 __fn0_power 10
    115 op mod __fn0_power __tmp9 __fn0_n
    116 jump __label62 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  117 set __retval0 9
+-    * set __tmp0 __fn0_i
++  117 set __tmp0 9
    118 jump __label4 always
    119 label __label62
    120 label __label63
@@ -1454,8 +1454,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    124 op mul __tmp9 __fn0_power 10
    125 op mod __fn0_power __tmp9 __fn0_n
    126 jump __label66 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  127 set __retval0 10
+-    * set __tmp0 __fn0_i
++  127 set __tmp0 10
    128 jump __label4 always
    129 label __label66
    130 label __label67
@@ -1466,8 +1466,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    134 op mul __tmp9 __fn0_power 10
    135 op mod __fn0_power __tmp9 __fn0_n
    136 jump __label70 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  137 set __retval0 11
+-    * set __tmp0 __fn0_i
++  137 set __tmp0 11
    138 jump __label4 always
    139 label __label70
    140 label __label71
@@ -1478,8 +1478,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    144 op mul __tmp9 __fn0_power 10
    145 op mod __fn0_power __tmp9 __fn0_n
    146 jump __label74 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  147 set __retval0 12
+-    * set __tmp0 __fn0_i
++  147 set __tmp0 12
    148 jump __label4 always
    149 label __label74
    150 label __label75
@@ -1490,8 +1490,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    154 op mul __tmp9 __fn0_power 10
    155 op mod __fn0_power __tmp9 __fn0_n
    156 jump __label78 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  157 set __retval0 13
+-    * set __tmp0 __fn0_i
++  157 set __tmp0 13
    158 jump __label4 always
    159 label __label78
    160 label __label79
@@ -1502,8 +1502,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    164 op mul __tmp9 __fn0_power 10
    165 op mod __fn0_power __tmp9 __fn0_n
    166 jump __label82 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  167 set __retval0 14
+-    * set __tmp0 __fn0_i
++  167 set __tmp0 14
    168 jump __label4 always
    169 label __label82
    170 label __label83
@@ -1514,8 +1514,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    174 op mul __tmp9 __fn0_power 10
    175 op mod __fn0_power __tmp9 __fn0_n
    176 jump __label86 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  177 set __retval0 15
+-    * set __tmp0 __fn0_i
++  177 set __tmp0 15
    178 jump __label4 always
    179 label __label86
    180 label __label87
@@ -1526,8 +1526,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    184 op mul __tmp9 __fn0_power 10
    185 op mod __fn0_power __tmp9 __fn0_n
    186 jump __label90 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  187 set __retval0 16
+-    * set __tmp0 __fn0_i
++  187 set __tmp0 16
    188 jump __label4 always
    189 label __label90
    190 label __label91
@@ -1538,8 +1538,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    194 op mul __tmp9 __fn0_power 10
    195 op mod __fn0_power __tmp9 __fn0_n
    196 jump __label94 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  197 set __retval0 17
+-    * set __tmp0 __fn0_i
++  197 set __tmp0 17
    198 jump __label4 always
    199 label __label94
    200 label __label95
@@ -1550,8 +1550,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    204 op mul __tmp9 __fn0_power 10
    205 op mod __fn0_power __tmp9 __fn0_n
    206 jump __label98 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  207 set __retval0 18
+-    * set __tmp0 __fn0_i
++  207 set __tmp0 18
    208 jump __label4 always
    209 label __label98
    210 label __label99
@@ -1562,8 +1562,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    214 op mul __tmp9 __fn0_power 10
    215 op mod __fn0_power __tmp9 __fn0_n
    216 jump __label102 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  217 set __retval0 19
+-    * set __tmp0 __fn0_i
++  217 set __tmp0 19
    218 jump __label4 always
    219 label __label102
    220 label __label103
@@ -1574,8 +1574,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    224 op mul __tmp9 __fn0_power 10
    225 op mod __fn0_power __tmp9 __fn0_n
    226 jump __label106 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  227 set __retval0 20
+-    * set __tmp0 __fn0_i
++  227 set __tmp0 20
    228 jump __label4 always
    229 label __label106
    230 label __label107
@@ -1586,8 +1586,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    234 op mul __tmp9 __fn0_power 10
    235 op mod __fn0_power __tmp9 __fn0_n
    236 jump __label110 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  237 set __retval0 21
+-    * set __tmp0 __fn0_i
++  237 set __tmp0 21
    238 jump __label4 always
    239 label __label110
    240 label __label111
@@ -1598,8 +1598,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    244 op mul __tmp9 __fn0_power 10
    245 op mod __fn0_power __tmp9 __fn0_n
    246 jump __label114 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  247 set __retval0 22
+-    * set __tmp0 __fn0_i
++  247 set __tmp0 22
    248 jump __label4 always
    249 label __label114
    250 label __label115
@@ -1610,8 +1610,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    254 op mul __tmp9 __fn0_power 10
    255 op mod __fn0_power __tmp9 __fn0_n
    256 jump __label118 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  257 set __retval0 23
+-    * set __tmp0 __fn0_i
++  257 set __tmp0 23
    258 jump __label4 always
    259 label __label118
    260 label __label119
@@ -1622,8 +1622,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    264 op mul __tmp9 __fn0_power 10
    265 op mod __fn0_power __tmp9 __fn0_n
    266 jump __label122 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  267 set __retval0 24
+-    * set __tmp0 __fn0_i
++  267 set __tmp0 24
    268 jump __label4 always
    269 label __label122
    270 label __label123
@@ -1634,8 +1634,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    274 op mul __tmp9 __fn0_power 10
    275 op mod __fn0_power __tmp9 __fn0_n
    276 jump __label126 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  277 set __retval0 25
+-    * set __tmp0 __fn0_i
++  277 set __tmp0 25
    278 jump __label4 always
    279 label __label126
    280 label __label127
@@ -1646,8 +1646,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    284 op mul __tmp9 __fn0_power 10
    285 op mod __fn0_power __tmp9 __fn0_n
    286 jump __label130 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  287 set __retval0 26
+-    * set __tmp0 __fn0_i
++  287 set __tmp0 26
    288 jump __label4 always
    289 label __label130
    290 label __label131
@@ -1658,8 +1658,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    294 op mul __tmp9 __fn0_power 10
    295 op mod __fn0_power __tmp9 __fn0_n
    296 jump __label134 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  297 set __retval0 27
+-    * set __tmp0 __fn0_i
++  297 set __tmp0 27
    298 jump __label4 always
    299 label __label134
    300 label __label135
@@ -1670,8 +1670,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    304 op mul __tmp9 __fn0_power 10
    305 op mod __fn0_power __tmp9 __fn0_n
    306 jump __label138 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  307 set __retval0 28
+-    * set __tmp0 __fn0_i
++  307 set __tmp0 28
    308 jump __label4 always
    309 label __label138
    310 label __label139
@@ -1682,8 +1682,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    314 op mul __tmp9 __fn0_power 10
    315 op mod __fn0_power __tmp9 __fn0_n
    316 jump __label142 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  317 set __retval0 29
+-    * set __tmp0 __fn0_i
++  317 set __tmp0 29
    318 jump __label4 always
    319 label __label142
    320 label __label143
@@ -1694,8 +1694,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    324 op mul __tmp9 __fn0_power 10
    325 op mod __fn0_power __tmp9 __fn0_n
    326 jump __label146 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  327 set __retval0 30
+-    * set __tmp0 __fn0_i
++  327 set __tmp0 30
    328 jump __label4 always
    329 label __label146
    330 label __label147
@@ -1706,8 +1706,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    334 op mul __tmp9 __fn0_power 10
    335 op mod __fn0_power __tmp9 __fn0_n
    336 jump __label150 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  337 set __retval0 31
+-    * set __tmp0 __fn0_i
++  337 set __tmp0 31
    338 jump __label4 always
    339 label __label150
    340 label __label151
@@ -1718,8 +1718,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    344 op mul __tmp9 __fn0_power 10
    345 op mod __fn0_power __tmp9 __fn0_n
    346 jump __label154 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  347 set __retval0 32
+-    * set __tmp0 __fn0_i
++  347 set __tmp0 32
    348 jump __label4 always
    349 label __label154
    350 label __label155
@@ -1730,8 +1730,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    354 op mul __tmp9 __fn0_power 10
    355 op mod __fn0_power __tmp9 __fn0_n
    356 jump __label158 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  357 set __retval0 33
+-    * set __tmp0 __fn0_i
++  357 set __tmp0 33
    358 jump __label4 always
    359 label __label158
    360 label __label159
@@ -1742,8 +1742,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    364 op mul __tmp9 __fn0_power 10
    365 op mod __fn0_power __tmp9 __fn0_n
    366 jump __label162 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  367 set __retval0 34
+-    * set __tmp0 __fn0_i
++  367 set __tmp0 34
    368 jump __label4 always
    369 label __label162
    370 label __label163
@@ -1754,8 +1754,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    374 op mul __tmp9 __fn0_power 10
    375 op mod __fn0_power __tmp9 __fn0_n
    376 jump __label166 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  377 set __retval0 35
+-    * set __tmp0 __fn0_i
++  377 set __tmp0 35
    378 jump __label4 always
    379 label __label166
    380 label __label167
@@ -1766,8 +1766,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    384 op mul __tmp9 __fn0_power 10
    385 op mod __fn0_power __tmp9 __fn0_n
    386 jump __label170 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  387 set __retval0 36
+-    * set __tmp0 __fn0_i
++  387 set __tmp0 36
    388 jump __label4 always
    389 label __label170
    390 label __label171
@@ -1778,8 +1778,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    394 op mul __tmp9 __fn0_power 10
    395 op mod __fn0_power __tmp9 __fn0_n
    396 jump __label174 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  397 set __retval0 37
+-    * set __tmp0 __fn0_i
++  397 set __tmp0 37
    398 jump __label4 always
    399 label __label174
    400 label __label175
@@ -1790,8 +1790,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    404 op mul __tmp9 __fn0_power 10
    405 op mod __fn0_power __tmp9 __fn0_n
    406 jump __label178 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  407 set __retval0 38
+-    * set __tmp0 __fn0_i
++  407 set __tmp0 38
    408 jump __label4 always
    409 label __label178
    410 label __label179
@@ -1802,8 +1802,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    414 op mul __tmp9 __fn0_power 10
    415 op mod __fn0_power __tmp9 __fn0_n
    416 jump __label182 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  417 set __retval0 39
+-    * set __tmp0 __fn0_i
++  417 set __tmp0 39
    418 jump __label4 always
    419 label __label182
    420 label __label183
@@ -1814,8 +1814,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    424 op mul __tmp9 __fn0_power 10
    425 op mod __fn0_power __tmp9 __fn0_n
    426 jump __label186 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  427 set __retval0 40
+-    * set __tmp0 __fn0_i
++  427 set __tmp0 40
    428 jump __label4 always
    429 label __label186
    430 label __label187
@@ -1826,8 +1826,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    434 op mul __tmp9 __fn0_power 10
    435 op mod __fn0_power __tmp9 __fn0_n
    436 jump __label190 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  437 set __retval0 41
+-    * set __tmp0 __fn0_i
++  437 set __tmp0 41
    438 jump __label4 always
    439 label __label190
    440 label __label191
@@ -1838,8 +1838,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    444 op mul __tmp9 __fn0_power 10
    445 op mod __fn0_power __tmp9 __fn0_n
    446 jump __label194 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  447 set __retval0 42
+-    * set __tmp0 __fn0_i
++  447 set __tmp0 42
    448 jump __label4 always
    449 label __label194
    450 label __label195
@@ -1850,8 +1850,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    454 op mul __tmp9 __fn0_power 10
    455 op mod __fn0_power __tmp9 __fn0_n
    456 jump __label198 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  457 set __retval0 43
+-    * set __tmp0 __fn0_i
++  457 set __tmp0 43
    458 jump __label4 always
    459 label __label198
    460 label __label199
@@ -1862,8 +1862,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    464 op mul __tmp9 __fn0_power 10
    465 op mod __fn0_power __tmp9 __fn0_n
    466 jump __label202 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  467 set __retval0 44
+-    * set __tmp0 __fn0_i
++  467 set __tmp0 44
    468 jump __label4 always
    469 label __label202
    470 label __label203
@@ -1874,8 +1874,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    474 op mul __tmp9 __fn0_power 10
    475 op mod __fn0_power __tmp9 __fn0_n
    476 jump __label206 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  477 set __retval0 45
+-    * set __tmp0 __fn0_i
++  477 set __tmp0 45
    478 jump __label4 always
    479 label __label206
    480 label __label207
@@ -1886,8 +1886,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    484 op mul __tmp9 __fn0_power 10
    485 op mod __fn0_power __tmp9 __fn0_n
    486 jump __label210 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  487 set __retval0 46
+-    * set __tmp0 __fn0_i
++  487 set __tmp0 46
    488 jump __label4 always
    489 label __label210
    490 label __label211
@@ -1898,8 +1898,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    494 op mul __tmp9 __fn0_power 10
    495 op mod __fn0_power __tmp9 __fn0_n
    496 jump __label214 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  497 set __retval0 47
+-    * set __tmp0 __fn0_i
++  497 set __tmp0 47
    498 jump __label4 always
    499 label __label214
    500 label __label215
@@ -1910,8 +1910,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    504 op mul __tmp9 __fn0_power 10
    505 op mod __fn0_power __tmp9 __fn0_n
    506 jump __label218 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  507 set __retval0 48
+-    * set __tmp0 __fn0_i
++  507 set __tmp0 48
    508 jump __label4 always
    509 label __label218
    510 label __label219
@@ -1922,8 +1922,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    514 op mul __tmp9 __fn0_power 10
    515 op mod __fn0_power __tmp9 __fn0_n
    516 jump __label222 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  517 set __retval0 49
+-    * set __tmp0 __fn0_i
++  517 set __tmp0 49
    518 jump __label4 always
    519 label __label222
    520 label __label223
@@ -1934,8 +1934,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    524 op mul __tmp9 __fn0_power 10
    525 op mod __fn0_power __tmp9 __fn0_n
    526 jump __label226 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  527 set __retval0 50
+-    * set __tmp0 __fn0_i
++  527 set __tmp0 50
    528 jump __label4 always
    529 label __label226
    530 label __label227
@@ -1946,8 +1946,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    534 op mul __tmp9 __fn0_power 10
    535 op mod __fn0_power __tmp9 __fn0_n
    536 jump __label230 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  537 set __retval0 51
+-    * set __tmp0 __fn0_i
++  537 set __tmp0 51
    538 jump __label4 always
    539 label __label230
    540 label __label231
@@ -1958,8 +1958,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    544 op mul __tmp9 __fn0_power 10
    545 op mod __fn0_power __tmp9 __fn0_n
    546 jump __label234 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  547 set __retval0 52
+-    * set __tmp0 __fn0_i
++  547 set __tmp0 52
    548 jump __label4 always
    549 label __label234
    550 label __label235
@@ -1970,8 +1970,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    554 op mul __tmp9 __fn0_power 10
    555 op mod __fn0_power __tmp9 __fn0_n
    556 jump __label238 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  557 set __retval0 53
+-    * set __tmp0 __fn0_i
++  557 set __tmp0 53
    558 jump __label4 always
    559 label __label238
    560 label __label239
@@ -1982,8 +1982,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    564 op mul __tmp9 __fn0_power 10
    565 op mod __fn0_power __tmp9 __fn0_n
    566 jump __label242 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  567 set __retval0 54
+-    * set __tmp0 __fn0_i
++  567 set __tmp0 54
    568 jump __label4 always
    569 label __label242
    570 label __label243
@@ -1994,8 +1994,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    574 op mul __tmp9 __fn0_power 10
    575 op mod __fn0_power __tmp9 __fn0_n
    576 jump __label246 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  577 set __retval0 55
+-    * set __tmp0 __fn0_i
++  577 set __tmp0 55
    578 jump __label4 always
    579 label __label246
    580 label __label247
@@ -2006,8 +2006,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    584 op mul __tmp9 __fn0_power 10
    585 op mod __fn0_power __tmp9 __fn0_n
    586 jump __label250 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  587 set __retval0 56
+-    * set __tmp0 __fn0_i
++  587 set __tmp0 56
    588 jump __label4 always
    589 label __label250
    590 label __label251
@@ -2018,8 +2018,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    594 op mul __tmp9 __fn0_power 10
    595 op mod __fn0_power __tmp9 __fn0_n
    596 jump __label254 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  597 set __retval0 57
+-    * set __tmp0 __fn0_i
++  597 set __tmp0 57
    598 jump __label4 always
    599 label __label254
    600 label __label255
@@ -2030,8 +2030,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    604 op mul __tmp9 __fn0_power 10
    605 op mod __fn0_power __tmp9 __fn0_n
    606 jump __label258 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  607 set __retval0 58
+-    * set __tmp0 __fn0_i
++  607 set __tmp0 58
    608 jump __label4 always
    609 label __label258
    610 label __label259
@@ -2042,8 +2042,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    614 op mul __tmp9 __fn0_power 10
    615 op mod __fn0_power __tmp9 __fn0_n
    616 jump __label262 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  617 set __retval0 59
+-    * set __tmp0 __fn0_i
++  617 set __tmp0 59
    618 jump __label4 always
    619 label __label262
    620 label __label263
@@ -2054,8 +2054,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    624 op mul __tmp9 __fn0_power 10
    625 op mod __fn0_power __tmp9 __fn0_n
    626 jump __label266 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  627 set __retval0 60
+-    * set __tmp0 __fn0_i
++  627 set __tmp0 60
    628 jump __label4 always
    629 label __label266
    630 label __label267
@@ -2066,8 +2066,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    634 op mul __tmp9 __fn0_power 10
    635 op mod __fn0_power __tmp9 __fn0_n
    636 jump __label270 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  637 set __retval0 61
+-    * set __tmp0 __fn0_i
++  637 set __tmp0 61
    638 jump __label4 always
    639 label __label270
    640 label __label271
@@ -2078,8 +2078,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    644 op mul __tmp9 __fn0_power 10
    645 op mod __fn0_power __tmp9 __fn0_n
    646 jump __label274 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  647 set __retval0 62
+-    * set __tmp0 __fn0_i
++  647 set __tmp0 62
    648 jump __label4 always
    649 label __label274
    650 label __label275
@@ -2090,8 +2090,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    654 op mul __tmp9 __fn0_power 10
    655 op mod __fn0_power __tmp9 __fn0_n
    656 jump __label278 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  657 set __retval0 63
+-    * set __tmp0 __fn0_i
++  657 set __tmp0 63
    658 jump __label4 always
    659 label __label278
    660 label __label279
@@ -2102,8 +2102,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    664 op mul __tmp9 __fn0_power 10
    665 op mod __fn0_power __tmp9 __fn0_n
    666 jump __label282 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  667 set __retval0 64
+-    * set __tmp0 __fn0_i
++  667 set __tmp0 64
    668 jump __label4 always
    669 label __label282
    670 label __label283
@@ -2114,8 +2114,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    674 op mul __tmp9 __fn0_power 10
    675 op mod __fn0_power __tmp9 __fn0_n
    676 jump __label286 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  677 set __retval0 65
+-    * set __tmp0 __fn0_i
++  677 set __tmp0 65
    678 jump __label4 always
    679 label __label286
    680 label __label287
@@ -2126,8 +2126,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    684 op mul __tmp9 __fn0_power 10
    685 op mod __fn0_power __tmp9 __fn0_n
    686 jump __label290 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  687 set __retval0 66
+-    * set __tmp0 __fn0_i
++  687 set __tmp0 66
    688 jump __label4 always
    689 label __label290
    690 label __label291
@@ -2138,8 +2138,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    694 op mul __tmp9 __fn0_power 10
    695 op mod __fn0_power __tmp9 __fn0_n
    696 jump __label294 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  697 set __retval0 67
+-    * set __tmp0 __fn0_i
++  697 set __tmp0 67
    698 jump __label4 always
    699 label __label294
    700 label __label295
@@ -2150,8 +2150,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    704 op mul __tmp9 __fn0_power 10
    705 op mod __fn0_power __tmp9 __fn0_n
    706 jump __label298 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  707 set __retval0 68
+-    * set __tmp0 __fn0_i
++  707 set __tmp0 68
    708 jump __label4 always
    709 label __label298
    710 label __label299
@@ -2162,8 +2162,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    714 op mul __tmp9 __fn0_power 10
    715 op mod __fn0_power __tmp9 __fn0_n
    716 jump __label302 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  717 set __retval0 69
+-    * set __tmp0 __fn0_i
++  717 set __tmp0 69
    718 jump __label4 always
    719 label __label302
    720 label __label303
@@ -2174,8 +2174,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    724 op mul __tmp9 __fn0_power 10
    725 op mod __fn0_power __tmp9 __fn0_n
    726 jump __label306 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  727 set __retval0 70
+-    * set __tmp0 __fn0_i
++  727 set __tmp0 70
    728 jump __label4 always
    729 label __label306
    730 label __label307
@@ -2186,8 +2186,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    734 op mul __tmp9 __fn0_power 10
    735 op mod __fn0_power __tmp9 __fn0_n
    736 jump __label310 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  737 set __retval0 71
+-    * set __tmp0 __fn0_i
++  737 set __tmp0 71
    738 jump __label4 always
    739 label __label310
    740 label __label311
@@ -2198,8 +2198,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    744 op mul __tmp9 __fn0_power 10
    745 op mod __fn0_power __tmp9 __fn0_n
    746 jump __label314 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  747 set __retval0 72
+-    * set __tmp0 __fn0_i
++  747 set __tmp0 72
    748 jump __label4 always
    749 label __label314
    750 label __label315
@@ -2210,8 +2210,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    754 op mul __tmp9 __fn0_power 10
    755 op mod __fn0_power __tmp9 __fn0_n
    756 jump __label318 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  757 set __retval0 73
+-    * set __tmp0 __fn0_i
++  757 set __tmp0 73
    758 jump __label4 always
    759 label __label318
    760 label __label319
@@ -2222,8 +2222,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    764 op mul __tmp9 __fn0_power 10
    765 op mod __fn0_power __tmp9 __fn0_n
    766 jump __label322 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  767 set __retval0 74
+-    * set __tmp0 __fn0_i
++  767 set __tmp0 74
    768 jump __label4 always
    769 label __label322
    770 label __label323
@@ -2234,8 +2234,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    774 op mul __tmp9 __fn0_power 10
    775 op mod __fn0_power __tmp9 __fn0_n
    776 jump __label326 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  777 set __retval0 75
+-    * set __tmp0 __fn0_i
++  777 set __tmp0 75
    778 jump __label4 always
    779 label __label326
    780 label __label327
@@ -2246,8 +2246,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    784 op mul __tmp9 __fn0_power 10
    785 op mod __fn0_power __tmp9 __fn0_n
    786 jump __label330 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  787 set __retval0 76
+-    * set __tmp0 __fn0_i
++  787 set __tmp0 76
    788 jump __label4 always
    789 label __label330
    790 label __label331
@@ -2258,8 +2258,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    794 op mul __tmp9 __fn0_power 10
    795 op mod __fn0_power __tmp9 __fn0_n
    796 jump __label334 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  797 set __retval0 77
+-    * set __tmp0 __fn0_i
++  797 set __tmp0 77
    798 jump __label4 always
    799 label __label334
    800 label __label335
@@ -2270,8 +2270,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    804 op mul __tmp9 __fn0_power 10
    805 op mod __fn0_power __tmp9 __fn0_n
    806 jump __label338 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  807 set __retval0 78
+-    * set __tmp0 __fn0_i
++  807 set __tmp0 78
    808 jump __label4 always
    809 label __label338
    810 label __label339
@@ -2282,8 +2282,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    814 op mul __tmp9 __fn0_power 10
    815 op mod __fn0_power __tmp9 __fn0_n
    816 jump __label342 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  817 set __retval0 79
+-    * set __tmp0 __fn0_i
++  817 set __tmp0 79
    818 jump __label4 always
    819 label __label342
    820 label __label343
@@ -2294,8 +2294,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    824 op mul __tmp9 __fn0_power 10
    825 op mod __fn0_power __tmp9 __fn0_n
    826 jump __label346 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  827 set __retval0 80
+-    * set __tmp0 __fn0_i
++  827 set __tmp0 80
    828 jump __label4 always
    829 label __label346
    830 label __label347
@@ -2306,8 +2306,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    834 op mul __tmp9 __fn0_power 10
    835 op mod __fn0_power __tmp9 __fn0_n
    836 jump __label350 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  837 set __retval0 81
+-    * set __tmp0 __fn0_i
++  837 set __tmp0 81
    838 jump __label4 always
    839 label __label350
    840 label __label351
@@ -2318,8 +2318,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    844 op mul __tmp9 __fn0_power 10
    845 op mod __fn0_power __tmp9 __fn0_n
    846 jump __label354 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  847 set __retval0 82
+-    * set __tmp0 __fn0_i
++  847 set __tmp0 82
    848 jump __label4 always
    849 label __label354
    850 label __label355
@@ -2330,8 +2330,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    854 op mul __tmp9 __fn0_power 10
    855 op mod __fn0_power __tmp9 __fn0_n
    856 jump __label358 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  857 set __retval0 83
+-    * set __tmp0 __fn0_i
++  857 set __tmp0 83
    858 jump __label4 always
    859 label __label358
    860 label __label359
@@ -2342,8 +2342,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    864 op mul __tmp9 __fn0_power 10
    865 op mod __fn0_power __tmp9 __fn0_n
    866 jump __label362 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  867 set __retval0 84
+-    * set __tmp0 __fn0_i
++  867 set __tmp0 84
    868 jump __label4 always
    869 label __label362
    870 label __label363
@@ -2354,8 +2354,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    874 op mul __tmp9 __fn0_power 10
    875 op mod __fn0_power __tmp9 __fn0_n
    876 jump __label366 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  877 set __retval0 85
+-    * set __tmp0 __fn0_i
++  877 set __tmp0 85
    878 jump __label4 always
    879 label __label366
    880 label __label367
@@ -2366,8 +2366,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    884 op mul __tmp9 __fn0_power 10
    885 op mod __fn0_power __tmp9 __fn0_n
    886 jump __label370 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  887 set __retval0 86
+-    * set __tmp0 __fn0_i
++  887 set __tmp0 86
    888 jump __label4 always
    889 label __label370
    890 label __label371
@@ -2378,8 +2378,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    894 op mul __tmp9 __fn0_power 10
    895 op mod __fn0_power __tmp9 __fn0_n
    896 jump __label374 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  897 set __retval0 87
+-    * set __tmp0 __fn0_i
++  897 set __tmp0 87
    898 jump __label4 always
    899 label __label374
    900 label __label375
@@ -2390,8 +2390,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    904 op mul __tmp9 __fn0_power 10
    905 op mod __fn0_power __tmp9 __fn0_n
    906 jump __label378 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  907 set __retval0 88
+-    * set __tmp0 __fn0_i
++  907 set __tmp0 88
    908 jump __label4 always
    909 label __label378
    910 label __label379
@@ -2402,8 +2402,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    914 op mul __tmp9 __fn0_power 10
    915 op mod __fn0_power __tmp9 __fn0_n
    916 jump __label382 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  917 set __retval0 89
+-    * set __tmp0 __fn0_i
++  917 set __tmp0 89
    918 jump __label4 always
    919 label __label382
    920 label __label383
@@ -2414,8 +2414,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    924 op mul __tmp9 __fn0_power 10
    925 op mod __fn0_power __tmp9 __fn0_n
    926 jump __label386 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  927 set __retval0 90
+-    * set __tmp0 __fn0_i
++  927 set __tmp0 90
    928 jump __label4 always
    929 label __label386
    930 label __label387
@@ -2426,8 +2426,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    934 op mul __tmp9 __fn0_power 10
    935 op mod __fn0_power __tmp9 __fn0_n
    936 jump __label390 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  937 set __retval0 91
+-    * set __tmp0 __fn0_i
++  937 set __tmp0 91
    938 jump __label4 always
    939 label __label390
    940 label __label391
@@ -2438,8 +2438,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    944 op mul __tmp9 __fn0_power 10
    945 op mod __fn0_power __tmp9 __fn0_n
    946 jump __label394 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  947 set __retval0 92
+-    * set __tmp0 __fn0_i
++  947 set __tmp0 92
    948 jump __label4 always
    949 label __label394
    950 label __label395
@@ -2450,8 +2450,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    954 op mul __tmp9 __fn0_power 10
    955 op mod __fn0_power __tmp9 __fn0_n
    956 jump __label398 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  957 set __retval0 93
+-    * set __tmp0 __fn0_i
++  957 set __tmp0 93
    958 jump __label4 always
    959 label __label398
    960 label __label399
@@ -2462,8 +2462,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    964 op mul __tmp9 __fn0_power 10
    965 op mod __fn0_power __tmp9 __fn0_n
    966 jump __label402 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  967 set __retval0 94
+-    * set __tmp0 __fn0_i
++  967 set __tmp0 94
    968 jump __label4 always
    969 label __label402
    970 label __label403
@@ -2474,8 +2474,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    974 op mul __tmp9 __fn0_power 10
    975 op mod __fn0_power __tmp9 __fn0_n
    976 jump __label406 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  977 set __retval0 95
+-    * set __tmp0 __fn0_i
++  977 set __tmp0 95
    978 jump __label4 always
    979 label __label406
    980 label __label407
@@ -2486,8 +2486,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    984 op mul __tmp9 __fn0_power 10
    985 op mod __fn0_power __tmp9 __fn0_n
    986 jump __label410 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  987 set __retval0 96
+-    * set __tmp0 __fn0_i
++  987 set __tmp0 96
    988 jump __label4 always
    989 label __label410
    990 label __label411
@@ -2498,8 +2498,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
    994 op mul __tmp9 __fn0_power 10
    995 op mod __fn0_power __tmp9 __fn0_n
    996 jump __label414 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+  997 set __retval0 97
+-    * set __tmp0 __fn0_i
++  997 set __tmp0 97
    998 jump __label4 always
    999 label __label414
   1000 label __label415
@@ -2510,8 +2510,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
   1004 op mul __tmp9 __fn0_power 10
   1005 op mod __fn0_power __tmp9 __fn0_n
   1006 jump __label418 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+ 1007 set __retval0 98
+-    * set __tmp0 __fn0_i
++ 1007 set __tmp0 98
   1008 jump __label4 always
   1009 label __label418
   1010 label __label419
@@ -2522,8 +2522,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
   1014 op mul __tmp9 __fn0_power 10
   1015 op mod __fn0_power __tmp9 __fn0_n
   1016 jump __label422 notEqual __fn0_power 1
--    * set __retval0 __fn0_i
-+ 1017 set __retval0 99
+-    * set __tmp0 __fn0_i
++ 1017 set __tmp0 99
   1018 jump __label4 always
   1019 label __label422
   1020 label __label423
@@ -2545,7 +2545,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
 -    * op mul __tmp9 1 10
     32 op mod __fn0_power 10 __fn0_n
     33 jump __label30 notEqual __fn0_power 1
-    34 set __retval0 1
+    34 set __tmp0 1
  
     36 label __label30
     37 label __label31
@@ -3353,607 +3353,607 @@ op mod __tmp4 __fn0_n 2
 jump __label27 equal __tmp4 0
 label __label10
 jump __label11 greaterThanEq __fn0_n 2
-set __retval0 0
+set __tmp0 0
 jump __label4 always 0 0
 label __label11
 op mod __fn0_power 10 __fn0_n
 jump __label30 notEqual __fn0_power 1
-set __retval0 1
+set __tmp0 1
 jump __label4 always 0 0
 label __label30
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label34 notEqual __fn0_power 1
-set __retval0 2
+set __tmp0 2
 jump __label4 always 0 0
 label __label34
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label38 notEqual __fn0_power 1
-set __retval0 3
+set __tmp0 3
 jump __label4 always 0 0
 label __label38
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label42 notEqual __fn0_power 1
-set __retval0 4
+set __tmp0 4
 jump __label4 always 0 0
 label __label42
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label46 notEqual __fn0_power 1
-set __retval0 5
+set __tmp0 5
 jump __label4 always 0 0
 label __label46
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label50 notEqual __fn0_power 1
-set __retval0 6
+set __tmp0 6
 jump __label4 always 0 0
 label __label50
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label54 notEqual __fn0_power 1
-set __retval0 7
+set __tmp0 7
 jump __label4 always 0 0
 label __label54
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label58 notEqual __fn0_power 1
-set __retval0 8
+set __tmp0 8
 jump __label4 always 0 0
 label __label58
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label62 notEqual __fn0_power 1
-set __retval0 9
+set __tmp0 9
 jump __label4 always 0 0
 label __label62
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label66 notEqual __fn0_power 1
-set __retval0 10
+set __tmp0 10
 jump __label4 always 0 0
 label __label66
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label70 notEqual __fn0_power 1
-set __retval0 11
+set __tmp0 11
 jump __label4 always 0 0
 label __label70
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label74 notEqual __fn0_power 1
-set __retval0 12
+set __tmp0 12
 jump __label4 always 0 0
 label __label74
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label78 notEqual __fn0_power 1
-set __retval0 13
+set __tmp0 13
 jump __label4 always 0 0
 label __label78
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label82 notEqual __fn0_power 1
-set __retval0 14
+set __tmp0 14
 jump __label4 always 0 0
 label __label82
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label86 notEqual __fn0_power 1
-set __retval0 15
+set __tmp0 15
 jump __label4 always 0 0
 label __label86
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label90 notEqual __fn0_power 1
-set __retval0 16
+set __tmp0 16
 jump __label4 always 0 0
 label __label90
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label94 notEqual __fn0_power 1
-set __retval0 17
+set __tmp0 17
 jump __label4 always 0 0
 label __label94
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label98 notEqual __fn0_power 1
-set __retval0 18
+set __tmp0 18
 jump __label4 always 0 0
 label __label98
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label102 notEqual __fn0_power 1
-set __retval0 19
+set __tmp0 19
 jump __label4 always 0 0
 label __label102
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label106 notEqual __fn0_power 1
-set __retval0 20
+set __tmp0 20
 jump __label4 always 0 0
 label __label106
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label110 notEqual __fn0_power 1
-set __retval0 21
+set __tmp0 21
 jump __label4 always 0 0
 label __label110
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label114 notEqual __fn0_power 1
-set __retval0 22
+set __tmp0 22
 jump __label4 always 0 0
 label __label114
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label118 notEqual __fn0_power 1
-set __retval0 23
+set __tmp0 23
 jump __label4 always 0 0
 label __label118
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label122 notEqual __fn0_power 1
-set __retval0 24
+set __tmp0 24
 jump __label4 always 0 0
 label __label122
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label126 notEqual __fn0_power 1
-set __retval0 25
+set __tmp0 25
 jump __label4 always 0 0
 label __label126
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label130 notEqual __fn0_power 1
-set __retval0 26
+set __tmp0 26
 jump __label4 always 0 0
 label __label130
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label134 notEqual __fn0_power 1
-set __retval0 27
+set __tmp0 27
 jump __label4 always 0 0
 label __label134
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label138 notEqual __fn0_power 1
-set __retval0 28
+set __tmp0 28
 jump __label4 always 0 0
 label __label138
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label142 notEqual __fn0_power 1
-set __retval0 29
+set __tmp0 29
 jump __label4 always 0 0
 label __label142
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label146 notEqual __fn0_power 1
-set __retval0 30
+set __tmp0 30
 jump __label4 always 0 0
 label __label146
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label150 notEqual __fn0_power 1
-set __retval0 31
+set __tmp0 31
 jump __label4 always 0 0
 label __label150
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label154 notEqual __fn0_power 1
-set __retval0 32
+set __tmp0 32
 jump __label4 always 0 0
 label __label154
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label158 notEqual __fn0_power 1
-set __retval0 33
+set __tmp0 33
 jump __label4 always 0 0
 label __label158
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label162 notEqual __fn0_power 1
-set __retval0 34
+set __tmp0 34
 jump __label4 always 0 0
 label __label162
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label166 notEqual __fn0_power 1
-set __retval0 35
+set __tmp0 35
 jump __label4 always 0 0
 label __label166
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label170 notEqual __fn0_power 1
-set __retval0 36
+set __tmp0 36
 jump __label4 always 0 0
 label __label170
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label174 notEqual __fn0_power 1
-set __retval0 37
+set __tmp0 37
 jump __label4 always 0 0
 label __label174
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label178 notEqual __fn0_power 1
-set __retval0 38
+set __tmp0 38
 jump __label4 always 0 0
 label __label178
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label182 notEqual __fn0_power 1
-set __retval0 39
+set __tmp0 39
 jump __label4 always 0 0
 label __label182
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label186 notEqual __fn0_power 1
-set __retval0 40
+set __tmp0 40
 jump __label4 always 0 0
 label __label186
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label190 notEqual __fn0_power 1
-set __retval0 41
+set __tmp0 41
 jump __label4 always 0 0
 label __label190
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label194 notEqual __fn0_power 1
-set __retval0 42
+set __tmp0 42
 jump __label4 always 0 0
 label __label194
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label198 notEqual __fn0_power 1
-set __retval0 43
+set __tmp0 43
 jump __label4 always 0 0
 label __label198
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label202 notEqual __fn0_power 1
-set __retval0 44
+set __tmp0 44
 jump __label4 always 0 0
 label __label202
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label206 notEqual __fn0_power 1
-set __retval0 45
+set __tmp0 45
 jump __label4 always 0 0
 label __label206
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label210 notEqual __fn0_power 1
-set __retval0 46
+set __tmp0 46
 jump __label4 always 0 0
 label __label210
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label214 notEqual __fn0_power 1
-set __retval0 47
+set __tmp0 47
 jump __label4 always 0 0
 label __label214
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label218 notEqual __fn0_power 1
-set __retval0 48
+set __tmp0 48
 jump __label4 always 0 0
 label __label218
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label222 notEqual __fn0_power 1
-set __retval0 49
+set __tmp0 49
 jump __label4 always 0 0
 label __label222
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label226 notEqual __fn0_power 1
-set __retval0 50
+set __tmp0 50
 jump __label4 always 0 0
 label __label226
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label230 notEqual __fn0_power 1
-set __retval0 51
+set __tmp0 51
 jump __label4 always 0 0
 label __label230
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label234 notEqual __fn0_power 1
-set __retval0 52
+set __tmp0 52
 jump __label4 always 0 0
 label __label234
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label238 notEqual __fn0_power 1
-set __retval0 53
+set __tmp0 53
 jump __label4 always 0 0
 label __label238
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label242 notEqual __fn0_power 1
-set __retval0 54
+set __tmp0 54
 jump __label4 always 0 0
 label __label242
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label246 notEqual __fn0_power 1
-set __retval0 55
+set __tmp0 55
 jump __label4 always 0 0
 label __label246
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label250 notEqual __fn0_power 1
-set __retval0 56
+set __tmp0 56
 jump __label4 always 0 0
 label __label250
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label254 notEqual __fn0_power 1
-set __retval0 57
+set __tmp0 57
 jump __label4 always 0 0
 label __label254
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label258 notEqual __fn0_power 1
-set __retval0 58
+set __tmp0 58
 jump __label4 always 0 0
 label __label258
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label262 notEqual __fn0_power 1
-set __retval0 59
+set __tmp0 59
 jump __label4 always 0 0
 label __label262
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label266 notEqual __fn0_power 1
-set __retval0 60
+set __tmp0 60
 jump __label4 always 0 0
 label __label266
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label270 notEqual __fn0_power 1
-set __retval0 61
+set __tmp0 61
 jump __label4 always 0 0
 label __label270
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label274 notEqual __fn0_power 1
-set __retval0 62
+set __tmp0 62
 jump __label4 always 0 0
 label __label274
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label278 notEqual __fn0_power 1
-set __retval0 63
+set __tmp0 63
 jump __label4 always 0 0
 label __label278
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label282 notEqual __fn0_power 1
-set __retval0 64
+set __tmp0 64
 jump __label4 always 0 0
 label __label282
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label286 notEqual __fn0_power 1
-set __retval0 65
+set __tmp0 65
 jump __label4 always 0 0
 label __label286
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label290 notEqual __fn0_power 1
-set __retval0 66
+set __tmp0 66
 jump __label4 always 0 0
 label __label290
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label294 notEqual __fn0_power 1
-set __retval0 67
+set __tmp0 67
 jump __label4 always 0 0
 label __label294
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label298 notEqual __fn0_power 1
-set __retval0 68
+set __tmp0 68
 jump __label4 always 0 0
 label __label298
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label302 notEqual __fn0_power 1
-set __retval0 69
+set __tmp0 69
 jump __label4 always 0 0
 label __label302
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label306 notEqual __fn0_power 1
-set __retval0 70
+set __tmp0 70
 jump __label4 always 0 0
 label __label306
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label310 notEqual __fn0_power 1
-set __retval0 71
+set __tmp0 71
 jump __label4 always 0 0
 label __label310
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label314 notEqual __fn0_power 1
-set __retval0 72
+set __tmp0 72
 jump __label4 always 0 0
 label __label314
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label318 notEqual __fn0_power 1
-set __retval0 73
+set __tmp0 73
 jump __label4 always 0 0
 label __label318
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label322 notEqual __fn0_power 1
-set __retval0 74
+set __tmp0 74
 jump __label4 always 0 0
 label __label322
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label326 notEqual __fn0_power 1
-set __retval0 75
+set __tmp0 75
 jump __label4 always 0 0
 label __label326
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label330 notEqual __fn0_power 1
-set __retval0 76
+set __tmp0 76
 jump __label4 always 0 0
 label __label330
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label334 notEqual __fn0_power 1
-set __retval0 77
+set __tmp0 77
 jump __label4 always 0 0
 label __label334
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label338 notEqual __fn0_power 1
-set __retval0 78
+set __tmp0 78
 jump __label4 always 0 0
 label __label338
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label342 notEqual __fn0_power 1
-set __retval0 79
+set __tmp0 79
 jump __label4 always 0 0
 label __label342
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label346 notEqual __fn0_power 1
-set __retval0 80
+set __tmp0 80
 jump __label4 always 0 0
 label __label346
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label350 notEqual __fn0_power 1
-set __retval0 81
+set __tmp0 81
 jump __label4 always 0 0
 label __label350
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label354 notEqual __fn0_power 1
-set __retval0 82
+set __tmp0 82
 jump __label4 always 0 0
 label __label354
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label358 notEqual __fn0_power 1
-set __retval0 83
+set __tmp0 83
 jump __label4 always 0 0
 label __label358
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label362 notEqual __fn0_power 1
-set __retval0 84
+set __tmp0 84
 jump __label4 always 0 0
 label __label362
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label366 notEqual __fn0_power 1
-set __retval0 85
+set __tmp0 85
 jump __label4 always 0 0
 label __label366
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label370 notEqual __fn0_power 1
-set __retval0 86
+set __tmp0 86
 jump __label4 always 0 0
 label __label370
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label374 notEqual __fn0_power 1
-set __retval0 87
+set __tmp0 87
 jump __label4 always 0 0
 label __label374
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label378 notEqual __fn0_power 1
-set __retval0 88
+set __tmp0 88
 jump __label4 always 0 0
 label __label378
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label382 notEqual __fn0_power 1
-set __retval0 89
+set __tmp0 89
 jump __label4 always 0 0
 label __label382
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label386 notEqual __fn0_power 1
-set __retval0 90
+set __tmp0 90
 jump __label4 always 0 0
 label __label386
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label390 notEqual __fn0_power 1
-set __retval0 91
+set __tmp0 91
 jump __label4 always 0 0
 label __label390
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label394 notEqual __fn0_power 1
-set __retval0 92
+set __tmp0 92
 jump __label4 always 0 0
 label __label394
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label398 notEqual __fn0_power 1
-set __retval0 93
+set __tmp0 93
 jump __label4 always 0 0
 label __label398
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label402 notEqual __fn0_power 1
-set __retval0 94
+set __tmp0 94
 jump __label4 always 0 0
 label __label402
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label406 notEqual __fn0_power 1
-set __retval0 95
+set __tmp0 95
 jump __label4 always 0 0
 label __label406
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label410 notEqual __fn0_power 1
-set __retval0 96
+set __tmp0 96
 jump __label4 always 0 0
 label __label410
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label414 notEqual __fn0_power 1
-set __retval0 97
+set __tmp0 97
 jump __label4 always 0 0
 label __label414
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label418 notEqual __fn0_power 1
-set __retval0 98
+set __tmp0 98
 jump __label4 always 0 0
 label __label418
 op mul __tmp9 __fn0_power 10
 op mod __fn0_power __tmp9 __fn0_n
 jump __label422 notEqual __fn0_power 1
-set __retval0 99
+set __tmp0 99
 jump __label4 always 0 0
 label __label422
 print "Power of ten limit reached."
 end
 label __label4
-jump __label18 lessThanEq __retval0 maxlen
-set maxlen __retval0
+jump __label18 lessThanEq __tmp0 maxlen
+set maxlen __tmp0
 set maxnum d
 label __label18
 op add d d 1

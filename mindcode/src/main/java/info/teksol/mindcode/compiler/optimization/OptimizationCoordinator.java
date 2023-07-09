@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.GenerationGoal;
@@ -104,51 +103,33 @@ public class OptimizationCoordinator {
             }
         }
 
-        if (profile.getGoal() == GenerationGoal.SIZE) {
+        if (phase != ITERATED) {
             return modified;
         }
 
         while (true) {
-            int costLimit = 1000 - program.stream().mapToInt(LogicInstruction::getRealSize).sum();
-            if (costLimit <= 0) {
-                break;
-            }
+            int costLimit = profile.getGoal() == GenerationGoal.SIZE
+                    ? 0
+                    : Math.max(0, 1000 - program.stream().mapToInt(LogicInstruction::getRealSize).sum());
 
             optimizationContext.prepare();
-            List<Tuple2<Optimization, OptimizationAction>> possibleOptimizations = new ArrayList<>();
-            for (Optimization optimization : phase.optimizations) {
-                Optimizer optimizer = optimizers.get(optimization);
-                if (optimizer != null) {
-                    optimizer.getPossibleOptimizations(costLimit)
-                            .forEach(a -> possibleOptimizations.add(Tuple2.of(optimization, a)));
-                }
-            }
+            List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
+                    .map(optimizers::get)
+                    .filter(Objects::nonNull)
+                    .flatMap(o -> o.getPossibleOptimizations(costLimit).stream())
+                    .toList();
             optimizationContext.finish();
 
             if (possibleOptimizations.isEmpty()) {
                 break;
             }
 
-            optimizationStatistics.add(MindcodeMessage.info(
+            OptimizationAction selectedAction = possibleOptimizations.stream().max(ACTION_COMPARATOR).get();
+            optimizationStatistics.add(MindcodeMessage.debug(
                     "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
-
-            double[] array = possibleOptimizations.stream().mapToDouble(t -> t.getT2().efficiency()).toArray();
-
-            Tuple2<Optimization, OptimizationAction> selection = possibleOptimizations
-                    .stream()
-                    .max(Comparator.comparing(Tuple2::getT2, ACTION_COMPARATOR))
-                    .get();
-
-            possibleOptimizations.forEach(t -> outputPossibleOptimization(t.getT2(), selection.getT2()));
-
-            Optimizer optimizer = optimizers.get(selection.getT1());
-            OptimizationAction action = selection.getT2();
-            OptimizationResult result = optimizer.applyOptimization(action, costLimit);
-
-            if (result == OptimizationResult.REALIZED) {
-                debugPrinter.registerIteration(optimizer, action.toString(), program);
-                modified = true;
-            }
+            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, selectedAction));
+            OptimizationResult result = selectedAction.apply(costLimit);
+            modified |= result == OptimizationResult.REALIZED;
         }
 
         return modified;
@@ -159,8 +140,8 @@ public class OptimizationCoordinator {
                     .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed());
 
     private void outputPossibleOptimization(OptimizationAction opt, OptimizationAction selected) {
-        String message = String.format("  %s %-50s cost %3d, benefit %10.1f, efficiency %10.1f",
-                opt == selected ? "*" : " ", opt, opt.cost(), opt.benefit(), opt.efficiency());
-        optimizationStatistics.add(MindcodeMessage.info(message));
+        optimizationStatistics.add(MindcodeMessage.debug(
+                "  %s %-50s cost %3d, benefit %10.1f, efficiency %10.1f",
+                opt == selected ? "*" : " ", opt, opt.cost(), opt.benefit(), opt.efficiency()));
     }
 }
