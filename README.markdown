@@ -1,6 +1,6 @@
 # Mindcode
 
-Welcome to Mindcode, a high-level language for [Mindustry](https://github.com/anuke/mindustry). Mindustry is a game in
+Welcome to Mindcode, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a game in
 the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a
 high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
