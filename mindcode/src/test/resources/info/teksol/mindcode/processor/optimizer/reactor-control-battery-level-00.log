@@ -162,31 +162,32 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
     27 set wait @time
     28 label __label3
 -    * jump __label5 equal true false
-    29 op equal __tmp4 loops 0
-    30 jump __label6 equal __tmp4 false
-    31 set wait @time
++   29 noop
+    30 op equal __tmp4 loops 0
+    31 jump __label6 equal __tmp4 false
+    32 set wait @time
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
-    26 set loops 0
     27 set wait @time
     28 label __label3
+    29 noop
 -    * op equal __tmp4 loops 0
 -    * jump __label6 equal __tmp4 false
-+   29 jump __label6 notEqual loops 0
-    30 set wait @time
-    31 jump __label7 always
-    32 label __label6
++   30 jump __label6 notEqual loops 0
+    31 set wait @time
+    32 jump __label7 always
+    33 label __label6
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    28 label __label3
-    29 jump __label6 notEqual loops 0
-    30 set wait @time
+    29 noop
+    30 jump __label6 notEqual loops 0
+    31 set wait @time
 -    * jump __label7 always
-    31 label __label6
-    32 label __label7
-    33 op add wait wait DELAY
+    32 label __label6
+    33 label __label7
+    34 op add wait wait DELAY
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -198,34 +199,34 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     20 op min SAMPLES SAMPLES SPACING
     21 set HALF 0.5
  
-    34 sensor powerNetOut battery1 @powerNetOut
-    35 sensor powerNetStored battery1 @powerNetStored
-    36 set tmp index
+    35 sensor powerNetOut battery1 @powerNetOut
+    36 sensor powerNetStored battery1 @powerNetStored
+    37 set tmp index
 -    * read __tmp11 bank1 tmp
-+   37 read __tmp11 bank1 index
-    38 op sub ACCU_CONS ACCU_CONS __tmp11
-    39 op add ACCU_CONS ACCU_CONS powerNetOut
++   38 read __tmp11 bank1 index
+    39 op sub ACCU_CONS ACCU_CONS __tmp11
+    40 op add ACCU_CONS ACCU_CONS powerNetOut
 -    * write powerNetOut bank1 tmp
-+   40 write powerNetOut bank1 index
-    41 op div __tmp14 ACCU_CONS SAMPLES
-    42 op add __tmp15 __tmp14 HALF
-    43 op floor consumption __tmp15
-    44 write consumption bank1 CONSUMPTION_INDEX
++   41 write powerNetOut bank1 index
+    42 op div __tmp14 ACCU_CONS SAMPLES
+    43 op add __tmp15 __tmp14 HALF
+    44 op floor consumption __tmp15
+    45 write consumption bank1 CONSUMPTION_INDEX
 -    * op add tmp tmp SPACING
-+   45 op add tmp index SPACING
-    46 read __tmp18 bank1 tmp
-    47 op sub ACCU_PROD ACCU_PROD __tmp18
-    48 op add ACCU_PROD ACCU_PROD powerNetIn
++   46 op add tmp index SPACING
+    47 read __tmp18 bank1 tmp
+    48 op sub ACCU_PROD ACCU_PROD __tmp18
+    49 op add ACCU_PROD ACCU_PROD powerNetIn
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    33 sensor powerNetIn battery1 @powerNetIn
-    34 sensor powerNetOut battery1 @powerNetOut
-    35 sensor powerNetStored battery1 @powerNetStored
+    34 sensor powerNetIn battery1 @powerNetIn
+    35 sensor powerNetOut battery1 @powerNetOut
+    36 sensor powerNetStored battery1 @powerNetStored
 -    * set tmp index
-    36 read __tmp11 bank1 index
-    37 op sub ACCU_CONS ACCU_CONS __tmp11
-    38 op add ACCU_CONS ACCU_CONS powerNetOut
+    37 read __tmp11 bank1 index
+    38 op sub ACCU_CONS ACCU_CONS __tmp11
+    39 op add ACCU_CONS ACCU_CONS powerNetOut
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -245,20 +246,20 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 
 Modifications by Loop Optimization: replicate condition at line 74 (+3 instructions):
  
-    87 op lessThan __tmp38 @time wait
-    88 op land __tmp39 __tmp37 __tmp38
-    89 jump __label10 equal __tmp39 false
-+   90 label __label12
-    91 op add loops loops 1
-    92 label __label9
+    88 op lessThan __tmp38 @time wait
+    89 op land __tmp39 __tmp37 __tmp38
+    90 jump __label10 equal __tmp39 false
++   91 label __label12
+    92 op add loops loops 1
+    93 label __label9
 -    * jump __label8 always
-+   93 op greaterThanEq __tmp37 @time start
-+   94 op lessThan __tmp38 @time wait
-+   95 op land __tmp39 __tmp37 __tmp38
-+   96 jump __label12 notEqual __tmp39 false
-    97 label __label10
-    98 print "\n[lightgray]Loops: "
-    99 print loops
++   94 op greaterThanEq __tmp37 @time start
++   95 op lessThan __tmp38 @time wait
++   96 op land __tmp39 __tmp37 __tmp38
++   97 jump __label12 notEqual __tmp39 false
+    98 label __label10
+    99 print "\n[lightgray]Loops: "
+   100 print loops
 
 Modifications by Loop Unrolling: unroll loop at line 8 (+1021 instructions):
  
@@ -2328,7 +2329,7 @@ Modifications by Loop Unrolling: unroll loop at line 8 (+1021 instructions):
   2057 set PRODUCTION_INDEX 509
   2058 set NET_POWER_INDEX 510
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      5 set addr 0
      6 label __label13
@@ -5403,11 +5404,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 + 2052 write 0 bank1 511
   2053 label __label1037
 -    * op add addr addr 1
-  2054 label __label2
-  2055 set CONSUMPTION_INDEX 508
-  2056 set PRODUCTION_INDEX 509
++ 2054 op add addr 511 1
+  2055 label __label2
+  2056 set CONSUMPTION_INDEX 508
+  2057 set PRODUCTION_INDEX 509
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-512 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-513 instructions):
  
      2 printflush message1
      3 print "Initializing..."
@@ -7461,38 +7463,42 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-5
   1539 label __label1036
   1540 write 0 bank1 511
   1541 label __label1037
+-    * op add addr 511 1
+  1542 label __label2
+  1543 set CONSUMPTION_INDEX 508
+  1544 set PRODUCTION_INDEX 509
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-  1630 printflush message1
-  1631 label __label4
-  1632 jump __label3 always
+  1631 printflush message1
+  1632 label __label4
+  1633 jump __label3 always
 -    * label __label5
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-  1597 op mod index __tmp34 SAMPLES
-  1598 print "Measured interval: [green]"
-  1599 print SECONDS
+  1598 op mod index __tmp34 SAMPLES
+  1599 print "Measured interval: [green]"
+  1600 print SECONDS
 -    * print "[] seconds\n"
 -    * print "Consumption: [green]"
-+ 1600 print "[] seconds\nConsumption: [green]"
-  1601 print consumption
++ 1601 print "[] seconds\nConsumption: [green]"
+  1602 print consumption
 -    * print "[]\n"
 -    * print "Production: [green]"
-+ 1602 print "[]\nProduction: [green]"
-  1603 print production
++ 1603 print "[]\nProduction: [green]"
+  1604 print production
 -    * print "[]\n"
 -    * print "Net power: [green]"
-+ 1604 print "[]\nNet power: [green]"
-  1605 print net_power
++ 1605 print "[]\nNet power: [green]"
+  1606 print net_power
 -    * print "[]\n"
 -    * print "Battery change: [green]"
-+ 1606 print "[]\nBattery change: [green]"
-  1607 print battery_change
-  1608 print "[]"
-  1609 set loops 0
++ 1607 print "[]\nBattery change: [green]"
+  1608 print battery_change
+  1609 print "[]"
+  1610 set loops 0
 
 Final code before resolving virtual instructions:
 

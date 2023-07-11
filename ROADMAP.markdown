@@ -4,19 +4,26 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* Improve weight computations for user defined functions: weight if a function is a sum of weights of all function 
-  calls. 
+* Improve weight computations for user defined functions: weight of a function body should be a sum of weights of 
+  all its calls. 
 * Additional optimizations for speed:
   * Switched case expression: all or a subset of `when` branches with constant conditions can be rearranged and an 
     in-memory jump table created. 
   * Return optimization: replace jump to return instruction with the return instruction itself.
+  * Function inlining: if just one of the parameters passed to the function is variable with a few discrete values and 
+    others are fixed, create a switched expression and inline the function separately for each value (???)     
   * Only recreate OptimizationActions of the action whose context(s) are affected by previous optimizations. 
 * Syntax Update
   * Rewrite the syntax using lists of elements instead of chained elements where possible
   * Allow empty bodies of ifs, loops, functions etc.
+  * Allow properties to be invoked on expressions 
   * New `yield` keyword for assigning values to variables in list iteration loop lists.
   * Add block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
     error reporting would be much more preferable, but quite hard to implement).
+  * Possibly
+    * make both semicolon and an EOL an expression separator and require one after each expression; allow empty 
+      expressions --> hopefully make the syntax less ambiguous 
+    * only allow dashes in REF identifiers (the `@` Mindustry constants), then support ++ and -- operators
 * Unreachable code elimination improvements:
   * Instead of removing instructions, replace them with a no-op (to preserve AST context structure). Only when an
     entire AST context (not just a subcontext) is unreachable, eliminate it altogether -- this could perhaps be done

@@ -100,7 +100,7 @@ public class FunctionInliner extends BaseOptimizer {
             return OptimizationResult.INVALID;
         }
 
-        List<AstContext> calls = contexts(c -> c.matches(AstContextType.CALL, OUT_OF_LINE_CALL)
+        List<AstContext> calls = contexts(c -> c.matches(OUT_OF_LINE_CALL)
                 && c.functionPrefix().equals(context.functionPrefix()));
 
         for (AstContext call : calls) {

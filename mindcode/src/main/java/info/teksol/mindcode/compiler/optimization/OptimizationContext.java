@@ -33,6 +33,7 @@ public class OptimizationContext {
      * Hold evaluation of first loop condition variables for loop optimizer.
      */
     private final Map<AstContext, DataFlowVariableStates.VariableStates> loopVariables = new HashMap<>();
+
     private final Set<LogicVariable> staleVariables = new HashSet<>();
 
     /**
@@ -213,7 +214,7 @@ public class OptimizationContext {
 
     }
 
-    public void removeInactiveLabels() {
+    public void removeInactiveInstructions() {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
                 switch (it.next()) {
@@ -229,6 +230,7 @@ public class OptimizationContext {
                             it.remove();
                         }
                     }
+                    case NoOpInstruction noop -> it.remove();
                     default -> {
                     }
                 }
@@ -697,7 +699,14 @@ public class OptimizationContext {
         instructionRemoved(original);
         instructionAdded(instruction);
         updated = true;
-        modifications += Math.max(original.getRealSize(), instruction.getRealSize());
+        int difference = original.getRealSize() - instruction.getRealSize();
+        if (difference == 0) {
+            modifications++;
+        } else if (difference > 0) {
+            deletions += difference;
+        } else {
+            insertions -= difference;   // Flip sign
+        }
     }
 
     /**

@@ -54,11 +54,11 @@ eval(3 &  d(2), 2,          "and")
 eval(3 ^  d(2), 1,          "xor")
 
 // Small values work because long is signed
-eval(~d(0),     -1,         "not")
-eval(~d(65535), -65536,     "not")
+eval(~d(0),     -1,         "not1")
+eval(~d(65535), -65536,     "not2")
 
 a = 0xabcdefabcdefabc
-eval(~a, -(a + 1),          "not")
+eval(~d(a), -(a + 1),       "not3")
 
 eval(max(2, d(4)), 4,       "max")
 eval(min(2, d(4)), 2,       "min")

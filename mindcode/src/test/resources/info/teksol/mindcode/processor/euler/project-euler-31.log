@@ -316,7 +316,7 @@ Modifications by Loop Unrolling: unroll iteration loop at line 4 (-2 instruction
     44 print 41
     45 label __label13
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      1 set index 0
      2 set value 200
@@ -373,20 +373,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 -    * write value bank1 index
 -    * op add index index 1
 +   39 write 1 bank1 7
-    40 label __label42
-    41 label __label3
-    42 label __label12
++   40 op add index 7 1
+    41 label __label42
+    42 label __label3
+    43 label __label12
  
-    59 set __fn0_result 0
-    60 set __fn0_i __fn0_index
-    61 label __label20
+    60 set __fn0_result 0
+    61 set __fn0_i __fn0_index
+    62 label __label20
 -    * jump __label22 greaterThanEq __fn0_i 8
-+   62 jump __label22 greaterThanEq __fn0_index 8
-    63 label __label26
-    64 read __fn0_p bank1 __fn0_i
-    65 jump __label23 greaterThan __fn0_p __fn0_amount
++   63 jump __label22 greaterThanEq __fn0_index 8
+    64 label __label26
+    65 read __fn0_p bank1 __fn0_i
+    66 jump __label23 greaterThan __fn0_p __fn0_amount
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-16 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-17 instructions):
      0 set __sp 16
 -    * set index 0
 -    * set value 200
@@ -427,7 +428,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
 -    * set value 1
     22 label __label41
     23 write 1 bank1 7
+-    * op add index 7 1
     24 label __label42
+    25 label __label3
+    26 label __label12
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  

@@ -3,7 +3,7 @@
      8 instructions eliminated by Jump Normalization (5 iterations).
     24 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions modified by If Expression Optimization (4 iterations).
-    58 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
+    58 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      1 loops improved by Loop Optimization.
    104 instructions added by Loop Unrolling (5 iterations).
@@ -427,7 +427,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    175 print __tmp2
    176 label __label88
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-8 instructions):
  
      2 label __label9
      3 set __tmp2 0
@@ -439,788 +439,551 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 +    7 jump __label12 equal 0 false
      8 set __tmp2 1
      9 label __label12
-    10 print __tmp2
+-    * print __tmp2
++   10 print 0
     11 label __label13
 -    * op add i i 1
 +   12 op add i 0 1
     13 label __label14
-    14 set __tmp2 0
-    15 label __label15
+-    * set __tmp2 0
+    14 label __label15
 -    * op mod __tmp0 i 2
-+   16 op mod __tmp0 1 2
-    17 label __label16
++   15 op mod __tmp0 1 2
+    16 label __label16
 -    * jump __label17 equal __tmp0 false
-+   18 jump __label17 equal 1 false
-    19 set __tmp2 1
-    20 label __label17
-    21 print __tmp2
-    22 label __label18
++   17 jump __label17 equal 1 false
+    18 set __tmp2 1
+    19 label __label17
+-    * print __tmp2
++   20 print 1
+    21 label __label18
 -    * op add i i 1
-+   23 op add i 1 1
-    24 label __label19
-    25 set __tmp2 0
-    26 label __label20
++   22 op add i 1 1
+    23 label __label19
+    24 set __tmp2 0
+    25 label __label20
 -    * op mod __tmp0 i 2
-+   27 op mod __tmp0 2 2
-    28 label __label21
++   26 op mod __tmp0 2 2
+    27 label __label21
 -    * jump __label22 equal __tmp0 false
-+   29 jump __label22 equal 0 false
-    30 set __tmp2 1
-    31 label __label22
-    32 print __tmp2
-    33 label __label23
--    * op add i i 1
-+   34 op add i 2 1
-    35 label __label24
-    36 set __tmp2 0
-    37 label __label25
--    * op mod __tmp0 i 2
-+   38 op mod __tmp0 3 2
-    39 label __label26
--    * jump __label27 equal __tmp0 false
-+   40 jump __label27 equal 1 false
-    41 set __tmp2 1
-    42 label __label27
-    43 print __tmp2
-    44 label __label28
--    * op add i i 1
-+   45 op add i 3 1
-    46 label __label29
-    47 set __tmp2 0
-    48 label __label30
--    * op mod __tmp0 i 2
-+   49 op mod __tmp0 4 2
-    50 label __label31
--    * jump __label32 equal __tmp0 false
-+   51 jump __label32 equal 0 false
-    52 set __tmp2 1
-    53 label __label32
-    54 print __tmp2
-    55 label __label33
--    * op add i i 1
-+   56 op add i 4 1
-    57 label __label34
-    58 set __tmp2 0
-    59 label __label35
--    * op mod __tmp0 i 2
-+   60 op mod __tmp0 5 2
-    61 label __label36
--    * jump __label37 equal __tmp0 false
-+   62 jump __label37 equal 1 false
-    63 set __tmp2 1
-    64 label __label37
-    65 print __tmp2
-    66 label __label38
--    * op add i i 1
-+   67 op add i 5 1
-    68 label __label39
-    69 set __tmp2 0
-    70 label __label40
--    * op mod __tmp0 i 2
-+   71 op mod __tmp0 6 2
-    72 label __label41
--    * jump __label42 equal __tmp0 false
-+   73 jump __label42 equal 0 false
-    74 set __tmp2 1
-    75 label __label42
-    76 print __tmp2
-    77 label __label43
--    * op add i i 1
-+   78 op add i 6 1
-    79 label __label44
-    80 set __tmp2 0
-    81 label __label45
--    * op mod __tmp0 i 2
-+   82 op mod __tmp0 7 2
-    83 label __label46
--    * jump __label47 equal __tmp0 false
-+   84 jump __label47 equal 1 false
-    85 set __tmp2 1
-    86 label __label47
-    87 print __tmp2
-    88 label __label48
--    * op add i i 1
-+   89 op add i 7 1
-    90 label __label49
-    91 set __tmp2 0
-    92 label __label50
--    * op mod __tmp0 i 2
-+   93 op mod __tmp0 8 2
-    94 label __label51
--    * jump __label52 equal __tmp0 false
-+   95 jump __label52 equal 0 false
-    96 set __tmp2 1
-    97 label __label52
-    98 print __tmp2
-    99 label __label53
--    * op add i i 1
-+  100 op add i 8 1
-   101 label __label54
-   102 set __tmp2 0
-   103 label __label55
--    * op mod __tmp0 i 2
-+  104 op mod __tmp0 9 2
-   105 label __label56
--    * jump __label57 equal __tmp0 false
-+  106 jump __label57 equal 1 false
-   107 set __tmp2 1
-   108 label __label57
-   109 print __tmp2
-   110 label __label58
--    * op add i i 1
-+  111 op add i 9 1
-   112 label __label59
-   113 set __tmp2 0
-   114 label __label60
--    * op mod __tmp0 i 2
-+  115 op mod __tmp0 10 2
-   116 label __label61
--    * jump __label62 equal __tmp0 false
-+  117 jump __label62 equal 0 false
-   118 set __tmp2 1
-   119 label __label62
-   120 print __tmp2
-   121 label __label63
--    * op add i i 1
-+  122 op add i 10 1
-   123 label __label64
-   124 set __tmp2 0
-   125 label __label65
--    * op mod __tmp0 i 2
-+  126 op mod __tmp0 11 2
-   127 label __label66
--    * jump __label67 equal __tmp0 false
-+  128 jump __label67 equal 1 false
-   129 set __tmp2 1
-   130 label __label67
-   131 print __tmp2
-   132 label __label68
--    * op add i i 1
-+  133 op add i 11 1
-   134 label __label69
-   135 set __tmp2 0
-   136 label __label70
--    * op mod __tmp0 i 2
-+  137 op mod __tmp0 12 2
-   138 label __label71
--    * jump __label72 equal __tmp0 false
-+  139 jump __label72 equal 0 false
-   140 set __tmp2 1
-   141 label __label72
-   142 print __tmp2
-   143 label __label73
--    * op add i i 1
-+  144 op add i 12 1
-   145 label __label74
-   146 set __tmp2 0
-   147 label __label75
--    * op mod __tmp0 i 2
-+  148 op mod __tmp0 13 2
-   149 label __label76
--    * jump __label77 equal __tmp0 false
-+  150 jump __label77 equal 1 false
-   151 set __tmp2 1
-   152 label __label77
-   153 print __tmp2
-   154 label __label78
--    * op add i i 1
-+  155 op add i 13 1
-   156 label __label79
-   157 set __tmp2 0
-   158 label __label80
--    * op mod __tmp0 i 2
-+  159 op mod __tmp0 14 2
-   160 label __label81
--    * jump __label82 equal __tmp0 false
-+  161 jump __label82 equal 0 false
-   162 set __tmp2 1
-   163 label __label82
-   164 print __tmp2
-   165 label __label83
--    * op add i i 1
-+  166 op add i 14 1
-   167 label __label84
-   168 set __tmp2 0
-   169 label __label85
--    * op mod __tmp0 i 2
-+  170 op mod __tmp0 15 2
-   171 label __label86
--    * jump __label87 equal __tmp0 false
-+  172 jump __label87 equal 1 false
-   173 set __tmp2 1
-   174 label __label87
-   175 print __tmp2
-   176 label __label88
--    * op add i i 1
-   177 label __label2
-   178 end
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-32 instructions):
--    * set i 0
-     0 label __label8
-     1 label __label9
-     2 set __tmp2 0
-     3 label __label10
--    * op mod __tmp0 0 2
-     4 label __label11
-     5 jump __label12 equal 0 false
-     6 set __tmp2 1
-     7 label __label12
-     8 print __tmp2
-     9 label __label13
--    * op add i 0 1
-    10 label __label14
-    11 set __tmp2 0
-    12 label __label15
--    * op mod __tmp0 1 2
-    13 label __label16
-    14 jump __label17 equal 1 false
-    15 set __tmp2 1
-    16 label __label17
-    17 print __tmp2
-    18 label __label18
--    * op add i 1 1
-    19 label __label19
-    20 set __tmp2 0
-    21 label __label20
--    * op mod __tmp0 2 2
-    22 label __label21
-    23 jump __label22 equal 0 false
-    24 set __tmp2 1
-    25 label __label22
-    26 print __tmp2
-    27 label __label23
--    * op add i 2 1
-    28 label __label24
-    29 set __tmp2 0
-    30 label __label25
--    * op mod __tmp0 3 2
-    31 label __label26
-    32 jump __label27 equal 1 false
-    33 set __tmp2 1
-    34 label __label27
-    35 print __tmp2
-    36 label __label28
--    * op add i 3 1
-    37 label __label29
-    38 set __tmp2 0
-    39 label __label30
--    * op mod __tmp0 4 2
-    40 label __label31
-    41 jump __label32 equal 0 false
-    42 set __tmp2 1
-    43 label __label32
-    44 print __tmp2
-    45 label __label33
--    * op add i 4 1
-    46 label __label34
-    47 set __tmp2 0
-    48 label __label35
--    * op mod __tmp0 5 2
-    49 label __label36
-    50 jump __label37 equal 1 false
-    51 set __tmp2 1
-    52 label __label37
-    53 print __tmp2
-    54 label __label38
--    * op add i 5 1
-    55 label __label39
-    56 set __tmp2 0
-    57 label __label40
--    * op mod __tmp0 6 2
-    58 label __label41
-    59 jump __label42 equal 0 false
-    60 set __tmp2 1
-    61 label __label42
-    62 print __tmp2
-    63 label __label43
--    * op add i 6 1
-    64 label __label44
-    65 set __tmp2 0
-    66 label __label45
--    * op mod __tmp0 7 2
-    67 label __label46
-    68 jump __label47 equal 1 false
-    69 set __tmp2 1
-    70 label __label47
-    71 print __tmp2
-    72 label __label48
--    * op add i 7 1
-    73 label __label49
-    74 set __tmp2 0
-    75 label __label50
--    * op mod __tmp0 8 2
-    76 label __label51
-    77 jump __label52 equal 0 false
-    78 set __tmp2 1
-    79 label __label52
-    80 print __tmp2
-    81 label __label53
--    * op add i 8 1
-    82 label __label54
-    83 set __tmp2 0
-    84 label __label55
--    * op mod __tmp0 9 2
-    85 label __label56
-    86 jump __label57 equal 1 false
-    87 set __tmp2 1
-    88 label __label57
-    89 print __tmp2
-    90 label __label58
--    * op add i 9 1
-    91 label __label59
-    92 set __tmp2 0
-    93 label __label60
--    * op mod __tmp0 10 2
-    94 label __label61
-    95 jump __label62 equal 0 false
-    96 set __tmp2 1
-    97 label __label62
-    98 print __tmp2
-    99 label __label63
--    * op add i 10 1
-   100 label __label64
-   101 set __tmp2 0
-   102 label __label65
--    * op mod __tmp0 11 2
-   103 label __label66
-   104 jump __label67 equal 1 false
-   105 set __tmp2 1
-   106 label __label67
-   107 print __tmp2
-   108 label __label68
--    * op add i 11 1
-   109 label __label69
-   110 set __tmp2 0
-   111 label __label70
--    * op mod __tmp0 12 2
-   112 label __label71
-   113 jump __label72 equal 0 false
-   114 set __tmp2 1
-   115 label __label72
-   116 print __tmp2
-   117 label __label73
--    * op add i 12 1
-   118 label __label74
-   119 set __tmp2 0
-   120 label __label75
--    * op mod __tmp0 13 2
-   121 label __label76
-   122 jump __label77 equal 1 false
-   123 set __tmp2 1
-   124 label __label77
-   125 print __tmp2
-   126 label __label78
--    * op add i 13 1
-   127 label __label79
-   128 set __tmp2 0
-   129 label __label80
--    * op mod __tmp0 14 2
-   130 label __label81
-   131 jump __label82 equal 0 false
-   132 set __tmp2 1
-   133 label __label82
-   134 print __tmp2
-   135 label __label83
--    * op add i 14 1
-   136 label __label84
-   137 set __tmp2 0
-   138 label __label85
--    * op mod __tmp0 15 2
-   139 label __label86
-   140 jump __label87 equal 1 false
-   141 set __tmp2 1
-
-Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-8 instructions):
- 
-     2 set __tmp2 0
-     3 label __label10
-     4 label __label11
--    * jump __label12 equal 0 false
-+    5 jump __label12 always
-     6 set __tmp2 1
-     7 label __label12
-     8 print __tmp2
- 
-    11 set __tmp2 0
-    12 label __label15
-    13 label __label16
--    * jump __label17 equal 1 false
-    14 set __tmp2 1
-    15 label __label17
-    16 print __tmp2
- 
-    19 set __tmp2 0
-    20 label __label20
-    21 label __label21
--    * jump __label22 equal 0 false
-+   22 jump __label22 always
-    23 set __tmp2 1
-    24 label __label22
-    25 print __tmp2
- 
-    28 set __tmp2 0
-    29 label __label25
-    30 label __label26
--    * jump __label27 equal 1 false
-    31 set __tmp2 1
-    32 label __label27
-    33 print __tmp2
- 
-    36 set __tmp2 0
-    37 label __label30
-    38 label __label31
--    * jump __label32 equal 0 false
-+   39 jump __label32 always
-    40 set __tmp2 1
-    41 label __label32
-    42 print __tmp2
- 
-    45 set __tmp2 0
-    46 label __label35
-    47 label __label36
--    * jump __label37 equal 1 false
-    48 set __tmp2 1
-    49 label __label37
-    50 print __tmp2
- 
-    53 set __tmp2 0
-    54 label __label40
-    55 label __label41
--    * jump __label42 equal 0 false
-+   56 jump __label42 always
-    57 set __tmp2 1
-    58 label __label42
-    59 print __tmp2
- 
-    62 set __tmp2 0
-    63 label __label45
-    64 label __label46
--    * jump __label47 equal 1 false
-    65 set __tmp2 1
-    66 label __label47
-    67 print __tmp2
- 
-    70 set __tmp2 0
-    71 label __label50
-    72 label __label51
--    * jump __label52 equal 0 false
-+   73 jump __label52 always
-    74 set __tmp2 1
-    75 label __label52
-    76 print __tmp2
- 
-    79 set __tmp2 0
-    80 label __label55
-    81 label __label56
--    * jump __label57 equal 1 false
-    82 set __tmp2 1
-    83 label __label57
-    84 print __tmp2
- 
-    87 set __tmp2 0
-    88 label __label60
-    89 label __label61
--    * jump __label62 equal 0 false
-+   90 jump __label62 always
-    91 set __tmp2 1
-    92 label __label62
-    93 print __tmp2
- 
-    96 set __tmp2 0
-    97 label __label65
-    98 label __label66
--    * jump __label67 equal 1 false
-    99 set __tmp2 1
-   100 label __label67
-   101 print __tmp2
- 
-   104 set __tmp2 0
-   105 label __label70
-   106 label __label71
--    * jump __label72 equal 0 false
-+  107 jump __label72 always
-   108 set __tmp2 1
-   109 label __label72
-   110 print __tmp2
- 
-   113 set __tmp2 0
-   114 label __label75
-   115 label __label76
--    * jump __label77 equal 1 false
-   116 set __tmp2 1
-   117 label __label77
-   118 print __tmp2
- 
-   121 set __tmp2 0
-   122 label __label80
-   123 label __label81
--    * jump __label82 equal 0 false
-+  124 jump __label82 always
-   125 set __tmp2 1
-   126 label __label82
-   127 print __tmp2
- 
-   130 set __tmp2 0
-   131 label __label85
-   132 label __label86
--    * jump __label87 equal 1 false
-   133 set __tmp2 1
-   134 label __label87
-   135 print __tmp2
-
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1 (-8 instructions):
- 
-     5 jump __label12 always
-     6 set __tmp2 1
-     7 label __label12
--    * print __tmp2
-+    8 print 0
-     9 label __label13
-    10 label __label14
--    * set __tmp2 0
-    11 label __label15
-    12 label __label16
-    13 set __tmp2 1
-    14 label __label17
--    * print __tmp2
-+   15 print 1
-    16 label __label18
-    17 label __label19
-    18 set __tmp2 0
- 
-    21 jump __label22 always
-    22 set __tmp2 1
-    23 label __label22
--    * print __tmp2
-+   24 print 0
-    25 label __label23
-    26 label __label24
--    * set __tmp2 0
-    27 label __label25
-    28 label __label26
++   28 jump __label22 equal 0 false
     29 set __tmp2 1
-    30 label __label27
+    30 label __label22
 -    * print __tmp2
-+   31 print 1
-    32 label __label28
-    33 label __label29
-    34 set __tmp2 0
- 
-    37 jump __label32 always
-    38 set __tmp2 1
-    39 label __label32
--    * print __tmp2
-+   40 print 0
-    41 label __label33
-    42 label __label34
++   31 print 0
+    32 label __label23
+-    * op add i i 1
++   33 op add i 2 1
+    34 label __label24
 -    * set __tmp2 0
-    43 label __label35
-    44 label __label36
-    45 set __tmp2 1
-    46 label __label37
+    35 label __label25
+-    * op mod __tmp0 i 2
++   36 op mod __tmp0 3 2
+    37 label __label26
+-    * jump __label27 equal __tmp0 false
++   38 jump __label27 equal 1 false
+    39 set __tmp2 1
+    40 label __label27
 -    * print __tmp2
-+   47 print 1
-    48 label __label38
-    49 label __label39
-    50 set __tmp2 0
- 
-    53 jump __label42 always
-    54 set __tmp2 1
-    55 label __label42
++   41 print 1
+    42 label __label28
+-    * op add i i 1
++   43 op add i 3 1
+    44 label __label29
+    45 set __tmp2 0
+    46 label __label30
+-    * op mod __tmp0 i 2
++   47 op mod __tmp0 4 2
+    48 label __label31
+-    * jump __label32 equal __tmp0 false
++   49 jump __label32 equal 0 false
+    50 set __tmp2 1
+    51 label __label32
 -    * print __tmp2
-+   56 print 0
-    57 label __label43
-    58 label __label44
++   52 print 0
+    53 label __label33
+-    * op add i i 1
++   54 op add i 4 1
+    55 label __label34
 -    * set __tmp2 0
-    59 label __label45
-    60 label __label46
-    61 set __tmp2 1
-    62 label __label47
+    56 label __label35
+-    * op mod __tmp0 i 2
++   57 op mod __tmp0 5 2
+    58 label __label36
+-    * jump __label37 equal __tmp0 false
++   59 jump __label37 equal 1 false
+    60 set __tmp2 1
+    61 label __label37
 -    * print __tmp2
-+   63 print 1
-    64 label __label48
-    65 label __label49
++   62 print 1
+    63 label __label38
+-    * op add i i 1
++   64 op add i 5 1
+    65 label __label39
     66 set __tmp2 0
- 
-    69 jump __label52 always
-    70 set __tmp2 1
-    71 label __label52
+    67 label __label40
+-    * op mod __tmp0 i 2
++   68 op mod __tmp0 6 2
+    69 label __label41
+-    * jump __label42 equal __tmp0 false
++   70 jump __label42 equal 0 false
+    71 set __tmp2 1
+    72 label __label42
 -    * print __tmp2
-+   72 print 0
-    73 label __label53
-    74 label __label54
++   73 print 0
+    74 label __label43
+-    * op add i i 1
++   75 op add i 6 1
+    76 label __label44
 -    * set __tmp2 0
-    75 label __label55
-    76 label __label56
-    77 set __tmp2 1
-    78 label __label57
+    77 label __label45
+-    * op mod __tmp0 i 2
++   78 op mod __tmp0 7 2
+    79 label __label46
+-    * jump __label47 equal __tmp0 false
++   80 jump __label47 equal 1 false
+    81 set __tmp2 1
+    82 label __label47
 -    * print __tmp2
-+   79 print 1
-    80 label __label58
-    81 label __label59
-    82 set __tmp2 0
- 
-    85 jump __label62 always
-    86 set __tmp2 1
-    87 label __label62
++   83 print 1
+    84 label __label48
+-    * op add i i 1
++   85 op add i 7 1
+    86 label __label49
+    87 set __tmp2 0
+    88 label __label50
+-    * op mod __tmp0 i 2
++   89 op mod __tmp0 8 2
+    90 label __label51
+-    * jump __label52 equal __tmp0 false
++   91 jump __label52 equal 0 false
+    92 set __tmp2 1
+    93 label __label52
 -    * print __tmp2
-+   88 print 0
-    89 label __label63
-    90 label __label64
++   94 print 0
+    95 label __label53
+-    * op add i i 1
++   96 op add i 8 1
+    97 label __label54
 -    * set __tmp2 0
-    91 label __label65
-    92 label __label66
-    93 set __tmp2 1
-    94 label __label67
--    * print __tmp2
-+   95 print 1
-    96 label __label68
-    97 label __label69
-    98 set __tmp2 0
- 
-   101 jump __label72 always
+    98 label __label55
+-    * op mod __tmp0 i 2
++   99 op mod __tmp0 9 2
+   100 label __label56
+-    * jump __label57 equal __tmp0 false
++  101 jump __label57 equal 1 false
    102 set __tmp2 1
-   103 label __label72
+   103 label __label57
 -    * print __tmp2
-+  104 print 0
-   105 label __label73
-   106 label __label74
++  104 print 1
+   105 label __label58
+-    * op add i i 1
++  106 op add i 9 1
+   107 label __label59
+   108 set __tmp2 0
+   109 label __label60
+-    * op mod __tmp0 i 2
++  110 op mod __tmp0 10 2
+   111 label __label61
+-    * jump __label62 equal __tmp0 false
++  112 jump __label62 equal 0 false
+   113 set __tmp2 1
+   114 label __label62
+-    * print __tmp2
++  115 print 0
+   116 label __label63
+-    * op add i i 1
++  117 op add i 10 1
+   118 label __label64
 -    * set __tmp2 0
-   107 label __label75
-   108 label __label76
-   109 set __tmp2 1
-   110 label __label77
+   119 label __label65
+-    * op mod __tmp0 i 2
++  120 op mod __tmp0 11 2
+   121 label __label66
+-    * jump __label67 equal __tmp0 false
++  122 jump __label67 equal 1 false
+   123 set __tmp2 1
+   124 label __label67
 -    * print __tmp2
-+  111 print 1
-   112 label __label78
-   113 label __label79
-   114 set __tmp2 0
- 
-   117 jump __label82 always
-   118 set __tmp2 1
-   119 label __label82
++  125 print 1
+   126 label __label68
+-    * op add i i 1
++  127 op add i 11 1
+   128 label __label69
+   129 set __tmp2 0
+   130 label __label70
+-    * op mod __tmp0 i 2
++  131 op mod __tmp0 12 2
+   132 label __label71
+-    * jump __label72 equal __tmp0 false
++  133 jump __label72 equal 0 false
+   134 set __tmp2 1
+   135 label __label72
 -    * print __tmp2
-+  120 print 0
-   121 label __label83
-   122 label __label84
++  136 print 0
+   137 label __label73
+-    * op add i i 1
++  138 op add i 12 1
+   139 label __label74
 -    * set __tmp2 0
-   123 label __label85
-   124 label __label86
-   125 set __tmp2 1
-   126 label __label87
+   140 label __label75
+-    * op mod __tmp0 i 2
++  141 op mod __tmp0 13 2
+   142 label __label76
+-    * jump __label77 equal __tmp0 false
++  143 jump __label77 equal 1 false
+   144 set __tmp2 1
+   145 label __label77
 -    * print __tmp2
-+  127 print 1
-   128 label __label88
-   129 label __label2
-   130 end
++  146 print 1
+   147 label __label78
+-    * op add i i 1
++  148 op add i 13 1
+   149 label __label79
+   150 set __tmp2 0
+   151 label __label80
+-    * op mod __tmp0 i 2
++  152 op mod __tmp0 14 2
+   153 label __label81
+-    * jump __label82 equal __tmp0 false
++  154 jump __label82 equal 0 false
+   155 set __tmp2 1
+   156 label __label82
+-    * print __tmp2
++  157 print 0
+   158 label __label83
+-    * op add i i 1
++  159 op add i 14 1
+   160 label __label84
+-    * set __tmp2 0
+   161 label __label85
+-    * op mod __tmp0 i 2
++  162 op mod __tmp0 15 2
+   163 label __label86
+-    * jump __label87 equal __tmp0 false
++  164 jump __label87 equal 1 false
+   165 set __tmp2 1
+   166 label __label87
+-    * print __tmp2
++  167 print 1
+   168 label __label88
+-    * op add i i 1
++  169 op add i 15 1
+   170 label __label2
+   171 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-16 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-49 instructions):
+-    * set i 0
      0 label __label8
      1 label __label9
 -    * set __tmp2 0
      2 label __label10
+-    * op mod __tmp0 0 2
      3 label __label11
-     4 jump __label12 always
+     4 jump __label12 equal 0 false
+     5 set __tmp2 1
+     6 label __label12
+     7 print 0
+     8 label __label13
+-    * op add i 0 1
+     9 label __label14
+    10 label __label15
+-    * op mod __tmp0 1 2
+    11 label __label16
+    12 jump __label17 equal 1 false
+-    * set __tmp2 1
+    13 label __label17
+    14 print 1
+    15 label __label18
+-    * op add i 1 1
+    16 label __label19
+-    * set __tmp2 0
+    17 label __label20
+-    * op mod __tmp0 2 2
+    18 label __label21
+    19 jump __label22 equal 0 false
+    20 set __tmp2 1
+    21 label __label22
+    22 print 0
+    23 label __label23
+-    * op add i 2 1
+    24 label __label24
+    25 label __label25
+-    * op mod __tmp0 3 2
+    26 label __label26
+    27 jump __label27 equal 1 false
+-    * set __tmp2 1
+    28 label __label27
+    29 print 1
+    30 label __label28
+-    * op add i 3 1
+    31 label __label29
+-    * set __tmp2 0
+    32 label __label30
+-    * op mod __tmp0 4 2
+    33 label __label31
+    34 jump __label32 equal 0 false
+    35 set __tmp2 1
+    36 label __label32
+    37 print 0
+    38 label __label33
+-    * op add i 4 1
+    39 label __label34
+    40 label __label35
+-    * op mod __tmp0 5 2
+    41 label __label36
+    42 jump __label37 equal 1 false
+-    * set __tmp2 1
+    43 label __label37
+    44 print 1
+    45 label __label38
+-    * op add i 5 1
+    46 label __label39
+-    * set __tmp2 0
+    47 label __label40
+-    * op mod __tmp0 6 2
+    48 label __label41
+    49 jump __label42 equal 0 false
+    50 set __tmp2 1
+    51 label __label42
+    52 print 0
+    53 label __label43
+-    * op add i 6 1
+    54 label __label44
+    55 label __label45
+-    * op mod __tmp0 7 2
+    56 label __label46
+    57 jump __label47 equal 1 false
+-    * set __tmp2 1
+    58 label __label47
+    59 print 1
+    60 label __label48
+-    * op add i 7 1
+    61 label __label49
+-    * set __tmp2 0
+    62 label __label50
+-    * op mod __tmp0 8 2
+    63 label __label51
+    64 jump __label52 equal 0 false
+    65 set __tmp2 1
+    66 label __label52
+    67 print 0
+    68 label __label53
+-    * op add i 8 1
+    69 label __label54
+    70 label __label55
+-    * op mod __tmp0 9 2
+    71 label __label56
+    72 jump __label57 equal 1 false
+-    * set __tmp2 1
+    73 label __label57
+    74 print 1
+    75 label __label58
+-    * op add i 9 1
+    76 label __label59
+-    * set __tmp2 0
+    77 label __label60
+-    * op mod __tmp0 10 2
+    78 label __label61
+    79 jump __label62 equal 0 false
+    80 set __tmp2 1
+    81 label __label62
+    82 print 0
+    83 label __label63
+-    * op add i 10 1
+    84 label __label64
+    85 label __label65
+-    * op mod __tmp0 11 2
+    86 label __label66
+    87 jump __label67 equal 1 false
+-    * set __tmp2 1
+    88 label __label67
+    89 print 1
+    90 label __label68
+-    * op add i 11 1
+    91 label __label69
+-    * set __tmp2 0
+    92 label __label70
+-    * op mod __tmp0 12 2
+    93 label __label71
+    94 jump __label72 equal 0 false
+    95 set __tmp2 1
+    96 label __label72
+    97 print 0
+    98 label __label73
+-    * op add i 12 1
+    99 label __label74
+   100 label __label75
+-    * op mod __tmp0 13 2
+   101 label __label76
+   102 jump __label77 equal 1 false
+-    * set __tmp2 1
+   103 label __label77
+   104 print 1
+   105 label __label78
+-    * op add i 13 1
+   106 label __label79
+-    * set __tmp2 0
+   107 label __label80
+-    * op mod __tmp0 14 2
+   108 label __label81
+   109 jump __label82 equal 0 false
+   110 set __tmp2 1
+   111 label __label82
+   112 print 0
+   113 label __label83
+-    * op add i 14 1
+   114 label __label84
+   115 label __label85
+-    * op mod __tmp0 15 2
+   116 label __label86
+   117 jump __label87 equal 1 false
+-    * set __tmp2 1
+   118 label __label87
+   119 print 1
+   120 label __label88
+-    * op add i 15 1
+   121 label __label2
+   122 end
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-8 instructions):
+ 
+     1 label __label9
+     2 label __label10
+     3 label __label11
+-    * jump __label12 equal 0 false
++    4 jump __label12 always
+     5 set __tmp2 1
+     6 label __label12
+     7 print 0
  
      9 label __label14
     10 label __label15
     11 label __label16
--    * set __tmp2 1
-    12 label __label17
-    13 print 1
-    14 label __label18
-    15 label __label19
--    * set __tmp2 0
-    16 label __label20
-    17 label __label21
-    18 jump __label22 always
+-    * jump __label17 equal 1 false
++   12 noop
+    13 label __label17
+    14 print 1
+    15 label __label18
+    16 label __label19
+    17 label __label20
+    18 label __label21
+-    * jump __label22 equal 0 false
++   19 jump __label22 always
+    20 set __tmp2 1
+    21 label __label22
+    22 print 0
  
-    23 label __label24
-    24 label __label25
-    25 label __label26
--    * set __tmp2 1
-    26 label __label27
-    27 print 1
-    28 label __label28
-    29 label __label29
--    * set __tmp2 0
-    30 label __label30
-    31 label __label31
-    32 jump __label32 always
+    24 label __label24
+    25 label __label25
+    26 label __label26
+-    * jump __label27 equal 1 false
++   27 noop
+    28 label __label27
+    29 print 1
+    30 label __label28
+    31 label __label29
+    32 label __label30
+    33 label __label31
+-    * jump __label32 equal 0 false
++   34 jump __label32 always
+    35 set __tmp2 1
+    36 label __label32
+    37 print 0
  
-    37 label __label34
-    38 label __label35
-    39 label __label36
--    * set __tmp2 1
-    40 label __label37
-    41 print 1
-    42 label __label38
-    43 label __label39
--    * set __tmp2 0
-    44 label __label40
-    45 label __label41
-    46 jump __label42 always
+    39 label __label34
+    40 label __label35
+    41 label __label36
+-    * jump __label37 equal 1 false
++   42 noop
+    43 label __label37
+    44 print 1
+    45 label __label38
+    46 label __label39
+    47 label __label40
+    48 label __label41
+-    * jump __label42 equal 0 false
++   49 jump __label42 always
+    50 set __tmp2 1
+    51 label __label42
+    52 print 0
  
-    51 label __label44
-    52 label __label45
-    53 label __label46
--    * set __tmp2 1
-    54 label __label47
-    55 print 1
-    56 label __label48
-    57 label __label49
--    * set __tmp2 0
-    58 label __label50
-    59 label __label51
-    60 jump __label52 always
+    54 label __label44
+    55 label __label45
+    56 label __label46
+-    * jump __label47 equal 1 false
++   57 noop
+    58 label __label47
+    59 print 1
+    60 label __label48
+    61 label __label49
+    62 label __label50
+    63 label __label51
+-    * jump __label52 equal 0 false
++   64 jump __label52 always
+    65 set __tmp2 1
+    66 label __label52
+    67 print 0
  
-    65 label __label54
-    66 label __label55
-    67 label __label56
--    * set __tmp2 1
-    68 label __label57
-    69 print 1
-    70 label __label58
-    71 label __label59
--    * set __tmp2 0
-    72 label __label60
-    73 label __label61
-    74 jump __label62 always
+    69 label __label54
+    70 label __label55
+    71 label __label56
+-    * jump __label57 equal 1 false
++   72 noop
+    73 label __label57
+    74 print 1
+    75 label __label58
+    76 label __label59
+    77 label __label60
+    78 label __label61
+-    * jump __label62 equal 0 false
++   79 jump __label62 always
+    80 set __tmp2 1
+    81 label __label62
+    82 print 0
  
-    79 label __label64
-    80 label __label65
-    81 label __label66
--    * set __tmp2 1
-    82 label __label67
-    83 print 1
-    84 label __label68
-    85 label __label69
--    * set __tmp2 0
-    86 label __label70
-    87 label __label71
-    88 jump __label72 always
+    84 label __label64
+    85 label __label65
+    86 label __label66
+-    * jump __label67 equal 1 false
++   87 noop
+    88 label __label67
+    89 print 1
+    90 label __label68
+    91 label __label69
+    92 label __label70
+    93 label __label71
+-    * jump __label72 equal 0 false
++   94 jump __label72 always
+    95 set __tmp2 1
+    96 label __label72
+    97 print 0
  
-    93 label __label74
-    94 label __label75
-    95 label __label76
--    * set __tmp2 1
-    96 label __label77
-    97 print 1
-    98 label __label78
-    99 label __label79
--    * set __tmp2 0
-   100 label __label80
-   101 label __label81
-   102 jump __label82 always
+    99 label __label74
+   100 label __label75
+   101 label __label76
+-    * jump __label77 equal 1 false
++  102 noop
+   103 label __label77
+   104 print 1
+   105 label __label78
+   106 label __label79
+   107 label __label80
+   108 label __label81
+-    * jump __label82 equal 0 false
++  109 jump __label82 always
+   110 set __tmp2 1
+   111 label __label82
+   112 print 0
  
-   107 label __label84
-   108 label __label85
-   109 label __label86
--    * set __tmp2 1
-   110 label __label87
-   111 print 1
-   112 label __label88
+   114 label __label84
+   115 label __label85
+   116 label __label86
+-    * jump __label87 equal 1 false
++  117 noop
+   118 label __label87
+   119 print 1
+   120 label __label88
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-8 instructions):
  
@@ -1232,61 +995,61 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-8 inst
      6 print 0
      7 label __label13
  
-    15 label __label20
-    16 label __label21
-    17 jump __label22 always
+    16 label __label20
+    17 label __label21
+    18 jump __label22 always
 -    * set __tmp2 1
-    18 label __label22
-    19 print 0
-    20 label __label23
+    19 label __label22
+    20 print 0
+    21 label __label23
  
-    28 label __label30
-    29 label __label31
-    30 jump __label32 always
+    30 label __label30
+    31 label __label31
+    32 jump __label32 always
 -    * set __tmp2 1
-    31 label __label32
-    32 print 0
-    33 label __label33
+    33 label __label32
+    34 print 0
+    35 label __label33
  
-    41 label __label40
-    42 label __label41
-    43 jump __label42 always
+    44 label __label40
+    45 label __label41
+    46 jump __label42 always
 -    * set __tmp2 1
-    44 label __label42
-    45 print 0
-    46 label __label43
+    47 label __label42
+    48 print 0
+    49 label __label43
  
-    54 label __label50
-    55 label __label51
-    56 jump __label52 always
+    58 label __label50
+    59 label __label51
+    60 jump __label52 always
 -    * set __tmp2 1
-    57 label __label52
-    58 print 0
-    59 label __label53
+    61 label __label52
+    62 print 0
+    63 label __label53
  
-    67 label __label60
-    68 label __label61
-    69 jump __label62 always
+    72 label __label60
+    73 label __label61
+    74 jump __label62 always
 -    * set __tmp2 1
-    70 label __label62
-    71 print 0
-    72 label __label63
+    75 label __label62
+    76 print 0
+    77 label __label63
  
-    80 label __label70
-    81 label __label71
-    82 jump __label72 always
+    86 label __label70
+    87 label __label71
+    88 jump __label72 always
 -    * set __tmp2 1
-    83 label __label72
-    84 print 0
-    85 label __label73
+    89 label __label72
+    90 print 0
+    91 label __label73
  
-    93 label __label80
-    94 label __label81
-    95 jump __label82 always
+   100 label __label80
+   101 label __label81
+   102 jump __label82 always
 -    * set __tmp2 1
-    96 label __label82
-    97 print 0
-    98 label __label83
+   103 label __label82
+   104 print 0
+   105 label __label83
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-8 instructions):
  
@@ -1298,61 +1061,61 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-8 instructi
      5 print 0
      6 label __label13
  
-    13 label __label19
-    14 label __label20
-    15 label __label21
+    14 label __label19
+    15 label __label20
+    16 label __label21
 -    * jump __label22 always
-    16 label __label22
-    17 print 0
-    18 label __label23
+    17 label __label22
+    18 print 0
+    19 label __label23
  
-    25 label __label29
-    26 label __label30
-    27 label __label31
+    27 label __label29
+    28 label __label30
+    29 label __label31
 -    * jump __label32 always
-    28 label __label32
-    29 print 0
-    30 label __label33
+    30 label __label32
+    31 print 0
+    32 label __label33
  
-    37 label __label39
-    38 label __label40
-    39 label __label41
+    40 label __label39
+    41 label __label40
+    42 label __label41
 -    * jump __label42 always
-    40 label __label42
-    41 print 0
-    42 label __label43
+    43 label __label42
+    44 print 0
+    45 label __label43
  
-    49 label __label49
-    50 label __label50
-    51 label __label51
+    53 label __label49
+    54 label __label50
+    55 label __label51
 -    * jump __label52 always
-    52 label __label52
-    53 print 0
-    54 label __label53
+    56 label __label52
+    57 print 0
+    58 label __label53
  
-    61 label __label59
-    62 label __label60
-    63 label __label61
+    66 label __label59
+    67 label __label60
+    68 label __label61
 -    * jump __label62 always
-    64 label __label62
-    65 print 0
-    66 label __label63
+    69 label __label62
+    70 print 0
+    71 label __label63
  
-    73 label __label69
-    74 label __label70
-    75 label __label71
+    79 label __label69
+    80 label __label70
+    81 label __label71
 -    * jump __label72 always
-    76 label __label72
-    77 print 0
-    78 label __label73
+    82 label __label72
+    83 print 0
+    84 label __label73
  
-    85 label __label79
-    86 label __label80
-    87 label __label81
+    92 label __label79
+    93 label __label80
+    94 label __label81
 -    * jump __label82 always
-    88 label __label82
-    89 print 0
-    90 label __label83
+    95 label __label82
+    96 print 0
+    97 label __label83
 
 Final code before resolving virtual instructions:
 

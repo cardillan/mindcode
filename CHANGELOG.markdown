@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-07-12
+
+### Fixed
+
+* Fixed bug in [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining) that caused runtime 
+  exception in some circumstances.
+* Fixed bug in [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) that may have 
+  removed instructions that were actually used by the program.
+
+### Changed
+
+* Changed Data Flow Optimization to perform fewer iterations in certain situations. The reduction is substantial (up 
+  to fivefold in tested scenarios) and translates into faster compilation times in these scenarios. 
+* Changed optimizers that need to be compatible with AST context structure to replace instructions with a no-op 
+  instead of removing them, preserving the AST context structure. Prevents potential bugs in optimizers relying on 
+  AST context structure. 
+
 ## 2023-07-10
 
 ### Added

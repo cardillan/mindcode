@@ -222,6 +222,7 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7A, W, PROP, Opcode.SETPROP, sensor("property"), block("object"), in("value"));
 
         // Virtual instructions
+        add(list, V6, V7A, S, NONE, Opcode.NOOP);
         add(list, V6, V7A, S, NONE, Opcode.LABEL,       label("label"));
         add(list, V6, V7A, S, NONE, Opcode.GOTOLABEL,   label("address"), label("marker"));
         add(list, V6, V7A, S, NONE, Opcode.PUSH,        block("memory"), in("value"));

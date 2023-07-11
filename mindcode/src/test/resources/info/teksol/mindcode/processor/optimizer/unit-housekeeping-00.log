@@ -336,221 +336,222 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
      4 set index 1
      5 label __label0
 -    * jump __label2 equal true false
-     6 sensor __tmp2 switch2 @enabled
-     7 jump __label3 equal __tmp2 false
-     8 jump __label7 equal UNIT @flare
++    6 noop
+     7 sensor __tmp2 switch2 @enabled
+     8 jump __label3 equal __tmp2 false
+     9 jump __label7 equal UNIT @flare
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 instructions):
  
-    40 label __label3
-    41 label __label4
-    42 ubind UNIT
+    41 label __label3
+    42 label __label4
+    43 ubind UNIT
 -    * op equal __tmp5 @unit null
 -    * jump __label14 equal __tmp5 false
-+   43 jump __label14 notEqual @unit null
-    44 print UNIT
-    45 print ": no active unit found."
-    46 printflush message1
++   44 jump __label14 notEqual @unit null
+    45 print UNIT
+    46 print ": no active unit found."
+    47 printflush message1
  
-    68 sensor items @unit @totalItems
-    69 sensor item @unit @firstItem
-    70 sensor __tmp18 @unit @controller
+    69 sensor items @unit @totalItems
+    70 sensor item @unit @firstItem
+    71 sensor __tmp18 @unit @controller
 -    * op equal __tmp19 __tmp18 @this
 -    * jump __label20 equal __tmp19 false
-+   71 jump __label20 notEqual __tmp18 @this
-    72 set controlled 0
-    73 jump __label21 always
-    74 label __label20
++   72 jump __label20 notEqual __tmp18 @this
+    73 set controlled 0
+    74 jump __label21 always
+    75 label __label20
  
-   111 jump __label24 always
-   112 label __label29
-   113 label __label24
+   112 jump __label24 always
+   113 label __label29
+   114 label __label24
 -    * op notEqual __tmp36 flag 0
 -    * jump __label31 equal __tmp36 false
-+  114 jump __label31 equal flag 0
-   115 print ", F"
-   116 print flag
-   117 jump __label32 always
-   118 label __label31
-   119 label __label32
++  115 jump __label31 equal flag 0
+   116 print ", F"
+   117 print flag
+   118 jump __label32 always
+   119 label __label31
+   120 label __label32
 -    * op greaterThan __tmp38 items 0
 -    * jump __label33 equal __tmp38 false
-+  120 jump __label33 lessThanEq items 0
-   121 print ", "
-   122 print items
-   123 print " "
++  121 jump __label33 lessThanEq items 0
+   122 print ", "
+   123 print items
+   124 print " "
  
-   132 sensor __tmp41 switch1 @enabled
-   133 op land __tmp42 __tmp40 __tmp41
-   134 jump __label35 equal __tmp42 false
+   133 sensor __tmp41 switch1 @enabled
+   134 op land __tmp42 __tmp40 __tmp41
+   135 jump __label35 equal __tmp42 false
 -    * op greaterThan __tmp44 items 0
 -    * jump __label37 equal __tmp44 false
-+  135 jump __label37 lessThanEq items 0
-   136 ucontrol flag 1
-   137 ulocate building core false @copper CORE_X CORE_Y __tmp47 CORE
-   138 ucontrol within CORE_X CORE_Y 8 __tmp48
++  136 jump __label37 lessThanEq items 0
+   137 ucontrol flag 1
+   138 ulocate building core false @copper CORE_X CORE_Y __tmp47 CORE
+   139 ucontrol within CORE_X CORE_Y 8 __tmp48
  
-   144 label __label40
-   145 jump __label38 always
-   146 label __label37
+   145 label __label40
+   146 jump __label38 always
+   147 label __label37
 -    * op notEqual __tmp50 flag 0
 -    * jump __label41 equal __tmp50 false
-+  147 jump __label41 equal flag 0
-   148 ucontrol within THIS_X THIS_Y 8 __tmp52
-   149 jump __label43 equal __tmp52 false
-   150 ucontrol flag 0
++  148 jump __label41 equal flag 0
+   149 ucontrol within THIS_X THIS_Y 8 __tmp52
+   150 jump __label43 equal __tmp52 false
+   151 ucontrol flag 0
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-10 instructions):
  
-    36 control enabled switch2 false
-    37 print UNIT
-    38 print ": gathering information..."
+    37 control enabled switch2 false
+    38 print UNIT
+    39 print ": gathering information..."
 -    * jump __label4 always
-    39 label __label3
-    40 label __label4
-    41 ubind UNIT
+    40 label __label3
+    41 label __label4
+    42 ubind UNIT
  
-    56 sensor __tmp12 switch1 @enabled
-    57 jump __label18 equal __tmp12 false
-    58 print " (cleanup active)"
+    57 sensor __tmp12 switch1 @enabled
+    58 jump __label18 equal __tmp12 false
+    59 print " (cleanup active)"
 -    * jump __label19 always
-    59 label __label18
-    60 label __label19
+    60 label __label18
+    61 label __label19
 -    * jump __label17 always
-    61 label __label16
-    62 label __label17
-    63 sensor controlled @unit @controlled
+    62 label __label16
+    63 label __label17
+    64 sensor controlled @unit @controlled
  
-    67 sensor __tmp18 @unit @controller
-    68 jump __label20 notEqual __tmp18 @this
-    69 set controlled 0
+    68 sensor __tmp18 @unit @controller
+    69 jump __label20 notEqual __tmp18 @this
+    70 set controlled 0
 -    * jump __label21 always
-    70 label __label20
-    71 label __label21
-    72 op notEqual __tmp21 flag 0
+    71 label __label20
+    72 label __label21
+    73 op notEqual __tmp21 flag 0
  
-   104 jump __label29 always
-   105 label __label30
-   106 print ", group"
+   105 jump __label29 always
+   106 label __label30
+   107 print ", group"
 -    * jump __label24 always
-   107 label __label29
-   108 label __label24
-   109 jump __label31 equal flag 0
-   110 print ", F"
-   111 print flag
+   108 label __label29
+   109 label __label24
+   110 jump __label31 equal flag 0
+   111 print ", F"
+   112 print flag
 -    * jump __label32 always
-   112 label __label31
-   113 label __label32
-   114 jump __label33 lessThanEq items 0
+   113 label __label31
+   114 label __label32
+   115 jump __label33 lessThanEq items 0
  
-   116 print items
-   117 print " "
-   118 print item
+   117 print items
+   118 print " "
+   119 print item
 -    * jump __label34 always
-   119 label __label33
-   120 label __label34
+   120 label __label33
+   121 label __label34
 -    * jump __label23 always
-   121 label __label22
-   122 label __label23
-   123 op equal __tmp40 controlled 0
+   122 label __label22
+   123 label __label23
+   124 op equal __tmp40 controlled 0
  
-   144 label __label43
-   145 ucontrol approach THIS_X THIS_Y 4
-   146 label __label44
+   145 label __label43
+   146 ucontrol approach THIS_X THIS_Y 4
+   147 label __label44
 -    * jump __label42 always
-   147 label __label41
-   148 label __label42
-   149 label __label38
+   148 label __label41
+   149 label __label42
+   150 label __label38
 -    * jump __label36 always
-   150 label __label35
-   151 label __label36
-   152 op add index index 1
+   151 label __label35
+   152 label __label36
+   153 op add index index 1
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-7 instructions):
  
-     5 label __label0
-     6 sensor __tmp2 switch2 @enabled
-     7 jump __label3 equal __tmp2 false
+     6 noop
+     7 sensor __tmp2 switch2 @enabled
+     8 jump __label3 equal __tmp2 false
 -    * jump __label7 equal UNIT @flare
 -    * jump __label6 always
-+    8 jump __label6 notEqual UNIT @flare
-     9 label __label7
-    10 set __tmp4 @mono
-    11 jump __label5 always
-    12 label __label6
++    9 jump __label6 notEqual UNIT @flare
+    10 label __label7
+    11 set __tmp4 @mono
+    12 jump __label5 always
+    13 label __label6
 -    * jump __label9 equal UNIT @mono
 -    * jump __label8 always
-+   13 jump __label8 notEqual UNIT @mono
-    14 label __label9
-    15 set __tmp4 @poly
-    16 jump __label5 always
-    17 label __label8
++   14 jump __label8 notEqual UNIT @mono
+    15 label __label9
+    16 set __tmp4 @poly
+    17 jump __label5 always
+    18 label __label8
 -    * jump __label11 equal UNIT @poly
 -    * jump __label10 always
-+   18 jump __label10 notEqual UNIT @poly
-    19 label __label11
-    20 set __tmp4 @mega
-    21 jump __label5 always
-    22 label __label10
++   19 jump __label10 notEqual UNIT @poly
+    20 label __label11
+    21 set __tmp4 @mega
+    22 jump __label5 always
+    23 label __label10
 -    * jump __label13 equal UNIT @mega
 -    * jump __label12 always
-+   23 jump __label12 notEqual UNIT @mega
-    24 label __label13
-    25 set __tmp4 @flare
-    26 jump __label5 always
++   24 jump __label12 notEqual UNIT @mega
+    25 label __label13
+    26 set __tmp4 @flare
+    27 jump __label5 always
  
-    76 jump __label22 equal __tmp28 false
-    77 print "\n"
-    78 print index
+    77 jump __label22 equal __tmp28 false
+    78 print "\n"
+    79 print index
 -    * jump __label26 equal controlled @ctrlProcessor
 -    * jump __label25 always
-+   79 jump __label25 notEqual controlled @ctrlProcessor
-    80 label __label26
-    81 sensor controller @unit @controller
-    82 sensor __tmp32 controller @x
++   80 jump __label25 notEqual controlled @ctrlProcessor
+    81 label __label26
+    82 sensor controller @unit @controller
+    83 sensor __tmp32 controller @x
  
-    89 print y
-    90 jump __label24 always
-    91 label __label25
+    90 print y
+    91 jump __label24 always
+    92 label __label25
 -    * jump __label28 equal controlled @ctrlPlayer
 -    * jump __label27 always
-+   92 jump __label27 notEqual controlled @ctrlPlayer
-    93 label __label28
-    94 print ", player"
-    95 jump __label24 always
-    96 label __label27
++   93 jump __label27 notEqual controlled @ctrlPlayer
+    94 label __label28
+    95 print ", player"
+    96 jump __label24 always
+    97 label __label27
 -    * jump __label30 equal controlled @ctrlFormation
 -    * jump __label29 always
-+   97 jump __label29 notEqual controlled @ctrlFormation
-    98 label __label30
-    99 print ", group"
-   100 label __label29
++   98 jump __label29 notEqual controlled @ctrlFormation
+    99 label __label30
+   100 print ", group"
+   101 label __label29
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-    39 print UNIT
-    40 print ": no active unit found."
-    41 printflush message1
+    40 print UNIT
+    41 print ": no active unit found."
+    42 printflush message1
 -    * jump __label15 always
-+   42 jump __label0 always
-    43 label __label14
-    44 op strictEqual __tmp7 @unit first_unit
-    45 op strictEqual __tmp8 first_unit null
++   43 jump __label0 always
+    44 label __label14
+    45 op strictEqual __tmp7 @unit first_unit
+    46 op strictEqual __tmp8 first_unit null
  
-   123 ucontrol within CORE_X CORE_Y 8 __tmp48
-   124 jump __label39 equal __tmp48 false
-   125 ucontrol itemDrop CORE items
+   124 ucontrol within CORE_X CORE_Y 8 __tmp48
+   125 jump __label39 equal __tmp48 false
+   126 ucontrol itemDrop CORE items
 -    * jump __label40 always
-+  126 jump __label38 always
-   127 label __label39
-   128 ucontrol approach CORE_X CORE_Y 4
-   129 label __label40
++  127 jump __label38 always
+   128 label __label39
+   129 ucontrol approach CORE_X CORE_Y 4
+   130 label __label40
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   146 label __label15
-   147 label __label1
-   148 jump __label0 always
+   147 label __label15
+   148 label __label1
+   149 jump __label0 always
 -    * label __label2
 -    * end
 

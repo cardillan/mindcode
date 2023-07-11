@@ -131,6 +131,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public NoOpInstruction createNoOp(AstContext astContext) {
+        return (NoOpInstruction) createInstruction(astContext, NOOP);
+    }
+
+    @Override
     public OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first) {
         return (OpInstruction) createInstruction(astContext, OP, operation, target, first);
     }
@@ -218,6 +223,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case GOTOLABEL  -> new GotoLabelInstruction(astContext, arguments, params);
             case JUMP       -> new JumpInstruction(astContext, arguments, params);
             case LABEL      -> new LabelInstruction(astContext, arguments, params);
+            case NOOP       -> new NoOpInstruction(astContext);
             case OP         -> new OpInstruction(astContext, arguments, params);
             case PACKCOLOR  -> new PackColorInstruction(astContext, arguments, params);
             case POP        -> new PopInstruction(astContext, arguments, params);
@@ -240,8 +246,9 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         AstContext astContext = instruction.getAstContext();
 
         switch (instruction) {
-            case GotoLabelInstruction ix -> {}       // Do nothing
-            case LabelInstruction ix -> {}       // Do nothing
+            case NoOpInstruction ix -> {}           // Do nothing
+            case GotoLabelInstruction ix -> {}      // Do nothing
+            case LabelInstruction ix -> {}          // Do nothing
 
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));

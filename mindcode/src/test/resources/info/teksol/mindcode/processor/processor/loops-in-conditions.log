@@ -4,7 +4,7 @@
      1 instructions eliminated by Jump Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions eliminated by If Expression Optimization (4 iterations).
-    38 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
+    38 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
      2 instructions eliminated by Loop Optimization (4 iterations).
      2 loops improved by Loop Optimization.
     18 instructions added by Loop Unrolling (6 iterations).
@@ -312,33 +312,36 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     67 print result
     68 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2 instructions):
- 
-     3 set __fn0_i 0
-     4 label __label14
-     5 label __label15
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+-    * set result 1
+     0 label __label0
+     1 set __fn0_c 0
+     2 set __fn0_i 0
+     3 label __label14
+     4 label __label15
 -    * op add __fn0_c __fn0_c __fn0_i
-+    6 op add __fn0_c 0 0
-     7 label __label16
++    5 op add __fn0_c 0 0
+     6 label __label16
 -    * op add __fn0_i __fn0_i 1
-+    8 op add __fn0_i 0 1
-     9 label __label17
++    7 op add __fn0_i 0 1
+     8 label __label17
 -    * op add __fn0_c __fn0_c __fn0_i
-+   10 op add __fn0_c 0 1
-    11 label __label18
++    9 op add __fn0_c 0 1
+    10 label __label18
 -    * op add __fn0_i __fn0_i 1
-+   12 op add __fn0_i 1 1
-    13 label __label19
++   11 op add __fn0_i 1 1
+    12 label __label19
 -    * op add __fn0_c __fn0_c __fn0_i
-+   14 op add __fn0_c 1 2
-    15 label __label20
++   13 op add __fn0_c 1 2
+    14 label __label20
 -    * op add __fn0_i __fn0_i 1
-+   16 op add __fn0_i 2 1
-    17 label __label21
++   15 op add __fn0_i 2 1
+    16 label __label21
 -    * op add __fn0_c __fn0_c __fn0_i
-+   18 op add __fn0_c 3 3
-    19 label __label22
++   17 op add __fn0_c 3 3
+    18 label __label22
 -    * op add __fn0_i __fn0_i 1
++   19 op add __fn0_i 3 1
     20 label __label4
 -    * print __fn0_c
 +   21 print 6
@@ -394,110 +397,100 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-2
 +   56 op add __fn1_c 21 7
     57 label __label39
 -    * op add __fn1_i __fn1_i 1
-    58 label __label9
++   58 op add __fn1_i 7 1
+    59 label __label9
 -    * print __fn1_c
-+   59 print 28
-    60 label __label6
++   60 print 28
+    61 label __label6
 -    * jump __label11 greaterThanEq __fn0_c __fn1_c
-+   61 jump __label11 greaterThanEq 6 28
-    62 print "Less"
-    63 set result 0
-    64 label __label11
++   62 jump __label11 greaterThanEq 6 28
+    63 print "Less"
+    64 set result 0
+    65 label __label11
+-    * print result
++   66 print 0
+    67 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-26 instructions):
-     0 set result 1
-     1 label __label0
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-29 instructions):
+     0 label __label0
 -    * set __fn0_c 0
 -    * set __fn0_i 0
-     2 label __label14
-     3 label __label15
+     1 label __label14
+     2 label __label15
 -    * op add __fn0_c 0 0
-     4 label __label16
+     3 label __label16
 -    * op add __fn0_i 0 1
-     5 label __label17
+     4 label __label17
 -    * op add __fn0_c 0 1
-     6 label __label18
+     5 label __label18
 -    * op add __fn0_i 1 1
-     7 label __label19
+     6 label __label19
 -    * op add __fn0_c 1 2
-     8 label __label20
+     7 label __label20
 -    * op add __fn0_i 2 1
-     9 label __label21
+     8 label __label21
 -    * op add __fn0_c 3 3
-    10 label __label22
-    11 label __label4
-    12 print 6
-    13 label __label1
-    14 label __label5
+     9 label __label22
+-    * op add __fn0_i 3 1
+    10 label __label4
+    11 print 6
+    12 label __label1
+    13 label __label5
 -    * set __fn1_c 0
 -    * set __fn1_i 0
-    15 label __label23
-    16 label __label24
+    14 label __label23
+    15 label __label24
 -    * op add __fn1_c 0 0
-    17 label __label25
+    16 label __label25
 -    * op add __fn1_i 0 1
-    18 label __label26
+    17 label __label26
 -    * op add __fn1_c 0 1
-    19 label __label27
+    18 label __label27
 -    * op add __fn1_i 1 1
-    20 label __label28
+    19 label __label28
 -    * op add __fn1_c 1 2
-    21 label __label29
+    20 label __label29
 -    * op add __fn1_i 2 1
-    22 label __label30
+    21 label __label30
 -    * op add __fn1_c 3 3
-    23 label __label31
+    22 label __label31
 -    * op add __fn1_i 3 1
-    24 label __label32
+    23 label __label32
 -    * op add __fn1_c 6 4
-    25 label __label33
+    24 label __label33
 -    * op add __fn1_i 4 1
-    26 label __label34
+    25 label __label34
 -    * op add __fn1_c 10 5
-    27 label __label35
+    26 label __label35
 -    * op add __fn1_i 5 1
-    28 label __label36
+    27 label __label36
 -    * op add __fn1_c 15 6
-    29 label __label37
+    28 label __label37
 -    * op add __fn1_i 6 1
-    30 label __label38
+    29 label __label38
 -    * op add __fn1_c 21 7
-    31 label __label39
-    32 label __label9
-    33 print 28
+    30 label __label39
+-    * op add __fn1_i 7 1
+    31 label __label9
+    32 print 28
+    33 label __label6
+    34 jump __label11 greaterThanEq 6 28
+    35 print "Less"
+-    * set result 0
+    36 label __label11
+    37 print 0
+    38 end
 
 Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
  
-    32 label __label9
-    33 print 28
-    34 label __label6
--    * jump __label11 greaterThanEq 6 28
-    35 print "Less"
-    36 set result 0
-    37 label __label11
-
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1 (-1 instructions):
--    * set result 1
-     0 label __label0
-     1 label __label14
-     2 label __label15
- 
-    34 print "Less"
-    35 set result 0
-    36 label __label11
--    * print result
-+   37 print 0
-    38 end
-
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-1 instructions):
- 
+    31 label __label9
     32 print 28
     33 label __label6
-    34 print "Less"
--    * set result 0
-    35 label __label11
-    36 print 0
-    37 end
+-    * jump __label11 greaterThanEq 6 28
++   34 noop
+    35 print "Less"
+    36 label __label11
+    37 print 0
 
 Final code before resolving virtual instructions:
 

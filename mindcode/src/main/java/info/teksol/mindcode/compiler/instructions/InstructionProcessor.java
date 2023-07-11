@@ -37,6 +37,7 @@ public interface InstructionProcessor {
     JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target);
     LabelInstruction createLabel(AstContext astContext, LogicLabel label);
     GotoLabelInstruction createGotoLabel(AstContext astContext, LogicLabel label, LogicLabel marker);
+    NoOpInstruction createNoOp(AstContext astContext);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first);
     OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first, LogicValue second);
     PopInstruction createPop(AstContext astContext, LogicVariable memory, LogicVariable value);

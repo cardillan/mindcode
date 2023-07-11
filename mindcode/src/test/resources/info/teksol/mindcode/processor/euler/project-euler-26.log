@@ -1327,7 +1327,7 @@ Modifications by Loop Unrolling: unroll loop at line 24 (+587 instructions):
   1025 end
   1026 label __label4
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      5 label __label3
      6 set __fn0_n d
@@ -2529,11 +2529,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
   1020 label __label423
   1021 label __label424
 -    * op add __fn0_i __fn0_i 1
-  1022 label __label15
-  1023 print "Power of ten limit reached."
-  1024 end
++ 1022 op add __fn0_i 99 1
+  1023 label __label15
+  1024 print "Power of ten limit reached."
+  1025 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-101 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-102 instructions):
  
     27 jump __label4 always
     28 label __label11
@@ -3330,6 +3331,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
    912 label __label421
    913 op mul __tmp9 __fn0_power 10
    914 op mod __fn0_power __tmp9 __fn0_n
+ 
+   918 label __label422
+   919 label __label423
+   920 label __label424
+-    * op add __fn0_i 99 1
+   921 label __label15
+   922 print "Power of ten limit reached."
+   923 end
 
 Final code before resolving virtual instructions:
 

@@ -121,6 +121,10 @@ public abstract class AbstractOptimizer implements Optimizer {
         return instructionProcessor.createGotoLabel(astContext, label, marker);
     }
 
+    public NoOpInstruction createNoOp(AstContext astContext) {
+        return instructionProcessor.createNoOp(astContext);
+    }
+
     protected OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first) {
         return instructionProcessor.createOp(astContext, operation, target, first);
     }

@@ -108,28 +108,29 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
     13 op add h __tmp10 1
     14 label __label0
 -    * jump __label2 equal true false
-    15 op lessThan __tmp12 pn hn
-    16 jump __label3 equal __tmp12 false
-    17 op add pn pn p
++   15 noop
+    16 op lessThan __tmp12 pn hn
+    17 jump __label3 equal __tmp12 false
+    18 op add pn pn p
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
-    12 op mul __tmp10 4 h
     13 op add h __tmp10 1
     14 label __label0
+    15 noop
 -    * op lessThan __tmp12 pn hn
 -    * jump __label3 equal __tmp12 false
-+   15 jump __label3 greaterThanEq pn hn
-    16 op add pn pn p
-    17 op add p p 3
-    18 jump __label4 always
-    19 label __label3
++   16 jump __label3 greaterThanEq pn hn
+    17 op add pn pn p
+    18 op add p p 3
+    19 jump __label4 always
+    20 label __label3
 -    * op lessThan __tmp16 hn pn
 -    * jump __label5 equal __tmp16 false
-+   20 jump __label5 greaterThanEq hn pn
-    21 op add hn hn h
-    22 op add h h 4
-    23 jump __label6 always
++   21 jump __label5 greaterThanEq hn pn
+    22 op add hn hn h
+    23 op add h h 4
+    24 jump __label6 always
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set p 165
@@ -159,21 +160,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   12 op mul __tmp10 4 143
 +   13 op add h 572 1
     14 label __label0
-    15 jump __label3 greaterThanEq pn hn
-    16 op add pn pn p
+    15 noop
+    16 jump __label3 greaterThanEq pn hn
  
-    30 label __label2
-    31 label __label7
-    32 set __fn0_v 1533776805
+    31 label __label2
+    32 label __label7
+    33 set __fn0_v 1533776805
 -    * print __fn0_v
-+   33 print 1533776805
-    34 label __label8
-    35 label __label9
-    36 set __fn1_v hn
++   34 print 1533776805
+    35 label __label8
+    36 label __label9
+    37 set __fn1_v hn
 -    * print __fn1_v
-+   37 print hn
-    38 label __label10
-    39 end
++   38 print hn
+    39 label __label10
+    40 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
 -    * set p 165
@@ -191,52 +192,52 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mul __tmp10 4 143
      3 op add h 572 1
      4 label __label0
-     5 jump __label3 greaterThanEq pn hn
+     5 noop
  
-    19 jump __label0 always
-    20 label __label2
-    21 label __label7
+    20 jump __label0 always
+    21 label __label2
+    22 label __label7
 -    * set __fn0_v 1533776805
-    22 print 1533776805
-    23 label __label8
-    24 label __label9
+    23 print 1533776805
+    24 label __label8
+    25 label __label9
 -    * set __fn1_v hn
-    25 print hn
-    26 label __label10
-    27 end
+    26 print hn
+    27 label __label10
+    28 end
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-     5 jump __label3 greaterThanEq pn hn
-     6 op add pn pn p
-     7 op add p p 3
+     6 jump __label3 greaterThanEq pn hn
+     7 op add pn pn p
+     8 op add p p 3
 -    * jump __label4 always
-+    8 jump __label0 always
-     9 label __label3
++    9 jump __label0 always
+    10 label __label3
 -    * jump __label5 greaterThanEq hn pn
-+   10 jump __label2 greaterThanEq hn pn
-    11 op add hn hn h
-    12 op add h h 4
++   11 jump __label2 greaterThanEq hn pn
+    12 op add hn hn h
+    13 op add h h 4
 -    * jump __label6 always
-+   13 jump __label0 always
-    14 label __label5
-    15 jump __label2 always
-    16 label __label6
++   14 jump __label0 always
+    15 label __label5
+    16 jump __label2 always
+    17 label __label6
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
  
-    11 op add hn hn h
-    12 op add h h 4
-    13 jump __label0 always
+    12 op add hn hn h
+    13 op add h h 4
+    14 jump __label0 always
 -    * label __label5
 -    * jump __label2 always
 -    * label __label6
 -    * label __label4
 -    * label __label1
 -    * jump __label0 always
-    14 label __label2
-    15 label __label7
-    16 print 1533776805
+    15 label __label2
+    16 label __label7
+    17 print 1533776805
 
 Final code before resolving virtual instructions:
 

@@ -123,7 +123,7 @@ Modifications by Loop Unrolling: unroll loop at line 3 (+17 instructions):
     44 print b
     45 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      1 set i 10
      2 label __label4
@@ -186,12 +186,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 +   40 op sub b 11 1
     41 label __label24
 -    * op add i i 1
-    42 label __label2
++   42 op add i 19 1
+    43 label __label2
 -    * print b
-+   43 print 10
-    44 end
++   44 print 10
+    45 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-21 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-22 instructions):
 -    * set b 20
 -    * set i 10
      0 label __label4
@@ -234,8 +235,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2
     19 label __label23
 -    * op sub b 11 1
     20 label __label24
+-    * op add i 19 1
     21 label __label2
     22 print 10
+    23 end
 
 Final code before resolving virtual instructions:
 

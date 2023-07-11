@@ -303,6 +303,12 @@ public class DataFlowVariableStates {
             return variableValue == null || stored.contains(variable) ? null : variableValue.constantValue;
         }
 
+        public void protectVariable(LogicVariable variable) {
+            if (definitions.containsKey(variable)) {
+                optimizer.keep.addAll(definitions.get(variable));
+            }
+        }
+
         public LogicVariable findEquivalent(LogicVariable value) {
             return stored.contains(value) ? null : equivalences.get(value);
         }

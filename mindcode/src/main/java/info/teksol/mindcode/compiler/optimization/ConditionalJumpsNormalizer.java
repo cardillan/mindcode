@@ -30,7 +30,7 @@ class ConditionalJumpsNormalizer extends BaseOptimizer {
                     if (result == TRUE) {
                         iterator.set(createJumpUnconditional(jump.getAstContext(), jump.getTarget()));
                     } else if (result == FALSE) {
-                        iterator.remove();
+                        iterator.set(createNoOp(jump.getAstContext()));
                     }
                 }
             }

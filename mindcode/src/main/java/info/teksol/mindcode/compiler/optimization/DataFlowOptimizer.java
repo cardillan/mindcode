@@ -42,8 +42,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
      * from this structure are kept for uninitialized variables, so that any values written before the END instruction
      * executions are preserved.
      * <p/>
-     * Only main variables are stored here. Global variable writes are always preserved, and local variables are not
-     * expected to keep their value between function calls.
+     * Only main variables are stored here. Global variable writes are always preserved, and local variables
+     * are not expected to keep their value between function calls.
      */
     final Map<LogicVariable, List<LogicInstruction>> orphans = new HashMap<>();
 
@@ -112,21 +112,24 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .filter(e -> uninitialized.contains(e.getKey()))
                 .forEachOrdered(e -> keep.addAll(e.getValue()));
 
+        instructionStream()
+                .filter(ix -> replacements.containsKey(ix) || getVariableStates(ix) != null)
+                .forEachOrdered(this::replaceInstruction);
+
         for (LogicInstruction instruction : defines) {
             // TODO create mechanism to identify instructions without side effects
             //      Will be used by the DeadCodeEliminator too!
             switch (instruction.getOpcode()) {
                 case SET, OP, PACKCOLOR, READ -> {
                     if (!keep.contains(instruction) || useless.contains(instruction)) {
-                        removeInstruction(instruction);
+                        int index = instructionIndex(instruction);
+                        if (index >= 0) {
+                            removeInstruction(index);
+                        }
                     }
                 }
             }
         }
-
-        instructionStream()
-                .filter(ix -> replacements.containsKey(ix) || getVariableStates(ix) != null)
-                .forEachOrdered(this::replaceInstruction);
 
         return wasUpdated();
     }
@@ -135,6 +138,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         int index = instructionIndex(instruction);
         if (index < 0) return;
 
+        VariableStates variableStates = Objects.requireNonNull(getVariableStates(instruction));
         Map<LogicVariable, LogicValue> valueReplacements = replacements.get(instruction);
         if (valueReplacements != null) {
             boolean updated = false;
@@ -149,29 +153,38 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
 
             if (updated) {
-                replaceInstruction(index, replaceArgs(instruction, arguments));
+                replaceInstruction(index, replaceArgs(instruction, arguments), variableStates);
             }
         } else if (instruction instanceof OpInstruction op && op.hasSecondOperand()) {
             // Trying for extended evaluation
-            VariableStates variableStates = Objects.requireNonNull(getVariableStates(instruction));
             OpInstruction newInstruction = extendedEvaluate(variableStates, op);
             if (newInstruction != null && canReplace(instruction, newInstruction)) {
-                replaceInstruction(index, normalize(newInstruction));
+                OpInstruction normalized = normalize(newInstruction);
+                replaceInstruction(index, normalized, variableStates);
             }
         } else if (instruction instanceof SetInstruction set) {
             // Specific optimization to streamline self-modifying statements in recursive calls
-            VariableStates variableStates = Objects.requireNonNull(getVariableStates(instruction));
             if (canEliminate(set, set.getResult()) && set.getValue().isTemporaryVariable()) {
                 VariableStates.VariableValue val = variableStates.findVariableValue(set.getValue());
                 if (val != null && val.isExpression() && val.getInstruction() instanceof OpInstruction op) {
                     if (op.inputArgumentsStream().anyMatch(set.getResult()::equals)) {
                         OpInstruction newInstruction = op.withContext(set.getAstContext()).withResult(set.getResult());
-                        replaceInstruction(index, normalize(newInstruction));
+                        OpInstruction normalized = normalize(newInstruction);
+                        replaceInstruction(index, normalized, variableStates);
                     }
                 }
             }
         }
     }
+
+    private void replaceInstruction(int index, LogicInstruction instruction, VariableStates variableStates) {
+        replaceInstruction(index, instruction);
+        instruction.inputArgumentsStream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .forEachOrdered(variableStates::protectVariable);
+    }
+
 
     private int countReferences(LogicVariable variable) {
         return references.containsKey(variable) ? references.get(variable).size() : 0;
@@ -372,7 +385,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                         variableStates.isolatedCopy(), false);
                 optimizationContext.storeLoopVariables(context, copy);
             } else {
-                // Store variable states right before enttering the body for the first time
+                // Store variable states right before entering the body for the first time
                 optimizationContext.storeLoopVariables(context, variableStates.isolatedCopy());
             }
 
@@ -445,16 +458,18 @@ public class DataFlowOptimizer extends BaseOptimizer {
         boolean avoidMerge;
 
         // TODO Will need better condition processing after implementing short-circuit boolean eval
-        LogicInstruction conditionIx = lastInstruction(condition);
+        LogicBoolean jumpResult = (lastInstruction(condition) instanceof JumpInstruction jump)
+                ? evaluateJumpInstruction(jump)
+                : LogicBoolean.FALSE;
 
-        if (conditionIx instanceof JumpInstruction jump) {
-            // Process first body only if jump is conditional
-            process[0] = jump.isConditional();
+        if (jumpResult != LogicBoolean.FALSE) {
+            // Process first body only if jump evaluation is unknown to us (we know it isn't false)
+            process[0] = jumpResult != LogicBoolean.TRUE;
 
             // If the jump is unconditional, the control flow is linear - do not merge branches
-            avoidMerge = jump.isUnconditional();
+            avoidMerge = jumpResult == LogicBoolean.TRUE;
         } else {
-            // No jump: don't process second body
+            // The jump doesn't exist or is always false: don't process second body
             process[1] = false;
 
             // The control flow is linear - do not merge branches
@@ -668,11 +683,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
 
         if (modifyInstructions) {
-            if (instruction instanceof OpInstruction op && op.hasSecondOperand()
-                    || instruction instanceof SetInstruction
-                    || instruction instanceof JumpInstruction) {
-                putVariableStates(instruction, variableStates.isolatedCopy());
-            }
+            putVariableStates(instruction, variableStates.isolatedCopy());
         }
 
         return variableStates;

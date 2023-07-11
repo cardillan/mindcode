@@ -43,6 +43,7 @@ public enum Opcode {
     SETFLAG         ("setflag",         "Set a global flag that can be read by all processors."),
     SETPROP         ("setprop",         "Sets a property of a unit or building."),
 
+    NOOP            ("noop",            0),
     LABEL           ("label",           0),
     GOTOLABEL       ("gotolabel",       0),
     PUSH            ("push",            2),
