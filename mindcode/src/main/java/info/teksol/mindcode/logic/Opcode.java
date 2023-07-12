@@ -52,6 +52,7 @@ public enum Opcode {
     CALLREC         ("callrec",         3),
     RETURN          ("return",          3),
     GOTO            ("goto",            1),
+    GOTOOFFSET      ("gotooffset",      1),
     SETADDR         ("setaddr",         1),
     ;
     

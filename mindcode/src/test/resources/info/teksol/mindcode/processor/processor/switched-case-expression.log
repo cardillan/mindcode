@@ -2,13 +2,18 @@
     11 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
     13 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Optimization (4 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by Single Step Elimination (4 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     1 instructions eliminated by Loop Optimization (3 iterations).
+     1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
-    10 instructions eliminated by Jump Straightening.
-    58 instructions after optimizations.
+     5 instructions added by Case Switching (3 iterations).
+     1 case expressions converted to switched jumps Case Switching.
+    10 instructions eliminated by Jump Straightening (3 iterations).
+    63 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 942):
+  * Case Switching: convert case at line 16                      cost   2, benefit      625.0, efficiency      312.5 (+5 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  
@@ -18,100 +23,111 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 ins
 -    * op add __tmp5 S0 1
 -    * set S0 __tmp5
 +   25 op add S0 S0 1
-    26 set __tmp4 S0
-    27 jump __label10 always
-    28 label __label11
-    29 jump __label14 equal __ast0 1
-    30 jump __label13 always
-    31 label __label14
++   26 noop
+    27 set __tmp4 S0
+    28 jump __label10 always
+    29 label __label11
+    30 jump __label14 equal __ast0 1
+    31 jump __label13 always
+    32 label __label14
 -    * op add __tmp6 S1 1
 -    * set S1 __tmp6
-+   32 op add S1 S1 1
-    33 set __tmp4 S1
-    34 jump __label10 always
-    35 label __label13
-    36 jump __label16 equal __ast0 2
-    37 jump __label15 always
-    38 label __label16
++   33 op add S1 S1 1
++   34 noop
+    35 set __tmp4 S1
+    36 jump __label10 always
+    37 label __label13
+    38 jump __label16 equal __ast0 2
+    39 jump __label15 always
+    40 label __label16
 -    * op add __tmp7 S2 1
 -    * set S2 __tmp7
-+   39 op add S2 S2 1
-    40 set __tmp4 S2
-    41 jump __label10 always
-    42 label __label15
-    43 jump __label18 equal __ast0 3
-    44 jump __label17 always
-    45 label __label18
++   41 op add S2 S2 1
++   42 noop
+    43 set __tmp4 S2
+    44 jump __label10 always
+    45 label __label15
+    46 jump __label18 equal __ast0 3
+    47 jump __label17 always
+    48 label __label18
 -    * op add __tmp8 S3 1
 -    * set S3 __tmp8
-+   46 op add S3 S3 1
-    47 set __tmp4 S3
-    48 jump __label10 always
-    49 label __label17
-    50 jump __label20 equal __ast0 4
-    51 jump __label19 always
-    52 label __label20
++   49 op add S3 S3 1
++   50 noop
+    51 set __tmp4 S3
+    52 jump __label10 always
+    53 label __label17
+    54 jump __label20 equal __ast0 4
+    55 jump __label19 always
+    56 label __label20
 -    * op add __tmp9 S4 1
 -    * set S4 __tmp9
-+   53 op add S4 S4 1
-    54 set __tmp4 S4
-    55 jump __label10 always
-    56 label __label19
-    57 jump __label22 equal __ast0 5
-    58 jump __label21 always
-    59 label __label22
++   57 op add S4 S4 1
++   58 noop
+    59 set __tmp4 S4
+    60 jump __label10 always
+    61 label __label19
+    62 jump __label22 equal __ast0 5
+    63 jump __label21 always
+    64 label __label22
 -    * op add __tmp10 S5 1
 -    * set S5 __tmp10
-+   60 op add S5 S5 1
-    61 set __tmp4 S5
-    62 jump __label10 always
-    63 label __label21
-    64 jump __label24 equal __ast0 6
-    65 jump __label23 always
-    66 label __label24
++   65 op add S5 S5 1
++   66 noop
+    67 set __tmp4 S5
+    68 jump __label10 always
+    69 label __label21
+    70 jump __label24 equal __ast0 6
+    71 jump __label23 always
+    72 label __label24
 -    * op add __tmp11 S6 1
 -    * set S6 __tmp11
-+   67 op add S6 S6 1
-    68 set __tmp4 S6
-    69 jump __label10 always
-    70 label __label23
-    71 jump __label26 equal __ast0 7
-    72 jump __label25 always
-    73 label __label26
++   73 op add S6 S6 1
++   74 noop
+    75 set __tmp4 S6
+    76 jump __label10 always
+    77 label __label23
+    78 jump __label26 equal __ast0 7
+    79 jump __label25 always
+    80 label __label26
 -    * op add __tmp12 S7 1
 -    * set S7 __tmp12
-+   74 op add S7 S7 1
-    75 set __tmp4 S7
-    76 jump __label10 always
-    77 label __label25
-    78 jump __label28 equal __ast0 8
-    79 jump __label27 always
-    80 label __label28
++   81 op add S7 S7 1
++   82 noop
+    83 set __tmp4 S7
+    84 jump __label10 always
+    85 label __label25
+    86 jump __label28 equal __ast0 8
+    87 jump __label27 always
+    88 label __label28
 -    * op add __tmp13 S8 1
 -    * set S8 __tmp13
-+   81 op add S8 S8 1
-    82 set __tmp4 S8
-    83 jump __label10 always
-    84 label __label27
-    85 jump __label30 equal __ast0 9
-    86 jump __label29 always
-    87 label __label30
++   89 op add S8 S8 1
++   90 noop
+    91 set __tmp4 S8
+    92 jump __label10 always
+    93 label __label27
+    94 jump __label30 equal __ast0 9
+    95 jump __label29 always
+    96 label __label30
 -    * op add __tmp14 S9 1
 -    * set S9 __tmp14
-+   88 op add S9 S9 1
-    89 set __tmp4 S9
-    90 jump __label10 always
-    91 label __label29
++   97 op add S9 S9 1
++   98 noop
+    99 set __tmp4 S9
+   100 jump __label10 always
+   101 label __label29
  
-    93 label __label10
-    94 set __tmp3 __tmp4
-    95 label __label9
+   103 label __label10
+   104 set __tmp3 __tmp4
+   105 label __label9
 -    * op idiv __tmp15 __fn0_n 10
 -    * set __fn0_n __tmp15
-+   96 op idiv __fn0_n __fn0_n 10
-    97 label __label6
-    98 jump __label5 always
-    99 label __label7
++  106 op idiv __fn0_n __fn0_n 10
++  107 noop
+   108 label __label6
+   109 jump __label5 always
+   110 label __label7
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -124,170 +140,305 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     22 jump __label11 always
     23 label __label12
     24 op add S0 S0 1
-    25 set __tmp4 S0
-    26 jump __label10 always
-    27 label __label11
+ 
+    26 set __tmp4 S0
+    27 jump __label10 always
+    28 label __label11
 -    * jump __label14 equal __ast0 1
-+   28 jump __label14 equal __fn1_n 1
-    29 jump __label13 always
-    30 label __label14
-    31 op add S1 S1 1
-    32 set __tmp4 S1
-    33 jump __label10 always
-    34 label __label13
++   29 jump __label14 equal __fn1_n 1
+    30 jump __label13 always
+    31 label __label14
+    32 op add S1 S1 1
+ 
+    34 set __tmp4 S1
+    35 jump __label10 always
+    36 label __label13
 -    * jump __label16 equal __ast0 2
-+   35 jump __label16 equal __fn1_n 2
-    36 jump __label15 always
-    37 label __label16
-    38 op add S2 S2 1
-    39 set __tmp4 S2
-    40 jump __label10 always
-    41 label __label15
++   37 jump __label16 equal __fn1_n 2
+    38 jump __label15 always
+    39 label __label16
+    40 op add S2 S2 1
+ 
+    42 set __tmp4 S2
+    43 jump __label10 always
+    44 label __label15
 -    * jump __label18 equal __ast0 3
-+   42 jump __label18 equal __fn1_n 3
-    43 jump __label17 always
-    44 label __label18
-    45 op add S3 S3 1
-    46 set __tmp4 S3
-    47 jump __label10 always
-    48 label __label17
++   45 jump __label18 equal __fn1_n 3
+    46 jump __label17 always
+    47 label __label18
+    48 op add S3 S3 1
+ 
+    50 set __tmp4 S3
+    51 jump __label10 always
+    52 label __label17
 -    * jump __label20 equal __ast0 4
-+   49 jump __label20 equal __fn1_n 4
-    50 jump __label19 always
-    51 label __label20
-    52 op add S4 S4 1
-    53 set __tmp4 S4
-    54 jump __label10 always
-    55 label __label19
++   53 jump __label20 equal __fn1_n 4
+    54 jump __label19 always
+    55 label __label20
+    56 op add S4 S4 1
+ 
+    58 set __tmp4 S4
+    59 jump __label10 always
+    60 label __label19
 -    * jump __label22 equal __ast0 5
-+   56 jump __label22 equal __fn1_n 5
-    57 jump __label21 always
-    58 label __label22
-    59 op add S5 S5 1
-    60 set __tmp4 S5
-    61 jump __label10 always
-    62 label __label21
++   61 jump __label22 equal __fn1_n 5
+    62 jump __label21 always
+    63 label __label22
+    64 op add S5 S5 1
+ 
+    66 set __tmp4 S5
+    67 jump __label10 always
+    68 label __label21
 -    * jump __label24 equal __ast0 6
-+   63 jump __label24 equal __fn1_n 6
-    64 jump __label23 always
-    65 label __label24
-    66 op add S6 S6 1
-    67 set __tmp4 S6
-    68 jump __label10 always
-    69 label __label23
--    * jump __label26 equal __ast0 7
-+   70 jump __label26 equal __fn1_n 7
-    71 jump __label25 always
-    72 label __label26
-    73 op add S7 S7 1
-    74 set __tmp4 S7
++   69 jump __label24 equal __fn1_n 6
+    70 jump __label23 always
+    71 label __label24
+    72 op add S6 S6 1
+ 
+    74 set __tmp4 S6
     75 jump __label10 always
-    76 label __label25
+    76 label __label23
+-    * jump __label26 equal __ast0 7
++   77 jump __label26 equal __fn1_n 7
+    78 jump __label25 always
+    79 label __label26
+    80 op add S7 S7 1
+ 
+    82 set __tmp4 S7
+    83 jump __label10 always
+    84 label __label25
 -    * jump __label28 equal __ast0 8
-+   77 jump __label28 equal __fn1_n 8
-    78 jump __label27 always
-    79 label __label28
-    80 op add S8 S8 1
-    81 set __tmp4 S8
-    82 jump __label10 always
-    83 label __label27
++   85 jump __label28 equal __fn1_n 8
+    86 jump __label27 always
+    87 label __label28
+    88 op add S8 S8 1
+ 
+    90 set __tmp4 S8
+    91 jump __label10 always
+    92 label __label27
 -    * jump __label30 equal __ast0 9
-+   84 jump __label30 equal __fn1_n 9
-    85 jump __label29 always
-    86 label __label30
-    87 op add S9 S9 1
++   93 jump __label30 equal __fn1_n 9
+    94 jump __label29 always
+    95 label __label30
+    96 op add S9 S9 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
-    90 label __label29
-    91 set __tmp4 null
-    92 label __label10
+   100 label __label29
+   101 set __tmp4 null
+   102 label __label10
 -    * set __tmp3 __tmp4
-    93 label __label9
-    94 op idiv __fn0_n __fn0_n 10
-    95 label __label6
-    96 jump __label5 always
-    97 label __label7
++  103 noop
+   104 label __label9
+   105 op idiv __fn0_n __fn0_n 10
+   106 noop
+   107 label __label6
+   108 jump __label5 always
+   109 label __label7
 -    * set __tmp0 null
-    98 label __label4
-    99 label __label1
-   100 op add i i 1
++  110 noop
+   111 label __label4
+   112 label __label1
+   113 op add i i 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-11 instructions):
  
-    22 jump __label11 always
     23 label __label12
     24 op add S0 S0 1
+    25 noop
 -    * set __tmp4 S0
-    25 jump __label10 always
-    26 label __label11
-    27 jump __label14 equal __fn1_n 1
-    28 jump __label13 always
-    29 label __label14
-    30 op add S1 S1 1
++   26 noop
+    27 jump __label10 always
+    28 label __label11
+    29 jump __label14 equal __fn1_n 1
+ 
+    31 label __label14
+    32 op add S1 S1 1
+    33 noop
 -    * set __tmp4 S1
-    31 jump __label10 always
-    32 label __label13
-    33 jump __label16 equal __fn1_n 2
-    34 jump __label15 always
-    35 label __label16
-    36 op add S2 S2 1
++   34 noop
+    35 jump __label10 always
+    36 label __label13
+    37 jump __label16 equal __fn1_n 2
+ 
+    39 label __label16
+    40 op add S2 S2 1
+    41 noop
 -    * set __tmp4 S2
-    37 jump __label10 always
-    38 label __label15
-    39 jump __label18 equal __fn1_n 3
-    40 jump __label17 always
-    41 label __label18
-    42 op add S3 S3 1
--    * set __tmp4 S3
++   42 noop
     43 jump __label10 always
-    44 label __label17
-    45 jump __label20 equal __fn1_n 4
-    46 jump __label19 always
-    47 label __label20
-    48 op add S4 S4 1
+    44 label __label15
+    45 jump __label18 equal __fn1_n 3
+ 
+    47 label __label18
+    48 op add S3 S3 1
+    49 noop
+-    * set __tmp4 S3
++   50 noop
+    51 jump __label10 always
+    52 label __label17
+    53 jump __label20 equal __fn1_n 4
+ 
+    55 label __label20
+    56 op add S4 S4 1
+    57 noop
 -    * set __tmp4 S4
-    49 jump __label10 always
-    50 label __label19
-    51 jump __label22 equal __fn1_n 5
-    52 jump __label21 always
-    53 label __label22
-    54 op add S5 S5 1
++   58 noop
+    59 jump __label10 always
+    60 label __label19
+    61 jump __label22 equal __fn1_n 5
+ 
+    63 label __label22
+    64 op add S5 S5 1
+    65 noop
 -    * set __tmp4 S5
-    55 jump __label10 always
-    56 label __label21
-    57 jump __label24 equal __fn1_n 6
-    58 jump __label23 always
-    59 label __label24
-    60 op add S6 S6 1
--    * set __tmp4 S6
-    61 jump __label10 always
-    62 label __label23
-    63 jump __label26 equal __fn1_n 7
-    64 jump __label25 always
-    65 label __label26
-    66 op add S7 S7 1
--    * set __tmp4 S7
++   66 noop
     67 jump __label10 always
-    68 label __label25
-    69 jump __label28 equal __fn1_n 8
-    70 jump __label27 always
-    71 label __label28
-    72 op add S8 S8 1
+    68 label __label21
+    69 jump __label24 equal __fn1_n 6
+ 
+    71 label __label24
+    72 op add S6 S6 1
+    73 noop
+-    * set __tmp4 S6
++   74 noop
+    75 jump __label10 always
+    76 label __label23
+    77 jump __label26 equal __fn1_n 7
+ 
+    79 label __label26
+    80 op add S7 S7 1
+    81 noop
+-    * set __tmp4 S7
++   82 noop
+    83 jump __label10 always
+    84 label __label25
+    85 jump __label28 equal __fn1_n 8
+ 
+    87 label __label28
+    88 op add S8 S8 1
+    89 noop
 -    * set __tmp4 S8
-    73 jump __label10 always
-    74 label __label27
-    75 jump __label30 equal __fn1_n 9
-    76 jump __label29 always
-    77 label __label30
-    78 op add S9 S9 1
++   90 noop
+    91 jump __label10 always
+    92 label __label27
+    93 jump __label30 equal __fn1_n 9
+ 
+    95 label __label30
+    96 op add S9 S9 1
+    97 noop
 -    * set __tmp4 S9
-    79 jump __label10 always
-    80 label __label29
++   98 noop
+    99 jump __label10 always
+   100 label __label29
 -    * set __tmp4 null
-    81 label __label10
-    82 label __label9
-    83 op idiv __fn0_n __fn0_n 10
++  101 noop
+   102 label __label10
+   103 noop
+   104 label __label9
+
+Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 instructions):
+ 
+    18 op mod __tmp2 __fn0_n 10
+    19 label __label8
+    20 set __fn1_n __tmp2
+-    * jump __label12 equal __fn1_n 0
+-    * jump __label11 always
++   21 jump __label11 notEqual __fn1_n 0
++   22 noop
+    23 label __label12
+    24 op add S0 S0 1
+    25 noop
+    26 noop
+    27 jump __label10 always
+    28 label __label11
+-    * jump __label14 equal __fn1_n 1
+-    * jump __label13 always
++   29 jump __label13 notEqual __fn1_n 1
++   30 noop
+    31 label __label14
+    32 op add S1 S1 1
+    33 noop
+    34 noop
+    35 jump __label10 always
+    36 label __label13
+-    * jump __label16 equal __fn1_n 2
+-    * jump __label15 always
++   37 jump __label15 notEqual __fn1_n 2
++   38 noop
+    39 label __label16
+    40 op add S2 S2 1
+    41 noop
+    42 noop
+    43 jump __label10 always
+    44 label __label15
+-    * jump __label18 equal __fn1_n 3
+-    * jump __label17 always
++   45 jump __label17 notEqual __fn1_n 3
++   46 noop
+    47 label __label18
+    48 op add S3 S3 1
+    49 noop
+    50 noop
+    51 jump __label10 always
+    52 label __label17
+-    * jump __label20 equal __fn1_n 4
+-    * jump __label19 always
++   53 jump __label19 notEqual __fn1_n 4
++   54 noop
+    55 label __label20
+    56 op add S4 S4 1
+    57 noop
+    58 noop
+    59 jump __label10 always
+    60 label __label19
+-    * jump __label22 equal __fn1_n 5
+-    * jump __label21 always
++   61 jump __label21 notEqual __fn1_n 5
++   62 noop
+    63 label __label22
+    64 op add S5 S5 1
+    65 noop
+    66 noop
+    67 jump __label10 always
+    68 label __label21
+-    * jump __label24 equal __fn1_n 6
+-    * jump __label23 always
++   69 jump __label23 notEqual __fn1_n 6
++   70 noop
+    71 label __label24
+    72 op add S6 S6 1
+    73 noop
+    74 noop
+    75 jump __label10 always
+    76 label __label23
+-    * jump __label26 equal __fn1_n 7
+-    * jump __label25 always
++   77 jump __label25 notEqual __fn1_n 7
++   78 noop
+    79 label __label26
+    80 op add S7 S7 1
+    81 noop
+    82 noop
+    83 jump __label10 always
+    84 label __label25
+-    * jump __label28 equal __fn1_n 8
+-    * jump __label27 always
++   85 jump __label27 notEqual __fn1_n 8
++   86 noop
+    87 label __label28
+    88 op add S8 S8 1
+    89 noop
+    90 noop
+    91 jump __label10 always
+    92 label __label27
+-    * jump __label30 equal __fn1_n 9
+-    * jump __label29 always
++   93 jump __label29 notEqual __fn1_n 9
++   94 noop
+    95 label __label30
+    96 op add S9 S9 1
+    97 noop
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -303,87 +454,106 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 inst
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    75 jump __label29 always
-    76 label __label30
-    77 op add S9 S9 1
+    95 op add S9 S9 1
+    96 noop
+    97 noop
 -    * jump __label10 always
-    78 label __label29
-    79 label __label10
-    80 label __label9
++   98 noop
+    99 label __label29
+   100 noop
+   101 label __label10
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     17 op mod __tmp2 __fn0_n 10
     18 label __label8
     19 set __fn1_n __tmp2
--    * jump __label12 equal __fn1_n 0
-+   20 jump __label12 equal __tmp2 0
-    21 jump __label11 always
+-    * jump __label11 notEqual __fn1_n 0
++   20 jump __label11 notEqual __tmp2 0
+    21 noop
     22 label __label12
     23 op add S0 S0 1
-    24 jump __label10 always
-    25 label __label11
--    * jump __label14 equal __fn1_n 1
-+   26 jump __label14 equal __tmp2 1
-    27 jump __label13 always
-    28 label __label14
-    29 op add S1 S1 1
-    30 jump __label10 always
-    31 label __label13
--    * jump __label16 equal __fn1_n 2
-+   32 jump __label16 equal __tmp2 2
-    33 jump __label15 always
-    34 label __label16
-    35 op add S2 S2 1
-    36 jump __label10 always
-    37 label __label15
--    * jump __label18 equal __fn1_n 3
-+   38 jump __label18 equal __tmp2 3
-    39 jump __label17 always
-    40 label __label18
-    41 op add S3 S3 1
+ 
+    25 noop
+    26 jump __label10 always
+    27 label __label11
+-    * jump __label13 notEqual __fn1_n 1
++   28 jump __label13 notEqual __tmp2 1
+    29 noop
+    30 label __label14
+    31 op add S1 S1 1
+ 
+    33 noop
+    34 jump __label10 always
+    35 label __label13
+-    * jump __label15 notEqual __fn1_n 2
++   36 jump __label15 notEqual __tmp2 2
+    37 noop
+    38 label __label16
+    39 op add S2 S2 1
+ 
+    41 noop
     42 jump __label10 always
-    43 label __label17
--    * jump __label20 equal __fn1_n 4
-+   44 jump __label20 equal __tmp2 4
-    45 jump __label19 always
-    46 label __label20
-    47 op add S4 S4 1
-    48 jump __label10 always
-    49 label __label19
--    * jump __label22 equal __fn1_n 5
-+   50 jump __label22 equal __tmp2 5
-    51 jump __label21 always
-    52 label __label22
-    53 op add S5 S5 1
-    54 jump __label10 always
-    55 label __label21
--    * jump __label24 equal __fn1_n 6
-+   56 jump __label24 equal __tmp2 6
-    57 jump __label23 always
-    58 label __label24
-    59 op add S6 S6 1
-    60 jump __label10 always
-    61 label __label23
--    * jump __label26 equal __fn1_n 7
-+   62 jump __label26 equal __tmp2 7
-    63 jump __label25 always
-    64 label __label26
-    65 op add S7 S7 1
+    43 label __label15
+-    * jump __label17 notEqual __fn1_n 3
++   44 jump __label17 notEqual __tmp2 3
+    45 noop
+    46 label __label18
+    47 op add S3 S3 1
+ 
+    49 noop
+    50 jump __label10 always
+    51 label __label17
+-    * jump __label19 notEqual __fn1_n 4
++   52 jump __label19 notEqual __tmp2 4
+    53 noop
+    54 label __label20
+    55 op add S4 S4 1
+ 
+    57 noop
+    58 jump __label10 always
+    59 label __label19
+-    * jump __label21 notEqual __fn1_n 5
++   60 jump __label21 notEqual __tmp2 5
+    61 noop
+    62 label __label22
+    63 op add S5 S5 1
+ 
+    65 noop
     66 jump __label10 always
-    67 label __label25
--    * jump __label28 equal __fn1_n 8
-+   68 jump __label28 equal __tmp2 8
-    69 jump __label27 always
-    70 label __label28
-    71 op add S8 S8 1
-    72 jump __label10 always
-    73 label __label27
--    * jump __label30 equal __fn1_n 9
-+   74 jump __label30 equal __tmp2 9
-    75 jump __label29 always
-    76 label __label30
-    77 op add S9 S9 1
+    67 label __label21
+-    * jump __label23 notEqual __fn1_n 6
++   68 jump __label23 notEqual __tmp2 6
+    69 noop
+    70 label __label24
+    71 op add S6 S6 1
+ 
+    73 noop
+    74 jump __label10 always
+    75 label __label23
+-    * jump __label25 notEqual __fn1_n 7
++   76 jump __label25 notEqual __tmp2 7
+    77 noop
+    78 label __label26
+    79 op add S7 S7 1
+ 
+    81 noop
+    82 jump __label10 always
+    83 label __label25
+-    * jump __label27 notEqual __fn1_n 8
++   84 jump __label27 notEqual __tmp2 8
+    85 noop
+    86 label __label28
+    87 op add S8 S8 1
+ 
+    89 noop
+    90 jump __label10 always
+    91 label __label27
+-    * jump __label29 notEqual __fn1_n 9
++   92 jump __label29 notEqual __tmp2 9
+    93 noop
+    94 label __label30
+    95 op add S9 S9 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
@@ -391,8 +561,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     17 op mod __tmp2 __fn0_n 10
     18 label __label8
 -    * set __fn1_n __tmp2
-    19 jump __label12 equal __tmp2 0
-    20 jump __label11 always
+    19 jump __label11 notEqual __tmp2 0
+    20 noop
     21 label __label12
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
@@ -409,24 +579,142 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 +   17 label __label32
     18 op mod __tmp2 __fn0_n 10
     19 label __label8
-    20 jump __label12 equal __tmp2 0
+    20 jump __label11 notEqual __tmp2 0
  
-    80 label __label9
-    81 op idiv __fn0_n __fn0_n 10
-    82 label __label6
+   104 op idiv __fn0_n __fn0_n 10
+   105 noop
+   106 label __label6
 -    * jump __label5 always
-+   83 jump __label32 greaterThan __fn0_n 0
-    84 label __label7
-    85 label __label4
-    86 label __label1
-    87 op add i i 1
++  107 jump __label32 greaterThan __fn0_n 0
+   108 label __label7
+   109 noop
+   110 label __label4
+   111 label __label1
+   112 op add i i 1
 -    * jump __label0 always
-+   88 jump __label31 lessThanEq i 100
-    89 label __label2
-    90 print S0
-    91 print S1
++  113 jump __label31 lessThanEq i 100
+   114 label __label2
+   115 print S0
+   116 print S1
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Case Switching: convert case at line 16 (+5 instructions):
+ 
+    17 label __label32
+    18 op mod __tmp2 __fn0_n 10
+    19 label __label8
+-    * jump __label11 notEqual __tmp2 0
+-    * noop
++   20 op min __tmp16 __tmp2 10
++   21 op max __tmp16 __tmp16 -1
++   22 gotooffset __label35 __tmp16 -1 __label34
++   23 gotolabel __label35 __label34
++   24 jump __label33 always
++   25 gotolabel __label36 __label34
++   26 jump __label12 always
++   27 gotolabel __label37 __label34
++   28 jump __label14 always
++   29 gotolabel __label38 __label34
++   30 jump __label16 always
++   31 gotolabel __label39 __label34
++   32 jump __label18 always
++   33 gotolabel __label40 __label34
++   34 jump __label20 always
++   35 gotolabel __label41 __label34
++   36 jump __label22 always
++   37 gotolabel __label42 __label34
++   38 jump __label24 always
++   39 gotolabel __label43 __label34
++   40 jump __label26 always
++   41 gotolabel __label44 __label34
++   42 jump __label28 always
++   43 gotolabel __label45 __label34
++   44 jump __label30 always
++   45 gotolabel __label46 __label34
++   46 jump __label33 always
+    47 label __label12
+    48 op add S0 S0 1
+    49 noop
+    50 noop
+    51 jump __label10 always
+    52 label __label11
+-    * jump __label13 notEqual __tmp2 1
+-    * noop
+    53 label __label14
+    54 op add S1 S1 1
+    55 noop
+    56 noop
+    57 jump __label10 always
+    58 label __label13
+-    * jump __label15 notEqual __tmp2 2
+-    * noop
+    59 label __label16
+    60 op add S2 S2 1
+    61 noop
+    62 noop
+    63 jump __label10 always
+    64 label __label15
+-    * jump __label17 notEqual __tmp2 3
+-    * noop
+    65 label __label18
+    66 op add S3 S3 1
+    67 noop
+    68 noop
+    69 jump __label10 always
+    70 label __label17
+-    * jump __label19 notEqual __tmp2 4
+-    * noop
+    71 label __label20
+    72 op add S4 S4 1
+    73 noop
+    74 noop
+    75 jump __label10 always
+    76 label __label19
+-    * jump __label21 notEqual __tmp2 5
+-    * noop
+    77 label __label22
+    78 op add S5 S5 1
+    79 noop
+    80 noop
+    81 jump __label10 always
+    82 label __label21
+-    * jump __label23 notEqual __tmp2 6
+-    * noop
+    83 label __label24
+    84 op add S6 S6 1
+    85 noop
+    86 noop
+    87 jump __label10 always
+    88 label __label23
+-    * jump __label25 notEqual __tmp2 7
+-    * noop
+    89 label __label26
+    90 op add S7 S7 1
+    91 noop
+    92 noop
+    93 jump __label10 always
+    94 label __label25
+-    * jump __label27 notEqual __tmp2 8
+-    * noop
+    95 label __label28
+    96 op add S8 S8 1
+    97 noop
+    98 noop
+    99 jump __label10 always
+   100 label __label27
+-    * jump __label29 notEqual __tmp2 9
+-    * noop
+   101 label __label30
+   102 op add S9 S9 1
+   103 noop
+   104 noop
+   105 noop
+   106 label __label29
++  107 label __label33
+   108 noop
+   109 label __label10
+   110 noop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     13 label __label3
     14 set __fn0_n i
@@ -437,80 +725,63 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     18 op mod __tmp2 __fn0_n 10
     19 label __label8
 
-Modifications by Final phase, Jump Straightening, iteration 1 (-10 instructions):
+Modifications by Final phase, Unreachable Code Elimination, iteration 1:
  
-    17 label __label32
-    18 op mod __tmp2 __fn0_n 10
-    19 label __label8
--    * jump __label12 equal __tmp2 0
--    * jump __label11 always
-+   20 jump __label11 notEqual __tmp2 0
-    21 label __label12
-    22 op add S0 S0 1
-    23 jump __label10 always
-    24 label __label11
--    * jump __label14 equal __tmp2 1
--    * jump __label13 always
-+   25 jump __label13 notEqual __tmp2 1
-    26 label __label14
-    27 op add S1 S1 1
-    28 jump __label10 always
-    29 label __label13
--    * jump __label16 equal __tmp2 2
--    * jump __label15 always
-+   30 jump __label15 notEqual __tmp2 2
-    31 label __label16
-    32 op add S2 S2 1
-    33 jump __label10 always
-    34 label __label15
--    * jump __label18 equal __tmp2 3
--    * jump __label17 always
-+   35 jump __label17 notEqual __tmp2 3
-    36 label __label18
-    37 op add S3 S3 1
-    38 jump __label10 always
-    39 label __label17
--    * jump __label20 equal __tmp2 4
--    * jump __label19 always
-+   40 jump __label19 notEqual __tmp2 4
-    41 label __label20
-    42 op add S4 S4 1
-    43 jump __label10 always
-    44 label __label19
--    * jump __label22 equal __tmp2 5
--    * jump __label21 always
-+   45 jump __label21 notEqual __tmp2 5
-    46 label __label22
-    47 op add S5 S5 1
-    48 jump __label10 always
-    49 label __label21
--    * jump __label24 equal __tmp2 6
--    * jump __label23 always
-+   50 jump __label23 notEqual __tmp2 6
-    51 label __label24
-    52 op add S6 S6 1
-    53 jump __label10 always
-    54 label __label23
--    * jump __label26 equal __tmp2 7
--    * jump __label25 always
-+   55 jump __label25 notEqual __tmp2 7
-    56 label __label26
-    57 op add S7 S7 1
-    58 jump __label10 always
-    59 label __label25
--    * jump __label28 equal __tmp2 8
--    * jump __label27 always
-+   60 jump __label27 notEqual __tmp2 8
-    61 label __label28
-    62 op add S8 S8 1
-    63 jump __label10 always
-    64 label __label27
--    * jump __label30 equal __tmp2 9
--    * jump __label29 always
-+   65 jump __label29 notEqual __tmp2 9
-    66 label __label30
-    67 op add S9 S9 1
-    68 label __label29
+    49 noop
+    50 noop
+    51 jump __label10 always
+-    * label __label11
+    52 label __label14
+    53 op add S1 S1 1
+    54 noop
+    55 noop
+    56 jump __label10 always
+-    * label __label13
+    57 label __label16
+    58 op add S2 S2 1
+    59 noop
+    60 noop
+    61 jump __label10 always
+-    * label __label15
+    62 label __label18
+    63 op add S3 S3 1
+    64 noop
+    65 noop
+    66 jump __label10 always
+-    * label __label17
+    67 label __label20
+    68 op add S4 S4 1
+    69 noop
+    70 noop
+    71 jump __label10 always
+-    * label __label19
+    72 label __label22
+    73 op add S5 S5 1
+    74 noop
+    75 noop
+    76 jump __label10 always
+-    * label __label21
+    77 label __label24
+    78 op add S6 S6 1
+    79 noop
+    80 noop
+    81 jump __label10 always
+-    * label __label23
+    82 label __label26
+    83 op add S7 S7 1
+    84 noop
+    85 noop
+    86 jump __label10 always
+-    * label __label25
+    87 label __label28
+    88 op add S8 S8 1
+    89 noop
+    90 noop
+    91 jump __label10 always
+-    * label __label27
+    92 label __label30
+    93 op add S9 S9 1
+    94 noop
 
 Final code before resolving virtual instructions:
 
@@ -530,45 +801,63 @@ set __fn0_n i
 jump __label7 lessThanEq i 0
 label __label32
 op mod __tmp2 __fn0_n 10
-jump __label11 notEqual __tmp2 0
+op min __tmp16 __tmp2 10
+op max __tmp16 __tmp16 -1
+gotooffset __label35 __tmp16 -1 __label34
+gotolabel __label35 __label34
+jump __label33 always 0 0
+gotolabel __label36 __label34
+jump __label12 always 0 0
+gotolabel __label37 __label34
+jump __label14 always 0 0
+gotolabel __label38 __label34
+jump __label16 always 0 0
+gotolabel __label39 __label34
+jump __label18 always 0 0
+gotolabel __label40 __label34
+jump __label20 always 0 0
+gotolabel __label41 __label34
+jump __label22 always 0 0
+gotolabel __label42 __label34
+jump __label24 always 0 0
+gotolabel __label43 __label34
+jump __label26 always 0 0
+gotolabel __label44 __label34
+jump __label28 always 0 0
+gotolabel __label45 __label34
+jump __label30 always 0 0
+gotolabel __label46 __label34
+jump __label33 always 0 0
+label __label12
 op add S0 S0 1
 jump __label10 always 0 0
-label __label11
-jump __label13 notEqual __tmp2 1
+label __label14
 op add S1 S1 1
 jump __label10 always 0 0
-label __label13
-jump __label15 notEqual __tmp2 2
+label __label16
 op add S2 S2 1
 jump __label10 always 0 0
-label __label15
-jump __label17 notEqual __tmp2 3
+label __label18
 op add S3 S3 1
 jump __label10 always 0 0
-label __label17
-jump __label19 notEqual __tmp2 4
+label __label20
 op add S4 S4 1
 jump __label10 always 0 0
-label __label19
-jump __label21 notEqual __tmp2 5
+label __label22
 op add S5 S5 1
 jump __label10 always 0 0
-label __label21
-jump __label23 notEqual __tmp2 6
+label __label24
 op add S6 S6 1
 jump __label10 always 0 0
-label __label23
-jump __label25 notEqual __tmp2 7
+label __label26
 op add S7 S7 1
 jump __label10 always 0 0
-label __label25
-jump __label27 notEqual __tmp2 8
+label __label28
 op add S8 S8 1
 jump __label10 always 0 0
-label __label27
-jump __label29 notEqual __tmp2 9
+label __label30
 op add S9 S9 1
-label __label29
+label __label33
 label __label10
 op idiv __fn0_n __fn0_n 10
 jump __label32 greaterThan __fn0_n 0

@@ -105,6 +105,10 @@ public abstract class AbstractOptimizer implements Optimizer {
         return instructionProcessor.createGoto(astContext, address, marker);
     }
 
+    public GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
+        return instructionProcessor.createGotoOffset(astContext, target, value, offset, marker);
+    }
+
     protected JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
         return instructionProcessor.createJump(astContext, target, condition, x, y);
     }

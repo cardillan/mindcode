@@ -33,6 +33,7 @@ public interface InstructionProcessor {
     CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr);
     EndInstruction createEnd(AstContext astContext);
     GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker);
+    GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker);
     JumpInstruction createJump(AstContext astContext, LogicLabel target, Condition condition, LogicValue x, LogicValue y);
     JumpInstruction createJumpUnconditional(AstContext astContext, LogicLabel target);
     LabelInstruction createLabel(AstContext astContext, LogicLabel label);

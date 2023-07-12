@@ -2,10 +2,16 @@ package info.teksol.mindcode.logic;
 
 public class LogicLabel extends AbstractArgument implements LogicAddress {
     private final String label;
+    private final int address;
 
-    private LogicLabel(String label) {
+    private LogicLabel(String label, int address) {
         super(ArgumentType.LABEL);
         this.label = label;
+        this.address = address;
+    }
+
+    public int getAddress() {
+        return address;
     }
 
     @Override
@@ -21,10 +27,10 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
     }
 
     public static LogicLabel symbolic(String name) {
-        return new LogicLabel(name);
+        return new LogicLabel(name, -1);
     }
 
     public static LogicLabel absolute(int address) {
-        return new LogicLabel(String.valueOf(address));
+        return new LogicLabel(String.valueOf(address), address);
     }
 }

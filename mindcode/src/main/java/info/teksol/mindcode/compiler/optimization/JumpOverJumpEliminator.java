@@ -1,7 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 
 /**
@@ -36,6 +38,7 @@ public class JumpOverJumpEliminator extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump
@@ -43,14 +46,21 @@ public class JumpOverJumpEliminator extends BaseOptimizer {
                         && iterator.peek(0) instanceof JumpInstruction next
                         && next.isUnconditional()) {
 
-                    try (LogicIterator inner = iterator.copy()) {
-                        inner.next(); // Skip unconditional jump
-                        while (inner.hasNext() && inner.next() instanceof LabelInstruction label) {
-                            if (label.getLabel().equals(jump.getTarget())) {
-                                iterator.set(jump.invert().withTarget(next.getTarget()));
-                                iterator.next();
-                                iterator.remove();
-                                break;
+                    if (next.getAstContext() == jump.getAstContext() || phase == OptimizationPhase.FINAL) {
+                        try (LogicIterator inner = iterator.copy()) {
+                            inner.next(); // Skip unconditional jump
+                            while (inner.hasNext()) {
+                                LogicInstruction instruction = inner.next();
+                                if (instruction instanceof LabelInstruction label) {
+                                    if (label.getLabel().equals(jump.getTarget())) {
+                                        iterator.set(jump.invert().withTarget(next.getTarget()));
+                                        AstContext astContext = iterator.next().getAstContext();
+                                        iterator.set(createNoOp(astContext));
+                                        break;
+                                    }
+                                } else if (instruction.getRealSize() != 0) {
+                                    break;
+                                }
                             }
                         }
                     }

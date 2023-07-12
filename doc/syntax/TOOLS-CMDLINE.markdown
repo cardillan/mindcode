@@ -77,11 +77,11 @@ usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s]
-                [input] [output]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
+                [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [-t {6,7s,7w,7as,7aw}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}]
+                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a mindcode source file into text mlog file.
 
@@ -142,6 +142,10 @@ optimization levels:
                          optimization level of unrolls loops with constant number of iterations (optimization for speed)
   --function-inlining LEVEL
                          optimization level of inlines stackless function calls (optimization for speed)
+  --case-switching LEVEL
+                         optimization level of modifies suitable case expressions to use jump tables
+  --return-optimization LEVEL
+                         optimization level of speeds up return statements in recursive and stackless functions
   --jump-straightening LEVEL
                          optimization level of simplifying sequences of intertwined jumps
   --jump-threading LEVEL
@@ -170,11 +174,11 @@ usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s]
-                [-a TAG [TAG ...]] [input] [output]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
+                [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [-t {6,7s,7w,7as,7aw}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}]
+                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
 
 Compile a schema definition file into binary msch file.
 
@@ -236,6 +240,10 @@ optimization levels:
                          optimization level of unrolls loops with constant number of iterations (optimization for speed)
   --function-inlining LEVEL
                          optimization level of inlines stackless function calls (optimization for speed)
+  --case-switching LEVEL
+                         optimization level of modifies suitable case expressions to use jump tables
+  --return-optimization LEVEL
+                         optimization level of speeds up return statements in recursive and stackless functions
   --jump-straightening LEVEL
                          optimization level of simplifying sequences of intertwined jumps
   --jump-threading LEVEL

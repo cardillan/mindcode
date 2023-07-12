@@ -54,11 +54,7 @@ class TempVariableEliminator extends BaseOptimizer {
                             // The current instruction merely transfers a value from the output argument of the previous instruction
                             // Replacing those arguments with target of the set instruction
                             itPrev.set(replaceAllArgs(previous, value, set.getResult()).withContext(set.getAstContext()));
-                            itCurr.remove();
-
-                            // We just removed instruction *after* itPref cursor, but we need itPref to sync with itCurr
-                            // which got its cursor decreased.
-                            itPrev.previous();
+                            itCurr.set(createNoOp(current.getAstContext()));
                         }
                     }
                 }

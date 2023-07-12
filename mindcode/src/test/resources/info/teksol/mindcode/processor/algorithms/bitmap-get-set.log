@@ -3,7 +3,7 @@
      1 instructions eliminated by Dead Code Elimination (3 iterations).
     16 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions modified by If Expression Optimization (3 iterations).
-    40 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+    40 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
      2 instructions eliminated by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
    219 instructions added by Loop Unrolling (5 iterations).
@@ -11,11 +11,11 @@
    192 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 974):
-  * Loop Unrolling: unroll loop at line 13             cost  56, benefit      400,0, efficiency        7,1
-    Loop Unrolling: unroll loop at line 17             cost 160, benefit      800,0, efficiency        5,0
+  * Loop Unrolling: unroll loop at line 13                       cost  56, benefit      400.0, efficiency        7.1 (+38 instructions)
+    Loop Unrolling: unroll loop at line 17                       cost 160, benefit      800.0, efficiency        5.0
 
-Pass 1: speed optimization selection (cost limit 919):
-  * Loop Unrolling: unroll loop at line 17             cost 160, benefit      800,0, efficiency        5,0
+Pass 1: speed optimization selection (cost limit 936):
+  * Loop Unrolling: unroll loop at line 17                       cost 160, benefit      800.0, efficiency        5.0 (+144 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
@@ -25,9 +25,10 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
 -    * op and __tmp13 __tmp9 __tmp12
 -    * set __tmp8 __tmp13
 +   30 op and __tmp8 __tmp9 __tmp12
-    31 label __label9
-    32 jump __label10 equal __tmp8 false
-    33 set __tmp14 1
++   31 noop
+    32 label __label9
+    33 jump __label10 equal __tmp8 false
+    34 set __tmp14 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -35,32 +36,33 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
     13 op idiv __tmp7 __fn0_bitIndex BITS
     14 write __tmp6 BITMAP __tmp7
 -    * set __tmp1 __tmp6
-    15 label __label4
-    16 label __label1
-    17 op add i i 1
++   15 noop
+    16 label __label4
+    17 label __label1
+    18 op add i i 1
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1:
  
-    20 set i 0
-    21 label __label5
-    22 jump __label7 greaterThanEq i 16
-+   23 set __tmp14 0
-    24 label __label8
-    25 set __fn1_bitIndex i
-    26 op idiv __tmp10 __fn1_bitIndex BITS
+    21 set i 0
+    22 label __label5
+    23 jump __label7 greaterThanEq i 16
++   24 set __tmp14 0
+    25 label __label8
+    26 set __fn1_bitIndex i
+    27 op idiv __tmp10 __fn1_bitIndex BITS
  
-    29 op shl __tmp12 1 __tmp11
-    30 op and __tmp8 __tmp9 __tmp12
-    31 label __label9
+    31 op and __tmp8 __tmp9 __tmp12
+    32 noop
+    33 label __label9
 -    * jump __label10 equal __tmp8 false
-+   32 jump __label11 equal __tmp8 false
-    33 set __tmp14 1
-    34 jump __label11 always
++   34 jump __label11 equal __tmp8 false
+    35 set __tmp14 1
+    36 jump __label11 always
 -    * label __label10
 -    * set __tmp14 0
-    35 label __label11
-    36 print __tmp14
-    37 label __label6
+    37 label __label11
+    38 print __tmp14
+    39 label __label6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -78,21 +80,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * write __tmp6 BITMAP __tmp7
 +   13 op idiv __tmp7 __tmp0 BITS
 +   14 write __tmp6 BITMAP __tmp3
-    15 label __label4
-    16 label __label1
-    17 op add i i 1
+    15 noop
+    16 label __label4
+    17 label __label1
  
-    23 set __tmp14 0
-    24 label __label8
-    25 set __fn1_bitIndex i
+    24 set __tmp14 0
+    25 label __label8
+    26 set __fn1_bitIndex i
 -    * op idiv __tmp10 __fn1_bitIndex BITS
-+   26 op idiv __tmp10 i BITS
-    27 read __tmp9 BITMAP __tmp10
++   27 op idiv __tmp10 i BITS
+    28 read __tmp9 BITMAP __tmp10
 -    * op mod __tmp11 __fn1_bitIndex BITS
-+   28 op mod __tmp11 i BITS
-    29 op shl __tmp12 1 __tmp11
-    30 op and __tmp8 __tmp9 __tmp12
-    31 label __label9
++   29 op mod __tmp11 i BITS
+    30 op shl __tmp12 1 __tmp11
+    31 op and __tmp8 __tmp9 __tmp12
+    32 noop
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
@@ -107,16 +109,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
     11 op or __tmp6 __tmp2 __tmp5
 -    * op idiv __tmp7 __tmp0 BITS
     12 write __tmp6 BITMAP __tmp3
-    13 label __label4
-    14 label __label1
+    13 noop
+    14 label __label4
  
-    20 jump __label7 greaterThanEq i 16
-    21 set __tmp14 0
-    22 label __label8
+    21 jump __label7 greaterThanEq i 16
+    22 set __tmp14 0
+    23 label __label8
 -    * set __fn1_bitIndex i
-    23 op idiv __tmp10 i BITS
-    24 read __tmp9 BITMAP __tmp10
-    25 op mod __tmp11 i BITS
+    24 op idiv __tmp10 i BITS
+    25 read __tmp9 BITMAP __tmp10
+    26 op mod __tmp11 i BITS
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 instructions):
  
@@ -129,27 +131,27 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-2 inst
      6 label __label3
      7 op idiv __tmp3 __tmp0 BITS
  
-    13 label __label4
-    14 label __label1
-    15 op add i i 1
+    14 label __label4
+    15 label __label1
+    16 op add i i 1
 -    * jump __label0 always
-+   16 jump __label12 lessThan i 8
-    17 label __label2
-    18 set i 0
-    19 label __label5
++   17 jump __label12 lessThan i 8
+    18 label __label2
+    19 set i 0
+    20 label __label5
 -    * jump __label7 greaterThanEq i 16
-+   20 label __label13
-    21 set __tmp14 0
-    22 label __label8
-    23 op idiv __tmp10 i BITS
++   21 label __label13
+    22 set __tmp14 0
+    23 label __label8
+    24 op idiv __tmp10 i BITS
  
-    33 print __tmp14
-    34 label __label6
-    35 op add i i 1
+    35 print __tmp14
+    36 label __label6
+    37 op add i i 1
 -    * jump __label5 always
-+   36 jump __label13 lessThan i 16
-    37 label __label7
-    38 end
++   38 jump __label13 lessThan i 16
+    39 label __label7
+    40 end
 
 Modifications by Loop Unrolling: unroll loop at line 13 (+55 instructions):
      0 set BITS 32
@@ -165,6 +167,7 @@ Modifications by Loop Unrolling: unroll loop at line 13 (+55 instructions):
 -    * op shl __tmp5 1 __tmp4
 -    * op or __tmp6 __tmp2 __tmp5
 -    * write __tmp6 BITMAP __tmp3
+-    * noop
 -    * label __label4
 -    * label __label1
 -    * op add i i 1
@@ -181,103 +184,344 @@ Modifications by Loop Unrolling: unroll loop at line 13 (+55 instructions):
 +   10 op shl __tmp5 1 __tmp4
 +   11 op or __tmp6 __tmp2 __tmp5
 +   12 write __tmp6 BITMAP __tmp3
-+   13 label __label17
-+   14 label __label18
-+   15 op add i i 1
-+   16 label __label19
-+   17 op mul __tmp0 2 i
-+   18 label __label20
-+   19 op idiv __tmp3 __tmp0 BITS
-+   20 read __tmp2 BITMAP __tmp3
-+   21 op mod __tmp4 __tmp0 BITS
-+   22 op shl __tmp5 1 __tmp4
-+   23 op or __tmp6 __tmp2 __tmp5
-+   24 write __tmp6 BITMAP __tmp3
-+   25 label __label21
-+   26 label __label22
-+   27 op add i i 1
-+   28 label __label23
-+   29 op mul __tmp0 2 i
-+   30 label __label24
-+   31 op idiv __tmp3 __tmp0 BITS
-+   32 read __tmp2 BITMAP __tmp3
-+   33 op mod __tmp4 __tmp0 BITS
-+   34 op shl __tmp5 1 __tmp4
-+   35 op or __tmp6 __tmp2 __tmp5
-+   36 write __tmp6 BITMAP __tmp3
-+   37 label __label25
-+   38 label __label26
-+   39 op add i i 1
-+   40 label __label27
-+   41 op mul __tmp0 2 i
-+   42 label __label28
-+   43 op idiv __tmp3 __tmp0 BITS
-+   44 read __tmp2 BITMAP __tmp3
-+   45 op mod __tmp4 __tmp0 BITS
-+   46 op shl __tmp5 1 __tmp4
-+   47 op or __tmp6 __tmp2 __tmp5
-+   48 write __tmp6 BITMAP __tmp3
-+   49 label __label29
-+   50 label __label30
-+   51 op add i i 1
-+   52 label __label31
-+   53 op mul __tmp0 2 i
-+   54 label __label32
-+   55 op idiv __tmp3 __tmp0 BITS
-+   56 read __tmp2 BITMAP __tmp3
-+   57 op mod __tmp4 __tmp0 BITS
-+   58 op shl __tmp5 1 __tmp4
-+   59 op or __tmp6 __tmp2 __tmp5
-+   60 write __tmp6 BITMAP __tmp3
-+   61 label __label33
-+   62 label __label34
-+   63 op add i i 1
-+   64 label __label35
-+   65 op mul __tmp0 2 i
-+   66 label __label36
-+   67 op idiv __tmp3 __tmp0 BITS
-+   68 read __tmp2 BITMAP __tmp3
-+   69 op mod __tmp4 __tmp0 BITS
-+   70 op shl __tmp5 1 __tmp4
-+   71 op or __tmp6 __tmp2 __tmp5
-+   72 write __tmp6 BITMAP __tmp3
-+   73 label __label37
-+   74 label __label38
-+   75 op add i i 1
-+   76 label __label39
-+   77 op mul __tmp0 2 i
-+   78 label __label40
-+   79 op idiv __tmp3 __tmp0 BITS
-+   80 read __tmp2 BITMAP __tmp3
-+   81 op mod __tmp4 __tmp0 BITS
-+   82 op shl __tmp5 1 __tmp4
-+   83 op or __tmp6 __tmp2 __tmp5
-+   84 write __tmp6 BITMAP __tmp3
-+   85 label __label41
-+   86 label __label42
-+   87 op add i i 1
-+   88 label __label43
-+   89 op mul __tmp0 2 i
-+   90 label __label44
-+   91 op idiv __tmp3 __tmp0 BITS
-+   92 read __tmp2 BITMAP __tmp3
-+   93 op mod __tmp4 __tmp0 BITS
-+   94 op shl __tmp5 1 __tmp4
-+   95 op or __tmp6 __tmp2 __tmp5
-+   96 write __tmp6 BITMAP __tmp3
-+   97 label __label45
-+   98 label __label46
-+   99 op add i i 1
-+  100 label __label2
-   101 set i 0
-   102 label __label5
-   103 label __label13
++   13 noop
++   14 label __label17
++   15 label __label18
++   16 op add i i 1
++   17 label __label19
++   18 op mul __tmp0 2 i
++   19 label __label20
++   20 op idiv __tmp3 __tmp0 BITS
++   21 read __tmp2 BITMAP __tmp3
++   22 op mod __tmp4 __tmp0 BITS
++   23 op shl __tmp5 1 __tmp4
++   24 op or __tmp6 __tmp2 __tmp5
++   25 write __tmp6 BITMAP __tmp3
++   26 noop
++   27 label __label21
++   28 label __label22
++   29 op add i i 1
++   30 label __label23
++   31 op mul __tmp0 2 i
++   32 label __label24
++   33 op idiv __tmp3 __tmp0 BITS
++   34 read __tmp2 BITMAP __tmp3
++   35 op mod __tmp4 __tmp0 BITS
++   36 op shl __tmp5 1 __tmp4
++   37 op or __tmp6 __tmp2 __tmp5
++   38 write __tmp6 BITMAP __tmp3
++   39 noop
++   40 label __label25
++   41 label __label26
++   42 op add i i 1
++   43 label __label27
++   44 op mul __tmp0 2 i
++   45 label __label28
++   46 op idiv __tmp3 __tmp0 BITS
++   47 read __tmp2 BITMAP __tmp3
++   48 op mod __tmp4 __tmp0 BITS
++   49 op shl __tmp5 1 __tmp4
++   50 op or __tmp6 __tmp2 __tmp5
++   51 write __tmp6 BITMAP __tmp3
++   52 noop
++   53 label __label29
++   54 label __label30
++   55 op add i i 1
++   56 label __label31
++   57 op mul __tmp0 2 i
++   58 label __label32
++   59 op idiv __tmp3 __tmp0 BITS
++   60 read __tmp2 BITMAP __tmp3
++   61 op mod __tmp4 __tmp0 BITS
++   62 op shl __tmp5 1 __tmp4
++   63 op or __tmp6 __tmp2 __tmp5
++   64 write __tmp6 BITMAP __tmp3
++   65 noop
++   66 label __label33
++   67 label __label34
++   68 op add i i 1
++   69 label __label35
++   70 op mul __tmp0 2 i
++   71 label __label36
++   72 op idiv __tmp3 __tmp0 BITS
++   73 read __tmp2 BITMAP __tmp3
++   74 op mod __tmp4 __tmp0 BITS
++   75 op shl __tmp5 1 __tmp4
++   76 op or __tmp6 __tmp2 __tmp5
++   77 write __tmp6 BITMAP __tmp3
++   78 noop
++   79 label __label37
++   80 label __label38
++   81 op add i i 1
++   82 label __label39
++   83 op mul __tmp0 2 i
++   84 label __label40
++   85 op idiv __tmp3 __tmp0 BITS
++   86 read __tmp2 BITMAP __tmp3
++   87 op mod __tmp4 __tmp0 BITS
++   88 op shl __tmp5 1 __tmp4
++   89 op or __tmp6 __tmp2 __tmp5
++   90 write __tmp6 BITMAP __tmp3
++   91 noop
++   92 label __label41
++   93 label __label42
++   94 op add i i 1
++   95 label __label43
++   96 op mul __tmp0 2 i
++   97 label __label44
++   98 op idiv __tmp3 __tmp0 BITS
++   99 read __tmp2 BITMAP __tmp3
++  100 op mod __tmp4 __tmp0 BITS
++  101 op shl __tmp5 1 __tmp4
++  102 op or __tmp6 __tmp2 __tmp5
++  103 write __tmp6 BITMAP __tmp3
++  104 noop
++  105 label __label45
++  106 label __label46
++  107 op add i i 1
++  108 label __label2
+   109 set i 0
+   110 label __label5
+   111 label __label13
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     2 set i 0
+     3 label __label14
+     4 label __label15
+-    * op mul __tmp0 2 i
++    5 op mul __tmp0 2 0
+     6 label __label16
+-    * op idiv __tmp3 __tmp0 BITS
++    7 op idiv __tmp3 0 BITS
+     8 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++    9 op mod __tmp4 0 BITS
+    10 op shl __tmp5 1 __tmp4
+    11 op or __tmp6 __tmp2 __tmp5
+    12 write __tmp6 BITMAP __tmp3
+    13 noop
+    14 label __label17
+    15 label __label18
+-    * op add i i 1
++   16 op add i 0 1
+    17 label __label19
+-    * op mul __tmp0 2 i
++   18 op mul __tmp0 2 1
+    19 label __label20
+-    * op idiv __tmp3 __tmp0 BITS
++   20 op idiv __tmp3 2 BITS
+    21 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++   22 op mod __tmp4 2 BITS
+    23 op shl __tmp5 1 __tmp4
+    24 op or __tmp6 __tmp2 __tmp5
+    25 write __tmp6 BITMAP __tmp3
+    26 noop
+    27 label __label21
+    28 label __label22
+-    * op add i i 1
++   29 op add i 1 1
+    30 label __label23
+-    * op mul __tmp0 2 i
++   31 op mul __tmp0 2 2
+    32 label __label24
+-    * op idiv __tmp3 __tmp0 BITS
++   33 op idiv __tmp3 4 BITS
+    34 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++   35 op mod __tmp4 4 BITS
+    36 op shl __tmp5 1 __tmp4
+    37 op or __tmp6 __tmp2 __tmp5
+    38 write __tmp6 BITMAP __tmp3
+    39 noop
+    40 label __label25
+    41 label __label26
+-    * op add i i 1
++   42 op add i 2 1
+    43 label __label27
+-    * op mul __tmp0 2 i
++   44 op mul __tmp0 2 3
+    45 label __label28
+-    * op idiv __tmp3 __tmp0 BITS
++   46 op idiv __tmp3 6 BITS
+    47 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++   48 op mod __tmp4 6 BITS
+    49 op shl __tmp5 1 __tmp4
+    50 op or __tmp6 __tmp2 __tmp5
+    51 write __tmp6 BITMAP __tmp3
+    52 noop
+    53 label __label29
+    54 label __label30
+-    * op add i i 1
++   55 op add i 3 1
+    56 label __label31
+-    * op mul __tmp0 2 i
++   57 op mul __tmp0 2 4
+    58 label __label32
+-    * op idiv __tmp3 __tmp0 BITS
++   59 op idiv __tmp3 8 BITS
+    60 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++   61 op mod __tmp4 8 BITS
+    62 op shl __tmp5 1 __tmp4
+    63 op or __tmp6 __tmp2 __tmp5
+    64 write __tmp6 BITMAP __tmp3
+    65 noop
+    66 label __label33
+    67 label __label34
+-    * op add i i 1
++   68 op add i 4 1
+    69 label __label35
+-    * op mul __tmp0 2 i
++   70 op mul __tmp0 2 5
+    71 label __label36
+-    * op idiv __tmp3 __tmp0 BITS
++   72 op idiv __tmp3 10 BITS
+    73 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++   74 op mod __tmp4 10 BITS
+    75 op shl __tmp5 1 __tmp4
+    76 op or __tmp6 __tmp2 __tmp5
+    77 write __tmp6 BITMAP __tmp3
+    78 noop
+    79 label __label37
+    80 label __label38
+-    * op add i i 1
++   81 op add i 5 1
+    82 label __label39
+-    * op mul __tmp0 2 i
++   83 op mul __tmp0 2 6
+    84 label __label40
+-    * op idiv __tmp3 __tmp0 BITS
++   85 op idiv __tmp3 12 BITS
+    86 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++   87 op mod __tmp4 12 BITS
+    88 op shl __tmp5 1 __tmp4
+    89 op or __tmp6 __tmp2 __tmp5
+    90 write __tmp6 BITMAP __tmp3
+    91 noop
+    92 label __label41
+    93 label __label42
+-    * op add i i 1
++   94 op add i 6 1
+    95 label __label43
+-    * op mul __tmp0 2 i
++   96 op mul __tmp0 2 7
+    97 label __label44
+-    * op idiv __tmp3 __tmp0 BITS
++   98 op idiv __tmp3 14 BITS
+    99 read __tmp2 BITMAP __tmp3
+-    * op mod __tmp4 __tmp0 BITS
++  100 op mod __tmp4 14 BITS
+   101 op shl __tmp5 1 __tmp4
+   102 op or __tmp6 __tmp2 __tmp5
+   103 write __tmp6 BITMAP __tmp3
+   104 noop
+   105 label __label45
+   106 label __label46
+-    * op add i i 1
++  107 op add i 7 1
+   108 label __label2
+   109 set i 0
+   110 label __label5
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
+     0 set BITS 32
+     1 set BITMAP bank1
+-    * set i 0
+     2 label __label14
+     3 label __label15
+-    * op mul __tmp0 2 0
+     4 label __label16
+     5 op idiv __tmp3 0 BITS
+     6 read __tmp2 BITMAP __tmp3
+ 
+    11 noop
+    12 label __label17
+    13 label __label18
+-    * op add i 0 1
+    14 label __label19
+-    * op mul __tmp0 2 1
+    15 label __label20
+    16 op idiv __tmp3 2 BITS
+    17 read __tmp2 BITMAP __tmp3
+ 
+    22 noop
+    23 label __label21
+    24 label __label22
+-    * op add i 1 1
+    25 label __label23
+-    * op mul __tmp0 2 2
+    26 label __label24
+    27 op idiv __tmp3 4 BITS
+    28 read __tmp2 BITMAP __tmp3
+ 
+    33 noop
+    34 label __label25
+    35 label __label26
+-    * op add i 2 1
+    36 label __label27
+-    * op mul __tmp0 2 3
+    37 label __label28
+    38 op idiv __tmp3 6 BITS
+    39 read __tmp2 BITMAP __tmp3
+ 
+    44 noop
+    45 label __label29
+    46 label __label30
+-    * op add i 3 1
+    47 label __label31
+-    * op mul __tmp0 2 4
+    48 label __label32
+    49 op idiv __tmp3 8 BITS
+    50 read __tmp2 BITMAP __tmp3
+ 
+    55 noop
+    56 label __label33
+    57 label __label34
+-    * op add i 4 1
+    58 label __label35
+-    * op mul __tmp0 2 5
+    59 label __label36
+    60 op idiv __tmp3 10 BITS
+    61 read __tmp2 BITMAP __tmp3
+ 
+    66 noop
+    67 label __label37
+    68 label __label38
+-    * op add i 5 1
+    69 label __label39
+-    * op mul __tmp0 2 6
+    70 label __label40
+    71 op idiv __tmp3 12 BITS
+    72 read __tmp2 BITMAP __tmp3
+ 
+    77 noop
+    78 label __label41
+    79 label __label42
+-    * op add i 6 1
+    80 label __label43
+-    * op mul __tmp0 2 7
+    81 label __label44
+    82 op idiv __tmp3 14 BITS
+    83 read __tmp2 BITMAP __tmp3
+ 
+    88 noop
+    89 label __label45
+    90 label __label46
+-    * op add i 7 1
+    91 label __label2
+    92 set i 0
+    93 label __label5
 
 Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
  
-    98 label __label46
-    99 op add i i 1
-   100 label __label2
+    89 label __label45
+    90 label __label46
+    91 label __label2
 -    * set i 0
 -    * label __label5
 -    * label __label13
@@ -288,6 +532,7 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 -    * op mod __tmp11 i BITS
 -    * op shl __tmp12 1 __tmp11
 -    * op and __tmp8 __tmp9 __tmp12
+-    * noop
 -    * label __label9
 -    * jump __label11 equal __tmp8 false
 -    * set __tmp14 1
@@ -298,144 +543,153 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 -    * op add i i 1
 -    * jump __label13 lessThan i 16
 -    * label __label7
-+  101 set i 0
-+  102 label __label47
-+  103 label __label48
-+  104 set __tmp14 0
-+  105 label __label49
-+  106 op idiv __tmp10 i BITS
-+  107 read __tmp9 BITMAP __tmp10
-+  108 op mod __tmp11 i BITS
-+  109 op shl __tmp12 1 __tmp11
-+  110 op and __tmp8 __tmp9 __tmp12
-+  111 label __label50
-+  112 jump __label51 equal __tmp8 false
-+  113 set __tmp14 1
-+  114 jump __label51 always
-+  115 label __label51
-+  116 print __tmp14
-+  117 label __label52
-+  118 op add i i 1
-+  119 label __label53
-+  120 set __tmp14 0
-+  121 label __label54
-+  122 op idiv __tmp10 i BITS
-+  123 read __tmp9 BITMAP __tmp10
-+  124 op mod __tmp11 i BITS
-+  125 op shl __tmp12 1 __tmp11
-+  126 op and __tmp8 __tmp9 __tmp12
-+  127 label __label55
-+  128 jump __label56 equal __tmp8 false
-+  129 set __tmp14 1
-+  130 jump __label56 always
-+  131 label __label56
-+  132 print __tmp14
-+  133 label __label57
-+  134 op add i i 1
-+  135 label __label58
-+  136 set __tmp14 0
-+  137 label __label59
-+  138 op idiv __tmp10 i BITS
-+  139 read __tmp9 BITMAP __tmp10
-+  140 op mod __tmp11 i BITS
-+  141 op shl __tmp12 1 __tmp11
-+  142 op and __tmp8 __tmp9 __tmp12
-+  143 label __label60
-+  144 jump __label61 equal __tmp8 false
-+  145 set __tmp14 1
-+  146 jump __label61 always
-+  147 label __label61
-+  148 print __tmp14
-+  149 label __label62
-+  150 op add i i 1
-+  151 label __label63
-+  152 set __tmp14 0
-+  153 label __label64
-+  154 op idiv __tmp10 i BITS
-+  155 read __tmp9 BITMAP __tmp10
-+  156 op mod __tmp11 i BITS
-+  157 op shl __tmp12 1 __tmp11
-+  158 op and __tmp8 __tmp9 __tmp12
-+  159 label __label65
-+  160 jump __label66 equal __tmp8 false
-+  161 set __tmp14 1
-+  162 jump __label66 always
-+  163 label __label66
-+  164 print __tmp14
-+  165 label __label67
-+  166 op add i i 1
-+  167 label __label68
-+  168 set __tmp14 0
-+  169 label __label69
-+  170 op idiv __tmp10 i BITS
-+  171 read __tmp9 BITMAP __tmp10
-+  172 op mod __tmp11 i BITS
-+  173 op shl __tmp12 1 __tmp11
-+  174 op and __tmp8 __tmp9 __tmp12
-+  175 label __label70
-+  176 jump __label71 equal __tmp8 false
-+  177 set __tmp14 1
-+  178 jump __label71 always
-+  179 label __label71
-+  180 print __tmp14
-+  181 label __label72
-+  182 op add i i 1
-+  183 label __label73
-+  184 set __tmp14 0
-+  185 label __label74
-+  186 op idiv __tmp10 i BITS
-+  187 read __tmp9 BITMAP __tmp10
-+  188 op mod __tmp11 i BITS
-+  189 op shl __tmp12 1 __tmp11
-+  190 op and __tmp8 __tmp9 __tmp12
-+  191 label __label75
-+  192 jump __label76 equal __tmp8 false
-+  193 set __tmp14 1
-+  194 jump __label76 always
-+  195 label __label76
-+  196 print __tmp14
-+  197 label __label77
-+  198 op add i i 1
-+  199 label __label78
-+  200 set __tmp14 0
-+  201 label __label79
-+  202 op idiv __tmp10 i BITS
-+  203 read __tmp9 BITMAP __tmp10
-+  204 op mod __tmp11 i BITS
-+  205 op shl __tmp12 1 __tmp11
-+  206 op and __tmp8 __tmp9 __tmp12
-+  207 label __label80
-+  208 jump __label81 equal __tmp8 false
-+  209 set __tmp14 1
-+  210 jump __label81 always
-+  211 label __label81
-+  212 print __tmp14
-+  213 label __label82
-+  214 op add i i 1
-+  215 label __label83
-+  216 set __tmp14 0
-+  217 label __label84
-+  218 op idiv __tmp10 i BITS
-+  219 read __tmp9 BITMAP __tmp10
-+  220 op mod __tmp11 i BITS
-+  221 op shl __tmp12 1 __tmp11
-+  222 op and __tmp8 __tmp9 __tmp12
-+  223 label __label85
-+  224 jump __label86 equal __tmp8 false
-+  225 set __tmp14 1
-+  226 jump __label86 always
-+  227 label __label86
-+  228 print __tmp14
-+  229 label __label87
-+  230 op add i i 1
-+  231 label __label88
-+  232 set __tmp14 0
-+  233 label __label89
-+  234 op idiv __tmp10 i BITS
-+  235 read __tmp9 BITMAP __tmp10
-+  236 op mod __tmp11 i BITS
-+  237 op shl __tmp12 1 __tmp11
-+  238 op and __tmp8 __tmp9 __tmp12
++   92 set i 0
++   93 label __label47
++   94 label __label48
++   95 set __tmp14 0
++   96 label __label49
++   97 op idiv __tmp10 i BITS
++   98 read __tmp9 BITMAP __tmp10
++   99 op mod __tmp11 i BITS
++  100 op shl __tmp12 1 __tmp11
++  101 op and __tmp8 __tmp9 __tmp12
++  102 noop
++  103 label __label50
++  104 jump __label51 equal __tmp8 false
++  105 set __tmp14 1
++  106 jump __label51 always
++  107 label __label51
++  108 print __tmp14
++  109 label __label52
++  110 op add i i 1
++  111 label __label53
++  112 set __tmp14 0
++  113 label __label54
++  114 op idiv __tmp10 i BITS
++  115 read __tmp9 BITMAP __tmp10
++  116 op mod __tmp11 i BITS
++  117 op shl __tmp12 1 __tmp11
++  118 op and __tmp8 __tmp9 __tmp12
++  119 noop
++  120 label __label55
++  121 jump __label56 equal __tmp8 false
++  122 set __tmp14 1
++  123 jump __label56 always
++  124 label __label56
++  125 print __tmp14
++  126 label __label57
++  127 op add i i 1
++  128 label __label58
++  129 set __tmp14 0
++  130 label __label59
++  131 op idiv __tmp10 i BITS
++  132 read __tmp9 BITMAP __tmp10
++  133 op mod __tmp11 i BITS
++  134 op shl __tmp12 1 __tmp11
++  135 op and __tmp8 __tmp9 __tmp12
++  136 noop
++  137 label __label60
++  138 jump __label61 equal __tmp8 false
++  139 set __tmp14 1
++  140 jump __label61 always
++  141 label __label61
++  142 print __tmp14
++  143 label __label62
++  144 op add i i 1
++  145 label __label63
++  146 set __tmp14 0
++  147 label __label64
++  148 op idiv __tmp10 i BITS
++  149 read __tmp9 BITMAP __tmp10
++  150 op mod __tmp11 i BITS
++  151 op shl __tmp12 1 __tmp11
++  152 op and __tmp8 __tmp9 __tmp12
++  153 noop
++  154 label __label65
++  155 jump __label66 equal __tmp8 false
++  156 set __tmp14 1
++  157 jump __label66 always
++  158 label __label66
++  159 print __tmp14
++  160 label __label67
++  161 op add i i 1
++  162 label __label68
++  163 set __tmp14 0
++  164 label __label69
++  165 op idiv __tmp10 i BITS
++  166 read __tmp9 BITMAP __tmp10
++  167 op mod __tmp11 i BITS
++  168 op shl __tmp12 1 __tmp11
++  169 op and __tmp8 __tmp9 __tmp12
++  170 noop
++  171 label __label70
++  172 jump __label71 equal __tmp8 false
++  173 set __tmp14 1
++  174 jump __label71 always
++  175 label __label71
++  176 print __tmp14
++  177 label __label72
++  178 op add i i 1
++  179 label __label73
++  180 set __tmp14 0
++  181 label __label74
++  182 op idiv __tmp10 i BITS
++  183 read __tmp9 BITMAP __tmp10
++  184 op mod __tmp11 i BITS
++  185 op shl __tmp12 1 __tmp11
++  186 op and __tmp8 __tmp9 __tmp12
++  187 noop
++  188 label __label75
++  189 jump __label76 equal __tmp8 false
++  190 set __tmp14 1
++  191 jump __label76 always
++  192 label __label76
++  193 print __tmp14
++  194 label __label77
++  195 op add i i 1
++  196 label __label78
++  197 set __tmp14 0
++  198 label __label79
++  199 op idiv __tmp10 i BITS
++  200 read __tmp9 BITMAP __tmp10
++  201 op mod __tmp11 i BITS
++  202 op shl __tmp12 1 __tmp11
++  203 op and __tmp8 __tmp9 __tmp12
++  204 noop
++  205 label __label80
++  206 jump __label81 equal __tmp8 false
++  207 set __tmp14 1
++  208 jump __label81 always
++  209 label __label81
++  210 print __tmp14
++  211 label __label82
++  212 op add i i 1
++  213 label __label83
++  214 set __tmp14 0
++  215 label __label84
++  216 op idiv __tmp10 i BITS
++  217 read __tmp9 BITMAP __tmp10
++  218 op mod __tmp11 i BITS
++  219 op shl __tmp12 1 __tmp11
++  220 op and __tmp8 __tmp9 __tmp12
++  221 noop
++  222 label __label85
++  223 jump __label86 equal __tmp8 false
++  224 set __tmp14 1
++  225 jump __label86 always
++  226 label __label86
++  227 print __tmp14
++  228 label __label87
++  229 op add i i 1
++  230 label __label88
++  231 set __tmp14 0
++  232 label __label89
++  233 op idiv __tmp10 i BITS
++  234 read __tmp9 BITMAP __tmp10
++  235 op mod __tmp11 i BITS
++  236 op shl __tmp12 1 __tmp11
++  237 op and __tmp8 __tmp9 __tmp12
++  238 noop
 +  239 label __label90
 +  240 jump __label91 equal __tmp8 false
 +  241 set __tmp14 1
@@ -452,183 +706,647 @@ Modifications by Loop Unrolling: unroll loop at line 17 (+164 instructions):
 +  252 op mod __tmp11 i BITS
 +  253 op shl __tmp12 1 __tmp11
 +  254 op and __tmp8 __tmp9 __tmp12
-+  255 label __label95
-+  256 jump __label96 equal __tmp8 false
-+  257 set __tmp14 1
-+  258 jump __label96 always
-+  259 label __label96
-+  260 print __tmp14
-+  261 label __label97
-+  262 op add i i 1
-+  263 label __label98
-+  264 set __tmp14 0
-+  265 label __label99
-+  266 op idiv __tmp10 i BITS
-+  267 read __tmp9 BITMAP __tmp10
-+  268 op mod __tmp11 i BITS
-+  269 op shl __tmp12 1 __tmp11
-+  270 op and __tmp8 __tmp9 __tmp12
-+  271 label __label100
-+  272 jump __label101 equal __tmp8 false
-+  273 set __tmp14 1
-+  274 jump __label101 always
-+  275 label __label101
-+  276 print __tmp14
-+  277 label __label102
-+  278 op add i i 1
-+  279 label __label103
-+  280 set __tmp14 0
-+  281 label __label104
-+  282 op idiv __tmp10 i BITS
-+  283 read __tmp9 BITMAP __tmp10
-+  284 op mod __tmp11 i BITS
-+  285 op shl __tmp12 1 __tmp11
-+  286 op and __tmp8 __tmp9 __tmp12
-+  287 label __label105
-+  288 jump __label106 equal __tmp8 false
-+  289 set __tmp14 1
-+  290 jump __label106 always
-+  291 label __label106
-+  292 print __tmp14
-+  293 label __label107
-+  294 op add i i 1
-+  295 label __label108
-+  296 set __tmp14 0
-+  297 label __label109
-+  298 op idiv __tmp10 i BITS
-+  299 read __tmp9 BITMAP __tmp10
-+  300 op mod __tmp11 i BITS
-+  301 op shl __tmp12 1 __tmp11
-+  302 op and __tmp8 __tmp9 __tmp12
-+  303 label __label110
-+  304 jump __label111 equal __tmp8 false
-+  305 set __tmp14 1
-+  306 jump __label111 always
-+  307 label __label111
-+  308 print __tmp14
-+  309 label __label112
-+  310 op add i i 1
-+  311 label __label113
-+  312 set __tmp14 0
-+  313 label __label114
-+  314 op idiv __tmp10 i BITS
-+  315 read __tmp9 BITMAP __tmp10
-+  316 op mod __tmp11 i BITS
-+  317 op shl __tmp12 1 __tmp11
-+  318 op and __tmp8 __tmp9 __tmp12
-+  319 label __label115
-+  320 jump __label116 equal __tmp8 false
-+  321 set __tmp14 1
-+  322 jump __label116 always
-+  323 label __label116
-+  324 print __tmp14
-+  325 label __label117
-+  326 op add i i 1
-+  327 label __label118
-+  328 set __tmp14 0
-+  329 label __label119
-+  330 op idiv __tmp10 i BITS
-+  331 read __tmp9 BITMAP __tmp10
-+  332 op mod __tmp11 i BITS
-+  333 op shl __tmp12 1 __tmp11
-+  334 op and __tmp8 __tmp9 __tmp12
-+  335 label __label120
-+  336 jump __label121 equal __tmp8 false
-+  337 set __tmp14 1
-+  338 jump __label121 always
-+  339 label __label121
-+  340 print __tmp14
-+  341 label __label122
-+  342 op add i i 1
-+  343 label __label123
-+  344 set __tmp14 0
-+  345 label __label124
-+  346 op idiv __tmp10 i BITS
-+  347 read __tmp9 BITMAP __tmp10
-+  348 op mod __tmp11 i BITS
-+  349 op shl __tmp12 1 __tmp11
-+  350 op and __tmp8 __tmp9 __tmp12
-+  351 label __label125
-+  352 jump __label126 equal __tmp8 false
-+  353 set __tmp14 1
-+  354 jump __label126 always
-+  355 label __label126
-+  356 print __tmp14
-+  357 label __label127
-+  358 op add i i 1
-+  359 label __label7
-   360 end
++  255 noop
++  256 label __label95
++  257 jump __label96 equal __tmp8 false
++  258 set __tmp14 1
++  259 jump __label96 always
++  260 label __label96
++  261 print __tmp14
++  262 label __label97
++  263 op add i i 1
++  264 label __label98
++  265 set __tmp14 0
++  266 label __label99
++  267 op idiv __tmp10 i BITS
++  268 read __tmp9 BITMAP __tmp10
++  269 op mod __tmp11 i BITS
++  270 op shl __tmp12 1 __tmp11
++  271 op and __tmp8 __tmp9 __tmp12
++  272 noop
++  273 label __label100
++  274 jump __label101 equal __tmp8 false
++  275 set __tmp14 1
++  276 jump __label101 always
++  277 label __label101
++  278 print __tmp14
++  279 label __label102
++  280 op add i i 1
++  281 label __label103
++  282 set __tmp14 0
++  283 label __label104
++  284 op idiv __tmp10 i BITS
++  285 read __tmp9 BITMAP __tmp10
++  286 op mod __tmp11 i BITS
++  287 op shl __tmp12 1 __tmp11
++  288 op and __tmp8 __tmp9 __tmp12
++  289 noop
++  290 label __label105
++  291 jump __label106 equal __tmp8 false
++  292 set __tmp14 1
++  293 jump __label106 always
++  294 label __label106
++  295 print __tmp14
++  296 label __label107
++  297 op add i i 1
++  298 label __label108
++  299 set __tmp14 0
++  300 label __label109
++  301 op idiv __tmp10 i BITS
++  302 read __tmp9 BITMAP __tmp10
++  303 op mod __tmp11 i BITS
++  304 op shl __tmp12 1 __tmp11
++  305 op and __tmp8 __tmp9 __tmp12
++  306 noop
++  307 label __label110
++  308 jump __label111 equal __tmp8 false
++  309 set __tmp14 1
++  310 jump __label111 always
++  311 label __label111
++  312 print __tmp14
++  313 label __label112
++  314 op add i i 1
++  315 label __label113
++  316 set __tmp14 0
++  317 label __label114
++  318 op idiv __tmp10 i BITS
++  319 read __tmp9 BITMAP __tmp10
++  320 op mod __tmp11 i BITS
++  321 op shl __tmp12 1 __tmp11
++  322 op and __tmp8 __tmp9 __tmp12
++  323 noop
++  324 label __label115
++  325 jump __label116 equal __tmp8 false
++  326 set __tmp14 1
++  327 jump __label116 always
++  328 label __label116
++  329 print __tmp14
++  330 label __label117
++  331 op add i i 1
++  332 label __label118
++  333 set __tmp14 0
++  334 label __label119
++  335 op idiv __tmp10 i BITS
++  336 read __tmp9 BITMAP __tmp10
++  337 op mod __tmp11 i BITS
++  338 op shl __tmp12 1 __tmp11
++  339 op and __tmp8 __tmp9 __tmp12
++  340 noop
++  341 label __label120
++  342 jump __label121 equal __tmp8 false
++  343 set __tmp14 1
++  344 jump __label121 always
++  345 label __label121
++  346 print __tmp14
++  347 label __label122
++  348 op add i i 1
++  349 label __label123
++  350 set __tmp14 0
++  351 label __label124
++  352 op idiv __tmp10 i BITS
++  353 read __tmp9 BITMAP __tmp10
++  354 op mod __tmp11 i BITS
++  355 op shl __tmp12 1 __tmp11
++  356 op and __tmp8 __tmp9 __tmp12
++  357 noop
++  358 label __label125
++  359 jump __label126 equal __tmp8 false
++  360 set __tmp14 1
++  361 jump __label126 always
++  362 label __label126
++  363 print __tmp14
++  364 label __label127
++  365 op add i i 1
++  366 label __label7
+   367 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    94 label __label48
+    95 set __tmp14 0
+    96 label __label49
+-    * op idiv __tmp10 i BITS
++   97 op idiv __tmp10 0 BITS
+    98 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++   99 op mod __tmp11 0 BITS
+   100 op shl __tmp12 1 __tmp11
+   101 op and __tmp8 __tmp9 __tmp12
+   102 noop
+ 
+   107 label __label51
+   108 print __tmp14
+   109 label __label52
+-    * op add i i 1
++  110 op add i 0 1
+   111 label __label53
+   112 set __tmp14 0
+   113 label __label54
+-    * op idiv __tmp10 i BITS
++  114 op idiv __tmp10 1 BITS
+   115 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  116 op mod __tmp11 1 BITS
+   117 op shl __tmp12 1 __tmp11
+   118 op and __tmp8 __tmp9 __tmp12
+   119 noop
+ 
+   124 label __label56
+   125 print __tmp14
+   126 label __label57
+-    * op add i i 1
++  127 op add i 1 1
+   128 label __label58
+   129 set __tmp14 0
+   130 label __label59
+-    * op idiv __tmp10 i BITS
++  131 op idiv __tmp10 2 BITS
+   132 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  133 op mod __tmp11 2 BITS
+   134 op shl __tmp12 1 __tmp11
+   135 op and __tmp8 __tmp9 __tmp12
+   136 noop
+ 
+   141 label __label61
+   142 print __tmp14
+   143 label __label62
+-    * op add i i 1
++  144 op add i 2 1
+   145 label __label63
+   146 set __tmp14 0
+   147 label __label64
+-    * op idiv __tmp10 i BITS
++  148 op idiv __tmp10 3 BITS
+   149 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  150 op mod __tmp11 3 BITS
+   151 op shl __tmp12 1 __tmp11
+   152 op and __tmp8 __tmp9 __tmp12
+   153 noop
+ 
+   158 label __label66
+   159 print __tmp14
+   160 label __label67
+-    * op add i i 1
++  161 op add i 3 1
+   162 label __label68
+   163 set __tmp14 0
+   164 label __label69
+-    * op idiv __tmp10 i BITS
++  165 op idiv __tmp10 4 BITS
+   166 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  167 op mod __tmp11 4 BITS
+   168 op shl __tmp12 1 __tmp11
+   169 op and __tmp8 __tmp9 __tmp12
+   170 noop
+ 
+   175 label __label71
+   176 print __tmp14
+   177 label __label72
+-    * op add i i 1
++  178 op add i 4 1
+   179 label __label73
+   180 set __tmp14 0
+   181 label __label74
+-    * op idiv __tmp10 i BITS
++  182 op idiv __tmp10 5 BITS
+   183 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  184 op mod __tmp11 5 BITS
+   185 op shl __tmp12 1 __tmp11
+   186 op and __tmp8 __tmp9 __tmp12
+   187 noop
+ 
+   192 label __label76
+   193 print __tmp14
+   194 label __label77
+-    * op add i i 1
++  195 op add i 5 1
+   196 label __label78
+   197 set __tmp14 0
+   198 label __label79
+-    * op idiv __tmp10 i BITS
++  199 op idiv __tmp10 6 BITS
+   200 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  201 op mod __tmp11 6 BITS
+   202 op shl __tmp12 1 __tmp11
+   203 op and __tmp8 __tmp9 __tmp12
+   204 noop
+ 
+   209 label __label81
+   210 print __tmp14
+   211 label __label82
+-    * op add i i 1
++  212 op add i 6 1
+   213 label __label83
+   214 set __tmp14 0
+   215 label __label84
+-    * op idiv __tmp10 i BITS
++  216 op idiv __tmp10 7 BITS
+   217 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  218 op mod __tmp11 7 BITS
+   219 op shl __tmp12 1 __tmp11
+   220 op and __tmp8 __tmp9 __tmp12
+   221 noop
+ 
+   226 label __label86
+   227 print __tmp14
+   228 label __label87
+-    * op add i i 1
++  229 op add i 7 1
+   230 label __label88
+   231 set __tmp14 0
+   232 label __label89
+-    * op idiv __tmp10 i BITS
++  233 op idiv __tmp10 8 BITS
+   234 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  235 op mod __tmp11 8 BITS
+   236 op shl __tmp12 1 __tmp11
+   237 op and __tmp8 __tmp9 __tmp12
+   238 noop
+ 
+   243 label __label91
+   244 print __tmp14
+   245 label __label92
+-    * op add i i 1
++  246 op add i 8 1
+   247 label __label93
+   248 set __tmp14 0
+   249 label __label94
+-    * op idiv __tmp10 i BITS
++  250 op idiv __tmp10 9 BITS
+   251 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  252 op mod __tmp11 9 BITS
+   253 op shl __tmp12 1 __tmp11
+   254 op and __tmp8 __tmp9 __tmp12
+   255 noop
+ 
+   260 label __label96
+   261 print __tmp14
+   262 label __label97
+-    * op add i i 1
++  263 op add i 9 1
+   264 label __label98
+   265 set __tmp14 0
+   266 label __label99
+-    * op idiv __tmp10 i BITS
++  267 op idiv __tmp10 10 BITS
+   268 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  269 op mod __tmp11 10 BITS
+   270 op shl __tmp12 1 __tmp11
+   271 op and __tmp8 __tmp9 __tmp12
+   272 noop
+ 
+   277 label __label101
+   278 print __tmp14
+   279 label __label102
+-    * op add i i 1
++  280 op add i 10 1
+   281 label __label103
+   282 set __tmp14 0
+   283 label __label104
+-    * op idiv __tmp10 i BITS
++  284 op idiv __tmp10 11 BITS
+   285 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  286 op mod __tmp11 11 BITS
+   287 op shl __tmp12 1 __tmp11
+   288 op and __tmp8 __tmp9 __tmp12
+   289 noop
+ 
+   294 label __label106
+   295 print __tmp14
+   296 label __label107
+-    * op add i i 1
++  297 op add i 11 1
+   298 label __label108
+   299 set __tmp14 0
+   300 label __label109
+-    * op idiv __tmp10 i BITS
++  301 op idiv __tmp10 12 BITS
+   302 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  303 op mod __tmp11 12 BITS
+   304 op shl __tmp12 1 __tmp11
+   305 op and __tmp8 __tmp9 __tmp12
+   306 noop
+ 
+   311 label __label111
+   312 print __tmp14
+   313 label __label112
+-    * op add i i 1
++  314 op add i 12 1
+   315 label __label113
+   316 set __tmp14 0
+   317 label __label114
+-    * op idiv __tmp10 i BITS
++  318 op idiv __tmp10 13 BITS
+   319 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  320 op mod __tmp11 13 BITS
+   321 op shl __tmp12 1 __tmp11
+   322 op and __tmp8 __tmp9 __tmp12
+   323 noop
+ 
+   328 label __label116
+   329 print __tmp14
+   330 label __label117
+-    * op add i i 1
++  331 op add i 13 1
+   332 label __label118
+   333 set __tmp14 0
+   334 label __label119
+-    * op idiv __tmp10 i BITS
++  335 op idiv __tmp10 14 BITS
+   336 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  337 op mod __tmp11 14 BITS
+   338 op shl __tmp12 1 __tmp11
+   339 op and __tmp8 __tmp9 __tmp12
+   340 noop
+ 
+   345 label __label121
+   346 print __tmp14
+   347 label __label122
+-    * op add i i 1
++  348 op add i 14 1
+   349 label __label123
+   350 set __tmp14 0
+   351 label __label124
+-    * op idiv __tmp10 i BITS
++  352 op idiv __tmp10 15 BITS
+   353 read __tmp9 BITMAP __tmp10
+-    * op mod __tmp11 i BITS
++  354 op mod __tmp11 15 BITS
+   355 op shl __tmp12 1 __tmp11
+   356 op and __tmp8 __tmp9 __tmp12
+   357 noop
+ 
+   362 label __label126
+   363 print __tmp14
+   364 label __label127
+-    * op add i i 1
++  365 op add i 15 1
+   366 label __label7
+   367 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
+ 
+    89 label __label45
+    90 label __label46
+    91 label __label2
+-    * set i 0
+    92 label __label47
+    93 label __label48
+    94 set __tmp14 0
+ 
+   106 label __label51
+   107 print __tmp14
+   108 label __label52
+-    * op add i 0 1
+   109 label __label53
+   110 set __tmp14 0
+   111 label __label54
+ 
+   122 label __label56
+   123 print __tmp14
+   124 label __label57
+-    * op add i 1 1
+   125 label __label58
+   126 set __tmp14 0
+   127 label __label59
+ 
+   138 label __label61
+   139 print __tmp14
+   140 label __label62
+-    * op add i 2 1
+   141 label __label63
+   142 set __tmp14 0
+   143 label __label64
+ 
+   154 label __label66
+   155 print __tmp14
+   156 label __label67
+-    * op add i 3 1
+   157 label __label68
+   158 set __tmp14 0
+   159 label __label69
+ 
+   170 label __label71
+   171 print __tmp14
+   172 label __label72
+-    * op add i 4 1
+   173 label __label73
+   174 set __tmp14 0
+   175 label __label74
+ 
+   186 label __label76
+   187 print __tmp14
+   188 label __label77
+-    * op add i 5 1
+   189 label __label78
+   190 set __tmp14 0
+   191 label __label79
+ 
+   202 label __label81
+   203 print __tmp14
+   204 label __label82
+-    * op add i 6 1
+   205 label __label83
+   206 set __tmp14 0
+   207 label __label84
+ 
+   218 label __label86
+   219 print __tmp14
+   220 label __label87
+-    * op add i 7 1
+   221 label __label88
+   222 set __tmp14 0
+   223 label __label89
+ 
+   234 label __label91
+   235 print __tmp14
+   236 label __label92
+-    * op add i 8 1
+   237 label __label93
+   238 set __tmp14 0
+   239 label __label94
+ 
+   250 label __label96
+   251 print __tmp14
+   252 label __label97
+-    * op add i 9 1
+   253 label __label98
+   254 set __tmp14 0
+   255 label __label99
+ 
+   266 label __label101
+   267 print __tmp14
+   268 label __label102
+-    * op add i 10 1
+   269 label __label103
+   270 set __tmp14 0
+   271 label __label104
+ 
+   282 label __label106
+   283 print __tmp14
+   284 label __label107
+-    * op add i 11 1
+   285 label __label108
+   286 set __tmp14 0
+   287 label __label109
+ 
+   298 label __label111
+   299 print __tmp14
+   300 label __label112
+-    * op add i 12 1
+   301 label __label113
+   302 set __tmp14 0
+   303 label __label114
+ 
+   314 label __label116
+   315 print __tmp14
+   316 label __label117
+-    * op add i 13 1
+   317 label __label118
+   318 set __tmp14 0
+   319 label __label119
+   320 op idiv __tmp10 14 BITS
+-    * read __tmp9 BITMAP __tmp10
++  321 read __tmp9 BITMAP __tmp3
+   322 op mod __tmp11 14 BITS
+-    * op shl __tmp12 1 __tmp11
++  323 op shl __tmp12 1 __tmp4
+   324 op and __tmp8 __tmp9 __tmp12
+   325 noop
+   326 label __label120
+ 
+   330 label __label121
+   331 print __tmp14
+   332 label __label122
+-    * op add i 14 1
+   333 label __label123
+   334 set __tmp14 0
+   335 label __label124
+ 
+   346 label __label126
+   347 print __tmp14
+   348 label __label127
+-    * op add i 15 1
+   349 label __label7
+   350 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
+ 
+   317 label __label118
+   318 set __tmp14 0
+   319 label __label119
+-    * op idiv __tmp10 14 BITS
+   320 read __tmp9 BITMAP __tmp3
+-    * op mod __tmp11 14 BITS
+   321 op shl __tmp12 1 __tmp4
+-    * op and __tmp8 __tmp9 __tmp12
++  322 op and __tmp8 __tmp9 __tmp5
+   323 noop
+   324 label __label120
+   325 jump __label121 equal __tmp8 false
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
+ 
+   318 set __tmp14 0
+   319 label __label119
+   320 read __tmp9 BITMAP __tmp3
+-    * op shl __tmp12 1 __tmp4
+   321 op and __tmp8 __tmp9 __tmp5
+   322 noop
+   323 label __label120
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-16 instructions):
  
-   111 label __label50
-   112 jump __label51 equal __tmp8 false
-   113 set __tmp14 1
+   102 label __label50
+   103 jump __label51 equal __tmp8 false
+   104 set __tmp14 1
 -    * jump __label51 always
-   114 label __label51
-   115 print __tmp14
-   116 label __label52
++  105 noop
+   106 label __label51
+   107 print __tmp14
+   108 label __label52
  
-   126 label __label55
-   127 jump __label56 equal __tmp8 false
-   128 set __tmp14 1
+   118 label __label55
+   119 jump __label56 equal __tmp8 false
+   120 set __tmp14 1
 -    * jump __label56 always
-   129 label __label56
-   130 print __tmp14
-   131 label __label57
++  121 noop
+   122 label __label56
+   123 print __tmp14
+   124 label __label57
  
-   141 label __label60
-   142 jump __label61 equal __tmp8 false
-   143 set __tmp14 1
+   134 label __label60
+   135 jump __label61 equal __tmp8 false
+   136 set __tmp14 1
 -    * jump __label61 always
-   144 label __label61
-   145 print __tmp14
-   146 label __label62
++  137 noop
+   138 label __label61
+   139 print __tmp14
+   140 label __label62
  
-   156 label __label65
-   157 jump __label66 equal __tmp8 false
-   158 set __tmp14 1
+   150 label __label65
+   151 jump __label66 equal __tmp8 false
+   152 set __tmp14 1
 -    * jump __label66 always
-   159 label __label66
-   160 print __tmp14
-   161 label __label67
++  153 noop
+   154 label __label66
+   155 print __tmp14
+   156 label __label67
  
-   171 label __label70
-   172 jump __label71 equal __tmp8 false
-   173 set __tmp14 1
+   166 label __label70
+   167 jump __label71 equal __tmp8 false
+   168 set __tmp14 1
 -    * jump __label71 always
-   174 label __label71
-   175 print __tmp14
-   176 label __label72
++  169 noop
+   170 label __label71
+   171 print __tmp14
+   172 label __label72
  
-   186 label __label75
-   187 jump __label76 equal __tmp8 false
-   188 set __tmp14 1
+   182 label __label75
+   183 jump __label76 equal __tmp8 false
+   184 set __tmp14 1
 -    * jump __label76 always
-   189 label __label76
-   190 print __tmp14
-   191 label __label77
++  185 noop
+   186 label __label76
+   187 print __tmp14
+   188 label __label77
  
-   201 label __label80
-   202 jump __label81 equal __tmp8 false
-   203 set __tmp14 1
+   198 label __label80
+   199 jump __label81 equal __tmp8 false
+   200 set __tmp14 1
 -    * jump __label81 always
-   204 label __label81
-   205 print __tmp14
-   206 label __label82
++  201 noop
+   202 label __label81
+   203 print __tmp14
+   204 label __label82
  
-   216 label __label85
-   217 jump __label86 equal __tmp8 false
-   218 set __tmp14 1
+   214 label __label85
+   215 jump __label86 equal __tmp8 false
+   216 set __tmp14 1
 -    * jump __label86 always
-   219 label __label86
-   220 print __tmp14
-   221 label __label87
++  217 noop
+   218 label __label86
+   219 print __tmp14
+   220 label __label87
  
-   231 label __label90
-   232 jump __label91 equal __tmp8 false
-   233 set __tmp14 1
+   230 label __label90
+   231 jump __label91 equal __tmp8 false
+   232 set __tmp14 1
 -    * jump __label91 always
++  233 noop
    234 label __label91
    235 print __tmp14
    236 label __label92
@@ -637,719 +1355,64 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    247 jump __label96 equal __tmp8 false
    248 set __tmp14 1
 -    * jump __label96 always
-   249 label __label96
-   250 print __tmp14
-   251 label __label97
- 
-   261 label __label100
-   262 jump __label101 equal __tmp8 false
-   263 set __tmp14 1
--    * jump __label101 always
-   264 label __label101
-   265 print __tmp14
-   266 label __label102
- 
-   276 label __label105
-   277 jump __label106 equal __tmp8 false
-   278 set __tmp14 1
--    * jump __label106 always
-   279 label __label106
-   280 print __tmp14
-   281 label __label107
- 
-   291 label __label110
-   292 jump __label111 equal __tmp8 false
-   293 set __tmp14 1
--    * jump __label111 always
-   294 label __label111
-   295 print __tmp14
-   296 label __label112
- 
-   306 label __label115
-   307 jump __label116 equal __tmp8 false
-   308 set __tmp14 1
--    * jump __label116 always
-   309 label __label116
-   310 print __tmp14
-   311 label __label117
- 
-   321 label __label120
-   322 jump __label121 equal __tmp8 false
-   323 set __tmp14 1
--    * jump __label121 always
-   324 label __label121
-   325 print __tmp14
-   326 label __label122
- 
-   336 label __label125
-   337 jump __label126 equal __tmp8 false
-   338 set __tmp14 1
--    * jump __label126 always
-   339 label __label126
-   340 print __tmp14
-   341 label __label127
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
- 
-     2 set i 0
-     3 label __label14
-     4 label __label15
--    * op mul __tmp0 2 i
-+    5 op mul __tmp0 2 0
-     6 label __label16
--    * op idiv __tmp3 __tmp0 BITS
-+    7 op idiv __tmp3 0 BITS
-     8 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+    9 op mod __tmp4 0 BITS
-    10 op shl __tmp5 1 __tmp4
-    11 op or __tmp6 __tmp2 __tmp5
-    12 write __tmp6 BITMAP __tmp3
-    13 label __label17
-    14 label __label18
--    * op add i i 1
-+   15 op add i 0 1
-    16 label __label19
--    * op mul __tmp0 2 i
-+   17 op mul __tmp0 2 1
-    18 label __label20
--    * op idiv __tmp3 __tmp0 BITS
-+   19 op idiv __tmp3 2 BITS
-    20 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+   21 op mod __tmp4 2 BITS
-    22 op shl __tmp5 1 __tmp4
-    23 op or __tmp6 __tmp2 __tmp5
-    24 write __tmp6 BITMAP __tmp3
-    25 label __label21
-    26 label __label22
--    * op add i i 1
-+   27 op add i 1 1
-    28 label __label23
--    * op mul __tmp0 2 i
-+   29 op mul __tmp0 2 2
-    30 label __label24
--    * op idiv __tmp3 __tmp0 BITS
-+   31 op idiv __tmp3 4 BITS
-    32 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+   33 op mod __tmp4 4 BITS
-    34 op shl __tmp5 1 __tmp4
-    35 op or __tmp6 __tmp2 __tmp5
-    36 write __tmp6 BITMAP __tmp3
-    37 label __label25
-    38 label __label26
--    * op add i i 1
-+   39 op add i 2 1
-    40 label __label27
--    * op mul __tmp0 2 i
-+   41 op mul __tmp0 2 3
-    42 label __label28
--    * op idiv __tmp3 __tmp0 BITS
-+   43 op idiv __tmp3 6 BITS
-    44 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+   45 op mod __tmp4 6 BITS
-    46 op shl __tmp5 1 __tmp4
-    47 op or __tmp6 __tmp2 __tmp5
-    48 write __tmp6 BITMAP __tmp3
-    49 label __label29
-    50 label __label30
--    * op add i i 1
-+   51 op add i 3 1
-    52 label __label31
--    * op mul __tmp0 2 i
-+   53 op mul __tmp0 2 4
-    54 label __label32
--    * op idiv __tmp3 __tmp0 BITS
-+   55 op idiv __tmp3 8 BITS
-    56 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+   57 op mod __tmp4 8 BITS
-    58 op shl __tmp5 1 __tmp4
-    59 op or __tmp6 __tmp2 __tmp5
-    60 write __tmp6 BITMAP __tmp3
-    61 label __label33
-    62 label __label34
--    * op add i i 1
-+   63 op add i 4 1
-    64 label __label35
--    * op mul __tmp0 2 i
-+   65 op mul __tmp0 2 5
-    66 label __label36
--    * op idiv __tmp3 __tmp0 BITS
-+   67 op idiv __tmp3 10 BITS
-    68 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+   69 op mod __tmp4 10 BITS
-    70 op shl __tmp5 1 __tmp4
-    71 op or __tmp6 __tmp2 __tmp5
-    72 write __tmp6 BITMAP __tmp3
-    73 label __label37
-    74 label __label38
--    * op add i i 1
-+   75 op add i 5 1
-    76 label __label39
--    * op mul __tmp0 2 i
-+   77 op mul __tmp0 2 6
-    78 label __label40
--    * op idiv __tmp3 __tmp0 BITS
-+   79 op idiv __tmp3 12 BITS
-    80 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+   81 op mod __tmp4 12 BITS
-    82 op shl __tmp5 1 __tmp4
-    83 op or __tmp6 __tmp2 __tmp5
-    84 write __tmp6 BITMAP __tmp3
-    85 label __label41
-    86 label __label42
--    * op add i i 1
-+   87 op add i 6 1
-    88 label __label43
--    * op mul __tmp0 2 i
-+   89 op mul __tmp0 2 7
-    90 label __label44
--    * op idiv __tmp3 __tmp0 BITS
-+   91 op idiv __tmp3 14 BITS
-    92 read __tmp2 BITMAP __tmp3
--    * op mod __tmp4 __tmp0 BITS
-+   93 op mod __tmp4 14 BITS
-    94 op shl __tmp5 1 __tmp4
-    95 op or __tmp6 __tmp2 __tmp5
-    96 write __tmp6 BITMAP __tmp3
-    97 label __label45
-    98 label __label46
--    * op add i i 1
-+   99 op add i 7 1
-   100 label __label2
-   101 set i 0
-   102 label __label47
-   103 label __label48
-   104 set __tmp14 0
-   105 label __label49
--    * op idiv __tmp10 i BITS
-+  106 op idiv __tmp10 0 BITS
-   107 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  108 op mod __tmp11 0 BITS
-   109 op shl __tmp12 1 __tmp11
-   110 op and __tmp8 __tmp9 __tmp12
-   111 label __label50
- 
-   114 label __label51
-   115 print __tmp14
-   116 label __label52
--    * op add i i 1
-+  117 op add i 0 1
-   118 label __label53
-   119 set __tmp14 0
-   120 label __label54
--    * op idiv __tmp10 i BITS
-+  121 op idiv __tmp10 1 BITS
-   122 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  123 op mod __tmp11 1 BITS
-   124 op shl __tmp12 1 __tmp11
-   125 op and __tmp8 __tmp9 __tmp12
-   126 label __label55
- 
-   129 label __label56
-   130 print __tmp14
-   131 label __label57
--    * op add i i 1
-+  132 op add i 1 1
-   133 label __label58
-   134 set __tmp14 0
-   135 label __label59
--    * op idiv __tmp10 i BITS
-+  136 op idiv __tmp10 2 BITS
-   137 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  138 op mod __tmp11 2 BITS
-   139 op shl __tmp12 1 __tmp11
-   140 op and __tmp8 __tmp9 __tmp12
-   141 label __label60
- 
-   144 label __label61
-   145 print __tmp14
-   146 label __label62
--    * op add i i 1
-+  147 op add i 2 1
-   148 label __label63
-   149 set __tmp14 0
-   150 label __label64
--    * op idiv __tmp10 i BITS
-+  151 op idiv __tmp10 3 BITS
-   152 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  153 op mod __tmp11 3 BITS
-   154 op shl __tmp12 1 __tmp11
-   155 op and __tmp8 __tmp9 __tmp12
-   156 label __label65
- 
-   159 label __label66
-   160 print __tmp14
-   161 label __label67
--    * op add i i 1
-+  162 op add i 3 1
-   163 label __label68
-   164 set __tmp14 0
-   165 label __label69
--    * op idiv __tmp10 i BITS
-+  166 op idiv __tmp10 4 BITS
-   167 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  168 op mod __tmp11 4 BITS
-   169 op shl __tmp12 1 __tmp11
-   170 op and __tmp8 __tmp9 __tmp12
-   171 label __label70
- 
-   174 label __label71
-   175 print __tmp14
-   176 label __label72
--    * op add i i 1
-+  177 op add i 4 1
-   178 label __label73
-   179 set __tmp14 0
-   180 label __label74
--    * op idiv __tmp10 i BITS
-+  181 op idiv __tmp10 5 BITS
-   182 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  183 op mod __tmp11 5 BITS
-   184 op shl __tmp12 1 __tmp11
-   185 op and __tmp8 __tmp9 __tmp12
-   186 label __label75
- 
-   189 label __label76
-   190 print __tmp14
-   191 label __label77
--    * op add i i 1
-+  192 op add i 5 1
-   193 label __label78
-   194 set __tmp14 0
-   195 label __label79
--    * op idiv __tmp10 i BITS
-+  196 op idiv __tmp10 6 BITS
-   197 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  198 op mod __tmp11 6 BITS
-   199 op shl __tmp12 1 __tmp11
-   200 op and __tmp8 __tmp9 __tmp12
-   201 label __label80
- 
-   204 label __label81
-   205 print __tmp14
-   206 label __label82
--    * op add i i 1
-+  207 op add i 6 1
-   208 label __label83
-   209 set __tmp14 0
-   210 label __label84
--    * op idiv __tmp10 i BITS
-+  211 op idiv __tmp10 7 BITS
-   212 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  213 op mod __tmp11 7 BITS
-   214 op shl __tmp12 1 __tmp11
-   215 op and __tmp8 __tmp9 __tmp12
-   216 label __label85
- 
-   219 label __label86
-   220 print __tmp14
-   221 label __label87
--    * op add i i 1
-+  222 op add i 7 1
-   223 label __label88
-   224 set __tmp14 0
-   225 label __label89
--    * op idiv __tmp10 i BITS
-+  226 op idiv __tmp10 8 BITS
-   227 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  228 op mod __tmp11 8 BITS
-   229 op shl __tmp12 1 __tmp11
-   230 op and __tmp8 __tmp9 __tmp12
-   231 label __label90
- 
-   234 label __label91
-   235 print __tmp14
-   236 label __label92
--    * op add i i 1
-+  237 op add i 8 1
-   238 label __label93
-   239 set __tmp14 0
-   240 label __label94
--    * op idiv __tmp10 i BITS
-+  241 op idiv __tmp10 9 BITS
-   242 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  243 op mod __tmp11 9 BITS
-   244 op shl __tmp12 1 __tmp11
-   245 op and __tmp8 __tmp9 __tmp12
-   246 label __label95
- 
-   249 label __label96
-   250 print __tmp14
-   251 label __label97
--    * op add i i 1
-+  252 op add i 9 1
-   253 label __label98
-   254 set __tmp14 0
-   255 label __label99
--    * op idiv __tmp10 i BITS
-+  256 op idiv __tmp10 10 BITS
-   257 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  258 op mod __tmp11 10 BITS
-   259 op shl __tmp12 1 __tmp11
-   260 op and __tmp8 __tmp9 __tmp12
-   261 label __label100
- 
-   264 label __label101
-   265 print __tmp14
-   266 label __label102
--    * op add i i 1
-+  267 op add i 10 1
-   268 label __label103
-   269 set __tmp14 0
-   270 label __label104
--    * op idiv __tmp10 i BITS
-+  271 op idiv __tmp10 11 BITS
-   272 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  273 op mod __tmp11 11 BITS
-   274 op shl __tmp12 1 __tmp11
-   275 op and __tmp8 __tmp9 __tmp12
-   276 label __label105
- 
-   279 label __label106
-   280 print __tmp14
-   281 label __label107
--    * op add i i 1
-+  282 op add i 11 1
-   283 label __label108
-   284 set __tmp14 0
-   285 label __label109
--    * op idiv __tmp10 i BITS
-+  286 op idiv __tmp10 12 BITS
-   287 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  288 op mod __tmp11 12 BITS
-   289 op shl __tmp12 1 __tmp11
-   290 op and __tmp8 __tmp9 __tmp12
-   291 label __label110
- 
-   294 label __label111
-   295 print __tmp14
-   296 label __label112
--    * op add i i 1
-+  297 op add i 12 1
-   298 label __label113
-   299 set __tmp14 0
-   300 label __label114
--    * op idiv __tmp10 i BITS
-+  301 op idiv __tmp10 13 BITS
-   302 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  303 op mod __tmp11 13 BITS
-   304 op shl __tmp12 1 __tmp11
-   305 op and __tmp8 __tmp9 __tmp12
-   306 label __label115
- 
-   309 label __label116
-   310 print __tmp14
-   311 label __label117
--    * op add i i 1
-+  312 op add i 13 1
-   313 label __label118
-   314 set __tmp14 0
-   315 label __label119
--    * op idiv __tmp10 i BITS
-+  316 op idiv __tmp10 14 BITS
-   317 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  318 op mod __tmp11 14 BITS
-   319 op shl __tmp12 1 __tmp11
-   320 op and __tmp8 __tmp9 __tmp12
-   321 label __label120
- 
-   324 label __label121
-   325 print __tmp14
-   326 label __label122
--    * op add i i 1
-+  327 op add i 14 1
-   328 label __label123
-   329 set __tmp14 0
-   330 label __label124
--    * op idiv __tmp10 i BITS
-+  331 op idiv __tmp10 15 BITS
-   332 read __tmp9 BITMAP __tmp10
--    * op mod __tmp11 i BITS
-+  333 op mod __tmp11 15 BITS
-   334 op shl __tmp12 1 __tmp11
-   335 op and __tmp8 __tmp9 __tmp12
-   336 label __label125
- 
-   339 label __label126
-   340 print __tmp14
-   341 label __label127
--    * op add i i 1
-+  342 op add i 15 1
-   343 label __label7
-   344 end
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-34 instructions):
-     0 set BITS 32
-     1 set BITMAP bank1
--    * set i 0
-     2 label __label14
-     3 label __label15
--    * op mul __tmp0 2 0
-     4 label __label16
-     5 op idiv __tmp3 0 BITS
-     6 read __tmp2 BITMAP __tmp3
- 
-    10 write __tmp6 BITMAP __tmp3
-    11 label __label17
-    12 label __label18
--    * op add i 0 1
-    13 label __label19
--    * op mul __tmp0 2 1
-    14 label __label20
-    15 op idiv __tmp3 2 BITS
-    16 read __tmp2 BITMAP __tmp3
- 
-    20 write __tmp6 BITMAP __tmp3
-    21 label __label21
-    22 label __label22
--    * op add i 1 1
-    23 label __label23
--    * op mul __tmp0 2 2
-    24 label __label24
-    25 op idiv __tmp3 4 BITS
-    26 read __tmp2 BITMAP __tmp3
- 
-    30 write __tmp6 BITMAP __tmp3
-    31 label __label25
-    32 label __label26
--    * op add i 2 1
-    33 label __label27
--    * op mul __tmp0 2 3
-    34 label __label28
-    35 op idiv __tmp3 6 BITS
-    36 read __tmp2 BITMAP __tmp3
- 
-    40 write __tmp6 BITMAP __tmp3
-    41 label __label29
-    42 label __label30
--    * op add i 3 1
-    43 label __label31
--    * op mul __tmp0 2 4
-    44 label __label32
-    45 op idiv __tmp3 8 BITS
-    46 read __tmp2 BITMAP __tmp3
- 
-    50 write __tmp6 BITMAP __tmp3
-    51 label __label33
-    52 label __label34
--    * op add i 4 1
-    53 label __label35
--    * op mul __tmp0 2 5
-    54 label __label36
-    55 op idiv __tmp3 10 BITS
-    56 read __tmp2 BITMAP __tmp3
- 
-    60 write __tmp6 BITMAP __tmp3
-    61 label __label37
-    62 label __label38
--    * op add i 5 1
-    63 label __label39
--    * op mul __tmp0 2 6
-    64 label __label40
-    65 op idiv __tmp3 12 BITS
-    66 read __tmp2 BITMAP __tmp3
- 
-    70 write __tmp6 BITMAP __tmp3
-    71 label __label41
-    72 label __label42
--    * op add i 6 1
-    73 label __label43
--    * op mul __tmp0 2 7
-    74 label __label44
-    75 op idiv __tmp3 14 BITS
-    76 read __tmp2 BITMAP __tmp3
- 
-    80 write __tmp6 BITMAP __tmp3
-    81 label __label45
-    82 label __label46
--    * op add i 7 1
-    83 label __label2
--    * set i 0
-    84 label __label47
-    85 label __label48
-    86 set __tmp14 0
- 
-    96 label __label51
-    97 print __tmp14
-    98 label __label52
--    * op add i 0 1
-    99 label __label53
-   100 set __tmp14 0
-   101 label __label54
- 
-   110 label __label56
-   111 print __tmp14
-   112 label __label57
--    * op add i 1 1
-   113 label __label58
-   114 set __tmp14 0
-   115 label __label59
- 
-   124 label __label61
-   125 print __tmp14
-   126 label __label62
--    * op add i 2 1
-   127 label __label63
-   128 set __tmp14 0
-   129 label __label64
- 
-   138 label __label66
-   139 print __tmp14
-   140 label __label67
--    * op add i 3 1
-   141 label __label68
-   142 set __tmp14 0
-   143 label __label69
- 
-   152 label __label71
-   153 print __tmp14
-   154 label __label72
--    * op add i 4 1
-   155 label __label73
-   156 set __tmp14 0
-   157 label __label74
- 
-   166 label __label76
-   167 print __tmp14
-   168 label __label77
--    * op add i 5 1
-   169 label __label78
-   170 set __tmp14 0
-   171 label __label79
- 
-   180 label __label81
-   181 print __tmp14
-   182 label __label82
--    * op add i 6 1
-   183 label __label83
-   184 set __tmp14 0
-   185 label __label84
- 
-   194 label __label86
-   195 print __tmp14
-   196 label __label87
--    * op add i 7 1
-   197 label __label88
-   198 set __tmp14 0
-   199 label __label89
- 
-   208 label __label91
-   209 print __tmp14
-   210 label __label92
--    * op add i 8 1
-   211 label __label93
-   212 set __tmp14 0
-   213 label __label94
- 
-   222 label __label96
-   223 print __tmp14
-   224 label __label97
--    * op add i 9 1
-   225 label __label98
-   226 set __tmp14 0
-   227 label __label99
- 
-   236 label __label101
-   237 print __tmp14
-   238 label __label102
--    * op add i 10 1
-   239 label __label103
-   240 set __tmp14 0
-   241 label __label104
- 
-   250 label __label106
++  249 noop
+   250 label __label96
    251 print __tmp14
-   252 label __label107
--    * op add i 11 1
-   253 label __label108
-   254 set __tmp14 0
-   255 label __label109
+   252 label __label97
  
-   264 label __label111
-   265 print __tmp14
-   266 label __label112
--    * op add i 12 1
-   267 label __label113
-   268 set __tmp14 0
-   269 label __label114
+   262 label __label100
+   263 jump __label101 equal __tmp8 false
+   264 set __tmp14 1
+-    * jump __label101 always
++  265 noop
+   266 label __label101
+   267 print __tmp14
+   268 label __label102
  
-   278 label __label116
-   279 print __tmp14
-   280 label __label117
--    * op add i 13 1
-   281 label __label118
-   282 set __tmp14 0
-   283 label __label119
-   284 op idiv __tmp10 14 BITS
--    * read __tmp9 BITMAP __tmp10
-+  285 read __tmp9 BITMAP __tmp3
-   286 op mod __tmp11 14 BITS
--    * op shl __tmp12 1 __tmp11
-+  287 op shl __tmp12 1 __tmp4
-   288 op and __tmp8 __tmp9 __tmp12
-   289 label __label120
-   290 jump __label121 equal __tmp8 false
+   278 label __label105
+   279 jump __label106 equal __tmp8 false
+   280 set __tmp14 1
+-    * jump __label106 always
++  281 noop
+   282 label __label106
+   283 print __tmp14
+   284 label __label107
  
-   292 label __label121
-   293 print __tmp14
-   294 label __label122
--    * op add i 14 1
-   295 label __label123
-   296 set __tmp14 0
-   297 label __label124
+   294 label __label110
+   295 jump __label111 equal __tmp8 false
+   296 set __tmp14 1
+-    * jump __label111 always
++  297 noop
+   298 label __label111
+   299 print __tmp14
+   300 label __label112
  
-   306 label __label126
-   307 print __tmp14
-   308 label __label127
--    * op add i 15 1
-   309 label __label7
-   310 end
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-2 instructions):
+   310 label __label115
+   311 jump __label116 equal __tmp8 false
+   312 set __tmp14 1
+-    * jump __label116 always
++  313 noop
+   314 label __label116
+   315 print __tmp14
+   316 label __label117
  
-   281 label __label118
-   282 set __tmp14 0
-   283 label __label119
--    * op idiv __tmp10 14 BITS
-   284 read __tmp9 BITMAP __tmp3
--    * op mod __tmp11 14 BITS
-   285 op shl __tmp12 1 __tmp4
--    * op and __tmp8 __tmp9 __tmp12
-+  286 op and __tmp8 __tmp9 __tmp5
-   287 label __label120
-   288 jump __label121 equal __tmp8 false
-   289 set __tmp14 1
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 4 (-1 instructions):
+   323 label __label120
+   324 jump __label121 equal __tmp8 false
+   325 set __tmp14 1
+-    * jump __label121 always
++  326 noop
+   327 label __label121
+   328 print __tmp14
+   329 label __label122
  
-   282 set __tmp14 0
-   283 label __label119
-   284 read __tmp9 BITMAP __tmp3
--    * op shl __tmp12 1 __tmp4
-   285 op and __tmp8 __tmp9 __tmp5
-   286 label __label120
-   287 jump __label121 equal __tmp8 false
+   339 label __label125
+   340 jump __label126 equal __tmp8 false
+   341 set __tmp14 1
+-    * jump __label126 always
++  342 noop
+   343 label __label126
+   344 print __tmp14
+   345 label __label127
 
 Final code before resolving virtual instructions:
 

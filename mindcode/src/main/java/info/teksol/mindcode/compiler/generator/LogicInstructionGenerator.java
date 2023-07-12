@@ -186,6 +186,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return instructionProcessor.createGoto(astContext, address, marker);
     }
 
+    public GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
+        return instructionProcessor.createGotoOffset(astContext, target, value, offset, marker);
+    }
+
     public JumpInstruction createJump(LogicLabel target, Condition condition, LogicValue x, LogicValue y) {
         return instructionProcessor.createJump(astContext, target, condition, x, y);
     }

@@ -11,20 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
- * to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
- * <ul>
- * <li>end instruction is handled identically to jump 0 always,</li>
- * <li>conditional jumps in the jump chain are followed if:</li>
- *     <ul>
- *         <li>their condition is identical to the condition the first jump, and</li>
- *         <li>the condition arguments do not contain a volatile variable ({@code @time}, {@code @tick},
- *         {@code @counter} etc.)</li>
- *     </ul>
- * </ul>
- * No instructions are removed or added except possibly a label at the start of the program.
-*/
 class PropagateJumpTargets extends BaseOptimizer {
     private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
     private boolean startLabelUsed = false;
@@ -40,12 +26,18 @@ class PropagateJumpTargets extends BaseOptimizer {
             it.add(createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
             while (it.hasNext()) {
                 LogicInstruction instruction = it.next();
-                if (instruction instanceof JumpInstruction ix) {
-                    LogicLabel label = findJumpRedirection(ix);
-                    if (!label.equals(ix.getTarget())) {
-                        startLabelUsed |= label.equals(FIRST_LABEL);
-                        // Update target of the original jump
-                        it.set(ix.withTarget(label));
+                if (instruction instanceof JumpInstruction jump) {
+                    LogicLabel label = findJumpRedirection(jump);
+                    GotoInstruction labeledGoto = aggressive() && labeledInstruction(label) instanceof GotoInstruction ix ? ix : null;
+                    if (jump.isUnconditional() && labeledGoto != null || !label.equals(jump.getTarget())) {
+                        if (labeledGoto != null) {
+                            // An unconditional jump targets a goto: replace it with the goto itself
+                            it.set(labeledGoto.withContext(jump.getAstContext()));
+                        } else {
+                            startLabelUsed |= label.equals(FIRST_LABEL);
+                            // Update target of the original jump
+                            it.set(jump.withTarget(label));
+                        }
                         count++;
                     }
                 }
@@ -89,7 +81,7 @@ class PropagateJumpTargets extends BaseOptimizer {
         }
 
         // Find next real instruction
-        LogicInstruction next = firstInstruction(target + 1, ix -> !(ix instanceof LabeledInstruction));
+        LogicInstruction next = firstInstruction(target + 1, ix -> ix.getRealSize() > 0);
         
         // Redirect compatible jumps
         if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {
@@ -107,11 +99,15 @@ class PropagateJumpTargets extends BaseOptimizer {
     
     // Returns true if the next jump is semantically identical to the first jump
     private boolean isIdenticalJump(JumpInstruction firstJump, JumpInstruction nextJump) {
-        List<LogicArgument> args1 = firstJump.getArgs();
-        List<LogicArgument> args2 = nextJump.getArgs();
-        
-        // Compare everything but labels; exclude volatile variables
-        return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size()))
-                && args1.stream().noneMatch(LogicArgument::isVolatile);
+        if (aggressive()) {
+            List<LogicArgument> args1 = firstJump.getArgs();
+            List<LogicArgument> args2 = nextJump.getArgs();
+
+            // Compare everything but labels; exclude volatile variables
+            return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size()))
+                    && args1.stream().noneMatch(LogicArgument::isVolatile);
+        } else {
+            return false;
+        }
     }
 }

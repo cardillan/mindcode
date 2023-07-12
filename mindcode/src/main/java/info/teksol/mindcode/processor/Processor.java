@@ -149,7 +149,7 @@ public class Processor {
     }
 
     private boolean executeOp(OpInstruction ix) {
-        Variable target = getOrCreateVariable(ix.getResult());
+        Variable target = getOrCreateVariable(ix.getArg(1));
         Variable a = getExistingVariable(ix.getX());
         Variable b = getExistingVariable(ix.hasSecondOperand() ? ix.getY() : LogicNumber.ZERO);
         OperationEval op = ExpressionEvaluator.getOperation(ix.getOperation());

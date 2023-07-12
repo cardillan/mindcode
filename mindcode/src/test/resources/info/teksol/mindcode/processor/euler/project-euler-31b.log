@@ -1,26 +1,26 @@
     42 instructions before optimizations.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
-     6 instructions eliminated by Jump Normalization (5 iterations).
-   216 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
-     1 instructions modified by Loop Optimization (4 iterations).
+     6 instructions eliminated by Jump Normalization (4 iterations).
+   216 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
+     1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
-   643 instructions added by Loop Unrolling (7 iterations).
+   643 instructions added by Loop Unrolling (6 iterations).
      3 loops unrolled by Loop Unrolling.
    461 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 962):
-  * Loop Unrolling: unroll iteration loop at line 4    cost  49, benefit       23,0, efficiency        0,5
+  * Loop Unrolling: unroll iteration loop at line 4              cost  49, benefit       23.0, efficiency        0.5 (+39 instructions)
 
-Pass 2: speed optimization selection (cost limit 923):
-    Loop Unrolling: unroll loop at line 6              cost 905, benefit   226250,0, efficiency      250,0
-    Loop Unrolling: unroll loop at line 6              cost 755, benefit   188750,0, efficiency      250,0
-    Loop Unrolling: unroll loop at line 6              cost 505, benefit   126250,0, efficiency      250,0
-  * Loop Unrolling: unroll loop at line 6              cost   5, benefit     1250,0, efficiency      250,0
+Pass 1: speed optimization selection (cost limit 923):
+    Loop Unrolling: unroll loop at line 6                        cost 905, benefit   226250.0, efficiency      250.0
+    Loop Unrolling: unroll loop at line 6                        cost 755, benefit   188750.0, efficiency      250.0
+    Loop Unrolling: unroll loop at line 6                        cost 505, benefit   126250.0, efficiency      250.0
+  * Loop Unrolling: unroll loop at line 6                        cost   5, benefit     1250.0, efficiency      250.0 (-5 instructions)
 
-Pass 2: speed optimization selection (cost limit 925):
-    Loop Unrolling: unroll loop at line 6              cost 905, benefit   226250,0, efficiency      250,0
-    Loop Unrolling: unroll loop at line 6              cost 755, benefit   188750,0, efficiency      250,0
-  * Loop Unrolling: unroll loop at line 6              cost 505, benefit   126250,0, efficiency      250,0
+Pass 1: speed optimization selection (cost limit 928):
+    Loop Unrolling: unroll loop at line 6                        cost 905, benefit   226250.0, efficiency      250.0
+    Loop Unrolling: unroll loop at line 6                        cost 755, benefit   188750.0, efficiency      250.0
+  * Loop Unrolling: unroll loop at line 6                        cost 505, benefit   126250.0, efficiency      250.0 (+395 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
@@ -28,14 +28,16 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructi
     49 set __fn0_v 73682
     50 print __fn0_v
 -    * set __tmp5 __fn0_v
-    51 label __label15
-    52 read __tmp6 bank2 200
-    53 label __label16
-    54 set __fn1_v __tmp6
-    55 print __fn1_v
++   51 noop
+    52 label __label15
+    53 read __tmp6 bank2 200
+    54 label __label16
+    55 set __fn1_v __tmp6
+    56 print __fn1_v
 -    * set __tmp7 __fn1_v
-    56 label __label17
-    57 end
++   57 noop
+    58 label __label17
+    59 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -44,14 +46,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     49 set __fn0_v 73682
 -    * print __fn0_v
 +   50 print 73682
-    51 label __label15
-    52 read __tmp6 bank2 200
-    53 label __label16
-    54 set __fn1_v __tmp6
+    51 noop
+    52 label __label15
+    53 read __tmp6 bank2 200
+    54 label __label16
+    55 set __fn1_v __tmp6
 -    * print __fn1_v
-+   55 print __tmp6
-    56 label __label17
-    57 end
++   56 print __tmp6
+    57 noop
+    58 label __label17
+    59 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
@@ -60,13 +64,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     48 label __label14
 -    * set __fn0_v 73682
     49 print 73682
-    50 label __label15
-    51 read __tmp6 bank2 200
-    52 label __label16
+    50 noop
+    51 label __label15
+    52 read __tmp6 bank2 200
+    53 label __label16
 -    * set __fn1_v __tmp6
-    53 print __tmp6
-    54 label __label17
-    55 end
+    54 print __tmp6
+    55 noop
+    56 label __label17
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
@@ -268,9 +273,9 @@ Modifications by Loop Unrolling: unroll iteration loop at line 4 (+47 instructio
 +  129 label __label2
    130 label __label14
    131 print 73682
-   132 label __label15
+   132 noop
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 write 1 bank2 0
      1 set i 1
      2 label __label19
@@ -399,7 +404,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
    122 op add __tmp4 __tmp1 __tmp2
    123 write __tmp4 bank2 j
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
      2 label __label19
      3 set j 1
@@ -473,7 +478,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
    119 read __tmp1 bank2 j
    120 op sub __tmp3 j 200
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-8 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-8 instructions):
      0 write 1 bank2 0
 -    * set i 1
      1 label __label19
@@ -568,6 +573,46 @@ Modifications by Loop Unrolling: unroll loop at line 6 (-2 instructions):
    118 label __label66
    119 label __label2
    120 label __label14
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   107 set j 200
+   108 label __label67
+   109 label __label68
+-    * read __tmp1 bank2 j
+-    * op sub __tmp3 j 200
+-    * read __tmp2 bank2 __tmp3
++  110 read __tmp1 bank2 200
++  111 op sub __tmp3 200 200
++  112 read __tmp2 bank2 0
+   113 op add __tmp4 __tmp1 __tmp2
+-    * write __tmp4 bank2 j
++  114 write __tmp4 bank2 200
+   115 label __label69
+-    * op add j j 1
++  116 op add j 200 1
+   117 label __label65
+   118 label __label66
+   119 label __label2
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
+ 
+   104 label __label59
+   105 label __label60
+   106 label __label61
+-    * set j 200
+   107 label __label67
+   108 label __label68
+   109 read __tmp1 bank2 200
+-    * op sub __tmp3 200 200
+   110 read __tmp2 bank2 0
+   111 op add __tmp4 __tmp1 __tmp2
+   112 write __tmp4 bank2 200
+   113 label __label69
+-    * op add j 200 1
+   114 label __label65
+   115 label __label66
+   116 label __label2
 
 Modifications by Loop Unrolling: unroll loop at line 6 (+598 instructions):
  
@@ -1400,65 +1445,9 @@ Modifications by Loop Unrolling: unroll loop at line 6 (+598 instructions):
 +  902 label __label59
    903 label __label60
    904 label __label61
-   905 set j 200
+   905 label __label67
 
-Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-6 instructions):
- 
-     1 label __label19
-     2 set j 1
-     3 label __label20
--    * jump __label23 greaterThan 1 200
-+    4 noop
-     5 label __label21
-     6 read __tmp1 bank2 j
-     7 op sub __tmp3 j 1
- 
-    16 label __label25
-    17 set j 2
-    18 label __label26
--    * jump __label29 greaterThan 2 200
-+   19 noop
-    20 label __label27
-    21 read __tmp1 bank2 j
-    22 op sub __tmp3 j 2
- 
-    31 label __label31
-    32 set j 5
-    33 label __label32
--    * jump __label35 greaterThan 5 200
-+   34 noop
-    35 label __label33
-    36 read __tmp1 bank2 j
-    37 op sub __tmp3 j 5
- 
-    46 label __label37
-    47 set j 10
-    48 label __label38
--    * jump __label41 greaterThan 10 200
-+   49 noop
-    50 label __label39
-    51 read __tmp1 bank2 j
-    52 op sub __tmp3 j 10
- 
-    61 label __label43
-    62 set j 20
-    63 label __label44
--    * jump __label47 greaterThan 20 200
-+   64 noop
-    65 label __label45
-    66 read __tmp1 bank2 j
-    67 op sub __tmp3 j 20
- 
-    76 label __label49
-    77 set j 50
-    78 label __label50
--    * jump __label53 greaterThan 50 200
-+   79 noop
-    80 label __label51
-    81 read __tmp1 bank2 j
-    82 op sub __tmp3 j 50
-
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     92 set j 100
     93 label __label70
@@ -2778,26 +2767,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1:
    902 label __label59
    903 label __label60
    904 label __label61
-   905 set j 200
-   906 label __label67
-   907 label __label68
--    * read __tmp1 bank2 j
--    * op sub __tmp3 j 200
--    * read __tmp2 bank2 __tmp3
-+  908 read __tmp1 bank2 200
-+  909 op sub __tmp3 200 200
-+  910 read __tmp2 bank2 0
-   911 op add __tmp4 __tmp1 __tmp2
--    * write __tmp4 bank2 j
-+  912 write __tmp4 bank2 200
-   913 label __label69
--    * op add j j 1
-+  914 op add j 200 1
-   915 label __label65
-   916 label __label66
-   917 label __label2
 
-Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-206 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-203 instructions):
  
     89 label __label53
     90 label __label54
@@ -3615,19 +3586,62 @@ Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 2 (-2
    699 label __label59
    700 label __label60
    701 label __label61
--    * set j 200
-   702 label __label67
-   703 label __label68
-   704 read __tmp1 bank2 200
--    * op sub __tmp3 200 200
-   705 read __tmp2 bank2 0
-   706 op add __tmp4 __tmp1 __tmp2
-   707 write __tmp4 bank2 200
-   708 label __label69
--    * op add j 200 1
-   709 label __label65
-   710 label __label66
-   711 label __label2
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-6 instructions):
+ 
+     1 label __label19
+     2 set j 1
+     3 label __label20
+-    * jump __label23 greaterThan 1 200
++    4 noop
+     5 label __label21
+     6 read __tmp1 bank2 j
+     7 op sub __tmp3 j 1
+ 
+    16 label __label25
+    17 set j 2
+    18 label __label26
+-    * jump __label29 greaterThan 2 200
++   19 noop
+    20 label __label27
+    21 read __tmp1 bank2 j
+    22 op sub __tmp3 j 2
+ 
+    31 label __label31
+    32 set j 5
+    33 label __label32
+-    * jump __label35 greaterThan 5 200
++   34 noop
+    35 label __label33
+    36 read __tmp1 bank2 j
+    37 op sub __tmp3 j 5
+ 
+    46 label __label37
+    47 set j 10
+    48 label __label38
+-    * jump __label41 greaterThan 10 200
++   49 noop
+    50 label __label39
+    51 read __tmp1 bank2 j
+    52 op sub __tmp3 j 10
+ 
+    61 label __label43
+    62 set j 20
+    63 label __label44
+-    * jump __label47 greaterThan 20 200
++   64 noop
+    65 label __label45
+    66 read __tmp1 bank2 j
+    67 op sub __tmp3 j 20
+ 
+    76 label __label49
+    77 set j 50
+    78 label __label50
+-    * jump __label53 greaterThan 50 200
++   79 noop
+    80 label __label51
+    81 read __tmp1 bank2 j
+    82 op sub __tmp3 j 50
 
 Final code before resolving virtual instructions:
 

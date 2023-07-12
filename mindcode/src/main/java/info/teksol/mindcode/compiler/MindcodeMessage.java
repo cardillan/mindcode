@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler;
 
 import org.intellij.lang.annotations.PrintFormat;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public record MindcodeMessage(MessageLevel level, String message) implements CompilerMessage {
@@ -19,24 +20,24 @@ public record MindcodeMessage(MessageLevel level, String message) implements Com
         return new MindcodeMessage(MessageLevel.WARNING, message);
     }
 
-    public static MindcodeMessage warn(String message, Object... args) {
-        return new MindcodeMessage(MessageLevel.WARNING, String.format(message, args));
+    public static MindcodeMessage warn(@PrintFormat String format, Object... args) {
+        return new MindcodeMessage(MessageLevel.WARNING, String.format(Locale.US, format, args));
     }
 
     public static MindcodeMessage info(String message) {
         return new MindcodeMessage(MessageLevel.INFO, message);
     }
 
-    public static MindcodeMessage info(@PrintFormat String message, Object... args) {
-        return new MindcodeMessage(MessageLevel.INFO, String.format(message, args));
+    public static MindcodeMessage info(@PrintFormat String format, Object... args) {
+        return new MindcodeMessage(MessageLevel.INFO, String.format(Locale.US, format, args));
     }
 
     public static MindcodeMessage debug(String message) {
         return new MindcodeMessage(MessageLevel.DEBUG, message);
     }
 
-    public static MindcodeMessage debug(@PrintFormat String message, Object... args) {
-        return new MindcodeMessage(MessageLevel.DEBUG, String.format(message, args));
+    public static MindcodeMessage debug(@PrintFormat String format, Object... args) {
+        return new MindcodeMessage(MessageLevel.DEBUG, String.format(Locale.US, format, args));
     }
 
 

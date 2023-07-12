@@ -34,8 +34,8 @@ public class IfExpressionOptimizer extends BaseOptimizer {
         LogicList trueBranch = contextInstructions(ifExpression.child(1));
         LogicList falseBranch = contextInstructions(ifExpression.child(3));
 
-        LogicInstruction lastTrue = trueBranch.getLast();
-        LogicInstruction lastFalse = falseBranch.getLast();
+        LogicInstruction lastTrue = getLastRealInstruction(trueBranch);
+        LogicInstruction lastFalse = getLastRealInstruction(falseBranch);
         JumpInstruction invertedJump = negateCompoundCondition(condition);
         boolean swappable = true;
 
@@ -65,24 +65,16 @@ public class IfExpressionOptimizer extends BaseOptimizer {
 
             // Do not perform the optimization if the condition depends on the resulting variable
             if (condition.stream().noneMatch(ix -> ix.inputArgumentsStream().anyMatch(updatedResVar::equals))) {
-                // TODO Remove the "true ||" if an optimization to replace unconditional jump to return instruction with the
-                //      return itself is ever implemented.
-                // Do not perform the optimization in recursive functions
-                // It might lead to more instructions being evaluated by moving assignment to the function return variable
-                // in front of the condition.
-                if (true || resTrue.getAstContext().functionPrefix() == null
-                        || !getCallGraph().getFunctionByPrefix(resTrue.getAstContext().functionPrefix()).isRecursive()) {
-                    if (invertedJump != null && trueBranch.size() == 1 && !isVolatile(resTrue)) {
-                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
-                        swappable = false;
-                    } else if (falseBranch.size() == 1 && !isVolatile(resFalse)) {
-                        moveFalseBranch(condition, trueBranch, falseBranch, jump);
-                        swappable = false;
-                    } else if (invertedJump == null && trueBranch.size() == 1 && jump.getCondition().hasInverse()
-                            && !isVolatile(resTrue)) {
-                        moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
-                        swappable = false;
-                    }
+                if (invertedJump != null && trueBranch.realSize() == 1 && !isVolatile(resTrue)) {
+                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, invertedJump, true);
+                    swappable = false;
+                } else if (falseBranch.realSize() == 1 && !isVolatile(resFalse)) {
+                    moveFalseBranch(condition, trueBranch, falseBranch, jump);
+                    swappable = false;
+                } else if (invertedJump == null && trueBranch.realSize() == 1 && jump.getCondition().hasInverse()
+                        && !isVolatile(resTrue)) {
+                    moveTrueBranchUsingJump(condition, trueBranch, falseBranch, jump.invert(), false);
+                    swappable = false;
                 }
             }
         }
@@ -90,6 +82,16 @@ public class IfExpressionOptimizer extends BaseOptimizer {
         if (swappable && invertedJump != null) {
             swapBranches(condition, trueBranch, falseBranch, invertedJump);
         }
+    }
+
+    private LogicInstruction getLastRealInstruction(LogicList instructions) {
+        for (int i = 0; i < instructions.size(); i ++) {
+            if (instructions.getFromEnd(i).getRealSize() > 0) {
+                return instructions.getFromEnd(i);
+            }
+        }
+
+        return null;
     }
 
     private LogicResultInstruction replaceAndGet(LogicResultInstruction original, LogicResultInstruction replaced) {
@@ -123,9 +125,9 @@ public class IfExpressionOptimizer extends BaseOptimizer {
             boolean compoundCondition) {
         // Move body
         int bodyIndex = instructionIndex(trueBranch.getFirst());
-        removeInstruction(bodyIndex);   // Removes the body
+        trueBranch.forEach(ix -> removeInstruction(bodyIndex)); // Removes the body
         removeInstruction(bodyIndex);   // Removes the jump
-        insertBefore(condition.getFirst(), trueBranch.getFirst());
+        insertBefore(condition.getFirst(), trueBranch);
 
         // Get final label (blind cast since the if structure was verified)
         LabelInstruction labelInstruction = (LabelInstruction) instructionAfter(falseBranch.getLast());
@@ -147,9 +149,9 @@ public class IfExpressionOptimizer extends BaseOptimizer {
 
         // Move body
         int bodyIndex = instructionIndex(falseBranch.getFirst());
-        removeInstruction(bodyIndex);               // Removes the body
+        falseBranch.forEach(ix -> removeInstruction(bodyIndex)); // Removes the body
         removeInstruction(bodyIndex - 1);     // Removes the previous jump
-        insertBefore(condition.getFirst(), falseBranch.getFirst());
+        insertBefore(condition.getFirst(), falseBranch);
 
         replaceInstruction(jump, jump.withTarget(labelInstruction.getLabel()));
     }

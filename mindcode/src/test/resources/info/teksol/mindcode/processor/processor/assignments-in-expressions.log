@@ -8,14 +8,16 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
 -    * op add __tmp0 A 1
 -    * set A __tmp0
 +    2 op add A A 1
-     3 op add __tmp1 A A
-     4 print __tmp1
++    3 noop
+     4 op add __tmp1 A A
+     5 print __tmp1
 -    * op add __tmp2 B 1
 -    * set B __tmp2
-+    5 op add B B 1
-     6 op add __tmp3 B B
-     7 print __tmp3
-     8 end
++    6 op add B B 1
++    7 noop
+     8 op add __tmp3 B B
+     9 print __tmp3
+    10 end
 
 Final code before resolving virtual instructions:
 

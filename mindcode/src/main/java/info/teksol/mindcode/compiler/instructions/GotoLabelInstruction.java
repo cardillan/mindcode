@@ -27,8 +27,8 @@ public class GotoLabelInstruction extends BaseInstruction implements LabeledInst
         return new GotoLabelInstruction(this, astContext);
     }
 
-    public boolean matches(GotoInstruction gotoInstruction) {
-        return getMarker().equals(gotoInstruction.getMarker());
+    public boolean matches(LogicInstruction instruction) {
+        return getMarker().equals(instruction.getMarker());
     }
 
     @Override

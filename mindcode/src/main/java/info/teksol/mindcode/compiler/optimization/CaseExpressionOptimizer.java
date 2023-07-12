@@ -50,6 +50,8 @@ class CaseExpressionOptimizer extends BaseOptimizer {
 
                     // Replace __ast with actual value in all case branches
                     list.stream().skip(1).forEach(in -> replaceInstruction(in, replaceAllArgs(in, result, ix.getValue())));
+
+                    // This doesn't break AST context structure. The set instruction is in a standalone context.
                     it.remove();
                 }
             }

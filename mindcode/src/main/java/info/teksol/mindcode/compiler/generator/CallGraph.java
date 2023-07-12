@@ -70,7 +70,7 @@ public final class CallGraph {
 
     public Function getFunctionByPrefix(String localPrefix) {
         return functions.values().stream()
-                .filter(f -> localPrefix.equals(f.localPrefix))
+                .filter(f -> Objects.equals(f.localPrefix, localPrefix))
                 .findFirst()
                 .orElseThrow();
     }

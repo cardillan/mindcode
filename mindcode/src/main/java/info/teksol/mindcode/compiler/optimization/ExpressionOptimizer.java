@@ -55,13 +55,15 @@ public class ExpressionOptimizer extends BaseOptimizer {
 
                                 replaceInstruction(ox, createOp(ox.getAstContext(),
                                         Operation.IDIV, ox.getResult(), ops.getT1(), ops.getT2()));
-                                it.remove();
+                                it.set(createNoOp(ix.getAstContext()));
+                                it.next();
                             }
                         }
                     }
                     case SetInstruction set -> {
                         if (set.getResult().equals(set.getValue())) {
-                            it.remove();
+                            it.set(createNoOp(set.getAstContext()));
+                            it.next();
                         }
                     }
                     default -> {}

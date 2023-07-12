@@ -54,6 +54,14 @@ public enum Optimization {
             FunctionInliner::new,
             "inlines stackless function calls (optimization for speed)"),
 
+    CASE_SWITCHING                      ("Case Switching",
+            CaseSwitcher::new,
+            "modifies suitable case expressions to use jump tables"),
+
+    RETURN_OPTIMIZATION                 ("Return Optimization",
+            ReturnOptimizer::new,
+            "speeds up return statements in recursive and stackless functions"),
+
     JUMP_OVER_JUMP_ELIMINATION          ("Jump Straightening",
             JumpOverJumpEliminator::new,
             "simplifying sequences of intertwined jumps"),

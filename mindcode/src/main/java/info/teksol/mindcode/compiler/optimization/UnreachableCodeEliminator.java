@@ -71,6 +71,14 @@ class UnreachableCodeEliminator extends BaseOptimizer {
                         }
                         continue MainLoop;
                     }
+                    case GotoOffsetInstruction gotoIx -> {
+                        for (int i = 0; i < program.size(); i++) {
+                            if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                heads.offer(i);
+                            }
+                        }
+                        continue MainLoop;
+                    }
                     default -> {}
                 }
 

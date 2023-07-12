@@ -216,6 +216,18 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     }
 
     /**
+     * Provides a sublist of the current program. Will fail when such sublist cannot be created.
+     * Returned list won't reflect further changed to the program.
+     *
+     * @param fromInstruction first instruction in the list
+     * @param toInstruction last instruction in the list (inclusive)
+     * @return a List containing given instructions.
+     */
+    protected List<LogicInstruction> instructionSubList(LogicInstruction fromInstruction, LogicInstruction toInstruction) {
+        return optimizationContext.instructionSubList(fromInstruction, toInstruction);
+    }
+
+    /**
      * Provides stream of all instructions in the program.
      *
      * @return an instruction stream
@@ -449,6 +461,14 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         optimizationContext.removeInstruction(index);
     }
 
+    protected void invalidateInstruction(int index) {
+        replaceInstruction(index, createNoOp(instructionAt(index).getAstContext()));
+    }
+
+    protected void invalidateInstruction(LogicInstruction instruction) {
+        replaceInstruction(instruction, createNoOp(instruction.getAstContext()));
+    }
+
     /**
      * Inserts a new instruction before given, existing instruction. The new instruction must be assigned
      * an AST context suitable for its position in the program. An instruction must not be placed into the
@@ -462,6 +482,19 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      */
     protected void insertBefore(LogicInstruction anchor, LogicInstruction inserted) {
         optimizationContext.insertBefore(anchor, inserted);
+    }
+
+
+    /**
+     * Inserts a list of instructions before given, existing instruction.
+     * <p>
+     * If the reference instruction isn't found in the program, an exception is thrown.
+     *
+     * @param anchor instruction before which to place the new instruction
+     * @param instructions instructions to add
+     */
+    protected void insertBefore(LogicInstruction anchor, LogicList instructions) {
+        optimizationContext.insertBefore(anchor, instructions);
     }
 
     /**
@@ -560,6 +593,16 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     }
 
     /**
+     * Creates a new LogicIterator positioned at given index.
+     *
+     * @param index initial position of the iterator
+     * @return a new LogicIterator instance
+     */
+    public LogicIterator createIteratorAtIndex(int index) {
+        return optimizationContext.createIteratorAtIndex(index);
+    }
+
+    /**
      * Creates a new LogicIterator positioned at given instruction.
      *
      * @param instruction target instruction
@@ -567,6 +610,16 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      */
     protected LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
         return optimizationContext.createIteratorAtInstruction(instruction);
+    }
+
+    /**
+     * Creates a new LogicIterator positioned at the beginning of given context.
+     *
+     * @param context target context
+     * @return LogicIterator positioned at the beginning of given context
+     */
+    protected LogicIterator createIteratorAtContext(AstContext context) {
+        return optimizationContext.createIteratorAtContext(context);
     }
     //</editor-fold>
 

@@ -240,7 +240,8 @@ This is the exact same conditional expression as the first `if` statement above,
 
 ## Case Expressions
 
-Case expression is another way of writing conditionals. Use case expression when you need to test a value against multiple different alternatives:
+Case expression is another way of writing conditionals. Use case expression when you need to test a value against 
+multiple different alternatives:
 
 ```
 next_action = case num_enemies

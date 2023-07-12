@@ -185,6 +185,10 @@ public class OptimizationContext {
             case JumpInstruction ix         -> labelReferences.computeIfAbsent(ix.getTarget(), v -> new ArrayList<>()).add(ix);
             case SetAddressInstruction ix   -> labelReferences.computeIfAbsent(ix.getLabel(), v -> new ArrayList<>()).add(ix);
             case GotoInstruction ix         -> labelReferences.computeIfAbsent(ix.getMarker(), v -> new ArrayList<>()).add(ix);
+            case GotoOffsetInstruction ix   -> {
+                labelReferences.computeIfAbsent(ix.getTarget(), v -> new ArrayList<>()).add(ix);
+                labelReferences.computeIfAbsent(ix.getMarker(), v -> new ArrayList<>()).add(ix);
+            }
             case CallInstruction ix         -> labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
             case CallRecInstruction ix      -> {
                 labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
@@ -199,6 +203,10 @@ public class OptimizationContext {
             case JumpInstruction ix         -> clearReferences(ix.getTarget(), ix);
             case SetAddressInstruction ix   -> clearReferences(ix.getLabel(), ix);
             case GotoInstruction ix         -> clearReferences(ix.getMarker(), ix);
+            case GotoOffsetInstruction ix   -> {
+                clearReferences(ix.getTarget(), ix);
+                clearReferences(ix.getMarker(), ix);
+            }
             case CallInstruction ix         -> clearReferences(ix.getCallAddr(), ix);
             case CallRecInstruction ix      -> {
                 clearReferences(ix.getCallAddr(), ix);
@@ -389,6 +397,18 @@ public class OptimizationContext {
     }
 
     /**
+     * Provides a sublist of the current program. Will fail when such sublist cannot be created.
+     * Returned list won't reflect further changed to the program.
+     *
+     * @param fromInstruction first instruction in the list
+     * @param toInstruction last instruction in the list (inclusive)
+     * @return a List containing given instructions.
+     */
+    protected List<LogicInstruction> instructionSubList(LogicInstruction fromInstruction, LogicInstruction toInstruction) {
+        return instructionSubList(instructionIndex(fromInstruction), instructionIndex(toInstruction) + 1);
+    }
+
+    /**
      * Provides stream of all instructions in the program.
      *
      * @return an instruction stream
@@ -481,8 +501,8 @@ public class OptimizationContext {
      * @return first non-label instruction following the label
      */
     protected int labeledInstructionIndex(LogicLabel label) {
-        // TODO use lookup structure
-        int labelIndex = firstInstructionIndex(ix -> ix instanceof LabeledInstruction li && li.getLabel().equals(label));
+        LabelInstruction labelInstruction = getLabelInstruction(label);
+        int labelIndex = firstInstructionIndex(ix -> ix == labelInstruction);
         if (labelIndex < 0) {
             throw new MindcodeInternalError("Label not found in program.\nLabel: " + label);
         }
@@ -586,7 +606,7 @@ public class OptimizationContext {
                 .noneMatch(ix -> ix instanceof ReturnInstruction ||
                         ix instanceof EndInstruction && !ix.getAstContext().matches(AstSubcontextType.END))
                 && codeBlock.stream()
-                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction)
+                .filter(ix -> ix instanceof JumpInstruction || ix instanceof GotoInstruction || ix instanceof GotoLabelInstruction)
                 .allMatch(ix -> getPossibleTargetLabels(ix).allMatch(localLabels::contains));
     }
 
@@ -604,12 +624,17 @@ public class OptimizationContext {
     private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
         return switch (instruction) {
             case JumpInstruction ix -> Stream.of(ix.getTarget());
-            case GotoInstruction ix -> instructionStream()
-                    .filter(in -> in instanceof GotoLabelInstruction gl && gl.matches(ix))
-                    .map(GotoLabelInstruction.class::cast)
-                    .map(GotoLabelInstruction::getLabel);
+            case GotoInstruction ix -> markedLabels(ix);
+            case GotoOffsetInstruction ix -> markedLabels(ix);
             default -> Stream.empty();
         };
+    }
+
+    private Stream<LogicLabel> markedLabels(LogicInstruction instruction) {
+        return instructionStream()
+                .filter(in -> in instanceof GotoLabelInstruction gl && gl.matches(instruction))
+                .map(GotoLabelInstruction.class::cast)
+                .map(GotoLabelInstruction::getLabel);
     }
     //</editor-fold>
 
@@ -738,6 +763,18 @@ public class OptimizationContext {
     }
 
     /**
+     * Inserts a list of instructions before given, existing instruction.
+     * <p>
+     * If the reference instruction isn't found in the program, an exception is thrown.
+     *
+     * @param anchor instruction before which to place the new instruction
+     * @param instructions instructions to add
+     */
+    protected void insertBefore(LogicInstruction anchor, LogicList instructions) {
+        insertInstructions(existingInstructionIndex(anchor), instructions);
+    }
+
+    /**
      * Inserts a new instruction after given, existing instruction. The new instruction must be assigned
      * an AST context suitable for its position in the program. An instruction must not be placed into the
      * program twice; when an instruction truly needs to be duplicated, an independent copy with proper
@@ -843,7 +880,19 @@ public class OptimizationContext {
      * @return a new LogicIterator instance
      */
     protected LogicIterator createIterator() {
-        return createIterator(0);
+        return createIteratorAtIndex(0);
+    }
+
+    /**
+     * Creates a new LogicIterator positioned at given index.
+     *
+     * @param index initial position of the iterator
+     * @return a new LogicIterator instance
+     */
+    public LogicIterator createIteratorAtIndex(int index) {
+        LogicIterator iterator = new LogicIterator(index);
+        iterators.add(iterator);
+        return iterator;
     }
 
     /**
@@ -853,7 +902,17 @@ public class OptimizationContext {
      * @return LogicIterator positioned at given instruction
      */
     protected LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
-        return createIterator(existingInstructionIndex(instruction));
+        return createIteratorAtIndex(existingInstructionIndex(instruction));
+    }
+
+    /**
+     * Creates a new LogicIterator positioned at the beginning of given context.
+     *
+     * @param context target context
+     * @return LogicIterator positioned at the beginning of given context
+     */
+    protected LogicIterator createIteratorAtContext(AstContext context) {
+        return createIteratorAtIndex(firstInstructionIndex(context));
     }
 
     /**
@@ -879,13 +938,18 @@ public class OptimizationContext {
             closeIterator(this);
         }
 
+        public void setNextIndex(int index) {
+            checkClosed();
+            cursor = index;
+        }
+
         /**
          * Creates an independent LogicIterator instance positioned at the same instruction as this instance.
          *
          * @return a new LogicIterator instance
          */
         public LogicIterator copy() {
-            return createIterator(cursor);
+            return createIteratorAtIndex(cursor);
         }
 
         /**
@@ -1057,12 +1121,6 @@ public class OptimizationContext {
         }
     }
 
-    private LogicIterator createIterator(int index) {
-        LogicIterator iterator = new LogicIterator(index);
-        iterators.add(iterator);
-        return iterator;
-    }
-
     private void closeIterator(LogicIterator iterator) {
         if (!iterators.remove(iterator)) {
             throw new IllegalStateException("Trying to close unknown iterator.");
@@ -1204,6 +1262,10 @@ public class OptimizationContext {
 
         public int size() {
             return instructions.size();
+        }
+
+        public int realSize() {
+            return instructions.stream().mapToInt(LogicInstruction::getRealSize).sum();
         }
 
         public boolean isEmpty() {

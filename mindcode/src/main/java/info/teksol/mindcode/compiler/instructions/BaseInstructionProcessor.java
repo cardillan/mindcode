@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.Opcode.*;
+import static info.teksol.mindcode.logic.Operation.ADD;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 
 public class BaseInstructionProcessor implements InstructionProcessor {
@@ -108,6 +109,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker) {
         return (GotoInstruction) createInstruction(astContext, GOTO, address, marker);
+    }
+
+    public GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
+        return (GotoOffsetInstruction) createInstruction(astContext, GOTOOFFSET, target, value, offset, marker);
     }
 
     @Override
@@ -220,6 +225,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case CALLREC    -> new CallRecInstruction(astContext, arguments, params);
             case END        -> new EndInstruction(astContext);
             case GOTO       -> new GotoInstruction(astContext, arguments, params);
+            case GOTOOFFSET -> new GotoOffsetInstruction(astContext, arguments, params);
             case GOTOLABEL  -> new GotoLabelInstruction(astContext, arguments, params);
             case JUMP       -> new JumpInstruction(astContext, arguments, params);
             case LABEL      -> new LabelInstruction(astContext, arguments, params);
@@ -252,7 +258,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
-                consumer.accept(createOp(astContext, Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
             }
 
             case PopInstruction ix -> {
@@ -262,7 +268,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
             case CallRecInstruction ix -> {
                 consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
-                consumer.accept(createOp(astContext, Operation.ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
                 consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
             }
 
@@ -274,9 +280,10 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             }
 
             case CallInstruction ix       -> consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
-            case GotoInstruction ix       -> consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
             case SetAddressInstruction ix -> consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()));
+            case GotoInstruction ix       -> consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
 
+            // Note: GotoOffsetInstruction is handled by LabelResolver, as the actual label value needs to be known
             default                       -> consumer.accept(instruction);
         }
     }

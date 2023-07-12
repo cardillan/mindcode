@@ -6,7 +6,7 @@ import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
-import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.*;
 
 import java.util.*;
@@ -258,6 +258,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 function.getCalls().keySet().stream()
                         .filter(callGraph::containsFunction)            // Filter out built-in functions
                         .map(callGraph::getFunction)
+                        .filter(f -> !f.isInline())                     // Function inlined by optimizer
                         .map(CallGraph.Function::getLocalPrefix)
                         .filter(Objects::nonNull)                       // Filter out main function
                         .forEachOrdered(callee -> {
@@ -292,6 +293,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
+    private LogicIterator iterator;
+
     private void processTopContext(AstContext context) {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.functionPrefix() != null) {
@@ -299,7 +302,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
             function.getLogicParameters().forEach(variableStates::markInitialized);
         }
 
+        iterator = createIteratorAtContext(context);
         variableStates = processContext(context, context, variableStates, true);
+        iterator.close();
         useless.addAll(variableStates.getUseless().values());
 
         if (context.functionPrefix() == null) {
@@ -338,7 +343,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private VariableStates processContext(AstContext context, AstContext localContext, VariableStates variableStates,
             boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
-        debug(() -> ">>> Entering context " + context.hierarchy());
+        debug(() -> ">>> Entering context " + context.id + ": " + context.hierarchy());
         final VariableStates result;
         if (!context.matches(BASIC)) {
             result = processDefaultContext(context, localContext, variableStates, modifyInstructions);
@@ -354,6 +359,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return result;
     }
 
+    // Note: this method processes contexts in unnatural order and uses iterator.setNextIndex to keep
+    // the iterator position synchronized with what is expected.
     private VariableStates processLoopContext(AstContext context, VariableStates variableStates, boolean modifyInstructions) {
         List<AstContext> children = context.children();
         int start = 0;
@@ -379,8 +386,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 start++;
             }
 
+            int savedPosition = iterator.nextIndex();
+
             if (children.get(start).matches(CONDITION)) {
-                // Evaluate the initial condition context fully for LoopOptimizer
+                // Evaluate the initial condition context fully for LoopOptimizer in isolation
                 VariableStates copy = processDefaultContext(children.get(start), context,
                         variableStates.isolatedCopy(), false);
                 optimizationContext.storeLoopVariables(context, copy);
@@ -394,6 +403,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 if (!children.get(start).matches(CONDITION)) {
                     throw new MindcodeInternalError("Expected CONDITION context, found " + children.get(start));
                 }
+                iterator.setNextIndex(savedPosition);
                 variableStates = processContext(children.get(start++), context, variableStates, modifyInstructions);
             }
 
@@ -405,12 +415,16 @@ public class DataFlowOptimizer extends BaseOptimizer {
                     .findFirst().get() == CONDITION;
         }
 
+        int startIndex = firstInstructionIndex(children.get(start));
+
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
         // Only perform the two-pass analysis when the outer loop is doing the second (and final) pass
         for (int i = 0; i < (modifyInstructions ? 2 : 1); i++) {
+            iterator.setNextIndex(startIndex);
+
             VariableStates initial = variableStates.copy("loop initial state");
             final int iteration = i;
-            debug(() -> "=== Processing loop - iteration " + iteration);
+            debug(() -> "=== Processing loop " + context.id + " - iteration " + iteration + ": position " + iterator.nextIndex());
 
             for (int j = start; j < children.size(); j++) {
                 // Do not propagate constants on first iteration...
@@ -490,6 +504,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
                     if (process[bodies]) {
                         branchedStates.newBranch();
                         branchedStates.processContext(child, context, modifyInstructions);
+                    } else {
+                        skipContext(child);
                     }
                     wasBody = true;
                     bodies++;
@@ -526,22 +542,43 @@ public class DataFlowOptimizer extends BaseOptimizer {
         BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
         boolean hasElse = false;
 
-        while (iterator.hasNext()) {
-            AstContext child = iterator.next();
-            switch (child.subcontextType()) {
-                case CONDITION -> {
-                    branchedStates.appendToInitialContext(child, context, modifyInstructions);
-                    branchedStates.newBranch();
+        if (context.findSubcontext(CONDITION) == null) {
+            // The context has been optimized by CaseSwitcher
+            while (iterator.hasNext()) {
+                AstContext child = iterator.next();
+                switch (child.subcontextType()) {
+                    case BODY -> {
+                        branchedStates.processContext(child, context, modifyInstructions);
+                        branchedStates.newBranch();
+                    }
+                    case ELSE -> {
+                        branchedStates.processContext(child, context, modifyInstructions);
+                        hasElse = true;
+                    }
+                    case FLOW_CONTROL ->  {
+                        branchedStates.processContext(child, context, modifyInstructions);
+                    }
+                    default -> throw new MindcodeInternalError("Unexpected subcontext %s in IF context", child);
                 }
-                case BODY, FLOW_CONTROL -> {
-                    branchedStates.processContext(child, context, modifyInstructions);
+            }
+        } else {
+            while (iterator.hasNext()) {
+                AstContext child = iterator.next();
+                switch (child.subcontextType()) {
+                    case CONDITION -> {
+                        branchedStates.appendToInitialContext(child, context, modifyInstructions);
+                        branchedStates.newBranch();
+                    }
+                    case BODY, FLOW_CONTROL -> {
+                        branchedStates.processContext(child, context, modifyInstructions);
+                    }
+                    case ELSE -> {
+                        branchedStates.newBranch();
+                        branchedStates.processContext(child, context, modifyInstructions);
+                        hasElse = true;
+                    }
+                    default -> throw new MindcodeInternalError("Unexpected subcontext %s in IF context", child);
                 }
-                case ELSE -> {
-                    branchedStates.newBranch();
-                    branchedStates.processContext(child, context, modifyInstructions);
-                    hasElse = true;
-                }
-                default -> throw new MindcodeInternalError("Unexpected subcontext %s in IF context", child);
             }
         }
 
@@ -566,11 +603,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
      */
     private VariableStates processDefaultContext(AstContext context, AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
-        LogicList instructions = contextInstructions(context);
 
-        int index = 0;
-        while (index < instructions.size()) {
-            LogicInstruction instruction = instructions.get(index);
+        while (iterator.hasNext()) {
+            LogicInstruction instruction = iterator.peek(0);
+            if (!instruction.belongsTo(context)) {
+                break;
+            }
+
             // This needs to be done for each active context
             // Do not move into processInstruction
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
@@ -584,17 +623,12 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
 
             if (instruction.getAstContext() == context) {
+                iterator.next();
                 variableStates = processInstruction(variableStates, instruction, modifyInstructions);
                 variableStates.print("  after processing instruction");
-                index++;
             } else {
-                AstContext childContext = context.findMatchingChild(instruction.getAstContext());
+                AstContext childContext = context.findDirectChild(instruction.getAstContext());
                 variableStates = processContext(childContext, context, variableStates, modifyInstructions);
-
-                // Skip the rest of this context
-                while (index < instructions.size() && instructions.get(index).belongsTo(childContext)) {
-                    index++;
-                }
             }
         }
 
@@ -687,6 +721,12 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
 
         return variableStates;
+    }
+
+    private void skipContext(AstContext context) {
+        while (iterator.hasNext() && iterator.peek(0).belongsTo(context)) {
+            iterator.next();
+        }
     }
 
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {

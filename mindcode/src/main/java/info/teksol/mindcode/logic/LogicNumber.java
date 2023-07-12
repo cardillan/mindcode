@@ -56,6 +56,14 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
         return (long) value;
     }
 
+    public int getIntValue() {
+        return (int) value;
+    }
+
+    public boolean isInteger() {
+        return value == (int) value;
+    }
+
     @Override
     public Object getObject() {
         return null;

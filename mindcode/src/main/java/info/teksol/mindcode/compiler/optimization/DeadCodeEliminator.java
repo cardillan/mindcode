@@ -85,11 +85,13 @@ class DeadCodeEliminator extends BaseOptimizer {
                     .filter(ix -> ix.getOutputs() < 2 || allWritesUnread(ix))
                     .mapToInt(ix -> firstInstructionIndex(ixx -> ixx == ix))
                     .filter(i -> i >= 0)
-                    .forEach(this::removeInstruction);
+                    .forEach(this::invalidateInstruction);
         }
 
         eliminations.addAll(uselessWrites);
     }
+
+
     
     /**
      * @param instruction instruction to examine

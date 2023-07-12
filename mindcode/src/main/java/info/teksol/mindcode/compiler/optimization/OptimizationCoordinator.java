@@ -108,9 +108,8 @@ public class OptimizationCoordinator {
         }
 
         while (true) {
-            int costLimit = profile.getGoal() == GenerationGoal.SIZE
-                    ? 0
-                    : Math.max(0, 1000 - program.stream().mapToInt(LogicInstruction::getRealSize).sum());
+            int initialSize = codeSize();
+            int costLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, 1000 - initialSize);
 
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
@@ -124,24 +123,42 @@ public class OptimizationCoordinator {
                 break;
             }
 
+            optimizationContext.prepare();
             OptimizationAction selectedAction = possibleOptimizations.stream().max(ACTION_COMPARATOR).get();
+            OptimizationResult result = selectedAction.apply(costLimit);
+            optimizationContext.finish();
+
+            if (result == OptimizationResult.REALIZED) {
+                Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
+                if (optimizer != null) {
+                    optimizationContext.prepare();
+                    optimizer.optimize(phase, pass);
+                    optimizationContext.finish();
+                }
+                modified = true;
+            }
+
+            int difference = codeSize() - initialSize;
             optimizationStatistics.add(MindcodeMessage.debug(
                     "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
-            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, selectedAction));
-            OptimizationResult result = selectedAction.apply(costLimit);
-            modified |= result == OptimizationResult.REALIZED;
+            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, selectedAction, difference));
         }
 
         return modified;
+    }
+
+    private int codeSize() {
+        return program.stream().mapToInt(LogicInstruction::getRealSize).sum();
     }
 
     private static final Comparator<OptimizationAction> ACTION_COMPARATOR =
             Comparator.comparingDouble(OptimizationAction::efficiency)
                     .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed());
 
-    private void outputPossibleOptimization(OptimizationAction opt, OptimizationAction selected) {
-        optimizationStatistics.add(MindcodeMessage.debug(
-                "  %s %-50s cost %3d, benefit %10.1f, efficiency %10.1f",
-                opt == selected ? "*" : " ", opt, opt.cost(), opt.benefit(), opt.efficiency()));
+    private void outputPossibleOptimization(OptimizationAction opt, OptimizationAction selected, int difference) {
+        String format = opt == selected
+                ? "  * %-60s cost %3d, benefit %10.1f, efficiency %10.1f (%+d instructions)"
+                : "    %-60s cost %3d, benefit %10.1f, efficiency %10.1f";
+        optimizationStatistics.add(MindcodeMessage.debug(format, opt, opt.cost(), opt.benefit(), opt.efficiency(), difference));
     }
 }

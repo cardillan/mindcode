@@ -1,30 +1,30 @@
    157 instructions before optimizations.
     20 instructions eliminated by Temp Variables Elimination.
     20 instructions eliminated by Dead Code Elimination (5 iterations).
-     2 instructions eliminated by Jump Normalization (4 iterations).
-     5 instructions eliminated by Jump Optimization (4 iterations).
-     8 instructions eliminated by Single Step Elimination (5 iterations).
-    51 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
-     3 instructions eliminated by Loop Optimization (3 iterations).
+     2 instructions eliminated by Jump Normalization (3 iterations).
+     5 instructions eliminated by Jump Optimization (3 iterations).
+     8 instructions eliminated by Single Step Elimination (4 iterations).
+    38 instructions eliminated by Data Flow Optimization (4 passes, 13 iterations).
+     3 instructions eliminated by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
-   139 instructions added by Loop Unrolling (6 iterations).
+   126 instructions added by Loop Unrolling (5 iterations).
      3 loops unrolled by Loop Unrolling.
-     1 instructions eliminated by Jump Straightening.
+     1 instructions eliminated by Jump Straightening (3 iterations).
      2 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Unreachable Code Elimination.
    184 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 903):
-    Loop Unrolling: unroll loop at line 41             cost   6, benefit     7500,0, efficiency     1250,0
-    Loop Unrolling: unroll loop at line 82             cost  56, benefit    62500,0, efficiency     1116,1
-  * Loop Unrolling: unroll loop at line 83             cost  75, benefit  2343750,0, efficiency    31250,0
+    Loop Unrolling: unroll loop at line 41                       cost   6, benefit     7500.0, efficiency     1250.0
+    Loop Unrolling: unroll loop at line 82                       cost  56, benefit    62500.0, efficiency     1116.1
+  * Loop Unrolling: unroll loop at line 83                       cost  75, benefit  2343750.0, efficiency    31250.0 (+38 instructions)
 
-Pass 1: speed optimization selection (cost limit 852):
-  * Loop Unrolling: unroll loop at line 41             cost   6, benefit     7500,0, efficiency     1250,0
-    Loop Unrolling: unroll loop at line 82             cost 158, benefit    62500,0, efficiency      395,6
+Pass 1: speed optimization selection (cost limit 865):
+  * Loop Unrolling: unroll loop at line 41                       cost   6, benefit     7500.0, efficiency     1250.0 (+2 instructions)
+    Loop Unrolling: unroll loop at line 82                       cost 132, benefit    62500.0, efficiency      473.5
 
-Pass 1: speed optimization selection (cost limit 843):
-  * Loop Unrolling: unroll loop at line 82             cost 158, benefit    62500,0, efficiency      395,6
+Pass 1: speed optimization selection (cost limit 863):
+  * Loop Unrolling: unroll loop at line 82                       cost 132, benefit    62500.0, efficiency      473.5 (+50 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 instructions):
  
@@ -34,43 +34,48 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 ins
 -    * op sub __tmp1 88 __tmp0
 -    * set paddleX __tmp1
 +    8 op sub paddleX 88 __tmp0
-     9 set ballX 88
-    10 set ballY 88
-    11 op rand __tmp2 10
++    9 noop
+    10 set ballX 88
+    11 set ballY 88
+    12 op rand __tmp2 10
 -    * op sub __tmp3 __tmp2 5
 -    * set ballVX __tmp3
-+   12 op sub ballVX __tmp2 5
-    13 op rand __tmp4 10
++   13 op sub ballVX __tmp2 5
++   14 noop
+    15 op rand __tmp4 10
 -    * op sub __tmp5 __tmp4 5
 -    * set ballVY __tmp5
-+   14 op sub ballVY __tmp4 5
-    15 set brickCount 6
-    16 set i 0
-    17 label __label3
++   16 op sub ballVY __tmp4 5
++   17 noop
+    18 set brickCount 6
+    19 set i 0
+    20 label __label3
  
-    31 op sub __tmp8 176 paddleWidth
-    32 op lessThan __tmp9 paddleX __tmp8
-    33 jump __label11 equal __tmp9 false
+    34 op sub __tmp8 176 paddleWidth
+    35 op lessThan __tmp9 paddleX __tmp8
+    36 jump __label11 equal __tmp9 false
 -    * op add __tmp11 paddleX 3
 -    * set paddleX __tmp11
-+   34 op add paddleX paddleX 3
-    35 set __tmp10 paddleX
-    36 jump __label12 always
-    37 label __label11
++   37 op add paddleX paddleX 3
++   38 noop
+    39 set __tmp10 paddleX
+    40 jump __label12 always
+    41 label __label11
  
-    42 label __label9
-    43 op greaterThan __tmp12 paddleX 0
-    44 jump __label13 equal __tmp12 false
+    46 label __label9
+    47 op greaterThan __tmp12 paddleX 0
+    48 jump __label13 equal __tmp12 false
 -    * op sub __tmp14 paddleX 3
 -    * set paddleX __tmp14
-+   45 op sub paddleX paddleX 3
-    46 set __tmp13 paddleX
-    47 jump __label14 always
-    48 label __label13
++   49 op sub paddleX paddleX 3
++   50 noop
+    51 set __tmp13 paddleX
+    52 jump __label14 always
+    53 label __label13
  
-    50 label __label14
-    51 set __tmp7 __tmp13
-    52 label __label10
+    55 label __label14
+    56 set __tmp7 __tmp13
+    57 label __label10
 -    * op add __tmp15 ballX ballVX
 -    * set ballX __tmp15
 -    * op add __tmp16 ballY ballVY
@@ -79,215 +84,253 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 ins
 -    * set ballXEnd __tmp17
 -    * op add __tmp18 ballY 5
 -    * set ballYEnd __tmp18
-+   53 op add ballX ballX ballVX
-+   54 op add ballY ballY ballVY
-+   55 op add ballXEnd ballX 5
-+   56 op add ballYEnd ballY 5
-    57 op lessThan __tmp19 ballX 0
-    58 op greaterThan __tmp20 ballXEnd 176
-    59 op or __tmp21 __tmp19 __tmp20
-    60 jump __label15 equal __tmp21 false
++   58 op add ballX ballX ballVX
++   59 noop
++   60 op add ballY ballY ballVY
++   61 noop
++   62 op add ballXEnd ballX 5
++   63 noop
++   64 op add ballYEnd ballY 5
++   65 noop
+    66 op lessThan __tmp19 ballX 0
+    67 op greaterThan __tmp20 ballXEnd 176
+    68 op or __tmp21 __tmp19 __tmp20
+    69 jump __label15 equal __tmp21 false
 -    * op mul __tmp23 ballVX -1
 -    * set ballVX __tmp23
-+   61 op mul ballVX ballVX -1
-    62 set __tmp22 ballVX
-    63 jump __label16 always
-    64 label __label15
++   70 op mul ballVX ballVX -1
++   71 noop
+    72 set __tmp22 ballVX
+    73 jump __label16 always
+    74 label __label15
  
-    66 label __label16
-    67 op greaterThan __tmp24 ballYEnd 176
-    68 jump __label17 equal __tmp24 false
+    76 label __label16
+    77 op greaterThan __tmp24 ballYEnd 176
+    78 jump __label17 equal __tmp24 false
 -    * op mul __tmp26 ballVY -1
 -    * set ballVY __tmp26
-+   69 op mul ballVY ballVY -1
-    70 set __tmp25 ballVY
-    71 jump __label18 always
-    72 label __label17
++   79 op mul ballVY ballVY -1
++   80 noop
+    81 set __tmp25 ballVY
+    82 jump __label18 always
+    83 label __label17
  
-    81 op lessThan __tmp33 ballY 15
-    82 op land __tmp34 __tmp32 __tmp33
-    83 jump __label19 equal __tmp34 false
+    92 op lessThan __tmp33 ballY 15
+    93 op land __tmp34 __tmp32 __tmp33
+    94 jump __label19 equal __tmp34 false
 -    * op mul __tmp36 ballVY -1.1
 -    * set ballVY __tmp36
-+   84 op mul ballVY ballVY -1.1
-    85 op add __tmp37 ballX 2.5
-    86 op sub __tmp38 __tmp37 paddleX
-    87 op div __tmp39 paddleWidth 2
-    88 op add __tmp40 __tmp38 __tmp39
-    89 op div __tmp41 __tmp40 10
++   95 op mul ballVY ballVY -1.1
++   96 noop
+    97 op add __tmp37 ballX 2.5
+    98 op sub __tmp38 __tmp37 paddleX
+    99 op div __tmp39 paddleWidth 2
+   100 op add __tmp40 __tmp38 __tmp39
+   101 op div __tmp41 __tmp40 10
 -    * op add __tmp42 ballVX __tmp41
 -    * set ballVX __tmp42
 -    * op sub __tmp43 paddleWidth 1
 -    * set paddleWidth __tmp43
-+   90 op add ballVX ballVX __tmp41
-+   91 op sub paddleWidth paddleWidth 1
-    92 set __tmp35 paddleWidth
-    93 jump __label20 always
-    94 label __label19
++  102 op add ballVX ballVX __tmp41
++  103 noop
++  104 op sub paddleWidth paddleWidth 1
++  105 noop
+   106 set __tmp35 paddleWidth
+   107 jump __label20 always
+   108 label __label19
  
-   117 op land __tmp56 __tmp53 __tmp55
-   118 jump __label29 equal __tmp56 false
-   119 write 0 BRICKS brickPtr
+   131 op land __tmp56 __tmp53 __tmp55
+   132 jump __label29 equal __tmp56 false
+   133 write 0 BRICKS brickPtr
 -    * op sub __tmp58 brickCount 1
 -    * set brickCount __tmp58
-+  120 op sub brickCount brickCount 1
-   121 set brickWidthPlusBallSizeMinus1 62.666666666666664
-   122 op sub __tmp59 x 4
-   123 op greaterThan __tmp60 ballX __tmp59
++  134 op sub brickCount brickCount 1
++  135 noop
+   136 set brickWidthPlusBallSizeMinus1 62.666666666666664
+   137 op sub __tmp59 x 4
+   138 op greaterThan __tmp60 ballX __tmp59
  
-   125 op lessThan __tmp62 ballX __tmp61
-   126 op land __tmp63 __tmp60 __tmp62
-   127 jump __label31 equal __tmp63 false
+   140 op lessThan __tmp62 ballX __tmp61
+   141 op land __tmp63 __tmp60 __tmp62
+   142 jump __label31 equal __tmp63 false
 -    * op mul __tmp65 ballVY -1
 -    * set ballVY __tmp65
-+  128 op mul ballVY ballVY -1
-   129 set __tmp64 ballVY
-   130 jump __label32 always
-   131 label __label31
++  143 op mul ballVY ballVY -1
++  144 noop
+   145 set __tmp64 ballVY
+   146 jump __label32 always
+   147 label __label31
 -    * op mul __tmp66 ballVX -1
 -    * set ballVX __tmp66
-+  132 op mul ballVX ballVX -1
-   133 set __tmp64 ballVX
-   134 label __label32
-   135 set __tmp57 __tmp64
++  148 op mul ballVX ballVX -1
++  149 noop
+   150 set __tmp64 ballVX
+   151 label __label32
+   152 set __tmp57 __tmp64
  
-   142 label __label27
-   143 set __tmp47 null
-   144 label __label28
+   159 label __label27
+   160 set __tmp47 null
+   161 label __label28
 -    * op add __tmp67 brickPtr 1
 -    * set brickPtr __tmp67
-+  145 op add brickPtr brickPtr 1
-   146 label __label25
++  162 op add brickPtr brickPtr 1
++  163 noop
+   164 label __label25
 -    * op add __tmp68 x 58.666666666666664
 -    * set x __tmp68
-+  147 op add x x 58.666666666666664
-   148 jump __label24 always
-   149 label __label26
-   150 label __label22
++  165 op add x x 58.666666666666664
++  166 noop
+   167 jump __label24 always
+   168 label __label26
+   169 label __label22
 -    * op sub __tmp69 y 10
 -    * set y __tmp69
-+  151 op sub y y 10
-   152 jump __label21 always
-   153 label __label23
-   154 op lessThan __tmp70 ballY 0
++  170 op sub y y 10
++  171 noop
+   172 jump __label21 always
+   173 label __label23
+   174 op lessThan __tmp70 ballY 0
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instructions):
  
-    37 label __label11
-    38 set __tmp10 null
-    39 label __label12
+    41 label __label11
+    42 set __tmp10 null
+    43 label __label12
 -    * set __tmp7 __tmp10
-    40 jump __label10 always
-    41 label __label9
-    42 op greaterThan __tmp12 paddleX 0
++   44 noop
+    45 jump __label10 always
+    46 label __label9
+    47 op greaterThan __tmp12 paddleX 0
  
-    47 label __label13
-    48 set __tmp13 null
-    49 label __label14
+    53 label __label13
+    54 set __tmp13 null
+    55 label __label14
 -    * set __tmp7 __tmp13
-    50 label __label10
-    51 op add ballX ballX ballVX
-    52 op add ballY ballY ballVY
++   56 noop
+    57 label __label10
+    58 op add ballX ballX ballVX
+    59 noop
  
-    57 op or __tmp21 __tmp19 __tmp20
-    58 jump __label15 equal __tmp21 false
-    59 op mul ballVX ballVX -1
+    69 jump __label15 equal __tmp21 false
+    70 op mul ballVX ballVX -1
+    71 noop
 -    * set __tmp22 ballVX
-    60 jump __label16 always
-    61 label __label15
++   72 noop
+    73 jump __label16 always
+    74 label __label15
 -    * set __tmp22 null
-    62 label __label16
-    63 op greaterThan __tmp24 ballYEnd 176
-    64 jump __label17 equal __tmp24 false
-    65 op mul ballVY ballVY -1
++   75 noop
+    76 label __label16
+    77 op greaterThan __tmp24 ballYEnd 176
+    78 jump __label17 equal __tmp24 false
+    79 op mul ballVY ballVY -1
+    80 noop
 -    * set __tmp25 ballVY
-    66 jump __label18 always
-    67 label __label17
++   81 noop
+    82 jump __label18 always
+    83 label __label17
 -    * set __tmp25 null
-    68 label __label18
-    69 op greaterThan __tmp27 ballXEnd paddleX
-    70 op add __tmp28 paddleX paddleWidth
++   84 noop
+    85 label __label18
+    86 op greaterThan __tmp27 ballXEnd paddleX
+    87 op add __tmp28 paddleX paddleWidth
  
-    83 op div __tmp41 __tmp40 10
-    84 op add ballVX ballVX __tmp41
-    85 op sub paddleWidth paddleWidth 1
+   103 noop
+   104 op sub paddleWidth paddleWidth 1
+   105 noop
 -    * set __tmp35 paddleWidth
-    86 jump __label20 always
-    87 label __label19
++  106 noop
+   107 jump __label20 always
+   108 label __label19
 -    * set __tmp35 null
-    88 label __label20
-    89 set brickPtr 0
-    90 set y 126
++  109 noop
+   110 label __label20
+   111 set brickPtr 0
+   112 set y 126
  
-   129 label __label29
-   130 set __tmp57 null
-   131 label __label30
+   154 label __label29
+   155 set __tmp57 null
+   156 label __label30
 -    * set __tmp47 __tmp57
-   132 jump __label28 always
-   133 label __label27
++  157 noop
+   158 jump __label28 always
+   159 label __label27
 -    * set __tmp47 null
-   134 label __label28
-   135 op add brickPtr brickPtr 1
-   136 label __label25
++  160 noop
+   161 label __label28
+   162 op add brickPtr brickPtr 1
+   163 noop
  
-   146 op or __tmp72 __tmp70 __tmp71
-   147 jump __label33 equal __tmp72 false
-   148 jump __label8 always
+   176 op or __tmp72 __tmp70 __tmp71
+   177 jump __label33 equal __tmp72 false
+   178 jump __label8 always
 -    * set __tmp73 null
-   149 jump __label34 always
-   150 label __label33
++  179 noop
+   180 jump __label34 always
+   181 label __label33
 -    * set __tmp73 null
-   151 label __label34
-   152 drawflush DISPLAY
-   153 label __label7
++  182 noop
+   183 label __label34
+   184 drawflush DISPLAY
+   185 label __label7
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructions):
  
-    32 op lessThan __tmp9 paddleX __tmp8
-    33 jump __label11 equal __tmp9 false
-    34 op add paddleX paddleX 3
+    36 jump __label11 equal __tmp9 false
+    37 op add paddleX paddleX 3
+    38 noop
 -    * set __tmp10 paddleX
-    35 jump __label12 always
-    36 label __label11
++   39 noop
+    40 jump __label12 always
+    41 label __label11
 -    * set __tmp10 null
-    37 label __label12
-    38 jump __label10 always
-    39 label __label9
-    40 op greaterThan __tmp12 paddleX 0
-    41 jump __label13 equal __tmp12 false
-    42 op sub paddleX paddleX 3
--    * set __tmp13 paddleX
-    43 jump __label14 always
-    44 label __label13
--    * set __tmp13 null
-    45 label __label14
-    46 label __label10
-    47 op add ballX ballX ballVX
++   42 noop
+    43 label __label12
+    44 noop
+    45 jump __label10 always
  
-   120 op mul ballVX ballVX -1
-   121 set __tmp64 ballVX
-   122 label __label32
+    48 jump __label13 equal __tmp12 false
+    49 op sub paddleX paddleX 3
+    50 noop
+-    * set __tmp13 paddleX
++   51 noop
+    52 jump __label14 always
+    53 label __label13
+-    * set __tmp13 null
++   54 noop
+    55 label __label14
+    56 noop
+    57 label __label10
+ 
+   149 noop
+   150 set __tmp64 ballVX
+   151 label __label32
 -    * set __tmp57 __tmp64
-   123 jump __label30 always
-   124 label __label29
++  152 noop
+   153 jump __label30 always
+   154 label __label29
 -    * set __tmp57 null
-   125 label __label30
-   126 jump __label28 always
-   127 label __label27
++  155 noop
+   156 label __label30
+   157 noop
+   158 jump __label28 always
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructions):
  
-   114 op land __tmp63 __tmp60 __tmp62
-   115 jump __label31 equal __tmp63 false
-   116 op mul ballVY ballVY -1
+   142 jump __label31 equal __tmp63 false
+   143 op mul ballVY ballVY -1
+   144 noop
 -    * set __tmp64 ballVY
-   117 jump __label32 always
-   118 label __label31
-   119 op mul ballVX ballVX -1
++  145 noop
+   146 jump __label32 always
+   147 label __label31
+   148 op mul ballVX ballVX -1
+   149 noop
 -    * set __tmp64 ballVX
-   120 label __label32
-   121 jump __label30 always
-   122 label __label29
++  150 noop
+   151 label __label32
+   152 noop
+   153 jump __label30 always
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-2 instructions):
  
@@ -300,117 +343,132 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-2 ins
      7 op div __tmp0 paddleWidth 2
      8 op sub paddleX 88 __tmp0
  
-    22 jump __label3 always
-    23 label __label5
-    24 label __label6
+    25 jump __label3 always
+    26 label __label5
+    27 label __label6
 -    * jump __label8 equal true false
-+   25 noop
-    26 draw clear 0 0 0
-    27 draw rect paddleX 10 paddleWidth 5
-    28 draw rect ballX ballY 5 5
++   28 noop
+    29 draw clear 0 0 0
+    30 draw rect paddleX 10 paddleWidth 5
+    31 draw rect ballX ballY 5 5
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
  
-    29 sensor __tmp6 PADDLECONTROLLER @enabled
-    30 jump __label9 equal __tmp6 false
-    31 op sub __tmp8 176 paddleWidth
+    32 sensor __tmp6 PADDLECONTROLLER @enabled
+    33 jump __label9 equal __tmp6 false
+    34 op sub __tmp8 176 paddleWidth
 -    * op lessThan __tmp9 paddleX __tmp8
 -    * jump __label11 equal __tmp9 false
-+   32 jump __label11 greaterThanEq paddleX __tmp8
-    33 op add paddleX paddleX 3
-    34 jump __label12 always
-    35 label __label11
-    36 label __label12
-    37 jump __label10 always
-    38 label __label9
++   35 jump __label11 greaterThanEq paddleX __tmp8
+    36 op add paddleX paddleX 3
+    37 noop
+    38 noop
+ 
+    43 noop
+    44 jump __label10 always
+    45 label __label9
 -    * op greaterThan __tmp12 paddleX 0
 -    * jump __label13 equal __tmp12 false
-+   39 jump __label13 lessThanEq paddleX 0
-    40 op sub paddleX paddleX 3
-    41 jump __label14 always
-    42 label __label13
++   46 jump __label13 lessThanEq paddleX 0
+    47 op sub paddleX paddleX 3
+    48 noop
+    49 noop
  
-    54 jump __label16 always
-    55 label __label15
-    56 label __label16
+    72 label __label15
+    73 noop
+    74 label __label16
 -    * op greaterThan __tmp24 ballYEnd 176
 -    * jump __label17 equal __tmp24 false
-+   57 jump __label17 lessThanEq ballYEnd 176
-    58 op mul ballVY ballVY -1
-    59 jump __label18 always
-    60 label __label17
++   75 jump __label17 lessThanEq ballYEnd 176
+    76 op mul ballVY ballVY -1
+    77 noop
+    78 noop
  
-    82 set brickPtr 0
-    83 set y 126
-    84 label __label21
+   108 set brickPtr 0
+   109 set y 126
+   110 label __label21
 -    * op greaterThan __tmp44 y 106
 -    * jump __label23 equal __tmp44 false
-+   85 jump __label23 lessThanEq y 106
-    86 set x 1
-    87 label __label24
++  111 jump __label23 lessThanEq y 106
+   112 set x 1
+   113 label __label24
 -    * op lessThan __tmp45 x 176
 -    * jump __label26 equal __tmp45 false
-+   88 jump __label26 greaterThanEq x 176
-    89 read __tmp46 BRICKS brickPtr
-    90 jump __label27 equal __tmp46 false
-    91 draw rect x y 57.666666666666664 9
++  114 jump __label26 greaterThanEq x 176
+   115 read __tmp46 BRICKS brickPtr
+   116 jump __label27 equal __tmp46 false
+   117 draw rect x y 57.666666666666664 9
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-8 instructions):
  
-    31 op sub __tmp8 176 paddleWidth
-    32 jump __label11 greaterThanEq paddleX __tmp8
-    33 op add paddleX paddleX 3
+    36 op add paddleX paddleX 3
+    37 noop
+    38 noop
 -    * jump __label12 always
-    34 label __label11
-    35 label __label12
-    36 jump __label10 always
-    37 label __label9
-    38 jump __label13 lessThanEq paddleX 0
-    39 op sub paddleX paddleX 3
++   39 noop
+    40 label __label11
+    41 noop
+    42 label __label12
+ 
+    47 op sub paddleX paddleX 3
+    48 noop
+    49 noop
 -    * jump __label14 always
-    40 label __label13
-    41 label __label14
-    42 label __label10
++   50 noop
+    51 label __label13
+    52 noop
+    53 label __label14
  
-    49 op or __tmp21 __tmp19 __tmp20
-    50 jump __label15 equal __tmp21 false
-    51 op mul ballVX ballVX -1
+    68 op mul ballVX ballVX -1
+    69 noop
+    70 noop
 -    * jump __label16 always
-    52 label __label15
-    53 label __label16
-    54 jump __label17 lessThanEq ballYEnd 176
-    55 op mul ballVY ballVY -1
++   71 noop
+    72 label __label15
+    73 noop
+    74 label __label16
+ 
+    76 op mul ballVY ballVY -1
+    77 noop
+    78 noop
 -    * jump __label18 always
-    56 label __label17
-    57 label __label18
-    58 op greaterThan __tmp27 ballXEnd paddleX
++   79 noop
+    80 label __label17
+    81 noop
+    82 label __label18
  
-    72 op div __tmp41 __tmp40 10
-    73 op add ballVX ballVX __tmp41
-    74 op sub paddleWidth paddleWidth 1
+   101 op sub paddleWidth paddleWidth 1
+   102 noop
+   103 noop
 -    * jump __label20 always
-    75 label __label19
-    76 label __label20
-    77 set brickPtr 0
++  104 noop
+   105 label __label19
+   106 noop
+   107 label __label20
  
-   108 label __label31
-   109 op mul ballVX ballVX -1
-   110 label __label32
+   145 noop
+   146 label __label32
+   147 noop
 -    * jump __label30 always
-   111 label __label29
-   112 label __label30
++  148 noop
+   149 label __label29
+   150 noop
+   151 label __label30
+   152 noop
 -    * jump __label28 always
-   113 label __label27
-   114 label __label28
-   115 op add brickPtr brickPtr 1
++  153 noop
+   154 label __label27
+   155 noop
+   156 label __label28
  
-   126 op or __tmp72 __tmp70 __tmp71
-   127 jump __label33 equal __tmp72 false
-   128 jump __label8 always
+   172 jump __label33 equal __tmp72 false
+   173 jump __label8 always
+   174 noop
 -    * jump __label34 always
-   129 label __label33
-   130 label __label34
-   131 drawflush DISPLAY
++  175 noop
+   176 label __label33
+   177 noop
+   178 label __label34
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -421,18 +479,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op sub paddleX 88 __tmp0
 +    7 op div __tmp0 40 2
 +    8 op sub paddleX 88 20
-     9 set ballX 88
-    10 set ballY 88
-    11 op rand __tmp2 10
+     9 noop
+    10 set ballX 88
+    11 set ballY 88
  
-    99 set brickWidthPlusBallSizeMinus1 62.666666666666664
-   100 op sub __tmp59 x 4
-   101 op greaterThan __tmp60 ballX __tmp59
+   131 set brickWidthPlusBallSizeMinus1 62.666666666666664
+   132 op sub __tmp59 x 4
+   133 op greaterThan __tmp60 ballX __tmp59
 -    * op add __tmp61 x brickWidthPlusBallSizeMinus1
-+  102 op add __tmp61 x 62.666666666666664
-   103 op lessThan __tmp62 ballX __tmp61
-   104 op land __tmp63 __tmp60 __tmp62
-   105 jump __label31 equal __tmp63 false
++  134 op add __tmp61 x 62.666666666666664
+   135 op lessThan __tmp62 ballX __tmp61
+   136 op land __tmp63 __tmp60 __tmp62
+   137 jump __label31 equal __tmp63 false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
@@ -441,65 +499,66 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      6 set paddleWidth 40
 -    * op div __tmp0 40 2
      7 op sub paddleX 88 20
-     8 set ballX 88
-     9 set ballY 88
+     8 noop
+     9 set ballX 88
  
-    95 jump __label29 equal __tmp56 false
-    96 write 0 BRICKS brickPtr
-    97 op sub brickCount brickCount 1
+   127 write 0 BRICKS brickPtr
+   128 op sub brickCount brickCount 1
+   129 noop
 -    * set brickWidthPlusBallSizeMinus1 62.666666666666664
-    98 op sub __tmp59 x 4
-    99 op greaterThan __tmp60 ballX __tmp59
-   100 op add __tmp61 x 62.666666666666664
+   130 op sub __tmp59 x 4
+   131 op greaterThan __tmp60 ballX __tmp59
+   132 op add __tmp61 x 62.666666666666664
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-3 instructions):
  
-    14 set brickCount 6
-    15 set i 0
-    16 label __label3
+    17 set brickCount 6
+    18 set i 0
+    19 label __label3
 -    * jump __label5 greaterThanEq i 6
-+   17 label __label35
-    18 write 1 BRICKS i
-    19 label __label4
-    20 op add i i 1
++   20 label __label35
+    21 write 1 BRICKS i
+    22 label __label4
+    23 op add i i 1
 -    * jump __label3 always
-+   21 jump __label35 lessThan i 6
-    22 label __label5
-    23 label __label6
-    24 noop
++   24 jump __label35 lessThan i 6
+    25 label __label5
+    26 label __label6
+    27 noop
  
-    76 set brickPtr 0
-    77 set y 126
-    78 label __label21
+   107 set brickPtr 0
+   108 set y 126
+   109 label __label21
 -    * jump __label23 lessThanEq y 106
-+   79 label __label36
-    80 set x 1
-    81 label __label24
++  110 label __label36
+   111 set x 1
+   112 label __label24
 -    * jump __label26 greaterThanEq x 176
-+   82 label __label37
-    83 read __tmp46 BRICKS brickPtr
-    84 jump __label27 equal __tmp46 false
-    85 draw rect x y 57.666666666666664 9
++  113 label __label37
+   114 read __tmp46 BRICKS brickPtr
+   115 jump __label27 equal __tmp46 false
+   116 draw rect x y 57.666666666666664 9
  
-   113 op add brickPtr brickPtr 1
-   114 label __label25
-   115 op add x x 58.666666666666664
+   157 label __label25
+   158 op add x x 58.666666666666664
+   159 noop
 -    * jump __label24 always
-+  116 jump __label37 lessThan x 176
-   117 label __label26
-   118 label __label22
-   119 op sub y y 10
++  160 jump __label37 lessThan x 176
+   161 label __label26
+   162 label __label22
+   163 op sub y y 10
+   164 noop
 -    * jump __label21 always
-+  120 jump __label36 greaterThan y 106
-   121 label __label23
-   122 op lessThan __tmp70 ballY 0
-   123 op equal __tmp71 brickCount 0
++  165 jump __label36 greaterThan y 106
+   166 label __label23
+   167 op lessThan __tmp70 ballY 0
+   168 op equal __tmp71 brickCount 0
 
 Modifications by Loop Unrolling: unroll loop at line 83 (+51 instructions):
  
-    77 set y 126
-    78 label __label21
-    79 label __label36
+   108 set y 126
+   109 label __label21
+   110 label __label36
 -    * set x 1
 -    * label __label24
 -    * label __label37
@@ -518,6 +577,7 @@ Modifications by Loop Unrolling: unroll loop at line 83 (+51 instructions):
 -    * jump __label29 equal __tmp56 false
 -    * write 0 BRICKS brickPtr
 -    * op sub brickCount brickCount 1
+-    * noop
 -    * op sub __tmp59 x 4
 -    * op greaterThan __tmp60 ballX __tmp59
 -    * op add __tmp61 x 62.666666666666664
@@ -525,133 +585,382 @@ Modifications by Loop Unrolling: unroll loop at line 83 (+51 instructions):
 -    * op land __tmp63 __tmp60 __tmp62
 -    * jump __label31 equal __tmp63 false
 -    * op mul ballVY ballVY -1
+-    * noop
+-    * noop
 -    * jump __label32 always
 -    * label __label31
 -    * op mul ballVX ballVX -1
+-    * noop
+-    * noop
 -    * label __label32
+-    * noop
+-    * noop
 -    * label __label29
+-    * noop
 -    * label __label30
+-    * noop
+-    * noop
 -    * label __label27
+-    * noop
 -    * label __label28
 -    * op add brickPtr brickPtr 1
+-    * noop
 -    * label __label25
 -    * op add x x 58.666666666666664
+-    * noop
 -    * jump __label37 lessThan x 176
 -    * label __label26
-+   80 set x 1
-+   81 label __label38
-+   82 label __label39
-+   83 read __tmp46 BRICKS brickPtr
-+   84 jump __label44 equal __tmp46 false
-+   85 draw rect x y 57.666666666666664 9
-+   86 op greaterThan __tmp48 ballXEnd x
-+   87 op add __tmp49 x 58.666666666666664
-+   88 op lessThan __tmp50 ballX __tmp49
-+   89 op land __tmp51 __tmp48 __tmp50
-+   90 op greaterThan __tmp52 ballYEnd y
-+   91 op land __tmp53 __tmp51 __tmp52
-+   92 op add __tmp54 y 10
-+   93 op lessThan __tmp55 ballY __tmp54
-+   94 op land __tmp56 __tmp53 __tmp55
-+   95 jump __label42 equal __tmp56 false
-+   96 write 0 BRICKS brickPtr
-+   97 op sub brickCount brickCount 1
-+   98 op sub __tmp59 x 4
-+   99 op greaterThan __tmp60 ballX __tmp59
-+  100 op add __tmp61 x 62.666666666666664
-+  101 op lessThan __tmp62 ballX __tmp61
-+  102 op land __tmp63 __tmp60 __tmp62
-+  103 jump __label40 equal __tmp63 false
-+  104 op mul ballVY ballVY -1
-+  105 jump __label41 always
-+  106 label __label40
-+  107 op mul ballVX ballVX -1
-+  108 label __label41
-+  109 label __label42
-+  110 label __label43
-+  111 label __label44
-+  112 label __label45
-+  113 op add brickPtr brickPtr 1
-+  114 label __label46
-+  115 op add x x 58.666666666666664
-+  116 label __label47
-+  117 read __tmp46 BRICKS brickPtr
-+  118 jump __label52 equal __tmp46 false
-+  119 draw rect x y 57.666666666666664 9
-+  120 op greaterThan __tmp48 ballXEnd x
-+  121 op add __tmp49 x 58.666666666666664
-+  122 op lessThan __tmp50 ballX __tmp49
-+  123 op land __tmp51 __tmp48 __tmp50
-+  124 op greaterThan __tmp52 ballYEnd y
-+  125 op land __tmp53 __tmp51 __tmp52
-+  126 op add __tmp54 y 10
-+  127 op lessThan __tmp55 ballY __tmp54
-+  128 op land __tmp56 __tmp53 __tmp55
-+  129 jump __label50 equal __tmp56 false
-+  130 write 0 BRICKS brickPtr
-+  131 op sub brickCount brickCount 1
-+  132 op sub __tmp59 x 4
-+  133 op greaterThan __tmp60 ballX __tmp59
-+  134 op add __tmp61 x 62.666666666666664
-+  135 op lessThan __tmp62 ballX __tmp61
-+  136 op land __tmp63 __tmp60 __tmp62
-+  137 jump __label48 equal __tmp63 false
-+  138 op mul ballVY ballVY -1
-+  139 jump __label49 always
-+  140 label __label48
++  111 set x 1
++  112 label __label38
++  113 label __label39
++  114 read __tmp46 BRICKS brickPtr
++  115 jump __label44 equal __tmp46 false
++  116 draw rect x y 57.666666666666664 9
++  117 op greaterThan __tmp48 ballXEnd x
++  118 op add __tmp49 x 58.666666666666664
++  119 op lessThan __tmp50 ballX __tmp49
++  120 op land __tmp51 __tmp48 __tmp50
++  121 op greaterThan __tmp52 ballYEnd y
++  122 op land __tmp53 __tmp51 __tmp52
++  123 op add __tmp54 y 10
++  124 op lessThan __tmp55 ballY __tmp54
++  125 op land __tmp56 __tmp53 __tmp55
++  126 jump __label42 equal __tmp56 false
++  127 write 0 BRICKS brickPtr
++  128 op sub brickCount brickCount 1
++  129 noop
++  130 op sub __tmp59 x 4
++  131 op greaterThan __tmp60 ballX __tmp59
++  132 op add __tmp61 x 62.666666666666664
++  133 op lessThan __tmp62 ballX __tmp61
++  134 op land __tmp63 __tmp60 __tmp62
++  135 jump __label40 equal __tmp63 false
++  136 op mul ballVY ballVY -1
++  137 noop
++  138 noop
++  139 jump __label41 always
++  140 label __label40
 +  141 op mul ballVX ballVX -1
-+  142 label __label49
-+  143 label __label50
-+  144 label __label51
-+  145 label __label52
-+  146 label __label53
-+  147 op add brickPtr brickPtr 1
-+  148 label __label54
-+  149 op add x x 58.666666666666664
-+  150 label __label55
-+  151 read __tmp46 BRICKS brickPtr
-+  152 jump __label60 equal __tmp46 false
-+  153 draw rect x y 57.666666666666664 9
-+  154 op greaterThan __tmp48 ballXEnd x
-+  155 op add __tmp49 x 58.666666666666664
-+  156 op lessThan __tmp50 ballX __tmp49
-+  157 op land __tmp51 __tmp48 __tmp50
-+  158 op greaterThan __tmp52 ballYEnd y
-+  159 op land __tmp53 __tmp51 __tmp52
-+  160 op add __tmp54 y 10
-+  161 op lessThan __tmp55 ballY __tmp54
-+  162 op land __tmp56 __tmp53 __tmp55
-+  163 jump __label58 equal __tmp56 false
-+  164 write 0 BRICKS brickPtr
-+  165 op sub brickCount brickCount 1
-+  166 op sub __tmp59 x 4
-+  167 op greaterThan __tmp60 ballX __tmp59
-+  168 op add __tmp61 x 62.666666666666664
-+  169 op lessThan __tmp62 ballX __tmp61
-+  170 op land __tmp63 __tmp60 __tmp62
-+  171 jump __label56 equal __tmp63 false
-+  172 op mul ballVY ballVY -1
-+  173 jump __label57 always
-+  174 label __label56
-+  175 op mul ballVX ballVX -1
-+  176 label __label57
-+  177 label __label58
-+  178 label __label59
-+  179 label __label60
-+  180 label __label61
-+  181 op add brickPtr brickPtr 1
-+  182 label __label62
-+  183 op add x x 58.666666666666664
-+  184 label __label26
-   185 label __label22
-   186 op sub y y 10
-   187 jump __label36 greaterThan y 106
++  142 noop
++  143 noop
++  144 label __label41
++  145 noop
++  146 noop
++  147 label __label42
++  148 noop
++  149 label __label43
++  150 noop
++  151 noop
++  152 label __label44
++  153 noop
++  154 label __label45
++  155 op add brickPtr brickPtr 1
++  156 noop
++  157 label __label46
++  158 op add x x 58.666666666666664
++  159 noop
++  160 label __label47
++  161 read __tmp46 BRICKS brickPtr
++  162 jump __label52 equal __tmp46 false
++  163 draw rect x y 57.666666666666664 9
++  164 op greaterThan __tmp48 ballXEnd x
++  165 op add __tmp49 x 58.666666666666664
++  166 op lessThan __tmp50 ballX __tmp49
++  167 op land __tmp51 __tmp48 __tmp50
++  168 op greaterThan __tmp52 ballYEnd y
++  169 op land __tmp53 __tmp51 __tmp52
++  170 op add __tmp54 y 10
++  171 op lessThan __tmp55 ballY __tmp54
++  172 op land __tmp56 __tmp53 __tmp55
++  173 jump __label50 equal __tmp56 false
++  174 write 0 BRICKS brickPtr
++  175 op sub brickCount brickCount 1
++  176 noop
++  177 op sub __tmp59 x 4
++  178 op greaterThan __tmp60 ballX __tmp59
++  179 op add __tmp61 x 62.666666666666664
++  180 op lessThan __tmp62 ballX __tmp61
++  181 op land __tmp63 __tmp60 __tmp62
++  182 jump __label48 equal __tmp63 false
++  183 op mul ballVY ballVY -1
++  184 noop
++  185 noop
++  186 jump __label49 always
++  187 label __label48
++  188 op mul ballVX ballVX -1
++  189 noop
++  190 noop
++  191 label __label49
++  192 noop
++  193 noop
++  194 label __label50
++  195 noop
++  196 label __label51
++  197 noop
++  198 noop
++  199 label __label52
++  200 noop
++  201 label __label53
++  202 op add brickPtr brickPtr 1
++  203 noop
++  204 label __label54
++  205 op add x x 58.666666666666664
++  206 noop
++  207 label __label55
++  208 read __tmp46 BRICKS brickPtr
++  209 jump __label60 equal __tmp46 false
++  210 draw rect x y 57.666666666666664 9
++  211 op greaterThan __tmp48 ballXEnd x
++  212 op add __tmp49 x 58.666666666666664
++  213 op lessThan __tmp50 ballX __tmp49
++  214 op land __tmp51 __tmp48 __tmp50
++  215 op greaterThan __tmp52 ballYEnd y
++  216 op land __tmp53 __tmp51 __tmp52
++  217 op add __tmp54 y 10
++  218 op lessThan __tmp55 ballY __tmp54
++  219 op land __tmp56 __tmp53 __tmp55
++  220 jump __label58 equal __tmp56 false
++  221 write 0 BRICKS brickPtr
++  222 op sub brickCount brickCount 1
++  223 noop
++  224 op sub __tmp59 x 4
++  225 op greaterThan __tmp60 ballX __tmp59
++  226 op add __tmp61 x 62.666666666666664
++  227 op lessThan __tmp62 ballX __tmp61
++  228 op land __tmp63 __tmp60 __tmp62
++  229 jump __label56 equal __tmp63 false
++  230 op mul ballVY ballVY -1
++  231 noop
++  232 noop
++  233 jump __label57 always
++  234 label __label56
++  235 op mul ballVX ballVX -1
++  236 noop
++  237 noop
++  238 label __label57
++  239 noop
++  240 noop
++  241 label __label58
++  242 noop
++  243 label __label59
++  244 noop
++  245 noop
++  246 label __label60
++  247 noop
++  248 label __label61
++  249 op add brickPtr brickPtr 1
++  250 noop
++  251 label __label62
++  252 op add x x 58.666666666666664
++  253 noop
++  254 label __label26
+   255 label __label22
+   256 op sub y y 10
+   257 noop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   113 label __label39
+   114 read __tmp46 BRICKS brickPtr
+   115 jump __label44 equal __tmp46 false
+-    * draw rect x y 57.666666666666664 9
+-    * op greaterThan __tmp48 ballXEnd x
+-    * op add __tmp49 x 58.666666666666664
+-    * op lessThan __tmp50 ballX __tmp49
++  116 draw rect 1 y 57.666666666666664 9
++  117 op greaterThan __tmp48 ballXEnd 1
++  118 op add __tmp49 1 58.666666666666664
++  119 op lessThan __tmp50 ballX 59.666666666666664
+   120 op land __tmp51 __tmp48 __tmp50
+   121 op greaterThan __tmp52 ballYEnd y
+   122 op land __tmp53 __tmp51 __tmp52
+ 
+   127 write 0 BRICKS brickPtr
+   128 op sub brickCount brickCount 1
+   129 noop
+-    * op sub __tmp59 x 4
+-    * op greaterThan __tmp60 ballX __tmp59
+-    * op add __tmp61 x 62.666666666666664
+-    * op lessThan __tmp62 ballX __tmp61
++  130 op sub __tmp59 1 4
++  131 op greaterThan __tmp60 ballX -3
++  132 op add __tmp61 1 62.666666666666664
++  133 op lessThan __tmp62 ballX 63.666666666666664
+   134 op land __tmp63 __tmp60 __tmp62
+   135 jump __label40 equal __tmp63 false
+   136 op mul ballVY ballVY -1
+ 
+   155 op add brickPtr brickPtr 1
+   156 noop
+   157 label __label46
+-    * op add x x 58.666666666666664
++  158 op add x 1 58.666666666666664
+   159 noop
+   160 label __label47
+   161 read __tmp46 BRICKS brickPtr
+   162 jump __label52 equal __tmp46 false
+-    * draw rect x y 57.666666666666664 9
+-    * op greaterThan __tmp48 ballXEnd x
+-    * op add __tmp49 x 58.666666666666664
+-    * op lessThan __tmp50 ballX __tmp49
++  163 draw rect 59.666666666666664 y 57.666666666666664 9
++  164 op greaterThan __tmp48 ballXEnd 59.666666666666664
++  165 op add __tmp49 59.666666666666664 58.666666666666664
++  166 op lessThan __tmp50 ballX 118.33333333333333
+   167 op land __tmp51 __tmp48 __tmp50
+   168 op greaterThan __tmp52 ballYEnd y
+   169 op land __tmp53 __tmp51 __tmp52
+ 
+   174 write 0 BRICKS brickPtr
+   175 op sub brickCount brickCount 1
+   176 noop
+-    * op sub __tmp59 x 4
+-    * op greaterThan __tmp60 ballX __tmp59
+-    * op add __tmp61 x 62.666666666666664
+-    * op lessThan __tmp62 ballX __tmp61
++  177 op sub __tmp59 59.666666666666664 4
++  178 op greaterThan __tmp60 ballX 55.666666666666664
++  179 op add __tmp61 59.666666666666664 62.666666666666664
++  180 op lessThan __tmp62 ballX 122.33333333333333
+   181 op land __tmp63 __tmp60 __tmp62
+   182 jump __label48 equal __tmp63 false
+   183 op mul ballVY ballVY -1
+ 
+   202 op add brickPtr brickPtr 1
+   203 noop
+   204 label __label54
+-    * op add x x 58.666666666666664
++  205 op add x 59.666666666666664 58.666666666666664
+   206 noop
+   207 label __label55
+   208 read __tmp46 BRICKS brickPtr
+   209 jump __label60 equal __tmp46 false
+-    * draw rect x y 57.666666666666664 9
+-    * op greaterThan __tmp48 ballXEnd x
+-    * op add __tmp49 x 58.666666666666664
+-    * op lessThan __tmp50 ballX __tmp49
++  210 draw rect 118.33333333333333 y 57.666666666666664 9
++  211 op greaterThan __tmp48 ballXEnd 118.33333333333333
++  212 op add __tmp49 118.33333333333333 58.666666666666664
++  213 op lessThan __tmp50 ballX 177
+   214 op land __tmp51 __tmp48 __tmp50
+   215 op greaterThan __tmp52 ballYEnd y
+   216 op land __tmp53 __tmp51 __tmp52
+ 
+   221 write 0 BRICKS brickPtr
+   222 op sub brickCount brickCount 1
+   223 noop
+-    * op sub __tmp59 x 4
+-    * op greaterThan __tmp60 ballX __tmp59
+-    * op add __tmp61 x 62.666666666666664
+-    * op lessThan __tmp62 ballX __tmp61
++  224 op sub __tmp59 118.33333333333333 4
++  225 op greaterThan __tmp60 ballX 114.33333333333333
++  226 op add __tmp61 118.33333333333333 62.666666666666664
++  227 op lessThan __tmp62 ballX 181
+   228 op land __tmp63 __tmp60 __tmp62
+   229 jump __label56 equal __tmp63 false
+   230 op mul ballVY ballVY -1
+ 
+   249 op add brickPtr brickPtr 1
+   250 noop
+   251 label __label62
+-    * op add x x 58.666666666666664
++  252 op add x 118.33333333333333 58.666666666666664
+   253 noop
+   254 label __label26
+   255 label __label22
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-13 instructions):
+ 
+   108 set y 126
+   109 label __label21
+   110 label __label36
+-    * set x 1
+   111 label __label38
+   112 label __label39
+   113 read __tmp46 BRICKS brickPtr
+   114 jump __label44 equal __tmp46 false
+   115 draw rect 1 y 57.666666666666664 9
+   116 op greaterThan __tmp48 ballXEnd 1
+-    * op add __tmp49 1 58.666666666666664
+   117 op lessThan __tmp50 ballX 59.666666666666664
+   118 op land __tmp51 __tmp48 __tmp50
+   119 op greaterThan __tmp52 ballYEnd y
+ 
+   125 write 0 BRICKS brickPtr
+   126 op sub brickCount brickCount 1
+   127 noop
+-    * op sub __tmp59 1 4
+   128 op greaterThan __tmp60 ballX -3
+-    * op add __tmp61 1 62.666666666666664
+   129 op lessThan __tmp62 ballX 63.666666666666664
+   130 op land __tmp63 __tmp60 __tmp62
+   131 jump __label40 equal __tmp63 false
+ 
+   151 op add brickPtr brickPtr 1
+   152 noop
+   153 label __label46
+-    * op add x 1 58.666666666666664
+   154 noop
+   155 label __label47
+   156 read __tmp46 BRICKS brickPtr
+   157 jump __label52 equal __tmp46 false
+   158 draw rect 59.666666666666664 y 57.666666666666664 9
+   159 op greaterThan __tmp48 ballXEnd 59.666666666666664
+-    * op add __tmp49 59.666666666666664 58.666666666666664
+   160 op lessThan __tmp50 ballX 118.33333333333333
+   161 op land __tmp51 __tmp48 __tmp50
+   162 op greaterThan __tmp52 ballYEnd y
+ 
+   168 write 0 BRICKS brickPtr
+   169 op sub brickCount brickCount 1
+   170 noop
+-    * op sub __tmp59 59.666666666666664 4
+   171 op greaterThan __tmp60 ballX 55.666666666666664
+-    * op add __tmp61 59.666666666666664 62.666666666666664
+   172 op lessThan __tmp62 ballX 122.33333333333333
+   173 op land __tmp63 __tmp60 __tmp62
+   174 jump __label48 equal __tmp63 false
+ 
+   194 op add brickPtr brickPtr 1
+   195 noop
+   196 label __label54
+-    * op add x 59.666666666666664 58.666666666666664
+   197 noop
+   198 label __label55
+   199 read __tmp46 BRICKS brickPtr
+   200 jump __label60 equal __tmp46 false
+   201 draw rect 118.33333333333333 y 57.666666666666664 9
+   202 op greaterThan __tmp48 ballXEnd 118.33333333333333
+-    * op add __tmp49 118.33333333333333 58.666666666666664
+   203 op lessThan __tmp50 ballX 177
+   204 op land __tmp51 __tmp48 __tmp50
+   205 op greaterThan __tmp52 ballYEnd y
+ 
+   211 write 0 BRICKS brickPtr
+   212 op sub brickCount brickCount 1
+   213 noop
+-    * op sub __tmp59 118.33333333333333 4
+   214 op greaterThan __tmp60 ballX 114.33333333333333
+-    * op add __tmp61 118.33333333333333 62.666666666666664
+   215 op lessThan __tmp62 ballX 181
+   216 op land __tmp63 __tmp60 __tmp62
+   217 jump __label56 equal __tmp63 false
+ 
+   237 op add brickPtr brickPtr 1
+   238 noop
+   239 label __label62
+-    * op add x 118.33333333333333 58.666666666666664
+   240 noop
+   241 label __label26
+   242 label __label22
 
 Modifications by Loop Unrolling: unroll loop at line 41 (+9 instructions):
  
-    12 op rand __tmp4 10
-    13 op sub ballVY __tmp4 5
-    14 set brickCount 6
+    15 op sub ballVY __tmp4 5
+    16 noop
+    17 set brickCount 6
 -    * set i 0
 -    * label __label3
 -    * label __label35
@@ -660,54 +969,131 @@ Modifications by Loop Unrolling: unroll loop at line 41 (+9 instructions):
 -    * op add i i 1
 -    * jump __label35 lessThan i 6
 -    * label __label5
-+   15 set i 0
-+   16 label __label63
-+   17 label __label64
-+   18 write 1 BRICKS i
-+   19 label __label65
-+   20 op add i i 1
-+   21 label __label66
-+   22 write 1 BRICKS i
-+   23 label __label67
-+   24 op add i i 1
-+   25 label __label68
-+   26 write 1 BRICKS i
-+   27 label __label69
-+   28 op add i i 1
-+   29 label __label70
-+   30 write 1 BRICKS i
-+   31 label __label71
-+   32 op add i i 1
-+   33 label __label72
-+   34 write 1 BRICKS i
-+   35 label __label73
-+   36 op add i i 1
-+   37 label __label74
-+   38 write 1 BRICKS i
-+   39 label __label75
-+   40 op add i i 1
-+   41 label __label5
-    42 label __label6
-    43 noop
-    44 draw clear 0 0 0
++   18 set i 0
++   19 label __label63
++   20 label __label64
++   21 write 1 BRICKS i
++   22 label __label65
++   23 op add i i 1
++   24 label __label66
++   25 write 1 BRICKS i
++   26 label __label67
++   27 op add i i 1
++   28 label __label68
++   29 write 1 BRICKS i
++   30 label __label69
++   31 op add i i 1
++   32 label __label70
++   33 write 1 BRICKS i
++   34 label __label71
++   35 op add i i 1
++   36 label __label72
++   37 write 1 BRICKS i
++   38 label __label73
++   39 op add i i 1
++   40 label __label74
++   41 write 1 BRICKS i
++   42 label __label75
++   43 op add i i 1
++   44 label __label5
+    45 label __label6
+    46 noop
+    47 draw clear 0 0 0
 
-Modifications by Loop Unrolling: unroll loop at line 82 (+79 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    93 label __label19
-    94 label __label20
-    95 set brickPtr 0
+    18 set i 0
+    19 label __label63
+    20 label __label64
+-    * write 1 BRICKS i
++   21 write 1 BRICKS 0
+    22 label __label65
+-    * op add i i 1
++   23 op add i 0 1
+    24 label __label66
+-    * write 1 BRICKS i
++   25 write 1 BRICKS 1
+    26 label __label67
+-    * op add i i 1
++   27 op add i 1 1
+    28 label __label68
+-    * write 1 BRICKS i
++   29 write 1 BRICKS 2
+    30 label __label69
+-    * op add i i 1
++   31 op add i 2 1
+    32 label __label70
+-    * write 1 BRICKS i
++   33 write 1 BRICKS 3
+    34 label __label71
+-    * op add i i 1
++   35 op add i 3 1
+    36 label __label72
+-    * write 1 BRICKS i
++   37 write 1 BRICKS 4
+    38 label __label73
+-    * op add i i 1
++   39 op add i 4 1
+    40 label __label74
+-    * write 1 BRICKS i
++   41 write 1 BRICKS 5
+    42 label __label75
+-    * op add i i 1
++   43 op add i 5 1
+    44 label __label5
+    45 label __label6
+    46 noop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
+ 
+    15 op sub ballVY __tmp4 5
+    16 noop
+    17 set brickCount 6
+-    * set i 0
+    18 label __label63
+    19 label __label64
+    20 write 1 BRICKS 0
+    21 label __label65
+-    * op add i 0 1
+    22 label __label66
+    23 write 1 BRICKS 1
+    24 label __label67
+-    * op add i 1 1
+    25 label __label68
+    26 write 1 BRICKS 2
+    27 label __label69
+-    * op add i 2 1
+    28 label __label70
+    29 write 1 BRICKS 3
+    30 label __label71
+-    * op add i 3 1
+    31 label __label72
+    32 write 1 BRICKS 4
+    33 label __label73
+-    * op add i 4 1
+    34 label __label74
+    35 write 1 BRICKS 5
+    36 label __label75
+-    * op add i 5 1
+    37 label __label5
+    38 label __label6
+    39 noop
+
+Modifications by Loop Unrolling: unroll loop at line 82 (+66 instructions):
+ 
+   117 noop
+   118 label __label20
+   119 set brickPtr 0
 -    * set y 126
 -    * label __label21
 -    * label __label36
--    * set x 1
 -    * label __label38
 -    * label __label39
 -    * read __tmp46 BRICKS brickPtr
 -    * jump __label44 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
+-    * draw rect 1 y 57.666666666666664 9
+-    * op greaterThan __tmp48 ballXEnd 1
+-    * op lessThan __tmp50 ballX 59.666666666666664
 -    * op land __tmp51 __tmp48 __tmp50
 -    * op greaterThan __tmp52 ballYEnd y
 -    * op land __tmp53 __tmp51 __tmp52
@@ -717,31 +1103,40 @@ Modifications by Loop Unrolling: unroll loop at line 82 (+79 instructions):
 -    * jump __label42 equal __tmp56 false
 -    * write 0 BRICKS brickPtr
 -    * op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
+-    * noop
+-    * op greaterThan __tmp60 ballX -3
+-    * op lessThan __tmp62 ballX 63.666666666666664
 -    * op land __tmp63 __tmp60 __tmp62
 -    * jump __label40 equal __tmp63 false
 -    * op mul ballVY ballVY -1
+-    * noop
+-    * noop
 -    * jump __label41 always
 -    * label __label40
 -    * op mul ballVX ballVX -1
+-    * noop
+-    * noop
 -    * label __label41
+-    * noop
+-    * noop
 -    * label __label42
+-    * noop
 -    * label __label43
+-    * noop
+-    * noop
 -    * label __label44
+-    * noop
 -    * label __label45
 -    * op add brickPtr brickPtr 1
+-    * noop
 -    * label __label46
--    * op add x x 58.666666666666664
+-    * noop
 -    * label __label47
 -    * read __tmp46 BRICKS brickPtr
 -    * jump __label52 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
+-    * draw rect 59.666666666666664 y 57.666666666666664 9
+-    * op greaterThan __tmp48 ballXEnd 59.666666666666664
+-    * op lessThan __tmp50 ballX 118.33333333333333
 -    * op land __tmp51 __tmp48 __tmp50
 -    * op greaterThan __tmp52 ballYEnd y
 -    * op land __tmp53 __tmp51 __tmp52
@@ -751,31 +1146,40 @@ Modifications by Loop Unrolling: unroll loop at line 82 (+79 instructions):
 -    * jump __label50 equal __tmp56 false
 -    * write 0 BRICKS brickPtr
 -    * op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
+-    * noop
+-    * op greaterThan __tmp60 ballX 55.666666666666664
+-    * op lessThan __tmp62 ballX 122.33333333333333
 -    * op land __tmp63 __tmp60 __tmp62
 -    * jump __label48 equal __tmp63 false
 -    * op mul ballVY ballVY -1
+-    * noop
+-    * noop
 -    * jump __label49 always
 -    * label __label48
 -    * op mul ballVX ballVX -1
+-    * noop
+-    * noop
 -    * label __label49
+-    * noop
+-    * noop
 -    * label __label50
+-    * noop
 -    * label __label51
+-    * noop
+-    * noop
 -    * label __label52
+-    * noop
 -    * label __label53
 -    * op add brickPtr brickPtr 1
+-    * noop
 -    * label __label54
--    * op add x x 58.666666666666664
+-    * noop
 -    * label __label55
 -    * read __tmp46 BRICKS brickPtr
 -    * jump __label60 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
+-    * draw rect 118.33333333333333 y 57.666666666666664 9
+-    * op greaterThan __tmp48 ballXEnd 118.33333333333333
+-    * op lessThan __tmp50 ballX 177
 -    * op land __tmp51 __tmp48 __tmp50
 -    * op greaterThan __tmp52 ballYEnd y
 -    * op land __tmp53 __tmp51 __tmp52
@@ -785,851 +1189,685 @@ Modifications by Loop Unrolling: unroll loop at line 82 (+79 instructions):
 -    * jump __label58 equal __tmp56 false
 -    * write 0 BRICKS brickPtr
 -    * op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
+-    * noop
+-    * op greaterThan __tmp60 ballX 114.33333333333333
+-    * op lessThan __tmp62 ballX 181
 -    * op land __tmp63 __tmp60 __tmp62
 -    * jump __label56 equal __tmp63 false
 -    * op mul ballVY ballVY -1
+-    * noop
+-    * noop
 -    * jump __label57 always
 -    * label __label56
 -    * op mul ballVX ballVX -1
+-    * noop
+-    * noop
 -    * label __label57
+-    * noop
+-    * noop
 -    * label __label58
+-    * noop
 -    * label __label59
+-    * noop
+-    * noop
 -    * label __label60
+-    * noop
 -    * label __label61
 -    * op add brickPtr brickPtr 1
+-    * noop
 -    * label __label62
--    * op add x x 58.666666666666664
+-    * noop
 -    * label __label26
 -    * label __label22
 -    * op sub y y 10
+-    * noop
 -    * jump __label36 greaterThan y 106
 -    * label __label23
-+   96 set y 126
-+   97 label __label76
-+   98 label __label77
-+   99 set x 1
-+  100 label __label78
-+  101 label __label79
-+  102 read __tmp46 BRICKS brickPtr
-+  103 jump __label84 equal __tmp46 false
-+  104 draw rect x y 57.666666666666664 9
-+  105 op greaterThan __tmp48 ballXEnd x
-+  106 op add __tmp49 x 58.666666666666664
-+  107 op lessThan __tmp50 ballX __tmp49
-+  108 op land __tmp51 __tmp48 __tmp50
-+  109 op greaterThan __tmp52 ballYEnd y
-+  110 op land __tmp53 __tmp51 __tmp52
-+  111 op add __tmp54 y 10
-+  112 op lessThan __tmp55 ballY __tmp54
-+  113 op land __tmp56 __tmp53 __tmp55
-+  114 jump __label82 equal __tmp56 false
-+  115 write 0 BRICKS brickPtr
-+  116 op sub brickCount brickCount 1
-+  117 op sub __tmp59 x 4
-+  118 op greaterThan __tmp60 ballX __tmp59
-+  119 op add __tmp61 x 62.666666666666664
-+  120 op lessThan __tmp62 ballX __tmp61
-+  121 op land __tmp63 __tmp60 __tmp62
-+  122 jump __label80 equal __tmp63 false
-+  123 op mul ballVY ballVY -1
-+  124 jump __label81 always
-+  125 label __label80
-+  126 op mul ballVX ballVX -1
-+  127 label __label81
-+  128 label __label82
-+  129 label __label83
-+  130 label __label84
-+  131 label __label85
-+  132 op add brickPtr brickPtr 1
-+  133 label __label86
-+  134 op add x x 58.666666666666664
-+  135 label __label87
-+  136 read __tmp46 BRICKS brickPtr
-+  137 jump __label92 equal __tmp46 false
-+  138 draw rect x y 57.666666666666664 9
-+  139 op greaterThan __tmp48 ballXEnd x
-+  140 op add __tmp49 x 58.666666666666664
-+  141 op lessThan __tmp50 ballX __tmp49
-+  142 op land __tmp51 __tmp48 __tmp50
-+  143 op greaterThan __tmp52 ballYEnd y
-+  144 op land __tmp53 __tmp51 __tmp52
-+  145 op add __tmp54 y 10
-+  146 op lessThan __tmp55 ballY __tmp54
-+  147 op land __tmp56 __tmp53 __tmp55
-+  148 jump __label90 equal __tmp56 false
-+  149 write 0 BRICKS brickPtr
-+  150 op sub brickCount brickCount 1
-+  151 op sub __tmp59 x 4
-+  152 op greaterThan __tmp60 ballX __tmp59
-+  153 op add __tmp61 x 62.666666666666664
-+  154 op lessThan __tmp62 ballX __tmp61
-+  155 op land __tmp63 __tmp60 __tmp62
-+  156 jump __label88 equal __tmp63 false
-+  157 op mul ballVY ballVY -1
-+  158 jump __label89 always
-+  159 label __label88
-+  160 op mul ballVX ballVX -1
-+  161 label __label89
-+  162 label __label90
-+  163 label __label91
-+  164 label __label92
-+  165 label __label93
-+  166 op add brickPtr brickPtr 1
-+  167 label __label94
-+  168 op add x x 58.666666666666664
-+  169 label __label95
-+  170 read __tmp46 BRICKS brickPtr
-+  171 jump __label100 equal __tmp46 false
-+  172 draw rect x y 57.666666666666664 9
-+  173 op greaterThan __tmp48 ballXEnd x
-+  174 op add __tmp49 x 58.666666666666664
-+  175 op lessThan __tmp50 ballX __tmp49
-+  176 op land __tmp51 __tmp48 __tmp50
-+  177 op greaterThan __tmp52 ballYEnd y
-+  178 op land __tmp53 __tmp51 __tmp52
-+  179 op add __tmp54 y 10
-+  180 op lessThan __tmp55 ballY __tmp54
-+  181 op land __tmp56 __tmp53 __tmp55
-+  182 jump __label98 equal __tmp56 false
-+  183 write 0 BRICKS brickPtr
-+  184 op sub brickCount brickCount 1
-+  185 op sub __tmp59 x 4
-+  186 op greaterThan __tmp60 ballX __tmp59
-+  187 op add __tmp61 x 62.666666666666664
-+  188 op lessThan __tmp62 ballX __tmp61
-+  189 op land __tmp63 __tmp60 __tmp62
-+  190 jump __label96 equal __tmp63 false
-+  191 op mul ballVY ballVY -1
-+  192 jump __label97 always
-+  193 label __label96
-+  194 op mul ballVX ballVX -1
-+  195 label __label97
-+  196 label __label98
-+  197 label __label99
-+  198 label __label100
-+  199 label __label101
-+  200 op add brickPtr brickPtr 1
-+  201 label __label102
-+  202 op add x x 58.666666666666664
-+  203 label __label103
-+  204 label __label104
-+  205 op sub y y 10
-+  206 label __label105
-+  207 set x 1
-+  208 label __label106
-+  209 label __label107
-+  210 read __tmp46 BRICKS brickPtr
-+  211 jump __label112 equal __tmp46 false
-+  212 draw rect x y 57.666666666666664 9
-+  213 op greaterThan __tmp48 ballXEnd x
-+  214 op add __tmp49 x 58.666666666666664
-+  215 op lessThan __tmp50 ballX __tmp49
++  120 set y 126
++  121 label __label76
++  122 label __label77
++  123 label __label78
++  124 label __label79
++  125 read __tmp46 BRICKS brickPtr
++  126 jump __label84 equal __tmp46 false
++  127 draw rect 1 y 57.666666666666664 9
++  128 op greaterThan __tmp48 ballXEnd 1
++  129 op lessThan __tmp50 ballX 59.666666666666664
++  130 op land __tmp51 __tmp48 __tmp50
++  131 op greaterThan __tmp52 ballYEnd y
++  132 op land __tmp53 __tmp51 __tmp52
++  133 op add __tmp54 y 10
++  134 op lessThan __tmp55 ballY __tmp54
++  135 op land __tmp56 __tmp53 __tmp55
++  136 jump __label82 equal __tmp56 false
++  137 write 0 BRICKS brickPtr
++  138 op sub brickCount brickCount 1
++  139 noop
++  140 op greaterThan __tmp60 ballX -3
++  141 op lessThan __tmp62 ballX 63.666666666666664
++  142 op land __tmp63 __tmp60 __tmp62
++  143 jump __label80 equal __tmp63 false
++  144 op mul ballVY ballVY -1
++  145 noop
++  146 noop
++  147 jump __label81 always
++  148 label __label80
++  149 op mul ballVX ballVX -1
++  150 noop
++  151 noop
++  152 label __label81
++  153 noop
++  154 noop
++  155 label __label82
++  156 noop
++  157 label __label83
++  158 noop
++  159 noop
++  160 label __label84
++  161 noop
++  162 label __label85
++  163 op add brickPtr brickPtr 1
++  164 noop
++  165 label __label86
++  166 noop
++  167 label __label87
++  168 read __tmp46 BRICKS brickPtr
++  169 jump __label92 equal __tmp46 false
++  170 draw rect 59.666666666666664 y 57.666666666666664 9
++  171 op greaterThan __tmp48 ballXEnd 59.666666666666664
++  172 op lessThan __tmp50 ballX 118.33333333333333
++  173 op land __tmp51 __tmp48 __tmp50
++  174 op greaterThan __tmp52 ballYEnd y
++  175 op land __tmp53 __tmp51 __tmp52
++  176 op add __tmp54 y 10
++  177 op lessThan __tmp55 ballY __tmp54
++  178 op land __tmp56 __tmp53 __tmp55
++  179 jump __label90 equal __tmp56 false
++  180 write 0 BRICKS brickPtr
++  181 op sub brickCount brickCount 1
++  182 noop
++  183 op greaterThan __tmp60 ballX 55.666666666666664
++  184 op lessThan __tmp62 ballX 122.33333333333333
++  185 op land __tmp63 __tmp60 __tmp62
++  186 jump __label88 equal __tmp63 false
++  187 op mul ballVY ballVY -1
++  188 noop
++  189 noop
++  190 jump __label89 always
++  191 label __label88
++  192 op mul ballVX ballVX -1
++  193 noop
++  194 noop
++  195 label __label89
++  196 noop
++  197 noop
++  198 label __label90
++  199 noop
++  200 label __label91
++  201 noop
++  202 noop
++  203 label __label92
++  204 noop
++  205 label __label93
++  206 op add brickPtr brickPtr 1
++  207 noop
++  208 label __label94
++  209 noop
++  210 label __label95
++  211 read __tmp46 BRICKS brickPtr
++  212 jump __label100 equal __tmp46 false
++  213 draw rect 118.33333333333333 y 57.666666666666664 9
++  214 op greaterThan __tmp48 ballXEnd 118.33333333333333
++  215 op lessThan __tmp50 ballX 177
 +  216 op land __tmp51 __tmp48 __tmp50
 +  217 op greaterThan __tmp52 ballYEnd y
 +  218 op land __tmp53 __tmp51 __tmp52
 +  219 op add __tmp54 y 10
 +  220 op lessThan __tmp55 ballY __tmp54
 +  221 op land __tmp56 __tmp53 __tmp55
-+  222 jump __label110 equal __tmp56 false
++  222 jump __label98 equal __tmp56 false
 +  223 write 0 BRICKS brickPtr
 +  224 op sub brickCount brickCount 1
-+  225 op sub __tmp59 x 4
-+  226 op greaterThan __tmp60 ballX __tmp59
-+  227 op add __tmp61 x 62.666666666666664
-+  228 op lessThan __tmp62 ballX __tmp61
-+  229 op land __tmp63 __tmp60 __tmp62
-+  230 jump __label108 equal __tmp63 false
-+  231 op mul ballVY ballVY -1
-+  232 jump __label109 always
-+  233 label __label108
-+  234 op mul ballVX ballVX -1
-+  235 label __label109
-+  236 label __label110
-+  237 label __label111
-+  238 label __label112
-+  239 label __label113
-+  240 op add brickPtr brickPtr 1
-+  241 label __label114
-+  242 op add x x 58.666666666666664
-+  243 label __label115
-+  244 read __tmp46 BRICKS brickPtr
-+  245 jump __label120 equal __tmp46 false
-+  246 draw rect x y 57.666666666666664 9
-+  247 op greaterThan __tmp48 ballXEnd x
-+  248 op add __tmp49 x 58.666666666666664
-+  249 op lessThan __tmp50 ballX __tmp49
-+  250 op land __tmp51 __tmp48 __tmp50
-+  251 op greaterThan __tmp52 ballYEnd y
-+  252 op land __tmp53 __tmp51 __tmp52
-+  253 op add __tmp54 y 10
-+  254 op lessThan __tmp55 ballY __tmp54
-+  255 op land __tmp56 __tmp53 __tmp55
-+  256 jump __label118 equal __tmp56 false
-+  257 write 0 BRICKS brickPtr
-+  258 op sub brickCount brickCount 1
-+  259 op sub __tmp59 x 4
-+  260 op greaterThan __tmp60 ballX __tmp59
-+  261 op add __tmp61 x 62.666666666666664
-+  262 op lessThan __tmp62 ballX __tmp61
-+  263 op land __tmp63 __tmp60 __tmp62
-+  264 jump __label116 equal __tmp63 false
-+  265 op mul ballVY ballVY -1
-+  266 jump __label117 always
-+  267 label __label116
-+  268 op mul ballVX ballVX -1
-+  269 label __label117
-+  270 label __label118
-+  271 label __label119
-+  272 label __label120
-+  273 label __label121
-+  274 op add brickPtr brickPtr 1
-+  275 label __label122
-+  276 op add x x 58.666666666666664
-+  277 label __label123
-+  278 read __tmp46 BRICKS brickPtr
-+  279 jump __label128 equal __tmp46 false
-+  280 draw rect x y 57.666666666666664 9
-+  281 op greaterThan __tmp48 ballXEnd x
-+  282 op add __tmp49 x 58.666666666666664
-+  283 op lessThan __tmp50 ballX __tmp49
-+  284 op land __tmp51 __tmp48 __tmp50
-+  285 op greaterThan __tmp52 ballYEnd y
-+  286 op land __tmp53 __tmp51 __tmp52
-+  287 op add __tmp54 y 10
-+  288 op lessThan __tmp55 ballY __tmp54
-+  289 op land __tmp56 __tmp53 __tmp55
-+  290 jump __label126 equal __tmp56 false
-+  291 write 0 BRICKS brickPtr
-+  292 op sub brickCount brickCount 1
-+  293 op sub __tmp59 x 4
-+  294 op greaterThan __tmp60 ballX __tmp59
-+  295 op add __tmp61 x 62.666666666666664
-+  296 op lessThan __tmp62 ballX __tmp61
-+  297 op land __tmp63 __tmp60 __tmp62
-+  298 jump __label124 equal __tmp63 false
-+  299 op mul ballVY ballVY -1
-+  300 jump __label125 always
-+  301 label __label124
-+  302 op mul ballVX ballVX -1
-+  303 label __label125
-+  304 label __label126
-+  305 label __label127
-+  306 label __label128
-+  307 label __label129
-+  308 op add brickPtr brickPtr 1
-+  309 label __label130
-+  310 op add x x 58.666666666666664
-+  311 label __label131
-+  312 label __label132
-+  313 op sub y y 10
-+  314 label __label23
-   315 op lessThan __tmp70 ballY 0
-   316 op equal __tmp71 brickCount 0
-   317 op or __tmp72 __tmp70 __tmp71
++  225 noop
++  226 op greaterThan __tmp60 ballX 114.33333333333333
++  227 op lessThan __tmp62 ballX 181
++  228 op land __tmp63 __tmp60 __tmp62
++  229 jump __label96 equal __tmp63 false
++  230 op mul ballVY ballVY -1
++  231 noop
++  232 noop
++  233 jump __label97 always
++  234 label __label96
++  235 op mul ballVX ballVX -1
++  236 noop
++  237 noop
++  238 label __label97
++  239 noop
++  240 noop
++  241 label __label98
++  242 noop
++  243 label __label99
++  244 noop
++  245 noop
++  246 label __label100
++  247 noop
++  248 label __label101
++  249 op add brickPtr brickPtr 1
++  250 noop
++  251 label __label102
++  252 noop
++  253 label __label103
++  254 label __label104
++  255 op sub y y 10
++  256 noop
++  257 label __label105
++  258 label __label106
++  259 label __label107
++  260 read __tmp46 BRICKS brickPtr
++  261 jump __label112 equal __tmp46 false
++  262 draw rect 1 y 57.666666666666664 9
++  263 op greaterThan __tmp48 ballXEnd 1
++  264 op lessThan __tmp50 ballX 59.666666666666664
++  265 op land __tmp51 __tmp48 __tmp50
++  266 op greaterThan __tmp52 ballYEnd y
++  267 op land __tmp53 __tmp51 __tmp52
++  268 op add __tmp54 y 10
++  269 op lessThan __tmp55 ballY __tmp54
++  270 op land __tmp56 __tmp53 __tmp55
++  271 jump __label110 equal __tmp56 false
++  272 write 0 BRICKS brickPtr
++  273 op sub brickCount brickCount 1
++  274 noop
++  275 op greaterThan __tmp60 ballX -3
++  276 op lessThan __tmp62 ballX 63.666666666666664
++  277 op land __tmp63 __tmp60 __tmp62
++  278 jump __label108 equal __tmp63 false
++  279 op mul ballVY ballVY -1
++  280 noop
++  281 noop
++  282 jump __label109 always
++  283 label __label108
++  284 op mul ballVX ballVX -1
++  285 noop
++  286 noop
++  287 label __label109
++  288 noop
++  289 noop
++  290 label __label110
++  291 noop
++  292 label __label111
++  293 noop
++  294 noop
++  295 label __label112
++  296 noop
++  297 label __label113
++  298 op add brickPtr brickPtr 1
++  299 noop
++  300 label __label114
++  301 noop
++  302 label __label115
++  303 read __tmp46 BRICKS brickPtr
++  304 jump __label120 equal __tmp46 false
++  305 draw rect 59.666666666666664 y 57.666666666666664 9
++  306 op greaterThan __tmp48 ballXEnd 59.666666666666664
++  307 op lessThan __tmp50 ballX 118.33333333333333
++  308 op land __tmp51 __tmp48 __tmp50
++  309 op greaterThan __tmp52 ballYEnd y
++  310 op land __tmp53 __tmp51 __tmp52
++  311 op add __tmp54 y 10
++  312 op lessThan __tmp55 ballY __tmp54
++  313 op land __tmp56 __tmp53 __tmp55
++  314 jump __label118 equal __tmp56 false
++  315 write 0 BRICKS brickPtr
++  316 op sub brickCount brickCount 1
++  317 noop
++  318 op greaterThan __tmp60 ballX 55.666666666666664
++  319 op lessThan __tmp62 ballX 122.33333333333333
++  320 op land __tmp63 __tmp60 __tmp62
++  321 jump __label116 equal __tmp63 false
++  322 op mul ballVY ballVY -1
++  323 noop
++  324 noop
++  325 jump __label117 always
++  326 label __label116
++  327 op mul ballVX ballVX -1
++  328 noop
++  329 noop
++  330 label __label117
++  331 noop
++  332 noop
++  333 label __label118
++  334 noop
++  335 label __label119
++  336 noop
++  337 noop
++  338 label __label120
++  339 noop
++  340 label __label121
++  341 op add brickPtr brickPtr 1
++  342 noop
++  343 label __label122
++  344 noop
++  345 label __label123
++  346 read __tmp46 BRICKS brickPtr
++  347 jump __label128 equal __tmp46 false
++  348 draw rect 118.33333333333333 y 57.666666666666664 9
++  349 op greaterThan __tmp48 ballXEnd 118.33333333333333
++  350 op lessThan __tmp50 ballX 177
++  351 op land __tmp51 __tmp48 __tmp50
++  352 op greaterThan __tmp52 ballYEnd y
++  353 op land __tmp53 __tmp51 __tmp52
++  354 op add __tmp54 y 10
++  355 op lessThan __tmp55 ballY __tmp54
++  356 op land __tmp56 __tmp53 __tmp55
++  357 jump __label126 equal __tmp56 false
++  358 write 0 BRICKS brickPtr
++  359 op sub brickCount brickCount 1
++  360 noop
++  361 op greaterThan __tmp60 ballX 114.33333333333333
++  362 op lessThan __tmp62 ballX 181
++  363 op land __tmp63 __tmp60 __tmp62
++  364 jump __label124 equal __tmp63 false
++  365 op mul ballVY ballVY -1
++  366 noop
++  367 noop
++  368 jump __label125 always
++  369 label __label124
++  370 op mul ballVX ballVX -1
++  371 noop
++  372 noop
++  373 label __label125
++  374 noop
++  375 noop
++  376 label __label126
++  377 noop
++  378 label __label127
++  379 noop
++  380 noop
++  381 label __label128
++  382 noop
++  383 label __label129
++  384 op add brickPtr brickPtr 1
++  385 noop
++  386 label __label130
++  387 noop
++  388 label __label131
++  389 label __label132
++  390 op sub y y 10
++  391 noop
++  392 label __label23
+   393 op lessThan __tmp70 ballY 0
+   394 op equal __tmp71 brickCount 0
+   395 op or __tmp72 __tmp70 __tmp71
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    15 set i 0
-    16 label __label63
-    17 label __label64
--    * write 1 BRICKS i
-+   18 write 1 BRICKS 0
-    19 label __label65
--    * op add i i 1
-+   20 op add i 0 1
-    21 label __label66
--    * write 1 BRICKS i
-+   22 write 1 BRICKS 1
-    23 label __label67
--    * op add i i 1
-+   24 op add i 1 1
-    25 label __label68
--    * write 1 BRICKS i
-+   26 write 1 BRICKS 2
-    27 label __label69
--    * op add i i 1
-+   28 op add i 2 1
-    29 label __label70
--    * write 1 BRICKS i
-+   30 write 1 BRICKS 3
-    31 label __label71
--    * op add i i 1
-+   32 op add i 3 1
-    33 label __label72
--    * write 1 BRICKS i
-+   34 write 1 BRICKS 4
-    35 label __label73
--    * op add i i 1
-+   36 op add i 4 1
-    37 label __label74
--    * write 1 BRICKS i
-+   38 write 1 BRICKS 5
-    39 label __label75
--    * op add i i 1
-+   40 op add i 5 1
-    41 label __label5
-    42 label __label6
-    43 noop
- 
-    99 set x 1
-   100 label __label78
-   101 label __label79
+   122 label __label77
+   123 label __label78
+   124 label __label79
 -    * read __tmp46 BRICKS brickPtr
-+  102 read __tmp46 BRICKS 0
-   103 jump __label84 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
-+  104 draw rect 1 126 57.666666666666664 9
-+  105 op greaterThan __tmp48 ballXEnd 1
-+  106 op add __tmp49 1 58.666666666666664
-+  107 op lessThan __tmp50 ballX 59.666666666666664
-   108 op land __tmp51 __tmp48 __tmp50
++  125 read __tmp46 BRICKS 0
+   126 jump __label84 equal __tmp46 false
+-    * draw rect 1 y 57.666666666666664 9
++  127 draw rect 1 126 57.666666666666664 9
+   128 op greaterThan __tmp48 ballXEnd 1
+   129 op lessThan __tmp50 ballX 59.666666666666664
+   130 op land __tmp51 __tmp48 __tmp50
 -    * op greaterThan __tmp52 ballYEnd y
-+  109 op greaterThan __tmp52 ballYEnd 126
-   110 op land __tmp53 __tmp51 __tmp52
++  131 op greaterThan __tmp52 ballYEnd 126
+   132 op land __tmp53 __tmp51 __tmp52
 -    * op add __tmp54 y 10
 -    * op lessThan __tmp55 ballY __tmp54
-+  111 op add __tmp54 126 10
-+  112 op lessThan __tmp55 ballY 136
-   113 op land __tmp56 __tmp53 __tmp55
-   114 jump __label82 equal __tmp56 false
++  133 op add __tmp54 126 10
++  134 op lessThan __tmp55 ballY 136
+   135 op land __tmp56 __tmp53 __tmp55
+   136 jump __label82 equal __tmp56 false
 -    * write 0 BRICKS brickPtr
-+  115 write 0 BRICKS 0
-   116 op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
-+  117 op sub __tmp59 1 4
-+  118 op greaterThan __tmp60 ballX -3
-+  119 op add __tmp61 1 62.666666666666664
-+  120 op lessThan __tmp62 ballX 63.666666666666664
-   121 op land __tmp63 __tmp60 __tmp62
-   122 jump __label80 equal __tmp63 false
-   123 op mul ballVY ballVY -1
++  137 write 0 BRICKS 0
+   138 op sub brickCount brickCount 1
+   139 noop
+   140 op greaterThan __tmp60 ballX -3
  
-   129 label __label83
-   130 label __label84
-   131 label __label85
+   160 label __label84
+   161 noop
+   162 label __label85
 -    * op add brickPtr brickPtr 1
-+  132 op add brickPtr 0 1
-   133 label __label86
--    * op add x x 58.666666666666664
-+  134 op add x 1 58.666666666666664
-   135 label __label87
++  163 op add brickPtr 0 1
+   164 noop
+   165 label __label86
+   166 noop
+   167 label __label87
 -    * read __tmp46 BRICKS brickPtr
-+  136 read __tmp46 BRICKS 1
-   137 jump __label92 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
-+  138 draw rect 59.666666666666664 126 57.666666666666664 9
-+  139 op greaterThan __tmp48 ballXEnd 59.666666666666664
-+  140 op add __tmp49 59.666666666666664 58.666666666666664
-+  141 op lessThan __tmp50 ballX 118.33333333333333
-   142 op land __tmp51 __tmp48 __tmp50
++  168 read __tmp46 BRICKS 1
+   169 jump __label92 equal __tmp46 false
+-    * draw rect 59.666666666666664 y 57.666666666666664 9
++  170 draw rect 59.666666666666664 126 57.666666666666664 9
+   171 op greaterThan __tmp48 ballXEnd 59.666666666666664
+   172 op lessThan __tmp50 ballX 118.33333333333333
+   173 op land __tmp51 __tmp48 __tmp50
 -    * op greaterThan __tmp52 ballYEnd y
-+  143 op greaterThan __tmp52 ballYEnd 126
-   144 op land __tmp53 __tmp51 __tmp52
++  174 op greaterThan __tmp52 ballYEnd 126
+   175 op land __tmp53 __tmp51 __tmp52
 -    * op add __tmp54 y 10
 -    * op lessThan __tmp55 ballY __tmp54
-+  145 op add __tmp54 126 10
-+  146 op lessThan __tmp55 ballY 136
-   147 op land __tmp56 __tmp53 __tmp55
-   148 jump __label90 equal __tmp56 false
++  176 op add __tmp54 126 10
++  177 op lessThan __tmp55 ballY 136
+   178 op land __tmp56 __tmp53 __tmp55
+   179 jump __label90 equal __tmp56 false
 -    * write 0 BRICKS brickPtr
-+  149 write 0 BRICKS 1
-   150 op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
-+  151 op sub __tmp59 59.666666666666664 4
-+  152 op greaterThan __tmp60 ballX 55.666666666666664
-+  153 op add __tmp61 59.666666666666664 62.666666666666664
-+  154 op lessThan __tmp62 ballX 122.33333333333333
-   155 op land __tmp63 __tmp60 __tmp62
-   156 jump __label88 equal __tmp63 false
-   157 op mul ballVY ballVY -1
++  180 write 0 BRICKS 1
+   181 op sub brickCount brickCount 1
+   182 noop
+   183 op greaterThan __tmp60 ballX 55.666666666666664
  
-   163 label __label91
-   164 label __label92
-   165 label __label93
+   203 label __label92
+   204 noop
+   205 label __label93
 -    * op add brickPtr brickPtr 1
-+  166 op add brickPtr 1 1
-   167 label __label94
--    * op add x x 58.666666666666664
-+  168 op add x 59.666666666666664 58.666666666666664
-   169 label __label95
++  206 op add brickPtr 1 1
+   207 noop
+   208 label __label94
+   209 noop
+   210 label __label95
 -    * read __tmp46 BRICKS brickPtr
-+  170 read __tmp46 BRICKS 2
-   171 jump __label100 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
-+  172 draw rect 118.33333333333333 126 57.666666666666664 9
-+  173 op greaterThan __tmp48 ballXEnd 118.33333333333333
-+  174 op add __tmp49 118.33333333333333 58.666666666666664
-+  175 op lessThan __tmp50 ballX 177
-   176 op land __tmp51 __tmp48 __tmp50
--    * op greaterThan __tmp52 ballYEnd y
-+  177 op greaterThan __tmp52 ballYEnd 126
-   178 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 y 10
--    * op lessThan __tmp55 ballY __tmp54
-+  179 op add __tmp54 126 10
-+  180 op lessThan __tmp55 ballY 136
-   181 op land __tmp56 __tmp53 __tmp55
-   182 jump __label98 equal __tmp56 false
--    * write 0 BRICKS brickPtr
-+  183 write 0 BRICKS 2
-   184 op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
-+  185 op sub __tmp59 118.33333333333333 4
-+  186 op greaterThan __tmp60 ballX 114.33333333333333
-+  187 op add __tmp61 118.33333333333333 62.666666666666664
-+  188 op lessThan __tmp62 ballX 181
-   189 op land __tmp63 __tmp60 __tmp62
-   190 jump __label96 equal __tmp63 false
-   191 op mul ballVY ballVY -1
- 
-   197 label __label99
-   198 label __label100
-   199 label __label101
--    * op add brickPtr brickPtr 1
-+  200 op add brickPtr 2 1
-   201 label __label102
--    * op add x x 58.666666666666664
-+  202 op add x 118.33333333333333 58.666666666666664
-   203 label __label103
-   204 label __label104
--    * op sub y y 10
-+  205 op sub y 126 10
-   206 label __label105
-   207 set x 1
-   208 label __label106
-   209 label __label107
--    * read __tmp46 BRICKS brickPtr
-+  210 read __tmp46 BRICKS 3
-   211 jump __label112 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
-+  212 draw rect 1 116 57.666666666666664 9
-+  213 op greaterThan __tmp48 ballXEnd 1
-+  214 op add __tmp49 1 58.666666666666664
-+  215 op lessThan __tmp50 ballX 59.666666666666664
++  211 read __tmp46 BRICKS 2
+   212 jump __label100 equal __tmp46 false
+-    * draw rect 118.33333333333333 y 57.666666666666664 9
++  213 draw rect 118.33333333333333 126 57.666666666666664 9
+   214 op greaterThan __tmp48 ballXEnd 118.33333333333333
+   215 op lessThan __tmp50 ballX 177
    216 op land __tmp51 __tmp48 __tmp50
 -    * op greaterThan __tmp52 ballYEnd y
-+  217 op greaterThan __tmp52 ballYEnd 116
++  217 op greaterThan __tmp52 ballYEnd 126
    218 op land __tmp53 __tmp51 __tmp52
 -    * op add __tmp54 y 10
 -    * op lessThan __tmp55 ballY __tmp54
-+  219 op add __tmp54 116 10
-+  220 op lessThan __tmp55 ballY 126
++  219 op add __tmp54 126 10
++  220 op lessThan __tmp55 ballY 136
    221 op land __tmp56 __tmp53 __tmp55
-   222 jump __label110 equal __tmp56 false
+   222 jump __label98 equal __tmp56 false
 -    * write 0 BRICKS brickPtr
-+  223 write 0 BRICKS 3
++  223 write 0 BRICKS 2
    224 op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
-+  225 op sub __tmp59 1 4
-+  226 op greaterThan __tmp60 ballX -3
-+  227 op add __tmp61 1 62.666666666666664
-+  228 op lessThan __tmp62 ballX 63.666666666666664
-   229 op land __tmp63 __tmp60 __tmp62
-   230 jump __label108 equal __tmp63 false
-   231 op mul ballVY ballVY -1
+   225 noop
+   226 op greaterThan __tmp60 ballX 114.33333333333333
  
-   237 label __label111
-   238 label __label112
-   239 label __label113
+   246 label __label100
+   247 noop
+   248 label __label101
 -    * op add brickPtr brickPtr 1
-+  240 op add brickPtr 3 1
-   241 label __label114
--    * op add x x 58.666666666666664
-+  242 op add x 1 58.666666666666664
-   243 label __label115
--    * read __tmp46 BRICKS brickPtr
-+  244 read __tmp46 BRICKS 4
-   245 jump __label120 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
-+  246 draw rect 59.666666666666664 116 57.666666666666664 9
-+  247 op greaterThan __tmp48 ballXEnd 59.666666666666664
-+  248 op add __tmp49 59.666666666666664 58.666666666666664
-+  249 op lessThan __tmp50 ballX 118.33333333333333
-   250 op land __tmp51 __tmp48 __tmp50
--    * op greaterThan __tmp52 ballYEnd y
-+  251 op greaterThan __tmp52 ballYEnd 116
-   252 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 y 10
--    * op lessThan __tmp55 ballY __tmp54
-+  253 op add __tmp54 116 10
-+  254 op lessThan __tmp55 ballY 126
-   255 op land __tmp56 __tmp53 __tmp55
-   256 jump __label118 equal __tmp56 false
--    * write 0 BRICKS brickPtr
-+  257 write 0 BRICKS 4
-   258 op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
-+  259 op sub __tmp59 59.666666666666664 4
-+  260 op greaterThan __tmp60 ballX 55.666666666666664
-+  261 op add __tmp61 59.666666666666664 62.666666666666664
-+  262 op lessThan __tmp62 ballX 122.33333333333333
-   263 op land __tmp63 __tmp60 __tmp62
-   264 jump __label116 equal __tmp63 false
-   265 op mul ballVY ballVY -1
- 
-   271 label __label119
-   272 label __label120
-   273 label __label121
--    * op add brickPtr brickPtr 1
-+  274 op add brickPtr 4 1
-   275 label __label122
--    * op add x x 58.666666666666664
-+  276 op add x 59.666666666666664 58.666666666666664
-   277 label __label123
--    * read __tmp46 BRICKS brickPtr
-+  278 read __tmp46 BRICKS 5
-   279 jump __label128 equal __tmp46 false
--    * draw rect x y 57.666666666666664 9
--    * op greaterThan __tmp48 ballXEnd x
--    * op add __tmp49 x 58.666666666666664
--    * op lessThan __tmp50 ballX __tmp49
-+  280 draw rect 118.33333333333333 116 57.666666666666664 9
-+  281 op greaterThan __tmp48 ballXEnd 118.33333333333333
-+  282 op add __tmp49 118.33333333333333 58.666666666666664
-+  283 op lessThan __tmp50 ballX 177
-   284 op land __tmp51 __tmp48 __tmp50
--    * op greaterThan __tmp52 ballYEnd y
-+  285 op greaterThan __tmp52 ballYEnd 116
-   286 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 y 10
--    * op lessThan __tmp55 ballY __tmp54
-+  287 op add __tmp54 116 10
-+  288 op lessThan __tmp55 ballY 126
-   289 op land __tmp56 __tmp53 __tmp55
-   290 jump __label126 equal __tmp56 false
--    * write 0 BRICKS brickPtr
-+  291 write 0 BRICKS 5
-   292 op sub brickCount brickCount 1
--    * op sub __tmp59 x 4
--    * op greaterThan __tmp60 ballX __tmp59
--    * op add __tmp61 x 62.666666666666664
--    * op lessThan __tmp62 ballX __tmp61
-+  293 op sub __tmp59 118.33333333333333 4
-+  294 op greaterThan __tmp60 ballX 114.33333333333333
-+  295 op add __tmp61 118.33333333333333 62.666666666666664
-+  296 op lessThan __tmp62 ballX 181
-   297 op land __tmp63 __tmp60 __tmp62
-   298 jump __label124 equal __tmp63 false
-   299 op mul ballVY ballVY -1
- 
-   305 label __label127
-   306 label __label128
-   307 label __label129
--    * op add brickPtr brickPtr 1
-+  308 op add brickPtr 5 1
-   309 label __label130
--    * op add x x 58.666666666666664
-+  310 op add x 118.33333333333333 58.666666666666664
-   311 label __label131
-   312 label __label132
++  249 op add brickPtr 2 1
+   250 noop
+   251 label __label102
+   252 noop
+   253 label __label103
+   254 label __label104
 -    * op sub y y 10
-+  313 op sub y 116 10
-   314 label __label23
-   315 op lessThan __tmp70 ballY 0
-   316 op equal __tmp71 brickCount 0
++  255 op sub y 126 10
+   256 noop
+   257 label __label105
+   258 label __label106
+   259 label __label107
+-    * read __tmp46 BRICKS brickPtr
++  260 read __tmp46 BRICKS 3
+   261 jump __label112 equal __tmp46 false
+-    * draw rect 1 y 57.666666666666664 9
++  262 draw rect 1 116 57.666666666666664 9
+   263 op greaterThan __tmp48 ballXEnd 1
+   264 op lessThan __tmp50 ballX 59.666666666666664
+   265 op land __tmp51 __tmp48 __tmp50
+-    * op greaterThan __tmp52 ballYEnd y
++  266 op greaterThan __tmp52 ballYEnd 116
+   267 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 y 10
+-    * op lessThan __tmp55 ballY __tmp54
++  268 op add __tmp54 116 10
++  269 op lessThan __tmp55 ballY 126
+   270 op land __tmp56 __tmp53 __tmp55
+   271 jump __label110 equal __tmp56 false
+-    * write 0 BRICKS brickPtr
++  272 write 0 BRICKS 3
+   273 op sub brickCount brickCount 1
+   274 noop
+   275 op greaterThan __tmp60 ballX -3
+ 
+   295 label __label112
+   296 noop
+   297 label __label113
+-    * op add brickPtr brickPtr 1
++  298 op add brickPtr 3 1
+   299 noop
+   300 label __label114
+   301 noop
+   302 label __label115
+-    * read __tmp46 BRICKS brickPtr
++  303 read __tmp46 BRICKS 4
+   304 jump __label120 equal __tmp46 false
+-    * draw rect 59.666666666666664 y 57.666666666666664 9
++  305 draw rect 59.666666666666664 116 57.666666666666664 9
+   306 op greaterThan __tmp48 ballXEnd 59.666666666666664
+   307 op lessThan __tmp50 ballX 118.33333333333333
+   308 op land __tmp51 __tmp48 __tmp50
+-    * op greaterThan __tmp52 ballYEnd y
++  309 op greaterThan __tmp52 ballYEnd 116
+   310 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 y 10
+-    * op lessThan __tmp55 ballY __tmp54
++  311 op add __tmp54 116 10
++  312 op lessThan __tmp55 ballY 126
+   313 op land __tmp56 __tmp53 __tmp55
+   314 jump __label118 equal __tmp56 false
+-    * write 0 BRICKS brickPtr
++  315 write 0 BRICKS 4
+   316 op sub brickCount brickCount 1
+   317 noop
+   318 op greaterThan __tmp60 ballX 55.666666666666664
+ 
+   338 label __label120
+   339 noop
+   340 label __label121
+-    * op add brickPtr brickPtr 1
++  341 op add brickPtr 4 1
+   342 noop
+   343 label __label122
+   344 noop
+   345 label __label123
+-    * read __tmp46 BRICKS brickPtr
++  346 read __tmp46 BRICKS 5
+   347 jump __label128 equal __tmp46 false
+-    * draw rect 118.33333333333333 y 57.666666666666664 9
++  348 draw rect 118.33333333333333 116 57.666666666666664 9
+   349 op greaterThan __tmp48 ballXEnd 118.33333333333333
+   350 op lessThan __tmp50 ballX 177
+   351 op land __tmp51 __tmp48 __tmp50
+-    * op greaterThan __tmp52 ballYEnd y
++  352 op greaterThan __tmp52 ballYEnd 116
+   353 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 y 10
+-    * op lessThan __tmp55 ballY __tmp54
++  354 op add __tmp54 116 10
++  355 op lessThan __tmp55 ballY 126
+   356 op land __tmp56 __tmp53 __tmp55
+   357 jump __label126 equal __tmp56 false
+-    * write 0 BRICKS brickPtr
++  358 write 0 BRICKS 5
+   359 op sub brickCount brickCount 1
+   360 noop
+   361 op greaterThan __tmp60 ballX 114.33333333333333
+ 
+   381 label __label128
+   382 noop
+   383 label __label129
+-    * op add brickPtr brickPtr 1
++  384 op add brickPtr 5 1
+   385 noop
+   386 label __label130
+   387 noop
+   388 label __label131
+   389 label __label132
+-    * op sub y y 10
++  390 op sub y 116 10
+   391 noop
+   392 label __label23
+   393 op lessThan __tmp70 ballY 0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-49 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-16 instructions):
  
-    12 op rand __tmp4 10
-    13 op sub ballVY __tmp4 5
-    14 set brickCount 6
--    * set i 0
-    15 label __label63
-    16 label __label64
-    17 write 1 BRICKS 0
-    18 label __label65
--    * op add i 0 1
-    19 label __label66
-    20 write 1 BRICKS 1
-    21 label __label67
--    * op add i 1 1
-    22 label __label68
-    23 write 1 BRICKS 2
-    24 label __label69
--    * op add i 2 1
-    25 label __label70
-    26 write 1 BRICKS 3
-    27 label __label71
--    * op add i 3 1
-    28 label __label72
-    29 write 1 BRICKS 4
-    30 label __label73
--    * op add i 4 1
-    31 label __label74
-    32 write 1 BRICKS 5
-    33 label __label75
--    * op add i 5 1
-    34 label __label5
-    35 label __label6
-    36 noop
- 
-    85 op sub paddleWidth paddleWidth 1
-    86 label __label19
-    87 label __label20
+   116 label __label19
+   117 noop
+   118 label __label20
 -    * set brickPtr 0
 -    * set y 126
-    88 label __label76
-    89 label __label77
--    * set x 1
-    90 label __label78
-    91 label __label79
-    92 read __tmp46 BRICKS 0
-    93 jump __label84 equal __tmp46 false
-    94 draw rect 1 126 57.666666666666664 9
-    95 op greaterThan __tmp48 ballXEnd 1
--    * op add __tmp49 1 58.666666666666664
-    96 op lessThan __tmp50 ballX 59.666666666666664
-    97 op land __tmp51 __tmp48 __tmp50
-    98 op greaterThan __tmp52 ballYEnd 126
-    99 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 126 10
-   100 op lessThan __tmp55 ballY 136
-   101 op land __tmp56 __tmp53 __tmp55
-   102 jump __label82 equal __tmp56 false
-   103 write 0 BRICKS 0
-   104 op sub brickCount brickCount 1
--    * op sub __tmp59 1 4
-   105 op greaterThan __tmp60 ballX -3
--    * op add __tmp61 1 62.666666666666664
-   106 op lessThan __tmp62 ballX 63.666666666666664
-   107 op land __tmp63 __tmp60 __tmp62
-   108 jump __label80 equal __tmp63 false
+   119 label __label76
+   120 label __label77
+   121 label __label78
  
-   115 label __label83
-   116 label __label84
-   117 label __label85
+   128 op land __tmp51 __tmp48 __tmp50
+   129 op greaterThan __tmp52 ballYEnd 126
+   130 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 126 10
+   131 op lessThan __tmp55 ballY 136
+   132 op land __tmp56 __tmp53 __tmp55
+   133 jump __label82 equal __tmp56 false
+ 
+   157 label __label84
+   158 noop
+   159 label __label85
 -    * op add brickPtr 0 1
-   118 label __label86
--    * op add x 1 58.666666666666664
-   119 label __label87
-   120 read __tmp46 BRICKS 1
-   121 jump __label92 equal __tmp46 false
-   122 draw rect 59.666666666666664 126 57.666666666666664 9
-   123 op greaterThan __tmp48 ballXEnd 59.666666666666664
--    * op add __tmp49 59.666666666666664 58.666666666666664
-   124 op lessThan __tmp50 ballX 118.33333333333333
-   125 op land __tmp51 __tmp48 __tmp50
-   126 op greaterThan __tmp52 ballYEnd 126
-   127 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 126 10
-   128 op lessThan __tmp55 ballY 136
-   129 op land __tmp56 __tmp53 __tmp55
-   130 jump __label90 equal __tmp56 false
-   131 write 0 BRICKS 1
-   132 op sub brickCount brickCount 1
--    * op sub __tmp59 59.666666666666664 4
-   133 op greaterThan __tmp60 ballX 55.666666666666664
--    * op add __tmp61 59.666666666666664 62.666666666666664
-   134 op lessThan __tmp62 ballX 122.33333333333333
-   135 op land __tmp63 __tmp60 __tmp62
-   136 jump __label88 equal __tmp63 false
+   160 noop
+   161 label __label86
+   162 noop
  
-   143 label __label91
-   144 label __label92
-   145 label __label93
+   169 op land __tmp51 __tmp48 __tmp50
+   170 op greaterThan __tmp52 ballYEnd 126
+   171 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 126 10
+   172 op lessThan __tmp55 ballY 136
+   173 op land __tmp56 __tmp53 __tmp55
+   174 jump __label90 equal __tmp56 false
+ 
+   198 label __label92
+   199 noop
+   200 label __label93
 -    * op add brickPtr 1 1
-   146 label __label94
--    * op add x 59.666666666666664 58.666666666666664
-   147 label __label95
-   148 read __tmp46 BRICKS 2
-   149 jump __label100 equal __tmp46 false
-   150 draw rect 118.33333333333333 126 57.666666666666664 9
-   151 op greaterThan __tmp48 ballXEnd 118.33333333333333
--    * op add __tmp49 118.33333333333333 58.666666666666664
-   152 op lessThan __tmp50 ballX 177
-   153 op land __tmp51 __tmp48 __tmp50
-   154 op greaterThan __tmp52 ballYEnd 126
-   155 op land __tmp53 __tmp51 __tmp52
+   201 noop
+   202 label __label94
+   203 noop
+ 
+   210 op land __tmp51 __tmp48 __tmp50
+   211 op greaterThan __tmp52 ballYEnd 126
+   212 op land __tmp53 __tmp51 __tmp52
 -    * op add __tmp54 126 10
-   156 op lessThan __tmp55 ballY 136
-   157 op land __tmp56 __tmp53 __tmp55
-   158 jump __label98 equal __tmp56 false
-   159 write 0 BRICKS 2
-   160 op sub brickCount brickCount 1
--    * op sub __tmp59 118.33333333333333 4
-   161 op greaterThan __tmp60 ballX 114.33333333333333
--    * op add __tmp61 118.33333333333333 62.666666666666664
-   162 op lessThan __tmp62 ballX 181
-   163 op land __tmp63 __tmp60 __tmp62
-   164 jump __label96 equal __tmp63 false
+   213 op lessThan __tmp55 ballY 136
+   214 op land __tmp56 __tmp53 __tmp55
+   215 jump __label98 equal __tmp56 false
  
-   171 label __label99
-   172 label __label100
-   173 label __label101
+   239 label __label100
+   240 noop
+   241 label __label101
 -    * op add brickPtr 2 1
-   174 label __label102
--    * op add x 118.33333333333333 58.666666666666664
-   175 label __label103
-   176 label __label104
+   242 noop
+   243 label __label102
+   244 noop
+   245 label __label103
+   246 label __label104
 -    * op sub y 126 10
-   177 label __label105
--    * set x 1
-   178 label __label106
-   179 label __label107
-   180 read __tmp46 BRICKS 3
-   181 jump __label112 equal __tmp46 false
-   182 draw rect 1 116 57.666666666666664 9
-   183 op greaterThan __tmp48 ballXEnd 1
--    * op add __tmp49 1 58.666666666666664
-   184 op lessThan __tmp50 ballX 59.666666666666664
-   185 op land __tmp51 __tmp48 __tmp50
-   186 op greaterThan __tmp52 ballYEnd 116
-   187 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 116 10
-   188 op lessThan __tmp55 ballY 126
-   189 op land __tmp56 __tmp53 __tmp55
-   190 jump __label110 equal __tmp56 false
-   191 write 0 BRICKS 3
-   192 op sub brickCount brickCount 1
--    * op sub __tmp59 1 4
-   193 op greaterThan __tmp60 ballX -3
--    * op add __tmp61 1 62.666666666666664
-   194 op lessThan __tmp62 ballX 63.666666666666664
-   195 op land __tmp63 __tmp60 __tmp62
-   196 jump __label108 equal __tmp63 false
+   247 noop
+   248 label __label105
+   249 label __label106
  
-   203 label __label111
-   204 label __label112
-   205 label __label113
+   256 op land __tmp51 __tmp48 __tmp50
+   257 op greaterThan __tmp52 ballYEnd 116
+   258 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 116 10
+   259 op lessThan __tmp55 ballY 126
+   260 op land __tmp56 __tmp53 __tmp55
+   261 jump __label110 equal __tmp56 false
+ 
+   285 label __label112
+   286 noop
+   287 label __label113
 -    * op add brickPtr 3 1
-   206 label __label114
--    * op add x 1 58.666666666666664
-   207 label __label115
-   208 read __tmp46 BRICKS 4
-   209 jump __label120 equal __tmp46 false
-   210 draw rect 59.666666666666664 116 57.666666666666664 9
-   211 op greaterThan __tmp48 ballXEnd 59.666666666666664
--    * op add __tmp49 59.666666666666664 58.666666666666664
-   212 op lessThan __tmp50 ballX 118.33333333333333
-   213 op land __tmp51 __tmp48 __tmp50
-   214 op greaterThan __tmp52 ballYEnd 116
-   215 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 116 10
-   216 op lessThan __tmp55 ballY 126
-   217 op land __tmp56 __tmp53 __tmp55
-   218 jump __label118 equal __tmp56 false
-   219 write 0 BRICKS 4
-   220 op sub brickCount brickCount 1
--    * op sub __tmp59 59.666666666666664 4
-   221 op greaterThan __tmp60 ballX 55.666666666666664
--    * op add __tmp61 59.666666666666664 62.666666666666664
-   222 op lessThan __tmp62 ballX 122.33333333333333
-   223 op land __tmp63 __tmp60 __tmp62
-   224 jump __label116 equal __tmp63 false
+   288 noop
+   289 label __label114
+   290 noop
  
-   231 label __label119
-   232 label __label120
-   233 label __label121
+   297 op land __tmp51 __tmp48 __tmp50
+   298 op greaterThan __tmp52 ballYEnd 116
+   299 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 116 10
+   300 op lessThan __tmp55 ballY 126
+   301 op land __tmp56 __tmp53 __tmp55
+   302 jump __label118 equal __tmp56 false
+ 
+   326 label __label120
+   327 noop
+   328 label __label121
 -    * op add brickPtr 4 1
-   234 label __label122
--    * op add x 59.666666666666664 58.666666666666664
-   235 label __label123
-   236 read __tmp46 BRICKS 5
-   237 jump __label128 equal __tmp46 false
-   238 draw rect 118.33333333333333 116 57.666666666666664 9
-   239 op greaterThan __tmp48 ballXEnd 118.33333333333333
--    * op add __tmp49 118.33333333333333 58.666666666666664
-   240 op lessThan __tmp50 ballX 177
-   241 op land __tmp51 __tmp48 __tmp50
-   242 op greaterThan __tmp52 ballYEnd 116
-   243 op land __tmp53 __tmp51 __tmp52
--    * op add __tmp54 116 10
-   244 op lessThan __tmp55 ballY 126
-   245 op land __tmp56 __tmp53 __tmp55
-   246 jump __label126 equal __tmp56 false
-   247 write 0 BRICKS 5
-   248 op sub brickCount brickCount 1
--    * op sub __tmp59 118.33333333333333 4
-   249 op greaterThan __tmp60 ballX 114.33333333333333
--    * op add __tmp61 118.33333333333333 62.666666666666664
-   250 op lessThan __tmp62 ballX 181
-   251 op land __tmp63 __tmp60 __tmp62
-   252 jump __label124 equal __tmp63 false
+   329 noop
+   330 label __label122
+   331 noop
  
-   259 label __label127
-   260 label __label128
-   261 label __label129
+   338 op land __tmp51 __tmp48 __tmp50
+   339 op greaterThan __tmp52 ballYEnd 116
+   340 op land __tmp53 __tmp51 __tmp52
+-    * op add __tmp54 116 10
+   341 op lessThan __tmp55 ballY 126
+   342 op land __tmp56 __tmp53 __tmp55
+   343 jump __label126 equal __tmp56 false
+ 
+   367 label __label128
+   368 noop
+   369 label __label129
 -    * op add brickPtr 5 1
-   262 label __label130
--    * op add x 118.33333333333333 58.666666666666664
-   263 label __label131
-   264 label __label132
+   370 noop
+   371 label __label130
+   372 noop
+   373 label __label131
+   374 label __label132
 -    * op sub y 116 10
-   265 label __label23
-   266 op lessThan __tmp70 ballY 0
-   267 op equal __tmp71 brickCount 0
+   375 noop
+   376 label __label23
+   377 op lessThan __tmp70 ballY 0
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
  
-   266 op lessThan __tmp70 ballY 0
-   267 op equal __tmp71 brickCount 0
-   268 op or __tmp72 __tmp70 __tmp71
+   377 op lessThan __tmp70 ballY 0
+   378 op equal __tmp71 brickCount 0
+   379 op or __tmp72 __tmp70 __tmp71
 -    * jump __label33 equal __tmp72 false
 -    * jump __label8 always
-+  269 jump __label8 notEqual __tmp72 false
-   270 label __label33
-   271 label __label34
-   272 drawflush DISPLAY
++  380 jump __label8 notEqual __tmp72 false
++  381 noop
+   382 noop
+   383 noop
+   384 label __label33
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-    40 sensor __tmp6 PADDLECONTROLLER @enabled
-    41 jump __label9 equal __tmp6 false
-    42 op sub __tmp8 176 paddleWidth
+    43 sensor __tmp6 PADDLECONTROLLER @enabled
+    44 jump __label9 equal __tmp6 false
+    45 op sub __tmp8 176 paddleWidth
 -    * jump __label11 greaterThanEq paddleX __tmp8
-+   43 jump __label10 greaterThanEq paddleX __tmp8
-    44 op add paddleX paddleX 3
-    45 label __label11
-    46 label __label12
++   46 jump __label10 greaterThanEq paddleX __tmp8
+    47 op add paddleX paddleX 3
+    48 noop
+    49 noop
  
-   266 op lessThan __tmp70 ballY 0
-   267 op equal __tmp71 brickCount 0
-   268 op or __tmp72 __tmp70 __tmp71
+   377 op lessThan __tmp70 ballY 0
+   378 op equal __tmp71 brickCount 0
+   379 op or __tmp72 __tmp70 __tmp71
 -    * jump __label8 notEqual __tmp72 false
-+  269 jump __label0 notEqual __tmp72 false
-   270 label __label33
-   271 label __label34
-   272 drawflush DISPLAY
++  380 jump __label0 notEqual __tmp72 false
+   381 noop
+   382 noop
+   383 noop
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
  
-   272 drawflush DISPLAY
-   273 label __label7
-   274 jump __label6 always
+   387 drawflush DISPLAY
+   388 label __label7
+   389 jump __label6 always
 -    * label __label8
 -    * label __label1
 -    * jump __label0 always

@@ -1,17 +1,18 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.instructions.GotoOffsetInstruction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static info.teksol.mindcode.logic.Opcode.OP;
 
 public class LogicInstructionLabelResolver {
     private final InstructionProcessor instructionProcessor;
@@ -62,7 +63,16 @@ public class LogicInstructionLabelResolver {
         final List<LogicInstruction> result = new ArrayList<>();
 
         for (final LogicInstruction instruction : program) {
-            if (instruction.getArgs().stream().anyMatch(a -> a.getType() == ArgumentType.LABEL)) {
+            if (instruction instanceof GotoOffsetInstruction ix) {
+                if (resolveLabel(ix.getTarget()) instanceof LogicLabel label && label.getAddress() >= 0) {
+                    int offset = label.getAddress() - ix.getOffset().getIntValue();
+                    LogicInstruction newInstruction = instructionProcessor.createInstruction(ix.getAstContext(),
+                            OP, Operation.ADD, LogicBuiltIn.COUNTER, ix.getValue(), LogicNumber.get(offset));
+                    result.add(newInstruction);
+                } else {
+                    throw new MindcodeInternalError("GotoOffset target '%s' is not a label.", ix.getTarget());
+                }
+            } else if (instruction.getArgs().stream().anyMatch(a -> a.getType() == ArgumentType.LABEL)) {
                 List<LogicArgument> newArgs = instruction.getArgs().stream().map(this::resolveLabel).toList();
                 LogicInstruction newInstruction = instructionProcessor.replaceArgs(instruction, newArgs);
                 result.add(newInstruction);

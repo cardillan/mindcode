@@ -93,4 +93,47 @@ public class PropagateJumpTargetsTest extends AbstractOptimizerTest<PropagateJum
                 createInstruction(END)
         );
     }
+
+    @Test
+    void propagatesGoto() {
+        assertCompilesTo("""
+                        def foo(n)
+                            if n > 10
+                                return 2
+                            else
+                                return 0
+                            end
+                        end
+                        print(foo(2))
+                        print(foo(3))
+                        """,
+                createInstruction(SET, "__fn0_n", "2"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(SET, var(0), "__fn0retval"),
+                createInstruction(PRINT, var(0)),
+                createInstruction(SET, "__fn0_n", "3"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1002)),
+                createInstruction(CALL, var(1000)),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
+                createInstruction(SET, var(1), "__fn0retval"),
+                createInstruction(PRINT, var(1)),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, var(1004), "lessThanEq", "__fn0_n", "10"),
+                createInstruction(SET, "__fn0retval", "2"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(SET, var(3), "null"),
+                createInstruction(JUMP, var(1005), "always"),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(SET, "__fn0retval", "0"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(SET, var(3), "null"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(SET, "__fn0retval", var(3)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(END)
+        );
+    }
 }

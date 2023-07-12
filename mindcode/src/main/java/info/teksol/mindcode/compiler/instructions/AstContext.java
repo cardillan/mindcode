@@ -107,6 +107,10 @@ public final class AstContext {
         return this == other || (parent != null && parent.belongsTo(other));
     }
 
+    public boolean matches(AstContextType contextType) {
+        return this.contextType == contextType;
+    }
+
     public boolean matches(AstContextType contextType, AstSubcontextType subcontextType) {
         return this.contextType == contextType && this.subcontextType == subcontextType;
     }
@@ -175,7 +179,7 @@ public final class AstContext {
         return found;
     }
 
-    public AstContext findMatchingChild(AstContext descendant) {
+    public AstContext findDirectChild(AstContext descendant) {
         AstContext current = descendant;
         while (current != null) {
             if (current.parent == this) {
@@ -270,6 +274,15 @@ public final class AstContext {
 
     public AstContext lastChild() {
         return children.get(children.size() - 1);
+    }
+
+    public AstContext nextChild(AstContext child) {
+        for (int i = 0; i < children.size() - 1; i++) {
+            if (children.get(i) == child) {
+                return children.get(i + 1);
+            }
+        }
+        return null;
     }
 
     @Override

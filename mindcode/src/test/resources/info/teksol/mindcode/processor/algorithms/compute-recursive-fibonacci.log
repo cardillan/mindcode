@@ -15,9 +15,10 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
 -    * op add __tmp7 __tmp4 __tmp6
 -    * set __tmp2 __tmp7
 +   29 op add __tmp2 __tmp4 __tmp6
-    30 label __label4
-    31 set __fn0retval __tmp2
-    32 label __label2
++   30 noop
+    31 label __label4
+    32 set __fn0retval __tmp2
+    33 label __label2
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -50,11 +51,12 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     26 set __tmp6 __fn0retval
 -    * op add __tmp2 __tmp4 __tmp6
 +   27 op add __fn0retval __tmp4 __tmp6
-    28 label __label4
+    28 noop
+    29 label __label4
 -    * set __fn0retval __tmp2
-    29 label __label2
-    30 return bank1
-    31 end
+    30 label __label2
+    31 return bank1
+    32 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -88,9 +90,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     26 set __tmp6 __fn0retval
 -    * op add __fn0retval __tmp4 __tmp6
 +   27 op add __fn0retval __tmp4 __fn0retval
-    28 label __label4
-    29 label __label2
-    30 return bank1
+    28 noop
+    29 label __label4
+    30 label __label2
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
@@ -121,14 +123,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     22 pop bank1 __fn0_n
 -    * set __tmp6 __fn0retval
     23 op add __fn0retval __tmp4 __fn0retval
-    24 label __label4
-    25 label __label2
+    24 noop
+    25 label __label4
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-    24 label __label4
-    25 label __label2
-    26 return bank1
+    25 label __label4
+    26 label __label2
+    27 return bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
@@ -144,8 +146,8 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
     20 pop bank1 __tmp4
 -    * pop bank1 __fn0_n
     21 op add __fn0retval __tmp4 __fn0retval
-    22 label __label4
-    23 label __label2
+    22 noop
+    23 label __label4
 
 Final code before resolving virtual instructions:
 
