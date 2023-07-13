@@ -1,3 +1,5 @@
+[![Project Map](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/cardillanmindcode/)
+
 # Mindcode
 
 Welcome to Mindcode, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a game in
