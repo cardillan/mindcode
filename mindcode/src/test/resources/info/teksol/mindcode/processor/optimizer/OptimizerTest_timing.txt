@@ -3,7 +3,7 @@ detector-00.mnd:                        : parse:          0 ms, compile:        
 factory-monitor-00.mnd:                 : parse:        400 ms, compile:          0 ms, optimize:        200 ms
 factory-monitor-silicon-00.mnd:         : parse:        600 ms, compile:          0 ms, optimize:        200 ms
 factory-monitor-surge-alloy-00.mnd:     : parse:        200 ms, compile:          0 ms, optimize:          0 ms
-instant-overdrive-dome-00.mnd:          : parse:        200 ms, compile:          0 ms, optimize:        200 ms
+instant-overdrive-dome-00.mnd:          : parse:        200 ms, compile:          0 ms, optimize:        400 ms
 item-counter-00.mnd:                    : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 item-counter-micro-00.mnd:              : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 item-rate-display-00.mnd:               : parse:        400 ms, compile:          0 ms, optimize:        200 ms
@@ -13,12 +13,13 @@ level-display-water-cryo-00.mnd:        : parse:        200 ms, compile:        
 level-meter-00.mnd:                     : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 mass-driver-monitor-00.mnd:             : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 mass-driver-monitor-surge-alloy-00.mnd: : parse:        200 ms, compile:          0 ms, optimize:          0 ms
-reactor-control-00.mnd:                 : parse:      1,200 ms, compile:          0 ms, optimize:        200 ms
+reactor-control-00.mnd:                 : parse:      1,400 ms, compile:          0 ms, optimize:        200 ms
 reactor-control-battery-level-00.mnd:   : parse:        400 ms, compile:          0 ms, optimize:        200 ms
 regulator-00.mnd:                       : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 remote-vault-00.mnd:                    : parse:          0 ms, compile:          0 ms, optimize:          0 ms
+storage-display-00.mnd:                 : parse:        200 ms, compile:          0 ms, optimize:        600 ms
 unit-housekeeping-00.mnd:               : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 unit-speed-00.mnd:                      : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 unit-transport-00.mnd:                  : parse:        600 ms, compile:          0 ms, optimize:        400 ms
 unit-transport-flow-rate-00.mnd:        : parse:        200 ms, compile:          0 ms, optimize:          0 ms
-unit-transport-single-00.mnd:           : parse:        200 ms, compile:          0 ms, optimize:        200 ms
+unit-transport-single-00.mnd:           : parse:        200 ms, compile:          0 ms, optimize:          0 ms

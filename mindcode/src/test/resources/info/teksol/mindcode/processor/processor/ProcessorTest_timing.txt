@@ -2,7 +2,7 @@ assignments-in-expressions.mnd:         : parse:          0 ms, compile:        
 complex-case-expression.mnd:            : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 computesPackColor:                      : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 expression-evaluation-compile-time.mnd: : parse:          0 ms, compile:          0 ms, optimize:          0 ms
-expression-evaluation-runtime.mnd:      : parse:          0 ms, compile:          0 ms, optimize:        400 ms
+expression-evaluation-runtime.mnd:      : parse:          0 ms, compile:          0 ms, optimize:        600 ms
 fixed-bounds-ranged-for.mnd:            : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 for-each-loop-break-continue.mnd:       : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 function-inlining.mnd:                  : parse:          0 ms, compile:          0 ms, optimize:        400 ms
@@ -13,4 +13,5 @@ loops-in-conditions.mnd:                : parse:          0 ms, compile:        
 printsNumbersStringsObjects:            : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 ranged-for-loop-break-continue.mnd:     : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 recursive-function-condition.mnd:       : parse:          0 ms, compile:          0 ms, optimize:          0 ms
+switched-case-expression.mnd:           : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 while-loop.mnd:                         : parse:          0 ms, compile:          0 ms, optimize:          0 ms

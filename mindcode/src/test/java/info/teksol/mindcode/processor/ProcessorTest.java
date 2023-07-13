@@ -155,6 +155,12 @@ public class ProcessorTest extends AbstractProcessorTest {
     }
 
     @Test
+    void executesSwitchedCaseExpressions() throws IOException {
+        testAndEvaluateFile("switched-case-expression.mnd",
+                List.of("11", "21", "20", "20", "20", "20", "20", "20", "20", "20"));
+    }
+
+    @Test
     void executesFixedBoundsRangedFor() throws IOException {
         testAndEvaluateFile("fixed-bounds-ranged-for.mnd",
                 List.of("10"));

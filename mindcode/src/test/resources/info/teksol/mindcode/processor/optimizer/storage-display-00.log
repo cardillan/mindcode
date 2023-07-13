@@ -1,0 +1,5332 @@
+   490 instructions before optimizations.
+    16 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Case Expression Optimization.
+    48 instructions eliminated by Dead Code Elimination (5 iterations).
+     3 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
+     9 instructions eliminated by Jump Optimization (5 iterations).
+    27 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+     1 instructions eliminated by If Expression Optimization (4 iterations).
+   170 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
+     6 instructions added by Loop Optimization (4 iterations).
+     3 loops improved by Loop Optimization.
+   486 instructions added by Loop Unrolling (7 iterations).
+     2 loops unrolled by Loop Unrolling.
+    58 instructions eliminated by Jump Straightening.
+     2 instructions updated by PropagateJumpTargets.
+    49 instructions eliminated by Unreachable Code Elimination.
+     5 instructions eliminated by Print Merging.
+   595 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 666):
+    Loop Optimization: replicate condition at line 56  cost   7, benefit       25,0, efficiency        3,6
+    Loop Unrolling: unroll iteration loop at line 69   cost  97, benefit     1175,0, efficiency       12,1
+  * Loop Unrolling: unroll loop at line 150            cost 475, benefit   156250,0, efficiency      328,9
+
+Pass 1: speed optimization selection (cost limit 283):
+    Loop Optimization: replicate condition at line 56  cost   7, benefit       25,0, efficiency        3,6
+  * Loop Unrolling: unroll iteration loop at line 69   cost  97, benefit     1175,0, efficiency       12,1
+
+Pass 1: speed optimization selection (cost limit 180):
+  * Loop Optimization: replicate condition at line 56  cost   7, benefit       25,0, efficiency        3,6
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-16 instructions):
+ 
+     4 label __label0
+     5 print "Configuring storage display..."
+     6 print "\n"
+-    * set __tmp0 @links
+-    * set LINKS __tmp0
++    7 set LINKS @links
+     8 set n LINKS
+     9 label __label3
+    10 op greaterThan __tmp1 n 0
+    11 jump __label5 equal __tmp1 false
+-    * op sub __tmp2 n 1
+-    * set n __tmp2
+-    * getlink __tmp3 n
+-    * set block __tmp3
++   12 op sub n n 1
++   13 getlink block n
+    14 print "Found: "
+    15 print block
+    16 print "\n"
+-    * sensor __tmp4 block @type
+-    * set __ast0 __tmp4
++   17 sensor __ast0 block @type
+    18 jump __label8 equal __ast0 @message
+    19 jump __label7 always
+    20 label __label8
+ 
+    90 op equal __tmp16 LINKS @links
+    91 op land __tmp17 __tmp15 __tmp16
+    92 jump __label19 equal __tmp17 false
+-    * set __tmp18 @time
+-    * set start __tmp18
+-    * sensor __tmp19 CONTAINER @itemCapacity
+-    * set CAPACITY __tmp19
+-    * op div __tmp20 CAPACITY 5
+-    * set LIMIT __tmp20
++   93 set start @time
++   94 sensor CAPACITY CONTAINER @itemCapacity
++   95 op div LIMIT CAPACITY 5
+    96 draw stroke 2
+    97 set x 7
+    98 set y 152
+ 
+   192 op sub __tmp28 __tmp27 2
+   193 op add __tmp29 __tmp28 1
+   194 draw image __tmp26 __tmp29 item 16 0
+-    * op add __tmp30 index 1
+-    * set index __tmp30
+-    * op sub __tmp31 y 20
+-    * set y __tmp31
++  195 op add index index 1
++  196 op sub y y 20
+   197 op equal __tmp32 index 8
+   198 jump __label47 equal __tmp32 false
+   199 set y 152
+ 
+   293 set __fn3_item item
+   294 set __fn3_x x
+   295 set __fn3_y y
+-    * sensor __tmp38 CONTAINER __fn3_item
+-    * set __fn3_amount __tmp38
++  296 sensor __fn3_amount CONTAINER __fn3_item
+   297 op strictEqual __tmp39 MEMORY null
+   298 jump __label74 equal __tmp39 false
+   299 op equal __tmp41 __fn3_amount CAPACITY
+ 
+   316 set __tmp40 __tmp42
+   317 jump __label75 always
+   318 label __label74
+-    * read __tmp45 MEMORY __fn3_index
+-    * set __fn3_last __tmp45
++  319 read __fn3_last MEMORY __fn3_index
+   320 write __fn3_amount MEMORY __fn3_index
+   321 op equal __tmp46 __fn3_amount __fn3_last
+   322 jump __label80 equal __tmp46 false
+ 
+   533 label __label89
+   534 set __tmp51 __tmp52
+   535 label __label88
+-    * op sub __tmp143 __fn3_x 11
+-    * set __fn3_x __tmp143
+-    * op idiv __tmp144 __fn3_amount 10
+-    * set __fn3_amount __tmp144
++  536 op sub __fn3_x __fn3_x 11
++  537 op idiv __fn3_amount __fn3_amount 10
+   538 op equal __tmp145 __fn3_amount 0
+   539 jump __label110 equal __tmp145 false
+   540 jump __label86 always
+ 
+   549 label __label86
+   550 set __tmp37 null
+   551 label __label73
+-    * op add __tmp147 index 1
+-    * set index __tmp147
+-    * op sub __tmp148 y 20
+-    * set y __tmp148
++  552 op add index index 1
++  553 op sub y y 20
+   554 op equal __tmp149 index 8
+   555 jump __label112 equal __tmp149 false
+   556 drawflush display1
+ 
+   580 label __label55
+   581 drawflush display1
+   582 op sub __tmp153 @time start
+-    * op floor __tmp154 __tmp153
+-    * set elapsed __tmp154
++  583 op floor elapsed __tmp153
+   584 print "Storage Display\nElapsed: "
+   585 print elapsed
+   586 print " ms"
+
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+   345 set __fn4_x __fn3_x
+   346 set __fn4_y __fn3_y
+   347 set __fn4_digit __tmp50
+-    * set __ast1 __fn4_digit
+-    * jump __label91 equal __ast1 0
++  348 jump __label91 equal __fn4_digit 0
+   349 jump __label90 always
+   350 label __label91
+   351 op sub __tmp53 __fn4_x 2
+ 
+   356 set __tmp52 null
+   357 jump __label89 always
+   358 label __label90
+-    * jump __label93 equal __ast1 1
++  359 jump __label93 equal __fn4_digit 1
+   360 jump __label92 always
+   361 label __label93
+   362 op add __tmp57 __fn4_x 7
+ 
+   368 set __tmp52 null
+   369 jump __label89 always
+   370 label __label92
+-    * jump __label95 equal __ast1 2
++  371 jump __label95 equal __fn4_digit 2
+   372 jump __label94 always
+   373 label __label95
+   374 op add __tmp62 __fn4_x 7
+ 
+   391 set __tmp52 null
+   392 jump __label89 always
+   393 label __label94
+-    * jump __label97 equal __ast1 3
++  394 jump __label97 equal __fn4_digit 3
+   395 jump __label96 always
+   396 label __label97
+   397 op add __tmp74 __fn4_x 7
+ 
+   411 set __tmp52 null
+   412 jump __label89 always
+   413 label __label96
+-    * jump __label99 equal __ast1 4
++  414 jump __label99 equal __fn4_digit 4
+   415 jump __label98 always
+   416 label __label99
+   417 op add __tmp84 __fn4_x 7
+ 
+   428 set __tmp52 null
+   429 jump __label89 always
+   430 label __label98
+-    * jump __label101 equal __ast1 5
++  431 jump __label101 equal __fn4_digit 5
+   432 jump __label100 always
+   433 label __label101
+   434 op add __tmp92 __fn4_x 7
+ 
+   451 set __tmp52 null
+   452 jump __label89 always
+   453 label __label100
+-    * jump __label103 equal __ast1 6
++  454 jump __label103 equal __fn4_digit 6
+   455 jump __label102 always
+   456 label __label103
+   457 op add __tmp104 __fn4_y 12
+ 
+   473 set __tmp52 null
+   474 jump __label89 always
+   475 label __label102
+-    * jump __label105 equal __ast1 7
++  476 jump __label105 equal __fn4_digit 7
+   477 jump __label104 always
+   478 label __label105
+   479 op add __tmp115 __fn4_x 7
+ 
+   490 set __tmp52 null
+   491 jump __label89 always
+   492 label __label104
+-    * jump __label107 equal __ast1 8
++  493 jump __label107 equal __fn4_digit 8
+   494 jump __label106 always
+   495 label __label107
+   496 op sub __tmp124 __fn4_x 2
+ 
+   505 set __tmp52 null
+   506 jump __label89 always
+   507 label __label106
+-    * jump __label109 equal __ast1 9
++  508 jump __label109 equal __fn4_digit 9
+   509 jump __label108 always
+   510 label __label109
+   511 op add __tmp131 __fn4_x 7
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instructions):
+ 
+    19 jump __label7 always
+    20 label __label8
+    21 set MESSAGE block
+-    * set __tmp5 MESSAGE
+    22 jump __label6 always
+    23 label __label7
+    24 jump __label10 equal __ast0 @memory-bank
+ 
+    26 jump __label9 always
+    27 label __label10
+    28 set MEMORY block
+-    * set __tmp5 MEMORY
+    29 jump __label6 always
+    30 label __label9
+    31 jump __label12 equal __ast0 @vault
+ 
+    36 jump __label11 always
+    37 label __label12
+    38 set CONTAINER block
+-    * set __tmp5 CONTAINER
+    39 jump __label6 always
+    40 label __label11
+    41 jump __label14 equal __ast0 @large-logic-display
+    42 jump __label13 always
+    43 label __label14
+    44 set DISPLAY block
+-    * set __tmp5 DISPLAY
+    45 jump __label6 always
+    46 label __label13
+-    * set __tmp5 null
+    47 label __label6
+    48 label __label4
+    49 jump __label3 always
+ 
+    66 jump __label15 equal __tmp8 false
+    67 print "No container or display."
+    68 print "\n"
+-    * set __tmp9 "No container or display."
+    69 jump __label16 always
+    70 label __label15
+-    * set __tmp9 null
+    71 label __label16
+    72 printflush MESSAGE
+    73 label __label1
+ 
+   100 draw rect 93 0 16 176
+   101 set __tmp22 null
+   102 label __label23
+-    * set __tmp21 __tmp22
+   103 label __label21
+   104 label __label24
+   105 set __fn1_first_column false
+ 
+   112 draw rect 93 0 16 176
+   113 set __tmp24 null
+   114 label __label27
+-    * set __tmp23 __tmp24
+   115 label __label25
+   116 draw color 255 255 255 255
+   117 set index 0
+ 
+   190 set y 152
+   191 set x 93
+   192 draw color 255 255 255 255
+-    * set __tmp33 null
+   193 jump __label48 always
+   194 label __label47
+-    * set __tmp33 null
+   195 label __label48
+   196 label __label28
+   197 goto __tmp25 marker0
+ 
+   211 draw rect 109 0 176 176
+   212 set __tmp35 null
+   213 label __label52
+-    * set __tmp34 __tmp35
+   214 label __label50
+   215 set index 0
+   216 setaddr __tmp36 __label56
+ 
+   301 label __label79
+   302 set __tmp42 __tmp44
+   303 label __label77
+-    * set __tmp40 __tmp42
+   304 jump __label75 always
+   305 label __label74
+   306 read __fn3_last MEMORY __fn3_index
+ 
+   322 label __label83
+   323 set __tmp47 __tmp49
+   324 label __label81
+-    * set __tmp40 __tmp47
+   325 label __label75
+   326 set __fn3_i 0
+   327 label __label84
+ 
+   516 label __label108
+   517 set __tmp52 null
+   518 label __label89
+-    * set __tmp51 __tmp52
+   519 label __label88
+   520 op sub __fn3_x __fn3_x 11
+   521 op idiv __fn3_amount __fn3_amount 10
+   522 op equal __tmp145 __fn3_amount 0
+   523 jump __label110 equal __tmp145 false
+   524 jump __label86 always
+-    * set __tmp146 null
+   525 jump __label111 always
+   526 label __label110
+-    * set __tmp146 null
+   527 label __label111
+   528 label __label85
+   529 op add __fn3_i __fn3_i 1
+   530 jump __label84 always
+   531 label __label86
+-    * set __tmp37 null
+   532 label __label73
+   533 op add index index 1
+   534 op sub y y 20
+ 
+   550 label __label117
+   551 set __tmp151 __tmp152
+   552 label __label115
+-    * set __tmp150 __tmp151
+   553 jump __label113 always
+   554 label __label112
+-    * set __tmp150 null
+   555 label __label113
+   556 label __label53
+   557 goto __tmp36 marker1
+
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-22 instructions):
+ 
+    94 draw color 0 0 80 255
+    95 jump __label22 equal __fn0_first_column false
+    96 draw rect 0 0 23 176
+-    * set __tmp22 null
+    97 jump __label23 always
+    98 label __label22
+    99 draw rect 93 0 16 176
+-    * set __tmp22 null
+   100 label __label23
+   101 label __label21
+   102 label __label24
+ 
+   104 draw color 0 0 80 255
+   105 jump __label26 equal __fn1_first_column false
+   106 draw rect 0 0 23 176
+-    * set __tmp24 null
+   107 jump __label27 always
+   108 label __label26
+   109 draw rect 93 0 16 176
+-    * set __tmp24 null
+   110 label __label27
+   111 label __label25
+   112 draw color 255 255 255 255
+ 
+   201 draw color 0 0 80 255
+   202 jump __label51 equal __fn2_first_column false
+   203 draw rect 23 0 70 176
+-    * set __tmp35 null
+   204 jump __label52 always
+   205 label __label51
+   206 draw rect 109 0 176 176
+-    * set __tmp35 null
+   207 label __label52
+   208 label __label50
+   209 set index 0
+ 
+   281 op equal __tmp41 __fn3_amount CAPACITY
+   282 jump __label76 equal __tmp41 false
+   283 draw color 0 255 0 255
+-    * set __tmp42 null
+   284 jump __label77 always
+   285 label __label76
+   286 op greaterThan __tmp43 __fn3_amount LIMIT
+ 
+   292 draw color 255 80 80 255
+   293 set __tmp44 null
+   294 label __label79
+-    * set __tmp42 __tmp44
+   295 label __label77
+   296 jump __label75 always
+   297 label __label74
+ 
+   300 op equal __tmp46 __fn3_amount __fn3_last
+   301 jump __label80 equal __tmp46 false
+   302 draw color 255 255 0 255
+-    * set __tmp47 null
+   303 jump __label81 always
+   304 label __label80
+   305 op lessThan __tmp48 __fn3_amount __fn3_last
+ 
+   311 draw color 0 255 0 255
+   312 set __tmp49 null
+   313 label __label83
+-    * set __tmp47 __tmp49
+   314 label __label81
+   315 label __label75
+   316 set __fn3_i 0
+ 
+   329 op sub __tmp55 __fn4_y 2
+   330 op add __tmp56 __tmp55 1
+   331 draw lineRect __tmp54 __tmp56 9 14
+-    * set __tmp52 null
+   332 jump __label89 always
+   333 label __label90
+   334 jump __label93 equal __fn4_digit 1
+ 
+   340 op sub __tmp60 __tmp59 1
+   341 op add __tmp61 __fn4_y 12
+   342 draw line __tmp58 __fn4_y __tmp60 __tmp61
+-    * set __tmp52 null
+   343 jump __label89 always
+   344 label __label92
+   345 jump __label95 equal __fn4_digit 2
+ 
+   362 op add __tmp72 __fn4_x 7
+   363 op add __tmp73 __fn4_y 12
+   364 draw line __fn4_x __tmp71 __tmp72 __tmp73
+-    * set __tmp52 null
+   365 jump __label89 always
+   366 label __label94
+   367 jump __label97 equal __fn4_digit 3
+ 
+   381 op add __tmp82 __fn4_x 7
+   382 op add __tmp83 __fn4_y 12
+   383 draw line __fn4_x __tmp81 __tmp82 __tmp83
+-    * set __tmp52 null
+   384 jump __label89 always
+   385 label __label96
+   386 jump __label99 equal __fn4_digit 4
+ 
+   397 op add __tmp90 __fn4_y 6
+   398 op add __tmp91 __fn4_y 12
+   399 draw line __fn4_x __tmp90 __fn4_x __tmp91
+-    * set __tmp52 null
+   400 jump __label89 always
+   401 label __label98
+   402 jump __label101 equal __fn4_digit 5
+ 
+   419 op add __tmp102 __fn4_x 7
+   420 op add __tmp103 __fn4_y 12
+   421 draw line __fn4_x __tmp101 __tmp102 __tmp103
+-    * set __tmp52 null
+   422 jump __label89 always
+   423 label __label100
+   424 jump __label103 equal __fn4_digit 6
+ 
+   440 op add __tmp113 __fn4_x 7
+   441 op add __tmp114 __fn4_y 12
+   442 draw line __fn4_x __tmp112 __tmp113 __tmp114
+-    * set __tmp52 null
+   443 jump __label89 always
+   444 label __label102
+   445 jump __label105 equal __fn4_digit 7
+ 
+   456 op sub __tmp122 __tmp121 1
+   457 op add __tmp123 __fn4_y 12
+   458 draw line __fn4_x __tmp120 __tmp122 __tmp123
+-    * set __tmp52 null
+   459 jump __label89 always
+   460 label __label104
+   461 jump __label107 equal __fn4_digit 8
+ 
+   470 op add __tmp129 __fn4_x 7
+   471 op add __tmp130 __fn4_y 6
+   472 draw line __fn4_x __tmp128 __tmp129 __tmp130
+-    * set __tmp52 null
+   473 jump __label89 always
+   474 label __label106
+   475 jump __label109 equal __fn4_digit 9
+ 
+   492 op add __tmp141 __fn4_x 7
+   493 op add __tmp142 __fn4_y 12
+   494 draw line __fn4_x __tmp140 __tmp141 __tmp142
+-    * set __tmp52 null
+   495 jump __label89 always
+   496 label __label108
+-    * set __tmp52 null
+   497 label __label89
+   498 label __label88
+   499 op sub __fn3_x __fn3_x 11
+ 
+   527 draw rect 109 0 176 176
+   528 set __tmp152 null
+   529 label __label117
+-    * set __tmp151 __tmp152
+   530 label __label115
+   531 jump __label113 always
+   532 label __label112
+
+Modifications by Initial phase, Dead Code Elimination, iteration 3 (-6 instructions):
+ 
+   286 op greaterThan __tmp43 __fn3_amount LIMIT
+   287 jump __label78 equal __tmp43 false
+   288 draw color 255 255 0 255
+-    * set __tmp44 null
+   289 jump __label79 always
+   290 label __label78
+   291 draw color 255 80 80 255
+-    * set __tmp44 null
+   292 label __label79
+   293 label __label77
+   294 jump __label75 always
+ 
+   303 op lessThan __tmp48 __fn3_amount __fn3_last
+   304 jump __label82 equal __tmp48 false
+   305 draw color 255 80 80 255
+-    * set __tmp49 null
+   306 jump __label83 always
+   307 label __label82
+   308 draw color 0 255 0 255
+-    * set __tmp49 null
+   309 label __label83
+   310 label __label81
+   311 label __label75
+ 
+   517 draw color 0 0 80 255
+   518 jump __label116 equal __fn5_first_column false
+   519 draw rect 23 0 70 176
+-    * set __tmp152 null
+   520 jump __label117 always
+   521 label __label116
+   522 draw rect 109 0 176 176
+-    * set __tmp152 null
+   523 label __label117
+   524 label __label115
+   525 jump __label113 always
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-9 instructions):
+ 
+     7 set LINKS @links
+     8 set n LINKS
+     9 label __label3
+-    * op greaterThan __tmp1 n 0
+-    * jump __label5 equal __tmp1 false
++   10 jump __label5 lessThanEq n 0
+    11 op sub n n 1
+    12 getlink block n
+    13 print "Found: "
+ 
+    70 label __label16
+    71 printflush MESSAGE
+    72 label __label1
+-    * op equal __tmp10 CONTAINER null
+-    * jump __label0 notEqual __tmp10 false
++   73 jump __label0 equal CONTAINER null
+    74 label __label2
+    75 label __label17
+    76 sensor __tmp11 CONTAINER @dead
+ 
+   179 draw image __tmp26 __tmp29 item 16 0
+   180 op add index index 1
+   181 op sub y y 20
+-    * op equal __tmp32 index 8
+-    * jump __label47 equal __tmp32 false
++  182 jump __label47 notEqual index 8
+   183 set y 152
+   184 set x 93
+   185 draw color 255 255 255 255
+ 
+   275 sensor __fn3_amount CONTAINER __fn3_item
+   276 op strictEqual __tmp39 MEMORY null
+   277 jump __label74 equal __tmp39 false
+-    * op equal __tmp41 __fn3_amount CAPACITY
+-    * jump __label76 equal __tmp41 false
++  278 jump __label76 notEqual __fn3_amount CAPACITY
+   279 draw color 0 255 0 255
+   280 jump __label77 always
+   281 label __label76
+-    * op greaterThan __tmp43 __fn3_amount LIMIT
+-    * jump __label78 equal __tmp43 false
++  282 jump __label78 lessThanEq __fn3_amount LIMIT
+   283 draw color 255 255 0 255
+   284 jump __label79 always
+   285 label __label78
+ 
+   290 label __label74
+   291 read __fn3_last MEMORY __fn3_index
+   292 write __fn3_amount MEMORY __fn3_index
+-    * op equal __tmp46 __fn3_amount __fn3_last
+-    * jump __label80 equal __tmp46 false
++  293 jump __label80 notEqual __fn3_amount __fn3_last
+   294 draw color 255 255 0 255
+   295 jump __label81 always
+   296 label __label80
+-    * op lessThan __tmp48 __fn3_amount __fn3_last
+-    * jump __label82 equal __tmp48 false
++  297 jump __label82 greaterThanEq __fn3_amount __fn3_last
+   298 draw color 255 80 80 255
+   299 jump __label83 always
+   300 label __label82
+ 
+   487 label __label88
+   488 op sub __fn3_x __fn3_x 11
+   489 op idiv __fn3_amount __fn3_amount 10
+-    * op equal __tmp145 __fn3_amount 0
+-    * jump __label110 equal __tmp145 false
++  490 jump __label110 notEqual __fn3_amount 0
+   491 jump __label86 always
+   492 jump __label111 always
+   493 label __label110
+ 
+   499 label __label73
+   500 op add index index 1
+   501 op sub y y 20
+-    * op equal __tmp149 index 8
+-    * jump __label112 equal __tmp149 false
++  502 jump __label112 notEqual index 8
+   503 drawflush display1
+   504 set y 152
+   505 set x 157
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-6 instructions):
+ 
+    41 jump __label13 always
+    42 label __label14
+    43 set DISPLAY block
+-    * jump __label6 always
+    44 label __label13
+    45 label __label6
+    46 label __label4
+ 
+    64 jump __label15 equal __tmp8 false
+    65 print "No container or display."
+    66 print "\n"
+-    * jump __label16 always
+    67 label __label15
+    68 label __label16
+    69 printflush MESSAGE
+ 
+   181 set y 152
+   182 set x 93
+   183 draw color 255 255 255 255
+-    * jump __label48 always
+   184 label __label47
+   185 label __label48
+   186 label __label28
+ 
+   478 op add __tmp141 __fn4_x 7
+   479 op add __tmp142 __fn4_y 12
+   480 draw line __fn4_x __tmp140 __tmp141 __tmp142
+-    * jump __label89 always
+   481 label __label108
+   482 label __label89
+   483 label __label88
+ 
+   485 op idiv __fn3_amount __fn3_amount 10
+   486 jump __label110 notEqual __fn3_amount 0
+   487 jump __label86 always
+-    * jump __label111 always
+   488 label __label110
+   489 label __label111
+   490 label __label85
+ 
+   508 draw rect 109 0 176 176
+   509 label __label117
+   510 label __label115
+-    * jump __label113 always
+   511 label __label112
+   512 label __label113
+   513 label __label53
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+   270 set __fn3_x x
+   271 set __fn3_y y
+   272 sensor __fn3_amount CONTAINER __fn3_item
+-    * op strictEqual __tmp39 MEMORY null
+-    * jump __label74 equal __tmp39 false
++  273 jump __label74 strictEqual MEMORY null
++  274 read __fn3_last MEMORY __fn3_index
++  275 write __fn3_amount MEMORY __fn3_index
++  276 jump __label80 notEqual __fn3_amount __fn3_last
++  277 draw color 255 255 0 255
++  278 jump __label81 always
++  279 label __label80
++  280 jump __label82 greaterThanEq __fn3_amount __fn3_last
++  281 draw color 255 80 80 255
++  282 jump __label83 always
++  283 label __label82
++  284 draw color 0 255 0 255
++  285 label __label83
++  286 label __label81
++  287 jump __label75 always
++  288 label __label74
+   289 jump __label76 notEqual __fn3_amount CAPACITY
+   290 draw color 0 255 0 255
+   291 jump __label77 always
+ 
+   297 draw color 255 80 80 255
+   298 label __label79
+   299 label __label77
+-    * jump __label75 always
+-    * label __label74
+-    * read __fn3_last MEMORY __fn3_index
+-    * write __fn3_amount MEMORY __fn3_index
+-    * jump __label80 notEqual __fn3_amount __fn3_last
+-    * draw color 255 255 0 255
+-    * jump __label81 always
+-    * label __label80
+-    * jump __label82 greaterThanEq __fn3_amount __fn3_last
+-    * draw color 255 80 80 255
+-    * jump __label83 always
+-    * label __label82
+-    * draw color 0 255 0 255
+-    * label __label83
+-    * label __label81
+   300 label __label75
+   301 set __fn3_i 0
+   302 label __label84
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    88 label __label20
+    89 set __fn0_first_column true
+    90 draw color 0 0 80 255
+-    * jump __label22 equal __fn0_first_column false
++   91 jump __label22 equal true false
+    92 draw rect 0 0 23 176
+    93 jump __label23 always
+    94 label __label22
+ 
+    98 label __label24
+    99 set __fn1_first_column false
+   100 draw color 0 0 80 255
+-    * jump __label26 equal __fn1_first_column false
++  101 jump __label26 equal false false
+   102 draw rect 0 0 23 176
+   103 jump __label27 always
+   104 label __label26
+ 
+   172 label __label29
+   173 op add __tmp26 x 8
+   174 op add __tmp27 y 8
+-    * op sub __tmp28 __tmp27 2
+-    * op add __tmp29 __tmp28 1
++  175 op add __tmp28 y 6
++  176 op sub __tmp29 __tmp27 1
+   177 draw image __tmp26 __tmp29 item 16 0
+   178 op add index index 1
+   179 op sub y y 20
+ 
+   193 label __label49
+   194 set __fn2_first_column true
+   195 draw color 0 0 80 255
+-    * jump __label51 equal __fn2_first_column false
++  196 jump __label51 equal true false
+   197 draw rect 23 0 70 176
+   198 jump __label52 always
+   199 label __label51
+ 
+   269 set __fn3_item item
+   270 set __fn3_x x
+   271 set __fn3_y y
+-    * sensor __fn3_amount CONTAINER __fn3_item
++  272 sensor __fn3_amount CONTAINER item
+   273 jump __label74 strictEqual MEMORY null
+-    * read __fn3_last MEMORY __fn3_index
+-    * write __fn3_amount MEMORY __fn3_index
++  274 read __fn3_last MEMORY index
++  275 write __fn3_amount MEMORY index
+   276 jump __label80 notEqual __fn3_amount __fn3_last
+   277 draw color 255 255 0 255
+   278 jump __label81 always
+ 
+   304 op mod __tmp50 __fn3_amount 10
+   305 label __label87
+   306 set __fn4_x __fn3_x
+-    * set __fn4_y __fn3_y
++  307 set __fn4_y y
+   308 set __fn4_digit __tmp50
+-    * jump __label91 equal __fn4_digit 0
++  309 jump __label91 equal __tmp50 0
+   310 jump __label90 always
+   311 label __label91
+-    * op sub __tmp53 __fn4_x 2
+-    * op add __tmp54 __tmp53 1
+-    * op sub __tmp55 __fn4_y 2
+-    * op add __tmp56 __tmp55 1
++  312 op sub __tmp53 __fn3_x 2
++  313 op sub __tmp54 __fn4_x 1
++  314 op sub __tmp55 __fn3_y 2
++  315 op sub __tmp56 __fn4_y 1
+   316 draw lineRect __tmp54 __tmp56 9 14
+   317 jump __label89 always
+   318 label __label90
+-    * jump __label93 equal __fn4_digit 1
++  319 jump __label93 equal __tmp50 1
+   320 jump __label92 always
+   321 label __label93
+-    * op add __tmp57 __fn4_x 7
+-    * op sub __tmp58 __tmp57 1
+-    * op add __tmp59 __fn4_x 7
+-    * op sub __tmp60 __tmp59 1
+-    * op add __tmp61 __fn4_y 12
+-    * draw line __tmp58 __fn4_y __tmp60 __tmp61
++  322 op add __tmp57 __fn3_x 7
++  323 op add __tmp58 __fn4_x 6
++  324 op add __tmp59 __fn3_x 7
++  325 op sub __tmp60 __tmp57 1
++  326 op add __tmp61 __fn3_y 12
++  327 draw line __tmp58 __fn3_y __tmp58 __tmp61
+   328 jump __label89 always
+   329 label __label92
+-    * jump __label95 equal __fn4_digit 2
++  330 jump __label95 equal __tmp50 2
+   331 jump __label94 always
+   332 label __label95
+-    * op add __tmp62 __fn4_x 7
+-    * draw line __fn4_x __fn4_y __tmp62 __fn4_y
+-    * op add __tmp63 __fn4_y 6
+-    * draw line __fn4_x __fn4_y __fn4_x __tmp63
+-    * op add __tmp64 __fn4_y 6
+-    * op add __tmp65 __fn4_x 7
+-    * op add __tmp66 __fn4_y 6
+-    * draw line __fn4_x __tmp64 __tmp65 __tmp66
+-    * op add __tmp67 __fn4_x 7
+-    * op add __tmp68 __fn4_y 6
+-    * op add __tmp69 __fn4_x 7
+-    * op add __tmp70 __fn4_y 12
+-    * draw line __tmp67 __tmp68 __tmp69 __tmp70
+-    * op add __tmp71 __fn4_y 12
+-    * op add __tmp72 __fn4_x 7
+-    * op add __tmp73 __fn4_y 12
+-    * draw line __fn4_x __tmp71 __tmp72 __tmp73
++  333 op add __tmp62 __fn3_x 7
++  334 draw line __fn3_x __fn3_y __tmp62 __fn3_y
++  335 op add __tmp63 __fn3_y 6
++  336 draw line __fn3_x __fn3_y __fn3_x __tmp63
++  337 op add __tmp64 __fn3_y 6
++  338 op add __tmp65 __fn3_x 7
++  339 op add __tmp66 __fn3_y 6
++  340 draw line __fn3_x __tmp63 __tmp62 __tmp63
++  341 op add __tmp67 __fn3_x 7
++  342 op add __tmp68 __fn3_y 6
++  343 op add __tmp69 __fn3_x 7
++  344 op add __tmp70 __fn3_y 12
++  345 draw line __tmp62 __tmp63 __tmp62 __tmp70
++  346 op add __tmp71 __fn3_y 12
++  347 op add __tmp72 __fn3_x 7
++  348 op add __tmp73 __fn3_y 12
++  349 draw line __fn3_x __tmp70 __tmp62 __tmp70
+   350 jump __label89 always
+   351 label __label94
+-    * jump __label97 equal __fn4_digit 3
++  352 jump __label97 equal __tmp50 3
+   353 jump __label96 always
+   354 label __label97
+-    * op add __tmp74 __fn4_x 7
+-    * op add __tmp75 __fn4_x 7
+-    * op add __tmp76 __fn4_y 12
+-    * draw line __tmp74 __fn4_y __tmp75 __tmp76
+-    * op add __tmp77 __fn4_x 7
+-    * draw line __fn4_x __fn4_y __tmp77 __fn4_y
+-    * op add __tmp78 __fn4_y 6
+-    * op add __tmp79 __fn4_x 7
+-    * op add __tmp80 __fn4_y 6
+-    * draw line __fn4_x __tmp78 __tmp79 __tmp80
+-    * op add __tmp81 __fn4_y 12
+-    * op add __tmp82 __fn4_x 7
+-    * op add __tmp83 __fn4_y 12
+-    * draw line __fn4_x __tmp81 __tmp82 __tmp83
++  355 op add __tmp74 __fn3_x 7
++  356 op add __tmp75 __fn3_x 7
++  357 op add __tmp76 __fn3_y 12
++  358 draw line __tmp74 __fn3_y __tmp74 __tmp76
++  359 op add __tmp77 __fn3_x 7
++  360 draw line __fn3_x __fn3_y __tmp74 __fn3_y
++  361 op add __tmp78 __fn3_y 6
++  362 op add __tmp79 __fn3_x 7
++  363 op add __tmp80 __fn3_y 6
++  364 draw line __fn3_x __tmp78 __tmp74 __tmp78
++  365 op add __tmp81 __fn3_y 12
++  366 op add __tmp82 __fn3_x 7
++  367 op add __tmp83 __fn3_y 12
++  368 draw line __fn3_x __tmp76 __tmp74 __tmp76
+   369 jump __label89 always
+   370 label __label96
+-    * jump __label99 equal __fn4_digit 4
++  371 jump __label99 equal __tmp50 4
+   372 jump __label98 always
+   373 label __label99
+-    * op add __tmp84 __fn4_x 7
+-    * op add __tmp85 __fn4_x 7
+-    * op add __tmp86 __fn4_y 12
+-    * draw line __tmp84 __fn4_y __tmp85 __tmp86
+-    * op add __tmp87 __fn4_y 6
+-    * op add __tmp88 __fn4_x 7
+-    * op add __tmp89 __fn4_y 6
+-    * draw line __fn4_x __tmp87 __tmp88 __tmp89
+-    * op add __tmp90 __fn4_y 6
+-    * op add __tmp91 __fn4_y 12
+-    * draw line __fn4_x __tmp90 __fn4_x __tmp91
++  374 op add __tmp84 __fn3_x 7
++  375 op add __tmp85 __fn3_x 7
++  376 op add __tmp86 __fn3_y 12
++  377 draw line __tmp84 __fn3_y __tmp84 __tmp86
++  378 op add __tmp87 __fn3_y 6
++  379 op add __tmp88 __fn3_x 7
++  380 op add __tmp89 __fn3_y 6
++  381 draw line __fn3_x __tmp87 __tmp84 __tmp87
++  382 op add __tmp90 __fn3_y 6
++  383 op add __tmp91 __fn3_y 12
++  384 draw line __fn3_x __tmp87 __fn3_x __tmp86
+   385 jump __label89 always
+   386 label __label98
+-    * jump __label101 equal __fn4_digit 5
++  387 jump __label101 equal __tmp50 5
+   388 jump __label100 always
+   389 label __label101
+-    * op add __tmp92 __fn4_x 7
+-    * draw line __fn4_x __fn4_y __tmp92 __fn4_y
+-    * op add __tmp93 __fn4_x 7
+-    * op add __tmp94 __fn4_x 7
+-    * op add __tmp95 __fn4_y 6
+-    * draw line __tmp93 __fn4_y __tmp94 __tmp95
+-    * op add __tmp96 __fn4_y 6
+-    * op add __tmp97 __fn4_x 7
+-    * op add __tmp98 __fn4_y 6
+-    * draw line __fn4_x __tmp96 __tmp97 __tmp98
+-    * op add __tmp99 __fn4_y 6
+-    * op add __tmp100 __fn4_y 12
+-    * draw line __fn4_x __tmp99 __fn4_x __tmp100
+-    * op add __tmp101 __fn4_y 12
+-    * op add __tmp102 __fn4_x 7
+-    * op add __tmp103 __fn4_y 12
+-    * draw line __fn4_x __tmp101 __tmp102 __tmp103
++  390 op add __tmp92 __fn3_x 7
++  391 draw line __fn3_x __fn3_y __tmp92 __fn3_y
++  392 op add __tmp93 __fn3_x 7
++  393 op add __tmp94 __fn3_x 7
++  394 op add __tmp95 __fn3_y 6
++  395 draw line __tmp92 __fn3_y __tmp92 __tmp95
++  396 op add __tmp96 __fn3_y 6
++  397 op add __tmp97 __fn3_x 7
++  398 op add __tmp98 __fn3_y 6
++  399 draw line __fn3_x __tmp95 __tmp92 __tmp95
++  400 op add __tmp99 __fn3_y 6
++  401 op add __tmp100 __fn3_y 12
++  402 draw line __fn3_x __tmp95 __fn3_x __tmp100
++  403 op add __tmp101 __fn3_y 12
++  404 op add __tmp102 __fn3_x 7
++  405 op add __tmp103 __fn3_y 12
++  406 draw line __fn3_x __tmp100 __tmp92 __tmp100
+   407 jump __label89 always
+   408 label __label100
+-    * jump __label103 equal __fn4_digit 6
++  409 jump __label103 equal __tmp50 6
+   410 jump __label102 always
+   411 label __label103
+-    * op add __tmp104 __fn4_y 12
+-    * draw line __fn4_x __fn4_y __fn4_x __tmp104
+-    * op add __tmp105 __fn4_x 7
+-    * draw line __fn4_x __fn4_y __tmp105 __fn4_y
+-    * op add __tmp106 __fn4_x 7
+-    * op add __tmp107 __fn4_x 7
+-    * op add __tmp108 __fn4_y 6
+-    * draw line __tmp106 __fn4_y __tmp107 __tmp108
+-    * op add __tmp109 __fn4_y 6
+-    * op add __tmp110 __fn4_x 7
+-    * op add __tmp111 __fn4_y 6
+-    * draw line __fn4_x __tmp109 __tmp110 __tmp111
+-    * op add __tmp112 __fn4_y 12
+-    * op add __tmp113 __fn4_x 7
+-    * op add __tmp114 __fn4_y 12
+-    * draw line __fn4_x __tmp112 __tmp113 __tmp114
++  412 op add __tmp104 __fn3_y 12
++  413 draw line __fn3_x __fn3_y __fn3_x __tmp104
++  414 op add __tmp105 __fn3_x 7
++  415 draw line __fn3_x __fn3_y __tmp105 __fn3_y
++  416 op add __tmp106 __fn3_x 7
++  417 op add __tmp107 __fn3_x 7
++  418 op add __tmp108 __fn3_y 6
++  419 draw line __tmp105 __fn3_y __tmp105 __tmp108
++  420 op add __tmp109 __fn3_y 6
++  421 op add __tmp110 __fn3_x 7
++  422 op add __tmp111 __fn3_y 6
++  423 draw line __fn3_x __tmp108 __tmp105 __tmp108
++  424 op add __tmp112 __fn3_y 12
++  425 op add __tmp113 __fn3_x 7
++  426 op add __tmp114 __fn3_y 12
++  427 draw line __fn3_x __tmp104 __tmp105 __tmp104
+   428 jump __label89 always
+   429 label __label102
+-    * jump __label105 equal __fn4_digit 7
++  430 jump __label105 equal __tmp50 7
+   431 jump __label104 always
+   432 label __label105
+-    * op add __tmp115 __fn4_x 7
+-    * op sub __tmp116 __tmp115 1
+-    * op add __tmp117 __fn4_x 7
+-    * op sub __tmp118 __tmp117 1
+-    * op add __tmp119 __fn4_y 12
+-    * draw line __tmp116 __fn4_y __tmp118 __tmp119
+-    * op add __tmp120 __fn4_y 12
+-    * op add __tmp121 __fn4_x 7
+-    * op sub __tmp122 __tmp121 1
+-    * op add __tmp123 __fn4_y 12
+-    * draw line __fn4_x __tmp120 __tmp122 __tmp123
++  433 op add __tmp115 __fn3_x 7
++  434 op add __tmp116 __fn4_x 6
++  435 op add __tmp117 __fn3_x 7
++  436 op sub __tmp118 __tmp115 1
++  437 op add __tmp119 __fn3_y 12
++  438 draw line __tmp116 __fn3_y __tmp116 __tmp119
++  439 op add __tmp120 __fn3_y 12
++  440 op add __tmp121 __fn3_x 7
++  441 op sub __tmp122 __tmp115 1
++  442 op add __tmp123 __fn3_y 12
++  443 draw line __fn3_x __tmp119 __tmp116 __tmp119
+   444 jump __label89 always
+   445 label __label104
+-    * jump __label107 equal __fn4_digit 8
++  446 jump __label107 equal __tmp50 8
+   447 jump __label106 always
+   448 label __label107
+-    * op sub __tmp124 __fn4_x 2
+-    * op add __tmp125 __tmp124 1
+-    * op sub __tmp126 __fn4_y 2
+-    * op add __tmp127 __tmp126 1
++  449 op sub __tmp124 __fn3_x 2
++  450 op sub __tmp125 __fn4_x 1
++  451 op sub __tmp126 __fn3_y 2
++  452 op sub __tmp127 __fn4_y 1
+   453 draw lineRect __tmp125 __tmp127 9 14
+-    * op add __tmp128 __fn4_y 6
+-    * op add __tmp129 __fn4_x 7
+-    * op add __tmp130 __fn4_y 6
+-    * draw line __fn4_x __tmp128 __tmp129 __tmp130
++  454 op add __tmp128 __fn3_y 6
++  455 op add __tmp129 __fn3_x 7
++  456 op add __tmp130 __fn3_y 6
++  457 draw line __fn3_x __tmp128 __tmp129 __tmp128
+   458 jump __label89 always
+   459 label __label106
+-    * jump __label109 equal __fn4_digit 9
++  460 jump __label109 equal __tmp50 9
+   461 jump __label108 always
+   462 label __label109
+-    * op add __tmp131 __fn4_x 7
+-    * draw line __fn4_x __fn4_y __tmp131 __fn4_y
+-    * op add __tmp132 __fn4_x 7
+-    * op add __tmp133 __fn4_x 7
+-    * op add __tmp134 __fn4_y 12
+-    * draw line __tmp132 __fn4_y __tmp133 __tmp134
+-    * op add __tmp135 __fn4_y 6
+-    * op add __tmp136 __fn4_x 7
+-    * op add __tmp137 __fn4_y 6
+-    * draw line __fn4_x __tmp135 __tmp136 __tmp137
+-    * op add __tmp138 __fn4_y 6
+-    * op add __tmp139 __fn4_y 12
+-    * draw line __fn4_x __tmp138 __fn4_x __tmp139
+-    * op add __tmp140 __fn4_y 12
+-    * op add __tmp141 __fn4_x 7
+-    * op add __tmp142 __fn4_y 12
+-    * draw line __fn4_x __tmp140 __tmp141 __tmp142
++  463 op add __tmp131 __fn3_x 7
++  464 draw line __fn3_x __fn3_y __tmp131 __fn3_y
++  465 op add __tmp132 __fn3_x 7
++  466 op add __tmp133 __fn3_x 7
++  467 op add __tmp134 __fn3_y 12
++  468 draw line __tmp131 __fn3_y __tmp131 __tmp134
++  469 op add __tmp135 __fn3_y 6
++  470 op add __tmp136 __fn3_x 7
++  471 op add __tmp137 __fn3_y 6
++  472 draw line __fn3_x __tmp135 __tmp131 __tmp135
++  473 op add __tmp138 __fn3_y 6
++  474 op add __tmp139 __fn3_y 12
++  475 draw line __fn3_x __tmp135 __fn3_x __tmp134
++  476 op add __tmp140 __fn3_y 12
++  477 op add __tmp141 __fn3_x 7
++  478 op add __tmp142 __fn3_y 12
++  479 draw line __fn3_x __tmp134 __tmp131 __tmp134
+   480 label __label108
+   481 label __label89
+   482 label __label88
+ 
+   500 label __label114
+   501 set __fn5_first_column false
+   502 draw color 0 0 80 255
+-    * jump __label116 equal __fn5_first_column false
++  503 jump __label116 equal false false
+   504 draw rect 23 0 70 176
+   505 jump __label117 always
+   506 label __label116
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-35 instructions):
+ 
+    86 set x 7
+    87 set y 152
+    88 label __label20
+-    * set __fn0_first_column true
+    89 draw color 0 0 80 255
+    90 jump __label22 equal true false
+    91 draw rect 0 0 23 176
+ 
+    95 label __label23
+    96 label __label21
+    97 label __label24
+-    * set __fn1_first_column false
+    98 draw color 0 0 80 255
+    99 jump __label26 equal false false
+   100 draw rect 0 0 23 176
+ 
+   170 label __label29
+   171 op add __tmp26 x 8
+   172 op add __tmp27 y 8
+-    * op add __tmp28 y 6
+-    * op sub __tmp29 __tmp27 1
++  173 op add __tmp29 y 7
+   174 draw image __tmp26 __tmp29 item 16 0
+   175 op add index index 1
+   176 op sub y y 20
+ 
+   188 set x 71
+   189 set y 152
+   190 label __label49
+-    * set __fn2_first_column true
+   191 draw color 0 0 80 255
+   192 jump __label51 equal true false
+   193 draw rect 23 0 70 176
+ 
+   261 set item @spore-pod
+   262 label __label54
+   263 label __label72
+-    * set __fn3_index index
+-    * set __fn3_item item
+   264 set __fn3_x x
+   265 set __fn3_y y
+   266 sensor __fn3_amount CONTAINER item
+ 
+   299 label __label87
+   300 set __fn4_x __fn3_x
+   301 set __fn4_y y
+-    * set __fn4_digit __tmp50
+   302 jump __label91 equal __tmp50 0
+   303 jump __label90 always
+   304 label __label91
+-    * op sub __tmp53 __fn3_x 2
+-    * op sub __tmp54 __fn4_x 1
+-    * op sub __tmp55 __fn3_y 2
+-    * op sub __tmp56 __fn4_y 1
++  305 op sub __tmp54 __fn3_x 1
++  306 op sub __tmp55 y 2
++  307 op sub __tmp56 y 1
+   308 draw lineRect __tmp54 __tmp56 9 14
+   309 jump __label89 always
+   310 label __label90
+ 
+   312 jump __label92 always
+   313 label __label93
+   314 op add __tmp57 __fn3_x 7
+-    * op add __tmp58 __fn4_x 6
+-    * op add __tmp59 __fn3_x 7
+-    * op sub __tmp60 __tmp57 1
+-    * op add __tmp61 __fn3_y 12
+-    * draw line __tmp58 __fn3_y __tmp58 __tmp61
++  315 op add __tmp58 __fn3_x 6
++  316 op add __tmp60 __fn3_x 6
++  317 op add __tmp61 y 12
++  318 draw line __tmp58 y __tmp58 __tmp61
+   319 jump __label89 always
+   320 label __label92
+   321 jump __label95 equal __tmp50 2
+   322 jump __label94 always
+   323 label __label95
+   324 op add __tmp62 __fn3_x 7
+-    * draw line __fn3_x __fn3_y __tmp62 __fn3_y
+-    * op add __tmp63 __fn3_y 6
+-    * draw line __fn3_x __fn3_y __fn3_x __tmp63
+-    * op add __tmp64 __fn3_y 6
+-    * op add __tmp65 __fn3_x 7
+-    * op add __tmp66 __fn3_y 6
++  325 draw line __fn3_x y __tmp62 y
++  326 op add __tmp63 y 6
++  327 draw line __fn3_x y __fn3_x __tmp63
++  328 op add __tmp64 y 6
++  329 op add __tmp66 y 6
+   330 draw line __fn3_x __tmp63 __tmp62 __tmp63
+-    * op add __tmp67 __fn3_x 7
+-    * op add __tmp68 __fn3_y 6
+-    * op add __tmp69 __fn3_x 7
+-    * op add __tmp70 __fn3_y 12
++  331 op add __tmp68 y 6
++  332 op add __tmp70 y 12
+   333 draw line __tmp62 __tmp63 __tmp62 __tmp70
+-    * op add __tmp71 __fn3_y 12
+-    * op add __tmp72 __fn3_x 7
+-    * op add __tmp73 __fn3_y 12
++  334 op add __tmp71 y 12
++  335 op add __tmp73 y 12
+   336 draw line __fn3_x __tmp70 __tmp62 __tmp70
+   337 jump __label89 always
+   338 label __label94
+ 
+   340 jump __label96 always
+   341 label __label97
+   342 op add __tmp74 __fn3_x 7
+-    * op add __tmp75 __fn3_x 7
+-    * op add __tmp76 __fn3_y 12
+-    * draw line __tmp74 __fn3_y __tmp74 __tmp76
+-    * op add __tmp77 __fn3_x 7
+-    * draw line __fn3_x __fn3_y __tmp74 __fn3_y
+-    * op add __tmp78 __fn3_y 6
+-    * op add __tmp79 __fn3_x 7
+-    * op add __tmp80 __fn3_y 6
++  343 op add __tmp76 y 12
++  344 draw line __tmp74 y __tmp74 __tmp76
++  345 draw line __fn3_x y __tmp74 y
++  346 op add __tmp78 y 6
++  347 op add __tmp80 y 6
+   348 draw line __fn3_x __tmp78 __tmp74 __tmp78
+-    * op add __tmp81 __fn3_y 12
+-    * op add __tmp82 __fn3_x 7
+-    * op add __tmp83 __fn3_y 12
++  349 op add __tmp81 y 12
++  350 op add __tmp83 y 12
+   351 draw line __fn3_x __tmp76 __tmp74 __tmp76
+   352 jump __label89 always
+   353 label __label96
+ 
+   355 jump __label98 always
+   356 label __label99
+   357 op add __tmp84 __fn3_x 7
+-    * op add __tmp85 __fn3_x 7
+-    * op add __tmp86 __fn3_y 12
+-    * draw line __tmp84 __fn3_y __tmp84 __tmp86
+-    * op add __tmp87 __fn3_y 6
+-    * op add __tmp88 __fn3_x 7
+-    * op add __tmp89 __fn3_y 6
++  358 op add __tmp86 y 12
++  359 draw line __tmp84 y __tmp84 __tmp86
++  360 op add __tmp87 y 6
++  361 op add __tmp89 y 6
+   362 draw line __fn3_x __tmp87 __tmp84 __tmp87
+-    * op add __tmp90 __fn3_y 6
+-    * op add __tmp91 __fn3_y 12
++  363 op add __tmp90 y 6
++  364 op add __tmp91 y 12
+   365 draw line __fn3_x __tmp87 __fn3_x __tmp86
+   366 jump __label89 always
+   367 label __label98
+ 
+   369 jump __label100 always
+   370 label __label101
+   371 op add __tmp92 __fn3_x 7
+-    * draw line __fn3_x __fn3_y __tmp92 __fn3_y
+-    * op add __tmp93 __fn3_x 7
+-    * op add __tmp94 __fn3_x 7
+-    * op add __tmp95 __fn3_y 6
+-    * draw line __tmp92 __fn3_y __tmp92 __tmp95
+-    * op add __tmp96 __fn3_y 6
+-    * op add __tmp97 __fn3_x 7
+-    * op add __tmp98 __fn3_y 6
++  372 draw line __fn3_x y __tmp92 y
++  373 op add __tmp95 y 6
++  374 draw line __tmp92 y __tmp92 __tmp95
++  375 op add __tmp96 y 6
++  376 op add __tmp98 y 6
+   377 draw line __fn3_x __tmp95 __tmp92 __tmp95
+-    * op add __tmp99 __fn3_y 6
+-    * op add __tmp100 __fn3_y 12
++  378 op add __tmp99 y 6
++  379 op add __tmp100 y 12
+   380 draw line __fn3_x __tmp95 __fn3_x __tmp100
+-    * op add __tmp101 __fn3_y 12
+-    * op add __tmp102 __fn3_x 7
+-    * op add __tmp103 __fn3_y 12
++  381 op add __tmp101 y 12
++  382 op add __tmp103 y 12
+   383 draw line __fn3_x __tmp100 __tmp92 __tmp100
+   384 jump __label89 always
+   385 label __label100
+   386 jump __label103 equal __tmp50 6
+   387 jump __label102 always
+   388 label __label103
+-    * op add __tmp104 __fn3_y 12
+-    * draw line __fn3_x __fn3_y __fn3_x __tmp104
++  389 op add __tmp104 y 12
++  390 draw line __fn3_x y __fn3_x __tmp104
+   391 op add __tmp105 __fn3_x 7
+-    * draw line __fn3_x __fn3_y __tmp105 __fn3_y
+-    * op add __tmp106 __fn3_x 7
+-    * op add __tmp107 __fn3_x 7
+-    * op add __tmp108 __fn3_y 6
+-    * draw line __tmp105 __fn3_y __tmp105 __tmp108
+-    * op add __tmp109 __fn3_y 6
+-    * op add __tmp110 __fn3_x 7
+-    * op add __tmp111 __fn3_y 6
++  392 draw line __fn3_x y __tmp105 y
++  393 op add __tmp108 y 6
++  394 draw line __tmp105 y __tmp105 __tmp108
++  395 op add __tmp109 y 6
++  396 op add __tmp111 y 6
+   397 draw line __fn3_x __tmp108 __tmp105 __tmp108
+-    * op add __tmp112 __fn3_y 12
+-    * op add __tmp113 __fn3_x 7
+-    * op add __tmp114 __fn3_y 12
++  398 op add __tmp112 y 12
++  399 op add __tmp114 y 12
+   400 draw line __fn3_x __tmp104 __tmp105 __tmp104
+   401 jump __label89 always
+   402 label __label102
+ 
+   404 jump __label104 always
+   405 label __label105
+   406 op add __tmp115 __fn3_x 7
+-    * op add __tmp116 __fn4_x 6
+-    * op add __tmp117 __fn3_x 7
+-    * op sub __tmp118 __tmp115 1
+-    * op add __tmp119 __fn3_y 12
+-    * draw line __tmp116 __fn3_y __tmp116 __tmp119
+-    * op add __tmp120 __fn3_y 12
+-    * op add __tmp121 __fn3_x 7
+-    * op sub __tmp122 __tmp115 1
+-    * op add __tmp123 __fn3_y 12
++  407 op add __tmp116 __fn3_x 6
++  408 op add __tmp118 __fn3_x 6
++  409 op add __tmp119 y 12
++  410 draw line __tmp116 y __tmp116 __tmp119
++  411 op add __tmp120 y 12
++  412 op add __tmp122 __fn3_x 6
++  413 op add __tmp123 y 12
+   414 draw line __fn3_x __tmp119 __tmp116 __tmp119
+   415 jump __label89 always
+   416 label __label104
+   417 jump __label107 equal __tmp50 8
+   418 jump __label106 always
+   419 label __label107
+-    * op sub __tmp124 __fn3_x 2
+-    * op sub __tmp125 __fn4_x 1
+-    * op sub __tmp126 __fn3_y 2
+-    * op sub __tmp127 __fn4_y 1
++  420 op sub __tmp125 __fn3_x 1
++  421 op sub __tmp126 y 2
++  422 op sub __tmp127 y 1
+   423 draw lineRect __tmp125 __tmp127 9 14
+-    * op add __tmp128 __fn3_y 6
++  424 op add __tmp128 y 6
+   425 op add __tmp129 __fn3_x 7
+-    * op add __tmp130 __fn3_y 6
++  426 op add __tmp130 y 6
+   427 draw line __fn3_x __tmp128 __tmp129 __tmp128
+   428 jump __label89 always
+   429 label __label106
+ 
+   431 jump __label108 always
+   432 label __label109
+   433 op add __tmp131 __fn3_x 7
+-    * draw line __fn3_x __fn3_y __tmp131 __fn3_y
+-    * op add __tmp132 __fn3_x 7
+-    * op add __tmp133 __fn3_x 7
+-    * op add __tmp134 __fn3_y 12
+-    * draw line __tmp131 __fn3_y __tmp131 __tmp134
+-    * op add __tmp135 __fn3_y 6
+-    * op add __tmp136 __fn3_x 7
+-    * op add __tmp137 __fn3_y 6
++  434 draw line __fn3_x y __tmp131 y
++  435 op add __tmp134 y 12
++  436 draw line __tmp131 y __tmp131 __tmp134
++  437 op add __tmp135 y 6
++  438 op add __tmp137 y 6
+   439 draw line __fn3_x __tmp135 __tmp131 __tmp135
+-    * op add __tmp138 __fn3_y 6
+-    * op add __tmp139 __fn3_y 12
++  440 op add __tmp138 y 6
++  441 op add __tmp139 y 12
+   442 draw line __fn3_x __tmp135 __fn3_x __tmp134
+-    * op add __tmp140 __fn3_y 12
+-    * op add __tmp141 __fn3_x 7
+-    * op add __tmp142 __fn3_y 12
++  443 op add __tmp140 y 12
++  444 op add __tmp142 y 12
+   445 draw line __fn3_x __tmp134 __tmp131 __tmp134
+   446 label __label108
+   447 label __label89
+ 
+   464 set y 152
+   465 set x 157
+   466 label __label114
+-    * set __fn5_first_column false
+   467 draw color 0 0 80 255
+   468 jump __label116 equal false false
+   469 draw rect 23 0 70 176
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-39 instructions):
+ 
+   169 set item @spore-pod
+   170 label __label29
+   171 op add __tmp26 x 8
+-    * op add __tmp27 y 8
+   172 op add __tmp29 y 7
+   173 draw image __tmp26 __tmp29 item 16 0
+   174 op add index index 1
+ 
+   261 label __label54
+   262 label __label72
+   263 set __fn3_x x
+-    * set __fn3_y y
+   264 sensor __fn3_amount CONTAINER item
+   265 jump __label74 strictEqual MEMORY null
+   266 read __fn3_last MEMORY index
+ 
+   295 jump __label86 greaterThanEq __fn3_i 5
+   296 op mod __tmp50 __fn3_amount 10
+   297 label __label87
+-    * set __fn4_x __fn3_x
+-    * set __fn4_y y
+   298 jump __label91 equal __tmp50 0
+   299 jump __label90 always
+   300 label __label91
+   301 op sub __tmp54 __fn3_x 1
+-    * op sub __tmp55 y 2
+   302 op sub __tmp56 y 1
+   303 draw lineRect __tmp54 __tmp56 9 14
+   304 jump __label89 always
+ 
+   306 jump __label93 equal __tmp50 1
+   307 jump __label92 always
+   308 label __label93
+-    * op add __tmp57 __fn3_x 7
+   309 op add __tmp58 __fn3_x 6
+-    * op add __tmp60 __fn3_x 6
+   310 op add __tmp61 y 12
+   311 draw line __tmp58 y __tmp58 __tmp61
+   312 jump __label89 always
+ 
+   318 draw line __fn3_x y __tmp62 y
+   319 op add __tmp63 y 6
+   320 draw line __fn3_x y __fn3_x __tmp63
+-    * op add __tmp64 y 6
+-    * op add __tmp66 y 6
+   321 draw line __fn3_x __tmp63 __tmp62 __tmp63
+-    * op add __tmp68 y 6
+   322 op add __tmp70 y 12
+   323 draw line __tmp62 __tmp63 __tmp62 __tmp70
+-    * op add __tmp71 y 12
+-    * op add __tmp73 y 12
+   324 draw line __fn3_x __tmp70 __tmp62 __tmp70
+   325 jump __label89 always
+   326 label __label94
+ 
+   332 draw line __tmp74 y __tmp74 __tmp76
+   333 draw line __fn3_x y __tmp74 y
+   334 op add __tmp78 y 6
+-    * op add __tmp80 y 6
+   335 draw line __fn3_x __tmp78 __tmp74 __tmp78
+-    * op add __tmp81 y 12
+-    * op add __tmp83 y 12
+   336 draw line __fn3_x __tmp76 __tmp74 __tmp76
+   337 jump __label89 always
+   338 label __label96
+ 
+   343 op add __tmp86 y 12
+   344 draw line __tmp84 y __tmp84 __tmp86
+   345 op add __tmp87 y 6
+-    * op add __tmp89 y 6
+   346 draw line __fn3_x __tmp87 __tmp84 __tmp87
+-    * op add __tmp90 y 6
+-    * op add __tmp91 y 12
+   347 draw line __fn3_x __tmp87 __fn3_x __tmp86
+   348 jump __label89 always
+   349 label __label98
+ 
+   354 draw line __fn3_x y __tmp92 y
+   355 op add __tmp95 y 6
+   356 draw line __tmp92 y __tmp92 __tmp95
+-    * op add __tmp96 y 6
+-    * op add __tmp98 y 6
+   357 draw line __fn3_x __tmp95 __tmp92 __tmp95
+-    * op add __tmp99 y 6
+   358 op add __tmp100 y 12
+   359 draw line __fn3_x __tmp95 __fn3_x __tmp100
+-    * op add __tmp101 y 12
+-    * op add __tmp103 y 12
+   360 draw line __fn3_x __tmp100 __tmp92 __tmp100
+   361 jump __label89 always
+   362 label __label100
+ 
+   369 draw line __fn3_x y __tmp105 y
+   370 op add __tmp108 y 6
+   371 draw line __tmp105 y __tmp105 __tmp108
+-    * op add __tmp109 y 6
+-    * op add __tmp111 y 6
+   372 draw line __fn3_x __tmp108 __tmp105 __tmp108
+-    * op add __tmp112 y 12
+-    * op add __tmp114 y 12
+   373 draw line __fn3_x __tmp104 __tmp105 __tmp104
+   374 jump __label89 always
+   375 label __label102
+   376 jump __label105 equal __tmp50 7
+   377 jump __label104 always
+   378 label __label105
+-    * op add __tmp115 __fn3_x 7
+   379 op add __tmp116 __fn3_x 6
+-    * op add __tmp118 __fn3_x 6
+   380 op add __tmp119 y 12
+   381 draw line __tmp116 y __tmp116 __tmp119
+-    * op add __tmp120 y 12
+-    * op add __tmp122 __fn3_x 6
+-    * op add __tmp123 y 12
+   382 draw line __fn3_x __tmp119 __tmp116 __tmp119
+   383 jump __label89 always
+   384 label __label104
+ 
+   386 jump __label106 always
+   387 label __label107
+   388 op sub __tmp125 __fn3_x 1
+-    * op sub __tmp126 y 2
+   389 op sub __tmp127 y 1
+   390 draw lineRect __tmp125 __tmp127 9 14
+   391 op add __tmp128 y 6
+   392 op add __tmp129 __fn3_x 7
+-    * op add __tmp130 y 6
+   393 draw line __fn3_x __tmp128 __tmp129 __tmp128
+   394 jump __label89 always
+   395 label __label106
+ 
+   401 op add __tmp134 y 12
+   402 draw line __tmp131 y __tmp131 __tmp134
+   403 op add __tmp135 y 6
+-    * op add __tmp137 y 6
+   404 draw line __fn3_x __tmp135 __tmp131 __tmp135
+-    * op add __tmp138 y 6
+-    * op add __tmp139 y 12
+   405 draw line __fn3_x __tmp135 __fn3_x __tmp134
+-    * op add __tmp140 y 12
+-    * op add __tmp142 y 12
+   406 draw line __fn3_x __tmp134 __tmp131 __tmp134
+   407 label __label108
+   408 label __label89
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     8 set n LINKS
+     9 label __label3
+    10 jump __label5 lessThanEq n 0
++   11 label __label118
+    12 op sub n n 1
+    13 getlink block n
+    14 print "Found: "
+ 
+    45 label __label13
+    46 label __label6
+    47 label __label4
+-    * jump __label3 always
++   48 jump __label118 greaterThan n 0
+    49 label __label5
+    50 print "Message: "
+    51 print MESSAGE
+ 
+   293 label __label75
+   294 set __fn3_i 0
+   295 label __label84
+-    * jump __label86 greaterThanEq __fn3_i 5
++  296 label __label119
+   297 op mod __tmp50 __fn3_amount 10
+   298 label __label87
+   299 jump __label91 equal __tmp50 0
+ 
+   416 label __label111
+   417 label __label85
+   418 op add __fn3_i __fn3_i 1
+-    * jump __label84 always
++  419 jump __label119 lessThan __fn3_i 5
+   420 label __label86
+   421 label __label73
+   422 op add index index 1
+
+Modifications by Loop Unrolling: unroll loop at line 150 (+383 instructions):
+ 
+   291 label __label79
+   292 label __label77
+   293 label __label75
+-    * set __fn3_i 0
+-    * label __label84
+-    * label __label119
+-    * op mod __tmp50 __fn3_amount 10
+-    * label __label87
+-    * jump __label91 equal __tmp50 0
+-    * jump __label90 always
+-    * label __label91
+-    * op sub __tmp54 __fn3_x 1
+-    * op sub __tmp56 y 1
+-    * draw lineRect __tmp54 __tmp56 9 14
+-    * jump __label89 always
+-    * label __label90
+-    * jump __label93 equal __tmp50 1
+-    * jump __label92 always
+-    * label __label93
+-    * op add __tmp58 __fn3_x 6
+-    * op add __tmp61 y 12
+-    * draw line __tmp58 y __tmp58 __tmp61
+-    * jump __label89 always
+-    * label __label92
+-    * jump __label95 equal __tmp50 2
+-    * jump __label94 always
+-    * label __label95
+-    * op add __tmp62 __fn3_x 7
+-    * draw line __fn3_x y __tmp62 y
+-    * op add __tmp63 y 6
+-    * draw line __fn3_x y __fn3_x __tmp63
+-    * draw line __fn3_x __tmp63 __tmp62 __tmp63
+-    * op add __tmp70 y 12
+-    * draw line __tmp62 __tmp63 __tmp62 __tmp70
+-    * draw line __fn3_x __tmp70 __tmp62 __tmp70
+-    * jump __label89 always
+-    * label __label94
+-    * jump __label97 equal __tmp50 3
+-    * jump __label96 always
+-    * label __label97
+-    * op add __tmp74 __fn3_x 7
+-    * op add __tmp76 y 12
+-    * draw line __tmp74 y __tmp74 __tmp76
+-    * draw line __fn3_x y __tmp74 y
+-    * op add __tmp78 y 6
+-    * draw line __fn3_x __tmp78 __tmp74 __tmp78
+-    * draw line __fn3_x __tmp76 __tmp74 __tmp76
+-    * jump __label89 always
+-    * label __label96
+-    * jump __label99 equal __tmp50 4
+-    * jump __label98 always
+-    * label __label99
+-    * op add __tmp84 __fn3_x 7
+-    * op add __tmp86 y 12
+-    * draw line __tmp84 y __tmp84 __tmp86
+-    * op add __tmp87 y 6
+-    * draw line __fn3_x __tmp87 __tmp84 __tmp87
+-    * draw line __fn3_x __tmp87 __fn3_x __tmp86
+-    * jump __label89 always
+-    * label __label98
+-    * jump __label101 equal __tmp50 5
+-    * jump __label100 always
+-    * label __label101
+-    * op add __tmp92 __fn3_x 7
+-    * draw line __fn3_x y __tmp92 y
+-    * op add __tmp95 y 6
+-    * draw line __tmp92 y __tmp92 __tmp95
+-    * draw line __fn3_x __tmp95 __tmp92 __tmp95
+-    * op add __tmp100 y 12
+-    * draw line __fn3_x __tmp95 __fn3_x __tmp100
+-    * draw line __fn3_x __tmp100 __tmp92 __tmp100
+-    * jump __label89 always
+-    * label __label100
+-    * jump __label103 equal __tmp50 6
+-    * jump __label102 always
+-    * label __label103
+-    * op add __tmp104 y 12
+-    * draw line __fn3_x y __fn3_x __tmp104
+-    * op add __tmp105 __fn3_x 7
+-    * draw line __fn3_x y __tmp105 y
+-    * op add __tmp108 y 6
+-    * draw line __tmp105 y __tmp105 __tmp108
+-    * draw line __fn3_x __tmp108 __tmp105 __tmp108
+-    * draw line __fn3_x __tmp104 __tmp105 __tmp104
+-    * jump __label89 always
+-    * label __label102
+-    * jump __label105 equal __tmp50 7
+-    * jump __label104 always
+-    * label __label105
+-    * op add __tmp116 __fn3_x 6
+-    * op add __tmp119 y 12
+-    * draw line __tmp116 y __tmp116 __tmp119
+-    * draw line __fn3_x __tmp119 __tmp116 __tmp119
+-    * jump __label89 always
+-    * label __label104
+-    * jump __label107 equal __tmp50 8
+-    * jump __label106 always
+-    * label __label107
+-    * op sub __tmp125 __fn3_x 1
+-    * op sub __tmp127 y 1
+-    * draw lineRect __tmp125 __tmp127 9 14
+-    * op add __tmp128 y 6
+-    * op add __tmp129 __fn3_x 7
+-    * draw line __fn3_x __tmp128 __tmp129 __tmp128
+-    * jump __label89 always
+-    * label __label106
+-    * jump __label109 equal __tmp50 9
+-    * jump __label108 always
+-    * label __label109
+-    * op add __tmp131 __fn3_x 7
+-    * draw line __fn3_x y __tmp131 y
+-    * op add __tmp134 y 12
+-    * draw line __tmp131 y __tmp131 __tmp134
+-    * op add __tmp135 y 6
+-    * draw line __fn3_x __tmp135 __tmp131 __tmp135
+-    * draw line __fn3_x __tmp135 __fn3_x __tmp134
+-    * draw line __fn3_x __tmp134 __tmp131 __tmp134
+-    * label __label108
+-    * label __label89
+-    * label __label88
+-    * op sub __fn3_x __fn3_x 11
+-    * op idiv __fn3_amount __fn3_amount 10
+-    * jump __label110 notEqual __fn3_amount 0
+-    * jump __label86 always
+-    * label __label110
+-    * label __label111
+-    * label __label85
+-    * op add __fn3_i __fn3_i 1
+-    * jump __label119 lessThan __fn3_i 5
+-    * label __label86
++  294 set __fn3_i 0
++  295 label __label120
++  296 label __label121
++  297 op mod __tmp50 __fn3_amount 10
++  298 label __label122
++  299 jump __label123 equal __tmp50 0
++  300 jump __label124 always
++  301 label __label123
++  302 op sub __tmp54 __fn3_x 1
++  303 op sub __tmp56 y 1
++  304 draw lineRect __tmp54 __tmp56 9 14
++  305 jump __label143 always
++  306 label __label124
++  307 jump __label125 equal __tmp50 1
++  308 jump __label126 always
++  309 label __label125
++  310 op add __tmp58 __fn3_x 6
++  311 op add __tmp61 y 12
++  312 draw line __tmp58 y __tmp58 __tmp61
++  313 jump __label143 always
++  314 label __label126
++  315 jump __label127 equal __tmp50 2
++  316 jump __label128 always
++  317 label __label127
++  318 op add __tmp62 __fn3_x 7
++  319 draw line __fn3_x y __tmp62 y
++  320 op add __tmp63 y 6
++  321 draw line __fn3_x y __fn3_x __tmp63
++  322 draw line __fn3_x __tmp63 __tmp62 __tmp63
++  323 op add __tmp70 y 12
++  324 draw line __tmp62 __tmp63 __tmp62 __tmp70
++  325 draw line __fn3_x __tmp70 __tmp62 __tmp70
++  326 jump __label143 always
++  327 label __label128
++  328 jump __label129 equal __tmp50 3
++  329 jump __label130 always
++  330 label __label129
++  331 op add __tmp74 __fn3_x 7
++  332 op add __tmp76 y 12
++  333 draw line __tmp74 y __tmp74 __tmp76
++  334 draw line __fn3_x y __tmp74 y
++  335 op add __tmp78 y 6
++  336 draw line __fn3_x __tmp78 __tmp74 __tmp78
++  337 draw line __fn3_x __tmp76 __tmp74 __tmp76
++  338 jump __label143 always
++  339 label __label130
++  340 jump __label131 equal __tmp50 4
++  341 jump __label132 always
++  342 label __label131
++  343 op add __tmp84 __fn3_x 7
++  344 op add __tmp86 y 12
++  345 draw line __tmp84 y __tmp84 __tmp86
++  346 op add __tmp87 y 6
++  347 draw line __fn3_x __tmp87 __tmp84 __tmp87
++  348 draw line __fn3_x __tmp87 __fn3_x __tmp86
++  349 jump __label143 always
++  350 label __label132
++  351 jump __label133 equal __tmp50 5
++  352 jump __label134 always
++  353 label __label133
++  354 op add __tmp92 __fn3_x 7
++  355 draw line __fn3_x y __tmp92 y
++  356 op add __tmp95 y 6
++  357 draw line __tmp92 y __tmp92 __tmp95
++  358 draw line __fn3_x __tmp95 __tmp92 __tmp95
++  359 op add __tmp100 y 12
++  360 draw line __fn3_x __tmp95 __fn3_x __tmp100
++  361 draw line __fn3_x __tmp100 __tmp92 __tmp100
++  362 jump __label143 always
++  363 label __label134
++  364 jump __label135 equal __tmp50 6
++  365 jump __label136 always
++  366 label __label135
++  367 op add __tmp104 y 12
++  368 draw line __fn3_x y __fn3_x __tmp104
++  369 op add __tmp105 __fn3_x 7
++  370 draw line __fn3_x y __tmp105 y
++  371 op add __tmp108 y 6
++  372 draw line __tmp105 y __tmp105 __tmp108
++  373 draw line __fn3_x __tmp108 __tmp105 __tmp108
++  374 draw line __fn3_x __tmp104 __tmp105 __tmp104
++  375 jump __label143 always
++  376 label __label136
++  377 jump __label137 equal __tmp50 7
++  378 jump __label138 always
++  379 label __label137
++  380 op add __tmp116 __fn3_x 6
++  381 op add __tmp119 y 12
++  382 draw line __tmp116 y __tmp116 __tmp119
++  383 draw line __fn3_x __tmp119 __tmp116 __tmp119
++  384 jump __label143 always
++  385 label __label138
++  386 jump __label139 equal __tmp50 8
++  387 jump __label140 always
++  388 label __label139
++  389 op sub __tmp125 __fn3_x 1
++  390 op sub __tmp127 y 1
++  391 draw lineRect __tmp125 __tmp127 9 14
++  392 op add __tmp128 y 6
++  393 op add __tmp129 __fn3_x 7
++  394 draw line __fn3_x __tmp128 __tmp129 __tmp128
++  395 jump __label143 always
++  396 label __label140
++  397 jump __label141 equal __tmp50 9
++  398 jump __label142 always
++  399 label __label141
++  400 op add __tmp131 __fn3_x 7
++  401 draw line __fn3_x y __tmp131 y
++  402 op add __tmp134 y 12
++  403 draw line __tmp131 y __tmp131 __tmp134
++  404 op add __tmp135 y 6
++  405 draw line __fn3_x __tmp135 __tmp131 __tmp135
++  406 draw line __fn3_x __tmp135 __fn3_x __tmp134
++  407 draw line __fn3_x __tmp134 __tmp131 __tmp134
++  408 label __label142
++  409 label __label143
++  410 label __label144
++  411 op sub __fn3_x __fn3_x 11
++  412 op idiv __fn3_amount __fn3_amount 10
++  413 jump __label145 notEqual __fn3_amount 0
++  414 jump __label86 always
++  415 label __label145
++  416 label __label146
++  417 label __label147
++  418 op add __fn3_i __fn3_i 1
++  419 label __label148
++  420 op mod __tmp50 __fn3_amount 10
++  421 label __label149
++  422 jump __label150 equal __tmp50 0
++  423 jump __label151 always
++  424 label __label150
++  425 op sub __tmp54 __fn3_x 1
++  426 op sub __tmp56 y 1
++  427 draw lineRect __tmp54 __tmp56 9 14
++  428 jump __label170 always
++  429 label __label151
++  430 jump __label152 equal __tmp50 1
++  431 jump __label153 always
++  432 label __label152
++  433 op add __tmp58 __fn3_x 6
++  434 op add __tmp61 y 12
++  435 draw line __tmp58 y __tmp58 __tmp61
++  436 jump __label170 always
++  437 label __label153
++  438 jump __label154 equal __tmp50 2
++  439 jump __label155 always
++  440 label __label154
++  441 op add __tmp62 __fn3_x 7
++  442 draw line __fn3_x y __tmp62 y
++  443 op add __tmp63 y 6
++  444 draw line __fn3_x y __fn3_x __tmp63
++  445 draw line __fn3_x __tmp63 __tmp62 __tmp63
++  446 op add __tmp70 y 12
++  447 draw line __tmp62 __tmp63 __tmp62 __tmp70
++  448 draw line __fn3_x __tmp70 __tmp62 __tmp70
++  449 jump __label170 always
++  450 label __label155
++  451 jump __label156 equal __tmp50 3
++  452 jump __label157 always
++  453 label __label156
++  454 op add __tmp74 __fn3_x 7
++  455 op add __tmp76 y 12
++  456 draw line __tmp74 y __tmp74 __tmp76
++  457 draw line __fn3_x y __tmp74 y
++  458 op add __tmp78 y 6
++  459 draw line __fn3_x __tmp78 __tmp74 __tmp78
++  460 draw line __fn3_x __tmp76 __tmp74 __tmp76
++  461 jump __label170 always
++  462 label __label157
++  463 jump __label158 equal __tmp50 4
++  464 jump __label159 always
++  465 label __label158
++  466 op add __tmp84 __fn3_x 7
++  467 op add __tmp86 y 12
++  468 draw line __tmp84 y __tmp84 __tmp86
++  469 op add __tmp87 y 6
++  470 draw line __fn3_x __tmp87 __tmp84 __tmp87
++  471 draw line __fn3_x __tmp87 __fn3_x __tmp86
++  472 jump __label170 always
++  473 label __label159
++  474 jump __label160 equal __tmp50 5
++  475 jump __label161 always
++  476 label __label160
++  477 op add __tmp92 __fn3_x 7
++  478 draw line __fn3_x y __tmp92 y
++  479 op add __tmp95 y 6
++  480 draw line __tmp92 y __tmp92 __tmp95
++  481 draw line __fn3_x __tmp95 __tmp92 __tmp95
++  482 op add __tmp100 y 12
++  483 draw line __fn3_x __tmp95 __fn3_x __tmp100
++  484 draw line __fn3_x __tmp100 __tmp92 __tmp100
++  485 jump __label170 always
++  486 label __label161
++  487 jump __label162 equal __tmp50 6
++  488 jump __label163 always
++  489 label __label162
++  490 op add __tmp104 y 12
++  491 draw line __fn3_x y __fn3_x __tmp104
++  492 op add __tmp105 __fn3_x 7
++  493 draw line __fn3_x y __tmp105 y
++  494 op add __tmp108 y 6
++  495 draw line __tmp105 y __tmp105 __tmp108
++  496 draw line __fn3_x __tmp108 __tmp105 __tmp108
++  497 draw line __fn3_x __tmp104 __tmp105 __tmp104
++  498 jump __label170 always
++  499 label __label163
++  500 jump __label164 equal __tmp50 7
++  501 jump __label165 always
++  502 label __label164
++  503 op add __tmp116 __fn3_x 6
++  504 op add __tmp119 y 12
++  505 draw line __tmp116 y __tmp116 __tmp119
++  506 draw line __fn3_x __tmp119 __tmp116 __tmp119
++  507 jump __label170 always
++  508 label __label165
++  509 jump __label166 equal __tmp50 8
++  510 jump __label167 always
++  511 label __label166
++  512 op sub __tmp125 __fn3_x 1
++  513 op sub __tmp127 y 1
++  514 draw lineRect __tmp125 __tmp127 9 14
++  515 op add __tmp128 y 6
++  516 op add __tmp129 __fn3_x 7
++  517 draw line __fn3_x __tmp128 __tmp129 __tmp128
++  518 jump __label170 always
++  519 label __label167
++  520 jump __label168 equal __tmp50 9
++  521 jump __label169 always
++  522 label __label168
++  523 op add __tmp131 __fn3_x 7
++  524 draw line __fn3_x y __tmp131 y
++  525 op add __tmp134 y 12
++  526 draw line __tmp131 y __tmp131 __tmp134
++  527 op add __tmp135 y 6
++  528 draw line __fn3_x __tmp135 __tmp131 __tmp135
++  529 draw line __fn3_x __tmp135 __fn3_x __tmp134
++  530 draw line __fn3_x __tmp134 __tmp131 __tmp134
++  531 label __label169
++  532 label __label170
++  533 label __label171
++  534 op sub __fn3_x __fn3_x 11
++  535 op idiv __fn3_amount __fn3_amount 10
++  536 jump __label172 notEqual __fn3_amount 0
++  537 jump __label86 always
++  538 label __label172
++  539 label __label173
++  540 label __label174
++  541 op add __fn3_i __fn3_i 1
++  542 label __label175
++  543 op mod __tmp50 __fn3_amount 10
++  544 label __label176
++  545 jump __label177 equal __tmp50 0
++  546 jump __label178 always
++  547 label __label177
++  548 op sub __tmp54 __fn3_x 1
++  549 op sub __tmp56 y 1
++  550 draw lineRect __tmp54 __tmp56 9 14
++  551 jump __label197 always
++  552 label __label178
++  553 jump __label179 equal __tmp50 1
++  554 jump __label180 always
++  555 label __label179
++  556 op add __tmp58 __fn3_x 6
++  557 op add __tmp61 y 12
++  558 draw line __tmp58 y __tmp58 __tmp61
++  559 jump __label197 always
++  560 label __label180
++  561 jump __label181 equal __tmp50 2
++  562 jump __label182 always
++  563 label __label181
++  564 op add __tmp62 __fn3_x 7
++  565 draw line __fn3_x y __tmp62 y
++  566 op add __tmp63 y 6
++  567 draw line __fn3_x y __fn3_x __tmp63
++  568 draw line __fn3_x __tmp63 __tmp62 __tmp63
++  569 op add __tmp70 y 12
++  570 draw line __tmp62 __tmp63 __tmp62 __tmp70
++  571 draw line __fn3_x __tmp70 __tmp62 __tmp70
++  572 jump __label197 always
++  573 label __label182
++  574 jump __label183 equal __tmp50 3
++  575 jump __label184 always
++  576 label __label183
++  577 op add __tmp74 __fn3_x 7
++  578 op add __tmp76 y 12
++  579 draw line __tmp74 y __tmp74 __tmp76
++  580 draw line __fn3_x y __tmp74 y
++  581 op add __tmp78 y 6
++  582 draw line __fn3_x __tmp78 __tmp74 __tmp78
++  583 draw line __fn3_x __tmp76 __tmp74 __tmp76
++  584 jump __label197 always
++  585 label __label184
++  586 jump __label185 equal __tmp50 4
++  587 jump __label186 always
++  588 label __label185
++  589 op add __tmp84 __fn3_x 7
++  590 op add __tmp86 y 12
++  591 draw line __tmp84 y __tmp84 __tmp86
++  592 op add __tmp87 y 6
++  593 draw line __fn3_x __tmp87 __tmp84 __tmp87
++  594 draw line __fn3_x __tmp87 __fn3_x __tmp86
++  595 jump __label197 always
++  596 label __label186
++  597 jump __label187 equal __tmp50 5
++  598 jump __label188 always
++  599 label __label187
++  600 op add __tmp92 __fn3_x 7
++  601 draw line __fn3_x y __tmp92 y
++  602 op add __tmp95 y 6
++  603 draw line __tmp92 y __tmp92 __tmp95
++  604 draw line __fn3_x __tmp95 __tmp92 __tmp95
++  605 op add __tmp100 y 12
++  606 draw line __fn3_x __tmp95 __fn3_x __tmp100
++  607 draw line __fn3_x __tmp100 __tmp92 __tmp100
++  608 jump __label197 always
++  609 label __label188
++  610 jump __label189 equal __tmp50 6
++  611 jump __label190 always
++  612 label __label189
++  613 op add __tmp104 y 12
++  614 draw line __fn3_x y __fn3_x __tmp104
++  615 op add __tmp105 __fn3_x 7
++  616 draw line __fn3_x y __tmp105 y
++  617 op add __tmp108 y 6
++  618 draw line __tmp105 y __tmp105 __tmp108
++  619 draw line __fn3_x __tmp108 __tmp105 __tmp108
++  620 draw line __fn3_x __tmp104 __tmp105 __tmp104
++  621 jump __label197 always
++  622 label __label190
++  623 jump __label191 equal __tmp50 7
++  624 jump __label192 always
++  625 label __label191
++  626 op add __tmp116 __fn3_x 6
++  627 op add __tmp119 y 12
++  628 draw line __tmp116 y __tmp116 __tmp119
++  629 draw line __fn3_x __tmp119 __tmp116 __tmp119
++  630 jump __label197 always
++  631 label __label192
++  632 jump __label193 equal __tmp50 8
++  633 jump __label194 always
++  634 label __label193
++  635 op sub __tmp125 __fn3_x 1
++  636 op sub __tmp127 y 1
++  637 draw lineRect __tmp125 __tmp127 9 14
++  638 op add __tmp128 y 6
++  639 op add __tmp129 __fn3_x 7
++  640 draw line __fn3_x __tmp128 __tmp129 __tmp128
++  641 jump __label197 always
++  642 label __label194
++  643 jump __label195 equal __tmp50 9
++  644 jump __label196 always
++  645 label __label195
++  646 op add __tmp131 __fn3_x 7
++  647 draw line __fn3_x y __tmp131 y
++  648 op add __tmp134 y 12
++  649 draw line __tmp131 y __tmp131 __tmp134
++  650 op add __tmp135 y 6
++  651 draw line __fn3_x __tmp135 __tmp131 __tmp135
++  652 draw line __fn3_x __tmp135 __fn3_x __tmp134
++  653 draw line __fn3_x __tmp134 __tmp131 __tmp134
++  654 label __label196
++  655 label __label197
++  656 label __label198
++  657 op sub __fn3_x __fn3_x 11
++  658 op idiv __fn3_amount __fn3_amount 10
++  659 jump __label199 notEqual __fn3_amount 0
++  660 jump __label86 always
++  661 label __label199
++  662 label __label200
++  663 label __label201
++  664 op add __fn3_i __fn3_i 1
++  665 label __label202
++  666 op mod __tmp50 __fn3_amount 10
++  667 label __label203
++  668 jump __label204 equal __tmp50 0
++  669 jump __label205 always
++  670 label __label204
++  671 op sub __tmp54 __fn3_x 1
++  672 op sub __tmp56 y 1
++  673 draw lineRect __tmp54 __tmp56 9 14
++  674 jump __label224 always
++  675 label __label205
++  676 jump __label206 equal __tmp50 1
++  677 jump __label207 always
++  678 label __label206
++  679 op add __tmp58 __fn3_x 6
++  680 op add __tmp61 y 12
++  681 draw line __tmp58 y __tmp58 __tmp61
++  682 jump __label224 always
++  683 label __label207
++  684 jump __label208 equal __tmp50 2
++  685 jump __label209 always
++  686 label __label208
++  687 op add __tmp62 __fn3_x 7
++  688 draw line __fn3_x y __tmp62 y
++  689 op add __tmp63 y 6
++  690 draw line __fn3_x y __fn3_x __tmp63
++  691 draw line __fn3_x __tmp63 __tmp62 __tmp63
++  692 op add __tmp70 y 12
++  693 draw line __tmp62 __tmp63 __tmp62 __tmp70
++  694 draw line __fn3_x __tmp70 __tmp62 __tmp70
++  695 jump __label224 always
++  696 label __label209
++  697 jump __label210 equal __tmp50 3
++  698 jump __label211 always
++  699 label __label210
++  700 op add __tmp74 __fn3_x 7
++  701 op add __tmp76 y 12
++  702 draw line __tmp74 y __tmp74 __tmp76
++  703 draw line __fn3_x y __tmp74 y
++  704 op add __tmp78 y 6
++  705 draw line __fn3_x __tmp78 __tmp74 __tmp78
++  706 draw line __fn3_x __tmp76 __tmp74 __tmp76
++  707 jump __label224 always
++  708 label __label211
++  709 jump __label212 equal __tmp50 4
++  710 jump __label213 always
++  711 label __label212
++  712 op add __tmp84 __fn3_x 7
++  713 op add __tmp86 y 12
++  714 draw line __tmp84 y __tmp84 __tmp86
++  715 op add __tmp87 y 6
++  716 draw line __fn3_x __tmp87 __tmp84 __tmp87
++  717 draw line __fn3_x __tmp87 __fn3_x __tmp86
++  718 jump __label224 always
++  719 label __label213
++  720 jump __label214 equal __tmp50 5
++  721 jump __label215 always
++  722 label __label214
++  723 op add __tmp92 __fn3_x 7
++  724 draw line __fn3_x y __tmp92 y
++  725 op add __tmp95 y 6
++  726 draw line __tmp92 y __tmp92 __tmp95
++  727 draw line __fn3_x __tmp95 __tmp92 __tmp95
++  728 op add __tmp100 y 12
++  729 draw line __fn3_x __tmp95 __fn3_x __tmp100
++  730 draw line __fn3_x __tmp100 __tmp92 __tmp100
++  731 jump __label224 always
++  732 label __label215
++  733 jump __label216 equal __tmp50 6
++  734 jump __label217 always
++  735 label __label216
++  736 op add __tmp104 y 12
++  737 draw line __fn3_x y __fn3_x __tmp104
++  738 op add __tmp105 __fn3_x 7
++  739 draw line __fn3_x y __tmp105 y
++  740 op add __tmp108 y 6
++  741 draw line __tmp105 y __tmp105 __tmp108
++  742 draw line __fn3_x __tmp108 __tmp105 __tmp108
++  743 draw line __fn3_x __tmp104 __tmp105 __tmp104
++  744 jump __label224 always
++  745 label __label217
++  746 jump __label218 equal __tmp50 7
++  747 jump __label219 always
++  748 label __label218
++  749 op add __tmp116 __fn3_x 6
++  750 op add __tmp119 y 12
++  751 draw line __tmp116 y __tmp116 __tmp119
++  752 draw line __fn3_x __tmp119 __tmp116 __tmp119
++  753 jump __label224 always
++  754 label __label219
++  755 jump __label220 equal __tmp50 8
++  756 jump __label221 always
++  757 label __label220
++  758 op sub __tmp125 __fn3_x 1
++  759 op sub __tmp127 y 1
++  760 draw lineRect __tmp125 __tmp127 9 14
++  761 op add __tmp128 y 6
++  762 op add __tmp129 __fn3_x 7
++  763 draw line __fn3_x __tmp128 __tmp129 __tmp128
++  764 jump __label224 always
++  765 label __label221
++  766 jump __label222 equal __tmp50 9
++  767 jump __label223 always
++  768 label __label222
++  769 op add __tmp131 __fn3_x 7
++  770 draw line __fn3_x y __tmp131 y
++  771 op add __tmp134 y 12
++  772 draw line __tmp131 y __tmp131 __tmp134
++  773 op add __tmp135 y 6
++  774 draw line __fn3_x __tmp135 __tmp131 __tmp135
++  775 draw line __fn3_x __tmp135 __fn3_x __tmp134
++  776 draw line __fn3_x __tmp134 __tmp131 __tmp134
++  777 label __label223
++  778 label __label224
++  779 label __label225
++  780 op sub __fn3_x __fn3_x 11
++  781 op idiv __fn3_amount __fn3_amount 10
++  782 jump __label226 notEqual __fn3_amount 0
++  783 jump __label86 always
++  784 label __label226
++  785 label __label227
++  786 label __label228
++  787 op add __fn3_i __fn3_i 1
++  788 label __label229
++  789 op mod __tmp50 __fn3_amount 10
++  790 label __label230
++  791 jump __label231 equal __tmp50 0
++  792 jump __label232 always
++  793 label __label231
++  794 op sub __tmp54 __fn3_x 1
++  795 op sub __tmp56 y 1
++  796 draw lineRect __tmp54 __tmp56 9 14
++  797 jump __label251 always
++  798 label __label232
++  799 jump __label233 equal __tmp50 1
++  800 jump __label234 always
++  801 label __label233
++  802 op add __tmp58 __fn3_x 6
++  803 op add __tmp61 y 12
++  804 draw line __tmp58 y __tmp58 __tmp61
++  805 jump __label251 always
++  806 label __label234
++  807 jump __label235 equal __tmp50 2
++  808 jump __label236 always
++  809 label __label235
++  810 op add __tmp62 __fn3_x 7
++  811 draw line __fn3_x y __tmp62 y
++  812 op add __tmp63 y 6
++  813 draw line __fn3_x y __fn3_x __tmp63
++  814 draw line __fn3_x __tmp63 __tmp62 __tmp63
++  815 op add __tmp70 y 12
++  816 draw line __tmp62 __tmp63 __tmp62 __tmp70
++  817 draw line __fn3_x __tmp70 __tmp62 __tmp70
++  818 jump __label251 always
++  819 label __label236
++  820 jump __label237 equal __tmp50 3
++  821 jump __label238 always
++  822 label __label237
++  823 op add __tmp74 __fn3_x 7
++  824 op add __tmp76 y 12
++  825 draw line __tmp74 y __tmp74 __tmp76
++  826 draw line __fn3_x y __tmp74 y
++  827 op add __tmp78 y 6
++  828 draw line __fn3_x __tmp78 __tmp74 __tmp78
++  829 draw line __fn3_x __tmp76 __tmp74 __tmp76
++  830 jump __label251 always
++  831 label __label238
++  832 jump __label239 equal __tmp50 4
++  833 jump __label240 always
++  834 label __label239
++  835 op add __tmp84 __fn3_x 7
++  836 op add __tmp86 y 12
++  837 draw line __tmp84 y __tmp84 __tmp86
++  838 op add __tmp87 y 6
++  839 draw line __fn3_x __tmp87 __tmp84 __tmp87
++  840 draw line __fn3_x __tmp87 __fn3_x __tmp86
++  841 jump __label251 always
++  842 label __label240
++  843 jump __label241 equal __tmp50 5
++  844 jump __label242 always
++  845 label __label241
++  846 op add __tmp92 __fn3_x 7
++  847 draw line __fn3_x y __tmp92 y
++  848 op add __tmp95 y 6
++  849 draw line __tmp92 y __tmp92 __tmp95
++  850 draw line __fn3_x __tmp95 __tmp92 __tmp95
++  851 op add __tmp100 y 12
++  852 draw line __fn3_x __tmp95 __fn3_x __tmp100
++  853 draw line __fn3_x __tmp100 __tmp92 __tmp100
++  854 jump __label251 always
++  855 label __label242
++  856 jump __label243 equal __tmp50 6
++  857 jump __label244 always
++  858 label __label243
++  859 op add __tmp104 y 12
++  860 draw line __fn3_x y __fn3_x __tmp104
++  861 op add __tmp105 __fn3_x 7
++  862 draw line __fn3_x y __tmp105 y
++  863 op add __tmp108 y 6
++  864 draw line __tmp105 y __tmp105 __tmp108
++  865 draw line __fn3_x __tmp108 __tmp105 __tmp108
++  866 draw line __fn3_x __tmp104 __tmp105 __tmp104
++  867 jump __label251 always
++  868 label __label244
++  869 jump __label245 equal __tmp50 7
++  870 jump __label246 always
++  871 label __label245
++  872 op add __tmp116 __fn3_x 6
++  873 op add __tmp119 y 12
++  874 draw line __tmp116 y __tmp116 __tmp119
++  875 draw line __fn3_x __tmp119 __tmp116 __tmp119
++  876 jump __label251 always
++  877 label __label246
++  878 jump __label247 equal __tmp50 8
++  879 jump __label248 always
++  880 label __label247
++  881 op sub __tmp125 __fn3_x 1
++  882 op sub __tmp127 y 1
++  883 draw lineRect __tmp125 __tmp127 9 14
++  884 op add __tmp128 y 6
++  885 op add __tmp129 __fn3_x 7
++  886 draw line __fn3_x __tmp128 __tmp129 __tmp128
++  887 jump __label251 always
++  888 label __label248
++  889 jump __label249 equal __tmp50 9
++  890 jump __label250 always
++  891 label __label249
++  892 op add __tmp131 __fn3_x 7
++  893 draw line __fn3_x y __tmp131 y
++  894 op add __tmp134 y 12
++  895 draw line __tmp131 y __tmp131 __tmp134
++  896 op add __tmp135 y 6
++  897 draw line __fn3_x __tmp135 __tmp131 __tmp135
++  898 draw line __fn3_x __tmp135 __fn3_x __tmp134
++  899 draw line __fn3_x __tmp134 __tmp131 __tmp134
++  900 label __label250
++  901 label __label251
++  902 label __label252
++  903 op sub __fn3_x __fn3_x 11
++  904 op idiv __fn3_amount __fn3_amount 10
++  905 jump __label253 notEqual __fn3_amount 0
++  906 jump __label86 always
++  907 label __label253
++  908 label __label254
++  909 label __label255
++  910 op add __fn3_i __fn3_i 1
++  911 label __label86
+   912 label __label73
+   913 op add index index 1
+   914 op sub y y 20
+
+Modifications by Loop Unrolling: unroll iteration loop at line 69 (+103 instructions):
+ 
+   106 label __label25
+   107 draw color 255 255 255 255
+   108 set index 0
+-    * setaddr __tmp25 __label31
+-    * set item @sand
+-    * jump __label29 always
+-    * gotolabel __label31 marker0
+-    * setaddr __tmp25 __label32
+-    * set item @copper
+-    * jump __label29 always
+-    * gotolabel __label32 marker0
+-    * setaddr __tmp25 __label33
+-    * set item @lead
+-    * jump __label29 always
+-    * gotolabel __label33 marker0
+-    * setaddr __tmp25 __label34
+-    * set item @coal
+-    * jump __label29 always
+-    * gotolabel __label34 marker0
+-    * setaddr __tmp25 __label35
+-    * set item @titanium
+-    * jump __label29 always
+-    * gotolabel __label35 marker0
+-    * setaddr __tmp25 __label36
+-    * set item @thorium
+-    * jump __label29 always
+-    * gotolabel __label36 marker0
+-    * setaddr __tmp25 __label37
+-    * set item @scrap
+-    * jump __label29 always
+-    * gotolabel __label37 marker0
+-    * setaddr __tmp25 __label38
+-    * set item @graphite
+-    * jump __label29 always
+-    * gotolabel __label38 marker0
+-    * setaddr __tmp25 __label39
+-    * set item @metaglass
+-    * jump __label29 always
+-    * gotolabel __label39 marker0
+-    * setaddr __tmp25 __label40
+-    * set item @silicon
+-    * jump __label29 always
+-    * gotolabel __label40 marker0
+-    * setaddr __tmp25 __label41
+-    * set item @pyratite
+-    * jump __label29 always
+-    * gotolabel __label41 marker0
+-    * setaddr __tmp25 __label42
+-    * set item @blast-compound
+-    * jump __label29 always
+-    * gotolabel __label42 marker0
+-    * setaddr __tmp25 __label43
+-    * set item @plastanium
+-    * jump __label29 always
+-    * gotolabel __label43 marker0
+-    * setaddr __tmp25 __label44
+-    * set item @phase-fabric
+-    * jump __label29 always
+-    * gotolabel __label44 marker0
+-    * setaddr __tmp25 __label45
+-    * set item @surge-alloy
+-    * jump __label29 always
+-    * gotolabel __label45 marker0
+-    * setaddr __tmp25 __label46
+-    * set item @spore-pod
+-    * label __label29
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label47 notEqual index 8
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+-    * label __label47
+-    * label __label48
+-    * label __label28
+-    * goto __tmp25 marker0
+-    * gotolabel __label46 marker0
+-    * label __label30
++  109 set item @sand
++  110 label __label256
++  111 op add __tmp26 x 8
++  112 op add __tmp29 y 7
++  113 draw image __tmp26 __tmp29 item 16 0
++  114 op add index index 1
++  115 op sub y y 20
++  116 jump __label257 notEqual index 8
++  117 set y 152
++  118 set x 93
++  119 draw color 255 255 255 255
++  120 label __label257
++  121 label __label258
++  122 label __label259
++  123 set item @copper
++  124 label __label260
++  125 op add __tmp26 x 8
++  126 op add __tmp29 y 7
++  127 draw image __tmp26 __tmp29 item 16 0
++  128 op add index index 1
++  129 op sub y y 20
++  130 jump __label261 notEqual index 8
++  131 set y 152
++  132 set x 93
++  133 draw color 255 255 255 255
++  134 label __label261
++  135 label __label262
++  136 label __label263
++  137 set item @lead
++  138 label __label264
++  139 op add __tmp26 x 8
++  140 op add __tmp29 y 7
++  141 draw image __tmp26 __tmp29 item 16 0
++  142 op add index index 1
++  143 op sub y y 20
++  144 jump __label265 notEqual index 8
++  145 set y 152
++  146 set x 93
++  147 draw color 255 255 255 255
++  148 label __label265
++  149 label __label266
++  150 label __label267
++  151 set item @coal
++  152 label __label268
++  153 op add __tmp26 x 8
++  154 op add __tmp29 y 7
++  155 draw image __tmp26 __tmp29 item 16 0
++  156 op add index index 1
++  157 op sub y y 20
++  158 jump __label269 notEqual index 8
++  159 set y 152
++  160 set x 93
++  161 draw color 255 255 255 255
++  162 label __label269
++  163 label __label270
++  164 label __label271
++  165 set item @titanium
++  166 label __label272
++  167 op add __tmp26 x 8
++  168 op add __tmp29 y 7
++  169 draw image __tmp26 __tmp29 item 16 0
++  170 op add index index 1
++  171 op sub y y 20
++  172 jump __label273 notEqual index 8
++  173 set y 152
++  174 set x 93
++  175 draw color 255 255 255 255
++  176 label __label273
++  177 label __label274
++  178 label __label275
++  179 set item @thorium
++  180 label __label276
++  181 op add __tmp26 x 8
++  182 op add __tmp29 y 7
++  183 draw image __tmp26 __tmp29 item 16 0
++  184 op add index index 1
++  185 op sub y y 20
++  186 jump __label277 notEqual index 8
++  187 set y 152
++  188 set x 93
++  189 draw color 255 255 255 255
++  190 label __label277
++  191 label __label278
++  192 label __label279
++  193 set item @scrap
++  194 label __label280
++  195 op add __tmp26 x 8
++  196 op add __tmp29 y 7
++  197 draw image __tmp26 __tmp29 item 16 0
++  198 op add index index 1
++  199 op sub y y 20
++  200 jump __label281 notEqual index 8
++  201 set y 152
++  202 set x 93
++  203 draw color 255 255 255 255
++  204 label __label281
++  205 label __label282
++  206 label __label283
++  207 set item @graphite
++  208 label __label284
++  209 op add __tmp26 x 8
++  210 op add __tmp29 y 7
++  211 draw image __tmp26 __tmp29 item 16 0
++  212 op add index index 1
++  213 op sub y y 20
++  214 jump __label285 notEqual index 8
++  215 set y 152
++  216 set x 93
++  217 draw color 255 255 255 255
++  218 label __label285
++  219 label __label286
++  220 label __label287
++  221 set item @metaglass
++  222 label __label288
++  223 op add __tmp26 x 8
++  224 op add __tmp29 y 7
++  225 draw image __tmp26 __tmp29 item 16 0
++  226 op add index index 1
++  227 op sub y y 20
++  228 jump __label289 notEqual index 8
++  229 set y 152
++  230 set x 93
++  231 draw color 255 255 255 255
++  232 label __label289
++  233 label __label290
++  234 label __label291
++  235 set item @silicon
++  236 label __label292
++  237 op add __tmp26 x 8
++  238 op add __tmp29 y 7
++  239 draw image __tmp26 __tmp29 item 16 0
++  240 op add index index 1
++  241 op sub y y 20
++  242 jump __label293 notEqual index 8
++  243 set y 152
++  244 set x 93
++  245 draw color 255 255 255 255
++  246 label __label293
++  247 label __label294
++  248 label __label295
++  249 set item @pyratite
++  250 label __label296
++  251 op add __tmp26 x 8
++  252 op add __tmp29 y 7
++  253 draw image __tmp26 __tmp29 item 16 0
++  254 op add index index 1
++  255 op sub y y 20
++  256 jump __label297 notEqual index 8
++  257 set y 152
++  258 set x 93
++  259 draw color 255 255 255 255
++  260 label __label297
++  261 label __label298
++  262 label __label299
++  263 set item @blast-compound
++  264 label __label300
++  265 op add __tmp26 x 8
++  266 op add __tmp29 y 7
++  267 draw image __tmp26 __tmp29 item 16 0
++  268 op add index index 1
++  269 op sub y y 20
++  270 jump __label301 notEqual index 8
++  271 set y 152
++  272 set x 93
++  273 draw color 255 255 255 255
++  274 label __label301
++  275 label __label302
++  276 label __label303
++  277 set item @plastanium
++  278 label __label304
++  279 op add __tmp26 x 8
++  280 op add __tmp29 y 7
++  281 draw image __tmp26 __tmp29 item 16 0
++  282 op add index index 1
++  283 op sub y y 20
++  284 jump __label305 notEqual index 8
++  285 set y 152
++  286 set x 93
++  287 draw color 255 255 255 255
++  288 label __label305
++  289 label __label306
++  290 label __label307
++  291 set item @phase-fabric
++  292 label __label308
++  293 op add __tmp26 x 8
++  294 op add __tmp29 y 7
++  295 draw image __tmp26 __tmp29 item 16 0
++  296 op add index index 1
++  297 op sub y y 20
++  298 jump __label309 notEqual index 8
++  299 set y 152
++  300 set x 93
++  301 draw color 255 255 255 255
++  302 label __label309
++  303 label __label310
++  304 label __label311
++  305 set item @surge-alloy
++  306 label __label312
++  307 op add __tmp26 x 8
++  308 op add __tmp29 y 7
++  309 draw image __tmp26 __tmp29 item 16 0
++  310 op add index index 1
++  311 op sub y y 20
++  312 jump __label313 notEqual index 8
++  313 set y 152
++  314 set x 93
++  315 draw color 255 255 255 255
++  316 label __label313
++  317 label __label314
++  318 label __label315
++  319 set item @spore-pod
++  320 label __label316
++  321 op add __tmp26 x 8
++  322 op add __tmp29 y 7
++  323 draw image __tmp26 __tmp29 item 16 0
++  324 op add index index 1
++  325 op sub y y 20
++  326 jump __label317 notEqual index 8
++  327 set y 152
++  328 set x 93
++  329 draw color 255 255 255 255
++  330 label __label317
++  331 label __label318
++  332 label __label319
++  333 label __label30
+   334 drawflush display1
+   335 set x 71
+   336 set y 152
+
+Modifications by Loop Optimization: replicate condition at line 56 (+7 instructions):
+ 
+    80 op equal __tmp16 LINKS @links
+    81 op land __tmp17 __tmp15 __tmp16
+    82 jump __label19 equal __tmp17 false
++   83 label __label320
+    84 set start @time
+    85 sensor CAPACITY CONTAINER @itemCapacity
+    86 op div LIMIT CAPACITY 5
+ 
+  1087 print " ms"
+  1088 printflush message1
+  1089 label __label18
+-    * jump __label17 always
++ 1090 sensor __tmp11 CONTAINER @dead
++ 1091 op strictEqual __tmp12 __tmp11 0
++ 1092 sensor __tmp13 DISPLAY @dead
++ 1093 op strictEqual __tmp14 __tmp13 0
++ 1094 op land __tmp15 __tmp12 __tmp14
++ 1095 op equal __tmp16 LINKS @links
++ 1096 op land __tmp17 __tmp15 __tmp16
++ 1097 jump __label320 notEqual __tmp17 false
+  1098 label __label19
+  1099 end
+
+Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-2 instructions):
+ 
+    89 set y 152
+    90 label __label20
+    91 draw color 0 0 80 255
+-    * jump __label22 equal true false
++   92 noop
+    93 draw rect 0 0 23 176
+    94 jump __label23 always
+    95 label __label22
+ 
+    98 label __label21
+    99 label __label24
+   100 draw color 0 0 80 255
+-    * jump __label26 equal false false
++  101 jump __label26 always
+   102 draw rect 0 0 23 176
+   103 jump __label27 always
+   104 label __label26
+ 
+   337 set y 152
+   338 label __label49
+   339 draw color 0 0 80 255
+-    * jump __label51 equal true false
++  340 noop
+   341 draw rect 23 0 70 176
+   342 jump __label52 always
+   343 label __label51
+ 
+  1066 set x 157
+  1067 label __label114
+  1068 draw color 0 0 80 255
+-    * jump __label116 equal false false
++ 1069 jump __label116 always
+  1070 draw rect 23 0 70 176
+  1071 jump __label117 always
+  1072 label __label116
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-3 instructions):
+ 
+     7 set LINKS @links
+     8 set n LINKS
+     9 label __label3
+-    * jump __label5 lessThanEq n 0
++   10 jump __label5 lessThanEq LINKS 0
+    11 label __label118
+    12 op sub n n 1
+    13 getlink block n
+ 
+   109 set index 0
+   110 set item @sand
+   111 label __label256
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label257 notEqual index 8
++  112 op add __tmp26 7 8
++  113 op add __tmp29 152 7
++  114 draw image 15 159 @sand 16 0
++  115 op add index 0 1
++  116 op sub y 152 20
++  117 jump __label257 notEqual 1 8
+   118 set y 152
+   119 set x 93
+   120 draw color 255 255 255 255
+ 
+   123 label __label259
+   124 set item @copper
+   125 label __label260
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label261 notEqual index 8
++  126 op add __tmp26 7 8
++  127 op add __tmp29 132 7
++  128 draw image 15 139 @copper 16 0
++  129 op add index 1 1
++  130 op sub y 132 20
++  131 jump __label261 notEqual 2 8
+   132 set y 152
+   133 set x 93
+   134 draw color 255 255 255 255
+ 
+   137 label __label263
+   138 set item @lead
+   139 label __label264
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label265 notEqual index 8
++  140 op add __tmp26 7 8
++  141 op add __tmp29 112 7
++  142 draw image 15 119 @lead 16 0
++  143 op add index 2 1
++  144 op sub y 112 20
++  145 jump __label265 notEqual 3 8
+   146 set y 152
+   147 set x 93
+   148 draw color 255 255 255 255
+ 
+   151 label __label267
+   152 set item @coal
+   153 label __label268
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label269 notEqual index 8
++  154 op add __tmp26 7 8
++  155 op add __tmp29 92 7
++  156 draw image 15 99 @coal 16 0
++  157 op add index 3 1
++  158 op sub y 92 20
++  159 jump __label269 notEqual 4 8
+   160 set y 152
+   161 set x 93
+   162 draw color 255 255 255 255
+ 
+   165 label __label271
+   166 set item @titanium
+   167 label __label272
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label273 notEqual index 8
++  168 op add __tmp26 7 8
++  169 op add __tmp29 72 7
++  170 draw image 15 79 @titanium 16 0
++  171 op add index 4 1
++  172 op sub y 72 20
++  173 jump __label273 notEqual 5 8
+   174 set y 152
+   175 set x 93
+   176 draw color 255 255 255 255
+ 
+   179 label __label275
+   180 set item @thorium
+   181 label __label276
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label277 notEqual index 8
++  182 op add __tmp26 7 8
++  183 op add __tmp29 52 7
++  184 draw image 15 59 @thorium 16 0
++  185 op add index 5 1
++  186 op sub y 52 20
++  187 jump __label277 notEqual 6 8
+   188 set y 152
+   189 set x 93
+   190 draw color 255 255 255 255
+ 
+   193 label __label279
+   194 set item @scrap
+   195 label __label280
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label281 notEqual index 8
++  196 op add __tmp26 7 8
++  197 op add __tmp29 32 7
++  198 draw image 15 39 @scrap 16 0
++  199 op add index 6 1
++  200 op sub y 32 20
++  201 jump __label281 notEqual 7 8
+   202 set y 152
+   203 set x 93
+   204 draw color 255 255 255 255
+ 
+   207 label __label283
+   208 set item @graphite
+   209 label __label284
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label285 notEqual index 8
++  210 op add __tmp26 7 8
++  211 op add __tmp29 12 7
++  212 draw image 15 19 @graphite 16 0
++  213 op add index 7 1
++  214 op sub y 12 20
++  215 jump __label285 notEqual 8 8
+   216 set y 152
+   217 set x 93
+   218 draw color 255 255 255 255
+ 
+   221 label __label287
+   222 set item @metaglass
+   223 label __label288
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label289 notEqual index 8
++  224 op add __tmp26 93 8
++  225 op add __tmp29 152 7
++  226 draw image 101 159 @metaglass 16 0
++  227 op add index 8 1
++  228 op sub y 152 20
++  229 jump __label289 notEqual 9 8
+   230 set y 152
+   231 set x 93
+   232 draw color 255 255 255 255
+ 
+   235 label __label291
+   236 set item @silicon
+   237 label __label292
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label293 notEqual index 8
++  238 op add __tmp26 93 8
++  239 op add __tmp29 132 7
++  240 draw image 101 139 @silicon 16 0
++  241 op add index 9 1
++  242 op sub y 132 20
++  243 jump __label293 notEqual 10 8
+   244 set y 152
+   245 set x 93
+   246 draw color 255 255 255 255
+ 
+   249 label __label295
+   250 set item @pyratite
+   251 label __label296
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label297 notEqual index 8
++  252 op add __tmp26 93 8
++  253 op add __tmp29 112 7
++  254 draw image 101 119 @pyratite 16 0
++  255 op add index 10 1
++  256 op sub y 112 20
++  257 jump __label297 notEqual 11 8
+   258 set y 152
+   259 set x 93
+   260 draw color 255 255 255 255
+ 
+   263 label __label299
+   264 set item @blast-compound
+   265 label __label300
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label301 notEqual index 8
++  266 op add __tmp26 93 8
++  267 op add __tmp29 92 7
++  268 draw image 101 99 @blast-compound 16 0
++  269 op add index 11 1
++  270 op sub y 92 20
++  271 jump __label301 notEqual 12 8
+   272 set y 152
+   273 set x 93
+   274 draw color 255 255 255 255
+ 
+   277 label __label303
+   278 set item @plastanium
+   279 label __label304
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label305 notEqual index 8
++  280 op add __tmp26 93 8
++  281 op add __tmp29 72 7
++  282 draw image 101 79 @plastanium 16 0
++  283 op add index 12 1
++  284 op sub y 72 20
++  285 jump __label305 notEqual 13 8
+   286 set y 152
+   287 set x 93
+   288 draw color 255 255 255 255
+ 
+   291 label __label307
+   292 set item @phase-fabric
+   293 label __label308
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label309 notEqual index 8
++  294 op add __tmp26 93 8
++  295 op add __tmp29 52 7
++  296 draw image 101 59 @phase-fabric 16 0
++  297 op add index 13 1
++  298 op sub y 52 20
++  299 jump __label309 notEqual 14 8
+   300 set y 152
+   301 set x 93
+   302 draw color 255 255 255 255
+ 
+   305 label __label311
+   306 set item @surge-alloy
+   307 label __label312
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label313 notEqual index 8
++  308 op add __tmp26 93 8
++  309 op add __tmp29 32 7
++  310 draw image 101 39 @surge-alloy 16 0
++  311 op add index 14 1
++  312 op sub y 32 20
++  313 jump __label313 notEqual 15 8
+   314 set y 152
+   315 set x 93
+   316 draw color 255 255 255 255
+ 
+   319 label __label315
+   320 set item @spore-pod
+   321 label __label316
+-    * op add __tmp26 x 8
+-    * op add __tmp29 y 7
+-    * draw image __tmp26 __tmp29 item 16 0
+-    * op add index index 1
+-    * op sub y y 20
+-    * jump __label317 notEqual index 8
+-    * set y 152
+-    * set x 93
++  322 op add __tmp26 93 8
++  323 op add __tmp29 12 7
++  324 draw image 101 19 @spore-pod 16 0
++  325 op add index 15 1
++  326 op sub y 12 20
++  327 jump __label317 notEqual 16 8
+   328 draw color 255 255 255 255
+   329 label __label317
+   330 label __label318
+ 
+   445 jump __label123 equal __tmp50 0
+   446 jump __label124 always
+   447 label __label123
+-    * op sub __tmp54 __fn3_x 1
++  448 op sub __tmp54 x 1
+   449 op sub __tmp56 y 1
+   450 draw lineRect __tmp54 __tmp56 9 14
+   451 jump __label143 always
+ 
+   453 jump __label125 equal __tmp50 1
+   454 jump __label126 always
+   455 label __label125
+-    * op add __tmp58 __fn3_x 6
++  456 op add __tmp58 x 6
+   457 op add __tmp61 y 12
+   458 draw line __tmp58 y __tmp58 __tmp61
+   459 jump __label143 always
+ 
+   461 jump __label127 equal __tmp50 2
+   462 jump __label128 always
+   463 label __label127
+-    * op add __tmp62 __fn3_x 7
+-    * draw line __fn3_x y __tmp62 y
++  464 op add __tmp62 x 7
++  465 draw line x y __tmp62 y
+   466 op add __tmp63 y 6
+-    * draw line __fn3_x y __fn3_x __tmp63
+-    * draw line __fn3_x __tmp63 __tmp62 __tmp63
++  467 draw line x y x __tmp63
++  468 draw line x __tmp63 __tmp62 __tmp63
+   469 op add __tmp70 y 12
+   470 draw line __tmp62 __tmp63 __tmp62 __tmp70
+-    * draw line __fn3_x __tmp70 __tmp62 __tmp70
++  471 draw line x __tmp70 __tmp62 __tmp70
+   472 jump __label143 always
+   473 label __label128
+   474 jump __label129 equal __tmp50 3
+   475 jump __label130 always
+   476 label __label129
+-    * op add __tmp74 __fn3_x 7
++  477 op add __tmp74 x 7
+   478 op add __tmp76 y 12
+   479 draw line __tmp74 y __tmp74 __tmp76
+-    * draw line __fn3_x y __tmp74 y
++  480 draw line x y __tmp74 y
+   481 op add __tmp78 y 6
+-    * draw line __fn3_x __tmp78 __tmp74 __tmp78
+-    * draw line __fn3_x __tmp76 __tmp74 __tmp76
++  482 draw line x __tmp78 __tmp74 __tmp78
++  483 draw line x __tmp76 __tmp74 __tmp76
+   484 jump __label143 always
+   485 label __label130
+   486 jump __label131 equal __tmp50 4
+   487 jump __label132 always
+   488 label __label131
+-    * op add __tmp84 __fn3_x 7
++  489 op add __tmp84 x 7
+   490 op add __tmp86 y 12
+   491 draw line __tmp84 y __tmp84 __tmp86
+   492 op add __tmp87 y 6
+-    * draw line __fn3_x __tmp87 __tmp84 __tmp87
+-    * draw line __fn3_x __tmp87 __fn3_x __tmp86
++  493 draw line x __tmp87 __tmp84 __tmp87
++  494 draw line x __tmp87 x __tmp86
+   495 jump __label143 always
+   496 label __label132
+   497 jump __label133 equal __tmp50 5
+   498 jump __label134 always
+   499 label __label133
+-    * op add __tmp92 __fn3_x 7
+-    * draw line __fn3_x y __tmp92 y
++  500 op add __tmp92 x 7
++  501 draw line x y __tmp92 y
+   502 op add __tmp95 y 6
+   503 draw line __tmp92 y __tmp92 __tmp95
+-    * draw line __fn3_x __tmp95 __tmp92 __tmp95
++  504 draw line x __tmp95 __tmp92 __tmp95
+   505 op add __tmp100 y 12
+-    * draw line __fn3_x __tmp95 __fn3_x __tmp100
+-    * draw line __fn3_x __tmp100 __tmp92 __tmp100
++  506 draw line x __tmp95 x __tmp100
++  507 draw line x __tmp100 __tmp92 __tmp100
+   508 jump __label143 always
+   509 label __label134
+   510 jump __label135 equal __tmp50 6
+   511 jump __label136 always
+   512 label __label135
+   513 op add __tmp104 y 12
+-    * draw line __fn3_x y __fn3_x __tmp104
+-    * op add __tmp105 __fn3_x 7
+-    * draw line __fn3_x y __tmp105 y
++  514 draw line x y x __tmp104
++  515 op add __tmp105 x 7
++  516 draw line x y __tmp105 y
+   517 op add __tmp108 y 6
+   518 draw line __tmp105 y __tmp105 __tmp108
+-    * draw line __fn3_x __tmp108 __tmp105 __tmp108
+-    * draw line __fn3_x __tmp104 __tmp105 __tmp104
++  519 draw line x __tmp108 __tmp105 __tmp108
++  520 draw line x __tmp104 __tmp105 __tmp104
+   521 jump __label143 always
+   522 label __label136
+   523 jump __label137 equal __tmp50 7
+   524 jump __label138 always
+   525 label __label137
+-    * op add __tmp116 __fn3_x 6
++  526 op add __tmp116 x 6
+   527 op add __tmp119 y 12
+   528 draw line __tmp116 y __tmp116 __tmp119
+-    * draw line __fn3_x __tmp119 __tmp116 __tmp119
++  529 draw line x __tmp119 __tmp116 __tmp119
+   530 jump __label143 always
+   531 label __label138
+   532 jump __label139 equal __tmp50 8
+   533 jump __label140 always
+   534 label __label139
+-    * op sub __tmp125 __fn3_x 1
++  535 op sub __tmp125 x 1
+   536 op sub __tmp127 y 1
+   537 draw lineRect __tmp125 __tmp127 9 14
+   538 op add __tmp128 y 6
+-    * op add __tmp129 __fn3_x 7
+-    * draw line __fn3_x __tmp128 __tmp129 __tmp128
++  539 op add __tmp129 x 7
++  540 draw line x __tmp128 __tmp129 __tmp128
+   541 jump __label143 always
+   542 label __label140
+   543 jump __label141 equal __tmp50 9
+   544 jump __label142 always
+   545 label __label141
+-    * op add __tmp131 __fn3_x 7
+-    * draw line __fn3_x y __tmp131 y
++  546 op add __tmp131 x 7
++  547 draw line x y __tmp131 y
+   548 op add __tmp134 y 12
+   549 draw line __tmp131 y __tmp131 __tmp134
+   550 op add __tmp135 y 6
+-    * draw line __fn3_x __tmp135 __tmp131 __tmp135
+-    * draw line __fn3_x __tmp135 __fn3_x __tmp134
+-    * draw line __fn3_x __tmp134 __tmp131 __tmp134
++  551 draw line x __tmp135 __tmp131 __tmp135
++  552 draw line x __tmp135 x __tmp134
++  553 draw line x __tmp134 __tmp131 __tmp134
+   554 label __label142
+   555 label __label143
+   556 label __label144
+-    * op sub __fn3_x __fn3_x 11
++  557 op sub __fn3_x x 11
+   558 op idiv __fn3_amount __fn3_amount 10
+   559 jump __label145 notEqual __fn3_amount 0
+   560 jump __label86 always
+   561 label __label145
+   562 label __label146
+   563 label __label147
+-    * op add __fn3_i __fn3_i 1
++  564 op add __fn3_i 0 1
+   565 label __label148
+   566 op mod __tmp50 __fn3_amount 10
+   567 label __label149
+ 
+   684 label __label172
+   685 label __label173
+   686 label __label174
+-    * op add __fn3_i __fn3_i 1
++  687 op add __fn3_i 1 1
+   688 label __label175
+   689 op mod __tmp50 __fn3_amount 10
+   690 label __label176
+ 
+   807 label __label199
+   808 label __label200
+   809 label __label201
+-    * op add __fn3_i __fn3_i 1
++  810 op add __fn3_i 2 1
+   811 label __label202
+   812 op mod __tmp50 __fn3_amount 10
+   813 label __label203
+ 
+   930 label __label226
+   931 label __label227
+   932 label __label228
+-    * op add __fn3_i __fn3_i 1
++  933 op add __fn3_i 3 1
+   934 label __label229
+   935 op mod __tmp50 __fn3_amount 10
+   936 label __label230
+ 
+  1046 label __label250
+  1047 label __label251
+  1048 label __label252
+-    * op sub __fn3_x __fn3_x 11
+  1049 op idiv __fn3_amount __fn3_amount 10
+  1050 jump __label253 notEqual __fn3_amount 0
+  1051 jump __label86 always
+  1052 label __label253
+  1053 label __label254
+  1054 label __label255
+-    * op add __fn3_i __fn3_i 1
++ 1055 op add __fn3_i 4 1
+  1056 label __label86
+  1057 label __label73
+  1058 op add index index 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-92 instructions):
+ 
+    85 sensor CAPACITY CONTAINER @itemCapacity
+    86 op div LIMIT CAPACITY 5
+    87 draw stroke 2
+-    * set x 7
+-    * set y 152
+    88 label __label20
+    89 draw color 0 0 80 255
+    90 noop
+ 
+   104 label __label27
+   105 label __label25
+   106 draw color 255 255 255 255
+-    * set index 0
+-    * set item @sand
+   107 label __label256
+-    * op add __tmp26 7 8
+-    * op add __tmp29 152 7
+   108 draw image 15 159 @sand 16 0
+-    * op add index 0 1
+-    * op sub y 152 20
+   109 jump __label257 notEqual 1 8
+   110 set y 152
+   111 set x 93
+ 
+   113 label __label257
+   114 label __label258
+   115 label __label259
+-    * set item @copper
+   116 label __label260
+-    * op add __tmp26 7 8
+-    * op add __tmp29 132 7
+   117 draw image 15 139 @copper 16 0
+-    * op add index 1 1
+-    * op sub y 132 20
+   118 jump __label261 notEqual 2 8
+   119 set y 152
+   120 set x 93
+ 
+   122 label __label261
+   123 label __label262
+   124 label __label263
+-    * set item @lead
+   125 label __label264
+-    * op add __tmp26 7 8
+-    * op add __tmp29 112 7
+   126 draw image 15 119 @lead 16 0
+-    * op add index 2 1
+-    * op sub y 112 20
+   127 jump __label265 notEqual 3 8
+   128 set y 152
+   129 set x 93
+ 
+   131 label __label265
+   132 label __label266
+   133 label __label267
+-    * set item @coal
+   134 label __label268
+-    * op add __tmp26 7 8
+-    * op add __tmp29 92 7
+   135 draw image 15 99 @coal 16 0
+-    * op add index 3 1
+-    * op sub y 92 20
+   136 jump __label269 notEqual 4 8
+   137 set y 152
+   138 set x 93
+ 
+   140 label __label269
+   141 label __label270
+   142 label __label271
+-    * set item @titanium
+   143 label __label272
+-    * op add __tmp26 7 8
+-    * op add __tmp29 72 7
+   144 draw image 15 79 @titanium 16 0
+-    * op add index 4 1
+-    * op sub y 72 20
+   145 jump __label273 notEqual 5 8
+   146 set y 152
+   147 set x 93
+ 
+   149 label __label273
+   150 label __label274
+   151 label __label275
+-    * set item @thorium
+   152 label __label276
+-    * op add __tmp26 7 8
+-    * op add __tmp29 52 7
+   153 draw image 15 59 @thorium 16 0
+-    * op add index 5 1
+-    * op sub y 52 20
+   154 jump __label277 notEqual 6 8
+   155 set y 152
+   156 set x 93
+ 
+   158 label __label277
+   159 label __label278
+   160 label __label279
+-    * set item @scrap
+   161 label __label280
+-    * op add __tmp26 7 8
+-    * op add __tmp29 32 7
+   162 draw image 15 39 @scrap 16 0
+-    * op add index 6 1
+-    * op sub y 32 20
+   163 jump __label281 notEqual 7 8
+   164 set y 152
+   165 set x 93
+ 
+   167 label __label281
+   168 label __label282
+   169 label __label283
+-    * set item @graphite
+   170 label __label284
+-    * op add __tmp26 7 8
+-    * op add __tmp29 12 7
+   171 draw image 15 19 @graphite 16 0
+-    * op add index 7 1
+-    * op sub y 12 20
+   172 jump __label285 notEqual 8 8
+-    * set y 152
+-    * set x 93
+   173 draw color 255 255 255 255
+   174 label __label285
+   175 label __label286
+   176 label __label287
+-    * set item @metaglass
+   177 label __label288
+-    * op add __tmp26 93 8
+-    * op add __tmp29 152 7
+   178 draw image 101 159 @metaglass 16 0
+-    * op add index 8 1
+-    * op sub y 152 20
+   179 jump __label289 notEqual 9 8
+   180 set y 152
+   181 set x 93
+ 
+   183 label __label289
+   184 label __label290
+   185 label __label291
+-    * set item @silicon
+   186 label __label292
+-    * op add __tmp26 93 8
+-    * op add __tmp29 132 7
+   187 draw image 101 139 @silicon 16 0
+-    * op add index 9 1
+-    * op sub y 132 20
+   188 jump __label293 notEqual 10 8
+   189 set y 152
+   190 set x 93
+ 
+   192 label __label293
+   193 label __label294
+   194 label __label295
+-    * set item @pyratite
+   195 label __label296
+-    * op add __tmp26 93 8
+-    * op add __tmp29 112 7
+   196 draw image 101 119 @pyratite 16 0
+-    * op add index 10 1
+-    * op sub y 112 20
+   197 jump __label297 notEqual 11 8
+   198 set y 152
+   199 set x 93
+ 
+   201 label __label297
+   202 label __label298
+   203 label __label299
+-    * set item @blast-compound
+   204 label __label300
+-    * op add __tmp26 93 8
+-    * op add __tmp29 92 7
+   205 draw image 101 99 @blast-compound 16 0
+-    * op add index 11 1
+-    * op sub y 92 20
+   206 jump __label301 notEqual 12 8
+   207 set y 152
+   208 set x 93
+ 
+   210 label __label301
+   211 label __label302
+   212 label __label303
+-    * set item @plastanium
+   213 label __label304
+-    * op add __tmp26 93 8
+-    * op add __tmp29 72 7
+   214 draw image 101 79 @plastanium 16 0
+-    * op add index 12 1
+-    * op sub y 72 20
+   215 jump __label305 notEqual 13 8
+   216 set y 152
+   217 set x 93
+ 
+   219 label __label305
+   220 label __label306
+   221 label __label307
+-    * set item @phase-fabric
+   222 label __label308
+-    * op add __tmp26 93 8
+-    * op add __tmp29 52 7
+   223 draw image 101 59 @phase-fabric 16 0
+-    * op add index 13 1
+-    * op sub y 52 20
+   224 jump __label309 notEqual 14 8
+   225 set y 152
+   226 set x 93
+ 
+   228 label __label309
+   229 label __label310
+   230 label __label311
+-    * set item @surge-alloy
+   231 label __label312
+-    * op add __tmp26 93 8
+-    * op add __tmp29 32 7
+   232 draw image 101 39 @surge-alloy 16 0
+-    * op add index 14 1
+-    * op sub y 32 20
+   233 jump __label313 notEqual 15 8
+   234 set y 152
+   235 set x 93
+ 
+   237 label __label313
+   238 label __label314
+   239 label __label315
+-    * set item @spore-pod
+   240 label __label316
+-    * op add __tmp26 93 8
+-    * op add __tmp29 12 7
+   241 draw image 101 19 @spore-pod 16 0
+-    * op add index 15 1
+-    * op sub y 12 20
+   242 jump __label317 notEqual 16 8
+   243 draw color 255 255 255 255
+   244 label __label317
+ 
+   322 set item @spore-pod
+   323 label __label54
+   324 label __label72
+-    * set __fn3_x x
+   325 sensor __fn3_amount CONTAINER item
+   326 jump __label74 strictEqual MEMORY null
+   327 read __fn3_last MEMORY index
+ 
+   351 label __label79
+   352 label __label77
+   353 label __label75
+-    * set __fn3_i 0
+   354 label __label120
+   355 label __label121
+   356 op mod __tmp50 __fn3_amount 10
+ 
+   474 label __label145
+   475 label __label146
+   476 label __label147
+-    * op add __fn3_i 0 1
+   477 label __label148
+   478 op mod __tmp50 __fn3_amount 10
+   479 label __label149
+ 
+   596 label __label172
+   597 label __label173
+   598 label __label174
+-    * op add __fn3_i 1 1
+   599 label __label175
+   600 op mod __tmp50 __fn3_amount 10
+   601 label __label176
+ 
+   718 label __label199
+   719 label __label200
+   720 label __label201
+-    * op add __fn3_i 2 1
+   721 label __label202
+   722 op mod __tmp50 __fn3_amount 10
+   723 label __label203
+ 
+   840 label __label226
+   841 label __label227
+   842 label __label228
+-    * op add __fn3_i 3 1
+   843 label __label229
+   844 op mod __tmp50 __fn3_amount 10
+   845 label __label230
+ 
+   961 label __label253
+   962 label __label254
+   963 label __label255
+-    * op add __fn3_i 4 1
+   964 label __label86
+   965 label __label73
+   966 op add index index 1
+
+Modifications by Iterated phase, Jump Normalization, pass 3, iteration 1 (-1 instructions):
+ 
+   106 draw color 255 255 255 255
+   107 label __label256
+   108 draw image 15 159 @sand 16 0
+-    * jump __label257 notEqual 1 8
++  109 jump __label257 always
+   110 set y 152
+   111 set x 93
+   112 draw color 255 255 255 255
+ 
+   115 label __label259
+   116 label __label260
+   117 draw image 15 139 @copper 16 0
+-    * jump __label261 notEqual 2 8
++  118 jump __label261 always
+   119 set y 152
+   120 set x 93
+   121 draw color 255 255 255 255
+ 
+   124 label __label263
+   125 label __label264
+   126 draw image 15 119 @lead 16 0
+-    * jump __label265 notEqual 3 8
++  127 jump __label265 always
+   128 set y 152
+   129 set x 93
+   130 draw color 255 255 255 255
+ 
+   133 label __label267
+   134 label __label268
+   135 draw image 15 99 @coal 16 0
+-    * jump __label269 notEqual 4 8
++  136 jump __label269 always
+   137 set y 152
+   138 set x 93
+   139 draw color 255 255 255 255
+ 
+   142 label __label271
+   143 label __label272
+   144 draw image 15 79 @titanium 16 0
+-    * jump __label273 notEqual 5 8
++  145 jump __label273 always
+   146 set y 152
+   147 set x 93
+   148 draw color 255 255 255 255
+ 
+   151 label __label275
+   152 label __label276
+   153 draw image 15 59 @thorium 16 0
+-    * jump __label277 notEqual 6 8
++  154 jump __label277 always
+   155 set y 152
+   156 set x 93
+   157 draw color 255 255 255 255
+ 
+   160 label __label279
+   161 label __label280
+   162 draw image 15 39 @scrap 16 0
+-    * jump __label281 notEqual 7 8
++  163 jump __label281 always
+   164 set y 152
+   165 set x 93
+   166 draw color 255 255 255 255
+ 
+   169 label __label283
+   170 label __label284
+   171 draw image 15 19 @graphite 16 0
+-    * jump __label285 notEqual 8 8
++  172 noop
+   173 draw color 255 255 255 255
+   174 label __label285
+   175 label __label286
+   176 label __label287
+   177 label __label288
+   178 draw image 101 159 @metaglass 16 0
+-    * jump __label289 notEqual 9 8
++  179 jump __label289 always
+   180 set y 152
+   181 set x 93
+   182 draw color 255 255 255 255
+ 
+   185 label __label291
+   186 label __label292
+   187 draw image 101 139 @silicon 16 0
+-    * jump __label293 notEqual 10 8
++  188 jump __label293 always
+   189 set y 152
+   190 set x 93
+   191 draw color 255 255 255 255
+ 
+   194 label __label295
+   195 label __label296
+   196 draw image 101 119 @pyratite 16 0
+-    * jump __label297 notEqual 11 8
++  197 jump __label297 always
+   198 set y 152
+   199 set x 93
+   200 draw color 255 255 255 255
+ 
+   203 label __label299
+   204 label __label300
+   205 draw image 101 99 @blast-compound 16 0
+-    * jump __label301 notEqual 12 8
++  206 jump __label301 always
+   207 set y 152
+   208 set x 93
+   209 draw color 255 255 255 255
+ 
+   212 label __label303
+   213 label __label304
+   214 draw image 101 79 @plastanium 16 0
+-    * jump __label305 notEqual 13 8
++  215 jump __label305 always
+   216 set y 152
+   217 set x 93
+   218 draw color 255 255 255 255
+ 
+   221 label __label307
+   222 label __label308
+   223 draw image 101 59 @phase-fabric 16 0
+-    * jump __label309 notEqual 14 8
++  224 jump __label309 always
+   225 set y 152
+   226 set x 93
+   227 draw color 255 255 255 255
+ 
+   230 label __label311
+   231 label __label312
+   232 draw image 101 39 @surge-alloy 16 0
+-    * jump __label313 notEqual 15 8
++  233 jump __label313 always
+   234 set y 152
+   235 set x 93
+   236 draw color 255 255 255 255
+ 
+   239 label __label315
+   240 label __label316
+   241 draw image 101 19 @spore-pod 16 0
+-    * jump __label317 notEqual 16 8
++  242 jump __label317 always
+   243 draw color 255 255 255 255
+   244 label __label317
+   245 label __label318
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   957 label __label252
+   958 op idiv __fn3_amount __fn3_amount 10
+   959 jump __label253 notEqual __fn3_amount 0
+-    * jump __label86 always
+   960 label __label253
+   961 label __label254
+   962 label __label255
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 2 (-1 instructions):
+ 
+   956 label __label251
+   957 label __label252
+   958 op idiv __fn3_amount __fn3_amount 10
+-    * jump __label253 notEqual __fn3_amount 0
+   959 label __label253
+   960 label __label254
+   961 label __label255
+
+Modifications by Iterated phase, Data Flow Optimization, pass 3, iteration 1 (-1 instructions):
+ 
+   955 label __label250
+   956 label __label251
+   957 label __label252
+-    * op idiv __fn3_amount __fn3_amount 10
+   958 label __label253
+   959 label __label254
+   960 label __label255
+
+Modifications by Final phase, Jump Straightening, iteration 1 (-58 instructions):
+ 
+    15 print block
+    16 print "\n"
+    17 sensor __ast0 block @type
+-    * jump __label8 equal __ast0 @message
+-    * jump __label7 always
++   18 jump __label7 notEqual __ast0 @message
+    19 label __label8
+    20 set MESSAGE block
+    21 jump __label6 always
+    22 label __label7
+    23 jump __label10 equal __ast0 @memory-bank
+-    * jump __label10 equal __ast0 @memory-cell
+-    * jump __label9 always
++   24 jump __label9 notEqual __ast0 @memory-cell
+    25 label __label10
+    26 set MEMORY block
+    27 jump __label6 always
+ 
+    30 jump __label12 equal __ast0 @container
+    31 jump __label12 equal __ast0 @core-shard
+    32 jump __label12 equal __ast0 @core-foundation
+-    * jump __label12 equal __ast0 @core-nucleus
+-    * jump __label11 always
++   33 jump __label11 notEqual __ast0 @core-nucleus
+    34 label __label12
+    35 set CONTAINER block
+    36 jump __label6 always
+    37 label __label11
+-    * jump __label14 equal __ast0 @large-logic-display
+-    * jump __label13 always
++   38 jump __label13 notEqual __ast0 @large-logic-display
+    39 label __label14
+    40 set DISPLAY block
+    41 label __label13
+ 
+   351 label __label121
+   352 op mod __tmp50 __fn3_amount 10
+   353 label __label122
+-    * jump __label123 equal __tmp50 0
+-    * jump __label124 always
++  354 jump __label124 notEqual __tmp50 0
+   355 label __label123
+   356 op sub __tmp54 x 1
+   357 op sub __tmp56 y 1
+   358 draw lineRect __tmp54 __tmp56 9 14
+   359 jump __label143 always
+   360 label __label124
+-    * jump __label125 equal __tmp50 1
+-    * jump __label126 always
++  361 jump __label126 notEqual __tmp50 1
+   362 label __label125
+   363 op add __tmp58 x 6
+   364 op add __tmp61 y 12
+   365 draw line __tmp58 y __tmp58 __tmp61
+   366 jump __label143 always
+   367 label __label126
+-    * jump __label127 equal __tmp50 2
+-    * jump __label128 always
++  368 jump __label128 notEqual __tmp50 2
+   369 label __label127
+   370 op add __tmp62 x 7
+   371 draw line x y __tmp62 y
+ 
+   377 draw line x __tmp70 __tmp62 __tmp70
+   378 jump __label143 always
+   379 label __label128
+-    * jump __label129 equal __tmp50 3
+-    * jump __label130 always
++  380 jump __label130 notEqual __tmp50 3
+   381 label __label129
+   382 op add __tmp74 x 7
+   383 op add __tmp76 y 12
+ 
+   388 draw line x __tmp76 __tmp74 __tmp76
+   389 jump __label143 always
+   390 label __label130
+-    * jump __label131 equal __tmp50 4
+-    * jump __label132 always
++  391 jump __label132 notEqual __tmp50 4
+   392 label __label131
+   393 op add __tmp84 x 7
+   394 op add __tmp86 y 12
+ 
+   398 draw line x __tmp87 x __tmp86
+   399 jump __label143 always
+   400 label __label132
+-    * jump __label133 equal __tmp50 5
+-    * jump __label134 always
++  401 jump __label134 notEqual __tmp50 5
+   402 label __label133
+   403 op add __tmp92 x 7
+   404 draw line x y __tmp92 y
+ 
+   410 draw line x __tmp100 __tmp92 __tmp100
+   411 jump __label143 always
+   412 label __label134
+-    * jump __label135 equal __tmp50 6
+-    * jump __label136 always
++  413 jump __label136 notEqual __tmp50 6
+   414 label __label135
+   415 op add __tmp104 y 12
+   416 draw line x y x __tmp104
+ 
+   422 draw line x __tmp104 __tmp105 __tmp104
+   423 jump __label143 always
+   424 label __label136
+-    * jump __label137 equal __tmp50 7
+-    * jump __label138 always
++  425 jump __label138 notEqual __tmp50 7
+   426 label __label137
+   427 op add __tmp116 x 6
+   428 op add __tmp119 y 12
+ 
+   430 draw line x __tmp119 __tmp116 __tmp119
+   431 jump __label143 always
+   432 label __label138
+-    * jump __label139 equal __tmp50 8
+-    * jump __label140 always
++  433 jump __label140 notEqual __tmp50 8
+   434 label __label139
+   435 op sub __tmp125 x 1
+   436 op sub __tmp127 y 1
+ 
+   440 draw line x __tmp128 __tmp129 __tmp128
+   441 jump __label143 always
+   442 label __label140
+-    * jump __label141 equal __tmp50 9
+-    * jump __label142 always
++  443 jump __label142 notEqual __tmp50 9
+   444 label __label141
+   445 op add __tmp131 x 7
+   446 draw line x y __tmp131 y
+ 
+   455 label __label144
+   456 op sub __fn3_x x 11
+   457 op idiv __fn3_amount __fn3_amount 10
+-    * jump __label145 notEqual __fn3_amount 0
+-    * jump __label86 always
++  458 jump __label86 equal __fn3_amount 0
+   459 label __label145
+   460 label __label146
+   461 label __label147
+   462 label __label148
+   463 op mod __tmp50 __fn3_amount 10
+   464 label __label149
+-    * jump __label150 equal __tmp50 0
+-    * jump __label151 always
++  465 jump __label151 notEqual __tmp50 0
+   466 label __label150
+   467 op sub __tmp54 __fn3_x 1
+   468 op sub __tmp56 y 1
+   469 draw lineRect __tmp54 __tmp56 9 14
+   470 jump __label170 always
+   471 label __label151
+-    * jump __label152 equal __tmp50 1
+-    * jump __label153 always
++  472 jump __label153 notEqual __tmp50 1
+   473 label __label152
+   474 op add __tmp58 __fn3_x 6
+   475 op add __tmp61 y 12
+   476 draw line __tmp58 y __tmp58 __tmp61
+   477 jump __label170 always
+   478 label __label153
+-    * jump __label154 equal __tmp50 2
+-    * jump __label155 always
++  479 jump __label155 notEqual __tmp50 2
+   480 label __label154
+   481 op add __tmp62 __fn3_x 7
+   482 draw line __fn3_x y __tmp62 y
+ 
+   488 draw line __fn3_x __tmp70 __tmp62 __tmp70
+   489 jump __label170 always
+   490 label __label155
+-    * jump __label156 equal __tmp50 3
+-    * jump __label157 always
++  491 jump __label157 notEqual __tmp50 3
+   492 label __label156
+   493 op add __tmp74 __fn3_x 7
+   494 op add __tmp76 y 12
+ 
+   499 draw line __fn3_x __tmp76 __tmp74 __tmp76
+   500 jump __label170 always
+   501 label __label157
+-    * jump __label158 equal __tmp50 4
+-    * jump __label159 always
++  502 jump __label159 notEqual __tmp50 4
+   503 label __label158
+   504 op add __tmp84 __fn3_x 7
+   505 op add __tmp86 y 12
+ 
+   509 draw line __fn3_x __tmp87 __fn3_x __tmp86
+   510 jump __label170 always
+   511 label __label159
+-    * jump __label160 equal __tmp50 5
+-    * jump __label161 always
++  512 jump __label161 notEqual __tmp50 5
+   513 label __label160
+   514 op add __tmp92 __fn3_x 7
+   515 draw line __fn3_x y __tmp92 y
+ 
+   521 draw line __fn3_x __tmp100 __tmp92 __tmp100
+   522 jump __label170 always
+   523 label __label161
+-    * jump __label162 equal __tmp50 6
+-    * jump __label163 always
++  524 jump __label163 notEqual __tmp50 6
+   525 label __label162
+   526 op add __tmp104 y 12
+   527 draw line __fn3_x y __fn3_x __tmp104
+ 
+   533 draw line __fn3_x __tmp104 __tmp105 __tmp104
+   534 jump __label170 always
+   535 label __label163
+-    * jump __label164 equal __tmp50 7
+-    * jump __label165 always
++  536 jump __label165 notEqual __tmp50 7
+   537 label __label164
+   538 op add __tmp116 __fn3_x 6
+   539 op add __tmp119 y 12
+ 
+   541 draw line __fn3_x __tmp119 __tmp116 __tmp119
+   542 jump __label170 always
+   543 label __label165
+-    * jump __label166 equal __tmp50 8
+-    * jump __label167 always
++  544 jump __label167 notEqual __tmp50 8
+   545 label __label166
+   546 op sub __tmp125 __fn3_x 1
+   547 op sub __tmp127 y 1
+ 
+   551 draw line __fn3_x __tmp128 __tmp129 __tmp128
+   552 jump __label170 always
+   553 label __label167
+-    * jump __label168 equal __tmp50 9
+-    * jump __label169 always
++  554 jump __label169 notEqual __tmp50 9
+   555 label __label168
+   556 op add __tmp131 __fn3_x 7
+   557 draw line __fn3_x y __tmp131 y
+ 
+   566 label __label171
+   567 op sub __fn3_x __fn3_x 11
+   568 op idiv __fn3_amount __fn3_amount 10
+-    * jump __label172 notEqual __fn3_amount 0
+-    * jump __label86 always
++  569 jump __label86 equal __fn3_amount 0
+   570 label __label172
+   571 label __label173
+   572 label __label174
+   573 label __label175
+   574 op mod __tmp50 __fn3_amount 10
+   575 label __label176
+-    * jump __label177 equal __tmp50 0
+-    * jump __label178 always
++  576 jump __label178 notEqual __tmp50 0
+   577 label __label177
+   578 op sub __tmp54 __fn3_x 1
+   579 op sub __tmp56 y 1
+   580 draw lineRect __tmp54 __tmp56 9 14
+   581 jump __label197 always
+   582 label __label178
+-    * jump __label179 equal __tmp50 1
+-    * jump __label180 always
++  583 jump __label180 notEqual __tmp50 1
+   584 label __label179
+   585 op add __tmp58 __fn3_x 6
+   586 op add __tmp61 y 12
+   587 draw line __tmp58 y __tmp58 __tmp61
+   588 jump __label197 always
+   589 label __label180
+-    * jump __label181 equal __tmp50 2
+-    * jump __label182 always
++  590 jump __label182 notEqual __tmp50 2
+   591 label __label181
+   592 op add __tmp62 __fn3_x 7
+   593 draw line __fn3_x y __tmp62 y
+ 
+   599 draw line __fn3_x __tmp70 __tmp62 __tmp70
+   600 jump __label197 always
+   601 label __label182
+-    * jump __label183 equal __tmp50 3
+-    * jump __label184 always
++  602 jump __label184 notEqual __tmp50 3
+   603 label __label183
+   604 op add __tmp74 __fn3_x 7
+   605 op add __tmp76 y 12
+ 
+   610 draw line __fn3_x __tmp76 __tmp74 __tmp76
+   611 jump __label197 always
+   612 label __label184
+-    * jump __label185 equal __tmp50 4
+-    * jump __label186 always
++  613 jump __label186 notEqual __tmp50 4
+   614 label __label185
+   615 op add __tmp84 __fn3_x 7
+   616 op add __tmp86 y 12
+ 
+   620 draw line __fn3_x __tmp87 __fn3_x __tmp86
+   621 jump __label197 always
+   622 label __label186
+-    * jump __label187 equal __tmp50 5
+-    * jump __label188 always
++  623 jump __label188 notEqual __tmp50 5
+   624 label __label187
+   625 op add __tmp92 __fn3_x 7
+   626 draw line __fn3_x y __tmp92 y
+ 
+   632 draw line __fn3_x __tmp100 __tmp92 __tmp100
+   633 jump __label197 always
+   634 label __label188
+-    * jump __label189 equal __tmp50 6
+-    * jump __label190 always
++  635 jump __label190 notEqual __tmp50 6
+   636 label __label189
+   637 op add __tmp104 y 12
+   638 draw line __fn3_x y __fn3_x __tmp104
+ 
+   644 draw line __fn3_x __tmp104 __tmp105 __tmp104
+   645 jump __label197 always
+   646 label __label190
+-    * jump __label191 equal __tmp50 7
+-    * jump __label192 always
++  647 jump __label192 notEqual __tmp50 7
+   648 label __label191
+   649 op add __tmp116 __fn3_x 6
+   650 op add __tmp119 y 12
+ 
+   652 draw line __fn3_x __tmp119 __tmp116 __tmp119
+   653 jump __label197 always
+   654 label __label192
+-    * jump __label193 equal __tmp50 8
+-    * jump __label194 always
++  655 jump __label194 notEqual __tmp50 8
+   656 label __label193
+   657 op sub __tmp125 __fn3_x 1
+   658 op sub __tmp127 y 1
+ 
+   662 draw line __fn3_x __tmp128 __tmp129 __tmp128
+   663 jump __label197 always
+   664 label __label194
+-    * jump __label195 equal __tmp50 9
+-    * jump __label196 always
++  665 jump __label196 notEqual __tmp50 9
+   666 label __label195
+   667 op add __tmp131 __fn3_x 7
+   668 draw line __fn3_x y __tmp131 y
+ 
+   677 label __label198
+   678 op sub __fn3_x __fn3_x 11
+   679 op idiv __fn3_amount __fn3_amount 10
+-    * jump __label199 notEqual __fn3_amount 0
+-    * jump __label86 always
++  680 jump __label86 equal __fn3_amount 0
+   681 label __label199
+   682 label __label200
+   683 label __label201
+   684 label __label202
+   685 op mod __tmp50 __fn3_amount 10
+   686 label __label203
+-    * jump __label204 equal __tmp50 0
+-    * jump __label205 always
++  687 jump __label205 notEqual __tmp50 0
+   688 label __label204
+   689 op sub __tmp54 __fn3_x 1
+   690 op sub __tmp56 y 1
+   691 draw lineRect __tmp54 __tmp56 9 14
+   692 jump __label224 always
+   693 label __label205
+-    * jump __label206 equal __tmp50 1
+-    * jump __label207 always
++  694 jump __label207 notEqual __tmp50 1
+   695 label __label206
+   696 op add __tmp58 __fn3_x 6
+   697 op add __tmp61 y 12
+   698 draw line __tmp58 y __tmp58 __tmp61
+   699 jump __label224 always
+   700 label __label207
+-    * jump __label208 equal __tmp50 2
+-    * jump __label209 always
++  701 jump __label209 notEqual __tmp50 2
+   702 label __label208
+   703 op add __tmp62 __fn3_x 7
+   704 draw line __fn3_x y __tmp62 y
+ 
+   710 draw line __fn3_x __tmp70 __tmp62 __tmp70
+   711 jump __label224 always
+   712 label __label209
+-    * jump __label210 equal __tmp50 3
+-    * jump __label211 always
++  713 jump __label211 notEqual __tmp50 3
+   714 label __label210
+   715 op add __tmp74 __fn3_x 7
+   716 op add __tmp76 y 12
+ 
+   721 draw line __fn3_x __tmp76 __tmp74 __tmp76
+   722 jump __label224 always
+   723 label __label211
+-    * jump __label212 equal __tmp50 4
+-    * jump __label213 always
++  724 jump __label213 notEqual __tmp50 4
+   725 label __label212
+   726 op add __tmp84 __fn3_x 7
+   727 op add __tmp86 y 12
+ 
+   731 draw line __fn3_x __tmp87 __fn3_x __tmp86
+   732 jump __label224 always
+   733 label __label213
+-    * jump __label214 equal __tmp50 5
+-    * jump __label215 always
++  734 jump __label215 notEqual __tmp50 5
+   735 label __label214
+   736 op add __tmp92 __fn3_x 7
+   737 draw line __fn3_x y __tmp92 y
+ 
+   743 draw line __fn3_x __tmp100 __tmp92 __tmp100
+   744 jump __label224 always
+   745 label __label215
+-    * jump __label216 equal __tmp50 6
+-    * jump __label217 always
++  746 jump __label217 notEqual __tmp50 6
+   747 label __label216
+   748 op add __tmp104 y 12
+   749 draw line __fn3_x y __fn3_x __tmp104
+ 
+   755 draw line __fn3_x __tmp104 __tmp105 __tmp104
+   756 jump __label224 always
+   757 label __label217
+-    * jump __label218 equal __tmp50 7
+-    * jump __label219 always
++  758 jump __label219 notEqual __tmp50 7
+   759 label __label218
+   760 op add __tmp116 __fn3_x 6
+   761 op add __tmp119 y 12
+ 
+   763 draw line __fn3_x __tmp119 __tmp116 __tmp119
+   764 jump __label224 always
+   765 label __label219
+-    * jump __label220 equal __tmp50 8
+-    * jump __label221 always
++  766 jump __label221 notEqual __tmp50 8
+   767 label __label220
+   768 op sub __tmp125 __fn3_x 1
+   769 op sub __tmp127 y 1
+ 
+   773 draw line __fn3_x __tmp128 __tmp129 __tmp128
+   774 jump __label224 always
+   775 label __label221
+-    * jump __label222 equal __tmp50 9
+-    * jump __label223 always
++  776 jump __label223 notEqual __tmp50 9
+   777 label __label222
+   778 op add __tmp131 __fn3_x 7
+   779 draw line __fn3_x y __tmp131 y
+ 
+   788 label __label225
+   789 op sub __fn3_x __fn3_x 11
+   790 op idiv __fn3_amount __fn3_amount 10
+-    * jump __label226 notEqual __fn3_amount 0
+-    * jump __label86 always
++  791 jump __label86 equal __fn3_amount 0
+   792 label __label226
+   793 label __label227
+   794 label __label228
+   795 label __label229
+   796 op mod __tmp50 __fn3_amount 10
+   797 label __label230
+-    * jump __label231 equal __tmp50 0
+-    * jump __label232 always
++  798 jump __label232 notEqual __tmp50 0
+   799 label __label231
+   800 op sub __tmp54 __fn3_x 1
+   801 op sub __tmp56 y 1
+   802 draw lineRect __tmp54 __tmp56 9 14
+   803 jump __label251 always
+   804 label __label232
+-    * jump __label233 equal __tmp50 1
+-    * jump __label234 always
++  805 jump __label234 notEqual __tmp50 1
+   806 label __label233
+   807 op add __tmp58 __fn3_x 6
+   808 op add __tmp61 y 12
+   809 draw line __tmp58 y __tmp58 __tmp61
+   810 jump __label251 always
+   811 label __label234
+-    * jump __label235 equal __tmp50 2
+-    * jump __label236 always
++  812 jump __label236 notEqual __tmp50 2
+   813 label __label235
+   814 op add __tmp62 __fn3_x 7
+   815 draw line __fn3_x y __tmp62 y
+ 
+   821 draw line __fn3_x __tmp70 __tmp62 __tmp70
+   822 jump __label251 always
+   823 label __label236
+-    * jump __label237 equal __tmp50 3
+-    * jump __label238 always
++  824 jump __label238 notEqual __tmp50 3
+   825 label __label237
+   826 op add __tmp74 __fn3_x 7
+   827 op add __tmp76 y 12
+ 
+   832 draw line __fn3_x __tmp76 __tmp74 __tmp76
+   833 jump __label251 always
+   834 label __label238
+-    * jump __label239 equal __tmp50 4
+-    * jump __label240 always
++  835 jump __label240 notEqual __tmp50 4
+   836 label __label239
+   837 op add __tmp84 __fn3_x 7
+   838 op add __tmp86 y 12
+ 
+   842 draw line __fn3_x __tmp87 __fn3_x __tmp86
+   843 jump __label251 always
+   844 label __label240
+-    * jump __label241 equal __tmp50 5
+-    * jump __label242 always
++  845 jump __label242 notEqual __tmp50 5
+   846 label __label241
+   847 op add __tmp92 __fn3_x 7
+   848 draw line __fn3_x y __tmp92 y
+ 
+   854 draw line __fn3_x __tmp100 __tmp92 __tmp100
+   855 jump __label251 always
+   856 label __label242
+-    * jump __label243 equal __tmp50 6
+-    * jump __label244 always
++  857 jump __label244 notEqual __tmp50 6
+   858 label __label243
+   859 op add __tmp104 y 12
+   860 draw line __fn3_x y __fn3_x __tmp104
+ 
+   866 draw line __fn3_x __tmp104 __tmp105 __tmp104
+   867 jump __label251 always
+   868 label __label244
+-    * jump __label245 equal __tmp50 7
+-    * jump __label246 always
++  869 jump __label246 notEqual __tmp50 7
+   870 label __label245
+   871 op add __tmp116 __fn3_x 6
+   872 op add __tmp119 y 12
+ 
+   874 draw line __fn3_x __tmp119 __tmp116 __tmp119
+   875 jump __label251 always
+   876 label __label246
+-    * jump __label247 equal __tmp50 8
+-    * jump __label248 always
++  877 jump __label248 notEqual __tmp50 8
+   878 label __label247
+   879 op sub __tmp125 __fn3_x 1
+   880 op sub __tmp127 y 1
+ 
+   884 draw line __fn3_x __tmp128 __tmp129 __tmp128
+   885 jump __label251 always
+   886 label __label248
+-    * jump __label249 equal __tmp50 9
+-    * jump __label250 always
++  887 jump __label250 notEqual __tmp50 9
+   888 label __label249
+   889 op add __tmp131 __fn3_x 7
+   890 draw line __fn3_x y __tmp131 y
+
+Modifications by Final phase, Jump Threading, iteration 1:
+ 
+   324 write __fn3_amount MEMORY index
+   325 jump __label80 notEqual __fn3_amount __fn3_last
+   326 draw color 255 255 0 255
+-    * jump __label81 always
++  327 jump __label75 always
+   328 label __label80
+   329 jump __label82 greaterThanEq __fn3_amount __fn3_last
+   330 draw color 255 80 80 255
+-    * jump __label83 always
++  331 jump __label75 always
+   332 label __label82
+   333 draw color 0 255 0 255
+   334 label __label83
+
+Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 instructions):
+ 
+    86 noop
+    87 draw rect 0 0 23 176
+    88 jump __label23 always
+-    * label __label22
+-    * draw rect 93 0 16 176
+    89 label __label23
+    90 label __label21
+    91 label __label24
+    92 draw color 0 0 80 255
+    93 jump __label26 always
+-    * draw rect 0 0 23 176
+-    * jump __label27 always
+    94 label __label26
+    95 draw rect 93 0 16 176
+    96 label __label27
+ 
+    99 label __label256
+   100 draw image 15 159 @sand 16 0
+   101 jump __label257 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   102 label __label257
+   103 label __label258
+   104 label __label259
+   105 label __label260
+   106 draw image 15 139 @copper 16 0
+   107 jump __label261 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   108 label __label261
+   109 label __label262
+   110 label __label263
+   111 label __label264
+   112 draw image 15 119 @lead 16 0
+   113 jump __label265 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   114 label __label265
+   115 label __label266
+   116 label __label267
+   117 label __label268
+   118 draw image 15 99 @coal 16 0
+   119 jump __label269 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   120 label __label269
+   121 label __label270
+   122 label __label271
+   123 label __label272
+   124 draw image 15 79 @titanium 16 0
+   125 jump __label273 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   126 label __label273
+   127 label __label274
+   128 label __label275
+   129 label __label276
+   130 draw image 15 59 @thorium 16 0
+   131 jump __label277 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   132 label __label277
+   133 label __label278
+   134 label __label279
+   135 label __label280
+   136 draw image 15 39 @scrap 16 0
+   137 jump __label281 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   138 label __label281
+   139 label __label282
+   140 label __label283
+ 
+   148 label __label288
+   149 draw image 101 159 @metaglass 16 0
+   150 jump __label289 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   151 label __label289
+   152 label __label290
+   153 label __label291
+   154 label __label292
+   155 draw image 101 139 @silicon 16 0
+   156 jump __label293 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   157 label __label293
+   158 label __label294
+   159 label __label295
+   160 label __label296
+   161 draw image 101 119 @pyratite 16 0
+   162 jump __label297 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   163 label __label297
+   164 label __label298
+   165 label __label299
+   166 label __label300
+   167 draw image 101 99 @blast-compound 16 0
+   168 jump __label301 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   169 label __label301
+   170 label __label302
+   171 label __label303
+   172 label __label304
+   173 draw image 101 79 @plastanium 16 0
+   174 jump __label305 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   175 label __label305
+   176 label __label306
+   177 label __label307
+   178 label __label308
+   179 draw image 101 59 @phase-fabric 16 0
+   180 jump __label309 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   181 label __label309
+   182 label __label310
+   183 label __label311
+   184 label __label312
+   185 draw image 101 39 @surge-alloy 16 0
+   186 jump __label313 always
+-    * set y 152
+-    * set x 93
+-    * draw color 255 255 255 255
+   187 label __label313
+   188 label __label314
+   189 label __label315
+   190 label __label316
+   191 draw image 101 19 @spore-pod 16 0
+   192 jump __label317 always
+-    * draw color 255 255 255 255
+   193 label __label317
+   194 label __label318
+   195 label __label319
+ 
+   202 noop
+   203 draw rect 23 0 70 176
+   204 jump __label52 always
+-    * label __label51
+-    * draw rect 109 0 176 176
+   205 label __label52
+   206 label __label50
+   207 set index 0
+ 
+   862 label __label114
+   863 draw color 0 0 80 255
+   864 jump __label116 always
+-    * draw rect 23 0 70 176
+-    * jump __label117 always
+   865 label __label116
+   866 draw rect 109 0 176 176
+   867 label __label117
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-19 instructions):
+ 
+    85 draw color 0 0 80 255
+    86 noop
+    87 draw rect 0 0 23 176
+-    * jump __label23 always
+    88 label __label23
+    89 label __label21
+    90 label __label24
+    91 draw color 0 0 80 255
+-    * jump __label26 always
+    92 label __label26
+    93 draw rect 93 0 16 176
+    94 label __label27
+ 
+    96 draw color 255 255 255 255
+    97 label __label256
+    98 draw image 15 159 @sand 16 0
+-    * jump __label257 always
+    99 label __label257
+   100 label __label258
+   101 label __label259
+   102 label __label260
+   103 draw image 15 139 @copper 16 0
+-    * jump __label261 always
+   104 label __label261
+   105 label __label262
+   106 label __label263
+   107 label __label264
+   108 draw image 15 119 @lead 16 0
+-    * jump __label265 always
+   109 label __label265
+   110 label __label266
+   111 label __label267
+   112 label __label268
+   113 draw image 15 99 @coal 16 0
+-    * jump __label269 always
+   114 label __label269
+   115 label __label270
+   116 label __label271
+   117 label __label272
+   118 draw image 15 79 @titanium 16 0
+-    * jump __label273 always
+   119 label __label273
+   120 label __label274
+   121 label __label275
+   122 label __label276
+   123 draw image 15 59 @thorium 16 0
+-    * jump __label277 always
+   124 label __label277
+   125 label __label278
+   126 label __label279
+   127 label __label280
+   128 draw image 15 39 @scrap 16 0
+-    * jump __label281 always
+   129 label __label281
+   130 label __label282
+   131 label __label283
+ 
+   138 label __label287
+   139 label __label288
+   140 draw image 101 159 @metaglass 16 0
+-    * jump __label289 always
+   141 label __label289
+   142 label __label290
+   143 label __label291
+   144 label __label292
+   145 draw image 101 139 @silicon 16 0
+-    * jump __label293 always
+   146 label __label293
+   147 label __label294
+   148 label __label295
+   149 label __label296
+   150 draw image 101 119 @pyratite 16 0
+-    * jump __label297 always
+   151 label __label297
+   152 label __label298
+   153 label __label299
+   154 label __label300
+   155 draw image 101 99 @blast-compound 16 0
+-    * jump __label301 always
+   156 label __label301
+   157 label __label302
+   158 label __label303
+   159 label __label304
+   160 draw image 101 79 @plastanium 16 0
+-    * jump __label305 always
+   161 label __label305
+   162 label __label306
+   163 label __label307
+   164 label __label308
+   165 draw image 101 59 @phase-fabric 16 0
+-    * jump __label309 always
+   166 label __label309
+   167 label __label310
+   168 label __label311
+   169 label __label312
+   170 draw image 101 39 @surge-alloy 16 0
+-    * jump __label313 always
+   171 label __label313
+   172 label __label314
+   173 label __label315
+   174 label __label316
+   175 draw image 101 19 @spore-pod 16 0
+-    * jump __label317 always
+   176 label __label317
+   177 label __label318
+   178 label __label319
+ 
+   184 draw color 0 0 80 255
+   185 noop
+   186 draw rect 23 0 70 176
+-    * jump __label52 always
+   187 label __label52
+   188 label __label50
+   189 set index 0
+ 
+   843 set x 157
+   844 label __label114
+   845 draw color 0 0 80 255
+-    * jump __label116 always
+   846 label __label116
+   847 draw rect 109 0 176 176
+   848 label __label117
+
+Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
+ 
+     2 set MESSAGE null
+     3 set DISPLAY null
+     4 label __label0
+-    * print "Configuring storage display..."
+-    * print "\n"
++    5 print "Configuring storage display...\n"
+     6 set LINKS @links
+     7 set n LINKS
+     8 label __label3
+ 
+    44 label __label5
+    45 print "Message: "
+    46 print MESSAGE
+-    * print "\n"
+-    * print "Memory: "
++   47 print "\nMemory: "
+    48 print MEMORY
+-    * print "\n"
+-    * print "Container: "
++   49 print "\nContainer: "
+    50 print CONTAINER
+-    * print "\n"
+-    * print "Display: "
++   51 print "\nDisplay: "
+    52 print DISPLAY
+    53 print "\n"
+    54 op equal __tmp6 CONTAINER null
+    55 op equal __tmp7 DISPLAY null
+    56 op or __tmp8 __tmp6 __tmp7
+    57 jump __label15 equal __tmp8 false
+-    * print "No container or display."
+-    * print "\n"
++   58 print "No container or display.\n"
+    59 label __label15
+    60 label __label16
+    61 printflush MESSAGE
+
+Final code before resolving virtual instructions:
+
+set CONTAINER null
+set MEMORY null
+set MESSAGE null
+set DISPLAY null
+label __label0
+print "Configuring storage display...\n"
+set LINKS @links
+set n LINKS
+jump __label5 lessThanEq LINKS 0
+label __label118
+op sub n n 1
+getlink block n
+print "Found: "
+print block
+print "\n"
+sensor __ast0 block @type
+jump __label7 notEqual __ast0 @message
+set MESSAGE block
+jump __label6 always 0 0
+label __label7
+jump __label10 equal __ast0 @memory-bank
+jump __label9 notEqual __ast0 @memory-cell
+label __label10
+set MEMORY block
+jump __label6 always 0 0
+label __label9
+jump __label12 equal __ast0 @vault
+jump __label12 equal __ast0 @container
+jump __label12 equal __ast0 @core-shard
+jump __label12 equal __ast0 @core-foundation
+jump __label11 notEqual __ast0 @core-nucleus
+label __label12
+set CONTAINER block
+jump __label6 always 0 0
+label __label11
+jump __label13 notEqual __ast0 @large-logic-display
+set DISPLAY block
+label __label13
+label __label6
+jump __label118 greaterThan n 0
+label __label5
+print "Message: "
+print MESSAGE
+print "\nMemory: "
+print MEMORY
+print "\nContainer: "
+print CONTAINER
+print "\nDisplay: "
+print DISPLAY
+print "\n"
+op equal __tmp6 CONTAINER null
+op equal __tmp7 DISPLAY null
+op or __tmp8 __tmp6 __tmp7
+jump __label15 equal __tmp8 false
+print "No container or display.\n"
+label __label15
+printflush MESSAGE
+jump __label0 equal CONTAINER null
+sensor __tmp11 CONTAINER @dead
+op strictEqual __tmp12 __tmp11 0
+sensor __tmp13 DISPLAY @dead
+op strictEqual __tmp14 __tmp13 0
+op land __tmp15 __tmp12 __tmp14
+op equal __tmp16 LINKS @links
+op land __tmp17 __tmp15 __tmp16
+jump __label19 equal __tmp17 false
+label __label320
+set start @time
+sensor CAPACITY CONTAINER @itemCapacity
+op div LIMIT CAPACITY 5
+draw stroke 2 0 0 0 0 0
+draw color 0 0 80 255 0 0
+draw rect 0 0 23 176 0 0
+draw color 0 0 80 255 0 0
+draw rect 93 0 16 176 0 0
+draw color 255 255 255 255 0 0
+draw image 15 159 @sand 16 0 0
+draw image 15 139 @copper 16 0 0
+draw image 15 119 @lead 16 0 0
+draw image 15 99 @coal 16 0 0
+draw image 15 79 @titanium 16 0 0
+draw image 15 59 @thorium 16 0 0
+draw image 15 39 @scrap 16 0 0
+draw image 15 19 @graphite 16 0 0
+draw color 255 255 255 255 0 0
+draw image 101 159 @metaglass 16 0 0
+draw image 101 139 @silicon 16 0 0
+draw image 101 119 @pyratite 16 0 0
+draw image 101 99 @blast-compound 16 0 0
+draw image 101 79 @plastanium 16 0 0
+draw image 101 59 @phase-fabric 16 0 0
+draw image 101 39 @surge-alloy 16 0 0
+draw image 101 19 @spore-pod 16 0 0
+drawflush display1
+set x 71
+set y 152
+draw color 0 0 80 255 0 0
+draw rect 23 0 70 176 0 0
+set index 0
+setaddr __tmp36 __label56
+set item @sand
+jump __label54 always 0 0
+gotolabel __label56 marker1
+setaddr __tmp36 __label57
+set item @copper
+jump __label54 always 0 0
+gotolabel __label57 marker1
+setaddr __tmp36 __label58
+set item @lead
+jump __label54 always 0 0
+gotolabel __label58 marker1
+setaddr __tmp36 __label59
+set item @coal
+jump __label54 always 0 0
+gotolabel __label59 marker1
+setaddr __tmp36 __label60
+set item @titanium
+jump __label54 always 0 0
+gotolabel __label60 marker1
+setaddr __tmp36 __label61
+set item @thorium
+jump __label54 always 0 0
+gotolabel __label61 marker1
+setaddr __tmp36 __label62
+set item @scrap
+jump __label54 always 0 0
+gotolabel __label62 marker1
+setaddr __tmp36 __label63
+set item @graphite
+jump __label54 always 0 0
+gotolabel __label63 marker1
+setaddr __tmp36 __label64
+set item @metaglass
+jump __label54 always 0 0
+gotolabel __label64 marker1
+setaddr __tmp36 __label65
+set item @silicon
+jump __label54 always 0 0
+gotolabel __label65 marker1
+setaddr __tmp36 __label66
+set item @pyratite
+jump __label54 always 0 0
+gotolabel __label66 marker1
+setaddr __tmp36 __label67
+set item @blast-compound
+jump __label54 always 0 0
+gotolabel __label67 marker1
+setaddr __tmp36 __label68
+set item @plastanium
+jump __label54 always 0 0
+gotolabel __label68 marker1
+setaddr __tmp36 __label69
+set item @phase-fabric
+jump __label54 always 0 0
+gotolabel __label69 marker1
+setaddr __tmp36 __label70
+set item @surge-alloy
+jump __label54 always 0 0
+gotolabel __label70 marker1
+setaddr __tmp36 __label71
+set item @spore-pod
+label __label54
+sensor __fn3_amount CONTAINER item
+jump __label74 strictEqual MEMORY null
+read __fn3_last MEMORY index
+write __fn3_amount MEMORY index
+jump __label80 notEqual __fn3_amount __fn3_last
+draw color 255 255 0 255 0 0
+jump __label75 always 0 0
+label __label80
+jump __label82 greaterThanEq __fn3_amount __fn3_last
+draw color 255 80 80 255 0 0
+jump __label75 always 0 0
+label __label82
+draw color 0 255 0 255 0 0
+jump __label75 always 0 0
+label __label74
+jump __label76 notEqual __fn3_amount CAPACITY
+draw color 0 255 0 255 0 0
+jump __label77 always 0 0
+label __label76
+jump __label78 lessThanEq __fn3_amount LIMIT
+draw color 255 255 0 255 0 0
+jump __label79 always 0 0
+label __label78
+draw color 255 80 80 255 0 0
+label __label79
+label __label77
+label __label75
+op mod __tmp50 __fn3_amount 10
+jump __label124 notEqual __tmp50 0
+op sub __tmp54 x 1
+op sub __tmp56 y 1
+draw lineRect __tmp54 __tmp56 9 14 0 0
+jump __label143 always 0 0
+label __label124
+jump __label126 notEqual __tmp50 1
+op add __tmp58 x 6
+op add __tmp61 y 12
+draw line __tmp58 y __tmp58 __tmp61 0 0
+jump __label143 always 0 0
+label __label126
+jump __label128 notEqual __tmp50 2
+op add __tmp62 x 7
+draw line x y __tmp62 y 0 0
+op add __tmp63 y 6
+draw line x y x __tmp63 0 0
+draw line x __tmp63 __tmp62 __tmp63 0 0
+op add __tmp70 y 12
+draw line __tmp62 __tmp63 __tmp62 __tmp70 0 0
+draw line x __tmp70 __tmp62 __tmp70 0 0
+jump __label143 always 0 0
+label __label128
+jump __label130 notEqual __tmp50 3
+op add __tmp74 x 7
+op add __tmp76 y 12
+draw line __tmp74 y __tmp74 __tmp76 0 0
+draw line x y __tmp74 y 0 0
+op add __tmp78 y 6
+draw line x __tmp78 __tmp74 __tmp78 0 0
+draw line x __tmp76 __tmp74 __tmp76 0 0
+jump __label143 always 0 0
+label __label130
+jump __label132 notEqual __tmp50 4
+op add __tmp84 x 7
+op add __tmp86 y 12
+draw line __tmp84 y __tmp84 __tmp86 0 0
+op add __tmp87 y 6
+draw line x __tmp87 __tmp84 __tmp87 0 0
+draw line x __tmp87 x __tmp86 0 0
+jump __label143 always 0 0
+label __label132
+jump __label134 notEqual __tmp50 5
+op add __tmp92 x 7
+draw line x y __tmp92 y 0 0
+op add __tmp95 y 6
+draw line __tmp92 y __tmp92 __tmp95 0 0
+draw line x __tmp95 __tmp92 __tmp95 0 0
+op add __tmp100 y 12
+draw line x __tmp95 x __tmp100 0 0
+draw line x __tmp100 __tmp92 __tmp100 0 0
+jump __label143 always 0 0
+label __label134
+jump __label136 notEqual __tmp50 6
+op add __tmp104 y 12
+draw line x y x __tmp104 0 0
+op add __tmp105 x 7
+draw line x y __tmp105 y 0 0
+op add __tmp108 y 6
+draw line __tmp105 y __tmp105 __tmp108 0 0
+draw line x __tmp108 __tmp105 __tmp108 0 0
+draw line x __tmp104 __tmp105 __tmp104 0 0
+jump __label143 always 0 0
+label __label136
+jump __label138 notEqual __tmp50 7
+op add __tmp116 x 6
+op add __tmp119 y 12
+draw line __tmp116 y __tmp116 __tmp119 0 0
+draw line x __tmp119 __tmp116 __tmp119 0 0
+jump __label143 always 0 0
+label __label138
+jump __label140 notEqual __tmp50 8
+op sub __tmp125 x 1
+op sub __tmp127 y 1
+draw lineRect __tmp125 __tmp127 9 14 0 0
+op add __tmp128 y 6
+op add __tmp129 x 7
+draw line x __tmp128 __tmp129 __tmp128 0 0
+jump __label143 always 0 0
+label __label140
+jump __label142 notEqual __tmp50 9
+op add __tmp131 x 7
+draw line x y __tmp131 y 0 0
+op add __tmp134 y 12
+draw line __tmp131 y __tmp131 __tmp134 0 0
+op add __tmp135 y 6
+draw line x __tmp135 __tmp131 __tmp135 0 0
+draw line x __tmp135 x __tmp134 0 0
+draw line x __tmp134 __tmp131 __tmp134 0 0
+label __label142
+label __label143
+op sub __fn3_x x 11
+op idiv __fn3_amount __fn3_amount 10
+jump __label86 equal __fn3_amount 0
+op mod __tmp50 __fn3_amount 10
+jump __label151 notEqual __tmp50 0
+op sub __tmp54 __fn3_x 1
+op sub __tmp56 y 1
+draw lineRect __tmp54 __tmp56 9 14 0 0
+jump __label170 always 0 0
+label __label151
+jump __label153 notEqual __tmp50 1
+op add __tmp58 __fn3_x 6
+op add __tmp61 y 12
+draw line __tmp58 y __tmp58 __tmp61 0 0
+jump __label170 always 0 0
+label __label153
+jump __label155 notEqual __tmp50 2
+op add __tmp62 __fn3_x 7
+draw line __fn3_x y __tmp62 y 0 0
+op add __tmp63 y 6
+draw line __fn3_x y __fn3_x __tmp63 0 0
+draw line __fn3_x __tmp63 __tmp62 __tmp63 0 0
+op add __tmp70 y 12
+draw line __tmp62 __tmp63 __tmp62 __tmp70 0 0
+draw line __fn3_x __tmp70 __tmp62 __tmp70 0 0
+jump __label170 always 0 0
+label __label155
+jump __label157 notEqual __tmp50 3
+op add __tmp74 __fn3_x 7
+op add __tmp76 y 12
+draw line __tmp74 y __tmp74 __tmp76 0 0
+draw line __fn3_x y __tmp74 y 0 0
+op add __tmp78 y 6
+draw line __fn3_x __tmp78 __tmp74 __tmp78 0 0
+draw line __fn3_x __tmp76 __tmp74 __tmp76 0 0
+jump __label170 always 0 0
+label __label157
+jump __label159 notEqual __tmp50 4
+op add __tmp84 __fn3_x 7
+op add __tmp86 y 12
+draw line __tmp84 y __tmp84 __tmp86 0 0
+op add __tmp87 y 6
+draw line __fn3_x __tmp87 __tmp84 __tmp87 0 0
+draw line __fn3_x __tmp87 __fn3_x __tmp86 0 0
+jump __label170 always 0 0
+label __label159
+jump __label161 notEqual __tmp50 5
+op add __tmp92 __fn3_x 7
+draw line __fn3_x y __tmp92 y 0 0
+op add __tmp95 y 6
+draw line __tmp92 y __tmp92 __tmp95 0 0
+draw line __fn3_x __tmp95 __tmp92 __tmp95 0 0
+op add __tmp100 y 12
+draw line __fn3_x __tmp95 __fn3_x __tmp100 0 0
+draw line __fn3_x __tmp100 __tmp92 __tmp100 0 0
+jump __label170 always 0 0
+label __label161
+jump __label163 notEqual __tmp50 6
+op add __tmp104 y 12
+draw line __fn3_x y __fn3_x __tmp104 0 0
+op add __tmp105 __fn3_x 7
+draw line __fn3_x y __tmp105 y 0 0
+op add __tmp108 y 6
+draw line __tmp105 y __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp108 __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp104 __tmp105 __tmp104 0 0
+jump __label170 always 0 0
+label __label163
+jump __label165 notEqual __tmp50 7
+op add __tmp116 __fn3_x 6
+op add __tmp119 y 12
+draw line __tmp116 y __tmp116 __tmp119 0 0
+draw line __fn3_x __tmp119 __tmp116 __tmp119 0 0
+jump __label170 always 0 0
+label __label165
+jump __label167 notEqual __tmp50 8
+op sub __tmp125 __fn3_x 1
+op sub __tmp127 y 1
+draw lineRect __tmp125 __tmp127 9 14 0 0
+op add __tmp128 y 6
+op add __tmp129 __fn3_x 7
+draw line __fn3_x __tmp128 __tmp129 __tmp128 0 0
+jump __label170 always 0 0
+label __label167
+jump __label169 notEqual __tmp50 9
+op add __tmp131 __fn3_x 7
+draw line __fn3_x y __tmp131 y 0 0
+op add __tmp134 y 12
+draw line __tmp131 y __tmp131 __tmp134 0 0
+op add __tmp135 y 6
+draw line __fn3_x __tmp135 __tmp131 __tmp135 0 0
+draw line __fn3_x __tmp135 __fn3_x __tmp134 0 0
+draw line __fn3_x __tmp134 __tmp131 __tmp134 0 0
+label __label169
+label __label170
+op sub __fn3_x __fn3_x 11
+op idiv __fn3_amount __fn3_amount 10
+jump __label86 equal __fn3_amount 0
+op mod __tmp50 __fn3_amount 10
+jump __label178 notEqual __tmp50 0
+op sub __tmp54 __fn3_x 1
+op sub __tmp56 y 1
+draw lineRect __tmp54 __tmp56 9 14 0 0
+jump __label197 always 0 0
+label __label178
+jump __label180 notEqual __tmp50 1
+op add __tmp58 __fn3_x 6
+op add __tmp61 y 12
+draw line __tmp58 y __tmp58 __tmp61 0 0
+jump __label197 always 0 0
+label __label180
+jump __label182 notEqual __tmp50 2
+op add __tmp62 __fn3_x 7
+draw line __fn3_x y __tmp62 y 0 0
+op add __tmp63 y 6
+draw line __fn3_x y __fn3_x __tmp63 0 0
+draw line __fn3_x __tmp63 __tmp62 __tmp63 0 0
+op add __tmp70 y 12
+draw line __tmp62 __tmp63 __tmp62 __tmp70 0 0
+draw line __fn3_x __tmp70 __tmp62 __tmp70 0 0
+jump __label197 always 0 0
+label __label182
+jump __label184 notEqual __tmp50 3
+op add __tmp74 __fn3_x 7
+op add __tmp76 y 12
+draw line __tmp74 y __tmp74 __tmp76 0 0
+draw line __fn3_x y __tmp74 y 0 0
+op add __tmp78 y 6
+draw line __fn3_x __tmp78 __tmp74 __tmp78 0 0
+draw line __fn3_x __tmp76 __tmp74 __tmp76 0 0
+jump __label197 always 0 0
+label __label184
+jump __label186 notEqual __tmp50 4
+op add __tmp84 __fn3_x 7
+op add __tmp86 y 12
+draw line __tmp84 y __tmp84 __tmp86 0 0
+op add __tmp87 y 6
+draw line __fn3_x __tmp87 __tmp84 __tmp87 0 0
+draw line __fn3_x __tmp87 __fn3_x __tmp86 0 0
+jump __label197 always 0 0
+label __label186
+jump __label188 notEqual __tmp50 5
+op add __tmp92 __fn3_x 7
+draw line __fn3_x y __tmp92 y 0 0
+op add __tmp95 y 6
+draw line __tmp92 y __tmp92 __tmp95 0 0
+draw line __fn3_x __tmp95 __tmp92 __tmp95 0 0
+op add __tmp100 y 12
+draw line __fn3_x __tmp95 __fn3_x __tmp100 0 0
+draw line __fn3_x __tmp100 __tmp92 __tmp100 0 0
+jump __label197 always 0 0
+label __label188
+jump __label190 notEqual __tmp50 6
+op add __tmp104 y 12
+draw line __fn3_x y __fn3_x __tmp104 0 0
+op add __tmp105 __fn3_x 7
+draw line __fn3_x y __tmp105 y 0 0
+op add __tmp108 y 6
+draw line __tmp105 y __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp108 __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp104 __tmp105 __tmp104 0 0
+jump __label197 always 0 0
+label __label190
+jump __label192 notEqual __tmp50 7
+op add __tmp116 __fn3_x 6
+op add __tmp119 y 12
+draw line __tmp116 y __tmp116 __tmp119 0 0
+draw line __fn3_x __tmp119 __tmp116 __tmp119 0 0
+jump __label197 always 0 0
+label __label192
+jump __label194 notEqual __tmp50 8
+op sub __tmp125 __fn3_x 1
+op sub __tmp127 y 1
+draw lineRect __tmp125 __tmp127 9 14 0 0
+op add __tmp128 y 6
+op add __tmp129 __fn3_x 7
+draw line __fn3_x __tmp128 __tmp129 __tmp128 0 0
+jump __label197 always 0 0
+label __label194
+jump __label196 notEqual __tmp50 9
+op add __tmp131 __fn3_x 7
+draw line __fn3_x y __tmp131 y 0 0
+op add __tmp134 y 12
+draw line __tmp131 y __tmp131 __tmp134 0 0
+op add __tmp135 y 6
+draw line __fn3_x __tmp135 __tmp131 __tmp135 0 0
+draw line __fn3_x __tmp135 __fn3_x __tmp134 0 0
+draw line __fn3_x __tmp134 __tmp131 __tmp134 0 0
+label __label196
+label __label197
+op sub __fn3_x __fn3_x 11
+op idiv __fn3_amount __fn3_amount 10
+jump __label86 equal __fn3_amount 0
+op mod __tmp50 __fn3_amount 10
+jump __label205 notEqual __tmp50 0
+op sub __tmp54 __fn3_x 1
+op sub __tmp56 y 1
+draw lineRect __tmp54 __tmp56 9 14 0 0
+jump __label224 always 0 0
+label __label205
+jump __label207 notEqual __tmp50 1
+op add __tmp58 __fn3_x 6
+op add __tmp61 y 12
+draw line __tmp58 y __tmp58 __tmp61 0 0
+jump __label224 always 0 0
+label __label207
+jump __label209 notEqual __tmp50 2
+op add __tmp62 __fn3_x 7
+draw line __fn3_x y __tmp62 y 0 0
+op add __tmp63 y 6
+draw line __fn3_x y __fn3_x __tmp63 0 0
+draw line __fn3_x __tmp63 __tmp62 __tmp63 0 0
+op add __tmp70 y 12
+draw line __tmp62 __tmp63 __tmp62 __tmp70 0 0
+draw line __fn3_x __tmp70 __tmp62 __tmp70 0 0
+jump __label224 always 0 0
+label __label209
+jump __label211 notEqual __tmp50 3
+op add __tmp74 __fn3_x 7
+op add __tmp76 y 12
+draw line __tmp74 y __tmp74 __tmp76 0 0
+draw line __fn3_x y __tmp74 y 0 0
+op add __tmp78 y 6
+draw line __fn3_x __tmp78 __tmp74 __tmp78 0 0
+draw line __fn3_x __tmp76 __tmp74 __tmp76 0 0
+jump __label224 always 0 0
+label __label211
+jump __label213 notEqual __tmp50 4
+op add __tmp84 __fn3_x 7
+op add __tmp86 y 12
+draw line __tmp84 y __tmp84 __tmp86 0 0
+op add __tmp87 y 6
+draw line __fn3_x __tmp87 __tmp84 __tmp87 0 0
+draw line __fn3_x __tmp87 __fn3_x __tmp86 0 0
+jump __label224 always 0 0
+label __label213
+jump __label215 notEqual __tmp50 5
+op add __tmp92 __fn3_x 7
+draw line __fn3_x y __tmp92 y 0 0
+op add __tmp95 y 6
+draw line __tmp92 y __tmp92 __tmp95 0 0
+draw line __fn3_x __tmp95 __tmp92 __tmp95 0 0
+op add __tmp100 y 12
+draw line __fn3_x __tmp95 __fn3_x __tmp100 0 0
+draw line __fn3_x __tmp100 __tmp92 __tmp100 0 0
+jump __label224 always 0 0
+label __label215
+jump __label217 notEqual __tmp50 6
+op add __tmp104 y 12
+draw line __fn3_x y __fn3_x __tmp104 0 0
+op add __tmp105 __fn3_x 7
+draw line __fn3_x y __tmp105 y 0 0
+op add __tmp108 y 6
+draw line __tmp105 y __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp108 __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp104 __tmp105 __tmp104 0 0
+jump __label224 always 0 0
+label __label217
+jump __label219 notEqual __tmp50 7
+op add __tmp116 __fn3_x 6
+op add __tmp119 y 12
+draw line __tmp116 y __tmp116 __tmp119 0 0
+draw line __fn3_x __tmp119 __tmp116 __tmp119 0 0
+jump __label224 always 0 0
+label __label219
+jump __label221 notEqual __tmp50 8
+op sub __tmp125 __fn3_x 1
+op sub __tmp127 y 1
+draw lineRect __tmp125 __tmp127 9 14 0 0
+op add __tmp128 y 6
+op add __tmp129 __fn3_x 7
+draw line __fn3_x __tmp128 __tmp129 __tmp128 0 0
+jump __label224 always 0 0
+label __label221
+jump __label223 notEqual __tmp50 9
+op add __tmp131 __fn3_x 7
+draw line __fn3_x y __tmp131 y 0 0
+op add __tmp134 y 12
+draw line __tmp131 y __tmp131 __tmp134 0 0
+op add __tmp135 y 6
+draw line __fn3_x __tmp135 __tmp131 __tmp135 0 0
+draw line __fn3_x __tmp135 __fn3_x __tmp134 0 0
+draw line __fn3_x __tmp134 __tmp131 __tmp134 0 0
+label __label223
+label __label224
+op sub __fn3_x __fn3_x 11
+op idiv __fn3_amount __fn3_amount 10
+jump __label86 equal __fn3_amount 0
+op mod __tmp50 __fn3_amount 10
+jump __label232 notEqual __tmp50 0
+op sub __tmp54 __fn3_x 1
+op sub __tmp56 y 1
+draw lineRect __tmp54 __tmp56 9 14 0 0
+jump __label251 always 0 0
+label __label232
+jump __label234 notEqual __tmp50 1
+op add __tmp58 __fn3_x 6
+op add __tmp61 y 12
+draw line __tmp58 y __tmp58 __tmp61 0 0
+jump __label251 always 0 0
+label __label234
+jump __label236 notEqual __tmp50 2
+op add __tmp62 __fn3_x 7
+draw line __fn3_x y __tmp62 y 0 0
+op add __tmp63 y 6
+draw line __fn3_x y __fn3_x __tmp63 0 0
+draw line __fn3_x __tmp63 __tmp62 __tmp63 0 0
+op add __tmp70 y 12
+draw line __tmp62 __tmp63 __tmp62 __tmp70 0 0
+draw line __fn3_x __tmp70 __tmp62 __tmp70 0 0
+jump __label251 always 0 0
+label __label236
+jump __label238 notEqual __tmp50 3
+op add __tmp74 __fn3_x 7
+op add __tmp76 y 12
+draw line __tmp74 y __tmp74 __tmp76 0 0
+draw line __fn3_x y __tmp74 y 0 0
+op add __tmp78 y 6
+draw line __fn3_x __tmp78 __tmp74 __tmp78 0 0
+draw line __fn3_x __tmp76 __tmp74 __tmp76 0 0
+jump __label251 always 0 0
+label __label238
+jump __label240 notEqual __tmp50 4
+op add __tmp84 __fn3_x 7
+op add __tmp86 y 12
+draw line __tmp84 y __tmp84 __tmp86 0 0
+op add __tmp87 y 6
+draw line __fn3_x __tmp87 __tmp84 __tmp87 0 0
+draw line __fn3_x __tmp87 __fn3_x __tmp86 0 0
+jump __label251 always 0 0
+label __label240
+jump __label242 notEqual __tmp50 5
+op add __tmp92 __fn3_x 7
+draw line __fn3_x y __tmp92 y 0 0
+op add __tmp95 y 6
+draw line __tmp92 y __tmp92 __tmp95 0 0
+draw line __fn3_x __tmp95 __tmp92 __tmp95 0 0
+op add __tmp100 y 12
+draw line __fn3_x __tmp95 __fn3_x __tmp100 0 0
+draw line __fn3_x __tmp100 __tmp92 __tmp100 0 0
+jump __label251 always 0 0
+label __label242
+jump __label244 notEqual __tmp50 6
+op add __tmp104 y 12
+draw line __fn3_x y __fn3_x __tmp104 0 0
+op add __tmp105 __fn3_x 7
+draw line __fn3_x y __tmp105 y 0 0
+op add __tmp108 y 6
+draw line __tmp105 y __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp108 __tmp105 __tmp108 0 0
+draw line __fn3_x __tmp104 __tmp105 __tmp104 0 0
+jump __label251 always 0 0
+label __label244
+jump __label246 notEqual __tmp50 7
+op add __tmp116 __fn3_x 6
+op add __tmp119 y 12
+draw line __tmp116 y __tmp116 __tmp119 0 0
+draw line __fn3_x __tmp119 __tmp116 __tmp119 0 0
+jump __label251 always 0 0
+label __label246
+jump __label248 notEqual __tmp50 8
+op sub __tmp125 __fn3_x 1
+op sub __tmp127 y 1
+draw lineRect __tmp125 __tmp127 9 14 0 0
+op add __tmp128 y 6
+op add __tmp129 __fn3_x 7
+draw line __fn3_x __tmp128 __tmp129 __tmp128 0 0
+jump __label251 always 0 0
+label __label248
+jump __label250 notEqual __tmp50 9
+op add __tmp131 __fn3_x 7
+draw line __fn3_x y __tmp131 y 0 0
+op add __tmp134 y 12
+draw line __tmp131 y __tmp131 __tmp134 0 0
+op add __tmp135 y 6
+draw line __fn3_x __tmp135 __tmp131 __tmp135 0 0
+draw line __fn3_x __tmp135 __fn3_x __tmp134 0 0
+draw line __fn3_x __tmp134 __tmp131 __tmp134 0 0
+label __label250
+label __label251
+label __label86
+op add index index 1
+op sub y y 20
+jump __label112 notEqual index 8
+drawflush display1
+set y 152
+set x 157
+draw color 0 0 80 255 0 0
+draw rect 109 0 176 176 0 0
+label __label112
+goto __tmp36 marker1
+gotolabel __label71 marker1
+drawflush display1
+op sub __tmp153 @time start
+op floor elapsed __tmp153 0
+print "Storage Display\nElapsed: "
+print elapsed
+print " ms"
+printflush message1
+sensor __tmp11 CONTAINER @dead
+op strictEqual __tmp12 __tmp11 0
+sensor __tmp13 DISPLAY @dead
+op strictEqual __tmp14 __tmp13 0
+op land __tmp15 __tmp12 __tmp14
+op equal __tmp16 LINKS @links
+op land __tmp17 __tmp15 __tmp16
+jump __label320 notEqual __tmp17 false
+label __label19
+end

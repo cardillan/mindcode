@@ -1,0 +1,28 @@
+S0 = S1 = S2 = S3 = S4 = S5 = S6 = S7 = S8 = S9 = 0
+
+for i in 1 .. 100
+   processNumber(i)
+end
+print(S0, S1, S2, S3, S4, S5, S6, S7, S8, S9)
+
+def processNumber(n)
+    while n > 0
+        processDigit(n % 10)
+        n \= 10
+    end
+end
+
+def processDigit(n)
+    case n
+        when 0 then S0 += 1
+        when 1 then S1 += 1
+        when 2 then S2 += 1
+        when 3 then S3 += 1
+        when 4 then S4 += 1
+        when 5 then S5 += 1
+        when 6 then S6 += 1
+        when 7 then S7 += 1
+        when 8 then S8 += 1
+        when 9 then S9 += 1
+    end
+end
