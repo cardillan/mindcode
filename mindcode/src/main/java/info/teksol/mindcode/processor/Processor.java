@@ -137,7 +137,11 @@ public class Processor {
             case SetInstruction ix      -> executeSet(ix);
             case StopInstruction ix     -> false;
             case WriteInstruction ix    -> executeWrite(ix);
-            default                     -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction " + instruction);
+            default                     ->
+                switch (instruction.getOpcode()) {
+                    case DRAW, DRAWFLUSH -> true;
+                    default             -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction " + instruction);
+                };
         };
     }
 
@@ -234,8 +238,12 @@ public class Processor {
             String repl = value.substring(1, value.length() - 1).replace("\\n", "\n").replace("\\\"", "'").replace("\\\\", "\\");
             return DoubleVariable.newStringValue(true, value, repl);
         }
+        if (value.startsWith("@")) {
+            // For now, we'll emulate these as strings
+            return DoubleVariable.newStringValue(true, value, value);
+        }
         try {
-            // This code is duplicated in NumericLiteral. Will be removed from here once typed arguments are implemented.
+            // TODO This code is duplicated in NumericLiteral. Will be removed from here once typed arguments are implemented.
             return value.startsWith("0x") ? DoubleVariable.newLongValue(true, value, Long.decode(value)) :
                     value.startsWith("0b") ? DoubleVariable.newLongValue(true, value, Long.parseLong(value, 2, value.length(), 2)) :
                     DoubleVariable.newDoubleValue(true, value, Double.parseDouble(value));

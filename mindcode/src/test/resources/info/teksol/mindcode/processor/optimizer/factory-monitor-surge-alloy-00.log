@@ -737,52 +737,54 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
      9 noop
 -    * op mul __tmp2 EXPECTED_FLOW 3600
 -    * op floor EXPECTED_FLOW_STR __tmp2
-+   10 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
-    11 noop
-    12 set RATE_INDEX 511
-    13 jump __label0 equal bank1 null
++   10 noop
++   11 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
+    12 noop
+    13 set RATE_INDEX 511
+    14 jump __label0 equal bank1 null
  
-    62 noop
-    63 draw color 255 255 16 255
-    64 draw triangle 156 pos1 164 pos 156 pos2
+    63 noop
+    64 draw color 255 255 16 255
+    65 draw triangle 156 pos1 164 pos 156 pos2
 -    * op mul __tmp23 3600 rate
 -    * op floor flow_str __tmp23
-+   65 op idiv flow_str rate 0.0002777777777777778
-    66 noop
-    67 noop
-    68 jump __label10 always
++   66 noop
++   67 op idiv flow_str rate 0.0002777777777777778
+    68 noop
+    69 noop
+    70 jump __label10 always
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
-   252 noop
-   253 jump __label35 always
-   254 label __label34
-+  255 set red 255
-   256 op greaterThan __tmp86 minimum 14
-   257 op greaterThanEq __tmp87 boost EXPECTED_BOOST
-   258 op land __tmp88 __tmp86 __tmp87
+   254 noop
+   255 jump __label35 always
+   256 label __label34
++  257 set red 255
+   258 op greaterThan __tmp86 minimum 14
+   259 op greaterThanEq __tmp87 boost EXPECTED_BOOST
+   260 op land __tmp88 __tmp86 __tmp87
 -    * jump __label36 equal __tmp88 false
 -    * set __tmp89 0
-+  259 jump __label37 equal __tmp88 false
-+  260 set red 0
-   261 jump __label37 always
++  261 jump __label37 equal __tmp88 false
++  262 set red 0
+   263 jump __label37 always
 -    * label __label36
 -    * set __tmp89 255
-   262 label __label37
+   264 label __label37
 -    * set red __tmp89
 -    * jump __label38 lessThanEq minimum 7
 -    * set __tmp91 255
-+  263 set green 0
-+  264 jump __label39 lessThanEq minimum 7
-+  265 set green 255
-   266 jump __label39 always
++  265 set green 0
++  266 jump __label39 lessThanEq minimum 7
++  267 set green 255
+   268 jump __label39 always
 -    * label __label38
 -    * set __tmp91 0
-   267 label __label39
+   269 label __label39
 -    * set green __tmp91
-   268 set blue 0
-   269 noop
-   270 label __label35
+   270 set blue 0
+   271 noop
+   272 label __label35
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -792,19 +794,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op div EXPECTED_FLOW __tmp0 75
 +    8 op div EXPECTED_FLOW EXPECTED_BOOST 4.6875
      9 noop
-    10 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
-    11 noop
+    10 noop
+    11 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
  
-    21 noop
-    22 label __label1
-    23 set lastRate null
+    22 noop
+    23 label __label1
+    24 set lastRate null
 -    * set icon lastRate
 -    * set flow_str icon
-+   24 set icon null
-+   25 set flow_str lastRate
-    26 control enabled switch1 0
-    27 label __label2
-    28 sensor __tmp6 switch1 @enabled
++   25 set icon null
++   26 set flow_str lastRate
+    27 control enabled switch1 0
+    28 label __label2
+    29 sensor __tmp6 switch1 @enabled
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
@@ -814,105 +816,105 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op mul __tmp0 EXPECTED_BOOST 16
      7 op div EXPECTED_FLOW EXPECTED_BOOST 4.6875
      8 noop
-     9 op idiv EXPECTED_FLOW_STR EXPECTED_FLOW 0.0002777777777777778
+     9 noop
  
-    21 label __label1
-    22 set lastRate null
-    23 set icon null
+    22 label __label1
+    23 set lastRate null
+    24 set icon null
 -    * set flow_str lastRate
-+   24 set flow_str null
-    25 control enabled switch1 0
-    26 label __label2
-    27 sensor __tmp6 switch1 @enabled
++   25 set flow_str null
+    26 control enabled switch1 0
+    27 label __label2
+    28 sensor __tmp6 switch1 @enabled
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-    93 set n 0
-    94 label __label11
-    95 jump __label13 greaterThanEq n @links
-+   96 label __label42
-    97 getlink smelter n
-    98 noop
-    99 sensor __tmp28 smelter @type
+    95 set n 0
+    96 label __label11
+    97 jump __label13 greaterThanEq n @links
++   98 label __label42
+    99 getlink smelter n
+   100 noop
+   101 sensor __tmp28 smelter @type
  
-   302 label __label12
-   303 op add n n 1
-   304 noop
+   304 label __label12
+   305 op add n n 1
+   306 noop
 -    * jump __label11 always
-+  305 jump __label42 lessThan n @links
-   306 label __label13
-   307 drawflush display1
-   308 op sub __tmp103 @time start
++  307 jump __label42 lessThan n @links
+   308 label __label13
+   309 drawflush display1
+   310 op sub __tmp103 @time start
 
 Modifications by Loop Optimization: replicate condition at line 26 (+1 instructions):
  
-    26 label __label2
-    27 sensor __tmp6 switch1 @enabled
-    28 jump __label4 notEqual __tmp6 0
-+   29 label __label43
-    30 print "Surge Alloy Factory Monitor"
-    31 jump __label5 equal bank1 null
-    32 jump __label7 notEqual FROM_INDEX 0
+    27 label __label2
+    28 sensor __tmp6 switch1 @enabled
+    29 jump __label4 notEqual __tmp6 0
++   30 label __label43
+    31 print "Surge Alloy Factory Monitor"
+    32 jump __label5 equal bank1 null
+    33 jump __label7 notEqual FROM_INDEX 0
  
-   313 print " ms"
-   314 printflush message1
-   315 label __label3
+   315 print " ms"
+   316 printflush message1
+   317 label __label3
 -    * jump __label2 always
-+  316 sensor __tmp6 switch1 @enabled
-+  317 jump __label43 equal __tmp6 0
-   318 label __label4
-   319 end
++  318 sensor __tmp6 switch1 @enabled
++  319 jump __label43 equal __tmp6 0
+   320 label __label4
+   321 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    93 set index FROM_INDEX
-    94 set n 0
-    95 label __label11
+    95 set index FROM_INDEX
+    96 set n 0
+    97 label __label11
 -    * jump __label13 greaterThanEq n @links
-+   96 jump __label13 greaterThanEq 0 @links
-    97 label __label42
-    98 getlink smelter n
-    99 noop
++   98 jump __label13 greaterThanEq 0 @links
+    99 label __label42
+   100 getlink smelter n
+   101 noop
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
  
-   259 op land __tmp88 __tmp86 __tmp87
-   260 jump __label37 equal __tmp88 false
-   261 set red 0
+   261 op land __tmp88 __tmp86 __tmp87
+   262 jump __label37 equal __tmp88 false
+   263 set red 0
 -    * jump __label37 always
-+  262 noop
-   263 label __label37
-   264 set green 0
-   265 jump __label39 lessThanEq minimum 7
-   266 set green 255
++  264 noop
+   265 label __label37
+   266 set green 0
+   267 jump __label39 lessThanEq minimum 7
+   268 set green 255
 -    * jump __label39 always
-+  267 noop
-   268 label __label39
-   269 set blue 0
-   270 noop
++  269 noop
+   270 label __label39
+   271 set blue 0
+   272 noop
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-   194 op add __tmp69 y 7
-   195 draw image __tmp68 __tmp69 icon 16 0
-   196 noop
+   196 op add __tmp69 y 7
+   197 draw image __tmp68 __tmp69 icon 16 0
+   198 noop
 -    * jump __label31 always
-+  197 jump __label29 always
-   198 label __label30
-   199 op add x12 x 12
-   200 noop
++  199 jump __label29 always
+   200 label __label30
+   201 op add x12 x 12
+   202 noop
 
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
-    78 label __label8
-    79 print "\nNominal production: "
-    80 print EXPECTED_FLOW_STR
+    80 label __label8
+    81 print "\nNominal production: "
+    82 print EXPECTED_FLOW_STR
 -    * print "/min"
 -    * print "\nActual production: "
-+   81 print "/min\nActual production: "
-    82 print flow_str
-    83 print "/min"
-    84 noop
++   83 print "/min\nActual production: "
+    84 print flow_str
+    85 print "/min"
+    86 noop
 
 Final code before resolving virtual instructions:
 

@@ -1101,20 +1101,22 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    455 noop
 -    * op mul __tmp179 expected_flow 3600
 -    * op floor expected_flow_str __tmp179
-+  456 op idiv expected_flow_str expected_flow 0.0002777777777777778
-   457 noop
-   458 set lastRate rate
-   459 draw color 0 0 80 255
++  456 noop
++  457 op idiv expected_flow_str expected_flow 0.0002777777777777778
+   458 noop
+   459 set lastRate rate
+   460 draw color 0 0 80 255
  
-   483 noop
-   484 draw color 255 255 16 255
-   485 draw triangle 156 pos1 164 pos 156 pos2
+   484 noop
+   485 draw color 255 255 16 255
+   486 draw triangle 156 pos1 164 pos 156 pos2
 -    * op mul __tmp189 3600 rate
 -    * op floor flow_str __tmp189
-+  486 op idiv flow_str rate 0.0002777777777777778
-   487 noop
-   488 noop
++  487 noop
++  488 op idiv flow_str rate 0.0002777777777777778
    489 noop
+   490 noop
+   491 noop
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-7 instructions):
  
@@ -1512,14 +1514,14 @@ Modifications by Loop Optimization: replicate condition at line 33 (+1 instructi
     46 noop
     47 print "Silicon Factory Monitor"
  
-   482 print " ms"
-   483 printflush message1
-   484 label __label9
+   484 print " ms"
+   485 printflush message1
+   486 label __label9
 -    * jump __label8 always
-+  485 sensor __tmp13 switch1 @enabled
-+  486 jump __label73 equal __tmp13 0
-   487 label __label10
-   488 end
++  487 sensor __tmp13 switch1 @enabled
++  488 jump __label73 equal __tmp13 0
+   489 label __label10
+   490 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1613,15 +1615,15 @@ Modifications by Final phase, Jump Threading, iteration 1:
 
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
-   465 label __label68
-   466 print "\nNominal production: "
-   467 print expected_flow_str
+   467 label __label68
+   468 print "\nNominal production: "
+   469 print expected_flow_str
 -    * print "/min"
 -    * print "\nActual production: "
-+  468 print "/min\nActual production: "
-   469 print flow_str
-   470 print "/min"
-   471 noop
++  470 print "/min\nActual production: "
+   471 print flow_str
+   472 print "/min"
+   473 noop
 
 Final code before resolving virtual instructions:
 

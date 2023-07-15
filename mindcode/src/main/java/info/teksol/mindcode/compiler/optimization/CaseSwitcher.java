@@ -19,6 +19,10 @@ import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
  * Inlines functions
  */
 public class CaseSwitcher extends BaseOptimizer {
+    // Activates generating range limiting instructions for case switching.
+    // Only set to false for the purposes of benchmarking.
+    private static final boolean RANGE_LIMITING = true;
+
     public CaseSwitcher(OptimizationContext optimizationContext) {
         super(Optimization.CASE_SWITCHING, optimizationContext);
     }
@@ -134,9 +138,13 @@ public class CaseSwitcher extends BaseOptimizer {
         LogicLabel marker = instructionProcessor.nextLabel();
         List<LogicLabel> labels = IntStream.rangeClosed(min, max).mapToObj(i -> instructionProcessor.nextLabel()).toList();
 
-        insertInstruction(index++, createOp(newContext, Operation.MIN, jumpValue, action.variable, LogicNumber.get(max)));
-        insertInstruction(index++, createOp(newContext, Operation.MAX, jumpValue, jumpValue, LogicNumber.get(min)));
-        insertInstruction(index++, createGotoOffset(newContext, labels.get(0), jumpValue, LogicNumber.get(min), marker));
+        if (RANGE_LIMITING) {
+            insertInstruction(index++, createOp(newContext, Operation.MIN, jumpValue, action.variable, LogicNumber.get(max)));
+            insertInstruction(index++, createOp(newContext, Operation.MAX, jumpValue, jumpValue, LogicNumber.get(min)));
+            insertInstruction(index++, createGotoOffset(newContext, labels.get(0), jumpValue, LogicNumber.get(min), marker));
+        } else {
+            insertInstruction(index++, createGotoOffset(newContext, labels.get(0), action.variable, LogicNumber.get(min), marker));
+        }
         for (int i = 0; i < labels.size(); i++) {
             insertInstruction(index++, createGotoLabel(newContext, labels.get(i), marker));
             insertInstruction(index++, createJumpUnconditional(newContext, targets.getOrDefault(min + i, finalLabel)));

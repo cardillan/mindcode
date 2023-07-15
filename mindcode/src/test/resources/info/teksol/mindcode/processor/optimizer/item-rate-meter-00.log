@@ -543,10 +543,11 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    180 print "[]\n"
 -    * op mul __tmp46 rate 3600
 -    * op floor __tmp47 __tmp46
-+  181 op idiv __tmp47 rate 0.0002777777777777778
-   182 print "Current rate [green]"
-   183 print __tmp47
-   184 print "[]/min\n"
++  181 noop
++  182 op idiv __tmp47 rate 0.0002777777777777778
+   183 print "Current rate [green]"
+   184 print __tmp47
+   185 print "[]/min\n"
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -637,15 +638,15 @@ Modifications by Loop Optimization: replicate condition at line 56 (+1 instructi
    117 noop
    118 op add __tmp24 nextTick TICKS
  
-   199 set prevTick currTick
-   200 set prev curr
-   201 label __label25
+   200 set prevTick currTick
+   201 set prev curr
+   202 label __label25
 -    * jump __label24 always
-+  202 sensor __tmp21 switch1 @enabled
-+  203 jump __label43 equal __tmp21 0
-   204 label __label26
-   205 control enabled switch1 0
-   206 end
++  203 sensor __tmp21 switch1 @enabled
++  204 jump __label43 equal __tmp21 0
+   205 label __label26
+   206 control enabled switch1 0
+   207 end
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
@@ -669,25 +670,26 @@ Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
    178 print "Total items: [gold]"
    179 print curr
 -    * print "[]\n"
-   180 op idiv __tmp47 rate 0.0002777777777777778
+   180 noop
+   181 op idiv __tmp47 rate 0.0002777777777777778
 -    * print "Current rate [green]"
-+  181 print "[]\nCurrent rate [green]"
-   182 print __tmp47
++  182 print "[]\nCurrent rate [green]"
+   183 print __tmp47
 -    * print "[]/min\n"
 -    * print "  memory start: [gold]"
-+  183 print "[]/min\n  memory start: [gold]"
-   184 print startIndex
++  184 print "[]/min\n  memory start: [gold]"
+   185 print startIndex
 -    * print "[]\n"
 -    * print "  memory index: [gold]"
-+  185 print "[]\n  memory index: [gold]"
-   186 print index
++  186 print "[]\n  memory index: [gold]"
+   187 print index
 -    * print "[]\n"
-   187 op floor __tmp48 time
+   188 op floor __tmp48 time
 -    * print "[lightgray]Loop time: "
-+  188 print "[]\n[lightgray]Loop time: "
-   189 print __tmp48
-   190 print " ms"
-   191 printflush message1
++  189 print "[]\n[lightgray]Loop time: "
+   190 print __tmp48
+   191 print " ms"
+   192 printflush message1
 
 Final code before resolving virtual instructions:
 

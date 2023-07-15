@@ -229,10 +229,11 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     90 noop
 -    * op mul __tmp36 60000 flow_rate
 -    * op floor flow_rate_str __tmp36
-+   91 op idiv flow_rate_str flow_rate 0.000016666666666666667
-    92 noop
-    93 op div seconds MILLIS 1000
-    94 noop
++   91 noop
++   92 op idiv flow_rate_str flow_rate 0.000016666666666666667
+    93 noop
+    94 op div seconds MILLIS 1000
+    95 noop
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -245,14 +246,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     69 jump __label8 greaterThanEq MILLIS TOTAL_MILLIS
     70 op add MILLIS MILLIS DELAY
  
-   102 print "\nItems shipped: "
-   103 print shipped
-   104 print "\nContainer level: "
+   103 print "\nItems shipped: "
+   104 print shipped
+   105 print "\nContainer level: "
 -    * print level
-+  105 print 0
-   106 print "\nFlow rate: "
-   107 print flow_rate_str
-   108 print "\nTotal: "
++  106 print 0
+   107 print "\nFlow rate: "
+   108 print flow_rate_str
+   109 print "\nTotal: "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
@@ -266,18 +267,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-   117 set loops 0
-   118 label __label10
-   119 jump __label12 greaterThanEq @time wait
-+  120 label __label13
-   121 op add loops loops 1
-   122 noop
-   123 label __label11
+   118 set loops 0
+   119 label __label10
+   120 jump __label12 greaterThanEq @time wait
++  121 label __label13
+   122 op add loops loops 1
+   123 noop
+   124 label __label11
 -    * jump __label10 always
-+  124 jump __label13 lessThan @time wait
-   125 label __label12
-   126 label __label4
-   127 jump __label3 always
++  125 jump __label13 lessThan @time wait
+   126 label __label12
+   127 label __label4
+   128 jump __label3 always
 
 Modifications by Loop Optimization: replicate condition at line 16 (+5 instructions):
  
@@ -312,33 +313,33 @@ Modifications by Loop Optimization: replicate condition at line 37 (+8 instructi
     57 noop
     58 op add wait wait DELAY
  
-   131 jump __label13 lessThan @time wait
-   132 label __label12
-   133 label __label4
+   132 jump __label13 lessThan @time wait
+   133 label __label12
+   134 label __label4
 -    * jump __label3 always
-+  134 sensor __tmp10 SORTER @dead
-+  135 op strictEqual __tmp11 __tmp10 0
-+  136 sensor __tmp12 VAULT @dead
-+  137 op strictEqual __tmp13 __tmp12 0
-+  138 op land __tmp14 __tmp11 __tmp13
-+  139 read __tmp15 BANK IND_SESSION_KEY
-+  140 op strictEqual __tmp16 SESSION_KEY __tmp15
-+  141 op land __tmp17 __tmp14 __tmp16
-+  142 jump __label15 notEqual __tmp17 false
-   143 label __label5
-   144 end
++  135 sensor __tmp10 SORTER @dead
++  136 op strictEqual __tmp11 __tmp10 0
++  137 sensor __tmp12 VAULT @dead
++  138 op strictEqual __tmp13 __tmp12 0
++  139 op land __tmp14 __tmp11 __tmp13
++  140 read __tmp15 BANK IND_SESSION_KEY
++  141 op strictEqual __tmp16 SESSION_KEY __tmp15
++  142 op land __tmp17 __tmp14 __tmp16
++  143 jump __label15 notEqual __tmp17 false
+   144 label __label5
+   145 end
 
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
-   102 noop
-   103 print "Measured interval: "
-   104 print seconds
+   103 noop
+   104 print "Measured interval: "
+   105 print seconds
 -    * print " sec"
 -    * print "\nItem: "
-+  105 print " sec\nItem: "
-   106 print item
-   107 print "\nItems shipped: "
-   108 print shipped
++  106 print " sec\nItem: "
+   107 print item
+   108 print "\nItems shipped: "
+   109 print shipped
 
 Final code before resolving virtual instructions:
 

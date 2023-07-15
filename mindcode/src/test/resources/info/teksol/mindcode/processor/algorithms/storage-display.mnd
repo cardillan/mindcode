@@ -1,0 +1,138 @@
+// Sizing
+const HEIGHT    = 12
+const HALF      = HEIGHT \ 2
+const WIDTH     = 7
+const GAP_X     = 4
+const SPACE_X   = WIDTH + GAP_X
+const SPACE_Y   = 20
+const IMAGE     = 16
+const COLUMN    = IMAGE + 6 * SPACE_X + GAP_X
+const OFFSET    = IMAGE + GAP_X + 4 * SPACE_X
+
+// Initial position
+const TOP       = 176 - SPACE_Y - 4
+const BOTTOM    = TOP - 8 * SPACE_Y
+const LEFT1     = 7
+const LEFT2     = LEFT1 + COLUMN
+const STROKE    = 2
+
+stroke(STROKE)
+
+x = LEFT1
+y = TOP
+eraseImages(true)
+eraseImages(false)
+color(255,255,255,255)
+index = 0
+
+for item in (@sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphite, @metaglass, @silicon,
+          @pyratite, @blast-compound, @plastanium, @phase-fabric, @surge-alloy, @spore-pod)
+    image(x + IMAGE \ 2, y + IMAGE \ 2 - STROKE + 1, item, IMAGE, 0)
+    index += 1
+    y -= SPACE_Y
+    if index == 8
+        y = TOP
+        x = LEFT2
+        color(255,255,255,255)
+    end
+end
+drawflush(display1)
+
+x = LEFT1 + OFFSET
+y = TOP
+eraseNumbers(true)
+index = 0
+
+for item in (@sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphite, @metaglass, @silicon,
+          @pyratite, @blast-compound, @plastanium, @phase-fabric, @surge-alloy, @spore-pod)
+    image(0, 0, item, IMAGE, 0)
+    displayItem(x, y)
+    index += 1
+    y -= SPACE_Y
+    if index == 8
+        drawflush(display1)
+        y = TOP
+        x = LEFT2 + OFFSET
+        eraseNumbers(false)
+    end
+end
+
+drawflush(display1)
+
+def eraseImages(first_column)
+    color(0, 0, 80, 255)
+    if first_column
+        rect(0, 0, LEFT1 + IMAGE, 176)
+    else
+        rect(LEFT2, 0, IMAGE, 176)
+    end
+end
+
+def eraseNumbers(first_column)
+    color(0, 0, 80, 255)
+    if first_column
+        rect(LEFT1 + IMAGE, 0, COLUMN - IMAGE, 176)
+    else
+        rect(LEFT2 + IMAGE, 0, 176, 176)
+    end
+end
+
+def displayItem(x, y)
+    amount = max(AMOUNT, 0)
+    color(0,255,0,255)
+
+    for i in 0 ... 5
+        drawDigit(x, y, amount % 10)
+        x -= SPACE_X
+        amount \= 10
+        if amount == 0 break end
+    end
+end
+
+def drawDigit(x, y, digit)
+    case digit
+        when 0 then
+            lineRect(x - STROKE + 1, y - STROKE + 1, WIDTH + STROKE, HEIGHT + STROKE)
+        when 1 then
+            line(x + WIDTH - 1, y, x + WIDTH - 1, y + HEIGHT)
+        when 2 then
+            line(x, y, x + WIDTH, y)
+            line(x, y, x, y + HALF)
+            line(x, y + HALF, x + WIDTH, y + HALF)
+            line(x + WIDTH, y + HALF, x + WIDTH, y + HEIGHT)
+            line(x, y + HEIGHT, x + WIDTH, y + HEIGHT)
+        when 3 then
+            line(x + WIDTH, y, x + WIDTH, y + HEIGHT)
+            line(x, y, x + WIDTH, y)
+            line(x, y + HALF, x + WIDTH, y + HALF)
+            line(x, y + HEIGHT, x + WIDTH, y + HEIGHT)
+        when 4 then
+            line(x + WIDTH, y, x + WIDTH, y + HEIGHT)
+            line(x, y + HALF, x + WIDTH, y + HALF)
+            line(x, y + HALF, x, y + HEIGHT)
+        when 5 then
+            line(x, y, x + WIDTH, y)
+            line(x + WIDTH, y, x + WIDTH, y + HALF)
+            line(x, y + HALF, x + WIDTH, y + HALF)
+            line(x, y + HALF, x, y + HEIGHT)
+            line(x, y + HEIGHT, x + WIDTH, y + HEIGHT)
+        when 6 then
+            line(x, y, x, y + HEIGHT)
+            line(x, y, x + WIDTH, y)
+            line(x + WIDTH, y, x + WIDTH, y + HALF)
+            line(x, y + HALF, x + WIDTH, y + HALF)
+            line(x, y + HEIGHT, x + WIDTH, y + HEIGHT)
+        when 7 then
+            line(x + WIDTH - 1, y, x + WIDTH - 1, y + HEIGHT)
+            line(x, y + HEIGHT, x + WIDTH - 1, y + HEIGHT)
+        when 8 then
+            lineRect(x - STROKE + 1, y - STROKE + 1, WIDTH + STROKE, HEIGHT + STROKE)
+            line(x, y + HALF, x + WIDTH, y + HALF)
+        when 9 then
+            line(x, y, x + WIDTH, y)
+            line(x + WIDTH, y, x + WIDTH, y + HEIGHT)
+            line(x, y + HALF, x + WIDTH, y + HALF)
+            line(x, y + HALF, x, y + HEIGHT)
+            line(x, y + HEIGHT, x + WIDTH, y + HEIGHT)
+    end
+end

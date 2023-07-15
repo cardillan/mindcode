@@ -112,15 +112,16 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-
     12 label __label5
     13 pop bank1 __fn0_n
 -    * set __fn0retval __fn0retval
-    14 noop
++   14 noop
     15 noop
-    16 label __label4
+    16 noop
+    17 label __label4
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-    16 label __label4
-    17 label __label2
-    18 return bank1
+    17 label __label4
+    18 label __label2
+    19 return bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
@@ -135,7 +136,7 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
 -    * pop bank1 __fn0_n
     12 noop
     13 noop
-    14 label __label4
+    14 noop
 
 Final code before resolving virtual instructions:
 

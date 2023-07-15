@@ -2992,20 +2992,22 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    723 noop
 -    * op mul __tmp208 items_per_ms_unit 60000
 -    * op floor items_per_min_unit __tmp208
-+  724 op idiv items_per_min_unit items_per_ms_unit 0.000016666666666666667
-   725 noop
-   726 op add __tmp210 min_level max_level
-   727 op div this_level __tmp210 2
++  724 noop
++  725 op idiv items_per_min_unit items_per_ms_unit 0.000016666666666666667
+   726 noop
+   727 op add __tmp210 min_level max_level
+   728 op div this_level __tmp210 2
  
-   734 set last_level this_level
-   735 op add total_flow_per_ms items_per_ms corr_per_ms
-   736 noop
+   735 set last_level this_level
+   736 op add total_flow_per_ms items_per_ms corr_per_ms
+   737 noop
 -    * op mul __tmp216 60000 corr_per_ms
 -    * op floor corr_per_min __tmp216
-+  737 op idiv corr_per_min corr_per_ms 0.000016666666666666667
-   738 noop
-   739 set CORR_SIGN "[]([green]"
-   740 jump __label129 lessThan corr_per_min 0
++  738 noop
++  739 op idiv corr_per_min corr_per_ms 0.000016666666666666667
+   740 noop
+   741 set CORR_SIGN "[]([green]"
+   742 jump __label129 lessThan corr_per_min 0
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-4 instructions):
  
@@ -3288,14 +3290,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    657 sensor last_level CONTAINER ITEM
    658 noop
  
-   749 set total_flow_2 total_flow_1
-   750 set total_flow_1 total_flow_per_ms
-   751 op add __tmp229 total_flow_3 total_flow_2
+   751 set total_flow_2 total_flow_1
+   752 set total_flow_1 total_flow_per_ms
+   753 op add __tmp229 total_flow_3 total_flow_2
 -    * op add __tmp230 __tmp229 total_flow_1
-+  752 op add __tmp230 __tmp229 total_flow_per_ms
-   753 op div total_flow_per_ms __tmp230 3
-   754 noop
-   755 noop
++  754 op add __tmp230 __tmp229 total_flow_per_ms
+   755 op div total_flow_per_ms __tmp230 3
+   756 noop
+   757 noop
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
  
@@ -3586,22 +3588,22 @@ Modifications by Loop Optimization: replicate condition at line 184 (+5 instruct
 
 Modifications by Loop Optimization: replicate condition at line 692 (+2 instructions):
  
-  1238 sensor __tmp379 SORTER @dead
-  1239 op strictEqual __tmp380 __tmp379 0
-  1240 jump __label213 notEqual __tmp380 false
-+ 1241 label __label229
-  1242 print "[salmon]sorter1 is missing![]\nPlease place and link sorter or inverted sorter to the processor."
-  1243 printflush message1
-  1244 printflush message2
-  1245 set SORTER sorter1
-  1246 label __label212
+  1240 sensor __tmp379 SORTER @dead
+  1241 op strictEqual __tmp380 __tmp379 0
+  1242 jump __label213 notEqual __tmp380 false
++ 1243 label __label229
+  1244 print "[salmon]sorter1 is missing![]\nPlease place and link sorter or inverted sorter to the processor."
+  1245 printflush message1
+  1246 printflush message2
+  1247 set SORTER sorter1
+  1248 label __label212
 -    * jump __label211 always
-+ 1247 sensor __tmp379 SORTER @dead
-+ 1248 op strictEqual __tmp380 __tmp379 0
-+ 1249 jump __label229 equal __tmp380 false
-  1250 label __label213
-  1251 sensor __tmp382 SRC @dead
-  1252 op strictEqual __tmp383 __tmp382 0
++ 1249 sensor __tmp379 SORTER @dead
++ 1250 op strictEqual __tmp380 __tmp379 0
++ 1251 jump __label229 equal __tmp380 false
+  1252 label __label213
+  1253 sensor __tmp382 SRC @dead
+  1254 op strictEqual __tmp383 __tmp382 0
 
 Modifications by Loop Optimization: replicate condition at line 203 (+3 instructions):
  
@@ -3627,22 +3629,22 @@ Modifications by Loop Optimization: replicate condition at line 203 (+3 instruct
 
 Modifications by Loop Optimization: replicate condition at line 700 (+3 instructions):
  
-  1265 sensor __tmp391 switch2 @enabled
-  1266 op or __tmp392 __tmp390 __tmp391
-  1267 jump __label218 notEqual __tmp392 false
-+ 1268 label __label231
-  1269 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
-  1270 printflush message1
-  1271 printflush message2
-  1272 label __label217
+  1267 sensor __tmp391 switch2 @enabled
+  1268 op or __tmp392 __tmp390 __tmp391
+  1269 jump __label218 notEqual __tmp392 false
++ 1270 label __label231
+  1271 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
+  1272 printflush message1
+  1273 printflush message2
+  1274 label __label217
 -    * jump __label216 always
-+ 1273 sensor __tmp390 switch1 @enabled
-+ 1274 sensor __tmp391 switch2 @enabled
-+ 1275 op or __tmp392 __tmp390 __tmp391
-+ 1276 jump __label231 equal __tmp392 false
-  1277 label __label218
-  1278 noop
-  1279 noop
++ 1275 sensor __tmp390 switch1 @enabled
++ 1276 sensor __tmp391 switch2 @enabled
++ 1277 op or __tmp392 __tmp390 __tmp391
++ 1278 jump __label231 equal __tmp392 false
+  1279 label __label218
+  1280 noop
+  1281 noop
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-6 instructions):
  
@@ -3701,46 +3703,46 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-4 instructions):
  
-   948 set items_in_transit 0
-   949 print "Unit status:"
-   950 sensor __tmp269 SRC @dead
+   950 set items_in_transit 0
+   951 print "Unit status:"
+   952 sensor __tmp269 SRC @dead
 -    * jump __label155 equal __tmp269 0
 -    * jump __label69 always
-+  951 jump __label69 notEqual __tmp269 0
-+  952 noop
-   953 noop
-   954 noop
-   955 label __label155
++  953 jump __label69 notEqual __tmp269 0
++  954 noop
+   955 noop
    956 noop
-   957 label __label156
-   958 sensor __tmp272 DST @dead
+   957 label __label155
+   958 noop
+   959 label __label156
+   960 sensor __tmp272 DST @dead
 -    * jump __label157 equal __tmp272 0
 -    * jump __label69 always
-+  959 jump __label69 notEqual __tmp272 0
-+  960 noop
-   961 noop
-   962 noop
-   963 label __label157
++  961 jump __label69 notEqual __tmp272 0
++  962 noop
+   963 noop
    964 noop
-   965 label __label158
-   966 sensor __tmp275 SORTER @dead
+   965 label __label157
+   966 noop
+   967 label __label158
+   968 sensor __tmp275 SORTER @dead
 -    * jump __label159 equal __tmp275 0
 -    * jump __label69 always
-+  967 jump __label69 notEqual __tmp275 0
-+  968 noop
-   969 noop
-   970 noop
-   971 label __label159
++  969 jump __label69 notEqual __tmp275 0
++  970 noop
+   971 noop
    972 noop
-   973 label __label160
-   974 getlink __tmp278 CONTAINER_INDEX
+   973 label __label159
+   974 noop
+   975 label __label160
+   976 getlink __tmp278 CONTAINER_INDEX
 -    * jump __label161 equal CONTAINER __tmp278
 -    * jump __label69 always
-+  975 jump __label69 notEqual CONTAINER __tmp278
-+  976 noop
-   977 noop
-   978 noop
-   979 label __label161
++  977 jump __label69 notEqual CONTAINER __tmp278
++  978 noop
+   979 noop
+   980 noop
+   981 label __label161
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
@@ -3767,32 +3769,32 @@ Modifications by Final phase, Jump Threading, iteration 1:
    336 noop
    337 label __label54
  
-  1001 noop
-  1002 label __label164
-  1003 sensor __tmp287 @unit @controller
+  1003 noop
+  1004 label __label164
+  1005 sensor __tmp287 @unit @controller
 -    * jump __label167 notEqual __tmp287 @this
-+ 1004 jump __label67 notEqual __tmp287 @this
-  1005 sensor state @unit @flag
-  1006 noop
++ 1006 jump __label67 notEqual __tmp287 @this
+  1007 sensor state @unit @flag
+  1008 noop
 -    * jump __label169 equal state S_UNUSED
-+ 1007 jump __label67 equal state S_UNUSED
-  1008 op max __tmp293 state 1
-  1009 op min state __tmp293 STATE_LIMIT
-  1010 noop
++ 1009 jump __label67 equal state S_UNUSED
+  1010 op max __tmp293 state 1
+  1011 op min state __tmp293 STATE_LIMIT
+  1012 noop
  
-  1198 print "[]\nParking: [green]"
-  1199 ucontrol approach DROP_X DROP_Y 6
-  1200 ucontrol within DROP_X DROP_Y 8 __tmp373
+  1200 print "[]\nParking: [green]"
+  1201 ucontrol approach DROP_X DROP_Y 6
+  1202 ucontrol within DROP_X DROP_Y 8 __tmp373
 -    * jump __label207 equal __tmp373 false
-+ 1201 jump __label206 equal __tmp373 false
-  1202 ucontrol itemDrop DROP_TARGET UNIT_CAPACITY
-  1203 sensor items @unit @totalItems
-  1204 noop
++ 1203 jump __label206 equal __tmp373 false
+  1204 ucontrol itemDrop DROP_TARGET UNIT_CAPACITY
+  1205 sensor items @unit @totalItems
+  1206 noop
 -    * jump __label209 greaterThan items PARK_ITEM_LIMIT
-+ 1205 jump __label206 greaterThan items PARK_ITEM_LIMIT
-  1206 ucontrol move PARK_X PARK_Y
-  1207 set state S_UNUSED
-  1208 noop
++ 1207 jump __label206 greaterThan items PARK_ITEM_LIMIT
+  1208 ucontrol move PARK_X PARK_Y
+  1209 set state S_UNUSED
+  1210 noop
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
  
@@ -3811,15 +3813,15 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
 
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
-   908 jump __label153 equal AUTO_ALLOCATION false
-   909 print "\nUnit throughput: [green]"
-   910 print items_per_min_unit
+   910 jump __label153 equal AUTO_ALLOCATION false
+   911 print "\nUnit throughput: [green]"
+   912 print items_per_min_unit
 -    * print "[]/min"
 -    * print "\nMin/last round: [green]"
-+  911 print "[]/min\nMin/last round: [green]"
-   912 print turnaround_str
-   913 print "[]/[green]"
-   914 print elapsed_str
++  913 print "[]/min\nMin/last round: [green]"
+   914 print turnaround_str
+   915 print "[]/[green]"
+   916 print elapsed_str
 
 Final code before resolving virtual instructions:
 

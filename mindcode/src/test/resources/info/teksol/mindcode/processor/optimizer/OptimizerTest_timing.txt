@@ -1,6 +1,6 @@
 breakout-00.mnd:                        : parse:        400 ms, compile:          0 ms, optimize:        200 ms
 detector-00.mnd:                        : parse:          0 ms, compile:          0 ms, optimize:          0 ms
-factory-monitor-00.mnd:                 : parse:        600 ms, compile:          0 ms, optimize:        200 ms
+factory-monitor-00.mnd:                 : parse:        400 ms, compile:          0 ms, optimize:        200 ms
 factory-monitor-silicon-00.mnd:         : parse:        600 ms, compile:          0 ms, optimize:          0 ms
 factory-monitor-surge-alloy-00.mnd:     : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 instant-overdrive-dome-00.mnd:          : parse:        200 ms, compile:          0 ms, optimize:        200 ms

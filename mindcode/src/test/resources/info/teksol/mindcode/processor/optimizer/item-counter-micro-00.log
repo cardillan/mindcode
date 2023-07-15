@@ -878,20 +878,22 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    170 write __tmp45 MEMORY lastCell
 -    * op mul __tmp46 rate 600000
 -    * op floor ratePerMin __tmp46
-+  171 op idiv ratePerMin rate 0.0000016666666666666667
-   172 noop
-   173 jump __label32 greaterThan duration BATCH_DURATION
-   174 op add __tmp50 BATCH BATCH_STEP
++  171 noop
++  172 op idiv ratePerMin rate 0.0000016666666666666667
+   173 noop
+   174 jump __label32 greaterThan duration BATCH_DURATION
+   175 op add __tmp50 BATCH BATCH_STEP
  
-   268 print elapsed
-   269 print "[] ms\n"
-   270 op sub __tmp80 @time start
+   269 print elapsed
+   270 print "[] ms\n"
+   271 op sub __tmp80 @time start
 -    * op div __tmp81 __tmp80 2
 -    * op floor __tmp82 __tmp81
-+  271 op idiv __tmp82 __tmp80 2
-   272 print "[lightgray]Loop time: "
-   273 print __tmp82
-   274 print " ms"
++  272 noop
++  273 op idiv __tmp82 __tmp80 2
+   274 print "[lightgray]Loop time: "
+   275 print __tmp82
+   276 print " ms"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -977,15 +979,15 @@ Modifications by Loop Optimization: replicate condition at line 68 (+1 instructi
    118 noop
    119 sensor a1 CONV1 @totalItems
  
-   278 noop
-   279 label __label45
-   280 label __label20
+   280 noop
+   281 label __label45
+   282 label __label20
 -    * jump __label19 always
-+  281 sensor __tmp21 switch1 @enabled
-+  282 jump __label46 equal __tmp21 0
-   283 label __label21
-   284 control enabled switch1 0
-   285 write 0 MEMORY lastCell
++  283 sensor __tmp21 switch1 @enabled
++  284 jump __label46 equal __tmp21 0
+   285 label __label21
+   286 control enabled switch1 0
+   287 write 0 MEMORY lastCell
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
@@ -1034,46 +1036,47 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
     80 set BATCH_DURATION 2000
     81 op idiv __tmp13 MIN_BATCH 10
  
-   262 printflush message1
-   263 jump __label44 equal LINKS @links
-   264 end
+   264 printflush message1
+   265 jump __label44 equal LINKS @links
+   266 end
 -    * noop
 -    * noop
-   265 label __label44
-   266 noop
-   267 label __label45
+   267 label __label44
+   268 noop
+   269 label __label45
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-   181 print "Item Counter                  \n"
-   182 print "Monitoring [green]"
-   183 print LINKED
+   182 print "Item Counter                  \n"
+   183 print "Monitoring [green]"
+   184 print LINKED
 -    * print "[] conveyors\n"
 -    * print "Total items: [gold]"
-+  184 print "[] conveyors\nTotal items: [gold]"
-   185 print total
++  185 print "[] conveyors\nTotal items: [gold]"
+   186 print total
 -    * print "[]\n"
 -    * print "Rate: [green]"
-+  186 print "[]\nRate: [green]"
-   187 print ratePerMin
-   188 print "[] items/min\n"
-   189 sensor b1 CONV1 @totalItems
++  187 print "[]\nRate: [green]"
+   188 print ratePerMin
+   189 print "[] items/min\n"
+   190 sensor b1 CONV1 @totalItems
  
-   248 label __label43
-   249 print "Batch size: [green]"
-   250 print BATCH_TXT
+   249 label __label43
+   250 print "Batch size: [green]"
+   251 print BATCH_TXT
 -    * print "[]\n"
 -    * print "Batch time: [gold]"
-+  251 print "[]\nBatch time: [gold]"
-   252 print elapsed
++  252 print "[]\nBatch time: [gold]"
+   253 print elapsed
 -    * print "[] ms\n"
-   253 op sub __tmp80 @time start
-   254 op idiv __tmp82 __tmp80 2
+   254 op sub __tmp80 @time start
+   255 noop
+   256 op idiv __tmp82 __tmp80 2
 -    * print "[lightgray]Loop time: "
-+  255 print "[] ms\n[lightgray]Loop time: "
-   256 print __tmp82
-   257 print " ms"
-   258 printflush message1
++  257 print "[] ms\n[lightgray]Loop time: "
+   258 print __tmp82
+   259 print " ms"
+   260 printflush message1
 
 Final code before resolving virtual instructions:
 

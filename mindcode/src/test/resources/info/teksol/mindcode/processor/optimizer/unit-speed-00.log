@@ -165,10 +165,11 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     80 op div __tmp27 distance elapsed
 -    * op mul __tmp28 __tmp27 100000
 -    * op floor __tmp29 __tmp28
-+   81 op idiv __tmp29 __tmp27 0.00001
-    82 op div speed __tmp29 100
-    83 noop
-    84 label __label15
++   81 noop
++   82 op idiv __tmp29 __tmp27 0.00001
+    83 op div speed __tmp29 100
+    84 noop
+    85 label __label15
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
@@ -257,48 +258,48 @@ Modifications by Loop Optimization: replicate condition at line 45 (+1 instructi
 
 Modifications by Loop Optimization: replicate condition at line 58 (+1 instructions):
  
-    93 label __label15
-    94 sensor __tmp31 switch1 @enabled
-    95 jump __label17 notEqual __tmp31 false
-+   96 label __label23
-    97 print "Measurement results ("
-    98 print UNIT
-    99 print "):"
+    94 label __label15
+    95 sensor __tmp31 switch1 @enabled
+    96 jump __label17 notEqual __tmp31 false
++   97 label __label23
+    98 print "Measurement results ("
+    99 print UNIT
+   100 print "):"
  
-   112 print "\nPress button to repeat"
-   113 printflush message1
-   114 label __label16
+   113 print "\nPress button to repeat"
+   114 printflush message1
+   115 label __label16
 -    * jump __label15 always
-+  115 sensor __tmp31 switch1 @enabled
-+  116 jump __label23 equal __tmp31 false
-   117 label __label17
-   118 end
++  116 sensor __tmp31 switch1 @enabled
++  117 jump __label23 equal __tmp31 false
+   118 label __label17
+   119 end
 
 Modifications by Final phase, Print Merging, iteration 1 (-3 instructions):
  
-    96 label __label23
-    97 print "Measurement results ("
-    98 print UNIT
+    97 label __label23
+    98 print "Measurement results ("
+    99 print UNIT
 -    * print "):"
 -    * print "\nMap dimensions: "
-+   99 print "):\nMap dimensions: "
-   100 print @mapw
-   101 print "x"
-   102 print @maph
-   103 print "\nElapsed time: "
-   104 print elapsed
++  100 print "):\nMap dimensions: "
+   101 print @mapw
+   102 print "x"
+   103 print @maph
+   104 print "\nElapsed time: "
+   105 print elapsed
 -    * print "ms"
 -    * print "\nDistance travelled: "
-+  105 print "ms\nDistance travelled: "
-   106 print distance
-   107 print "\nSpeed: "
-   108 print speed
++  106 print "ms\nDistance travelled: "
+   107 print distance
+   108 print "\nSpeed: "
+   109 print speed
 -    * print "tiles/s"
 -    * print "\nPress button to repeat"
-+  109 print "tiles/s\nPress button to repeat"
-   110 printflush message1
-   111 label __label16
-   112 sensor __tmp31 switch1 @enabled
++  110 print "tiles/s\nPress button to repeat"
+   111 printflush message1
+   112 label __label16
+   113 sensor __tmp31 switch1 @enabled
 
 Final code before resolving virtual instructions:
 

@@ -470,10 +470,11 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    102 write __tmp37 MEMORY lastCell
 -    * op mul __tmp38 rate 60000
 -    * op floor ratePerMin __tmp38
-+  103 op idiv ratePerMin rate 0.000016666666666666667
-   104 noop
-   105 jump __label25 greaterThan duration BATCH_DURATION
-   106 op add __tmp42 batch BATCH_STEP
++  103 noop
++  104 op idiv ratePerMin rate 0.000016666666666666667
+   105 noop
+   106 jump __label25 greaterThan duration BATCH_DURATION
+   107 op add __tmp42 batch BATCH_STEP
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -513,27 +514,27 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     80 noop
     81 op add n n 1
  
-   129 noop
-   130 label __label20
-   131 label __label17
+   130 noop
+   131 label __label20
+   132 label __label17
 -    * jump __label16 always
-+  132 jump __label33 lessThan n @links
-   133 label __label18
-   134 op sub __tmp44 @time startTime
-   135 op floor elapsed __tmp44
++  133 jump __label33 lessThan n @links
+   134 label __label18
+   135 op sub __tmp44 @time startTime
+   136 op floor elapsed __tmp44
  
-   175 set n 0
-   176 label __label29
-   177 jump __label31 greaterThanEq n @links
-+  178 label __label34
-   179 write 0 MEMORY n
-   180 op add n n 1
-   181 noop
-   182 label __label30
+   176 set n 0
+   177 label __label29
+   178 jump __label31 greaterThanEq n @links
++  179 label __label34
+   180 write 0 MEMORY n
+   181 op add n n 1
+   182 noop
+   183 label __label30
 -    * jump __label29 always
-+  183 jump __label34 lessThan n @links
-   184 label __label31
-   185 end
++  184 jump __label34 lessThan n @links
+   185 label __label31
+   186 end
 
 Modifications by Loop Optimization: replicate condition at line 39 (+1 instructions):
  
@@ -545,15 +546,15 @@ Modifications by Loop Optimization: replicate condition at line 39 (+1 instructi
     75 noop
     76 set n FIRST_BLOCK
  
-   169 print " ms"
-   170 printflush message1
-   171 label __label14
+   170 print " ms"
+   171 printflush message1
+   172 label __label14
 -    * jump __label13 always
-+  172 sensor __tmp17 switch1 @enabled
-+  173 jump __label35 equal __tmp17 0
-   174 label __label15
-   175 control enabled switch1 0
-   176 write 0 MEMORY lastCell
++  173 sensor __tmp17 switch1 @enabled
++  174 jump __label35 equal __tmp17 0
+   175 label __label15
+   176 control enabled switch1 0
+   177 write 0 MEMORY lastCell
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -566,40 +567,40 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     80 getlink block n
     81 noop
  
-   176 write 0 MEMORY lastCell
-   177 set n 0
-   178 label __label29
+   177 write 0 MEMORY lastCell
+   178 set n 0
+   179 label __label29
 -    * jump __label31 greaterThanEq n @links
-+  179 jump __label31 greaterThanEq 0 @links
-   180 label __label34
-   181 write 0 MEMORY n
-   182 op add n n 1
++  180 jump __label31 greaterThanEq 0 @links
+   181 label __label34
+   182 write 0 MEMORY n
+   183 op add n n 1
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-   152 print "Item Counter                  \n"
-   153 print "Total items: [gold]"
-   154 print total
+   153 print "Item Counter                  \n"
+   154 print "Total items: [gold]"
+   155 print total
 -    * print "[]\n"
 -    * print "Rate: [green]"
-+  155 print "[]\nRate: [green]"
-   156 print ratePerMin
++  156 print "[]\nRate: [green]"
+   157 print ratePerMin
 -    * print "[] items/min\n"
 -    * print "Batch size: [green]"
-+  157 print "[] items/min\nBatch size: [green]"
-   158 print batch
++  158 print "[] items/min\nBatch size: [green]"
+   159 print batch
 -    * print "[]\n"
 -    * print "Batch time: [gold]"
-+  159 print "[]\nBatch time: [gold]"
-   160 print elapsed
++  160 print "[]\nBatch time: [gold]"
+   161 print elapsed
 -    * print "[] ms\n"
-   161 op sub __tmp52 @time start
-   162 op floor __tmp53 __tmp52
+   162 op sub __tmp52 @time start
+   163 op floor __tmp53 __tmp52
 -    * print "[lightgray]Loop time: "
-+  163 print "[] ms\n[lightgray]Loop time: "
-   164 print __tmp53
-   165 print " ms"
-   166 printflush message1
++  164 print "[] ms\n[lightgray]Loop time: "
+   165 print __tmp53
+   166 print " ms"
+   167 printflush message1
 
 Final code before resolving virtual instructions:
 

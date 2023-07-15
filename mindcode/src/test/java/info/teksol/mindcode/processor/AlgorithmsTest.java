@@ -1,5 +1,8 @@
 package info.teksol.mindcode.processor;
 
+import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.optimization.Optimization;
+import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.junit.jupiter.api.*;
 
 import java.io.IOException;
@@ -37,6 +40,16 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     void memoryBitReadWriteTest() throws IOException {
         testAndEvaluateFile("bitmap-get-set.mnd",
                 IntStream.range(1, 17).map(i -> i % 2).mapToObj(String::valueOf).collect(Collectors.toList())
+        );
+    }
+
+
+    @Test
+    void storageDisplayTest() throws IOException {
+        testAndEvaluateFile("storage-display.mnd",
+                s -> "AMOUNT = 12345\n" + s,
+                List.of(),
+                List.of()
         );
     }
 
@@ -102,6 +115,58 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 s -> s,
                 List.of(MindustryMemory.createMemoryBank("bank2")),
                 List.of(expectedOutput)
+        )));
+    }
+
+    //@TestFactory
+    public List<DynamicTest> runDrawingTests() throws IOException {
+        List<Optimization> optimizations = List.of(
+                Optimization.UNREACHABLE_CODE_ELIMINATION,
+                Optimization.PRINT_TEXT_MERGING,
+                Optimization.RETURN_OPTIMIZATION,
+                Optimization.STACK_USAGE_OPTIMIZATION,
+                Optimization.EXPRESSION_OPTIMIZATION,
+                Optimization.CONDITIONAL_JUMPS_NORMALIZATION,
+                Optimization.CONDITIONAL_JUMPS_OPTIMIZATION,
+                Optimization.JUMP_OVER_JUMP_ELIMINATION,
+                Optimization.CASE_EXPRESSION_OPTIMIZATION,
+                Optimization.IF_EXPRESSION_OPTIMIZATION,
+                Optimization.JUMP_TARGET_PROPAGATION,
+                Optimization.TEMP_VARIABLES_ELIMINATION,
+                Optimization.DEAD_CODE_ELIMINATION,
+                Optimization.SINGLE_STEP_JUMP_ELIMINATION,
+                Optimization.LOOP_OPTIMIZATION,
+                Optimization.DATA_FLOW_OPTIMIZATION,
+                Optimization.FUNCTION_INLINING,
+                Optimization.LOOP_UNROLLING,
+                Optimization.CASE_SWITCHING
+        );
+
+        final List<DynamicTest> result = new ArrayList<>();
+        int[] numbers = { 21600, 12345, 13579 };
+        String code = readFile("storage-display.mnd");
+
+        for (int number : numbers) {
+            for (int index = 0; index <= optimizations.size(); index++) {
+                CompilerProfile compilerProfile = createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.OFF);
+                for (int i = 0; i < index; i++) {
+                    compilerProfile.setOptimizationLevel(optimizations.get(i), OptimizationLevel.AGGRESSIVE);
+                }
+                processDrawingCode(result, index == 0 ? "None" : "+ " + optimizations.get(index - 1).getName(),
+                        compilerProfile, code, number);
+            }
+        }
+        return result;
+    }
+
+    private void processDrawingCode(List<DynamicTest> result, String name, CompilerProfile profile, String code, int number) {
+        result.add(DynamicTest.dynamicTest(name, null, () -> testAndEvaluateCode(
+                createTestCompiler(profile),
+                number + ", " + name,
+                "AMOUNT = " + number + "\n" + code,
+                List.of(),
+                dummy -> {},
+                Path.of(getScriptsDirectory(), "storage-display.log")
         )));
     }
 }

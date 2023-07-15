@@ -222,17 +222,19 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
     86 push bank1 __fn0_pivot_index
     87 push bank1 __fn0_new_pivot_index
 -    * set __fn0_left __fn0_left
-    88 set __fn0_right __tmp25
-    89 callrec bank1 __label0 __label21
-    90 label __label21
++   88 noop
+    89 set __fn0_right __tmp25
+    90 callrec bank1 __label0 __label21
+    91 label __label21
  
-    99 push bank1 __fn0_pivot_index
-   100 push bank1 __fn0_new_pivot_index
-   101 set __fn0_left __tmp27
+   100 push bank1 __fn0_pivot_index
+   101 push bank1 __fn0_new_pivot_index
+   102 set __fn0_left __tmp27
 -    * set __fn0_right __fn0_right
-   102 callrec bank1 __label0 __label22
-   103 label __label22
-   104 pop bank1 __fn0_new_pivot_index
++  103 noop
+   104 callrec bank1 __label0 __label22
+   105 label __label22
+   106 pop bank1 __fn0_new_pivot_index
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -246,20 +248,20 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     24 op idiv __tmp7 __tmp6 2
     25 op add __fn0_pivot_index __fn0_left __tmp7
  
-   106 pop bank1 __fn0_pivot_index
-   107 pop bank1 __fn0_right
-   108 pop bank1 __fn0_left
+   108 pop bank1 __fn0_pivot_index
+   109 pop bank1 __fn0_right
+   110 pop bank1 __fn0_left
 -    * set __tmp5 __fn0retval
-+  109 set __fn0retval __fn0retval
-   110 noop
-   111 jump __label7 always
++  111 set __fn0retval __fn0retval
+   112 noop
+   113 jump __label7 always
 -    * label __label6
 -    * set __tmp5 null
-   112 label __label7
+   114 label __label7
 -    * set __fn0retval __tmp5
-   113 label __label5
-   114 return bank1
-   115 end
+   115 label __label5
+   116 return bank1
+   117 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -432,24 +434,25 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
     78 set __fn0_new_pivot_index __fn1_index
     79 op sub __tmp25 __fn1_index 1
  
-   103 pop bank1 __fn0_left
-   104 set __fn0retval __fn0retval
-   105 noop
+   105 pop bank1 __fn0_left
+   106 set __fn0retval __fn0retval
+   107 noop
 -    * jump __label7 always
-+  106 noop
-   107 label __label7
-   108 label __label5
-   109 return bank1
++  108 noop
+   109 label __label7
+   110 label __label5
+   111 return bank1
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-1 instructions):
  
-   101 pop bank1 __fn0_pivot_index
-   102 pop bank1 __fn0_right
-   103 pop bank1 __fn0_left
+   103 pop bank1 __fn0_pivot_index
+   104 pop bank1 __fn0_right
+   105 pop bank1 __fn0_left
 -    * set __fn0retval __fn0retval
-   104 noop
-   105 noop
-   106 label __label7
++  106 noop
+   107 noop
+   108 noop
+   109 label __label7
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -473,9 +476,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   106 label __label7
-   107 label __label5
-   108 return bank1
+   109 label __label7
+   110 label __label5
+   111 return bank1
 -    * end
 
 Modifications by Final phase, Dead Code Elimination, iteration 1 (-1 instructions):
@@ -498,29 +501,31 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-24 instructions)
     80 push bank1 __fn0_right
 -    * push bank1 __fn0_pivot_index
     81 push bank1 __fn0_new_pivot_index
-    82 set __fn0_right __tmp25
-    83 callrec bank1 __label0 __label21
-    84 label __label21
-    85 pop bank1 __fn0_new_pivot_index
+    82 noop
+    83 set __fn0_right __tmp25
+    84 callrec bank1 __label0 __label21
+    85 label __label21
+    86 pop bank1 __fn0_new_pivot_index
 -    * pop bank1 __fn0_pivot_index
-    86 pop bank1 __fn0_right
+    87 pop bank1 __fn0_right
 -    * pop bank1 __fn0_left
-    87 noop
-    88 op add __tmp27 __fn0_new_pivot_index 1
+    88 noop
+    89 op add __tmp27 __fn0_new_pivot_index 1
 -    * push bank1 __fn0_left
 -    * push bank1 __fn0_right
 -    * push bank1 __fn0_pivot_index
 -    * push bank1 __fn0_new_pivot_index
-    89 set __fn0_left __tmp27
-    90 callrec bank1 __label0 __label22
-    91 label __label22
+    90 set __fn0_left __tmp27
+    91 noop
+    92 callrec bank1 __label0 __label22
+    93 label __label22
 -    * pop bank1 __fn0_new_pivot_index
 -    * pop bank1 __fn0_pivot_index
 -    * pop bank1 __fn0_right
 -    * pop bank1 __fn0_left
-    92 noop
-    93 noop
-    94 label __label7
+    94 noop
+    95 noop
+    96 noop
 
 Final code before resolving virtual instructions:
 
