@@ -16,12 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -119,7 +114,7 @@ public class HomeController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = compile(sourceCode, enableOptimization);
+        final CompilerOutput<String> result = compile(true, sourceCode, enableOptimization);
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 

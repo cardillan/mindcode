@@ -18,12 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Controller
@@ -110,7 +105,7 @@ public class SchematicsController {
 
         final long start = System.nanoTime();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(sourceCode,
-                CompilerProfile.standardOptimizations(), null);
+                CompilerProfile.standardOptimizations(true), null);
         final long end = System.nanoTime();
         logger.info("performance built_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 

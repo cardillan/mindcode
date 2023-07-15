@@ -15,16 +15,16 @@
    184 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 903):
-    Loop Unrolling: unroll loop at line 41                       cost   6, benefit     7500.0, efficiency     1250.0
-    Loop Unrolling: unroll loop at line 82                       cost  56, benefit    62500.0, efficiency     1116.1
-  * Loop Unrolling: unroll loop at line 83                       cost  75, benefit  2343750.0, efficiency    31250.0 (+38 instructions)
+    Loop Unrolling: unroll loop at line 41                       cost     2, benefit     7500,0, efficiency     3750,0
+    Loop Unrolling: unroll loop at line 82                       cost    25, benefit    62500,0, efficiency     2500,0
+  * Loop Unrolling: unroll loop at line 83                       cost    47, benefit  2343750,0, efficiency    49867,0 (+38 instructions)
 
 Pass 1: speed optimization selection (cost limit 865):
-  * Loop Unrolling: unroll loop at line 41                       cost   6, benefit     7500.0, efficiency     1250.0 (+2 instructions)
-    Loop Unrolling: unroll loop at line 82                       cost 132, benefit    62500.0, efficiency      473.5
+  * Loop Unrolling: unroll loop at line 41                       cost     2, benefit     7500,0, efficiency     3750,0 (+2 instructions)
+    Loop Unrolling: unroll loop at line 82                       cost    63, benefit    62500,0, efficiency      992,1
 
 Pass 1: speed optimization selection (cost limit 863):
-  * Loop Unrolling: unroll loop at line 82                       cost 132, benefit    62500.0, efficiency      473.5 (+50 instructions)
+  * Loop Unrolling: unroll loop at line 82                       cost    63, benefit    62500,0, efficiency      992,1 (+50 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-20 instructions):
  

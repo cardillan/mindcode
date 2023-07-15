@@ -17,9 +17,11 @@ Some of the latest enhancements to Mindcode are:
 
 * A number of powerful code optimizations:
   [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization),
-  [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling) and
-  automatic [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining).
-* Added support for the new [`angleDiff` operation](doc/syntax/FUNCTIONS_V7.markdown#instruction-op) in Mindustry v145.
+  [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling),
+  [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining) and 
+  [Case Switching](doc/syntax/SYNTAX-5-OTHER.markdown#case-switching). Most of them perform 
+  [optimization for speed](doc/syntax/SYNTAX-5-OTHER.markdown#optimization-for-speed): they increase the code size 
+  (up to the 1000 instructions limit) if it results in faster execution of the final program.   
 * [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in
   Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic,
   either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the

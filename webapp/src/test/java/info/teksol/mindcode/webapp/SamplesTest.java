@@ -45,11 +45,11 @@ class SamplesTest {
     }
 
     private  List<LogicInstruction> generateAndOptimize(Seq program) {
-        return generateAndOptimize(instructionProcessor, program, CompilerProfile.standardOptimizations());
+        return generateAndOptimize(instructionProcessor, program, CompilerProfile.standardOptimizations(false));
     }
 
     private  List<LogicInstruction> generateUnoptimized(Seq program) {
-        return generateAndOptimize(instructionProcessor, program, CompilerProfile.noOptimizations());
+        return generateAndOptimize(instructionProcessor, program, CompilerProfile.noOptimizations(false));
     }
 
     @TestFactory

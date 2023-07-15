@@ -8,4 +8,4 @@ sorting with heap-sort.mnd:                50 instructions,  63534 steps, 100.0%
 sorting with insert-sort.mnd:              24 instructions,  25934 steps, 100.0% coverage, source CRC 8798EEACE8F27B83, compiled CRC 3D3BD69675D967B2
 sorting with quick-sort.mnd:               63 instructions,  47943 steps, 100.0% coverage, source CRC A12B1C1E01183B69, compiled CRC D89D4D8479DC6895
 sorting with select-sort.mnd:              28 instructions,  35150 steps, 100.0% coverage, source CRC C62156D8944BBF63, compiled CRC 6E8E1E63DA08E730
-storage-display.mnd:                      533 instructions,   1380 steps,  30.9% coverage, source CRC 62F1B4E0E4834190, compiled CRC 78143A2FDB807907
+storage-display.mnd:                      573 instructions,   1352 steps,  34.3% coverage, source CRC B2BD1DE918D0F327, compiled CRC 2123D8F7A6C0F812

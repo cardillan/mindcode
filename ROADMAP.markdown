@@ -4,27 +4,16 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 ## Current priorities
 
-* Case Switching
-  * Support for selecting a subset of existing `when` branches to handle, the jump table `else` entries would then 
-    jump to the remaining branches of the original switch.
-  * Cases with non-continuous values of when branches: convert the largest segment from case values with a density 
-    higher than 0.5, leave other values to conditional jumps 
-  * On `aggressive` level, convert switches that have overlapping values.
-* Data Flow Optimization: correctly resolve case expressions (both jump table based and condition based) when the 
-  input value is effectively constant. 
-* Optimization speedups
-  * DataFlowOptimizer: cache VariableState instances at the entry and exit points end of each context. If the 
-    inbound instance is equal to the cached one, use the cached outbound instance and save processing.
-  * Only recreate OptimizationActions of the action whose context(s) are affected by previous optimizations.
-* Improve weight computations for user defined functions: weight of a function body should be a sum of weights of 
-  all its calls (calls within function calls need to be evaluated repeatedly). 
+* Fix incorrect headings of Data Flow Optimization passes executed after applying selected speed optimization. 
+* Improve weight computations for user defined functions: weight of a function body should be a sum of weights of
+  all its calls (calls within function calls need to be evaluated repeatedly).
 * When an uninitialized temporary variable is found by Data Flow Optimization, generate compilation error -- if it
   happens, it is an optimization bug.
 * Variable type and invariant inferring.
   * Probably via data flow analysis (not global).
   * Hopefully will help with some boolean conditions.
   * Constraints on variable values inferred from instruction producing the value
-    * e.g. `op max result input 10` limits the value of `max` to `10` 
+    * e.g. `op max result input 10` limits the value of `max` to `10`
   * Constraints on variable values inferred from conditions
     *  "non-null", "non-negative", "less than x", "boolean", "integer"
   * Constraints on relationships between variables
@@ -39,7 +28,27 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * Case Switching enhancements
     * Support ranges when input value is integer
     * Omit range checking where possible
-* Syntax Update
+* `optimization-quota` compiler option: a numerical value. Nonzero value allows performing speed optimizations that 
+  would exceed instruction space by at most the given quota, followed by other optimization passes specified by the 
+  optimizer. If the code size after the additional optimizations fits instruction space, the optimization is 
+  committed; if it doesn't, the optimization is rolled back and rejected forever. Limited to 200 in the web 
+  application. Needs the following:
+  * way for the speed optimizers to specify which other optimizations to run,
+  * mechanism for rolling back rejected optimizations,
+  * mechanism for keeping track of rejected optimizations.
+* Case Switching
+  * Support for selecting a subset of existing `when` branches to handle, the jump table `else` entries would then 
+    jump to the remaining branches of the original switch.
+  * Cases with non-continuous values of when branches: convert the largest segment from case values with a density 
+    higher than 0.5, leave other values to conditional jumps 
+  * On `aggressive` level, convert switches that have overlapping values.
+* Data Flow Optimization: correctly resolve case expressions (both jump table based and condition based) when the 
+  input value is effectively constant. 
+* Optimization speedups
+  * DataFlowOptimizer: cache VariableState instances at the entry and exit points end of each context. If the 
+    inbound instance is equal to the cached one, use the cached outbound instance and avoid new processing.
+  * Only recreate OptimizationActions of the action whose context(s) are affected by previous optimizations.
+* Syntax actualization
   * Rewrite the syntax using lists of elements instead of chained elements where possible
   * Allow empty bodies of ifs, loops, functions etc.
   * Allow properties to be invoked on expressions. The nature of the call will be determined by the property name.

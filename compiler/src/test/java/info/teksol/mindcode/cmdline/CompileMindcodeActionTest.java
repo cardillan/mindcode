@@ -165,7 +165,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     @Test
     public void createsCompilerProfileDefault() throws ArgumentParserException {
         Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut());
-        CompilerProfile expected = CompilerProfile.fullOptimizations();
+        CompilerProfile expected = CompilerProfile.fullOptimizations(false);
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
@@ -173,6 +173,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(expected.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION), actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
         assertEquals(expected.getParseTreeLevel(), actual.getParseTreeLevel());
         assertEquals(expected.getDebugLevel(), actual.getDebugLevel());
+        assertEquals(CompilerProfile.DEFAULT_INSTRUCTIONS, actual.getInstructionLimit());
         assertEquals(CompilerProfile.DEFAULT_CMDLINE_PASSES, actual.getOptimizationPasses());
         assertEquals(expected.getGoal(), actual.getGoal());
         assertEquals(expected.getMemoryModel(), actual.getMemoryModel());

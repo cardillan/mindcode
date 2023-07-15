@@ -15,46 +15,46 @@
    380 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 617):
-  * Loop Optimization: replicate condition at line 44            cost   1, benefit       25.0, efficiency       25.0 (+1 instructions)
-    Loop Optimization: replicate condition at line 52            cost   2, benefit       25.0, efficiency       12.5
-    Loop Optimization: replicate condition at line 103           cost   4, benefit       12.5, efficiency        3.1
-    Loop Optimization: replicate condition at line 112           cost   5, benefit        6.3, efficiency        1.3
-    Loop Optimization: replicate condition at line 131           cost   3, benefit       25.0, efficiency        8.3
-    Loop Optimization: replicate condition at line 306           cost   2, benefit       25.0, efficiency       12.5
-    Loop Optimization: replicate condition at line 316           cost   1, benefit       12.5, efficiency       12.5
+  * Loop Optimization: replicate condition at line 44            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
+    Loop Optimization: replicate condition at line 52            cost     2, benefit       25,0, efficiency       12,5
+    Loop Optimization: replicate condition at line 103           cost     4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112           cost     5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131           cost     3, benefit       25,0, efficiency        8,3
+    Loop Optimization: replicate condition at line 306           cost     2, benefit       25,0, efficiency       12,5
+    Loop Optimization: replicate condition at line 316           cost     1, benefit       12,5, efficiency       12,5
 
 Pass 1: speed optimization selection (cost limit 616):
-    Loop Optimization: replicate condition at line 52            cost   2, benefit       25.0, efficiency       12.5
-    Loop Optimization: replicate condition at line 103           cost   4, benefit       12.5, efficiency        3.1
-    Loop Optimization: replicate condition at line 112           cost   5, benefit        6.3, efficiency        1.3
-    Loop Optimization: replicate condition at line 131           cost   3, benefit       25.0, efficiency        8.3
-    Loop Optimization: replicate condition at line 306           cost   2, benefit       25.0, efficiency       12.5
-  * Loop Optimization: replicate condition at line 316           cost   1, benefit       12.5, efficiency       12.5 (+1 instructions)
+    Loop Optimization: replicate condition at line 52            cost     2, benefit       25,0, efficiency       12,5
+    Loop Optimization: replicate condition at line 103           cost     4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112           cost     5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131           cost     3, benefit       25,0, efficiency        8,3
+    Loop Optimization: replicate condition at line 306           cost     2, benefit       25,0, efficiency       12,5
+  * Loop Optimization: replicate condition at line 316           cost     1, benefit       12,5, efficiency       12,5 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 615):
-  * Loop Optimization: replicate condition at line 52            cost   2, benefit       25.0, efficiency       12.5 (+2 instructions)
-    Loop Optimization: replicate condition at line 103           cost   4, benefit       12.5, efficiency        3.1
-    Loop Optimization: replicate condition at line 112           cost   5, benefit        6.3, efficiency        1.3
-    Loop Optimization: replicate condition at line 131           cost   3, benefit       25.0, efficiency        8.3
-    Loop Optimization: replicate condition at line 306           cost   2, benefit       25.0, efficiency       12.5
+  * Loop Optimization: replicate condition at line 52            cost     2, benefit       25,0, efficiency       12,5 (+2 instructions)
+    Loop Optimization: replicate condition at line 103           cost     4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112           cost     5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131           cost     3, benefit       25,0, efficiency        8,3
+    Loop Optimization: replicate condition at line 306           cost     2, benefit       25,0, efficiency       12,5
 
 Pass 1: speed optimization selection (cost limit 613):
-    Loop Optimization: replicate condition at line 103           cost   4, benefit       12.5, efficiency        3.1
-    Loop Optimization: replicate condition at line 112           cost   5, benefit        6.3, efficiency        1.3
-    Loop Optimization: replicate condition at line 131           cost   3, benefit       25.0, efficiency        8.3
-  * Loop Optimization: replicate condition at line 306           cost   2, benefit       25.0, efficiency       12.5 (+2 instructions)
+    Loop Optimization: replicate condition at line 103           cost     4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112           cost     5, benefit        6,3, efficiency        1,3
+    Loop Optimization: replicate condition at line 131           cost     3, benefit       25,0, efficiency        8,3
+  * Loop Optimization: replicate condition at line 306           cost     2, benefit       25,0, efficiency       12,5 (+2 instructions)
 
 Pass 1: speed optimization selection (cost limit 611):
-    Loop Optimization: replicate condition at line 103           cost   4, benefit       12.5, efficiency        3.1
-    Loop Optimization: replicate condition at line 112           cost   5, benefit        6.3, efficiency        1.3
-  * Loop Optimization: replicate condition at line 131           cost   3, benefit       25.0, efficiency        8.3 (+3 instructions)
+    Loop Optimization: replicate condition at line 103           cost     4, benefit       12,5, efficiency        3,1
+    Loop Optimization: replicate condition at line 112           cost     5, benefit        6,3, efficiency        1,3
+  * Loop Optimization: replicate condition at line 131           cost     3, benefit       25,0, efficiency        8,3 (+3 instructions)
 
 Pass 1: speed optimization selection (cost limit 608):
-  * Loop Optimization: replicate condition at line 103           cost   4, benefit       12.5, efficiency        3.1 (+4 instructions)
-    Loop Optimization: replicate condition at line 112           cost   5, benefit        6.3, efficiency        1.3
+  * Loop Optimization: replicate condition at line 103           cost     4, benefit       12,5, efficiency        3,1 (+4 instructions)
+    Loop Optimization: replicate condition at line 112           cost     5, benefit        6,3, efficiency        1,3
 
 Pass 1: speed optimization selection (cost limit 604):
-  * Loop Optimization: replicate condition at line 112           cost   5, benefit        6.3, efficiency        1.3 (+5 instructions)
+  * Loop Optimization: replicate condition at line 112           cost     5, benefit        6,3, efficiency        1,3 (+5 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-39 instructions):
  

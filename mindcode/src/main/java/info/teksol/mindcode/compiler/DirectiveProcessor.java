@@ -91,6 +91,20 @@ public class DirectiveProcessor {
         }
     }
 
+    private void setInstructionLimit(CompilerProfile compilerProfile, String strLimit) {
+        try {
+            int limit = Integer.parseInt(strLimit);
+            if (limit >= 1 && limit <= CompilerProfile.MAX_INSTRUCTIONS) {
+                compilerProfile.setInstructionLimit(limit);
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            // Do nothing
+        }
+        error("Invalid value '%s' of compiler directive 'instruction-limit' (expected integer between 1 and  "
+                + CompilerProfile.MAX_INSTRUCTIONS + ").", strLimit);
+    }
+
     private void setOptimizationPasses(CompilerProfile compilerProfile, String strPasses) {
         try {
             int passes = Integer.parseInt(strPasses);
@@ -101,7 +115,8 @@ public class DirectiveProcessor {
         } catch (NumberFormatException ex) {
             // Do nothing
         }
-        error("Invalid value '%s' of compiler directive 'passes' (expected integer between 1 and  " + CompilerProfile.MAX_PASSES + ").", strPasses);
+        error("Invalid value '%s' of compiler directive 'passes' (expected integer between 1 and  "
+                + CompilerProfile.MAX_PASSES + ").", strPasses);
     }
 
     private void setGenerationGoal(CompilerProfile compilerProfile, String strGoal) {
@@ -131,6 +146,7 @@ public class DirectiveProcessor {
         map.put("target", this::setTarget);
         map.put("optimization", this::setAllOptimizationsLevel);
         map.put("booleanEval", this::setShortCircuitEval);
+        map.put("instruction-limit", this::setInstructionLimit);
         map.put("passes", this::setOptimizationPasses);
         map.put("goal", this::setGenerationGoal);
         map.put("memory-model", this::setMemoryModel);

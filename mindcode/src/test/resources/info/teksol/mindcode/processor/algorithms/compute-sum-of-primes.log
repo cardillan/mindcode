@@ -15,56 +15,56 @@
    834 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 937):
-    Loop Unrolling: unroll loop at line 29                       cost  48, benefit      300.0, efficiency        6.3
-    Function Inlining: inline function testAndSetMultiples       cost  16, benefit      200.0, efficiency       12.5
-  * Function Inlining: inline function getBit                    cost   7, benefit      182.0, efficiency       26.0 (+2 instructions)
-    Function Inlining: inline function call at line 30           cost  17, benefit      100.0, efficiency        5.9
-    Function Inlining: inline function call at line 34           cost  17, benefit      100.0, efficiency        5.9
-    Function Inlining: inline function call at line 41           cost   4, benefit       87.5, efficiency       21.9
-    Function Inlining: inline function call at line 45           cost   4, benefit       87.5, efficiency       21.9
-    Function Inlining: inline function call at line 15           cost   4, benefit        7.0, efficiency        1.8
+    Loop Unrolling: unroll loop at line 29                       cost    33, benefit      300,0, efficiency        9,1
+    Function Inlining: inline function testAndSetMultiples       cost    16, benefit      200,0, efficiency       12,5
+  * Function Inlining: inline function getBit                    cost     7, benefit      182,0, efficiency       26,0 (+2 instructions)
+    Function Inlining: inline function call at line 30           cost    17, benefit      100,0, efficiency        5,9
+    Function Inlining: inline function call at line 34           cost    17, benefit      100,0, efficiency        5,9
+    Function Inlining: inline function call at line 41           cost     4, benefit       87,5, efficiency       21,9
+    Function Inlining: inline function call at line 45           cost     4, benefit       87,5, efficiency       21,9
+    Function Inlining: inline function call at line 15           cost     4, benefit        7,0, efficiency        1,8
 
 Pass 1: speed optimization selection (cost limit 935):
-    Loop Unrolling: unroll loop at line 29                       cost  48, benefit      300.0, efficiency        6.3
-  * Function Inlining: inline function testAndSetMultiples       cost  19, benefit      200.0, efficiency       10.5 (+7 instructions)
-    Function Inlining: inline function call at line 30           cost  20, benefit      100.0, efficiency        5.0
-    Function Inlining: inline function call at line 34           cost  20, benefit      100.0, efficiency        5.0
+    Loop Unrolling: unroll loop at line 29                       cost    33, benefit      300,0, efficiency        9,1
+  * Function Inlining: inline function testAndSetMultiples       cost    19, benefit      200,0, efficiency       10,5 (+7 instructions)
+    Function Inlining: inline function call at line 30           cost    20, benefit      100,0, efficiency        5,0
+    Function Inlining: inline function call at line 34           cost    20, benefit      100,0, efficiency        5,0
 
 Pass 1: speed optimization selection (cost limit 928):
-  * Loop Unrolling: unroll loop at line 29                       cost 168, benefit      300.0, efficiency        1.8 (+107 instructions)
+  * Loop Unrolling: unroll loop at line 29                       cost   123, benefit      300,0, efficiency        2,4 (+107 instructions)
 
 Pass 1: speed optimization selection (cost limit 821):
-    Loop Unrolling: unroll loop at line 17                       cost 288, benefit     2400.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost 198, benefit     1650.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost 108, benefit      900.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost  78, benefit      650.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost  42, benefit      350.0, efficiency        8.3
-  * Loop Unrolling: unroll loop at line 17                       cost  24, benefit      200.0, efficiency        8.3 (+14 instructions)
+    Loop Unrolling: unroll loop at line 17                       cost   278, benefit     2400,0, efficiency        8,6
+    Loop Unrolling: unroll loop at line 17                       cost   188, benefit     1650,0, efficiency        8,8
+    Loop Unrolling: unroll loop at line 17                       cost    98, benefit      900,0, efficiency        9,2
+    Loop Unrolling: unroll loop at line 17                       cost    68, benefit      650,0, efficiency        9,6
+    Loop Unrolling: unroll loop at line 17                       cost    32, benefit      350,0, efficiency       10,9
+  * Loop Unrolling: unroll loop at line 17                       cost    14, benefit      200,0, efficiency       14,3 (+14 instructions)
 
 Pass 1: speed optimization selection (cost limit 807):
-    Loop Unrolling: unroll loop at line 17                       cost 288, benefit     2400.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost 198, benefit     1650.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost 108, benefit      900.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost  78, benefit      650.0, efficiency        8.3
-  * Loop Unrolling: unroll loop at line 17                       cost  42, benefit      350.0, efficiency        8.3 (+32 instructions)
+    Loop Unrolling: unroll loop at line 17                       cost   278, benefit     2400,0, efficiency        8,6
+    Loop Unrolling: unroll loop at line 17                       cost   188, benefit     1650,0, efficiency        8,8
+    Loop Unrolling: unroll loop at line 17                       cost    98, benefit      900,0, efficiency        9,2
+    Loop Unrolling: unroll loop at line 17                       cost    68, benefit      650,0, efficiency        9,6
+  * Loop Unrolling: unroll loop at line 17                       cost    32, benefit      350,0, efficiency       10,9 (+32 instructions)
 
 Pass 1: speed optimization selection (cost limit 775):
-    Loop Unrolling: unroll loop at line 17                       cost 288, benefit     2400.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost 198, benefit     1650.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost 108, benefit      900.0, efficiency        8.3
-  * Loop Unrolling: unroll loop at line 17                       cost  78, benefit      650.0, efficiency        8.3 (+68 instructions)
+    Loop Unrolling: unroll loop at line 17                       cost   278, benefit     2400,0, efficiency        8,6
+    Loop Unrolling: unroll loop at line 17                       cost   188, benefit     1650,0, efficiency        8,8
+    Loop Unrolling: unroll loop at line 17                       cost    98, benefit      900,0, efficiency        9,2
+  * Loop Unrolling: unroll loop at line 17                       cost    68, benefit      650,0, efficiency        9,6 (+68 instructions)
 
 Pass 1: speed optimization selection (cost limit 707):
-    Loop Unrolling: unroll loop at line 17                       cost 288, benefit     2400.0, efficiency        8.3
-    Loop Unrolling: unroll loop at line 17                       cost 198, benefit     1650.0, efficiency        8.3
-  * Loop Unrolling: unroll loop at line 17                       cost 108, benefit      900.0, efficiency        8.3 (+98 instructions)
+    Loop Unrolling: unroll loop at line 17                       cost   278, benefit     2400,0, efficiency        8,6
+    Loop Unrolling: unroll loop at line 17                       cost   188, benefit     1650,0, efficiency        8,8
+  * Loop Unrolling: unroll loop at line 17                       cost    98, benefit      900,0, efficiency        9,2 (+98 instructions)
 
 Pass 1: speed optimization selection (cost limit 609):
-    Loop Unrolling: unroll loop at line 17                       cost 288, benefit     2400.0, efficiency        8.3
-  * Loop Unrolling: unroll loop at line 17                       cost 198, benefit     1650.0, efficiency        8.3 (+188 instructions)
+    Loop Unrolling: unroll loop at line 17                       cost   278, benefit     2400,0, efficiency        8,6
+  * Loop Unrolling: unroll loop at line 17                       cost   188, benefit     1650,0, efficiency        8,8 (+188 instructions)
 
 Pass 1: speed optimization selection (cost limit 421):
-  * Loop Unrolling: unroll loop at line 17                       cost 288, benefit     2400.0, efficiency        8.3 (+278 instructions)
+  * Loop Unrolling: unroll loop at line 17                       cost   278, benefit     2400,0, efficiency        8,6 (+278 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-17 instructions):
  

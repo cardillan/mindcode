@@ -13,7 +13,7 @@
     63 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 942):
-  * Case Switching: convert case at line 16                      cost   2, benefit      625.0, efficiency      312.5 (+5 instructions)
+  * Case Switching: convert case at line 16                      cost     2, benefit      625,0, efficiency      312,5 (+5 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  

@@ -31,7 +31,7 @@ abstract class ActionHandler {
     abstract void handle(Namespace arguments);
 
     void configureMindcodeCompiler(Subparser subparser) {
-        CompilerProfile defaults = CompilerProfile.fullOptimizations();
+        CompilerProfile defaults = CompilerProfile.fullOptimizations(false);
 
         ArgumentGroup optimizations = subparser.addArgumentGroup("optimization levels")
                 .description("Options to specify global and individual optimization levels. " +
@@ -57,6 +57,12 @@ abstract class ActionHandler {
                         " version 7 rev. A with standard processor or world processor)")
                 .choices("6", "7s", "7w", "7as", "7aw")
                 .setDefault("7w");
+
+        subparser.addArgument("-i", "--instruction-limit")
+                .help("sets the maximal number of instructions for the speed optimizations")
+                .choices(Arguments.range(1, CompilerProfile.MAX_INSTRUCTIONS))
+                .type(Integer.class)
+                .setDefault(CompilerProfile.DEFAULT_INSTRUCTIONS);
 
         subparser.addArgument("-e", "--passes")
                 .help("sets maximal number of optimization passes to be made")
@@ -103,7 +109,7 @@ abstract class ActionHandler {
     }
 
     static CompilerProfile createCompilerProfile(Namespace arguments) {
-        CompilerProfile profile = CompilerProfile.fullOptimizations();
+        CompilerProfile profile = CompilerProfile.fullOptimizations(false);
 
         // Setup optimization levels
         profile.setAllOptimizationLevels(arguments.get("optimization"));
@@ -121,6 +127,7 @@ abstract class ActionHandler {
 
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
         profile.setDebugLevel(arguments.getInt("debug_messages"));
+        profile.setInstructionLimit(arguments.get("instruction_limit"));
         profile.setOptimizationPasses(arguments.get("passes"));
         profile.setGoal(arguments.get("goal"));
         profile.setMemoryModel(arguments.get("memory_model"));

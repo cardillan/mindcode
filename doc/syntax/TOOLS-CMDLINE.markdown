@@ -80,8 +80,9 @@ usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination
                 [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
                 [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
                 [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w,7as,7aw}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}]
-                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
+                [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
+                [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s]
+                [input] [output]
 
 Compile a mindcode source file into text mlog file.
 
@@ -91,6 +92,8 @@ named arguments:
   -t, --target {6,7s,7w,7as,7aw}
                          selects target processor version and edition (version  6,  version 7 with standard processor or
                          world processor, version 7 rev. A with standard processor or world processor)
+  -i, --instruction-limit {1..100000}
+                         sets the maximal number of instructions for the speed optimizations
   -e, --passes {1..1000}
                          sets maximal number of optimization passes to be made
   -g, --goal {SIZE,SPEED,AUTO}
@@ -177,8 +180,9 @@ usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination
                 [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
                 [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
                 [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w,7as,7aw}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}] [-m {VOLATILE,ALIASED,RESTRICTED}]
-                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
+                [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
+                [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s]
+                [-a TAG [TAG ...]] [input] [output]
 
 Compile a schema definition file into binary msch file.
 
@@ -188,6 +192,8 @@ named arguments:
   -t, --target {6,7s,7w,7as,7aw}
                          selects target processor version and edition (version  6,  version 7 with standard processor or
                          world processor, version 7 rev. A with standard processor or world processor)
+  -i, --instruction-limit {1..100000}
+                         sets the maximal number of instructions for the speed optimizations
   -e, --passes {1..1000}
                          sets maximal number of optimization passes to be made
   -g, --goal {SIZE,SPEED,AUTO}

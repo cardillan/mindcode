@@ -156,7 +156,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
     }
 
     protected CompilerProfile createCompilerProfile() {
-        return CompilerProfile.noOptimizations()
+        return CompilerProfile.noOptimizations(false)
                 .setProcessorVersion(getProcessorVersion())
                 .setProcessorEdition(getProcessorEdition())
                 .setDebugLevel(3);

@@ -36,14 +36,13 @@ public class ReturnOptimizer extends BaseOptimizer {
     @Override
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
         invocations++;
-        return forEachContext(AstContextType.FUNCTION, BODY,
-                context -> findReturnStatementOptimizations(context, costLimit))
+        return forEachContext(AstContextType.FUNCTION, BODY, this::findReturnStatementOptimizations)
                 .stream()
                 .flatMap(List::stream)
                 .toList();
     }
 
-    private List<OptimizationAction> findReturnStatementOptimizations(AstContext context, int costLimit) {
+    private List<OptimizationAction> findReturnStatementOptimizations(AstContext context) {
         if (!getCallGraph().getFunctionByPrefix(context.functionPrefix()).isRecursive()) {
             return List.of();
         }

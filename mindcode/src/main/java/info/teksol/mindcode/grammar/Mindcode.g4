@@ -291,7 +291,7 @@ fragment Binary          : '0b' ('0' | '1')+ ;
 fragment Hexadecimal     : '0x' HexDigit+ ;
 fragment DecimalDigit    : '0'..'9' ;
 fragment HexDigit        : ('0'..'9'|'a'..'f'|'A'..'F') ;
-fragment Float           : DecimalDigits DecimalExponent?
+fragment Float           : DecimalDigits DecimalExponent
                          | DecimalDigits DOT DecimalDigits DecimalExponent?
                          ;
 

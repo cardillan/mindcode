@@ -2,25 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2023-07-15
 
 ### Added
 
 * Added [Case Switching](doc/syntax/SYNTAX-5-OTHER.markdown#case-switching) optimization. This optimization converts 
   suitable case expressions to use jump tables.
-* Added [Return Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#return-optimization) improving some specific cases 
-  of recursive functions. 
+* Added [Return Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#return-optimization) improving some very specific 
+  cases sometimes arising in recursive functions.
+* Added [compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-instruction-limit) to alter the instruction limit 
+  for speed optimizations. 
+
+### Fixed
+
+* Fixed wrong cost estimation in [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling). The cost 
+  estimates were too high, potentially preventing some eligible loops from being unrolled.
+* Fixed compiler not recognizing integer values in compiler option directives (`#set`).
 
 ### Changed
 
 * Changed [Jump Threading](doc/syntax/SYNTAX-5-OTHER.markdown#jump-threading) to also replace jumps leading to `goto`
   instructions with the `goto` instruction itself on `aggressive` level. There's a possible speedup in some stackless 
   function calls and list iteration loops.
-* Changed [Single Step Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#single-step-elimination) to remove two 
+* Changed [Single Step Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#single-step-elimination) to also remove two 
   consecutive jumps that are identical. Such sequences were sometimes produced as a result of other optimizations.
 * Changed [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) to use single 
   instruction iterator instance instead of making an instruction list from each AstContext being processed. 
   Significantly speeds up processing.
+* Additional optimizers converted to adding no-op instruction instead of removing them; updated other optimizers 
+  to correctly handle such code.
 
 ## 2023-07-12
 

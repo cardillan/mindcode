@@ -40,7 +40,7 @@ class SchematicsSamplesTest {
     }
 
     private void buildSchematics(String sample, File file) {
-        CompilerOutput<byte[]> output = SchemacodeCompiler.compile(sample, CompilerProfile.fullOptimizations(), null);
+        CompilerOutput<byte[]> output = SchemacodeCompiler.compile(sample, CompilerProfile.fullOptimizations(true), null);
         output.errors().forEach(Assertions::fail);
         assertFalse(output.hasErrors(), "Failed to compile sample " + file.getPath());
     }

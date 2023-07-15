@@ -8,29 +8,29 @@
     86 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 916):
-  * Loop Optimization: replicate condition at line 17            cost   1, benefit       25.0, efficiency       25.0 (+1 instructions)
-    Loop Optimization: replicate condition at line 24            cost   1, benefit       25.0, efficiency       25.0
-    Loop Optimization: replicate condition at line 32            cost   1, benefit       25.0, efficiency       25.0
-    Loop Optimization: replicate condition at line 45            cost   1, benefit       25.0, efficiency       25.0
-    Loop Optimization: replicate condition at line 58            cost   1, benefit       25.0, efficiency       25.0
+  * Loop Optimization: replicate condition at line 17            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
+    Loop Optimization: replicate condition at line 24            cost     1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 32            cost     1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 45            cost     1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 58            cost     1, benefit       25,0, efficiency       25,0
 
 Pass 1: speed optimization selection (cost limit 915):
-  * Loop Optimization: replicate condition at line 24            cost   1, benefit       25.0, efficiency       25.0 (+1 instructions)
-    Loop Optimization: replicate condition at line 32            cost   1, benefit       25.0, efficiency       25.0
-    Loop Optimization: replicate condition at line 45            cost   1, benefit       25.0, efficiency       25.0
-    Loop Optimization: replicate condition at line 58            cost   1, benefit       25.0, efficiency       25.0
+  * Loop Optimization: replicate condition at line 24            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
+    Loop Optimization: replicate condition at line 32            cost     1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 45            cost     1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 58            cost     1, benefit       25,0, efficiency       25,0
 
 Pass 1: speed optimization selection (cost limit 914):
-  * Loop Optimization: replicate condition at line 32            cost   1, benefit       25.0, efficiency       25.0 (+1 instructions)
-    Loop Optimization: replicate condition at line 45            cost   1, benefit       25.0, efficiency       25.0
-    Loop Optimization: replicate condition at line 58            cost   1, benefit       25.0, efficiency       25.0
+  * Loop Optimization: replicate condition at line 32            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
+    Loop Optimization: replicate condition at line 45            cost     1, benefit       25,0, efficiency       25,0
+    Loop Optimization: replicate condition at line 58            cost     1, benefit       25,0, efficiency       25,0
 
 Pass 1: speed optimization selection (cost limit 913):
-  * Loop Optimization: replicate condition at line 45            cost   1, benefit       25.0, efficiency       25.0 (+1 instructions)
-    Loop Optimization: replicate condition at line 58            cost   1, benefit       25.0, efficiency       25.0
+  * Loop Optimization: replicate condition at line 45            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
+    Loop Optimization: replicate condition at line 58            cost     1, benefit       25,0, efficiency       25,0
 
 Pass 1: speed optimization selection (cost limit 912):
-  * Loop Optimization: replicate condition at line 58            cost   1, benefit       25.0, efficiency       25.0 (+1 instructions)
+  * Loop Optimization: replicate condition at line 58            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
  

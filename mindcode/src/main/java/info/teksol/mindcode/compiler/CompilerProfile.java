@@ -16,13 +16,18 @@ import java.util.stream.Collectors;
  */
 public class CompilerProfile {
     public static final int MAX_PASSES = 1000;
+    public static final int MAX_INSTRUCTIONS = 100000;
+    public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
+    public static final int DEFAULT_INSTRUCTIONS = 1000;
     public static final int DEFAULT_WEBAPP_PASSES = 3;
     public static final int DEFAULT_CMDLINE_PASSES = 25;
 
     private final Map<Optimization, OptimizationLevel> levels;
+    private final boolean webApplication;
     private ProcessorVersion processorVersion = ProcessorVersion.V7;
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
-    private int optimizationPasses = 3;
+    private int instructionLimit = 1000;
+    private int optimizationPasses = DEFAULT_WEBAPP_PASSES;
     private GenerationGoal goal = GenerationGoal.AUTO;
     private MemoryModel memoryModel = MemoryModel.VOLATILE;
     private boolean shortCircuitEval = false;
@@ -35,26 +40,28 @@ public class CompilerProfile {
 
     private List<String> additionalTags = List.of();
 
-    private CompilerProfile(OptimizationLevel level) {
+    private CompilerProfile(boolean webApplication, OptimizationLevel level) {
+        this.webApplication = webApplication;
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }
 
-    public CompilerProfile(Optimization... optimizations) {
+    public CompilerProfile(boolean webApplication, Optimization... optimizations) {
+        this.webApplication = webApplication;
         Set<Optimization> optimSet = Set.of(optimizations);
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
                 o -> optimSet.contains(o) ? OptimizationLevel.AGGRESSIVE : OptimizationLevel.OFF));
     }
 
-    public static CompilerProfile fullOptimizations() {
-        return new CompilerProfile(OptimizationLevel.AGGRESSIVE);
+    public static CompilerProfile fullOptimizations(boolean webApplication) {
+        return new CompilerProfile(webApplication, OptimizationLevel.AGGRESSIVE);
     }
 
-    public static CompilerProfile standardOptimizations() {
-        return new CompilerProfile(OptimizationLevel.BASIC);
+    public static CompilerProfile standardOptimizations(boolean webApplication) {
+        return new CompilerProfile(webApplication, OptimizationLevel.BASIC);
     }
 
-    public static CompilerProfile noOptimizations() {
-        return new CompilerProfile(OptimizationLevel.OFF);
+    public static CompilerProfile noOptimizations(boolean webApplication) {
+        return new CompilerProfile(webApplication, OptimizationLevel.OFF);
     }
 
     public ProcessorVersion getProcessorVersion() {
@@ -101,6 +108,16 @@ public class CompilerProfile {
 
     public boolean optimizationsActive() {
         return levels.values().stream().anyMatch(l -> l != OptimizationLevel.OFF);
+    }
+
+    public int getInstructionLimit() {
+        return instructionLimit;
+    }
+
+    public CompilerProfile setInstructionLimit(int instructionLimit) {
+        int max = webApplication ? MAX_INSTRUCTIONS_WEBAPP : MAX_INSTRUCTIONS;
+        this.instructionLimit = Math.min(max, instructionLimit);
+        return this;
     }
 
     public int getOptimizationPasses() {

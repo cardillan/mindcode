@@ -14,11 +14,11 @@
     59 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 923):
-  * Loop Unrolling: unroll iteration loop at line 4              cost   0, benefit       23.0, efficiency   Infinity (-19 instructions)
-    Return Optimization: optimize return at line 14              cost   2, benefit        1.0, efficiency        0.5
+  * Loop Unrolling: unroll iteration loop at line 4              cost     0, benefit       23,0, efficiency   Infinity (-19 instructions)
+    Return Optimization: optimize return at line 14              cost     2, benefit        1,0, efficiency        0,5
 
 Pass 1: speed optimization selection (cost limit 942):
-  * Return Optimization: optimize return at line 14              cost   2, benefit        1.0, efficiency        0.5 (+2 instructions)
+  * Return Optimization: optimize return at line 14              cost     2, benefit        1,0, efficiency        0,5 (+2 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  

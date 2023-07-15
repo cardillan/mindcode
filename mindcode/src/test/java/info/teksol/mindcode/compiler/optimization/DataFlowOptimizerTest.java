@@ -105,7 +105,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Test
     void producesNoWarningsOnBasicLevel() {
-        assertGeneratesWarnings(createTestCompiler(CompilerProfile.standardOptimizations()),
+        assertGeneratesWarnings(createTestCompiler(CompilerProfile.standardOptimizations(false)),
                 """
                         for n in 0 ... 1000
                             j = switch1.enabled
@@ -367,7 +367,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void handlesWhileLoops() {
         assertCompilesTo("""
                         i = 0
-                        while i < 1000
+                        while i < 10000
                             i = i + 1
                         end
                         print(i)
@@ -375,7 +375,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(SET, "i", "0"),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1003), "lessThan", "i", "1000"),
+                createInstruction(JUMP, var(1003), "lessThan", "i", "10000"),
                 createInstruction(PRINT, "i"),
                 createInstruction(END)
         );
@@ -639,7 +639,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Test
     void handlesReturnInLoop() {
-        assertCompilesTo(new TestCompiler(CompilerProfile.fullOptimizations()),
+        assertCompilesTo(new TestCompiler(CompilerProfile.fullOptimizations(false)),
                 """
                         if UNIT_S1 == null UNIT_S1 = findUnit() end
                         inline def findUnit()

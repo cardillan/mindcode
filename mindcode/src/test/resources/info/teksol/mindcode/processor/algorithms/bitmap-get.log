@@ -12,7 +12,7 @@
     17 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 990):
-  * Loop Unrolling: unroll loop at line 5                        cost  96, benefit      800.0, efficiency        8.3 (+47 instructions)
+  * Loop Unrolling: unroll loop at line 5                        cost    87, benefit      800,0, efficiency        9,2 (+47 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  

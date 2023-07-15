@@ -155,13 +155,14 @@ public class LoopUnroller extends BaseOptimizer {
                 // Loop control updates will only be removed by Data Flow Optimization later on.
                 int size = loopIxs.stream().mapToInt(LogicInstruction::getRealSize).sum()
                         - controlIxs.stream().mapToInt(LogicInstruction::getRealSize).sum();
+                int originalSize = contextStream(loop).mapToInt(LogicInstruction::getRealSize).sum();
 
                 int loopLimit = size <= 0 ? costLimit : costLimit / size;
                 int loops = findLoopCount(loop, jump, controlVariable, initLiteral, controlIxs, loopLimit);
                 if (loops > 0 && loops <= loopLimit) {
                     // Compute benefit: unrolling avoids all control variable updates and the condition jump
                     double weight = controlIxs.stream().mapToDouble(ix -> ix.getAstContext().weight()).sum() + jump.getAstContext().weight();
-                    return new UnrollLoopAction(loop, loops * size, loops * weight, loops, controlVariable);
+                    return new UnrollLoopAction(loop, loops * size - originalSize, loops * weight, loops, controlVariable);
                 }
             }
         }

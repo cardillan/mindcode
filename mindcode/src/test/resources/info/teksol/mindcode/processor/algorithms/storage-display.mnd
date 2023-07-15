@@ -38,7 +38,6 @@ for item in (@sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphit
 end
 drawflush(display1)
 
-x = LEFT1 + OFFSET
 y = TOP
 eraseNumbers(true)
 index = 0
@@ -46,13 +45,16 @@ index = 0
 for item in (@sand, @copper, @lead, @coal, @titanium, @thorium, @scrap, @graphite, @metaglass, @silicon,
           @pyratite, @blast-compound, @plastanium, @phase-fabric, @surge-alloy, @spore-pod)
     image(0, 0, item, IMAGE, 0)
-    displayItem(x, y)
+    if index < 8
+        displayItem(LEFT1 + OFFSET, y)
+    else
+        displayItem(LEFT2 + OFFSET, y)
+    end
     index += 1
     y -= SPACE_Y
     if index == 8
         drawflush(display1)
         y = TOP
-        x = LEFT2 + OFFSET
         eraseNumbers(false)
     end
 end

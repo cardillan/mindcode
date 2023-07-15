@@ -148,7 +148,9 @@ public class AlgorithmsTest extends AbstractProcessorTest {
 
         for (int number : numbers) {
             for (int index = 0; index <= optimizations.size(); index++) {
-                CompilerProfile compilerProfile = createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.OFF);
+                CompilerProfile compilerProfile = createCompilerProfile()
+                        .setAllOptimizationLevels(OptimizationLevel.OFF)
+                        .setInstructionLimit(1100);
                 for (int i = 0; i < index; i++) {
                     compilerProfile.setOptimizationLevel(optimizations.get(i), OptimizationLevel.AGGRESSIVE);
                 }

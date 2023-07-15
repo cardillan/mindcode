@@ -11,7 +11,7 @@
     50 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 947):
-  * Loop Optimization: replicate condition at line 30            cost   2, benefit      625.0, efficiency      312.5 (+1 instructions)
+  * Loop Optimization: replicate condition at line 30            cost     2, benefit      625,0, efficiency      312,5 (+1 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  

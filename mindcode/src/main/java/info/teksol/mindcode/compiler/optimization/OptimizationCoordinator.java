@@ -109,13 +109,14 @@ public class OptimizationCoordinator {
 
         while (true) {
             int initialSize = codeSize();
-            int costLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, 1000 - initialSize);
+            int costLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, profile.getInstructionLimit() - initialSize);
+            int expandedCostLimit = 500 + costLimit;
 
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
                     .map(optimizers::get)
                     .filter(Objects::nonNull)
-                    .flatMap(o -> o.getPossibleOptimizations(costLimit).stream())
+                    .flatMap(o -> o.getPossibleOptimizations(expandedCostLimit).stream())
                     .toList();
             optimizationContext.finish();
 
@@ -123,25 +124,33 @@ public class OptimizationCoordinator {
                 break;
             }
 
-            optimizationContext.prepare();
-            OptimizationAction selectedAction = possibleOptimizations.stream().max(ACTION_COMPARATOR).get();
-            OptimizationResult result = selectedAction.apply(costLimit);
-            optimizationContext.finish();
+            OptimizationAction selectedAction = possibleOptimizations.stream()
+                    .filter(a -> a.cost() <= costLimit)
+                    .max(ACTION_COMPARATOR).orElse(null);
+            if (selectedAction != null) {
+                optimizationContext.prepare();
+                OptimizationResult result = selectedAction.apply(costLimit);
+                optimizationContext.finish();
 
-            if (result == OptimizationResult.REALIZED) {
-                Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
-                if (optimizer != null) {
-                    optimizationContext.prepare();
-                    optimizer.optimize(phase, pass);
-                    optimizationContext.finish();
+                if (result == OptimizationResult.REALIZED) {
+                    Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
+                    if (optimizer != null) {
+                        optimizationContext.prepare();
+                        optimizer.optimize(phase, pass);
+                        optimizationContext.finish();
+                    }
+                    modified = true;
                 }
-                modified = true;
             }
 
             int difference = codeSize() - initialSize;
             optimizationStatistics.add(MindcodeMessage.debug(
                     "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
-            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, selectedAction, difference));
+            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference));
+
+            if (selectedAction == null) {
+                break;
+            }
         }
 
         return modified;
@@ -155,10 +164,15 @@ public class OptimizationCoordinator {
             Comparator.comparingDouble(OptimizationAction::efficiency)
                     .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed());
 
-    private void outputPossibleOptimization(OptimizationAction opt, OptimizationAction selected, int difference) {
-        String format = opt == selected
-                ? "  * %-60s cost %3d, benefit %10.1f, efficiency %10.1f (%+d instructions)"
-                : "    %-60s cost %3d, benefit %10.1f, efficiency %10.1f";
-        optimizationStatistics.add(MindcodeMessage.debug(format, opt, opt.cost(), opt.benefit(), opt.efficiency(), difference));
+    private void outputPossibleOptimization(OptimizationAction opt, int costLimit, OptimizationAction selected, int difference) {
+        String message;
+        if (opt == selected) {
+            message = String.format("  * %-60s cost %5d, benefit %10.1f, efficiency %10.1f (%+d instructions)",
+                    opt, opt.cost(), opt.benefit(), opt.efficiency(), difference);
+        } else {
+            message = String.format("  %s %-60s cost %5d, benefit %10.1f, efficiency %10.1f",
+                    opt.cost() > costLimit ? "!" : " ", opt, opt.cost(), opt.benefit(), opt.efficiency());
+        }
+        optimizationStatistics.add(MindcodeMessage.debug(message));
     }
 }
