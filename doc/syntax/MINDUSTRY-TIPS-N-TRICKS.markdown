@@ -353,6 +353,55 @@ if @unit.controller != @this or @unit.dead !== 0
 end
 ```
 
+### Detecting destroyed buildings
+
+If you want to know status of buildings out of processor range, or enemy ones, you need to use units to detect it with `getBlock` command. Do not confuse with `getblock`! `getBlock` retrieves a building, floor or type at the given coordinates if the unit is within position.
+
+```
+getBlock(x, y, type, building, floor)
+```
+
+Let's look at each argument here:
+* `getBlock` it’s a function that itself returns nothing, but the arguments are returned with a value 
+* `x` and `y` coordinates
+* `type` variable name that is returned with the block type. If it’s a building returns `building`. If there is free space, returns `air`. If it’s a solid environmental block, returns `solid`
+* `building` variable name that is returned with the `building`. If there is no building, returns null.
+* `floor` variable name that is returned with the floor type.
+
+If you don't need some arguments, just leave them with 0: `getBlock(x, y, 0, 0, myVariable)`. If a unit is out of range, or if the block doesn’t exist, all arguments return null.
+
+In the example code below Flare finds the nearest enemy turret and approach to it. If the unit is within of the turret, checks the building variable. If it's null, turret has been destroyed, if not, it's still exists. If ulocate return 0, no enemy turret was found.
+
+```
+findFreeUnit(@flare, 1)
+unitRange = @unit.range
+enTurr = ulocate(building, turret, true, outx, outy)
+while @unit.controlled == 1
+    if enTurr == 0
+        print("There are no more turrets")
+        printflush(message1)
+        wait(3)
+        end()
+    end
+    approach(outx, outy, unitRange)
+    inNear = within(outx, outy, unitRange)
+    if inNear == 1
+        getBlock(outx, outy, 0, block, 0)
+        if block === null
+            print("Enemy turrer at", outx, ", ", outy, " has been destroyed!")
+            printflush(message1)
+            wait(3)
+            enTurr = ulocate(building, turret, true, outx, outy)
+        else
+            print("Enemy turrer at", outx, ", ", outy, " still exists")
+        end
+    else
+        print("Searching for enemy turrer at", outx, ", ", outy, "...")
+    end
+    printflush(message1)
+end
+```
+
 ### Locating the core
 
 One of the first thing you'll probably want to do is to locate your core, as it is the most important building in 
