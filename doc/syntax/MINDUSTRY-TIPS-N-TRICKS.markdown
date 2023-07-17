@@ -436,15 +436,15 @@ while @unit.controlled == 1        // If the unit still controlled by this proc
     if inNear == 1
         getBlock(outx, outy, 0, block, 0)       // We don't need a block type or floor type, only a building
         if block === null
-            printf("Enemy turrer at ${outx}, ${outy} has been destroyed!")
+            printf("Enemy turrer at ${outx}, ${outy} has been destroyed!\n")
             printflush(message1)
             wait(3)
             enTurr = ulocate(building, turret, true, outx, outy)        // Finding the next enemy turret
         else
-            printf("Enemy turrer at ${outx}, ${outy} still exists")
+            printf("Enemy turrer at ${outx}, ${outy} still exists\n")
         end
     else
-        printf("Searching for enemy turrer at ${outx}, ${outy}...")
+        printf("Searching for enemy turrer at ${outx}, ${outy}...\n")
     end
     printflush(message1)
 end
