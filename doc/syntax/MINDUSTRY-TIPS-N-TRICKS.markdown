@@ -353,6 +353,54 @@ if @unit.controller != @this or @unit.dead !== 0
 end
 ```
 
+### Discarding unwanted items
+
+Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that 
+are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
+
+```
+itemDrop(@air, @unit.totalItems)
+```
+
+In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
+suggest specifying the correct amount, just in case something changes in the future.     
+
+## Using Buildings
+
+Mindustry allows your processors to control existing ally buildings only if the are linked to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get building sensors and block information. Getting this data is not just limited to your buildings. You can also obtain enemy building information, which is not possible with linking to processor since you can't link to an enemy building. The only limitation is that the unit must be within the radius of the building (28 blocks in 145.1).
+
+### Locating the core
+
+One of the first thing you'll probably want to do is to locate your core, as it is the most important building in 
+the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, just 
+issue this command:
+
+```
+found = ulocate(building, core, false, core_x, core_y, core)
+```
+
+Let's look at each argument here: 
+
+* `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it 
+wasn't.  If you don't need it, use just `ulocate(building, core, false, core_x, core_y, core)`.
+* `ulocate` is the name of the function we're calling.
+* `building` and `core` are constant values that specify what are we looking for, They must be specified exactly 
+  like this, you cannot, for example, store them in variable (e.g. `type = core; ulocate(building, type, false, 
+  core_x, core_y, core)` won't work).
+* `false` specifies we're looking for our own core. Put `true` if you want to locate enemy one.
+* `core_x` and `core_y` are variables that will receive the position of the core on the map. Use them to send your 
+  units there.
+* `core` is the building itself, and it can be used to query its state:
+
+```
+findFreeUnit(@poly, 1)
+ulocate(building, core, false, core_x, core_y, core)
+println("Silicon status: ", core.silicon)
+printflush(message1) 
+```
+
+will tell you how bad your silicone situation is.
+
 ### Detecting destroyed buildings
 
 If you want to know status of buildings out of processor range, or enemy ones, you need to use units to detect it with `getBlock` command. Do not confuse with `getblock`! `getBlock` retrieves a building, floor or type at the given coordinates if the unit is within position.
@@ -401,54 +449,6 @@ while @unit.controlled == 1
     printflush(message1)
 end
 ```
-
-### Locating the core
-
-One of the first thing you'll probably want to do is to locate your core, as it is the most important building in 
-the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, just 
-issue this command:
-
-```
-found = ulocate(building, core, false, core_x, core_y, core)
-```
-
-Let's look at each argument here: 
-
-* `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it 
-wasn't.  If you don't need it, use just `ulocate(building, core, false, core_x, core_y, core)`.
-* `ulocate` is the name of the function we're calling.
-* `building` and `core` are constant values that specify what are we looking for, They must be specified exactly 
-  like this, you cannot, for example, store them in variable (e.g. `type = core; ulocate(building, type, false, 
-  core_x, core_y, core)` won't work).
-* `false` specifies we're looking for our own core. Put `true` if you want to locate enemy one.
-* `core_x` and `core_y` are variables that will receive the position of the core on the map. Use them to send your 
-  units there.
-* `core` is the building itself, and it can be used to query its state:
-
-```
-findFreeUnit(@poly, 1)
-ulocate(building, core, false, core_x, core_y, core)
-println("Silicon status: ", core.silicon)
-printflush(message1) 
-```
-
-will tell you how bad your silicone situation is.
-
-### Discarding unwanted items
-
-Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that 
-are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
-
-```
-itemDrop(@air, @unit.totalItems)
-```
-
-In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
-suggest specifying the correct amount, just in case something changes in the future.     
-
-## Using Buildings
-
-Mindustry allows your processors to control existing ally buildings only if the are linked to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get building sensors and block information. Getting this data is not just limited to your buildings. You can also obtain enemy building information, which is not possible with linking to processor since you can't link to an enemy building. The only limitation is that the unit must be within the radius of the building (28 blocks in 145.1).
 
 ---
 
