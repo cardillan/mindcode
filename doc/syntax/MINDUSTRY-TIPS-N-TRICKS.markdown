@@ -423,8 +423,8 @@ In the example code below Flare finds the nearest enemy turret and approach to i
 ```
 findFreeUnit(@flare, 1)
 unitRange = @unit.range
-enTurr = ulocate(building, turret, true, outx, outy)
-while @unit.controlled == 1
+enTurr = ulocate(building, turret, true, outx, outy)        // Locating nearest enemy turret. If found, enTurr == 1 and (outx, ouy)- it's coordinates, else enTurr == 0.
+while @unit.controlled == 1        // If the unit still controlled by this proc
     if enTurr == 0
         println("There are no more turrets")
         printflush(message1)
@@ -434,12 +434,12 @@ while @unit.controlled == 1
     approach(outx, outy, unitRange)
     inNear = within(outx, outy, unitRange)
     if inNear == 1
-        getBlock(outx, outy, 0, block, 0)
+        getBlock(outx, outy, 0, block, 0)       // We don't need a block type or floor type, only a building
         if block === null
             printf("Enemy turrer at ${outx}, ${outy} has been destroyed!")
             printflush(message1)
             wait(3)
-            enTurr = ulocate(building, turret, true, outx, outy)
+            enTurr = ulocate(building, turret, true, outx, outy)        // Finding the next enemy turret
         else
             printf("Enemy turrer at ${outx}, ${outy} still exists")
         end
