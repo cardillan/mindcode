@@ -353,6 +353,22 @@ if @unit.controller != @this or @unit.dead !== 0
 end
 ```
 
+### Discarding unwanted items
+
+Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that 
+are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
+
+```
+itemDrop(@air, @unit.totalItems)
+```
+
+In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
+suggest specifying the correct amount, just in case something changes in the future.     
+
+## Using Buildings
+
+Mindustry allows your processors to control and receive information from any ally building only if the are linked to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get building and block information. Getting this data is not just limited to your buildings. You can also obtain enemy building information, which is not possible with linking to your processor since you can't link to an enemy building.
+
 ### Locating the core
 
 One of the first thing you'll probably want to do is to locate your core, as it is the most important building in 
@@ -385,17 +401,54 @@ printflush(message1)
 
 will tell you how bad your silicone situation is.
 
-### Discarding unwanted items
+### Obtaining buildings
 
-Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that 
-are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
+You can obtain building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! `getBlock` retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
 
 ```
-itemDrop(@air, @unit.totalItems)
+getBlock(x, y, type, building, floor)
 ```
 
-In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
-suggest specifying the correct amount, just in case something changes in the future.     
+Let's look at each argument here:
+* `getBlock` it’s a function that itself returns nothing, but the arguments are returned with a value 
+* `x` and `y` coordinates
+* `type` variable name that is returned with the block type. If it’s a building returns `building`. If there is free space, returns `air`. If it’s a solid environmental block, returns `solid`
+* `building` variable name that is returned with the `building`. If there is no building, returns null.
+* `floor` variable name that is returned with the floor type.
+
+If you don't need some arguments, just leave them with 0: `getBlock(x, y, 0, 0, myVariable)`. If a unit is out of range, or if the block doesn’t exist, all arguments return `null`.
+
+In the example code below Flare finds the nearest enemy turret and approach to it. If the unit is within of the turret, checks the building variable. If it's null, turret has been destroyed, if not, it's still exists. If ulocate return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
+
+```
+findFreeUnit(@flare, 1)
+unitRange = @unit.range
+enTurr = ulocate(building, turret, true, outx, outy)        // Locating nearest enemy turret. If found, enTurr == 1 and (outx, ouy)- it's coordinates, else enTurr == 0.
+while @unit.controlled == 1        // If the unit still controlled by this proc
+    if enTurr == 0
+        println("There are no more turrets")
+        printflush(message1)
+        wait(3)
+        end()
+    end
+    approach(outx, outy, unitRange)
+    inNear = within(outx, outy, unitRange)
+    if inNear == 1
+        getBlock(outx, outy, 0, block, 0)       // We don't need a block type or floor type, only a building
+        if block === null
+            printf("Enemy turrer at ${outx}, ${outy} has been destroyed!\n")
+            printflush(message1)
+            wait(3)
+            enTurr = ulocate(building, turret, true, outx, outy)        // Finding the next enemy turret
+        else
+            printf("Enemy turrer at ${outx}, ${outy} still exists\n")
+        end
+    else
+        printf("Searching for enemy turrer at ${outx}, ${outy}...\n")
+    end
+    printflush(message1)
+end
+```
 
 ---
 
