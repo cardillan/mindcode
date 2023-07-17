@@ -403,7 +403,7 @@ will tell you how bad your silicone situation is.
 
 ### Obtaining buildings
 
-If you want to know status of buildings out of processor range, or enemy ones, you need to use units to detect it with `getBlock` command. Do not confuse with `getblock`! `getBlock` retrieves a building, floor or type at the given coordinates if the unit is within position.
+You can obtain building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! `getBlock` retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
 
 ```
 getBlock(x, y, type, building, floor)
@@ -416,7 +416,7 @@ Let's look at each argument here:
 * `building` variable name that is returned with the `building`. If there is no building, returns null.
 * `floor` variable name that is returned with the floor type.
 
-If you don't need some arguments, just leave them with 0: `getBlock(x, y, 0, 0, myVariable)`. If a unit is out of range, or if the block doesn’t exist, all arguments return null.
+If you don't need some arguments, just leave them with 0: `getBlock(x, y, 0, 0, myVariable)`. If a unit is out of range, or if the block doesn’t exist, all arguments return `null`.
 
 In the example code below Flare finds the nearest enemy turret and approach to it. If the unit is within of the turret, checks the building variable. If it's null, turret has been destroyed, if not, it's still exists. If ulocate return 0, no enemy turret was found.
 
