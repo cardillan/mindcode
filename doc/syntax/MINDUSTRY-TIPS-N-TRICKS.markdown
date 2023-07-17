@@ -418,7 +418,7 @@ Let's look at each argument here:
 
 If you don't need some arguments, just leave them with 0: `getBlock(x, y, 0, 0, myVariable)`. If a unit is out of range, or if the block doesn’t exist, all arguments return `null`.
 
-In the example code below Flare finds the nearest enemy turret and approach to it. If the unit is within of the turret, checks the building variable. If it's null, turret has been destroyed, if not, it's still exists. If ulocate return 0, no enemy turret was found.
+In the example code below Flare finds the nearest enemy turret and approach to it. If the unit is within of the turret, checks the building variable. If it's null, turret has been destroyed, if not, it's still exists. If ulocate return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
 
 ```
 findFreeUnit(@flare, 1)
