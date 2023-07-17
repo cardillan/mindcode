@@ -446,6 +446,10 @@ itemDrop(@air, @unit.totalItems)
 In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
 suggest specifying the correct amount, just in case something changes in the future.     
 
+## Using Buildings
+
+Mindustry allows your processors to control existing ally buildings only if the are linked to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get building sensors and block information. Getting this data is not just limited to your buildings. You can also obtain enemy building information, which is not possible with linking to processor since you can't link to an enemy building. The only limitation is that the unit must be within the radius of the building (28 blocks in 145.1).
+
 ---
 
 [« Previous: Schematics Refresher](TOOLS-REFRESHER.markdown)
