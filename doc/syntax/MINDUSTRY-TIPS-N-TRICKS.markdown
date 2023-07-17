@@ -378,7 +378,7 @@ unitRange = @unit.range
 enTurr = ulocate(building, turret, true, outx, outy)
 while @unit.controlled == 1
     if enTurr == 0
-        print("There are no more turrets")
+        printf("There are no more turrets")
         printflush(message1)
         wait(3)
         end()
@@ -388,15 +388,15 @@ while @unit.controlled == 1
     if inNear == 1
         getBlock(outx, outy, 0, block, 0)
         if block === null
-            print("Enemy turrer at", outx, ", ", outy, " has been destroyed!")
+            printf("Enemy turrer at", outx, ", ", outy, " has been destroyed!")
             printflush(message1)
             wait(3)
             enTurr = ulocate(building, turret, true, outx, outy)
         else
-            print("Enemy turrer at", outx, ", ", outy, " still exists")
+            printf("Enemy turrer at", outx, ", ", outy, " still exists")
         end
     else
-        print("Searching for enemy turrer at", outx, ", ", outy, "...")
+        printf("Searching for enemy turrer at", outx, ", ", outy, "...")
     end
     printflush(message1)
 end
