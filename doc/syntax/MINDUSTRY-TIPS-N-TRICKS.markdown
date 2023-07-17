@@ -401,7 +401,7 @@ printflush(message1)
 
 will tell you how bad your silicone situation is.
 
-### Detecting destroyed buildings
+### Obtaining buildings
 
 If you want to know status of buildings out of processor range, or enemy ones, you need to use units to detect it with `getBlock` command. Do not confuse with `getblock`! `getBlock` retrieves a building, floor or type at the given coordinates if the unit is within position.
 
