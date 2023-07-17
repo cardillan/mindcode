@@ -161,7 +161,7 @@ public class LoopUnroller extends BaseOptimizer {
                 int loops = findLoopCount(loop, jump, controlVariable, initLiteral, controlIxs, loopLimit);
                 if (loops > 0 && loops <= loopLimit) {
                     // Compute benefit: unrolling avoids all control variable updates and the condition jump
-                    double weight = controlIxs.stream().mapToDouble(ix -> ix.getAstContext().weight()).sum() + jump.getAstContext().weight();
+                    double weight = controlIxs.stream().mapToDouble(ix -> ix.getAstContext().totalWeight()).sum() + jump.getAstContext().totalWeight();
                     return new UnrollLoopAction(loop, loops * size - originalSize, loops * weight, loops, controlVariable);
                 }
             }
@@ -332,7 +332,7 @@ public class LoopUnroller extends BaseOptimizer {
 
         // Optimization cost could actually get negative
         int cost = Math.max(size * loops - savings, 0);
-        return cost > costLimit ? null : new UnrollListIterationLoopAction(loop, cost, loop.weight() * savings);
+        return cost > costLimit ? null : new UnrollListIterationLoopAction(loop, cost, loop.totalWeight() * savings);
     }
 
     private OptimizationResult unrollLoop(AstContext loop, LogicVariable loopControlVariable, int loops, int costLimit) {

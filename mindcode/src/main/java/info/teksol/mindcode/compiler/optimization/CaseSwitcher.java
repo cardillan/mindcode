@@ -116,7 +116,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
         // New sequence of executed instructions will be: op min / op max / goto offset / jump
         // We save half of the switch jumps on average
-        double benefit = (targets.size() / 2.0 - 4) * context.weight();
+        double benefit = (targets.size() / 2.0 - 4) * context.totalWeight();
 
         return benefit <= 0 || cost > costLimit ? null
                 : new ConvertCaseExpressionAction(context, cost, benefit, variable, targets);

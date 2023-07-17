@@ -1,11 +1,14 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.GenerationGoal;
+import info.teksol.mindcode.compiler.instructions.AstContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
 
@@ -295,7 +298,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                           end
                           return c
                         end
-                        
+                                                
                         result = if sum(1000) < sum(2000)
                             print("Less")
                             0
@@ -339,5 +342,33 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(PRINT, "0"),
                 createInstruction(END)
         );
+    }
+
+    @Test
+    void computesFunctionWeights() {
+        TestCompiler compiler = createTestCompiler(createCompilerProfile()
+                .setGoal(GenerationGoal.SIZE)
+                .setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.OFF)
+                .setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.OFF)
+        );
+
+        assertCompilesTo(compiler,
+                ix -> false,
+                """
+                        def a(n) print(n) end
+                        def b(n) c(n); c(n + 1) end
+                        def c(n) print(n / 2) end
+                        
+                        a(1); a(2)
+                        
+                        for i in 1 .. 25
+                            b(i); b(i + 1)
+                        end
+                        """);
+
+        List<Double> weights = compiler.getRootContext().children().stream()
+                .filter(ctx -> ctx.functionPrefix() != null)
+                .map(AstContext::getWeight).toList();
+        assertEquals(List.of(2d, 50d, 100d), weights, "Computed function weights differ from expected.");
     }
 }

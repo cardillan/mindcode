@@ -83,7 +83,7 @@ public class ReturnOptimizer extends BaseOptimizer {
 
     private OptimizationAction createOptimizationAction(JumpInstruction ix, ReturnInstruction returnInstruction) {
         int cost = returnInstruction.getRealSize() - ix.getRealSize();
-        double benefit = ix.getRealSize() * ix.getAstContext().weight();
+        double benefit = ix.getRealSize() * ix.getAstContext().totalWeight();
         return new ReplaceReturnStatementAction(ix.getAstContext(), cost, benefit, ix, returnInstruction);
     }
 

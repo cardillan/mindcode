@@ -15,10 +15,10 @@
 
 Pass 1: speed optimization selection (cost limit 923):
   * Loop Unrolling: unroll iteration loop at line 4              cost     0, benefit       23,0, efficiency   Infinity (-19 instructions)
-    Return Optimization: optimize return at line 14              cost     2, benefit        1,0, efficiency        0,5
+    Return Optimization: optimize return at line 14              cost     2, benefit       13,0, efficiency        6,5
 
 Pass 1: speed optimization selection (cost limit 942):
-  * Return Optimization: optimize return at line 14              cost     2, benefit        1,0, efficiency        0,5 (+2 instructions)
+  * Return Optimization: optimize return at line 14              cost     2, benefit       13,0, efficiency        6,5 (+2 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
@@ -28,225 +28,214 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
 -    * op add __tmp1 index 1
 -    * set index __tmp1
 +   34 op add index index 1
-+   35 noop
-    36 label __label1
-    37 goto __tmp0 marker0
-    38 gotolabel __label11 marker0
+    35 label __label1
+    36 goto __tmp0 marker0
+    37 gotolabel __label11 marker0
  
-    67 set __fn0_i __fn0_index
-    68 label __label20
-    69 jump __label22 greaterThanEq __fn0_i 8
+    66 set __fn0_i __fn0_index
+    67 label __label20
+    68 jump __label22 greaterThanEq __fn0_i 8
 -    * read __tmp7 bank1 __fn0_i
 -    * set __fn0_p __tmp7
-+   70 read __fn0_p bank1 __fn0_i
-+   71 noop
-    72 op lessThanEq __tmp8 __fn0_p __fn0_amount
-    73 jump __label23 equal __tmp8 false
-    74 op sub __tmp10 __fn0_amount __fn0_p
- 
-    87 pop bank1 __fn0_index
-    88 pop bank1 __fn0_amount
-    89 set __tmp11 __fn0retval
--    * op add __tmp12 __fn0_result __tmp11
--    * set __fn0_result __tmp12
-+   90 op add __fn0_result __fn0_result __tmp11
-+   91 noop
-    92 set __tmp9 __fn0_result
-    93 jump __label24 always
-    94 label __label23
-
-Modifications by Initial phase, Dead Code Elimination, iteration 1 (-6 instructions):
- 
-    40 label __label12
-    41 set __fn1_v 41
-    42 print __fn1_v
--    * set __tmp2 __fn1_v
-+   43 noop
-    44 label __label13
-    45 set __fn0_amount 20
-    46 set __fn0_index 1
- 
-    50 label __label15
-    51 set __fn2_v __tmp3
-    52 print __fn2_v
--    * set __tmp4 __fn2_v
-+   53 noop
-    54 label __label16
-    55 end
-    56 label __label0
- 
-    58 jump __label18 equal __tmp5 false
-    59 set __fn0retval 1
-    60 jump __label17 always
--    * set __tmp6 null
-+   61 noop
-    62 jump __label19 always
-    63 label __label18
--    * set __tmp6 null
-+   64 noop
-    65 label __label19
-    66 set __fn0_result 0
-    67 set __fn0_i __fn0_index
- 
-    89 set __tmp11 __fn0retval
-    90 op add __fn0_result __fn0_result __tmp11
-    91 noop
--    * set __tmp9 __fn0_result
-+   92 noop
-    93 jump __label24 always
-    94 label __label23
--    * set __tmp9 null
-+   95 noop
-    96 label __label24
-    97 label __label21
-    98 op add __fn0_i __fn0_i 1
-
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
- 
-    54 label __label16
-    55 end
-    56 label __label0
--    * op equal __tmp5 __fn0_amount 0
--    * jump __label18 equal __tmp5 false
-+   57 jump __label18 notEqual __fn0_amount 0
-    58 set __fn0retval 1
-    59 jump __label17 always
-    60 noop
- 
-    68 jump __label22 greaterThanEq __fn0_i 8
-    69 read __fn0_p bank1 __fn0_i
-    70 noop
--    * op lessThanEq __tmp8 __fn0_p __fn0_amount
--    * jump __label23 equal __tmp8 false
-+   71 jump __label23 greaterThan __fn0_p __fn0_amount
++   69 read __fn0_p bank1 __fn0_i
+    70 op lessThanEq __tmp8 __fn0_p __fn0_amount
+    71 jump __label23 equal __tmp8 false
     72 op sub __tmp10 __fn0_amount __fn0_p
-    73 push bank1 __fn0_amount
-    74 push bank1 __fn0_index
-
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
- 
-    58 set __fn0retval 1
-    59 jump __label17 always
-    60 noop
--    * jump __label19 always
-+   61 noop
-    62 label __label18
-    63 noop
-    64 label __label19
- 
-    88 op add __fn0_result __fn0_result __tmp11
-    89 noop
-    90 noop
--    * jump __label24 always
-+   91 noop
-    92 label __label23
-    93 noop
-    94 label __label24
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-    39 label __label3
-    40 label __label12
-    41 set __fn1_v 41
--    * print __fn1_v
-+   42 print 41
-    43 noop
-    44 label __label13
-    45 set __fn0_amount 20
- 
-    48 label __label14
-    49 set __tmp3 __fn0retval
-    50 label __label15
--    * set __fn2_v __tmp3
--    * print __fn2_v
-+   51 set __fn2_v __fn0retval
-+   52 print __tmp3
-    53 noop
-    54 label __label16
-    55 end
- 
-    75 push bank1 __fn0_result
-    76 push bank1 __fn0_i
-    77 push bank1 __fn0_p
--    * set __fn0_amount __tmp10
-+   78 op sub __fn0_amount __fn0_amount __fn0_p
-    79 set __fn0_index __fn0_i
-    80 callrec bank1 __label0 __label25
-    81 label __label25
  
     85 pop bank1 __fn0_index
     86 pop bank1 __fn0_amount
     87 set __tmp11 __fn0retval
+-    * op add __tmp12 __fn0_result __tmp11
+-    * set __fn0_result __tmp12
++   88 op add __fn0_result __fn0_result __tmp11
+    89 set __tmp9 __fn0_result
+    90 jump __label24 always
+    91 label __label23
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-6 instructions):
+ 
+    39 label __label12
+    40 set __fn1_v 41
+    41 print __fn1_v
+-    * set __tmp2 __fn1_v
+    42 label __label13
+    43 set __fn0_amount 20
+    44 set __fn0_index 1
+ 
+    48 label __label15
+    49 set __fn2_v __tmp3
+    50 print __fn2_v
+-    * set __tmp4 __fn2_v
+    51 label __label16
+    52 end
+    53 label __label0
+ 
+    55 jump __label18 equal __tmp5 false
+    56 set __fn0retval 1
+    57 jump __label17 always
+-    * set __tmp6 null
+    58 jump __label19 always
+    59 label __label18
+-    * set __tmp6 null
+    60 label __label19
+    61 set __fn0_result 0
+    62 set __fn0_i __fn0_index
+ 
+    82 pop bank1 __fn0_amount
+    83 set __tmp11 __fn0retval
+    84 op add __fn0_result __fn0_result __tmp11
+-    * set __tmp9 __fn0_result
+    85 jump __label24 always
+    86 label __label23
+-    * set __tmp9 null
+    87 label __label24
+    88 label __label21
+    89 op add __fn0_i __fn0_i 1
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    51 label __label16
+    52 end
+    53 label __label0
+-    * op equal __tmp5 __fn0_amount 0
+-    * jump __label18 equal __tmp5 false
++   54 jump __label18 notEqual __fn0_amount 0
+    55 set __fn0retval 1
+    56 jump __label17 always
+    57 jump __label19 always
+ 
+    62 label __label20
+    63 jump __label22 greaterThanEq __fn0_i 8
+    64 read __fn0_p bank1 __fn0_i
+-    * op lessThanEq __tmp8 __fn0_p __fn0_amount
+-    * jump __label23 equal __tmp8 false
++   65 jump __label23 greaterThan __fn0_p __fn0_amount
+    66 op sub __tmp10 __fn0_amount __fn0_p
+    67 push bank1 __fn0_amount
+    68 push bank1 __fn0_index
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
+ 
+    54 jump __label18 notEqual __fn0_amount 0
+    55 set __fn0retval 1
+    56 jump __label17 always
+-    * jump __label19 always
+    57 label __label18
+    58 label __label19
+    59 set __fn0_result 0
+ 
+    79 pop bank1 __fn0_amount
+    80 set __tmp11 __fn0retval
+    81 op add __fn0_result __fn0_result __tmp11
+-    * jump __label24 always
+    82 label __label23
+    83 label __label24
+    84 label __label21
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    38 label __label3
+    39 label __label12
+    40 set __fn1_v 41
+-    * print __fn1_v
++   41 print 41
+    42 label __label13
+    43 set __fn0_amount 20
+    44 set __fn0_index 1
+ 
+    46 label __label14
+    47 set __tmp3 __fn0retval
+    48 label __label15
+-    * set __fn2_v __tmp3
+-    * print __fn2_v
++   49 set __fn2_v __fn0retval
++   50 print __tmp3
+    51 label __label16
+    52 end
+    53 label __label0
+ 
+    68 push bank1 __fn0_result
+    69 push bank1 __fn0_i
+    70 push bank1 __fn0_p
+-    * set __fn0_amount __tmp10
++   71 op sub __fn0_amount __fn0_amount __fn0_p
+    72 set __fn0_index __fn0_i
+    73 callrec bank1 __label0 __label25
+    74 label __label25
+ 
+    78 pop bank1 __fn0_index
+    79 pop bank1 __fn0_amount
+    80 set __tmp11 __fn0retval
 -    * op add __fn0_result __fn0_result __tmp11
-+   88 op add __fn0_result __fn0_result __fn0retval
-    89 noop
-    90 noop
-    91 noop
++   81 op add __fn0_result __fn0_result __fn0retval
+    82 label __label23
+    83 label __label24
+    84 label __label21
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
-    38 gotolabel __label11 marker0
-    39 label __label3
-    40 label __label12
+    37 gotolabel __label11 marker0
+    38 label __label3
+    39 label __label12
 -    * set __fn1_v 41
-    41 print 41
-    42 noop
-    43 label __label13
+    40 print 41
+    41 label __label13
+    42 set __fn0_amount 20
  
-    47 label __label14
-    48 set __tmp3 __fn0retval
-    49 label __label15
+    45 label __label14
+    46 set __tmp3 __fn0retval
+    47 label __label15
 -    * set __fn2_v __fn0retval
 -    * print __tmp3
-+   50 print __fn0retval
-    51 noop
-    52 label __label16
-    53 end
++   48 print __fn0retval
+    49 label __label16
+    50 end
+    51 label __label0
  
-    67 read __fn0_p bank1 __fn0_i
-    68 noop
-    69 jump __label23 greaterThan __fn0_p __fn0_amount
+    60 jump __label22 greaterThanEq __fn0_i 8
+    61 read __fn0_p bank1 __fn0_i
+    62 jump __label23 greaterThan __fn0_p __fn0_amount
 -    * op sub __tmp10 __fn0_amount __fn0_p
-    70 push bank1 __fn0_amount
-    71 push bank1 __fn0_index
-    72 push bank1 __fn0_result
+    63 push bank1 __fn0_amount
+    64 push bank1 __fn0_index
+    65 push bank1 __fn0_result
  
-    81 pop bank1 __fn0_result
-    82 pop bank1 __fn0_index
-    83 pop bank1 __fn0_amount
+    74 pop bank1 __fn0_result
+    75 pop bank1 __fn0_index
+    76 pop bank1 __fn0_amount
 -    * set __tmp11 __fn0retval
-    84 op add __fn0_result __fn0_result __fn0retval
-    85 noop
-    86 noop
+    77 op add __fn0_result __fn0_result __fn0retval
+    78 label __label23
+    79 label __label24
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
  
-    45 set __fn0_index 1
-    46 callrec bank1 __label0 __label14
-    47 label __label14
+    43 set __fn0_index 1
+    44 callrec bank1 __label0 __label14
+    45 label __label14
 -    * set __tmp3 __fn0retval
-    48 label __label15
-    49 print __fn0retval
-    50 noop
+    46 label __label15
+    47 print __fn0retval
+    48 label __label16
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-    63 set __fn0_i __fn0_index
-    64 label __label20
-    65 jump __label22 greaterThanEq __fn0_i 8
-+   66 label __label26
-    67 read __fn0_p bank1 __fn0_i
-    68 noop
-    69 jump __label23 greaterThan __fn0_p __fn0_amount
+    57 set __fn0_i __fn0_index
+    58 label __label20
+    59 jump __label22 greaterThanEq __fn0_i 8
++   60 label __label26
+    61 read __fn0_p bank1 __fn0_i
+    62 jump __label23 greaterThan __fn0_p __fn0_amount
+    63 push bank1 __fn0_amount
  
-    90 label __label24
-    91 label __label21
-    92 op add __fn0_i __fn0_i 1
+    79 label __label24
+    80 label __label21
+    81 op add __fn0_i __fn0_i 1
 -    * jump __label20 always
-+   93 jump __label26 lessThan __fn0_i 8
-    94 label __label22
-    95 set __fn0retval __fn0_result
-    96 label __label17
++   82 jump __label26 lessThan __fn0_i 8
+    83 label __label22
+    84 set __fn0retval __fn0_result
+    85 label __label17
 
 Modifications by Loop Unrolling: unroll iteration loop at line 4 (-2 instructions):
      0 set __sp 16
@@ -284,7 +273,6 @@ Modifications by Loop Unrolling: unroll iteration loop at line 4 (-2 instruction
 -    * label __label2
 -    * write value bank1 index
 -    * op add index index 1
--    * noop
 -    * label __label1
 -    * goto __tmp0 marker0
 -    * gotolabel __label11 marker0
@@ -293,54 +281,46 @@ Modifications by Loop Unrolling: unroll iteration loop at line 4 (-2 instruction
 +    3 label __label27
 +    4 write value bank1 index
 +    5 op add index index 1
-+    6 noop
-+    7 label __label28
-+    8 set value 100
-+    9 label __label29
-+   10 write value bank1 index
-+   11 op add index index 1
-+   12 noop
-+   13 label __label30
-+   14 set value 50
-+   15 label __label31
-+   16 write value bank1 index
-+   17 op add index index 1
-+   18 noop
-+   19 label __label32
-+   20 set value 20
-+   21 label __label33
-+   22 write value bank1 index
-+   23 op add index index 1
-+   24 noop
-+   25 label __label34
-+   26 set value 10
-+   27 label __label35
-+   28 write value bank1 index
-+   29 op add index index 1
-+   30 noop
-+   31 label __label36
-+   32 set value 5
-+   33 label __label37
++    6 label __label28
++    7 set value 100
++    8 label __label29
++    9 write value bank1 index
++   10 op add index index 1
++   11 label __label30
++   12 set value 50
++   13 label __label31
++   14 write value bank1 index
++   15 op add index index 1
++   16 label __label32
++   17 set value 20
++   18 label __label33
++   19 write value bank1 index
++   20 op add index index 1
++   21 label __label34
++   22 set value 10
++   23 label __label35
++   24 write value bank1 index
++   25 op add index index 1
++   26 label __label36
++   27 set value 5
++   28 label __label37
++   29 write value bank1 index
++   30 op add index index 1
++   31 label __label38
++   32 set value 2
++   33 label __label39
 +   34 write value bank1 index
 +   35 op add index index 1
-+   36 noop
-+   37 label __label38
-+   38 set value 2
-+   39 label __label39
-+   40 write value bank1 index
-+   41 op add index index 1
-+   42 noop
-+   43 label __label40
-+   44 set value 1
-+   45 label __label41
-+   46 write value bank1 index
-+   47 op add index index 1
-+   48 noop
-+   49 label __label42
-+   50 label __label3
-    51 label __label12
-    52 print 41
-    53 noop
++   36 label __label40
++   37 set value 1
++   38 label __label41
++   39 write value bank1 index
++   40 op add index index 1
++   41 label __label42
++   42 label __label3
+    43 label __label12
+    44 print 41
+    45 label __label13
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -351,74 +331,67 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add index index 1
 +    4 write 200 bank1 0
 +    5 op add index 0 1
-     6 noop
-     7 label __label28
-     8 set value 100
-     9 label __label29
+     6 label __label28
+     7 set value 100
+     8 label __label29
 -    * write value bank1 index
 -    * op add index index 1
-+   10 write 100 bank1 1
-+   11 op add index 1 1
-    12 noop
-    13 label __label30
-    14 set value 50
-    15 label __label31
++    9 write 100 bank1 1
++   10 op add index 1 1
+    11 label __label30
+    12 set value 50
+    13 label __label31
 -    * write value bank1 index
 -    * op add index index 1
-+   16 write 50 bank1 2
-+   17 op add index 2 1
-    18 noop
-    19 label __label32
-    20 set value 20
-    21 label __label33
++   14 write 50 bank1 2
++   15 op add index 2 1
+    16 label __label32
+    17 set value 20
+    18 label __label33
 -    * write value bank1 index
 -    * op add index index 1
-+   22 write 20 bank1 3
-+   23 op add index 3 1
-    24 noop
-    25 label __label34
-    26 set value 10
-    27 label __label35
++   19 write 20 bank1 3
++   20 op add index 3 1
+    21 label __label34
+    22 set value 10
+    23 label __label35
 -    * write value bank1 index
 -    * op add index index 1
-+   28 write 10 bank1 4
-+   29 op add index 4 1
-    30 noop
-    31 label __label36
-    32 set value 5
-    33 label __label37
++   24 write 10 bank1 4
++   25 op add index 4 1
+    26 label __label36
+    27 set value 5
+    28 label __label37
 -    * write value bank1 index
 -    * op add index index 1
-+   34 write 5 bank1 5
-+   35 op add index 5 1
-    36 noop
-    37 label __label38
-    38 set value 2
-    39 label __label39
++   29 write 5 bank1 5
++   30 op add index 5 1
+    31 label __label38
+    32 set value 2
+    33 label __label39
 -    * write value bank1 index
 -    * op add index index 1
-+   40 write 2 bank1 6
-+   41 op add index 6 1
-    42 noop
-    43 label __label40
-    44 set value 1
-    45 label __label41
++   34 write 2 bank1 6
++   35 op add index 6 1
+    36 label __label40
+    37 set value 1
+    38 label __label41
 -    * write value bank1 index
 -    * op add index index 1
-+   46 write 1 bank1 7
-+   47 op add index 7 1
-    48 noop
-    49 label __label42
-    50 label __label3
++   39 write 1 bank1 7
++   40 op add index 7 1
+    41 label __label42
+    42 label __label3
+    43 label __label12
  
-    73 set __fn0_result 0
-    74 set __fn0_i __fn0_index
-    75 label __label20
+    60 set __fn0_result 0
+    61 set __fn0_i __fn0_index
+    62 label __label20
 -    * jump __label22 greaterThanEq __fn0_i 8
-+   76 jump __label22 greaterThanEq __fn0_index 8
-    77 label __label26
-    78 read __fn0_p bank1 __fn0_i
-    79 noop
++   63 jump __label22 greaterThanEq __fn0_index 8
+    64 label __label26
+    65 read __fn0_p bank1 __fn0_i
+    66 jump __label23 greaterThan __fn0_p __fn0_amount
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
      0 set __sp 16
@@ -427,77 +400,61 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
      1 label __label27
      2 write 200 bank1 0
 -    * op add index 0 1
-     3 noop
-     4 label __label28
+     3 label __label28
 -    * set value 100
-     5 label __label29
-     6 write 100 bank1 1
+     4 label __label29
+     5 write 100 bank1 1
 -    * op add index 1 1
-     7 noop
-     8 label __label30
+     6 label __label30
 -    * set value 50
-     9 label __label31
-    10 write 50 bank1 2
+     7 label __label31
+     8 write 50 bank1 2
 -    * op add index 2 1
-    11 noop
-    12 label __label32
+     9 label __label32
 -    * set value 20
-    13 label __label33
-    14 write 20 bank1 3
+    10 label __label33
+    11 write 20 bank1 3
 -    * op add index 3 1
-    15 noop
-    16 label __label34
+    12 label __label34
 -    * set value 10
-    17 label __label35
-    18 write 10 bank1 4
+    13 label __label35
+    14 write 10 bank1 4
 -    * op add index 4 1
-    19 noop
-    20 label __label36
+    15 label __label36
 -    * set value 5
-    21 label __label37
-    22 write 5 bank1 5
+    16 label __label37
+    17 write 5 bank1 5
 -    * op add index 5 1
-    23 noop
-    24 label __label38
+    18 label __label38
 -    * set value 2
-    25 label __label39
-    26 write 2 bank1 6
+    19 label __label39
+    20 write 2 bank1 6
 -    * op add index 6 1
-    27 noop
-    28 label __label40
+    21 label __label40
 -    * set value 1
-    29 label __label41
-    30 write 1 bank1 7
+    22 label __label41
+    23 write 1 bank1 7
 -    * op add index 7 1
-    31 noop
-    32 label __label42
-    33 label __label3
+    24 label __label42
+    25 label __label3
+    26 label __label12
 
 Modifications by Return Optimization: optimize return at line 14 (+2 instructions):
  
-    47 label __label0
-    48 jump __label18 notEqual __fn0_amount 0
-    49 set __fn0retval 1
+    37 label __label0
+    38 jump __label18 notEqual __fn0_amount 0
+    39 set __fn0retval 1
 -    * jump __label17 always
-+   50 return bank1
-    51 noop
-    52 noop
-    53 label __label18
++   40 return bank1
+    41 label __label18
+    42 label __label19
+    43 set __fn0_result 0
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-    48 jump __label18 notEqual __fn0_amount 0
-    49 set __fn0retval 1
-    50 return bank1
--    * noop
--    * noop
-    51 label __label18
-    52 noop
-    53 label __label19
- 
-    87 set __fn0retval __fn0_result
-    88 label __label17
-    89 return bank1
+    71 set __fn0retval __fn0_result
+    72 label __label17
+    73 return bank1
 -    * end
 
 Final code before resolving virtual instructions:

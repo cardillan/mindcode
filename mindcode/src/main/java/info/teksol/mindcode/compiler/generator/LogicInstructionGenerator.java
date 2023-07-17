@@ -306,9 +306,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private void registerConstant(String name, ConstantAstNode value) {
         if (constants.get(name) != null) {
-            throw new MindcodeException("Multiple declarations of constant '" + name + "'.");
+            throw new MindcodeException(value.startToken(), "multiple declarations of constant '%s'.", name);
         } else if (constants.containsKey(name)) {
-            throw new MindcodeException("Cannot redefine variable or function parameter '" + name + "' as a constant.");
+            throw new MindcodeException(value.startToken(), "cannot redefine variable or function parameter '%s' as a constant.", name);
         }
         constants.put(name, value.toLogicLiteral(instructionProcessor));
     }
@@ -366,6 +366,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicValue body = visit(function.getBody());
         emit(createSet(LogicVariable.fnRetVal(localPrefix), body));
         emit(createLabel(returnStack.getReturnLabel()));
+        // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
+        //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
         emit(createGoto(LogicVariable.fnRetAddr(localPrefix), LogicLabel.symbolic(localPrefix)));
     }
 
@@ -465,7 +467,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final LogicLabel returnLabel = nextLabel();
         emit(createSetAddress(LogicVariable.fnRetAddr(localPrefix), returnLabel));
         emit(createCallStackless(function.getLabel()));
-        emit(createGotoLabel(returnLabel, LogicLabel.symbolic(localPrefix))); // where the function must return
+        // Mark position where the function must return
+        // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
+        //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
+        emit(createGotoLabel(returnLabel, LogicLabel.symbolic(localPrefix)));
 
         return passReturnValue(function);
     }
@@ -633,13 +638,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     @Override
     public LogicValue visitConstant(Constant node) {
         if (!localPrefix.isEmpty()) {
-            throw new MindcodeException("Constant declaration not allowed in user function '" + node.getName() + "'.");
+            throw new MindcodeException(node.startToken(), "constant declaration not allowed in user function '%s'.", node.getName());
         }
         AstNode value = expressionEvaluator.evaluate(node.getValue());
         if (value instanceof ConstantAstNode constant) {
             registerConstant(node.getName(), constant);
         } else {
-            throw new MindcodeException("Constant declaration of '" + node.getName() + "' does not use a constant expression.");
+            throw new MindcodeException(node.startToken(), "Constant declaration of '%s' does not use a constant expression.", node.getName());
         }
         return NULL;
     }
@@ -675,14 +680,14 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 LogicArgument prop = visit(propertyAccess.getProperty());
                 String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
                 if (functionMapper.handleProperty(instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
-                    throw new MindcodeException("Undefined property '" + propTarget + "." + prop + "'");
+                    throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", propTarget, prop);
                 }
             }
 
             case VarRef varRef -> {
                 String name = varRef.getName();
                 if (constants.get(name) != null) {
-                    throw new MindcodeException("Assignment to constant '" + name + "' not allowed.");
+                    throw new MindcodeException(node.startToken(), "assignment to constant '%s' not allowed.", name);
                 }
 
                 final LogicValue target = visit(node.getVar());
@@ -691,7 +696,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         emit(createSet(variable, rvalue));
                         return target;
                     } else {
-                        throw new MindcodeException("Assignment to variable '" + target + "' not allowed (name reserved for linked blocks).");
+                        throw new MindcodeException(node.startToken(), "assignment to variable '%s' not allowed (name reserved for linked blocks).", target);
                     }
                 } else {
                     throw new MindcodeInternalError("Unsupported assignment target '" + target + "'.");
@@ -1098,20 +1103,20 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             if (first instanceof NumericLiteral firstLit && last instanceof NumericLiteral lastLit) {
                 if (firstLit.notInteger() || lastLit.notInteger()) {
-                    throw new MindcodeException("Heap declarations must use integer range; found " + heap.getRange());
+                    throw new MindcodeException(heap.startToken(), "heap declarations must use integer range.");
                 }
 
                 int firstInt = firstLit.getAsInteger();
                 int lastInt = lastLit.getAsInteger() + (heap.getRange() instanceof InclusiveRange ? 1 : 0);
 
                 if (firstInt >= lastInt) {
-                    throw new MindcodeException("Empty or invalid range in heap declaration: " + heap.getRange());
+                    throw new MindcodeException(heap.startToken(), "empty or invalid range in heap declaration.");
                 }
 
                 heapBaseAddress = firstInt;
                 heapSize = lastInt - firstInt;
             } else {
-                throw new MindcodeException("Heap declarations must use constant range; found " + heap.getRange());
+                throw new MindcodeException(heap.startToken(), "heap declarations must use constant range.");
             }
         } else {
             heapBaseAddress = 0;
@@ -1132,19 +1137,19 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             if (first instanceof NumericLiteral firstLit && last instanceof NumericLiteral lastLit) {
                 if (firstLit.notInteger() || lastLit.notInteger()) {
-                    throw new MindcodeException("Stack declarations must use integer range; found " + stack.getRange());
+                    throw new MindcodeException(stack.startToken(), "stack declarations must use integer range.");
                 }
 
                 int firstInt = firstLit.getAsInteger();
                 int lastInt = lastLit.getAsInteger() + (stack.getRange() instanceof InclusiveRange ? 1 : 0);
 
                 if (firstInt >= lastInt) {
-                    throw new MindcodeException("Empty or invalid range in stack declaration: " + stack.getRange());
+                    throw new MindcodeException(stack.startToken(), "empty or invalid range in stack declaration.");
                 }
 
                 start = firstInt;
             } else {
-                throw new MindcodeException("Stack declarations must use constant range; found " + stack.getRange());
+                throw new MindcodeException(stack.startToken(), "stack declarations must use constant range.");
             }
         }
 
@@ -1186,7 +1191,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         final List<LogicValue> args = node.getParams().stream().map(this::visit).collect(Collectors.toList());
         LogicValue value = functionMapper.handleProperty(instructions::add, node.getProperty(), target, args);
         if (value == null) {
-            throw new MindcodeException("Undefined property '" + target + "." + node.getProperty() + "'");
+            throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", target, node.getProperty());
         }
         return value;
     }
@@ -1196,18 +1201,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         // Must be therefore handled here and not by the FunctionMapper
         
         if (params.isEmpty()) {
-            throw new MindcodeException("First parameter of printf() function must be a constant string value.");
+            throw new MindcodeException(node.startToken(), "first parameter of printf() function must be a constant string value.");
         }
 
         AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
         if (astFormat instanceof StringLiteral format) {
-            return handlePrintf(format.getText(), params);
+            return handlePrintf(node, format.getText(), params);
         } else {
-            throw new MindcodeException("First parameter of printf() function must be a constant string value.");
+            throw new MindcodeException(node.startToken(), "first parameter of printf() function must be a constant string value.");
         }
     }
 
-    private LogicValue handlePrintf(String format, List<LogicValue> params) {
+    private LogicValue handlePrintf(FunctionCall node, String format, List<LogicValue> params) {
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
         int position = 1;       // Skipping the 1st param, which is the format string
@@ -1236,7 +1241,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                         if (position < params.size()) {
                             emit(createPrint(params.get(position++)));
                         } else {
-                            throw new MindcodeException("Not enough arguments for printf format string " + format);
+                            throw new MindcodeException(node.startToken(), "not enough arguments for printf format string.");
                         }
                     } else {
                         // Going through createVariable ensures proper handling and registering of local variables
@@ -1273,7 +1278,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         if (position < params.size()) {
-            throw new MindcodeException("Too many arguments for printf format string " + format);
+            throw new MindcodeException(node.startToken(), "too many arguments for printf format string.");
         }
 
         return NULL;

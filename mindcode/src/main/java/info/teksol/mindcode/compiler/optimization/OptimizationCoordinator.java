@@ -110,7 +110,7 @@ public class OptimizationCoordinator {
         while (true) {
             int initialSize = codeSize();
             int costLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, profile.getInstructionLimit() - initialSize);
-            int expandedCostLimit = 500 + costLimit;
+            int expandedCostLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : 500 + costLimit;
 
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
@@ -143,10 +143,12 @@ public class OptimizationCoordinator {
                 }
             }
 
-            int difference = codeSize() - initialSize;
-            optimizationStatistics.add(MindcodeMessage.debug(
-                    "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
-            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference));
+            if (profile.getGoal() != GenerationGoal.SIZE) {
+                int difference = codeSize() - initialSize;
+                optimizationStatistics.add(MindcodeMessage.debug(
+                        "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
+                possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference));
+            }
 
             if (selectedAction == null) {
                 break;

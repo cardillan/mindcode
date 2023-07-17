@@ -14,768 +14,713 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
 -    * op add __tmp0 99999900 LINK_ID
 -    * set QUERY_FLAG __tmp0
 +    1 op add QUERY_FLAG 99999900 LINK_ID
-+    2 noop
-     3 sensor __tmp1 vault1 @x
-     4 sensor __tmp2 vault1 @y
-     5 op mul __tmp3 @mapw __tmp2
-     6 op add __tmp4 __tmp1 __tmp3
+     2 sensor __tmp1 vault1 @x
+     3 sensor __tmp2 vault1 @y
+     4 op mul __tmp3 @mapw __tmp2
+     5 op add __tmp4 __tmp1 __tmp3
 -    * op mul __tmp5 100 __tmp4
 -    * set position __tmp5
 -    * op add __tmp6 position LINK_ID
 -    * set ANSWER_FLAG __tmp6
-+    7 op mul position 100 __tmp4
-+    8 noop
-+    9 op add ANSWER_FLAG position LINK_ID
-+   10 noop
-    11 set SERVICED 0
-    12 label __label0
-    13 jump __label2 equal true false
++    6 op mul position 100 __tmp4
++    7 op add ANSWER_FLAG position LINK_ID
+     8 set SERVICED 0
+     9 label __label0
+    10 jump __label2 equal true false
 -    * set __tmp7 @time
 -    * set start __tmp7
-+   14 set start @time
-+   15 noop
-    16 label __label3
-    17 set __fn0_unit @mono
-    18 ubind __fn0_unit
++   11 set start @time
+    12 label __label3
+    13 set __fn0_unit @mono
+    14 ubind __fn0_unit
  
-    20 op equal __tmp10 __tmp9 QUERY_FLAG
-    21 jump __label5 equal __tmp10 false
-    22 ucontrol flag ANSWER_FLAG
+    16 op equal __tmp10 __tmp9 QUERY_FLAG
+    17 jump __label5 equal __tmp10 false
+    18 ucontrol flag ANSWER_FLAG
 -    * op add __tmp12 SERVICED 1
 -    * set SERVICED __tmp12
-+   23 op add SERVICED SERVICED 1
-+   24 noop
-    25 set __tmp11 SERVICED
-    26 jump __label6 always
-    27 label __label5
++   19 op add SERVICED SERVICED 1
+    20 set __tmp11 SERVICED
+    21 jump __label6 always
+    22 label __label5
  
-    36 op equal __tmp15 __tmp14 QUERY_FLAG
-    37 jump __label9 equal __tmp15 false
-    38 ucontrol flag ANSWER_FLAG
+    31 op equal __tmp15 __tmp14 QUERY_FLAG
+    32 jump __label9 equal __tmp15 false
+    33 ucontrol flag ANSWER_FLAG
 -    * op add __tmp17 SERVICED 1
 -    * set SERVICED __tmp17
-+   39 op add SERVICED SERVICED 1
-+   40 noop
-    41 set __tmp16 SERVICED
-    42 jump __label10 always
-    43 label __label9
++   34 op add SERVICED SERVICED 1
+    35 set __tmp16 SERVICED
+    36 jump __label10 always
+    37 label __label9
  
-    52 op equal __tmp20 __tmp19 QUERY_FLAG
-    53 jump __label13 equal __tmp20 false
-    54 ucontrol flag ANSWER_FLAG
+    46 op equal __tmp20 __tmp19 QUERY_FLAG
+    47 jump __label13 equal __tmp20 false
+    48 ucontrol flag ANSWER_FLAG
 -    * op add __tmp22 SERVICED 1
 -    * set SERVICED __tmp22
-+   55 op add SERVICED SERVICED 1
-+   56 noop
-    57 set __tmp21 SERVICED
-    58 jump __label14 always
-    59 label __label13
++   49 op add SERVICED SERVICED 1
+    50 set __tmp21 SERVICED
+    51 jump __label14 always
+    52 label __label13
  
-    68 op equal __tmp25 __tmp24 QUERY_FLAG
-    69 jump __label17 equal __tmp25 false
-    70 ucontrol flag ANSWER_FLAG
+    61 op equal __tmp25 __tmp24 QUERY_FLAG
+    62 jump __label17 equal __tmp25 false
+    63 ucontrol flag ANSWER_FLAG
 -    * op add __tmp27 SERVICED 1
 -    * set SERVICED __tmp27
-+   71 op add SERVICED SERVICED 1
-+   72 noop
-    73 set __tmp26 SERVICED
-    74 jump __label18 always
-    75 label __label17
++   64 op add SERVICED SERVICED 1
+    65 set __tmp26 SERVICED
+    66 jump __label18 always
+    67 label __label17
  
-    84 op equal __tmp30 __tmp29 QUERY_FLAG
-    85 jump __label21 equal __tmp30 false
-    86 ucontrol flag ANSWER_FLAG
+    76 op equal __tmp30 __tmp29 QUERY_FLAG
+    77 jump __label21 equal __tmp30 false
+    78 ucontrol flag ANSWER_FLAG
 -    * op add __tmp32 SERVICED 1
 -    * set SERVICED __tmp32
-+   87 op add SERVICED SERVICED 1
-+   88 noop
-    89 set __tmp31 SERVICED
-    90 jump __label22 always
-    91 label __label21
++   79 op add SERVICED SERVICED 1
+    80 set __tmp31 SERVICED
+    81 jump __label22 always
+    82 label __label21
  
-   100 op equal __tmp35 __tmp34 QUERY_FLAG
-   101 jump __label25 equal __tmp35 false
-   102 ucontrol flag ANSWER_FLAG
+    91 op equal __tmp35 __tmp34 QUERY_FLAG
+    92 jump __label25 equal __tmp35 false
+    93 ucontrol flag ANSWER_FLAG
 -    * op add __tmp37 SERVICED 1
 -    * set SERVICED __tmp37
-+  103 op add SERVICED SERVICED 1
-+  104 noop
-   105 set __tmp36 SERVICED
-   106 jump __label26 always
-   107 label __label25
++   94 op add SERVICED SERVICED 1
+    95 set __tmp36 SERVICED
+    96 jump __label26 always
+    97 label __label25
  
-   116 op equal __tmp40 __tmp39 QUERY_FLAG
-   117 jump __label29 equal __tmp40 false
-   118 ucontrol flag ANSWER_FLAG
+   106 op equal __tmp40 __tmp39 QUERY_FLAG
+   107 jump __label29 equal __tmp40 false
+   108 ucontrol flag ANSWER_FLAG
 -    * op add __tmp42 SERVICED 1
 -    * set SERVICED __tmp42
-+  119 op add SERVICED SERVICED 1
-+  120 noop
-   121 set __tmp41 SERVICED
-   122 jump __label30 always
-   123 label __label29
++  109 op add SERVICED SERVICED 1
+   110 set __tmp41 SERVICED
+   111 jump __label30 always
+   112 label __label29
  
-   132 op equal __tmp45 __tmp44 QUERY_FLAG
-   133 jump __label33 equal __tmp45 false
-   134 ucontrol flag ANSWER_FLAG
+   121 op equal __tmp45 __tmp44 QUERY_FLAG
+   122 jump __label33 equal __tmp45 false
+   123 ucontrol flag ANSWER_FLAG
 -    * op add __tmp47 SERVICED 1
 -    * set SERVICED __tmp47
-+  135 op add SERVICED SERVICED 1
-+  136 noop
-   137 set __tmp46 SERVICED
-   138 jump __label34 always
-   139 label __label33
++  124 op add SERVICED SERVICED 1
+   125 set __tmp46 SERVICED
+   126 jump __label34 always
+   127 label __label33
  
-   148 op equal __tmp50 __tmp49 QUERY_FLAG
-   149 jump __label37 equal __tmp50 false
-   150 ucontrol flag ANSWER_FLAG
+   136 op equal __tmp50 __tmp49 QUERY_FLAG
+   137 jump __label37 equal __tmp50 false
+   138 ucontrol flag ANSWER_FLAG
 -    * op add __tmp52 SERVICED 1
 -    * set SERVICED __tmp52
-+  151 op add SERVICED SERVICED 1
-+  152 noop
-   153 set __tmp51 SERVICED
-   154 jump __label38 always
-   155 label __label37
++  139 op add SERVICED SERVICED 1
+   140 set __tmp51 SERVICED
+   141 jump __label38 always
+   142 label __label37
  
-   164 op equal __tmp55 __tmp54 QUERY_FLAG
-   165 jump __label41 equal __tmp55 false
-   166 ucontrol flag ANSWER_FLAG
+   151 op equal __tmp55 __tmp54 QUERY_FLAG
+   152 jump __label41 equal __tmp55 false
+   153 ucontrol flag ANSWER_FLAG
 -    * op add __tmp57 SERVICED 1
 -    * set SERVICED __tmp57
-+  167 op add SERVICED SERVICED 1
-+  168 noop
-   169 set __tmp56 SERVICED
-   170 jump __label42 always
-   171 label __label41
++  154 op add SERVICED SERVICED 1
+   155 set __tmp56 SERVICED
+   156 jump __label42 always
+   157 label __label41
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
  
-    27 label __label5
-    28 set __tmp11 null
-    29 label __label6
+    22 label __label5
+    23 set __tmp11 null
+    24 label __label6
 -    * set __tmp8 __tmp11
-+   30 noop
-    31 label __label4
-    32 label __label7
-    33 set __fn1_unit @poly
+    25 label __label4
+    26 label __label7
+    27 set __fn1_unit @poly
  
-    43 label __label9
-    44 set __tmp16 null
-    45 label __label10
+    36 label __label9
+    37 set __tmp16 null
+    38 label __label10
 -    * set __tmp13 __tmp16
-+   46 noop
-    47 label __label8
-    48 label __label11
-    49 set __fn2_unit @mega
+    39 label __label8
+    40 label __label11
+    41 set __fn2_unit @mega
  
-    59 label __label13
-    60 set __tmp21 null
-    61 label __label14
+    50 label __label13
+    51 set __tmp21 null
+    52 label __label14
 -    * set __tmp18 __tmp21
-+   62 noop
-    63 label __label12
-    64 label __label15
-    65 set __fn3_unit @quad
+    53 label __label12
+    54 label __label15
+    55 set __fn3_unit @quad
  
-    75 label __label17
-    76 set __tmp26 null
-    77 label __label18
+    64 label __label17
+    65 set __tmp26 null
+    66 label __label18
 -    * set __tmp23 __tmp26
-+   78 noop
-    79 label __label16
-    80 label __label19
-    81 set __fn4_unit @oct
+    67 label __label16
+    68 label __label19
+    69 set __fn4_unit @oct
  
-    91 label __label21
-    92 set __tmp31 null
-    93 label __label22
+    78 label __label21
+    79 set __tmp31 null
+    80 label __label22
 -    * set __tmp28 __tmp31
-+   94 noop
-    95 label __label20
-    96 label __label23
-    97 set __fn5_unit @flare
+    81 label __label20
+    82 label __label23
+    83 set __fn5_unit @flare
  
-   107 label __label25
-   108 set __tmp36 null
-   109 label __label26
+    92 label __label25
+    93 set __tmp36 null
+    94 label __label26
 -    * set __tmp33 __tmp36
-+  110 noop
-   111 label __label24
-   112 label __label27
-   113 set __fn6_unit @horizon
+    95 label __label24
+    96 label __label27
+    97 set __fn6_unit @horizon
  
-   123 label __label29
-   124 set __tmp41 null
-   125 label __label30
+   106 label __label29
+   107 set __tmp41 null
+   108 label __label30
 -    * set __tmp38 __tmp41
-+  126 noop
-   127 label __label28
-   128 label __label31
-   129 set __fn7_unit @zenith
+   109 label __label28
+   110 label __label31
+   111 set __fn7_unit @zenith
  
-   139 label __label33
-   140 set __tmp46 null
-   141 label __label34
+   120 label __label33
+   121 set __tmp46 null
+   122 label __label34
 -    * set __tmp43 __tmp46
-+  142 noop
-   143 label __label32
-   144 label __label35
-   145 set __fn8_unit @antumbra
+   123 label __label32
+   124 label __label35
+   125 set __fn8_unit @antumbra
  
-   155 label __label37
-   156 set __tmp51 null
-   157 label __label38
+   134 label __label37
+   135 set __tmp51 null
+   136 label __label38
 -    * set __tmp48 __tmp51
-+  158 noop
-   159 label __label36
-   160 label __label39
-   161 set __fn9_unit @eclipse
+   137 label __label36
+   138 label __label39
+   139 set __fn9_unit @eclipse
  
-   171 label __label41
-   172 set __tmp56 null
-   173 label __label42
+   148 label __label41
+   149 set __tmp56 null
+   150 label __label42
 -    * set __tmp53 __tmp56
-+  174 noop
-   175 label __label40
-   176 print "Remote vault [gold]#"
-   177 print LINK_ID
+   151 label __label40
+   152 print "Remote vault [gold]#"
+   153 print LINK_ID
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-20 instructions):
  
-    22 ucontrol flag ANSWER_FLAG
-    23 op add SERVICED SERVICED 1
-    24 noop
+    17 jump __label5 equal __tmp10 false
+    18 ucontrol flag ANSWER_FLAG
+    19 op add SERVICED SERVICED 1
 -    * set __tmp11 SERVICED
-+   25 noop
-    26 jump __label6 always
-    27 label __label5
+    20 jump __label6 always
+    21 label __label5
 -    * set __tmp11 null
-+   28 noop
-    29 label __label6
-    30 noop
-    31 label __label4
+    22 label __label6
+    23 label __label4
+    24 label __label7
  
-    38 ucontrol flag ANSWER_FLAG
-    39 op add SERVICED SERVICED 1
-    40 noop
+    29 jump __label9 equal __tmp15 false
+    30 ucontrol flag ANSWER_FLAG
+    31 op add SERVICED SERVICED 1
 -    * set __tmp16 SERVICED
-+   41 noop
-    42 jump __label10 always
-    43 label __label9
+    32 jump __label10 always
+    33 label __label9
 -    * set __tmp16 null
-+   44 noop
-    45 label __label10
-    46 noop
-    47 label __label8
+    34 label __label10
+    35 label __label8
+    36 label __label11
  
+    41 jump __label13 equal __tmp20 false
+    42 ucontrol flag ANSWER_FLAG
+    43 op add SERVICED SERVICED 1
+-    * set __tmp21 SERVICED
+    44 jump __label14 always
+    45 label __label13
+-    * set __tmp21 null
+    46 label __label14
+    47 label __label12
+    48 label __label15
+ 
+    53 jump __label17 equal __tmp25 false
     54 ucontrol flag ANSWER_FLAG
     55 op add SERVICED SERVICED 1
-    56 noop
--    * set __tmp21 SERVICED
-+   57 noop
-    58 jump __label14 always
-    59 label __label13
--    * set __tmp21 null
-+   60 noop
-    61 label __label14
-    62 noop
-    63 label __label12
- 
-    70 ucontrol flag ANSWER_FLAG
-    71 op add SERVICED SERVICED 1
-    72 noop
 -    * set __tmp26 SERVICED
-+   73 noop
-    74 jump __label18 always
-    75 label __label17
+    56 jump __label18 always
+    57 label __label17
 -    * set __tmp26 null
-+   76 noop
-    77 label __label18
-    78 noop
-    79 label __label16
+    58 label __label18
+    59 label __label16
+    60 label __label19
  
-    86 ucontrol flag ANSWER_FLAG
-    87 op add SERVICED SERVICED 1
-    88 noop
+    65 jump __label21 equal __tmp30 false
+    66 ucontrol flag ANSWER_FLAG
+    67 op add SERVICED SERVICED 1
 -    * set __tmp31 SERVICED
-+   89 noop
-    90 jump __label22 always
-    91 label __label21
+    68 jump __label22 always
+    69 label __label21
 -    * set __tmp31 null
-+   92 noop
-    93 label __label22
-    94 noop
-    95 label __label20
+    70 label __label22
+    71 label __label20
+    72 label __label23
  
+    77 jump __label25 equal __tmp35 false
+    78 ucontrol flag ANSWER_FLAG
+    79 op add SERVICED SERVICED 1
+-    * set __tmp36 SERVICED
+    80 jump __label26 always
+    81 label __label25
+-    * set __tmp36 null
+    82 label __label26
+    83 label __label24
+    84 label __label27
+ 
+    89 jump __label29 equal __tmp40 false
+    90 ucontrol flag ANSWER_FLAG
+    91 op add SERVICED SERVICED 1
+-    * set __tmp41 SERVICED
+    92 jump __label30 always
+    93 label __label29
+-    * set __tmp41 null
+    94 label __label30
+    95 label __label28
+    96 label __label31
+ 
+   101 jump __label33 equal __tmp45 false
    102 ucontrol flag ANSWER_FLAG
    103 op add SERVICED SERVICED 1
-   104 noop
--    * set __tmp36 SERVICED
-+  105 noop
-   106 jump __label26 always
-   107 label __label25
--    * set __tmp36 null
-+  108 noop
-   109 label __label26
-   110 noop
-   111 label __label24
- 
-   118 ucontrol flag ANSWER_FLAG
-   119 op add SERVICED SERVICED 1
-   120 noop
--    * set __tmp41 SERVICED
-+  121 noop
-   122 jump __label30 always
-   123 label __label29
--    * set __tmp41 null
-+  124 noop
-   125 label __label30
-   126 noop
-   127 label __label28
- 
-   134 ucontrol flag ANSWER_FLAG
-   135 op add SERVICED SERVICED 1
-   136 noop
 -    * set __tmp46 SERVICED
-+  137 noop
-   138 jump __label34 always
-   139 label __label33
+   104 jump __label34 always
+   105 label __label33
 -    * set __tmp46 null
-+  140 noop
-   141 label __label34
-   142 noop
-   143 label __label32
+   106 label __label34
+   107 label __label32
+   108 label __label35
  
-   150 ucontrol flag ANSWER_FLAG
-   151 op add SERVICED SERVICED 1
-   152 noop
+   113 jump __label37 equal __tmp50 false
+   114 ucontrol flag ANSWER_FLAG
+   115 op add SERVICED SERVICED 1
 -    * set __tmp51 SERVICED
-+  153 noop
-   154 jump __label38 always
-   155 label __label37
+   116 jump __label38 always
+   117 label __label37
 -    * set __tmp51 null
-+  156 noop
-   157 label __label38
-   158 noop
-   159 label __label36
+   118 label __label38
+   119 label __label36
+   120 label __label39
  
-   166 ucontrol flag ANSWER_FLAG
-   167 op add SERVICED SERVICED 1
-   168 noop
+   125 jump __label41 equal __tmp55 false
+   126 ucontrol flag ANSWER_FLAG
+   127 op add SERVICED SERVICED 1
 -    * set __tmp56 SERVICED
-+  169 noop
-   170 jump __label42 always
-   171 label __label41
+   128 jump __label42 always
+   129 label __label41
 -    * set __tmp56 null
-+  172 noop
-   173 label __label42
-   174 noop
-   175 label __label40
+   130 label __label42
+   131 label __label40
+   132 print "Remote vault [gold]#"
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
-    10 noop
-    11 set SERVICED 0
-    12 label __label0
+     7 op add ANSWER_FLAG position LINK_ID
+     8 set SERVICED 0
+     9 label __label0
 -    * jump __label2 equal true false
-+   13 noop
-    14 set start @time
-    15 noop
-    16 label __label3
+    10 set start @time
+    11 label __label3
+    12 set __fn0_unit @mono
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 instructions):
  
-    17 set __fn0_unit @mono
-    18 ubind __fn0_unit
-    19 sensor __tmp9 @unit @flag
+    12 set __fn0_unit @mono
+    13 ubind __fn0_unit
+    14 sensor __tmp9 @unit @flag
 -    * op equal __tmp10 __tmp9 QUERY_FLAG
 -    * jump __label5 equal __tmp10 false
-+   20 jump __label5 notEqual __tmp9 QUERY_FLAG
-    21 ucontrol flag ANSWER_FLAG
-    22 op add SERVICED SERVICED 1
-    23 noop
++   15 jump __label5 notEqual __tmp9 QUERY_FLAG
+    16 ucontrol flag ANSWER_FLAG
+    17 op add SERVICED SERVICED 1
+    18 jump __label6 always
  
-    32 set __fn1_unit @poly
-    33 ubind __fn1_unit
-    34 sensor __tmp14 @unit @flag
+    23 set __fn1_unit @poly
+    24 ubind __fn1_unit
+    25 sensor __tmp14 @unit @flag
 -    * op equal __tmp15 __tmp14 QUERY_FLAG
 -    * jump __label9 equal __tmp15 false
-+   35 jump __label9 notEqual __tmp14 QUERY_FLAG
-    36 ucontrol flag ANSWER_FLAG
-    37 op add SERVICED SERVICED 1
-    38 noop
++   26 jump __label9 notEqual __tmp14 QUERY_FLAG
+    27 ucontrol flag ANSWER_FLAG
+    28 op add SERVICED SERVICED 1
+    29 jump __label10 always
  
-    47 set __fn2_unit @mega
-    48 ubind __fn2_unit
-    49 sensor __tmp19 @unit @flag
+    34 set __fn2_unit @mega
+    35 ubind __fn2_unit
+    36 sensor __tmp19 @unit @flag
 -    * op equal __tmp20 __tmp19 QUERY_FLAG
 -    * jump __label13 equal __tmp20 false
-+   50 jump __label13 notEqual __tmp19 QUERY_FLAG
-    51 ucontrol flag ANSWER_FLAG
-    52 op add SERVICED SERVICED 1
-    53 noop
++   37 jump __label13 notEqual __tmp19 QUERY_FLAG
+    38 ucontrol flag ANSWER_FLAG
+    39 op add SERVICED SERVICED 1
+    40 jump __label14 always
  
-    62 set __fn3_unit @quad
-    63 ubind __fn3_unit
-    64 sensor __tmp24 @unit @flag
+    45 set __fn3_unit @quad
+    46 ubind __fn3_unit
+    47 sensor __tmp24 @unit @flag
 -    * op equal __tmp25 __tmp24 QUERY_FLAG
 -    * jump __label17 equal __tmp25 false
-+   65 jump __label17 notEqual __tmp24 QUERY_FLAG
-    66 ucontrol flag ANSWER_FLAG
-    67 op add SERVICED SERVICED 1
-    68 noop
++   48 jump __label17 notEqual __tmp24 QUERY_FLAG
+    49 ucontrol flag ANSWER_FLAG
+    50 op add SERVICED SERVICED 1
+    51 jump __label18 always
  
-    77 set __fn4_unit @oct
-    78 ubind __fn4_unit
-    79 sensor __tmp29 @unit @flag
+    56 set __fn4_unit @oct
+    57 ubind __fn4_unit
+    58 sensor __tmp29 @unit @flag
 -    * op equal __tmp30 __tmp29 QUERY_FLAG
 -    * jump __label21 equal __tmp30 false
-+   80 jump __label21 notEqual __tmp29 QUERY_FLAG
-    81 ucontrol flag ANSWER_FLAG
-    82 op add SERVICED SERVICED 1
-    83 noop
++   59 jump __label21 notEqual __tmp29 QUERY_FLAG
+    60 ucontrol flag ANSWER_FLAG
+    61 op add SERVICED SERVICED 1
+    62 jump __label22 always
  
-    92 set __fn5_unit @flare
-    93 ubind __fn5_unit
-    94 sensor __tmp34 @unit @flag
+    67 set __fn5_unit @flare
+    68 ubind __fn5_unit
+    69 sensor __tmp34 @unit @flag
 -    * op equal __tmp35 __tmp34 QUERY_FLAG
 -    * jump __label25 equal __tmp35 false
-+   95 jump __label25 notEqual __tmp34 QUERY_FLAG
-    96 ucontrol flag ANSWER_FLAG
-    97 op add SERVICED SERVICED 1
-    98 noop
++   70 jump __label25 notEqual __tmp34 QUERY_FLAG
+    71 ucontrol flag ANSWER_FLAG
+    72 op add SERVICED SERVICED 1
+    73 jump __label26 always
  
-   107 set __fn6_unit @horizon
-   108 ubind __fn6_unit
-   109 sensor __tmp39 @unit @flag
+    78 set __fn6_unit @horizon
+    79 ubind __fn6_unit
+    80 sensor __tmp39 @unit @flag
 -    * op equal __tmp40 __tmp39 QUERY_FLAG
 -    * jump __label29 equal __tmp40 false
-+  110 jump __label29 notEqual __tmp39 QUERY_FLAG
-   111 ucontrol flag ANSWER_FLAG
-   112 op add SERVICED SERVICED 1
-   113 noop
++   81 jump __label29 notEqual __tmp39 QUERY_FLAG
+    82 ucontrol flag ANSWER_FLAG
+    83 op add SERVICED SERVICED 1
+    84 jump __label30 always
  
-   122 set __fn7_unit @zenith
-   123 ubind __fn7_unit
-   124 sensor __tmp44 @unit @flag
+    89 set __fn7_unit @zenith
+    90 ubind __fn7_unit
+    91 sensor __tmp44 @unit @flag
 -    * op equal __tmp45 __tmp44 QUERY_FLAG
 -    * jump __label33 equal __tmp45 false
-+  125 jump __label33 notEqual __tmp44 QUERY_FLAG
-   126 ucontrol flag ANSWER_FLAG
-   127 op add SERVICED SERVICED 1
-   128 noop
++   92 jump __label33 notEqual __tmp44 QUERY_FLAG
+    93 ucontrol flag ANSWER_FLAG
+    94 op add SERVICED SERVICED 1
+    95 jump __label34 always
  
-   137 set __fn8_unit @antumbra
-   138 ubind __fn8_unit
-   139 sensor __tmp49 @unit @flag
+   100 set __fn8_unit @antumbra
+   101 ubind __fn8_unit
+   102 sensor __tmp49 @unit @flag
 -    * op equal __tmp50 __tmp49 QUERY_FLAG
 -    * jump __label37 equal __tmp50 false
-+  140 jump __label37 notEqual __tmp49 QUERY_FLAG
-   141 ucontrol flag ANSWER_FLAG
-   142 op add SERVICED SERVICED 1
-   143 noop
++  103 jump __label37 notEqual __tmp49 QUERY_FLAG
+   104 ucontrol flag ANSWER_FLAG
+   105 op add SERVICED SERVICED 1
+   106 jump __label38 always
  
-   152 set __fn9_unit @eclipse
-   153 ubind __fn9_unit
-   154 sensor __tmp54 @unit @flag
+   111 set __fn9_unit @eclipse
+   112 ubind __fn9_unit
+   113 sensor __tmp54 @unit @flag
 -    * op equal __tmp55 __tmp54 QUERY_FLAG
 -    * jump __label41 equal __tmp55 false
-+  155 jump __label41 notEqual __tmp54 QUERY_FLAG
-   156 ucontrol flag ANSWER_FLAG
-   157 op add SERVICED SERVICED 1
-   158 noop
++  114 jump __label41 notEqual __tmp54 QUERY_FLAG
+   115 ucontrol flag ANSWER_FLAG
+   116 op add SERVICED SERVICED 1
+   117 jump __label42 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-10 instructions):
  
-    22 op add SERVICED SERVICED 1
-    23 noop
-    24 noop
+    15 jump __label5 notEqual __tmp9 QUERY_FLAG
+    16 ucontrol flag ANSWER_FLAG
+    17 op add SERVICED SERVICED 1
 -    * jump __label6 always
-+   25 noop
-    26 label __label5
-    27 noop
-    28 label __label6
+    18 label __label5
+    19 label __label6
+    20 label __label4
  
-    37 op add SERVICED SERVICED 1
-    38 noop
-    39 noop
+    25 jump __label9 notEqual __tmp14 QUERY_FLAG
+    26 ucontrol flag ANSWER_FLAG
+    27 op add SERVICED SERVICED 1
 -    * jump __label10 always
-+   40 noop
-    41 label __label9
-    42 noop
-    43 label __label10
+    28 label __label9
+    29 label __label10
+    30 label __label8
  
-    52 op add SERVICED SERVICED 1
-    53 noop
-    54 noop
+    35 jump __label13 notEqual __tmp19 QUERY_FLAG
+    36 ucontrol flag ANSWER_FLAG
+    37 op add SERVICED SERVICED 1
 -    * jump __label14 always
-+   55 noop
-    56 label __label13
-    57 noop
-    58 label __label14
+    38 label __label13
+    39 label __label14
+    40 label __label12
  
-    67 op add SERVICED SERVICED 1
-    68 noop
-    69 noop
+    45 jump __label17 notEqual __tmp24 QUERY_FLAG
+    46 ucontrol flag ANSWER_FLAG
+    47 op add SERVICED SERVICED 1
 -    * jump __label18 always
-+   70 noop
-    71 label __label17
-    72 noop
-    73 label __label18
+    48 label __label17
+    49 label __label18
+    50 label __label16
  
-    82 op add SERVICED SERVICED 1
-    83 noop
-    84 noop
+    55 jump __label21 notEqual __tmp29 QUERY_FLAG
+    56 ucontrol flag ANSWER_FLAG
+    57 op add SERVICED SERVICED 1
 -    * jump __label22 always
-+   85 noop
-    86 label __label21
-    87 noop
-    88 label __label22
+    58 label __label21
+    59 label __label22
+    60 label __label20
  
-    97 op add SERVICED SERVICED 1
-    98 noop
-    99 noop
+    65 jump __label25 notEqual __tmp34 QUERY_FLAG
+    66 ucontrol flag ANSWER_FLAG
+    67 op add SERVICED SERVICED 1
 -    * jump __label26 always
-+  100 noop
-   101 label __label25
-   102 noop
-   103 label __label26
+    68 label __label25
+    69 label __label26
+    70 label __label24
  
-   112 op add SERVICED SERVICED 1
-   113 noop
-   114 noop
+    75 jump __label29 notEqual __tmp39 QUERY_FLAG
+    76 ucontrol flag ANSWER_FLAG
+    77 op add SERVICED SERVICED 1
 -    * jump __label30 always
-+  115 noop
-   116 label __label29
-   117 noop
-   118 label __label30
+    78 label __label29
+    79 label __label30
+    80 label __label28
  
-   127 op add SERVICED SERVICED 1
-   128 noop
-   129 noop
+    85 jump __label33 notEqual __tmp44 QUERY_FLAG
+    86 ucontrol flag ANSWER_FLAG
+    87 op add SERVICED SERVICED 1
 -    * jump __label34 always
-+  130 noop
-   131 label __label33
-   132 noop
-   133 label __label34
+    88 label __label33
+    89 label __label34
+    90 label __label32
  
-   142 op add SERVICED SERVICED 1
-   143 noop
-   144 noop
+    95 jump __label37 notEqual __tmp49 QUERY_FLAG
+    96 ucontrol flag ANSWER_FLAG
+    97 op add SERVICED SERVICED 1
 -    * jump __label38 always
-+  145 noop
-   146 label __label37
-   147 noop
-   148 label __label38
+    98 label __label37
+    99 label __label38
+   100 label __label36
  
-   157 op add SERVICED SERVICED 1
-   158 noop
-   159 noop
+   105 jump __label41 notEqual __tmp54 QUERY_FLAG
+   106 ucontrol flag ANSWER_FLAG
+   107 op add SERVICED SERVICED 1
 -    * jump __label42 always
-+  160 noop
-   161 label __label41
-   162 noop
-   163 label __label42
+   108 label __label41
+   109 label __label42
+   110 label __label40
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    15 noop
-    16 label __label3
-    17 set __fn0_unit @mono
+    10 set start @time
+    11 label __label3
+    12 set __fn0_unit @mono
 -    * ubind __fn0_unit
-+   18 ubind @mono
-    19 sensor __tmp9 @unit @flag
-    20 jump __label5 notEqual __tmp9 QUERY_FLAG
-    21 ucontrol flag ANSWER_FLAG
++   13 ubind @mono
+    14 sensor __tmp9 @unit @flag
+    15 jump __label5 notEqual __tmp9 QUERY_FLAG
+    16 ucontrol flag ANSWER_FLAG
  
-    30 label __label4
-    31 label __label7
-    32 set __fn1_unit @poly
+    20 label __label4
+    21 label __label7
+    22 set __fn1_unit @poly
 -    * ubind __fn1_unit
-+   33 ubind @poly
-    34 sensor __tmp14 @unit @flag
-    35 jump __label9 notEqual __tmp14 QUERY_FLAG
++   23 ubind @poly
+    24 sensor __tmp14 @unit @flag
+    25 jump __label9 notEqual __tmp14 QUERY_FLAG
+    26 ucontrol flag ANSWER_FLAG
+ 
+    30 label __label8
+    31 label __label11
+    32 set __fn2_unit @mega
+-    * ubind __fn2_unit
++   33 ubind @mega
+    34 sensor __tmp19 @unit @flag
+    35 jump __label13 notEqual __tmp19 QUERY_FLAG
     36 ucontrol flag ANSWER_FLAG
  
-    45 label __label8
-    46 label __label11
-    47 set __fn2_unit @mega
--    * ubind __fn2_unit
-+   48 ubind @mega
-    49 sensor __tmp19 @unit @flag
-    50 jump __label13 notEqual __tmp19 QUERY_FLAG
-    51 ucontrol flag ANSWER_FLAG
- 
-    60 label __label12
-    61 label __label15
-    62 set __fn3_unit @quad
+    40 label __label12
+    41 label __label15
+    42 set __fn3_unit @quad
 -    * ubind __fn3_unit
-+   63 ubind @quad
-    64 sensor __tmp24 @unit @flag
-    65 jump __label17 notEqual __tmp24 QUERY_FLAG
++   43 ubind @quad
+    44 sensor __tmp24 @unit @flag
+    45 jump __label17 notEqual __tmp24 QUERY_FLAG
+    46 ucontrol flag ANSWER_FLAG
+ 
+    50 label __label16
+    51 label __label19
+    52 set __fn4_unit @oct
+-    * ubind __fn4_unit
++   53 ubind @oct
+    54 sensor __tmp29 @unit @flag
+    55 jump __label21 notEqual __tmp29 QUERY_FLAG
+    56 ucontrol flag ANSWER_FLAG
+ 
+    60 label __label20
+    61 label __label23
+    62 set __fn5_unit @flare
+-    * ubind __fn5_unit
++   63 ubind @flare
+    64 sensor __tmp34 @unit @flag
+    65 jump __label25 notEqual __tmp34 QUERY_FLAG
     66 ucontrol flag ANSWER_FLAG
  
-    75 label __label16
-    76 label __label19
-    77 set __fn4_unit @oct
--    * ubind __fn4_unit
-+   78 ubind @oct
-    79 sensor __tmp29 @unit @flag
-    80 jump __label21 notEqual __tmp29 QUERY_FLAG
-    81 ucontrol flag ANSWER_FLAG
+    70 label __label24
+    71 label __label27
+    72 set __fn6_unit @horizon
+-    * ubind __fn6_unit
++   73 ubind @horizon
+    74 sensor __tmp39 @unit @flag
+    75 jump __label29 notEqual __tmp39 QUERY_FLAG
+    76 ucontrol flag ANSWER_FLAG
  
-    90 label __label20
-    91 label __label23
-    92 set __fn5_unit @flare
--    * ubind __fn5_unit
-+   93 ubind @flare
-    94 sensor __tmp34 @unit @flag
-    95 jump __label25 notEqual __tmp34 QUERY_FLAG
+    80 label __label28
+    81 label __label31
+    82 set __fn7_unit @zenith
+-    * ubind __fn7_unit
++   83 ubind @zenith
+    84 sensor __tmp44 @unit @flag
+    85 jump __label33 notEqual __tmp44 QUERY_FLAG
+    86 ucontrol flag ANSWER_FLAG
+ 
+    90 label __label32
+    91 label __label35
+    92 set __fn8_unit @antumbra
+-    * ubind __fn8_unit
++   93 ubind @antumbra
+    94 sensor __tmp49 @unit @flag
+    95 jump __label37 notEqual __tmp49 QUERY_FLAG
     96 ucontrol flag ANSWER_FLAG
  
-   105 label __label24
-   106 label __label27
-   107 set __fn6_unit @horizon
--    * ubind __fn6_unit
-+  108 ubind @horizon
-   109 sensor __tmp39 @unit @flag
-   110 jump __label29 notEqual __tmp39 QUERY_FLAG
-   111 ucontrol flag ANSWER_FLAG
- 
-   120 label __label28
-   121 label __label31
-   122 set __fn7_unit @zenith
--    * ubind __fn7_unit
-+  123 ubind @zenith
-   124 sensor __tmp44 @unit @flag
-   125 jump __label33 notEqual __tmp44 QUERY_FLAG
-   126 ucontrol flag ANSWER_FLAG
- 
-   135 label __label32
-   136 label __label35
-   137 set __fn8_unit @antumbra
--    * ubind __fn8_unit
-+  138 ubind @antumbra
-   139 sensor __tmp49 @unit @flag
-   140 jump __label37 notEqual __tmp49 QUERY_FLAG
-   141 ucontrol flag ANSWER_FLAG
- 
-   150 label __label36
-   151 label __label39
-   152 set __fn9_unit @eclipse
+   100 label __label36
+   101 label __label39
+   102 set __fn9_unit @eclipse
 -    * ubind __fn9_unit
-+  153 ubind @eclipse
-   154 sensor __tmp54 @unit @flag
-   155 jump __label41 notEqual __tmp54 QUERY_FLAG
-   156 ucontrol flag ANSWER_FLAG
++  103 ubind @eclipse
+   104 sensor __tmp54 @unit @flag
+   105 jump __label41 notEqual __tmp54 QUERY_FLAG
+   106 ucontrol flag ANSWER_FLAG
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-10 instructions):
  
-    14 set start @time
-    15 noop
-    16 label __label3
+     9 label __label0
+    10 set start @time
+    11 label __label3
 -    * set __fn0_unit @mono
-    17 ubind @mono
-    18 sensor __tmp9 @unit @flag
-    19 jump __label5 notEqual __tmp9 QUERY_FLAG
+    12 ubind @mono
+    13 sensor __tmp9 @unit @flag
+    14 jump __label5 notEqual __tmp9 QUERY_FLAG
  
-    28 noop
-    29 label __label4
-    30 label __label7
+    18 label __label6
+    19 label __label4
+    20 label __label7
 -    * set __fn1_unit @poly
-    31 ubind @poly
-    32 sensor __tmp14 @unit @flag
-    33 jump __label9 notEqual __tmp14 QUERY_FLAG
+    21 ubind @poly
+    22 sensor __tmp14 @unit @flag
+    23 jump __label9 notEqual __tmp14 QUERY_FLAG
  
-    42 noop
-    43 label __label8
-    44 label __label11
+    27 label __label10
+    28 label __label8
+    29 label __label11
 -    * set __fn2_unit @mega
-    45 ubind @mega
-    46 sensor __tmp19 @unit @flag
-    47 jump __label13 notEqual __tmp19 QUERY_FLAG
+    30 ubind @mega
+    31 sensor __tmp19 @unit @flag
+    32 jump __label13 notEqual __tmp19 QUERY_FLAG
  
-    56 noop
-    57 label __label12
-    58 label __label15
+    36 label __label14
+    37 label __label12
+    38 label __label15
 -    * set __fn3_unit @quad
-    59 ubind @quad
-    60 sensor __tmp24 @unit @flag
-    61 jump __label17 notEqual __tmp24 QUERY_FLAG
+    39 ubind @quad
+    40 sensor __tmp24 @unit @flag
+    41 jump __label17 notEqual __tmp24 QUERY_FLAG
  
-    70 noop
-    71 label __label16
-    72 label __label19
+    45 label __label18
+    46 label __label16
+    47 label __label19
 -    * set __fn4_unit @oct
-    73 ubind @oct
-    74 sensor __tmp29 @unit @flag
-    75 jump __label21 notEqual __tmp29 QUERY_FLAG
+    48 ubind @oct
+    49 sensor __tmp29 @unit @flag
+    50 jump __label21 notEqual __tmp29 QUERY_FLAG
  
-    84 noop
-    85 label __label20
-    86 label __label23
+    54 label __label22
+    55 label __label20
+    56 label __label23
 -    * set __fn5_unit @flare
-    87 ubind @flare
-    88 sensor __tmp34 @unit @flag
-    89 jump __label25 notEqual __tmp34 QUERY_FLAG
+    57 ubind @flare
+    58 sensor __tmp34 @unit @flag
+    59 jump __label25 notEqual __tmp34 QUERY_FLAG
  
-    98 noop
-    99 label __label24
-   100 label __label27
+    63 label __label26
+    64 label __label24
+    65 label __label27
 -    * set __fn6_unit @horizon
-   101 ubind @horizon
-   102 sensor __tmp39 @unit @flag
-   103 jump __label29 notEqual __tmp39 QUERY_FLAG
+    66 ubind @horizon
+    67 sensor __tmp39 @unit @flag
+    68 jump __label29 notEqual __tmp39 QUERY_FLAG
  
-   112 noop
-   113 label __label28
-   114 label __label31
+    72 label __label30
+    73 label __label28
+    74 label __label31
 -    * set __fn7_unit @zenith
-   115 ubind @zenith
-   116 sensor __tmp44 @unit @flag
-   117 jump __label33 notEqual __tmp44 QUERY_FLAG
+    75 ubind @zenith
+    76 sensor __tmp44 @unit @flag
+    77 jump __label33 notEqual __tmp44 QUERY_FLAG
  
-   126 noop
-   127 label __label32
-   128 label __label35
+    81 label __label34
+    82 label __label32
+    83 label __label35
 -    * set __fn8_unit @antumbra
-   129 ubind @antumbra
-   130 sensor __tmp49 @unit @flag
-   131 jump __label37 notEqual __tmp49 QUERY_FLAG
+    84 ubind @antumbra
+    85 sensor __tmp49 @unit @flag
+    86 jump __label37 notEqual __tmp49 QUERY_FLAG
  
-   140 noop
-   141 label __label36
-   142 label __label39
+    90 label __label38
+    91 label __label36
+    92 label __label39
 -    * set __fn9_unit @eclipse
-   143 ubind @eclipse
-   144 sensor __tmp54 @unit @flag
-   145 jump __label41 notEqual __tmp54 QUERY_FLAG
+    93 ubind @eclipse
+    94 sensor __tmp54 @unit @flag
+    95 jump __label41 notEqual __tmp54 QUERY_FLAG
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   167 printflush message1
-   168 label __label1
-   169 jump __label0 always
+   112 printflush message1
+   113 label __label1
+   114 jump __label0 always
 -    * label __label2
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
  
-   155 label __label40
-   156 print "Remote vault [gold]#"
-   157 print LINK_ID
+   100 label __label40
+   101 print "Remote vault [gold]#"
+   102 print LINK_ID
 -    * print "[]\n"
 -    * print "Queries serviced: [green]"
-+  158 print "[]\nQueries serviced: [green]"
-   159 print SERVICED
++  103 print "[]\nQueries serviced: [green]"
+   104 print SERVICED
 -    * print "[]\n"
-   160 op sub __tmp58 @time start
-   161 op floor __tmp59 __tmp58
+   105 op sub __tmp58 @time start
+   106 op floor __tmp59 __tmp58
 -    * print "[lightgray]Loop time: "
-+  162 print "[]\n[lightgray]Loop time: "
-   163 print __tmp59
-   164 print " ms"
-   165 printflush message1
++  107 print "[]\n[lightgray]Loop time: "
+   108 print __tmp59
+   109 print " ms"
+   110 printflush message1
 
 Final code before resolving virtual instructions:
 

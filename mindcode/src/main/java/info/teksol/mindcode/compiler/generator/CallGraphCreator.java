@@ -60,7 +60,7 @@ public class CallGraphCreator  {
                 .filter(instructionProcessor::isGlobalName)
                 .forEach(name -> {
                     throw new MindcodeException("Function " + function.getName()
-                        + " has parameter named " + name + "; this name denotes global variable");
+                        + " has parameter named " + name + "; this name is reserved for global variable");
                 });
     }
     
@@ -82,7 +82,8 @@ public class CallGraphCreator  {
 
     private void visitFunctionDeclaration(FunctionDeclaration functionDeclaration) {
         if (functions.containsKey(functionDeclaration.getName())) {
-            throw new MindcodeException("Multiple declarations of function " + functionDeclaration.getName());
+            throw new MindcodeException("Multiple declarations of function " + functionDeclaration.getName()
+                    + " at line " + functionDeclaration.startToken().getLine());
         }
         functions.put(functionDeclaration.getName(), functionDeclaration);
         callMap.put(functionDeclaration.getName(), new ArrayList<>());
@@ -94,12 +95,12 @@ public class CallGraphCreator  {
 
     private void  visitStackAllocation(StackAllocation node) {
         if (allocatedStack != null) {
-            throw new MindcodeException("Multiple stack allocations in " + node);
+            throw new MindcodeException(node.startToken(), "multiple stack allocations.");
         }
 
         if (encounteredNodes.stream().anyMatch(ControlBlockAstNode.class::isInstance)) {
-            throw new MindcodeException(
-                    "Stack allocation must not be preceded by a control statement or a function call.");
+            throw new MindcodeException(node.startToken(),
+                    "stack allocation must not be preceded by a control statement or a function call.");
         }
 
         allocatedStack = node;

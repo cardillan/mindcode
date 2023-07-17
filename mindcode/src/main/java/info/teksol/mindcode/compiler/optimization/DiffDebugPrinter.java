@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
 import info.teksol.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -93,8 +94,12 @@ public class DiffDebugPrinter implements DebugPrinter {
 
     // Prints diff between the "before" and "after" versions. Instructions in the output are numbered
     // according to the after list.
-    protected void printDiff(Consumer<String> messageConsumer, String title, List<LogicInstruction> before,
-            List<LogicInstruction> after) {
+    protected void printDiff(Consumer<String> messageConsumer, String title, List<LogicInstruction> before0,
+            List<LogicInstruction> after0) {
+
+        List<LogicInstruction> before = before0.stream().filter(ix -> !(ix instanceof NoOpInstruction)).toList();
+        List<LogicInstruction> after  =  after0.stream().filter(ix -> !(ix instanceof NoOpInstruction)).toList();
+
         // Do not print steps that didn't change anything
         if (before.equals(after) && !printAll()) {
             return;

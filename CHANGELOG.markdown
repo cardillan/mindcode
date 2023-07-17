@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2023-07-20
+
+### Fixed
+
+* Fixed a bug in code duplication routine that sometimes prevented [Unreachable Code
+  Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#unreachable-code-elimination) from removing unreachable portions 
+  of optimized case statements and inlined functions. The bug sometimes caused runtime exceptions when optimizing 
+  for speed, usually under tight instruction space restrictions only.
+* Fixed [#108 Compilation errors are not properly reported](https://github.com/cardillan/mindcode/issues/108).
+
+### Changed
+
+* Changed weight computation of user defined functions. Weight of a function is computed as a total weight of all 
+  its `CALL`, resp. `CALLREC` instructions.
+
 ## 2023-07-15
 
 ### Added

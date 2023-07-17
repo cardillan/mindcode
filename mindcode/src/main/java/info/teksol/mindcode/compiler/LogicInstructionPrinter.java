@@ -24,12 +24,7 @@ public class LogicInstructionPrinter {
         return buffer.toString();
     }
 
-    private static double totalWeight(List<LogicInstruction> instructions) {
-        return instructions.stream().mapToDouble(ix -> ix.getAstContext().weight()).sum();
-    }
-
     public static String toStringWithContextsFull(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
-        double totalWeight = totalWeight(instructions);
         DecimalFormat format = new DecimalFormat("0.0E00");
         format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
         format.setMaximumFractionDigits(2);
@@ -45,7 +40,7 @@ public class LogicInstructionPrinter {
 
             String hierarchy = unroll.stream().limit(10).map(c -> c.contextType().text).collect(Collectors.joining(" "));
             AstContext ctx = instruction.getAstContext();
-            buffer.append("%-50s  %s  %10s ".formatted(hierarchy, ctx.subcontextType().text, format.format(ctx.weight()/totalWeight)));
+            buffer.append("%-50s  %s  %10s ".formatted(hierarchy, ctx.subcontextType().text, format.format(ctx.totalWeight())));
             buffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
@@ -55,7 +50,6 @@ public class LogicInstructionPrinter {
     }
 
     public static String toStringWithContextsShort(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
-        double totalWeight = totalWeight(instructions);
         DecimalFormat format = new DecimalFormat("0.0E00");
         format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
         format.setMaximumFractionDigits(2);
@@ -64,7 +58,7 @@ public class LogicInstructionPrinter {
         instructions.forEach((instruction) -> {
             AstContext ctx = instruction.getAstContext();
             buffer.append("%3d:%s  %s %8s ".formatted(ctx.level(), ctx.contextType().text,
-                    ctx.subcontextType().text, format.format(ctx.weight()/totalWeight)));
+                    ctx.subcontextType().text, format.format(ctx.totalWeight())));
             buffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");

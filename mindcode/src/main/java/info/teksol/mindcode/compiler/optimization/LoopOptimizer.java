@@ -110,7 +110,7 @@ public class LoopOptimizer extends BaseOptimizer {
                     duplicateCondition(loop, jump, backJump, conditionEvaluation, removeOriginal, newJumpCreator);
                 }
             } else if (cost <= costLimit) {
-                return new DuplicateConditionAction(loop, cost, backJump.getAstContext().weight(),
+                return new DuplicateConditionAction(loop, cost, backJump.getAstContext().totalWeight(),
                         jump, backJump, conditionEvaluation, removeOriginal, newJumpCreator);
             }
         }

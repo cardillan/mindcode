@@ -17,7 +17,7 @@ public final class AstContext {
     private final AstContextType contextType;
     private final AstSubcontextType subcontextType;
     private final AstContext parent;
-    private final double weight;
+    private double weight;
     private final List<AstContext> children;
 
     private AstContext(String functionPrefix, int level, AstNode node, AstContextType contextType,
@@ -45,7 +45,7 @@ public final class AstContext {
 
     public AstContext createChild(AstNode node, AstContextType contextType) {
         AstContext child = new AstContext(functionPrefix, level + 1, node, contextType, node.getSubcontextType(),
-                this, weight);
+                this, 1.0);
         children.add(child);
 
         return child;
@@ -58,16 +58,14 @@ public final class AstContext {
         return child;
     }
 
-    public AstContext createSubcontext(AstSubcontextType subcontextType, double multiplier) {
-        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType,
-                this, weight * multiplier);
+    public AstContext createSubcontext(AstSubcontextType subcontextType, double weight) {
+        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType, this, weight);
         children.add(child);
         return child;
     }
 
-    public AstContext createSubcontext(String functionPrefix, AstSubcontextType subcontextType, double multiplier) {
-        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType,
-                this, weight * multiplier);
+    public AstContext createSubcontext(String functionPrefix, AstSubcontextType subcontextType, double weight) {
+        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType, this, weight);
         children.add(child);
         return child;
     }
@@ -227,7 +225,7 @@ public final class AstContext {
                 ", level=" + level +
                 ", contextType=" + contextType +
                 ", subcontextType=" + subcontextType +
-                ", weight=" + weight +
+                ", totalWeight=" + totalWeight() +
                 ", node=" + node +
                 '}';
     }
@@ -256,8 +254,16 @@ public final class AstContext {
         return parent;
     }
 
-    public double weight() {
+    public void updateWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public double getWeight() {
         return weight;
+    }
+
+    public double totalWeight() {
+        return parent == null ? weight : weight * parent.totalWeight();
     }
 
     public List<AstContext> children() {

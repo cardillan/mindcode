@@ -1,6 +1,5 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.MindcodeMessage;
@@ -405,7 +404,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 .toList();
 
         if (indexes.size() != 1)  {
-            throw new MindcodeException("Cannot determine variant selector position for opcode " + opcode);
+            throw new MindcodeInternalError("Cannot determine variant selector position for opcode " + opcode);
         }
 
         return indexes.get(0);

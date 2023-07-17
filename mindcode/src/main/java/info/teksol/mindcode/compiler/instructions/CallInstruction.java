@@ -7,7 +7,7 @@ import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
 
-public class CallInstruction extends BaseInstruction {
+public class CallInstruction extends BaseInstruction implements CallingInstruction {
 
     CallInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
         super(astContext, Opcode.CALL, args, params);

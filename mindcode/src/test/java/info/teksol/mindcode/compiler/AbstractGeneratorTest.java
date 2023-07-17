@@ -25,6 +25,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         public final CompilerProfile profile;
         public final InstructionProcessor processor;
         public final LogicInstructionGenerator generator;
+        public AstContext rootContext;
 
         public TestCompiler(CompilerProfile profile) {
             this.profile = profile;
@@ -39,6 +40,14 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
         public List<CompilerMessage> getMessages() {
             return readOnlyMessages;
+        }
+
+        public AstContext getRootContext() {
+            return rootContext;
+        }
+
+        public void setRootContext(AstContext rootContext) {
+            this.rootContext = rootContext;
         }
 
         public TestCompiler() {
@@ -182,6 +191,7 @@ public class AbstractGeneratorTest extends AbstractAstTest {
         long compile = System.nanoTime();
         GeneratorOutput output = compiler.generator.generate(program);
         compiler.addMessage(new TimingMessage("Compile", ((System.nanoTime() - compile) / 1_000_000L)));
+        compiler.setRootContext(output.rootAstContext());
 
         return output;
     }

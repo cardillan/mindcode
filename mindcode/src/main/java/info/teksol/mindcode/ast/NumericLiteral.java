@@ -34,7 +34,7 @@ public class NumericLiteral extends ConstantAstNode {
                         .orElseThrow(NumberFormatException::new);
             }
         } catch (NumberFormatException ex) {
-            throw new MindcodeException("Numeric literal '" + literal + "' does not have a valid mlog representation.");
+            throw new MindcodeException(startToken(), "numeric literal '%s' does not have a valid mlog representation.", literal);
         }
     }
 

@@ -10,12 +10,7 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;
 import info.teksol.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -659,7 +654,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             // toKeywordOptional handles the case of somebody passing in a number as the first argument of e.g. ulocate.
             FunctionHandler handler = functions.get(toKeywordOptional(arguments.get(0)).getKeyword());
             if (handler == null) {
-                throw new MindcodeException("Unhandled type of " + getOpcode() + " in " + arguments);
+                throw new MindcodeInternalError("Unhandled type of " + getOpcode() + " in " + arguments);
             }
             return handler.handleFunction(program, arguments);
         }

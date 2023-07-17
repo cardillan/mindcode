@@ -29,64 +29,56 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 ins
 -    * set __tmp6 @unit
 -    * set __fn0_first_unit __tmp6
 +   34 set __fn0_first_unit @unit
-+   35 noop
-    36 jump __label10 always
-    37 set __tmp5 null
-    38 jump __label12 always
+    35 jump __label10 always
+    36 set __tmp5 null
+    37 jump __label12 always
  
-    46 label __label9
-    47 jump __label8 always
-    48 label __label10
+    45 label __label9
+    46 jump __label8 always
+    47 label __label10
 -    * set __tmp7 @unit
 -    * set __fn0_first_unit __tmp7
-+   49 set __fn0_first_unit @unit
-+   50 noop
-    51 label __label13
-    52 sensor __tmp8 @unit @controller
-    53 op equal __tmp9 __tmp8 @this
-    54 jump __label16 equal __tmp9 false
++   48 set __fn0_first_unit @unit
+    49 label __label13
+    50 sensor __tmp8 @unit @controller
+    51 op equal __tmp9 __tmp8 @this
+    52 jump __label16 equal __tmp9 false
 -    * op add __tmp11 __fn0_count 1
 -    * set __fn0_count __tmp11
-+   55 op add __fn0_count __fn0_count 1
-+   56 noop
-    57 ucontrol flag 1
-    58 set UNIT_S2 UNIT_P2
-    59 set UNIT_P2 UNIT_S1
-    60 set UNIT_S1 UNIT_P1
++   53 op add __fn0_count __fn0_count 1
+    54 ucontrol flag 1
+    55 set UNIT_S2 UNIT_P2
+    56 set UNIT_P2 UNIT_S1
+    57 set UNIT_S1 UNIT_P1
 -    * set __tmp12 @unit
 -    * set UNIT_P1 __tmp12
-+   61 set UNIT_P1 @unit
-+   62 noop
-    63 op notEqual __tmp13 UNIT_S2 null
-    64 jump __label18 equal __tmp13 false
-    65 jump __label15 always
++   58 set UNIT_P1 @unit
+    59 op notEqual __tmp13 UNIT_S2 null
+    60 jump __label18 equal __tmp13 false
+    61 jump __label15 always
  
-   183 label __label42
-   184 set __tmp40 null
-   185 label __label43
+   179 label __label42
+   180 set __tmp40 null
+   181 label __label43
 -    * sensor __tmp41 UNIT_S1 @itemCapacity
 -    * set UNIT_CAPACITY __tmp41
 -    * sensor __tmp42 UNIT_S1 @speed
 -    * set SPEED __tmp42
 -    * op div __tmp43 SPEED 10
 -    * set SPEED_TENTHS __tmp43
-+  186 sensor UNIT_CAPACITY UNIT_S1 @itemCapacity
-+  187 noop
-+  188 sensor SPEED UNIT_S1 @speed
-+  189 noop
-+  190 op div SPEED_TENTHS SPEED 10
-+  191 noop
-   192 print "[gold]Locating core..."
-   193 printflush message1
-   194 label __label44
++  182 sensor UNIT_CAPACITY UNIT_S1 @itemCapacity
++  183 sensor SPEED UNIT_S1 @speed
++  184 op div SPEED_TENTHS SPEED 10
+   185 print "[gold]Locating core..."
+   186 printflush message1
+   187 label __label44
 -    * ulocate building core false @copper __tmp45 __tmp46 __tmp47 __tmp44
 -    * set CORE __tmp44
-+  195 ulocate building core false @copper __tmp45 __tmp46 __tmp47 CORE
-+  196 noop
-   197 label __label45
-   198 op equal __tmp48 CORE null
-   199 jump __label44 notEqual __tmp48 false
-   200 label __label46
++  188 ulocate building core false @copper __tmp45 __tmp46 __tmp47 CORE
+   189 label __label45
+   190 op equal __tmp48 CORE null
+   191 jump __label44 notEqual __tmp48 false
+   192 label __label46
 -    * sensor __tmp49 CORE @x
 -    * set CORE_X __tmp49
 -    * sensor __tmp50 CORE @y
@@ -95,1568 +87,1359 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 ins
 -    * set DOME_X __tmp51
 -    * sensor __tmp52 DOME @y
 -    * set DOME_Y __tmp52
-+  201 sensor CORE_X CORE @x
-+  202 noop
-+  203 sensor CORE_Y CORE @y
-+  204 noop
-+  205 sensor DOME_X DOME @x
-+  206 noop
-+  207 sensor DOME_Y DOME @y
-+  208 noop
-   209 op sub __tmp53 DOME_X CORE_X
-   210 op sub __tmp54 DOME_Y CORE_Y
-   211 op len __tmp55 __tmp53 __tmp54
-   212 op mul __tmp56 2 __tmp55
++  193 sensor CORE_X CORE @x
++  194 sensor CORE_Y CORE @y
++  195 sensor DOME_X DOME @x
++  196 sensor DOME_Y DOME @y
+   197 op sub __tmp53 DOME_X CORE_X
+   198 op sub __tmp54 DOME_Y CORE_Y
+   199 op len __tmp55 __tmp53 __tmp54
+   200 op mul __tmp56 2 __tmp55
 -    * op div __tmp57 __tmp56 SPEED
 -    * set travel_time __tmp57
 -    * op greaterThanEq __tmp58 travel_time 47
 -    * set FOUR_UNITS __tmp58
-+  213 op div travel_time __tmp56 SPEED
-+  214 noop
-+  215 op greaterThanEq FOUR_UNITS travel_time 47
-+  216 noop
-   217 jump __label47 equal FOUR_UNITS false
-   218 op equal __tmp60 UNIT_S2 null
-   219 jump __label49 equal __tmp60 false
++  201 op div travel_time __tmp56 SPEED
++  202 op greaterThanEq FOUR_UNITS travel_time 47
+   203 jump __label47 equal FOUR_UNITS false
+   204 op equal __tmp60 UNIT_S2 null
+   205 jump __label49 equal __tmp60 false
  
-   345 sensor __tmp89 UNIT_S1 @totalItems
-   346 sensor __tmp90 UNIT_S2 @totalItems
-   347 op lessThan __tmp91 __tmp89 __tmp90
+   331 sensor __tmp89 UNIT_S1 @totalItems
+   332 sensor __tmp90 UNIT_S2 @totalItems
+   333 op lessThan __tmp91 __tmp89 __tmp90
 -    * op or __tmp92 __tmp88 __tmp91
 -    * set SUPPLY_S_FIRST __tmp92
-+  348 op or SUPPLY_S_FIRST __tmp88 __tmp91
-+  349 noop
-   350 op equal __tmp93 FOUR_UNITS false
-   351 sensor __tmp94 UNIT_P1 @totalItems
-   352 sensor __tmp95 UNIT_P2 @totalItems
-   353 op lessThan __tmp96 __tmp94 __tmp95
++  334 op or SUPPLY_S_FIRST __tmp88 __tmp91
+   335 op equal __tmp93 FOUR_UNITS false
+   336 sensor __tmp94 UNIT_P1 @totalItems
+   337 sensor __tmp95 UNIT_P2 @totalItems
+   338 op lessThan __tmp96 __tmp94 __tmp95
 -    * op or __tmp97 __tmp93 __tmp96
 -    * set SUPPLY_P_FIRST __tmp97
-+  354 op or SUPPLY_P_FIRST __tmp93 __tmp96
-+  355 noop
-   356 label __label75
-   357 sensor __tmp98 switch1 @enabled
-   358 jump __label77 equal __tmp98 false
++  339 op or SUPPLY_P_FIRST __tmp93 __tmp96
+   340 label __label75
+   341 sensor __tmp98 switch1 @enabled
+   342 jump __label77 equal __tmp98 false
 -    * set __tmp99 @time
 -    * set start __tmp99
-+  359 set start @time
-+  360 noop
-   361 print " === [gold]Supplying Overdrive Dome[] === "
-   362 print "\n"
-   363 label __label78
-   364 set __fn5_item @silicon
-   365 set __fn5_text "\n[green]Silicon[] status:\n"
-   366 print __fn5_text
++  343 set start @time
+   344 print " === [gold]Supplying Overdrive Dome[] === "
+   345 print "\n"
+   346 label __label78
+   347 set __fn5_item @silicon
+   348 set __fn5_text "\n[green]Silicon[] status:\n"
+   349 print __fn5_text
 -    * sensor __tmp101 DOME __fn5_item
 -    * set __fn5_level __tmp101
-+  367 sensor __fn5_level DOME __fn5_item
-+  368 noop
-   369 op greaterThan __tmp102 __fn5_level 3
-   370 jump __label80 equal __tmp102 false
-   371 print "  dome:  [green]"
++  350 sensor __fn5_level DOME __fn5_item
+   351 op greaterThan __tmp102 __fn5_level 3
+   352 jump __label80 equal __tmp102 false
+   353 print "  dome:  [green]"
  
-   432 label __label84
-   433 set __tmp110 null
-   434 label __label85
+   414 label __label84
+   415 set __tmp110 null
+   416 label __label85
 -    * sensor __tmp117 @unit @flag
 -    * set __fn6_state __tmp117
-+  435 sensor __fn6_state @unit @flag
-+  436 noop
-   437 set __fn6_distance -1
-   438 set __fn6_color "gold"
-   439 op equal __tmp118 __fn6_state 1
++  417 sensor __fn6_state @unit @flag
+   418 set __fn6_distance -1
+   419 set __fn6_color "gold"
+   420 op equal __tmp118 __fn6_state 1
  
-   498 op sub __tmp138 CORE_Y __tmp137
-   499 op len __tmp139 __tmp136 __tmp138
-   500 op idiv __tmp140 __tmp139 SPEED_TENTHS
+   479 op sub __tmp138 CORE_Y __tmp137
+   480 op len __tmp139 __tmp136 __tmp138
+   481 op idiv __tmp140 __tmp139 SPEED_TENTHS
 -    * op div __tmp141 __tmp140 10
 -    * set __fn6_distance __tmp141
-+  501 op div __fn6_distance __tmp140 10
-+  502 noop
-   503 set __tmp131 __fn6_distance
-   504 label __label106
-   505 set __tmp129 __tmp131
++  482 op div __fn6_distance __tmp140 10
+   483 set __tmp131 __fn6_distance
+   484 label __label106
+   485 set __tmp129 __tmp131
  
-   543 op sub __tmp153 DOME_Y __tmp152
-   544 op len __tmp154 __tmp151 __tmp153
-   545 op idiv __tmp155 __tmp154 SPEED_TENTHS
+   523 op sub __tmp153 DOME_Y __tmp152
+   524 op len __tmp154 __tmp151 __tmp153
+   525 op idiv __tmp155 __tmp154 SPEED_TENTHS
 -    * op div __tmp156 __tmp155 10
 -    * set __fn6_distance __tmp156
-+  546 op div __fn6_distance __tmp155 10
-+  547 noop
-   548 set __tmp145 __fn6_distance
-   549 label __label112
-   550 set __tmp143 __tmp145
++  526 op div __fn6_distance __tmp155 10
+   527 set __tmp145 __fn6_distance
+   528 label __label112
+   529 set __tmp143 __tmp145
  
-   630 label __label123
-   631 set __tmp168 null
-   632 label __label124
+   609 label __label123
+   610 set __tmp168 null
+   611 label __label124
 -    * sensor __tmp175 @unit @flag
 -    * set __fn8_state __tmp175
-+  633 sensor __fn8_state @unit @flag
-+  634 noop
-   635 set __fn8_distance -1
-   636 set __fn8_color "gold"
-   637 op equal __tmp176 __fn8_state 1
++  612 sensor __fn8_state @unit @flag
+   613 set __fn8_distance -1
+   614 set __fn8_color "gold"
+   615 op equal __tmp176 __fn8_state 1
  
-   696 op sub __tmp196 CORE_Y __tmp195
-   697 op len __tmp197 __tmp194 __tmp196
-   698 op idiv __tmp198 __tmp197 SPEED_TENTHS
+   674 op sub __tmp196 CORE_Y __tmp195
+   675 op len __tmp197 __tmp194 __tmp196
+   676 op idiv __tmp198 __tmp197 SPEED_TENTHS
 -    * op div __tmp199 __tmp198 10
 -    * set __fn8_distance __tmp199
-+  699 op div __fn8_distance __tmp198 10
-+  700 noop
-   701 set __tmp189 __fn8_distance
-   702 label __label145
-   703 set __tmp187 __tmp189
++  677 op div __fn8_distance __tmp198 10
+   678 set __tmp189 __fn8_distance
+   679 label __label145
+   680 set __tmp187 __tmp189
  
-   741 op sub __tmp211 DOME_Y __tmp210
-   742 op len __tmp212 __tmp209 __tmp211
-   743 op idiv __tmp213 __tmp212 SPEED_TENTHS
+   718 op sub __tmp211 DOME_Y __tmp210
+   719 op len __tmp212 __tmp209 __tmp211
+   720 op idiv __tmp213 __tmp212 SPEED_TENTHS
 -    * op div __tmp214 __tmp213 10
 -    * set __fn8_distance __tmp214
-+  744 op div __fn8_distance __tmp213 10
-+  745 noop
-   746 set __tmp203 __fn8_distance
-   747 label __label151
-   748 set __tmp201 __tmp203
++  721 op div __fn8_distance __tmp213 10
+   722 set __tmp203 __fn8_distance
+   723 label __label151
+   724 set __tmp201 __tmp203
  
-   777 set UNIT_S2 __tmp162
-   778 jump __label158 equal SUPPLY_S_FIRST false
-   779 sensor __tmp219 UNIT_S1 @totalItems
+   753 set UNIT_S2 __tmp162
+   754 jump __label158 equal SUPPLY_S_FIRST false
+   755 sensor __tmp219 UNIT_S1 @totalItems
 -    * op greaterThan __tmp220 __tmp219 0
 -    * set __tmp218 __tmp220
-+  780 op greaterThan __tmp218 __tmp219 0
-+  781 noop
-   782 jump __label159 always
-   783 label __label158
-   784 sensor __tmp221 UNIT_S2 @totalItems
++  756 op greaterThan __tmp218 __tmp219 0
+   757 jump __label159 always
+   758 label __label158
+   759 sensor __tmp221 UNIT_S2 @totalItems
 -    * op equal __tmp222 __tmp221 0
 -    * set __tmp218 __tmp222
-+  785 op equal __tmp218 __tmp221 0
-+  786 noop
-   787 label __label159
-   788 set SUPPLY_S_FIRST __tmp218
-   789 set __tmp160 SUPPLY_S_FIRST
++  760 op equal __tmp218 __tmp221 0
+   761 label __label159
+   762 set SUPPLY_S_FIRST __tmp218
+   763 set __tmp160 SUPPLY_S_FIRST
  
-   795 set __fn10_item @phase-fabric
-   796 set __fn10_text "\n[green]Phase fabric[] status:\n"
-   797 print __fn10_text
+   769 set __fn10_item @phase-fabric
+   770 set __fn10_text "\n[green]Phase fabric[] status:\n"
+   771 print __fn10_text
 -    * sensor __tmp224 DOME __fn10_item
 -    * set __fn10_level __tmp224
-+  798 sensor __fn10_level DOME __fn10_item
-+  799 noop
-   800 op greaterThan __tmp225 __fn10_level 3
-   801 jump __label162 equal __tmp225 false
-   802 print "  dome:  [green]"
++  772 sensor __fn10_level DOME __fn10_item
+   773 op greaterThan __tmp225 __fn10_level 3
+   774 jump __label162 equal __tmp225 false
+   775 print "  dome:  [green]"
  
-   863 label __label166
-   864 set __tmp233 null
-   865 label __label167
+   836 label __label166
+   837 set __tmp233 null
+   838 label __label167
 -    * sensor __tmp240 @unit @flag
 -    * set __fn11_state __tmp240
-+  866 sensor __fn11_state @unit @flag
-+  867 noop
-   868 set __fn11_distance -1
-   869 set __fn11_color "gold"
-   870 op equal __tmp241 __fn11_state 1
++  839 sensor __fn11_state @unit @flag
+   840 set __fn11_distance -1
+   841 set __fn11_color "gold"
+   842 op equal __tmp241 __fn11_state 1
  
-   929 op sub __tmp261 CORE_Y __tmp260
-   930 op len __tmp262 __tmp259 __tmp261
-   931 op idiv __tmp263 __tmp262 SPEED_TENTHS
+   901 op sub __tmp261 CORE_Y __tmp260
+   902 op len __tmp262 __tmp259 __tmp261
+   903 op idiv __tmp263 __tmp262 SPEED_TENTHS
 -    * op div __tmp264 __tmp263 10
 -    * set __fn11_distance __tmp264
-+  932 op div __fn11_distance __tmp263 10
-+  933 noop
-   934 set __tmp254 __fn11_distance
-   935 label __label188
-   936 set __tmp252 __tmp254
++  904 op div __fn11_distance __tmp263 10
+   905 set __tmp254 __fn11_distance
+   906 label __label188
+   907 set __tmp252 __tmp254
  
-   974 op sub __tmp276 DOME_Y __tmp275
-   975 op len __tmp277 __tmp274 __tmp276
-   976 op idiv __tmp278 __tmp277 SPEED_TENTHS
+   945 op sub __tmp276 DOME_Y __tmp275
+   946 op len __tmp277 __tmp274 __tmp276
+   947 op idiv __tmp278 __tmp277 SPEED_TENTHS
 -    * op div __tmp279 __tmp278 10
 -    * set __fn11_distance __tmp279
-+  977 op div __fn11_distance __tmp278 10
-+  978 noop
-   979 set __tmp268 __fn11_distance
-   980 label __label194
-   981 set __tmp266 __tmp268
++  948 op div __fn11_distance __tmp278 10
+   949 set __tmp268 __fn11_distance
+   950 label __label194
+   951 set __tmp266 __tmp268
  
-  1061 label __label205
-  1062 set __tmp291 null
-  1063 label __label206
+  1031 label __label205
+  1032 set __tmp291 null
+  1033 label __label206
 -    * sensor __tmp298 @unit @flag
 -    * set __fn13_state __tmp298
-+ 1064 sensor __fn13_state @unit @flag
-+ 1065 noop
-  1066 set __fn13_distance -1
-  1067 set __fn13_color "gold"
-  1068 op equal __tmp299 __fn13_state 1
++ 1034 sensor __fn13_state @unit @flag
+  1035 set __fn13_distance -1
+  1036 set __fn13_color "gold"
+  1037 op equal __tmp299 __fn13_state 1
  
-  1127 op sub __tmp319 CORE_Y __tmp318
-  1128 op len __tmp320 __tmp317 __tmp319
-  1129 op idiv __tmp321 __tmp320 SPEED_TENTHS
+  1096 op sub __tmp319 CORE_Y __tmp318
+  1097 op len __tmp320 __tmp317 __tmp319
+  1098 op idiv __tmp321 __tmp320 SPEED_TENTHS
 -    * op div __tmp322 __tmp321 10
 -    * set __fn13_distance __tmp322
-+ 1130 op div __fn13_distance __tmp321 10
-+ 1131 noop
-  1132 set __tmp312 __fn13_distance
-  1133 label __label227
-  1134 set __tmp310 __tmp312
++ 1099 op div __fn13_distance __tmp321 10
+  1100 set __tmp312 __fn13_distance
+  1101 label __label227
+  1102 set __tmp310 __tmp312
  
-  1172 op sub __tmp334 DOME_Y __tmp333
-  1173 op len __tmp335 __tmp332 __tmp334
-  1174 op idiv __tmp336 __tmp335 SPEED_TENTHS
+  1140 op sub __tmp334 DOME_Y __tmp333
+  1141 op len __tmp335 __tmp332 __tmp334
+  1142 op idiv __tmp336 __tmp335 SPEED_TENTHS
 -    * op div __tmp337 __tmp336 10
 -    * set __fn13_distance __tmp337
-+ 1175 op div __fn13_distance __tmp336 10
-+ 1176 noop
-  1177 set __tmp326 __fn13_distance
-  1178 label __label233
-  1179 set __tmp324 __tmp326
++ 1143 op div __fn13_distance __tmp336 10
+  1144 set __tmp326 __fn13_distance
+  1145 label __label233
+  1146 set __tmp324 __tmp326
  
-  1208 set UNIT_P2 __tmp285
-  1209 jump __label240 equal SUPPLY_P_FIRST false
-  1210 sensor __tmp342 UNIT_P1 @totalItems
+  1175 set UNIT_P2 __tmp285
+  1176 jump __label240 equal SUPPLY_P_FIRST false
+  1177 sensor __tmp342 UNIT_P1 @totalItems
 -    * op greaterThan __tmp343 __tmp342 0
 -    * set __tmp341 __tmp343
-+ 1211 op greaterThan __tmp341 __tmp342 0
-+ 1212 noop
-  1213 jump __label241 always
-  1214 label __label240
-  1215 sensor __tmp344 UNIT_P2 @totalItems
++ 1178 op greaterThan __tmp341 __tmp342 0
+  1179 jump __label241 always
+  1180 label __label240
+  1181 sensor __tmp344 UNIT_P2 @totalItems
 -    * op equal __tmp345 __tmp344 0
 -    * set __tmp341 __tmp345
-+ 1216 op equal __tmp341 __tmp344 0
-+ 1217 noop
-  1218 label __label241
-  1219 set SUPPLY_P_FIRST __tmp341
-  1220 set __tmp283 SUPPLY_P_FIRST
++ 1182 op equal __tmp341 __tmp344 0
+  1183 label __label241
+  1184 set SUPPLY_P_FIRST __tmp341
+  1185 set __tmp283 SUPPLY_P_FIRST
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-92 instructions):
  
+    33 jump __label11 equal __tmp4 false
     34 set __fn0_first_unit @unit
-    35 noop
-    36 jump __label10 always
+    35 jump __label10 always
 -    * set __tmp5 null
-+   37 noop
-    38 jump __label12 always
-    39 label __label11
+    36 jump __label12 always
+    37 label __label11
 -    * set __tmp5 null
-+   40 noop
-    41 label __label12
-    42 print "[salmon]No unit of type "
-    43 print UNIT
+    38 label __label12
+    39 print "[salmon]No unit of type "
+    40 print UNIT
  
-    68 label __label18
-    69 set __tmp14 null
-    70 label __label19
+    62 label __label18
+    63 set __tmp14 null
+    64 label __label19
 -    * set __tmp10 __tmp14
-+   71 noop
-    72 jump __label17 always
-    73 label __label16
+    65 jump __label17 always
+    66 label __label16
 -    * set __tmp10 null
-+   74 noop
-    75 label __label17
-    76 ubind UNIT
-    77 label __label14
+    67 label __label17
+    68 ubind UNIT
+    69 label __label14
  
-    81 op land __tmp18 __tmp15 __tmp17
-    82 jump __label13 notEqual __tmp18 false
-    83 label __label15
+    73 op land __tmp18 __tmp15 __tmp17
+    74 jump __label13 notEqual __tmp18 false
+    75 label __label15
 -    * set __tmp3 __fn0_count
-+   84 noop
-    85 jump __label7 always
+    76 jump __label7 always
 -    * set __tmp3 null
-+   86 noop
-    87 label __label7
-    88 op equal __tmp19 UNIT_S1 null
-    89 jump __label20 equal __tmp19 false
+    77 label __label7
+    78 op equal __tmp19 UNIT_S1 null
+    79 jump __label20 equal __tmp19 false
  
-    96 print "[salmon]No unit of type "
-    97 print UNIT
-    98 print " found..."
+    86 print "[salmon]No unit of type "
+    87 print UNIT
+    88 print " found..."
 -    * set __tmp23 null
-+   99 noop
-   100 jump __label28 always
-   101 label __label27
-   102 sensor __tmp24 @unit @controlled
+    89 jump __label28 always
+    90 label __label27
+    91 sensor __tmp24 @unit @controlled
  
-   113 jump __label23 always
-   114 set __tmp26 null
-   115 label __label30
+   102 jump __label23 always
+   103 set __tmp26 null
+   104 label __label30
 -    * set __tmp23 __tmp26
-+  116 noop
-   117 label __label28
-   118 printflush message1
-   119 label __label25
+   105 label __label28
+   106 printflush message1
+   107 label __label25
  
-   122 set __tmp21 null
-   123 label __label23
-   124 set UNIT_S1 __tmp21
+   110 set __tmp21 null
+   111 label __label23
+   112 set UNIT_S1 __tmp21
 -    * set __tmp20 UNIT_S1
-+  125 noop
-   126 jump __label21 always
-   127 label __label20
+   113 jump __label21 always
+   114 label __label20
 -    * set __tmp20 null
-+  128 noop
-   129 label __label21
-   130 op equal __tmp27 UNIT_P1 null
-   131 jump __label31 equal __tmp27 false
+   115 label __label21
+   116 op equal __tmp27 UNIT_P1 null
+   117 jump __label31 equal __tmp27 false
  
-   138 print "[salmon]No unit of type "
-   139 print UNIT
-   140 print " found..."
+   124 print "[salmon]No unit of type "
+   125 print UNIT
+   126 print " found..."
 -    * set __tmp31 null
-+  141 noop
-   142 jump __label39 always
-   143 label __label38
-   144 sensor __tmp32 @unit @controlled
+   127 jump __label39 always
+   128 label __label38
+   129 sensor __tmp32 @unit @controlled
  
-   155 jump __label34 always
-   156 set __tmp34 null
-   157 label __label41
+   140 jump __label34 always
+   141 set __tmp34 null
+   142 label __label41
 -    * set __tmp31 __tmp34
-+  158 noop
-   159 label __label39
-   160 printflush message1
-   161 label __label36
+   143 label __label39
+   144 printflush message1
+   145 label __label36
  
-   164 set __tmp29 null
-   165 label __label34
-   166 set UNIT_P1 __tmp29
+   148 set __tmp29 null
+   149 label __label34
+   150 set UNIT_P1 __tmp29
 -    * set __tmp28 UNIT_P1
-+  167 noop
-   168 jump __label32 always
-   169 label __label31
+   151 jump __label32 always
+   152 label __label31
 -    * set __tmp28 null
-+  170 noop
-   171 label __label32
-   172 sensor __tmp35 UNIT_S1 @firstItem
-   173 op equal __tmp36 __tmp35 @phase-fabric
+   153 label __label32
+   154 sensor __tmp35 UNIT_S1 @firstItem
+   155 op equal __tmp36 __tmp35 @phase-fabric
  
-   178 set u UNIT_S1
-   179 set UNIT_S1 UNIT_P1
-   180 set UNIT_P1 u
+   160 set u UNIT_S1
+   161 set UNIT_S1 UNIT_P1
+   162 set UNIT_P1 u
 -    * set __tmp40 UNIT_P1
-+  181 noop
-   182 jump __label43 always
-   183 label __label42
+   163 jump __label43 always
+   164 label __label42
 -    * set __tmp40 null
-+  184 noop
-   185 label __label43
-   186 sensor UNIT_CAPACITY UNIT_S1 @itemCapacity
-   187 noop
+   165 label __label43
+   166 sensor UNIT_CAPACITY UNIT_S1 @itemCapacity
+   167 sensor SPEED UNIT_S1 @speed
  
-   226 print "[salmon]No unit of type "
-   227 print UNIT
-   228 print " found..."
+   196 print "[salmon]No unit of type "
+   197 print UNIT
+   198 print " found..."
 -    * set __tmp64 null
-+  229 noop
-   230 jump __label57 always
-   231 label __label56
-   232 sensor __tmp65 @unit @controlled
+   199 jump __label57 always
+   200 label __label56
+   201 sensor __tmp65 @unit @controlled
  
-   243 jump __label52 always
-   244 set __tmp67 null
-   245 label __label59
+   212 jump __label52 always
+   213 set __tmp67 null
+   214 label __label59
 -    * set __tmp64 __tmp67
-+  246 noop
-   247 label __label57
-   248 printflush message1
-   249 label __label54
+   215 label __label57
+   216 printflush message1
+   217 label __label54
  
-   252 set __tmp62 null
-   253 label __label52
-   254 set UNIT_S2 __tmp62
+   220 set __tmp62 null
+   221 label __label52
+   222 set UNIT_S2 __tmp62
 -    * set __tmp61 UNIT_S2
-+  255 noop
-   256 jump __label50 always
-   257 label __label49
+   223 jump __label50 always
+   224 label __label49
 -    * set __tmp61 null
-+  258 noop
-   259 label __label50
-   260 op equal __tmp68 UNIT_P2 null
-   261 jump __label60 equal __tmp68 false
+   225 label __label50
+   226 op equal __tmp68 UNIT_P2 null
+   227 jump __label60 equal __tmp68 false
  
-   268 print "[salmon]No unit of type "
-   269 print UNIT
-   270 print " found..."
+   234 print "[salmon]No unit of type "
+   235 print UNIT
+   236 print " found..."
 -    * set __tmp72 null
-+  271 noop
-   272 jump __label68 always
-   273 label __label67
-   274 sensor __tmp73 @unit @controlled
+   237 jump __label68 always
+   238 label __label67
+   239 sensor __tmp73 @unit @controlled
  
-   285 jump __label63 always
-   286 set __tmp75 null
-   287 label __label70
+   250 jump __label63 always
+   251 set __tmp75 null
+   252 label __label70
 -    * set __tmp72 __tmp75
-+  288 noop
-   289 label __label68
-   290 printflush message1
-   291 label __label65
+   253 label __label68
+   254 printflush message1
+   255 label __label65
  
-   294 set __tmp70 null
-   295 label __label63
-   296 set UNIT_P2 __tmp70
+   258 set __tmp70 null
+   259 label __label63
+   260 set UNIT_P2 __tmp70
 -    * set __tmp69 UNIT_P2
-+  297 noop
-   298 jump __label61 always
-   299 label __label60
+   261 jump __label61 always
+   262 label __label60
 -    * set __tmp69 null
-+  300 noop
-   301 label __label61
-   302 sensor __tmp76 UNIT_S1 @firstItem
-   303 op equal __tmp77 __tmp76 @phase-fabric
+   263 label __label61
+   264 sensor __tmp76 UNIT_S1 @firstItem
+   265 op equal __tmp77 __tmp76 @phase-fabric
  
-   308 set u UNIT_S1
-   309 set UNIT_S1 UNIT_P2
-   310 set UNIT_P2 u
+   270 set u UNIT_S1
+   271 set UNIT_S1 UNIT_P2
+   272 set UNIT_P2 u
 -    * set __tmp81 UNIT_P2
-+  311 noop
-   312 jump __label72 always
-   313 label __label71
+   273 jump __label72 always
+   274 label __label71
 -    * set __tmp81 null
-+  314 noop
-   315 label __label72
-   316 sensor __tmp82 UNIT_S2 @firstItem
-   317 op equal __tmp83 __tmp82 @phase-fabric
+   275 label __label72
+   276 sensor __tmp82 UNIT_S2 @firstItem
+   277 op equal __tmp83 __tmp82 @phase-fabric
  
-   322 set u UNIT_S2
-   323 set UNIT_S2 UNIT_P2
-   324 set UNIT_P2 u
+   282 set u UNIT_S2
+   283 set UNIT_S2 UNIT_P2
+   284 set UNIT_P2 u
 -    * set __tmp87 UNIT_P2
-+  325 noop
-   326 jump __label74 always
-   327 label __label73
+   285 jump __label74 always
+   286 label __label73
 -    * set __tmp87 null
-+  328 noop
-   329 label __label74
-   330 set GROUP1 "probe  1"
-   331 set GROUP2 "probe 2"
+   287 label __label74
+   288 set GROUP1 "probe  1"
+   289 set GROUP2 "probe 2"
 -    * set __tmp59 GROUP2
-+  332 noop
-   333 jump __label48 always
-   334 label __label47
-   335 ubind UNIT_S2
+   290 jump __label48 always
+   291 label __label47
+   292 ubind UNIT_S2
  
-   339 ucontrol unbind
-   340 set UNIT_P2 null
-   341 set GROUP1 "probe"
+   296 ucontrol unbind
+   297 set UNIT_P2 null
+   298 set GROUP1 "probe"
 -    * set __tmp59 GROUP1
-+  342 noop
-   343 label __label48
-   344 op equal __tmp88 FOUR_UNITS false
-   345 sensor __tmp89 UNIT_S1 @totalItems
+   299 label __label48
+   300 op equal __tmp88 FOUR_UNITS false
+   301 sensor __tmp89 UNIT_S1 @totalItems
  
-   379 print "[]\n"
-   380 set __tmp103 null
-   381 label __label81
+   331 print "[]\n"
+   332 set __tmp103 null
+   333 label __label81
 -    * set __tmp100 __tmp103
-+  382 noop
-   383 label __label79
-   384 label __label82
-   385 set __fn6_unit UNIT_S1
+   334 label __label79
+   335 label __label82
+   336 set __fn6_unit UNIT_S1
  
-   402 print "[salmon]No unit of type "
-   403 print UNIT
-   404 print " found..."
+   353 print "[salmon]No unit of type "
+   354 print UNIT
+   355 print " found..."
 -    * set __tmp113 null
-+  405 noop
-   406 jump __label92 always
-   407 label __label91
-   408 sensor __tmp114 @unit @controlled
+   356 jump __label92 always
+   357 label __label91
+   358 sensor __tmp114 @unit @controlled
  
-   419 jump __label87 always
-   420 set __tmp116 null
-   421 label __label94
+   369 jump __label87 always
+   370 set __tmp116 null
+   371 label __label94
 -    * set __tmp113 __tmp116
-+  422 noop
-   423 label __label92
-   424 printflush message1
-   425 label __label89
+   372 label __label92
+   373 printflush message1
+   374 label __label89
  
-   427 label __label90
-   428 set __tmp111 null
-   429 label __label87
+   376 label __label90
+   377 set __tmp111 null
+   378 label __label87
 -    * set __tmp110 __tmp111
-+  430 noop
-   431 jump __label85 always
-   432 label __label84
+   379 jump __label85 always
+   380 label __label84
 -    * set __tmp110 null
-+  433 noop
-   434 label __label85
-   435 sensor __fn6_state @unit @flag
-   436 noop
+   381 label __label85
+   382 sensor __fn6_state @unit @flag
+   383 set __fn6_distance -1
  
-   466 label __label100
-   467 set __tmp122 __tmp125
-   468 label __label98
+   412 label __label100
+   413 set __tmp122 __tmp125
+   414 label __label98
 -    * set __tmp119 __tmp122
-+  469 noop
-   470 jump __label96 always
-   471 label __label95
+   415 jump __label96 always
+   416 label __label95
 -    * set __tmp119 null
-+  472 noop
-   473 label __label96
-   474 op equal __tmp128 __fn6_state 2
-   475 jump __label103 equal __tmp128 false
+   417 label __label96
+   418 op equal __tmp128 __fn6_state 2
+   419 jump __label103 equal __tmp128 false
  
-   502 noop
-   503 set __tmp131 __fn6_distance
-   504 label __label106
+   445 op div __fn6_distance __tmp140 10
+   446 set __tmp131 __fn6_distance
+   447 label __label106
 -    * set __tmp129 __tmp131
-+  505 noop
-   506 jump __label104 always
-   507 label __label103
+   448 jump __label104 always
+   449 label __label103
 -    * set __tmp129 null
-+  508 noop
-   509 label __label104
-   510 op equal __tmp142 __fn6_state 3
-   511 jump __label109 equal __tmp142 false
+   450 label __label104
+   451 op equal __tmp142 __fn6_state 3
+   452 jump __label109 equal __tmp142 false
  
-   515 ucontrol itemDrop DOME UNIT_CAPACITY
-   516 set MSG ", supplying\n"
-   517 set __fn6_color "green"
+   456 ucontrol itemDrop DOME UNIT_CAPACITY
+   457 set MSG ", supplying\n"
+   458 set __fn6_color "green"
 -    * set __tmp146 __fn6_color
-+  518 noop
-   519 jump __label114 always
-   520 label __label113
-   521 ucontrol approach DOME_X DOME_Y 6
-   522 set MSG ", waiting\n"
+   459 jump __label114 always
+   460 label __label113
+   461 ucontrol approach DOME_X DOME_Y 6
+   462 set MSG ", waiting\n"
 -    * set __tmp146 MSG
-+  523 noop
-   524 label __label114
-   525 sensor __tmp147 @unit @totalItems
-   526 op lessThanEq __tmp148 __tmp147 0
+   463 label __label114
+   464 sensor __tmp147 @unit @totalItems
+   465 op lessThanEq __tmp148 __tmp147 0
  
-   547 noop
-   548 set __tmp145 __fn6_distance
-   549 label __label112
+   485 op div __fn6_distance __tmp155 10
+   486 set __tmp145 __fn6_distance
+   487 label __label112
 -    * set __tmp143 __tmp145
-+  550 noop
-   551 jump __label110 always
-   552 label __label109
+   488 jump __label110 always
+   489 label __label109
 -    * set __tmp143 null
-+  553 noop
-   554 label __label110
-   555 ucontrol flag __fn6_state
-   556 sensor __tmp157 @unit @totalItems
+   490 label __label110
+   491 ucontrol flag __fn6_state
+   492 sensor __tmp157 @unit @totalItems
  
-   566 print MSG
-   567 print __fn6_distance
-   568 print "[] sec\n"
+   502 print MSG
+   503 print __fn6_distance
+   504 print "[] sec\n"
 -    * set __tmp159 null
-+  569 noop
-   570 jump __label118 always
-   571 label __label117
-   572 print MSG
+   505 jump __label118 always
+   506 label __label117
+   507 print MSG
 -    * set __tmp159 MSG
-+  573 noop
-   574 label __label118
-   575 set __tmp104 @unit
-   576 jump __label83 always
+   508 label __label118
+   509 set __tmp104 @unit
+   510 jump __label83 always
  
-   600 print "[salmon]No unit of type "
-   601 print UNIT
-   602 print " found..."
+   534 print "[salmon]No unit of type "
+   535 print UNIT
+   536 print " found..."
 -    * set __tmp171 null
-+  603 noop
-   604 jump __label131 always
-   605 label __label130
-   606 sensor __tmp172 @unit @controlled
+   537 jump __label131 always
+   538 label __label130
+   539 sensor __tmp172 @unit @controlled
  
-   617 jump __label126 always
-   618 set __tmp174 null
-   619 label __label133
+   550 jump __label126 always
+   551 set __tmp174 null
+   552 label __label133
 -    * set __tmp171 __tmp174
-+  620 noop
-   621 label __label131
-   622 printflush message1
-   623 label __label128
+   553 label __label131
+   554 printflush message1
+   555 label __label128
  
-   625 label __label129
-   626 set __tmp169 null
-   627 label __label126
+   557 label __label129
+   558 set __tmp169 null
+   559 label __label126
 -    * set __tmp168 __tmp169
-+  628 noop
-   629 jump __label124 always
-   630 label __label123
+   560 jump __label124 always
+   561 label __label123
 -    * set __tmp168 null
-+  631 noop
-   632 label __label124
-   633 sensor __fn8_state @unit @flag
-   634 noop
+   562 label __label124
+   563 sensor __fn8_state @unit @flag
+   564 set __fn8_distance -1
  
-   664 label __label139
-   665 set __tmp180 __tmp183
-   666 label __label137
+   593 label __label139
+   594 set __tmp180 __tmp183
+   595 label __label137
 -    * set __tmp177 __tmp180
-+  667 noop
-   668 jump __label135 always
-   669 label __label134
+   596 jump __label135 always
+   597 label __label134
 -    * set __tmp177 null
-+  670 noop
-   671 label __label135
-   672 op equal __tmp186 __fn8_state 2
-   673 jump __label142 equal __tmp186 false
+   598 label __label135
+   599 op equal __tmp186 __fn8_state 2
+   600 jump __label142 equal __tmp186 false
  
-   700 noop
-   701 set __tmp189 __fn8_distance
-   702 label __label145
+   626 op div __fn8_distance __tmp198 10
+   627 set __tmp189 __fn8_distance
+   628 label __label145
 -    * set __tmp187 __tmp189
-+  703 noop
-   704 jump __label143 always
-   705 label __label142
+   629 jump __label143 always
+   630 label __label142
 -    * set __tmp187 null
-+  706 noop
-   707 label __label143
-   708 op equal __tmp200 __fn8_state 3
-   709 jump __label148 equal __tmp200 false
+   631 label __label143
+   632 op equal __tmp200 __fn8_state 3
+   633 jump __label148 equal __tmp200 false
  
-   713 ucontrol itemDrop DOME UNIT_CAPACITY
-   714 set MSG ", supplying\n"
-   715 set __fn8_color "green"
+   637 ucontrol itemDrop DOME UNIT_CAPACITY
+   638 set MSG ", supplying\n"
+   639 set __fn8_color "green"
 -    * set __tmp204 __fn8_color
-+  716 noop
-   717 jump __label153 always
-   718 label __label152
-   719 ucontrol approach DOME_X DOME_Y 6
-   720 set MSG ", waiting\n"
+   640 jump __label153 always
+   641 label __label152
+   642 ucontrol approach DOME_X DOME_Y 6
+   643 set MSG ", waiting\n"
 -    * set __tmp204 MSG
-+  721 noop
-   722 label __label153
-   723 sensor __tmp205 @unit @totalItems
-   724 op lessThanEq __tmp206 __tmp205 0
+   644 label __label153
+   645 sensor __tmp205 @unit @totalItems
+   646 op lessThanEq __tmp206 __tmp205 0
  
-   745 noop
-   746 set __tmp203 __fn8_distance
-   747 label __label151
+   666 op div __fn8_distance __tmp213 10
+   667 set __tmp203 __fn8_distance
+   668 label __label151
 -    * set __tmp201 __tmp203
-+  748 noop
-   749 jump __label149 always
-   750 label __label148
+   669 jump __label149 always
+   670 label __label148
 -    * set __tmp201 null
-+  751 noop
-   752 label __label149
-   753 ucontrol flag __fn8_state
-   754 sensor __tmp215 @unit @totalItems
+   671 label __label149
+   672 ucontrol flag __fn8_state
+   673 sensor __tmp215 @unit @totalItems
  
-   764 print MSG
-   765 print __fn8_distance
-   766 print "[] sec\n"
+   683 print MSG
+   684 print __fn8_distance
+   685 print "[] sec\n"
 -    * set __tmp217 null
-+  767 noop
-   768 jump __label157 always
-   769 label __label156
-   770 print MSG
+   686 jump __label157 always
+   687 label __label156
+   688 print MSG
 -    * set __tmp217 MSG
-+  771 noop
-   772 label __label157
-   773 set __tmp162 @unit
-   774 jump __label122 always
+   689 label __label157
+   690 set __tmp162 @unit
+   691 jump __label122 always
  
-   786 noop
-   787 label __label159
-   788 set SUPPLY_S_FIRST __tmp218
+   701 op equal __tmp218 __tmp221 0
+   702 label __label159
+   703 set SUPPLY_S_FIRST __tmp218
 -    * set __tmp160 SUPPLY_S_FIRST
-+  789 noop
-   790 jump __label120 always
-   791 label __label119
+   704 jump __label120 always
+   705 label __label119
 -    * set __tmp160 null
-+  792 noop
-   793 label __label120
-   794 label __label160
-   795 set __fn10_item @phase-fabric
+   706 label __label120
+   707 label __label160
+   708 set __fn10_item @phase-fabric
  
-   810 print "[]\n"
-   811 set __tmp226 null
-   812 label __label163
+   722 print "[]\n"
+   723 set __tmp226 null
+   724 label __label163
 -    * set __tmp223 __tmp226
-+  813 noop
-   814 label __label161
-   815 label __label164
-   816 set __fn11_unit UNIT_P1
+   725 label __label161
+   726 label __label164
+   727 set __fn11_unit UNIT_P1
  
-   833 print "[salmon]No unit of type "
-   834 print UNIT
-   835 print " found..."
+   744 print "[salmon]No unit of type "
+   745 print UNIT
+   746 print " found..."
 -    * set __tmp236 null
-+  836 noop
-   837 jump __label174 always
-   838 label __label173
-   839 sensor __tmp237 @unit @controlled
+   747 jump __label174 always
+   748 label __label173
+   749 sensor __tmp237 @unit @controlled
  
-   850 jump __label169 always
-   851 set __tmp239 null
-   852 label __label176
+   760 jump __label169 always
+   761 set __tmp239 null
+   762 label __label176
 -    * set __tmp236 __tmp239
-+  853 noop
-   854 label __label174
-   855 printflush message1
-   856 label __label171
+   763 label __label174
+   764 printflush message1
+   765 label __label171
  
-   858 label __label172
-   859 set __tmp234 null
-   860 label __label169
+   767 label __label172
+   768 set __tmp234 null
+   769 label __label169
 -    * set __tmp233 __tmp234
-+  861 noop
-   862 jump __label167 always
-   863 label __label166
+   770 jump __label167 always
+   771 label __label166
 -    * set __tmp233 null
-+  864 noop
-   865 label __label167
-   866 sensor __fn11_state @unit @flag
-   867 noop
+   772 label __label167
+   773 sensor __fn11_state @unit @flag
+   774 set __fn11_distance -1
  
-   897 label __label182
-   898 set __tmp245 __tmp248
-   899 label __label180
+   803 label __label182
+   804 set __tmp245 __tmp248
+   805 label __label180
 -    * set __tmp242 __tmp245
-+  900 noop
-   901 jump __label178 always
-   902 label __label177
+   806 jump __label178 always
+   807 label __label177
 -    * set __tmp242 null
-+  903 noop
-   904 label __label178
-   905 op equal __tmp251 __fn11_state 2
-   906 jump __label185 equal __tmp251 false
+   808 label __label178
+   809 op equal __tmp251 __fn11_state 2
+   810 jump __label185 equal __tmp251 false
  
-   933 noop
-   934 set __tmp254 __fn11_distance
-   935 label __label188
+   836 op div __fn11_distance __tmp263 10
+   837 set __tmp254 __fn11_distance
+   838 label __label188
 -    * set __tmp252 __tmp254
-+  936 noop
-   937 jump __label186 always
-   938 label __label185
+   839 jump __label186 always
+   840 label __label185
 -    * set __tmp252 null
-+  939 noop
-   940 label __label186
-   941 op equal __tmp265 __fn11_state 3
-   942 jump __label191 equal __tmp265 false
+   841 label __label186
+   842 op equal __tmp265 __fn11_state 3
+   843 jump __label191 equal __tmp265 false
  
-   946 ucontrol itemDrop DOME UNIT_CAPACITY
-   947 set MSG ", supplying\n"
-   948 set __fn11_color "green"
+   847 ucontrol itemDrop DOME UNIT_CAPACITY
+   848 set MSG ", supplying\n"
+   849 set __fn11_color "green"
 -    * set __tmp269 __fn11_color
-+  949 noop
-   950 jump __label196 always
-   951 label __label195
-   952 ucontrol approach DOME_X DOME_Y 6
-   953 set MSG ", waiting\n"
+   850 jump __label196 always
+   851 label __label195
+   852 ucontrol approach DOME_X DOME_Y 6
+   853 set MSG ", waiting\n"
 -    * set __tmp269 MSG
-+  954 noop
-   955 label __label196
-   956 sensor __tmp270 @unit @totalItems
-   957 op lessThanEq __tmp271 __tmp270 0
+   854 label __label196
+   855 sensor __tmp270 @unit @totalItems
+   856 op lessThanEq __tmp271 __tmp270 0
  
-   978 noop
-   979 set __tmp268 __fn11_distance
-   980 label __label194
+   876 op div __fn11_distance __tmp278 10
+   877 set __tmp268 __fn11_distance
+   878 label __label194
 -    * set __tmp266 __tmp268
-+  981 noop
-   982 jump __label192 always
-   983 label __label191
+   879 jump __label192 always
+   880 label __label191
 -    * set __tmp266 null
-+  984 noop
-   985 label __label192
-   986 ucontrol flag __fn11_state
-   987 sensor __tmp280 @unit @totalItems
+   881 label __label192
+   882 ucontrol flag __fn11_state
+   883 sensor __tmp280 @unit @totalItems
  
-   997 print MSG
-   998 print __fn11_distance
-   999 print "[] sec\n"
+   893 print MSG
+   894 print __fn11_distance
+   895 print "[] sec\n"
 -    * set __tmp282 null
-+ 1000 noop
-  1001 jump __label200 always
-  1002 label __label199
-  1003 print MSG
+   896 jump __label200 always
+   897 label __label199
+   898 print MSG
 -    * set __tmp282 MSG
-+ 1004 noop
-  1005 label __label200
-  1006 set __tmp227 @unit
-  1007 jump __label165 always
+   899 label __label200
+   900 set __tmp227 @unit
+   901 jump __label165 always
  
-  1031 print "[salmon]No unit of type "
-  1032 print UNIT
-  1033 print " found..."
+   925 print "[salmon]No unit of type "
+   926 print UNIT
+   927 print " found..."
 -    * set __tmp294 null
-+ 1034 noop
-  1035 jump __label213 always
-  1036 label __label212
-  1037 sensor __tmp295 @unit @controlled
+   928 jump __label213 always
+   929 label __label212
+   930 sensor __tmp295 @unit @controlled
  
-  1048 jump __label208 always
-  1049 set __tmp297 null
-  1050 label __label215
+   941 jump __label208 always
+   942 set __tmp297 null
+   943 label __label215
 -    * set __tmp294 __tmp297
-+ 1051 noop
-  1052 label __label213
-  1053 printflush message1
-  1054 label __label210
+   944 label __label213
+   945 printflush message1
+   946 label __label210
  
-  1056 label __label211
-  1057 set __tmp292 null
-  1058 label __label208
+   948 label __label211
+   949 set __tmp292 null
+   950 label __label208
 -    * set __tmp291 __tmp292
-+ 1059 noop
-  1060 jump __label206 always
-  1061 label __label205
+   951 jump __label206 always
+   952 label __label205
 -    * set __tmp291 null
-+ 1062 noop
-  1063 label __label206
-  1064 sensor __fn13_state @unit @flag
-  1065 noop
+   953 label __label206
+   954 sensor __fn13_state @unit @flag
+   955 set __fn13_distance -1
  
-  1095 label __label221
-  1096 set __tmp303 __tmp306
-  1097 label __label219
+   984 label __label221
+   985 set __tmp303 __tmp306
+   986 label __label219
 -    * set __tmp300 __tmp303
-+ 1098 noop
-  1099 jump __label217 always
-  1100 label __label216
+   987 jump __label217 always
+   988 label __label216
 -    * set __tmp300 null
-+ 1101 noop
-  1102 label __label217
-  1103 op equal __tmp309 __fn13_state 2
-  1104 jump __label224 equal __tmp309 false
+   989 label __label217
+   990 op equal __tmp309 __fn13_state 2
+   991 jump __label224 equal __tmp309 false
  
-  1131 noop
-  1132 set __tmp312 __fn13_distance
-  1133 label __label227
+  1017 op div __fn13_distance __tmp321 10
+  1018 set __tmp312 __fn13_distance
+  1019 label __label227
 -    * set __tmp310 __tmp312
-+ 1134 noop
-  1135 jump __label225 always
-  1136 label __label224
+  1020 jump __label225 always
+  1021 label __label224
 -    * set __tmp310 null
-+ 1137 noop
-  1138 label __label225
-  1139 op equal __tmp323 __fn13_state 3
-  1140 jump __label230 equal __tmp323 false
+  1022 label __label225
+  1023 op equal __tmp323 __fn13_state 3
+  1024 jump __label230 equal __tmp323 false
  
-  1144 ucontrol itemDrop DOME UNIT_CAPACITY
-  1145 set MSG ", supplying\n"
-  1146 set __fn13_color "green"
+  1028 ucontrol itemDrop DOME UNIT_CAPACITY
+  1029 set MSG ", supplying\n"
+  1030 set __fn13_color "green"
 -    * set __tmp327 __fn13_color
-+ 1147 noop
-  1148 jump __label235 always
-  1149 label __label234
-  1150 ucontrol approach DOME_X DOME_Y 6
-  1151 set MSG ", waiting\n"
+  1031 jump __label235 always
+  1032 label __label234
+  1033 ucontrol approach DOME_X DOME_Y 6
+  1034 set MSG ", waiting\n"
 -    * set __tmp327 MSG
-+ 1152 noop
-  1153 label __label235
-  1154 sensor __tmp328 @unit @totalItems
-  1155 op lessThanEq __tmp329 __tmp328 0
+  1035 label __label235
+  1036 sensor __tmp328 @unit @totalItems
+  1037 op lessThanEq __tmp329 __tmp328 0
  
-  1176 noop
-  1177 set __tmp326 __fn13_distance
-  1178 label __label233
+  1057 op div __fn13_distance __tmp336 10
+  1058 set __tmp326 __fn13_distance
+  1059 label __label233
 -    * set __tmp324 __tmp326
-+ 1179 noop
-  1180 jump __label231 always
-  1181 label __label230
+  1060 jump __label231 always
+  1061 label __label230
 -    * set __tmp324 null
-+ 1182 noop
-  1183 label __label231
-  1184 ucontrol flag __fn13_state
-  1185 sensor __tmp338 @unit @totalItems
+  1062 label __label231
+  1063 ucontrol flag __fn13_state
+  1064 sensor __tmp338 @unit @totalItems
  
-  1195 print MSG
-  1196 print __fn13_distance
-  1197 print "[] sec\n"
+  1074 print MSG
+  1075 print __fn13_distance
+  1076 print "[] sec\n"
 -    * set __tmp340 null
-+ 1198 noop
-  1199 jump __label239 always
-  1200 label __label238
-  1201 print MSG
+  1077 jump __label239 always
+  1078 label __label238
+  1079 print MSG
 -    * set __tmp340 MSG
-+ 1202 noop
-  1203 label __label239
-  1204 set __tmp285 @unit
-  1205 jump __label204 always
+  1080 label __label239
+  1081 set __tmp285 @unit
+  1082 jump __label204 always
  
-  1217 noop
-  1218 label __label241
-  1219 set SUPPLY_P_FIRST __tmp341
+  1092 op equal __tmp341 __tmp344 0
+  1093 label __label241
+  1094 set SUPPLY_P_FIRST __tmp341
 -    * set __tmp283 SUPPLY_P_FIRST
-+ 1220 noop
-  1221 jump __label202 always
-  1222 label __label201
+  1095 jump __label202 always
+  1096 label __label201
 -    * set __tmp283 null
-+ 1223 noop
-  1224 label __label202
-  1225 op sub __tmp346 @time start
-  1226 op floor __tmp347 __tmp346
+  1097 label __label202
+  1098 op sub __tmp346 @time start
+  1099 op floor __tmp347 __tmp346
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-54 instructions):
  
-    63 op notEqual __tmp13 UNIT_S2 null
-    64 jump __label18 equal __tmp13 false
-    65 jump __label15 always
+    57 op notEqual __tmp13 UNIT_S2 null
+    58 jump __label18 equal __tmp13 false
+    59 jump __label15 always
 -    * set __tmp14 null
-+   66 noop
-    67 jump __label19 always
-    68 label __label18
+    60 jump __label19 always
+    61 label __label18
 -    * set __tmp14 null
-+   69 noop
-    70 label __label19
-    71 noop
-    72 jump __label17 always
+    62 label __label19
+    63 jump __label17 always
+    64 label __label16
  
-   105 print "[salmon]Looking for a free "
-   106 print UNIT
-   107 print "..."
+    92 print "[salmon]Looking for a free "
+    93 print UNIT
+    94 print "..."
 -    * set __tmp26 null
-+  108 noop
-   109 jump __label30 always
-   110 label __label29
-   111 ucontrol flag 1
-   112 set __tmp21 @unit
-   113 jump __label23 always
+    95 jump __label30 always
+    96 label __label29
+    97 ucontrol flag 1
+    98 set __tmp21 @unit
+    99 jump __label23 always
 -    * set __tmp26 null
-+  114 noop
-   115 label __label30
-   116 noop
-   117 label __label28
+   100 label __label30
+   101 label __label28
+   102 printflush message1
  
-   147 print "[salmon]Looking for a free "
-   148 print UNIT
-   149 print "..."
+   128 print "[salmon]Looking for a free "
+   129 print UNIT
+   130 print "..."
 -    * set __tmp34 null
-+  150 noop
-   151 jump __label41 always
-   152 label __label40
-   153 ucontrol flag 1
-   154 set __tmp29 @unit
-   155 jump __label34 always
+   131 jump __label41 always
+   132 label __label40
+   133 ucontrol flag 1
+   134 set __tmp29 @unit
+   135 jump __label34 always
 -    * set __tmp34 null
-+  156 noop
-   157 label __label41
-   158 noop
-   159 label __label39
+   136 label __label41
+   137 label __label39
+   138 printflush message1
  
-   235 print "[salmon]Looking for a free "
-   236 print UNIT
-   237 print "..."
+   198 print "[salmon]Looking for a free "
+   199 print UNIT
+   200 print "..."
 -    * set __tmp67 null
-+  238 noop
-   239 jump __label59 always
-   240 label __label58
-   241 ucontrol flag 1
-   242 set __tmp62 @unit
-   243 jump __label52 always
+   201 jump __label59 always
+   202 label __label58
+   203 ucontrol flag 1
+   204 set __tmp62 @unit
+   205 jump __label52 always
 -    * set __tmp67 null
-+  244 noop
-   245 label __label59
-   246 noop
-   247 label __label57
+   206 label __label59
+   207 label __label57
+   208 printflush message1
  
-   277 print "[salmon]Looking for a free "
-   278 print UNIT
-   279 print "..."
+   234 print "[salmon]Looking for a free "
+   235 print UNIT
+   236 print "..."
 -    * set __tmp75 null
-+  280 noop
-   281 jump __label70 always
-   282 label __label69
-   283 ucontrol flag 1
-   284 set __tmp70 @unit
-   285 jump __label63 always
+   237 jump __label70 always
+   238 label __label69
+   239 ucontrol flag 1
+   240 set __tmp70 @unit
+   241 jump __label63 always
 -    * set __tmp75 null
-+  286 noop
-   287 label __label70
-   288 noop
-   289 label __label68
+   242 label __label70
+   243 label __label68
+   244 printflush message1
  
-   371 print "  dome:  [green]"
-   372 print __fn5_level
-   373 print "[]\n"
+   313 print "  dome:  [green]"
+   314 print __fn5_level
+   315 print "[]\n"
 -    * set __tmp103 null
-+  374 noop
-   375 jump __label81 always
-   376 label __label80
-   377 print "  dome:  [coral]"
-   378 print __fn5_level
-   379 print "[]\n"
+   316 jump __label81 always
+   317 label __label80
+   318 print "  dome:  [coral]"
+   319 print __fn5_level
+   320 print "[]\n"
 -    * set __tmp103 null
-+  380 noop
-   381 label __label81
-   382 noop
-   383 label __label79
+   321 label __label81
+   322 label __label79
+   323 label __label82
  
-   411 print "[salmon]Looking for a free "
-   412 print UNIT
-   413 print "..."
+   349 print "[salmon]Looking for a free "
+   350 print UNIT
+   351 print "..."
 -    * set __tmp116 null
-+  414 noop
-   415 jump __label94 always
-   416 label __label93
-   417 ucontrol flag 1
+   352 jump __label94 always
+   353 label __label93
+   354 ucontrol flag 1
 -    * set __tmp111 @unit
-+  418 noop
-   419 jump __label87 always
+   355 jump __label87 always
 -    * set __tmp116 null
-+  420 noop
-   421 label __label94
-   422 noop
-   423 label __label92
- 
-   425 label __label89
-   426 jump __label88 always
-   427 label __label90
+   356 label __label94
+   357 label __label92
+   358 printflush message1
+   359 label __label89
+   360 jump __label88 always
+   361 label __label90
 -    * set __tmp111 null
-+  428 noop
-   429 label __label87
-   430 noop
-   431 jump __label85 always
+   362 label __label87
+   363 jump __label85 always
+   364 label __label84
  
-   442 op equal __tmp121 __tmp120 __fn6_item
-   443 jump __label97 equal __tmp121 false
-   444 set __fn6_state 3
+   372 op equal __tmp121 __tmp120 __fn6_item
+   373 jump __label97 equal __tmp121 false
+   374 set __fn6_state 3
 -    * set __tmp122 __fn6_state
-+  445 noop
-   446 jump __label98 always
-   447 label __label97
-   448 sensor __tmp123 @unit @totalItems
+   375 jump __label98 always
+   376 label __label97
+   377 sensor __tmp123 @unit @totalItems
  
-   464 label __label102
-   465 set __tmp125 __tmp127
-   466 label __label100
+   393 label __label102
+   394 set __tmp125 __tmp127
+   395 label __label100
 -    * set __tmp122 __tmp125
-+  467 noop
-   468 label __label98
-   469 noop
-   470 jump __label96 always
+   396 label __label98
+   397 jump __label96 always
+   398 label __label95
  
-   487 set MSG ", loading\n"
-   488 set __tmp134 MSG
-   489 label __label108
+   413 set MSG ", loading\n"
+   414 set __tmp134 MSG
+   415 label __label108
 -    * set __tmp131 __tmp134
-+  490 noop
-   491 jump __label106 always
-   492 label __label105
-   493 ucontrol approach CORE_X CORE_Y 6
+   416 jump __label106 always
+   417 label __label105
+   418 ucontrol approach CORE_X CORE_Y 6
  
-   500 op idiv __tmp140 __tmp139 SPEED_TENTHS
-   501 op div __fn6_distance __tmp140 10
-   502 noop
+   424 op len __tmp139 __tmp136 __tmp138
+   425 op idiv __tmp140 __tmp139 SPEED_TENTHS
+   426 op div __fn6_distance __tmp140 10
 -    * set __tmp131 __fn6_distance
-+  503 noop
-   504 label __label106
-   505 noop
-   506 jump __label104 always
+   427 label __label106
+   428 jump __label104 always
+   429 label __label103
  
-   532 label __label115
-   533 set __tmp149 null
-   534 label __label116
+   451 label __label115
+   452 set __tmp149 null
+   453 label __label116
 -    * set __tmp145 __tmp149
-+  535 noop
-   536 jump __label112 always
-   537 label __label111
-   538 ucontrol approach DOME_X DOME_Y 6
+   454 jump __label112 always
+   455 label __label111
+   456 ucontrol approach DOME_X DOME_Y 6
  
-   545 op idiv __tmp155 __tmp154 SPEED_TENTHS
-   546 op div __fn6_distance __tmp155 10
-   547 noop
+   462 op len __tmp154 __tmp151 __tmp153
+   463 op idiv __tmp155 __tmp154 SPEED_TENTHS
+   464 op div __fn6_distance __tmp155 10
 -    * set __tmp145 __fn6_distance
-+  548 noop
-   549 label __label112
-   550 noop
-   551 jump __label110 always
+   465 label __label112
+   466 jump __label110 always
+   467 label __label109
  
-   609 print "[salmon]Looking for a free "
-   610 print UNIT
-   611 print "..."
+   520 print "[salmon]Looking for a free "
+   521 print UNIT
+   522 print "..."
 -    * set __tmp174 null
-+  612 noop
-   613 jump __label133 always
-   614 label __label132
-   615 ucontrol flag 1
+   523 jump __label133 always
+   524 label __label132
+   525 ucontrol flag 1
 -    * set __tmp169 @unit
-+  616 noop
-   617 jump __label126 always
+   526 jump __label126 always
 -    * set __tmp174 null
-+  618 noop
-   619 label __label133
-   620 noop
-   621 label __label131
- 
-   623 label __label128
-   624 jump __label127 always
-   625 label __label129
+   527 label __label133
+   528 label __label131
+   529 printflush message1
+   530 label __label128
+   531 jump __label127 always
+   532 label __label129
 -    * set __tmp169 null
-+  626 noop
-   627 label __label126
-   628 noop
-   629 jump __label124 always
+   533 label __label126
+   534 jump __label124 always
+   535 label __label123
  
-   640 op equal __tmp179 __tmp178 __fn8_item
-   641 jump __label136 equal __tmp179 false
-   642 set __fn8_state 3
+   543 op equal __tmp179 __tmp178 __fn8_item
+   544 jump __label136 equal __tmp179 false
+   545 set __fn8_state 3
 -    * set __tmp180 __fn8_state
-+  643 noop
-   644 jump __label137 always
-   645 label __label136
-   646 sensor __tmp181 @unit @totalItems
+   546 jump __label137 always
+   547 label __label136
+   548 sensor __tmp181 @unit @totalItems
  
-   662 label __label141
-   663 set __tmp183 __tmp185
-   664 label __label139
+   564 label __label141
+   565 set __tmp183 __tmp185
+   566 label __label139
 -    * set __tmp180 __tmp183
-+  665 noop
-   666 label __label137
-   667 noop
-   668 jump __label135 always
+   567 label __label137
+   568 jump __label135 always
+   569 label __label134
  
-   685 set MSG ", loading\n"
-   686 set __tmp192 MSG
-   687 label __label147
+   584 set MSG ", loading\n"
+   585 set __tmp192 MSG
+   586 label __label147
 -    * set __tmp189 __tmp192
-+  688 noop
-   689 jump __label145 always
-   690 label __label144
-   691 ucontrol approach CORE_X CORE_Y 6
+   587 jump __label145 always
+   588 label __label144
+   589 ucontrol approach CORE_X CORE_Y 6
  
-   698 op idiv __tmp198 __tmp197 SPEED_TENTHS
-   699 op div __fn8_distance __tmp198 10
-   700 noop
+   595 op len __tmp197 __tmp194 __tmp196
+   596 op idiv __tmp198 __tmp197 SPEED_TENTHS
+   597 op div __fn8_distance __tmp198 10
 -    * set __tmp189 __fn8_distance
-+  701 noop
-   702 label __label145
-   703 noop
-   704 jump __label143 always
+   598 label __label145
+   599 jump __label143 always
+   600 label __label142
  
-   730 label __label154
-   731 set __tmp207 null
-   732 label __label155
+   622 label __label154
+   623 set __tmp207 null
+   624 label __label155
 -    * set __tmp203 __tmp207
-+  733 noop
-   734 jump __label151 always
-   735 label __label150
-   736 ucontrol approach DOME_X DOME_Y 6
+   625 jump __label151 always
+   626 label __label150
+   627 ucontrol approach DOME_X DOME_Y 6
  
-   743 op idiv __tmp213 __tmp212 SPEED_TENTHS
-   744 op div __fn8_distance __tmp213 10
-   745 noop
+   633 op len __tmp212 __tmp209 __tmp211
+   634 op idiv __tmp213 __tmp212 SPEED_TENTHS
+   635 op div __fn8_distance __tmp213 10
 -    * set __tmp203 __fn8_distance
-+  746 noop
-   747 label __label151
-   748 noop
-   749 jump __label149 always
+   636 label __label151
+   637 jump __label149 always
+   638 label __label148
  
-   802 print "  dome:  [green]"
-   803 print __fn10_level
-   804 print "[]\n"
+   682 print "  dome:  [green]"
+   683 print __fn10_level
+   684 print "[]\n"
 -    * set __tmp226 null
-+  805 noop
-   806 jump __label163 always
-   807 label __label162
-   808 print "  dome:  [coral]"
-   809 print __fn10_level
-   810 print "[]\n"
+   685 jump __label163 always
+   686 label __label162
+   687 print "  dome:  [coral]"
+   688 print __fn10_level
+   689 print "[]\n"
 -    * set __tmp226 null
-+  811 noop
-   812 label __label163
-   813 noop
-   814 label __label161
+   690 label __label163
+   691 label __label161
+   692 label __label164
  
-   842 print "[salmon]Looking for a free "
-   843 print UNIT
-   844 print "..."
+   718 print "[salmon]Looking for a free "
+   719 print UNIT
+   720 print "..."
 -    * set __tmp239 null
-+  845 noop
-   846 jump __label176 always
-   847 label __label175
-   848 ucontrol flag 1
+   721 jump __label176 always
+   722 label __label175
+   723 ucontrol flag 1
 -    * set __tmp234 @unit
-+  849 noop
-   850 jump __label169 always
+   724 jump __label169 always
 -    * set __tmp239 null
-+  851 noop
-   852 label __label176
-   853 noop
-   854 label __label174
- 
-   856 label __label171
-   857 jump __label170 always
-   858 label __label172
+   725 label __label176
+   726 label __label174
+   727 printflush message1
+   728 label __label171
+   729 jump __label170 always
+   730 label __label172
 -    * set __tmp234 null
-+  859 noop
-   860 label __label169
-   861 noop
-   862 jump __label167 always
+   731 label __label169
+   732 jump __label167 always
+   733 label __label166
  
-   873 op equal __tmp244 __tmp243 __fn11_item
-   874 jump __label179 equal __tmp244 false
-   875 set __fn11_state 3
+   741 op equal __tmp244 __tmp243 __fn11_item
+   742 jump __label179 equal __tmp244 false
+   743 set __fn11_state 3
 -    * set __tmp245 __fn11_state
-+  876 noop
-   877 jump __label180 always
-   878 label __label179
-   879 sensor __tmp246 @unit @totalItems
+   744 jump __label180 always
+   745 label __label179
+   746 sensor __tmp246 @unit @totalItems
  
-   895 label __label184
-   896 set __tmp248 __tmp250
-   897 label __label182
+   762 label __label184
+   763 set __tmp248 __tmp250
+   764 label __label182
 -    * set __tmp245 __tmp248
-+  898 noop
-   899 label __label180
-   900 noop
-   901 jump __label178 always
+   765 label __label180
+   766 jump __label178 always
+   767 label __label177
  
-   918 set MSG ", loading\n"
-   919 set __tmp257 MSG
-   920 label __label190
+   782 set MSG ", loading\n"
+   783 set __tmp257 MSG
+   784 label __label190
 -    * set __tmp254 __tmp257
-+  921 noop
-   922 jump __label188 always
-   923 label __label187
-   924 ucontrol approach CORE_X CORE_Y 6
+   785 jump __label188 always
+   786 label __label187
+   787 ucontrol approach CORE_X CORE_Y 6
  
-   931 op idiv __tmp263 __tmp262 SPEED_TENTHS
-   932 op div __fn11_distance __tmp263 10
-   933 noop
+   793 op len __tmp262 __tmp259 __tmp261
+   794 op idiv __tmp263 __tmp262 SPEED_TENTHS
+   795 op div __fn11_distance __tmp263 10
 -    * set __tmp254 __fn11_distance
-+  934 noop
-   935 label __label188
-   936 noop
-   937 jump __label186 always
+   796 label __label188
+   797 jump __label186 always
+   798 label __label185
  
-   963 label __label197
-   964 set __tmp272 null
-   965 label __label198
+   820 label __label197
+   821 set __tmp272 null
+   822 label __label198
 -    * set __tmp268 __tmp272
-+  966 noop
-   967 jump __label194 always
-   968 label __label193
-   969 ucontrol approach DOME_X DOME_Y 6
+   823 jump __label194 always
+   824 label __label193
+   825 ucontrol approach DOME_X DOME_Y 6
  
-   976 op idiv __tmp278 __tmp277 SPEED_TENTHS
-   977 op div __fn11_distance __tmp278 10
-   978 noop
+   831 op len __tmp277 __tmp274 __tmp276
+   832 op idiv __tmp278 __tmp277 SPEED_TENTHS
+   833 op div __fn11_distance __tmp278 10
 -    * set __tmp268 __fn11_distance
-+  979 noop
-   980 label __label194
-   981 noop
-   982 jump __label192 always
+   834 label __label194
+   835 jump __label192 always
+   836 label __label191
  
-  1040 print "[salmon]Looking for a free "
-  1041 print UNIT
-  1042 print "..."
+   889 print "[salmon]Looking for a free "
+   890 print UNIT
+   891 print "..."
 -    * set __tmp297 null
-+ 1043 noop
-  1044 jump __label215 always
-  1045 label __label214
-  1046 ucontrol flag 1
+   892 jump __label215 always
+   893 label __label214
+   894 ucontrol flag 1
 -    * set __tmp292 @unit
-+ 1047 noop
-  1048 jump __label208 always
+   895 jump __label208 always
 -    * set __tmp297 null
-+ 1049 noop
-  1050 label __label215
-  1051 noop
-  1052 label __label213
- 
-  1054 label __label210
-  1055 jump __label209 always
-  1056 label __label211
+   896 label __label215
+   897 label __label213
+   898 printflush message1
+   899 label __label210
+   900 jump __label209 always
+   901 label __label211
 -    * set __tmp292 null
-+ 1057 noop
-  1058 label __label208
-  1059 noop
-  1060 jump __label206 always
+   902 label __label208
+   903 jump __label206 always
+   904 label __label205
  
-  1071 op equal __tmp302 __tmp301 __fn13_item
-  1072 jump __label218 equal __tmp302 false
-  1073 set __fn13_state 3
+   912 op equal __tmp302 __tmp301 __fn13_item
+   913 jump __label218 equal __tmp302 false
+   914 set __fn13_state 3
 -    * set __tmp303 __fn13_state
-+ 1074 noop
-  1075 jump __label219 always
-  1076 label __label218
-  1077 sensor __tmp304 @unit @totalItems
+   915 jump __label219 always
+   916 label __label218
+   917 sensor __tmp304 @unit @totalItems
  
-  1093 label __label223
-  1094 set __tmp306 __tmp308
-  1095 label __label221
+   933 label __label223
+   934 set __tmp306 __tmp308
+   935 label __label221
 -    * set __tmp303 __tmp306
-+ 1096 noop
-  1097 label __label219
-  1098 noop
-  1099 jump __label217 always
+   936 label __label219
+   937 jump __label217 always
+   938 label __label216
  
-  1116 set MSG ", loading\n"
-  1117 set __tmp315 MSG
-  1118 label __label229
+   953 set MSG ", loading\n"
+   954 set __tmp315 MSG
+   955 label __label229
 -    * set __tmp312 __tmp315
-+ 1119 noop
-  1120 jump __label227 always
-  1121 label __label226
-  1122 ucontrol approach CORE_X CORE_Y 6
+   956 jump __label227 always
+   957 label __label226
+   958 ucontrol approach CORE_X CORE_Y 6
  
-  1129 op idiv __tmp321 __tmp320 SPEED_TENTHS
-  1130 op div __fn13_distance __tmp321 10
-  1131 noop
+   964 op len __tmp320 __tmp317 __tmp319
+   965 op idiv __tmp321 __tmp320 SPEED_TENTHS
+   966 op div __fn13_distance __tmp321 10
 -    * set __tmp312 __fn13_distance
-+ 1132 noop
-  1133 label __label227
-  1134 noop
-  1135 jump __label225 always
+   967 label __label227
+   968 jump __label225 always
+   969 label __label224
  
-  1161 label __label236
-  1162 set __tmp330 null
-  1163 label __label237
+   991 label __label236
+   992 set __tmp330 null
+   993 label __label237
 -    * set __tmp326 __tmp330
-+ 1164 noop
-  1165 jump __label233 always
-  1166 label __label232
-  1167 ucontrol approach DOME_X DOME_Y 6
+   994 jump __label233 always
+   995 label __label232
+   996 ucontrol approach DOME_X DOME_Y 6
  
-  1174 op idiv __tmp336 __tmp335 SPEED_TENTHS
-  1175 op div __fn13_distance __tmp336 10
-  1176 noop
+  1002 op len __tmp335 __tmp332 __tmp334
+  1003 op idiv __tmp336 __tmp335 SPEED_TENTHS
+  1004 op div __fn13_distance __tmp336 10
 -    * set __tmp326 __fn13_distance
-+ 1177 noop
-  1178 label __label233
-  1179 noop
-  1180 jump __label231 always
+  1005 label __label233
+  1006 jump __label231 always
+  1007 label __label230
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-24 instructions):
  
-   449 op equal __tmp124 __tmp123 0
-   450 jump __label99 equal __tmp124 false
-   451 set __fn6_state 2
+   378 op equal __tmp124 __tmp123 0
+   379 jump __label99 equal __tmp124 false
+   380 set __fn6_state 2
 -    * set __tmp125 __fn6_state
-+  452 noop
-   453 jump __label100 always
-   454 label __label99
-   455 set MSG ", initializing\n"
+   381 jump __label100 always
+   382 label __label99
+   383 set MSG ", initializing\n"
  
-   462 label __label101
-   463 set __tmp127 null
-   464 label __label102
+   390 label __label101
+   391 set __tmp127 null
+   392 label __label102
 -    * set __tmp125 __tmp127
-+  465 noop
-   466 label __label100
-   467 noop
-   468 label __label98
+   393 label __label100
+   394 label __label98
+   395 jump __label96 always
  
-   481 jump __label107 equal __tmp133 false
-   482 ucontrol approach DOME_X DOME_Y 6
-   483 set __fn6_state 3
+   405 jump __label107 equal __tmp133 false
+   406 ucontrol approach DOME_X DOME_Y 6
+   407 set __fn6_state 3
 -    * set __tmp134 __fn6_state
-+  484 noop
-   485 jump __label108 always
-   486 label __label107
-   487 set MSG ", loading\n"
+   408 jump __label108 always
+   409 label __label107
+   410 set MSG ", loading\n"
 -    * set __tmp134 MSG
-+  488 noop
-   489 label __label108
-   490 noop
-   491 jump __label106 always
+   411 label __label108
+   412 jump __label106 always
+   413 label __label105
  
-   527 jump __label115 equal __tmp148 false
-   528 ucontrol approach CORE_X CORE_Y 6
-   529 set __fn6_state 2
+   442 jump __label115 equal __tmp148 false
+   443 ucontrol approach CORE_X CORE_Y 6
+   444 set __fn6_state 2
 -    * set __tmp149 __fn6_state
-+  530 noop
-   531 jump __label116 always
-   532 label __label115
+   445 jump __label116 always
+   446 label __label115
 -    * set __tmp149 null
-+  533 noop
-   534 label __label116
-   535 noop
-   536 jump __label112 always
+   447 label __label116
+   448 jump __label112 always
+   449 label __label111
  
-   647 op equal __tmp182 __tmp181 0
-   648 jump __label138 equal __tmp182 false
-   649 set __fn8_state 2
+   543 op equal __tmp182 __tmp181 0
+   544 jump __label138 equal __tmp182 false
+   545 set __fn8_state 2
 -    * set __tmp183 __fn8_state
-+  650 noop
-   651 jump __label139 always
-   652 label __label138
-   653 set MSG ", initializing\n"
+   546 jump __label139 always
+   547 label __label138
+   548 set MSG ", initializing\n"
  
-   660 label __label140
-   661 set __tmp185 null
-   662 label __label141
+   555 label __label140
+   556 set __tmp185 null
+   557 label __label141
 -    * set __tmp183 __tmp185
-+  663 noop
-   664 label __label139
-   665 noop
-   666 label __label137
+   558 label __label139
+   559 label __label137
+   560 jump __label135 always
  
-   679 jump __label146 equal __tmp191 false
-   680 ucontrol approach DOME_X DOME_Y 6
-   681 set __fn8_state 3
+   570 jump __label146 equal __tmp191 false
+   571 ucontrol approach DOME_X DOME_Y 6
+   572 set __fn8_state 3
 -    * set __tmp192 __fn8_state
-+  682 noop
-   683 jump __label147 always
-   684 label __label146
-   685 set MSG ", loading\n"
+   573 jump __label147 always
+   574 label __label146
+   575 set MSG ", loading\n"
 -    * set __tmp192 MSG
-+  686 noop
-   687 label __label147
-   688 noop
-   689 jump __label145 always
+   576 label __label147
+   577 jump __label145 always
+   578 label __label144
  
-   725 jump __label154 equal __tmp206 false
-   726 ucontrol approach CORE_X CORE_Y 6
-   727 set __fn8_state 2
+   607 jump __label154 equal __tmp206 false
+   608 ucontrol approach CORE_X CORE_Y 6
+   609 set __fn8_state 2
 -    * set __tmp207 __fn8_state
-+  728 noop
-   729 jump __label155 always
-   730 label __label154
+   610 jump __label155 always
+   611 label __label154
 -    * set __tmp207 null
-+  731 noop
-   732 label __label155
-   733 noop
-   734 jump __label151 always
+   612 label __label155
+   613 jump __label151 always
+   614 label __label150
  
-   880 op equal __tmp247 __tmp246 0
-   881 jump __label181 equal __tmp247 false
-   882 set __fn11_state 2
+   735 op equal __tmp247 __tmp246 0
+   736 jump __label181 equal __tmp247 false
+   737 set __fn11_state 2
 -    * set __tmp248 __fn11_state
-+  883 noop
-   884 jump __label182 always
-   885 label __label181
-   886 set MSG ", initializing\n"
+   738 jump __label182 always
+   739 label __label181
+   740 set MSG ", initializing\n"
  
-   893 label __label183
-   894 set __tmp250 null
-   895 label __label184
+   747 label __label183
+   748 set __tmp250 null
+   749 label __label184
 -    * set __tmp248 __tmp250
-+  896 noop
-   897 label __label182
-   898 noop
-   899 label __label180
+   750 label __label182
+   751 label __label180
+   752 jump __label178 always
  
-   912 jump __label189 equal __tmp256 false
-   913 ucontrol approach DOME_X DOME_Y 6
-   914 set __fn11_state 3
+   762 jump __label189 equal __tmp256 false
+   763 ucontrol approach DOME_X DOME_Y 6
+   764 set __fn11_state 3
 -    * set __tmp257 __fn11_state
-+  915 noop
-   916 jump __label190 always
-   917 label __label189
-   918 set MSG ", loading\n"
+   765 jump __label190 always
+   766 label __label189
+   767 set MSG ", loading\n"
 -    * set __tmp257 MSG
-+  919 noop
-   920 label __label190
-   921 noop
-   922 jump __label188 always
+   768 label __label190
+   769 jump __label188 always
+   770 label __label187
  
-   958 jump __label197 equal __tmp271 false
-   959 ucontrol approach CORE_X CORE_Y 6
-   960 set __fn11_state 2
+   799 jump __label197 equal __tmp271 false
+   800 ucontrol approach CORE_X CORE_Y 6
+   801 set __fn11_state 2
 -    * set __tmp272 __fn11_state
-+  961 noop
-   962 jump __label198 always
-   963 label __label197
+   802 jump __label198 always
+   803 label __label197
 -    * set __tmp272 null
-+  964 noop
-   965 label __label198
-   966 noop
-   967 jump __label194 always
+   804 label __label198
+   805 jump __label194 always
+   806 label __label193
  
-  1078 op equal __tmp305 __tmp304 0
-  1079 jump __label220 equal __tmp305 false
-  1080 set __fn13_state 2
+   900 op equal __tmp305 __tmp304 0
+   901 jump __label220 equal __tmp305 false
+   902 set __fn13_state 2
 -    * set __tmp306 __fn13_state
-+ 1081 noop
-  1082 jump __label221 always
-  1083 label __label220
-  1084 set MSG ", initializing\n"
+   903 jump __label221 always
+   904 label __label220
+   905 set MSG ", initializing\n"
  
-  1091 label __label222
-  1092 set __tmp308 null
-  1093 label __label223
+   912 label __label222
+   913 set __tmp308 null
+   914 label __label223
 -    * set __tmp306 __tmp308
-+ 1094 noop
-  1095 label __label221
-  1096 noop
-  1097 label __label219
+   915 label __label221
+   916 label __label219
+   917 jump __label217 always
  
-  1110 jump __label228 equal __tmp314 false
-  1111 ucontrol approach DOME_X DOME_Y 6
-  1112 set __fn13_state 3
+   927 jump __label228 equal __tmp314 false
+   928 ucontrol approach DOME_X DOME_Y 6
+   929 set __fn13_state 3
 -    * set __tmp315 __fn13_state
-+ 1113 noop
-  1114 jump __label229 always
-  1115 label __label228
-  1116 set MSG ", loading\n"
+   930 jump __label229 always
+   931 label __label228
+   932 set MSG ", loading\n"
 -    * set __tmp315 MSG
-+ 1117 noop
-  1118 label __label229
-  1119 noop
-  1120 jump __label227 always
+   933 label __label229
+   934 jump __label227 always
+   935 label __label226
  
-  1156 jump __label236 equal __tmp329 false
-  1157 ucontrol approach CORE_X CORE_Y 6
-  1158 set __fn13_state 2
+   964 jump __label236 equal __tmp329 false
+   965 ucontrol approach CORE_X CORE_Y 6
+   966 set __fn13_state 2
 -    * set __tmp330 __fn13_state
-+ 1159 noop
-  1160 jump __label237 always
-  1161 label __label236
+   967 jump __label237 always
+   968 label __label236
 -    * set __tmp330 null
-+ 1162 noop
-  1163 label __label237
-  1164 noop
-  1165 jump __label233 always
+   969 label __label237
+   970 jump __label233 always
+   971 label __label232
 
 Modifications by Initial phase, Dead Code Elimination, iteration 4 (-8 instructions):
  
-   457 ucontrol within CORE_X CORE_Y 8 __tmp126
-   458 jump __label101 equal __tmp126 false
-   459 ucontrol itemDrop CORE UNIT_CAPACITY
+   385 ucontrol within CORE_X CORE_Y 8 __tmp126
+   386 jump __label101 equal __tmp126 false
+   387 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * set __tmp127 null
-+  460 noop
-   461 jump __label102 always
-   462 label __label101
+   388 jump __label102 always
+   389 label __label101
 -    * set __tmp127 null
-+  463 noop
-   464 label __label102
-   465 noop
-   466 label __label100
+   390 label __label102
+   391 label __label100
+   392 label __label98
  
-   655 ucontrol within CORE_X CORE_Y 8 __tmp184
-   656 jump __label140 equal __tmp184 false
-   657 ucontrol itemDrop CORE UNIT_CAPACITY
+   548 ucontrol within CORE_X CORE_Y 8 __tmp184
+   549 jump __label140 equal __tmp184 false
+   550 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * set __tmp185 null
-+  658 noop
-   659 jump __label141 always
-   660 label __label140
+   551 jump __label141 always
+   552 label __label140
 -    * set __tmp185 null
-+  661 noop
-   662 label __label141
-   663 noop
-   664 label __label139
+   553 label __label141
+   554 label __label139
+   555 label __label137
  
-   888 ucontrol within CORE_X CORE_Y 8 __tmp249
-   889 jump __label183 equal __tmp249 false
-   890 ucontrol itemDrop CORE UNIT_CAPACITY
+   738 ucontrol within CORE_X CORE_Y 8 __tmp249
+   739 jump __label183 equal __tmp249 false
+   740 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * set __tmp250 null
-+  891 noop
-   892 jump __label184 always
-   893 label __label183
+   741 jump __label184 always
+   742 label __label183
 -    * set __tmp250 null
-+  894 noop
-   895 label __label184
-   896 noop
-   897 label __label182
+   743 label __label184
+   744 label __label182
+   745 label __label180
  
-  1086 ucontrol within CORE_X CORE_Y 8 __tmp307
-  1087 jump __label222 equal __tmp307 false
-  1088 ucontrol itemDrop CORE UNIT_CAPACITY
+   901 ucontrol within CORE_X CORE_Y 8 __tmp307
+   902 jump __label222 equal __tmp307 false
+   903 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * set __tmp308 null
-+ 1089 noop
-  1090 jump __label223 always
-  1091 label __label222
+   904 jump __label223 always
+   905 label __label222
 -    * set __tmp308 null
-+ 1092 noop
-  1093 label __label223
-  1094 noop
-  1095 label __label221
+   906 label __label223
+   907 label __label221
+   908 label __label219
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 instructions):
  
@@ -1664,82 +1447,73 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 ins
     28 set __fn0_count 0
     29 label __label8
 -    * jump __label10 equal true false
-+   30 noop
-    31 ubind UNIT
-    32 op notEqual __tmp4 @unit null
-    33 jump __label11 equal __tmp4 false
+    30 ubind UNIT
+    31 op notEqual __tmp4 @unit null
+    32 jump __label11 equal __tmp4 false
  
-    89 jump __label20 equal __tmp19 false
-    90 label __label22
-    91 label __label24
+    76 jump __label20 equal __tmp19 false
+    77 label __label22
+    78 label __label24
 -    * jump __label26 equal true false
-+   92 noop
-    93 ubind UNIT
-    94 op equal __tmp22 @unit null
-    95 jump __label27 equal __tmp22 false
+    79 ubind UNIT
+    80 op equal __tmp22 @unit null
+    81 jump __label27 equal __tmp22 false
  
-   131 jump __label31 equal __tmp27 false
-   132 label __label33
-   133 label __label35
+   111 jump __label31 equal __tmp27 false
+   112 label __label33
+   113 label __label35
 -    * jump __label37 equal true false
-+  134 noop
-   135 ubind UNIT
-   136 op equal __tmp30 @unit null
-   137 jump __label38 equal __tmp30 false
+   114 ubind UNIT
+   115 op equal __tmp30 @unit null
+   116 jump __label38 equal __tmp30 false
  
-   219 jump __label49 equal __tmp60 false
-   220 label __label51
-   221 label __label53
+   180 jump __label49 equal __tmp60 false
+   181 label __label51
+   182 label __label53
 -    * jump __label55 equal true false
-+  222 noop
-   223 ubind UNIT
-   224 op equal __tmp63 @unit null
-   225 jump __label56 equal __tmp63 false
+   183 ubind UNIT
+   184 op equal __tmp63 @unit null
+   185 jump __label56 equal __tmp63 false
  
-   261 jump __label60 equal __tmp68 false
-   262 label __label62
-   263 label __label64
+   215 jump __label60 equal __tmp68 false
+   216 label __label62
+   217 label __label64
 -    * jump __label66 equal true false
-+  264 noop
-   265 ubind UNIT
-   266 op equal __tmp71 @unit null
-   267 jump __label67 equal __tmp71 false
+   218 ubind UNIT
+   219 op equal __tmp71 @unit null
+   220 jump __label67 equal __tmp71 false
  
-   395 jump __label84 equal __tmp109 false
-   396 label __label86
-   397 label __label88
+   329 jump __label84 equal __tmp109 false
+   330 label __label86
+   331 label __label88
 -    * jump __label90 equal true false
-+  398 noop
-   399 ubind UNIT
-   400 op equal __tmp112 @unit null
-   401 jump __label91 equal __tmp112 false
+   332 ubind UNIT
+   333 op equal __tmp112 @unit null
+   334 jump __label91 equal __tmp112 false
  
-   593 jump __label123 equal __tmp167 false
-   594 label __label125
-   595 label __label127
+   491 jump __label123 equal __tmp167 false
+   492 label __label125
+   493 label __label127
 -    * jump __label129 equal true false
-+  596 noop
-   597 ubind UNIT
-   598 op equal __tmp170 @unit null
-   599 jump __label130 equal __tmp170 false
+   494 ubind UNIT
+   495 op equal __tmp170 @unit null
+   496 jump __label130 equal __tmp170 false
  
-   826 jump __label166 equal __tmp232 false
-   827 label __label168
-   828 label __label170
+   680 jump __label166 equal __tmp232 false
+   681 label __label168
+   682 label __label170
 -    * jump __label172 equal true false
-+  829 noop
-   830 ubind UNIT
-   831 op equal __tmp235 @unit null
-   832 jump __label173 equal __tmp235 false
+   683 ubind UNIT
+   684 op equal __tmp235 @unit null
+   685 jump __label173 equal __tmp235 false
  
-  1024 jump __label205 equal __tmp290 false
-  1025 label __label207
-  1026 label __label209
+   842 jump __label205 equal __tmp290 false
+   843 label __label207
+   844 label __label209
 -    * jump __label211 equal true false
-+ 1027 noop
-  1028 ubind UNIT
-  1029 op equal __tmp293 @unit null
-  1030 jump __label212 equal __tmp293 false
+   845 ubind UNIT
+   846 op equal __tmp293 @unit null
+   847 jump __label212 equal __tmp293 false
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-64 instructions):
      0 set UNIT @flare
@@ -1762,1252 +1536,1176 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-64 ins
     14 print "\n"
     15 printflush message1
  
+    26 set __fn0_count 0
     27 label __label8
-    28 noop
-    29 ubind UNIT
+    28 ubind UNIT
 -    * op notEqual __tmp4 @unit null
 -    * jump __label11 equal __tmp4 false
-+   30 jump __label11 equal @unit null
-    31 set __fn0_first_unit @unit
-    32 noop
-    33 jump __label10 always
++   29 jump __label11 equal @unit null
+    30 set __fn0_first_unit @unit
+    31 jump __label10 always
+    32 jump __label12 always
  
-    47 noop
-    48 label __label13
-    49 sensor __tmp8 @unit @controller
+    42 set __fn0_first_unit @unit
+    43 label __label13
+    44 sensor __tmp8 @unit @controller
 -    * op equal __tmp9 __tmp8 @this
 -    * jump __label16 equal __tmp9 false
-+   50 jump __label16 notEqual __tmp8 @this
-    51 op add __fn0_count __fn0_count 1
-    52 noop
-    53 ucontrol flag 1
- 
-    56 set UNIT_S1 UNIT_P1
-    57 set UNIT_P1 @unit
-    58 noop
++   45 jump __label16 notEqual __tmp8 @this
+    46 op add __fn0_count __fn0_count 1
+    47 ucontrol flag 1
+    48 set UNIT_S2 UNIT_P2
+    49 set UNIT_P2 UNIT_S1
+    50 set UNIT_S1 UNIT_P1
+    51 set UNIT_P1 @unit
 -    * op notEqual __tmp13 UNIT_S2 null
 -    * jump __label18 equal __tmp13 false
-+   59 jump __label18 equal UNIT_S2 null
-    60 jump __label15 always
-    61 noop
-    62 jump __label19 always
++   52 jump __label18 equal UNIT_S2 null
+    53 jump __label15 always
+    54 jump __label19 always
+    55 label __label18
  
-    80 jump __label7 always
-    81 noop
-    82 label __label7
+    67 label __label15
+    68 jump __label7 always
+    69 label __label7
 -    * op equal __tmp19 UNIT_S1 null
 -    * jump __label20 equal __tmp19 false
-+   83 jump __label20 notEqual UNIT_S1 null
-    84 label __label22
-    85 label __label24
-    86 noop
-    87 ubind UNIT
++   70 jump __label20 notEqual UNIT_S1 null
+    71 label __label22
+    72 label __label24
+    73 ubind UNIT
 -    * op equal __tmp22 @unit null
 -    * jump __label27 equal __tmp22 false
-+   88 jump __label27 notEqual @unit null
-    89 print "[salmon]No unit of type "
-    90 print UNIT
-    91 print " found..."
- 
-    93 jump __label28 always
-    94 label __label27
-    95 sensor __tmp24 @unit @controlled
++   74 jump __label27 notEqual @unit null
+    75 print "[salmon]No unit of type "
+    76 print UNIT
+    77 print " found..."
+    78 jump __label28 always
+    79 label __label27
+    80 sensor __tmp24 @unit @controlled
 -    * op notEqual __tmp25 __tmp24 0
 -    * jump __label29 equal __tmp25 false
-+   96 jump __label29 equal __tmp24 0
-    97 print "[salmon]Looking for a free "
-    98 print UNIT
-    99 print "..."
++   81 jump __label29 equal __tmp24 0
+    82 print "[salmon]Looking for a free "
+    83 print UNIT
+    84 print "..."
  
-   119 label __label20
-   120 noop
-   121 label __label21
+    99 jump __label21 always
+   100 label __label20
+   101 label __label21
 -    * op equal __tmp27 UNIT_P1 null
 -    * jump __label31 equal __tmp27 false
-+  122 jump __label31 notEqual UNIT_P1 null
-   123 label __label33
-   124 label __label35
-   125 noop
-   126 ubind UNIT
++  102 jump __label31 notEqual UNIT_P1 null
+   103 label __label33
+   104 label __label35
+   105 ubind UNIT
 -    * op equal __tmp30 @unit null
 -    * jump __label38 equal __tmp30 false
-+  127 jump __label38 notEqual @unit null
-   128 print "[salmon]No unit of type "
-   129 print UNIT
-   130 print " found..."
- 
-   132 jump __label39 always
-   133 label __label38
-   134 sensor __tmp32 @unit @controlled
++  106 jump __label38 notEqual @unit null
+   107 print "[salmon]No unit of type "
+   108 print UNIT
+   109 print " found..."
+   110 jump __label39 always
+   111 label __label38
+   112 sensor __tmp32 @unit @controlled
 -    * op notEqual __tmp33 __tmp32 0
 -    * jump __label40 equal __tmp33 false
-+  135 jump __label40 equal __tmp32 0
-   136 print "[salmon]Looking for a free "
-   137 print UNIT
-   138 print "..."
++  113 jump __label40 equal __tmp32 0
+   114 print "[salmon]Looking for a free "
+   115 print UNIT
+   116 print "..."
  
-   184 ulocate building core false @copper __tmp45 __tmp46 __tmp47 CORE
-   185 noop
-   186 label __label45
+   151 label __label44
+   152 ulocate building core false @copper __tmp45 __tmp46 __tmp47 CORE
+   153 label __label45
 -    * op equal __tmp48 CORE null
 -    * jump __label44 notEqual __tmp48 false
-+  187 jump __label44 equal CORE null
-   188 label __label46
-   189 sensor CORE_X CORE @x
-   190 noop
++  154 jump __label44 equal CORE null
+   155 label __label46
+   156 sensor CORE_X CORE @x
+   157 sensor CORE_Y CORE @y
  
-   203 op greaterThanEq FOUR_UNITS travel_time 47
-   204 noop
-   205 jump __label47 equal FOUR_UNITS false
+   164 op div travel_time __tmp56 SPEED
+   165 op greaterThanEq FOUR_UNITS travel_time 47
+   166 jump __label47 equal FOUR_UNITS false
 -    * op equal __tmp60 UNIT_S2 null
 -    * jump __label49 equal __tmp60 false
-+  206 jump __label49 notEqual UNIT_S2 null
-   207 label __label51
-   208 label __label53
-   209 noop
-   210 ubind UNIT
++  167 jump __label49 notEqual UNIT_S2 null
+   168 label __label51
+   169 label __label53
+   170 ubind UNIT
 -    * op equal __tmp63 @unit null
 -    * jump __label56 equal __tmp63 false
-+  211 jump __label56 notEqual @unit null
-   212 print "[salmon]No unit of type "
-   213 print UNIT
-   214 print " found..."
- 
-   216 jump __label57 always
-   217 label __label56
-   218 sensor __tmp65 @unit @controlled
++  171 jump __label56 notEqual @unit null
+   172 print "[salmon]No unit of type "
+   173 print UNIT
+   174 print " found..."
+   175 jump __label57 always
+   176 label __label56
+   177 sensor __tmp65 @unit @controlled
 -    * op notEqual __tmp66 __tmp65 0
 -    * jump __label58 equal __tmp66 false
-+  219 jump __label58 equal __tmp65 0
-   220 print "[salmon]Looking for a free "
-   221 print UNIT
-   222 print "..."
++  178 jump __label58 equal __tmp65 0
+   179 print "[salmon]Looking for a free "
+   180 print UNIT
+   181 print "..."
  
-   242 label __label49
-   243 noop
-   244 label __label50
+   196 jump __label50 always
+   197 label __label49
+   198 label __label50
 -    * op equal __tmp68 UNIT_P2 null
 -    * jump __label60 equal __tmp68 false
-+  245 jump __label60 notEqual UNIT_P2 null
-   246 label __label62
-   247 label __label64
-   248 noop
-   249 ubind UNIT
++  199 jump __label60 notEqual UNIT_P2 null
+   200 label __label62
+   201 label __label64
+   202 ubind UNIT
 -    * op equal __tmp71 @unit null
 -    * jump __label67 equal __tmp71 false
-+  250 jump __label67 notEqual @unit null
-   251 print "[salmon]No unit of type "
-   252 print UNIT
-   253 print " found..."
- 
-   255 jump __label68 always
-   256 label __label67
-   257 sensor __tmp73 @unit @controlled
++  203 jump __label67 notEqual @unit null
+   204 print "[salmon]No unit of type "
+   205 print UNIT
+   206 print " found..."
+   207 jump __label68 always
+   208 label __label67
+   209 sensor __tmp73 @unit @controlled
 -    * op notEqual __tmp74 __tmp73 0
 -    * jump __label69 equal __tmp74 false
-+  258 jump __label69 equal __tmp73 0
-   259 print "[salmon]Looking for a free "
-   260 print UNIT
-   261 print "..."
++  210 jump __label69 equal __tmp73 0
+   211 print "[salmon]Looking for a free "
+   212 print UNIT
+   213 print "..."
  
-   348 print __fn5_text
-   349 sensor __fn5_level DOME __fn5_item
-   350 noop
+   285 set __fn5_text "\n[green]Silicon[] status:\n"
+   286 print __fn5_text
+   287 sensor __fn5_level DOME __fn5_item
 -    * op greaterThan __tmp102 __fn5_level 3
 -    * jump __label80 equal __tmp102 false
-+  351 jump __label80 lessThanEq __fn5_level 3
-   352 print "  dome:  [green]"
-   353 print __fn5_level
-   354 print "[]\n"
++  288 jump __label80 lessThanEq __fn5_level 3
+   289 print "  dome:  [green]"
+   290 print __fn5_level
+   291 print "[]\n"
  
-   372 op strictEqual __tmp106 __tmp105 0
-   373 sensor __tmp107 @unit @controller
-   374 op notEqual __tmp108 __tmp107 @this
+   306 op strictEqual __tmp106 __tmp105 0
+   307 sensor __tmp107 @unit @controller
+   308 op notEqual __tmp108 __tmp107 @this
 -    * op lessThanEq __tmp109 __tmp106 __tmp108
 -    * jump __label84 equal __tmp109 false
-+  375 jump __label84 greaterThan __tmp106 __tmp108
-   376 label __label86
-   377 label __label88
-   378 noop
-   379 ubind UNIT
++  309 jump __label84 greaterThan __tmp106 __tmp108
+   310 label __label86
+   311 label __label88
+   312 ubind UNIT
 -    * op equal __tmp112 @unit null
 -    * jump __label91 equal __tmp112 false
-+  380 jump __label91 notEqual @unit null
-   381 print "[salmon]No unit of type "
-   382 print UNIT
-   383 print " found..."
- 
-   385 jump __label92 always
-   386 label __label91
-   387 sensor __tmp114 @unit @controlled
++  313 jump __label91 notEqual @unit null
+   314 print "[salmon]No unit of type "
+   315 print UNIT
+   316 print " found..."
+   317 jump __label92 always
+   318 label __label91
+   319 sensor __tmp114 @unit @controlled
 -    * op notEqual __tmp115 __tmp114 0
 -    * jump __label93 equal __tmp115 false
-+  388 jump __label93 equal __tmp114 0
-   389 print "[salmon]Looking for a free "
-   390 print UNIT
-   391 print "..."
++  320 jump __label93 equal __tmp114 0
+   321 print "[salmon]Looking for a free "
+   322 print UNIT
+   323 print "..."
  
-   414 noop
-   415 set __fn6_distance -1
-   416 set __fn6_color "gold"
+   338 sensor __fn6_state @unit @flag
+   339 set __fn6_distance -1
+   340 set __fn6_color "gold"
 -    * op equal __tmp118 __fn6_state 1
 -    * jump __label95 equal __tmp118 false
-+  417 jump __label95 notEqual __fn6_state 1
-   418 sensor __tmp120 @unit @firstItem
++  341 jump __label95 notEqual __fn6_state 1
+   342 sensor __tmp120 @unit @firstItem
 -    * op equal __tmp121 __tmp120 __fn6_item
 -    * jump __label97 equal __tmp121 false
-+  419 jump __label97 notEqual __tmp120 __fn6_item
-   420 set __fn6_state 3
-   421 noop
-   422 jump __label98 always
-   423 label __label97
-   424 sensor __tmp123 @unit @totalItems
++  343 jump __label97 notEqual __tmp120 __fn6_item
+   344 set __fn6_state 3
+   345 jump __label98 always
+   346 label __label97
+   347 sensor __tmp123 @unit @totalItems
 -    * op equal __tmp124 __tmp123 0
 -    * jump __label99 equal __tmp124 false
-+  425 jump __label99 notEqual __tmp123 0
-   426 set __fn6_state 2
-   427 noop
-   428 jump __label100 always
++  348 jump __label99 notEqual __tmp123 0
+   349 set __fn6_state 2
+   350 jump __label100 always
+   351 label __label99
  
-   446 label __label95
-   447 noop
-   448 label __label96
+   362 jump __label96 always
+   363 label __label95
+   364 label __label96
 -    * op equal __tmp128 __fn6_state 2
 -    * jump __label103 equal __tmp128 false
-+  449 jump __label103 notEqual __fn6_state 2
-   450 ucontrol within CORE_X CORE_Y 8 __tmp130
-   451 jump __label105 equal __tmp130 false
-   452 ucontrol itemTake CORE __fn6_item UNIT_CAPACITY
-   453 sensor __tmp132 @unit @totalItems
++  365 jump __label103 notEqual __fn6_state 2
+   366 ucontrol within CORE_X CORE_Y 8 __tmp130
+   367 jump __label105 equal __tmp130 false
+   368 ucontrol itemTake CORE __fn6_item UNIT_CAPACITY
+   369 sensor __tmp132 @unit @totalItems
 -    * op greaterThanEq __tmp133 __tmp132 UNIT_CAPACITY
 -    * jump __label107 equal __tmp133 false
-+  454 jump __label107 lessThan __tmp132 UNIT_CAPACITY
-   455 ucontrol approach DOME_X DOME_Y 6
-   456 set __fn6_state 3
-   457 noop
++  370 jump __label107 lessThan __tmp132 UNIT_CAPACITY
+   371 ucontrol approach DOME_X DOME_Y 6
+   372 set __fn6_state 3
+   373 jump __label108 always
  
-   480 label __label103
-   481 noop
-   482 label __label104
+   389 jump __label104 always
+   390 label __label103
+   391 label __label104
 -    * op equal __tmp142 __fn6_state 3
 -    * jump __label109 equal __tmp142 false
-+  483 jump __label109 notEqual __fn6_state 3
-   484 ucontrol within DOME_X DOME_Y 8 __tmp144
-   485 jump __label111 equal __tmp144 false
-   486 jump __label113 equal __fn6_supply false
++  392 jump __label109 notEqual __fn6_state 3
+   393 ucontrol within DOME_X DOME_Y 8 __tmp144
+   394 jump __label111 equal __tmp144 false
+   395 jump __label113 equal __fn6_supply false
  
-   495 noop
-   496 label __label114
-   497 sensor __tmp147 @unit @totalItems
+   402 set MSG ", waiting\n"
+   403 label __label114
+   404 sensor __tmp147 @unit @totalItems
 -    * op lessThanEq __tmp148 __tmp147 0
 -    * jump __label115 equal __tmp148 false
-+  498 jump __label115 greaterThan __tmp147 0
-   499 ucontrol approach CORE_X CORE_Y 6
-   500 set __fn6_state 2
-   501 noop
++  405 jump __label115 greaterThan __tmp147 0
+   406 ucontrol approach CORE_X CORE_Y 6
+   407 set __fn6_state 2
+   408 jump __label116 always
  
-   532 print "]"
-   533 print __tmp157
-   534 print "[]"
+   432 print "]"
+   433 print __tmp157
+   434 print "[]"
 -    * op greaterThanEq __tmp158 __fn6_distance 0
 -    * jump __label117 equal __tmp158 false
-+  535 jump __label117 lessThan __fn6_distance 0
-   536 print MSG
-   537 print __fn6_distance
-   538 print "[] sec\n"
++  435 jump __label117 lessThan __fn6_distance 0
+   436 print MSG
+   437 print __fn6_distance
+   438 print "[] sec\n"
  
-   559 op strictEqual __tmp164 __tmp163 0
-   560 sensor __tmp165 @unit @controller
-   561 op notEqual __tmp166 __tmp165 @this
+   457 op strictEqual __tmp164 __tmp163 0
+   458 sensor __tmp165 @unit @controller
+   459 op notEqual __tmp166 __tmp165 @this
 -    * op lessThanEq __tmp167 __tmp164 __tmp166
 -    * jump __label123 equal __tmp167 false
-+  562 jump __label123 greaterThan __tmp164 __tmp166
-   563 label __label125
-   564 label __label127
-   565 noop
-   566 ubind UNIT
++  460 jump __label123 greaterThan __tmp164 __tmp166
+   461 label __label125
+   462 label __label127
+   463 ubind UNIT
 -    * op equal __tmp170 @unit null
 -    * jump __label130 equal __tmp170 false
-+  567 jump __label130 notEqual @unit null
-   568 print "[salmon]No unit of type "
-   569 print UNIT
-   570 print " found..."
- 
-   572 jump __label131 always
-   573 label __label130
-   574 sensor __tmp172 @unit @controlled
++  464 jump __label130 notEqual @unit null
+   465 print "[salmon]No unit of type "
+   466 print UNIT
+   467 print " found..."
+   468 jump __label131 always
+   469 label __label130
+   470 sensor __tmp172 @unit @controlled
 -    * op notEqual __tmp173 __tmp172 0
 -    * jump __label132 equal __tmp173 false
-+  575 jump __label132 equal __tmp172 0
-   576 print "[salmon]Looking for a free "
-   577 print UNIT
-   578 print "..."
++  471 jump __label132 equal __tmp172 0
+   472 print "[salmon]Looking for a free "
+   473 print UNIT
+   474 print "..."
  
-   601 noop
-   602 set __fn8_distance -1
-   603 set __fn8_color "gold"
+   489 sensor __fn8_state @unit @flag
+   490 set __fn8_distance -1
+   491 set __fn8_color "gold"
 -    * op equal __tmp176 __fn8_state 1
 -    * jump __label134 equal __tmp176 false
-+  604 jump __label134 notEqual __fn8_state 1
-   605 sensor __tmp178 @unit @firstItem
++  492 jump __label134 notEqual __fn8_state 1
+   493 sensor __tmp178 @unit @firstItem
 -    * op equal __tmp179 __tmp178 __fn8_item
 -    * jump __label136 equal __tmp179 false
-+  606 jump __label136 notEqual __tmp178 __fn8_item
-   607 set __fn8_state 3
-   608 noop
-   609 jump __label137 always
-   610 label __label136
-   611 sensor __tmp181 @unit @totalItems
++  494 jump __label136 notEqual __tmp178 __fn8_item
+   495 set __fn8_state 3
+   496 jump __label137 always
+   497 label __label136
+   498 sensor __tmp181 @unit @totalItems
 -    * op equal __tmp182 __tmp181 0
 -    * jump __label138 equal __tmp182 false
-+  612 jump __label138 notEqual __tmp181 0
-   613 set __fn8_state 2
-   614 noop
-   615 jump __label139 always
++  499 jump __label138 notEqual __tmp181 0
+   500 set __fn8_state 2
+   501 jump __label139 always
+   502 label __label138
  
-   633 label __label134
-   634 noop
-   635 label __label135
+   513 jump __label135 always
+   514 label __label134
+   515 label __label135
 -    * op equal __tmp186 __fn8_state 2
 -    * jump __label142 equal __tmp186 false
-+  636 jump __label142 notEqual __fn8_state 2
-   637 ucontrol within CORE_X CORE_Y 8 __tmp188
-   638 jump __label144 equal __tmp188 false
-   639 ucontrol itemTake CORE __fn8_item UNIT_CAPACITY
-   640 sensor __tmp190 @unit @totalItems
++  516 jump __label142 notEqual __fn8_state 2
+   517 ucontrol within CORE_X CORE_Y 8 __tmp188
+   518 jump __label144 equal __tmp188 false
+   519 ucontrol itemTake CORE __fn8_item UNIT_CAPACITY
+   520 sensor __tmp190 @unit @totalItems
 -    * op greaterThanEq __tmp191 __tmp190 UNIT_CAPACITY
 -    * jump __label146 equal __tmp191 false
-+  641 jump __label146 lessThan __tmp190 UNIT_CAPACITY
-   642 ucontrol approach DOME_X DOME_Y 6
-   643 set __fn8_state 3
-   644 noop
++  521 jump __label146 lessThan __tmp190 UNIT_CAPACITY
+   522 ucontrol approach DOME_X DOME_Y 6
+   523 set __fn8_state 3
+   524 jump __label147 always
  
-   667 label __label142
-   668 noop
-   669 label __label143
+   540 jump __label143 always
+   541 label __label142
+   542 label __label143
 -    * op equal __tmp200 __fn8_state 3
 -    * jump __label148 equal __tmp200 false
-+  670 jump __label148 notEqual __fn8_state 3
-   671 ucontrol within DOME_X DOME_Y 8 __tmp202
-   672 jump __label150 equal __tmp202 false
-   673 jump __label152 equal __fn8_supply false
++  543 jump __label148 notEqual __fn8_state 3
+   544 ucontrol within DOME_X DOME_Y 8 __tmp202
+   545 jump __label150 equal __tmp202 false
+   546 jump __label152 equal __fn8_supply false
  
-   682 noop
-   683 label __label153
-   684 sensor __tmp205 @unit @totalItems
+   553 set MSG ", waiting\n"
+   554 label __label153
+   555 sensor __tmp205 @unit @totalItems
 -    * op lessThanEq __tmp206 __tmp205 0
 -    * jump __label154 equal __tmp206 false
-+  685 jump __label154 greaterThan __tmp205 0
-   686 ucontrol approach CORE_X CORE_Y 6
-   687 set __fn8_state 2
-   688 noop
++  556 jump __label154 greaterThan __tmp205 0
+   557 ucontrol approach CORE_X CORE_Y 6
+   558 set __fn8_state 2
+   559 jump __label155 always
  
-   719 print "]"
-   720 print __tmp215
-   721 print "[]"
+   583 print "]"
+   584 print __tmp215
+   585 print "[]"
 -    * op greaterThanEq __tmp216 __fn8_distance 0
 -    * jump __label156 equal __tmp216 false
-+  722 jump __label156 lessThan __fn8_distance 0
-   723 print MSG
-   724 print __fn8_distance
-   725 print "[] sec\n"
++  586 jump __label156 lessThan __fn8_distance 0
+   587 print MSG
+   588 print __fn8_distance
+   589 print "[] sec\n"
  
-   756 print __fn10_text
-   757 sensor __fn10_level DOME __fn10_item
-   758 noop
+   613 set __fn10_text "\n[green]Phase fabric[] status:\n"
+   614 print __fn10_text
+   615 sensor __fn10_level DOME __fn10_item
 -    * op greaterThan __tmp225 __fn10_level 3
 -    * jump __label162 equal __tmp225 false
-+  759 jump __label162 lessThanEq __fn10_level 3
-   760 print "  dome:  [green]"
-   761 print __fn10_level
-   762 print "[]\n"
++  616 jump __label162 lessThanEq __fn10_level 3
+   617 print "  dome:  [green]"
+   618 print __fn10_level
+   619 print "[]\n"
  
-   780 op strictEqual __tmp229 __tmp228 0
-   781 sensor __tmp230 @unit @controller
-   782 op notEqual __tmp231 __tmp230 @this
+   634 op strictEqual __tmp229 __tmp228 0
+   635 sensor __tmp230 @unit @controller
+   636 op notEqual __tmp231 __tmp230 @this
 -    * op lessThanEq __tmp232 __tmp229 __tmp231
 -    * jump __label166 equal __tmp232 false
-+  783 jump __label166 greaterThan __tmp229 __tmp231
-   784 label __label168
-   785 label __label170
-   786 noop
-   787 ubind UNIT
++  637 jump __label166 greaterThan __tmp229 __tmp231
+   638 label __label168
+   639 label __label170
+   640 ubind UNIT
 -    * op equal __tmp235 @unit null
 -    * jump __label173 equal __tmp235 false
-+  788 jump __label173 notEqual @unit null
-   789 print "[salmon]No unit of type "
-   790 print UNIT
-   791 print " found..."
- 
-   793 jump __label174 always
-   794 label __label173
-   795 sensor __tmp237 @unit @controlled
++  641 jump __label173 notEqual @unit null
+   642 print "[salmon]No unit of type "
+   643 print UNIT
+   644 print " found..."
+   645 jump __label174 always
+   646 label __label173
+   647 sensor __tmp237 @unit @controlled
 -    * op notEqual __tmp238 __tmp237 0
 -    * jump __label175 equal __tmp238 false
-+  796 jump __label175 equal __tmp237 0
-   797 print "[salmon]Looking for a free "
-   798 print UNIT
-   799 print "..."
++  648 jump __label175 equal __tmp237 0
+   649 print "[salmon]Looking for a free "
+   650 print UNIT
+   651 print "..."
  
-   822 noop
-   823 set __fn11_distance -1
-   824 set __fn11_color "gold"
+   666 sensor __fn11_state @unit @flag
+   667 set __fn11_distance -1
+   668 set __fn11_color "gold"
 -    * op equal __tmp241 __fn11_state 1
 -    * jump __label177 equal __tmp241 false
-+  825 jump __label177 notEqual __fn11_state 1
-   826 sensor __tmp243 @unit @firstItem
++  669 jump __label177 notEqual __fn11_state 1
+   670 sensor __tmp243 @unit @firstItem
 -    * op equal __tmp244 __tmp243 __fn11_item
 -    * jump __label179 equal __tmp244 false
-+  827 jump __label179 notEqual __tmp243 __fn11_item
-   828 set __fn11_state 3
-   829 noop
-   830 jump __label180 always
-   831 label __label179
-   832 sensor __tmp246 @unit @totalItems
++  671 jump __label179 notEqual __tmp243 __fn11_item
+   672 set __fn11_state 3
+   673 jump __label180 always
+   674 label __label179
+   675 sensor __tmp246 @unit @totalItems
 -    * op equal __tmp247 __tmp246 0
 -    * jump __label181 equal __tmp247 false
-+  833 jump __label181 notEqual __tmp246 0
-   834 set __fn11_state 2
-   835 noop
-   836 jump __label182 always
++  676 jump __label181 notEqual __tmp246 0
+   677 set __fn11_state 2
+   678 jump __label182 always
+   679 label __label181
  
-   854 label __label177
-   855 noop
-   856 label __label178
+   690 jump __label178 always
+   691 label __label177
+   692 label __label178
 -    * op equal __tmp251 __fn11_state 2
 -    * jump __label185 equal __tmp251 false
-+  857 jump __label185 notEqual __fn11_state 2
-   858 ucontrol within CORE_X CORE_Y 8 __tmp253
-   859 jump __label187 equal __tmp253 false
-   860 ucontrol itemTake CORE __fn11_item UNIT_CAPACITY
-   861 sensor __tmp255 @unit @totalItems
++  693 jump __label185 notEqual __fn11_state 2
+   694 ucontrol within CORE_X CORE_Y 8 __tmp253
+   695 jump __label187 equal __tmp253 false
+   696 ucontrol itemTake CORE __fn11_item UNIT_CAPACITY
+   697 sensor __tmp255 @unit @totalItems
 -    * op greaterThanEq __tmp256 __tmp255 UNIT_CAPACITY
 -    * jump __label189 equal __tmp256 false
-+  862 jump __label189 lessThan __tmp255 UNIT_CAPACITY
-   863 ucontrol approach DOME_X DOME_Y 6
-   864 set __fn11_state 3
-   865 noop
++  698 jump __label189 lessThan __tmp255 UNIT_CAPACITY
+   699 ucontrol approach DOME_X DOME_Y 6
+   700 set __fn11_state 3
+   701 jump __label190 always
  
-   888 label __label185
-   889 noop
-   890 label __label186
+   717 jump __label186 always
+   718 label __label185
+   719 label __label186
 -    * op equal __tmp265 __fn11_state 3
 -    * jump __label191 equal __tmp265 false
-+  891 jump __label191 notEqual __fn11_state 3
-   892 ucontrol within DOME_X DOME_Y 8 __tmp267
-   893 jump __label193 equal __tmp267 false
-   894 jump __label195 equal __fn11_supply false
++  720 jump __label191 notEqual __fn11_state 3
+   721 ucontrol within DOME_X DOME_Y 8 __tmp267
+   722 jump __label193 equal __tmp267 false
+   723 jump __label195 equal __fn11_supply false
  
-   903 noop
-   904 label __label196
-   905 sensor __tmp270 @unit @totalItems
+   730 set MSG ", waiting\n"
+   731 label __label196
+   732 sensor __tmp270 @unit @totalItems
 -    * op lessThanEq __tmp271 __tmp270 0
 -    * jump __label197 equal __tmp271 false
-+  906 jump __label197 greaterThan __tmp270 0
-   907 ucontrol approach CORE_X CORE_Y 6
-   908 set __fn11_state 2
-   909 noop
++  733 jump __label197 greaterThan __tmp270 0
+   734 ucontrol approach CORE_X CORE_Y 6
+   735 set __fn11_state 2
+   736 jump __label198 always
  
-   940 print "]"
-   941 print __tmp280
-   942 print "[]"
+   760 print "]"
+   761 print __tmp280
+   762 print "[]"
 -    * op greaterThanEq __tmp281 __fn11_distance 0
 -    * jump __label199 equal __tmp281 false
-+  943 jump __label199 lessThan __fn11_distance 0
-   944 print MSG
-   945 print __fn11_distance
-   946 print "[] sec\n"
++  763 jump __label199 lessThan __fn11_distance 0
+   764 print MSG
+   765 print __fn11_distance
+   766 print "[] sec\n"
  
-   967 op strictEqual __tmp287 __tmp286 0
-   968 sensor __tmp288 @unit @controller
-   969 op notEqual __tmp289 __tmp288 @this
+   785 op strictEqual __tmp287 __tmp286 0
+   786 sensor __tmp288 @unit @controller
+   787 op notEqual __tmp289 __tmp288 @this
 -    * op lessThanEq __tmp290 __tmp287 __tmp289
 -    * jump __label205 equal __tmp290 false
-+  970 jump __label205 greaterThan __tmp287 __tmp289
-   971 label __label207
-   972 label __label209
-   973 noop
-   974 ubind UNIT
++  788 jump __label205 greaterThan __tmp287 __tmp289
+   789 label __label207
+   790 label __label209
+   791 ubind UNIT
 -    * op equal __tmp293 @unit null
 -    * jump __label212 equal __tmp293 false
-+  975 jump __label212 notEqual @unit null
-   976 print "[salmon]No unit of type "
-   977 print UNIT
-   978 print " found..."
- 
-   980 jump __label213 always
-   981 label __label212
-   982 sensor __tmp295 @unit @controlled
++  792 jump __label212 notEqual @unit null
+   793 print "[salmon]No unit of type "
+   794 print UNIT
+   795 print " found..."
+   796 jump __label213 always
+   797 label __label212
+   798 sensor __tmp295 @unit @controlled
 -    * op notEqual __tmp296 __tmp295 0
 -    * jump __label214 equal __tmp296 false
-+  983 jump __label214 equal __tmp295 0
-   984 print "[salmon]Looking for a free "
-   985 print UNIT
-   986 print "..."
++  799 jump __label214 equal __tmp295 0
+   800 print "[salmon]Looking for a free "
+   801 print UNIT
+   802 print "..."
  
-  1009 noop
-  1010 set __fn13_distance -1
-  1011 set __fn13_color "gold"
+   817 sensor __fn13_state @unit @flag
+   818 set __fn13_distance -1
+   819 set __fn13_color "gold"
 -    * op equal __tmp299 __fn13_state 1
 -    * jump __label216 equal __tmp299 false
-+ 1012 jump __label216 notEqual __fn13_state 1
-  1013 sensor __tmp301 @unit @firstItem
++  820 jump __label216 notEqual __fn13_state 1
+   821 sensor __tmp301 @unit @firstItem
 -    * op equal __tmp302 __tmp301 __fn13_item
 -    * jump __label218 equal __tmp302 false
-+ 1014 jump __label218 notEqual __tmp301 __fn13_item
-  1015 set __fn13_state 3
-  1016 noop
-  1017 jump __label219 always
-  1018 label __label218
-  1019 sensor __tmp304 @unit @totalItems
++  822 jump __label218 notEqual __tmp301 __fn13_item
+   823 set __fn13_state 3
+   824 jump __label219 always
+   825 label __label218
+   826 sensor __tmp304 @unit @totalItems
 -    * op equal __tmp305 __tmp304 0
 -    * jump __label220 equal __tmp305 false
-+ 1020 jump __label220 notEqual __tmp304 0
-  1021 set __fn13_state 2
-  1022 noop
-  1023 jump __label221 always
++  827 jump __label220 notEqual __tmp304 0
+   828 set __fn13_state 2
+   829 jump __label221 always
+   830 label __label220
  
-  1041 label __label216
-  1042 noop
-  1043 label __label217
+   841 jump __label217 always
+   842 label __label216
+   843 label __label217
 -    * op equal __tmp309 __fn13_state 2
 -    * jump __label224 equal __tmp309 false
-+ 1044 jump __label224 notEqual __fn13_state 2
-  1045 ucontrol within CORE_X CORE_Y 8 __tmp311
-  1046 jump __label226 equal __tmp311 false
-  1047 ucontrol itemTake CORE __fn13_item UNIT_CAPACITY
-  1048 sensor __tmp313 @unit @totalItems
++  844 jump __label224 notEqual __fn13_state 2
+   845 ucontrol within CORE_X CORE_Y 8 __tmp311
+   846 jump __label226 equal __tmp311 false
+   847 ucontrol itemTake CORE __fn13_item UNIT_CAPACITY
+   848 sensor __tmp313 @unit @totalItems
 -    * op greaterThanEq __tmp314 __tmp313 UNIT_CAPACITY
 -    * jump __label228 equal __tmp314 false
-+ 1049 jump __label228 lessThan __tmp313 UNIT_CAPACITY
-  1050 ucontrol approach DOME_X DOME_Y 6
-  1051 set __fn13_state 3
-  1052 noop
++  849 jump __label228 lessThan __tmp313 UNIT_CAPACITY
+   850 ucontrol approach DOME_X DOME_Y 6
+   851 set __fn13_state 3
+   852 jump __label229 always
  
-  1075 label __label224
-  1076 noop
-  1077 label __label225
+   868 jump __label225 always
+   869 label __label224
+   870 label __label225
 -    * op equal __tmp323 __fn13_state 3
 -    * jump __label230 equal __tmp323 false
-+ 1078 jump __label230 notEqual __fn13_state 3
-  1079 ucontrol within DOME_X DOME_Y 8 __tmp325
-  1080 jump __label232 equal __tmp325 false
-  1081 jump __label234 equal __fn13_supply false
++  871 jump __label230 notEqual __fn13_state 3
+   872 ucontrol within DOME_X DOME_Y 8 __tmp325
+   873 jump __label232 equal __tmp325 false
+   874 jump __label234 equal __fn13_supply false
  
-  1090 noop
-  1091 label __label235
-  1092 sensor __tmp328 @unit @totalItems
+   881 set MSG ", waiting\n"
+   882 label __label235
+   883 sensor __tmp328 @unit @totalItems
 -    * op lessThanEq __tmp329 __tmp328 0
 -    * jump __label236 equal __tmp329 false
-+ 1093 jump __label236 greaterThan __tmp328 0
-  1094 ucontrol approach CORE_X CORE_Y 6
-  1095 set __fn13_state 2
-  1096 noop
++  884 jump __label236 greaterThan __tmp328 0
+   885 ucontrol approach CORE_X CORE_Y 6
+   886 set __fn13_state 2
+   887 jump __label237 always
  
-  1127 print "]"
-  1128 print __tmp338
-  1129 print "[]"
+   911 print "]"
+   912 print __tmp338
+   913 print "[]"
 -    * op greaterThanEq __tmp339 __fn13_distance 0
 -    * jump __label238 equal __tmp339 false
-+ 1130 jump __label238 lessThan __fn13_distance 0
-  1131 print MSG
-  1132 print __fn13_distance
-  1133 print "[] sec\n"
++  914 jump __label238 lessThan __fn13_distance 0
+   915 print MSG
+   916 print __fn13_distance
+   917 print "[] sec\n"
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-37 instructions):
  
-    32 noop
-    33 jump __label10 always
-    34 noop
+    29 jump __label11 equal @unit null
+    30 set __fn0_first_unit @unit
+    31 jump __label10 always
 -    * jump __label12 always
-+   35 noop
-    36 label __label11
-    37 noop
-    38 label __label12
+    32 label __label11
+    33 label __label12
+    34 print "[salmon]No unit of type "
  
-    59 jump __label18 equal UNIT_S2 null
-    60 jump __label15 always
-    61 noop
+    50 set UNIT_P1 @unit
+    51 jump __label18 equal UNIT_S2 null
+    52 jump __label15 always
 -    * jump __label19 always
-+   62 noop
-    63 label __label18
-    64 noop
-    65 label __label19
-    66 noop
+    53 label __label18
+    54 label __label19
 -    * jump __label17 always
-+   67 noop
-    68 label __label16
-    69 noop
-    70 label __label17
+    55 label __label16
+    56 label __label17
+    57 ubind UNIT
  
-    77 jump __label13 notEqual __tmp18 false
-    78 label __label15
-    79 noop
+    62 op land __tmp18 __tmp15 __tmp17
+    63 jump __label13 notEqual __tmp18 false
+    64 label __label15
 -    * jump __label7 always
-+   80 noop
-    81 noop
-    82 label __label7
-    83 jump __label20 notEqual UNIT_S1 null
+    65 label __label7
+    66 jump __label20 notEqual UNIT_S1 null
+    67 label __label22
  
-   115 label __label23
-   116 set UNIT_S1 __tmp21
-   117 noop
+    92 set __tmp21 null
+    93 label __label23
+    94 set UNIT_S1 __tmp21
 -    * jump __label21 always
-+  118 noop
-   119 label __label20
-   120 noop
-   121 label __label21
+    95 label __label20
+    96 label __label21
+    97 jump __label31 notEqual UNIT_P1 null
  
-   154 label __label34
-   155 set UNIT_P1 __tmp29
-   156 noop
+   123 set __tmp29 null
+   124 label __label34
+   125 set UNIT_P1 __tmp29
 -    * jump __label32 always
-+  157 noop
-   158 label __label31
-   159 noop
-   160 label __label32
+   126 label __label31
+   127 label __label32
+   128 sensor __tmp35 UNIT_S1 @firstItem
  
-   168 set UNIT_S1 UNIT_P1
-   169 set UNIT_P1 u
-   170 noop
+   134 set u UNIT_S1
+   135 set UNIT_S1 UNIT_P1
+   136 set UNIT_P1 u
 -    * jump __label43 always
-+  171 noop
-   172 label __label42
-   173 noop
-   174 label __label43
+   137 label __label42
+   138 label __label43
+   139 sensor UNIT_CAPACITY UNIT_S1 @itemCapacity
  
-   238 label __label52
-   239 set UNIT_S2 __tmp62
-   240 noop
+   186 set __tmp62 null
+   187 label __label52
+   188 set UNIT_S2 __tmp62
 -    * jump __label50 always
-+  241 noop
-   242 label __label49
-   243 noop
-   244 label __label50
+   189 label __label49
+   190 label __label50
+   191 jump __label60 notEqual UNIT_P2 null
  
-   277 label __label63
-   278 set UNIT_P2 __tmp70
-   279 noop
+   217 set __tmp70 null
+   218 label __label63
+   219 set UNIT_P2 __tmp70
 -    * jump __label61 always
-+  280 noop
-   281 label __label60
-   282 noop
-   283 label __label61
+   220 label __label60
+   221 label __label61
+   222 sensor __tmp76 UNIT_S1 @firstItem
  
-   291 set UNIT_S1 UNIT_P2
-   292 set UNIT_P2 u
-   293 noop
+   228 set u UNIT_S1
+   229 set UNIT_S1 UNIT_P2
+   230 set UNIT_P2 u
 -    * jump __label72 always
-+  294 noop
-   295 label __label71
-   296 noop
-   297 label __label72
+   231 label __label71
+   232 label __label72
+   233 sensor __tmp82 UNIT_S2 @firstItem
  
-   305 set UNIT_S2 UNIT_P2
-   306 set UNIT_P2 u
-   307 noop
+   239 set u UNIT_S2
+   240 set UNIT_S2 UNIT_P2
+   241 set UNIT_P2 u
 -    * jump __label74 always
-+  308 noop
-   309 label __label73
-   310 noop
-   311 label __label74
+   242 label __label73
+   243 label __label74
+   244 set GROUP1 "probe  1"
  
-   406 noop
-   407 label __label87
-   408 noop
+   321 jump __label88 always
+   322 label __label90
+   323 label __label87
 -    * jump __label85 always
-+  409 noop
-   410 label __label84
-   411 noop
-   412 label __label85
+   324 label __label84
+   325 label __label85
+   326 sensor __fn6_state @unit @flag
  
-   433 jump __label101 equal __tmp126 false
-   434 ucontrol itemDrop CORE UNIT_CAPACITY
-   435 noop
+   342 ucontrol within CORE_X CORE_Y 8 __tmp126
+   343 jump __label101 equal __tmp126 false
+   344 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * jump __label102 always
-+  436 noop
-   437 label __label101
-   438 noop
-   439 label __label102
- 
-   442 noop
-   443 label __label98
-   444 noop
+   345 label __label101
+   346 label __label102
+   347 label __label100
+   348 label __label98
 -    * jump __label96 always
-+  445 noop
-   446 label __label95
-   447 noop
-   448 label __label96
+   349 label __label95
+   350 label __label96
+   351 jump __label103 notEqual __fn6_state 2
  
-   476 noop
-   477 label __label106
-   478 noop
+   372 op idiv __tmp140 __tmp139 SPEED_TENTHS
+   373 op div __fn6_distance __tmp140 10
+   374 label __label106
 -    * jump __label104 always
-+  479 noop
-   480 label __label103
-   481 noop
-   482 label __label104
+   375 label __label103
+   376 label __label104
+   377 jump __label109 notEqual __fn6_state 3
  
-   499 ucontrol approach CORE_X CORE_Y 6
-   500 set __fn6_state 2
-   501 noop
+   390 jump __label115 greaterThan __tmp147 0
+   391 ucontrol approach CORE_X CORE_Y 6
+   392 set __fn6_state 2
 -    * jump __label116 always
-+  502 noop
-   503 label __label115
-   504 noop
-   505 label __label116
+   393 label __label115
+   394 label __label116
+   395 jump __label112 always
  
-   519 noop
-   520 label __label112
-   521 noop
+   404 op idiv __tmp155 __tmp154 SPEED_TENTHS
+   405 op div __fn6_distance __tmp155 10
+   406 label __label112
 -    * jump __label110 always
-+  522 noop
-   523 label __label109
-   524 noop
-   525 label __label110
+   407 label __label109
+   408 label __label110
+   409 ucontrol flag __fn6_state
  
-   593 noop
-   594 label __label126
-   595 noop
+   466 jump __label127 always
+   467 label __label129
+   468 label __label126
 -    * jump __label124 always
-+  596 noop
-   597 label __label123
-   598 noop
-   599 label __label124
+   469 label __label123
+   470 label __label124
+   471 sensor __fn8_state @unit @flag
  
-   620 jump __label140 equal __tmp184 false
-   621 ucontrol itemDrop CORE UNIT_CAPACITY
-   622 noop
+   487 ucontrol within CORE_X CORE_Y 8 __tmp184
+   488 jump __label140 equal __tmp184 false
+   489 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * jump __label141 always
-+  623 noop
-   624 label __label140
-   625 noop
-   626 label __label141
- 
-   629 noop
-   630 label __label137
-   631 noop
+   490 label __label140
+   491 label __label141
+   492 label __label139
+   493 label __label137
 -    * jump __label135 always
-+  632 noop
-   633 label __label134
-   634 noop
-   635 label __label135
+   494 label __label134
+   495 label __label135
+   496 jump __label142 notEqual __fn8_state 2
  
-   663 noop
-   664 label __label145
-   665 noop
+   517 op idiv __tmp198 __tmp197 SPEED_TENTHS
+   518 op div __fn8_distance __tmp198 10
+   519 label __label145
 -    * jump __label143 always
-+  666 noop
-   667 label __label142
-   668 noop
-   669 label __label143
+   520 label __label142
+   521 label __label143
+   522 jump __label148 notEqual __fn8_state 3
  
-   686 ucontrol approach CORE_X CORE_Y 6
-   687 set __fn8_state 2
-   688 noop
+   535 jump __label154 greaterThan __tmp205 0
+   536 ucontrol approach CORE_X CORE_Y 6
+   537 set __fn8_state 2
 -    * jump __label155 always
-+  689 noop
-   690 label __label154
-   691 noop
-   692 label __label155
+   538 label __label154
+   539 label __label155
+   540 jump __label151 always
  
-   706 noop
-   707 label __label151
-   708 noop
+   549 op idiv __tmp213 __tmp212 SPEED_TENTHS
+   550 op div __fn8_distance __tmp213 10
+   551 label __label151
 -    * jump __label149 always
-+  709 noop
-   710 label __label148
-   711 noop
-   712 label __label149
+   552 label __label148
+   553 label __label149
+   554 ucontrol flag __fn8_state
  
-   746 label __label159
-   747 set SUPPLY_S_FIRST __tmp218
-   748 noop
+   582 op equal __tmp218 __tmp221 0
+   583 label __label159
+   584 set SUPPLY_S_FIRST __tmp218
 -    * jump __label120 always
-+  749 noop
-   750 label __label119
-   751 noop
-   752 label __label120
+   585 label __label119
+   586 label __label120
+   587 label __label160
  
-   814 noop
-   815 label __label169
-   816 noop
+   636 jump __label170 always
+   637 label __label172
+   638 label __label169
 -    * jump __label167 always
-+  817 noop
-   818 label __label166
-   819 noop
-   820 label __label167
+   639 label __label166
+   640 label __label167
+   641 sensor __fn11_state @unit @flag
  
-   841 jump __label183 equal __tmp249 false
-   842 ucontrol itemDrop CORE UNIT_CAPACITY
-   843 noop
+   657 ucontrol within CORE_X CORE_Y 8 __tmp249
+   658 jump __label183 equal __tmp249 false
+   659 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * jump __label184 always
-+  844 noop
-   845 label __label183
-   846 noop
-   847 label __label184
- 
-   850 noop
-   851 label __label180
-   852 noop
+   660 label __label183
+   661 label __label184
+   662 label __label182
+   663 label __label180
 -    * jump __label178 always
-+  853 noop
-   854 label __label177
-   855 noop
-   856 label __label178
+   664 label __label177
+   665 label __label178
+   666 jump __label185 notEqual __fn11_state 2
  
-   884 noop
-   885 label __label188
-   886 noop
+   687 op idiv __tmp263 __tmp262 SPEED_TENTHS
+   688 op div __fn11_distance __tmp263 10
+   689 label __label188
 -    * jump __label186 always
-+  887 noop
-   888 label __label185
-   889 noop
-   890 label __label186
+   690 label __label185
+   691 label __label186
+   692 jump __label191 notEqual __fn11_state 3
  
-   907 ucontrol approach CORE_X CORE_Y 6
-   908 set __fn11_state 2
-   909 noop
+   705 jump __label197 greaterThan __tmp270 0
+   706 ucontrol approach CORE_X CORE_Y 6
+   707 set __fn11_state 2
 -    * jump __label198 always
-+  910 noop
-   911 label __label197
-   912 noop
-   913 label __label198
+   708 label __label197
+   709 label __label198
+   710 jump __label194 always
  
-   927 noop
-   928 label __label194
-   929 noop
+   719 op idiv __tmp278 __tmp277 SPEED_TENTHS
+   720 op div __fn11_distance __tmp278 10
+   721 label __label194
 -    * jump __label192 always
-+  930 noop
-   931 label __label191
-   932 noop
-   933 label __label192
+   722 label __label191
+   723 label __label192
+   724 ucontrol flag __fn11_state
  
-  1001 noop
-  1002 label __label208
-  1003 noop
+   781 jump __label209 always
+   782 label __label211
+   783 label __label208
 -    * jump __label206 always
-+ 1004 noop
-  1005 label __label205
-  1006 noop
-  1007 label __label206
+   784 label __label205
+   785 label __label206
+   786 sensor __fn13_state @unit @flag
  
-  1028 jump __label222 equal __tmp307 false
-  1029 ucontrol itemDrop CORE UNIT_CAPACITY
-  1030 noop
+   802 ucontrol within CORE_X CORE_Y 8 __tmp307
+   803 jump __label222 equal __tmp307 false
+   804 ucontrol itemDrop CORE UNIT_CAPACITY
 -    * jump __label223 always
-+ 1031 noop
-  1032 label __label222
-  1033 noop
-  1034 label __label223
- 
-  1037 noop
-  1038 label __label219
-  1039 noop
+   805 label __label222
+   806 label __label223
+   807 label __label221
+   808 label __label219
 -    * jump __label217 always
-+ 1040 noop
-  1041 label __label216
-  1042 noop
-  1043 label __label217
+   809 label __label216
+   810 label __label217
+   811 jump __label224 notEqual __fn13_state 2
  
-  1071 noop
-  1072 label __label227
-  1073 noop
+   832 op idiv __tmp321 __tmp320 SPEED_TENTHS
+   833 op div __fn13_distance __tmp321 10
+   834 label __label227
 -    * jump __label225 always
-+ 1074 noop
-  1075 label __label224
-  1076 noop
-  1077 label __label225
+   835 label __label224
+   836 label __label225
+   837 jump __label230 notEqual __fn13_state 3
  
-  1094 ucontrol approach CORE_X CORE_Y 6
-  1095 set __fn13_state 2
-  1096 noop
+   850 jump __label236 greaterThan __tmp328 0
+   851 ucontrol approach CORE_X CORE_Y 6
+   852 set __fn13_state 2
 -    * jump __label237 always
-+ 1097 noop
-  1098 label __label236
-  1099 noop
-  1100 label __label237
+   853 label __label236
+   854 label __label237
+   855 jump __label233 always
  
-  1114 noop
-  1115 label __label233
-  1116 noop
+   864 op idiv __tmp336 __tmp335 SPEED_TENTHS
+   865 op div __fn13_distance __tmp336 10
+   866 label __label233
 -    * jump __label231 always
-+ 1117 noop
-  1118 label __label230
-  1119 noop
-  1120 label __label231
+   867 label __label230
+   868 label __label231
+   869 ucontrol flag __fn13_state
  
-  1154 label __label241
-  1155 set SUPPLY_P_FIRST __tmp341
-  1156 noop
+   897 op equal __tmp341 __tmp344 0
+   898 label __label241
+   899 set SUPPLY_P_FIRST __tmp341
 -    * jump __label202 always
-+ 1157 noop
-  1158 label __label201
-  1159 noop
-  1160 label __label202
+   900 label __label201
+   901 label __label202
+   902 op sub __tmp346 @time start
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
-   736 set UNIT_S2 __tmp162
-   737 jump __label158 equal SUPPLY_S_FIRST false
-   738 sensor __tmp219 UNIT_S1 @totalItems
+   575 set UNIT_S2 __tmp162
+   576 jump __label158 equal SUPPLY_S_FIRST false
+   577 sensor __tmp219 UNIT_S1 @totalItems
 -    * op greaterThan __tmp218 __tmp219 0
-+  739 op greaterThan SUPPLY_S_FIRST __tmp219 0
-   740 noop
-   741 jump __label159 always
-   742 label __label158
-   743 sensor __tmp221 UNIT_S2 @totalItems
++  578 op greaterThan SUPPLY_S_FIRST __tmp219 0
+   579 jump __label159 always
+   580 label __label158
+   581 sensor __tmp221 UNIT_S2 @totalItems
 -    * op equal __tmp218 __tmp221 0
-+  744 op equal SUPPLY_S_FIRST __tmp221 0
-   745 noop
-   746 label __label159
++  582 op equal SUPPLY_S_FIRST __tmp221 0
+   583 label __label159
 -    * set SUPPLY_S_FIRST __tmp218
-   747 noop
-   748 noop
-   749 label __label119
+   584 label __label119
+   585 label __label120
+   586 label __label160
  
-  1143 set UNIT_P2 __tmp285
-  1144 jump __label240 equal SUPPLY_P_FIRST false
-  1145 sensor __tmp342 UNIT_P1 @totalItems
+   889 set UNIT_P2 __tmp285
+   890 jump __label240 equal SUPPLY_P_FIRST false
+   891 sensor __tmp342 UNIT_P1 @totalItems
 -    * op greaterThan __tmp341 __tmp342 0
-+ 1146 op greaterThan SUPPLY_P_FIRST __tmp342 0
-  1147 noop
-  1148 jump __label241 always
-  1149 label __label240
-  1150 sensor __tmp344 UNIT_P2 @totalItems
++  892 op greaterThan SUPPLY_P_FIRST __tmp342 0
+   893 jump __label241 always
+   894 label __label240
+   895 sensor __tmp344 UNIT_P2 @totalItems
 -    * op equal __tmp341 __tmp344 0
-+ 1151 op equal SUPPLY_P_FIRST __tmp344 0
-  1152 noop
-  1153 label __label241
++  896 op equal SUPPLY_P_FIRST __tmp344 0
+   897 label __label241
 -    * set SUPPLY_P_FIRST __tmp341
-  1154 noop
-  1155 noop
-  1156 label __label201
+   898 label __label201
+   899 label __label202
+   900 op sub __tmp346 @time start
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-5 instructions):
  
-    28 noop
-    29 ubind UNIT
-    30 jump __label11 equal @unit null
+    27 label __label8
+    28 ubind UNIT
+    29 jump __label11 equal @unit null
 -    * set __fn0_first_unit @unit
-    31 noop
-    32 jump __label10 always
-    33 noop
+    30 jump __label10 always
+    31 label __label11
+    32 label __label12
  
-   332 sensor __tmp94 UNIT_P1 @totalItems
-   333 sensor __tmp95 UNIT_P2 @totalItems
-   334 op lessThan __tmp96 __tmp94 __tmp95
+   261 sensor __tmp94 UNIT_P1 @totalItems
+   262 sensor __tmp95 UNIT_P2 @totalItems
+   263 op lessThan __tmp96 __tmp94 __tmp95
 -    * op or SUPPLY_P_FIRST __tmp93 __tmp96
-+  335 op or SUPPLY_P_FIRST __tmp88 __tmp96
-   336 noop
-   337 label __label75
-   338 sensor __tmp98 switch1 @enabled
++  264 op or SUPPLY_P_FIRST __tmp88 __tmp96
+   265 label __label75
+   266 sensor __tmp98 switch1 @enabled
+   267 jump __label77 equal __tmp98 false
  
-   344 label __label78
-   345 set __fn5_item @silicon
-   346 set __fn5_text "\n[green]Silicon[] status:\n"
+   271 label __label78
+   272 set __fn5_item @silicon
+   273 set __fn5_text "\n[green]Silicon[] status:\n"
 -    * print __fn5_text
 -    * sensor __fn5_level DOME __fn5_item
-+  347 print "\n[green]Silicon[] status:\n"
-+  348 sensor __fn5_level DOME @silicon
-   349 noop
-   350 jump __label80 lessThanEq __fn5_level 3
-   351 print "  dome:  [green]"
++  274 print "\n[green]Silicon[] status:\n"
++  275 sensor __fn5_level DOME @silicon
+   276 jump __label80 lessThanEq __fn5_level 3
+   277 print "  dome:  [green]"
+   278 print __fn5_level
  
-   366 set __fn6_item @silicon
-   367 set __fn6_group GROUP1
-   368 set __fn6_supply SUPPLY_S_FIRST
+   289 set __fn6_item @silicon
+   290 set __fn6_group GROUP1
+   291 set __fn6_supply SUPPLY_S_FIRST
 -    * ubind __fn6_unit
-+  369 ubind UNIT_S1
-   370 sensor __tmp105 @unit @dead
-   371 op strictEqual __tmp106 __tmp105 0
-   372 sensor __tmp107 @unit @controller
++  292 ubind UNIT_S1
+   293 sensor __tmp105 @unit @dead
+   294 op strictEqual __tmp106 __tmp105 0
+   295 sensor __tmp107 @unit @controller
  
-   415 set __fn6_color "gold"
-   416 jump __label95 notEqual __fn6_state 1
-   417 sensor __tmp120 @unit @firstItem
+   327 set __fn6_color "gold"
+   328 jump __label95 notEqual __fn6_state 1
+   329 sensor __tmp120 @unit @firstItem
 -    * jump __label97 notEqual __tmp120 __fn6_item
-+  418 jump __label97 notEqual __tmp120 @silicon
-   419 set __fn6_state 3
-   420 noop
-   421 jump __label98 always
++  330 jump __label97 notEqual __tmp120 @silicon
+   331 set __fn6_state 3
+   332 jump __label98 always
+   333 label __label97
  
-   448 jump __label103 notEqual __fn6_state 2
-   449 ucontrol within CORE_X CORE_Y 8 __tmp130
-   450 jump __label105 equal __tmp130 false
+   350 jump __label103 notEqual __fn6_state 2
+   351 ucontrol within CORE_X CORE_Y 8 __tmp130
+   352 jump __label105 equal __tmp130 false
 -    * ucontrol itemTake CORE __fn6_item UNIT_CAPACITY
-+  451 ucontrol itemTake CORE @silicon UNIT_CAPACITY
-   452 sensor __tmp132 @unit @totalItems
-   453 jump __label107 lessThan __tmp132 UNIT_CAPACITY
-   454 ucontrol approach DOME_X DOME_Y 6
++  353 ucontrol itemTake CORE @silicon UNIT_CAPACITY
+   354 sensor __tmp132 @unit @totalItems
+   355 jump __label107 lessThan __tmp132 UNIT_CAPACITY
+   356 ucontrol approach DOME_X DOME_Y 6
  
-   482 jump __label109 notEqual __fn6_state 3
-   483 ucontrol within DOME_X DOME_Y 8 __tmp144
-   484 jump __label111 equal __tmp144 false
+   376 jump __label109 notEqual __fn6_state 3
+   377 ucontrol within DOME_X DOME_Y 8 __tmp144
+   378 jump __label111 equal __tmp144 false
 -    * jump __label113 equal __fn6_supply false
-+  485 jump __label113 equal SUPPLY_S_FIRST false
-   486 ucontrol itemDrop DOME UNIT_CAPACITY
-   487 set MSG ", supplying\n"
-   488 set __fn6_color "green"
++  379 jump __label113 equal SUPPLY_S_FIRST false
+   380 ucontrol itemDrop DOME UNIT_CAPACITY
+   381 set MSG ", supplying\n"
+   382 set __fn6_color "green"
  
-   525 ucontrol flag __fn6_state
-   526 sensor __tmp157 @unit @totalItems
-   527 print "  "
+   408 ucontrol flag __fn6_state
+   409 sensor __tmp157 @unit @totalItems
+   410 print "  "
 -    * print __fn6_group
-+  528 print GROUP1
-   529 print ": ["
-   530 print __fn6_color
-   531 print "]"
++  411 print GROUP1
+   412 print ": ["
+   413 print __fn6_color
+   414 print "]"
  
-   543 label __label118
-   544 set __tmp104 @unit
-   545 jump __label83 always
+   424 label __label118
+   425 set __tmp104 @unit
+   426 jump __label83 always
 -    * set __tmp104 null
-   546 label __label83
-   547 set UNIT_S1 __tmp104
-   548 jump __label119 equal FOUR_UNITS false
+   427 label __label83
+   428 set UNIT_S1 __tmp104
+   429 jump __label119 equal FOUR_UNITS false
  
-   552 set __fn8_item @silicon
-   553 set __fn8_group GROUP2
-   554 set __fn8_supply __tmp161
+   433 set __fn8_item @silicon
+   434 set __fn8_group GROUP2
+   435 set __fn8_supply __tmp161
 -    * ubind __fn8_unit
-+  555 ubind UNIT_S2
-   556 sensor __tmp163 @unit @dead
-   557 op strictEqual __tmp164 __tmp163 0
-   558 sensor __tmp165 @unit @controller
++  436 ubind UNIT_S2
+   437 sensor __tmp163 @unit @dead
+   438 op strictEqual __tmp164 __tmp163 0
+   439 sensor __tmp165 @unit @controller
  
-   601 set __fn8_color "gold"
-   602 jump __label134 notEqual __fn8_state 1
-   603 sensor __tmp178 @unit @firstItem
+   471 set __fn8_color "gold"
+   472 jump __label134 notEqual __fn8_state 1
+   473 sensor __tmp178 @unit @firstItem
 -    * jump __label136 notEqual __tmp178 __fn8_item
-+  604 jump __label136 notEqual __tmp178 @silicon
-   605 set __fn8_state 3
-   606 noop
-   607 jump __label137 always
++  474 jump __label136 notEqual __tmp178 @silicon
+   475 set __fn8_state 3
+   476 jump __label137 always
+   477 label __label136
  
-   634 jump __label142 notEqual __fn8_state 2
-   635 ucontrol within CORE_X CORE_Y 8 __tmp188
-   636 jump __label144 equal __tmp188 false
+   494 jump __label142 notEqual __fn8_state 2
+   495 ucontrol within CORE_X CORE_Y 8 __tmp188
+   496 jump __label144 equal __tmp188 false
 -    * ucontrol itemTake CORE __fn8_item UNIT_CAPACITY
-+  637 ucontrol itemTake CORE @silicon UNIT_CAPACITY
-   638 sensor __tmp190 @unit @totalItems
-   639 jump __label146 lessThan __tmp190 UNIT_CAPACITY
-   640 ucontrol approach DOME_X DOME_Y 6
++  497 ucontrol itemTake CORE @silicon UNIT_CAPACITY
+   498 sensor __tmp190 @unit @totalItems
+   499 jump __label146 lessThan __tmp190 UNIT_CAPACITY
+   500 ucontrol approach DOME_X DOME_Y 6
  
-   668 jump __label148 notEqual __fn8_state 3
-   669 ucontrol within DOME_X DOME_Y 8 __tmp202
-   670 jump __label150 equal __tmp202 false
+   520 jump __label148 notEqual __fn8_state 3
+   521 ucontrol within DOME_X DOME_Y 8 __tmp202
+   522 jump __label150 equal __tmp202 false
 -    * jump __label152 equal __fn8_supply false
-+  671 jump __label152 equal __tmp161 false
-   672 ucontrol itemDrop DOME UNIT_CAPACITY
-   673 set MSG ", supplying\n"
-   674 set __fn8_color "green"
++  523 jump __label152 equal __tmp161 false
+   524 ucontrol itemDrop DOME UNIT_CAPACITY
+   525 set MSG ", supplying\n"
+   526 set __fn8_color "green"
  
-   711 ucontrol flag __fn8_state
-   712 sensor __tmp215 @unit @totalItems
-   713 print "  "
+   552 ucontrol flag __fn8_state
+   553 sensor __tmp215 @unit @totalItems
+   554 print "  "
 -    * print __fn8_group
-+  714 print GROUP2
-   715 print ": ["
-   716 print __fn8_color
-   717 print "]"
++  555 print GROUP2
+   556 print ": ["
+   557 print __fn8_color
+   558 print "]"
  
-   729 label __label157
-   730 set __tmp162 @unit
-   731 jump __label122 always
+   568 label __label157
+   569 set __tmp162 @unit
+   570 jump __label122 always
 -    * set __tmp162 null
-   732 label __label122
-   733 set UNIT_S2 __tmp162
-   734 jump __label158 equal SUPPLY_S_FIRST false
+   571 label __label122
+   572 set UNIT_S2 __tmp162
+   573 jump __label158 equal SUPPLY_S_FIRST false
  
-   749 label __label160
-   750 set __fn10_item @phase-fabric
-   751 set __fn10_text "\n[green]Phase fabric[] status:\n"
+   583 label __label160
+   584 set __fn10_item @phase-fabric
+   585 set __fn10_text "\n[green]Phase fabric[] status:\n"
 -    * print __fn10_text
 -    * sensor __fn10_level DOME __fn10_item
-+  752 print "\n[green]Phase fabric[] status:\n"
-+  753 sensor __fn10_level DOME @phase-fabric
-   754 noop
-   755 jump __label162 lessThanEq __fn10_level 3
-   756 print "  dome:  [green]"
++  586 print "\n[green]Phase fabric[] status:\n"
++  587 sensor __fn10_level DOME @phase-fabric
+   588 jump __label162 lessThanEq __fn10_level 3
+   589 print "  dome:  [green]"
+   590 print __fn10_level
  
-   771 set __fn11_item @phase-fabric
-   772 set __fn11_group GROUP1
-   773 set __fn11_supply SUPPLY_P_FIRST
+   601 set __fn11_item @phase-fabric
+   602 set __fn11_group GROUP1
+   603 set __fn11_supply SUPPLY_P_FIRST
 -    * ubind __fn11_unit
-+  774 ubind UNIT_P1
-   775 sensor __tmp228 @unit @dead
-   776 op strictEqual __tmp229 __tmp228 0
-   777 sensor __tmp230 @unit @controller
++  604 ubind UNIT_P1
+   605 sensor __tmp228 @unit @dead
+   606 op strictEqual __tmp229 __tmp228 0
+   607 sensor __tmp230 @unit @controller
  
-   820 set __fn11_color "gold"
-   821 jump __label177 notEqual __fn11_state 1
-   822 sensor __tmp243 @unit @firstItem
+   639 set __fn11_color "gold"
+   640 jump __label177 notEqual __fn11_state 1
+   641 sensor __tmp243 @unit @firstItem
 -    * jump __label179 notEqual __tmp243 __fn11_item
-+  823 jump __label179 notEqual __tmp243 @phase-fabric
-   824 set __fn11_state 3
-   825 noop
-   826 jump __label180 always
++  642 jump __label179 notEqual __tmp243 @phase-fabric
+   643 set __fn11_state 3
+   644 jump __label180 always
+   645 label __label179
  
-   853 jump __label185 notEqual __fn11_state 2
-   854 ucontrol within CORE_X CORE_Y 8 __tmp253
-   855 jump __label187 equal __tmp253 false
+   662 jump __label185 notEqual __fn11_state 2
+   663 ucontrol within CORE_X CORE_Y 8 __tmp253
+   664 jump __label187 equal __tmp253 false
 -    * ucontrol itemTake CORE __fn11_item UNIT_CAPACITY
-+  856 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
-   857 sensor __tmp255 @unit @totalItems
-   858 jump __label189 lessThan __tmp255 UNIT_CAPACITY
-   859 ucontrol approach DOME_X DOME_Y 6
++  665 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
+   666 sensor __tmp255 @unit @totalItems
+   667 jump __label189 lessThan __tmp255 UNIT_CAPACITY
+   668 ucontrol approach DOME_X DOME_Y 6
  
-   887 jump __label191 notEqual __fn11_state 3
-   888 ucontrol within DOME_X DOME_Y 8 __tmp267
-   889 jump __label193 equal __tmp267 false
+   688 jump __label191 notEqual __fn11_state 3
+   689 ucontrol within DOME_X DOME_Y 8 __tmp267
+   690 jump __label193 equal __tmp267 false
 -    * jump __label195 equal __fn11_supply false
-+  890 jump __label195 equal SUPPLY_P_FIRST false
-   891 ucontrol itemDrop DOME UNIT_CAPACITY
-   892 set MSG ", supplying\n"
-   893 set __fn11_color "green"
++  691 jump __label195 equal SUPPLY_P_FIRST false
+   692 ucontrol itemDrop DOME UNIT_CAPACITY
+   693 set MSG ", supplying\n"
+   694 set __fn11_color "green"
  
-   930 ucontrol flag __fn11_state
-   931 sensor __tmp280 @unit @totalItems
-   932 print "  "
+   720 ucontrol flag __fn11_state
+   721 sensor __tmp280 @unit @totalItems
+   722 print "  "
 -    * print __fn11_group
-+  933 print GROUP1
-   934 print ": ["
-   935 print __fn11_color
-   936 print "]"
++  723 print GROUP1
+   724 print ": ["
+   725 print __fn11_color
+   726 print "]"
  
-   948 label __label200
-   949 set __tmp227 @unit
-   950 jump __label165 always
+   736 label __label200
+   737 set __tmp227 @unit
+   738 jump __label165 always
 -    * set __tmp227 null
-   951 label __label165
-   952 set UNIT_P1 __tmp227
-   953 jump __label201 equal FOUR_UNITS false
+   739 label __label165
+   740 set UNIT_P1 __tmp227
+   741 jump __label201 equal FOUR_UNITS false
  
-   957 set __fn13_item @phase-fabric
-   958 set __fn13_group GROUP2
-   959 set __fn13_supply __tmp284
+   745 set __fn13_item @phase-fabric
+   746 set __fn13_group GROUP2
+   747 set __fn13_supply __tmp284
 -    * ubind __fn13_unit
-+  960 ubind UNIT_P2
-   961 sensor __tmp286 @unit @dead
-   962 op strictEqual __tmp287 __tmp286 0
-   963 sensor __tmp288 @unit @controller
++  748 ubind UNIT_P2
+   749 sensor __tmp286 @unit @dead
+   750 op strictEqual __tmp287 __tmp286 0
+   751 sensor __tmp288 @unit @controller
  
-  1006 set __fn13_color "gold"
-  1007 jump __label216 notEqual __fn13_state 1
-  1008 sensor __tmp301 @unit @firstItem
+   783 set __fn13_color "gold"
+   784 jump __label216 notEqual __fn13_state 1
+   785 sensor __tmp301 @unit @firstItem
 -    * jump __label218 notEqual __tmp301 __fn13_item
-+ 1009 jump __label218 notEqual __tmp301 @phase-fabric
-  1010 set __fn13_state 3
-  1011 noop
-  1012 jump __label219 always
++  786 jump __label218 notEqual __tmp301 @phase-fabric
+   787 set __fn13_state 3
+   788 jump __label219 always
+   789 label __label218
  
-  1039 jump __label224 notEqual __fn13_state 2
-  1040 ucontrol within CORE_X CORE_Y 8 __tmp311
-  1041 jump __label226 equal __tmp311 false
+   806 jump __label224 notEqual __fn13_state 2
+   807 ucontrol within CORE_X CORE_Y 8 __tmp311
+   808 jump __label226 equal __tmp311 false
 -    * ucontrol itemTake CORE __fn13_item UNIT_CAPACITY
-+ 1042 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
-  1043 sensor __tmp313 @unit @totalItems
-  1044 jump __label228 lessThan __tmp313 UNIT_CAPACITY
-  1045 ucontrol approach DOME_X DOME_Y 6
++  809 ucontrol itemTake CORE @phase-fabric UNIT_CAPACITY
+   810 sensor __tmp313 @unit @totalItems
+   811 jump __label228 lessThan __tmp313 UNIT_CAPACITY
+   812 ucontrol approach DOME_X DOME_Y 6
  
-  1073 jump __label230 notEqual __fn13_state 3
-  1074 ucontrol within DOME_X DOME_Y 8 __tmp325
-  1075 jump __label232 equal __tmp325 false
+   832 jump __label230 notEqual __fn13_state 3
+   833 ucontrol within DOME_X DOME_Y 8 __tmp325
+   834 jump __label232 equal __tmp325 false
 -    * jump __label234 equal __fn13_supply false
-+ 1076 jump __label234 equal __tmp284 false
-  1077 ucontrol itemDrop DOME UNIT_CAPACITY
-  1078 set MSG ", supplying\n"
-  1079 set __fn13_color "green"
++  835 jump __label234 equal __tmp284 false
+   836 ucontrol itemDrop DOME UNIT_CAPACITY
+   837 set MSG ", supplying\n"
+   838 set __fn13_color "green"
  
-  1116 ucontrol flag __fn13_state
-  1117 sensor __tmp338 @unit @totalItems
-  1118 print "  "
+   864 ucontrol flag __fn13_state
+   865 sensor __tmp338 @unit @totalItems
+   866 print "  "
 -    * print __fn13_group
-+ 1119 print GROUP2
-  1120 print ": ["
-  1121 print __fn13_color
-  1122 print "]"
++  867 print GROUP2
+   868 print ": ["
+   869 print __fn13_color
+   870 print "]"
  
-  1134 label __label239
-  1135 set __tmp285 @unit
-  1136 jump __label204 always
+   880 label __label239
+   881 set __tmp285 @unit
+   882 jump __label204 always
 -    * set __tmp285 null
-  1137 label __label204
-  1138 set UNIT_P2 __tmp285
-  1139 jump __label240 equal SUPPLY_P_FIRST false
+   883 label __label204
+   884 set UNIT_P2 __tmp285
+   885 jump __label240 equal SUPPLY_P_FIRST false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-21 instructions):
  
-   328 op lessThan __tmp91 __tmp89 __tmp90
-   329 op or SUPPLY_S_FIRST __tmp88 __tmp91
-   330 noop
+   257 sensor __tmp90 UNIT_S2 @totalItems
+   258 op lessThan __tmp91 __tmp89 __tmp90
+   259 op or SUPPLY_S_FIRST __tmp88 __tmp91
 -    * op equal __tmp93 FOUR_UNITS false
-   331 sensor __tmp94 UNIT_P1 @totalItems
-   332 sensor __tmp95 UNIT_P2 @totalItems
-   333 op lessThan __tmp96 __tmp94 __tmp95
+   260 sensor __tmp94 UNIT_P1 @totalItems
+   261 sensor __tmp95 UNIT_P2 @totalItems
+   262 op lessThan __tmp96 __tmp94 __tmp95
  
-   341 print " === [gold]Supplying Overdrive Dome[] === "
-   342 print "\n"
-   343 label __label78
+   268 print " === [gold]Supplying Overdrive Dome[] === "
+   269 print "\n"
+   270 label __label78
 -    * set __fn5_item @silicon
 -    * set __fn5_text "\n[green]Silicon[] status:\n"
-   344 print "\n[green]Silicon[] status:\n"
-   345 sensor __fn5_level DOME @silicon
-   346 noop
+   271 print "\n[green]Silicon[] status:\n"
+   272 sensor __fn5_level DOME @silicon
+   273 jump __label80 lessThanEq __fn5_level 3
  
-   359 noop
-   360 label __label79
-   361 label __label82
+   282 label __label81
+   283 label __label79
+   284 label __label82
 -    * set __fn6_unit UNIT_S1
 -    * set __fn6_item @silicon
 -    * set __fn6_group GROUP1
 -    * set __fn6_supply SUPPLY_S_FIRST
-   362 ubind UNIT_S1
-   363 sensor __tmp105 @unit @dead
-   364 op strictEqual __tmp106 __tmp105 0
+   285 ubind UNIT_S1
+   286 sensor __tmp105 @unit @dead
+   287 op strictEqual __tmp106 __tmp105 0
  
-   541 jump __label119 equal FOUR_UNITS false
-   542 op equal __tmp161 SUPPLY_S_FIRST false
-   543 label __label121
+   422 jump __label119 equal FOUR_UNITS false
+   423 op equal __tmp161 SUPPLY_S_FIRST false
+   424 label __label121
 -    * set __fn8_unit UNIT_S2
 -    * set __fn8_item @silicon
 -    * set __fn8_group GROUP2
 -    * set __fn8_supply __tmp161
-   544 ubind UNIT_S2
-   545 sensor __tmp163 @unit @dead
-   546 op strictEqual __tmp164 __tmp163 0
+   425 ubind UNIT_S2
+   426 sensor __tmp163 @unit @dead
+   427 op strictEqual __tmp164 __tmp163 0
  
-   736 noop
-   737 label __label120
-   738 label __label160
+   570 label __label119
+   571 label __label120
+   572 label __label160
 -    * set __fn10_item @phase-fabric
 -    * set __fn10_text "\n[green]Phase fabric[] status:\n"
-   739 print "\n[green]Phase fabric[] status:\n"
-   740 sensor __fn10_level DOME @phase-fabric
-   741 noop
+   573 print "\n[green]Phase fabric[] status:\n"
+   574 sensor __fn10_level DOME @phase-fabric
+   575 jump __label162 lessThanEq __fn10_level 3
  
-   754 noop
-   755 label __label161
-   756 label __label164
+   584 label __label163
+   585 label __label161
+   586 label __label164
 -    * set __fn11_unit UNIT_P1
 -    * set __fn11_item @phase-fabric
 -    * set __fn11_group GROUP1
 -    * set __fn11_supply SUPPLY_P_FIRST
-   757 ubind UNIT_P1
-   758 sensor __tmp228 @unit @dead
-   759 op strictEqual __tmp229 __tmp228 0
+   587 ubind UNIT_P1
+   588 sensor __tmp228 @unit @dead
+   589 op strictEqual __tmp229 __tmp228 0
  
-   936 jump __label201 equal FOUR_UNITS false
-   937 op equal __tmp284 SUPPLY_P_FIRST false
-   938 label __label203
+   724 jump __label201 equal FOUR_UNITS false
+   725 op equal __tmp284 SUPPLY_P_FIRST false
+   726 label __label203
 -    * set __fn13_unit UNIT_P2
 -    * set __fn13_item @phase-fabric
 -    * set __fn13_group GROUP2
 -    * set __fn13_supply __tmp284
-   939 ubind UNIT_P2
-   940 sensor __tmp286 @unit @dead
-   941 op strictEqual __tmp287 __tmp286 0
+   727 ubind UNIT_P2
+   728 sensor __tmp286 @unit @dead
+   729 op strictEqual __tmp287 __tmp286 0
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
@@ -3044,299 +2742,225 @@ Modifications by Loop Optimization: replicate condition at line 38 (+1 instructi
 
 Modifications by Loop Optimization: replicate condition at line 115 (+1 instructions):
  
-   339 label __label75
-   340 sensor __tmp98 switch1 @enabled
-   341 jump __label77 equal __tmp98 false
-+  342 label __label244
-   343 set start @time
-   344 noop
-   345 print " === [gold]Supplying Overdrive Dome[] === "
+   267 label __label75
+   268 sensor __tmp98 switch1 @enabled
+   269 jump __label77 equal __tmp98 false
++  270 label __label244
+   271 set start @time
+   272 print " === [gold]Supplying Overdrive Dome[] === "
+   273 print "\n"
  
-  1141 print " ms"
-  1142 printflush message1
-  1143 label __label76
+   882 print " ms"
+   883 printflush message1
+   884 label __label76
 -    * jump __label75 always
-+ 1144 sensor __tmp98 switch1 @enabled
-+ 1145 jump __label244 notEqual __tmp98 false
-  1146 label __label77
-  1147 end
++  885 sensor __tmp98 switch1 @enabled
++  886 jump __label244 notEqual __tmp98 false
+   887 label __label77
+   888 end
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-4 instructions):
  
-   539 noop
-   540 label __label118
-   541 set __tmp104 @unit
+   420 print MSG
+   421 label __label118
+   422 set __tmp104 @unit
 -    * jump __label83 always
-+  542 noop
-   543 label __label83
-   544 set UNIT_S1 __tmp104
-   545 jump __label119 equal FOUR_UNITS false
+   423 label __label83
+   424 set UNIT_S1 __tmp104
+   425 jump __label119 equal FOUR_UNITS false
  
-   721 noop
-   722 label __label157
-   723 set __tmp162 @unit
+   559 print MSG
+   560 label __label157
+   561 set __tmp162 @unit
 -    * jump __label122 always
-+  724 noop
-   725 label __label122
-   726 set UNIT_S2 __tmp162
-   727 jump __label158 equal SUPPLY_S_FIRST false
+   562 label __label122
+   563 set UNIT_S2 __tmp162
+   564 jump __label158 equal SUPPLY_S_FIRST false
  
-   934 noop
-   935 label __label200
-   936 set __tmp227 @unit
+   720 print MSG
+   721 label __label200
+   722 set __tmp227 @unit
 -    * jump __label165 always
-+  937 noop
-   938 label __label165
-   939 set UNIT_P1 __tmp227
-   940 jump __label201 equal FOUR_UNITS false
+   723 label __label165
+   724 set UNIT_P1 __tmp227
+   725 jump __label201 equal FOUR_UNITS false
  
-  1116 noop
-  1117 label __label239
-  1118 set __tmp285 @unit
+   859 print MSG
+   860 label __label239
+   861 set __tmp285 @unit
 -    * jump __label204 always
-+ 1119 noop
-  1120 label __label204
-  1121 set UNIT_P2 __tmp285
-  1122 jump __label240 equal SUPPLY_P_FIRST false
+   862 label __label204
+   863 set UNIT_P2 __tmp285
+   864 jump __label240 equal SUPPLY_P_FIRST false
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
  
-    58 set UNIT_S1 UNIT_P1
-    59 set UNIT_P1 @unit
-    60 noop
+    50 set UNIT_P2 UNIT_S1
+    51 set UNIT_S1 UNIT_P1
+    52 set UNIT_P1 @unit
 -    * jump __label18 equal UNIT_S2 null
 -    * jump __label15 always
-+   61 jump __label15 notEqual UNIT_S2 null
-+   62 noop
-    63 noop
-    64 noop
-    65 label __label18
++   53 jump __label15 notEqual UNIT_S2 null
+    54 label __label18
+    55 label __label19
+    56 label __label16
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-   451 ucontrol approach DOME_X DOME_Y 6
-   452 set __fn6_state 3
-   453 noop
+   351 jump __label107 lessThan __tmp132 UNIT_CAPACITY
+   352 ucontrol approach DOME_X DOME_Y 6
+   353 set __fn6_state 3
 -    * jump __label108 always
-+  454 jump __label106 always
-   455 label __label107
-   456 set MSG ", loading\n"
-   457 noop
++  354 jump __label106 always
+   355 label __label107
+   356 set MSG ", loading\n"
+   357 label __label108
  
-   491 noop
-   492 label __label114
-   493 sensor __tmp147 @unit @totalItems
+   382 set MSG ", waiting\n"
+   383 label __label114
+   384 sensor __tmp147 @unit @totalItems
 -    * jump __label115 greaterThan __tmp147 0
-+  494 jump __label112 greaterThan __tmp147 0
-   495 ucontrol approach CORE_X CORE_Y 6
-   496 set __fn6_state 2
-   497 noop
++  385 jump __label112 greaterThan __tmp147 0
+   386 ucontrol approach CORE_X CORE_Y 6
+   387 set __fn6_state 2
+   388 label __label115
  
-   633 ucontrol approach DOME_X DOME_Y 6
-   634 set __fn8_state 3
-   635 noop
+   490 jump __label146 lessThan __tmp190 UNIT_CAPACITY
+   491 ucontrol approach DOME_X DOME_Y 6
+   492 set __fn8_state 3
 -    * jump __label147 always
-+  636 jump __label145 always
-   637 label __label146
-   638 set MSG ", loading\n"
-   639 noop
++  493 jump __label145 always
+   494 label __label146
+   495 set MSG ", loading\n"
+   496 label __label147
  
-   673 noop
-   674 label __label153
-   675 sensor __tmp205 @unit @totalItems
+   521 set MSG ", waiting\n"
+   522 label __label153
+   523 sensor __tmp205 @unit @totalItems
 -    * jump __label154 greaterThan __tmp205 0
-+  676 jump __label151 greaterThan __tmp205 0
-   677 ucontrol approach CORE_X CORE_Y 6
-   678 set __fn8_state 2
-   679 noop
++  524 jump __label151 greaterThan __tmp205 0
+   525 ucontrol approach CORE_X CORE_Y 6
+   526 set __fn8_state 2
+   527 label __label154
  
-   846 ucontrol approach DOME_X DOME_Y 6
-   847 set __fn11_state 3
-   848 noop
+   651 jump __label189 lessThan __tmp255 UNIT_CAPACITY
+   652 ucontrol approach DOME_X DOME_Y 6
+   653 set __fn11_state 3
 -    * jump __label190 always
-+  849 jump __label188 always
-   850 label __label189
-   851 set MSG ", loading\n"
-   852 noop
++  654 jump __label188 always
+   655 label __label189
+   656 set MSG ", loading\n"
+   657 label __label190
  
-   886 noop
-   887 label __label196
-   888 sensor __tmp270 @unit @totalItems
+   682 set MSG ", waiting\n"
+   683 label __label196
+   684 sensor __tmp270 @unit @totalItems
 -    * jump __label197 greaterThan __tmp270 0
-+  889 jump __label194 greaterThan __tmp270 0
-   890 ucontrol approach CORE_X CORE_Y 6
-   891 set __fn11_state 2
-   892 noop
++  685 jump __label194 greaterThan __tmp270 0
+   686 ucontrol approach CORE_X CORE_Y 6
+   687 set __fn11_state 2
+   688 label __label197
  
-  1028 ucontrol approach DOME_X DOME_Y 6
-  1029 set __fn13_state 3
-  1030 noop
+   790 jump __label228 lessThan __tmp313 UNIT_CAPACITY
+   791 ucontrol approach DOME_X DOME_Y 6
+   792 set __fn13_state 3
 -    * jump __label229 always
-+ 1031 jump __label227 always
-  1032 label __label228
-  1033 set MSG ", loading\n"
-  1034 noop
++  793 jump __label227 always
+   794 label __label228
+   795 set MSG ", loading\n"
+   796 label __label229
  
-  1068 noop
-  1069 label __label235
-  1070 sensor __tmp328 @unit @totalItems
+   821 set MSG ", waiting\n"
+   822 label __label235
+   823 sensor __tmp328 @unit @totalItems
 -    * jump __label236 greaterThan __tmp328 0
-+ 1071 jump __label233 greaterThan __tmp328 0
-  1072 ucontrol approach CORE_X CORE_Y 6
-  1073 set __fn13_state 2
-  1074 noop
++  824 jump __label233 greaterThan __tmp328 0
+   825 ucontrol approach CORE_X CORE_Y 6
+   826 set __fn13_state 2
+   827 label __label236
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 instructions):
  
-    33 jump __label11 equal @unit null
-    34 noop
-    35 jump __label10 always
--    * noop
--    * noop
-    36 label __label11
-    37 noop
-    38 label __label12
- 
-   103 ucontrol flag 1
-   104 set __tmp21 @unit
-   105 jump __label23 always
--    * noop
-   106 label __label30
-   107 noop
-   108 label __label28
-   109 printflush message1
-   110 label __label25
-   111 jump __label24 always
+    89 printflush message1
+    90 label __label25
+    91 jump __label24 always
 -    * label __label26
 -    * set __tmp21 null
-   112 label __label23
-   113 set UNIT_S1 __tmp21
-   114 noop
+    92 label __label23
+    93 set UNIT_S1 __tmp21
+    94 label __label20
  
-   139 ucontrol flag 1
-   140 set __tmp29 @unit
-   141 jump __label34 always
--    * noop
-   142 label __label41
-   143 noop
-   144 label __label39
-   145 printflush message1
-   146 label __label36
-   147 jump __label35 always
+   118 printflush message1
+   119 label __label36
+   120 jump __label35 always
 -    * label __label37
 -    * set __tmp29 null
-   148 label __label34
-   149 set UNIT_P1 __tmp29
-   150 noop
+   121 label __label34
+   122 set UNIT_P1 __tmp29
+   123 label __label31
  
-   220 ucontrol flag 1
-   221 set __tmp62 @unit
-   222 jump __label52 always
--    * noop
-   223 label __label59
-   224 noop
-   225 label __label57
-   226 printflush message1
-   227 label __label54
-   228 jump __label53 always
+   179 printflush message1
+   180 label __label54
+   181 jump __label53 always
 -    * label __label55
 -    * set __tmp62 null
-   229 label __label52
-   230 set UNIT_S2 __tmp62
-   231 noop
+   182 label __label52
+   183 set UNIT_S2 __tmp62
+   184 label __label49
  
-   256 ucontrol flag 1
-   257 set __tmp70 @unit
-   258 jump __label63 always
--    * noop
-   259 label __label70
-   260 noop
-   261 label __label68
-   262 printflush message1
-   263 label __label65
-   264 jump __label64 always
+   208 printflush message1
+   209 label __label65
+   210 jump __label64 always
 -    * label __label66
 -    * set __tmp70 null
-   265 label __label63
-   266 set UNIT_P2 __tmp70
-   267 noop
+   211 label __label63
+   212 set UNIT_P2 __tmp70
+   213 label __label60
  
-   377 ucontrol flag 1
-   378 noop
-   379 jump __label87 always
--    * noop
-   380 label __label94
-   381 noop
-   382 label __label92
-   383 printflush message1
-   384 label __label89
-   385 jump __label88 always
+   306 printflush message1
+   307 label __label89
+   308 jump __label88 always
 -    * label __label90
--    * noop
-   386 label __label87
-   387 noop
-   388 noop
+   309 label __label87
+   310 label __label84
+   311 label __label85
  
-   556 ucontrol flag 1
-   557 noop
-   558 jump __label126 always
--    * noop
-   559 label __label133
-   560 noop
-   561 label __label131
-   562 printflush message1
-   563 label __label128
-   564 jump __label127 always
+   444 printflush message1
+   445 label __label128
+   446 jump __label127 always
 -    * label __label129
--    * noop
-   565 label __label126
-   566 noop
-   567 noop
+   447 label __label126
+   448 label __label123
+   449 label __label124
  
-   766 ucontrol flag 1
-   767 noop
-   768 jump __label169 always
--    * noop
-   769 label __label176
-   770 noop
-   771 label __label174
-   772 printflush message1
-   773 label __label171
-   774 jump __label170 always
+   604 printflush message1
+   605 label __label171
+   606 jump __label170 always
 -    * label __label172
--    * noop
-   775 label __label169
-   776 noop
-   777 noop
+   607 label __label169
+   608 label __label166
+   609 label __label167
  
-   945 ucontrol flag 1
-   946 noop
-   947 jump __label208 always
--    * noop
-   948 label __label215
-   949 noop
-   950 label __label213
-   951 printflush message1
-   952 label __label210
-   953 jump __label209 always
+   742 printflush message1
+   743 label __label210
+   744 jump __label209 always
 -    * label __label211
--    * noop
-   954 label __label208
-   955 noop
-   956 noop
+   745 label __label208
+   746 label __label205
+   747 label __label206
 
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
-   329 set start @time
-   330 noop
-   331 print " === [gold]Supplying Overdrive Dome[] === "
+   261 label __label244
+   262 set start @time
+   263 print " === [gold]Supplying Overdrive Dome[] === "
 -    * print "\n"
-   332 label __label78
+   264 label __label78
 -    * print "\n[green]Silicon[] status:\n"
-+  333 print "\n\n[green]Silicon[] status:\n"
-   334 sensor __fn5_level DOME @silicon
-   335 noop
-   336 jump __label80 lessThanEq __fn5_level 3
++  265 print "\n\n[green]Silicon[] status:\n"
+   266 sensor __fn5_level DOME @silicon
+   267 jump __label80 lessThanEq __fn5_level 3
+   268 print "  dome:  [green]"
 
 Final code before resolving virtual instructions:
 

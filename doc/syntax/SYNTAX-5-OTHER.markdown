@@ -1413,8 +1413,8 @@ the limit to generate faster code where possible.
 
 Mindcode provides the [`goal` option](#option-goal) to specify whether Mindcode should generate code that is smaller
 (the goal is `size`) or a code that is faster (`speed`). There's a third option - `auto` - which is the default for 
-the compiler and currently is identical to the `speed` option. When the goal is set to `size`, no optimization for 
-speed, whose mechanics are described in this chapter, happens.
+the compiler and currently is identical to the `speed` option. When the goal is set to `size`, only optimizations 
+with a zero or negative cost are performed and no statistics about speed optimization optimizations is displayed. 
 
 Another setting affecting the speed optimizations is the [`instruction-limit`](#option-instruction-limit) option. It 
 allows to change the instruction limit considered by the optimizer.
@@ -1463,7 +1463,14 @@ impossible to compute this number precisely. Mindcode uses a very simple algorit
   times on average (which is certainly wrong). Even when the number of iterations is known at the compilation time, 
   the weight adjustment is the same for all loops. This is to prevent Mindcode from preferring optimizations of 
   loops with large, known number of iterations (such as setting all values of memory bank to 0) to other loops whose 
-  number of iterations cannot be known.   
+  number of iterations cannot be known.
+* Weight of stackless and recursive functions is adjusted:
+  * Stackless function weights are iteratively recomputed as a total weight of the respective `CALL` instructions of 
+    the given function.
+  * Recursive function weights are then computed as weights as a total weight of the respective `CALLREC` 
+    instructions of the given function. No iterative updating is made for recursive functions.
+* When instructions are duplicated or moved during optimizations, their weights are adjusted according to the 
+  context into which they're duplicated or moved.
 
 The benefit of an optimization is then computed as the sum of weights of instructions that would be avoided thanks 
 to the optimization. The net result is that Mindcode strongly prefers optimizing code inside loops, and defers 

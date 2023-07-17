@@ -73,6 +73,8 @@ public class OptimizationContext {
 
         /* Create label references */
         instructionStream().forEachOrdered(this::addLabelReferences);
+
+        adjustWeights();
     }
 
     InstructionProcessor getInstructionProcessor() {
@@ -219,7 +221,6 @@ public class OptimizationContext {
     private void clearReferences(LogicLabel label, LogicInstruction reference) {
         List<LogicInstruction> references = labelReferences.get(label);
         references.removeIf(ix -> ix == reference);
-
     }
 
     public void removeInactiveInstructions() {
@@ -227,14 +228,12 @@ public class OptimizationContext {
             while (it.hasNext()) {
                 switch (it.next()) {
                     case LabelInstruction label -> {
-                        List<LogicInstruction> references = labelReferences.get(label.getLabel());
-                        if (references == null || references.isEmpty()) {
+                        if (hasNoReferences(label.getLabel())) {
                             it.remove();
                         }
                     }
                     case GotoLabelInstruction gotoLabel -> {
-                        List<LogicInstruction> references = labelReferences.get(gotoLabel.getMarker());
-                        if (references == null || references.isEmpty()) {
+                        if (hasNoReferences(gotoLabel.getLabel()) && hasNoReferences(gotoLabel.getMarker())) {
                             it.remove();
                         }
                     }
@@ -244,6 +243,11 @@ public class OptimizationContext {
                 }
             }
         }
+    }
+
+    private boolean hasNoReferences(LogicLabel label) {
+        List<LogicInstruction> references = labelReferences.get(label);
+        return references == null || references.isEmpty();
     }
 
     public boolean isActive(LogicLabel label) {
@@ -315,7 +319,42 @@ public class OptimizationContext {
     }
     //</editor-fold>
 
-    //<editor-fold desc="AST context tree rebuild">
+    //<editor-fold desc="AST context tree updates">
+    private void adjustWeights() {
+        // Weights of stackless functions are recomputed until they stabilize
+        Map<LogicLabel, Double> updatedWeights;
+        boolean modified;
+        do {
+            updatedWeights = program.stream()
+                    .filter(CallingInstruction.class::isInstance)
+                    .map(CallingInstruction.class::cast)
+                    .collect(Collectors.groupingBy(CallingInstruction::getCallAddr,
+                            Collectors.summingDouble(ix -> ix.getAstContext().totalWeight())));
+
+            modified = updateWeights(updatedWeights, false);
+        } while (modified);
+
+        // Weights of recursive functions are updated just once
+        updateWeights(updatedWeights, true);
+    }
+
+    private boolean updateWeights(Map<LogicLabel, Double> updatedWeights, boolean recursive) {
+        boolean modified = false;
+        for (AstContext topContext : getRootContext().children()) {
+            if (topContext.functionPrefix() != null) {
+                CallGraph.Function function = callGraph.getFunctionByPrefix(topContext.functionPrefix());
+                if (function.isRecursive() == recursive) {
+                    Double weight = updatedWeights.get(function.getLabel());
+                    if (weight != null && topContext.getWeight() != weight) {
+                        modified = true;
+                        topContext.updateWeight(weight);
+                    }
+                }
+            }
+        }
+        return modified;
+    }
+
     private void rebuildAstContextTree() {
         eraseChildren(rootContext);
         program.forEach(ix -> eraseChildren(ix.getAstContext()));  // Erase children of nodes that aren't part of the tree yet
@@ -1378,10 +1417,21 @@ public class OptimizationContext {
 
         @NotNull
         private Map<LogicLabel, LogicLabel> duplicateLabels() {
-            return stream()
-                    .filter(LabeledInstruction.class::isInstance)
-                    .map(LabeledInstruction.class::cast)
-                    .map(LabeledInstruction::getLabel)
+            return Stream.concat(
+                            stream()
+                                    .filter(LabeledInstruction.class::isInstance)
+                                    .map(LabeledInstruction.class::cast)
+                                    .map(LabeledInstruction::getLabel),
+                            stream()
+                                    .filter(GotoLabelInstruction.class::isInstance)
+                                    .map(GotoLabelInstruction.class::cast)
+                                    .map(GotoLabelInstruction::getMarker)
+                                    // TODO STACKLESS_CALL We no longer need to track relationship between return from the stackless call and callee
+                                    //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
+                                    //      The remove the exception for localPrefix
+                                    .filter(l -> !l.toMlog().startsWith(instructionProcessor.getLocalPrefix()))
+                                    .distinct()
+                    )
                     .collect(Collectors.toMap(l -> l, l -> instructionProcessor.nextLabel()));
         }
 

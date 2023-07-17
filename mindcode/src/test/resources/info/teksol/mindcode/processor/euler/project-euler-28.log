@@ -20,49 +20,41 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 inst
 -    * op add __tmp3 count 1
 -    * set count __tmp3
 +    7 op add sum sum current
-+    8 noop
-+    9 op add current current step
-+   10 noop
-+   11 op add count count 1
-+   12 noop
-    13 op greaterThan __tmp4 count 3
-    14 jump __label3 equal __tmp4 false
++    8 op add current current step
++    9 op add count count 1
+    10 op greaterThan __tmp4 count 3
+    11 jump __label3 equal __tmp4 false
 -    * op add __tmp6 step 2
 -    * set step __tmp6
-+   15 op add step step 2
-+   16 noop
-    17 set count 0
-    18 set __tmp5 count
-    19 jump __label4 always
++   12 op add step step 2
+    13 set count 0
+    14 set __tmp5 count
+    15 jump __label4 always
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructions):
  
-    15 op add step step 2
-    16 noop
-    17 set count 0
+    11 jump __label3 equal __tmp4 false
+    12 op add step step 2
+    13 set count 0
 -    * set __tmp5 count
-+   18 noop
-    19 jump __label4 always
-    20 label __label3
+    14 jump __label4 always
+    15 label __label3
 -    * set __tmp5 null
-+   21 noop
-    22 label __label4
-    23 label __label1
-    24 jump __label0 always
+    16 label __label4
+    17 label __label1
+    18 jump __label0 always
  
-    26 label __label5
-    27 set __fn0_v 669171001
-    28 print __fn0_v
+    20 label __label5
+    21 set __fn0_v 669171001
+    22 print __fn0_v
 -    * set __tmp7 __fn0_v
-+   29 noop
-    30 label __label6
-    31 label __label7
-    32 set __fn1_v sum
-    33 print __fn1_v
+    23 label __label6
+    24 label __label7
+    25 set __fn1_v sum
+    26 print __fn1_v
 -    * set __tmp8 __fn1_v
-+   34 noop
-    35 label __label8
-    36 end
+    27 label __label8
+    28 end
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
@@ -73,60 +65,53 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
 -    * jump __label2 equal __tmp0 false
 +    5 jump __label2 greaterThan current 1002001
      6 op add sum sum current
-     7 noop
-     8 op add current current step
-     9 noop
-    10 op add count count 1
-    11 noop
+     7 op add current current step
+     8 op add count count 1
 -    * op greaterThan __tmp4 count 3
 -    * jump __label3 equal __tmp4 false
-+   12 jump __label3 lessThanEq count 3
-    13 op add step step 2
-    14 noop
-    15 set count 0
++    9 jump __label3 lessThanEq count 3
+    10 op add step step 2
+    11 set count 0
+    12 jump __label4 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    14 noop
-    15 set count 0
-    16 noop
+     9 jump __label3 lessThanEq count 3
+    10 op add step step 2
+    11 set count 0
 -    * jump __label4 always
-+   17 noop
-    18 label __label3
-    19 noop
-    20 label __label4
+    12 label __label3
+    13 label __label4
+    14 label __label1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    23 label __label2
-    24 label __label5
-    25 set __fn0_v 669171001
+    16 label __label2
+    17 label __label5
+    18 set __fn0_v 669171001
 -    * print __fn0_v
-+   26 print 669171001
-    27 noop
-    28 label __label6
-    29 label __label7
-    30 set __fn1_v sum
++   19 print 669171001
+    20 label __label6
+    21 label __label7
+    22 set __fn1_v sum
 -    * print __fn1_v
-+   31 print sum
-    32 noop
-    33 label __label8
-    34 end
++   23 print sum
+    24 label __label8
+    25 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
-    22 jump __label0 always
-    23 label __label2
-    24 label __label5
+    15 jump __label0 always
+    16 label __label2
+    17 label __label5
 -    * set __fn0_v 669171001
-    25 print 669171001
-    26 noop
-    27 label __label6
-    28 label __label7
+    18 print 669171001
+    19 label __label6
+    20 label __label7
 -    * set __fn1_v sum
-    29 print sum
-    30 noop
-    31 label __label8
+    21 print sum
+    22 label __label8
+    23 end
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -136,17 +121,17 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 -    * jump __label2 greaterThan current 1002001
 +    5 label __label9
      6 op add sum sum current
-     7 noop
-     8 op add current current step
+     7 op add current current step
+     8 op add count count 1
  
-    19 noop
-    20 label __label4
-    21 label __label1
+    12 label __label3
+    13 label __label4
+    14 label __label1
 -    * jump __label0 always
-+   22 jump __label9 lessThanEq current 1002001
-    23 label __label2
-    24 label __label5
-    25 print 669171001
++   15 jump __label9 lessThanEq current 1002001
+    16 label __label2
+    17 label __label5
+    18 print 669171001
 
 Final code before resolving virtual instructions:
 

@@ -1,6 +1,6 @@
 package info.teksol.mindcode.ast;
 
-import info.teksol.mindcode.MindcodeException;
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 public class AstPrettyPrinter extends BaseAstVisitor<String> {
@@ -51,7 +51,7 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         buffer.append(node.getProperty());
         switch (node.getParams().size()) {
             case 0:
-                throw new MindcodeException("Unexpected Control AST node with no parameters");
+                throw new MindcodeInternalError("Unexpected Control AST node with no parameters");
 
             case 1:
                 buffer.append(" = ");

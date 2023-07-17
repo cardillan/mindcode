@@ -36,53 +36,42 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-26 ins
 -    * op add __tmp6 M_G1 1
 -    * set M_B1 __tmp6
 +    4 op add M_CURRENT_INDEX M_START_INDEX 1
-+    5 noop
-+    6 op add M_R0 M_CURRENT_INDEX 2
-+    7 noop
-+    8 op add M_G0 M_R0 1
-+    9 noop
-+   10 op add M_B0 M_G0 1
-+   11 noop
-+   12 op add M_R1 M_B0 1
-+   13 noop
-+   14 op add M_G1 M_R1 1
-+   15 noop
-+   16 op add M_B1 M_G1 1
-+   17 noop
-    18 label __label0
-    19 op equal __tmp7 MEMORY null
-    20 op equal __tmp8 DISPLAY null
-    21 op or __tmp9 __tmp7 __tmp8
-    22 jump __label2 equal __tmp9 false
-    23 print "Item/Liquid/Energy Level Display"
++    5 op add M_R0 M_CURRENT_INDEX 2
++    6 op add M_G0 M_R0 1
++    7 op add M_B0 M_G0 1
++    8 op add M_R1 M_B0 1
++    9 op add M_G1 M_R1 1
++   10 op add M_B1 M_G1 1
+    11 label __label0
+    12 op equal __tmp7 MEMORY null
+    13 op equal __tmp8 DISPLAY null
+    14 op or __tmp9 __tmp7 __tmp8
+    15 jump __label2 equal __tmp9 false
+    16 print "Item/Liquid/Energy Level Display"
 -    * set __tmp10 @links
 -    * set n __tmp10
-+   24 set n @links
-+   25 noop
-    26 label __label3
-    27 op greaterThan __tmp11 n 0
-    28 jump __label5 equal __tmp11 false
++   17 set n @links
+    18 label __label3
+    19 op greaterThan __tmp11 n 0
+    20 jump __label5 equal __tmp11 false
 -    * op sub __tmp12 n 1
 -    * set n __tmp12
 -    * getlink __tmp13 n
 -    * set block __tmp13
-+   29 op sub n n 1
-+   30 noop
-+   31 getlink block n
-+   32 noop
-    33 print "\nFound: "
-    34 print block
++   21 op sub n n 1
++   22 getlink block n
+    23 print "\nFound: "
+    24 print block
 -    * sensor __tmp14 block @type
 -    * set __ast0 __tmp14
-+   35 sensor __ast0 block @type
-+   36 noop
-    37 jump __label8 equal __ast0 @large-logic-display
-    38 jump __label7 always
-    39 label __label8
++   25 sensor __ast0 block @type
+    26 jump __label8 equal __ast0 @large-logic-display
+    27 jump __label7 always
+    28 label __label8
  
-    96 label __label1
-    97 jump __label0 always
-    98 label __label2
+    85 label __label1
+    86 jump __label0 always
+    87 label __label2
 -    * read __tmp20 MEMORY M_CURRENT_INDEX
 -    * set CURRENT_INDEX __tmp20
 -    * read __tmp21 MEMORY M_R0
@@ -97,457 +86,411 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-26 ins
 -    * set G1 __tmp25
 -    * read __tmp26 MEMORY M_B1
 -    * set B1 __tmp26
-+   99 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
-+  100 noop
-+  101 read R0 MEMORY M_R0
-+  102 noop
-+  103 read G0 MEMORY M_G0
-+  104 noop
-+  105 read B0 MEMORY M_B0
-+  106 noop
-+  107 read R1 MEMORY M_R1
-+  108 noop
-+  109 read G1 MEMORY M_G1
-+  110 noop
-+  111 read B1 MEMORY M_B1
-+  112 noop
-   113 draw stroke 1
-   114 label __label19
-   115 sensor __tmp27 SWITCH @enabled
-   116 op equal __tmp28 __tmp27 0
-   117 jump __label21 equal __tmp28 false
++   88 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
++   89 read R0 MEMORY M_R0
++   90 read G0 MEMORY M_G0
++   91 read B0 MEMORY M_B0
++   92 read R1 MEMORY M_R1
++   93 read G1 MEMORY M_G1
++   94 read B1 MEMORY M_B1
+    95 draw stroke 1
+    96 label __label19
+    97 sensor __tmp27 SWITCH @enabled
+    98 op equal __tmp28 __tmp27 0
+    99 jump __label21 equal __tmp28 false
 -    * set __tmp29 @time
 -    * set start __tmp29
-+  118 set start @time
-+  119 noop
-   120 print "Item/Liquid/Energy Level Display"
-   121 draw clear 0 0 80
-   122 draw color R0 G0 B0 255
-   123 draw rect 10 10 156 156
++  100 set start @time
+   101 print "Item/Liquid/Energy Level Display"
+   102 draw clear 0 0 80
+   103 draw color R0 G0 B0 255
+   104 draw rect 10 10 156 156
 -    * read __tmp30 MEMORY CURRENT_INDEX
 -    * set head __tmp30
 -    * read __tmp31 MEMORY head
 -    * set last __tmp31
-+  124 read head MEMORY CURRENT_INDEX
-+  125 noop
-+  126 read last MEMORY head
-+  127 noop
-   128 print "\nIndex: "
-   129 print head
-   130 print "\nValue: "
++  105 read head MEMORY CURRENT_INDEX
++  106 read last MEMORY head
+   107 print "\nIndex: "
+   108 print head
+   109 print "\nValue: "
  
-   134 label __label22
-   135 op greaterThan __tmp32 x 10
-   136 jump __label24 equal __tmp32 false
+   113 label __label22
+   114 op greaterThan __tmp32 x 10
+   115 jump __label24 equal __tmp32 false
 -    * op sub __tmp33 head 1
 -    * set head __tmp33
 -    * read __tmp34 MEMORY head
 -    * set value __tmp34
 -    * op sub __tmp35 x 5
 -    * set x1 __tmp35
-+  137 op sub head head 1
-+  138 noop
-+  139 read value MEMORY head
-+  140 noop
-+  141 op sub x1 x 5
-+  142 noop
-   143 draw line x last x1 value
-   144 set x x1
-   145 set last value
++  116 op sub head head 1
++  117 read value MEMORY head
++  118 op sub x1 x 5
+   119 draw line x last x1 value
+   120 set x x1
+   121 set last value
  
-   153 print __tmp36
-   154 op div __tmp37 @time FREQ
-   155 op ceil __tmp38 __tmp37
+   129 print __tmp36
+   130 op div __tmp37 @time FREQ
+   131 op ceil __tmp38 __tmp37
 -    * op mul __tmp39 FREQ __tmp38
 -    * set wait __tmp39
-+  156 op mul wait FREQ __tmp38
-+  157 noop
-   158 set loops 0
-   159 label __label25
-   160 op lessThan __tmp40 @time wait
-   161 jump __label27 equal __tmp40 false
++  132 op mul wait FREQ __tmp38
+   133 set loops 0
+   134 label __label25
+   135 op lessThan __tmp40 @time wait
+   136 jump __label27 equal __tmp40 false
 -    * op add __tmp41 loops 1
 -    * set loops __tmp41
-+  162 op add loops loops 1
-+  163 noop
-   164 label __label26
-   165 jump __label25 always
-   166 label __label27
++  137 op add loops loops 1
+   138 label __label26
+   139 jump __label25 always
+   140 label __label27
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
  
-    38 jump __label7 always
-    39 label __label8
-    40 set DISPLAY block
+    27 jump __label7 always
+    28 label __label8
+    29 set DISPLAY block
 -    * set __tmp15 DISPLAY
-+   41 noop
-    42 jump __label6 always
-    43 label __label7
-    44 jump __label10 equal __ast0 @message
-    45 jump __label9 always
-    46 label __label10
-    47 set MESSAGE block
+    30 jump __label6 always
+    31 label __label7
+    32 jump __label10 equal __ast0 @message
+    33 jump __label9 always
+    34 label __label10
+    35 set MESSAGE block
 -    * set __tmp15 MESSAGE
-+   48 noop
-    49 jump __label6 always
-    50 label __label9
-    51 jump __label12 equal __ast0 @switch
-    52 jump __label11 always
-    53 label __label12
-    54 set SWITCH block
+    36 jump __label6 always
+    37 label __label9
+    38 jump __label12 equal __ast0 @switch
+    39 jump __label11 always
+    40 label __label12
+    41 set SWITCH block
 -    * set __tmp15 SWITCH
-+   55 noop
-    56 jump __label6 always
-    57 label __label11
-    58 jump __label14 equal __ast0 @memory-bank
-    59 jump __label13 always
-    60 label __label14
-    61 set MEMORY block
+    42 jump __label6 always
+    43 label __label11
+    44 jump __label14 equal __ast0 @memory-bank
+    45 jump __label13 always
+    46 label __label14
+    47 set MEMORY block
 -    * set __tmp15 MEMORY
-+   62 noop
-    63 jump __label6 always
-    64 label __label13
-    65 jump __label16 equal __ast0 @memory-cell
-    66 jump __label15 always
-    67 label __label16
-    68 set MEMORY block
+    48 jump __label6 always
+    49 label __label13
+    50 jump __label16 equal __ast0 @memory-cell
+    51 jump __label15 always
+    52 label __label16
+    53 set MEMORY block
 -    * set __tmp15 MEMORY
-+   69 noop
-    70 jump __label6 always
-    71 label __label15
+    54 jump __label6 always
+    55 label __label15
 -    * set __tmp15 null
-+   72 noop
-    73 label __label6
-    74 label __label4
-    75 jump __label3 always
+    56 label __label6
+    57 label __label4
+    58 jump __label3 always
  
-    87 op or __tmp18 __tmp16 __tmp17
-    88 jump __label17 equal __tmp18 false
-    89 print "\nNo memory or display."
+    70 op or __tmp18 __tmp16 __tmp17
+    71 jump __label17 equal __tmp18 false
+    72 print "\nNo memory or display."
 -    * set __tmp19 "\nNo memory or display."
-+   90 noop
-    91 jump __label18 always
-    92 label __label17
+    73 jump __label18 always
+    74 label __label17
 -    * set __tmp19 null
-+   93 noop
-    94 label __label18
-    95 printflush MESSAGE
-    96 label __label1
+    75 label __label18
+    76 printflush MESSAGE
+    77 label __label1
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-5 instructions):
  
-    34 print block
-    35 sensor __ast0 block @type
-    36 noop
+    23 print "\nFound: "
+    24 print block
+    25 sensor __ast0 block @type
 -    * jump __label8 equal __ast0 @large-logic-display
 -    * jump __label7 always
-+   37 jump __label7 notEqual __ast0 @large-logic-display
-+   38 noop
-    39 label __label8
-    40 set DISPLAY block
-    41 noop
-    42 jump __label6 always
-    43 label __label7
++   26 jump __label7 notEqual __ast0 @large-logic-display
+    27 label __label8
+    28 set DISPLAY block
+    29 jump __label6 always
+    30 label __label7
 -    * jump __label10 equal __ast0 @message
 -    * jump __label9 always
-+   44 jump __label9 notEqual __ast0 @message
-+   45 noop
-    46 label __label10
-    47 set MESSAGE block
-    48 noop
-    49 jump __label6 always
-    50 label __label9
++   31 jump __label9 notEqual __ast0 @message
+    32 label __label10
+    33 set MESSAGE block
+    34 jump __label6 always
+    35 label __label9
 -    * jump __label12 equal __ast0 @switch
 -    * jump __label11 always
-+   51 jump __label11 notEqual __ast0 @switch
-+   52 noop
-    53 label __label12
-    54 set SWITCH block
-    55 noop
-    56 jump __label6 always
-    57 label __label11
++   36 jump __label11 notEqual __ast0 @switch
+    37 label __label12
+    38 set SWITCH block
+    39 jump __label6 always
+    40 label __label11
 -    * jump __label14 equal __ast0 @memory-bank
 -    * jump __label13 always
-+   58 jump __label13 notEqual __ast0 @memory-bank
-+   59 noop
-    60 label __label14
-    61 set MEMORY block
-    62 noop
-    63 jump __label6 always
-    64 label __label13
++   41 jump __label13 notEqual __ast0 @memory-bank
+    42 label __label14
+    43 set MEMORY block
+    44 jump __label6 always
+    45 label __label13
 -    * jump __label16 equal __ast0 @memory-cell
 -    * jump __label15 always
-+   65 jump __label15 notEqual __ast0 @memory-cell
-+   66 noop
-    67 label __label16
-    68 set MEMORY block
-    69 noop
++   46 jump __label15 notEqual __ast0 @memory-cell
+    47 label __label16
+    48 set MEMORY block
+    49 jump __label6 always
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-4 instructions):
  
-    24 set n @links
-    25 noop
-    26 label __label3
+    16 print "Item/Liquid/Energy Level Display"
+    17 set n @links
+    18 label __label3
 -    * op greaterThan __tmp11 n 0
 -    * jump __label5 equal __tmp11 false
-+   27 jump __label5 lessThanEq n 0
-    28 op sub n n 1
-    29 noop
-    30 getlink block n
++   19 jump __label5 lessThanEq n 0
+    20 op sub n n 1
+    21 getlink block n
+    22 print "\nFound: "
  
-   112 draw stroke 1
-   113 label __label19
-   114 sensor __tmp27 SWITCH @enabled
+    81 draw stroke 1
+    82 label __label19
+    83 sensor __tmp27 SWITCH @enabled
 -    * op equal __tmp28 __tmp27 0
 -    * jump __label21 equal __tmp28 false
-+  115 jump __label21 notEqual __tmp27 0
-   116 set start @time
-   117 noop
-   118 print "Item/Liquid/Energy Level Display"
++   84 jump __label21 notEqual __tmp27 0
+    85 set start @time
+    86 print "Item/Liquid/Energy Level Display"
+    87 draw clear 0 0 80
  
-   130 draw color R1 G1 B1 255
-   131 set x 159
-   132 label __label22
+    96 draw color R1 G1 B1 255
+    97 set x 159
+    98 label __label22
 -    * op greaterThan __tmp32 x 10
 -    * jump __label24 equal __tmp32 false
-+  133 jump __label24 lessThanEq x 10
-   134 op sub head head 1
-   135 noop
-   136 read value MEMORY head
++   99 jump __label24 lessThanEq x 10
+   100 op sub head head 1
+   101 read value MEMORY head
+   102 op sub x1 x 5
  
-   154 noop
-   155 set loops 0
-   156 label __label25
+   116 op mul wait FREQ __tmp38
+   117 set loops 0
+   118 label __label25
 -    * op lessThan __tmp40 @time wait
 -    * jump __label27 equal __tmp40 false
-+  157 jump __label27 greaterThanEq @time wait
-   158 op add loops loops 1
-   159 noop
-   160 label __label26
++  119 jump __label27 greaterThanEq @time wait
+   120 op add loops loops 1
+   121 label __label26
+   122 jump __label25 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
-    66 label __label16
-    67 set MEMORY block
-    68 noop
+    45 jump __label15 notEqual __ast0 @memory-cell
+    46 label __label16
+    47 set MEMORY block
 -    * jump __label6 always
-+   69 noop
-    70 label __label15
-    71 noop
-    72 label __label6
+    48 label __label15
+    49 label __label6
+    50 label __label4
  
-    87 jump __label17 equal __tmp18 false
-    88 print "\nNo memory or display."
-    89 noop
+    63 op or __tmp18 __tmp16 __tmp17
+    64 jump __label17 equal __tmp18 false
+    65 print "\nNo memory or display."
 -    * jump __label18 always
-+   90 noop
-    91 label __label17
-    92 noop
-    93 label __label18
+    66 label __label17
+    67 label __label18
+    68 printflush MESSAGE
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
+     2 set MEMORY null
      3 set M_START_INDEX 0
      4 op add M_CURRENT_INDEX M_START_INDEX 1
-     5 noop
 -    * op add M_R0 M_CURRENT_INDEX 2
-+    6 op add M_R0 M_START_INDEX 3
-     7 noop
 -    * op add M_G0 M_R0 1
-+    8 op add M_G0 M_CURRENT_INDEX 3
-     9 noop
 -    * op add M_B0 M_G0 1
-+   10 op add M_B0 M_R0 2
-    11 noop
 -    * op add M_R1 M_B0 1
-+   12 op add M_R1 M_G0 2
-    13 noop
 -    * op add M_G1 M_R1 1
-+   14 op add M_G1 M_B0 2
-    15 noop
 -    * op add M_B1 M_G1 1
-+   16 op add M_B1 M_R1 2
-    17 noop
-    18 label __label0
-    19 op equal __tmp7 MEMORY null
++    5 op add M_R0 M_START_INDEX 3
++    6 op add M_G0 M_CURRENT_INDEX 3
++    7 op add M_B0 M_R0 2
++    8 op add M_R1 M_G0 2
++    9 op add M_G1 M_B0 2
++   10 op add M_B1 M_R1 2
+    11 label __label0
+    12 op equal __tmp7 MEMORY null
+    13 op equal __tmp8 DISPLAY null
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
-     5 noop
-     6 op add M_R0 M_START_INDEX 3
-     7 noop
+     3 set M_START_INDEX 0
+     4 op add M_CURRENT_INDEX M_START_INDEX 1
+     5 op add M_R0 M_START_INDEX 3
 -    * op add M_G0 M_CURRENT_INDEX 3
-+    8 op add M_G0 M_START_INDEX 4
-     9 noop
 -    * op add M_B0 M_R0 2
-+   10 op add M_B0 M_START_INDEX 5
-    11 noop
 -    * op add M_R1 M_G0 2
-+   12 op add M_R1 M_CURRENT_INDEX 5
-    13 noop
 -    * op add M_G1 M_B0 2
-+   14 op add M_G1 M_R0 4
-    15 noop
 -    * op add M_B1 M_R1 2
-+   16 op add M_B1 M_G0 4
-    17 noop
-    18 label __label0
-    19 op equal __tmp7 MEMORY null
++    6 op add M_G0 M_START_INDEX 4
++    7 op add M_B0 M_START_INDEX 5
++    8 op add M_R1 M_CURRENT_INDEX 5
++    9 op add M_G1 M_R0 4
++   10 op add M_B1 M_G0 4
+    11 label __label0
+    12 op equal __tmp7 MEMORY null
+    13 op equal __tmp8 DISPLAY null
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  
-     9 noop
-    10 op add M_B0 M_START_INDEX 5
-    11 noop
+     5 op add M_R0 M_START_INDEX 3
+     6 op add M_G0 M_START_INDEX 4
+     7 op add M_B0 M_START_INDEX 5
 -    * op add M_R1 M_CURRENT_INDEX 5
-+   12 op add M_R1 M_START_INDEX 6
-    13 noop
 -    * op add M_G1 M_R0 4
-+   14 op add M_G1 M_START_INDEX 7
-    15 noop
 -    * op add M_B1 M_G0 4
-+   16 op add M_B1 M_START_INDEX 8
-    17 noop
-    18 label __label0
-    19 op equal __tmp7 MEMORY null
++    8 op add M_R1 M_START_INDEX 6
++    9 op add M_G1 M_START_INDEX 7
++   10 op add M_B1 M_START_INDEX 8
+    11 label __label0
+    12 op equal __tmp7 MEMORY null
+    13 op equal __tmp8 DISPLAY null
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
-    25 noop
-    26 label __label3
-    27 jump __label5 lessThanEq n 0
-+   28 label __label28
-    29 op sub n n 1
-    30 noop
-    31 getlink block n
+    17 set n @links
+    18 label __label3
+    19 jump __label5 lessThanEq n 0
++   20 label __label28
+    21 op sub n n 1
+    22 getlink block n
+    23 print "\nFound: "
  
-    72 noop
-    73 label __label6
-    74 label __label4
+    49 label __label15
+    50 label __label6
+    51 label __label4
 -    * jump __label3 always
-+   75 jump __label28 greaterThan n 0
-    76 label __label5
-    77 print "\nMessage: "
-    78 print MESSAGE
++   52 jump __label28 greaterThan n 0
+    53 label __label5
+    54 print "\nMessage: "
+    55 print MESSAGE
  
-   131 draw color R1 G1 B1 255
-   132 set x 159
-   133 label __label22
+    95 draw color R1 G1 B1 255
+    96 set x 159
+    97 label __label22
 -    * jump __label24 lessThanEq x 10
-+  134 label __label29
-   135 op sub head head 1
-   136 noop
-   137 read value MEMORY head
++   98 label __label29
+    99 op sub head head 1
+   100 read value MEMORY head
+   101 op sub x1 x 5
  
-   142 set x x1
-   143 set last value
-   144 label __label23
+   103 set x x1
+   104 set last value
+   105 label __label23
 -    * jump __label22 always
-+  145 jump __label29 greaterThan x 10
-   146 label __label24
-   147 draw color 255 255 255 255
-   148 draw lineRect 10 10 156 156
++  106 jump __label29 greaterThan x 10
+   107 label __label24
+   108 draw color 255 255 255 255
+   109 draw lineRect 10 10 156 156
  
-   156 set loops 0
-   157 label __label25
-   158 jump __label27 greaterThanEq @time wait
-+  159 label __label30
-   160 op add loops loops 1
-   161 noop
-   162 label __label26
+   116 set loops 0
+   117 label __label25
+   118 jump __label27 greaterThanEq @time wait
++  119 label __label30
+   120 op add loops loops 1
+   121 label __label26
 -    * jump __label25 always
-+  163 jump __label30 lessThan @time wait
-   164 label __label27
-   165 drawflush DISPLAY
-   166 print "\nWait loops: "
++  122 jump __label30 lessThan @time wait
+   123 label __label27
+   124 drawflush DISPLAY
+   125 print "\nWait loops: "
 
 Modifications by Loop Optimization: replicate condition at line 55 (+1 instructions):
  
-   114 label __label19
-   115 sensor __tmp27 SWITCH @enabled
-   116 jump __label21 notEqual __tmp27 0
-+  117 label __label31
-   118 set start @time
-   119 noop
-   120 print "Item/Liquid/Energy Level Display"
+    81 label __label19
+    82 sensor __tmp27 SWITCH @enabled
+    83 jump __label21 notEqual __tmp27 0
++   84 label __label31
+    85 set start @time
+    86 print "Item/Liquid/Energy Level Display"
+    87 draw clear 0 0 80
  
-   168 print loops
-   169 printflush MESSAGE
-   170 label __label20
+   127 print loops
+   128 printflush MESSAGE
+   129 label __label20
 -    * jump __label19 always
-+  171 sensor __tmp27 SWITCH @enabled
-+  172 jump __label31 equal __tmp27 0
-   173 label __label21
-   174 control enabled switch1 0
-   175 end
++  130 sensor __tmp27 SWITCH @enabled
++  131 jump __label31 equal __tmp27 0
+   132 label __label21
+   133 control enabled switch1 0
+   134 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   143 set x x1
-   144 set last value
-   145 label __label23
+   104 set x x1
+   105 set last value
+   106 label __label23
 -    * jump __label29 greaterThan x 10
-+  146 jump __label29 greaterThan x1 10
-   147 label __label24
-   148 draw color 255 255 255 255
-   149 draw lineRect 10 10 156 156
++  107 jump __label29 greaterThan x1 10
+   108 label __label24
+   109 draw color 255 255 255 255
+   110 draw lineRect 10 10 156 156
 
 Modifications by Loop Optimization: replicate condition at line 14 (+3 instructions):
  
-    20 op equal __tmp8 DISPLAY null
-    21 op or __tmp9 __tmp7 __tmp8
-    22 jump __label2 equal __tmp9 false
-+   23 label __label32
-    24 print "Item/Liquid/Energy Level Display"
-    25 set n @links
-    26 noop
+    13 op equal __tmp8 DISPLAY null
+    14 op or __tmp9 __tmp7 __tmp8
+    15 jump __label2 equal __tmp9 false
++   16 label __label32
+    17 print "Item/Liquid/Energy Level Display"
+    18 set n @links
+    19 label __label3
  
-    95 label __label18
-    96 printflush MESSAGE
-    97 label __label1
+    69 label __label18
+    70 printflush MESSAGE
+    71 label __label1
 -    * jump __label0 always
-+   98 op equal __tmp7 MEMORY null
-+   99 op equal __tmp8 DISPLAY null
-+  100 op or __tmp9 __tmp7 __tmp8
-+  101 jump __label32 notEqual __tmp9 false
-   102 label __label2
-   103 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
-   104 noop
++   72 op equal __tmp7 MEMORY null
++   73 op equal __tmp8 DISPLAY null
++   74 op or __tmp9 __tmp7 __tmp8
++   75 jump __label32 notEqual __tmp9 false
+    76 label __label2
+    77 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
+    78 read R0 MEMORY M_R0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    97 label __label1
-    98 op equal __tmp7 MEMORY null
-    99 op equal __tmp8 DISPLAY null
+    71 label __label1
+    72 op equal __tmp7 MEMORY null
+    73 op equal __tmp8 DISPLAY null
 -    * op or __tmp9 __tmp7 __tmp8
-+  100 op or __tmp9 __tmp16 __tmp17
-   101 jump __label32 notEqual __tmp9 false
-   102 label __label2
-   103 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
++   74 op or __tmp9 __tmp16 __tmp17
+    75 jump __label32 notEqual __tmp9 false
+    76 label __label2
+    77 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
-    95 label __label18
-    96 printflush MESSAGE
-    97 label __label1
+    69 label __label18
+    70 printflush MESSAGE
+    71 label __label1
 -    * op equal __tmp7 MEMORY null
 -    * op equal __tmp8 DISPLAY null
-    98 op or __tmp9 __tmp16 __tmp17
+    72 op or __tmp9 __tmp16 __tmp17
 -    * jump __label32 notEqual __tmp9 false
-+   99 jump __label32 notEqual __tmp18 false
-   100 label __label2
-   101 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
-   102 noop
++   73 jump __label32 notEqual __tmp18 false
+    74 label __label2
+    75 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
+    76 read R0 MEMORY M_R0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
  
-    95 label __label18
-    96 printflush MESSAGE
-    97 label __label1
+    69 label __label18
+    70 printflush MESSAGE
+    71 label __label1
 -    * op or __tmp9 __tmp16 __tmp17
-    98 jump __label32 notEqual __tmp18 false
-    99 label __label2
-   100 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
+    72 jump __label32 notEqual __tmp18 false
+    73 label __label2
+    74 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
 
 Final code before resolving virtual instructions:
 

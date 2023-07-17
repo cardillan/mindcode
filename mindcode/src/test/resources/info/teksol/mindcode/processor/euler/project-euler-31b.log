@@ -12,47 +12,47 @@ Pass 1: speed optimization selection (cost limit 962):
   * Loop Unrolling: unroll iteration loop at line 4              cost    49, benefit       23,0, efficiency        0,5 (+39 instructions)
 
 Pass 1: speed optimization selection (cost limit 923):
-  ! Loop Unrolling: unroll loop at line 6                        cost   991, benefit   250000,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   986, benefit   248750,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   971, benefit   245000,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   946, benefit   238750,0, efficiency      252,4
-    Loop Unrolling: unroll loop at line 6                        cost   896, benefit   226250,0, efficiency      252,5
-    Loop Unrolling: unroll loop at line 6                        cost   746, benefit   188750,0, efficiency      253,0
-    Loop Unrolling: unroll loop at line 6                        cost   496, benefit   126250,0, efficiency      254,5
-  * Loop Unrolling: unroll loop at line 6                        cost     0, benefit     1250,0, efficiency   Infinity (-5 instructions)
+  ! Loop Unrolling: unroll loop at line 6                        cost   991, benefit    10000,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   986, benefit     9950,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   971, benefit     9800,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   946, benefit     9550,0, efficiency       10,1
+    Loop Unrolling: unroll loop at line 6                        cost   896, benefit     9050,0, efficiency       10,1
+    Loop Unrolling: unroll loop at line 6                        cost   746, benefit     7550,0, efficiency       10,1
+    Loop Unrolling: unroll loop at line 6                        cost   496, benefit     5050,0, efficiency       10,2
+  * Loop Unrolling: unroll loop at line 6                        cost     0, benefit       50,0, efficiency   Infinity (-5 instructions)
 
 Pass 1: speed optimization selection (cost limit 928):
-  ! Loop Unrolling: unroll loop at line 6                        cost   991, benefit   250000,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   986, benefit   248750,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   971, benefit   245000,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   946, benefit   238750,0, efficiency      252,4
-    Loop Unrolling: unroll loop at line 6                        cost   896, benefit   226250,0, efficiency      252,5
-    Loop Unrolling: unroll loop at line 6                        cost   746, benefit   188750,0, efficiency      253,0
-  * Loop Unrolling: unroll loop at line 6                        cost   496, benefit   126250,0, efficiency      254,5 (+395 instructions)
+  ! Loop Unrolling: unroll loop at line 6                        cost   991, benefit    10000,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   986, benefit     9950,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   971, benefit     9800,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   946, benefit     9550,0, efficiency       10,1
+    Loop Unrolling: unroll loop at line 6                        cost   896, benefit     9050,0, efficiency       10,1
+    Loop Unrolling: unroll loop at line 6                        cost   746, benefit     7550,0, efficiency       10,1
+  * Loop Unrolling: unroll loop at line 6                        cost   496, benefit     5050,0, efficiency       10,2 (+395 instructions)
 
 Pass 1: speed optimization selection (cost limit 533):
-  ! Loop Unrolling: unroll loop at line 6                        cost   991, benefit   250000,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   986, benefit   248750,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   971, benefit   245000,0, efficiency      252,3
-  ! Loop Unrolling: unroll loop at line 6                        cost   946, benefit   238750,0, efficiency      252,4
-  ! Loop Unrolling: unroll loop at line 6                        cost   896, benefit   226250,0, efficiency      252,5
-  ! Loop Unrolling: unroll loop at line 6                        cost   746, benefit   188750,0, efficiency      253,0
+  ! Loop Unrolling: unroll loop at line 6                        cost   991, benefit    10000,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   986, benefit     9950,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   971, benefit     9800,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   946, benefit     9550,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   896, benefit     9050,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   746, benefit     7550,0, efficiency       10,1
 
 Pass 2: speed optimization selection (cost limit 539):
-  ! Loop Unrolling: unroll loop at line 6                        cost   992, benefit   250000,0, efficiency      252,0
-  ! Loop Unrolling: unroll loop at line 6                        cost   987, benefit   248750,0, efficiency      252,0
-  ! Loop Unrolling: unroll loop at line 6                        cost   972, benefit   245000,0, efficiency      252,1
-  ! Loop Unrolling: unroll loop at line 6                        cost   947, benefit   238750,0, efficiency      252,1
-  ! Loop Unrolling: unroll loop at line 6                        cost   897, benefit   226250,0, efficiency      252,2
-  ! Loop Unrolling: unroll loop at line 6                        cost   747, benefit   188750,0, efficiency      252,7
+  ! Loop Unrolling: unroll loop at line 6                        cost   992, benefit    10000,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   987, benefit     9950,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   972, benefit     9800,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   947, benefit     9550,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   897, benefit     9050,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   747, benefit     7550,0, efficiency       10,1
 
 Pass 3: speed optimization selection (cost limit 539):
-  ! Loop Unrolling: unroll loop at line 6                        cost   992, benefit   250000,0, efficiency      252,0
-  ! Loop Unrolling: unroll loop at line 6                        cost   987, benefit   248750,0, efficiency      252,0
-  ! Loop Unrolling: unroll loop at line 6                        cost   972, benefit   245000,0, efficiency      252,1
-  ! Loop Unrolling: unroll loop at line 6                        cost   947, benefit   238750,0, efficiency      252,1
-  ! Loop Unrolling: unroll loop at line 6                        cost   897, benefit   226250,0, efficiency      252,2
-  ! Loop Unrolling: unroll loop at line 6                        cost   747, benefit   188750,0, efficiency      252,7
+  ! Loop Unrolling: unroll loop at line 6                        cost   992, benefit    10000,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   987, benefit     9950,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   972, benefit     9800,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   947, benefit     9550,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   897, benefit     9050,0, efficiency       10,1
+  ! Loop Unrolling: unroll loop at line 6                        cost   747, benefit     7550,0, efficiency       10,1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
@@ -60,16 +60,14 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructi
     49 set __fn0_v 73682
     50 print __fn0_v
 -    * set __tmp5 __fn0_v
-+   51 noop
-    52 label __label15
-    53 read __tmp6 bank2 200
-    54 label __label16
-    55 set __fn1_v __tmp6
-    56 print __fn1_v
+    51 label __label15
+    52 read __tmp6 bank2 200
+    53 label __label16
+    54 set __fn1_v __tmp6
+    55 print __fn1_v
 -    * set __tmp7 __fn1_v
-+   57 noop
-    58 label __label17
-    59 end
+    56 label __label17
+    57 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -78,16 +76,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     49 set __fn0_v 73682
 -    * print __fn0_v
 +   50 print 73682
-    51 noop
-    52 label __label15
-    53 read __tmp6 bank2 200
-    54 label __label16
-    55 set __fn1_v __tmp6
+    51 label __label15
+    52 read __tmp6 bank2 200
+    53 label __label16
+    54 set __fn1_v __tmp6
 -    * print __fn1_v
-+   56 print __tmp6
-    57 noop
-    58 label __label17
-    59 end
++   55 print __tmp6
+    56 label __label17
+    57 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
@@ -96,14 +92,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     48 label __label14
 -    * set __fn0_v 73682
     49 print 73682
-    50 noop
-    51 label __label15
-    52 read __tmp6 bank2 200
-    53 label __label16
+    50 label __label15
+    51 read __tmp6 bank2 200
+    52 label __label16
 -    * set __fn1_v __tmp6
-    54 print __tmp6
-    55 noop
-    56 label __label17
+    53 print __tmp6
+    54 label __label17
+    55 end
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
@@ -305,7 +300,7 @@ Modifications by Loop Unrolling: unroll iteration loop at line 4 (+47 instructio
 +  129 label __label2
    130 label __label14
    131 print 73682
-   132 noop
+   132 label __label15
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 write 1 bank2 0
@@ -3625,55 +3620,49 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-6 ins
      2 set j 1
      3 label __label20
 -    * jump __label23 greaterThan 1 200
-+    4 noop
-     5 label __label21
-     6 read __tmp1 bank2 j
-     7 op sub __tmp3 j 1
+     4 label __label21
+     5 read __tmp1 bank2 j
+     6 op sub __tmp3 j 1
  
-    16 label __label25
-    17 set j 2
-    18 label __label26
+    15 label __label25
+    16 set j 2
+    17 label __label26
 -    * jump __label29 greaterThan 2 200
-+   19 noop
-    20 label __label27
-    21 read __tmp1 bank2 j
-    22 op sub __tmp3 j 2
+    18 label __label27
+    19 read __tmp1 bank2 j
+    20 op sub __tmp3 j 2
  
-    31 label __label31
-    32 set j 5
-    33 label __label32
+    29 label __label31
+    30 set j 5
+    31 label __label32
 -    * jump __label35 greaterThan 5 200
-+   34 noop
-    35 label __label33
-    36 read __tmp1 bank2 j
-    37 op sub __tmp3 j 5
+    32 label __label33
+    33 read __tmp1 bank2 j
+    34 op sub __tmp3 j 5
  
-    46 label __label37
-    47 set j 10
-    48 label __label38
+    43 label __label37
+    44 set j 10
+    45 label __label38
 -    * jump __label41 greaterThan 10 200
-+   49 noop
-    50 label __label39
-    51 read __tmp1 bank2 j
-    52 op sub __tmp3 j 10
+    46 label __label39
+    47 read __tmp1 bank2 j
+    48 op sub __tmp3 j 10
  
-    61 label __label43
-    62 set j 20
-    63 label __label44
+    57 label __label43
+    58 set j 20
+    59 label __label44
 -    * jump __label47 greaterThan 20 200
-+   64 noop
-    65 label __label45
-    66 read __tmp1 bank2 j
-    67 op sub __tmp3 j 20
+    60 label __label45
+    61 read __tmp1 bank2 j
+    62 op sub __tmp3 j 20
  
-    76 label __label49
-    77 set j 50
-    78 label __label50
+    71 label __label49
+    72 set j 50
+    73 label __label50
 -    * jump __label53 greaterThan 50 200
-+   79 noop
-    80 label __label51
-    81 read __tmp1 bank2 j
-    82 op sub __tmp3 j 50
+    74 label __label51
+    75 read __tmp1 bank2 j
+    76 op sub __tmp3 j 50
 
 Final code before resolving virtual instructions:
 

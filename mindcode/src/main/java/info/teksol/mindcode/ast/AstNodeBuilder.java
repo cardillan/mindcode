@@ -289,7 +289,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     private void allocateStack(MindcodeParser.Alloc_listContext ctx) {
         if (allocatedStack != null) {
-            throw new MindcodeException("Multiple stack declaration in " + ctx.getText());
+            throw new MindcodeException(ctx.getStart(), "multiple stack declarations.");
         }
 
         final String name = ctx.id().getText();
@@ -302,7 +302,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
     private void allocateHeap(MindcodeParser.Alloc_listContext ctx) {
         if (allocatedHeap != null) {
-            throw new MindcodeException("Multiple stack/heap allocations in " + ctx.getText());
+            throw new MindcodeException(ctx.getStart(), "multiple stack/heap allocations.");
         }
 
         final String name = ctx.id().getText();
@@ -330,7 +330,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     @Override
     public AstNode visitGlobal_ref(MindcodeParser.Global_refContext ctx) {
         if (allocatedHeap == null) {
-            throw new MindcodeException("The heap must be allocated before using it in " + ctx.getText());
+            throw new MindcodeException(ctx.getStart(), "the heap must be allocated before using it.");
         }
 
         final String name = ctx.name.getText();
@@ -494,7 +494,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         } else if (ctx.ELSE() != null) {
             return ctx.false_branch == null ? new Seq(ctx.getStart(), new NoOp()) : visit(ctx.false_branch);
         } else {
-            throw new MindcodeException("Unhandled if/elsif/else; neither ELSIF nor ELSE were true in " + ctx.getText());
+            throw new MindcodeInternalError("Unhandled if/elsif/else; neither ELSIF nor ELSE were true in " + ctx.getText());
         }
     }
 
