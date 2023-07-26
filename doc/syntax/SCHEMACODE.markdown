@@ -486,8 +486,8 @@ easier to create the schematic in Mindustry, decompile to Schemacode definition 
 ## Block orientation
 
 Each block in schematic has an orientation, although specific orientation affects only some types of blocks (such as 
-conveyors or unit factories). Orientation can take four values - east, west, north or south - and is specified using 
-this syntax:
+conveyors or unit factories). Orientation can take four values - `east`, `west`, `north` or `south` - and is 
+specified using this syntax:
 
 ```
 facing <orientation>
@@ -495,8 +495,8 @@ facing <orientation>
 
 e.g. `@conveyor at (2, 4) facing west`.
 
-The cardinal directions are related to the schematic being defined, i.e. conveyor facing east is moving items from 
-left to right, relative to the standard orientation of the schematic.
+The cardinal directions are related to the coordinate system of the schematics, i.e. conveyor facing east is moving 
+items from left to right.
 
 ## Block configuration
 
@@ -575,9 +575,6 @@ Connection specified by position may lead to a place not occupied by any block, 
 schematic. Such a connection - called a "virtual connection" - is allowed and will be compiled into the schematic. 
 When the schematic is built in the Mindustry map and later a compatible block is added at the position of the 
 virtual connection, the connection will be automatically made.    
-
-At this moment it is not verified that the connection is valid. Be careful not to create a connection that would be 
-out of range, or impossible (such as diagonal connections for bridges).
 
 The following block types can be connected to at most one block:
 
@@ -982,8 +979,9 @@ end
 The relative file path is evaluated from the directory containing the file being compiled; if the compiled code is 
 read from standard input, it is evaluated from the current directory.
 
-> **Note**: only command line tool allows you to use code from an external file. The web application cannot access 
-> your local files, and the `file` option is therefore disabled there.  
+> [!NOTE]
+> Only command line tool allows you to use code from an external file. The web application cannot access your local 
+> files, and the `file` option is therefore disabled there.   
 
 # Origin and dimensions calculation
 
@@ -998,16 +996,16 @@ schematic
 end
 ```
 
-The positions in this schematic will be adjusted to (0, 1) for switch and (1, 0) for message block. It is therefore 
-possible to easily extend an existing schematic to the left or down without having to manually reposition all blocks.
+The positions in this schematic will be adjusted to (0, 1) for switch and (1, 0) for message block. 
+
+Block positions can be negative as well. It is therefore possible to easily extend an existing schematic to the left 
+or down without having to manually reposition all blocks.
 
 Similarly, the dimensions of the schematic are calculated as the dimensions of the smallest rectangle containing all 
 blocks of the schematic. These dimensions are written to the compiled schematic. If dimensions smaller than computed 
 dimensions are specified as an attribute, a compilation error occurs.
 
-
-
 ---
 
-[« Previous: Compiler directives](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp;
+[« Previous: Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown) &nbsp; | &nbsp;
 [Next: Command line tool »](TOOLS-CMDLINE.markdown)

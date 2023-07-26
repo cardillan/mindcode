@@ -1,1 +1,2 @@
->**Note**: Mindcode syntax documentation has been expanded and moved [here](doc/syntax/SYNTAX.markdown).
+> [!NOTE]
+> Mindcode syntax documentation has been expanded and moved [here](doc/syntax/SYNTAX.markdown).

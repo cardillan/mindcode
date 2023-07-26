@@ -33,8 +33,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * warn when `configure` main variable is used in V7 -- ML changes it to `config`,
   * warn about alloy-smelter --> surge-smelter V6 --> V7 name change.
 * Improve compiler error messages.
-* Warn developers when the generated code goes over 1000 Mindustry instructions.
-* Warn developers when potentially non-numeric value is being pushed on the stack.
+* Warn when the generated code goes over 1000 Mindustry instructions.
+* Warn when potentially non-numeric value is being pushed on the stack.
 
 # Updating ANTLR grammar
 
@@ -44,51 +44,57 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * Use mimex to obtain all metadata needed to recognize all valid properties.
 * Allow empty optional arguments in function calls. At this moment, optional arguments can only be omitted at the
   end of the argument list.
-* Out function parameters - new `out` keyword.
-  * Not passed by reference - Mindustry doesn't allow that.
-  * On function return, the output value will be copied to the variable passed in as the argument
-* Make both semicolon and an EOL an expression separator and require one after each expression; allow empty
-  expressions --> hopefully make the syntax less ambiguous
-  * Might make `if` operator possible: `break if some_cond` is equivalent to `if some_cond break end`. It's just a less 
-    verbose way of doing it.
-* Only allow dashes in REF identifiers (the `@` Mindustry constants), then add support for ++ and -- operators
-* Program bodies will be a sequence of statements, not expressions.
-  * Do not treat any random word in the source code as an expression; generate syntax error on it!
-  * Might be quite hard to do in syntax (e.g. we want to be able to use standalone case or if expressions), perhaps 
-    the compiler might detect these instances.
-    
-## New syntax
-
 * Block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
   error reporting would be much more preferable, but quite hard to implement).
-* `yield` keyword
+* Only allow dashes in REF identifiers (the `@` Mindustry constants), then add support for `++` and `--` operators
+* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`
+* Varargs inline functions (??)
+  * Function needs to be explicitly declared inline
+  * `inline def foo(a, b, c, x...) ... end`
+  * The vararg can be processed using list iteration loop, or maybe passed to another vararg function:
+    `def foo(arg...) for a in arg print(a) end end`
+    
+## New and extended keywords
+
+* `allocate`
+  * Allow specifying precise address for external variables
+    * `allocate $STATE in cell1[7]`
+    * The index must be a constant integer expression
+    * Must not overlap with heap. Can use a memory cell/bank different from heap.
+  * Support for external arrays:
+    * `allocate array $ARRAY in cell1[32 ... 64]`
+    * Has the `$` prefix as an external variable (which it is), and to differentiate it from future in-memory arrays.
+    * Mindcode adds the offset whenever the array is accessed (less efficient code if the offset is not zero).
+    * No out-of-bounds checks.
+* `array`
+  * Used in `allocate array`
+  * Reserved for future use in declaring in-memory arrays
+* `declare`, `var`
+* `enum`
+  * Possible syntax:
+    * `enum name(id1, id2, id3)`
+    * `enum name: id1, id2, id3 end`
+  * Mindcode assigns values to the enums as it sees fit. There are no guarantees on the numbers whatsoever.
+    They could be instruction addresses inside a case expression, for example, if there's just one case expression.
+  * Mindcode provides functions to access enum properties (e.g. enum.name, enum.next, enum.previous).
+    * Implemented as inline library functions. Using them might be costly.
+  * Support for enums in list iteration Loops: `for i in enum_name`.
+  * Enum will internally be a new type of LogicLiteral.
+* `fallthrough`
+  * Used in case expression to skip to the next `when` branch
+* `in`  
+  * New use as a boolean operator:
+    * Tests number is in range: `n in min .. max`
+    * Tests value is in enumerated set: `type in (@sorter, @inverted-sorter)`
+* `noinline` - prevent function inlining
+* `out`
+  * Output function parameters
+    * Not passed by reference - Mindustry doesn't allow that.
+    * On function return, the output value will be copied to the variable passed in as the argument.
+* `yield`
   * Assigns values to list variables in list iteration loops; compile error if some of the expressions in the list 
     isn't a variable
   * Used in when branch of case expression to set resulting value of the branch and exit the case expression
-* `fallthrough` keyword in case expression: skips to the next `when` branch
-* `in` boolean operator:
-  * tests number is in range: `n in min .. max`
-  * tests value is in enumerated set: `type in (@sorter, @inverted-sorter)`
-* `out` keyword for declaring output parameters in user defined functions
-  * `def foo(x, out y) y = 2 * x; return 2 * y end`  
-* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`
-* Varargs inline functions (??)
-  * Function needs to be explicitly declared inline 
-  * `inline def foo(a, b, c, x...) ... end` 
-  * The vararg can be processed using list iteration loop, or maybe passed to another vararg
-    function: `def foo(n...) for i in n print(i) end end`
-    
-## Enums
-
-* Possible syntax:
-  * `enum name(id1, id2, id3)`
-  * `enum name: id1, id2, id3 end`
-* Mindcode assigns values to the enums as it sees fit. There are no guarantees on the numbers whatsoever.
-  They could be instruction addresses inside a case expression, for example, if there's just one case expression.
-* Mindcode provides functions to access enum properties (e.g. enum.name, enum.next, enum.previous).
-  * Implemented as library functions. Using them might be costly.
-* Support for enums in list iteration Loops: `for i in enum_name`.
-* Enum will internally be a new type of LogicLiteral.
 
 ## #use compiler directive/statement
 
@@ -117,6 +123,7 @@ Typed variables, parameters and function return values.
 * Just a way to bind several variables together. Only static allocation.
 * Allows returning multiple values from functions.
 * Will compile down to individual variables, which will then be optimized by Data Flow Optimization.
+* Possible support for arrays of records
 
 # Speculative optimization for speed
 
@@ -157,28 +164,34 @@ Typed variables, parameters and function return values.
 * Assign a function address to a variable:
   * `fptr = function` (note: no brackets)
   * Assigning the function definition: `fptr = def foo(n) print(n) end`. Not sure about this, but why not?
-  * Lambda/anonymous function syntax: `fptr = def(n) print n end`
+  * Lambda/anonymous function syntax: `fptr = n -> print n` or `fptr = (m, n) -> (x = m * n; print(x))`
 * Global analysis of function assignments
   * If a function pointer is assigned a function address, it must not be assigned anything else (global analysis)
   * All function addresses assigned to a single function pointer variable must belong to functions having the same
     number of arguments
-  * Assignments between function pointers are tracked too. An alias  graph will be created, each continuous
-    segment in the graph must be assigned compatible functions (same number of parameters). Each segment gets its
-    own set of transfer variables.
+  * Assignments between function pointers are tracked too. An alias graph will be created, each continuous
+    segment in the graph must be assigned compatible functions (same number of parameters). Each segment - __function 
+    group__ - gets its own set of transfer variables.
   * Function call must use the correct number of arguments for the given function.
-  * Only stackless/recursive user defined functions can be assigned to function pointers
+  * Only stackless/recursive user defined functions can be assigned to function pointers.
   * Function pointers can be passed to other functions as arguments, assignments to arguments are tracked just
     like everything else, except calls through function pointers, which need to be handled separately.
   * Calling recursive functions is possible. A function can be made recursive by calls via function pointer.
 * Calling mechanism
-  * For each function segment a separate set of variables will be allocated: __fpN_retaddr, and __fpN_arg0 to
-    __fpN_argT for individual arguments ("fp" as in "function pointer").
-  * When making a call, return address and arguments will be stored in the __fpN variables. Calls of recursive and
+  * For each function group a separate set of variables will be allocated: `__fgN_retaddr`, and `__fgN_arg0` to
+    `__fgN_argM` for individual arguments ("fg" as in "function group").
+  * When making a call, return address and arguments will be stored in the `__fgN` variables. Calls of recursive and
     stackless functions through a function pointer are the same.
-  * A function callable through function pointer will be prepended a header that copies the __fpN argument and
-    return variables to actual __fnX arguments and return variable. If it is a recursive function, the header
-    will store __fpN_retaddr on stack to emulate a recursive call.
-  * Return from function works as usual.
+  * A function callable through function pointer will be prepended a header that copies the `__fgN` arguments and
+    return variable to actual `__fnX` arguments and return variable. If it is a recursive function, the header
+    will store `__fgN_retaddr` on stack to emulate a recursive call.
+  * Return address will be set to a code region after the function body which copies the `__fnN` variables to the 
+    `_fgN` ones and then returns to the caller. 
+  * Specific optimizers for function pointer calls
+    * If the return value is not used, function return address will be set directly to the caller's return address. 
+    * If the function is only called through a function pointer, copying `__fgN` variables to `__fpN` variables 
+      might be avoided, if the values are preserved.
+  * Function call graph will need to be built upon function groups too.
 * Possible handling of calling a null function pointer:
   * Skips to the beginning of a program, resetting it. Nothing needs to be done.
   * Null function pointer corresponds to a special function that does nothing and just returns. All function
@@ -186,12 +199,11 @@ Typed variables, parameters and function return values.
     address to them. Problem with global variables, where initialization isn't easy to track.
   * Null function pointer corresponds to a special function that indicates an error and stops the program
     execution. The same prerequisites as above. Ask Anuken for an extension to the stop instruction
-
+    
 # Processor-variables backed arrays
 
-Processor-variables backed arrays will always have a horrible performance, but when designed together with loops and
-loop optimizations they might be very useful - and not so slow. Loop unrolling could make them as fast as regular
-variables.
+Processor-variables backed arrays will always have a horrible performance, but when used together with loop 
+unrolling or data flow optimization, they might be very useful - and as fast as regular variables.
 
 * Declared at fixed size: `array A[] = (1, 2, 3)` or `array A[4]`
 * Array name is not a variable - neither an l-value nor an r-value.
@@ -270,11 +282,18 @@ Two basic approaches
 * Expression distribution:
   * `foo(value ? a : b)` could be turned into `if value foo(a) else foo(b) end`
   * Is useful when at least one value produced by the ternary expression is a constant.
+* Code path splitting (generalized version of the expression distribution)
+  * If a variable is known to take on several distinct values and is part of several control statements or complex 
+    expressions, create a jump table targeting specialized code for some or all of the values the 
+    variable can attain.
+  * Needs to create metric for the complexity to use this only when appropriate.
+  * Example: `bar = foo ? 5 : 10; for i in 1 ... bar cell1[i] = 0 end` - after the multiplexing optimization, there 
+    could be two unrolled loops.
 
 ### Inferring invariants of variables
 
 * Constraints on variable values inferred from instruction producing the value
-  * e.g. `op max result input 10` limits the value of `max` to `10`
+  * e.g. `op max result input 10` limits the value of `result` to `10`
 * Constraints on variable values inferred from conditions
   *  "non-null", "non-negative", "less than x", "equal to"
 * Constraints on relationships between variables
@@ -286,9 +305,6 @@ Two basic approaches
     array index access) and the control loop variable has no other uses, apply the linear transformation to the
     loop variable, initialization code and condition.
   * Step sync: convert `while <exp> i += 1; j = a * i + b end` to `j = i + b; while <exp> i += 1; j += a end`
-* Case Switching enhancements
-  * Support ranges when input value is integer
-  * Omit range checking where possible
 * Boolean expression optimizations: encode `a and not b` as `a > b`, `a or not b` as `a >= b`, if both values are
   known to be boolean.
 
@@ -298,6 +314,7 @@ Two basic approaches
   an unrolled loop; inlining it might prevent the loop from unrolling.
 * When just one of the parameters passed to the function is variable with a few discrete values and the others are
   fixed, create a switched expression and inline the function separately for each value (???)
+  * Code path splitting handles this in a general manner 
 * If there are several combinations of argument values, each used more than once, it might make sense to create a
   copy of the function for each distinct combination of the argument values and applying the above optimization to
   it.
@@ -315,9 +332,12 @@ Two basic approaches
 
 ## Case Switching
 
+* Only perform the optimization when the input value is a known integer
+* Support ranges in when branches
+* Omit range checking where possible (requires invariant inferring)
 * Support for selecting a subset of existing `when` branches to handle, the jump table `else` entries would then
   jump to the remaining branches of the original switch.
-* Cases with non-continuous values of when branches: convert the largest segment from case values with a density
+* Cases with sparse sets of when branches: convert the largest segment from case values with a density
   higher than 0.5, leave other values to conditional jumps
 * On `aggressive` level, convert switches that have overlapping values.
 
@@ -459,7 +479,7 @@ There are no plans to do any of these. We keep them around just in case.
 * Support multi-value return functions (`getBlock` comes to mind, but also Unit Locate)
 * Integrate a better code editor in the webapp, rather than a plain old `<textarea>`
 
-# Tried and refused
+# Refused
 
 * Implement recursive calls by storing function return variable on stack like other variables, instead of pushing it 
   on the stack at the time of the call
@@ -471,3 +491,7 @@ There are no plans to do any of these. We keep them around just in case.
   * In case of recursive-heavy algorithms (e.g. quicksort) the penalty is substantial. Recursive functions are 
     generally not very useful, and if someone is compelled to use them anyway, let's make them as efficient as 
     possible. 
+* Make EOL an expression separator in addition to a semicolon and make expression separator compulsory.
+  * Pro: removes ambiguity in function calls and perhaps other expressions, without having to put semicolon at the 
+    end of the lines
+  * Con: it would no longer be possible to split longer expressions on several lines without escaping EOLs. 

@@ -14,6 +14,13 @@ This document covers the basics of Mindcode syntax:
 * [Control flow statements](SYNTAX-3-STATEMENTS.markdown)
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
 * [Compiler directives](SYNTAX-5-OTHER.markdown)
+* [Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
+
+Function reference for individual compiler versions:
+
+* [Function reference for Mindustry Logic 6](FUNCTIONS_V6.markdown)
+* [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
+* [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
 
 Schemacode, a schematics definition language, is covered here:
 

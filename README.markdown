@@ -16,11 +16,11 @@ The main focus of Mindcode design is two-fold:
 Some of the latest enhancements to Mindcode are:
 
 * A number of powerful code optimizations:
-  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization),
-  [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling),
-  [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining) and 
-  [Case Switching](doc/syntax/SYNTAX-5-OTHER.markdown#case-switching). Most of them perform 
-  [optimization for speed](doc/syntax/SYNTAX-5-OTHER.markdown#optimization-for-speed): they increase the code size 
+  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization),
+  [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling),
+  [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) and 
+  [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching). Most of them perform 
+  [optimization for speed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed): they increase the code size 
   (up to the 1000 instructions limit) if it results in faster execution of the final program.   
 * [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in
   Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic,

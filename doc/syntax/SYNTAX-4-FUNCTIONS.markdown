@@ -100,7 +100,9 @@ You can use this for any property, not just item types, such as `@unit.dead` ins
 
 Again, the `vault1` or `storage` in the examples can be a variable or a linked block object.
 
-> **Note**: in the case of property access, the `@` character at the beginning of the property name is omitted.
+> [!NOTE]
+> In the case of property access, the `@` character at the beginning of the property name is omitted - 
+> `storage.thorium` is the right syntax, `storage.@thorium` is wrong.
 
 # Built-in functions
 

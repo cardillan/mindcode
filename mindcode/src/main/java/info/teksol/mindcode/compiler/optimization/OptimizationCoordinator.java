@@ -68,12 +68,12 @@ public class OptimizationCoordinator {
         Map<Optimization, Optimizer> optimizers = createOptimizers();
 
         optimizePhase(INITIAL, optimizers, 0, generatorOutput);
-        boolean modified = false;
-        for (int pass = 1; pass <= profile.getOptimizationPasses(); pass++) {
+        boolean modified = true;
+        for (int pass = 1; modified && pass <= profile.getOptimizationPasses(); pass++) {
             modified = optimizePhase(ITERATED, optimizers, pass, generatorOutput);
-            if (!modified) {
-                break;
-            }
+        }
+        if (modified) {
+            messageRecipient.accept(MindcodeMessage.warn("Optimization passes limit (%d) reached.", profile.getOptimizationPasses()));
         }
         optimizePhase(FINAL, optimizers, 0, generatorOutput);
 

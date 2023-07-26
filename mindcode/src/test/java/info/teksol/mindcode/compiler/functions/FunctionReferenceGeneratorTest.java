@@ -41,6 +41,14 @@ public class FunctionReferenceGeneratorTest {
             useless and may be removed by the optimizer.
             """;
 
+    private static final String[] navigation = {
+            "Code optimization", "SYNTAX-6-OPTIMIZATIONS.markdown",
+            "Function reference for Mindustry Logic 6", "FUNCTIONS_V6.markdown",
+            "Function reference for Mindustry Logic 7", "FUNCTIONS_V7.markdown",
+            "Function reference for Mindustry Logic 7A", "FUNCTIONS_V7A.markdown",
+            "Schemacode", "SCHEMACODE.markdown",
+    };
+
     @Test
     void createFunctionReferenceForV6() throws IOException {
         createFunctionReference(ProcessorVersion.V6);
@@ -91,6 +99,16 @@ public class FunctionReferenceGeneratorTest {
                     printOpcode(processor, w, opcode, samples);
                 }
             }
+
+            int prev = 2 * version.ordinal();
+            int next = prev + 4;
+            w.println();
+            w.println("---");
+            w.println();
+
+            w.printf("[« Previous: %s](%s) &nbsp; | &nbsp; [Next: %s »](%s)",
+                    navigation[prev], navigation[prev + 1], navigation[next], navigation[next + 1]);
+            w.println();
         }
     }
 

@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 
 * Fixed a bug in code duplication routine that sometimes prevented [Unreachable Code
-  Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#unreachable-code-elimination) from removing unreachable portions 
+  Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) from removing unreachable portions 
   of optimized case statements and inlined functions. The bug sometimes caused runtime exceptions when optimizing 
   for speed, usually under tight instruction space restrictions only.
 * Fixed [#108 Compilation errors are not properly reported](https://github.com/cardillan/mindcode/issues/108).
@@ -21,27 +21,27 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added [Case Switching](doc/syntax/SYNTAX-5-OTHER.markdown#case-switching) optimization. This optimization converts 
+* Added [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization. This optimization converts 
   suitable case expressions to use jump tables.
-* Added [Return Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#return-optimization) improving some very specific 
+* Added [Return Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization) improving some very specific 
   cases sometimes arising in recursive functions.
 * Added [compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-instruction-limit) to alter the instruction limit 
   for speed optimizations. 
 
 ### Fixed
 
-* Fixed wrong cost estimation in [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling). The cost 
+* Fixed wrong cost estimation in [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling). The cost 
   estimates were too high, potentially preventing some eligible loops from being unrolled.
 * Fixed compiler not recognizing integer values in compiler option directives (`#set`).
 
 ### Changed
 
-* Changed [Jump Threading](doc/syntax/SYNTAX-5-OTHER.markdown#jump-threading) to also replace jumps leading to `goto`
+* Changed [Jump Threading](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to also replace jumps leading to `goto`
   instructions with the `goto` instruction itself on `aggressive` level. There's a possible speedup in some stackless 
   function calls and list iteration loops.
-* Changed [Single Step Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#single-step-elimination) to also remove two 
+* Changed [Single Step Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to also remove two 
   consecutive jumps that are identical. Such sequences were sometimes produced as a result of other optimizations.
-* Changed [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) to use single 
+* Changed [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) to use single 
   instruction iterator instance instead of making an instruction list from each AstContext being processed. 
   Significantly speeds up processing.
 * Additional optimizers converted to adding no-op instruction instead of removing them; updated other optimizers 
@@ -51,9 +51,9 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-* Fixed bug in [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining) that caused runtime 
+* Fixed bug in [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) that caused runtime 
   exception in some circumstances.
-* Fixed bug in [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) that may have 
+* Fixed bug in [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) that may have 
   removed instructions that were actually used by the program.
 
 ### Changed
@@ -68,9 +68,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added list iteration loop unrolling to [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling) 
+* Added list iteration loop unrolling to [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling) 
   optimization.
-* Added [Function Inlining](doc/syntax/SYNTAX-5-OTHER.markdown#function-inlining). Stackless functions and even 
+* Added [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining). Stackless functions and even 
   individual function calls may be selected for inlining based on expected benefit and available instruction space.
 
 ### Fixed
@@ -84,7 +84,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 
 * Changed option name `conditional-jump-optimization` to `jump-optimization` to conform with 
-  [documentation](doc/syntax/SYNTAX-5-OTHER.markdown#jump-optimization).
+  [documentation](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-optimization).
 
 ### Miscellaneous
 
@@ -101,13 +101,13 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* Changed [Unreachable Code Elimination](doc/syntax/SYNTAX-5-OTHER.markdown#unreachable-code-elimination) to perform 
+* Changed [Unreachable Code Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) to perform 
   actual control flow analysis and remove all unreachable regions of code, instead of relying on active labels to 
   detect reachable instructions. This change eliminates some unreachable code that was not recognized before, such 
   as loops inside unreachable regions of code.
 * Changed Data Flow Optimization to protect assignment to uninitialized variables made before calling an out-of-line 
   or recursive function that might call the
-  [`end()` function](doc/syntax/SYNTAX-5-OTHER.markdown#handling-of-uninitialized-variables). Hopefully all 
+  [`end()` function](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#handling-of-uninitialized-variables). Hopefully all 
   possible means of calling the `end()` function are finally covered.
 * Changed the printout of final list of unresolved instruction (activated by the `-u` command line option) to omit 
   inactive labels.
@@ -116,11 +116,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added general [optimization for speed](doc/syntax/SYNTAX-5-OTHER.markdown#optimization-for-speed) mechanism. 
+* Added general [optimization for speed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed) mechanism. 
   Various opportunities for optimizations that improve execution speed at the price of code size increase are 
   identified and realized in the order of decreasing efficiency until the opportunities or the available instruction 
   space are exhausted.   
-* Added [Loop Unrolling](doc/syntax/SYNTAX-5-OTHER.markdown#loop-unrolling) optimization.
+* Added [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling) optimization.
 * Added [compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-passes) to limit the number of performed 
   optimization passes.
 
@@ -132,12 +132,12 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* Changed [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) to optimize [main 
+* Changed [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) to optimize [main 
   variables](doc/syntax/SYNTAX-1-VARIABLES.markdown#main-variables) even on `basic` level. Only final assignments to 
   main variables are preserved on `basic` level, other assignments can be optimized away. This change allows the Loop 
   Unrolling optimization to be functional even on `basic` optimization level.
 * Changed condition duplication by Loop Optimization to employ the general
-  [optimization for speed](doc/syntax/SYNTAX-5-OTHER.markdown#optimization-for-speed) mechanism.   
+  [optimization for speed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed) mechanism.   
 * Changed various optimizations for minor improvements:
   * Number of times the Data Flow Optimization has to process loops was reduced.
   * Jumps Normalization now recognizes always true/always false conditional jumps based on known variable 
@@ -164,14 +164,14 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* The [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization) now properly handles 
+* The [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) now properly handles 
   assignments to uninitialized variables made before calling the
-  [`end()` function](doc/syntax/SYNTAX-5-OTHER.markdown#handling-of-uninitialized-variables). 
+  [`end()` function](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#handling-of-uninitialized-variables). 
 
 ### Removed
 
 * Removed _Return value optimization_ and _Temporary inputs elimination_. These optimizations were completely 
-  superseded by the [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization).
+  superseded by the [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization).
 * Removed the old command-line compiler and the `mindcode` / `mindcode.bat` files in the `bin` directory.
 
 ## 2023-06-19
@@ -201,12 +201,12 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 * Added elimination of useless `set` instructions (such as `set x x`) to
-  [Expression Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization). Optimizes recursive 
+  [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). Optimizes recursive 
   function calls passing unchanged value of function argument to the next function call. 
 * Added elimination of variables never modified by a function from stack in
-  [Stack Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization).
+  [Stack Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization).
 * Added specific optimization for recursive function calls to the
-  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization):
+  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization):
   * The optimizer is aware when a variable value is preserved on stack and can reuse the variable state when 
     optimizing code following a recursive function call.
   * Streamlining expressions when passing value derived from the current value of the function argument to the 
@@ -235,14 +235,14 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added [Constant folding](doc/syntax/SYNTAX-5-OTHER.markdown#constant-folding) to Data Flow Optimization.
-* Added [Common subexpression optimization](doc/syntax/SYNTAX-5-OTHER.markdown#common-subexpressions-optimization) 
+* Added [Constant folding](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding) to Data Flow Optimization.
+* Added [Common subexpression optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#common-subexpressions-optimization) 
   to Data Flow Optimization.
 
 ### Removed
 
 * Removed _Function call optimization_. This optimization was completely superseded by the
-  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles all 
+  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization), which handles all 
   cases previously optimized by Function call optimization, and is able to identify more opportunities for 
   optimization. The old optimization was removed because it became incompatible (i.e. produced wrong results) 
   with the code produced by Data Flow Optimization.
@@ -250,7 +250,7 @@ All notable changes to this project will be documented in this file.
 ### Deprecated
 
 * Deprecated _Return value optimization_. This optimization was completely superseded by the
-  [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization), which handles more cases 
+  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization), which handles more cases 
   than the old optimization. The Return value optimization will be removed when it becomes incompatible with 
   further changes to code generation/optimization.  
 * Deprecated _Temporary inputs elimination_, for the same reasons as above. 
@@ -259,7 +259,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added [Data Flow Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#data-flow-optimization). This optimization could 
+* Added [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization). This optimization could 
   remove user defined variables from compiled code - see the documentation for details. 
 
 ### Fixed
@@ -289,7 +289,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added [If Expression Optimization](doc/syntax/SYNTAX-5-OTHER.markdown#if-expression-optimization). Sometimes 
+* Added [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization). Sometimes 
   it only decreases the number of instructions by rearranging them, in other cases it can decrease number of executed 
   instructions. Only ternary expressions and if statements containing both true and false branch are affected. 
 
@@ -298,7 +298,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 * Fixed the [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) not having upper 
   boundary fixed under some conditions. The feature announced in release [2023-05-03](#2023-05-03) wasn't fully 
   implemented until now.
-* Fixed bugs in the [stack optimization](doc/syntax/SYNTAX-5-OTHER.markdown#stack-optimization). In some cases, 
+* Fixed bugs in the [stack optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization). In some cases, 
   `push`/`pop` instructions were mistakenly removed, in other cases unnecessary `push`/`pop` instructions were left
   in the code. Current implementation utilizes AST structure metadata to identify and protect variables used in 
   loops.   
@@ -325,7 +325,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Added option for [code generation goal](doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). Allows to specify whether 
   to aim for a smaller code or a faster code.
-* Added basic [loop optimization](doc/syntax/SYNTAX-5-OTHER.markdown#loop-optimization).
+* Added basic [loop optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization).
 
 ## 2023-05-21
 
@@ -429,7 +429,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Changed
 
-* Enhanced [print merging optimization](doc/syntax/SYNTAX-5-OTHER.markdown#print-merging) to merge non-string 
+* Enhanced [print merging optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) to merge non-string 
   literals (eg. numeric constants) on aggressive optimization level. 
 * Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside valid 
   range (signed 64-bit integer; note that [Mindustry Logic variables](doc/syntax/SYNTAX-1-VARIABLES.markdown) cannot 
@@ -471,7 +471,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#numeric-literals-in-mindustry-logic) 
   in Mindcode source. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g. `1.5e-5`)
   are converted to mlog-compatible representation (in this case, `15e-6`).
-* Added [simple expression optimizer](doc/syntax/SYNTAX-5-OTHER.markdown#expression-optimization).
+* Added [simple expression optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
   Current implementation replaces `mul` by a constant or an `idiv`/`div` followed by a `floor`
   with a single `idiv` instruction.
   
@@ -498,7 +498,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 * Added limited support for [compile-time constant expression evaluation](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#constant-expressions).
 * Added support for [constant declaration](doc/syntax/SYNTAX-1-VARIABLES.markdown#constants) (`const foo = 1 / 3`).
   The value assigned must be a compile-time constant expression.
-* Added [compiler directives](doc/syntax/SYNTAX-5-OTHER.markdown) (`#set`): optimization and target instruction set 
+* Added [compiler directives](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) (`#set`): optimization and target instruction set 
   can be now set from the web app compiler.
 * Support for the new [`setprop` world processor instruction](doc/syntax/FUNCTIONS_V7.markdown#instruction-setprop)
   available in Mindustry v143.  

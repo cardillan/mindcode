@@ -71,8 +71,9 @@ The range is evaluated before the loop begins. If the value of the upper bound c
 isn't reflected while the loop executes. To have the condition fully evaluated on each iteration, use
 a [C-style loop](#c-style-loops) or a [while loop](#while-loops).   
 
-> **Note**: currently, range iteration loops can only increment the value by 1, and only support increasing values.
-> If the start value is greater than the end value, the loop body won't get executed at all.
+> [!NOTE]
+> Currently, range iteration loops can only increment the value by 1, and only support increasing values. If the 
+> start value is greater than the end value, the loop body won't get executed at all. 
 
 ## List Iteration Loops
 
@@ -154,10 +155,10 @@ Similarly, `continue MainLoop` skips the rest of the current iteration of both t
 Every loop in Mindcode can be marked with a label,
 and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
 
-
-> **Note**: usually, a `break` or `continue` statement will be the last statements in a block of code
-> (typically in an `if` or `case` statement). It doesn't make sense to put additional statements or expressions
-> after a `break` or `continue`, since that code would never get executed and will be removed by the optimizer.
+> [!NOTE]
+> Usually, a `break` or `continue` statement will be the last statements in a block of code (typically in an `if` or 
+> `case` statement). It doesn't make sense to put additional statements or expressions after a `break` or `continue`,
+> since that code would never get executed and will be removed by the optimizer.
 
 If you do put additional statements after a `break` or `continue`, the compiler will mistake them for a label:
 
@@ -169,9 +170,8 @@ end
 ```
 
 The compiler will say:
-> 
-> Undefined label print
-> 
+
+> Error while compiling source code: Undefined label 'print'.
 
 If you insist on putting additional statement after a `break` or `continue`, use semicolon to separate the two statements:
 
@@ -181,7 +181,6 @@ while true
     print("This never gets printed")
 end
 ```
-
 
 # Conditionals
 
@@ -322,16 +321,16 @@ end
 # `end()` function
 
 The `end()` function maps to the `end` instruction, and as such has a special meaning - it resets the execution of 
-the program and starts at the beginning again. In this sense, the `end()` function is one of control flow statements.
-The function may be called from anywhere, even from a recursive function. The following rules apply when the 
-function is invoked: 
+the program and starts it from the beginning again. In this sense, the `end()` function is one of control flow 
+statements. The function may be called from anywhere, even from a recursive function. The following rules apply when 
+the function is invoked: 
 
 * the processor starts executing the program from the beginning,
 * values of existing variables are preserved (the last value written to any uninitialized[^1] global or main variable 
   before `end()` is called is preserved),
 * the call stack is reset - calling recursive functions starts from the topmost level again.
 
-[^1] Only uninitialized variables are handled this way. Any value assigned to an initialized variable before 
+[^1]: Only uninitialized variables are handled this way. Any value assigned to an initialized variable before 
 calling `end()` would get overwritten with whatever value the variable is initialized to when the program execution is 
 restarted.  
 

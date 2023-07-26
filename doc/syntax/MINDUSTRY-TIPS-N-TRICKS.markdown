@@ -367,7 +367,10 @@ suggest specifying the correct amount, just in case something changes in the fut
 
 ## Using Buildings
 
-Mindustry allows your processors to control and receive information from any ally building only if the are linked to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get building and block information. Getting this data is not just limited to your buildings. You can also obtain enemy building information, which is not possible with linking to your processor since you can't link to an enemy building.
+Mindustry allows your processors to control and receive information from any allied building only if they are linked 
+to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get 
+building and block information. Getting this data is not just limited to your buildings. You can also obtain enemy 
+building information, which is not possible with linking to your processor since you can't link to an enemy building.
 
 ### Locating the core
 

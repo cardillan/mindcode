@@ -1,71 +1,30 @@
 # Variables and constants
 
 Mindcode uses Mindustry Logic processor variables for its own variables. These variables can contain a number 
-(integer or real), an object or a value `null`. An object can be a Mindustry object, such as a block or a unit, a 
+(integer or real), an object or a `null` value. An object can be a Mindustry object, such as a block or a unit, a 
 Mindustry constant such as `@coal`, or a string such as `"Text"`.
 
 Variables aren't declared in Mindcode, they're created with first use. `count = 10` creates a variable named 
-`count` and assigns a value of `10` to it. Variables that weren't previously written to have a value of `0` in 
+`count` and assigns a value of `10` to it. Variables that weren't previously written to have a value of `null` in 
 Mindustry Logic. Once set, processor variables are preserved (even across game saves/loads) until the processor code 
 is modified or the processor is destroyed.
 
-> **Note**: Mindustry Logic stores numbers as `double`, a 64-bit floating point value. To perform bitwise operations,
-> such as `&` or `<<`, the value is converted to a 64-bit integer (a Java `long`), the operation is performed and the 
-> result is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold 
-> only about 52 bits or so.
+> [!NOTE]
+> Mindustry Logic stores numbers as `double`, a 64-bit floating point value. To perform bitwise operations, such as 
+> `&` or `<<`, the value is converted to a 64-bit integer (a Java `long`), the operation is performed and the result 
+> is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold only 
+> about 52 bits or so.
 
 # Main variables
 
-Main variables are variables used in the main body of the program. The name of the variable in Mindcode
-is used as-is in Mindustry code. It might be therefore useful to put assignments to important variables 
-at the front of the program, so that it can be easily modified in compiled code without the need of recompilation:
-
-```
-count = 10
-warning = false
-item = @coal
-print(count, warning, item)
-```
-
-produces 
-
-```
-set count 10
-set warning false
-set item @coal
-print count
-print warning
-print item
-```
-
-When you compile a program using Mindcode, it is obviously possible to manually modify the compiled code. Mindcode 
-anticipates this and to better support this option, keeps variable names identical in the compiled code as in 
-the source code as much as possible.
+Main variables are variables used in the main body of the program. The name of the variable in Mindcode is used as-is 
+in Mindustry code.
 
 Mindcode is also aware of the actual values you assign to variables. In some cases, knowing the actual value allows 
 Mindcode to perform specific code optimizations that are only valid for the value you've assigned to the variable in 
-the source code. This, however, can interfere with the possibility to modify the compiled code directly.
-
-The [Data Flow Optimization](SYNTAX-5-OTHER.markdown#data-flow-optimization) performs the optimizations described 
-above. When its optimization level is set to `basic`, the optimizer leaves main variables alone and produces code 
-which fully supports making changes to them. When the optimization level is set to `aggressive`, assignments of 
-constants to main variables may be completely removed from code and parts of the code specific to other values of 
-the variable can get completely removed:
-
-```
-debug = false
-
-if debug
-    println("State: ", state)
-    println("Item count: ", @unit.totalItems)
-end
-```
-
-When compiled with Data Flow Optimization level set to `agressive`, all of the above code will be eliminated, as the 
-debugging information isn't printed out.
-
-[Global variables](#global-variables) are never optimized in his fashion regardless of optimization level and are 
-safe to use for parametrization of the compiled code. 
+the source code (see [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)). It also means that 
+if you change a value assigned to a main variable in the compiled code, the modified code might not behave correctly.
+Only changes to values assigned to [global variables](#global-variables) are supported in the compiled code.
 
 # Local variables
 
@@ -86,7 +45,35 @@ variables in compiled code might be a bit cumbersome.
 
 Global variables are common to all user functions and the main program body. Use names that don't contain any
 lowercase letters, such as `MAIN` or `_9` (this is actually not a particularly good name for a variable), to create 
-global variables. Variables whose name contains at least one lowercase letter are local. For example, the following code
+global variables. Variables whose name contains at least one lowercase letter are not global.
+
+The name of global variables in Mindcode are used as-is in Mindustry code. It might be therefore useful to put 
+assignments to important variables at the beginning of the program, so that it can be easily modified in compiled code 
+without the need of recompilation:
+
+```
+COUNT = 10
+WARNING = false
+ITEM = @coal
+print(COUNT, WARNING, ITEM)
+```
+
+produces
+
+```
+set COUNT 10
+set WARNING false
+set ITEM @coal
+print COUNT
+print WARNING
+print ITEM
+```
+
+Unlike main variables, global variables are never optimized away from the code. This also means that their use makes
+the code a bit less suitable for optimization, and you should limit their use to situations where they're really
+needed (i.e. for variables accessed from different functions, or for compile-in parameters).
+
+For example, the following code
 
 ```
 def foo(x)
@@ -107,10 +94,6 @@ examples), since both `x` and `local` in the `foo` function are local variables 
 
 Using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed.
 
-Unlike main variables, global variables are never optimized away from the code. This also means that their use makes 
-the code a bit less friendly towards optimization, and you should limit their use to situations where they're really 
-needed (i.e. for variables accessed from different functions, or for compile-in parameters).  
-
 # External memory
 
 Mindcode supports storing variables in external memory - memory cells or memory banks linked to the processor. These 
@@ -118,8 +101,8 @@ variables are stored independently of the processor and can be used to share val
 values even when the processor is destroyed or its code altered.
 
 On the other hand, only numeric values can be stored in external memory. It is therefore not possible to use it to 
-store strings, buildings or item types there. This -- quite restrictive -- limitation is unfortunately imposed by 
-Mindustry Logic itself.
+store strings, units, buildings or item types there. This -- quite restrictive -- limitation is unfortunately 
+imposed by Mindustry Logic itself.
 
 ## Arrays
 
@@ -184,7 +167,8 @@ cell4[36] = cell4[37] = 50
 cell4[38] = cell4[39] = 50
 ```
 
-**Note**: external variables are allocated on a first-come, first-served basis. If you had the following code:
+> [!NOTE]
+> External variables are allocated on a first-come, first-served basis. If you had the following code:
 
 ```
 allocate heap in cell2[61 .. 63]

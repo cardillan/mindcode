@@ -147,18 +147,8 @@ if a unit is bound, `0` otherwise.
 # Constant expressions
 
 Expressions or parts of expressions that are constant are evaluated at compile time. For example, `print(60 / 1000)` 
-compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime.
-
-Most of Mindcode operators and deterministic built-in functions can be used in constant expressions. Not every 
-possible evaluation is done at the moment, for example `print(ticks * 60 / 1000)` compiles to
-
-```
-op mul __tmp1 ticks 60
-op div __tmp3 __tmp1 1000
-print __tmp3
-```
-even though the `60 / 1000` could be evaluated at compile time. You can use parenthesis around constant expressions 
-to isolate them, helping compile-time evaluation, e.g. `print(ticks * (60 / 1000))`.
+compiles to `print 0.06`, without an `op` instruction that would compute the value at runtime. Most of Mindcode 
+operators and deterministic built-in functions can be used in constant expressions. 
 
 If the result of a constant expression is a value which
 [cannot be encoded into an mlog literal](SYNTAX.markdown#numeric-literals-in-mindustry-logic), the expression isn't 
@@ -184,7 +174,9 @@ end
 
 If the value of the constant expression can be only encoded to mlog with loss of precision, a warning is issued.
 
-Concatenation of string constants and literals using the `+` operator is also supported.
+Constant expressions are evaluated during code generation. Furthermore, expressions that contain some constant 
+subexpressions (e.g. `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated 
+by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
 
 # String expressions
 
