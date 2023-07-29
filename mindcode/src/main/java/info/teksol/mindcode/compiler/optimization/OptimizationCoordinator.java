@@ -7,6 +7,7 @@ import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -95,6 +96,16 @@ public class OptimizationCoordinator {
     private boolean optimizePhase(OptimizationPhase phase, Map<Optimization, Optimizer> optimizers, int pass, GeneratorOutput generatorOutput) {
         boolean modified = false;
         for (Optimization optimization : phase.optimizations) {
+            if (phase == FINAL) {
+                try (OptimizationContext.LogicIterator it = optimizationContext.createIterator()) {
+                    while (it.hasNext()) {
+                        if (it.next() instanceof NoOpInstruction) {
+                            it.remove();
+                        }
+                    }
+                }
+            }
+
             Optimizer optimizer = optimizers.get(optimization);
             if (optimizer != null) {
                 if (optimizer.optimize(phase, pass)) {

@@ -83,12 +83,13 @@ def displayItem(x, y)
     amount = max(AMOUNT, 0)
     color(0,255,0,255)
 
-    for i in 0 ... 5
+    for i in 0 ... 4
         drawDigit(x, y, amount % 10)
         x -= SPACE_X
         amount \= 10
-        if amount == 0 break end
+        if amount == 0 return end
     end
+    drawDigit12(x, y, amount)
 end
 
 def drawDigit(x, y, digit)
@@ -136,5 +137,17 @@ def drawDigit(x, y, digit)
             line(x, y + HALF, x + WIDTH, y + HALF)
             line(x, y + HALF, x, y + HEIGHT)
             line(x, y + HEIGHT, x + WIDTH, y + HEIGHT)
+    end
+end
+
+def drawDigit12(x, y, digit)
+    if digit == 1
+        line(x + WIDTH - 1, y, x + WIDTH - 1, y + HEIGHT)
+    else
+        line(x, y, x + WIDTH, y)
+        line(x, y, x, y + HALF)
+        line(x, y + HALF, x + WIDTH, y + HALF)
+        line(x + WIDTH, y + HALF, x + WIDTH, y + HEIGHT)
+        line(x, y + HEIGHT, x + WIDTH, y + HEIGHT)
     end
 end

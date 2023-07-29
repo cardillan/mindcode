@@ -8,11 +8,11 @@
      2 instructions modified by Data Flow Optimization (2 passes, 12 iterations).
     18 instructions added by Loop Optimization (3 iterations).
      9 loops improved by Loop Optimization.
-     4 instructions eliminated by Jump Straightening (4 iterations).
+     5 instructions eliminated by Jump Straightening (4 iterations).
      6 instructions updated by PropagateJumpTargets.
      3 instructions eliminated by Unreachable Code Elimination.
      8 instructions eliminated by Print Merging.
-   380 instructions after optimizations.
+   379 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 617):
   * Loop Optimization: replicate condition at line 44            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
@@ -1696,158 +1696,168 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    264 sensor SRC_X SRC @x
    265 sensor SRC_Y SRC @y
 
-Modifications by Final phase, Jump Straightening, iteration 1 (-4 instructions):
+Modifications by Final phase, Jump Straightening, iteration 1 (-5 instructions):
  
-   466 print "\n"
-   467 printflush message1
-   468 sensor __tmp185 switch1 @enabled
+    39 label __label10
+    40 label __label13
+    41 sensor __tmp11 @unit @controller
+-    * jump __label16 notEqual __tmp11 @this
+-    * jump __label7 always
++   42 jump __label7 equal __tmp11 @this
+    43 label __label16
+    44 label __label17
+    45 ubind UNIT
+ 
+   465 print "\n"
+   466 printflush message1
+   467 sensor __tmp185 switch1 @enabled
 -    * jump __label119 notEqual __tmp185 0
 -    * jump __label70 always
-+  469 jump __label70 equal __tmp185 0
-   470 label __label119
-   471 label __label120
-   472 sensor __tmp188 SRC @dead
++  468 jump __label70 equal __tmp185 0
+   469 label __label119
+   470 label __label120
+   471 sensor __tmp188 SRC @dead
 -    * jump __label121 equal __tmp188 0
 -    * jump __label70 always
-+  473 jump __label70 notEqual __tmp188 0
-   474 label __label121
-   475 label __label122
-   476 sensor __tmp191 DST @dead
++  472 jump __label70 notEqual __tmp188 0
+   473 label __label121
+   474 label __label122
+   475 sensor __tmp191 DST @dead
 -    * jump __label123 equal __tmp191 0
 -    * jump __label70 always
-+  477 jump __label70 notEqual __tmp191 0
-   478 label __label123
-   479 label __label124
-   480 sensor __tmp194 SORTER @dead
++  476 jump __label70 notEqual __tmp191 0
+   477 label __label123
+   478 label __label124
+   479 sensor __tmp194 SORTER @dead
 -    * jump __label125 equal __tmp194 0
 -    * jump __label70 always
-+  481 jump __label70 notEqual __tmp194 0
-   482 label __label125
-   483 label __label126
-   484 jump __label108 always
++  480 jump __label70 notEqual __tmp194 0
+   481 label __label125
+   482 label __label126
+   483 jump __label108 always
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-    63 jump __label24 always
-    64 label __label23
-    65 sensor __tmp21 @unit @controlled
+    62 jump __label24 always
+    63 label __label23
+    64 sensor __tmp21 @unit @controlled
 -    * jump __label25 equal __tmp21 0
-+   66 jump __label19 equal __tmp21 0
-    67 print "[salmon]Looking for a free "
-    68 print UNIT
-    69 print "..."
++   65 jump __label19 equal __tmp21 0
+    66 print "[salmon]Looking for a free "
+    67 print UNIT
+    68 print "..."
  
-   114 sensor __tmp37 DROP_TARGET @itemCapacity
-   115 op lessThan __tmp38 __tmp37 300
-   116 op land __tmp39 __tmp36 __tmp38
+   113 sensor __tmp37 DROP_TARGET @itemCapacity
+   114 op lessThan __tmp38 __tmp37 300
+   115 op land __tmp39 __tmp36 __tmp38
 -    * jump __label37 equal __tmp39 false
-+  117 jump __label29 equal __tmp39 false
-   118 print "Destination: "
-   119 print CONTAINER
-   120 print "\n"
++  116 jump __label29 equal __tmp39 false
+   117 print "Destination: "
+   118 print CONTAINER
+   119 print "\n"
  
-   232 set LOCAL_MARGIN DROP_LEVEL
-   233 set REMOTE_MARGIN LOAD_LEVEL
-   234 set DIRECTION "[] from vault #"
+   231 set LOCAL_MARGIN DROP_LEVEL
+   232 set REMOTE_MARGIN LOAD_LEVEL
+   233 set DIRECTION "[] from vault #"
 -    * jump __label61 notEqual LINK_ID 0
-+  235 jump __label59 notEqual LINK_ID 0
-   236 set DIRECTION "[] from core"
-   237 label __label61
-   238 jump __label59 always
++  234 jump __label59 notEqual LINK_ID 0
+   235 set DIRECTION "[] from core"
+   236 label __label61
+   237 jump __label59 always
  
-   296 jump __label79 always
-   297 label __label78
-   298 sensor __tmp118 @unit @controlled
+   295 jump __label79 always
+   296 label __label78
+   297 sensor __tmp118 @unit @controlled
 -    * jump __label80 equal __tmp118 0
-+  299 jump __label74 equal __tmp118 0
-   300 print "[salmon]Looking for a free "
-   301 print UNIT
-   302 print "..."
++  298 jump __label74 equal __tmp118 0
+   299 print "[salmon]Looking for a free "
+   300 print UNIT
+   301 print "..."
  
-   362 sensor __tmp143 @unit @totalItems
-   363 jump __label99 lessThan __tmp143 UNIT_CAPACITY
-   364 set state 3
+   361 sensor __tmp143 @unit @totalItems
+   362 jump __label99 lessThan __tmp143 UNIT_CAPACITY
+   363 set state 3
 -    * jump __label100 always
-+  365 jump __label98 always
-   366 label __label99
-   367 set MSG "\nLoading items: [green]"
-   368 label __label100
++  364 jump __label98 always
+   365 label __label99
+   366 set MSG "\nLoading items: [green]"
+   367 label __label100
  
-   385 jump __label105 greaterThan __tmp153 0
-   386 set state 2
-   387 ucontrol approach SRC_X SRC_Y 6
+   384 jump __label105 greaterThan __tmp153 0
+   385 set state 2
+   386 ucontrol approach SRC_X SRC_Y 6
 -    * jump __label106 always
-+  388 jump __label104 always
-   389 label __label105
-   390 set MSG "\nDropping items: [green]"
-   391 label __label106
++  387 jump __label104 always
+   388 label __label105
+   389 set MSG "\nDropping items: [green]"
+   390 label __label106
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-3 instructions):
  
-    68 print UNIT
-    69 print "..."
-    70 jump __label26 always
+    67 print UNIT
+    68 print "..."
+    69 jump __label26 always
 -    * label __label25
 -    * jump __label19 always
-    71 label __label26
-    72 label __label24
-    73 printflush message1
-    74 label __label21
-    75 jump __label20 always
--    * label __label22
-    76 label __label19
-    77 label __label7
-    78 label __label4
- 
-   120 print "\n"
-   121 print "[salmon]Item dump must be a container or a vault!"
-   122 jump __label38 always
--    * label __label37
--    * jump __label29 always
-   123 label __label38
-   124 label __label36
-   125 printflush message1
- 
-   296 print UNIT
-   297 print "..."
-   298 jump __label81 always
--    * label __label80
--    * jump __label74 always
-   299 label __label81
-   300 label __label79
-   301 printflush message1
-   302 label __label76
-   303 jump __label75 always
--    * label __label77
-   304 label __label74
-   305 ucontrol flag 1
-   306 set state 1
-
-Modifications by Final phase, Single Step Elimination, iteration 1 (-3 instructions):
- 
-    67 print "[salmon]Looking for a free "
-    68 print UNIT
-    69 print "..."
--    * jump __label26 always
     70 label __label26
     71 label __label24
     72 printflush message1
+    73 label __label21
+    74 jump __label20 always
+-    * label __label22
+    75 label __label19
+    76 label __label7
+    77 label __label4
  
-   118 print DROP_TARGET
    119 print "\n"
    120 print "[salmon]Item dump must be a container or a vault!"
--    * jump __label38 always
-   121 label __label38
-   122 label __label36
-   123 printflush message1
+   121 jump __label38 always
+-    * label __label37
+-    * jump __label29 always
+   122 label __label38
+   123 label __label36
+   124 printflush message1
  
-   293 print "[salmon]Looking for a free "
-   294 print UNIT
-   295 print "..."
+   295 print UNIT
+   296 print "..."
+   297 jump __label81 always
+-    * label __label80
+-    * jump __label74 always
+   298 label __label81
+   299 label __label79
+   300 printflush message1
+   301 label __label76
+   302 jump __label75 always
+-    * label __label77
+   303 label __label74
+   304 ucontrol flag 1
+   305 set state 1
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-3 instructions):
+ 
+    66 print "[salmon]Looking for a free "
+    67 print UNIT
+    68 print "..."
+-    * jump __label26 always
+    69 label __label26
+    70 label __label24
+    71 printflush message1
+ 
+   117 print DROP_TARGET
+   118 print "\n"
+   119 print "[salmon]Item dump must be a container or a vault!"
+-    * jump __label38 always
+   120 label __label38
+   121 label __label36
+   122 printflush message1
+ 
+   292 print "[salmon]Looking for a free "
+   293 print UNIT
+   294 print "..."
 -    * jump __label81 always
-   296 label __label81
-   297 label __label79
-   298 printflush message1
+   295 label __label81
+   296 label __label79
+   297 printflush message1
 
 Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
@@ -1864,66 +1874,66 @@ Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
     13 label __label1
     14 sensor __tmp2 switch1 @enabled
  
-   100 jump __label135 greaterThan n 0
-   101 label __label32
-   102 jump __label35 notEqual CONTAINER null
+    99 jump __label135 greaterThan n 0
+   100 label __label32
+   101 jump __label35 notEqual CONTAINER null
 -    * print "[salmon]No destination."
 -    * print "\n"
-+  103 print "[salmon]No destination.\n"
-   104 jump __label36 always
-   105 label __label35
-   106 op notEqual __tmp36 DROP_TARGET null
++  102 print "[salmon]No destination.\n"
+   103 jump __label36 always
+   104 label __label35
+   105 op notEqual __tmp36 DROP_TARGET null
  
-   110 jump __label29 equal __tmp39 false
-   111 print "Destination: "
-   112 print CONTAINER
+   109 jump __label29 equal __tmp39 false
+   110 print "Destination: "
+   111 print CONTAINER
 -    * print "\n"
 -    * print "Item dump: "
-+  113 print "\nItem dump: "
-   114 print DROP_TARGET
-   115 print "\n"
-   116 print "[salmon]Item dump must be a container or a vault!"
++  112 print "\nItem dump: "
+   113 print DROP_TARGET
+   114 print "\n"
+   115 print "[salmon]Item dump must be a container or a vault!"
  
-   388 print ITEM
-   389 print DIRECTION
-   390 print LINK_TXT
+   387 print ITEM
+   388 print DIRECTION
+   389 print LINK_TXT
 -    * print "\n"
-   391 sensor __tmp158 CONTAINER ITEM
+   390 sensor __tmp158 CONTAINER ITEM
 -    * print "Local items: [gold]"
-+  392 print "\nLocal items: [gold]"
-   393 print __tmp158
-   394 print "[]"
-   395 jump __label109 greaterThanEq LOCAL_LIMIT 100
++  391 print "\nLocal items: [gold]"
+   392 print __tmp158
+   393 print "[]"
+   394 jump __label109 greaterThanEq LOCAL_LIMIT 100
  
-   414 sensor __tmp165 @unit @totalItems
-   415 print MSG
-   416 print __tmp165
+   413 sensor __tmp165 @unit @totalItems
+   414 print MSG
+   415 print __tmp165
 -    * print "[]"
 -    * print "\n"
-+  417 print "[]\n"
-   418 jump __label115 notEqual show_state 2
-   419 sensor __tmp168 @unit @x
-   420 op sub __tmp169 SRC_X __tmp168
++  416 print "[]\n"
+   417 jump __label115 notEqual show_state 2
+   418 sensor __tmp168 @unit @x
+   419 op sub __tmp169 SRC_X __tmp168
  
-   445 op floor __tmp184 loop_time
-   446 print "[lightgray]Loop time: "
-   447 print __tmp184
+   444 op floor __tmp184 loop_time
+   445 print "[lightgray]Loop time: "
+   446 print __tmp184
 -    * print " ms[]"
 -    * print "\n"
-+  448 print " ms[]\n"
-   449 printflush message1
-   450 sensor __tmp185 switch1 @enabled
-   451 jump __label70 equal __tmp185 0
++  447 print " ms[]\n"
+   448 printflush message1
+   449 sensor __tmp185 switch1 @enabled
+   450 jump __label70 equal __tmp185 0
  
-   476 op strictEqual __tmp200 __tmp199 0
-   477 jump __label129 notEqual __tmp200 false
-   478 label __label140
+   475 op strictEqual __tmp200 __tmp199 0
+   476 jump __label129 notEqual __tmp200 false
+   477 label __label140
 -    * print "[salmon]sorter1 is missing!"
 -    * print "\n"
-+  479 print "[salmon]sorter1 is missing!\n"
-   480 print "[gold]Please place and link sorter or inverted sorter to the processor."
-   481 print "\n"
-   482 printflush message1
++  478 print "[salmon]sorter1 is missing!\n"
+   479 print "[gold]Please place and link sorter or inverted sorter to the processor."
+   480 print "\n"
+   481 printflush message1
 
 Final code before resolving virtual instructions:
 
@@ -1961,9 +1971,7 @@ jump __label8 always 0 0
 label __label10
 label __label13
 sensor __tmp11 @unit @controller
-jump __label16 notEqual __tmp11 @this
-jump __label7 always 0 0
-label __label16
+jump __label7 equal __tmp11 @this
 ubind UNIT
 print "[gold]Looking for old unit..."
 printflush message1

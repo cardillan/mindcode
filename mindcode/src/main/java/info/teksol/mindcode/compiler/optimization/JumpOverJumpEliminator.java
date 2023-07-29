@@ -38,7 +38,6 @@ public class JumpOverJumpEliminator extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
-
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump

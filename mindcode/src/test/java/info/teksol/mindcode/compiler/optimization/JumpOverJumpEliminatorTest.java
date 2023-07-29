@@ -52,6 +52,27 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
     }
 
     @Test
+    void optimizesFunctionReturn() {
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setAllOptimizationLevels(AGGRESSIVE)),
+                """
+                        displayItem()
+                        
+                        def displayItem()
+                            amount = vault1.coal
+                            if amount == 0 return end
+                            print(amount % 10)
+                        end
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SENSOR, "__fn0_amount", "vault1", "@coal"),
+                createInstruction(JUMP, "__start__", "equal", "__fn0_amount", "0"),
+                createInstruction(OP, "mod", var(4), "__fn0_amount", "10"),
+                createInstruction(PRINT, var(4)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void optimizesMinimalSequence() {
         assertOptimizesTo(
                 List.of(

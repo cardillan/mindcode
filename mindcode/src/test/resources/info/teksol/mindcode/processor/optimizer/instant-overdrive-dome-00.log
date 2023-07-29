@@ -8,11 +8,11 @@
     26 instructions eliminated by Data Flow Optimization (7 iterations).
      2 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-     1 instructions eliminated by Jump Straightening (4 iterations).
+     2 instructions eliminated by Jump Straightening (4 iterations).
      8 instructions updated by PropagateJumpTargets.
      4 instructions eliminated by Unreachable Code Elimination.
      1 instructions eliminated by Print Merging.
-   634 instructions after optimizations.
+   633 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 358):
   * Loop Optimization: replicate condition at line 38            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
@@ -2793,174 +2793,184 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    863 set UNIT_P2 __tmp285
    864 jump __label240 equal SUPPLY_P_FIRST false
 
-Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
+Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
  
-    50 set UNIT_P2 UNIT_S1
-    51 set UNIT_S1 UNIT_P1
-    52 set UNIT_P1 @unit
+    29 set __fn0_count 0
+    30 label __label8
+    31 ubind UNIT
+-    * jump __label11 equal @unit null
+-    * jump __label10 always
++   32 jump __label10 notEqual @unit null
+    33 label __label11
+    34 label __label12
+    35 print "[salmon]No unit of type "
+ 
+    49 set UNIT_P2 UNIT_S1
+    50 set UNIT_S1 UNIT_P1
+    51 set UNIT_P1 @unit
 -    * jump __label18 equal UNIT_S2 null
 -    * jump __label15 always
-+   53 jump __label15 notEqual UNIT_S2 null
-    54 label __label18
-    55 label __label19
-    56 label __label16
++   52 jump __label15 notEqual UNIT_S2 null
+    53 label __label18
+    54 label __label19
+    55 label __label16
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-   351 jump __label107 lessThan __tmp132 UNIT_CAPACITY
-   352 ucontrol approach DOME_X DOME_Y 6
-   353 set __fn6_state 3
+   350 jump __label107 lessThan __tmp132 UNIT_CAPACITY
+   351 ucontrol approach DOME_X DOME_Y 6
+   352 set __fn6_state 3
 -    * jump __label108 always
-+  354 jump __label106 always
-   355 label __label107
-   356 set MSG ", loading\n"
-   357 label __label108
++  353 jump __label106 always
+   354 label __label107
+   355 set MSG ", loading\n"
+   356 label __label108
  
-   382 set MSG ", waiting\n"
-   383 label __label114
-   384 sensor __tmp147 @unit @totalItems
+   381 set MSG ", waiting\n"
+   382 label __label114
+   383 sensor __tmp147 @unit @totalItems
 -    * jump __label115 greaterThan __tmp147 0
-+  385 jump __label112 greaterThan __tmp147 0
-   386 ucontrol approach CORE_X CORE_Y 6
-   387 set __fn6_state 2
-   388 label __label115
++  384 jump __label112 greaterThan __tmp147 0
+   385 ucontrol approach CORE_X CORE_Y 6
+   386 set __fn6_state 2
+   387 label __label115
  
-   490 jump __label146 lessThan __tmp190 UNIT_CAPACITY
-   491 ucontrol approach DOME_X DOME_Y 6
-   492 set __fn8_state 3
+   489 jump __label146 lessThan __tmp190 UNIT_CAPACITY
+   490 ucontrol approach DOME_X DOME_Y 6
+   491 set __fn8_state 3
 -    * jump __label147 always
-+  493 jump __label145 always
-   494 label __label146
-   495 set MSG ", loading\n"
-   496 label __label147
++  492 jump __label145 always
+   493 label __label146
+   494 set MSG ", loading\n"
+   495 label __label147
  
-   521 set MSG ", waiting\n"
-   522 label __label153
-   523 sensor __tmp205 @unit @totalItems
+   520 set MSG ", waiting\n"
+   521 label __label153
+   522 sensor __tmp205 @unit @totalItems
 -    * jump __label154 greaterThan __tmp205 0
-+  524 jump __label151 greaterThan __tmp205 0
-   525 ucontrol approach CORE_X CORE_Y 6
-   526 set __fn8_state 2
-   527 label __label154
++  523 jump __label151 greaterThan __tmp205 0
+   524 ucontrol approach CORE_X CORE_Y 6
+   525 set __fn8_state 2
+   526 label __label154
  
-   651 jump __label189 lessThan __tmp255 UNIT_CAPACITY
-   652 ucontrol approach DOME_X DOME_Y 6
-   653 set __fn11_state 3
+   650 jump __label189 lessThan __tmp255 UNIT_CAPACITY
+   651 ucontrol approach DOME_X DOME_Y 6
+   652 set __fn11_state 3
 -    * jump __label190 always
-+  654 jump __label188 always
-   655 label __label189
-   656 set MSG ", loading\n"
-   657 label __label190
++  653 jump __label188 always
+   654 label __label189
+   655 set MSG ", loading\n"
+   656 label __label190
  
-   682 set MSG ", waiting\n"
-   683 label __label196
-   684 sensor __tmp270 @unit @totalItems
+   681 set MSG ", waiting\n"
+   682 label __label196
+   683 sensor __tmp270 @unit @totalItems
 -    * jump __label197 greaterThan __tmp270 0
-+  685 jump __label194 greaterThan __tmp270 0
-   686 ucontrol approach CORE_X CORE_Y 6
-   687 set __fn11_state 2
-   688 label __label197
++  684 jump __label194 greaterThan __tmp270 0
+   685 ucontrol approach CORE_X CORE_Y 6
+   686 set __fn11_state 2
+   687 label __label197
  
-   790 jump __label228 lessThan __tmp313 UNIT_CAPACITY
-   791 ucontrol approach DOME_X DOME_Y 6
-   792 set __fn13_state 3
+   789 jump __label228 lessThan __tmp313 UNIT_CAPACITY
+   790 ucontrol approach DOME_X DOME_Y 6
+   791 set __fn13_state 3
 -    * jump __label229 always
-+  793 jump __label227 always
-   794 label __label228
-   795 set MSG ", loading\n"
-   796 label __label229
++  792 jump __label227 always
+   793 label __label228
+   794 set MSG ", loading\n"
+   795 label __label229
  
-   821 set MSG ", waiting\n"
-   822 label __label235
-   823 sensor __tmp328 @unit @totalItems
+   820 set MSG ", waiting\n"
+   821 label __label235
+   822 sensor __tmp328 @unit @totalItems
 -    * jump __label236 greaterThan __tmp328 0
-+  824 jump __label233 greaterThan __tmp328 0
-   825 ucontrol approach CORE_X CORE_Y 6
-   826 set __fn13_state 2
-   827 label __label236
++  823 jump __label233 greaterThan __tmp328 0
+   824 ucontrol approach CORE_X CORE_Y 6
+   825 set __fn13_state 2
+   826 label __label236
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 instructions):
  
-    89 printflush message1
-    90 label __label25
-    91 jump __label24 always
+    88 printflush message1
+    89 label __label25
+    90 jump __label24 always
 -    * label __label26
 -    * set __tmp21 null
-    92 label __label23
-    93 set UNIT_S1 __tmp21
-    94 label __label20
+    91 label __label23
+    92 set UNIT_S1 __tmp21
+    93 label __label20
  
-   118 printflush message1
-   119 label __label36
-   120 jump __label35 always
+   117 printflush message1
+   118 label __label36
+   119 jump __label35 always
 -    * label __label37
 -    * set __tmp29 null
-   121 label __label34
-   122 set UNIT_P1 __tmp29
-   123 label __label31
+   120 label __label34
+   121 set UNIT_P1 __tmp29
+   122 label __label31
  
-   179 printflush message1
-   180 label __label54
-   181 jump __label53 always
+   178 printflush message1
+   179 label __label54
+   180 jump __label53 always
 -    * label __label55
 -    * set __tmp62 null
-   182 label __label52
-   183 set UNIT_S2 __tmp62
-   184 label __label49
+   181 label __label52
+   182 set UNIT_S2 __tmp62
+   183 label __label49
  
-   208 printflush message1
-   209 label __label65
-   210 jump __label64 always
+   207 printflush message1
+   208 label __label65
+   209 jump __label64 always
 -    * label __label66
 -    * set __tmp70 null
-   211 label __label63
-   212 set UNIT_P2 __tmp70
-   213 label __label60
+   210 label __label63
+   211 set UNIT_P2 __tmp70
+   212 label __label60
  
-   306 printflush message1
-   307 label __label89
-   308 jump __label88 always
+   305 printflush message1
+   306 label __label89
+   307 jump __label88 always
 -    * label __label90
-   309 label __label87
-   310 label __label84
-   311 label __label85
+   308 label __label87
+   309 label __label84
+   310 label __label85
  
-   444 printflush message1
-   445 label __label128
-   446 jump __label127 always
+   443 printflush message1
+   444 label __label128
+   445 jump __label127 always
 -    * label __label129
-   447 label __label126
-   448 label __label123
-   449 label __label124
+   446 label __label126
+   447 label __label123
+   448 label __label124
  
-   604 printflush message1
-   605 label __label171
-   606 jump __label170 always
+   603 printflush message1
+   604 label __label171
+   605 jump __label170 always
 -    * label __label172
-   607 label __label169
-   608 label __label166
-   609 label __label167
+   606 label __label169
+   607 label __label166
+   608 label __label167
  
-   742 printflush message1
-   743 label __label210
-   744 jump __label209 always
+   741 printflush message1
+   742 label __label210
+   743 jump __label209 always
 -    * label __label211
-   745 label __label208
-   746 label __label205
-   747 label __label206
+   744 label __label208
+   745 label __label205
+   746 label __label206
 
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
-   261 label __label244
-   262 set start @time
-   263 print " === [gold]Supplying Overdrive Dome[] === "
+   260 label __label244
+   261 set start @time
+   262 print " === [gold]Supplying Overdrive Dome[] === "
 -    * print "\n"
-   264 label __label78
+   263 label __label78
 -    * print "\n[green]Silicon[] status:\n"
-+  265 print "\n\n[green]Silicon[] status:\n"
-   266 sensor __fn5_level DOME @silicon
-   267 jump __label80 lessThanEq __fn5_level 3
-   268 print "  dome:  [green]"
++  264 print "\n\n[green]Silicon[] status:\n"
+   265 sensor __fn5_level DOME @silicon
+   266 jump __label80 lessThanEq __fn5_level 3
+   267 print "  dome:  [green]"
 
 Final code before resolving virtual instructions:
 
@@ -2991,9 +3001,7 @@ set UNIT_S1 UNIT_P1
 set __fn0_count 0
 label __label8
 ubind UNIT
-jump __label11 equal @unit null
-jump __label10 always 0 0
-label __label11
+jump __label10 notEqual @unit null
 print "[salmon]No unit of type "
 print UNIT
 print " found. 1"

@@ -89,7 +89,7 @@ public class JumpInstruction extends BaseInstruction {
 
     private void ensureConditional() {
         if (isUnconditional()) {
-            throw new IllegalArgumentException("Conditional instruction required, got " + this);
+            throw new IllegalArgumentException("Conditional jump required, got " + this);
         }
     }
 }

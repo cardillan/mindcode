@@ -137,10 +137,7 @@ and availability of the aggressive optimization level is:
 | [Print Merging](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging)                                     | print-merging                |     Y      |
 
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers,
-deactivating it might allow you to use Mindcode until a fix is available. Partially activated optimizations
-aren't routinely tested, so by deactivating one you might even discover some new bugs. On the other hand, full
-optimization suite is tested by running compiled code on an emulated Mindustry processor, so bugs will hopefully
-be rare. 
+deactivating it might allow you to use Mindcode until a fix is available.
 
 In particular, some optimizers expect to work on code that was already processed by different optimizations,
 so turning off some optimizations might render other optimizations ineffective. **This is not a bug.**  

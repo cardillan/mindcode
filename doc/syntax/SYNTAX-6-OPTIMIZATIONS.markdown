@@ -1,9 +1,9 @@
 # Code optimization
 
 Code optimization runs on compiled (ML) code. The compiled code is inspected for sequences of instructions
-which can be removed or replaced by equivalent, but superior sequence of instructions. The new sequence might be 
-smaller than the original one, or even larger than the original one, if it is executing faster
-(see the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal)).  
+which can be removed or replaced by functionally equivalent, but shorter and/or faster sequence of instructions. The 
+new sequence might even be longer than the original one, if it is executing faster (see the
+[`goal` option](SYNTAX-5-OTHER.markdown#option-goal)).
 
 The information on compiler optimizations is a bit technical. It might be useful if you're trying to better 
 understand how Mindcode generates the ML code.
@@ -50,7 +50,7 @@ This optimization inspects the entire code and removes all instructions that wri
 if none of the variables written to are actually read anywhere in the code.
 
 This optimization support `basic` and `aggressive` levels of optimization. On the `aggressive` level,
-the optimization removes all dead assignment, even assignments to unused global and main variables.
+the optimization removes all dead assignments, even assignments to unused global and main variables.
 
 Dead Code Elimination also inspects your code and prints out suspicious variables:
 * _Unused variables_: those are the variables that were, or could be, eliminated. On `basic` level,
@@ -58,7 +58,7 @@ Dead Code Elimination also inspects your code and prints out suspicious variable
 * _Uninitialized variables_: those are global variables that are read by the program, but never written to.
   (The [Data Flow Optimization](#data-flow-optimization) detects uninitialized local and function variables.)
 
-Both cases deserve closer inspection, as they might be a result of a typo in a variable name.
+Both cases deserve a closer inspection, as they might be a result of a typo in a variable name.
 
 ## Jump Normalization
 
@@ -67,7 +67,7 @@ This optimization handles conditional jumps whose condition can be fully evaluat
 * always false conditional jumps are removed,
 * always true conditional jumps are converted to unconditional ones.
 
-A condition can be fully evaluated constant if both of its operands are literals, or if they're variables whose values 
+A condition can be fully evaluated if both of its operands are literals, or if they're variables whose values 
 were determined to be constant by the [Data Flow Optimization](#data-flow-optimization). 
 
 The first case reduces the code size and speeds up execution. The second one in itself improves neither size nor speed,
@@ -733,7 +733,7 @@ instructions in a Mindustry Logic program, loops with large number of iterations
 [speed optimization](#optimization-for-speed) for an explanation of how Mindcode decides whether to unroll a loop.
 
 Apart from removing the superfluous instructions, loop unrolling also replaces variables with constant values. This 
-can make further optimizations opportunities possible, especially for a Data Flow Optimizer and possibly for others. 
+can make further optimizations opportunities arise, especially for a Data Flow Optimizer and possibly for others. 
 A not particularly practical, but nonetheless striking example is this program which computes the sum of numbers from 
 0 to 100:
 
@@ -776,7 +776,7 @@ For other loops, unrolling can generally be performed when Mindcode can determin
 number of iterations and can infer other properties of the loop, such as a variable that controls the loop 
 iterations. A loop should be eligible for the unrolling when the following conditions are met:
 
-* The loop is controlled by a single, non-global variable: the loop condition must consist of a variable which is 
+* The loop is controlled by a single, local or main variable: the loop condition must consist of a variable which is 
   modified inside a loop, and a constant or an effectively constant variable. Loops based on global variables cannot 
   be unrolled. 
 * The loop control variable is modified inside the loop only by `op` instructions which have the loop control variable 
@@ -784,7 +784,6 @@ iterations. A loop should be eligible for the unrolling when the following condi
   must be deterministic. Any other instruction that sets the value of loop control variable precludes loop unrolling.
 * All modifications of the loop control variable happen directly in the loop body: the variable must not be modified 
   in a nested loop or in an if statement, for example.
-* The loop control variable isn't a global variable.
 * The loop has a nonzero number of iterations. The upper limit of the number of iterations depends on available 
   instruction space, but generally can never exceed 1000 iterations.
 
@@ -880,7 +879,7 @@ end
 Examples of loops that **cannot** be unrolled:
 
 ```
-// LIMIT is a global variable and as such the vslue assigned to it isn't considered constant
+// LIMIT is a global variable and as such the value assigned to it isn't considered constant
 // (see Data Flow Optimization)
 LIMIT = 10
 for i in 0 ... LIMIT
@@ -1000,17 +999,17 @@ Case Switching is a [speed optimization](#optimization-for-speed), and as such i
 
 Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry 
 condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, 
-and eventually to the `else` branch or end of the expression. This means the case expression evaluates, on average, 
-half of all existing conditions, assuming even distribution of the input values of the case expression. (Note: if 
+and eventually to the `else` branch or end of the expression. This means the case expression evaluates - on average - 
+half of all existing conditions, assuming even distribution of the input values of the case expression. (If 
 some input values of the case expressions are more frequent, it is possible to achieve better average execution 
 times by placing those values first.)
 
 The Case Switching optimization improves case expressions which branch on integer values of the expression.
 
 > [!WARNING]
-> It is assumed that a case statement branching exclusively on integer values expects integer value on input as well.
-> If the input value of the case expression may take on non-integer values, this optimization will produce wrong 
-> code. At this moment Mindcode isn't able to recognize such a situation; if this is the case, you need to disable 
+> It is assumed that a case statement branching exclusively on integer values always get integer value on input as 
+> well. If the input value of the case expression may take on non-integer values, this optimization will produce wrong 
+> code. At this moment Mindcode isn't able to recognize such situation; if this is the case, you need to disable 
 > the Case Switching optimization manually.
 
 The sequence of conditional jumps in such statements is replaced by a _jump table_. A jump table facilitates 
@@ -1039,9 +1038,9 @@ the `else` branch just jumps to the end of the case expression). Values inside t
 `when` branch, or, if the value doesn't correspond to any of the `when` branches, to the `else` branch. 
 
 The first two instructions in the example above (`op min`, `op max`) serve to limit the possible range of the input 
-values to the range of the jump table. The range is expanded by one on both ends, to catch values outside the 
-original range and redirect them to the `else` branch. The `op add @counter` instruction then transfers the 
-control to the corresponding specific jump in the jump table and consequently to the proper `when` branch.
+values to the range supported by the jump table. The jump table range is expanded by one on both ends, to catch values 
+outside the original range and redirect them to the `else` branch. The `op add @counter` instruction then transfers 
+the control to the corresponding specific jump in the jump table and consequently to the proper `when` branch.
 
 The jump table executes four instructions on each case expression execution. We've mentioned above that the original 
 case statement executes half of the conditional jumps on average. This means that converting the case expression to 
@@ -1051,14 +1050,14 @@ Notes:
 
 * If you put the more frequent values first in the case expression, and the value distribution is very skewed, 
   converting the case expression to the jump table might actually worsen the average execution time. Mindcode has 
-  no way to figure this on its own, if this is the case, you might need to disable the Case Switching optimization 
-  for your program.
-* When the input value of the case expression can be determined (by Mindcode) to already lie in a specific range, 
-  it might be possible to avoid the `op min` and/or `op max` instructions at the beginning of the jump table, as 
+  no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching 
+  optimization for your program.
+* If the input value of the case expression could be determined by Mindcode to already lie in a specific range, 
+  it would be possible to avoid the `op min` and/or `op max` instructions at the beginning of the jump table, as 
   their function is to ensure the value lies in a proper range. This would provide a potentially significant 
   additional speedup and is planned for some future version.  
 * Currently, there's no limit on the size of the jump table. For a case expression handling values 1 to 10 and 
-  then a value of 100, the jump table would have 100 entries (actually 102 doe to the out-of-bounds handlers). This 
+  then a value of 100, the jump table would have 100 entries (actually 102 due to the range expansion). This 
   affects computation of the optimization's benefit, and might make the optimization less favorable compared to 
   other optimizations; however if available space permits it, such a jump table would be created.   
   

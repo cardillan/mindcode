@@ -7,36 +7,41 @@ various kinds of `print()` function) one or more times to construct the resultin
 Each `print` instruction adds its argument, converted to string if necessary, to the end of the text buffer.
 Every `printflush` instruction, even unsuccessful, clears the text buffer.
 
-When a text is being printed into a message by using the `printflush` instruction, the entire string from the text buffer
-is displayed in the message block. At this moment, the string is inspected for special character sequences that can
-alter the appearance of the text in the message block. Two kinds of formatting are supported:
+When a text is being printed into a message by using the `printflush` instruction, the entire string from the text 
+buffer is displayed in the message block. At this moment, the string is inspected for special character sequences 
+that can alter the appearance of the text in the message block. Two kinds of formatting are supported:
+
 * Line breaks
 * Setting text color
 
 ### Line breaks
 
-When the `\n` sequence of characters is found in the string being printed, the `\n` sequence is replaced by a line break.
-For example:
+When the `\n` sequence of characters is found in the string being printed, the `\n` sequence is replaced by a line 
+break. For example:
 
 ```
 print("One\nTwo")
 printflush(message1)
 ```
+
 produces the following output:
+
 ```
 One
 Two
 ```
 
-Note that the backslash character is only recognized as part of the `\n` sequence, it is not otherwise specially handled.
-Specifically, it is not possible to encode it as `\\`, unlike many other programming languages. Therefore, the following
-code snippet
+Note that the backslash character is only recognized as part of the `\n` sequence, it is not otherwise specially 
+handled. Specifically, it is not possible to encode it as `\\`, unlike many other programming languages. Therefore, 
+the following code snippet
 
 ```
 print("One\\Two\\nThree")
 printflush(message1)
 ```
+
 produces the following output:
+
 ```
 One\\Two\
 Three
@@ -48,7 +53,9 @@ If you really want to output `\n` in the message block for whatever reason, you 
 print("One\[red][]nTwo")
 printflush(message1)
 ```
+
 which finally produces
+
 ```
 One\nTwo
 ```
@@ -132,7 +139,8 @@ The color is [red]
 The state is [alarm]
 ```
 
-In the second case, the doubling of square bracket is not strictly necessary, because `alarm` isn't recognized as a color name.
+In the second case, the doubling of square bracket is not strictly necessary, because `alarm` isn't recognized as a 
+color name.
 
 ### Displaying icons 
 
@@ -152,7 +160,7 @@ icons into string constant see [String expressions](SYNTAX-2-EXPRESSIONS.markdow
 
 ## Printing values
 
-When printing numbers, Mindustry always prints the full representation of a number. It might be sometimes cumbersome,
+When printing numbers, Mindustry prints the full representation of a number. It might be sometimes cumbersome,
 as fractions can produce a lot of digits. To avoid this, use the `floor` or `ceil` function:
 
 ```
@@ -163,9 +171,9 @@ println("Elapsed: ", floor(duration), " ms")
 ```
 
 When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead.
-The same formatting is used to display value of a variable in the Vars dialog in Mindustry UI. There isn't a way to output
-such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't necessarily have 
-a zero value.
+The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI. There isn't a way 
+to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't 
+necessarily have a zero value.
 
 ## Using units
 
@@ -179,8 +187,8 @@ create a truly robust solution.
 ### Binding units
 
 Unit needs to be bound to the processor to be controlled through it, using the `ubind` instruction (and a 
-corresponding `ubind()` function). Only one unit can be bound at a time.
-All [commands controlling the unit](FUNCTIONS_V7.markdown#instruction-ucontrol) are then sent to the bound unit.
+corresponding `ubind()` function). Only one unit can be bound at a time. All [commands controlling the
+unit](FUNCTIONS_V7A.markdown#instruction-ucontrol) are then sent to the bound unit.
 
 You need to specify a unit type when binding a unit (e.g. `ubind(@poly)`). If there is at least one unit of the 
 requested type, it is bound to your processor, and it is stored in a built-in variable named `@unit`. (The `ubind()` 
@@ -204,7 +212,6 @@ else
 end
 
 printf("There are $count active poly(s).")
-
 printflush(message1)
 ```
 
@@ -220,7 +227,7 @@ that unit again. For example:
 poly = ubind(@poly)     // We just assume the units exist
 mega = ubind(@mega)
 
-COUNT = 0
+ANGLE = 0
 while true
     controlUnit(poly)
     controlUnit(mega)
@@ -228,11 +235,11 @@ end
 
 def controlUnit(my_unit)
     ubind(my_unit)
-    move(@this.x + 10 * sin(COUNT), @this.y + 10 * cos(COUNT))  // Do *something* with the unit
+    move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE))  // Do *something* with the unit
     printf("Currently bound unit is ${@unit}.")
     printflush(message1)
     wait(0.8)
-    COUNT += 45
+    ANGLE += 45
 end
 ```
 
@@ -245,7 +252,7 @@ processors know to avoid them. Typical code might look like this:
 ```
 def findFreeUnit(unit_type, mark_flag)
     do
-        ubind(type)
+        ubind(unit_type)
     loop while @unit.flag !== 0      
 
     // If no unit was found, @unit would be null and so would be @unit.flag. 
@@ -267,9 +274,9 @@ There are two downsides to this arrangement:
 * If a processor for some reason stops controlling the unit without clearing its flag, all other processors will 
   consider that unit used and won't reuse it, potentially leading to shortage of available units.
 * The flag actually allows you to store various information about unit state, for example which particular task was 
-  assigned to it. It is possible to encode the flag and the state into one numerical value, although it requires 
+  it assigned to. It is possible to encode the flag and the state into one numerical value, although it requires 
   more computations and makes the code at least a bit slower.
-
+  
 ### Unit controllers
 
 The alternative to using flags is querying the unit to see whether it is free or actively controlled. When a unit is 
@@ -280,17 +287,17 @@ are assigned to each of these possibilities).
 A wee bit enhanced `findFreeUnit()` function using the `controlled` property might look like this:
 
 ```
-def findFreeUnit(my_unit, initial_flag)
+def findFreeUnit(unit_type, initial_flag)
     // Keep looking for unit until one is found
     while true
-        ubind(my_unit)
+        ubind(unit_type)
         if @unit == null
-            printf("No unit of type $my_unit found.")
+            printf("No unit of type $unit_type found.")
         elsif @unit.controlled != 0
-            printf("Looking for a free $my_unit...")
+            printf("Looking for a free $unit_type...")
         else
             flag(initial_flag)		// Mark unit as active
-            return
+            return @unit
         end
         printflush(message1)
     end
@@ -455,4 +462,4 @@ end
 
 ---
 
-[« Previous: Schematics Refresher](TOOLS-REFRESHER.markdown)
+[« Previous: Dealing with syntax errors](SYNTAX-ERRORS.markdown)

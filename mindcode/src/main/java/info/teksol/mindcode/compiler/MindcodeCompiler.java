@@ -1,7 +1,6 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.MindcodeException;
-import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.AstIndentedPrinter;
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
@@ -84,8 +83,7 @@ public class MindcodeCompiler implements Compiler<String> {
             }
             switch (e) {
                 case MindcodeException ex -> messages.add(MindcodeMessage.error("Error while compiling source code: " + e.getMessage()));
-                case MindcodeInternalError ex -> messages.add(MindcodeMessage.error("Internal error: " + e.getMessage()));
-                default -> messages.add(MindcodeMessage.error("Error while compiling source code."));
+                default -> messages.add(MindcodeMessage.error("Internal error: " + e.getMessage()));
             }
         }
 

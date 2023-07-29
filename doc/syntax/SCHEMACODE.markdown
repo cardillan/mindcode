@@ -586,7 +586,8 @@ The following block types can be connected to at most one block:
 * `@phase-conduit`
 * `@phase-conveyor`
 
-The following block types can be connected to several blocks (the exact amount depends on the block type):
+The following block types can be connected to several blocks (number of available connections depends on the block 
+type):
 
 * `@power-node`
 * `@power-node-large`
@@ -905,14 +906,14 @@ mindcode = <code>
 At most one of `mlog` or `mindcode` can be specified. If neither of these options is specified, the processor created 
 will not contain any instructions.
 
-The `<code>` can be specified in one of those ways:
+The `<code>` can be specified in one of these ways:
 
-* As a string literal,
-* As a text block,
-* As a string value identifier,
-* As a reference to an external file.
+* as a string literal,
+* as a text block,
+* as a string value identifier,
+* as a reference to an external file.
 
-A string literal is probably not very useful, but it could look like this:
+A string literal is only useful for very small snippets of code:
 
 ```
 schematic
@@ -981,13 +982,13 @@ read from standard input, it is evaluated from the current directory.
 
 > [!NOTE]
 > Only command line tool allows you to use code from an external file. The web application cannot access your local 
-> files, and the `file` option is therefore disabled there.   
+> files by specified path, and the `file` option is therefore disabled there.   
 
 # Origin and dimensions calculation
 
 Schematics Builder automatically calculates schematic boundaries. If the lower-left corner of the compiled schematic
 isn't positioned at (0, 0), all block and connection positions of the schematic are shifted to compensate for the 
-non-zero origin. Note that the position (0, 0) can be still left empty:
+non-zero origin. Note that the adjusted position (0, 0) can be still left empty:
 
 ```
 schematic

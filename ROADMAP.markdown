@@ -13,6 +13,14 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Small or internal improvements
 
+* Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion
+* Handling syntax errors - web & command line apps:
+  * Display message and link to the discussion, prompt users to ask for help if stuck
+* Handling internal errors:
+  * Web app:
+    * Store the source file in a separate table for errors  
+    * Display message "The error has been logged and will be investigated."
+  * Command line app: display message "An internal error occurred. Please report the error at ..."
 * Fix incorrect headings of Data Flow Optimization passes executed after applying selected speed optimization.
 * Refactor stackless function calls
   * UnreachableCodeEliminator now tracks code paths and recognizes CALL instruction; it is no longer necessary to
@@ -42,17 +50,18 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * Allow empty bodies of ifs, loops, functions etc.
 * Allow properties to be invoked on expressions. The nature of the call will be determined by the property name.
   * Use mimex to obtain all metadata needed to recognize all valid properties.
+  * Unknown properties will be called via `sensor`.
 * Allow empty optional arguments in function calls. At this moment, optional arguments can only be omitted at the
   end of the argument list.
 * Block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
   error reporting would be much more preferable, but quite hard to implement).
-* Only allow dashes in REF identifiers (the `@` Mindustry constants), then add support for `++` and `--` operators
-* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`
+* Only allow dashes in REF identifiers (the `@` Mindustry constants), then add support for `++` and `--` operators.
+* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
 * Varargs inline functions (??)
   * Function needs to be explicitly declared inline
   * `inline def foo(a, b, c, x...) ... end`
   * The vararg can be processed using list iteration loop, or maybe passed to another vararg function:
-    `def foo(arg...) for a in arg print(a) end end`
+    `def foo(arg...) for a in arg print(a) end end def bar(arg...) foo(arg) end`
     
 ## New and extended keywords
 
@@ -93,8 +102,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     * On function return, the output value will be copied to the variable passed in as the argument.
 * `yield`
   * Assigns values to list variables in list iteration loops; compile error if some of the expressions in the list 
-    isn't a variable
-  * Used in when branch of case expression to set resulting value of the branch and exit the case expression
+    isn't a variable.
+  * Used in when branch of case expression to set resulting value of the branch and exit the case expression.
 
 ## #use compiler directive/statement
 
@@ -127,7 +136,7 @@ Typed variables, parameters and function return values.
 
 # Speculative optimization for speed
 
-* `optimization-quota` compiler option: a numerical value. Nonzero value allows performing speed optimizations that
+* `instruction-overload` compiler option: a numerical value. Nonzero value allows performing speed optimizations that
   would exceed instruction space by at most the given quota, followed by other optimization passes specified by the
   optimizer. If the code size after the additional optimizations fits instruction space, the optimization is
   committed; if it doesn't, the optimization is rolled back and rejected forever. Limited to 200 in the web
@@ -135,7 +144,6 @@ Typed variables, parameters and function return values.
   * way for the speed optimizers to specify which other optimizations to run,
   * mechanism for rolling back rejected optimizations,
   * mechanism for keeping track of rejected optimizations.
-* Need a better name for the option!!
 
 # External variable optimizations
 
@@ -164,19 +172,20 @@ Typed variables, parameters and function return values.
 * Assign a function address to a variable:
   * `fptr = function` (note: no brackets)
   * Assigning the function definition: `fptr = def foo(n) print(n) end`. Not sure about this, but why not?
-  * Lambda/anonymous function syntax: `fptr = n -> print n` or `fptr = (m, n) -> (x = m * n; print(x))`
+  * Lambda/anonymous function syntax: `fptr = n -> print(n)` or `fptr = (m, n) -> (x = m * n; print(x))`
 * Global analysis of function assignments
-  * If a function pointer is assigned a function address, it must not be assigned anything else (global analysis)
+  * If a variable is assigned a function address, it must not be assigned anything which is not a function 
+    address (global analysis).
   * All function addresses assigned to a single function pointer variable must belong to functions having the same
-    number of arguments
-  * Assignments between function pointers are tracked too. An alias graph will be created, each continuous
-    segment in the graph must be assigned compatible functions (same number of parameters). Each segment - __function 
-    group__ - gets its own set of transfer variables.
+    number of arguments.
+  * Assignments between function pointers are tracked too. An alias graph will be created, each connected
+    segment in the graph must be assigned compatible functions (same number of parameters). Each segment - **function 
+    group** - gets its own set of transfer variables.
   * Function call must use the correct number of arguments for the given function.
   * Only stackless/recursive user defined functions can be assigned to function pointers.
   * Function pointers can be passed to other functions as arguments, assignments to arguments are tracked just
     like everything else, except calls through function pointers, which need to be handled separately.
-  * Calling recursive functions is possible. A function can be made recursive by calls via function pointer.
+  * Calling recursive functions is possible. A function can be made recursive by calls via function pointer(!)
 * Calling mechanism
   * For each function group a separate set of variables will be allocated: `__fgN_retaddr`, and `__fgN_arg0` to
     `__fgN_argM` for individual arguments ("fg" as in "function group").
@@ -198,7 +207,7 @@ Typed variables, parameters and function return values.
     pointers need to be initialized, and assigning null to them is replaced by assigning the special function
     address to them. Problem with global variables, where initialization isn't easy to track.
   * Null function pointer corresponds to a special function that indicates an error and stops the program
-    execution. The same prerequisites as above. Ask Anuken for an extension to the stop instruction
+    execution. The same prerequisites as above. Ask Anuken for an extension to the stop instruction.
     
 # Processor-variables backed arrays
 
@@ -267,6 +276,8 @@ Two basic approaches
 
 * Correctly resolve case expressions (both jump table based and condition based) when the input value is effectively 
   constant.
+* Recognize dead writes inside loops: `i = 0; while switch1.enabled i += 1 end`: writes to `i` are dead, but not 
+  recognized as such. 
 * Visit stackless functions on calls (??):
   * Every result of a visit to stackless function would have to be merged together and then applied to optimizations
     on that function.
@@ -282,13 +293,13 @@ Two basic approaches
 * Expression distribution:
   * `foo(value ? a : b)` could be turned into `if value foo(a) else foo(b) end`
   * Is useful when at least one value produced by the ternary expression is a constant.
-* Code path splitting (generalized version of the expression distribution)
+* Code path splitting
   * If a variable is known to take on several distinct values and is part of several control statements or complex 
     expressions, create a jump table targeting specialized code for some or all of the values the 
     variable can attain.
   * Needs to create metric for the complexity to use this only when appropriate.
-  * Example: `bar = foo ? 5 : 10; for i in 1 ... bar cell1[i] = 0 end` - after the multiplexing optimization, there 
-    could be two unrolled loops.
+  * Example: `bar = foo ? 5 : 10; for i in 1 ... bar cell1[i] = 0 end` - after the code path splitting optimization,
+    there could be two unrolled loops.
 
 ### Inferring invariants of variables
 
