@@ -717,10 +717,10 @@ export SPRING_DATASOURCE_PASSWORD=postgres_password
 Then run:
 
 ```bash
-mvnw install
+./mvnw install
 ```
 
-to build the app, and then
+from the project root to build the app, and then
 
 ```bash
 bin/run-local
