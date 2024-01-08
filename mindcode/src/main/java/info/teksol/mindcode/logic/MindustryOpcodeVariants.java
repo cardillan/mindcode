@@ -130,6 +130,7 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7A, S, FUNC, Opcode.UCONTROL,   uctrl("stop"));
         add(list, V6, V7A, S, FUNC, Opcode.UCONTROL,   uctrl("move"),      in("x"), in("y"));
         add(list, V6, V7A, S, FUNC, Opcode.UCONTROL,   uctrl("approach"),  in("x"), in("y"), in("radius"));
+        add(list, V7, V7A, S, FUNC, Opcode.UCONTROL,   uctrl("autoPathfind"));
         add(list, V7, V7A, S, FUNC, Opcode.UCONTROL,   uctrl("pathfind"),  in("x"), in("y"));
         add(list, V6, V7A, S, FUNC, Opcode.UCONTROL,   uctrl("boost"),     in("enable"));
         add(list, V6, V6,  S, FUNC, Opcode.UCONTROL,   uctrl("pathfind"));
