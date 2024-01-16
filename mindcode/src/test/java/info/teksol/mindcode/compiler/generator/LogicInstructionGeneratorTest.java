@@ -1162,4 +1162,21 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void recognizesTurretAsBLockName() {
+        assertCompilesTo("""
+                        def foo()
+                            turret1.health
+                        end
+                        print(foo())
+                        """,
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SENSOR, var(1), "turret1", "@health"),
+                createInstruction(SET, var(0), var(1)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, var(0)),
+                createInstruction(END)
+        );
+    }
 }

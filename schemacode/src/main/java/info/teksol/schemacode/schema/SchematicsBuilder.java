@@ -6,30 +6,14 @@ import info.teksol.mindcode.mimex.Icons;
 import info.teksol.schemacode.SchemacodeMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
-import info.teksol.schemacode.config.BooleanConfiguration;
-import info.teksol.schemacode.config.Configuration;
-import info.teksol.schemacode.config.EmptyConfiguration;
-import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.config.TextConfiguration;
-import info.teksol.schemacode.mimex.BlockType;
-import info.teksol.schemacode.mindustry.Color;
-import info.teksol.schemacode.mindustry.ConfigurationType;
-import info.teksol.schemacode.mindustry.Direction;
-import info.teksol.schemacode.mindustry.Item;
-import info.teksol.schemacode.mindustry.Liquid;
-import info.teksol.schemacode.mindustry.Position;
-import info.teksol.schemacode.mindustry.ProcessorConfiguration;
-import info.teksol.schemacode.mindustry.UnitPlan;
+import info.teksol.schemacode.config.*;
+import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.schema.BlockPositionResolver.AstBlockPosition;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -138,7 +122,7 @@ public class SchematicsBuilder {
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
             Configuration configuration = convertAstConfiguration(blockPos, astBlock.configuration());
             blocks.add(new Block(index, astBlock.labels(), type, blockPos.position(), direction,
-                    configuration.as(type.configurationType().getBuilderConfigurationClass())));
+                    configuration.as(ConfigurationType.fromBlockType(type).getBuilderConfigurationClass())));
         }
 
         String name = getStringAttribute("name", "");

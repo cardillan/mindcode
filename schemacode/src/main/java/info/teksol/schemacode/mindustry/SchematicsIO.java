@@ -3,21 +3,13 @@ package info.teksol.schemacode.mindustry;
 import info.teksol.mindcode.Tuple2;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.config.*;
-import info.teksol.schemacode.mimex.BlockType;
+import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.schema.Block;
 import info.teksol.schemacode.schema.BlockPositionMap;
 import info.teksol.schemacode.schema.Schematic;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
@@ -159,7 +151,8 @@ public class SchematicsIO {
             return raw;
         }
 
-        return switch (blockType.configurationType()) {
+        ConfigurationType configurationType = ConfigurationType.fromBlockType(blockType);
+        return switch (configurationType) {
             case NONE           -> raw.as(EmptyConfiguration.class);
             case BOOLEAN        -> raw.as(BooleanConfiguration.class);
             case COLOR          -> Color.decode(raw.as(IntConfiguration.class).value());
@@ -171,12 +164,12 @@ public class SchematicsIO {
             case PROCESSOR      -> ProcessorConfiguration.decode(raw.as(ByteArray.class), position);
             case TEXT           -> raw.as(TextConfiguration.class);
             case UNIT_PLAN      -> selectUnitPlan(raw.as(IntConfiguration.class), blockType);
-            default -> throw new SchematicsInternalError("Unhandled configuration type %s.", blockType.configurationType());
+            default -> throw new SchematicsInternalError("Unhandled configuration type %s.", configurationType);
         };
     }
 
     private static UnitPlan selectUnitPlan(IntConfiguration integer, BlockType blockType) {
-        if (blockType.implementation().configurationType() != ConfigurationType.UNIT_PLAN) {
+        if (ConfigurationType.fromBlockType(blockType) != ConfigurationType.UNIT_PLAN) {
             throw new SchematicsInternalError("Block '%s' does not support UNIT_PLAN configuration.", blockType.name());
         }
 
@@ -189,7 +182,7 @@ public class SchematicsIO {
     }
 
     private static Configuration mapConfig(BlockType block, int value, Position position) {
-        return switch (block.implementation()) {
+        return switch (Implementation.fromBlockType(block)) {
             case SORTER, UNLOADER, ITEMSOURCE   -> Item.forIndex(value);
             case LIQUIDSOURCE                   -> Liquid.forIndex(value);
             case MASSDRIVER, ITEMBRIDGE         -> Position.unpack(value).sub(position);

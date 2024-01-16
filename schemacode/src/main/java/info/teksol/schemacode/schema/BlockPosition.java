@@ -1,7 +1,7 @@
 package info.teksol.schemacode.schema;
 
 import info.teksol.schemacode.config.Configuration;
-import info.teksol.schemacode.mimex.BlockType;
+import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Implementation;
 import info.teksol.schemacode.mindustry.Position;
@@ -20,15 +20,15 @@ public interface BlockPosition {
     }
 
     default Implementation implementation() {
-        return blockType().implementation();
+        return Implementation.fromBlockType(blockType());
     }
 
     default Class<? extends Configuration> configurationClass() {
-        return blockType().implementation().configurationClass();
+        return implementation().configurationClass();
     }
 
     default ConfigurationType configurationType() {
-        return blockType().configurationType();
+        return ConfigurationType.fromBlockType(blockType());
     }
 
     default int x() {

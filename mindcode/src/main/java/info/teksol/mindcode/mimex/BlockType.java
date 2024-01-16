@@ -1,14 +1,13 @@
-package info.teksol.schemacode.mimex;
-
-import info.teksol.schemacode.mindustry.ConfigurationType;
-import info.teksol.schemacode.mindustry.Implementation;
+package info.teksol.mindcode.mimex;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public record BlockType(
         String name,
-        Implementation implementation,
+        String implementation,
         int size,
         boolean hasPower,
         boolean configurable,
@@ -29,7 +28,7 @@ public record BlockType(
         return NAME_MAP.containsKey(name);
     }
 
-    public String getBaseLinkName(){
+    public String getBaseLinkName() {
         String strippedTypeName = name.substring(1);
         if (strippedTypeName.contains("-")) {
             String[] s = strippedTypeName.split("-");
@@ -43,7 +42,9 @@ public record BlockType(
         return strippedTypeName;
     }
 
-    public ConfigurationType configurationType() {
-        return implementation.configurationType();
+    public static Set<String> getBaseLinkNames() {
+        return NAME_MAP.values().stream()
+                .map(BlockType::getBaseLinkName)
+                .collect(Collectors.toSet());
     }
 }

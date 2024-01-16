@@ -4,6 +4,7 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.mimex.BlockType;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -449,14 +450,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
 
-    private static final Set<String> BLOCK_NAMES = Set.of("arc", "bank", "battery", "cell", "center", "centrifuge",
-            "compressor", "conduit", "container", "conveyor", "crucible", "cultivator", "cyclone", "diode",
-            "disassembler", "display", "distributor", "dome", "door", "drill", "driver", "duo", "extractor", "factory",
-            "foreshadow", "foundation", "fuse", "gate", "generator", "hail", "incinerator", "junction", "kiln", "lancer",
-            "meltdown", "melter", "mender", "message", "mine", "mixer", "node", "nucleus", "panel", "parallax", "point",
-            "press", "processor", "projector", "pulverizer", "reactor", "reconstructor", "ripple", "router", "salvo",
-            "scatter", "scorch", "segment", "separator", "shard", "smelter", "sorter", "spectre", "swarmer", "switch",
-            "tank", "tower", "tsunami", "unloader", "vault", "wall", "wave", "weaver");
+    private static final Set<String> BLOCK_NAMES = BlockType.getBaseLinkNames();
 
     @Override
     public boolean isBlockName(String identifier) {

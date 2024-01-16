@@ -1,7 +1,7 @@
 package info.teksol.schemacode.schema;
 
+import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.AbstractSchematicsTest;
-import info.teksol.schemacode.mimex.BlockType;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;

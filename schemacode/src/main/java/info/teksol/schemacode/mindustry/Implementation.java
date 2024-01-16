@@ -1,6 +1,11 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.schemacode.config.Configuration;
+import info.teksol.mindcode.mimex.BlockType;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({"unused", "SpellCheckingInspection"})
 public enum Implementation {
@@ -149,5 +154,12 @@ public enum Implementation {
 
     public Class<? extends Configuration> configurationClass() {
         return configurationType.getConfigurationClass();
+    }
+
+    private static final Map<String, Implementation> STRING_MAP =
+            Arrays.stream(values()).collect(Collectors.toMap(v -> v.name(),v -> v));
+
+    public static Implementation fromBlockType(BlockType blockType) {
+        return STRING_MAP.get(blockType.implementation());
     }
 }

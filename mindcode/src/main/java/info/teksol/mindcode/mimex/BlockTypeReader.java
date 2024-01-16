@@ -1,14 +1,10 @@
-package info.teksol.schemacode.mimex;
-
-import info.teksol.schemacode.mindustry.ConfigurationType;
-import info.teksol.schemacode.mindustry.Implementation;
+package info.teksol.mindcode.mimex;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -64,7 +60,7 @@ class BlockTypeReader {
                 String[] columns = lines.get(i).split(";", -1);
                 list.add(new BlockType(
                         "@" + columns[name],
-                        Implementation.valueOf(columns[implementation].toUpperCase()),
+                        columns[implementation].toUpperCase(),
                         Integer.parseInt(columns[size]),
                         Boolean.parseBoolean(columns[hasPower]),
                         Boolean.parseBoolean(columns[configurable]),
@@ -82,12 +78,5 @@ class BlockTypeReader {
 
     private List<String> parseUnitPlans(String unitPlans) {
         return unitPlans.isBlank() ? List.of() : Stream.of(unitPlans.split("\\|")).map("@"::concat).toList();
-    }
-
-    public static void main(String[] argv) {
-        createFromResource().values().stream()
-                .filter(b -> b.implementation().configurationType() != ConfigurationType.NONE)
-                .sorted(Comparator.comparing(BlockType::configurationType))
-                .forEach(b -> System.out.printf("%-30s %s%n", b.name(), b.configurationType()));
     }
 }

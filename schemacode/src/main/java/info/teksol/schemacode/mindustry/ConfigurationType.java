@@ -1,11 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.schemacode.config.BooleanConfiguration;
-import info.teksol.schemacode.config.Configuration;
-import info.teksol.schemacode.config.EmptyConfiguration;
-import info.teksol.schemacode.config.IntConfiguration;
-import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.config.TextConfiguration;
+import info.teksol.schemacode.config.*;
+import info.teksol.mindcode.mimex.BlockType;
 
 import java.util.function.Supplier;
 
@@ -73,5 +69,10 @@ public enum ConfigurationType {
         }
 
         return NONE;
+    }
+
+
+    public static ConfigurationType fromBlockType(BlockType blockType) {
+        return Implementation.fromBlockType(blockType).configurationType();
     }
 }

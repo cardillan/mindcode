@@ -1,18 +1,14 @@
 package info.teksol.schemacode.schema;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.SchemacodeMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.AstBlock;
-import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.Position;
 import org.intellij.lang.annotations.PrintFormat;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 

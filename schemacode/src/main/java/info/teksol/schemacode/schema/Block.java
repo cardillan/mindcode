@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schema;
 
+import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
 
