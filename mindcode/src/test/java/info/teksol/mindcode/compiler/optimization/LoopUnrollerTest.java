@@ -580,4 +580,19 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void ignoresDegenerateLoops() {
+        assertCompilesTo(createTestCompiler(basicProfile),
+                """
+                        i = 0
+                        while i < 1000
+                            print(i)
+                        end
+                        """,
+                createInstruction(LABEL, var(1003)),
+                createInstruction(PRINT, "0"),
+                createInstruction(JUMP, var(1003), "always")
+        );
+    }
 }

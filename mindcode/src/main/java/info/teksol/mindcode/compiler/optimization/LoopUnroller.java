@@ -270,6 +270,10 @@ public class LoopUnroller extends BaseOptimizer {
 
     // Finds the control variable of this loop
     private LogicVariable findLoopControl(AstContext loop, AstContext init, JumpInstruction jump) {
+        if (jump.isUnconditional()) {
+            return null;    // There isn't any loop control variable
+        }
+
         LogicVariable result = null;
         for (LogicValue operand : jump.getOperands()) {
             if (operand instanceof LogicVariable variable && !variable.isGlobalVariable()) {
