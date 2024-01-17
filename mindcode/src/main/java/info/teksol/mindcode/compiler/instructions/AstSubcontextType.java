@@ -38,6 +38,9 @@ public enum AstSubcontextType {
     /** Code copying arguments to parameters before a function call. */
     PARAMETERS      ("PRMS"),
 
+    /** Code copying return value(s) of a function call to temporary variables. */
+    RETURN_VALUE    ("RETV"),
+
     /**
      * Call to a system function (mapped to an instruction) or a built-in function.
      * Technically not a call, as it includes the entire function body.

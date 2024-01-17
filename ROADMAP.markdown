@@ -13,6 +13,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Small or internal improvements
 
+* Function inliner: when inlining an out-of-line function, replace the return variable for the call being inlined 
+  with a normal temporary variable to allow further optimizations. 
 * Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion
 * Handling syntax errors - web & command line apps:
   * Display message and link to the discussion, prompt users to ask for help if stuck

@@ -536,6 +536,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             // this is easier than ensuring optimizers do not eliminate normal temporary variables
             // that received return values from functions.
             final LogicVariable resultVariable = nextReturnValue();
+            setSubcontextType(function.getLocalPrefix(), AstSubcontextType.RETURN_VALUE, 1.0);
             emit(createSet(resultVariable, LogicVariable.fnRetVal(localPrefix)));
             return resultVariable;
         } else {
