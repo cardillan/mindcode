@@ -355,7 +355,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 default     -> processDefaultContext(context, localContext, variableStates, modifyInstructions);
             };
         }
-        debug(() -> "<<< Exiting  context " + context.hierarchy());
+        debug(() -> "<<< Exiting  context " + context.id + ": " + context.hierarchy());
         return result;
     }
 
@@ -612,8 +612,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
             // This needs to be done for each active context
             // Do not move into processInstruction
+            // Jumps inside a RETURN context are caused by the return instruction and are local,
+            // but they do break the control flow and therefore need to be handled here.
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
-                    && !getLabelInstruction(jump.getTarget()).belongsTo(localContext)) {
+                    && (context.matches(AstContextType.RETURN) ||
+                    !getLabelInstruction(jump.getTarget()).belongsTo(localContext))) {
                 VariableStates copy = variableStates.copy("nonlocal jump");
                 copy.print("*** Storing variable states for label " + jump.getTarget().toMlog());
                 labelStates.computeIfAbsent(jump.getTarget(), ix -> new ArrayList<>()).add(copy);
@@ -655,6 +658,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
 
         switch (instruction) {
+            case NoOpInstruction ix:        return variableStates;
             case PushInstruction ix:        return variableStates.pushVariable(ix.getVariable());
             case PopInstruction ix:         return variableStates.popVariable(ix.getVariable());
             case LabeledInstruction ix:     return resolveLabel(variableStates, ix.getLabel());

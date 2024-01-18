@@ -155,7 +155,7 @@ public class FunctionInliner extends BaseOptimizer {
         LogicList body = stripReturnInstructions(
                 contextInstructions(
                         context(c -> c.matches(AstContextType.FUNCTION, BODY)
-                                && c.functionPrefix().equals(call.functionPrefix()))
+                                && call.functionPrefix().equals(c.functionPrefix()))
                 )
         );
         if (body == null) {

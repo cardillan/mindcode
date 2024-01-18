@@ -4,6 +4,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Current priorities
 
+* Bug fixes and [small improvements](#incremental-improvements)
 * [Updating ANTLR grammar](#updating-antlr-grammar)
 * [Inferring invariants of variables](#inferring-invariants-of-variables)
 * [Speculative optimization for speed](#speculative-optimization-for-speed)
@@ -11,11 +12,25 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * [Function pointers](#function-pointers)
 * [Processor-variables backed arrays](#processor-variables-backed-arrays)
 
-# Small or internal improvements
+# Incremental improvements
 
-* Function inliner: when inlining an out-of-line function, replace the return variable for the call being inlined 
-  with a normal temporary variable to allow further optimizations. 
+* Utilizing the new `id` property:
+  * Add built-in constants to the documentation, ensure uniform terminology. 
+  * Expand mimex to extract built-in constants metadata (items, liquids, units and so on) including their ID
+  * Schemacode
+    * replace the `Item` and `Liquid` enums with metadata, possibly utilize units).
+  * Mindcode
+    * recognize item/liquid built-in constants (possibly others),
+    * add expresion optimization to replace constant sensor instruction (`sensor result @constant @id`) with 
+      assignment (`set result integer-id-for-the-constant`)
+    * [Case switching over built-in constants](#case-switching-over-built-in-constants)
+* Case switching optimizer: when all when branches are built-in constants of the same type (e.g. @coal, @graphite, @) 
+* Function inliner: when inlining an out-of-line function, replace the return variable for the call being inlined
+  with a normal temporary variable to allow further optimizations.
 * Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion
+
+# Other small or internal improvements
+
 * Handling syntax errors - web & command line apps:
   * Display message and link to the discussion, prompt users to ask for help if stuck
 * Handling internal errors:
@@ -353,6 +368,37 @@ Two basic approaches
 * Cases with sparse sets of when branches: convert the largest segment from case values with a density
   higher than 0.5, leave other values to conditional jumps
 * On `aggressive` level, convert switches that have overlapping values.
+
+### Case switching over built-in constants
+
+Process case expressions based on item/liquid/unit/block etc. Applies when all when branches contain a built-in 
+constant of the same type. Example:
+
+```
+case itemType
+  when @coal then A
+  when @lead then B
+  when @graphite then C
+  ...
+end 
+```
+
+would compile into
+
+```
+sensor offset itemType @id
+op min offset offset maximal_used_id + 1
+op add @counter <start_of_jump_table - minimal_when_value - 1> offset
+start_of_jump_table:
+jump <branch for id 0>
+jump <branch for id 1>
+...
+jump <else branch>
+branch for id 0:
+<jump to else branch if itemType !=== constant_with_id_0> 
+```
+
+The `op min` instructions perhaps might be avoided under some circumstances.
 
 ## Loop unrolling
 

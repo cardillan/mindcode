@@ -112,4 +112,22 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void handlesReturnsCorrectly() {
+        assertCompilesTo("""
+                        def foo()
+                            t = rand(10)
+                            return t
+                        end
+                        print(foo())
+                        print(foo())
+                        """,
+                createInstruction(OP, "rand", "__fn0_t", "10"),
+                createInstruction(PRINT, "__fn0_t"),
+                createInstruction(OP, "rand", "__fn0_t", "10"),
+                createInstruction(PRINT, "__fn0_t"),
+                createInstruction(END)
+        );
+    }
 }
