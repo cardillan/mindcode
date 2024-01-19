@@ -93,12 +93,17 @@ consist of basic alphanumeric characters (i.e. letters a-z, A-Z and digits 0-9, 
 underscores and a dash characters. The first character must be an underscore or a letter. `_foo` and `bar-baz9` are 
 valid identifiers, `9to5`, `-qux` and `français` are not.
 
-Mindustry Logic provides constants and variables that start with `@`. These can be used as-is in Mindcode,
-e.g. `@time` or `@titanium-conveyor`. In some situations the `@` is dropped (more on this later).
-
 Mindcode compiler creates variables starting with two underscores, such as `__tmp10` or `__fn0retval`,
 when generating code. To avoid interference with the compiler, do not use any identifiers starting with two 
 underscores for your variable or function names.
+
+## Built-in variables and constants
+
+Mindustry Logic provides variables and constants that start with `@`. They can be read-only variables (such as 
+`@unit` or `@time`) or effectively constant values (such as `@coal` or `@this`).      
+
+Built-in variables and constants can be used as-is in Mindcode, e.g. `@time` or `@titanium-conveyor`. In some 
+situations the leading `@` is dropped (more on this later).
 
 ## Literals
 

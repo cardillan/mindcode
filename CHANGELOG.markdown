@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Added support for replacing `@this.x` and `@this.y` expression by `@thisx`/`@thisy` built-in constants to the
+  [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
+* Added support for replacing `@constant.id` expressions by an integer value of the ID assigned to the `@constant`, 
+  assuming it is a known item, liquid, block type or unit type. This optimization is only active on `aggresive` 
+  optimization level. For example, `id = @graphite.id` gets compiled down to `set id 3`, allowing further 
+  optimizations on the constant value (`3`) to take place. 
+
 ## 2024-01-19
 
 > [!NOTE]
@@ -28,7 +39,7 @@ All notable changes to this project will be documented in this file.
  
 ### Added
 
-* Added new autoPathfind() method for `ucontrol autoPathfind` instruction
+* Added new `autoPathfind()` method for `ucontrol autoPathfind` instruction
   ([PR #113](https://github.com/cardillan/mindcode/pull/113)).
 
 ### Fixed

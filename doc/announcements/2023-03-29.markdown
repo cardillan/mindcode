@@ -272,9 +272,10 @@ Additionally, several operators were added or altered:
 * `!`, `not`: boolean not (in previous versions, Mindcode treated these operators as bitwise negation instead of boolean negation).
 * `\=`, `%=`, `<<=`, `>>=`, `&=`, `|=`, `^=`, `&&=`, `||=`: new compound assignment operators.
 
-## Built-in functions
+## Library functions
 
-The `println()` and `printf()` functions for easier printing (see [Built-in functions](../syntax/SYNTAX-4-FUNCTIONS.markdown#built-in-functions)).
+The `println()` and `printf()` functions for easier printing (see
+[Library functions](../syntax/SYNTAX-4-FUNCTIONS.markdown#library-functions)).
 
 # Compiler enhancements
 

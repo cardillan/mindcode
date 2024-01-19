@@ -108,13 +108,25 @@ This optimizer simplifies the following sequences of jump that are a result of c
 
 ## Expression Optimization
 
-This optimization looks for sequences of mathematical operations that can be performed more efficiently. Currently,
-the following optimizations are available:
+This optimization looks for certain expressions that can be performed more efficiently. Currently, the following 
+optimizations are available:
 
 * `floor` function called on a multiplication by a constant or a division. Combines the two operations into one
   integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the
   divisor in the `idiv` operation.
-* All set instructions assigning a variable to itself (e.g. `set x x`) are removed. 
+* `sensor var @this @x` and `sensor var @this @y` are replaced by `set var @thisx` and `set var @thisy` respectively.
+  Data Flow Optimization can then apply [constant propagation](#constant-propagation) to the `@thisx`/`@thisy` 
+  built-in constants.
+* All set instructions assigning a variable to itself (e.g. `set x x`) are removed.
+
+If the optimization level is `aggressive`, the following additional expressions are handled:
+
+* If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, 
+  the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where ID is a 
+  numeric literal. Mindcode contains a list of known Mindustry objects and their IDs, obtained by using Mindustry 
+  Metadata Extraction extension on the latest Mindustry version. These IDs are expected to be immutable, but the 
+  optimization can be turned off by setting the optimization level to `basic` if the actual IDs turn out to be 
+  different from used Mindcode's IDs.   
 
 ## If Expression Optimization
 

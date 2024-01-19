@@ -5,6 +5,7 @@
      1 instructions eliminated by Jump Normalization (3 iterations).
      6 instructions eliminated by Jump Optimization (3 iterations).
     10 instructions eliminated by Single Step Elimination (4 iterations).
+     2 instructions modified by Expression Optimization (2 iterations).
      7 instructions eliminated by Jump Straightening (3 iterations).
      2 instructions updated by PropagateJumpTargets.
      1 instructions eliminated by Unreachable Code Elimination.
@@ -526,6 +527,16 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    144 label __label36
    145 op add index index 1
 
+Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
+     0 set UNIT @mega
+-    * sensor THIS_X @this @x
+-    * sensor THIS_Y @this @y
++    1 set THIS_X @thisx
++    2 set THIS_Y @thisy
+     3 set first_unit null
+     4 set index 1
+     5 label __label0
+
 Modifications by Final phase, Jump Threading, iteration 1:
  
     39 print UNIT
@@ -557,8 +568,8 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 inst
 Final code before resolving virtual instructions:
 
 set UNIT @mega
-sensor THIS_X @this @x
-sensor THIS_Y @this @y
+set THIS_X @thisx
+set THIS_Y @thisy
 set first_unit null
 set index 1
 label __label0

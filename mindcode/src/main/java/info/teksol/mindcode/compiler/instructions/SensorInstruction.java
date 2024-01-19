@@ -1,10 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicParameter;
-import info.teksol.mindcode.logic.LogicValue;
-import info.teksol.mindcode.logic.LogicVariable;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
@@ -36,8 +32,8 @@ public class SensorInstruction extends BaseInstruction implements LogicResultIns
         return (LogicVariable) getArg(0);
     }
 
-    public final LogicVariable getObject() {
-        return (LogicVariable) getArg(1);
+    public final LogicValue getObject() {
+        return (LogicValue) getArg(1);
     }
 
     public final LogicValue getProperty() {

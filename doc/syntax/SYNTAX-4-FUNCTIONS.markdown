@@ -104,9 +104,9 @@ Again, the `vault1` or `storage` in the examples can be a variable or a linked b
 > In the case of property access, the `@` character at the beginning of the property name is omitted - 
 > `storage.thorium` is the right syntax, `storage.@thorium` is wrong.
 
-# Built-in functions
+# Library functions
 
-Mindcode now defines a few built-in functions that enhance plain Mindustry Logic.
+Mindcode now defines a few library functions that enhance plain Mindustry Logic.
 
 ## print
 

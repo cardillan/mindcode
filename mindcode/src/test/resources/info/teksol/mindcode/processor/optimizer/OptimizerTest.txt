@@ -18,7 +18,7 @@ reactor-control-battery-level-00.mnd:     595 instructions, source CRC 9F59DD5A4
 regulator-00.mnd:                         153 instructions, source CRC A00D1F50F14899BC, compiled CRC 19D81AF095E734F1
 remote-vault-00.mnd:                       71 instructions, source CRC 1E09C1232F56369B, compiled CRC 7289B7E52DACE075
 storage-display-00.mnd:                   620 instructions, source CRC 8D7509D23CD10E8D, compiled CRC 8DE5C45A1DF35807
-unit-housekeeping-00.mnd:                 105 instructions, source CRC 4B23F79410A1161B, compiled CRC 287D4C932A0E3E34
+unit-housekeeping-00.mnd:                 105 instructions, source CRC 4B23F79410A1161B, compiled CRC 18BE07D16A113772
 unit-speed-00.mnd:                         86 instructions, source CRC 0ABDE88FE600D90A, compiled CRC C663154CBB61FF9B
 unit-transport-00.mnd:                    737 instructions, source CRC 4FBC90AFFB4A45B2, compiled CRC ECF4DBC15BCE00FC
 unit-transport-flow-rate-00.mnd:          103 instructions, source CRC 4D545E05529B23FE, compiled CRC 2E7F5F9C405C66F9

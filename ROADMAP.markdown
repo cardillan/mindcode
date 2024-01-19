@@ -16,13 +16,10 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 * Utilizing the new `id` property:
   * Add built-in constants to the documentation, ensure uniform terminology. 
-  * Expand mimex to extract built-in constants metadata (items, liquids, units and so on) including their ID
   * Schemacode
     * replace the `Item` and `Liquid` enums with metadata, possibly utilize units).
   * Mindcode
     * recognize item/liquid built-in constants (possibly others),
-    * add expresion optimization to replace constant sensor instruction (`sensor result @constant @id`) with 
-      assignment (`set result integer-id-for-the-constant`)
     * [Case switching over built-in constants](#case-switching-over-built-in-constants)
 * Improve handling of return statements by the Function Inlining optimization. Currently, the resulting AST context 
   structure can hinder further Data Flow optimizations.  
@@ -94,7 +91,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * `array`
   * Used in `allocate array`
   * Reserved for future use in declaring in-memory arrays
-* `declare`, `var`
+* `declare`, `var` (?)
 * `enum`
   * Possible syntax:
     * `enum name(id1, id2, id3)`
@@ -180,8 +177,8 @@ Typed variables, parameters and function return values.
 * Volatile values: always reread, never reuse last value
   * Specific built-in ones (already done)
   * All sensed properties (already done - the entire `sensor` instruction is deemed volatile)
-  * New compiler directive will allow to declare memory model for a memory block, linked block or built-in variable
-    (`#declare variable [volatile | aliased | restriced]`).
+  * New compiler directive will allow to declare memory model for a memory block, a linked block, a built-in variable
+    or a global variable (because of the `sync` instruction), e.g. `#declare variable [volatile | aliased | restriced]`.
 
 # Function pointers
 

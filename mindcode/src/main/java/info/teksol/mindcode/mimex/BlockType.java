@@ -6,7 +6,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public record BlockType(
+        String baseName,
         String name,
+        int id,
         String implementation,
         int size,
         boolean hasPower,
@@ -16,9 +18,9 @@ public record BlockType(
         int maxNodes,
         boolean rotate,
         List<String> unitPlans
-        ) {
+) implements NumberedConstant {
 
-    private static final Map<String, BlockType> NAME_MAP = BlockTypeReader.createFromResource();
+    static final Map<String, BlockType> NAME_MAP = BlockTypeReader.createFromResource();
 
     public static BlockType forName(String name) {
         return NAME_MAP.get(name);
@@ -29,9 +31,8 @@ public record BlockType(
     }
 
     public String getBaseLinkName() {
-        String strippedTypeName = name.substring(1);
-        if (strippedTypeName.contains("-")) {
-            String[] s = strippedTypeName.split("-");
+        if (baseName.contains("-")) {
+            String[] s = baseName.split("-");
             //filter out 'large' and numbers at the end of block names
             if (s.length >= 2 && (s[s.length - 1].equals("large") || s[s.length - 1].matches("\\d+"))) {
                 return s[s.length - 2];
@@ -39,7 +40,7 @@ public record BlockType(
                 return s[s.length - 1];
             }
         }
-        return strippedTypeName;
+        return baseName;
     }
 
     public static Set<String> getBaseLinkNames() {

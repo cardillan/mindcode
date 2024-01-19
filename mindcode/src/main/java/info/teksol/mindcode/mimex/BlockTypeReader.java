@@ -19,7 +19,7 @@ class BlockTypeReader {
     private static final String RESOURCE_NAME = "mimex-blocks.txt";
     private final List<String> lines;
     private final List<String> header;
-    private final int name, implementation, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
+    private final int name, id, implementation, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
 
     private BlockTypeReader() {
         try (InputStream input = BlockTypeReader.class.getResourceAsStream(RESOURCE_NAME)) {
@@ -29,6 +29,7 @@ class BlockTypeReader {
                     .toList();
             header = List.of(lines.get(0).split(";"));
             name = findColumn("name");
+            id = findColumn("id");
             implementation = findColumn("subclass");
             size = findColumn("size");
             hasPower = findColumn("hasPower");
@@ -59,7 +60,9 @@ class BlockTypeReader {
             for (int i = 1; i < lines.size(); i++) {
                 String[] columns = lines.get(i).split(";", -1);
                 list.add(new BlockType(
+                        columns[name],
                         "@" + columns[name],
+                        Integer.parseInt(columns[id]),
                         columns[implementation].toUpperCase(),
                         Integer.parseInt(columns[size]),
                         Boolean.parseBoolean(columns[hasPower]),

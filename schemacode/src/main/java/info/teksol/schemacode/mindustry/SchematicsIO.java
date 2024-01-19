@@ -1,9 +1,9 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mindcode.Tuple2;
+import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.config.*;
-import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.schema.Block;
 import info.teksol.schemacode.schema.BlockPositionMap;
 import info.teksol.schemacode.schema.Schematic;
@@ -35,7 +35,7 @@ public class SchematicsIO {
             List<BlockType> typeList = schematic.blocks().stream().map(Block::blockType).distinct().toList();
             stream.writeByte(typeList.size());
             for (BlockType t : typeList) {
-                stream.writeUTF(t.name().substring(1));
+                stream.writeUTF(t.baseName());
             }
 
             stream.writeInt(schematic.blocks().size());
@@ -125,7 +125,7 @@ public class SchematicsIO {
                 Position position = Position.unpack(stream.readInt());
                 Configuration raw = ver == 0 ? mapConfig(blockType, stream.readInt(), position) : readObject(stream);
                 Direction direction = Direction.convert(stream.readByte());
-                if (!"@air".equals(blockType.name())) {
+                if (!"air".equals(blockType.baseName())) {
                     Configuration config = convert(blockType, position, raw);
                     blocks.add(new Block(index++, List.of(), blockType, position, direction, config));
                 }

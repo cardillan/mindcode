@@ -131,4 +131,36 @@ public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOpt
                 )
         );
     }
+
+    @Test
+    void optimizesThisXY() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(SENSOR, tmp0, thiz, x),
+                        createInstruction(SENSOR, tmp1, thiz, y),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, thisx),
+                        createInstruction(SET, tmp1, thisy),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesConstantId() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(SENSOR, tmp0, lead, id),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, P1),
+                        createInstruction(END)
+                )
+        );
+    }
 }
