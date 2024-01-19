@@ -2,6 +2,59 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2024-01-19
+
+> [!NOTE]
+> Mindustry 7.0 build 146 added - among other improvements - the `id` property that provides an id of given 
+> block, unit, item or liquid (basically an inverse of the `lookup` operation). Since Mindcode has a generic support 
+> for properties and built-in constants, this property can be used right away, no explicit support from Mindcode is 
+> needed. For example: 
+>
+> ```
+> item = sorter1.config
+> numericId = item.id
+> print(numericId)
+> 
+> property = @id
+> value = item.sensor(property)
+> print(value)
+>
+> id = @graphite.id
+> print(id)
+> ```
+>
+> Among the new logic instructions, `autoPathfind` is already supported. Support for the new world-processor 
+> instructions is yet to be added.    
+ 
+### Added
+
+* Added new autoPathfind() method for `ucontrol autoPathfind` instruction
+  ([PR #113](https://github.com/cardillan/mindcode/pull/113)).
+
+### Fixed
+
+* Fixed Loop Unrolling failing on loops that do not have a loop control variable
+  ([#109](https://github.com/cardillan/mindcode/issues/109)).
+* Fixed Function Inlining optimization incorrectly inlining some functions containing a return statement
+  ([#116](https://github.com/cardillan/mindcode/issues/116)).
+* Fixed Function Inlining optimization incorrectly inlining functions used in expressions
+  ([#118](https://github.com/cardillan/mindcode/issues/118)).
+* Fixed `turret` not being recognized as a block name ([#117](https://github.com/cardillan/mindcode/issues/117)).
+
+### Changed
+
+* Mindcode compiler now utilizes metadata extracted by [mimex](https://github.com/cardillan/mimex) to obtain - and
+  keep current - a list of possible block names.
+* Function Inlining optimizer now replaces function return variable with the receiving variable when inlining a 
+  function call. The protection granted to function return variables is not necessary after inlining the call, and 
+  this replacement allows the receiving variable to be handled by further optimization.
+
+### Miscellaneous
+
+* Small documentation improvements.
+* No-op instructions are removed before the final optimization phase, avoiding the need to handle no-op by the final 
+  phase optimizers.
+
 ## 2023-07-20
 
 ### Fixed
@@ -311,7 +364,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
     structure. Optimizations based on these metadata should be easier to write and understand, once necessary 
     support tooling is in place.
   * It is necessary to update the AST context structure after each optimization iteration. These updates aren't done 
-    of the fly -- optimizers must understand the changes they make to the program in a single iteration aren't 
+    of the fly -- optimizers must understand that the changes they make to the program in a single iteration aren't 
     reflected to the AST context structure.
   * Optimizers need to be careful to create newly generated instructions using the right (already existing) AST 
     context, otherwise subsequent AST context-based optimizers can misunderstand the code structure. There are means

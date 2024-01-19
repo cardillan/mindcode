@@ -24,9 +24,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     * add expresion optimization to replace constant sensor instruction (`sensor result @constant @id`) with 
       assignment (`set result integer-id-for-the-constant`)
     * [Case switching over built-in constants](#case-switching-over-built-in-constants)
-* Case switching optimizer: when all when branches are built-in constants of the same type (e.g. @coal, @graphite, @) 
-* Function inliner: when inlining an out-of-line function, replace the return variable for the call being inlined
-  with a normal temporary variable to allow further optimizations.
+* Improve handling of return statements by the Function Inlining optimization. Currently, the resulting AST context 
+  structure can hinder further Data Flow optimizations.  
 * Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion
 
 # Other small or internal improvements
