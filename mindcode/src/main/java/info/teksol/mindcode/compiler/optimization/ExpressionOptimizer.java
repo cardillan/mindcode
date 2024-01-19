@@ -34,7 +34,7 @@ public class ExpressionOptimizer extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         // Cannot use for-each due to modifications of the underlying list in the loop
         try (LogicIterator it = createIterator()) {
             while(it.hasNext()) {

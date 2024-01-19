@@ -142,7 +142,7 @@ public class DataFlowVariableStates {
         }
 
         private void printInstruction(LogicInstruction instruction) {
-            if (DataFlowOptimizer.DEBUG) {
+            if (BaseOptimizer.TRACE) {
                 System.out.println("   " + optimizer.instructionIndex(instruction) + ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
             }
         }
@@ -152,7 +152,7 @@ public class DataFlowVariableStates {
             if (stored.contains(variable)) {
                 debug(() -> "    Not invalidating variable " + variable.toMlog() + ", because it is stored on stack.");
             } else {
-                if (DataFlowOptimizer.DEBUG) {
+                if (BaseOptimizer.TRACE) {
                     values.values().stream().filter(exp -> exp.dependsOn(variable))
                             .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
                     equivalences.entrySet().stream().filter(e -> e.getValue().equals(variable))
@@ -222,7 +222,7 @@ public class DataFlowVariableStates {
                 // Find the oldest equivalent expression
                 for (VariableValue expression : values.values()) {
                     if (expression.isExpression() && expression.isEqual(instruction)) {
-                        if (DataFlowOptimizer.DEBUG) {
+                        if (BaseOptimizer.TRACE) {
                             System.out.println("    Adding inferred equivalence " + variable.toMlog() + " == " + expression.variable.toMlog());
                         }
                         equivalences.put(variable, expression.variable);
@@ -286,7 +286,7 @@ public class DataFlowVariableStates {
             }
 
             if (definitions.containsKey(variable)) {
-                if (DataFlowOptimizer.DEBUG) {
+                if (BaseOptimizer.TRACE) {
                     definitions.get(variable).forEach(this::printInstruction);
                 }
                 // Variable value was read, keep all instructions that define its value
@@ -415,7 +415,7 @@ public class DataFlowVariableStates {
         }
 
         void print(String title) {
-            if (DataFlowOptimizer.DEBUG) {
+            if (BaseOptimizer.TRACE) {
                 System.out.println(title);
                 System.out.println("    VariableStates instance #" + id + (dead ? " DEAD!" : ""));
                 values.values().forEach(v -> System.out.println("    " + v));
@@ -580,7 +580,7 @@ public class DataFlowVariableStates {
     }
 
     private void debug(Supplier<String> text) {
-        if (DataFlowOptimizer.DEBUG) {
+        if (BaseOptimizer.TRACE) {
             System.out.println(text.get());
         }
     }

@@ -29,7 +29,7 @@ class TempVariableEliminator extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator itCurr = createIterator(); LogicIterator itPrev = createIterator()) {
             if (itCurr.hasNext()) {
                 itCurr.next(); // Skip first

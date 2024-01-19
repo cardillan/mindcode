@@ -37,7 +37,7 @@ public class StackUsageOptimizer extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         if (getCallGraph().containsRecursiveFunction()) {
             // Both optimizations handle the program body and user functions at once. The program body can contain call
             // instructions, but no push or pop instructions, so the optimizations won't do anything on them,

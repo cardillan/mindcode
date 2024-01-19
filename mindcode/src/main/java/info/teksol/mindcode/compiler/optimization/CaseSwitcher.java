@@ -40,7 +40,7 @@ public class CaseSwitcher extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         return false;
     }
 

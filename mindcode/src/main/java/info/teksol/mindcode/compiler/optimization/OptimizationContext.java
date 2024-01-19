@@ -1274,7 +1274,7 @@ public class OptimizationContext {
 
     //<editor-fold desc="Logic list">
     protected LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
-        return new LogicList(context,instructions);
+        return new LogicList(context, instructions);
     }
 
     private final LogicList EMPTY = new LogicList(null, java.util.List.of());

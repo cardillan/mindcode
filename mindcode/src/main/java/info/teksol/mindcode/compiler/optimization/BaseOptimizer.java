@@ -29,6 +29,8 @@ import java.util.stream.Stream;
  * instruction not in a program, an error occurs.
  */
 abstract class BaseOptimizer extends AbstractOptimizer {
+    protected static final boolean TRACE = false;
+
     protected int modifications = 0;
     protected int insertions = 0;
     protected int deletions = 0;
@@ -45,7 +47,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * Performs one iteration of the optimization. Return true to run another iteration, false when done.
      * @return true to re-run the optimization
      */
-    protected abstract boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration);
+    protected abstract boolean optimizeProgram(OptimizationPhase phase);
 
     @Override
     public boolean optimize(OptimizationPhase phase, int pass) {
@@ -54,7 +56,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         int iteration = 1;
         do {
             optimizationContext.prepare();
-            repeat = optimizeProgram(phase, pass, iteration);
+            if (TRACE) {
+                System.out.printf("%n*** %s: PASS %d, ITERATION %d ***%n%n", getName().toUpperCase(), pass, iteration);
+            }
+            repeat = optimizeProgram(phase);
             optimizationContext.finish();
 
             modifications += optimizationContext.getModifications();
@@ -125,7 +130,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.getVariableStates(instruction);
     }
 
-    public DataFlowVariableStates.VariableStates getConditionVariables(AstContext conditionContext) {
+    public DataFlowVariableStates.VariableStates getLoopVariables(AstContext conditionContext) {
         return optimizationContext.getLoopVariables(conditionContext);
     }
 
@@ -707,5 +712,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     protected LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
         return optimizationContext.buildLogicList(context, instructions);
+    }
+
+    protected void trace(Supplier<String> text) {
+        if (TRACE) {
+            System.out.println(text.get());
+        }
     }
 }

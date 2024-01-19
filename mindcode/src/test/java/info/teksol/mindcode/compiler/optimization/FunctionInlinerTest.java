@@ -104,10 +104,27 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         end
                         print(foo() + foo())
                         """,
-                createInstruction(OP, "rand", "__fn0retval", "10"),
-                createInstruction(SET, var(0), "__fn0retval"),
+                createInstruction(OP, "rand", var(0), "10"),
                 createInstruction(OP, "rand", "__fn0retval", "10"),
                 createInstruction(OP, "add", var(2), var(0), "__fn0retval"),
+                createInstruction(PRINT, var(2)),
+                createInstruction(END)
+        );
+    }
+
+
+    @Test
+    void inlinesFunctionCallsWithParametersInExpressions() {
+        assertCompilesTo("""
+                        def foo(n)
+                            t = rand(n)
+                            return t
+                        end
+                        print(foo(10) + foo(20))
+                        """,
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(OP, "rand", "__fn0_t", "20"),
+                createInstruction(OP, "add", var(2), var(0), "__fn0_t"),
                 createInstruction(PRINT, var(2)),
                 createInstruction(END)
         );

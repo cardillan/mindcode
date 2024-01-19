@@ -19,8 +19,6 @@ import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
 import static info.teksol.util.CollectionUtils.in;
 
 public class DataFlowOptimizer extends BaseOptimizer {
-    static final boolean DEBUG = false;
-
     /**
      * Stores possible replacement values to each input argument of a replaceable instruction.
      */
@@ -88,7 +86,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         defines.clear();
         keep.clear();
         orphans.clear();
@@ -100,8 +98,6 @@ public class DataFlowOptimizer extends BaseOptimizer {
         functionEndStates.clear();
 
         clearVariableStates();
-
-        debug(() -> "\n\n\n*** PASS " + pass + ", ITERATION " + iteration + " ***\n");
 
         analyzeFunctionVariables();
 
@@ -343,7 +339,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private VariableStates processContext(AstContext context, AstContext localContext, VariableStates variableStates,
             boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
-        debug(() -> ">>> Entering context " + context.id + ": " + context.hierarchy());
+        trace(() -> ">>> Entering context " + context.id + ": " + context.hierarchy());
         final VariableStates result;
         if (!context.matches(BASIC)) {
             result = processDefaultContext(context, localContext, variableStates, modifyInstructions);
@@ -355,7 +351,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 default     -> processDefaultContext(context, localContext, variableStates, modifyInstructions);
             };
         }
-        debug(() -> "<<< Exiting  context " + context.id + ": " + context.hierarchy());
+        trace(() -> "<<< Exiting  context " + context.id + ": " + context.hierarchy());
         return result;
     }
 
@@ -424,7 +420,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
             VariableStates initial = variableStates.copy("loop initial state");
             final int iteration = i;
-            debug(() -> "=== Processing loop " + context.id + " - iteration " + iteration + ": position " + iterator.nextIndex());
+            trace(() -> "=== Processing loop " + context.id + " - iteration " + iteration + ": position " + iterator.nextIndex());
 
             for (int j = start; j < children.size(); j++) {
                 // Do not propagate constants on first iteration...
@@ -652,10 +648,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
-        if (DEBUG) {
-            System.out.println("Processing instruction #" + instructionIndex(instruction) +
+        trace(() -> "Processing instruction #" + instructionIndex(instruction) +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
-        }
 
         switch (instruction) {
             case NoOpInstruction ix:        return variableStates;
@@ -690,7 +684,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         if (modifyInstructions && !valueReplacements.isEmpty()) {
             replacements.put(instruction, valueReplacements);
-            if (DEBUG) {
+            if (TRACE) {
                 System.out.println("    Detected the following possible value replacements for current instruction:");
                 valueReplacements.forEach((k, v) -> System.out.println("       " + k.toMlog() + " --> " + v.toMlog()));
             }
@@ -765,12 +759,6 @@ public class DataFlowOptimizer extends BaseOptimizer {
             return replaceArgument.apply(valueReplacements.get(variable));
         } else {
             return op;
-        }
-    }
-
-    private void debug(Supplier<String> text) {
-        if (DEBUG) {
-            System.out.println(text.get());
         }
     }
 

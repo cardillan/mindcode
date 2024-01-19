@@ -21,7 +21,7 @@ class PropagateJumpTargets extends BaseOptimizer {
     }
     
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator it = createIterator()) {
             it.add(createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
             while (it.hasNext()) {

@@ -41,7 +41,7 @@ class PrintMerger extends BaseOptimizer {
     private PrintInstruction previous;
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         previous = null;
 
         try (LogicIterator iterator = createIterator()) {

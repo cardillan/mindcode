@@ -14,7 +14,7 @@ class SingleStepJumpEliminator extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         List<JumpInstruction> removableJumps = new ArrayList<>();
 
         try (LogicIterator iterator = createIterator()) {

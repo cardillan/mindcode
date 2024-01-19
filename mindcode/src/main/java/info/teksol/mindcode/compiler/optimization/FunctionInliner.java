@@ -4,6 +4,7 @@ import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class FunctionInliner extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         return false;
     }
 
@@ -100,13 +101,16 @@ public class FunctionInliner extends BaseOptimizer {
             return OptimizationResult.INVALID;
         }
 
+        trace(() -> "Inlining function " + function.getName());
+
         List<AstContext> calls = contexts(c -> c.matches(OUT_OF_LINE_CALL)
                 && c.functionPrefix().equals(context.functionPrefix()));
 
         for (AstContext call : calls) {
             AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
             int insertionPoint = firstInstructionIndex(call);
-            insertInstructions(insertionPoint, body.duplicateToContext(newContext));
+            LogicList newBody = body.duplicateToContext(newContext);
+            insertInstructions(insertionPoint, swapReturnVariable(call, newBody));
             // Remove original call instructions
             removeMatchingInstructions(ix -> ix.belongsTo(call));
         }
@@ -118,6 +122,26 @@ public class FunctionInliner extends BaseOptimizer {
         count += calls.size();
 
         return OptimizationResult.REALIZED;
+    }
+
+    private LogicList swapReturnVariable(AstContext call, LogicList newBody) {
+        LogicInstruction followup = instructionAfter(call);
+        if (followup instanceof SetInstruction set
+                && set.getValue() instanceof LogicVariable variable
+//                && variable.getType() == ArgumentType.FUNCTION_RETVAL
+                && variable.getFunctionPrefix().equals(call.functionPrefix())) {
+            LogicVariable result = set.getResult();
+            removeInstruction(set);
+
+            // TODO When modification support is added to LogicList, rewrite this to modify instructions in the lo
+            List<LogicInstruction> newInstructions = newBody.stream()
+                    .map(ix -> replaceAllArgs(ix, variable, result))
+                    .toList();
+
+            return buildLogicList(newBody.getAstContext(), newInstructions);
+        } else {
+            return newBody;
+        }
     }
 
     private class InlineFunctionAction extends AbstractOptimizationAction {
@@ -182,9 +206,12 @@ public class FunctionInliner extends BaseOptimizer {
             return OptimizationResult.INVALID;
         }
 
+        trace(() -> "Inlining call " + call + " of function " + function.getName());
+
         AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
         int insertionPoint = firstInstructionIndex(call);
-        insertInstructions(insertionPoint, body.duplicateToContext(newContext));
+        LogicList newBody = body.duplicateToContext(newContext);
+        insertInstructions(insertionPoint, swapReturnVariable(call, newBody));
         // Remove original call instructions
         removeMatchingInstructions(ix -> ix.belongsTo(call));
 

@@ -43,7 +43,7 @@ public class LoopOptimizer extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         forEachContext(AstContextType.LOOP, BASIC, loop -> {
             processLoop(loop, true, 0);
             return null;

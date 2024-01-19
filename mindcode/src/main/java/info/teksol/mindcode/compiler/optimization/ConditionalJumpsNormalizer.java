@@ -21,7 +21,7 @@ class ConditionalJumpsNormalizer extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump && jump.isConditional()) {

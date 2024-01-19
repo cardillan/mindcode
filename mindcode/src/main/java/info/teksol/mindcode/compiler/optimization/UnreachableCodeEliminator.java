@@ -28,7 +28,7 @@ class UnreachableCodeEliminator extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         // List of all instructions
         List<LogicInstruction> program = optimizationContext.getProgram();
         BitSet unused = new BitSet(program.size());

@@ -34,7 +34,7 @@ class CaseExpressionOptimizer extends BaseOptimizer {
     }
 
     @Override
-    protected boolean optimizeProgram(OptimizationPhase phase, int pass, int iteration) {
+    protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
                 if (it.next() instanceof SetInstruction ix && ix.getResult().getType() == ArgumentType.AST_VARIABLE) {
