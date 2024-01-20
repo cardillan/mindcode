@@ -6,9 +6,13 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added support for replacing `@this.x` and `@this.y` expression by `@thisx`/`@thisy` built-in constants to the
-  [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
-* Added support for replacing `@constant.id` expressions by an integer value of the ID assigned to the `@constant`, 
+* Added limited support for the new `sync` instruction through the `sync()` function. The function requires a global
+  variable as a parameter (see [the `sync()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-sync-function) for 
+  the description of the function and the limitations imposed on it).
+* Added support to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) 
+  for replacing `@this.x` and `@this.y` expressions by `@thisx`/`@thisy` built-in constants.
+* Added support to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization)
+  for replacing `@constant.id` expressions by an integer value of the ID assigned to the `@constant`, 
   assuming it is a known item, liquid, block type or unit type. This optimization is only active on `aggresive` 
   optimization level. For example, `id = @graphite.id` gets compiled down to `set id 3`, allowing further 
   optimizations on the constant value (`3`) to take place. 
@@ -39,7 +43,7 @@ All notable changes to this project will be documented in this file.
  
 ### Added
 
-* Added new `autoPathfind()` method for `ucontrol autoPathfind` instruction
+* Added support for the `ucontrol autoPathfind` instruction through the `autoPathfind()` function
   ([PR #113](https://github.com/cardillan/mindcode/pull/113)).
 
 ### Fixed

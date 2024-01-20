@@ -1,9 +1,11 @@
 package info.teksol.mindcode.compiler.functions;
 
+import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
 
@@ -220,7 +222,6 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
         );
     }
 
-
     @Test
     void generatesSetProp() {
         assertCompilesTo("""
@@ -231,4 +232,33 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
         );
     }
 
+    @Test
+    void generatesSync() {
+        assertCompilesTo("""
+                        sync(GLOBAL)
+                        """,
+                createInstruction(SYNC, "GLOBAL"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void refusesLocalVariableForSync() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("""
+                        sync(local)
+                        """
+                )
+        );
+    }
+
+    @Test
+    void refusesLiteralForSync() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("""
+                        sync(10)
+                        """
+                )
+        );
+    }
 }

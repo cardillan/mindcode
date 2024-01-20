@@ -130,11 +130,14 @@ public enum LogicParameter {
     /** Type of cut scene in CUTSCENE instruction */
     CUTSCENE        (Flags.SELECTOR),
 
-    /** Item to fetch in Type of cut scene in FETCH instruction */
+    /** Item to fetch in FETCH instruction */
     FETCH           (Flags.SELECTOR),
 
     /** An unused input parameter. Ignored by given opcode variant. */
     UNUSED          (Flags.UNUSED),
+
+    /** An input parameter requiring a global variable - see the SYNC instruction. */
+    GLOBAL          (Flags.GLOBAL | Flags.INPUT  | Flags.OUTPUT),
 
     /** An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. */
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
@@ -211,6 +214,13 @@ public enum LogicParameter {
     }
 
     /**
+     * @return true if this parameter must be a global variable
+     */
+    public boolean isGlobal() {
+        return (flags & Flags.GLOBAL) != 0;
+    }
+
+    /**
      * @return true if the value of this parameter must be one from the allowed values list
      */
     public boolean restrictValues() {
@@ -261,5 +271,8 @@ public enum LogicParameter {
 
         /** Unused parameter. Doesn't map to Mindcode functions. */
         private static final int UNUSED     = 16;
+
+        /** Parameter requiring a global variable (see the SYNC instruction). */
+        private static final int GLOBAL     = 32;
     }
 }

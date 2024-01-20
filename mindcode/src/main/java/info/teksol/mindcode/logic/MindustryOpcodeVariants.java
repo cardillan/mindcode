@@ -218,6 +218,7 @@ public class MindustryOpcodeVariants {
         add(list, V7, V7A, W, FUNC, Opcode.FETCH, fetch("core"),        res("result"), in("team"), in("index"));
         add(list, V7, V7A, W, FUNC, Opcode.FETCH, fetch("build"),       res("result"), in("team"), in("index"), in("type"));
 
+        add(list, V7, V7A, W, FUNC, Opcode.SYNC,    glob("var"));
         add(list, V7, V7A, W, FUNC, Opcode.GETFLAG, res("result"), in("flag"));
         add(list, V7, V7A, W, FUNC, Opcode.SETFLAG, in("flag"), in("value"));
         add(list, V7, V7A, W, PROP, Opcode.SETPROP, sensor("property"), block("object"), in("value"));
@@ -266,6 +267,9 @@ public class MindustryOpcodeVariants {
         return new NamedParameter(LogicParameter.FETCH, name);
     }
 
+    public static NamedParameter glob(String name) {
+        return new NamedParameter(LogicParameter.GLOBAL, name);
+    }
     public static NamedParameter group(String name) {
         return new NamedParameter(LogicParameter.GROUP, name);
     }

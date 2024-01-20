@@ -254,6 +254,11 @@ public class BaseFunctionMapper implements FunctionMapper {
             int argIndex = 0;
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
+                if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
+                    throw new MindcodeException("Using argument '" + fnArgs.get(argIndex).toMlog() + "' in a call to '" + name
+                            + "' not allowed (a global variable is required)");
+                }
+
                 if (a.type() == LogicParameter.RESULT) {
                     ixArgs.add(tmp);
                 } else if (a.type() == LogicParameter.BLOCK) {
@@ -279,8 +284,8 @@ public class BaseFunctionMapper implements FunctionMapper {
                         // Block name cannot be used as output argument
                         LogicArgument argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            throw new MindcodeException("Using argument " + argument + " in a call to function " + name
-                                    + " not allowed (name reserved for linked blocks)");
+                            throw new MindcodeException("Using argument '" + argument.toMlog() + "' in a call to '" + name
+                                    + "' not allowed (name reserved for linked blocks)");
                         }
                         ixArgs.add(argument);
                     }
@@ -436,7 +441,7 @@ public class BaseFunctionMapper implements FunctionMapper {
 
         if (results > 1) {
             throw new InvalidMetadataException("More than one RESULT arguments in opcode " + opcodeVariant);
-        } else if (outputs == 1 && results == 0) {
+        } else if (outputs == 1 && results == 0 && opcodeVariant.opcode() != Opcode.SYNC) {
             // If there is exactly one output, it must be marked as a result
             throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
         }
@@ -570,6 +575,11 @@ public class BaseFunctionMapper implements FunctionMapper {
             int argIndex = 0;
 
             for (NamedParameter a : opcodeVariant.namedParameters()) {
+                if (a.type().isGlobal() && !fnArgs.get(argIndex).isGlobalVariable()) {
+                    throw new MindcodeException("Using argument '" + fnArgs.get(argIndex).toMlog() + "' in a call to '" + name
+                            + "' not allowed (a global variable is required)");
+                }
+
                 if (a.type() == LogicParameter.RESULT) {
                     ixArgs.add(tmp);
                 } else if (a.type().isSelector() && !a.type().isFunctionName()) {
@@ -594,8 +604,8 @@ public class BaseFunctionMapper implements FunctionMapper {
                         // Block name cannot be used as output argument
                         LogicValue argument = fnArgs.get(argIndex++);
                         if (argument.getType() == ArgumentType.BLOCK) {
-                            throw new MindcodeException("Using argument " + argument + " in a call to function " + name
-                                    + " not allowed (name reserved for linked blocks)");
+                            throw new MindcodeException("Using argument '" + argument.toMlog() + "' in a call to '" + name
+                                    + "' not allowed (name reserved for linked blocks)");
                         }
                         ixArgs.add(argument);
                     }
