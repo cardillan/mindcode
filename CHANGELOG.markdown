@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 * Added limited support for the new `sync` instruction through the `sync()` function. The function requires a global
   variable as a parameter (see [the `sync()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-sync-function) for 
   the description of the function and the limitations imposed on it).
+* Added support for the [`effect` instruction](doc/syntax/FUNCTIONS_V7A.markdown#instruction-effect).
 * Added more capabilities to the
   [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization): 
   * Replacing `@this.x` and `@this.y` expressions by `@thisx`/`@thisy` built-in constants.

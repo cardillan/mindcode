@@ -36,6 +36,7 @@ public enum Opcode {
     SETRULE         ("setrule",         "Set a game rule."),
     MESSAGE         ("message",         "Display a message on the screen from the text buffer. Will wait until the previous message finishes."),
     CUTSCENE        ("cutscene",        "Manipulate the player camera.", 1),
+    EFFECT          ("effect",          "Create a particle effect."),
     EXPLOSION       ("explosion",       "Create an explosion at a location."),
     SETRATE         ("setrate",         "Set processor execution speed in instructions/tick."),
     FETCH           ("fetch",           "Lookup units, cores, players or buildings by index. Indices start at 0 and end at their returned count."),

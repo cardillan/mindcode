@@ -261,4 +261,78 @@ public class WorldProcessorFunctionsTest extends AbstractGeneratorTest {
                 )
         );
     }
+
+    @Test
+    void generatesEffects() {
+        assertCompilesTo("""
+                        effect(warn, x, y)
+                        effect(cross, x, y)
+                        effect(blockFall, x, y, @vault)
+                        effect(placeBlock, x, y, size)
+                        effect(placeBlockSpark, x, y, size)
+                        effect(breakBlock, x, y, size)
+                        effect(spawn, x, y)
+                        effect(trail, x, y, size, color)
+                        effect(breakProp, x, y, size, color)
+                        effect(smokeCloud, x, y, color)
+                        effect(vapor, x, y, color)
+                        effect(hit, x, y, color)
+                        effect(hitSquare, x, y, color)
+                        effect(shootSmall, x, y, rotation, color)
+                        effect(shootBig, x, y, rotation, color)
+                        effect(smokeSmall, x, y, color)
+                        effect(smokeBig, x, y, color)
+                        effect(smokeColor, x, y, rotation, color)
+                        effect(smokeSquare, x, y, rotation, color)
+                        effect(smokeSquareBig, x, y, rotation, color)
+                        effect(spark, x, y, color)
+                        effect(sparkBig, x, y, color)
+                        effect(sparkShoot, x, y, rotation, color)
+                        effect(sparkShootBig, x, y, rotation, color)
+                        effect(drill, x, y, color)
+                        effect(drillBig, x, y, color)
+                        effect(lightBlock, x, y, size, color)
+                        effect(explosion, x, y, size)
+                        effect(smokePuff, x, y, color)
+                        effect(sparkExplosion, x, y, color)
+                        effect(crossExplosion, x, y, size, color)
+                        effect(wave, x, y, size, color)
+                        effect(bubble, x, y)
+                        """,
+                createInstruction(EFFECT, "warn", "x", "y"),
+                createInstruction(EFFECT, "cross", "x", "y"),
+                createInstruction(EFFECT, "blockFall", "x", "y", "size", "color", "@vault"),
+                createInstruction(EFFECT, "placeBlock", "x", "y", "size"),
+                createInstruction(EFFECT, "placeBlockSpark", "x", "y", "size"),
+                createInstruction(EFFECT, "breakBlock", "x", "y", "size"),
+                createInstruction(EFFECT, "spawn", "x", "y"),
+                createInstruction(EFFECT, "trail", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "breakProp", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "smokeCloud", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "vapor", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "hit", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "hitSquare", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "shootSmall", "x", "y", "rotation", "color"),
+                createInstruction(EFFECT, "shootBig", "x", "y", "rotation", "color"),
+                createInstruction(EFFECT, "smokeSmall", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "smokeBig", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "smokeColor", "x", "y", "rotation", "color"),
+                createInstruction(EFFECT, "smokeSquare", "x", "y", "rotation", "color"),
+                createInstruction(EFFECT, "smokeSquareBig", "x", "y", "rotation", "color"),
+                createInstruction(EFFECT, "spark", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "sparkBig", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "sparkShoot", "x", "y", "rotation", "color"),
+                createInstruction(EFFECT, "sparkShootBig", "x", "y", "rotation", "color"),
+                createInstruction(EFFECT, "drill", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "drillBig", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "lightBlock", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "explosion", "x", "y", "size"),
+                createInstruction(EFFECT, "smokePuff", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "sparkExplosion", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "crossExplosion", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "wave", "x", "y", "size", "color"),
+                createInstruction(EFFECT, "bubble", "x", "y"),
+                createInstruction(END)
+        );
+    }
 }

@@ -130,6 +130,9 @@ public enum LogicParameter {
     /** Type of cut scene in CUTSCENE instruction */
     CUTSCENE        (Flags.SELECTOR),
 
+    /** Type of visual effect */
+    EFFECT          (Flags.SELECTOR),
+
     /** Item to fetch in FETCH instruction */
     FETCH           (Flags.SELECTOR),
 
