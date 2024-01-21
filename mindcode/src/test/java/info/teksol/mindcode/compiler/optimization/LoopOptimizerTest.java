@@ -217,7 +217,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                             print(i)
                         end
                         """,
-                createInstruction(OP, "add", "i", "0", "1"),
+                createInstruction(SET, "i", "1"),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, "i"),
                 createInstruction(OP, "add", "i", "i", "1"),

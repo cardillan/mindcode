@@ -562,7 +562,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         """,
                 createInstruction(OP, "rand", "index", "10"),
                 createInstruction(SET, "parent", "0"),
-                createInstruction(OP, "add", "child", "0", "1"),
+                createInstruction(SET, "child", "1"),
                 createInstruction(JUMP, var(1002), "greaterThan", "1", "index"),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(SET, "parent", "child"),

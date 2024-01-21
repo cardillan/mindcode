@@ -1,12 +1,13 @@
     58 instructions before optimizations.
      7 instructions eliminated by Temp Variables Elimination.
      9 instructions eliminated by Dead Code Elimination (5 iterations).
-    80 instructions eliminated by Data Flow Optimization (10 passes, 48 iterations).
-     1 instructions eliminated by Loop Optimization (2 iterations).
+     1 instructions modified by Expression Optimization (3 iterations).
+    80 instructions eliminated by Data Flow Optimization (10 passes, 49 iterations).
+     1 instructions eliminated by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
-   146 instructions added by Loop Unrolling (12 iterations).
+   146 instructions added by Loop Unrolling (13 iterations).
      1 loops unrolled by Loop Unrolling.
-   858 instructions added by Function Inlining (12 iterations).
+   858 instructions added by Function Inlining (13 iterations).
     12 function calls inlined by Function Inlining.
      1 instructions eliminated by Unreachable Code Elimination.
    964 instructions after optimizations.
@@ -163,6 +164,16 @@ Pass 1: speed optimization selection (cost limit 35):
   ! Function Inlining: inline function call at line 14           cost   105, benefit        3,5, efficiency        0,0
 
 Pass 2: speed optimization selection (cost limit 35):
+  ! Function Inlining: inline function call at line 11           cost   105, benefit        3,5, efficiency        0,0
+  ! Function Inlining: inline function call at line 12           cost   105, benefit        3,5, efficiency        0,0
+  ! Function Inlining: inline function call at line 13           cost   105, benefit        3,5, efficiency        0,0
+  ! Function Inlining: inline function call at line 14           cost   105, benefit        3,5, efficiency        0,0
+  ! Function Inlining: inline function call at line 11           cost   105, benefit        3,5, efficiency        0,0
+  ! Function Inlining: inline function call at line 12           cost   105, benefit        3,5, efficiency        0,0
+  ! Function Inlining: inline function call at line 13           cost   105, benefit        3,5, efficiency        0,0
+  ! Function Inlining: inline function call at line 14           cost   105, benefit        3,5, efficiency        0,0
+
+Pass 3: speed optimization selection (cost limit 35):
   ! Function Inlining: inline function call at line 11           cost   105, benefit        3,5, efficiency        0,0
   ! Function Inlining: inline function call at line 12           cost   105, benefit        3,5, efficiency        0,0
   ! Function Inlining: inline function call at line 13           cost   105, benefit        3,5, efficiency        0,0
@@ -5547,6 +5558,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1
   1467 label __label874
   1468 label __label875
 
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+  1707 label __label16
+  1708 label __label17
+  1709 op add __tmp13 __fn1_n __fn1_r
+-    * op add __fn1_sum 0 __tmp13
++ 1710 set __fn1_sum __tmp13
+  1711 label __label18
+  1712 label __label19
+  1713 op add __tmp13 __fn1_n __fn1_r
+
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
   1913 print __tmp18
@@ -6424,7 +6446,7 @@ end
 label __label1
 op rand __fn1_r 10 0
 op add __tmp13 __fn1_n __fn1_r
-op add __fn1_sum 0 __tmp13
+set __fn1_sum __tmp13
 op add __tmp13 __fn1_n __fn1_r
 op add __fn1_sum __fn1_sum __tmp13
 op add __tmp13 __fn1_n __fn1_r

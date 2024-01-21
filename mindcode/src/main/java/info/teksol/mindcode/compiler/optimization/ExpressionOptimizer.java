@@ -49,6 +49,36 @@ public class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processOpInstruction(LogicIterator logicIterator, OpInstruction ix) {
+        if (ix.hasSecondOperand()) {
+            final Tuple2<LogicValue, LogicValue> opers = extractConstantOperand(ix);
+            if (opers.getT1() instanceof LogicNumber num && num.isInteger()) {
+                int value = num.getIntValue();
+                switch (ix.getOperation()) {
+                    case MUL -> {
+                        if (value == 0) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.get(0)));
+                            return;
+                        } else if (value == 1) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            return;
+                        }
+                    }
+                    case DIV -> {
+                        if (value == 1 && opers.getT1() == ix.getY()) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            return;
+                        }
+                    }
+                    case ADD, SUB -> {
+                        if (value == 0) {
+                            logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.getT2()));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
         final Tuple2<LogicValue, LogicValue> ops = extractIdivOperands(ix);
         if (ops != null) {
             LogicVariable result = ix.getResult();
@@ -68,6 +98,12 @@ public class ExpressionOptimizer extends BaseOptimizer {
                 logicIterator.next();
             }
         }
+    }
+
+    private Tuple2<LogicValue, LogicValue> extractConstantOperand(OpInstruction ix) {
+        return ix.getX().isNumericLiteral()
+                ? new Tuple2<>(ix.getX(), ix.getY())
+                : new Tuple2<>(ix.getY(), ix.getX());
     }
 
     private Tuple2<LogicValue, LogicValue> extractIdivOperands(OpInstruction ix) {

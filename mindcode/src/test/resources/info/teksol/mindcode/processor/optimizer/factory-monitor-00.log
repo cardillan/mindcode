@@ -3,6 +3,7 @@
     43 instructions eliminated by Dead Code Elimination (5 iterations).
     20 instructions eliminated by Jump Optimization (4 iterations).
     15 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     1 instructions modified by Expression Optimization (3 iterations).
      8 instructions eliminated by If Expression Optimization (3 iterations).
     16 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
      4 instructions added by Loop Optimization (3 iterations).
@@ -1551,6 +1552,17 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    412 set blue 0
    413 label __label76
 
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+   257 op mul __tmp83 __tmp82 BAR_GAP
+   258 op add __tmp81 OFFSET_Y __tmp83
+   259 label __label48
+-    * op sub crh __tmp81 0
++  260 set crh __tmp81
+   261 jump __label46 always
+   262 label __label45
+   263 set crx 0
+
 Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
  
    287 label __label52
@@ -1870,7 +1882,7 @@ op mod __tmp82 TO_INDEX 8
 op mul __tmp83 __tmp82 BAR_GAP
 op add __tmp81 OFFSET_Y __tmp83
 label __label48
-op sub crh __tmp81 0
+set crh __tmp81
 jump __label46 always 0 0
 label __label45
 set crx 0

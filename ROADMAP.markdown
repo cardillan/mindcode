@@ -14,6 +14,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Incremental improvements
 
+* Expand Data FLow Optimization to handle multiplication by zero, multiplication/division by one, and 
+  addition/subtraction of zero directly. 
 * Utilizing the new `id` property:
   * Add built-in constants to the documentation, ensure uniform terminology. 
   * Schemacode
@@ -34,6 +36,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     * Store the source file in a separate table for errors  
     * Display message "The error has been logged and will be investigated."
   * Command line app: display message "An internal error occurred. Please report the error at ..."
+* When an uninitialized temporary variable is found by Data Flow Optimization, generate compilation error -- if it
+  happens, it is an optimization bug.
 * Fix incorrect headings of Data Flow Optimization passes executed after applying selected speed optimization.
 * Refactor stackless function calls
   * UnreachableCodeEliminator now tracks code paths and recognizes CALL instruction; it is no longer necessary to
@@ -409,21 +413,10 @@ The `op min` instructions perhaps might be avoided under some circumstances.
 * Loop unswitching (if in loop --> loops in if)
 * Loop fusion???
 
-## Unreachable code elimination improvements:
+## Unreachable code elimination improvements
 
-* Instead of removing instructions, replace them with a no-op (to preserve AST context structure). Only when an
-  entire AST context (not just a subcontext) is unreachable, eliminate it altogether -- this could perhaps be done
-  while rebuilding AST context structure.
-* If and Loop handling in respective optimizers (including DFO) must be updated to cope with the possibility of
-  no-op instructions.
-* After this change, it should be called in iteration phase, to free space for further speed optimizations.
 * Detect `end` instructions which are **always** executed in a user defined function and terminate the code path
   when such a function is called.
-
-## Expression optimization
-
-* Replace addition/subtraction of 0 by assignment,
-* Replace multiplication/division by 1 by assignment,
 
 ## Optimization for speed
 
@@ -435,11 +428,6 @@ The `op min` instructions perhaps might be avoided under some circumstances.
 * Case expressions: if each branch of a case expression provides just the expression value, rearrange each branch
   to setting the expression value to the output variable and jump out if the branch was selected. Saves one jump
   per branch, at most 1/3 instructions. Doubles execution time in average case.
-
-# Error reporting improvements
-
-* When an uninitialized temporary variable is found by Data Flow Optimization, generate compilation error -- if it
-  happens, it is an optimization bug.
 
 # Schematics Builder
 
@@ -500,9 +488,7 @@ doing them isn't clear yet.
 * Function libraries. Now that inline and stackless functions are really useful, libraries might make sense.
 * Multiprocessing support - some kind of library or framework (probably) that could be used to
   provide high-level support for inter-processor communication using either memory cells/banks,
-  or even unit flags.
-  * The first step is already being made: schematics creation tool would allow us to compile
-    the entire multiprocessor schematic in one go.
+  or even unit flags. Schemacode would be used to produce a schematics with several processors.
 
 ### Parallel comparison
 

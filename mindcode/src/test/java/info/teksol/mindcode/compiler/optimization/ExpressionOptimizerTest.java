@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.logic.Operation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -159,6 +160,91 @@ public class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOpt
 
                 List.of(
                         createInstruction(SET, tmp0, P1),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesMulBy0() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.MUL, tmp0, a, P0),
+                        createInstruction(OP, Operation.MUL, tmp1, P0, b),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, P0),
+                        createInstruction(SET, tmp1, P0),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesMulBy1() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.MUL, tmp0, a, P1),
+                        createInstruction(OP, Operation.MUL, tmp1, P1, b),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, a),
+                        createInstruction(SET, tmp1, b),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesDivBy1() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.DIV, tmp0, a, P1),
+                        createInstruction(OP, Operation.DIV, tmp1, P1, b),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, a),
+                        createInstruction(OP, Operation.DIV, tmp1, P1, b),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesAddOf0() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.ADD, tmp0, a, P0),
+                        createInstruction(OP, Operation.ADD, tmp1, P0, b),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, a),
+                        createInstruction(SET, tmp1, b),
+                        createInstruction(END)
+                )
+        );
+    }
+
+    @Test
+    void optimizesSubOf0() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(OP, Operation.SUB, tmp0, a, P0),
+                        createInstruction(OP, Operation.SUB, tmp1, P0, b),
+                        createInstruction(END)
+                ),
+
+                List.of(
+                        createInstruction(SET, tmp0, a),
+                        createInstruction(SET, tmp1, b),
                         createInstruction(END)
                 )
         );
