@@ -174,4 +174,14 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void generatesNewAutoPathfind() {
+        assertCompilesTo("""
+                        autoPathfind()
+                        """,
+                createInstruction(UCONTROL, "autoPathfind"),
+                createInstruction(END)
+        );
+    }
 }

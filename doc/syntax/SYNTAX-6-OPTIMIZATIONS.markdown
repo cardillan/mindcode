@@ -117,6 +117,9 @@ optimizations are available:
 * `sensor var @this @x` and `sensor var @this @y` are replaced by `set var @thisx` and `set var @thisy` respectively.
   Data Flow Optimization can then apply [constant propagation](#constant-propagation) to the `@thisx`/`@thisy` 
   built-in constants.
+* Multiplication by literal zero is replaced by a `set` instruction setting the target variable to a zero.
+* Multiplication/division by one and addition/subtraction of zero are replaced by a `set` instruction setting the 
+  target variable to the other operand.  
 * All set instructions assigning a variable to itself (e.g. `set x x`) are removed.
 
 If the optimization level is `aggressive`, the following additional expressions are handled:

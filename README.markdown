@@ -15,6 +15,7 @@ The main focus of Mindcode design is two-fold:
 
 Some of the latest enhancements to Mindcode are:
 
+* All instructions added in Mindustry 7 build 146 are now supported.  
 * A number of powerful code optimizations:
   [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization),
   [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling),

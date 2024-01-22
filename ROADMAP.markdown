@@ -14,10 +14,14 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Incremental improvements
 
-* Expand Data FLow Optimization to handle multiplication by zero, multiplication/division by one, and 
-  addition/subtraction of zero directly. 
+* Expand handling of expressions by the Data Flow Optimization:
+  * handle multiplication by zero, multiplication/division by one, and addition/subtraction of zero directly (i.e. 
+    independently of the Expression Optimization).
+  * When there are two subsequent MUL/DIV or ADD/SUB instructions, the first one not being used by any other 
+    instruction and the second one containing a constant, move the constant to the first instruction. Would facilitate 
+    constant folding for more complex expressions.
+  * Add factoring-out capability to more complex expressions.
 * Utilizing the new `id` property:
-  * Add built-in constants to the documentation, ensure uniform terminology. 
   * Schemacode
     * replace the `Item` and `Liquid` enums with metadata, possibly utilize units).
   * Mindcode

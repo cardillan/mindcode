@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2024-01-22
 
 ### Added
 
@@ -12,14 +12,14 @@ All notable changes to this project will be documented in this file.
 * Added support for the [`effect` instruction](doc/syntax/FUNCTIONS_V7A.markdown#instruction-effect).
 * Added more capabilities to the
   [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization): 
-  * Replacing `@this.x` and `@this.y` expressions by `@thisx`/`@thisy` built-in constants.
-  * Replacing `@constant.id` expressions by an integer value of the ID assigned to the `@constant`, assuming it is a
-    known item, liquid, block type or unit type. This optimization is only active on `aggresive` optimization level. 
+  * Replacing `@this.x` and `@this.y` expressions by the `@thisx`/`@thisy` built-in constants.
+  * Replacing `@constant.id` expressions by an integer value of the ID assigned to the `@constant`, assuming it is 
+    a known item, liquid, block type or unit type. This optimization is only active on `aggresive` optimization level. 
     For example, `id = @graphite.id` gets compiled down to `set id 3`, allowing further optimizations on the 
     constant value (`3`) to take place. 
-  * Replacing multiplication by literal zero with setting the target variable to a zero directly, and replacing 
-    multiplication/division and addition/subtraction of a zero with setting the target variable to the other operand 
-    directly.  
+  * Replacing multiplication by literal zero by an instruction setting the target variable to a zero directly, and 
+    replacing multiplication/division by one and addition/subtraction of zero by an instruction setting the target 
+    variable to the other operand directly.  
 
 ## 2024-01-19
 

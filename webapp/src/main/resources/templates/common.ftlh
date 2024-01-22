@@ -42,7 +42,7 @@
 <#macro footer>
 <footer class="mt-8 text-xs text-center border border-t-2 border-l-0 border-r-0 border-b-0 border-gray-700">
     <div class="mt-4 flex justify-between">
-        <div><strong>2024-01-19</strong></div>
+        <div><strong>2024-01-22</strong></div>
         <div><strong>PRIVACY POLICY</strong>: This website does not track its users. The Mindcode and schematics you submit for compilation is kept for later analysis.
             No other information is kept about you or your actions on the site.</div>
         <div>Created by François (<a class="underline text-blue-500" href="https://github.com/francois">GitHub</a>,
