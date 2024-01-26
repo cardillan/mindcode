@@ -25,12 +25,13 @@ public class OptimizationContext {
     private final AstContext rootContext;
 
     /**
-     * Maps current snapshot of variable states to each instruction with possible replacements.
+     * Maps instructions to variable states at the moment of finishing the execution of the instruction.
+     * TODO perhaps the states should correspond to the before execution state?
      */
     private final Map<LogicInstruction, DataFlowVariableStates.VariableStates> variableStates = new IdentityHashMap<>();
 
     /**
-     * Hold evaluation of first loop condition variables for loop optimizer.
+     * Holds evaluation of first loop condition variables for loop optimizer.
      */
     private final Map<AstContext, DataFlowVariableStates.VariableStates> loopVariables = new HashMap<>();
 

@@ -41,7 +41,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
      * executions are preserved.
      * <p/>
      * Only main variables are stored here. Global variable writes are always preserved, and local variables
-     * are not expected to keep their value between function calls.
+     * generally do not keep their value between function calls.
      */
     final Map<LogicVariable, List<LogicInstruction>> orphans = new HashMap<>();
 
@@ -55,7 +55,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     final Set<LogicVariable> uninitialized = new HashSet<>();
 
     /**
-     * Instructions referencing each variable.
+     * Instructions referencing each variable. References are accumulated (not cleared during single pass).
      */
     final Map<LogicVariable, List<LogicInstruction>> references = new HashMap<>();
 
@@ -76,8 +76,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
     /** Contains function prefix of functions that may directly or indirectly call the end() instruction. */
     private Set<String> functionEnds;
 
+    /** List of variable states at each point of a call to a function that may invoke an end instruction. */
     private final List<VariableStates> functionEndStates = new ArrayList<>();
 
+    /** An instance used for variable states processing */
     private final DataFlowVariableStates dataFlowVariableStates;
 
     public DataFlowOptimizer(OptimizationContext optimizationContext) {
@@ -187,6 +189,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     }
 
     private boolean canReplace(LogicInstruction original, LogicInstruction replacement) {
+        // Maximal number of references to input variables not present in replacement instruction
         int maxOriginal = original.inputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
@@ -194,6 +197,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .mapToInt(this::countReferences)
                 .max().orElse(0);
 
+        // Maximal number of references to input variables not present in original instruction
         int maxReplacement = replacement.inputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
@@ -204,6 +208,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return maxReplacement >= maxOriginal || maxOriginal < 2;
     }
 
+    /**
+     * Creates lists of variables directly or indirectly read/written by each function, and a list of functions
+     * directly or indirectly calling end()
+     */
     private void analyzeFunctionVariables() {
         functionReads = new HashMap<>();
         functionWrites = new HashMap<>();
@@ -213,9 +221,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .filter(c -> c.functionPrefix() != null)
                 .forEachOrdered(this::analyzeFunctionVariables);
 
-        while (propagateFunctionReadsAndWrites());
+        while (propagateFunctionReadsAndWrites()) ;
     }
 
+    /**
+     * Analyzes reads, writes and end() calls by a single function.
+     *
+     * @param context context of the function to analyze
+     */
     private void analyzeFunctionVariables(AstContext context) {
         Set<LogicVariable> reads = new HashSet<>();
         Set<LogicVariable> writes = new HashSet<>();
@@ -242,7 +255,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
         functionWrites.put(context.functionPrefix(), writes);
     }
 
-
+    /**
+     * Propagates variable reads/writes and end() calls to calling functions.
+     *
+     * @return true if the propagation lead to some modifications
+     */
     private boolean propagateFunctionReadsAndWrites() {
         CallGraph callGraph = getCallGraph();
         boolean modified = false;
@@ -289,11 +306,18 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
+    /** Iterator pointing at the processed instruction */
     private LogicIterator iterator;
 
+    /**
+     * Processes a top context, either the main body context, or an out-of-line function context.
+     *
+     * @param context context to process
+     */
     private void processTopContext(AstContext context) {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.functionPrefix() != null) {
+            // All parameters of a function are initialized when the function is called.
             CallGraph.Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
             function.getLogicParameters().forEach(variableStates::markInitialized);
         }
@@ -312,9 +336,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
             functionEndStates.forEach(vs -> List.copyOf(uninitialized).forEach(vs::valueRead));
 
             if (!aggressive()) {
-                // On basic optimization level, provide some protection to main variables.
+                // On basic optimization level, provide limited protection to main variables.
                 // Specifically, latest values assigned to main variables are preserved.
                 // Variables that were part of unrolled loops are NOT preserved, regardless of their other use.
+                // Uninitialized variables aren't reported, because these variables aren't actually read, we only want
+                // to keep the instructions that produced them in the code.
                 VariableStates finalVariableStates = variableStates;
                 contextStream(context)
                         .flatMap(LogicInstruction::outputArgumentsStream)
@@ -330,37 +356,56 @@ public class DataFlowOptimizer extends BaseOptimizer {
         variableStates.print("Final states after processing top level context");
 
         if (!labelStates.isEmpty()) {
+            // There was a jump to a label, but this label hasn't been processed.
             throw new MindcodeInternalError("Unresolved variable states associated with labels "
                     + labelStates.keySet().stream().map(LogicLabel::toMlog).collect(Collectors.joining(", ")));
 
         }
     }
 
-    private VariableStates processContext(AstContext context, AstContext localContext, VariableStates variableStates,
+    /**
+     * Recursively processes contexts and their instructions. Jump outside local context are specifically handled.
+     * Context to be processed is either the same as the local context, or a direct child of the local context.
+     *
+     * @param localContext       context which is considered local
+     * @param context            context to be processed
+     * @param variableStates     variable states at the beginning of the context
+     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+     * @return the resulting variable states
+     */
+    private VariableStates processContext(AstContext localContext, AstContext context, VariableStates variableStates,
             boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
         trace(() -> ">>> Entering context " + context.id + ": " + context.hierarchy());
         final VariableStates result;
         if (!context.matches(BASIC)) {
-            result = processDefaultContext(context, localContext, variableStates, modifyInstructions);
+            result = processDefaultContext(localContext, context, variableStates, modifyInstructions);
         } else {
             result = switch (context.contextType()) {
                 case LOOP   -> processLoopContext(context, variableStates, modifyInstructions);
                 case IF     -> processIfContext(context, variableStates, modifyInstructions);
                 case CASE   -> processCaseContext(context, variableStates, modifyInstructions);
-                default     -> processDefaultContext(context, localContext, variableStates, modifyInstructions);
+                default     -> processDefaultContext(localContext, context, variableStates, modifyInstructions);
             };
         }
         trace(() -> "<<< Exiting  context " + context.id + ": " + context.hierarchy());
         return result;
     }
 
-    // Note: this method processes contexts in unnatural order and uses iterator.setNextIndex to keep
-    // the iterator position synchronized with what is expected.
-    private VariableStates processLoopContext(AstContext context, VariableStates variableStates, boolean modifyInstructions) {
-        List<AstContext> children = context.children();
-        int start = 0;
-        boolean mergeInitial = false;
+    /**
+     * Specialized processing of a LOOP context.
+     *
+     * @param localContext       context to process (must be a LOOP context)
+     * @param variableStates     variable states at the beginning of the context
+     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+     * @return the resulting variable states
+     */
+    private VariableStates processLoopContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
+        // Note: this method processes contexts in unnatural order and uses iterator.setNextIndex to keep
+        // the iterator position synchronized with what is expected.
+        List<AstContext> children = localContext.children();
+        int currentContext = 0;
+        boolean mergeStates = false;
 
         if (children.stream().anyMatch(ctx -> ctx.matches(ITERATOR))) {
             if (!children.get(0).matches(ITERATOR)) {
@@ -368,89 +413,102 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 throw new MindcodeInternalError("Unexpected structure of for-each loop");
             }
 
-            // First context is without merging to the prior
-            variableStates = processContext(children.get(start++), context, variableStates, modifyInstructions);
-
-            while (start < children.size() && children.get(start).matches(ITERATOR)) {
+            // Merge all final states of iterator subcontexts together: the loop body is processed with the final
+            // value of every iterator subcontext.
+            // First context is without merging to the previous one
+            variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
+            while (currentContext < children.size() && children.get(currentContext).matches(ITERATOR)) {
                 VariableStates copy = variableStates.copy("loop iterator");
-                variableStates = processContext(children.get(start++), context, variableStates, modifyInstructions);
-                variableStates = variableStates.merge(copy, "iterator loop");
+                variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
+                variableStates = variableStates.merge(copy, "loop iterator");
             }
         } else {
             if (!children.isEmpty() && children.get(0).matches(INIT)) {
-                variableStates = processContext(children.get(0), context, variableStates, modifyInstructions);
-                start++;
+                variableStates = processContext(localContext, children.get(0), variableStates, modifyInstructions);
+                currentContext++;
             }
 
             int savedPosition = iterator.nextIndex();
 
-            if (children.get(start).matches(CONDITION)) {
+            // Acquiring variable states before entering the loop. Note we don't advance currentContext here
+            if (children.get(currentContext).matches(CONDITION)) {
                 // Evaluate the initial condition context fully for LoopOptimizer in isolation
-                VariableStates copy = processDefaultContext(children.get(start), context,
+                VariableStates copy = processDefaultContext(localContext, children.get(currentContext),
                         variableStates.isolatedCopy(), false);
-                optimizationContext.storeLoopVariables(context, copy);
+                optimizationContext.storeLoopVariables(localContext, copy);
             } else {
-                // Store variable states right before entering the body for the first time
-                optimizationContext.storeLoopVariables(context, variableStates.isolatedCopy());
+                // No condition, the loop is entered directly: store variable states right before entering the body
+                // for the first time
+                optimizationContext.storeLoopVariables(localContext, variableStates.isolatedCopy());
             }
 
             // If there are two CONDITION contexts, the first one gets executed only once
+            // We'll process it here, similarly to the INIT context
             if (children.stream().filter(ctx -> ctx.matches(CONDITION)).count() > 1) {
-                if (!children.get(start).matches(CONDITION)) {
-                    throw new MindcodeInternalError("Expected CONDITION context, found " + children.get(start));
+                if (!children.get(currentContext).matches(CONDITION)) {
+                    // There are two CONDITION contexts, currentContext must point to the first one
+                    throw new MindcodeInternalError("Expected CONDITION context, found " + children.get(currentContext));
                 }
                 iterator.setNextIndex(savedPosition);
-                variableStates = processContext(children.get(start++), context, variableStates, modifyInstructions);
+                variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
             }
 
             // If the condition is before the body, we need to merge initial states after first pass through the body,
             // as we don't know whether the body will actually be executed.
-            mergeInitial = children.stream()
+            mergeStates = children.stream()
                     .map(AstContext::subcontextType)
                     .filter(in(BODY, CONDITION))
                     .findFirst().get() == CONDITION;
         }
 
-        int startIndex = firstInstructionIndex(children.get(start));
+        int loopStart = currentContext;
+        int startIndex = firstInstructionIndex(children.get(loopStart));
 
+        // The remaining CONDITION and BODY contexts are processed here.
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
-        // Only perform the two-pass analysis when the outer loop is doing the second (and final) pass
-        for (int i = 0; i < (modifyInstructions ? 2 : 1); i++) {
+        // Only perform the two-pass analysis when the outer loop is also doing the second pass
+        for (int pass = 0; pass < (modifyInstructions ? 2 : 1); pass++) {
             iterator.setNextIndex(startIndex);
 
             VariableStates initial = variableStates.copy("loop initial state");
-            final int iteration = i;
-            trace(() -> "=== Processing loop " + context.id + " - iteration " + iteration + ": position " + iterator.nextIndex());
+            final int iteration = pass;
+            trace(() -> "=== Processing loop " + localContext.id + " - iteration " + iteration + ": position " + iterator.nextIndex());
 
-            for (int j = start; j < children.size(); j++) {
-                // Do not propagate constants on first iteration...
-                variableStates = processContext(children.get(j), context, variableStates, modifyInstructions && i > 0);
+            for (int j = loopStart; j < children.size(); j++) {
+                // Do not modify instructions on the first iteration
+                variableStates = processContext(localContext, children.get(j), variableStates, pass > 0);
             }
-            if (mergeInitial) {
-                variableStates = variableStates.merge(initial, " inside loop");
+
+            if (mergeStates) {
+                variableStates = variableStates.merge(initial, "inside loop");
             } else {
-                mergeInitial = true;
+                mergeStates = true;
             }
         }
 
         return variableStates;
     }
 
-    private VariableStates processIfContext(AstContext context, VariableStates variableStates, boolean modifyInstructions) {
-        Iterator<AstContext> children = context.children().iterator();
+    /**
+     * Specialized processing of an IF context.
+     *
+     * @param localContext       context to process (must be an IF context)
+     * @param variableStates     variable states at the beginning of the context
+     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+     * @return the resulting variable states
+     */
+    private VariableStates processIfContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
+        Iterator<AstContext> children = localContext.children().iterator();
         AstContext condition = null;
-        boolean bodyBefore = false;
 
         // Process all contexts up to the condition
+        // This may include BODY contexts moved in front of the condition by If Expression Optimization.
         while (children.hasNext()) {
             AstContext child = children.next();
-            variableStates = processContext(child, context, variableStates, modifyInstructions);
+            variableStates = processContext(localContext, child, variableStates, modifyInstructions);
             if (child.matches(CONDITION)) {
                 condition = child;
                 break;
-            }
-            if (child.matches(BODY)) {
-                bodyBefore = true;
             }
         }
 
@@ -464,7 +522,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         // condition was true, in which case the jump was entirely removed. We want to only process the body
         // corresponding to the actual value of the condition: first one if the condition was true, and second one
         // if the condition was false.
-        boolean[] process = { true, true };
+        boolean[] process = {true, true};
         boolean avoidMerge;
 
         // TODO Will need better condition processing after implementing short-circuit boolean eval
@@ -488,26 +546,26 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
         boolean wasBody = false;
-        int bodies = 0;
+        int body = 0;
 
         while (children.hasNext()) {
             AstContext child = children.next();
             switch (child.subcontextType()) {
                 case BODY -> {
                     if (wasBody) {
-                        throw new MindcodeInternalError("Expected FLOW_CONTROL, found BODY subcontext in IF context %s", context);
+                        throw new MindcodeInternalError("Expected FLOW_CONTROL, found BODY subcontext in IF context %s", localContext);
                     }
-                    if (process[bodies]) {
+                    if (process[body]) {
                         branchedStates.newBranch();
-                        branchedStates.processContext(child, context, modifyInstructions);
+                        branchedStates.processContext(localContext, child, modifyInstructions);
                     } else {
                         skipContext(child);
                     }
                     wasBody = true;
-                    bodies++;
+                    body++;
                 }
                 case FLOW_CONTROL -> {
-                    branchedStates.processContext(child, context, modifyInstructions);
+                    branchedStates.processContext(localContext, child, modifyInstructions);
                     wasBody = false;
                 }
                 default -> throw new MindcodeInternalError("Unexpected subcontext %s in IF context", child);
@@ -518,43 +576,50 @@ public class DataFlowOptimizer extends BaseOptimizer {
             return branchedStates.getCurrentStates();
         }
 
-        // If there's only one body, start a new, empty branch. This will merge the initial state
-        // into the final state, covering the case where the one body was skipped.
-        if (bodies == 1) {
+        // There was only one body, no else branch. Create a new branch to represent the missing else branch.
+        if (body == 1) {
             branchedStates.newBranch();
         }
 
         return branchedStates.getFinalStates();
     }
 
-    private VariableStates processCaseContext(AstContext context, VariableStates variableStates, boolean modifyInstructions) {
-        List<AstContext> children = context.children();
+    /**
+     * Specialized processing of a CASE context.
+     *
+     * @param localContext       context to process (must be an IF context)
+     * @param variableStates     variable states at the beginning of the context
+     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+     * @return the resulting variable states
+     */
+    private VariableStates processCaseContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
+        List<AstContext> children = localContext.children();
         Iterator<AstContext> iterator = children.iterator();
         if (!children.isEmpty() && children.get(0).matches(INIT)) {
             AstContext child = iterator.next();
-            variableStates = processContext(child, context, variableStates, modifyInstructions);
+            variableStates = processContext(localContext, child, variableStates, modifyInstructions);
         }
 
         BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
         boolean hasElse = false;
 
-        if (context.findSubcontext(CONDITION) == null) {
+        if (localContext.findSubcontext(CONDITION) == null) {
             // The context has been optimized by CaseSwitcher
             while (iterator.hasNext()) {
                 AstContext child = iterator.next();
                 switch (child.subcontextType()) {
                     case BODY -> {
-                        branchedStates.processContext(child, context, modifyInstructions);
+                        branchedStates.processContext(localContext, child, modifyInstructions);
                         branchedStates.newBranch();
                     }
                     case ELSE -> {
-                        branchedStates.processContext(child, context, modifyInstructions);
+                        branchedStates.processContext(localContext, child, modifyInstructions);
                         hasElse = true;
                     }
-                    case FLOW_CONTROL ->  {
-                        branchedStates.processContext(child, context, modifyInstructions);
+                    case FLOW_CONTROL -> {
+                        branchedStates.processContext(localContext, child, modifyInstructions);
                     }
-                    default -> throw new MindcodeInternalError("Unexpected subcontext %s in IF context", child);
+                    default -> throw new MindcodeInternalError("Unexpected subcontext %s in CASE context", child);
                 }
             }
         } else {
@@ -562,18 +627,21 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 AstContext child = iterator.next();
                 switch (child.subcontextType()) {
                     case CONDITION -> {
-                        branchedStates.appendToInitialContext(child, context, modifyInstructions);
-                        branchedStates.newBranch();
+                        branchedStates.appendToInitialState(localContext, child, modifyInstructions);
                     }
-                    case BODY, FLOW_CONTROL -> {
-                        branchedStates.processContext(child, context, modifyInstructions);
+                    case BODY -> {
+                        branchedStates.newBranch();
+                        branchedStates.processContext(localContext, child, modifyInstructions);
+                    }
+                    case FLOW_CONTROL -> {
+                        branchedStates.processContext(localContext, child, modifyInstructions);
                     }
                     case ELSE -> {
                         branchedStates.newBranch();
-                        branchedStates.processContext(child, context, modifyInstructions);
+                        branchedStates.processContext(localContext, child, modifyInstructions);
                         hasElse = true;
                     }
-                    default -> throw new MindcodeInternalError("Unexpected subcontext %s in IF context", child);
+                    default -> throw new MindcodeInternalError("Unexpected subcontext %s in CASE context", child);
                 }
             }
         }
@@ -591,13 +659,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
      * current variable state with target label. Local context might be the context being processed, or a parent
      * context when jumps within that context are handled specifically (such as by processIfContext).
      *
-     * @param context context to process
-     * @param localContext context which is considered local
-     * @param variableStates variable states instance to update
+     * @param localContext       context which is considered local
+     * @param context            context to process
+     * @param variableStates     variable states instance to update
      * @param modifyInstructions true if instructions may be modified in this run based on known variable states
      * @return the resulting variable states
      */
-    private VariableStates processDefaultContext(AstContext context, AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
+    private VariableStates processDefaultContext(AstContext localContext, AstContext context,
+            VariableStates variableStates, boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
 
         while (iterator.hasNext()) {
@@ -608,7 +677,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
             // This needs to be done for each active context
             // Do not move into processInstruction
-            // Jumps inside a RETURN context are caused by the return instruction and are local,
+            // Jumps inside a RETURN context are caused by the return instruction and do not leave the local context,
             // but they do break the control flow and therefore need to be handled here.
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
                     && (context.matches(AstContextType.RETURN) ||
@@ -627,13 +696,25 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 variableStates.print("  after processing instruction");
             } else {
                 AstContext childContext = context.findDirectChild(instruction.getAstContext());
-                variableStates = processContext(childContext, context, variableStates, modifyInstructions);
+                variableStates = processContext(context, childContext, variableStates, modifyInstructions);
             }
         }
 
         return variableStates;
     }
 
+    /**
+     * Updates given variable states associated with a given label instruction to include all states deposited on the
+     * label by all nonlocal jumps targeting that label.
+     * <p>
+     * Note: Data Flow Optimizer only expects nonlocal jumps to target labels that are found later in the code than
+     * the jump. This is sufficient at the moment, as all nonlocal jumps are only generated by break, continue or
+     * return statements and adhere to the requirement.
+     *
+     * @param variableStates    current variable states
+     * @param label             label to process
+     * @return given variable states merged with all variable states stored at label
+     */
     private VariableStates resolveLabel(VariableStates variableStates, LogicLabel label) {
         List<VariableStates> states = labelStates.remove(label);
         if (states != null) {
@@ -644,12 +725,20 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
+    /**
+     * Processes a single instruction.
+     *
+     * @param variableStates        variable states before executing the instruction
+     * @param instruction           instruction to process
+     * @param modifyInstructions    true if instructions may be modified in this run based on known variable states
+     * @return variable states after executing the instruction
+     */
     private VariableStates processInstruction(VariableStates variableStates, LogicInstruction instruction, boolean modifyInstructions) {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
         trace(() -> "Processing instruction #" + instructionIndex(instruction) +
-                    ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
+                ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
         switch (instruction) {
             case NoOpInstruction ix:        return variableStates;
@@ -661,6 +750,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
 
         // Process inputs first, to handle instructions reading and writing the same variable
+        // This needs to be done even when not modifying instructions, because it keeps track of read variables.
+
         // Try to find possible replacements of input arguments to this instruction
         List<LogicVariable> inputs = instruction.inputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
@@ -668,7 +759,6 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .filter(variable -> canEliminate(instruction, variable))
                 .toList();
 
-        // This needs to be done even when not modifying instructions, because it keeps track of read variables.
         Map<LogicVariable, LogicValue> valueReplacements = new HashMap<>();
         for (LogicVariable variable : inputs) {
             LogicValue constantValue = variableStates.valueRead(variable, instruction);
@@ -690,6 +780,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
+        // Try to evaluate the instruction
         // We're not evaluating PackColor, because the result can never be converted to mlog representation.
         LogicValue value = switch (instruction) {
             case SetInstruction set && set.getValue() instanceof LogicLiteral literal -> literal;
@@ -699,6 +790,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
             default -> null;
         };
 
+        // The instruction sets all its output values. Instructions not processed above will set all their output
+        // variables to an unknown state (represented by null - actual null value in mlog would be represented by
+        // a LogicNull instance)
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
@@ -721,12 +815,25 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
+    /**
+     * Skip (move to an end of) the given context. Does nothing if the iterator is already past the context.
+     *
+     * @param context context to skip
+     */
     private void skipContext(AstContext context) {
         while (iterator.hasNext() && iterator.peek(0).belongsTo(context)) {
             iterator.next();
         }
     }
 
+    /**
+     * Determines whether it is possible to eliminate an assignment to a variable by given instruction. Elimination
+     * is generally allowed except cases requiring special protection.
+     *
+     * @param instruction instruction setting the variable
+     * @param variable    variable being inspected
+     * @return true if this assignment can be safely eliminated
+     */
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
         return switch (variable.getType()) {
             case COMPILER, FUNCTION_RETADDR, GLOBAL_VARIABLE -> false;
@@ -735,6 +842,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 // information whether they're read somewhere. Outside their functions they're processed normally
                 // (can be optimized freely).
                 // If they aren't read at all in the entire program, they'll be removed by DeadCodeEliminator.
+                // TODO when inlining a function, replace function prefix in the inlined functions with the function
+                //      prefix of the call being inlined. Then it is possible to stop replacing function return
+                //      variable, because this protection will not be granted.
                 AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION);
                 yield functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix());
             }
@@ -742,6 +852,15 @@ public class DataFlowOptimizer extends BaseOptimizer {
         };
     }
 
+    /**
+     * Tries to evaluate an OP instruction down to a constant value. Replaces variable arguments to the instruction
+     * with their inferred values if possible.
+     *
+     * @param op                instruction to evaluate
+     * @param valueReplacements value replacements to use
+     * @return a LogicLiteral representing the determined resulting value of the instruction,
+     * or null if the instruction cannot be evaluated
+     */
     private LogicLiteral evaluateOpInstruction(OpInstruction op, Map<LogicVariable, LogicValue> valueReplacements) {
         OpInstruction op1 = tryReplace(op, valueReplacements, op::getX, op::withX);
         OpInstruction op2 = op1.hasSecondOperand()
@@ -751,6 +870,15 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return evaluateOpInstruction(op2);
     }
 
+    /**
+     * Replaces a variable argument to the instruction with its inferred values if possible.
+     *
+     * @param op                instruction to be modified
+     * @param valueReplacements value replacements to use
+     * @param getArgument       lambda expression to extract the desired argument from the instruction
+     * @param replaceArgument   lambda to replace the desired argument with a new value
+     * @return a new, updated instruction, or the original one if no replacement is possible
+     */
     private OpInstruction tryReplace(OpInstruction op, Map<LogicVariable, LogicValue> valueReplacements,
             Supplier<LogicValue> getArgument, Function<LogicValue, OpInstruction> replaceArgument) {
         LogicValue value = getArgument.get();
@@ -762,15 +890,27 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
+    /**
+     * Helper class to manage variable states of branching statements (if, case).
+     */
     private class BranchedVariableStates {
+        /** The initial state of the statement, before branching. Set by constructor. */
         private VariableStates initial;
+
+        /** State of the currently processed branch. Null if no branch was processed. */
         private VariableStates current;
+
+        /** Final states of all branches merged together. */
         private VariableStates merged;
 
         public BranchedVariableStates(VariableStates initial) {
             this.initial = initial;
         }
 
+        /**
+         * Called when a body of a new branch is encountered. Closes the previous branch (if any) by merging it into
+         * the final states, and then creates variable states for the new branch by copying the initial state.
+         */
         public void newBranch() {
             if (current != null) {
                 merged = merged == null ? current : merged.merge(current, " old branch before starting new branch");
@@ -778,20 +918,46 @@ public class DataFlowOptimizer extends BaseOptimizer {
             current = initial.copy("new conditional branch");
         }
 
-        public void appendToInitialContext(AstContext context, AstContext localContext, boolean modifyInstructions) {
-            initial = DataFlowOptimizer.this.processContext(context, localContext, initial, modifyInstructions);
+        /**
+         * Processes the given context and appends the results into the initial state. Used to process conditions of
+         * individual branches of case expressions, which are all being processed until a match is found; the executed
+         * branch therefore contains the results of all conditions evaluated before it.
+         *
+         * @param localContext       context which is considered local
+         * @param context            context to be processed
+         * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+         */
+        public void appendToInitialState(AstContext localContext, AstContext context, boolean modifyInstructions) {
+            initial = DataFlowOptimizer.this.processContext(localContext, context, initial, modifyInstructions);
         }
 
-        public void processContext(AstContext context, AstContext localContext, boolean modifyInstructions) {
-            current = DataFlowOptimizer.this.processContext(context, localContext,
+        /**
+         * Processes the given context as part of the current branch.
+         *
+         * @param localContext       context which is considered local
+         * @param context            context to be processed
+         * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+         */
+        public void processContext(AstContext localContext, AstContext context, boolean modifyInstructions) {
+            current = DataFlowOptimizer.this.processContext(localContext, context,
                     current == null ? initial.copy("new conditional branch") : current, modifyInstructions);
         }
 
+        /**
+         * Returns variable states obtained by merging final states of all processed branches together.
+         *
+         * @return final variable states of the branched expression
+         */
         public VariableStates getFinalStates() {
-            newBranch();
+            newBranch();        // Force merging the previous branch
             return merged == null ? initial : merged;
         }
 
+        /**
+         * Returns variable states corresponding to the currently active branch.
+         *
+         * @return final variable states of the branch that was just processed
+         */
         public VariableStates getCurrentStates() {
             return current == null ? initial : current;
         }

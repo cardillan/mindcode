@@ -76,7 +76,8 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   end of the argument list.
 * Block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
   error reporting would be much more preferable, but quite hard to implement).
-* Only allow dashes in REF identifiers (the `@` Mindustry constants), then add support for `++` and `--` operators.
+* Only allow dashes in REF identifiers (the `@` Mindustry constants), and only in the middle of the identifier. Then 
+  add support for `++` and `--` operators.
 * Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
 * Varargs inline functions (??)
   * Function needs to be explicitly declared inline
@@ -299,18 +300,20 @@ Two basic approaches
   constant.
 * Recognize dead writes inside loops: `i = 0; while switch1.enabled i += 1 end`: writes to `i` are dead, but not 
   recognized as such. 
+* Identify uninitialized global variables (now only reported when they are never written to; use the same logic as 
+  for main/local variables instead).
+* Pulling invariant code out of loops/if branches.
+* Generalized constant folding on expression tree, including factoring constants out of complex expressions.
+  * Instruction reordering for better constant folding/subexpression optimization
+    * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
+      variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
+      user variable instead of the temporary one.
 * Visit stackless functions on calls (??):
   * Every result of a visit to stackless function would have to be merged together and then applied to optimizations
     on that function.
   * Could help keeping track of global variables and memory blocks.
   * Could be used to create more versions of a function, possibly inlining some of them, based on (dis)similarities
     of variable states between visits (probably quite complex.)
-* Generalized constant folding on expression tree, including factoring constants out of complex expressions.
-  * Pulling invariant code out of loops/if branches.
-  * Instruction reordering for better constant folding/subexpression optimization
-    * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
-      variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
-      user variable instead of the temporary one.
 * Expression distribution:
   * `foo(value ? a : b)` could be turned into `if value foo(a) else foo(b) end`
   * Is useful when at least one value produced by the ternary expression is a constant.

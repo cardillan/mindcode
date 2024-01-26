@@ -714,7 +714,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.buildLogicList(context, instructions);
     }
 
-    protected void trace(Supplier<String> text) {
+    protected final void trace(Supplier<String> text) {
         if (TRACE) {
             System.out.println(text.get());
         }

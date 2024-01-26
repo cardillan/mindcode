@@ -31,13 +31,14 @@ public class DataFlowVariableStates {
         return new VariableStates();
     }
 
+    /** Provides unique IDs to instances for easy identification during debug. */
     private final AtomicInteger counter = new AtomicInteger();
 
     /**
      * Describes known states of variables. Instances are primarily created by analysing code blocks, and then
      * merged when two or more code branches merge. Merging operations may produce variables with multiple definitions.
-     * When merging two instances prescribing different values/expressions to the same variable, the values/expressions
-     * are purged.
+     * When merging two instances prescribing conflicting values/expressions to the same variable,
+     * the values/expressions are purged.
      */
     class VariableStates {
         private final int id;
@@ -54,7 +55,10 @@ public class DataFlowVariableStates {
          */
         private final Map<LogicVariable, List<LogicInstruction>> definitions;
 
-        /** Identifies instructions that do not have to be kept, because they set identical value. */
+        /**
+         *  Identifies instructions that do not have to be kept, because they set value the variable already had.
+         *  Organized by variable for easier housekeeping.
+         */
         private final Map<LogicVariable, LogicInstruction> useless;
 
         /** Maps variables to prior variables containing the same expression. */
@@ -63,7 +67,11 @@ public class DataFlowVariableStates {
         /** Set of initialized variables. */
         private final Set<LogicVariable> initialized;
 
-        /** Set of variables stored on stack. */
+        /**
+         * Set of variables stored on stack. Storing a variable on stack preserves its value during subsequent
+         * modification (i.e. when setting parameter value for the recursive call) - the exact same value will be
+         * restored from stack later on.
+         */
         private final Set<LogicVariable> stored;
 
         /**
@@ -73,6 +81,7 @@ public class DataFlowVariableStates {
          */
         private boolean dead;
 
+        /** An isolated instance only tracks values of variables, cannot be used to determine definitions or reaches. */
         private boolean isolated;
 
         public VariableStates() {
@@ -102,20 +111,41 @@ public class DataFlowVariableStates {
                     e -> new ArrayList<>(e.getValue())));
         }
 
+        /**
+         * @return useless instructions, organized by variable they produce.
+         */
         public Map<LogicVariable, LogicInstruction> getUseless() {
             return useless;
         }
 
+        /**
+         * Creates a copy of variable states, for evaluating parallel branches.
+         *
+         * @param reason debug message
+         * @return a independent copy of this instance
+         */
         public VariableStates copy(String reason) {
             VariableStates copy = new VariableStates(this, counter.incrementAndGet(), isolated);
-            debug(() -> "*** " + reason + ": created VariableStates instance #" + copy.id + " as a copy of #" + id);
+            trace(() -> "*** " + reason + ": created VariableStates instance #" + copy.id + " as a copy of #" + id);
             return copy;
         }
 
+        /**
+         * Creates an isolated copy of this instance. An isolated copy only tracks values of variables, it doesn't
+         * propagate definitions or reaches. It is used when processing the context is incomplete, e.g. for first
+         * iteration of loops.
+         *
+         * @return an isolated copy of this instance
+         */
         public VariableStates isolatedCopy() {
             return new VariableStates(this, id, true);
         }
 
+        /**
+         * An isolated instance only tracks values of variables, but cannot be used to determine definitions or reaches.
+         *
+         * @return true if the instance is isolated.
+         */
         public boolean isIsolated() {
             return isolated;
         }
@@ -147,10 +177,15 @@ public class DataFlowVariableStates {
             }
         }
 
+        /**
+         * Purges all expressions and values depending on given variable. To be called after the variable value changes.
+         *
+         * @param variable variable to be purged
+         */
         // Called when a variable value changes to purge all dependent expressions
         private void invalidateVariable(LogicVariable variable) {
             if (stored.contains(variable)) {
-                debug(() -> "    Not invalidating variable " + variable.toMlog() + ", because it is stored on stack.");
+                trace(() -> "    Not invalidating variable " + variable.toMlog() + ", because it is stored on stack.");
             } else {
                 if (BaseOptimizer.TRACE) {
                     values.values().stream().filter(exp -> exp.dependsOn(variable))
@@ -164,29 +199,49 @@ public class DataFlowVariableStates {
             }
         }
 
+        /**
+         * Called when a variable has been stored on stack.
+         *
+         * @param variable variable to be stored
+         * @return this
+         */
         public VariableStates pushVariable(LogicVariable variable) {
-            debug(() -> "Pushing variable " + variable);
+            trace(() -> "Pushing variable " + variable);
             if (!stored.add(variable)) {
                 throw new MindcodeInternalError("Push called twice on " + variable.toMlog());
             }
             return this;
         }
 
+        /**
+         * Called when a variable has been restored from stack.
+         *
+         * @param variable variable to be restored
+         * @return this
+         */
         public VariableStates popVariable(LogicVariable variable) {
-            debug(() -> "Popping variable " + variable);
+            trace(() -> "Popping variable " + variable);
             if (!stored.remove(variable)) {
                 throw new MindcodeInternalError("Pop without push on " + variable.toMlog());
             }
             return this;
         }
 
+        /**
+         * Called to record a new value assigned to a variable.
+         *
+         * @param variable variable being assigned a new value
+         * @param instruction instruction performing the assignment
+         * @param value the value being assigned, null means the instruction assigns an unknown value (e.g. value
+         *             provided by sensor instruction, or random value)
+         */
         public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value) {
             if (stored.contains(variable)) {
-                debug(() -> "Not setting value of variable " + variable.toMlog() + ", because it is stored on stack.");
+                trace(() -> "Not setting value of variable " + variable.toMlog() + ", because it is stored on stack.");
                 return;
             }
 
-            debug(() -> "Value set: " + variable);
+            trace(() -> "Value set: " + variable);
             printInstruction(instruction);
 
             if (optimizer.canEliminate(instruction, variable)) {
@@ -214,12 +269,13 @@ public class DataFlowVariableStates {
             initialized.add(variable);
             definitions.put(variable, List.of(instruction));
 
-            // Update expressions
+            // Purge expressions based on the previous value of this variable
             invalidateVariable(variable);
 
             // Handle expressions only if the value is not exactly known
             if (value == null) {
-                // Find the oldest equivalent expression
+                // Find the oldest equivalent expression: an expression based on the same values.
+                // Recognizes that in c = a + b; d = a + b c and d is the same.
                 for (VariableValue expression : values.values()) {
                     if (expression.isExpression() && expression.isEqual(instruction)) {
                         if (BaseOptimizer.TRACE) {
@@ -232,7 +288,7 @@ public class DataFlowVariableStates {
 
                 if (instruction instanceof SetInstruction set) {
                     if (set.getResult() == variable && set.getValue() instanceof LogicVariable variable2) {
-                        debug(() -> "    Adding direct equivalence " + variable.toMlog() + " == " + variable2.toMlog());
+                        trace(() -> "    Adding direct equivalence " + variable.toMlog() + " == " + variable2.toMlog());
                         equivalences.put(variable, variable2);
                     }
                 } else if (instruction.getOutputs() == 1) {
@@ -245,43 +301,94 @@ public class DataFlowVariableStates {
             }
         }
 
+        /**
+         * Marks the variable as initialized, typically when a value is assigned to it.
+         *
+         * @param variable variable that is being initialized
+         */
         public void markInitialized(LogicVariable variable) {
             initialized.add(variable);
         }
 
+        /**
+         * Resets the variable after a call to a function that writes to the variable, eliminating all information
+         * about possible values. Variables stored on stack during the call aren't reset, because they're protected
+         * by being stored on the stack.
+         *
+         * @param variable variable to reset
+         */
         public void valueReset(LogicVariable variable) {
             if (stored.contains(variable)) {
-                debug(() -> "Variable " + variable + " not reset after function call, because it is stored on stack.");
+                trace(() -> "Variable " + variable + " not reset after function call, because it is stored on stack.");
             } else {
-                debug(() -> "Value reset: " + variable);
+                trace(() -> "Value reset: " + variable);
                 values.remove(variable);
                 invalidateVariable(variable);
             }
         }
 
+        /**
+         * Updates states of variables when a function call occurs.
+         *
+         * @param localPrefix identification of the function
+         * @param instruction instruction that caused the call
+         */
         public void updateAfterFunctionCall(String localPrefix, LogicInstruction instruction) {
             optimizer.functionReads.get(localPrefix).forEach(variable -> valueRead(variable, instruction, false));
             optimizer.functionWrites.get(localPrefix).forEach(this::valueReset);
             initialized.add(LogicVariable.fnRetVal(localPrefix));
         }
 
+        /**
+         * Returns a VariableValue instance keeping the information about the variable's value, or null if nothing
+         * is known.
+         *
+         * @param variable variable to test
+         * @return known value of the variable
+         */
         public VariableValue findVariableValue(LogicValue variable) {
             return variable instanceof LogicVariable v && !stored.contains(v) ? values.get(v) : null;
         }
 
+        /**
+         * Marks the variable as read, to protect instructions assigning a value to the variable. This is a generic
+         * version that doesn't take a specific instruction performing the access to the variable.
+         *
+         * @param variable variable to be marked as read
+         * @return
+         */
         public LogicValue valueRead(LogicVariable variable) {
             return valueRead(variable, null, true);
         }
 
+        /**
+         * Marks a variable as read by given instruction. The instruction might not be given if the read status
+         * doesn't come from a specific instruction. Returns the value of the variable, if it is known the variable
+         * has a constant value. Reports uninitialized variables.
+         *
+         * @param variable            variable to be marked
+         * @param instruction         instruction that reads the variable, may be null
+         * @return constant value of the variable, or null if there isn't a known constant value of the variable
+         */
         public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction) {
             return valueRead(variable, instruction, true);
         }
 
-        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean markUninitialized) {
-            debug(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!)" : ")"));
+        /**
+         * Marks a variable as read by given instruction. The instruction might not be given if the read status
+         * doesn't come from a specific instruction. Returns the value of the variable, if it is known the variable
+         * has a constant value.
+         *
+         * @param variable            variable to be marked
+         * @param instruction         instruction that reads the variable, may be null
+         * @param reportUninitialized true to report variables that might not be initialized at this read
+         * @return constant value of the variable, or null if there isn't a known constant value of the variable
+         */
+        public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reportUninitialized) {
+            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!)" : ")"));
 
-            if (markUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
-                debug(() -> "*** Detected uninitialized read of " + variable.toMlog());
+            if (reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
+                trace(() -> "*** Detected uninitialized read of " + variable.toMlog());
                 optimizer.uninitialized.add(variable);
             }
 
@@ -309,8 +416,16 @@ public class DataFlowVariableStates {
             }
         }
 
-        public LogicVariable findEquivalent(LogicVariable value) {
-            return stored.contains(value) ? null : equivalences.get(value);
+        /**
+         * Returns a variable that is known to contain the same value as given variable, meaning that the given variable
+         * can be safely replaced by the returned one. The concrete value is not necessarily known, only the fact
+         * that they're the same.
+         *
+         * @param variable variable to inspect
+         * @return a prior variable known to contain the same value
+         */
+        public LogicVariable findEquivalent(LogicVariable variable) {
+            return stored.contains(variable) ? null : equivalences.get(variable);
         }
 
         /**
@@ -324,7 +439,7 @@ public class DataFlowVariableStates {
             other.print("  other:");
 
             if (!stored.isEmpty() || !other.stored.isEmpty()) {
-                throw new MindcodeInternalError("Trying to merge variable states with variables on stack.");
+                throw new MindcodeInternalError("Trying to merge variable states having variables on stack.");
             }
 
             if (other.dead) {
@@ -368,6 +483,13 @@ public class DataFlowVariableStates {
             return this;
         }
 
+        /**
+         * Merges variable definitions.
+         *
+         * @param map1 instance to merge into
+         * @param map2 instance to be merged
+         * @param invalidateVariables if true, variables modified during the merge are invalidated
+         */
         private void merge(Map<LogicVariable, List<LogicInstruction>> map1, Map<LogicVariable, List<LogicInstruction>> map2,
                 boolean invalidateVariables) {
             for (LogicVariable variable : map2.keySet()) {
@@ -470,10 +592,10 @@ public class DataFlowVariableStates {
              * Determines whether the expression depends on the given variable.
              *
              * @param variable variable to inspect
-             * @return true if th expression reads the value of given variable
+             * @return true if the expression reads the value of given variable
              */
             public boolean dependsOn(LogicVariable variable) {
-                return isExpression() && instruction.inputArgumentsStream().anyMatch(arg -> arg.equals(variable));
+                return isExpression() && instruction.inputArgumentsStream().anyMatch(variable::equals);
             }
 
             /**
@@ -488,6 +610,8 @@ public class DataFlowVariableStates {
                 }
 
                 // Equivalence for SENSOR instruction is not supported. Sensed values are considered volatile.
+                // TODO define which sensed values aren't volatile (e.g. type, x) and process them
+                // TODO read instructions will depend on memory model
                 return switch (instruction) {
                     case OpInstruction op && op.getOperation().isDeterministic()
                             -> isOpEqual((OpInstruction) this.instruction, op);
@@ -501,11 +625,25 @@ public class DataFlowVariableStates {
                 return isExpression() && instruction.inputArgumentsStream().anyMatch(LogicArgument::isVolatile);
             }
 
-            @SuppressWarnings("SuspiciousMethodCalls")
+            /**
+             * If the passed in value is a variable and there exists a preexisting variable holding the same value,
+             * returns the preexisting variable.
+             *
+             * @param value value to remap
+             * @return an equivalent variable if it exists, otherwise the original value
+             */
             public LogicArgument remap(LogicArgument value) {
-                return equivalences.containsKey(value) ? equivalences.get(value) : value;
+                return value instanceof LogicVariable var && equivalences.containsKey(var) ? equivalences.get(var) : value;
             }
 
+            /**
+             * Determines whether the two instructions are equal. Both instructions need to have the same opcode
+             * (the opcode is not checked).
+             *
+             * @param first  instruction to compare
+             * @param second instruction to compare
+             * @return true if the two instructions are equal
+             */
             private boolean isInstructionEqual(LogicInstruction first, LogicInstruction second) {
                 List<LogicArgument> args1 = first.getArgs();
                 List<LogicArgument> args2 = second.getArgs();
@@ -524,9 +662,9 @@ public class DataFlowVariableStates {
             }
 
             /**
-             * Determines whether two OP instructions produce the same expression. It is already known the first
-             * instruction operation is deterministic. THe obvious case is when the two instructions are completely
-             * identical. Additionally, commutative and inverse operations are handled.
+             * Determines whether two OP instructions produce the same expression. It is already known at least one
+             * of the instructions has a deterministic operation. The obvious case is when the two instructions have
+             * equivalent operations and inputs. Additionally, commutative and inverse operations are handled.
              *
              * @param first first instruction to compare
              * @param second second instruction to compare
@@ -579,7 +717,7 @@ public class DataFlowVariableStates {
         }
     }
 
-    private void debug(Supplier<String> text) {
+    private void trace(Supplier<String> text) {
         if (BaseOptimizer.TRACE) {
             System.out.println(text.get());
         }
