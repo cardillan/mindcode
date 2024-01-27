@@ -627,7 +627,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 AstContext child = iterator.next();
                 switch (child.subcontextType()) {
                     case CONDITION -> {
-                        branchedStates.appendToInitialState(localContext, child, modifyInstructions);
+                        branchedStates.mergeWithInitialState(localContext, child, modifyInstructions);
                     }
                     case BODY -> {
                         branchedStates.newBranch();
@@ -895,7 +895,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
      */
     private class BranchedVariableStates {
         /** The initial state of the statement, before branching. Set by constructor. */
-        private VariableStates initial;
+        private final VariableStates initial;
 
         /** State of the currently processed branch. Null if no branch was processed. */
         private VariableStates current;
@@ -919,6 +919,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
 
         /**
+         * TODO review javadoc
          * Processes the given context and appends the results into the initial state. Used to process conditions of
          * individual branches of case expressions, which are all being processed until a match is found; the executed
          * branch therefore contains the results of all conditions evaluated before it.
@@ -927,8 +928,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
          * @param context            context to be processed
          * @param modifyInstructions true if instructions may be modified in this run based on known variable states
          */
-        public void appendToInitialState(AstContext localContext, AstContext context, boolean modifyInstructions) {
-            initial = DataFlowOptimizer.this.processContext(localContext, context, initial, modifyInstructions);
+        public void mergeWithInitialState(AstContext localContext, AstContext context, boolean modifyInstructions) {
+//            initial = DataFlowOptimizer.this.processContext(localContext, context, initial, modifyInstructions);
+            VariableStates processed = DataFlowOptimizer.this.processContext(localContext, context, initial.copy("new when condition"), modifyInstructions);
+            initial.merge(processed, "processed condition to initial state");
         }
 
         /**

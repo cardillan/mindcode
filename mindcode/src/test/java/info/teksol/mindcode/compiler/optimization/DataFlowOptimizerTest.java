@@ -249,6 +249,30 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
 
     @Test
+    void IdentifiesUninitializedVariables() {
+        assertCompilesToWithMessages(ignore("List of uninitialized variables: a, b."),
+                        """
+                        if switch1.enabled
+                            a = 1
+                        else
+                            b = 1
+                        end
+                        print(a, b)
+                        """,
+                createInstruction(SENSOR, var(0), "switch1", "@enabled"),
+                createInstruction(JUMP, var(1000), "equal", var(0), "false"),
+                createInstruction(SET, "a", "1"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "b", "1"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void handlesSingleBranchIfStatements() {
         assertCompilesTo("""
                         a = 1
@@ -357,6 +381,25 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(SET, var(1), "30"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, var(1)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesCaseExpressionsWithWhenSideEffects() {
+        assertCompilesToWithMessages(ignore("List of uninitialized variables: x."),
+                        """
+                        case switch1.enabled
+                            when 1, x = 2 then print(x)
+                        end
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SENSOR, "__ast0", "switch1", "@enabled"),
+                createInstruction(JUMP, var(1002), "equal", "__ast0", "1"),
+                createInstruction(SET, "x", "2"),
+                createInstruction(JUMP, "__start__", "notEqual", "__ast0", "2"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, "x"),
                 createInstruction(END)
         );
     }

@@ -81,7 +81,7 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
 
     @Test
     void optimizesWhileLoopStrictEqual() {
-        assertCompilesToWithMessages(m -> m.contains("List of uninitialized variables: i, state."),
+        assertCompilesToWithMessages(ignore("List of uninitialized variables: i, state."),
                 """
                         while state === 0
                             print(i)

@@ -1027,10 +1027,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setSubcontextType(AstSubcontextType.INIT, 1.0);
         final LogicValue caseValue = visit(node.getCondition());
         for (final CaseAlternative alternative : node.getAlternatives()) {
-            setSubcontextType(AstSubcontextType.CONDITION, multiplier * remain--);
-
             final LogicLabel nextAlt = nextLabel();         // Next alternative
             final LogicLabel bodyLabel = nextLabel();       // Body of this alternative
+            final double branchMultiplier = multiplier * remain--;
 
             nodeContext.encapsulate(() -> {
                 // Each matching value, including the last one, causes a jump to the "when" body
@@ -1039,15 +1038,18 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 for (AstNode value : alternative.getValues()) {
                     if (value instanceof Range range) {
                         // Range evaluation requires two comparisons. Instead of using "and" operator, we compile them into two jumps
+                        setSubcontextType(AstSubcontextType.CONDITION, branchMultiplier);
                         LogicLabel nextExp = nextLabel();       // Next value in when list
                         final LogicValue minValue = visit(range.getFirstValue());
                         emit(createJump(nextExp, Condition.LESS_THAN, caseValue, minValue));
                         // The max value is only evaluated when the min value lets us through
+                        setSubcontextType(AstSubcontextType.CONDITION, branchMultiplier);
                         final LogicValue maxValue = visit(range.getLastValue());
                         emit(createJump(bodyLabel, range.maxValueComparison(), caseValue, maxValue));
                         emit(createLabel(nextExp));
                     }
                     else {
+                        setSubcontextType(AstSubcontextType.CONDITION, branchMultiplier);
                         final LogicValue whenValue = visit(value);
                         emit(createJump(bodyLabel, Condition.EQUAL, caseValue, whenValue));
                     }
