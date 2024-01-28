@@ -1,5 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.Condition;
@@ -8,7 +10,7 @@ import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.List;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 
 public class IfExpressionOptimizer extends BaseOptimizer {
 

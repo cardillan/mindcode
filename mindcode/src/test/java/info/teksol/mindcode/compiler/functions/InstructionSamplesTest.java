@@ -1,17 +1,11 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
-import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.logic.BaseArgument;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicParameter;
-import info.teksol.mindcode.logic.NamedParameter;
-import info.teksol.mindcode.logic.Opcode;
-import info.teksol.mindcode.logic.OpcodeVariant;
-import info.teksol.mindcode.logic.ProcessorVersion;
+import info.teksol.mindcode.logic.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

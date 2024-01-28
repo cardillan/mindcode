@@ -1,15 +1,20 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.MessageLevel;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.EndInstruction;
+import info.teksol.mindcode.compiler.instructions.GotoInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 
 /**
  * Inlines functions
@@ -52,17 +57,17 @@ public class FunctionInliner extends BaseOptimizer {
 
 
     private OptimizationAction findPossibleInlining(AstContext context, int costLimit) {
-        if (context.functionPrefix() == null) {
+        if (context.function() == null) {
             // The function is declared, but not used.
             return null;
         }
-        CallGraph.Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
+        CallGraph.Function function = context.function();
         if (function.isRecursive() || function.isInline()) {
             return null;
         }
 
-        List<AstContext> calls = contexts(c -> c.matches(AstContextType.CALL, OUT_OF_LINE_CALL)
-                && c.functionPrefix().equals(context.functionPrefix()));
+        List<AstContext> calls = contexts(
+                c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
 
         // Benefit: saving 3 instructions (set return address, call, return) + half of number of parameters per call
         double benefit = calls.stream().mapToDouble(AstContext::totalWeight).sum() * (3d + function.getParamCount() / 2d);
@@ -91,7 +96,7 @@ public class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunction(AstContext context, int costLimit) {
-        CallGraph.Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
+        CallGraph.Function function = context.function();
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
@@ -103,8 +108,8 @@ public class FunctionInliner extends BaseOptimizer {
 
         trace(() -> "Inlining function " + function.getName());
 
-        List<AstContext> calls = contexts(c -> c.matches(OUT_OF_LINE_CALL)
-                && c.functionPrefix().equals(context.functionPrefix()));
+        List<AstContext> calls = contexts(
+                c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
 
         for (AstContext call : calls) {
             AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
@@ -128,7 +133,6 @@ public class FunctionInliner extends BaseOptimizer {
         LogicInstruction followup = instructionAfter(call);
         if (followup instanceof SetInstruction set
                 && set.getValue() instanceof LogicVariable variable
-//                && variable.getType() == ArgumentType.FUNCTION_RETVAL
                 && variable.getFunctionPrefix().equals(call.functionPrefix())) {
             LogicVariable result = set.getResult();
             removeInstruction(set);
@@ -156,18 +160,18 @@ public class FunctionInliner extends BaseOptimizer {
 
         @Override
         public String toString() {
-            return getName() + ": inline function " + getCallGraph().getFunctionByPrefix(astContext.functionPrefix()).getName();
+            return getName() + ": inline function " + astContext.function().getName();
         }
     }
 
 
 
     private OptimizationAction findPossibleCallInlining(AstContext call, int costLimit) {
-        if (call.functionPrefix() == null) {
+        if (call.function() == null) {
             // Shouldn't happen here
             return null;
         }
-        CallGraph.Function function = getCallGraph().getFunctionByPrefix(call.functionPrefix());
+        CallGraph.Function function = call.function();
         if (function.isRecursive() || function.isInline()) {
             return null;
         }
@@ -178,8 +182,9 @@ public class FunctionInliner extends BaseOptimizer {
         // Need to find the function body
         LogicList body = stripReturnInstructions(
                 contextInstructions(
-                        context(c -> c.matches(AstContextType.FUNCTION, BODY)
-                                && call.functionPrefix().equals(c.functionPrefix()))
+                        context(c ->call.function().equals(c.function())
+                                && c.matches(AstContextType.FUNCTION, BODY)
+                        )
                 )
         );
         if (body == null) {
@@ -191,15 +196,16 @@ public class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
-        CallGraph.Function function = getCallGraph().getFunctionByPrefix(call.functionPrefix());
+        CallGraph.Function function = call.function();
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
 
         LogicList body = stripReturnInstructions(
                 contextInstructions(
-                        context(c -> c.matches(AstContextType.FUNCTION, BODY)
-                                && c.functionPrefix().equals(call.functionPrefix()))
+                        context(c -> c.function() == call.function()
+                                        && c.matches(AstContextType.FUNCTION, BODY)
+                        )
                 )
         );
         if (body == null) {

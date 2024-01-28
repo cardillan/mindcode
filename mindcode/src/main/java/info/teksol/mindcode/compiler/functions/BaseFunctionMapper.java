@@ -4,7 +4,7 @@ import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.MindcodeMessage;
-import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.logic.*;

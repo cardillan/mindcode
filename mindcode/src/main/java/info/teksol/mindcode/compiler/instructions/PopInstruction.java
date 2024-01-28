@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicParameter;
 import info.teksol.mindcode.logic.Opcode;

@@ -3,6 +3,8 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.MessageLevel;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
@@ -15,7 +17,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 import static info.teksol.util.CollectionUtils.in;
 
 public class DataFlowOptimizer extends BaseOptimizer {
@@ -68,13 +70,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private final Map<LogicLabel, List<VariableStates>> labelStates = new HashMap<>();
 
     /** Maps function prefix to a list of variables directly or indirectly read by the function */
-    Map<String, Set<LogicVariable>> functionReads;
+    Map<CallGraph.Function, Set<LogicVariable>> functionReads;
 
     /** Maps function prefix to a list of variables directly or indirectly written by the function */
-    Map<String, Set<LogicVariable>> functionWrites;
+    Map<CallGraph.Function, Set<LogicVariable>> functionWrites;
 
     /** Contains function prefix of functions that may directly or indirectly call the end() instruction. */
-    private Set<String> functionEnds;
+    private Set<CallGraph.Function> functionEnds;
 
     /** List of variable states at each point of a call to a function that may invoke an end instruction. */
     private final List<VariableStates> functionEndStates = new ArrayList<>();
@@ -218,7 +220,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         functionEnds = new HashSet<>();
 
         getRootContext().children().stream()
-                .filter(c -> c.functionPrefix() != null)
+                .filter(AstContext::isFunction)
                 .forEachOrdered(this::analyzeFunctionVariables);
 
         while (propagateFunctionReadsAndWrites()) ;
@@ -247,12 +249,12 @@ public class DataFlowOptimizer extends BaseOptimizer {
                             .forEachOrdered(writes::add);
 
                     if (ix instanceof EndInstruction) {
-                        functionEnds.add(context.functionPrefix());
+                        functionEnds.add(context.function());
                     }
                 });
 
-        functionReads.put(context.functionPrefix(), reads);
-        functionWrites.put(context.functionPrefix(), writes);
+        functionReads.put(context.function(), reads);
+        functionWrites.put(context.function(), writes);
     }
 
     /**
@@ -265,20 +267,18 @@ public class DataFlowOptimizer extends BaseOptimizer {
         boolean modified = false;
         for (CallGraph.Function function : callGraph.getFunctions()) {
             if (!function.isInline()) {
-                Set<LogicVariable> reads = functionReads.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
-                Set<LogicVariable> writes = functionWrites.computeIfAbsent(function.getLocalPrefix(), f -> new HashSet<>());
+                Set<LogicVariable> reads = functionReads.computeIfAbsent(function, f -> new HashSet<>());
+                Set<LogicVariable> writes = functionWrites.computeIfAbsent(function, f -> new HashSet<>());
                 int size = reads.size() + writes.size() + functionEnds.size();
                 function.getCalls().keySet().stream()
                         .filter(callGraph::containsFunction)            // Filter out built-in functions
                         .map(callGraph::getFunction)
-                        .filter(f -> !f.isInline())                     // Function inlined by optimizer
-                        .map(CallGraph.Function::getLocalPrefix)
-                        .filter(Objects::nonNull)                       // Filter out main function
+                        .filter(f -> !f.isInline() && !f.isMain())      // Filter out functions inlined by optimizer and main function
                         .forEachOrdered(callee -> {
                             reads.addAll(functionReads.get(callee));
                             writes.addAll(functionWrites.get(callee));
                             if (functionEnds.contains(callee)) {
-                                functionEnds.add(function.getLocalPrefix());
+                                functionEnds.add(function);
                             }
                         });
 
@@ -316,10 +316,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
      */
     private void processTopContext(AstContext context) {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
-        if (context.functionPrefix() != null) {
+        if (context.isFunction()) {
             // All parameters of a function are initialized when the function is called.
-            CallGraph.Function function = getCallGraph().getFunctionByPrefix(context.functionPrefix());
-            function.getLogicParameters().forEach(variableStates::markInitialized);
+            context.function().getLogicParameters().forEach(variableStates::markInitialized);
         }
 
         iterator = createIteratorAtContext(context);
@@ -327,7 +326,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         iterator.close();
         useless.addAll(variableStates.getUseless().values());
 
-        if (context.functionPrefix() == null) {
+        if (!context.isFunction()) {
             // This is the main program context.
             // Variables that were not initialized might be expected to keep their value
             // on program restart (when reaching an end of instruction list/end instruction).
@@ -800,9 +799,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {
-                String functionPrefix = instruction.getAstContext().functionPrefix();
-                variableStates.updateAfterFunctionCall(functionPrefix, instruction);
-                if (modifyInstructions && functionEnds.contains(functionPrefix)) {
+                CallGraph.Function function = instruction.getAstContext().function();
+                variableStates.updateAfterFunctionCall(function, instruction);
+                if (modifyInstructions && functionEnds.contains(function)) {
                     functionEndStates.add(variableStates.copy("function end handling"));
                 }
             }

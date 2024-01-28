@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.logic.*;
 
 import java.util.List;

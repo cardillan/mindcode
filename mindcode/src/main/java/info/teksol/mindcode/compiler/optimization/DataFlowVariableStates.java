@@ -2,6 +2,8 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
+import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
@@ -13,8 +15,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.PARAMETERS;
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.RECURSIVE_CALL;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.PARAMETERS;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.RECURSIVE_CALL;
 
 public class DataFlowVariableStates {
 
@@ -330,13 +332,13 @@ public class DataFlowVariableStates {
         /**
          * Updates states of variables when a function call occurs.
          *
-         * @param localPrefix identification of the function
+         * @param function function to process
          * @param instruction instruction that caused the call
          */
-        public void updateAfterFunctionCall(String localPrefix, LogicInstruction instruction) {
-            optimizer.functionReads.get(localPrefix).forEach(variable -> valueRead(variable, instruction, false));
-            optimizer.functionWrites.get(localPrefix).forEach(this::valueReset);
-            initialized.add(LogicVariable.fnRetVal(localPrefix));
+        public void updateAfterFunctionCall(CallGraph.Function function, LogicInstruction instruction) {
+            optimizer.functionReads.get(function).forEach(variable -> valueRead(variable, instruction, false));
+            optimizer.functionWrites.get(function).forEach(this::valueReset);
+            initialized.add(LogicVariable.fnRetVal(function.getPrefix()));
         }
 
         /**
@@ -355,7 +357,7 @@ public class DataFlowVariableStates {
          * version that doesn't take a specific instruction performing the access to the variable.
          *
          * @param variable variable to be marked as read
-         * @return
+         * @return constant value of the variable, or null if there isn't a known constant value of the variable
          */
         public LogicValue valueRead(LogicVariable variable) {
             return valueRead(variable, null, true);
@@ -450,7 +452,7 @@ public class DataFlowVariableStates {
                 return other;
             }
 
-            merge(definitions,other.definitions, true);
+            merge(definitions,other.definitions);
 
             // Only keep values that are the same in both instances
             values.keySet().retainAll(other.values.keySet());
@@ -488,10 +490,8 @@ public class DataFlowVariableStates {
          *
          * @param map1 instance to merge into
          * @param map2 instance to be merged
-         * @param invalidateVariables if true, variables modified during the merge are invalidated
          */
-        private void merge(Map<LogicVariable, List<LogicInstruction>> map1, Map<LogicVariable, List<LogicInstruction>> map2,
-                boolean invalidateVariables) {
+        private void merge(Map<LogicVariable, List<LogicInstruction>> map1, Map<LogicVariable, List<LogicInstruction>> map2) {
             for (LogicVariable variable : map2.keySet()) {
                 if (map1.containsKey(variable)) {
                     List<LogicInstruction> current = map1.get(variable);
@@ -509,15 +509,11 @@ public class DataFlowVariableStates {
                             union.addAll(theOther);
                             map1.put(variable, new ArrayList<>(union));
                         }
-                        if (invalidateVariables) {
-                            invalidateVariable(variable);
-                        }
+                        invalidateVariable(variable);
                     }
                 } else {
                     map1.put(variable, map2.get(variable));
-                    if (invalidateVariables) {
-                        invalidateVariable(variable);
-                    }
+                    invalidateVariable(variable);
                 }
             }
         }

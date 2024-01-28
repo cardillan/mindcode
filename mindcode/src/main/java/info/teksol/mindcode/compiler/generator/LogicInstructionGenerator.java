@@ -67,7 +67,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private Function currentFunction;
 
     // Prefix for local variables (depends on function being processed)
-    private String localPrefix = "";
+    private String functionPrefix = "";
 
     private int heapBaseAddress = 0;
     
@@ -114,8 +114,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private void enterFunctionAstNode(String functionPrefix, AstNode node, double weight) {
-        astContext = astContext.createFunctionDeclaration(functionPrefix, node, node.getContextType(), weight);
+    private void enterFunctionAstNode(Function function, AstNode node, double weight) {
+        astContext = astContext.createFunctionDeclaration(function, node, node.getContextType(), weight);
     }
 
     private void exitAstNode(AstNode node) {
@@ -134,11 +134,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         astContext = astContext.createSubcontext(subcontextType, multiplier);
     }
 
-    private void setSubcontextType(String functionPrefix, AstSubcontextType subcontextType, double multiplier) {
+    private void setSubcontextType(Function function, AstSubcontextType subcontextType) {
         if (astContext.node() != null && astContext.subcontextType() != astContext.node().getSubcontextType()) {
             clearSubcontextType();
         }
-        astContext = astContext.createSubcontext(functionPrefix, subcontextType, multiplier);
+        astContext = astContext.createSubcontext(function, subcontextType, 1.0);
     }
 
     private void clearSubcontextType() {
@@ -327,12 +327,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 continue;
             }
 
-            enterFunctionAstNode(function.getLocalPrefix(), function.getDeclaration(), function.getUseCount());
+            enterFunctionAstNode(function, function.getDeclaration(), function.getUseCount());
             currentFunction = function;
-            localPrefix = function.getLocalPrefix();
+            functionPrefix = function.getPrefix();
             functionContext = new LocalContext();
             emit(createLabel(function.getLabel()));
-            returnStack.enterFunction(nextLabel(), LogicVariable.fnRetVal(localPrefix));
+            returnStack.enterFunction(nextLabel(), LogicVariable.fnRetVal(functionPrefix));
 
             if (function.isRecursive()) {
                 appendRecursiveFunctionDeclaration(function);
@@ -343,7 +343,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             emitEnd();
             exitAstNode(function.getDeclaration());
 
-            localPrefix = "";
+            functionPrefix = "";
             returnStack.exitFunction();
             currentFunction = callGraph.getMain();
         }
@@ -356,7 +356,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
-        emit(createSet(LogicVariable.fnRetVal(localPrefix), body));
+        emit(createSet(LogicVariable.fnRetVal(functionPrefix), body));
         emit(createLabel(returnStack.getReturnLabel()));
         emit(createReturn(stackName()));
     }
@@ -364,11 +364,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     private void appendStacklessFunctionDeclaration(Function function) {
         // Function parameters and return address are set up at the call site
         final LogicValue body = visit(function.getBody());
-        emit(createSet(LogicVariable.fnRetVal(localPrefix), body));
+        emit(createSet(LogicVariable.fnRetVal(functionPrefix), body));
         emit(createLabel(returnStack.getReturnLabel()));
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
-        emit(createGoto(LogicVariable.fnRetAddr(localPrefix), LogicLabel.symbolic(localPrefix)));
+        emit(createGoto(LogicVariable.fnRetAddr(functionPrefix), LogicLabel.symbolic(functionPrefix)));
     }
 
     @SuppressWarnings("SwitchStatementWithTooFewBranches")
@@ -411,11 +411,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         // Switching to new function prefix -- save/restore old one
-        String previousPrefix = localPrefix;
+        String previousPrefix = functionPrefix;
         try {
             // Entire inline function evaluates using given prefix (different invocations use different variables).
             // For other functions, the prefix is only used to set up variables representing function parameters.
-            localPrefix = function.isInline() ? instructionProcessor.nextLocalPrefix() : function.getLocalPrefix();
+            functionPrefix = function.isInline() ? instructionProcessor.nextFunctionPrefix() : function.getPrefix();
 
             if (function.isInline()) {
                 return handleInlineFunctionCall(function, arguments);
@@ -425,7 +425,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                 return handleRecursiveFunctionCall(function, arguments);
             }
         } finally {
-            localPrefix = previousPrefix;
+            functionPrefix = previousPrefix;
         }
     }
 
@@ -460,17 +460,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicValue handleStacklessFunctionCall(Function function, List<LogicValue> paramValues) {
-        setSubcontextType(function.getLocalPrefix(), AstSubcontextType.PARAMETERS, 1.0);
+        setSubcontextType(function, AstSubcontextType.PARAMETERS);
         setupFunctionParameters(function, paramValues);
 
-        setSubcontextType(function.getLocalPrefix(), AstSubcontextType.OUT_OF_LINE_CALL, 1.0);
+        setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
         final LogicLabel returnLabel = nextLabel();
-        emit(createSetAddress(LogicVariable.fnRetAddr(localPrefix), returnLabel));
+        emit(createSetAddress(LogicVariable.fnRetAddr(functionPrefix), returnLabel));
         emit(createCallStackless(function.getLabel()));
         // Mark position where the function must return
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
-        emit(createGotoLabel(returnLabel, LogicLabel.symbolic(localPrefix)));
+        emit(createGotoLabel(returnLabel, LogicLabel.symbolic(functionPrefix)));
 
         return passReturnValue(function);
     }
@@ -482,7 +482,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicValue handleRecursiveFunctionCall(Function function, List<LogicValue> paramValues) {
-        setSubcontextType(function.getLocalPrefix(), AstSubcontextType.RECURSIVE_CALL, 1.0);
+        setSubcontextType(function, AstSubcontextType.RECURSIVE_CALL);
         boolean useStack = currentFunction.isRecursiveCall(function.getName());
         List<LogicVariable> variables = useStack ? getContextVariables() : List.of();
 
@@ -536,13 +536,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             // this is easier than ensuring optimizers do not eliminate normal temporary variables
             // that received return values from functions.
             final LogicVariable resultVariable = nextReturnValue();
-            setSubcontextType(function.getLocalPrefix(), AstSubcontextType.RETURN_VALUE, 1.0);
-            emit(createSet(resultVariable, LogicVariable.fnRetVal(localPrefix)));
+            setSubcontextType(function, AstSubcontextType.RETURN_VALUE);
+            emit(createSet(resultVariable, LogicVariable.fnRetVal(functionPrefix)));
             return resultVariable;
         } else {
             // Use the function return value directly - there's only one place where it is produced
             // within this function's call tree
-            return LogicVariable.fnRetVal(localPrefix);
+            return LogicVariable.fnRetVal(functionPrefix);
         }
     }
 
@@ -638,7 +638,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitConstant(Constant node) {
-        if (!localPrefix.isEmpty()) {
+        if (!functionPrefix.isEmpty()) {
             throw new MindcodeException(node.startToken(), "constant declaration not allowed in user function '%s'.", node.getName());
         }
         AstNode value = expressionEvaluator.evaluate(node.getValue());
@@ -972,13 +972,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         } else if (instructionProcessor.isGlobalName(identifier)) {
             // Global variables aren't registered locally -- they must not be pushed onto stack!
             return LogicVariable.global(identifier);
-        } else if (localPrefix.isEmpty()) {
+        } else if (functionPrefix.isEmpty()) {
             // Main variable - again not pushed onto stack
             return LogicVariable.main(identifier);
         } else {
             // A truly local variable
             return functionContext.registerVariable(
-                    LogicVariable.local(currentFunction.getName(), localPrefix, identifier));
+                    LogicVariable.local(currentFunction.getName(), functionPrefix, identifier));
         }
     }
 

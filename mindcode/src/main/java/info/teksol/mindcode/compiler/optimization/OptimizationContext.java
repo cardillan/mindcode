@@ -1,6 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
@@ -342,11 +345,11 @@ public class OptimizationContext {
     private boolean updateWeights(Map<LogicLabel, Double> updatedWeights, boolean recursive) {
         boolean modified = false;
         for (AstContext topContext : getRootContext().children()) {
-            if (topContext.functionPrefix() != null) {
-                CallGraph.Function function = callGraph.getFunctionByPrefix(topContext.functionPrefix());
+            if (topContext.function() != null) {
+                CallGraph.Function function = topContext.function();
                 if (function.isRecursive() == recursive) {
                     Double weight = updatedWeights.get(function.getLabel());
-                    if (weight != null && topContext.getWeight() != weight) {
+                    if (weight != null && topContext.weight() != weight) {
                         modified = true;
                         topContext.updateWeight(weight);
                     }
@@ -1429,8 +1432,8 @@ public class OptimizationContext {
                                     .map(GotoLabelInstruction::getMarker)
                                     // TODO STACKLESS_CALL We no longer need to track relationship between return from the stackless call and callee
                                     //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
-                                    //      The remove the exception for localPrefix
-                                    .filter(l -> !l.toMlog().startsWith(instructionProcessor.getLocalPrefix()))
+                                    //      Then remove the exception for functionPrefix
+                                    .filter(l -> !l.toMlog().startsWith(instructionProcessor.getFunctionPrefix()))
                                     .distinct()
                     )
                     .collect(Collectors.toMap(l -> l, l -> instructionProcessor.nextLabel()));

@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 import java.util.function.Consumer;

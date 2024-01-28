@@ -1,4 +1,4 @@
-package info.teksol.mindcode.compiler.instructions;
+package info.teksol.mindcode.compiler.generator;
 
 public enum AstSubcontextType {
     /** Nonspecific context. */

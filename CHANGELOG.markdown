@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+* Fixed wrong optimization of side effects in the `when` expressions
+  ([#119](https://github.com/cardillan/mindcode/issues/119)).
+
+### Miscellaneous
+
+* Changed AstContext to store `CallGraph.Function` instances instead of a function prefix (`String`) to identify 
+  functions. All other classes that handle functions now operate on functions themselves instead of the prefixes. 
+  Avoids function lookups from local prefixes and increases type safety. 
+
 ## 2024-01-22
 
 ### Added

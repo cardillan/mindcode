@@ -1,8 +1,13 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.generator.CallGraph.Function;
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
+import info.teksol.mindcode.compiler.instructions.CallRecInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
+import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicArgument;
@@ -132,8 +137,7 @@ public class StackUsageOptimizer extends BaseOptimizer {
             throw new MindcodeInternalError("Expected RECURSIVE_CALL subcontext, found " + subcontext);
         }
 
-        Function function = getCallGraph().getFunctionByPrefix(subcontext.functionPrefix());
-        Set<LogicVariable> result = new HashSet<>(function.getLogicParameters());
+        Set<LogicVariable> result = new HashSet<>(subcontext.function().getLogicParameters());
 
         contextStream(subcontext)
                 .filter(SetInstruction.class::isInstance)

@@ -71,19 +71,13 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * Allow empty bodies of ifs, loops, functions etc.
 * Allow properties to be invoked on expressions. The nature of the call will be determined by the property name.
   * Use mimex to obtain all metadata needed to recognize all valid properties.
-  * Unknown properties will be called via `sensor`.
+  * Unknown properties will be delegated to the `sensor` instruction.
 * Allow empty optional arguments in function calls. At this moment, optional arguments can only be omitted at the
   end of the argument list.
-* Block comments to allow commenting/uncommenting blocks of code when battling a syntax error (better syntax
-  error reporting would be much more preferable, but quite hard to implement).
-* Only allow dashes in REF identifiers (the `@` Mindustry constants), and only in the middle of the identifier. Then 
-  add support for `++` and `--` operators.
-* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
-* Varargs inline functions (??)
-  * Function needs to be explicitly declared inline
-  * `inline def foo(a, b, c, x...) ... end`
-  * The vararg can be processed using list iteration loop, or maybe passed to another vararg function:
-    `def foo(arg...) for a in arg print(a) end end def bar(arg...) foo(arg) end`
+* Block comments `/* this is a block comment that can span several lines */`.
+* Only allow dashes in REF identifiers (e.g. `@battery-large`) and property names (e.g. `vault.blast-compound`), and 
+  only in the middle of the identifier. Then add support for `++` and `--` operators. `a-b` will become an 
+  expression equivalent to `a - b`.
     
 ## New and extended keywords
 
@@ -100,7 +94,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 * `array`
   * Used in `allocate array`
   * Reserved for future use in declaring in-memory arrays
-* `declare`, `var` (?)
+* `declare`, `var`: reserved for possible future use in declaring typed variables.
 * `enum`
   * Possible syntax:
     * `enum name(id1, id2, id3)`
@@ -127,6 +121,15 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     isn't a variable.
   * Used in when branch of case expression to set resulting value of the branch and exit the case expression.
 
+# Additional syntax enhancements
+
+* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
+* Varargs inline functions (??)
+  * Function needs to be explicitly declared inline
+  * `inline def foo(a, b, c, x...) ... end`
+  * The vararg can be processed using list iteration loop, or maybe passed to another vararg function:
+    `def foo(arg...) for a in arg print(a) end end def bar(arg...) foo(arg) end`
+    
 ## #use compiler directive/statement
 
 ```
@@ -147,6 +150,9 @@ Typed variables, parameters and function return values.
 * This would allow better optimization and some special features, such as function pointers.
 * Typed variables would have to be declared and could exist alongside untyped ones.
 * Compiler directive could be created to require all variables to be declared and typed.
+* Problems:
+  * Types of some expressions might not be possible to determine statically, e.g. the type of `block.sensor(property)` 
+    value depends on the property being sensed.   
 
 ## Records/structures
 
@@ -314,9 +320,6 @@ Two basic approaches
   * Could help keeping track of global variables and memory blocks.
   * Could be used to create more versions of a function, possibly inlining some of them, based on (dis)similarities
     of variable states between visits (probably quite complex.)
-* Expression distribution:
-  * `foo(value ? a : b)` could be turned into `if value foo(a) else foo(b) end`
-  * Is useful when at least one value produced by the ternary expression is a constant.
 * Code path splitting
   * If a variable is known to take on several distinct values and is part of several control statements or complex 
     expressions, create a jump table targeting specialized code for some or all of the values the 

@@ -1,7 +1,12 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.MessageLevel;
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.Condition;
 import info.teksol.mindcode.logic.LogicBoolean;
@@ -10,7 +15,7 @@ import info.teksol.mindcode.logic.LogicLabel;
 import java.util.List;
 import java.util.function.BiFunction;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 
 /**
  * The loop optimizers improves loops with the condition at the beginning by performing these modifications:

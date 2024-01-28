@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContext;
 
 public abstract class AbstractOptimizationAction implements OptimizationAction {
     protected final AstContext astContext;

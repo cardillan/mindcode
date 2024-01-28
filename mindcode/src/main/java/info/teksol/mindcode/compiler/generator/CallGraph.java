@@ -6,6 +6,7 @@ import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -66,13 +67,6 @@ public final class CallGraph {
     public Function getFunction(String name) {
         return Objects.requireNonNull(functions.get(name),
                 () -> "Requested nonexistent function " + name);
-    }
-
-    public Function getFunctionByPrefix(String localPrefix) {
-        return functions.values().stream()
-                .filter(f -> Objects.equals(f.localPrefix, localPrefix))
-                .findFirst()
-                .orElseThrow();
     }
 
     /**
@@ -156,7 +150,7 @@ public final class CallGraph {
 
     private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, Function function) {
         function.setLabel(instructionProcessor.nextLabel());
-        function.setLocalPrefix(instructionProcessor.nextLocalPrefix());
+        function.setPrefix(instructionProcessor.nextFunctionPrefix());
         function.createParameters();
     }
 
@@ -188,19 +182,27 @@ public final class CallGraph {
         callStack.remove(callStack.size() - 1);
     }
 
+    private static final AtomicInteger functionIds = new AtomicInteger();
+
     public static class Function {
+        private final int id = functionIds.getAndIncrement();
         private final FunctionDeclaration declaration;
         private final Set<String> recursiveCalls = new HashSet<>();
         private final Set<String> indirectCalls = new HashSet<>();
         private Map<String, Long> calls;
         private LogicLabel label;
-        private String localPrefix;
+        private String prefix;
         private int useCount = 0;
         private List<LogicVariable> parameters;
         private boolean inlined = false;
 
         private Function(FunctionDeclaration declaration) {
             this.declaration = declaration;
+        }
+
+        /** @return true if this is the main function */
+        public boolean isMain() {
+            return prefix == null;
         }
 
         /** @return true if this function should be inlined */
@@ -289,8 +291,8 @@ public final class CallGraph {
         }
 
         /** @return the local prefix allocated for local variables of this function */
-        public String getLocalPrefix() {
-            return localPrefix;
+        public String getPrefix() {
+            return prefix;
         }
 
         private boolean addIndirectCalls(Set<String> calls) {
@@ -316,8 +318,8 @@ public final class CallGraph {
             this.label = label;
         }
 
-        private void setLocalPrefix(String localPrefix) {
-            this.localPrefix = localPrefix;
+        private void setPrefix(String prefix) {
+            this.prefix = prefix;
         }
 
         public void setInlined() {
@@ -326,8 +328,21 @@ public final class CallGraph {
 
         private void createParameters() {
             parameters = getParams().stream()
-                    .map(p -> LogicVariable.local(getName(), localPrefix, p.getName()))
+                    .map(p -> LogicVariable.local(getName(), prefix, p.getName()))
                     .toList();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Function function = (Function) o;
+            return id == function.id;
+        }
+
+        @Override
+        public int hashCode() {
+            return Integer.hashCode(id);
         }
     }
 }

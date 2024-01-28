@@ -2,6 +2,9 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.*;
@@ -14,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.*;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 
 /**
  * Unrolls loops

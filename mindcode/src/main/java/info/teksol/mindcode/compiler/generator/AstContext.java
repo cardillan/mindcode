@@ -1,8 +1,7 @@
-package info.teksol.mindcode.compiler.instructions;
+package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.logic.ArgumentType;
-import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,7 +10,7 @@ public final class AstContext {
     private static final AtomicInteger counter = new AtomicInteger();
     public final int id;
 
-    private final String functionPrefix;
+    private final Function function;
     private final int level;
     private final AstNode node;
     private final AstContextType contextType;
@@ -20,10 +19,10 @@ public final class AstContext {
     private double weight;
     private final List<AstContext> children;
 
-    private AstContext(String functionPrefix, int level, AstNode node, AstContextType contextType,
+    private AstContext(Function function, int level, AstNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight, List<AstContext> children) {
         this.id = counter.getAndIncrement();
-        this.functionPrefix = functionPrefix;
+        this.function = function;
         this.level = level;
         this.node = node;
         this.contextType = contextType;
@@ -33,9 +32,9 @@ public final class AstContext {
         this.children = children;
     }
 
-    public AstContext(String functionPrefix, int level, AstNode node, AstContextType contextType,
+    public AstContext(Function function, int level, AstNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight) {
-        this(functionPrefix, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
+        this(function, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
     }
 
     public static AstContext createRootNode() {
@@ -44,28 +43,28 @@ public final class AstContext {
     }
 
     public AstContext createChild(AstNode node, AstContextType contextType) {
-        AstContext child = new AstContext(functionPrefix, level + 1, node, contextType, node.getSubcontextType(),
+        AstContext child = new AstContext(function, level + 1, node, contextType, node.getSubcontextType(),
                 this, 1.0);
         children.add(child);
 
         return child;
     }
 
-    public AstContext createFunctionDeclaration(String functionPrefix, AstNode node, AstContextType contextType, double weight) {
-        AstContext child = new AstContext(functionPrefix, level + 1, node, contextType, node.getSubcontextType(),
+    public AstContext createFunctionDeclaration(Function function, AstNode node, AstContextType contextType, double weight) {
+        AstContext child = new AstContext(function, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);
         return child;
     }
 
     public AstContext createSubcontext(AstSubcontextType subcontextType, double weight) {
-        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType, this, weight);
+        AstContext child = new AstContext(function, level, node, contextType, subcontextType, this, weight);
         children.add(child);
         return child;
     }
 
-    public AstContext createSubcontext(String functionPrefix, AstSubcontextType subcontextType, double weight) {
-        AstContext child = new AstContext(functionPrefix, level, node, contextType, subcontextType, this, weight);
+    public AstContext createSubcontext(Function function, AstSubcontextType subcontextType, double weight) {
+        AstContext child = new AstContext(function, level, node, contextType, subcontextType, this, weight);
         children.add(child);
         return child;
     }
@@ -77,7 +76,7 @@ public final class AstContext {
     }
 
     private AstContext createDeepCopy(Map<AstContext, AstContext> map, AstContext parent) {
-        AstContext copy = new AstContext(functionPrefix, level, node, contextType, subcontextType, parent, weight);
+        AstContext copy = new AstContext(function, level, node, contextType, subcontextType, parent, weight);
         children.stream()
                 .map(c -> c.createDeepCopy(map, copy))
                 .forEachOrdered(copy.children::add);
@@ -95,8 +94,8 @@ public final class AstContext {
     }
 
     /**
-     * This context belongs to another context when they're the same instance, or when this context is a direct child
-     * of the other context.
+     * This context belongs to another context when they're the same instance, or when this context is
+     * a descendant (direct or indirect child) of the other context.
      *
      * @param other context to match
      * @return true if this context belongs to the other context
@@ -142,16 +141,6 @@ public final class AstContext {
         return parent != null && parent.matchesRecursively(contextTypes);
     }
 
-    /**
-     * Determines whether a local variable belongs to the same function as this context.
-     *
-     * @param variable variable to inspect
-     * @return true if the variable belongs to the same function as this context
-     */
-    public boolean isLocalVariable(LogicVariable variable) {
-        return variable.getType() == ArgumentType.LOCAL_VARIABLE && Objects.equals(functionPrefix, variable.getFunctionPrefix());
-    }
-
     public AstContext findContextOfType(AstContextType contextType) {
         AstContext current = this;
         while (current != null) {
@@ -177,6 +166,12 @@ public final class AstContext {
         return found;
     }
 
+    /**
+     * For a given descendant, finds the direct child of this context that contains the descendant.
+     *
+     * @param descendant descendant to this context
+     * @return direct child containing the descendant, or null if it doesn't exist
+     */
     public AstContext findDirectChild(AstContext descendant) {
         AstContext current = descendant;
         while (current != null) {
@@ -239,7 +234,15 @@ public final class AstContext {
     }
 
     public String functionPrefix() {
-        return functionPrefix;
+        return function == null ? null : function.getPrefix();
+    }
+
+    public Function function() {
+        return function;
+    }
+
+    public boolean isFunction() {
+        return function != null;
     }
 
     public AstContextType contextType() {
@@ -258,7 +261,7 @@ public final class AstContext {
         this.weight = weight;
     }
 
-    public double getWeight() {
+    public double weight() {
         return weight;
     }
 

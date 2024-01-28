@@ -2,8 +2,13 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.NoOp;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.compiler.optimization.BaseOptimizerTest.DummyOptimizer;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.LogicLabel;

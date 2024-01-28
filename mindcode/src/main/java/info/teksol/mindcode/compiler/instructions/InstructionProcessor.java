@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.logic.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface InstructionProcessor {
 
     LogicLabel nextLabel();
     LogicVariable nextTemp();
-    String nextLocalPrefix();
+    String nextFunctionPrefix();
 
     /**
      * Creates a sample logic instruction from given opcode variant.
@@ -134,7 +135,7 @@ public interface InstructionProcessor {
         return "__tmp";
     }
 
-    default String getLocalPrefix() {
+    default String getFunctionPrefix() {
         return "__fn";
     }
 }

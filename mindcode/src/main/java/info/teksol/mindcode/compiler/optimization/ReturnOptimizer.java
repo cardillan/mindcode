@@ -1,12 +1,17 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.MessageLevel;
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.instructions.EndInstruction;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.ReturnInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 
 import java.util.List;
 
-import static info.teksol.mindcode.compiler.instructions.AstSubcontextType.BODY;
+import static info.teksol.mindcode.compiler.generator.AstSubcontextType.BODY;
 
 /**
  * Inlines functions
@@ -43,7 +48,7 @@ public class ReturnOptimizer extends BaseOptimizer {
     }
 
     private List<OptimizationAction> findReturnStatementOptimizations(AstContext context) {
-        if (!getCallGraph().getFunctionByPrefix(context.functionPrefix()).isRecursive()) {
+        if (context.function() == null || !context.function().isRecursive()) {
             return List.of();
         }
 

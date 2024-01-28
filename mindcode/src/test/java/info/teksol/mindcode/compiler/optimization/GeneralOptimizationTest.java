@@ -1,7 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.instructions.AstContext;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -367,8 +367,8 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         """);
 
         List<Double> weights = compiler.getRootContext().children().stream()
-                .filter(ctx -> ctx.functionPrefix() != null)
-                .map(AstContext::getWeight).toList();
+                .filter(ctx -> ctx.function() != null)
+                .map(AstContext::weight).toList();
         assertEquals(List.of(2d, 50d, 100d), weights, "Computed function weights differ from expected.");
     }
 }
