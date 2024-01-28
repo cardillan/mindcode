@@ -11,6 +11,10 @@ The main focus of Mindcode design is two-fold:
 * Provide language constructs that are not prohibitively expensive given the astonishingly slow speeds
   and limited instruction space of Mindustry processors.
 
+> [!NOTE]
+> Please have a look at a poll about introducing compulsory semicolons to the Mindcode syntax
+> [here](https://github.com/cardillan/mindcode/discussions/120).
+
 ## Latest development
 
 Some of the latest enhancements to Mindcode are:
