@@ -232,10 +232,10 @@ public class DataFlowVariableStates {
         /**
          * Called to record a new value assigned to a variable.
          *
-         * @param variable variable being assigned a new value
+         * @param variable    variable being assigned a new value
          * @param instruction instruction performing the assignment
-         * @param value the value being assigned, null means the instruction assigns an unknown value (e.g. value
-         *             provided by sensor instruction, or random value)
+         * @param value       the value being assigned, null means the instruction assigns an unknown value (e.g. value
+         *                    provided by sensor instruction, or random value)
          */
         public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value) {
             if (stored.contains(variable)) {

@@ -1,36 +1,34 @@
 [![Project Map](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/cardillanmindcode/)
 
-# Mindcode
+# Mindcode & Schemacode
 
-Welcome to Mindcode, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a game in
-the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a
-high-level language. Mindcode aims to make Mindustry programming easier for everyone.
+Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a 
+game in the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to 
+assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
-The main focus of Mindcode design is two-fold:
+Mindcode development focuses of the following priorities:
+
 * Keeping terminology and naming convention close to Mindustry Logic.
-* Provide language constructs that are not prohibitively expensive given the astonishingly slow speeds
+* Providing language constructs that are not prohibitively expensive given the astonishingly slow speeds
   and limited instruction space of Mindustry processors.
+* Employing various [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) to produce efficient code. 
 
 > [!NOTE]
 > Please have a look at a poll about introducing compulsory semicolons to the Mindcode syntax
 > [here](https://github.com/cardillan/mindcode/discussions/120).
 
+**Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text 
+file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into 
+Mindustry schematics, either as a binary `.msch` file, or as a text. Processors can be included in these schematics, 
+complete with the code (specified in Mindcode or Mindustry Logic language) and linked blocks.
+
 ## Latest development
 
 Some of the latest enhancements to Mindcode are:
 
+* [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting), a new optimization designed to pull 
+  invariant code out of loops to avoid repeated execution where possible.
 * All instructions added in Mindustry 7 build 146 are now supported.  
-* A number of powerful code optimizations:
-  [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization),
-  [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling),
-  [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) and 
-  [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching). Most of them perform 
-  [optimization for speed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed): they increase the code size 
-  (up to the 1000 instructions limit) if it results in faster execution of the final program.   
-* [Schematics builder](doc/syntax/SCHEMACODE.markdown). This tool allows you to define a Mindustry schematic in
-  Schemacode, a specialized definition language. Schemacode definitions can be compiled into Mindustry schematic,
-  either as a binary `.msch` file, or as a text. Processors can be included in these schematics, complete with the
-  code (specified in Mindcode or Mindustry Logic language) and linked blocks.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
 

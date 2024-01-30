@@ -841,9 +841,6 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 // information whether they're read somewhere. Outside their functions they're processed normally
                 // (can be optimized freely).
                 // If they aren't read at all in the entire program, they'll be removed by DeadCodeEliminator.
-                // TODO when inlining a function, replace function prefix in the inlined functions with the function
-                //      prefix of the call being inlined. Then it is possible to stop replacing function return
-                //      variable, because this protection will not be granted.
                 AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION);
                 yield functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix());
             }

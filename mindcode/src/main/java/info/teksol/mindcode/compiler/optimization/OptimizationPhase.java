@@ -27,6 +27,7 @@ public enum OptimizationPhase {
             EXPRESSION_OPTIMIZATION,
             IF_EXPRESSION_OPTIMIZATION,
             DATA_FLOW_OPTIMIZATION,
+            LOOP_HOISTING,
             LOOP_OPTIMIZATION,
             LOOP_UNROLLING,
             FUNCTION_INLINING,

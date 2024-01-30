@@ -100,6 +100,32 @@ public interface InstructionProcessor {
     int getPrintArgumentCount(LogicInstruction instruction);
 
     /**
+     * Determines whether the given instruction is effectively deterministic. The instruction is effectively
+     * deterministic if it sets the output variables to the same values each time it is called, assuming the input
+     * arguments are the same. Side effects aren't considered. Values and character of the input arguments to the
+     * instruction are considered - an otherwise deterministic instruction that has a volatile variable as an input
+     * argument isn't deterministic.
+     *
+     * Note: getlink is not deemed a deterministic instruction, as it can be influenced by linking updating
+     * blocks linked to the processor in the Mindustry World. Block variables are considered volatile
+     * for the same reason.
+     *
+     * @param instruction instruction to inspect
+     * @return true if the instruction is effectively deterministic
+     */
+    boolean isDeterministic(LogicInstruction instruction);
+
+    /**
+     * Determines whether the instruction is safe. A safe instruction has no side effects, i.e. performs no action
+     * apart from changing values of output arguments. Any instruction that modifies the state of the Mindustry world
+     * is not safe.
+     *
+     * @param instruction instruction to inspect
+     * @return true if the instruction is safe
+     */
+    boolean isSafe(LogicInstruction instruction);
+
+    /**
      * Determines whether the identifier could be a block name (such as switch1, cell2, projector3 etc.).
      *
      * @param identifier identifier to check

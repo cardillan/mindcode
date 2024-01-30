@@ -320,6 +320,30 @@ public class BaseInstructionProcessor implements InstructionProcessor {
                 + instruction.getOpcode().getAdditionalPrintArguments();
     }
 
+    @Override
+    public boolean isDeterministic(LogicInstruction instruction) {
+        // TODO Make sensor deterministic depending on the property being sensed
+        // TODO Add lookup instruction
+        return switch (instruction) {
+            case SetInstruction ix -> nonvolatileArguments(ix);
+            case OpInstruction ix -> ix.getOperation().isDeterministic() && nonvolatileArguments(ix);
+            case PackColorInstruction ix -> nonvolatileArguments(ix);
+            default -> false;
+        };
+    }
+
+    private boolean nonvolatileArguments(LogicInstruction instruction) {
+        return instruction.inputArgumentsStream().noneMatch(v -> v.getType() == ArgumentType.BLOCK || v.isVolatile());
+    }
+
+    @Override
+    public boolean isSafe(LogicInstruction instruction) {
+        // TODO More instructions might be safe
+        return switch (instruction.getOpcode()) {
+            case READ, GETLINK, RADAR, SENSOR, SET, OP, LOOKUP, PACKCOLOR -> true;
+            default -> false;
+        };
+    }
 
     /**
      * Returns true if the given value is allowed to be used in place of the given argument.

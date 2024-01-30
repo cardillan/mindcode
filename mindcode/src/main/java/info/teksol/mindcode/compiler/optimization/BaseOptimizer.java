@@ -473,7 +473,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     }
 
     protected void invalidateInstruction(int index) {
-        replaceInstruction(index, createNoOp(instructionAt(index).getAstContext()));
+        LogicInstruction instruction = instructionAt(index);
+        if (instruction.getOpcode() != Opcode.NOOP) {
+            replaceInstruction(index, createNoOp(instruction.getAstContext()));
+        }
     }
 
     protected void invalidateInstruction(LogicInstruction instruction) {
@@ -717,7 +720,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //</editor-fold>
 
     protected LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
-        return optimizationContext.buildLogicList(context, instructions);
+        return optimizationContext.buildLogicList(context, List.copyOf(instructions));
     }
 
     protected final void trace(Supplier<String> text) {

@@ -284,7 +284,7 @@ public class LoopUnroller extends BaseOptimizer {
                 List<LogicInstruction> controlIxs = getControlVariableUpdates(loop, init, variable);
                 if (!controlIxs.isEmpty()) {
                     if (controlIxs.stream().allMatch(ix -> ix instanceof OpInstruction op
-                            && withinLoopContext(loop, op)
+                            && loop.executesOnce(op)
                             && op.getResult().equals(variable) && op.getX().equals(variable)
                             && op.hasSecondOperand() && op.getY().isNumericLiteral())) {
                         if (result != null) {
@@ -308,16 +308,6 @@ public class LoopUnroller extends BaseOptimizer {
                 .filter(ix -> !ix.getAstContext().belongsTo(init))
                 .filter(ix -> ix.outputArgumentsStream().anyMatch(a -> a.equals(variable)))
                 .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    // Determines whether the instruction lies directly within the loop context (not in another control-flow subcontext)
-    private boolean withinLoopContext(AstContext loop, OpInstruction op) {
-        for (AstContext ctx = op.getAstContext(); ctx != null; ctx = ctx.parent()) {
-            if (ctx.contextType().flowControl) {
-                return ctx == loop || ctx.parent() == loop;
-            }
-        }
-        return false;
     }
 
     private OptimizationAction findPossibleIterationUnrolling(AstContext loop, int costLimit) {

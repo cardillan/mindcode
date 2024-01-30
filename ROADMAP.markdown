@@ -27,8 +27,6 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * Mindcode
     * recognize item/liquid built-in constants (possibly others),
     * [Case switching over built-in constants](#case-switching-over-built-in-constants)
-* Improve handling of return statements by the Function Inlining optimization. Currently, the resulting AST context 
-  structure can hinder further Data Flow optimizations.  
 * Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion
 
 # Other small or internal improvements

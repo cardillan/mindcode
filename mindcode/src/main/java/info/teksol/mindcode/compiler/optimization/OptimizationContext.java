@@ -1401,7 +1401,7 @@ public class OptimizationContext {
 
             Map<AstContext, AstContext> contextMap = astContext.createDeepCopy();
             return new LogicList(contextMap.get(astContext), stream()
-                    .map(ix -> replaceLabels(labelMap, contextMap, ix))
+                    .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
                     .toList());
         }
 
@@ -1415,7 +1415,7 @@ public class OptimizationContext {
 
             Map<AstContext, AstContext> contextMap = astContext.copyChildrenTo(newContext);
             return new LogicList(contextMap.get(astContext), stream()
-                    .map(ix -> replaceLabels(labelMap, contextMap, ix))
+                    .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
                     .toList());
         }
 
@@ -1439,7 +1439,7 @@ public class OptimizationContext {
                     .collect(Collectors.toMap(l -> l, l -> instructionProcessor.nextLabel()));
         }
 
-        private LogicInstruction replaceLabels(Map<LogicLabel, LogicLabel> labelMap, Map<AstContext, AstContext> contextMap, LogicInstruction ix) {
+        private LogicInstruction remapContextAndLabels(Map<LogicLabel, LogicLabel> labelMap, Map<AstContext, AstContext> contextMap, LogicInstruction ix) {
             return instructionProcessor.replaceLabels(ix.withContext(contextMap.get(ix.getAstContext())), labelMap);
         }
 

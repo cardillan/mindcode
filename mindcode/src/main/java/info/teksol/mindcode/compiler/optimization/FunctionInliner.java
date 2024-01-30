@@ -137,7 +137,7 @@ public class FunctionInliner extends BaseOptimizer {
             LogicVariable result = set.getResult();
             removeInstruction(set);
 
-            // TODO When modification support is added to LogicList, rewrite this to modify instructions in the lo
+            // TODO When modification support is added to LogicList, rewrite this to modify instructions there
             List<LogicInstruction> newInstructions = newBody.stream()
                     .map(ix -> replaceAllArgs(ix, variable, result))
                     .toList();

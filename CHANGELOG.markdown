@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+* Added [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization. This optimization 
+  moves invariant code out of loops.
+
 ## 2024-01-28
 
 ### Fixed

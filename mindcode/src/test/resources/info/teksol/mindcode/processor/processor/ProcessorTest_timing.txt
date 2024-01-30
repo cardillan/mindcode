@@ -5,7 +5,7 @@ expression-evaluation-compile-time.mnd: : parse:          0 ms, compile:        
 expression-evaluation-runtime.mnd:      : parse:          0 ms, compile:          0 ms, optimize:        200 ms
 fixed-bounds-ranged-for.mnd:            : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 for-each-loop-break-continue.mnd:       : parse:          0 ms, compile:          0 ms, optimize:          0 ms
-function-inlining.mnd:                  : parse:          0 ms, compile:          0 ms, optimize:        200 ms
+function-inlining.mnd:                  : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 handlesAssignmentsInConditions:         : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 handlesChainedAssignments:              : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 iterated-for-loop-break-continue.mnd:   : parse:          0 ms, compile:          0 ms, optimize:          0 ms

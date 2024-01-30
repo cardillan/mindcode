@@ -3,6 +3,7 @@
    125 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Optimization (3 iterations).
   1180 instructions eliminated by Data Flow Optimization (16 passes, 51 iterations).
+     1 loops improved by Loop Hoisting.
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
   1255 instructions added by Loop Unrolling (17 iterations).
@@ -3659,6 +3660,24 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2
    383 read __tmp376 bank1 __tmp379
    384 label __label255
 
+Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
+ 
+   364 label __label244
+   365 jump __label246 lessThan __fn121_row 0
+   366 op add __fn121_col __fn121_row 1
++  367 op add __tmp369 __fn121_row 1
+   368 label __label247
+   369 jump __label249 lessThan __fn121_col 0
+   370 label __label250
+ 
+   372 op add __tmp368 __tmp367 __fn121_col
+   373 read __tmp365 bank1 __tmp368
+   374 label __label251
+-    * op add __tmp369 __fn121_row 1
+   375 label __label252
+   376 op mul __tmp372 16 __tmp369
+   377 op add __tmp373 __tmp372 __fn121_col
+
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
    362 label __label242
@@ -3667,12 +3686,13 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 -    * jump __label246 lessThan __fn121_row 0
 +  365 label __label264
    366 op add __fn121_col __fn121_row 1
-   367 label __label247
-   368 jump __label249 lessThan __fn121_col 0
-+  369 label __label265
-   370 label __label250
-   371 op mul __tmp367 16 __fn121_row
-   372 op add __tmp368 __tmp367 __fn121_col
+   367 op add __tmp369 __fn121_row 1
+   368 label __label247
+   369 jump __label249 lessThan __fn121_col 0
++  370 label __label265
+   371 label __label250
+   372 op mul __tmp367 16 __fn121_row
+   373 op add __tmp368 __tmp367 __fn121_col
  
    390 label __label257
    391 label __label248
@@ -3697,6 +3717,7 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 -    * label __label244
 -    * label __label264
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 -    * label __label247
 -    * jump __label249 lessThan __fn121_col 0
 -    * label __label265
@@ -3705,7 +3726,6 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 -    * op add __tmp368 __tmp367 __fn121_col
 -    * read __tmp365 bank1 __tmp368
 -    * label __label251
--    * op add __tmp369 __fn121_row 1
 -    * label __label252
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -3733,15 +3753,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  364 label __label266
 +  365 label __label267
 +  366 op add __fn121_col __fn121_row 1
-+  367 label __label268
-+  368 jump __label279 lessThan __fn121_col 0
-+  369 label __label269
-+  370 label __label270
-+  371 op mul __tmp367 16 __fn121_row
-+  372 op add __tmp368 __tmp367 __fn121_col
-+  373 read __tmp365 bank1 __tmp368
-+  374 label __label271
-+  375 op add __tmp369 __fn121_row 1
++  367 op add __tmp369 __fn121_row 1
++  368 label __label268
++  369 jump __label279 lessThan __fn121_col 0
++  370 label __label269
++  371 label __label270
++  372 op mul __tmp367 16 __fn121_row
++  373 op add __tmp368 __tmp367 __fn121_col
++  374 read __tmp365 bank1 __tmp368
++  375 label __label271
 +  376 label __label272
 +  377 op mul __tmp372 16 __tmp369
 +  378 op add __tmp373 __tmp372 __fn121_col
@@ -3765,15 +3785,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  396 op sub __fn121_row __fn121_row 1
 +  397 label __label281
 +  398 op add __fn121_col __fn121_row 1
-+  399 label __label282
-+  400 jump __label293 lessThan __fn121_col 0
-+  401 label __label283
-+  402 label __label284
-+  403 op mul __tmp367 16 __fn121_row
-+  404 op add __tmp368 __tmp367 __fn121_col
-+  405 read __tmp365 bank1 __tmp368
-+  406 label __label285
-+  407 op add __tmp369 __fn121_row 1
++  399 op add __tmp369 __fn121_row 1
++  400 label __label282
++  401 jump __label293 lessThan __fn121_col 0
++  402 label __label283
++  403 label __label284
++  404 op mul __tmp367 16 __fn121_row
++  405 op add __tmp368 __tmp367 __fn121_col
++  406 read __tmp365 bank1 __tmp368
++  407 label __label285
 +  408 label __label286
 +  409 op mul __tmp372 16 __tmp369
 +  410 op add __tmp373 __tmp372 __fn121_col
@@ -3797,15 +3817,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  428 op sub __fn121_row __fn121_row 1
 +  429 label __label295
 +  430 op add __fn121_col __fn121_row 1
-+  431 label __label296
-+  432 jump __label307 lessThan __fn121_col 0
-+  433 label __label297
-+  434 label __label298
-+  435 op mul __tmp367 16 __fn121_row
-+  436 op add __tmp368 __tmp367 __fn121_col
-+  437 read __tmp365 bank1 __tmp368
-+  438 label __label299
-+  439 op add __tmp369 __fn121_row 1
++  431 op add __tmp369 __fn121_row 1
++  432 label __label296
++  433 jump __label307 lessThan __fn121_col 0
++  434 label __label297
++  435 label __label298
++  436 op mul __tmp367 16 __fn121_row
++  437 op add __tmp368 __tmp367 __fn121_col
++  438 read __tmp365 bank1 __tmp368
++  439 label __label299
 +  440 label __label300
 +  441 op mul __tmp372 16 __tmp369
 +  442 op add __tmp373 __tmp372 __fn121_col
@@ -3829,15 +3849,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  460 op sub __fn121_row __fn121_row 1
 +  461 label __label309
 +  462 op add __fn121_col __fn121_row 1
-+  463 label __label310
-+  464 jump __label321 lessThan __fn121_col 0
-+  465 label __label311
-+  466 label __label312
-+  467 op mul __tmp367 16 __fn121_row
-+  468 op add __tmp368 __tmp367 __fn121_col
-+  469 read __tmp365 bank1 __tmp368
-+  470 label __label313
-+  471 op add __tmp369 __fn121_row 1
++  463 op add __tmp369 __fn121_row 1
++  464 label __label310
++  465 jump __label321 lessThan __fn121_col 0
++  466 label __label311
++  467 label __label312
++  468 op mul __tmp367 16 __fn121_row
++  469 op add __tmp368 __tmp367 __fn121_col
++  470 read __tmp365 bank1 __tmp368
++  471 label __label313
 +  472 label __label314
 +  473 op mul __tmp372 16 __tmp369
 +  474 op add __tmp373 __tmp372 __fn121_col
@@ -3861,15 +3881,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  492 op sub __fn121_row __fn121_row 1
 +  493 label __label323
 +  494 op add __fn121_col __fn121_row 1
-+  495 label __label324
-+  496 jump __label335 lessThan __fn121_col 0
-+  497 label __label325
-+  498 label __label326
-+  499 op mul __tmp367 16 __fn121_row
-+  500 op add __tmp368 __tmp367 __fn121_col
-+  501 read __tmp365 bank1 __tmp368
-+  502 label __label327
-+  503 op add __tmp369 __fn121_row 1
++  495 op add __tmp369 __fn121_row 1
++  496 label __label324
++  497 jump __label335 lessThan __fn121_col 0
++  498 label __label325
++  499 label __label326
++  500 op mul __tmp367 16 __fn121_row
++  501 op add __tmp368 __tmp367 __fn121_col
++  502 read __tmp365 bank1 __tmp368
++  503 label __label327
 +  504 label __label328
 +  505 op mul __tmp372 16 __tmp369
 +  506 op add __tmp373 __tmp372 __fn121_col
@@ -3893,15 +3913,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  524 op sub __fn121_row __fn121_row 1
 +  525 label __label337
 +  526 op add __fn121_col __fn121_row 1
-+  527 label __label338
-+  528 jump __label349 lessThan __fn121_col 0
-+  529 label __label339
-+  530 label __label340
-+  531 op mul __tmp367 16 __fn121_row
-+  532 op add __tmp368 __tmp367 __fn121_col
-+  533 read __tmp365 bank1 __tmp368
-+  534 label __label341
-+  535 op add __tmp369 __fn121_row 1
++  527 op add __tmp369 __fn121_row 1
++  528 label __label338
++  529 jump __label349 lessThan __fn121_col 0
++  530 label __label339
++  531 label __label340
++  532 op mul __tmp367 16 __fn121_row
++  533 op add __tmp368 __tmp367 __fn121_col
++  534 read __tmp365 bank1 __tmp368
++  535 label __label341
 +  536 label __label342
 +  537 op mul __tmp372 16 __tmp369
 +  538 op add __tmp373 __tmp372 __fn121_col
@@ -3925,15 +3945,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  556 op sub __fn121_row __fn121_row 1
 +  557 label __label351
 +  558 op add __fn121_col __fn121_row 1
-+  559 label __label352
-+  560 jump __label363 lessThan __fn121_col 0
-+  561 label __label353
-+  562 label __label354
-+  563 op mul __tmp367 16 __fn121_row
-+  564 op add __tmp368 __tmp367 __fn121_col
-+  565 read __tmp365 bank1 __tmp368
-+  566 label __label355
-+  567 op add __tmp369 __fn121_row 1
++  559 op add __tmp369 __fn121_row 1
++  560 label __label352
++  561 jump __label363 lessThan __fn121_col 0
++  562 label __label353
++  563 label __label354
++  564 op mul __tmp367 16 __fn121_row
++  565 op add __tmp368 __tmp367 __fn121_col
++  566 read __tmp365 bank1 __tmp368
++  567 label __label355
 +  568 label __label356
 +  569 op mul __tmp372 16 __tmp369
 +  570 op add __tmp373 __tmp372 __fn121_col
@@ -3957,15 +3977,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  588 op sub __fn121_row __fn121_row 1
 +  589 label __label365
 +  590 op add __fn121_col __fn121_row 1
-+  591 label __label366
-+  592 jump __label377 lessThan __fn121_col 0
-+  593 label __label367
-+  594 label __label368
-+  595 op mul __tmp367 16 __fn121_row
-+  596 op add __tmp368 __tmp367 __fn121_col
-+  597 read __tmp365 bank1 __tmp368
-+  598 label __label369
-+  599 op add __tmp369 __fn121_row 1
++  591 op add __tmp369 __fn121_row 1
++  592 label __label366
++  593 jump __label377 lessThan __fn121_col 0
++  594 label __label367
++  595 label __label368
++  596 op mul __tmp367 16 __fn121_row
++  597 op add __tmp368 __tmp367 __fn121_col
++  598 read __tmp365 bank1 __tmp368
++  599 label __label369
 +  600 label __label370
 +  601 op mul __tmp372 16 __tmp369
 +  602 op add __tmp373 __tmp372 __fn121_col
@@ -3989,15 +4009,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  620 op sub __fn121_row __fn121_row 1
 +  621 label __label379
 +  622 op add __fn121_col __fn121_row 1
-+  623 label __label380
-+  624 jump __label391 lessThan __fn121_col 0
-+  625 label __label381
-+  626 label __label382
-+  627 op mul __tmp367 16 __fn121_row
-+  628 op add __tmp368 __tmp367 __fn121_col
-+  629 read __tmp365 bank1 __tmp368
-+  630 label __label383
-+  631 op add __tmp369 __fn121_row 1
++  623 op add __tmp369 __fn121_row 1
++  624 label __label380
++  625 jump __label391 lessThan __fn121_col 0
++  626 label __label381
++  627 label __label382
++  628 op mul __tmp367 16 __fn121_row
++  629 op add __tmp368 __tmp367 __fn121_col
++  630 read __tmp365 bank1 __tmp368
++  631 label __label383
 +  632 label __label384
 +  633 op mul __tmp372 16 __tmp369
 +  634 op add __tmp373 __tmp372 __fn121_col
@@ -4021,15 +4041,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  652 op sub __fn121_row __fn121_row 1
 +  653 label __label393
 +  654 op add __fn121_col __fn121_row 1
-+  655 label __label394
-+  656 jump __label405 lessThan __fn121_col 0
-+  657 label __label395
-+  658 label __label396
-+  659 op mul __tmp367 16 __fn121_row
-+  660 op add __tmp368 __tmp367 __fn121_col
-+  661 read __tmp365 bank1 __tmp368
-+  662 label __label397
-+  663 op add __tmp369 __fn121_row 1
++  655 op add __tmp369 __fn121_row 1
++  656 label __label394
++  657 jump __label405 lessThan __fn121_col 0
++  658 label __label395
++  659 label __label396
++  660 op mul __tmp367 16 __fn121_row
++  661 op add __tmp368 __tmp367 __fn121_col
++  662 read __tmp365 bank1 __tmp368
++  663 label __label397
 +  664 label __label398
 +  665 op mul __tmp372 16 __tmp369
 +  666 op add __tmp373 __tmp372 __fn121_col
@@ -4053,15 +4073,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  684 op sub __fn121_row __fn121_row 1
 +  685 label __label407
 +  686 op add __fn121_col __fn121_row 1
-+  687 label __label408
-+  688 jump __label419 lessThan __fn121_col 0
-+  689 label __label409
-+  690 label __label410
-+  691 op mul __tmp367 16 __fn121_row
-+  692 op add __tmp368 __tmp367 __fn121_col
-+  693 read __tmp365 bank1 __tmp368
-+  694 label __label411
-+  695 op add __tmp369 __fn121_row 1
++  687 op add __tmp369 __fn121_row 1
++  688 label __label408
++  689 jump __label419 lessThan __fn121_col 0
++  690 label __label409
++  691 label __label410
++  692 op mul __tmp367 16 __fn121_row
++  693 op add __tmp368 __tmp367 __fn121_col
++  694 read __tmp365 bank1 __tmp368
++  695 label __label411
 +  696 label __label412
 +  697 op mul __tmp372 16 __tmp369
 +  698 op add __tmp373 __tmp372 __fn121_col
@@ -4085,15 +4105,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  716 op sub __fn121_row __fn121_row 1
 +  717 label __label421
 +  718 op add __fn121_col __fn121_row 1
-+  719 label __label422
-+  720 jump __label433 lessThan __fn121_col 0
-+  721 label __label423
-+  722 label __label424
-+  723 op mul __tmp367 16 __fn121_row
-+  724 op add __tmp368 __tmp367 __fn121_col
-+  725 read __tmp365 bank1 __tmp368
-+  726 label __label425
-+  727 op add __tmp369 __fn121_row 1
++  719 op add __tmp369 __fn121_row 1
++  720 label __label422
++  721 jump __label433 lessThan __fn121_col 0
++  722 label __label423
++  723 label __label424
++  724 op mul __tmp367 16 __fn121_row
++  725 op add __tmp368 __tmp367 __fn121_col
++  726 read __tmp365 bank1 __tmp368
++  727 label __label425
 +  728 label __label426
 +  729 op mul __tmp372 16 __tmp369
 +  730 op add __tmp373 __tmp372 __fn121_col
@@ -4117,15 +4137,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  748 op sub __fn121_row __fn121_row 1
 +  749 label __label435
 +  750 op add __fn121_col __fn121_row 1
-+  751 label __label436
-+  752 jump __label447 lessThan __fn121_col 0
-+  753 label __label437
-+  754 label __label438
-+  755 op mul __tmp367 16 __fn121_row
-+  756 op add __tmp368 __tmp367 __fn121_col
-+  757 read __tmp365 bank1 __tmp368
-+  758 label __label439
-+  759 op add __tmp369 __fn121_row 1
++  751 op add __tmp369 __fn121_row 1
++  752 label __label436
++  753 jump __label447 lessThan __fn121_col 0
++  754 label __label437
++  755 label __label438
++  756 op mul __tmp367 16 __fn121_row
++  757 op add __tmp368 __tmp367 __fn121_col
++  758 read __tmp365 bank1 __tmp368
++  759 label __label439
 +  760 label __label440
 +  761 op mul __tmp372 16 __tmp369
 +  762 op add __tmp373 __tmp372 __fn121_col
@@ -4149,15 +4169,15 @@ Modifications by Loop Unrolling: unroll loop at line 9 (+233 instructions):
 +  780 op sub __fn121_row __fn121_row 1
 +  781 label __label449
 +  782 op add __fn121_col __fn121_row 1
-+  783 label __label450
-+  784 jump __label461 lessThan __fn121_col 0
-+  785 label __label451
-+  786 label __label452
-+  787 op mul __tmp367 16 __fn121_row
-+  788 op add __tmp368 __tmp367 __fn121_col
-+  789 read __tmp365 bank1 __tmp368
-+  790 label __label453
-+  791 op add __tmp369 __fn121_row 1
++  783 op add __tmp369 __fn121_row 1
++  784 label __label450
++  785 jump __label461 lessThan __fn121_col 0
++  786 label __label451
++  787 label __label452
++  788 op mul __tmp367 16 __fn121_row
++  789 op add __tmp368 __tmp367 __fn121_col
++  790 read __tmp365 bank1 __tmp368
++  791 label __label453
 +  792 label __label454
 +  793 op mul __tmp372 16 __tmp369
 +  794 op add __tmp373 __tmp372 __fn121_col
@@ -4190,20 +4210,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    364 label __label266
    365 label __label267
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  366 op add __fn121_col 13 1
-   367 label __label268
++  367 op add __tmp369 13 1
+   368 label __label268
 -    * jump __label279 lessThan __fn121_col 0
-+  368 jump __label279 lessThan 14 0
-   369 label __label269
-   370 label __label270
++  369 jump __label279 lessThan 14 0
+   370 label __label269
+   371 label __label270
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  371 op mul __tmp367 16 13
-+  372 op add __tmp368 208 __fn121_col
-   373 read __tmp365 bank1 __tmp368
-   374 label __label271
--    * op add __tmp369 __fn121_row 1
-+  375 op add __tmp369 13 1
++  372 op mul __tmp367 16 13
++  373 op add __tmp368 208 __fn121_col
+   374 read __tmp365 bank1 __tmp368
+   375 label __label271
    376 label __label272
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4226,20 +4246,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  396 op sub __fn121_row 13 1
    397 label __label281
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  398 op add __fn121_col 12 1
-   399 label __label282
++  399 op add __tmp369 12 1
+   400 label __label282
 -    * jump __label293 lessThan __fn121_col 0
-+  400 jump __label293 lessThan 13 0
-   401 label __label283
-   402 label __label284
++  401 jump __label293 lessThan 13 0
+   402 label __label283
+   403 label __label284
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  403 op mul __tmp367 16 12
-+  404 op add __tmp368 192 __fn121_col
-   405 read __tmp365 bank1 __tmp368
-   406 label __label285
--    * op add __tmp369 __fn121_row 1
-+  407 op add __tmp369 12 1
++  404 op mul __tmp367 16 12
++  405 op add __tmp368 192 __fn121_col
+   406 read __tmp365 bank1 __tmp368
+   407 label __label285
    408 label __label286
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4262,20 +4282,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  428 op sub __fn121_row 12 1
    429 label __label295
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  430 op add __fn121_col 11 1
-   431 label __label296
++  431 op add __tmp369 11 1
+   432 label __label296
 -    * jump __label307 lessThan __fn121_col 0
-+  432 jump __label307 lessThan 12 0
-   433 label __label297
-   434 label __label298
++  433 jump __label307 lessThan 12 0
+   434 label __label297
+   435 label __label298
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  435 op mul __tmp367 16 11
-+  436 op add __tmp368 176 __fn121_col
-   437 read __tmp365 bank1 __tmp368
-   438 label __label299
--    * op add __tmp369 __fn121_row 1
-+  439 op add __tmp369 11 1
++  436 op mul __tmp367 16 11
++  437 op add __tmp368 176 __fn121_col
+   438 read __tmp365 bank1 __tmp368
+   439 label __label299
    440 label __label300
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4298,20 +4318,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  460 op sub __fn121_row 11 1
    461 label __label309
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  462 op add __fn121_col 10 1
-   463 label __label310
++  463 op add __tmp369 10 1
+   464 label __label310
 -    * jump __label321 lessThan __fn121_col 0
-+  464 jump __label321 lessThan 11 0
-   465 label __label311
-   466 label __label312
++  465 jump __label321 lessThan 11 0
+   466 label __label311
+   467 label __label312
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  467 op mul __tmp367 16 10
-+  468 op add __tmp368 160 __fn121_col
-   469 read __tmp365 bank1 __tmp368
-   470 label __label313
--    * op add __tmp369 __fn121_row 1
-+  471 op add __tmp369 10 1
++  468 op mul __tmp367 16 10
++  469 op add __tmp368 160 __fn121_col
+   470 read __tmp365 bank1 __tmp368
+   471 label __label313
    472 label __label314
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4334,20 +4354,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  492 op sub __fn121_row 10 1
    493 label __label323
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  494 op add __fn121_col 9 1
-   495 label __label324
++  495 op add __tmp369 9 1
+   496 label __label324
 -    * jump __label335 lessThan __fn121_col 0
-+  496 jump __label335 lessThan 10 0
-   497 label __label325
-   498 label __label326
++  497 jump __label335 lessThan 10 0
+   498 label __label325
+   499 label __label326
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  499 op mul __tmp367 16 9
-+  500 op add __tmp368 144 __fn121_col
-   501 read __tmp365 bank1 __tmp368
-   502 label __label327
--    * op add __tmp369 __fn121_row 1
-+  503 op add __tmp369 9 1
++  500 op mul __tmp367 16 9
++  501 op add __tmp368 144 __fn121_col
+   502 read __tmp365 bank1 __tmp368
+   503 label __label327
    504 label __label328
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4370,20 +4390,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  524 op sub __fn121_row 9 1
    525 label __label337
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  526 op add __fn121_col 8 1
-   527 label __label338
++  527 op add __tmp369 8 1
+   528 label __label338
 -    * jump __label349 lessThan __fn121_col 0
-+  528 jump __label349 lessThan 9 0
-   529 label __label339
-   530 label __label340
++  529 jump __label349 lessThan 9 0
+   530 label __label339
+   531 label __label340
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  531 op mul __tmp367 16 8
-+  532 op add __tmp368 128 __fn121_col
-   533 read __tmp365 bank1 __tmp368
-   534 label __label341
--    * op add __tmp369 __fn121_row 1
-+  535 op add __tmp369 8 1
++  532 op mul __tmp367 16 8
++  533 op add __tmp368 128 __fn121_col
+   534 read __tmp365 bank1 __tmp368
+   535 label __label341
    536 label __label342
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4406,20 +4426,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  556 op sub __fn121_row 8 1
    557 label __label351
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  558 op add __fn121_col 7 1
-   559 label __label352
++  559 op add __tmp369 7 1
+   560 label __label352
 -    * jump __label363 lessThan __fn121_col 0
-+  560 jump __label363 lessThan 8 0
-   561 label __label353
-   562 label __label354
++  561 jump __label363 lessThan 8 0
+   562 label __label353
+   563 label __label354
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  563 op mul __tmp367 16 7
-+  564 op add __tmp368 112 __fn121_col
-   565 read __tmp365 bank1 __tmp368
-   566 label __label355
--    * op add __tmp369 __fn121_row 1
-+  567 op add __tmp369 7 1
++  564 op mul __tmp367 16 7
++  565 op add __tmp368 112 __fn121_col
+   566 read __tmp365 bank1 __tmp368
+   567 label __label355
    568 label __label356
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4442,20 +4462,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  588 op sub __fn121_row 7 1
    589 label __label365
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  590 op add __fn121_col 6 1
-   591 label __label366
++  591 op add __tmp369 6 1
+   592 label __label366
 -    * jump __label377 lessThan __fn121_col 0
-+  592 jump __label377 lessThan 7 0
-   593 label __label367
-   594 label __label368
++  593 jump __label377 lessThan 7 0
+   594 label __label367
+   595 label __label368
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  595 op mul __tmp367 16 6
-+  596 op add __tmp368 96 __fn121_col
-   597 read __tmp365 bank1 __tmp368
-   598 label __label369
--    * op add __tmp369 __fn121_row 1
-+  599 op add __tmp369 6 1
++  596 op mul __tmp367 16 6
++  597 op add __tmp368 96 __fn121_col
+   598 read __tmp365 bank1 __tmp368
+   599 label __label369
    600 label __label370
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4478,20 +4498,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  620 op sub __fn121_row 6 1
    621 label __label379
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  622 op add __fn121_col 5 1
-   623 label __label380
++  623 op add __tmp369 5 1
+   624 label __label380
 -    * jump __label391 lessThan __fn121_col 0
-+  624 jump __label391 lessThan 6 0
-   625 label __label381
-   626 label __label382
++  625 jump __label391 lessThan 6 0
+   626 label __label381
+   627 label __label382
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  627 op mul __tmp367 16 5
-+  628 op add __tmp368 80 __fn121_col
-   629 read __tmp365 bank1 __tmp368
-   630 label __label383
--    * op add __tmp369 __fn121_row 1
-+  631 op add __tmp369 5 1
++  628 op mul __tmp367 16 5
++  629 op add __tmp368 80 __fn121_col
+   630 read __tmp365 bank1 __tmp368
+   631 label __label383
    632 label __label384
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4514,20 +4534,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  652 op sub __fn121_row 5 1
    653 label __label393
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  654 op add __fn121_col 4 1
-   655 label __label394
++  655 op add __tmp369 4 1
+   656 label __label394
 -    * jump __label405 lessThan __fn121_col 0
-+  656 jump __label405 lessThan 5 0
-   657 label __label395
-   658 label __label396
++  657 jump __label405 lessThan 5 0
+   658 label __label395
+   659 label __label396
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  659 op mul __tmp367 16 4
-+  660 op add __tmp368 64 __fn121_col
-   661 read __tmp365 bank1 __tmp368
-   662 label __label397
--    * op add __tmp369 __fn121_row 1
-+  663 op add __tmp369 4 1
++  660 op mul __tmp367 16 4
++  661 op add __tmp368 64 __fn121_col
+   662 read __tmp365 bank1 __tmp368
+   663 label __label397
    664 label __label398
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4550,20 +4570,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  684 op sub __fn121_row 4 1
    685 label __label407
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  686 op add __fn121_col 3 1
-   687 label __label408
++  687 op add __tmp369 3 1
+   688 label __label408
 -    * jump __label419 lessThan __fn121_col 0
-+  688 jump __label419 lessThan 4 0
-   689 label __label409
-   690 label __label410
++  689 jump __label419 lessThan 4 0
+   690 label __label409
+   691 label __label410
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  691 op mul __tmp367 16 3
-+  692 op add __tmp368 48 __fn121_col
-   693 read __tmp365 bank1 __tmp368
-   694 label __label411
--    * op add __tmp369 __fn121_row 1
-+  695 op add __tmp369 3 1
++  692 op mul __tmp367 16 3
++  693 op add __tmp368 48 __fn121_col
+   694 read __tmp365 bank1 __tmp368
+   695 label __label411
    696 label __label412
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4586,20 +4606,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  716 op sub __fn121_row 3 1
    717 label __label421
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  718 op add __fn121_col 2 1
-   719 label __label422
++  719 op add __tmp369 2 1
+   720 label __label422
 -    * jump __label433 lessThan __fn121_col 0
-+  720 jump __label433 lessThan 3 0
-   721 label __label423
-   722 label __label424
++  721 jump __label433 lessThan 3 0
+   722 label __label423
+   723 label __label424
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  723 op mul __tmp367 16 2
-+  724 op add __tmp368 32 __fn121_col
-   725 read __tmp365 bank1 __tmp368
-   726 label __label425
--    * op add __tmp369 __fn121_row 1
-+  727 op add __tmp369 2 1
++  724 op mul __tmp367 16 2
++  725 op add __tmp368 32 __fn121_col
+   726 read __tmp365 bank1 __tmp368
+   727 label __label425
    728 label __label426
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4622,20 +4642,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  748 op sub __fn121_row 2 1
    749 label __label435
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  750 op add __fn121_col 1 1
-   751 label __label436
++  751 op add __tmp369 1 1
+   752 label __label436
 -    * jump __label447 lessThan __fn121_col 0
-+  752 jump __label447 lessThan 2 0
-   753 label __label437
-   754 label __label438
++  753 jump __label447 lessThan 2 0
+   754 label __label437
+   755 label __label438
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  755 op mul __tmp367 16 1
-+  756 op add __tmp368 16 __fn121_col
-   757 read __tmp365 bank1 __tmp368
-   758 label __label439
--    * op add __tmp369 __fn121_row 1
-+  759 op add __tmp369 1 1
++  756 op mul __tmp367 16 1
++  757 op add __tmp368 16 __fn121_col
+   758 read __tmp365 bank1 __tmp368
+   759 label __label439
    760 label __label440
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4658,20 +4678,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  780 op sub __fn121_row 1 1
    781 label __label449
 -    * op add __fn121_col __fn121_row 1
+-    * op add __tmp369 __fn121_row 1
 +  782 op add __fn121_col 0 1
-   783 label __label450
++  783 op add __tmp369 0 1
+   784 label __label450
 -    * jump __label461 lessThan __fn121_col 0
-+  784 jump __label461 lessThan 1 0
-   785 label __label451
-   786 label __label452
++  785 jump __label461 lessThan 1 0
+   786 label __label451
+   787 label __label452
 -    * op mul __tmp367 16 __fn121_row
 -    * op add __tmp368 __tmp367 __fn121_col
-+  787 op mul __tmp367 16 0
-+  788 op add __tmp368 0 __fn121_col
-   789 read __tmp365 bank1 __tmp368
-   790 label __label453
--    * op add __tmp369 __fn121_row 1
-+  791 op add __tmp369 0 1
++  788 op mul __tmp367 16 0
++  789 op add __tmp368 0 __fn121_col
+   790 read __tmp365 bank1 __tmp368
+   791 label __label453
    792 label __label454
 -    * op mul __tmp372 16 __tmp369
 -    * op add __tmp373 __tmp372 __fn121_col
@@ -4705,7 +4725,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    363 label __label266
    364 label __label267
    365 op add __fn121_col 13 1
- 
+-    * op add __tmp369 13 1
+   366 label __label268
    367 jump __label279 lessThan 14 0
    368 label __label269
    369 label __label270
@@ -4713,7 +4734,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    370 op add __tmp368 208 __fn121_col
    371 read __tmp365 bank1 __tmp368
    372 label __label271
--    * op add __tmp369 13 1
    373 label __label272
 -    * op mul __tmp372 16 14
    374 op add __tmp373 224 __fn121_col
@@ -4733,6 +4753,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 13 1
    392 label __label281
    393 op add __fn121_col 12 1
+-    * op add __tmp369 12 1
    394 label __label282
    395 jump __label293 lessThan 13 0
    396 label __label283
@@ -4741,7 +4762,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    398 op add __tmp368 192 __fn121_col
    399 read __tmp365 bank1 __tmp368
    400 label __label285
--    * op add __tmp369 12 1
    401 label __label286
 -    * op mul __tmp372 16 13
    402 op add __tmp373 208 __fn121_col
@@ -4761,6 +4781,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 12 1
    420 label __label295
    421 op add __fn121_col 11 1
+-    * op add __tmp369 11 1
    422 label __label296
    423 jump __label307 lessThan 12 0
    424 label __label297
@@ -4769,7 +4790,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    426 op add __tmp368 176 __fn121_col
    427 read __tmp365 bank1 __tmp368
    428 label __label299
--    * op add __tmp369 11 1
    429 label __label300
 -    * op mul __tmp372 16 12
    430 op add __tmp373 192 __fn121_col
@@ -4789,6 +4809,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 11 1
    448 label __label309
    449 op add __fn121_col 10 1
+-    * op add __tmp369 10 1
    450 label __label310
    451 jump __label321 lessThan 11 0
    452 label __label311
@@ -4797,7 +4818,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    454 op add __tmp368 160 __fn121_col
    455 read __tmp365 bank1 __tmp368
    456 label __label313
--    * op add __tmp369 10 1
    457 label __label314
 -    * op mul __tmp372 16 11
    458 op add __tmp373 176 __fn121_col
@@ -4817,6 +4837,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 10 1
    476 label __label323
    477 op add __fn121_col 9 1
+-    * op add __tmp369 9 1
    478 label __label324
    479 jump __label335 lessThan 10 0
    480 label __label325
@@ -4825,7 +4846,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    482 op add __tmp368 144 __fn121_col
    483 read __tmp365 bank1 __tmp368
    484 label __label327
--    * op add __tmp369 9 1
    485 label __label328
 -    * op mul __tmp372 16 10
    486 op add __tmp373 160 __fn121_col
@@ -4845,6 +4865,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 9 1
    504 label __label337
    505 op add __fn121_col 8 1
+-    * op add __tmp369 8 1
    506 label __label338
    507 jump __label349 lessThan 9 0
    508 label __label339
@@ -4853,7 +4874,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    510 op add __tmp368 128 __fn121_col
    511 read __tmp365 bank1 __tmp368
    512 label __label341
--    * op add __tmp369 8 1
    513 label __label342
 -    * op mul __tmp372 16 9
    514 op add __tmp373 144 __fn121_col
@@ -4873,6 +4893,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 8 1
    532 label __label351
    533 op add __fn121_col 7 1
+-    * op add __tmp369 7 1
    534 label __label352
    535 jump __label363 lessThan 8 0
    536 label __label353
@@ -4881,7 +4902,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    538 op add __tmp368 112 __fn121_col
    539 read __tmp365 bank1 __tmp368
    540 label __label355
--    * op add __tmp369 7 1
    541 label __label356
 -    * op mul __tmp372 16 8
    542 op add __tmp373 128 __fn121_col
@@ -4901,6 +4921,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 7 1
    560 label __label365
    561 op add __fn121_col 6 1
+-    * op add __tmp369 6 1
    562 label __label366
    563 jump __label377 lessThan 7 0
    564 label __label367
@@ -4909,7 +4930,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    566 op add __tmp368 96 __fn121_col
    567 read __tmp365 bank1 __tmp368
    568 label __label369
--    * op add __tmp369 6 1
    569 label __label370
 -    * op mul __tmp372 16 7
    570 op add __tmp373 112 __fn121_col
@@ -4929,6 +4949,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 6 1
    588 label __label379
    589 op add __fn121_col 5 1
+-    * op add __tmp369 5 1
    590 label __label380
    591 jump __label391 lessThan 6 0
    592 label __label381
@@ -4937,7 +4958,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    594 op add __tmp368 80 __fn121_col
    595 read __tmp365 bank1 __tmp368
    596 label __label383
--    * op add __tmp369 5 1
    597 label __label384
 -    * op mul __tmp372 16 6
    598 op add __tmp373 96 __fn121_col
@@ -4957,6 +4977,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 5 1
    616 label __label393
    617 op add __fn121_col 4 1
+-    * op add __tmp369 4 1
    618 label __label394
    619 jump __label405 lessThan 5 0
    620 label __label395
@@ -4965,7 +4986,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    622 op add __tmp368 64 __fn121_col
    623 read __tmp365 bank1 __tmp368
    624 label __label397
--    * op add __tmp369 4 1
    625 label __label398
 -    * op mul __tmp372 16 5
    626 op add __tmp373 80 __fn121_col
@@ -4985,6 +5005,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 4 1
    644 label __label407
    645 op add __fn121_col 3 1
+-    * op add __tmp369 3 1
    646 label __label408
    647 jump __label419 lessThan 4 0
    648 label __label409
@@ -4993,7 +5014,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    650 op add __tmp368 48 __fn121_col
    651 read __tmp365 bank1 __tmp368
    652 label __label411
--    * op add __tmp369 3 1
    653 label __label412
 -    * op mul __tmp372 16 4
    654 op add __tmp373 64 __fn121_col
@@ -5013,6 +5033,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 3 1
    672 label __label421
    673 op add __fn121_col 2 1
+-    * op add __tmp369 2 1
    674 label __label422
    675 jump __label433 lessThan 3 0
    676 label __label423
@@ -5021,7 +5042,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    678 op add __tmp368 32 __fn121_col
    679 read __tmp365 bank1 __tmp368
    680 label __label425
--    * op add __tmp369 2 1
    681 label __label426
 -    * op mul __tmp372 16 3
    682 op add __tmp373 48 __fn121_col
@@ -5041,6 +5061,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 2 1
    700 label __label435
    701 op add __fn121_col 1 1
+-    * op add __tmp369 1 1
    702 label __label436
    703 jump __label447 lessThan 2 0
    704 label __label437
@@ -5049,7 +5070,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    706 op add __tmp368 16 __fn121_col
    707 read __tmp365 bank1 __tmp368
    708 label __label439
--    * op add __tmp369 1 1
    709 label __label440
 -    * op mul __tmp372 16 2
    710 op add __tmp373 32 __fn121_col
@@ -5069,6 +5089,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op sub __fn121_row 1 1
    728 label __label449
    729 op add __fn121_col 0 1
+-    * op add __tmp369 0 1
    730 label __label450
    731 jump __label461 lessThan 1 0
    732 label __label451
@@ -5077,7 +5098,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    734 op add __tmp368 0 __fn121_col
    735 read __tmp365 bank1 __tmp368
    736 label __label453
--    * op add __tmp369 0 1
    737 label __label454
 -    * op mul __tmp372 16 1
    738 op add __tmp373 16 __fn121_col

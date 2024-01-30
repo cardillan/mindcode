@@ -5,14 +5,14 @@ public enum AstContextType {
     ROOT            ("ROOT"),
     BODY            ("BODY"),
     FUNCTION        ("FNDF"),
-    CALL            ("CALL"),
-    RETURN          ("RETN"),
+    CALL            ("CALL", true),
+    RETURN          ("RETN", true),
 
     IF              ("IF  ", true),
     CASE            ("CASE", true),
     LOOP            ("LOOP", true),
-    BREAK           ("BREA"),
-    CONTINUE        ("CONT"),
+    BREAK           ("BREA", true),
+    CONTINUE        ("CONT", true),
 
     // Non-control flow
     ASSIGNMENT      ("ASGN"),

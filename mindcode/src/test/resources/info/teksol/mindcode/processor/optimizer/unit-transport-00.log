@@ -8,6 +8,7 @@
      2 instructions eliminated by Expression Optimization (3 iterations).
      4 instructions eliminated by If Expression Optimization (3 iterations).
      8 instructions eliminated by Data Flow Optimization (3 passes, 15 iterations).
+     1 loops improved by Loop Hoisting.
     17 instructions added by Loop Optimization (3 iterations).
     13 loops improved by Loop Optimization.
     21 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
@@ -3014,6 +3015,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
    349 set CORR_SIGN "[]([green]+"
    350 set corr_per_min 0
 
+Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
+ 
+   145 print LINK_ID
+   146 print "..."
+   147 printflush message1
++  148 op add QUERY_FLAG 99999900 LINK_ID
+   149 label __label30
+   150 jump __label32 notEqual CORE null
+-    * op add QUERY_FLAG 99999900 LINK_ID
+   151 set flag QUERY_FLAG
+   152 ubind UNIT
+   153 label __label33
+
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
     51 ubind UNIT
@@ -3084,13 +3098,13 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    143 set DISCARD_UNIT_MAX_ITEMS UNIT_CAPACITY
    144 jump __label24 always
  
-   150 printflush message1
-   151 label __label30
-   152 jump __label32 notEqual CORE null
-+  153 label __label223
-   154 op add QUERY_FLAG 99999900 LINK_ID
+   151 op add QUERY_FLAG 99999900 LINK_ID
+   152 label __label30
+   153 jump __label32 notEqual CORE null
++  154 label __label223
    155 set flag QUERY_FLAG
    156 ubind UNIT
+   157 label __label33
  
    203 label __label40
    204 ucontrol flag S_UNUSED
@@ -3551,9 +3565,9 @@ print "[green]Locating vault #"
 print LINK_ID
 print "..."
 printflush message1
+op add QUERY_FLAG 99999900 LINK_ID
 jump __label32 notEqual CORE null
 label __label223
-op add QUERY_FLAG 99999900 LINK_ID
 set flag QUERY_FLAG
 ubind UNIT
 sensor __tmp57 @unit @controlled

@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.compiler.generator.CallGraph.Function;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -204,6 +205,32 @@ public final class AstContext {
 
     public List<AstContext> findSubcontexts(AstSubcontextType type) {
         return children.stream().filter(c -> c.subcontextType == type).toList();
+    }
+
+    /**
+     * Determines whether the instruction is executed exactly once within a context - i.e. isn't part o any embedded
+     * control flow structure, such as if, loop or case statements/expressions.
+     *
+     * @param instruction instruction to evaluate
+     * @return true if the instruction is simply contained in this context
+     */
+    public boolean executesOnce(LogicInstruction instruction) {
+        for (AstContext ctx = instruction.getAstContext(); ctx != null; ctx = ctx.parent()) {
+            if (!ctx.isLinear()) {
+                return ctx == this || ctx.parent() == this;
+            }
+        }
+        return false;
+    }
+
+    private boolean isLinear() {
+        if (contextType == AstContextType.CALL) {
+            return subcontextType == AstSubcontextType.SYSTEM_CALL
+                    || subcontextType == AstSubcontextType.ARGUMENTS
+                    || subcontextType == AstSubcontextType.BASIC;
+        } else {
+            return subcontextType == AstSubcontextType.INIT || subcontextType == AstSubcontextType.BASIC || !contextType.flowControl;
+        }
     }
 
     public String hierarchy() {

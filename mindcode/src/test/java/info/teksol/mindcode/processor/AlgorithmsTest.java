@@ -136,6 +136,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 Optimization.DEAD_CODE_ELIMINATION,
                 Optimization.SINGLE_STEP_JUMP_ELIMINATION,
                 Optimization.LOOP_OPTIMIZATION,
+                Optimization.LOOP_HOISTING,
                 Optimization.DATA_FLOW_OPTIMIZATION,
                 Optimization.FUNCTION_INLINING,
                 Optimization.LOOP_UNROLLING,

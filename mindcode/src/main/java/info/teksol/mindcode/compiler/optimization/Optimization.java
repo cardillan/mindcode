@@ -42,25 +42,29 @@ public enum Optimization {
             DataFlowOptimizer::new,
             "improving variable assignments and and expressions"),
 
+    LOOP_HOISTING                   ("Loop Hoisting",
+            LoopHoisting::new,
+            "moving invariant code out of loops"),
+
     LOOP_OPTIMIZATION                   ("Loop Optimization",
             LoopOptimizer::new,
             "improving loops"),
 
     LOOP_UNROLLING                      ("Loop Unrolling",
             LoopUnroller::new,
-            "unrolls loops with constant number of iterations (optimization for speed)"),
+            "unrolling loops with constant number of iterations (optimization for speed)"),
 
     FUNCTION_INLINING                   ("Function Inlining",
             FunctionInliner::new,
-            "inlines stackless function calls (optimization for speed)"),
+            "inlining stackless function calls (optimization for speed)"),
 
     CASE_SWITCHING                      ("Case Switching",
             CaseSwitcher::new,
-            "modifies suitable case expressions to use jump tables"),
+            "modifying suitable case expressions to use jump tables"),
 
     RETURN_OPTIMIZATION                 ("Return Optimization",
             ReturnOptimizer::new,
-            "speeds up return statements in recursive and stackless functions"),
+            "speeding up return statements in recursive and stackless functions"),
 
     JUMP_OVER_JUMP_ELIMINATION          ("Jump Straightening",
             JumpOverJumpEliminator::new,

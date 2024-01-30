@@ -624,6 +624,72 @@ false and act accordingly). Data Flow Optimization is therefore crucial for best
 as well. Some optimizations, such as [Loop Unrolling](#loop-unrolling), might outright require the Data Flow 
 Optimization to be active for their own work.
 
+## Loop Hoisting
+
+Loop hoisting is an optimization which tries to identify loop invariant code (i.e. code inside loops which
+executes identically in each loop iteration) and moves it in front of the loop. This way the code is executed only
+once, instead of on each loop iteration.
+
+Fo example, in the following code:
+
+```
+A = 10
+for i = 0; i < A; i += 1
+    print(2 * A)
+end
+```
+
+the evaluation of `2 * A` is moved in front of the loop in the compiled code:
+
+```
+set A 10
+set i 0
+op mul __tmp1 2 A
+jump 0 greaterThanEq 0 A
+print __tmp1
+op add i i 1
+jump 4 lessThan i A
+end
+```
+
+At this moment, the following limitations apply to this optimization:
+
+* The optimization is not performed on list iteration loops.
+* Branching expressions aren't processed, even if they are fully or partially invariant. If there is an `if` 
+  expression or ternary operator inside a loop, it won't be hoisted even if the expression as a whole is loop 
+  invariant.
+
+On the other hand, a loop condition is processed in the same manner as a loop body, and invariant code in nested 
+loops can be hoisted all the way to the top, when possible:
+
+```
+A = 10
+for j in 0 ... A
+    i = 0
+    while i < A + 10
+        i = i + 1
+        print(i)
+    end
+end
+```
+
+compiles into
+
+```
+set A 10
+set j 0
+op add __tmp1 A 10
+jump 0 greaterThanEq 0 A
+set i 0
+jump 9 greaterThanEq 0 __tmp1
+op add i i 1
+print i
+jump 6 lessThan i __tmp1
+op add j j 1
+jump 4 lessThan j A
+end
+```
+
 ## Loop Optimization
 
 The loop optimization improves loops with the condition at the beginning by performing these modifications:
