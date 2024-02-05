@@ -65,6 +65,19 @@ public class LoopHoisting extends BaseOptimizer {
 
         while (propagateDependencies(dependencies));
 
+        // If there are function calls, all global variables are unsafe
+        final boolean hasFunctionCalls = loop.containsChildContext(ctx ->
+                ctx.subcontextType() == OUT_OF_LINE_CALL || ctx.subcontextType() == RECURSIVE_CALL);
+
+        if (hasFunctionCalls) {
+            List<LogicVariable> globalVariables = dependencies.values().stream()
+                    .flatMap(Set::stream)
+                    .filter(LogicVariable::isGlobalVariable)
+                    .toList();
+
+            globalVariables.forEach(v -> dependencies.computeIfAbsent(v, w -> new HashSet<>()).add(v));
+        }
+
         // Dependencies now maps a variable to a full set of variables it depends on, directly or indirectly
 
         // Primary loop variables: depend on themselves

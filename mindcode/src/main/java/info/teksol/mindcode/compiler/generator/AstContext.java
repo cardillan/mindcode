@@ -6,6 +6,7 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 public final class AstContext {
     private static final AtomicInteger counter = new AtomicInteger();
@@ -205,6 +206,15 @@ public final class AstContext {
 
     public List<AstContext> findSubcontexts(AstSubcontextType type) {
         return children.stream().filter(c -> c.subcontextType == type).toList();
+    }
+
+    public boolean containsChildContext(Predicate<AstContext> matcher) {
+        for (AstContext child : children) {
+            if (matcher.test(child) || child.containsChildContext(matcher)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

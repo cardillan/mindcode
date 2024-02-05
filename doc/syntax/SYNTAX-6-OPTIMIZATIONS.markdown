@@ -630,7 +630,7 @@ Loop hoisting is an optimization which tries to identify loop invariant code (i.
 executes identically in each loop iteration) and moves it in front of the loop. This way the code is executed only
 once, instead of on each loop iteration.
 
-Fo example, in the following code:
+Fo example, in the following code
 
 ```
 A = 10
@@ -654,13 +654,16 @@ end
 
 At this moment, the following limitations apply to this optimization:
 
-* The optimization is not performed on list iteration loops.
+* Loop hoisting is not performed on list iteration loops.
 * Branching expressions aren't processed, even if they are fully or partially invariant. If there is an `if` 
-  expression or ternary operator inside a loop, it won't be hoisted even if the expression as a whole is loop 
+  expression or ternary operator inside a loop, it won't be hoisted, even if the expression as a whole is loop 
   invariant.
+* If the loop contains a stackless or recursive function call, all global variables are marked as loop dependent and 
+  expressions based on them aren't hoisted, since the compiler must assume the value of the global variable could be 
+  changed inside a function. 
 
 On the other hand, a loop condition is processed in the same manner as a loop body, and invariant code in nested 
-loops can be hoisted all the way to the top, when possible:
+loops is hoisted all the way to the top whenever possible:
 
 ```
 A = 10

@@ -101,6 +101,52 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     }
 
     @Test
+    void ignoresGlobalVariablesOnFunctionCall() {
+        assertCompilesTo("""
+                        allocate stack in cell1
+                        
+                        A = 10
+                        for i = 0; i < A; i += 1
+                            x = 2 * A
+                            foo(10)
+                            print(x)
+                        end
+                        
+                        def foo(n)
+                            print(n)
+                            A = 20
+                            if n > 0
+                                foo(n - 1)
+                            end
+                        end
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SET, "__sp", "0"),
+                createInstruction(SET, "A", "10"),
+                createInstruction(SET, "i", "0"),
+                createInstruction(JUMP, "__start__", "greaterThanEq", "0", "A"),
+                createInstruction(LABEL, var(1009)),
+                createInstruction(OP, "mul", "x", "2", "A"),
+                createInstruction(SET, "__fn0_n", "10"),
+                createInstruction(CALLREC, "cell1", var(1000), var(1004)),
+                createInstruction(LABEL, var(1004)),
+                createInstruction(PRINT, "x"),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1009), "lessThan", "i", "A"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(PRINT, "__fn0_n"),
+                createInstruction(SET, "A", "20"),
+                createInstruction(JUMP, var(1007), "lessThanEq", "__fn0_n", "0"),
+                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
+                createInstruction(CALLREC, "cell1", var(1000), var(1008)),
+                createInstruction(LABEL, var(1008)),
+                createInstruction(LABEL, var(1007)),
+                createInstruction(RETURN, "cell1")
+        );
+    }
+
+    @Test
     void handlesAssignmentsInConditions() {
         assertCompilesTo("""
                         A = 100
@@ -180,7 +226,6 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(END)
         );
     }
-
 
     @Test
     void handlesExpressions() {
