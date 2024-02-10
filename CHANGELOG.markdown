@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+* Fixed comments on the last line of source code causing compilation errors
+  [#110](https://github.com/cardillan/mindcode/issues/110).
+
 ## 2024-02-10
 
 ### Added

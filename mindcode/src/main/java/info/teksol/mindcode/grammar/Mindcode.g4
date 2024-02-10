@@ -303,6 +303,6 @@ HEXINT : Hexadecimal;
 BININT : Binary;
 
 ID : [_a-zA-Z][-a-zA-Z_0-9]*;
-SL_COMMENT : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;
+SL_COMMENT : ('//' ~('\r' | '\n')*) -> skip;
 WS : (' ' | '\t' | '\r' | '\n')+ -> skip;
 
