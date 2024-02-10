@@ -202,7 +202,9 @@ public class SchematicsIO {
             case 4 -> readString(stream);
             case 5 -> switch (b = stream.readByte()) {
                 case 0 -> Item.forIndex(stream.readShort());
+                case 1 -> { stream.readShort(); yield EmptyConfiguration.EMPTY; }
                 case 4 -> Liquid.forIndex(stream.readShort());
+                case 6 -> { stream.readShort(); yield EmptyConfiguration.EMPTY; }
                 default -> throw new UnsupportedOperationException("Unsupported item type " + b);
             };
             case 6 -> Array.create(Integer.class, stream.readShort(), stream::readInt);
@@ -220,6 +222,7 @@ public class SchematicsIO {
             case 18 -> Array.create(Vector.class, stream.readShort(), () -> new Vector(stream.readFloat(), stream.readFloat()));
             case 19 -> new Vector(stream.readFloat(), stream.readFloat());
             case 20 -> new UnhandledItem("Team ", "unsigned byte=" + stream.readUnsignedByte());
+            case 23 -> { stream.readUnsignedShort(); yield EmptyConfiguration.EMPTY; }
             default -> throw new IllegalArgumentException("Unknown object type: " + type);
         };
     }

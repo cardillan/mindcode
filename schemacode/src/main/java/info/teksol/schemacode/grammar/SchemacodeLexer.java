@@ -1,4 +1,4 @@
-// Generated from Schemacode.g4 by ANTLR 4.12.0
+// Generated from Schemacode.g4 by ANTLR 4.13.1
 package info.teksol.schemacode.grammar;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -9,9 +9,9 @@ import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
-@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue"})
+@SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast", "CheckReturnValue", "this-escape"})
 public class SchemacodeLexer extends Lexer {
-	static { RuntimeMetaData.checkVersion("4.12.0", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.13.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =

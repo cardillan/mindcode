@@ -201,6 +201,8 @@ DEF : 'def';
 DO : 'do';
 ELSE : 'else';
 ELSIF : 'elsif';
+ELSEIF : 'elseif';
+ELIF : 'elif';
 END : 'end';
 FALSE : 'false';
 FOR : 'for';
