@@ -6,7 +6,7 @@ Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.co
 game in the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to 
 assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
-Mindcode development focuses of the following priorities:
+Mindcode focuses of the following priorities:
 
 * Keeping terminology and naming convention close to Mindustry Logic.
 * Providing language constructs that are not prohibitively expensive given the astonishingly slow speeds

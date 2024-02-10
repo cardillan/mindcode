@@ -2,10 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2024-02-10
 
+### Added
+ 
 * Added [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization. This optimization 
   moves invariant code out of loops.
+* Added new reserved keywords `elseif` and `elif`. Using these keywords will result in a compilation error (see
+  [#121](https://github.com/cardillan/mindcode/issues/121)).
+
+### Changed
+
+* Schemacode decompiler now ignores some block-specific configurations that aren't supported yet (see
+  [#122](https://github.com/cardillan/mindcode/issues/122)). This is a temporary measure to prevent the decompiler 
+  crashing on such schematics until these configurations are fully supported.  
 
 ## 2024-01-28
 

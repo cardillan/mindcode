@@ -14,6 +14,10 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Incremental improvements
 
+* Loop Hoisting improvements
+  * Support for list iteration loops
+  * Support for hoisting entire loop invariant if statements
+  * Support for hoisting parts of if statements (maybe)
 * Expand handling of expressions by the Data Flow Optimization:
   * handle multiplication by zero, multiplication/division by one, and addition/subtraction of zero directly (i.e. 
     independently of the Expression Optimization).
@@ -23,10 +27,10 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * Add factoring-out capability to more complex expressions.
 * Utilizing the new `id` property:
   * Schemacode
-    * replace the `Item` and `Liquid` enums with metadata, possibly utilize units).
+    * replace the `Item` and `Liquid` enums with metadata, utilize units.
   * Mindcode
     * recognize item/liquid built-in constants (possibly others),
-    * [Case switching over built-in constants](#case-switching-over-built-in-constants)
+    * [Case switching over built-in constants](#case-switching-over-built-in-constants).
 * Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion
 
 # Other small or internal improvements
@@ -306,7 +310,7 @@ Two basic approaches
   recognized as such. 
 * Identify uninitialized global variables (now only reported when they are never written to; use the same logic as 
   for main/local variables instead).
-* Pulling invariant code out of loops/if branches.
+* Pulling invariant code out of if branches.
 * Generalized constant folding on expression tree, including factoring constants out of complex expressions.
   * Instruction reordering for better constant folding/subexpression optimization
     * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
