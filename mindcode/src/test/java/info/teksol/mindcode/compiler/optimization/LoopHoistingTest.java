@@ -17,7 +17,8 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
 
     @Override
     protected List<Optimization> getAllOptimizations() {
-        return Optimization.LIST;
+        // Loop unrolling might interfere with this optimizer
+        return Optimization.LIST.stream().filter(o -> o != Optimization.LOOP_UNROLLING).toList();
     }
 
     @Override
@@ -104,14 +105,14 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     void ignoresGlobalVariablesOnFunctionCall() {
         assertCompilesTo("""
                         allocate stack in cell1
-                        
+                                                
                         A = 10
                         for i = 0; i < A; i += 1
                             x = 2 * A
                             foo(10)
                             print(x)
                         end
-                        
+                                                
                         def foo(n)
                             print(n)
                             A = 20
@@ -198,6 +199,32 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(LABEL, var(1005)),
                 createInstruction(OP, "add", "j", "j", "1"),
                 createInstruction(JUMP, var(1006), "lessThan", "j", "A"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesListIteratorLoops() {
+        assertCompilesTo("""
+                        A = 10
+                        i = 0
+                        for i in (1, A)
+                            print(i, 2 * A)
+                        end
+                        """,
+                createInstruction(SET, "A", "10"),
+                createInstruction(OP, "mul", var(1), "2", "A"),
+                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(SET, "i", "1"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
+                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SET, "i", "A"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "i"),
+                createInstruction(PRINT, var(1)),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
                 createInstruction(END)
         );
     }

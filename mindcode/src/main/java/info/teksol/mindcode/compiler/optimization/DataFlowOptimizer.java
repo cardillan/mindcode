@@ -402,12 +402,17 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private VariableStates processLoopContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
         // Note: this method processes contexts in unnatural order and uses iterator.setNextIndex to keep
         // the iterator position synchronized with what is expected.
-        List<AstContext> children = localContext.children();
+        List<AstContext> children = new ArrayList<>(localContext.children());
         int currentContext = 0;
         boolean mergeStates = false;
 
         if (children.stream().anyMatch(ctx -> ctx.matches(ITERATOR))) {
-            if (!children.get(0).matches(ITERATOR)) {
+            if (children.get(currentContext).matches(INIT)) {
+                variableStates = processContext(localContext, children.get(0), variableStates, modifyInstructions);
+                currentContext++;
+            }
+
+            if (!children.get(currentContext).matches(ITERATOR)) {
                 // We can't just ignore code we don't understand
                 throw new MindcodeInternalError("Unexpected structure of for-each loop");
             }

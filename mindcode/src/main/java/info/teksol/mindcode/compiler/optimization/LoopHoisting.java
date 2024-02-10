@@ -41,17 +41,22 @@ public class LoopHoisting extends BaseOptimizer {
     }
 
     private void moveInvariants(AstContext loop) {
-        if (loop.findSubcontext(ITERATOR) != null) {
-            return;
-        }
-
+        AstContext anchor;
         List<AstContext> parts = new ArrayList<>(loop.children());
         if (parts.get(0).matches(INIT)) {
             parts.remove(0);
         }
 
+        anchor = parts.get(0);
+
         int conditions = (int) parts.stream().filter(c -> c.matches(CONDITION)).count();
-        if (conditions == 2) {
+        if (conditions == 0) {
+            // This looks like a list iteration loop. Remove all ITERATOR contexts; if none found, it wasn't
+            // a list iterator loop, we quit as we don't understand the structure.
+            if (!parts.removeIf(c -> c.matches(ITERATOR))) {
+                return;
+            }
+        } else if (conditions == 2) {
             if (!parts.get(0).matches(CONDITION)) return;
         } else if (conditions != 1) {
             return;
@@ -105,7 +110,7 @@ public class LoopHoisting extends BaseOptimizer {
             LogicList instructions = buildLogicList(initContext,
                     invariants.stream().map(ix -> ix.withContext(initContext)).toList());
 
-            int index = firstInstructionIndex(parts.get(0));
+            int index = firstInstructionIndex(anchor);
             insertInstructions(index, instructions);
             invariants.forEach(this::removeInstruction);
             count++;
