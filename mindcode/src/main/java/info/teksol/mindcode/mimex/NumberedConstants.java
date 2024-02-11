@@ -13,9 +13,19 @@ import java.util.stream.Stream;
 import static info.teksol.mindcode.mimex.BlockType.NAME_MAP;
 
 public class NumberedConstants {
-    private static final Map<String, Item> ITEM_MAP = new ItemReader().createFromResource();
-    private static final Map<String, Liquid> LIQUID_MAP = new LiquidReader().createFromResource();
-    private static final Map<String, Unit> UNIT_MAP = new UnitReader().createFromResource();
+    static final Map<String, Item> ITEM_MAP = new ItemReader().createFromResource();
+    static final Map<String, Liquid> LIQUID_MAP = new LiquidReader().createFromResource();
+    static final Map<String, Unit> UNIT_MAP = new UnitReader().createFromResource();
+    static final Map<String, UnitCommand> UNITCOMMAND_MAP = new UnitCommandReader().createFromResource();
+
+    static final Map<Integer, Item> ITEM_ID_MAP = ITEM_MAP.values().stream()
+            .collect(Collectors.toMap(Item::id, item -> item));
+    static final Map<Integer, Liquid> LIQUID_ID_MAP = LIQUID_MAP.values().stream()
+            .collect(Collectors.toMap(Liquid::id, liquid -> liquid));
+    static final Map<Integer, Unit> UNIT_ID_MAP = UNIT_MAP.values().stream()
+            .collect(Collectors.toMap(Unit::id, unit -> unit));
+    static final Map<Integer, UnitCommand> UNITCOMMAND_ID_MAP = UNITCOMMAND_MAP.values().stream()
+            .collect(Collectors.toMap(UnitCommand::id, command -> command));
 
     private static final Map<String, NumberedConstant> ALL_CONSTANTS =
             Stream.of(ITEM_MAP, LIQUID_MAP, UNIT_MAP, NAME_MAP)
@@ -114,6 +124,20 @@ public class NumberedConstants {
         @Override
         protected Unit create(String[] columns) {
             return new Unit(
+                    columns[name],
+                    "@" + columns[name],
+                    Integer.parseInt(columns[id]));
+        }
+    }
+
+    private static class UnitCommandReader extends AbstractReader<UnitCommand> {
+        public UnitCommandReader() {
+            super("mimex-commands.txt");
+        }
+
+        @Override
+        protected UnitCommand create(String[] columns) {
+            return new UnitCommand(
                     columns[name],
                     "@" + columns[name],
                     Integer.parseInt(columns[id]));

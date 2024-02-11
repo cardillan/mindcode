@@ -202,6 +202,30 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitConnections(SchemacodeParser.ConnectionsContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code blocktype}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlocktype(SchemacodeParser.BlocktypeContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code blocktype}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlocktype(SchemacodeParser.BlocktypeContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code unitcommand}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnitcommand(SchemacodeParser.UnitcommandContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code unitcommand}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnitcommand(SchemacodeParser.UnitcommandContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code item}
 	 * labeled alternative in {@link SchemacodeParser#configuration}.
 	 * @param ctx the parse tree

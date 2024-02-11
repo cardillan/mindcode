@@ -22,8 +22,15 @@ public record BlockType(
 
     static final Map<String, BlockType> NAME_MAP = BlockTypeReader.createFromResource();
 
+    static final Map<Integer, BlockType> ID_MAP = NAME_MAP.values().stream()
+            .collect(Collectors.toMap(BlockType::id, block -> block));
+
     public static BlockType forName(String name) {
         return NAME_MAP.get(name);
+    }
+
+    public static BlockType forId(int id) {
+        return ID_MAP.get(id);
     }
 
     public static boolean isNameValid(String name) {

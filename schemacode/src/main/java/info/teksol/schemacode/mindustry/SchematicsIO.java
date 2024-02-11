@@ -159,10 +159,14 @@ public class SchematicsIO {
             case CONNECTION     -> raw.as(Position.class).add(position);
             case CONNECTIONS    -> raw.as(PositionArray.class).remap(position::add);
             case INTEGER        -> raw.as(IntConfiguration.class);
-            case ITEM           -> raw.as(Item.class);
-            case LIQUID         -> raw.as(Liquid.class);
+            case BLOCK          -> raw.as(BlockConfiguration.class);
+            case ITEM           -> raw.as(ItemConfiguration.class);
+            case LIQUID         -> raw.as(LiquidConfiguration.class);
             case PROCESSOR      -> ProcessorConfiguration.decode(raw.as(ByteArray.class), position);
             case TEXT           -> raw.as(TextConfiguration.class);
+            case UNIT           -> raw.as(UnitConfiguration.class);
+            case UNIT_COMMAND   -> raw.as(UnitCommandConfiguration.class);
+            case UNIT_OR_BLOCK  -> raw.as(UnitOrBlockConfiguration.class);
             case UNIT_PLAN      -> selectUnitPlan(raw.as(IntConfiguration.class), blockType);
             default -> throw new SchematicsInternalError("Unhandled configuration type %s.", configurationType);
         };
@@ -183,8 +187,8 @@ public class SchematicsIO {
 
     private static Configuration mapConfig(BlockType block, int value, Position position) {
         return switch (Implementation.fromBlockType(block)) {
-            case SORTER, UNLOADER, ITEMSOURCE   -> Item.forIndex(value);
-            case LIQUIDSOURCE                   -> Liquid.forIndex(value);
+            case SORTER, UNLOADER, ITEMSOURCE   -> ItemConfiguration.forId(value);
+            case LIQUIDSOURCE                   -> LiquidConfiguration.forId(value);
             case MASSDRIVER, ITEMBRIDGE         -> Position.unpack(value).sub(position);
             case LIGHTBLOCK                     -> new IntConfiguration(value);
             default                             -> null;
@@ -201,10 +205,10 @@ public class SchematicsIO {
             case 3 -> new FloatConfiguration(stream.readFloat());
             case 4 -> readString(stream);
             case 5 -> switch (b = stream.readByte()) {
-                case 0 -> Item.forIndex(stream.readShort());
-                case 1 -> { stream.readShort(); yield EmptyConfiguration.EMPTY; }
-                case 4 -> Liquid.forIndex(stream.readShort());
-                case 6 -> { stream.readShort(); yield EmptyConfiguration.EMPTY; }
+                case 0 -> ItemConfiguration.forId(stream.readShort());
+                case 1 -> BlockConfiguration.forId(stream.readShort());
+                case 4 -> LiquidConfiguration.forId(stream.readShort());
+                case 6 -> UnitConfiguration.forId(stream.readShort());
                 default -> throw new UnsupportedOperationException("Unsupported item type " + b);
             };
             case 6 -> Array.create(Integer.class, stream.readShort(), stream::readInt);
@@ -222,7 +226,7 @@ public class SchematicsIO {
             case 18 -> Array.create(Vector.class, stream.readShort(), () -> new Vector(stream.readFloat(), stream.readFloat()));
             case 19 -> new Vector(stream.readFloat(), stream.readFloat());
             case 20 -> new UnhandledItem("Team ", "unsigned byte=" + stream.readUnsignedByte());
-            case 23 -> { stream.readUnsignedShort(); yield EmptyConfiguration.EMPTY; }
+            case 23 -> UnitCommandConfiguration.forId(stream.readUnsignedShort());
             default -> throw new IllegalArgumentException("Unknown object type: " + type);
         };
     }
@@ -239,8 +243,10 @@ public class SchematicsIO {
                     s.writeUTF(c.value());
                 }
             }
-            case Item c                     -> { s.writeByte(5); s.writeByte(0); s.writeShort(c.getId()); }
-            case Liquid c                   -> { s.writeByte(5); s.writeByte(4); s.writeShort(c.getId()); }
+            case ItemConfiguration c        -> { s.writeByte(5); s.writeByte(0); s.writeShort(c.getId()); }
+            case BlockConfiguration c       -> { s.writeByte(5); s.writeByte(1); s.writeShort(c.getId()); }
+            case LiquidConfiguration c      -> { s.writeByte(5); s.writeByte(4); s.writeShort(c.getId()); }
+            case UnitConfiguration c        -> { s.writeByte(5); s.writeByte(6); s.writeShort(c.getId()); }
             case Array<?> a                 -> { switch (a.dataClass().getSimpleName()) {
                 case "Integer"  -> { s.writeByte(6); s.writeShort(a.size()); a.store(i -> s.writeInt((Integer) i)); }
                 case "Boolean"  -> { s.writeByte(16); s.writeInt(a.size()); a.store(b -> s.writeBoolean((Boolean) b)); }
@@ -255,6 +261,7 @@ public class SchematicsIO {
             case DoubleConfiguration c      -> { s.writeByte(11); s.writeDouble(c.value()); }
             case ByteArray a                -> { s.writeByte(14); s.writeInt(a.size()); s.write(a.bytes());}
             case Vector c                   -> { s.writeByte(19); s.writeFloat(c.x()); s.writeFloat(c.y()); }
+            case UnitCommandConfiguration c -> { s.writeByte(23); s.writeShort(c.getId()); }
 
             default -> throw new SchematicsInternalError("Cannot store unhandled item %s", configuration);
         }

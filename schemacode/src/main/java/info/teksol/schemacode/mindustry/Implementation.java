@@ -1,7 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.schemacode.config.Configuration;
 import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.schemacode.config.Configuration;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -25,7 +25,7 @@ public enum Implementation {
     CANVASBLOCK,
     CLIFF,
     CONDUIT,
-    CONSTRUCTOR,
+    CONSTRUCTOR(ConfigurationType.BLOCK),
     CONSTRUCTBLOCK,
     CONSUMEGENERATOR,
     CONTINUOUSLIQUIDTURRET,
@@ -87,7 +87,7 @@ public enum Implementation {
     PAYLOADLOADER,
     PAYLOADMASSDRIVER(ConfigurationType.CONNECTION),
     PAYLOADROUTER,
-    PAYLOADSOURCE,
+    PAYLOADSOURCE(ConfigurationType.UNIT_OR_BLOCK),
     PAYLOADUNLOADER,
     PAYLOADVOID,
     POINTDEFENSETURRET,
@@ -99,7 +99,7 @@ public enum Implementation {
     PROP,
     PUMP,
     RADAR,
-    RECONSTRUCTOR,
+    RECONSTRUCTOR(ConfigurationType.UNIT_COMMAND),
     REGENPROJECTOR,
     REPAIRTOWER,
     REPAIRTURRET,

@@ -57,6 +57,8 @@ configuration
     : Virtual                       # virtual
     | Color colorDef                # color
     | Connected To connectionList   # connections
+    | Block Ref                     # blocktype
+    | Command Ref                   # unitcommand
     | Item Ref                      # item
     | Liquid Ref                    # liquid
     | Unit Ref                      # unit
@@ -113,7 +115,9 @@ stringLiteral
 
 As              : 'as';
 At              : 'at';
+Block           : 'block';
 Connected       : 'connected';
+Command         : 'command';
 Color           : 'color';
 Description     : 'description';
 Dimensions      : 'dimensions';

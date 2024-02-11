@@ -233,6 +233,30 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBlocktype(SchemacodeParser.BlocktypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBlocktype(SchemacodeParser.BlocktypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnitcommand(SchemacodeParser.UnitcommandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnitcommand(SchemacodeParser.UnitcommandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterItem(SchemacodeParser.ItemContext ctx) { }
 	/**
 	 * {@inheritDoc}

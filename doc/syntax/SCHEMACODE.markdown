@@ -503,17 +503,34 @@ items from left to right.
 Some blocks are stored with specific configurations: connection for bridges or power nodes, item type for unloaders,
 text for messages or links and code for processors. Schemacode supports the following types of configuration:
 
+* [Block type](#block-type-configuration): block type selected in a constructor or a payload source (a sandbox-only 
+  block).
 * [Boolean](#boolean-configuration): on/off or open/close, for switches and doors.
 * [Color](#color-configuration): color of the illuminator block.
 * [Single connection](#connection-configuration): connection to another block (e.g. a bridge or a mass driver).
 * [Multiple connections](#connection-configuration): connections to several different blocks (e.g. for power nodes).
 * [Item](#item-configuration): item type selected in a sorter, unloader or similar block.
 * [Liquid](#liquid-configuration): liquid type selected in a liquid source (a sandbox-only block).
-* [Unit](#unit-configuration): unit type selected in a unit factory.
+* [Unit](#unit-configuration): unit type selected in a unit factory or payload source.
+* [Unit command](#unit-command-configuration): unit command selected in a reconstructor.
 * [Text](#text-configuration): text contents for message blocks.
 * [Processor](#processor-configuration): links and code for logic processors.
 * Virtual: a specific configuration marking blocks that aren't part of the schematic, but can be used as link 
   targets. The keyword is accepted by Schematics Builder, but has no meaning at the moment.  
+
+## Block type configuration
+
+Block type configuration is specified as `block` followed by block type name (including the `@` prefix):
+
+```
+    @payload-source at (1, 0) block @large-copper-wall
+```
+
+The following block types can have block type configuration specified:
+
+* `@payload-source`
+* `@constructor`
+* `@large-constructor`
 
 ## Boolean configuration
 
@@ -698,6 +715,33 @@ Available unit types depend on the type of the factory:
 * `mech-fabricator`:  `@merui`
 * `ship-fabricator`:  `@elude`
 * `tank-fabricator`:  `@stell`
+* `payload-source`:   all unit types are allowed
+
+## Unit command configuration
+
+Unit command configuration is specified as `command` followed by the command name (including the `@` prefix):
+
+```
+    @multiplicative-reconstructor at (0, 0) command @repair
+```
+
+Possible unit commands are
+
+* `move`
+* `repair`
+* `rebuild`
+* `assist`
+* `mine`
+* `boost`
+
+The following block types can have unit command configuration specified:
+
+* `@additive-reconstructor`
+* `@multiplicative-reconstructor`
+* `@exponential-reconstructor`
+* `@tetrative-reconstructor`
+
+The applicability of a command depends on the type of unit processed by the reconstructor.
 
 ## Text configuration
 

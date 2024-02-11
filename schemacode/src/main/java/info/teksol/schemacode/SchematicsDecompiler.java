@@ -6,7 +6,6 @@ import info.teksol.schemacode.schema.Decompiler;
 import info.teksol.schemacode.schema.Schematic;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.List;
@@ -28,7 +27,7 @@ public class SchematicsDecompiler {
             decompiler.setRelativeLinks(true);
             String schemaDefinition = decompiler.buildCode();
             return new CompilerOutput<>(schemaDefinition, List.of());
-        } catch (IOException e) {
+        } catch (Exception e) {
             return new CompilerOutput<>("", List.of(SchemacodeMessage.error(e.toString())));
         }
     }

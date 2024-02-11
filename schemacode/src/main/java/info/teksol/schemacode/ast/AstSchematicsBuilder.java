@@ -4,11 +4,7 @@ import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.grammar.SchemacodeBaseVisitor;
 import info.teksol.schemacode.grammar.SchemacodeParser;
-import info.teksol.schemacode.grammar.SchemacodeParser.BooleanContext;
-import info.teksol.schemacode.grammar.SchemacodeParser.ColorContext;
-import info.teksol.schemacode.grammar.SchemacodeParser.ColorDefContext;
-import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
-import info.teksol.schemacode.grammar.SchemacodeParser.SchemaTagContext;
+import info.teksol.schemacode.grammar.SchemacodeParser.*;
 import info.teksol.schemacode.schema.Language;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -150,6 +146,16 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     @Override
     public AstConnection visitConnName(SchemacodeParser.ConnNameContext ctx) {
         return new AstConnection(ctx.Id().getSymbol().getText());
+    }
+
+    @Override
+    public AstSchemaItem visitBlocktype(SchemacodeParser.BlocktypeContext ctx) {
+        return new AstBlockReference(ctx.Ref().getSymbol().getText());
+    }
+
+    @Override
+    public AstSchemaItem visitUnitcommand(UnitcommandContext ctx) {
+        return new AstUnitCommandReference(ctx.Ref().getSymbol().getText());
     }
 
     @Override

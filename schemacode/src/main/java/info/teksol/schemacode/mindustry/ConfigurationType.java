@@ -1,7 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
-import info.teksol.schemacode.config.*;
 import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.schemacode.config.*;
 
 import java.util.function.Supplier;
 
@@ -12,11 +12,15 @@ public enum ConfigurationType {
     CONNECTION(Position.class, PositionArray.class, () -> Position.INVALID),
     CONNECTIONS(PositionArray.class, () -> PositionArray.EMPTY),
     INTEGER(IntConfiguration.class, () -> IntConfiguration.ZERO),
-    ITEM(Item.class, () -> EmptyConfiguration.EMPTY),
-    LIQUID(Liquid.class, () -> EmptyConfiguration.EMPTY),
+    ITEM(ItemConfiguration.class, () -> EmptyConfiguration.EMPTY),
+    LIQUID(LiquidConfiguration.class, () -> EmptyConfiguration.EMPTY),
     PROCESSOR(ProcessorConfiguration.class, () -> ProcessorConfiguration.EMPTY),
     TEXT(TextConfiguration.class, () -> TextConfiguration.EMPTY),
     UNIT_PLAN(UnitPlan.class, () -> UnitPlan.EMPTY),
+    BLOCK(BlockConfiguration.class, () -> EmptyConfiguration.EMPTY),
+    UNIT(UnitConfiguration.class, () -> EmptyConfiguration.EMPTY),
+    UNIT_COMMAND(UnitCommandConfiguration.class, () -> EmptyConfiguration.EMPTY),
+    UNIT_OR_BLOCK(UnitOrBlockConfiguration.class, () -> EmptyConfiguration.EMPTY),
     ;
 
     private final Class<? extends Configuration> mindustryClass;

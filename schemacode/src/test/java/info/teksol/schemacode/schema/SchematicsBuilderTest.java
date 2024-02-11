@@ -6,13 +6,8 @@ import info.teksol.schemacode.config.BooleanConfiguration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.config.TextConfiguration;
-import info.teksol.schemacode.mindustry.Color;
-import info.teksol.schemacode.mindustry.Direction;
-import info.teksol.schemacode.mindustry.Item;
-import info.teksol.schemacode.mindustry.Liquid;
-import info.teksol.schemacode.mindustry.ProcessorConfiguration;
+import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
-import info.teksol.schemacode.mindustry.UnitPlan;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -639,7 +634,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
-                        block("@unloader", P0_0, Direction.EAST, Item.COAL)
+                        block("@unloader", P0_0, Direction.EAST, ItemConfiguration.forName("@coal"))
                 )
         );
 
@@ -667,7 +662,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
 
         Schematic expected = new Schematic("", "", List.of(), 1, 1,
                 List.of(
-                        block("@liquid-source", P0_0, Direction.EAST, Liquid.CRYOFLUID)
+                        block("@liquid-source", P0_0, Direction.EAST, LiquidConfiguration.forName("@cryofluid"))
                 )
         );
 
@@ -918,5 +913,56 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """,
                 "Unexpected configuration type for block '@message' at \\(\\s*0,\\s*0\\): expected TEXT, found BOOLEAN.");
+    }
+
+    @Test
+    void buildsSchematicsWithUnitConfiguration() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @payload-source at (0, 0) unit @mega
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", List.of(), 5, 5,
+                List.of(
+                        block("@payload-source", P0_0, Direction.EAST, UnitConfiguration.forName("@mega"))
+                )
+        );
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void buildsSchematicsWithBlockConfiguration() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @payload-source at (0, 0) block @vault
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", List.of(), 5, 5,
+                List.of(
+                        block("@payload-source", P0_0, Direction.EAST, BlockConfiguration.forName("@vault"))
+                )
+        );
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void buildsSchematicsWithUnitCommandConfiguration() {
+        Schematic actual = buildSchematics("""
+                schematic
+                    @multiplicative-reconstructor at (0, 0) command @repair
+                end
+                """);
+
+        Schematic expected = new Schematic("", "", List.of(), 5, 5,
+                List.of(
+                        block("@multiplicative-reconstructor", P0_0, Direction.EAST, UnitCommandConfiguration.forName("@repair"))
+                )
+        );
+
+        assertEquals(expected, actual);
     }
 }

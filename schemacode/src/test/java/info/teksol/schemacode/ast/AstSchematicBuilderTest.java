@@ -268,7 +268,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void parsesBlockAtRelativeToCoordinates() {
         AstDefinitions actual = createDefinitions("""
                 schematic
-                    @switch               at block + (1, 1)
+                    @switch               at block1 + (1, 1)
                 end
                 """
         );
@@ -277,7 +277,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 new AstBlock(
                         List.of(),
                         "@switch",
-                        new AstCoordinates(new Position(1, 1), true, "block"),
+                        new AstCoordinates(new Position(1, 1), true, "block1"),
                         null,
                         null
                 )
@@ -444,7 +444,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesConnectedToRelativeTo() {
         parseSchematicsExpectingError("""
                 schematic
-                    @power-node at (0, 0) connected to block + (1, 1)
+                    @power-node at (0, 0) connected to block1 + (1, 1)
                 end
                 """,
                 "Syntax error: .* extraneous input '.+' expecting \\{'description', 'dimensions', 'end', 'name', 'tag', Id, Ref}");

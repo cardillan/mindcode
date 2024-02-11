@@ -2,12 +2,12 @@ package info.teksol.schemacode.schema;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.mindcode.mimex.Icons;
 import info.teksol.schemacode.SchemacodeMessage;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
-import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.schema.BlockPositionResolver.AstBlockPosition;
 import org.intellij.lang.annotations.PrintFormat;
@@ -238,17 +238,19 @@ public class SchematicsBuilder {
     @SuppressWarnings("DuplicateBranchesInSwitch")
     private Configuration convertAstConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
         Configuration configuration = switch (astConfiguration) {
-            case null                   -> EmptyConfiguration.EMPTY;
-            case AstBoolean b           -> BooleanConfiguration.of(b.value());
-            case AstConnection c        -> c.evaluate(this, blockPos.position());
-            case AstConnections c       -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
-            case AstItemReference r     -> verifyValue(blockPos, Item.forName(r.item()), r.item(), "item");
-            case AstLiquidReference r   -> verifyValue(blockPos, Liquid.forName(r.liquid()), r.liquid(), "liquid");
-            case AstProcessor p         -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
-            case AstRgbaValue rgb        -> convertToRgbValue(blockPos, rgb);
-            case AstText t              -> new TextConfiguration(t.getText(this));
-            case AstUnitReference r     -> convertToUnitPlan(blockPos, r);
-            default                     -> EmptyConfiguration.EMPTY;
+            case null                       -> EmptyConfiguration.EMPTY;
+            case AstBlockReference r        -> verifyValue(blockPos, BlockConfiguration.forName(r.item()), r.item(), "block");
+            case AstBoolean b               -> BooleanConfiguration.of(b.value());
+            case AstConnection c            -> c.evaluate(this, blockPos.position());
+            case AstConnections c           -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
+            case AstItemReference r         -> verifyValue(blockPos, ItemConfiguration.forName(r.item()), r.item(), "item");
+            case AstLiquidReference r       -> verifyValue(blockPos, LiquidConfiguration.forName(r.liquid()), r.liquid(), "liquid");
+            case AstProcessor p             -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
+            case AstRgbaValue rgb           -> convertToRgbValue(blockPos, rgb);
+            case AstText t                  -> new TextConfiguration(t.getText(this));
+            case AstUnitCommandReference r  -> verifyValue(blockPos, UnitCommandConfiguration.forName(r.item()), r.item(), "command");
+            case AstUnitReference r         -> decodeUnitConfiguration(blockPos, r);
+            default                         -> EmptyConfiguration.EMPTY;
         };
 
         if (!blockPos.configurationType().isCompatible(configuration)) {
@@ -288,14 +290,24 @@ public class SchematicsBuilder {
         return Math.max(Math.min(value, 255), 0);
     }
 
-    private Configuration convertToUnitPlan(BlockPosition blockPos, AstUnitReference unitReference) {
-        if (blockPos.blockType().unitPlans().contains(unitReference.unit())) {
-            return new UnitPlan(unitReference.unit());
-        } else {
-            error("Block '%s' at %s: unknown or unsupported unit type '%s'.",
-                    blockPos.name(), blockPos.position().toStringAbsolute(), unitReference.unit());
-            return EmptyConfiguration.EMPTY;
-        }
+    private Configuration decodeUnitConfiguration(BlockPosition blockPos, AstUnitReference ref) {
+        return switch (blockPos.configurationType()) {
+            case UNIT_OR_BLOCK -> verifyValue(blockPos, UnitConfiguration.forName(ref.unit()), ref.unit(), "ref");
+            case UNIT_PLAN -> {
+                if (blockPos.blockType().unitPlans().contains(ref.unit())) {
+                    yield new UnitPlan(ref.unit());
+                } else {
+                    error("Block '%s' at %s: unknown or unsupported unit type '%s'.",
+                            blockPos.name(), blockPos.position().toStringAbsolute(), ref.unit());
+                    yield EmptyConfiguration.EMPTY;
+                }
+            }
+            default -> {
+                error("Block '%s' at %s: unknown or unsupported configuration type '%s'.",
+                        blockPos.name(), blockPos.position().toStringAbsolute(), blockPos.configurationType());
+                yield EmptyConfiguration.EMPTY;
+            }
+        };
     }
 
     private <T> T getAttribute(String name, Class<T> expectedType) {

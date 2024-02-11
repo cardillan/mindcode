@@ -126,6 +126,20 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitConnections(SchemacodeParser.ConnectionsContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code blocktype}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlocktype(SchemacodeParser.BlocktypeContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code unitcommand}
+	 * labeled alternative in {@link SchemacodeParser#configuration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnitcommand(SchemacodeParser.UnitcommandContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code item}
 	 * labeled alternative in {@link SchemacodeParser#configuration}.
 	 * @param ctx the parse tree

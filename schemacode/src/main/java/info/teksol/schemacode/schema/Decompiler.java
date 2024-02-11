@@ -1,26 +1,11 @@
 package info.teksol.schemacode.schema;
 
 import info.teksol.mindcode.mimex.Icons;
-import info.teksol.schemacode.config.BooleanConfiguration;
-import info.teksol.schemacode.config.Configuration;
-import info.teksol.schemacode.config.EmptyConfiguration;
-import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.config.TextConfiguration;
-import info.teksol.schemacode.mindustry.Color;
-import info.teksol.schemacode.mindustry.ConfigurationType;
-import info.teksol.schemacode.mindustry.Direction;
-import info.teksol.schemacode.mindustry.Item;
-import info.teksol.schemacode.mindustry.Liquid;
-import info.teksol.schemacode.mindustry.Position;
-import info.teksol.schemacode.mindustry.ProcessorConfiguration;
+import info.teksol.schemacode.config.*;
+import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
-import info.teksol.schemacode.mindustry.UnitPlan;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -205,14 +190,17 @@ public class Decompiler {
         Class<? extends Configuration> cfgClass = block.configurationClass();
         Configuration cfg = block.configuration().as(cfgClass);
         switch (cfg) {
+            case BlockConfiguration b       -> sbr.append(" block ").append(b.getName());
             case BooleanConfiguration b     -> sbr.append(b.value() ? " enabled" : " disabled");
             case Color c                    -> writeColor(c);
-            case Item i                     -> sbr.append(" item ").append(i.getName());
-            case Liquid l                   -> sbr.append(" liquid ").append(l.getName());
+            case ItemConfiguration i        -> sbr.append(" item ").append(i.getName());
+            case LiquidConfiguration l      -> sbr.append(" liquid ").append(l.getName());
             case Position p                 -> writeConnection(block, p);
             case PositionArray p            -> writeConnections(block, p);
             case ProcessorConfiguration p   -> writeProcessor(block, p);
             case TextConfiguration t        -> writeText(t);
+            case UnitConfiguration u        -> sbr.append(" unit ").append(u.getName());
+            case UnitCommandConfiguration c -> sbr.append(" command ").append(c.getName());
             case UnitPlan p                 -> sbr.append(" unit ").append(p.unitName());
             default                         -> sbr.append(" // unknown configuration: ").append(cfg);
         }
