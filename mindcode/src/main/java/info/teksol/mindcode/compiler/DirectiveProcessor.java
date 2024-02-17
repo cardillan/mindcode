@@ -145,7 +145,7 @@ public class DirectiveProcessor {
         Map<String,BiConsumer<CompilerProfile,String>> map = new HashMap<>();
         map.put("target", this::setTarget);
         map.put("optimization", this::setAllOptimizationsLevel);
-        map.put("booleanEval", this::setShortCircuitEval);
+        map.put("boolean-eval", this::setShortCircuitEval);
         map.put("instruction-limit", this::setInstructionLimit);
         map.put("passes", this::setOptimizationPasses);
         map.put("goal", this::setGenerationGoal);

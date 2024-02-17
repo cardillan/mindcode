@@ -102,6 +102,33 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     }
 
     @Test
+    void recognizesIteratorVariables() {
+        assertCompilesTo("""
+                        a = 1
+                        for i in (a, a = 2)
+                            k = 2 * a
+                            print(i, k)
+                        end
+                        """,
+                createInstruction(SET, "a", "1"),
+                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(SET, "i", "1"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
+                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SET, "a", "2"),
+                createInstruction(SET, "i", "2"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "mul", "k", "2", "a"),
+                createInstruction(PRINT, "i"),
+                createInstruction(PRINT, "k"),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void ignoresGlobalVariablesOnFunctionCall() {
         assertCompilesTo("""
                         allocate stack in cell1
@@ -231,7 +258,6 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
 
     @Test
     void handlesIfInsideLoop() {
-        // At this moment, invariant ifs aren't handled. Special handling of an entire IF context needs to be added.
         assertCompilesTo("""
                         A = 10
                         i = 0
@@ -285,6 +311,61 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(JUMP, var(1010), "lessThan", "j", "1000"),
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(JUMP, var(1009), "lessThan", "i", "1000"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesInvariantIf() {
+        assertCompilesTo("""
+                        A = 10
+                        for i in 1 ... A
+                            a = A < 0 ? 3 : 4
+                            print(a)
+                        end
+                        print("finish")
+                        """,
+                createInstruction(SET, "A", "10"),
+                createInstruction(SET, "i", "1"),
+                createInstruction(SET, "a", "4"),
+                createInstruction(JUMP, var(1005), "greaterThanEq", "A", "0"),
+                createInstruction(SET, "a", "3"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(PRINT, "a"),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1006), "lessThan", "i", "A"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, q("finish")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesInvariantIfInExpression() {
+        assertCompilesTo("""
+                        A = 10
+                        for i in 1 ... A
+                            a = 10 * (A < 0 ? 3 : 4)
+                            print(a)
+                        end
+                        print("finish")
+                        """,
+                createInstruction(SET, "A", "10"),
+                createInstruction(SET, "i", "1"),
+                createInstruction(SET, var(2), "4"),
+                createInstruction(JUMP, var(1005), "greaterThanEq", "A", "0"),
+                createInstruction(SET, var(2), "3"),
+                createInstruction(LABEL, var(1005)),
+                createInstruction(OP, "mul", "a", "10", var(2)),
+                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
+                createInstruction(LABEL, var(1006)),
+                createInstruction(PRINT, "a"),
+                createInstruction(OP, "add", "i", "i", "1"),
+                createInstruction(JUMP, var(1006), "lessThan", "i", "A"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(PRINT, q("finish")),
                 createInstruction(END)
         );
     }

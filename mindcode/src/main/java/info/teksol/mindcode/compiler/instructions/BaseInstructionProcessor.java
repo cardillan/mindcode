@@ -328,6 +328,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case SetInstruction ix -> nonvolatileArguments(ix);
             case OpInstruction ix -> ix.getOperation().isDeterministic() && nonvolatileArguments(ix);
             case PackColorInstruction ix -> nonvolatileArguments(ix);
+            case NoOpInstruction ix -> true;
             default -> false;
         };
     }
@@ -340,7 +341,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     public boolean isSafe(LogicInstruction instruction) {
         // TODO More instructions might be safe
         return switch (instruction.getOpcode()) {
-            case READ, GETLINK, RADAR, SENSOR, SET, OP, LOOKUP, PACKCOLOR -> true;
+            case READ, GETLINK, RADAR, SENSOR, SET, OP, LOOKUP, PACKCOLOR, NOOP -> true;
             default -> false;
         };
     }

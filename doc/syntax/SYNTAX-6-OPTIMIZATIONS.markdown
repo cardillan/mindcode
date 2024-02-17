@@ -639,31 +639,23 @@ for i = 0; i < A; i += 1
 end
 ```
 
-the evaluation of `2 * A` is moved in front of the loop in the compiled code:
+the evaluation of `2 * A` is moved in front of the loop in the compiled code (changes highlighted):
 
+```diff
+    0  set A 10
+    1  set i 0
++   2  op mul __tmp1 2 A
+    3  jump 0 greaterThanEq 0 A
+-      op mul __tmp1 2 A
+    4  print __tmp1
+    5  op add i i 1
+-      jump 3 lessThan i A
++   6  jump 4 lessThan i A
+    7  end
 ```
-set A 10
-set i 0
-op mul __tmp1 2 A
-jump 0 greaterThanEq 0 A
-print __tmp1
-op add i i 1
-jump 4 lessThan i A
-end
-```
 
-At this moment, the following limitations apply to this optimization:
-
-* Loop hoisting is not performed on list iteration loops.
-* Branching expressions aren't processed, even if they are fully or partially invariant. If there is an `if` 
-  expression or ternary operator inside a loop, it won't be hoisted, even if the expression as a whole is loop 
-  invariant.
-* If the loop contains a stackless or recursive function call, all global variables are marked as loop dependent and 
-  expressions based on them aren't hoisted, since the compiler must assume the value of the global variable could be 
-  changed inside a function. 
-
-On the other hand, a loop condition is processed in the same manner as a loop body, and invariant code in nested 
-loops is hoisted all the way to the top whenever possible:
+A loop condition is processed as well as a loop body, and invariant code in nested loops is hoisted all the way to 
+the top when possible: 
 
 ```
 A = 10
@@ -678,20 +670,65 @@ end
 
 compiles into
 
+```diff
+    0  set A 10
+    1  set j 0
++   2  op add __tmp1 A 10
+    3  jump 0 greaterThanEq 0 A
+    4  set i 0
+-      op add __tmp1 A 10
+-      jump 10 greaterThanEq 0 __tmp1
++   5  jump 9 greaterThanEq 0 __tmp1
+    6  op add i i 1
+    7  print i
+-      op add __tmp1 A 10
+    8  jump 6 lessThan i __tmp1
+    9  op add j j 1
+-      jump 3 lessThan j A
++  10  jump 4 lessThan j A
+   11  end
 ```
-set A 10
-set j 0
-op add __tmp1 A 10
-jump 0 greaterThanEq 0 A
-set i 0
-jump 9 greaterThanEq 0 __tmp1
-op add i i 1
-print i
-jump 6 lessThan i __tmp1
-op add j j 1
-jump 4 lessThan j A
+
+On `aggressive` optimization level, Loop Hoisting is capable of handling some `if` expressions as well:
+
+```
+#set loop-hoisting = aggressive
+A = 10
+for i in 1 ... A
+    k = (A % 2 == 0) ? "Even" : "Odd"
+    print(i, k)
 end
+print("end")
 ```
+
+produces
+
+```diff
+    0  set A 10
+    1  set i 1
+-      jump 11 greaterThanEq 1 A
+    2  set k "Odd"
+    3  op mod __tmp1 A 2
+-      jump 7 notEqual __tmp1 0
++   4  jump 6 notEqual __tmp1 0
+    5  set k "Even"
++   6  jump 11 greaterThanEq 1 A
+    7  print i
+    8  print k
+    9  op add i i 1
+-      jump 3 lessThan i A
++  10  jump 7 lessThan i A
+   11  print "end"
+   12  end
+```
+
+At this moment, the following limitations apply:
+
+* If the loop contains a stackless or recursive function call, all global variables are marked as loop dependent and 
+  expressions based on them aren't hoisted, since the compiler must assume the value of the global variable could be 
+  changed inside a function.
+* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested 
+  in a function call (such as `print(A < 0 ? "positive" : "negative")`), it won't be optimized.   
 
 ## Loop Optimization
 
