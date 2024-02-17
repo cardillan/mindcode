@@ -4,7 +4,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Current priorities
 
-* Bug fixes and [small improvements](#incremental-improvements)
+* Bug fixes and [incremental improvements](#incremental-improvements)
 * [Updating ANTLR grammar](#updating-antlr-grammar)
 * [Inferring invariants of variables](#inferring-invariants-of-variables)
 * [Speculative optimization for speed](#speculative-optimization-for-speed)
@@ -14,27 +14,11 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 
 # Incremental improvements
 
-* Loop Hoisting improvements
-  * Support for list iteration loops
-  * Support for hoisting entire loop invariant if statements
-  * Support for hoisting parts of if statements (maybe)
-* Expand handling of expressions by the Data Flow Optimization:
-  * handle multiplication by zero, multiplication/division by one, and addition/subtraction of zero directly (i.e. 
-    independently of the Expression Optimization).
-  * When there are two subsequent MUL/DIV or ADD/SUB instructions, the first one not being used by any other 
-    instruction and the second one containing a constant, move the constant to the first instruction. Would facilitate 
-    constant folding for more complex expressions.
-  * Add factoring-out capability to more complex expressions.
-* Utilizing the new `id` property:
-  * Schemacode
-    * replace the `Item` and `Liquid` enums with metadata, utilize units.
-  * Mindcode
-    * recognize item/liquid built-in constants (possibly others),
-    * [Case switching over built-in constants](#case-switching-over-built-in-constants).
-* Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion
+None planned.
 
 # Other small or internal improvements
 
+* Create a documentation about diagnosing and resolving syntax errors, duplicate it into a discussion.
 * Handling syntax errors - web & command line apps:
   * Display message and link to the discussion, prompt users to ask for help if stuck
 * Handling internal errors:
@@ -84,7 +68,7 @@ This documents servers as a scratch pad to track ideas and possible enhancements
 ## New and extended keywords
 
 * `allocate`
-  * Allow specifying precise address for external variables
+  * Allow specifying concrete index for external variables
     * `allocate $STATE in cell1[7]`
     * The index must be a constant integer expression
     * Must not overlap with heap. Can use a memory cell/bank different from heap.
@@ -101,8 +85,9 @@ This documents servers as a scratch pad to track ideas and possible enhancements
   * Possible syntax:
     * `enum name(id1, id2, id3)`
     * `enum name: id1, id2, id3 end`
-  * Mindcode assigns values to the enums as it sees fit. There are no guarantees on the numbers whatsoever.
-    They could be instruction addresses inside a case expression, for example, if there's just one case expression.
+  * Mindcode assigns values to the enums as it sees fit. There are no guarantees on the numbers whatsoever, except 
+    preserving the declaration order. They could be instruction addresses inside a case expression, for example, if 
+    there's just one case expression.
   * Mindcode provides functions to access enum properties (e.g. enum.name, enum.next, enum.previous).
     * Implemented as inline library functions. Using them might be costly.
   * Support for enums in list iteration Loops: `for i in enum_name`.
@@ -114,6 +99,10 @@ This documents servers as a scratch pad to track ideas and possible enhancements
     * Tests number is in range: `n in min .. max`
     * Tests value is in enumerated set: `type in (@sorter, @inverted-sorter)`
 * `noinline` - prevent function inlining
+* `param` or `parameter`: explicit support for code parametrization
+  * Defines a new read-only variable and assigns a value to it.
+  * Compiler will assume the value assigned to this variable can be changed in compiled code.
+  * Subsequently, the special protection of global variables will be removed.
 * `out`
   * Output function parameters
     * Not passed by reference - Mindustry doesn't allow that.
@@ -178,8 +167,8 @@ Typed variables, parameters and function return values.
 # External variable optimizations
 
 * External variable value reuse
-  * When a value is read or written to a memory cell, store it and don't reread it if not necessary, unless the
-    memory cell was declared `volatile`.
+  * When a value is read or written to a memory cell, store it in a shadow variable and don't reread it if not 
+    necessary, unless the memory cell was declared `volatile`.
   * Needs to reset stored values on possible overwrites.
     * Tracking of possible memory block aliases (will be done globally) - all memory blocks obtained via instructions
       (`getlink`, `getBlock`, `ulocate`) are considered aliased (the optimizer cannot exclude the possibility
@@ -190,10 +179,10 @@ Typed variables, parameters and function return values.
       * If it was possible to establish that two expression values are distinct, we might utilize this knowledge and
         not reset the value represented by a known-to-be-distinct expression when a memory write occurs at the other
         expression index. We might consider expressions that differ by an integer constant distinct.
-    * Do not write the same value if it is known to be unchanged
-* Volatile values: always reread, never reuse last value
-  * Specific built-in ones (already done)
-  * All sensed properties (already done - the entire `sensor` instruction is deemed volatile)
+    * Do not write the same value if it is known to be unchanged.
+* Volatile values: always reread, never reuse last value.
+  * Specific built-in ones (already done).
+  * All sensed properties (already done - the entire `sensor` instruction is deemed volatile).
   * New compiler directive will allow to declare memory model for a memory block, a linked block, a built-in variable
     or a global variable (because of the `sync` instruction), e.g. `#declare variable [volatile | aliased | restriced]`.
 
@@ -304,6 +293,13 @@ Two basic approaches
 
 ## Data Flow Optimization
 
+* Expand handling of expressions by the Data Flow Optimization:
+  * handle multiplication by zero, multiplication/division by one, and addition/subtraction of zero directly (i.e.
+    independently of the Expression Optimization).
+  * When there are two subsequent MUL/DIV or ADD/SUB instructions, the first one not being used by any other
+    instruction and the second one containing a constant, move the constant to the first instruction. Would facilitate
+    constant folding for more complex expressions.
+  * Add factoring-out capability to more complex expressions.
 * Correctly resolve case expressions (both jump table based and condition based) when the input value is effectively 
   constant.
 * Recognize dead writes inside loops: `i = 0; while switch1.enabled i += 1 end`: writes to `i` are dead, but not 
@@ -316,7 +312,7 @@ Two basic approaches
     * If an expression being assigned to a user variable is identical to a prior expression assigned to a temporary
       variable, try to move the assignment to the user variable before the temporary variable. Might allow reusing the
       user variable instead of the temporary one.
-* Visit stackless functions on calls (??):
+* Visit stackless functions on calls - global variables:
   * Every result of a visit to stackless function would have to be merged together and then applied to optimizations
     on that function.
   * Could help keeping track of global variables and memory blocks.
@@ -424,6 +420,10 @@ The `op min` instructions perhaps might be avoided under some circumstances.
     * Need a limit on highest possible value of `n`
 * Loop unswitching (if in loop --> loops in if)
 * Loop fusion???
+
+## Loop hoisting
+
+* Generalized method of identifying finding loop invariant code.
 
 ## Unreachable code elimination improvements
 

@@ -2,12 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2024-02-17
+
+### Added
+
+* Added support for [block type](doc/syntax/SCHEMACODE.markdown#block-type-configuration),
+  [unit type for payload-source](doc/syntax/SCHEMACODE.markdown#unit-configuration) and  
+  [unit command](doc/syntax/SCHEMACODE.markdown#unit-command-configuration) configurations to Schemacode compiler 
+  and decompiler. This resolves the [#122 issue](https://github.com/cardillan/mindcode/issues/122)).
+* Added support for handling list iteration loops and loop invariant `if` expressions to the
+  [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization.
 
 ### Fixed
 
 * Fixed comments on the last line of source code causing compilation errors
   [#110](https://github.com/cardillan/mindcode/issues/110).
+
+### Miscellaneous
+
+* Schemacode compiler and decompiler now uses [mimex](https://github.com/cardillan/mimex)-generated metadata for 
+  lists of items, liquids and unit commands. All Mindcode object definitions are now loaded from extracted metadata 
+  and not from separate definitions, in Mindcode as well as in Schemacode.
+* The documentation of [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization now uses 
+  diff-style mlog code listings to demonstrate the effects of optimizations on emitted code. The goal is to 
+  gradually replace all suitable optimization examples to this format.
 
 ## 2024-02-10
 
