@@ -217,9 +217,9 @@ Locate a specific type of position/building anywhere on the map. Requires a boun
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`found = ulocate(ore, oreType, outx?, outy?)`|`ulocate ore core true oreType outx outy found __tmp0`|
-|`building = ulocate(building, group, enemy, outx?, outy?, found?)`|`ulocate building group enemy @copper outx outy found building`|
-|`building = ulocate(spawn, outx?, outy?, found?)`|`ulocate spawn core true @copper outx outy found building`|
-|`building = ulocate(damaged, outx?, outy?, found?)`|`ulocate damaged core true @copper outx outy found building`|
+|`found = ulocate(building, group, enemy, outx?, outy?, building?)`|`ulocate building group enemy @copper outx outy found building`|
+|`found = ulocate(spawn, outx?, outy?, building?)`|`ulocate spawn core true @copper outx outy found building`|
+|`found = ulocate(damaged, outx?, outy?, building?)`|`ulocate damaged core true @copper outx outy found building`|
 # World processor
 
 These instructions are only available to the World Processor,
