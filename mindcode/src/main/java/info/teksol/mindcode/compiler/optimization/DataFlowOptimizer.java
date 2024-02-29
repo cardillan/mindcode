@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 import static info.teksol.util.CollectionUtils.in;
+import static info.teksol.util.CollectionUtils.resultIn;
 
 public class DataFlowOptimizer extends BaseOptimizer {
     /**
@@ -457,12 +458,34 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
             }
 
-            // If the condition is before the body, we need to merge initial states after first pass through the body,
-            // as we don't know whether the body will actually be executed.
-            mergeStates = children.stream()
+            // If the condition is before the body, and it is not known that the condition will be true upon the first
+            // execution of the loop, we need to merge initial states after first pass through the body, as the body
+            // might not be executed at all.
+            boolean openingCondition = children.stream()
                     .map(AstContext::subcontextType)
                     .filter(in(BODY, CONDITION))
                     .findFirst().get() == CONDITION;
+
+            if (openingCondition) {
+                // Evaluate the condition
+                AstContext conditionContext = children.stream()
+                        .filter(resultIn(AstContext::subcontextType, CONDITION))
+                        .findFirst().get();
+                OptimizationContext.LogicList condition = contextInstructions(conditionContext);
+                LogicInstruction last = condition.getLast();
+                if (last instanceof NoOpInstruction) {
+                    // NoOp means the jump was already eliminated --> the body WILL be executed
+                    mergeStates = false;
+                } else if (last instanceof JumpInstruction jump) {
+                    // If the jump evaluates to false, it means it doesn't skip over the loop body
+                    // We don't need to merge the initial states, because the body will be executed
+                    LogicBoolean initialValue = optimizationContext.evaluateLoopConditionJump(jump, localContext);
+                    mergeStates = initialValue != LogicBoolean.FALSE;
+                } else {
+                    // We cannot guarantee the loop will be executed at least once
+                    mergeStates = true;
+                }
+            }
         }
 
         int loopStart = currentContext;
@@ -796,11 +819,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         // The instruction sets all its output values. Instructions not processed above will set all their output
         // variables to an unknown state (represented by null - actual null value in mlog would be represented by
-        // a LogicNull instance)
+        // a LogicNull instance).
+        // The actual inferred values aren't reused unless modifyInstruction is true (prevents inferred values from
+        // the first pass through a loop from being used during the second pass).
         instruction.outputArgumentsStream()
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
-                .forEach(arg -> variableStates.valueSet(arg, instruction, value));
+                .forEach(arg -> variableStates.valueSet(arg, instruction, value, modifyInstructions));
 
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {

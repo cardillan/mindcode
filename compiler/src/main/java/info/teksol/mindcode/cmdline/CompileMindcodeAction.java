@@ -26,7 +26,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .help("Compile a mindcode source file into text mlog file.");
 
         subparser.addArgument("-c", "--clipboard")
-                .help("paste compiled mlog code into clipboard")
+                .help("copy compiled mlog code to clipboard")
                 .action(Arguments.storeTrue());
 
         ArgumentGroup files = subparser.addArgumentGroup("input/output files");

@@ -4,11 +4,7 @@ import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.DefaultSettings;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
-import net.sourceforge.argparse4j.inf.ArgumentParser;
-import net.sourceforge.argparse4j.inf.ArgumentParserException;
-import net.sourceforge.argparse4j.inf.Namespace;
-import net.sourceforge.argparse4j.inf.Subparser;
-import net.sourceforge.argparse4j.inf.Subparsers;
+import net.sourceforge.argparse4j.inf.*;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -32,8 +28,8 @@ public class Main {
 
         Subparsers subparsers = parser.addSubparsers()
                 .title("Actions")
-                .description("Specifies the compilation type to be performed")
-                .help("Type of compilation")
+                .description("Specifies the type of processing to be performed")
+                .help("Type of processing")
                 .metavar("ACTION")
                 .dest("action");
 

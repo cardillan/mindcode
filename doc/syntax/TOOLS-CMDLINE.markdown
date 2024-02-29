@@ -60,9 +60,9 @@ named arguments:
   -h, --help             show this help message and exit
 
 Actions:
-  Specifies the compilation type to be performed
+  Specifies the type of processing to be performed
 
-  ACTION                 Type of compilation
+  ACTION                 Type of processing
     cm (compile-mindcode)
                          Compile a mindcode source file into text mlog file.
     cs (compile-schema)  Compile a schema definition file into binary msch file.
@@ -88,7 +88,7 @@ Compile a mindcode source file into text mlog file.
 
 named arguments:
   -h, --help             show this help message and exit
-  -c, --clipboard        paste compiled mlog code into clipboard
+  -c, --clipboard        copy compiled mlog code to clipboard
   -t, --target {6,7s,7w,7as,7aw}
                          selects target processor version and edition (version  6,  version 7 with standard processor or
                          world processor, version 7 rev. A with standard processor or world processor)

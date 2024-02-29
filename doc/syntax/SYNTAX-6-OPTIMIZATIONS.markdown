@@ -129,7 +129,7 @@ If the optimization level is `aggressive`, the following additional expressions 
   numeric literal. Mindcode contains a list of known Mindustry objects and their IDs, obtained by using Mindustry 
   Metadata Extraction extension on the latest Mindustry version. These IDs are expected to be immutable, but the 
   optimization can be turned off by setting the optimization level to `basic` if the actual IDs turn out to be 
-  different from used Mindcode's IDs.   
+  different from the IDs known to Mindcode.   
 
 ## If Expression Optimization
 
@@ -1073,7 +1073,7 @@ for i in 1 .. 5
 end
 ```
 
-In this case, the outer loop is unrolled first, after which each copy of the inner loop can be unrolled 
+In this example, the outer loop is unrolled first, after which each copy of the inner loop can be unrolled 
 independently. Further optimizations (including Print Merging) then compact the entire computation into a single 
 print instruction:
 

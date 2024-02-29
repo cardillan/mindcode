@@ -236,8 +236,10 @@ public class DataFlowVariableStates {
          * @param instruction instruction performing the assignment
          * @param value       the value being assigned, null means the instruction assigns an unknown value (e.g. value
          *                    provided by sensor instruction, or random value)
+         * @param reuseValue  indicates the value assigned to the variable can be reused by later optimizations
+         *                    (values inferred on the first pass through a loop must not be reused)
          */
-        public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value) {
+        public void valueSet(LogicVariable variable, LogicInstruction instruction, LogicValue value, boolean reuseValue) {
             if (stored.contains(variable)) {
                 trace(() -> "Not setting value of variable " + variable.toMlog() + ", because it is stored on stack.");
                 return;
@@ -247,8 +249,7 @@ public class DataFlowVariableStates {
             printInstruction(instruction);
 
             if (optimizer.canEliminate(instruction, variable)) {
-                // Only store the variable's value if it can be eliminated
-                // Otherwise the value itself could be used - we do not want this for global variables.
+                // Storing the variable value means the instruction can be completely eliminated (constant propagation)
                 if (value == null) {
                     values.remove(variable);
                 } else if (values.get(variable) != null && value.equals(values.get(variable).constantValue)) {
@@ -277,19 +278,21 @@ public class DataFlowVariableStates {
             // Handle expressions only if the value is not exactly known
             if (value == null) {
                 // Find the oldest equivalent expression: an expression based on the same values.
-                // Recognizes that in c = a + b; d = a + b c and d is the same.
-                for (VariableValue expression : values.values()) {
-                    if (expression.isExpression() && expression.isEqual(instruction)) {
-                        if (BaseOptimizer.TRACE) {
-                            System.out.println("    Adding inferred equivalence " + variable.toMlog() + " == " + expression.variable.toMlog());
+                // Recognizes that in "c = a + b; d = a + b" c and d is the same.
+                if (reuseValue) {
+                    for (VariableValue expression : values.values()) {
+                        if (expression.isExpression() && expression.isEqual(instruction)) {
+                            if (BaseOptimizer.TRACE) {
+                                System.out.println("    Adding inferred equivalence " + variable.toMlog() + " == " + expression.variable.toMlog());
+                            }
+                            equivalences.put(variable, expression.variable);
+                            break;
                         }
-                        equivalences.put(variable, expression.variable);
-                        break;
                     }
                 }
 
                 if (instruction instanceof SetInstruction set) {
-                    if (set.getResult() == variable && set.getValue() instanceof LogicVariable variable2) {
+                    if (reuseValue && set.getResult() == variable && set.getValue() instanceof LogicVariable variable2) {
                         trace(() -> "    Adding direct equivalence " + variable.toMlog() + " == " + variable2.toMlog());
                         equivalences.put(variable, variable2);
                     }

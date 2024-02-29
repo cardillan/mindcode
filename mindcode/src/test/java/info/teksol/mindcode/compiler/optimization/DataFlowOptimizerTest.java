@@ -115,6 +115,33 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 ""
         );
     }
+
+    @Test
+    void producesNoWarningsOnBasicLoop() {
+        assertGeneratesWarnings(createTestCompiler(CompilerProfile.standardOptimizations(false)),
+                """
+                        while true
+                            i = switch1.enabled
+                        end
+                        print(i)
+                        """,
+                ""
+        );
+    }
+
+    @Test
+    void producesNoWarningsOnBasicLoop2() {
+        assertGeneratesWarnings(createTestCompiler(CompilerProfile.standardOptimizations(false)),
+                """
+                        x = 159
+                        while x > 10
+                            x1 = x - 5
+                            x = x1
+                        end
+                        """,
+                ""
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Main variables">

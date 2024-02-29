@@ -9,7 +9,6 @@ import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.processor.DoubleVariable;
-import info.teksol.util.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -18,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
+import static info.teksol.util.CollectionUtils.resultIn;
 
 /**
  * Unrolls loops
@@ -106,7 +106,7 @@ public class LoopUnroller extends BaseOptimizer {
     // Creates a list of LogicLists containing instructions that are part of the loop iterations
     private List<LogicList> iterationInstructionContexts(AstContext loop) {
         List<LogicList> result = loop.children().stream()
-                .filter(CollectionUtils.in(AstContext::subcontextType, CONDITION, BODY, UPDATE))
+                .filter(resultIn(AstContext::subcontextType, CONDITION, BODY, UPDATE))
                 .map(this::contextInstructions)
                 .collect(Collectors.toCollection(ArrayList::new));
 

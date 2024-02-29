@@ -2,21 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+* Fixed the Data Flow Optimizer incorrectly reporting variables initialized inside an infinite `while` loop as 
+  uninitialized ([issue #127](https://github.com/cardillan/mindcode/issues/127)).
+
 ## 2024-02-17
 
 ### Added
 
 * Added support for [block type](doc/syntax/SCHEMACODE.markdown#block-type-configuration),
-  [unit type for payload-source](doc/syntax/SCHEMACODE.markdown#unit-configuration) and  
-  [unit command](doc/syntax/SCHEMACODE.markdown#unit-command-configuration) configurations to Schemacode compiler 
-  and decompiler. This resolves the [#122 issue](https://github.com/cardillan/mindcode/issues/122)).
+  [unit type for payload-source](doc/syntax/SCHEMACODE.markdown#unit-configuration)
+  and [unit command](doc/syntax/SCHEMACODE.markdown#unit-command-configuration) configurations to Schemacode compiler 
+  and decompiler. This definitely resolves [issue #122](https://github.com/cardillan/mindcode/issues/122).
 * Added support for handling list iteration loops and loop invariant `if` expressions to the
   [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization.
 
 ### Fixed
 
 * Fixed comments on the last line of source code causing compilation errors
-  [#110](https://github.com/cardillan/mindcode/issues/110).
+  ([#110](https://github.com/cardillan/mindcode/issues/110)).
 
 ### Miscellaneous
 
