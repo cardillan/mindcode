@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 
 * Fixed the Data Flow Optimizer incorrectly reporting variables initialized inside an infinite `while` loop as 
   uninitialized ([issue #127](https://github.com/cardillan/mindcode/issues/127)).
+* Fixed the Loop Hoisting Optimizer incorrectly hoisting assignments from a function return variable
+  ([issue #129](https://github.com/cardillan/mindcode/issues/129)).
 
 ## 2024-02-17
 

@@ -200,6 +200,28 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     }
 
     @Test
+    void recognizesFunctionReturnVariables() {
+        assertCompilesTo("""
+                        while true
+                            a = foo()
+                            b = foo()
+                            print(a, b)
+                        end
+
+                        def foo()
+                            rand(10)
+                        end
+                        """,
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "rand", "a", "10"),
+                createInstruction(OP, "rand", "__fn0retval", "10"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(JUMP, var(1001), "always")
+        );
+    }
+
+    @Test
     void handlesNestedLoops() {
         assertCompilesTo("""
                         A = 10

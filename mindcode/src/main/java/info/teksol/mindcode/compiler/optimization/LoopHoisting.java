@@ -8,6 +8,7 @@ import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicVariable;
 
@@ -163,6 +164,9 @@ public class LoopHoisting extends BaseOptimizer {
             Map<LogicVariable, Set<LogicVariable>> dependencies, LogicInstruction instruction) {
         if (instructionProcessor.isSafe(instruction) && instructionProcessor.isDeterministic(instruction)
                 && (loop.executesOnce(instruction) || inspectedContext != null && inspectedContext.executesOnce(instruction))) {
+            String prefix = instruction.getAstContext().function() == null
+                    ? null : instruction.getAstContext().function().getPrefix();
+
             List<LogicVariable> inputs = instruction.inputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)
@@ -172,6 +176,13 @@ public class LoopHoisting extends BaseOptimizer {
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)
                     .forEach(arg -> dependencies.computeIfAbsent(arg, a -> new HashSet<>()).addAll(inputs));
+
+            // Function return variables outside their functions are not loop invariant
+            instruction.inputArgumentsStream()
+                    .filter(LogicVariable.class::isInstance)
+                    .map(LogicVariable.class::cast)
+                    .filter(l -> l.getType() == ArgumentType.FUNCTION_RETVAL && !Objects.equals(l.getFunctionPrefix(), prefix))
+                    .forEachOrdered(arg -> dependencies.computeIfAbsent(arg, a -> new HashSet<>()).add(arg));
         } else {
             // This instruction isn't loop independent: it's unsafe, nondeterministic or nonlinear.
             // Add output variables as depending on themselves, removing their invariant status

@@ -135,7 +135,7 @@ while switch1.enabled
     printflush(message1)
 end
 
-inline def rebindUnits()
+def rebindUnits()
     UNIT_S1 = UNIT_P1 = UNIT_S2 = UNIT_P2 = null
     count = 0
 
@@ -168,7 +168,7 @@ inline def rebindUnits()
     return count
 end
 
-inline def findUnit()
+def findUnit()
     while true
         ubind(UNIT)
         if @unit == null
@@ -183,7 +183,7 @@ inline def findUnit()
     end
 end
 
-inline def processUnit(unit, item, group, supply)
+def processUnit(unit, item, group, supply)
     ubind(unit)
 
     // Unit lost. Rebind it
@@ -268,7 +268,7 @@ inline def processUnit(unit, item, group, supply)
     return @unit
 end
 
-inline def printDomeStatus(item, text)
+def printDomeStatus(item, text)
     print(text)
     level = DOME.sensor(item)
     if level > 3
