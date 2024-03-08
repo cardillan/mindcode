@@ -61,6 +61,7 @@ None planned.
 * Allow empty optional arguments in function calls. At this moment, optional arguments can only be omitted at the
   end of the argument list.
 * Block comments `/* this is a block comment that can span several lines */`.
+* Text block string literals
 * Only allow dashes in REF identifiers (e.g. `@battery-large`) and property names (e.g. `vault.blast-compound`), and 
   only in the middle of the identifier. Then add support for `++` and `--` operators. `a-b` will become an 
   expression equivalent to `a - b`.
