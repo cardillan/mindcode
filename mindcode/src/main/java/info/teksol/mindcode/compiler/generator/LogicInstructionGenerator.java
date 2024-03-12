@@ -174,8 +174,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
 
-    public CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr) {
-        return instructionProcessor.createCallRecursive(astContext, stack, callAddr, retAddr);
+    public CallRecInstruction createCallRecursive(LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
+        return instructionProcessor.createCallRecursive(astContext, stack, callAddr, retAddr, returnValue);
     }
 
     public EndInstruction createEnd() {
@@ -251,8 +251,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return instructionProcessor.createSetAddress(astContext, variable, address);
     }
 
-    public CallInstruction createCallStackless(LogicAddress value) {
-        return instructionProcessor.createCallStackless(astContext, value);
+    public CallInstruction createCallStackless(LogicAddress value, LogicVariable returnValue) {
+        return instructionProcessor.createCallStackless(astContext, value, returnValue);
     }
 
     public StopInstruction createStop() {
@@ -466,7 +466,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
         final LogicLabel returnLabel = nextLabel();
         emit(createSetAddress(LogicVariable.fnRetAddr(functionPrefix), returnLabel));
-        emit(createCallStackless(function.getLabel()));
+        emit(createCallStackless(function.getLabel(), LogicVariable.fnRetVal(functionPrefix)));
         // Mark position where the function must return
         // TODO (STACKLESS_CALL) We no longer need to track relationship between return from the stackless call and callee
         //      Use GOTO_OFFSET for list iterator, drop marker from GOTO and target simple labels
@@ -495,7 +495,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
          // Recursive function call
         final LogicLabel returnLabel = nextLabel();
-        emit(createCallRecursive(stackName(), function.getLabel(), returnLabel));
+        emit(createCallRecursive(stackName(), function.getLabel(), returnLabel,
+                LogicVariable.fnRetVal(functionPrefix)));
         emit(createLabel(returnLabel)); // where the function must return
 
         if (useStack) {

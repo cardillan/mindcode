@@ -65,28 +65,28 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
 -    * set __fn1_n __tmp4
 +   22 op add __fn1_n 10 __fn0_s
     23 setaddr __fn1retaddr __label7
-    24 call __label1
+    24 call __label1 __fn1retval
     25 gotolabel __label7 __fn1
     26 set __tmp5 __fn1retval
 -    * op add __tmp6 20 __fn0_s
 -    * set __fn1_n __tmp6
 +   27 op add __fn1_n 20 __fn0_s
     28 setaddr __fn1retaddr __label8
-    29 call __label1
+    29 call __label1 __fn1retval
     30 gotolabel __label8 __fn1
     31 set __tmp7 __fn1retval
 -    * op add __tmp8 30 __fn0_s
 -    * set __fn1_n __tmp8
 +   32 op add __fn1_n 30 __fn0_s
     33 setaddr __fn1retaddr __label9
-    34 call __label1
+    34 call __label1 __fn1retval
     35 gotolabel __label9 __fn1
     36 set __tmp9 __fn1retval
 -    * op add __tmp10 40 __fn0_s
 -    * set __fn1_n __tmp10
 +   37 op add __fn1_n 40 __fn0_s
     38 setaddr __fn1retaddr __label10
-    39 call __label1
+    39 call __label1 __fn1retval
     40 gotolabel __label10 __fn1
 -    * set __tmp11 __fn1retval
 -    * set __fn0retval __tmp11
@@ -113,49 +113,49 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructions):
  
      1 setaddr __fn0retaddr __label2
-     2 call __label0
+     2 call __label0 __fn0retval
      3 gotolabel __label2 __fn0
 -    * set __tmp0 __fn0retval
      4 set __fn0_s 2
      5 setaddr __fn0retaddr __label3
-     6 call __label0
+     6 call __label0 __fn0retval
      7 gotolabel __label3 __fn0
 -    * set __tmp1 __fn0retval
      8 set __fn0_s 3
      9 setaddr __fn0retaddr __label4
-    10 call __label0
+    10 call __label0 __fn0retval
     11 gotolabel __label4 __fn0
 -    * set __tmp2 __fn0retval
     12 set __fn0_s 4
     13 setaddr __fn0retaddr __label5
-    14 call __label0
+    14 call __label0 __fn0retval
     15 gotolabel __label5 __fn0
 -    * set __tmp3 __fn0retval
     16 end
     17 label __label0
     18 op add __fn1_n 10 __fn0_s
     19 setaddr __fn1retaddr __label7
-    20 call __label1
+    20 call __label1 __fn1retval
     21 gotolabel __label7 __fn1
 -    * set __tmp5 __fn1retval
     22 op add __fn1_n 20 __fn0_s
     23 setaddr __fn1retaddr __label8
-    24 call __label1
+    24 call __label1 __fn1retval
     25 gotolabel __label8 __fn1
 -    * set __tmp7 __fn1retval
     26 op add __fn1_n 30 __fn0_s
     27 setaddr __fn1retaddr __label9
-    28 call __label1
+    28 call __label1 __fn1retval
     29 gotolabel __label9 __fn1
 -    * set __tmp9 __fn1retval
     30 op add __fn1_n 40 __fn0_s
     31 setaddr __fn1retaddr __label10
-    32 call __label1
+    32 call __label1 __fn1retval
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructions):
  
     31 setaddr __fn1retaddr __label10
-    32 call __label1
+    32 call __label1 __fn1retval
     33 gotolabel __label10 __fn1
 -    * set __fn0retval __fn1retval
     34 label __label6
@@ -899,109 +899,109 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 Modifications by Function Inlining: inline function bar (+26 instructions):
      0 set __fn0_s 1
 -    * setaddr __fn0retaddr __label2
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label2 __fn0
 +    1 label __label117
 +    2 op add __fn1_n 10 __fn0_s
 +    3 setaddr __fn1retaddr __label118
-+    4 call __label1
++    4 call __label1 __fn1retval
 +    5 gotolabel __label118 __fn1
 +    6 op add __fn1_n 20 __fn0_s
 +    7 setaddr __fn1retaddr __label119
-+    8 call __label1
++    8 call __label1 __fn1retval
 +    9 gotolabel __label119 __fn1
 +   10 op add __fn1_n 30 __fn0_s
 +   11 setaddr __fn1retaddr __label120
-+   12 call __label1
++   12 call __label1 __fn1retval
 +   13 gotolabel __label120 __fn1
 +   14 op add __fn1_n 40 __fn0_s
 +   15 setaddr __fn1retaddr __label121
-+   16 call __label1
++   16 call __label1 __fn1retval
 +   17 gotolabel __label121 __fn1
 +   18 label __label122
     19 set __fn0_s 2
 -    * setaddr __fn0retaddr __label3
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label3 __fn0
 +   20 label __label123
 +   21 op add __fn1_n 10 __fn0_s
 +   22 setaddr __fn1retaddr __label124
-+   23 call __label1
++   23 call __label1 __fn1retval
 +   24 gotolabel __label124 __fn1
 +   25 op add __fn1_n 20 __fn0_s
 +   26 setaddr __fn1retaddr __label125
-+   27 call __label1
++   27 call __label1 __fn1retval
 +   28 gotolabel __label125 __fn1
 +   29 op add __fn1_n 30 __fn0_s
 +   30 setaddr __fn1retaddr __label126
-+   31 call __label1
++   31 call __label1 __fn1retval
 +   32 gotolabel __label126 __fn1
 +   33 op add __fn1_n 40 __fn0_s
 +   34 setaddr __fn1retaddr __label127
-+   35 call __label1
++   35 call __label1 __fn1retval
 +   36 gotolabel __label127 __fn1
 +   37 label __label128
     38 set __fn0_s 3
 -    * setaddr __fn0retaddr __label4
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label4 __fn0
 +   39 label __label129
 +   40 op add __fn1_n 10 __fn0_s
 +   41 setaddr __fn1retaddr __label130
-+   42 call __label1
++   42 call __label1 __fn1retval
 +   43 gotolabel __label130 __fn1
 +   44 op add __fn1_n 20 __fn0_s
 +   45 setaddr __fn1retaddr __label131
-+   46 call __label1
++   46 call __label1 __fn1retval
 +   47 gotolabel __label131 __fn1
 +   48 op add __fn1_n 30 __fn0_s
 +   49 setaddr __fn1retaddr __label132
-+   50 call __label1
++   50 call __label1 __fn1retval
 +   51 gotolabel __label132 __fn1
 +   52 op add __fn1_n 40 __fn0_s
 +   53 setaddr __fn1retaddr __label133
-+   54 call __label1
++   54 call __label1 __fn1retval
 +   55 gotolabel __label133 __fn1
 +   56 label __label134
     57 set __fn0_s 4
 -    * setaddr __fn0retaddr __label5
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label5 __fn0
 +   58 label __label135
 +   59 op add __fn1_n 10 __fn0_s
 +   60 setaddr __fn1retaddr __label136
-+   61 call __label1
++   61 call __label1 __fn1retval
 +   62 gotolabel __label136 __fn1
 +   63 op add __fn1_n 20 __fn0_s
 +   64 setaddr __fn1retaddr __label137
-+   65 call __label1
++   65 call __label1 __fn1retval
 +   66 gotolabel __label137 __fn1
 +   67 op add __fn1_n 30 __fn0_s
 +   68 setaddr __fn1retaddr __label138
-+   69 call __label1
++   69 call __label1 __fn1retval
 +   70 gotolabel __label138 __fn1
 +   71 op add __fn1_n 40 __fn0_s
 +   72 setaddr __fn1retaddr __label139
-+   73 call __label1
++   73 call __label1 __fn1retval
 +   74 gotolabel __label139 __fn1
 +   75 label __label140
     76 end
 -    * label __label0
 -    * op add __fn1_n 10 __fn0_s
 -    * setaddr __fn1retaddr __label7
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label7 __fn1
 -    * op add __fn1_n 20 __fn0_s
 -    * setaddr __fn1retaddr __label8
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label8 __fn1
 -    * op add __fn1_n 30 __fn0_s
 -    * setaddr __fn1retaddr __label9
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label9 __fn1
 -    * op add __fn1_n 40 __fn0_s
 -    * setaddr __fn1retaddr __label10
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label10 __fn1
 -    * label __label6
 -    * goto __fn0retaddr __fn0
@@ -1016,22 +1016,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add __fn1_n 10 __fn0_s
 +    2 op add __fn1_n 10 1
      3 setaddr __fn1retaddr __label118
-     4 call __label1
+     4 call __label1 __fn1retval
      5 gotolabel __label118 __fn1
 -    * op add __fn1_n 20 __fn0_s
 +    6 op add __fn1_n 20 1
      7 setaddr __fn1retaddr __label119
-     8 call __label1
+     8 call __label1 __fn1retval
      9 gotolabel __label119 __fn1
 -    * op add __fn1_n 30 __fn0_s
 +   10 op add __fn1_n 30 1
     11 setaddr __fn1retaddr __label120
-    12 call __label1
+    12 call __label1 __fn1retval
     13 gotolabel __label120 __fn1
 -    * op add __fn1_n 40 __fn0_s
 +   14 op add __fn1_n 40 1
     15 setaddr __fn1retaddr __label121
-    16 call __label1
+    16 call __label1 __fn1retval
     17 gotolabel __label121 __fn1
     18 label __label122
     19 set __fn0_s 2
@@ -1039,22 +1039,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add __fn1_n 10 __fn0_s
 +   21 op add __fn1_n 10 2
     22 setaddr __fn1retaddr __label124
-    23 call __label1
+    23 call __label1 __fn1retval
     24 gotolabel __label124 __fn1
 -    * op add __fn1_n 20 __fn0_s
 +   25 op add __fn1_n 20 2
     26 setaddr __fn1retaddr __label125
-    27 call __label1
+    27 call __label1 __fn1retval
     28 gotolabel __label125 __fn1
 -    * op add __fn1_n 30 __fn0_s
 +   29 op add __fn1_n 30 2
     30 setaddr __fn1retaddr __label126
-    31 call __label1
+    31 call __label1 __fn1retval
     32 gotolabel __label126 __fn1
 -    * op add __fn1_n 40 __fn0_s
 +   33 op add __fn1_n 40 2
     34 setaddr __fn1retaddr __label127
-    35 call __label1
+    35 call __label1 __fn1retval
     36 gotolabel __label127 __fn1
     37 label __label128
     38 set __fn0_s 3
@@ -1062,22 +1062,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add __fn1_n 10 __fn0_s
 +   40 op add __fn1_n 10 3
     41 setaddr __fn1retaddr __label130
-    42 call __label1
+    42 call __label1 __fn1retval
     43 gotolabel __label130 __fn1
 -    * op add __fn1_n 20 __fn0_s
 +   44 op add __fn1_n 20 3
     45 setaddr __fn1retaddr __label131
-    46 call __label1
+    46 call __label1 __fn1retval
     47 gotolabel __label131 __fn1
 -    * op add __fn1_n 30 __fn0_s
 +   48 op add __fn1_n 30 3
     49 setaddr __fn1retaddr __label132
-    50 call __label1
+    50 call __label1 __fn1retval
     51 gotolabel __label132 __fn1
 -    * op add __fn1_n 40 __fn0_s
 +   52 op add __fn1_n 40 3
     53 setaddr __fn1retaddr __label133
-    54 call __label1
+    54 call __label1 __fn1retval
     55 gotolabel __label133 __fn1
     56 label __label134
     57 set __fn0_s 4
@@ -1085,22 +1085,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add __fn1_n 10 __fn0_s
 +   59 op add __fn1_n 10 4
     60 setaddr __fn1retaddr __label136
-    61 call __label1
+    61 call __label1 __fn1retval
     62 gotolabel __label136 __fn1
 -    * op add __fn1_n 20 __fn0_s
 +   63 op add __fn1_n 20 4
     64 setaddr __fn1retaddr __label137
-    65 call __label1
+    65 call __label1 __fn1retval
     66 gotolabel __label137 __fn1
 -    * op add __fn1_n 30 __fn0_s
 +   67 op add __fn1_n 30 4
     68 setaddr __fn1retaddr __label138
-    69 call __label1
+    69 call __label1 __fn1retval
     70 gotolabel __label138 __fn1
 -    * op add __fn1_n 40 __fn0_s
 +   71 op add __fn1_n 40 4
     72 setaddr __fn1retaddr __label139
-    73 call __label1
+    73 call __label1 __fn1retval
     74 gotolabel __label139 __fn1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
@@ -1109,7 +1109,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
      1 op add __fn1_n 10 1
      2 setaddr __fn1retaddr __label118
  
-    15 call __label1
+    15 call __label1 __fn1retval
     16 gotolabel __label121 __fn1
     17 label __label122
 -    * set __fn0_s 2
@@ -1117,7 +1117,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     19 op add __fn1_n 10 2
     20 setaddr __fn1retaddr __label124
  
-    33 call __label1
+    33 call __label1 __fn1retval
     34 gotolabel __label127 __fn1
     35 label __label128
 -    * set __fn0_s 3
@@ -1125,7 +1125,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     37 op add __fn1_n 10 3
     38 setaddr __fn1retaddr __label130
  
-    51 call __label1
+    51 call __label1 __fn1retval
     52 gotolabel __label133 __fn1
     53 label __label134
 -    * set __fn0_s 4
@@ -1137,7 +1137,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
      0 label __label117
      1 op add __fn1_n 10 1
 -    * setaddr __fn1retaddr __label118
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label118 __fn1
 +    2 label __label141
 +    3 op rand __fn1_r 10
@@ -1302,7 +1302,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 +  162 label __label244
    163 op add __fn1_n 20 1
 -    * setaddr __fn1retaddr __label119
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label119 __fn1
 +  164 label __label245
 +  165 op rand __fn1_r 10
@@ -1467,7 +1467,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 +  324 label __label348
    325 op add __fn1_n 30 1
 -    * setaddr __fn1retaddr __label120
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label120 __fn1
 +  326 label __label349
 +  327 op rand __fn1_r 10
@@ -1632,7 +1632,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 +  486 label __label452
    487 op add __fn1_n 40 1
 -    * setaddr __fn1retaddr __label121
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label121 __fn1
 +  488 label __label453
 +  489 op rand __fn1_r 10
@@ -1799,7 +1799,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
    650 label __label123
    651 op add __fn1_n 10 2
 -    * setaddr __fn1retaddr __label124
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label124 __fn1
 +  652 label __label557
 +  653 op rand __fn1_r 10
@@ -1964,7 +1964,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 +  812 label __label660
    813 op add __fn1_n 20 2
 -    * setaddr __fn1retaddr __label125
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label125 __fn1
 +  814 label __label661
 +  815 op rand __fn1_r 10
@@ -2129,7 +2129,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 +  974 label __label764
    975 op add __fn1_n 30 2
 -    * setaddr __fn1retaddr __label126
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label126 __fn1
 +  976 label __label765
 +  977 op rand __fn1_r 10
@@ -2294,7 +2294,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 + 1136 label __label868
   1137 op add __fn1_n 40 2
 -    * setaddr __fn1retaddr __label127
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label127 __fn1
 + 1138 label __label869
 + 1139 op rand __fn1_r 10
@@ -2461,7 +2461,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
   1300 label __label129
   1301 op add __fn1_n 10 3
 -    * setaddr __fn1retaddr __label130
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label130 __fn1
 + 1302 label __label973
 + 1303 op rand __fn1_r 10
@@ -2626,7 +2626,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 + 1462 label __label1076
   1463 op add __fn1_n 20 3
 -    * setaddr __fn1retaddr __label131
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label131 __fn1
 + 1464 label __label1077
 + 1465 op rand __fn1_r 10
@@ -2791,7 +2791,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 + 1624 label __label1180
   1625 op add __fn1_n 30 3
 -    * setaddr __fn1retaddr __label132
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label132 __fn1
 + 1626 label __label1181
 + 1627 op rand __fn1_r 10
@@ -2956,7 +2956,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 + 1786 label __label1284
   1787 op add __fn1_n 40 3
 -    * setaddr __fn1retaddr __label133
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label133 __fn1
 + 1788 label __label1285
 + 1789 op rand __fn1_r 10
@@ -3123,7 +3123,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
   1950 label __label135
   1951 op add __fn1_n 10 4
 -    * setaddr __fn1retaddr __label136
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label136 __fn1
 + 1952 label __label1389
 + 1953 op rand __fn1_r 10
@@ -3288,7 +3288,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 + 2112 label __label1492
   2113 op add __fn1_n 20 4
 -    * setaddr __fn1retaddr __label137
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label137 __fn1
 + 2114 label __label1493
 + 2115 op rand __fn1_r 10
@@ -3453,7 +3453,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 + 2274 label __label1596
   2275 op add __fn1_n 30 4
 -    * setaddr __fn1retaddr __label138
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label138 __fn1
 + 2276 label __label1597
 + 2277 op rand __fn1_r 10
@@ -3618,7 +3618,7 @@ Modifications by Function Inlining: inline function foo (+821 instructions):
 + 2436 label __label1700
   2437 op add __fn1_n 40 4
 -    * setaddr __fn1retaddr __label139
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label139 __fn1
 + 2438 label __label1701
 + 2439 op rand __fn1_r 10

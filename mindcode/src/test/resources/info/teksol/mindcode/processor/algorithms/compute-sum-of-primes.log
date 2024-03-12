@@ -120,7 +120,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-17 ins
 -    * set __fn1_bitIndex __tmp13
 +   45 op idiv __fn1_bitIndex __fn2_i 2
     46 setaddr __fn1retaddr __label16
-    47 call __label1
+    47 call __label1 __fn1retval
     48 gotolabel __label16 __fn1
     49 set __tmp14 __fn1retval
     50 op equal __tmp15 __tmp14 false
@@ -140,7 +140,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-17 ins
 +   58 op add __fn2_i __fn2_i 2
 +   59 op idiv __fn1_bitIndex __fn2_i 2
     60 setaddr __fn1retaddr __label19
-    61 call __label1
+    61 call __label1 __fn1retval
     62 gotolabel __label19 __fn1
  
     65 jump __label20 equal __tmp21 false
@@ -170,7 +170,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-17 ins
 -    * set __fn1_bitIndex __tmp27
 +   88 op idiv __fn1_bitIndex __fn0_n 2
     89 setaddr __fn1retaddr __label25
-    90 call __label1
+    90 call __label1 __fn1retval
     91 gotolabel __label25 __fn1
 -    * op equal __tmp28 __fn1retval false
 -    * set __fn0_result __tmp28
@@ -303,7 +303,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
 +   38 jump __label15 greaterThan __fn2_i __fn2_maximum
     39 op idiv __fn1_bitIndex __fn2_i 2
     40 setaddr __fn1retaddr __label16
-    41 call __label1
+    41 call __label1 __fn1retval
     42 gotolabel __label16 __fn1
     43 set __tmp14 __fn1retval
 -    * op equal __tmp15 __tmp14 false
@@ -313,7 +313,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
     46 jump __label18 always
     47 label __label17
  
-    52 call __label1
+    52 call __label1 __fn1retval
     53 gotolabel __label19 __fn1
     54 set __tmp20 __fn1retval
 -    * op equal __tmp21 __tmp20 false
@@ -397,7 +397,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * set __fn0_maximum __fn2_maximum
 +   11 set __fn0_maximum 500
     12 setaddr __fn0retaddr __label7
-    13 call __label0
+    13 call __label0 __fn0retval
     14 gotolabel __label7 __fn0
     15 set __tmp4 __fn0retval
 -    * jump __label8 equal __tmp4 false
@@ -410,7 +410,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * set __fn0_maximum __fn2_maximum
 +   22 set __fn0_maximum 500
     23 setaddr __fn0retaddr __label10
-    24 call __label0
+    24 call __label0 __fn0retval
     25 gotolabel __label10 __fn0
     26 set __tmp8 __fn0retval
 -    * jump __label11 equal __tmp8 false
@@ -426,7 +426,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   36 jump __label15 greaterThan __fn2_i 500
     37 op idiv __fn1_bitIndex __fn2_i 2
     38 setaddr __fn1retaddr __label16
-    39 call __label1
+    39 call __label1 __fn1retval
     40 gotolabel __label16 __fn1
     41 set __tmp14 __fn1retval
 -    * jump __label17 notEqual __tmp14 false
@@ -435,7 +435,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     44 label __label17
     45 label __label18
  
-    49 call __label1
+    49 call __label1 __fn1retval
     50 gotolabel __label19 __fn1
     51 set __tmp20 __fn1retval
 -    * jump __label20 notEqual __tmp20 false
@@ -487,7 +487,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
      7 set __fn0_n __fn2_i
  
      9 setaddr __fn0retaddr __label7
-    10 call __label0
+    10 call __label0 __fn0retval
     11 gotolabel __label7 __fn0
 -    * set __tmp4 __fn0retval
     12 jump __label8 equal __fn0retval false
@@ -498,7 +498,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     17 set __fn0_n __fn2_i
 -    * set __fn0_maximum 500
     18 setaddr __fn0retaddr __label10
-    19 call __label0
+    19 call __label0 __fn0retval
     20 gotolabel __label10 __fn0
 -    * set __tmp8 __fn0retval
     21 jump __label11 equal __fn0retval false
@@ -506,7 +506,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     23 label __label11
  
     32 setaddr __fn1retaddr __label16
-    33 call __label1
+    33 call __label1 __fn1retval
     34 gotolabel __label16 __fn1
 -    * set __tmp14 __fn1retval
     35 jump __label17 notEqual __fn1retval false
@@ -514,7 +514,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     37 label __label17
  
     41 setaddr __fn1retaddr __label19
-    42 call __label1
+    42 call __label1 __fn1retval
     43 gotolabel __label19 __fn1
 -    * set __tmp20 __fn1retval
     44 jump __label20 notEqual __fn1retval false
@@ -565,7 +565,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 +   31 label __label35
     32 op idiv __fn1_bitIndex __fn2_i 2
     33 setaddr __fn1retaddr __label16
-    34 call __label1
+    34 call __label1 __fn1retval
  
     51 label __label21
     52 op add __fn2_i __fn2_i 4
@@ -599,7 +599,7 @@ Modifications by Function Inlining: inline function getBit (+2 instructions):
     31 label __label35
     32 op idiv __fn1_bitIndex __fn2_i 2
 -    * setaddr __fn1retaddr __label16
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label16 __fn1
 +   33 label __label37
 +   34 op idiv __tmp43 __fn1_bitIndex MOD
@@ -615,7 +615,7 @@ Modifications by Function Inlining: inline function getBit (+2 instructions):
     44 op add __fn2_i __fn2_i 2
     45 op idiv __fn1_bitIndex __fn2_i 2
 -    * setaddr __fn1retaddr __label19
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label19 __fn1
 +   46 label __label39
 +   47 op idiv __tmp43 __fn1_bitIndex MOD
@@ -632,7 +632,7 @@ Modifications by Function Inlining: inline function getBit (+2 instructions):
     67 label __label0
     68 op idiv __fn1_bitIndex __fn0_n 2
 -    * setaddr __fn1retaddr __label25
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label25 __fn1
 +   69 label __label41
 +   70 op idiv __tmp43 __fn1_bitIndex MOD
@@ -664,7 +664,7 @@ Modifications by Function Inlining: inline function testAndSetMultiples (+15 ins
      7 set __fn0_n __fn2_i
      8 set __fn0_maximum 500
 -    * setaddr __fn0retaddr __label7
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label7 __fn0
 +    9 label __label43
 +   10 op idiv __fn1_bitIndex __fn0_n 2
@@ -706,7 +706,7 @@ Modifications by Function Inlining: inline function testAndSetMultiples (+15 ins
     46 op add __fn2_i __fn2_i 2
     47 set __fn0_n __fn2_i
 -    * setaddr __fn0retaddr __label10
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label10 __fn0
 +   48 label __label55
 +   49 op idiv __fn1_bitIndex __fn0_n 2

@@ -13,13 +13,13 @@
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
      1 set __fn0_n 0
-     2 callrec bank1 __label0 __label1
+     2 callrec bank1 __label0 __label1 __fn0retval
      3 label __label1
 -    * set __tmp0 __fn0retval
 -    * set j __tmp0
 +    4 set j __fn0retval
      5 set __fn0_n j
-     6 callrec bank1 __label0 __label2
+     6 callrec bank1 __label0 __label2 __fn0retval
      7 label __label2
 -    * set __tmp1 __fn0retval
 -    * set i __tmp1
@@ -98,12 +98,12 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     2 callrec bank1 __label0 __label1
+     2 callrec bank1 __label0 __label1 __fn0retval
      3 label __label1
      4 set j __fn0retval
 -    * set __fn0_n j
 +    5 set __fn0_n __fn0retval
-     6 callrec bank1 __label0 __label2
+     6 callrec bank1 __label0 __label2 __fn0retval
      7 label __label2
      8 set i __fn0retval
  
@@ -112,7 +112,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     22 push bank1 __fn0_n
 -    * set __fn0_n __tmp7
 +   23 op mul __fn0_n -1 __fn0_n
-    24 callrec bank1 __label0 __label9
+    24 callrec bank1 __label0 __label9 __fn0retval
     25 label __label9
     26 pop bank1 __fn0_n
     27 set __tmp8 __fn0retval
@@ -130,7 +130,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * op mul __tmp7 -1 __fn0_n
     21 push bank1 __fn0_n
     22 op mul __fn0_n -1 __fn0_n
-    23 callrec bank1 __label0 __label9
+    23 callrec bank1 __label0 __label9 __fn0retval
     24 label __label9
     25 pop bank1 __fn0_n
 -    * set __tmp8 __fn0retval
@@ -189,7 +189,7 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
     21 jump __label8 lessThanEq __fn0_n 0
 -    * push bank1 __fn0_n
     22 op mul __fn0_n -1 __fn0_n
-    23 callrec bank1 __label0 __label9
+    23 callrec bank1 __label0 __label9 __fn0retval
     24 label __label9
 -    * pop bank1 __fn0_n
     25 op mul __fn0retval -1 __fn0retval
@@ -200,11 +200,11 @@ Final code before resolving virtual instructions:
 
 set __sp 0
 set __fn0_n 0
-callrec bank1 __label0 __label1
+callrec bank1 __label0 __label1 __fn0retval
 label __label1
 set j __fn0retval
 set __fn0_n __fn0retval
-callrec bank1 __label0 __label2
+callrec bank1 __label0 __label2 __fn0retval
 label __label2
 set i __fn0retval
 jump __label5 greaterThanEq __fn0retval 10
@@ -219,7 +219,7 @@ label __label0
 set __fn0retval __fn0_n
 jump __label8 lessThanEq __fn0_n 0
 op mul __fn0_n -1 __fn0_n
-callrec bank1 __label0 __label9
+callrec bank1 __label0 __label9 __fn0retval
 label __label9
 op mul __fn0retval -1 __fn0retval
 label __label8

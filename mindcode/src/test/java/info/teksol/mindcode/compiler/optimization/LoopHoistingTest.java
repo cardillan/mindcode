@@ -156,7 +156,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(LABEL, var(1009)),
                 createInstruction(OP, "mul", "x", "2", "A"),
                 createInstruction(SET, "__fn0_n", "10"),
-                createInstruction(CALLREC, "cell1", var(1000), var(1004)),
+                createInstruction(CALLREC, "cell1", var(1000), var(1004), "__fn0retval"),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(PRINT, "x"),
                 createInstruction(OP, "add", "i", "i", "1"),
@@ -167,7 +167,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SET, "A", "20"),
                 createInstruction(JUMP, var(1007), "lessThanEq", "__fn0_n", "0"),
                 createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
-                createInstruction(CALLREC, "cell1", var(1000), var(1008)),
+                createInstruction(CALLREC, "cell1", var(1000), var(1008), "__fn0retval"),
                 createInstruction(LABEL, var(1008)),
                 createInstruction(LABEL, var(1007)),
                 createInstruction(RETURN, "cell1")
@@ -213,7 +213,8 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         end
                         """,
                 createInstruction(LABEL, var(1001)),
-                createInstruction(OP, "rand", "a", "10"),
+                createInstruction(OP, "rand", "__fn0retval", "10"),
+                createInstruction(SET, "a", "__fn0retval"),
                 createInstruction(OP, "rand", "__fn0retval", "10"),
                 createInstruction(PRINT, "a"),
                 createInstruction(PRINT, "__fn0retval"),

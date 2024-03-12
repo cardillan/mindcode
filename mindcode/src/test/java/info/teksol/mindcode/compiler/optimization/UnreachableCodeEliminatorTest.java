@@ -102,18 +102,18 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                         """,
                 // call testa (2x)
                 createInstruction(SETADDR, "__fn2retaddr", var(1003)),
-                createInstruction(CALL, var(1002)),
+                createInstruction(CALL, var(1002), "__fn2retval"),
                 createInstruction(GOTOLABEL, var(1003), "__fn2"),
                 createInstruction(SETADDR, "__fn2retaddr", var(1004)),
-                createInstruction(CALL, var(1002)),
+                createInstruction(CALL, var(1002), "__fn2retval"),
                 createInstruction(GOTOLABEL, var(1004), "__fn2"),
                 // if false + call testb -- removed
                 // call testc (2)
                 createInstruction(SETADDR, "__fn1retaddr", var(1010)),
-                createInstruction(CALL, var(1001)),
+                createInstruction(CALL, var(1001), "__fn1retval"),
                 createInstruction(GOTOLABEL, var(1010), "__fn1"),
                 createInstruction(SETADDR, "__fn1retaddr", var(1011)),
-                createInstruction(CALL, var(1001)),
+                createInstruction(CALL, var(1001), "__fn1retval"),
                 createInstruction(GOTOLABEL, var(1011), "__fn1"),
                 createInstruction(PRINTFLUSH, "message1"),
                 createInstruction(END),

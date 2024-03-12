@@ -109,9 +109,9 @@ Again, the `vault1` or `storage` in the examples can be a variable or a linked b
 A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. 
 The function has one parameter - a variable to be synchronized across the network (namely, from the server to all 
 clients). A [global variable](SYNTAX-1-VARIABLES.markdown#global-variables) must be passed as an argument to this 
-function, otherwise a compile error occurs. The reason is that global variables are more restrained in optimizations 
-and therefore their dataflow is less altered. If local variables were used, they might not contain the expected 
-value, as some (or all) assignments to them can be eliminated by the Data Flow Optimization.
+function, otherwise a compilation error occurs. The reason is that global variables are more restrained in 
+optimizations and therefore their dataflow is less altered. If local variables were used, they might not contain the 
+expected value, as some (or all) assignments to them can be eliminated by the Data Flow Optimization.
 
 This constraint makes sense semantically as well: a scope of a global variable is the entire program. When a 
 variable is synced, its scope becomes even broader and is shared between multiple processors; using a local variable 

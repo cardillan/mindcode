@@ -1,10 +1,7 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.compiler.generator.AstContext;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicLabel;
-import info.teksol.mindcode.logic.LogicParameter;
-import info.teksol.mindcode.logic.Opcode;
+import info.teksol.mindcode.logic.*;
 
 import java.util.List;
 
@@ -30,5 +27,9 @@ public class CallInstruction extends BaseInstruction implements CallingInstructi
 
     public final LogicLabel getCallAddr() {
         return (LogicLabel) getArg(0);
+    }
+
+    public final LogicVariable getReturnValue()  {
+        return (LogicVariable) getArg(1);
     }
 }

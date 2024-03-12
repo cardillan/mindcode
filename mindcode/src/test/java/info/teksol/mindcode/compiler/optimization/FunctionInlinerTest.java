@@ -83,6 +83,34 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
     }
 
     @Test
+    void inlinesTwoFunctionCallsInsideLoop() {
+        CompilerProfile compilerProfile = createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.BASIC);
+        TestCompiler compiler = createTestCompiler(compilerProfile);
+        assertCompilesTo(compiler,
+                        """
+                        while true
+                            a = foo()
+                            b = foo()
+                            print(a, b)
+                        end
+                        
+                        def foo()
+                            rand(10)
+                        end
+                        """,
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "rand", "__fn0retval", "10"),
+                createInstruction(SET, "a", "__fn0retval"),
+                createInstruction(OP, "rand", "__fn0retval", "10"),
+                createInstruction(SET, "b", "__fn0retval"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void inlinesNestedFunctionCalls() {
         assertCompilesTo("""
                         def foo(n)
@@ -104,7 +132,8 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         end
                         print(foo() + foo())
                         """,
-                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(OP, "rand", "__fn0retval", "10"),
+                createInstruction(SET, var(0), "__fn0retval"),
                 createInstruction(OP, "rand", "__fn0retval", "10"),
                 createInstruction(OP, "add", var(2), var(0), "__fn0retval"),
                 createInstruction(PRINT, var(2)),

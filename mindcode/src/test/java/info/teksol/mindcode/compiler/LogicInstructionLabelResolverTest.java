@@ -50,7 +50,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                                 createInstruction(JUMP, label0, Condition.ALWAYS),
                                 createInstruction(PUSH, cell1, a),
                                 createInstruction(POP, cell1, a),
-                                createInstruction(CALLREC, cell1, label1, label2),
+                                createInstruction(CALLREC, cell1, label1, label2, fn0retval),
                                 createInstruction(LABEL, label1),
                                 createInstruction(RETURN, cell1),
                                 createInstruction(LABEL, label2),

@@ -94,13 +94,13 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
-    public CallInstruction createCallStackless(AstContext astContext, LogicAddress address) {
-        return (CallInstruction) createInstruction(astContext, CALL, address);
+    public CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue) {
+        return (CallInstruction) createInstruction(astContext, CALL, address, returnValue);
     }
 
     @Override
-    public CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr) {
-        return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr);
+    public CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
+        return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr, returnValue);
     }
 
     @Override

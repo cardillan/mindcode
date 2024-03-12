@@ -7,9 +7,7 @@ import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.EndInstruction;
 import info.teksol.mindcode.compiler.instructions.GotoInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
-import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,7 +113,7 @@ public class FunctionInliner extends BaseOptimizer {
             AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
             int insertionPoint = firstInstructionIndex(call);
             LogicList newBody = body.duplicateToContext(newContext);
-            insertInstructions(insertionPoint, swapReturnVariable(call, newBody));
+            insertInstructions(insertionPoint, newBody);
             // Remove original call instructions
             removeMatchingInstructions(ix -> ix.belongsTo(call));
         }
@@ -127,25 +125,6 @@ public class FunctionInliner extends BaseOptimizer {
         count += calls.size();
 
         return OptimizationResult.REALIZED;
-    }
-
-    private LogicList swapReturnVariable(AstContext call, LogicList newBody) {
-        LogicInstruction followup = instructionAfter(call);
-        if (followup instanceof SetInstruction set
-                && set.getValue() instanceof LogicVariable variable
-                && variable.getFunctionPrefix().equals(call.functionPrefix())) {
-            LogicVariable result = set.getResult();
-            removeInstruction(set);
-
-            // TODO When modification support is added to LogicList, rewrite this to modify instructions there
-            List<LogicInstruction> newInstructions = newBody.stream()
-                    .map(ix -> replaceAllArgs(ix, variable, result))
-                    .toList();
-
-            return buildLogicList(newBody.getAstContext(), newInstructions);
-        } else {
-            return newBody;
-        }
     }
 
     private class InlineFunctionAction extends AbstractOptimizationAction {
@@ -217,7 +196,7 @@ public class FunctionInliner extends BaseOptimizer {
         AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
         int insertionPoint = firstInstructionIndex(call);
         LogicList newBody = body.duplicateToContext(newContext);
-        insertInstructions(insertionPoint, swapReturnVariable(call, newBody));
+        insertInstructions(insertionPoint, newBody);
         // Remove original call instructions
         removeMatchingInstructions(ix -> ix.belongsTo(call));
 

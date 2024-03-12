@@ -11,7 +11,7 @@
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-    13 callrec bank1 __label0 __label5
+    13 callrec bank1 __label0 __label5 __fn0retval
     14 label __label5
     15 pop bank1 __fn0_n
 -    * set __tmp4 __fn0retval
@@ -44,7 +44,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     10 op sub __tmp3 __fn0_n 1
     11 push bank1 __fn0_n
     12 set __fn0_n __tmp3
-    13 callrec bank1 __label0 __label5
+    13 callrec bank1 __label0 __label5 __fn0retval
     14 label __label5
     15 pop bank1 __fn0_n
 -    * set __tmp2 __fn0retval
@@ -60,7 +60,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     2 callrec bank1 __label0 __label1
+     2 callrec bank1 __label0 __label1 __fn0retval
      3 label __label1
      4 set __tmp0 __fn0retval
 -    * print __tmp0
@@ -73,14 +73,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     11 push bank1 __fn0_n
 -    * set __fn0_n __tmp3
 +   12 op sub __fn0_n __fn0_n 1
-    13 callrec bank1 __label0 __label5
+    13 callrec bank1 __label0 __label5 __fn0retval
     14 label __label5
     15 pop bank1 __fn0_n
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
      1 set __fn0_n 1
-     2 callrec bank1 __label0 __label1
+     2 callrec bank1 __label0 __label1 __fn0retval
      3 label __label1
 -    * set __tmp0 __fn0retval
      4 print __fn0retval
@@ -91,7 +91,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * op sub __tmp3 __fn0_n 1
      9 push bank1 __fn0_n
     10 op sub __fn0_n __fn0_n 1
-    11 callrec bank1 __label0 __label5
+    11 callrec bank1 __label0 __label5 __fn0retval
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
@@ -105,7 +105,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-1 instructions):
  
-    11 callrec bank1 __label0 __label5
+    11 callrec bank1 __label0 __label5 __fn0retval
     12 label __label5
     13 pop bank1 __fn0_n
 -    * set __fn0retval __fn0retval
@@ -127,7 +127,7 @@ Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
      8 jump __label4 lessThanEq __fn0_n 0
 -    * push bank1 __fn0_n
      9 op sub __fn0_n __fn0_n 1
-    10 callrec bank1 __label0 __label5
+    10 callrec bank1 __label0 __label5 __fn0retval
     11 label __label5
 -    * pop bank1 __fn0_n
     12 label __label4
@@ -138,7 +138,7 @@ Final code before resolving virtual instructions:
 
 set __sp 0
 set __fn0_n 1
-callrec bank1 __label0 __label1
+callrec bank1 __label0 __label1 __fn0retval
 label __label1
 print __fn0retval
 end
@@ -146,7 +146,7 @@ label __label0
 set __fn0retval null
 jump __label4 lessThanEq __fn0_n 0
 op sub __fn0_n __fn0_n 1
-callrec bank1 __label0 __label5
+callrec bank1 __label0 __label5 __fn0retval
 label __label5
 label __label4
 return bank1

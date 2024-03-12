@@ -5,6 +5,7 @@ import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.instructions.PushOrPopInstruction;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.logic.Opcode;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -116,10 +117,12 @@ class DeadCodeEliminator extends BaseOptimizer {
                 .map(LogicVariable.class::cast)
                 .forEach(reads::add);
 
-        instruction.outputArgumentsStream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .filter(Predicate.not(LogicVariable::isCompilerVariable))
-                .forEach(v -> addWrite(instruction, v));
+        if (instruction.getOpcode() != Opcode.CALL && instruction.getOpcode() != Opcode.CALLREC) {
+            instruction.outputArgumentsStream()
+                    .filter(LogicVariable.class::isInstance)
+                    .map(LogicVariable.class::cast)
+                    .filter(Predicate.not(LogicVariable::isCompilerVariable))
+                    .forEach(v -> addWrite(instruction, v));
+        }
     }
 }

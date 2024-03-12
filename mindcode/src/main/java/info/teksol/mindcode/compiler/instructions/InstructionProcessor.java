@@ -30,8 +30,8 @@ public interface InstructionProcessor {
     LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant);
 
 
-    CallInstruction createCallStackless(AstContext astContext, LogicAddress address);
-    CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr);
+    CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue);
+    CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue);
     EndInstruction createEnd(AstContext astContext);
     GotoInstruction createGoto(AstContext astContext, LogicVariable address, LogicLabel marker);
     GotoOffsetInstruction createGotoOffset(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker);
@@ -105,7 +105,7 @@ public interface InstructionProcessor {
      * arguments are the same. Side effects aren't considered. Values and character of the input arguments to the
      * instruction are considered - an otherwise deterministic instruction that has a volatile variable as an input
      * argument isn't deterministic.
-     *
+     * <p>
      * Note: getlink is not deemed a deterministic instruction, as it can be influenced by linking updating
      * blocks linked to the processor in the Mindustry World. Block variables are considered volatile
      * for the same reason.

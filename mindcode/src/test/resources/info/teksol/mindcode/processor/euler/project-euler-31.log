@@ -160,7 +160,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * set __fn0_amount __tmp10
 +   71 op sub __fn0_amount __fn0_amount __fn0_p
     72 set __fn0_index __fn0_i
-    73 callrec bank1 __label0 __label25
+    73 callrec bank1 __label0 __label25 __fn0retval
     74 label __label25
  
     78 pop bank1 __fn0_index
@@ -211,7 +211,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
  
     43 set __fn0_index 1
-    44 callrec bank1 __label0 __label14
+    44 callrec bank1 __label0 __label14 __fn0retval
     45 label __label14
 -    * set __tmp3 __fn0retval
     46 label __label15
@@ -471,7 +471,7 @@ write 1 bank1 7
 print 41
 set __fn0_amount 20
 set __fn0_index 1
-callrec bank1 __label0 __label14
+callrec bank1 __label0 __label14 __fn0retval
 label __label14
 print __fn0retval
 end
@@ -493,7 +493,7 @@ push bank1 __fn0_i
 push bank1 __fn0_p
 op sub __fn0_amount __fn0_amount __fn0_p
 set __fn0_index __fn0_i
-callrec bank1 __label0 __label25
+callrec bank1 __label0 __label25 __fn0retval
 label __label25
 pop bank1 __fn0_p
 pop bank1 __fn0_i

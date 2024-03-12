@@ -263,8 +263,8 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7A, S, NONE, Opcode.GOTOLABEL,   label("address"), label("marker"));
         add(list, V6, V7A, S, NONE, Opcode.PUSH,        block("memory"), in("value"));
         add(list, V6, V7A, S, NONE, Opcode.POP,         block("memory"), out("value"));
-        add(list, V6, V7A, S, NONE, Opcode.CALL,        label("callAddr"));
-        add(list, V6, V7A, S, NONE, Opcode.CALLREC,     block("memory"), label("callAddr"), label("retAddr"));
+        add(list, V6, V7A, S, NONE, Opcode.CALL,        label("callAddr"), out("retval"));
+        add(list, V6, V7A, S, NONE, Opcode.CALLREC,     block("memory"), label("callAddr"), label("retAddr"), out("retval"));
         add(list, V6, V7A, S, NONE, Opcode.RETURN,      block("memory"));
         add(list, V6, V7A, S, NONE, Opcode.GOTO,        in("address"), label("marker"));
         add(list, V6, V7A, S, NONE, Opcode.GOTOOFFSET,  label("address"), in("value"), in("offset"), label("marker"));

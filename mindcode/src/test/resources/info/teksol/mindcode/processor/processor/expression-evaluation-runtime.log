@@ -8,7 +8,7 @@
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 instructions):
  
-  1302 call __label0
+  1302 call __label0 __fn0retval
   1303 gotolabel __label241 __fn0
   1304 set __tmp242 __fn0retval
 -    * op pow __tmp243 a __tmp242
@@ -18,7 +18,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1307 set __fn49_actual a
   1308 set __fn49_expected 16
  
-  1330 call __label0
+  1330 call __label0 __fn0retval
   1331 gotolabel __label246 __fn0
   1332 set __tmp247 __fn0retval
 -    * op mul __tmp248 a __tmp247
@@ -28,7 +28,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1335 set __fn50_actual a
   1336 set __fn50_expected 8
  
-  1358 call __label0
+  1358 call __label0 __fn0retval
   1359 gotolabel __label251 __fn0
   1360 set __tmp252 __fn0retval
 -    * op div __tmp253 a __tmp252
@@ -38,7 +38,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1363 set __fn51_actual a
   1364 set __fn51_expected 1.5
  
-  1386 call __label0
+  1386 call __label0 __fn0retval
   1387 gotolabel __label256 __fn0
   1388 set __tmp257 __fn0retval
 -    * op idiv __tmp258 a __tmp257
@@ -48,7 +48,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1391 set __fn52_actual a
   1392 set __fn52_expected 1
  
-  1414 call __label0
+  1414 call __label0 __fn0retval
   1415 gotolabel __label261 __fn0
   1416 set __tmp262 __fn0retval
 -    * op mod __tmp263 a __tmp262
@@ -58,7 +58,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1419 set __fn53_actual a
   1420 set __fn53_expected 2
  
-  1442 call __label0
+  1442 call __label0 __fn0retval
   1443 gotolabel __label266 __fn0
   1444 set __tmp267 __fn0retval
 -    * op add __tmp268 a __tmp267
@@ -68,7 +68,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1447 set __fn54_actual a
   1448 set __fn54_expected 6
  
-  1470 call __label0
+  1470 call __label0 __fn0retval
   1471 gotolabel __label271 __fn0
   1472 set __tmp272 __fn0retval
 -    * op sub __tmp273 a __tmp272
@@ -78,7 +78,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1475 set __fn55_actual a
   1476 set __fn55_expected 2
  
-  1498 call __label0
+  1498 call __label0 __fn0retval
   1499 gotolabel __label276 __fn0
   1500 set __tmp277 __fn0retval
 -    * op shl __tmp278 a __tmp277
@@ -88,7 +88,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1503 set __fn56_actual a
   1504 set __fn56_expected 4
  
-  1526 call __label0
+  1526 call __label0 __fn0retval
   1527 gotolabel __label281 __fn0
   1528 set __tmp282 __fn0retval
 -    * op shr __tmp283 a __tmp282
@@ -98,7 +98,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1531 set __fn57_actual a
   1532 set __fn57_expected 2
  
-  1554 call __label0
+  1554 call __label0 __fn0retval
   1555 gotolabel __label286 __fn0
   1556 set __tmp287 __fn0retval
 -    * op or __tmp288 a __tmp287
@@ -108,7 +108,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1559 set __fn58_actual a
   1560 set __fn58_expected 3
  
-  1582 call __label0
+  1582 call __label0 __fn0retval
   1583 gotolabel __label291 __fn0
   1584 set __tmp292 __fn0retval
 -    * op and __tmp293 a __tmp292
@@ -118,7 +118,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1587 set __fn59_actual a
   1588 set __fn59_expected 2
  
-  1610 call __label0
+  1610 call __label0 __fn0retval
   1611 gotolabel __label296 __fn0
   1612 set __tmp297 __fn0retval
 -    * op xor __tmp298 a __tmp297
@@ -128,7 +128,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1615 set __fn60_actual a
   1616 set __fn60_expected 1
  
-  1638 call __label0
+  1638 call __label0 __fn0retval
   1639 gotolabel __label301 __fn0
   1640 set __tmp302 __fn0retval
 -    * op land __tmp303 a __tmp302
@@ -138,7 +138,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1643 set __fn61_actual a
   1644 set __fn61_expected false
  
-  1666 call __label0
+  1666 call __label0 __fn0retval
   1667 gotolabel __label306 __fn0
   1668 set __tmp307 __fn0retval
 -    * op land __tmp308 a __tmp307
@@ -148,7 +148,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-15 ins
   1671 set __fn62_actual a
   1672 set __fn62_expected true
  
-  1694 call __label0
+  1694 call __label0 __fn0retval
   1695 gotolabel __label311 __fn0
   1696 set __tmp312 __fn0retval
 -    * op or __tmp313 a __tmp312
@@ -2308,7 +2308,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-63 ins
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
-     2 call __label0
+     2 call __label0 __fn0retval
      3 gotolabel __label1 __fn0
      4 set __tmp0 __fn0retval
 -    * op add __tmp1 2 __tmp0
@@ -2335,7 +2335,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     21 label __label5
     22 label __label3
  
-    25 call __label0
+    25 call __label0 __fn0retval
     26 gotolabel __label6 __fn0
     27 set __tmp5 __fn0retval
 -    * op sub __tmp6 7 __tmp5
@@ -2362,7 +2362,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     44 label __label10
     45 label __label8
  
-    48 call __label0
+    48 call __label0 __fn0retval
     49 gotolabel __label11 __fn0
     50 set __tmp10 __fn0retval
 -    * op mul __tmp11 3 __tmp10
@@ -2389,7 +2389,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     67 label __label15
     68 label __label13
  
-    71 call __label0
+    71 call __label0 __fn0retval
     72 gotolabel __label16 __fn0
     73 set __tmp15 __fn0retval
 -    * op div __tmp16 6 __tmp15
@@ -2416,7 +2416,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     90 label __label20
     91 label __label18
  
-    94 call __label0
+    94 call __label0 __fn0retval
     95 gotolabel __label21 __fn0
     96 set __tmp20 __fn0retval
 -    * op div __tmp21 1 __tmp20
@@ -2443,7 +2443,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    113 label __label25
    114 label __label23
  
-   117 call __label0
+   117 call __label0 __fn0retval
    118 gotolabel __label26 __fn0
    119 set __tmp25 __fn0retval
 -    * op idiv __tmp26 6 __tmp25
@@ -2470,7 +2470,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    136 label __label30
    137 label __label28
  
-   140 call __label0
+   140 call __label0 __fn0retval
    141 gotolabel __label31 __fn0
    142 set __tmp30 __fn0retval
 -    * op mod __tmp31 6 __tmp30
@@ -2497,7 +2497,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    159 label __label35
    160 label __label33
  
-   163 call __label0
+   163 call __label0 __fn0retval
    164 gotolabel __label36 __fn0
    165 set __tmp35 __fn0retval
 -    * op pow __tmp36 2 __tmp35
@@ -2524,7 +2524,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    182 label __label40
    183 label __label38
  
-   186 call __label0
+   186 call __label0 __fn0retval
    187 gotolabel __label41 __fn0
    188 set __tmp40 __fn0retval
 -    * op equal __tmp41 5 __tmp40
@@ -2551,7 +2551,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    205 label __label45
    206 label __label43
  
-   209 call __label0
+   209 call __label0 __fn0retval
    210 gotolabel __label46 __fn0
    211 set __tmp45 __fn0retval
 -    * op equal __tmp46 5 __tmp45
@@ -2578,7 +2578,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    228 label __label50
    229 label __label48
  
-   232 call __label0
+   232 call __label0 __fn0retval
    233 gotolabel __label51 __fn0
    234 set __tmp50 __fn0retval
 -    * op equal __tmp51 0 __tmp50
@@ -2605,7 +2605,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    251 label __label55
    252 label __label53
  
-   255 call __label0
+   255 call __label0 __fn0retval
    256 gotolabel __label56 __fn0
    257 set __tmp55 __fn0retval
 -    * op notEqual __tmp56 5 __tmp55
@@ -2632,7 +2632,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    274 label __label60
    275 label __label58
  
-   278 call __label0
+   278 call __label0 __fn0retval
    279 gotolabel __label61 __fn0
    280 set __tmp60 __fn0retval
 -    * op notEqual __tmp61 5 __tmp60
@@ -2659,7 +2659,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    297 label __label65
    298 label __label63
  
-   301 call __label0
+   301 call __label0 __fn0retval
    302 gotolabel __label66 __fn0
    303 set __tmp65 __fn0retval
 -    * op notEqual __tmp66 0 __tmp65
@@ -2686,7 +2686,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    320 label __label70
    321 label __label68
  
-   324 call __label0
+   324 call __label0 __fn0retval
    325 gotolabel __label71 __fn0
    326 set __tmp70 __fn0retval
 -    * op land __tmp71 1 __tmp70
@@ -2713,7 +2713,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    343 label __label75
    344 label __label73
  
-   347 call __label0
+   347 call __label0 __fn0retval
    348 gotolabel __label76 __fn0
    349 set __tmp75 __fn0retval
 -    * op land __tmp76 1 __tmp75
@@ -2740,7 +2740,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    366 label __label80
    367 label __label78
  
-   370 call __label0
+   370 call __label0 __fn0retval
    371 gotolabel __label81 __fn0
    372 set __tmp80 __fn0retval
 -    * op lessThan __tmp81 0 __tmp80
@@ -2767,7 +2767,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    389 label __label85
    390 label __label83
  
-   393 call __label0
+   393 call __label0 __fn0retval
    394 gotolabel __label86 __fn0
    395 set __tmp85 __fn0retval
 -    * op lessThan __tmp86 1 __tmp85
@@ -2794,7 +2794,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    412 label __label90
    413 label __label88
  
-   416 call __label0
+   416 call __label0 __fn0retval
    417 gotolabel __label91 __fn0
    418 set __tmp90 __fn0retval
 -    * op lessThanEq __tmp91 1 __tmp90
@@ -2821,7 +2821,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    435 label __label95
    436 label __label93
  
-   439 call __label0
+   439 call __label0 __fn0retval
    440 gotolabel __label96 __fn0
    441 set __tmp95 __fn0retval
 -    * op lessThanEq __tmp96 1 __tmp95
@@ -2848,7 +2848,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    458 label __label100
    459 label __label98
  
-   462 call __label0
+   462 call __label0 __fn0retval
    463 gotolabel __label101 __fn0
    464 set __tmp100 __fn0retval
 -    * op greaterThan __tmp101 2 __tmp100
@@ -2875,7 +2875,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    481 label __label105
    482 label __label103
  
-   485 call __label0
+   485 call __label0 __fn0retval
    486 gotolabel __label106 __fn0
    487 set __tmp105 __fn0retval
 -    * op greaterThan __tmp106 1 __tmp105
@@ -2902,7 +2902,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    504 label __label110
    505 label __label108
  
-   508 call __label0
+   508 call __label0 __fn0retval
    509 gotolabel __label111 __fn0
    510 set __tmp110 __fn0retval
 -    * op greaterThanEq __tmp111 1 __tmp110
@@ -2929,7 +2929,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    527 label __label115
    528 label __label113
  
-   531 call __label0
+   531 call __label0 __fn0retval
    532 gotolabel __label116 __fn0
    533 set __tmp115 __fn0retval
 -    * op greaterThanEq __tmp116 1 __tmp115
@@ -2956,7 +2956,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    550 label __label120
    551 label __label118
  
-   554 call __label0
+   554 call __label0 __fn0retval
    555 gotolabel __label121 __fn0
    556 set __tmp120 __fn0retval
 -    * op strictEqual __tmp121 0 __tmp120
@@ -2983,7 +2983,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    573 label __label125
    574 label __label123
  
-   577 call __label0
+   577 call __label0 __fn0retval
    578 gotolabel __label126 __fn0
    579 set __tmp125 __fn0retval
 -    * op strictEqual __tmp126 null __tmp125
@@ -3010,7 +3010,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    596 label __label130
    597 label __label128
  
-   600 call __label0
+   600 call __label0 __fn0retval
    601 gotolabel __label131 __fn0
    602 set __tmp130 __fn0retval
 -    * op shl __tmp131 1 __tmp130
@@ -3037,7 +3037,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    619 label __label135
    620 label __label133
  
-   623 call __label0
+   623 call __label0 __fn0retval
    624 gotolabel __label136 __fn0
    625 set __tmp135 __fn0retval
 -    * op shr __tmp136 9 __tmp135
@@ -3064,7 +3064,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    642 label __label140
    643 label __label138
  
-   646 call __label0
+   646 call __label0 __fn0retval
    647 gotolabel __label141 __fn0
    648 set __tmp140 __fn0retval
 -    * op or __tmp141 1 __tmp140
@@ -3091,7 +3091,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    665 label __label145
    666 label __label143
  
-   669 call __label0
+   669 call __label0 __fn0retval
    670 gotolabel __label146 __fn0
    671 set __tmp145 __fn0retval
 -    * op and __tmp146 3 __tmp145
@@ -3118,7 +3118,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    688 label __label150
    689 label __label148
  
-   692 call __label0
+   692 call __label0 __fn0retval
    693 gotolabel __label151 __fn0
    694 set __tmp150 __fn0retval
 -    * op xor __tmp151 3 __tmp150
@@ -3145,7 +3145,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    711 label __label155
    712 label __label153
  
-   715 call __label0
+   715 call __label0 __fn0retval
    716 gotolabel __label156 __fn0
    717 set __tmp155 __fn0retval
 -    * op not __tmp156 __tmp155
@@ -3172,7 +3172,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    734 label __label160
    735 label __label158
  
-   738 call __label0
+   738 call __label0 __fn0retval
    739 gotolabel __label161 __fn0
    740 set __tmp160 __fn0retval
 -    * op not __tmp161 __tmp160
@@ -3202,7 +3202,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * set __fn0_n a
 +  760 set __fn0_n 0xabcdefabcdefabc
    761 setaddr __fn0retaddr __label166
-   762 call __label0
+   762 call __label0 __fn0retval
    763 gotolabel __label166 __fn0
    764 set __tmp165 __fn0retval
 -    * op not __tmp166 __tmp165
@@ -3234,7 +3234,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    783 label __label170
    784 label __label168
  
-   787 call __label0
+   787 call __label0 __fn0retval
    788 gotolabel __label171 __fn0
    789 set __tmp172 __fn0retval
 -    * op max __tmp173 2 __tmp172
@@ -3261,7 +3261,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    806 label __label175
    807 label __label173
  
-   810 call __label0
+   810 call __label0 __fn0retval
    811 gotolabel __label176 __fn0
    812 set __tmp177 __fn0retval
 -    * op min __tmp178 2 __tmp177
@@ -3288,7 +3288,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    829 label __label180
    830 label __label178
  
-   833 call __label0
+   833 call __label0 __fn0retval
    834 gotolabel __label181 __fn0
    835 set __tmp182 __fn0retval
 -    * op abs __tmp183 __tmp182
@@ -3315,7 +3315,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    852 label __label185
    853 label __label183
  
-   856 call __label0
+   856 call __label0 __fn0retval
    857 gotolabel __label186 __fn0
    858 set __tmp187 __fn0retval
 -    * op log __tmp188 __tmp187
@@ -3342,7 +3342,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    875 label __label190
    876 label __label188
  
-   879 call __label0
+   879 call __label0 __fn0retval
    880 gotolabel __label191 __fn0
    881 set __tmp192 __fn0retval
 -    * op log10 __tmp193 __tmp192
@@ -3369,7 +3369,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    898 label __label195
    899 label __label193
  
-   902 call __label0
+   902 call __label0 __fn0retval
    903 gotolabel __label196 __fn0
    904 set __tmp197 __fn0retval
 -    * op floor __tmp198 __tmp197
@@ -3396,7 +3396,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    921 label __label200
    922 label __label198
  
-   925 call __label0
+   925 call __label0 __fn0retval
    926 gotolabel __label201 __fn0
    927 set __tmp202 __fn0retval
 -    * op ceil __tmp203 __tmp202
@@ -3423,7 +3423,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    944 label __label205
    945 label __label203
  
-   948 call __label0
+   948 call __label0 __fn0retval
    949 gotolabel __label206 __fn0
    950 set __tmp207 __fn0retval
 -    * op sqrt __tmp208 __tmp207
@@ -3450,7 +3450,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    967 label __label210
    968 label __label208
  
-   971 call __label0
+   971 call __label0 __fn0retval
    972 gotolabel __label211 __fn0
    973 set __tmp212 __fn0retval
 -    * op angle __tmp213 1 __tmp212
@@ -3477,7 +3477,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    990 label __label215
    991 label __label213
  
-   994 call __label0
+   994 call __label0 __fn0retval
    995 gotolabel __label216 __fn0
    996 set __tmp217 __fn0retval
 -    * op angleDiff __tmp218 45 __tmp217
@@ -3504,7 +3504,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1013 label __label220
   1014 label __label218
  
-  1017 call __label0
+  1017 call __label0 __fn0retval
   1018 gotolabel __label221 __fn0
   1019 set __tmp222 __fn0retval
 -    * op mul __tmp223 -1 __tmp222
@@ -3531,7 +3531,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1036 label __label225
   1037 label __label223
  
-  1040 call __label0
+  1040 call __label0 __fn0retval
   1041 gotolabel __label226 __fn0
   1042 set __tmp227 __fn0retval
 -    * op equal __tmp228 __tmp227 false
@@ -3558,7 +3558,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1059 label __label230
   1060 label __label228
  
-  1063 call __label0
+  1063 call __label0 __fn0retval
   1064 gotolabel __label231 __fn0
   1065 set __tmp232 __fn0retval
 -    * op equal __tmp233 __tmp232 false
@@ -3585,7 +3585,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1082 label __label235
   1083 label __label233
  
-  1086 call __label0
+  1086 call __label0 __fn0retval
   1087 gotolabel __label236 __fn0
   1088 set __tmp237 __fn0retval
 -    * op equal __tmp238 __tmp237 false
@@ -3612,7 +3612,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1105 label __label240
   1106 label __label238
  
-  1110 call __label0
+  1110 call __label0 __fn0retval
   1111 gotolabel __label241 __fn0
   1112 set __tmp242 __fn0retval
 -    * op pow a a __tmp242
@@ -3639,7 +3639,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1129 label __label245
   1130 label __label243
  
-  1134 call __label0
+  1134 call __label0 __fn0retval
   1135 gotolabel __label246 __fn0
   1136 set __tmp247 __fn0retval
 -    * op mul a a __tmp247
@@ -3666,7 +3666,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1153 label __label250
   1154 label __label248
  
-  1158 call __label0
+  1158 call __label0 __fn0retval
   1159 gotolabel __label251 __fn0
   1160 set __tmp252 __fn0retval
 -    * op div a a __tmp252
@@ -3693,7 +3693,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1177 label __label255
   1178 label __label253
  
-  1182 call __label0
+  1182 call __label0 __fn0retval
   1183 gotolabel __label256 __fn0
   1184 set __tmp257 __fn0retval
 -    * op idiv a a __tmp257
@@ -3720,7 +3720,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1201 label __label260
   1202 label __label258
  
-  1206 call __label0
+  1206 call __label0 __fn0retval
   1207 gotolabel __label261 __fn0
   1208 set __tmp262 __fn0retval
 -    * op mod a a __tmp262
@@ -3747,7 +3747,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1225 label __label265
   1226 label __label263
  
-  1230 call __label0
+  1230 call __label0 __fn0retval
   1231 gotolabel __label266 __fn0
   1232 set __tmp267 __fn0retval
 -    * op add a a __tmp267
@@ -3774,7 +3774,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1249 label __label270
   1250 label __label268
  
-  1254 call __label0
+  1254 call __label0 __fn0retval
   1255 gotolabel __label271 __fn0
   1256 set __tmp272 __fn0retval
 -    * op sub a a __tmp272
@@ -3801,7 +3801,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1273 label __label275
   1274 label __label273
  
-  1278 call __label0
+  1278 call __label0 __fn0retval
   1279 gotolabel __label276 __fn0
   1280 set __tmp277 __fn0retval
 -    * op shl a a __tmp277
@@ -3828,7 +3828,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1297 label __label280
   1298 label __label278
  
-  1302 call __label0
+  1302 call __label0 __fn0retval
   1303 gotolabel __label281 __fn0
   1304 set __tmp282 __fn0retval
 -    * op shr a a __tmp282
@@ -3855,7 +3855,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1321 label __label285
   1322 label __label283
  
-  1326 call __label0
+  1326 call __label0 __fn0retval
   1327 gotolabel __label286 __fn0
   1328 set __tmp287 __fn0retval
 -    * op or a a __tmp287
@@ -3882,7 +3882,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1345 label __label290
   1346 label __label288
  
-  1350 call __label0
+  1350 call __label0 __fn0retval
   1351 gotolabel __label291 __fn0
   1352 set __tmp292 __fn0retval
 -    * op and a a __tmp292
@@ -3909,7 +3909,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1369 label __label295
   1370 label __label293
  
-  1374 call __label0
+  1374 call __label0 __fn0retval
   1375 gotolabel __label296 __fn0
   1376 set __tmp297 __fn0retval
 -    * op xor a a __tmp297
@@ -3936,7 +3936,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1393 label __label300
   1394 label __label298
  
-  1398 call __label0
+  1398 call __label0 __fn0retval
   1399 gotolabel __label301 __fn0
   1400 set __tmp302 __fn0retval
 -    * op land a a __tmp302
@@ -3963,7 +3963,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1417 label __label305
   1418 label __label303
  
-  1422 call __label0
+  1422 call __label0 __fn0retval
   1423 gotolabel __label306 __fn0
   1424 set __tmp307 __fn0retval
 -    * op land a a __tmp307
@@ -3992,7 +3992,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
   1443 set a 0
 -    * set __fn0_n 2
   1444 setaddr __fn0retaddr __label311
-  1445 call __label0
+  1445 call __label0 __fn0retval
   1446 gotolabel __label311 __fn0
   1447 set __tmp312 __fn0retval
 -    * op or a a __tmp312
@@ -4022,7 +4022,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-270 instructions):
  
      1 setaddr __fn0retaddr __label1
-     2 call __label0
+     2 call __label0 __fn0retval
      3 gotolabel __label1 __fn0
 -    * set __tmp0 __fn0retval
      4 op add __tmp1 2 __fn0retval
@@ -4035,7 +4035,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      8 jump __label5 always
  
     20 setaddr __fn0retaddr __label6
-    21 call __label0
+    21 call __label0 __fn0retval
     22 gotolabel __label6 __fn0
 -    * set __tmp5 __fn0retval
     23 op sub __tmp6 7 __fn0retval
@@ -4048,7 +4048,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     27 jump __label10 always
  
     39 setaddr __fn0retaddr __label11
-    40 call __label0
+    40 call __label0 __fn0retval
     41 gotolabel __label11 __fn0
 -    * set __tmp10 __fn0retval
     42 op mul __tmp11 3 __fn0retval
@@ -4061,7 +4061,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     46 jump __label15 always
  
     58 setaddr __fn0retaddr __label16
-    59 call __label0
+    59 call __label0 __fn0retval
     60 gotolabel __label16 __fn0
 -    * set __tmp15 __fn0retval
     61 op div __tmp16 6 __fn0retval
@@ -4074,7 +4074,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     65 jump __label20 always
  
     77 setaddr __fn0retaddr __label21
-    78 call __label0
+    78 call __label0 __fn0retval
     79 gotolabel __label21 __fn0
 -    * set __tmp20 __fn0retval
     80 op div __tmp21 1 __fn0retval
@@ -4087,7 +4087,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     84 jump __label25 always
  
     96 setaddr __fn0retaddr __label26
-    97 call __label0
+    97 call __label0 __fn0retval
     98 gotolabel __label26 __fn0
 -    * set __tmp25 __fn0retval
     99 op idiv __tmp26 6 __fn0retval
@@ -4100,7 +4100,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    103 jump __label30 always
  
    115 setaddr __fn0retaddr __label31
-   116 call __label0
+   116 call __label0 __fn0retval
    117 gotolabel __label31 __fn0
 -    * set __tmp30 __fn0retval
    118 op mod __tmp31 6 __fn0retval
@@ -4113,7 +4113,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    122 jump __label35 always
  
    134 setaddr __fn0retaddr __label36
-   135 call __label0
+   135 call __label0 __fn0retval
    136 gotolabel __label36 __fn0
 -    * set __tmp35 __fn0retval
    137 op pow __tmp36 2 __fn0retval
@@ -4126,7 +4126,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    141 jump __label40 always
  
    153 setaddr __fn0retaddr __label41
-   154 call __label0
+   154 call __label0 __fn0retval
    155 gotolabel __label41 __fn0
 -    * set __tmp40 __fn0retval
    156 op equal __tmp41 5 __fn0retval
@@ -4139,7 +4139,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    160 jump __label45 always
  
    172 setaddr __fn0retaddr __label46
-   173 call __label0
+   173 call __label0 __fn0retval
    174 gotolabel __label46 __fn0
 -    * set __tmp45 __fn0retval
    175 op equal __tmp46 5 __fn0retval
@@ -4152,7 +4152,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    179 jump __label50 always
  
    191 setaddr __fn0retaddr __label51
-   192 call __label0
+   192 call __label0 __fn0retval
    193 gotolabel __label51 __fn0
 -    * set __tmp50 __fn0retval
    194 op equal __tmp51 0 __fn0retval
@@ -4165,7 +4165,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    198 jump __label55 always
  
    210 setaddr __fn0retaddr __label56
-   211 call __label0
+   211 call __label0 __fn0retval
    212 gotolabel __label56 __fn0
 -    * set __tmp55 __fn0retval
    213 op notEqual __tmp56 5 __fn0retval
@@ -4178,7 +4178,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    217 jump __label60 always
  
    229 setaddr __fn0retaddr __label61
-   230 call __label0
+   230 call __label0 __fn0retval
    231 gotolabel __label61 __fn0
 -    * set __tmp60 __fn0retval
    232 op notEqual __tmp61 5 __fn0retval
@@ -4191,7 +4191,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    236 jump __label65 always
  
    248 setaddr __fn0retaddr __label66
-   249 call __label0
+   249 call __label0 __fn0retval
    250 gotolabel __label66 __fn0
 -    * set __tmp65 __fn0retval
    251 op notEqual __tmp66 0 __fn0retval
@@ -4204,7 +4204,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    255 jump __label70 always
  
    267 setaddr __fn0retaddr __label71
-   268 call __label0
+   268 call __label0 __fn0retval
    269 gotolabel __label71 __fn0
 -    * set __tmp70 __fn0retval
    270 op land __tmp71 1 __fn0retval
@@ -4217,7 +4217,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    274 jump __label75 always
  
    286 setaddr __fn0retaddr __label76
-   287 call __label0
+   287 call __label0 __fn0retval
    288 gotolabel __label76 __fn0
 -    * set __tmp75 __fn0retval
    289 op land __tmp76 1 __fn0retval
@@ -4230,7 +4230,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    293 jump __label80 always
  
    305 setaddr __fn0retaddr __label81
-   306 call __label0
+   306 call __label0 __fn0retval
    307 gotolabel __label81 __fn0
 -    * set __tmp80 __fn0retval
    308 op lessThan __tmp81 0 __fn0retval
@@ -4243,7 +4243,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    312 jump __label85 always
  
    324 setaddr __fn0retaddr __label86
-   325 call __label0
+   325 call __label0 __fn0retval
    326 gotolabel __label86 __fn0
 -    * set __tmp85 __fn0retval
    327 op lessThan __tmp86 1 __fn0retval
@@ -4256,7 +4256,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    331 jump __label90 always
  
    343 setaddr __fn0retaddr __label91
-   344 call __label0
+   344 call __label0 __fn0retval
    345 gotolabel __label91 __fn0
 -    * set __tmp90 __fn0retval
    346 op lessThanEq __tmp91 1 __fn0retval
@@ -4269,7 +4269,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    350 jump __label95 always
  
    362 setaddr __fn0retaddr __label96
-   363 call __label0
+   363 call __label0 __fn0retval
    364 gotolabel __label96 __fn0
 -    * set __tmp95 __fn0retval
    365 op lessThanEq __tmp96 1 __fn0retval
@@ -4282,7 +4282,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    369 jump __label100 always
  
    381 setaddr __fn0retaddr __label101
-   382 call __label0
+   382 call __label0 __fn0retval
    383 gotolabel __label101 __fn0
 -    * set __tmp100 __fn0retval
    384 op greaterThan __tmp101 2 __fn0retval
@@ -4295,7 +4295,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    388 jump __label105 always
  
    400 setaddr __fn0retaddr __label106
-   401 call __label0
+   401 call __label0 __fn0retval
    402 gotolabel __label106 __fn0
 -    * set __tmp105 __fn0retval
    403 op greaterThan __tmp106 1 __fn0retval
@@ -4308,7 +4308,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    407 jump __label110 always
  
    419 setaddr __fn0retaddr __label111
-   420 call __label0
+   420 call __label0 __fn0retval
    421 gotolabel __label111 __fn0
 -    * set __tmp110 __fn0retval
    422 op greaterThanEq __tmp111 1 __fn0retval
@@ -4321,7 +4321,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    426 jump __label115 always
  
    438 setaddr __fn0retaddr __label116
-   439 call __label0
+   439 call __label0 __fn0retval
    440 gotolabel __label116 __fn0
 -    * set __tmp115 __fn0retval
    441 op greaterThanEq __tmp116 1 __fn0retval
@@ -4334,7 +4334,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    445 jump __label120 always
  
    457 setaddr __fn0retaddr __label121
-   458 call __label0
+   458 call __label0 __fn0retval
    459 gotolabel __label121 __fn0
 -    * set __tmp120 __fn0retval
    460 op strictEqual __tmp121 0 __fn0retval
@@ -4347,7 +4347,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    464 jump __label125 always
  
    476 setaddr __fn0retaddr __label126
-   477 call __label0
+   477 call __label0 __fn0retval
    478 gotolabel __label126 __fn0
 -    * set __tmp125 __fn0retval
    479 op strictEqual __tmp126 null __fn0retval
@@ -4360,7 +4360,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    483 jump __label130 always
  
    495 setaddr __fn0retaddr __label131
-   496 call __label0
+   496 call __label0 __fn0retval
    497 gotolabel __label131 __fn0
 -    * set __tmp130 __fn0retval
    498 op shl __tmp131 1 __fn0retval
@@ -4373,7 +4373,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    502 jump __label135 always
  
    514 setaddr __fn0retaddr __label136
-   515 call __label0
+   515 call __label0 __fn0retval
    516 gotolabel __label136 __fn0
 -    * set __tmp135 __fn0retval
    517 op shr __tmp136 9 __fn0retval
@@ -4386,7 +4386,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    521 jump __label140 always
  
    533 setaddr __fn0retaddr __label141
-   534 call __label0
+   534 call __label0 __fn0retval
    535 gotolabel __label141 __fn0
 -    * set __tmp140 __fn0retval
    536 op or __tmp141 1 __fn0retval
@@ -4399,7 +4399,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    540 jump __label145 always
  
    552 setaddr __fn0retaddr __label146
-   553 call __label0
+   553 call __label0 __fn0retval
    554 gotolabel __label146 __fn0
 -    * set __tmp145 __fn0retval
    555 op and __tmp146 3 __fn0retval
@@ -4412,7 +4412,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    559 jump __label150 always
  
    571 setaddr __fn0retaddr __label151
-   572 call __label0
+   572 call __label0 __fn0retval
    573 gotolabel __label151 __fn0
 -    * set __tmp150 __fn0retval
    574 op xor __tmp151 3 __fn0retval
@@ -4425,7 +4425,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    578 jump __label155 always
  
    590 setaddr __fn0retaddr __label156
-   591 call __label0
+   591 call __label0 __fn0retval
    592 gotolabel __label156 __fn0
 -    * set __tmp155 __fn0retval
    593 op not __tmp156 __fn0retval
@@ -4438,7 +4438,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    597 jump __label160 always
  
    609 setaddr __fn0retaddr __label161
-   610 call __label0
+   610 call __label0 __fn0retval
    611 gotolabel __label161 __fn0
 -    * set __tmp160 __fn0retval
    612 op not __tmp161 __fn0retval
@@ -4456,7 +4456,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 0xabcdefabcdefabc
    627 set __fn0_n 0xabcdefabcdefabc
    628 setaddr __fn0retaddr __label166
-   629 call __label0
+   629 call __label0 __fn0retval
    630 gotolabel __label166 __fn0
 -    * set __tmp165 __fn0retval
    631 op not __tmp166 __fn0retval
@@ -4481,7 +4481,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    644 print "\n"
  
    648 setaddr __fn0retaddr __label171
-   649 call __label0
+   649 call __label0 __fn0retval
    650 gotolabel __label171 __fn0
 -    * set __tmp172 __fn0retval
    651 op max __tmp173 2 __fn0retval
@@ -4494,7 +4494,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    655 jump __label175 always
  
    667 setaddr __fn0retaddr __label176
-   668 call __label0
+   668 call __label0 __fn0retval
    669 gotolabel __label176 __fn0
 -    * set __tmp177 __fn0retval
    670 op min __tmp178 2 __fn0retval
@@ -4507,7 +4507,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    674 jump __label180 always
  
    686 setaddr __fn0retaddr __label181
-   687 call __label0
+   687 call __label0 __fn0retval
    688 gotolabel __label181 __fn0
 -    * set __tmp182 __fn0retval
    689 op abs __tmp183 __fn0retval
@@ -4520,7 +4520,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    693 jump __label185 always
  
    705 setaddr __fn0retaddr __label186
-   706 call __label0
+   706 call __label0 __fn0retval
    707 gotolabel __label186 __fn0
 -    * set __tmp187 __fn0retval
    708 op log __tmp188 __fn0retval
@@ -4533,7 +4533,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    712 jump __label190 always
  
    724 setaddr __fn0retaddr __label191
-   725 call __label0
+   725 call __label0 __fn0retval
    726 gotolabel __label191 __fn0
 -    * set __tmp192 __fn0retval
    727 op log10 __tmp193 __fn0retval
@@ -4546,7 +4546,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    731 jump __label195 always
  
    743 setaddr __fn0retaddr __label196
-   744 call __label0
+   744 call __label0 __fn0retval
    745 gotolabel __label196 __fn0
 -    * set __tmp197 __fn0retval
    746 op floor __tmp198 __fn0retval
@@ -4559,7 +4559,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    750 jump __label200 always
  
    762 setaddr __fn0retaddr __label201
-   763 call __label0
+   763 call __label0 __fn0retval
    764 gotolabel __label201 __fn0
 -    * set __tmp202 __fn0retval
    765 op ceil __tmp203 __fn0retval
@@ -4572,7 +4572,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    769 jump __label205 always
  
    781 setaddr __fn0retaddr __label206
-   782 call __label0
+   782 call __label0 __fn0retval
    783 gotolabel __label206 __fn0
 -    * set __tmp207 __fn0retval
    784 op sqrt __tmp208 __fn0retval
@@ -4585,7 +4585,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    788 jump __label210 always
  
    800 setaddr __fn0retaddr __label211
-   801 call __label0
+   801 call __label0 __fn0retval
    802 gotolabel __label211 __fn0
 -    * set __tmp212 __fn0retval
    803 op angle __tmp213 1 __fn0retval
@@ -4598,7 +4598,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    807 jump __label215 always
  
    819 setaddr __fn0retaddr __label216
-   820 call __label0
+   820 call __label0 __fn0retval
    821 gotolabel __label216 __fn0
 -    * set __tmp217 __fn0retval
    822 op angleDiff __tmp218 45 __fn0retval
@@ -4611,7 +4611,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    826 jump __label220 always
  
    838 setaddr __fn0retaddr __label221
-   839 call __label0
+   839 call __label0 __fn0retval
    840 gotolabel __label221 __fn0
 -    * set __tmp222 __fn0retval
    841 op mul __tmp223 -1 __fn0retval
@@ -4624,7 +4624,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    845 jump __label225 always
  
    857 setaddr __fn0retaddr __label226
-   858 call __label0
+   858 call __label0 __fn0retval
    859 gotolabel __label226 __fn0
 -    * set __tmp227 __fn0retval
    860 op equal __tmp228 __fn0retval false
@@ -4637,7 +4637,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    864 jump __label230 always
  
    876 setaddr __fn0retaddr __label231
-   877 call __label0
+   877 call __label0 __fn0retval
    878 gotolabel __label231 __fn0
 -    * set __tmp232 __fn0retval
    879 op equal __tmp233 __fn0retval false
@@ -4650,7 +4650,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    883 jump __label235 always
  
    895 setaddr __fn0retaddr __label236
-   896 call __label0
+   896 call __label0 __fn0retval
    897 gotolabel __label236 __fn0
 -    * set __tmp237 __fn0retval
    898 op equal __tmp238 __fn0retval false
@@ -4668,7 +4668,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 2
    913 set __fn0_n 4
    914 setaddr __fn0retaddr __label241
-   915 call __label0
+   915 call __label0 __fn0retval
    916 gotolabel __label241 __fn0
 -    * set __tmp242 __fn0retval
    917 op pow a 2 __fn0retval
@@ -4686,7 +4686,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 2
    932 set __fn0_n 4
    933 setaddr __fn0retaddr __label246
-   934 call __label0
+   934 call __label0 __fn0retval
    935 gotolabel __label246 __fn0
 -    * set __tmp247 __fn0retval
    936 op mul a 2 __fn0retval
@@ -4704,7 +4704,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 6
    951 set __fn0_n 4
    952 setaddr __fn0retaddr __label251
-   953 call __label0
+   953 call __label0 __fn0retval
    954 gotolabel __label251 __fn0
 -    * set __tmp252 __fn0retval
    955 op div a 6 __fn0retval
@@ -4722,7 +4722,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 6
    970 set __fn0_n 4
    971 setaddr __fn0retaddr __label256
-   972 call __label0
+   972 call __label0 __fn0retval
    973 gotolabel __label256 __fn0
 -    * set __tmp257 __fn0retval
    974 op idiv a 6 __fn0retval
@@ -4740,7 +4740,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 6
    989 set __fn0_n 4
    990 setaddr __fn0retaddr __label261
-   991 call __label0
+   991 call __label0 __fn0retval
    992 gotolabel __label261 __fn0
 -    * set __tmp262 __fn0retval
    993 op mod a 6 __fn0retval
@@ -4758,7 +4758,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 4
   1008 set __fn0_n 2
   1009 setaddr __fn0retaddr __label266
-  1010 call __label0
+  1010 call __label0 __fn0retval
   1011 gotolabel __label266 __fn0
 -    * set __tmp267 __fn0retval
   1012 op add a 4 __fn0retval
@@ -4776,7 +4776,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 4
   1027 set __fn0_n 2
   1028 setaddr __fn0retaddr __label271
-  1029 call __label0
+  1029 call __label0 __fn0retval
   1030 gotolabel __label271 __fn0
 -    * set __tmp272 __fn0retval
   1031 op sub a 4 __fn0retval
@@ -4794,7 +4794,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 1
   1046 set __fn0_n 2
   1047 setaddr __fn0retaddr __label276
-  1048 call __label0
+  1048 call __label0 __fn0retval
   1049 gotolabel __label276 __fn0
 -    * set __tmp277 __fn0retval
   1050 op shl a 1 __fn0retval
@@ -4812,7 +4812,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 9
   1065 set __fn0_n 2
   1066 setaddr __fn0retaddr __label281
-  1067 call __label0
+  1067 call __label0 __fn0retval
   1068 gotolabel __label281 __fn0
 -    * set __tmp282 __fn0retval
   1069 op shr a 9 __fn0retval
@@ -4830,7 +4830,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 1
   1084 set __fn0_n 2
   1085 setaddr __fn0retaddr __label286
-  1086 call __label0
+  1086 call __label0 __fn0retval
   1087 gotolabel __label286 __fn0
 -    * set __tmp287 __fn0retval
   1088 op or a 1 __fn0retval
@@ -4848,7 +4848,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 3
   1103 set __fn0_n 2
   1104 setaddr __fn0retaddr __label291
-  1105 call __label0
+  1105 call __label0 __fn0retval
   1106 gotolabel __label291 __fn0
 -    * set __tmp292 __fn0retval
   1107 op and a 3 __fn0retval
@@ -4866,7 +4866,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 3
 -    * set __fn0_n 2
   1122 setaddr __fn0retaddr __label296
-  1123 call __label0
+  1123 call __label0 __fn0retval
   1124 gotolabel __label296 __fn0
 -    * set __tmp297 __fn0retval
   1125 op xor a 3 __fn0retval
@@ -4884,7 +4884,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 1
   1140 set __fn0_n 0
   1141 setaddr __fn0retaddr __label301
-  1142 call __label0
+  1142 call __label0 __fn0retval
   1143 gotolabel __label301 __fn0
 -    * set __tmp302 __fn0retval
   1144 op land a 1 __fn0retval
@@ -4902,7 +4902,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 -    * set a 1
   1159 set __fn0_n 2
   1160 setaddr __fn0retaddr __label306
-  1161 call __label0
+  1161 call __label0 __fn0retval
   1162 gotolabel __label306 __fn0
 -    * set __tmp307 __fn0retval
   1163 op land a 1 __fn0retval
@@ -4919,7 +4919,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
   1177 label __label308
 -    * set a 0
   1178 setaddr __fn0retaddr __label311
-  1179 call __label0
+  1179 call __label0 __fn0retval
   1180 gotolabel __label311 __fn0
 -    * set __tmp312 __fn0retval
   1181 op or a 0 __fn0retval
@@ -4933,7 +4933,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
  
-   629 call __label0
+   629 call __label0 __fn0retval
    630 gotolabel __label166 __fn0
    631 op not __tmp166 __fn0retval
 -    * op mul __tmp168 -1 773738404492802690
@@ -4946,7 +4946,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2
   1101 label __label288
 -    * set __fn0_n 2
   1102 setaddr __fn0retaddr __label291
-  1103 call __label0
+  1103 call __label0 __fn0retval
   1104 gotolabel __label291 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
@@ -4956,7 +4956,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1
   1082 label __label283
 -    * set __fn0_n 2
   1083 setaddr __fn0retaddr __label286
-  1084 call __label0
+  1084 call __label0 __fn0retval
   1085 gotolabel __label286 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
@@ -4966,7 +4966,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1
   1063 label __label278
 -    * set __fn0_n 2
   1064 setaddr __fn0retaddr __label281
-  1065 call __label0
+  1065 call __label0 __fn0retval
   1066 gotolabel __label281 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1 instructions):
@@ -4976,7 +4976,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1
   1044 label __label273
 -    * set __fn0_n 2
   1045 setaddr __fn0retaddr __label276
-  1046 call __label0
+  1046 call __label0 __fn0retval
   1047 gotolabel __label276 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 7 (-1 instructions):
@@ -4986,7 +4986,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 7 (-1
   1025 label __label268
 -    * set __fn0_n 2
   1026 setaddr __fn0retaddr __label271
-  1027 call __label0
+  1027 call __label0 __fn0retval
   1028 gotolabel __label271 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 8 (-1 instructions):
@@ -4996,7 +4996,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 8 (-1
    987 label __label258
 -    * set __fn0_n 4
    988 setaddr __fn0retaddr __label261
-   989 call __label0
+   989 call __label0 __fn0retval
    990 gotolabel __label261 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 9 (-1 instructions):
@@ -5006,7 +5006,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 9 (-1
    968 label __label253
 -    * set __fn0_n 4
    969 setaddr __fn0retaddr __label256
-   970 call __label0
+   970 call __label0 __fn0retval
    971 gotolabel __label256 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 10 (-1 instructions):
@@ -5016,7 +5016,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 10 (-
    949 label __label248
 -    * set __fn0_n 4
    950 setaddr __fn0retaddr __label251
-   951 call __label0
+   951 call __label0 __fn0retval
    952 gotolabel __label251 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 11 (-1 instructions):
@@ -5026,7 +5026,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 11 (-
    930 label __label243
 -    * set __fn0_n 4
    931 setaddr __fn0retaddr __label246
-   932 call __label0
+   932 call __label0 __fn0retval
    933 gotolabel __label246 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 12 (-1 instructions):
@@ -5036,7 +5036,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 12 (-
    759 label __label198
 -    * set __fn0_n 2.5
    760 setaddr __fn0retaddr __label201
-   761 call __label0
+   761 call __label0 __fn0retval
    762 gotolabel __label201 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 13 (-1 instructions):
@@ -5046,7 +5046,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 13 (-
    664 label __label173
 -    * set __fn0_n 4
    665 setaddr __fn0retaddr __label176
-   666 call __label0
+   666 call __label0 __fn0retval
    667 gotolabel __label176 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 14 (-1 instructions):
@@ -5056,7 +5056,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 14 (-
    569 label __label148
 -    * set __fn0_n 2
    570 setaddr __fn0retaddr __label151
-   571 call __label0
+   571 call __label0 __fn0retval
    572 gotolabel __label151 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 15 (-1 instructions):
@@ -5066,7 +5066,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 15 (-
    550 label __label143
 -    * set __fn0_n 2
    551 setaddr __fn0retaddr __label146
-   552 call __label0
+   552 call __label0 __fn0retval
    553 gotolabel __label146 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 16 (-1 instructions):
@@ -5076,7 +5076,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 16 (-
    531 label __label138
 -    * set __fn0_n 2
    532 setaddr __fn0retaddr __label141
-   533 call __label0
+   533 call __label0 __fn0retval
    534 gotolabel __label141 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 17 (-1 instructions):
@@ -5086,7 +5086,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 17 (-
    512 label __label133
 -    * set __fn0_n 2
    513 setaddr __fn0retaddr __label136
-   514 call __label0
+   514 call __label0 __fn0retval
    515 gotolabel __label136 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 18 (-1 instructions):
@@ -5096,7 +5096,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 18 (-
    474 label __label123
 -    * set __fn0_n null
    475 setaddr __fn0retaddr __label126
-   476 call __label0
+   476 call __label0 __fn0retval
    477 gotolabel __label126 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 19 (-1 instructions):
@@ -5106,7 +5106,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 19 (-
    132 label __label33
 -    * set __fn0_n 4
    133 setaddr __fn0retaddr __label36
-   134 call __label0
+   134 call __label0 __fn0retval
    135 gotolabel __label36 __fn0
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 20 (-1 instructions):
@@ -5116,7 +5116,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 20 (-
    113 label __label28
 -    * set __fn0_n 4
    114 setaddr __fn0retaddr __label31
-   115 call __label0
+   115 call __label0 __fn0retval
    116 gotolabel __label31 __fn0
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
@@ -5130,7 +5130,7 @@ Final code before resolving virtual instructions:
 
 set __fn0_n 3
 setaddr __fn0retaddr __label1
-call __label0
+call __label0 __fn0retval
 gotolabel __label1 __fn0
 op add __tmp1 2 __fn0retval
 jump __label4 notEqual __tmp1 5
@@ -5147,7 +5147,7 @@ print "\n"
 label __label5
 set __fn0_n 6
 setaddr __fn0retaddr __label6
-call __label0
+call __label0 __fn0retval
 gotolabel __label6 __fn0
 op sub __tmp6 7 __fn0retval
 jump __label9 notEqual __tmp6 1
@@ -5164,7 +5164,7 @@ print "\n"
 label __label10
 set __fn0_n 2
 setaddr __fn0retaddr __label11
-call __label0
+call __label0 __fn0retval
 gotolabel __label11 __fn0
 op mul __tmp11 3 __fn0retval
 jump __label14 notEqual __tmp11 6
@@ -5181,7 +5181,7 @@ print "\n"
 label __label15
 set __fn0_n 4
 setaddr __fn0retaddr __label16
-call __label0
+call __label0 __fn0retval
 gotolabel __label16 __fn0
 op div __tmp16 6 __fn0retval
 jump __label19 notEqual __tmp16 1.5
@@ -5198,7 +5198,7 @@ print "\n"
 label __label20
 set __fn0_n 100000
 setaddr __fn0retaddr __label21
-call __label0
+call __label0 __fn0retval
 gotolabel __label21 __fn0
 op div __tmp21 1 __fn0retval
 jump __label24 notEqual __tmp21 0.00001
@@ -5215,7 +5215,7 @@ print "\n"
 label __label25
 set __fn0_n 4
 setaddr __fn0retaddr __label26
-call __label0
+call __label0 __fn0retval
 gotolabel __label26 __fn0
 op idiv __tmp26 6 __fn0retval
 jump __label29 notEqual __tmp26 1
@@ -5231,7 +5231,7 @@ print __tmp26
 print "\n"
 label __label30
 setaddr __fn0retaddr __label31
-call __label0
+call __label0 __fn0retval
 gotolabel __label31 __fn0
 op mod __tmp31 6 __fn0retval
 jump __label34 notEqual __tmp31 2
@@ -5247,7 +5247,7 @@ print __tmp31
 print "\n"
 label __label35
 setaddr __fn0retaddr __label36
-call __label0
+call __label0 __fn0retval
 gotolabel __label36 __fn0
 op pow __tmp36 2 __fn0retval
 jump __label39 notEqual __tmp36 16
@@ -5264,7 +5264,7 @@ print "\n"
 label __label40
 set __fn0_n 5
 setaddr __fn0retaddr __label41
-call __label0
+call __label0 __fn0retval
 gotolabel __label41 __fn0
 op equal __tmp41 5 __fn0retval
 jump __label44 notEqual __tmp41 true
@@ -5281,7 +5281,7 @@ print "\n"
 label __label45
 set __fn0_n 6
 setaddr __fn0retaddr __label46
-call __label0
+call __label0 __fn0retval
 gotolabel __label46 __fn0
 op equal __tmp46 5 __fn0retval
 jump __label49 notEqual __tmp46 false
@@ -5298,7 +5298,7 @@ print "\n"
 label __label50
 set __fn0_n null
 setaddr __fn0retaddr __label51
-call __label0
+call __label0 __fn0retval
 gotolabel __label51 __fn0
 op equal __tmp51 0 __fn0retval
 jump __label54 notEqual __tmp51 true
@@ -5315,7 +5315,7 @@ print "\n"
 label __label55
 set __fn0_n 5
 setaddr __fn0retaddr __label56
-call __label0
+call __label0 __fn0retval
 gotolabel __label56 __fn0
 op notEqual __tmp56 5 __fn0retval
 jump __label59 notEqual __tmp56 false
@@ -5332,7 +5332,7 @@ print "\n"
 label __label60
 set __fn0_n 6
 setaddr __fn0retaddr __label61
-call __label0
+call __label0 __fn0retval
 gotolabel __label61 __fn0
 op notEqual __tmp61 5 __fn0retval
 jump __label64 notEqual __tmp61 true
@@ -5349,7 +5349,7 @@ print "\n"
 label __label65
 set __fn0_n null
 setaddr __fn0retaddr __label66
-call __label0
+call __label0 __fn0retval
 gotolabel __label66 __fn0
 op notEqual __tmp66 0 __fn0retval
 jump __label69 notEqual __tmp66 false
@@ -5366,7 +5366,7 @@ print "\n"
 label __label70
 set __fn0_n 0
 setaddr __fn0retaddr __label71
-call __label0
+call __label0 __fn0retval
 gotolabel __label71 __fn0
 op land __tmp71 1 __fn0retval
 jump __label74 notEqual __tmp71 false
@@ -5383,7 +5383,7 @@ print "\n"
 label __label75
 set __fn0_n 2
 setaddr __fn0retaddr __label76
-call __label0
+call __label0 __fn0retval
 gotolabel __label76 __fn0
 op land __tmp76 1 __fn0retval
 jump __label79 notEqual __tmp76 true
@@ -5400,7 +5400,7 @@ print "\n"
 label __label80
 set __fn0_n 1
 setaddr __fn0retaddr __label81
-call __label0
+call __label0 __fn0retval
 gotolabel __label81 __fn0
 op lessThan __tmp81 0 __fn0retval
 jump __label84 notEqual __tmp81 true
@@ -5417,7 +5417,7 @@ print "\n"
 label __label85
 set __fn0_n 0
 setaddr __fn0retaddr __label86
-call __label0
+call __label0 __fn0retval
 gotolabel __label86 __fn0
 op lessThan __tmp86 1 __fn0retval
 jump __label89 notEqual __tmp86 false
@@ -5434,7 +5434,7 @@ print "\n"
 label __label90
 set __fn0_n 1
 setaddr __fn0retaddr __label91
-call __label0
+call __label0 __fn0retval
 gotolabel __label91 __fn0
 op lessThanEq __tmp91 1 __fn0retval
 jump __label94 notEqual __tmp91 true
@@ -5451,7 +5451,7 @@ print "\n"
 label __label95
 set __fn0_n 0
 setaddr __fn0retaddr __label96
-call __label0
+call __label0 __fn0retval
 gotolabel __label96 __fn0
 op lessThanEq __tmp96 1 __fn0retval
 jump __label99 notEqual __tmp96 false
@@ -5468,7 +5468,7 @@ print "\n"
 label __label100
 set __fn0_n 1
 setaddr __fn0retaddr __label101
-call __label0
+call __label0 __fn0retval
 gotolabel __label101 __fn0
 op greaterThan __tmp101 2 __fn0retval
 jump __label104 notEqual __tmp101 true
@@ -5485,7 +5485,7 @@ print "\n"
 label __label105
 set __fn0_n 2
 setaddr __fn0retaddr __label106
-call __label0
+call __label0 __fn0retval
 gotolabel __label106 __fn0
 op greaterThan __tmp106 1 __fn0retval
 jump __label109 notEqual __tmp106 false
@@ -5502,7 +5502,7 @@ print "\n"
 label __label110
 set __fn0_n 1
 setaddr __fn0retaddr __label111
-call __label0
+call __label0 __fn0retval
 gotolabel __label111 __fn0
 op greaterThanEq __tmp111 1 __fn0retval
 jump __label114 notEqual __tmp111 true
@@ -5519,7 +5519,7 @@ print "\n"
 label __label115
 set __fn0_n 2
 setaddr __fn0retaddr __label116
-call __label0
+call __label0 __fn0retval
 gotolabel __label116 __fn0
 op greaterThanEq __tmp116 1 __fn0retval
 jump __label119 notEqual __tmp116 false
@@ -5536,7 +5536,7 @@ print "\n"
 label __label120
 set __fn0_n null
 setaddr __fn0retaddr __label121
-call __label0
+call __label0 __fn0retval
 gotolabel __label121 __fn0
 op strictEqual __tmp121 0 __fn0retval
 jump __label124 notEqual __tmp121 false
@@ -5552,7 +5552,7 @@ print __tmp121
 print "\n"
 label __label125
 setaddr __fn0retaddr __label126
-call __label0
+call __label0 __fn0retval
 gotolabel __label126 __fn0
 op strictEqual __tmp126 null __fn0retval
 jump __label129 notEqual __tmp126 true
@@ -5569,7 +5569,7 @@ print "\n"
 label __label130
 set __fn0_n 2
 setaddr __fn0retaddr __label131
-call __label0
+call __label0 __fn0retval
 gotolabel __label131 __fn0
 op shl __tmp131 1 __fn0retval
 jump __label134 notEqual __tmp131 4
@@ -5585,7 +5585,7 @@ print __tmp131
 print "\n"
 label __label135
 setaddr __fn0retaddr __label136
-call __label0
+call __label0 __fn0retval
 gotolabel __label136 __fn0
 op shr __tmp136 9 __fn0retval
 jump __label139 notEqual __tmp136 2
@@ -5601,7 +5601,7 @@ print __tmp136
 print "\n"
 label __label140
 setaddr __fn0retaddr __label141
-call __label0
+call __label0 __fn0retval
 gotolabel __label141 __fn0
 op or __tmp141 1 __fn0retval
 jump __label144 notEqual __tmp141 3
@@ -5617,7 +5617,7 @@ print __tmp141
 print "\n"
 label __label145
 setaddr __fn0retaddr __label146
-call __label0
+call __label0 __fn0retval
 gotolabel __label146 __fn0
 op and __tmp146 3 __fn0retval
 jump __label149 notEqual __tmp146 2
@@ -5633,7 +5633,7 @@ print __tmp146
 print "\n"
 label __label150
 setaddr __fn0retaddr __label151
-call __label0
+call __label0 __fn0retval
 gotolabel __label151 __fn0
 op xor __tmp151 3 __fn0retval
 jump __label154 notEqual __tmp151 1
@@ -5650,7 +5650,7 @@ print "\n"
 label __label155
 set __fn0_n 0
 setaddr __fn0retaddr __label156
-call __label0
+call __label0 __fn0retval
 gotolabel __label156 __fn0
 op not __tmp156 __fn0retval 0
 jump __label159 notEqual __tmp156 -1
@@ -5667,7 +5667,7 @@ print "\n"
 label __label160
 set __fn0_n 65535
 setaddr __fn0retaddr __label161
-call __label0
+call __label0 __fn0retval
 gotolabel __label161 __fn0
 op not __tmp161 __fn0retval 0
 jump __label164 notEqual __tmp161 -65536
@@ -5684,7 +5684,7 @@ print "\n"
 label __label165
 set __fn0_n 0xabcdefabcdefabc
 setaddr __fn0retaddr __label166
-call __label0
+call __label0 __fn0retval
 gotolabel __label166 __fn0
 op not __tmp166 __fn0retval 0
 jump __label169 notEqual __tmp166 -773738404492802690
@@ -5701,7 +5701,7 @@ print "\n"
 label __label170
 set __fn0_n 4
 setaddr __fn0retaddr __label171
-call __label0
+call __label0 __fn0retval
 gotolabel __label171 __fn0
 op max __tmp173 2 __fn0retval
 jump __label174 notEqual __tmp173 4
@@ -5717,7 +5717,7 @@ print __tmp173
 print "\n"
 label __label175
 setaddr __fn0retaddr __label176
-call __label0
+call __label0 __fn0retval
 gotolabel __label176 __fn0
 op min __tmp178 2 __fn0retval
 jump __label179 notEqual __tmp178 2
@@ -5734,7 +5734,7 @@ print "\n"
 label __label180
 set __fn0_n -2
 setaddr __fn0retaddr __label181
-call __label0
+call __label0 __fn0retval
 gotolabel __label181 __fn0
 op abs __tmp183 __fn0retval 0
 jump __label184 notEqual __tmp183 2
@@ -5751,7 +5751,7 @@ print "\n"
 label __label185
 set __fn0_n 2.718281828459045
 setaddr __fn0retaddr __label186
-call __label0
+call __label0 __fn0retval
 gotolabel __label186 __fn0
 op log __tmp188 __fn0retval 0
 jump __label189 notEqual __tmp188 1
@@ -5768,7 +5768,7 @@ print "\n"
 label __label190
 set __fn0_n 10
 setaddr __fn0retaddr __label191
-call __label0
+call __label0 __fn0retval
 gotolabel __label191 __fn0
 op log10 __tmp193 __fn0retval 0
 jump __label194 notEqual __tmp193 1
@@ -5785,7 +5785,7 @@ print "\n"
 label __label195
 set __fn0_n 2.5
 setaddr __fn0retaddr __label196
-call __label0
+call __label0 __fn0retval
 gotolabel __label196 __fn0
 op floor __tmp198 __fn0retval 0
 jump __label199 notEqual __tmp198 2
@@ -5801,7 +5801,7 @@ print __tmp198
 print "\n"
 label __label200
 setaddr __fn0retaddr __label201
-call __label0
+call __label0 __fn0retval
 gotolabel __label201 __fn0
 op ceil __tmp203 __fn0retval 0
 jump __label204 notEqual __tmp203 3
@@ -5818,7 +5818,7 @@ print "\n"
 label __label205
 set __fn0_n 16
 setaddr __fn0retaddr __label206
-call __label0
+call __label0 __fn0retval
 gotolabel __label206 __fn0
 op sqrt __tmp208 __fn0retval 0
 jump __label209 notEqual __tmp208 4
@@ -5835,7 +5835,7 @@ print "\n"
 label __label210
 set __fn0_n 1
 setaddr __fn0retaddr __label211
-call __label0
+call __label0 __fn0retval
 gotolabel __label211 __fn0
 op angle __tmp213 1 __fn0retval
 jump __label214 notEqual __tmp213 45
@@ -5852,7 +5852,7 @@ print "\n"
 label __label215
 set __fn0_n 135
 setaddr __fn0retaddr __label216
-call __label0
+call __label0 __fn0retval
 gotolabel __label216 __fn0
 op angleDiff __tmp218 45 __fn0retval
 jump __label219 notEqual __tmp218 90
@@ -5869,7 +5869,7 @@ print "\n"
 label __label220
 set __fn0_n 8
 setaddr __fn0retaddr __label221
-call __label0
+call __label0 __fn0retval
 gotolabel __label221 __fn0
 op mul __tmp223 -1 __fn0retval
 jump __label224 notEqual __tmp223 -8
@@ -5886,7 +5886,7 @@ print "\n"
 label __label225
 set __fn0_n 0
 setaddr __fn0retaddr __label226
-call __label0
+call __label0 __fn0retval
 gotolabel __label226 __fn0
 op equal __tmp228 __fn0retval false
 jump __label229 notEqual __tmp228 1
@@ -5903,7 +5903,7 @@ print "\n"
 label __label230
 set __fn0_n 1
 setaddr __fn0retaddr __label231
-call __label0
+call __label0 __fn0retval
 gotolabel __label231 __fn0
 op equal __tmp233 __fn0retval false
 jump __label234 notEqual __tmp233 0
@@ -5920,7 +5920,7 @@ print "\n"
 label __label235
 set __fn0_n 2
 setaddr __fn0retaddr __label236
-call __label0
+call __label0 __fn0retval
 gotolabel __label236 __fn0
 op equal __tmp238 __fn0retval false
 jump __label239 notEqual __tmp238 0
@@ -5937,7 +5937,7 @@ print "\n"
 label __label240
 set __fn0_n 4
 setaddr __fn0retaddr __label241
-call __label0
+call __label0 __fn0retval
 gotolabel __label241 __fn0
 op pow a 2 __fn0retval
 jump __label244 notEqual a 16
@@ -5953,7 +5953,7 @@ print a
 print "\n"
 label __label245
 setaddr __fn0retaddr __label246
-call __label0
+call __label0 __fn0retval
 gotolabel __label246 __fn0
 op mul a 2 __fn0retval
 jump __label249 notEqual a 8
@@ -5969,7 +5969,7 @@ print a
 print "\n"
 label __label250
 setaddr __fn0retaddr __label251
-call __label0
+call __label0 __fn0retval
 gotolabel __label251 __fn0
 op div a 6 __fn0retval
 jump __label254 notEqual a 1.5
@@ -5985,7 +5985,7 @@ print a
 print "\n"
 label __label255
 setaddr __fn0retaddr __label256
-call __label0
+call __label0 __fn0retval
 gotolabel __label256 __fn0
 op idiv a 6 __fn0retval
 jump __label259 notEqual a 1
@@ -6001,7 +6001,7 @@ print a
 print "\n"
 label __label260
 setaddr __fn0retaddr __label261
-call __label0
+call __label0 __fn0retval
 gotolabel __label261 __fn0
 op mod a 6 __fn0retval
 jump __label264 notEqual a 2
@@ -6018,7 +6018,7 @@ print "\n"
 label __label265
 set __fn0_n 2
 setaddr __fn0retaddr __label266
-call __label0
+call __label0 __fn0retval
 gotolabel __label266 __fn0
 op add a 4 __fn0retval
 jump __label269 notEqual a 6
@@ -6034,7 +6034,7 @@ print a
 print "\n"
 label __label270
 setaddr __fn0retaddr __label271
-call __label0
+call __label0 __fn0retval
 gotolabel __label271 __fn0
 op sub a 4 __fn0retval
 jump __label274 notEqual a 2
@@ -6050,7 +6050,7 @@ print a
 print "\n"
 label __label275
 setaddr __fn0retaddr __label276
-call __label0
+call __label0 __fn0retval
 gotolabel __label276 __fn0
 op shl a 1 __fn0retval
 jump __label279 notEqual a 4
@@ -6066,7 +6066,7 @@ print a
 print "\n"
 label __label280
 setaddr __fn0retaddr __label281
-call __label0
+call __label0 __fn0retval
 gotolabel __label281 __fn0
 op shr a 9 __fn0retval
 jump __label284 notEqual a 2
@@ -6082,7 +6082,7 @@ print a
 print "\n"
 label __label285
 setaddr __fn0retaddr __label286
-call __label0
+call __label0 __fn0retval
 gotolabel __label286 __fn0
 op or a 1 __fn0retval
 jump __label289 notEqual a 3
@@ -6098,7 +6098,7 @@ print a
 print "\n"
 label __label290
 setaddr __fn0retaddr __label291
-call __label0
+call __label0 __fn0retval
 gotolabel __label291 __fn0
 op and a 3 __fn0retval
 jump __label294 notEqual a 2
@@ -6114,7 +6114,7 @@ print a
 print "\n"
 label __label295
 setaddr __fn0retaddr __label296
-call __label0
+call __label0 __fn0retval
 gotolabel __label296 __fn0
 op xor a 3 __fn0retval
 jump __label299 notEqual a 1
@@ -6131,7 +6131,7 @@ print "\n"
 label __label300
 set __fn0_n 0
 setaddr __fn0retaddr __label301
-call __label0
+call __label0 __fn0retval
 gotolabel __label301 __fn0
 op land a 1 __fn0retval
 jump __label304 notEqual a false
@@ -6148,7 +6148,7 @@ print "\n"
 label __label305
 set __fn0_n 2
 setaddr __fn0retaddr __label306
-call __label0
+call __label0 __fn0retval
 gotolabel __label306 __fn0
 op land a 1 __fn0retval
 jump __label309 notEqual a true
@@ -6164,7 +6164,7 @@ print a
 print "\n"
 label __label310
 setaddr __fn0retaddr __label311
-call __label0
+call __label0 __fn0retval
 gotolabel __label311 __fn0
 op or a 0 __fn0retval
 jump __label314 notEqual a 2

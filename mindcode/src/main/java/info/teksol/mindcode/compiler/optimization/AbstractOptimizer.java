@@ -90,12 +90,12 @@ public abstract class AbstractOptimizer implements Optimizer {
     //</editor-fold>
 
     //<editor-fold desc="Instruction creation">
-    protected CallInstruction createCallStackless(AstContext astContext, LogicAddress address) {
-        return instructionProcessor.createCallStackless(astContext, address);
+    protected CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue) {
+        return instructionProcessor.createCallStackless(astContext, address, returnValue);
     }
 
-    protected CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr) {
-        return instructionProcessor.createCallRecursive(astContext, stack, callAddr, retAddr);
+    protected CallRecInstruction createCallRecursive(AstContext astContext, LogicVariable stack, LogicLabel callAddr, LogicLabel retAddr, LogicVariable returnValue) {
+        return instructionProcessor.createCallRecursive(astContext, stack, callAddr, retAddr, returnValue);
     }
 
     protected EndInstruction createEnd(AstContext astContext) {

@@ -100,7 +100,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 ins
     88 set y 152
  
    176 setaddr __fn2retaddr __label48
-   177 call __label2
+   177 call __label2 __fn2retval
    178 gotolabel __label48 __fn2
 -    * set __tmp15 __fn2retval
 -    * set __tmp14 __tmp15
@@ -110,7 +110,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 ins
    182 set __fn2_x 157
  
    184 setaddr __fn2retaddr __label49
-   185 call __label2
+   185 call __label2 __fn2retval
    186 gotolabel __label49 __fn2
 -    * set __tmp16 __fn2retval
 -    * set __tmp14 __tmp16
@@ -127,7 +127,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-10 ins
    193 drawflush display1
  
    196 setaddr __fn0retaddr __label52
-   197 call __label0
+   197 call __label0 __fn0retval
    198 gotolabel __label52 __fn0
 -    * set __tmp21 __fn0retval
 -    * set __tmp20 __tmp21
@@ -255,12 +255,12 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instructions):
  
      5 setaddr __fn1retaddr __label3
-     6 call __label1
+     6 call __label1 __fn1retval
      7 gotolabel __label3 __fn1
 -    * set __tmp0 __fn1retval
      8 set __fn1_first_column false
      9 setaddr __fn1retaddr __label4
-    10 call __label1
+    10 call __label1 __fn1retval
     11 gotolabel __label4 __fn1
 -    * set __tmp1 __fn1retval
     12 draw color 255 255 255 255
@@ -279,7 +279,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instruct
     93 goto __tmp2 marker0
  
     99 setaddr __fn0retaddr __label26
-   100 call __label0
+   100 call __label0 __fn0retval
    101 gotolabel __label26 __fn0
 -    * set __tmp11 __fn0retval
    102 set index 0
@@ -287,7 +287,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instruct
    104 set item @sand
  
    171 setaddr __fn2retaddr __label48
-   172 call __label2
+   172 call __label2 __fn2retval
    173 gotolabel __label48 __fn2
 -    * set __tmp14 __fn2retval
    174 jump __label47 always
@@ -295,7 +295,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instruct
    176 set __fn2_x 157
  
    178 setaddr __fn2retaddr __label49
-   179 call __label2
+   179 call __label2 __fn2retval
    180 gotolabel __label49 __fn2
 -    * set __tmp14 __fn2retval
    181 label __label47
@@ -303,7 +303,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-12 instruct
    183 op sub y y 20
  
    189 setaddr __fn0retaddr __label52
-   190 call __label0
+   190 call __label0 __fn0retval
    191 gotolabel __label52 __fn0
 -    * set __tmp20 __fn0retval
    192 jump __label51 always
@@ -665,7 +665,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     90 label __label5
  
    185 setaddr __fn0retaddr __label52
-   186 call __label0
+   186 call __label0 __fn0retval
    187 gotolabel __label52 __fn0
 -    * jump __label51 always
    188 label __label50
@@ -2222,7 +2222,7 @@ Modifications by Function Inlining: inline function eraseNumbers (-1 instruction
     93 set y 152
     94 set __fn0_first_column true
 -    * setaddr __fn0retaddr __label26
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label26 __fn0
 +   95 label __label272
 +   96 draw color 0 0 80 255
@@ -2241,7 +2241,7 @@ Modifications by Function Inlining: inline function eraseNumbers (-1 instruction
    187 set y 152
    188 set __fn0_first_column false
 -    * setaddr __fn0retaddr __label52
--    * call __label0
+-    * call __label0 __fn0retval
 -    * gotolabel __label52 __fn0
 +  189 label __label276
 +  190 draw color 0 0 80 255
@@ -2318,7 +2318,7 @@ Modifications by Function Inlining: inline function eraseImages (-1 instructions
      3 set y 152
      4 set __fn1_first_column true
 -    * setaddr __fn1retaddr __label3
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label3 __fn1
 +    5 label __label280
 +    6 draw color 0 0 80 255
@@ -2331,7 +2331,7 @@ Modifications by Function Inlining: inline function eraseImages (-1 instructions
 +   13 label __label283
     14 set __fn1_first_column false
 -    * setaddr __fn1retaddr __label4
--    * call __label1
+-    * call __label1 __fn1retval
 -    * gotolabel __label4 __fn1
 +   15 label __label284
 +   16 draw color 0 0 80 255
@@ -3260,7 +3260,7 @@ Modifications by Function Inlining: inline function displayItem (+369 instructio
    241 set __fn2_x 71
    242 set __fn2_y y
 -    * setaddr __fn2retaddr __label48
--    * call __label2
+-    * call __label2 __fn2retval
 -    * gotolabel __label48 __fn2
 +  243 label __label352
 +  244 op max __fn2_amount AMOUNT 0
@@ -3810,7 +3810,7 @@ Modifications by Function Inlining: inline function displayItem (+369 instructio
    788 set __fn2_x 157
    789 set __fn2_y y
 -    * setaddr __fn2retaddr __label49
--    * call __label2
+-    * call __label2 __fn2retval
 -    * gotolabel __label49 __fn2
 +  790 label __label524
 +  791 op max __fn2_amount AMOUNT 0
