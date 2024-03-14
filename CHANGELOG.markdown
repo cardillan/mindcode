@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2024-03-12
+
+### Fixed
+
+* Fixed incorrect handling of inlined function return values
+ ([issue #130](https://github.com/cardillan/mindcode/issues/130)).
+
 ## 2024-03-08
 
 ### Fixed
