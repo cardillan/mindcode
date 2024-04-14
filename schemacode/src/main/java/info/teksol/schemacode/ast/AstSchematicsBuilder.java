@@ -223,13 +223,23 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
     }
 
     @Override
+    public AstSchemaItem visitProgram(ProgramContext ctx) {
+        List<AstProgramSnippet> snippets = ctx.programSnippet().stream()
+                .map(this::visit)
+                .map(AstProgramSnippet.class::cast)
+                .toList();
+
+        return new AstProgram(snippets);
+    }
+
+    @Override
     public AstSchemaItem visitProgramString(SchemacodeParser.ProgramStringContext ctx) {
-        return new AstProgramText((AstText) visit(ctx.text));
+        return new AstProgramSnippetText((AstText) visit(ctx.text));
     }
 
     @Override
     public AstSchemaItem visitProgramFile(SchemacodeParser.ProgramFileContext ctx) {
-        return new AstProgramFile((AstText) visit(ctx.file));
+        return new AstProgramSnippetFile((AstText) visit(ctx.file));
     }
 
     // Coordinates & direction

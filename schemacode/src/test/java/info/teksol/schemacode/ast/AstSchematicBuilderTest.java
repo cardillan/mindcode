@@ -1010,7 +1010,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramText(AstStringLiteral.fromText("program")), Language.MLOG)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                        new AstProgramSnippetText(AstStringLiteral.fromText("program"))
+                                ), Language.MLOG)
                 )
         );
 
@@ -1033,7 +1036,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramText(new AstStringRef("mlog_program")), Language.MLOG)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                        new AstProgramSnippetText(new AstStringRef("mlog_program"))
+                                ), Language.MLOG)
                 )
         );
 
@@ -1056,7 +1062,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramFile(AstStringLiteral.fromText("file")), Language.MLOG)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file"))
+                                ), Language.MLOG)
                 )
         );
 
@@ -1079,7 +1088,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramFile(new AstStringRef("my_file")), Language.MLOG)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                        new AstProgramSnippetFile(new AstStringRef("my_file"))
+                                ), Language.MLOG)
                 )
         );
 
@@ -1102,7 +1114,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramText(AstStringLiteral.fromText("program")), Language.MINDCODE)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                        new AstProgramSnippetText(AstStringLiteral.fromText("program"))
+                                ), Language.MINDCODE)
                 )
         );
 
@@ -1125,7 +1140,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramText(new AstStringRef("mindcode_program")), Language.MINDCODE)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                    new AstProgramSnippetText(new AstStringRef("mindcode_program"))
+                                ), Language.MINDCODE)
                 )
         );
 
@@ -1148,7 +1166,10 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramFile(AstStringLiteral.fromText("file")), Language.MINDCODE)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                    new AstProgramSnippetFile(AstStringLiteral.fromText("file"))
+                                ), Language.MINDCODE)
                 )
         );
 
@@ -1171,7 +1192,40 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         "@micro-processor",
                         new AstCoordinates(0, 0),
                         null,
-                        new AstProcessor(List.of(), new AstProgramFile(new AstStringRef("my_file")), Language.MINDCODE)
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                    new AstProgramSnippetFile(new AstStringRef("my_file"))
+                                ), Language.MINDCODE)
+                )
+        );
+
+        assertEquals(expected, actual);
+    }
+
+
+    @Test
+    public void parsesProcessorCodeMindcodeMultipleSnippets() {
+        AstDefinitions actual = createDefinitions("""
+                schematic
+                    @micro-processor at (0, 0) processor
+                        mindcode = "program" + file "file" + my_program + file my_file
+                    end
+                end
+                """);
+
+        AstDefinitions expected = definitionWithBlocks(
+                new AstBlock(
+                        List.of(),
+                        "@micro-processor",
+                        new AstCoordinates(0, 0),
+                        null,
+                        new AstProcessor(List.of(),
+                                new AstProgram(
+                                        new AstProgramSnippetText(AstStringLiteral.fromText("program")),
+                                        new AstProgramSnippetFile(AstStringLiteral.fromText("file")),
+                                        new AstProgramSnippetText(new AstStringRef("my_program")),
+                                        new AstProgramSnippetFile(new AstStringRef("my_file"))
+                                ), Language.MINDCODE)
                 )
         );
 

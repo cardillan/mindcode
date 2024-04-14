@@ -11,11 +11,7 @@ import info.teksol.schemacode.schema.Block;
 import info.teksol.schemacode.schema.BlockPosition;
 import info.teksol.schemacode.schema.SchematicsBuilder;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -151,15 +147,24 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
             case NONE -> "";
             case MLOG -> processor.program().getProgramText(builder);
             case MINDCODE -> {
+                String mindcode = processor.program().getProgramText(builder);
+                String cached = builder.getMlogFromCache(mindcode);
+                if (cached != null) {
+                    yield cached;
+                }
+
                 builder.info("Compiling %s", processor.program().getProgramId(builder));
-                CompilerOutput<String> output = CompilerFacade.compile(processor.program().getProgramText(builder),
+                CompilerOutput<String> output = CompilerFacade.compile(mindcode,
                         builder.getCompilerProfile());
                 output.messages().forEach(builder::addMessage);
                 if (output.hasErrors()) {
                     builder.error("Compile errors in Mindcode source code.");
                     yield "";
                 }
-                yield output.output();
+
+                String mlog = output.output();
+                builder.storeMlogToCache(mindcode, mlog);
+                yield mlog;
             }
         };
     }

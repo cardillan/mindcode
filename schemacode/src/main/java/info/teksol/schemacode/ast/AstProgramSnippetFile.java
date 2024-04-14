@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public record AstProgramFile(AstText fileName) implements AstProgram {
+public record AstProgramSnippetFile(AstText fileName) implements AstProgramSnippet {
 
     @Override
     public String getProgramId(SchematicsBuilder builder) {

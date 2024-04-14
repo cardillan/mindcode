@@ -950,7 +950,8 @@ mindcode = <code>
 At most one of `mlog` or `mindcode` can be specified. If neither of these options is specified, the processor created 
 will not contain any instructions.
 
-The `<code>` can be specified in one of these ways:
+`<code>` is one or more code snippets joined together using a `+` (plus) operator. A code snippet can be specified in 
+one of these ways:
 
 * as a string literal,
 * as a text block,
@@ -1026,7 +1027,30 @@ read from standard input, it is evaluated from the current directory.
 
 > [!NOTE]
 > Only command line tool allows you to use code from an external file. The web application cannot access your local 
-> files by specified path, and the `file` option is therefore disabled there.   
+> files by specified path, and the `file` option is therefore disabled there.
+
+### Processor code
+
+A program will typically consist of just one code snippet. Using multiple code snippets is primarily used to 
+parametrize a common code shared between multiple processors, for example:
+
+```
+schematic
+    @micro-processor at (0, 0) processor
+        mindcode = "pos_x = 0; pos_y = 0;" + file "fractal.mnd"
+    end
+    @micro-processor at (0, 1) processor
+        mindcode = "pos_x = 100; pos_y = 100;" + file "fractal.mnd"
+    end
+end
+```
+
+It is assumed that the code stored in `fractal.mnd` uses the `pos_x` and `pos_y` variables, specifically the values 
+assigned to them in the preceding code snippet.
+
+This feature may be especially useful for parametrizing Mindcode. Since the code for each processor is compiled 
+independently, different values assigned to each processor may lead to different mlog code due to optimizations, 
+specifically constant folding and constant propagation.   
 
 # Origin and dimensions calculation
 

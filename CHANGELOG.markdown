@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Added
+
+* Added support for specifying processor code (both Mindcode and mlog) as a concatenation of multiple code snippets
+  from various sources (string literal, string constant or external file). 
+
 ## 2024-03-12
 
 ### Fixed

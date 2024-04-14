@@ -398,26 +398,36 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitLinkPos(SchemacodeParser.LinkPosContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SchemacodeParser#program}.
+	 * @param ctx the parse tree
+	 */
+	void enterProgram(SchemacodeParser.ProgramContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SchemacodeParser#program}.
+	 * @param ctx the parse tree
+	 */
+	void exitProgram(SchemacodeParser.ProgramContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code programString}
-	 * labeled alternative in {@link SchemacodeParser#program}.
+	 * labeled alternative in {@link SchemacodeParser#programSnippet}.
 	 * @param ctx the parse tree
 	 */
 	void enterProgramString(SchemacodeParser.ProgramStringContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code programString}
-	 * labeled alternative in {@link SchemacodeParser#program}.
+	 * labeled alternative in {@link SchemacodeParser#programSnippet}.
 	 * @param ctx the parse tree
 	 */
 	void exitProgramString(SchemacodeParser.ProgramStringContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code programFile}
-	 * labeled alternative in {@link SchemacodeParser#program}.
+	 * labeled alternative in {@link SchemacodeParser#programSnippet}.
 	 * @param ctx the parse tree
 	 */
 	void enterProgramFile(SchemacodeParser.ProgramFileContext ctx);
 	/**
 	 * Exit a parse tree produced by the {@code programFile}
-	 * labeled alternative in {@link SchemacodeParser#program}.
+	 * labeled alternative in {@link SchemacodeParser#programSnippet}.
 	 * @param ctx the parse tree
 	 */
 	void exitProgramFile(SchemacodeParser.ProgramFileContext ctx);

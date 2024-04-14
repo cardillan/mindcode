@@ -82,7 +82,7 @@ connection
     ;
 
 processor
-    : Processor links=processorLinks? ( Mindcode mindcode=program | Mlog mlog=program) ? End
+    : Processor links=processorLinks? ( Mindcode Assign mindcode=program | Mlog Assign mlog=program) ? End
     ;
 
 processorLinks
@@ -95,8 +95,12 @@ linkDef
     ;
 
 program
-    : Assign text=textDef           # programString
-    | Assign File file=textDef      # programFile
+    : programSnippet (Plus programSnippet)*
+    ;
+
+programSnippet
+    : text=textDef           # programString
+    | File file=textDef      # programFile
     ;
 
 textDef

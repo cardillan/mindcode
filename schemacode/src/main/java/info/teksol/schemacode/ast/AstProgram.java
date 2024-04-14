@@ -2,9 +2,24 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.schemacode.schema.SchematicsBuilder;
 
-public interface AstProgram extends AstSchemaItem {
+import java.util.List;
+import java.util.stream.Collectors;
 
-    String getProgramId(SchematicsBuilder builder);
+public record AstProgram(List<AstProgramSnippet> snippets) implements AstSchemaItem {
 
-    String getProgramText(SchematicsBuilder builder);
+    public AstProgram(AstProgramSnippet... snippets) {
+        this(List.of(snippets));
+    }
+
+    public String getProgramText(SchematicsBuilder builder) {
+        return snippets.stream()
+                .map(s -> s.getProgramText(builder))
+                .collect(Collectors.joining("\n"));
+    }
+
+    public String getProgramId(SchematicsBuilder builder) {
+        return snippets.stream()
+                .map(s -> s.getProgramId(builder))
+                .collect(Collectors.joining(", "));
+    }
 }

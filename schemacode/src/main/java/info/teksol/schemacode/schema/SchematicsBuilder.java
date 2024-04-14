@@ -409,4 +409,15 @@ public class SchematicsBuilder {
             return object;
         }
     }
+
+    // Caches result of compiling Mindcode to mlog - avid repeated recompilation of identical mindcode
+    private final Map<String, String> compilerCache = new HashMap<>();
+
+    public String getMlogFromCache(String mindcode) {
+        return compilerCache.get(mindcode);
+    }
+
+    public void storeMlogToCache(String mindcode, String mlog) {
+        compilerCache.put(mindcode, mlog);
+    }
 }

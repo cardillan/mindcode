@@ -2,7 +2,7 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.schemacode.schema.SchematicsBuilder;
 
-public record AstProgramText(AstText programText) implements AstProgram {
+public record AstProgramSnippetText(AstText programText) implements AstProgramSnippet {
 
     @Override
     public String getProgramId(SchematicsBuilder builder) {
