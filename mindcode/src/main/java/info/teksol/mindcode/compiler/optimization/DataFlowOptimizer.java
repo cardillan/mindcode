@@ -405,7 +405,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         // the iterator position synchronized with what is expected.
         List<AstContext> children = new ArrayList<>(localContext.children());
         int currentContext = 0;
-        boolean mergeStates = false;
+        boolean propagateUninitialized = false;
 
         if (children.stream().anyMatch(ctx -> ctx.matches(ITERATOR))) {
             if (children.get(currentContext).matches(INIT)) {
@@ -425,7 +425,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             while (currentContext < children.size() && children.get(currentContext).matches(ITERATOR)) {
                 VariableStates copy = variableStates.copy("loop iterator");
                 variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
-                variableStates = variableStates.merge(copy, "loop iterator");
+                variableStates = variableStates.merge(copy, true, "loop iterator");
             }
         } else {
             if (!children.isEmpty() && children.get(0).matches(INIT)) {
@@ -475,15 +475,15 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 LogicInstruction last = condition.getLast();
                 if (last instanceof NoOpInstruction) {
                     // NoOp means the jump was already eliminated --> the body WILL be executed
-                    mergeStates = false;
+                    propagateUninitialized = false;
                 } else if (last instanceof JumpInstruction jump) {
                     // If the jump evaluates to false, it means it doesn't skip over the loop body
-                    // We don't need to merge the initial states, because the body will be executed
                     LogicBoolean initialValue = optimizationContext.evaluateLoopConditionJump(jump, localContext);
-                    mergeStates = initialValue != LogicBoolean.FALSE;
+                    propagateUninitialized = initialValue != LogicBoolean.FALSE;
                 } else {
                     // We cannot guarantee the loop will be executed at least once
-                    mergeStates = true;
+                    // Variable that are initialized in the loop body, but not before the loop, need to remain uninitialized
+                    propagateUninitialized = true;
                 }
             }
         }
@@ -506,11 +506,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 variableStates = processContext(localContext, children.get(j), variableStates, pass > 0);
             }
 
-            if (mergeStates) {
-                variableStates = variableStates.merge(initial, "inside loop");
-            } else {
-                mergeStates = true;
-            }
+            variableStates = variableStates.merge(initial, propagateUninitialized, "inside loop");
+            propagateUninitialized = true;
         }
 
         return variableStates;
@@ -746,7 +743,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         List<VariableStates> states = labelStates.remove(label);
         if (states != null) {
             for (VariableStates state : states) {
-                variableStates = variableStates.merge(state, "states for label " + label.toMlog());
+                variableStates = variableStates.merge(state, true, "states for label " + label.toMlog());
             }
         }
         return variableStates;
@@ -939,7 +936,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
          */
         public void newBranch() {
             if (current != null) {
-                merged = merged == null ? current : merged.merge(current, " old branch before starting new branch");
+                merged = merged == null ? current : merged.merge(current, true, " old branch before starting new branch");
             }
             current = initial.copy("new conditional branch");
         }
@@ -957,7 +954,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         public void mergeWithInitialState(AstContext localContext, AstContext context, boolean modifyInstructions) {
 //            initial = DataFlowOptimizer.this.processContext(localContext, context, initial, modifyInstructions);
             VariableStates processed = DataFlowOptimizer.this.processContext(localContext, context, initial.copy("new when condition"), modifyInstructions);
-            initial.merge(processed, "processed condition to initial state");
+            initial.merge(processed, true, "processed condition to initial state");
         }
 
         /**

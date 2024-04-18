@@ -437,9 +437,11 @@ public class DataFlowVariableStates {
          * Merges two variable states. Each state was produced by a code path, and it isn't known which one was
          * executed.
          *
-         * @param other states to merge to this one.
+         * @param other                  states to merge to this one
+         * @param propagateUninitialized propagate uninitialized variables from the other instance
+         * @param reason                 reasons for the merge, for debug purposes
          */
-        public VariableStates merge(VariableStates other, String reason) {
+        public VariableStates merge(VariableStates other, boolean propagateUninitialized, String reason) {
             print("*** Merge " + reason + ":\n  this: ");
             other.print("  other:");
 
@@ -473,8 +475,10 @@ public class DataFlowVariableStates {
                 }
             }
 
-            // Variable is initialized only if it was initialized by both code paths
-            initialized.retainAll(other.initialized);
+            if (propagateUninitialized) {
+                // Variable is initialized only if it was initialized by both code paths
+                initialized.retainAll(other.initialized);
+            }
 
             useless.keySet().retainAll(other.useless.keySet());
             for (LogicVariable variable : other.useless.keySet()) {

@@ -644,6 +644,27 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void handlesNonConstantExpressions() {
+        assertCompilesTo("""
+                        x = 0
+                        while true
+                            print(x + 1)
+                            x = rand(10)
+                            print(x + 1)
+                        end
+                        """,
+                createInstruction(SET, "x", "0"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "add", var(0), "x", "1"),
+                createInstruction(PRINT, var(0)),
+                createInstruction(OP, "rand", "x", "10"),
+                createInstruction(OP, "add", var(2), "x", "1"),
+                createInstruction(PRINT, var(2)),
+                createInstruction(JUMP, var(1000), "always")
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Exit points">
