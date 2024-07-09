@@ -35,7 +35,8 @@ public class SchematicsController {
                 "on-off-switch",
                 "regulator",
                 "worker-recall-station",
-                "scrap-to-metaglass-2"
+                "scrap-to-metaglass-2",
+                "mandelbrot-generator"
         );
 
         final List<String> sources = sampleNames.stream()
@@ -98,7 +99,7 @@ public class SchematicsController {
                 sourceCode = "// 404 Not Found";
             }
         } else {
-            final int skipCount = random.nextInt(samples.size());
+            final int skipCount = random.nextInt(samples.size() - 2);
             sampleName = samples.keySet().stream().skip(skipCount).findFirst().get();
             sourceCode = samples.get(sampleName);
         }

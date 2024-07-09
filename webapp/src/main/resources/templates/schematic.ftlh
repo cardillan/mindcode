@@ -17,6 +17,7 @@
             <li><a href="?s=regulator"              class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "regulator"            >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Regulator</a>
             <li><a href="?s=worker-recall-station"  class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "worker-recall-station">font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Unit Recall Station</a>
             <li><a href="?s=scrap-to-metaglass-2"   class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "scrap-to-metaglass-2" >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Scrap to Metaglass</a>
+            <li><a href="?s=mandelbrot-generator"   class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "mandelbrot-generator" >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Mandelbrot Generator</a>
         </ul>
     </nav>
 </#if>
