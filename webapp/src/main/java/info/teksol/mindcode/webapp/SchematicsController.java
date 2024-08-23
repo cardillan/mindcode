@@ -99,7 +99,7 @@ public class SchematicsController {
                 sourceCode = "// 404 Not Found";
             }
         } else {
-            final int skipCount = random.nextInt(samples.size() - 2);
+            final int skipCount = random.nextInt(samples.size() - 1);
             sampleName = samples.keySet().stream().skip(skipCount).findFirst().get();
             sourceCode = samples.get(sampleName);
         }
