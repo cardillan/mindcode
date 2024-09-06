@@ -83,6 +83,12 @@ public class DataFlowVariableStates {
          */
         private boolean dead;
 
+        /**
+         * Indicates the instance is reachable - contain at least one instruction that is not unreachable. Instances
+         * which are not reachable are ignored on merges.
+         */
+        private boolean reachable = true;
+
         /** An isolated instance only tracks values of variables, cannot be used to determine definitions or reaches. */
         private boolean isolated;
 
@@ -106,6 +112,7 @@ public class DataFlowVariableStates {
             initialized = new HashSet<>(other.initialized);
             stored = new HashSet<>(other.stored);
             dead = other.dead;
+            reachable = other.reachable;
         }
 
         private static Map<LogicVariable, List<LogicInstruction>> deepCopy(Map<LogicVariable, List<LogicInstruction>> original) {
@@ -171,6 +178,14 @@ public class DataFlowVariableStates {
             }
             dead = true;
             return this;
+        }
+
+        public void setReachable() {
+            this.reachable = true;
+        }
+
+        public void setUnreachable() {
+            this.reachable = false;
         }
 
         private void printInstruction(LogicInstruction instruction) {
@@ -390,10 +405,11 @@ public class DataFlowVariableStates {
          * @return constant value of the variable, or null if there isn't a known constant value of the variable
          */
         public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reportUninitialized) {
-            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!)" : ")"));
+            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!" : "" ) + (reachable ? "" : " UNREACHABLE!" ) + ")");
 
             if (reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
                 trace(() -> "*** Detected uninitialized read of " + variable.toMlog());
+                print("Current context:");
                 optimizer.uninitialized.add(variable);
             }
 
@@ -449,10 +465,10 @@ public class DataFlowVariableStates {
                 throw new MindcodeInternalError("Trying to merge variable states having variables on stack.");
             }
 
-            if (other.dead) {
+            if (other.dead || !other.reachable) {
                 print("  result:");
                 return this;        // Merging two dead ends produces dead end again
-            } else if (dead) {
+            } else if (dead || !reachable) {
                 other.print("  result:");
                 return other;
             }
@@ -542,7 +558,7 @@ public class DataFlowVariableStates {
         void print(String title) {
             if (BaseOptimizer.TRACE) {
                 System.out.println(title);
-                System.out.println("    VariableStates instance #" + id + (dead ? " DEAD!" : ""));
+                System.out.println("    VariableStates instance #" + id + (dead ? " DEAD!" : "") + (reachable ? "" : " UNREACHABLE!"));
                 values.values().forEach(v -> System.out.println("    " + v));
                 definitions.forEach((k, v) -> {
                     System.out.println("    Definitions of " + k.toMlog());

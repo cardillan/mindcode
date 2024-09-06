@@ -36,6 +36,7 @@ import java.util.stream.Stream;
  */
 abstract class BaseOptimizer extends AbstractOptimizer {
     protected static final boolean TRACE = false;
+    protected static final boolean DEBUG_PRINT = TRACE;
 
     protected int modifications = 0;
     protected int insertions = 0;
@@ -62,9 +63,16 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         int iteration = 1;
         do {
             optimizationContext.prepare();
+
             if (TRACE) {
                 System.out.printf("%n*** %s: PASS %d, ITERATION %d ***%n%n", getName().toUpperCase(), pass, iteration);
             }
+            if (DEBUG_PRINT) {
+                System.out.println("Program at the beginnig of the optimization phase:");
+                optimizationContext.debugPrintProgram();
+                System.out.println();
+            }
+
             repeat = optimizeProgram(phase);
             optimizationContext.finish();
 

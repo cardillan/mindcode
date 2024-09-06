@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
@@ -113,6 +114,12 @@ public class OptimizationContext {
         return updated;
     }
 
+    void debugPrintProgram() {
+        for (int i = 0; i < program.size(); i++) {
+            System.out.printf("%4d:  %s%n", i, LogicInstructionPrinter.toString(instructionProcessor, program.get(i)));
+        }
+    }
+
     /**
      * Prepares the instance for the next round of program modification/optimization.
      */
@@ -130,6 +137,79 @@ public class OptimizationContext {
         if (!iterators.isEmpty()) {
             throw new IllegalStateException("Unclosed iterators.");
         }
+    }
+
+    //<editor-fold desc="Common optimizer functionality">
+
+    /**
+     * Returns a BitSet whose bits are The optimizer analyses the control flow of the program. It starts at the first instruction and visits
+     * every instruction reachable from there, either by advancing to the next instruction, or by a jump/goto/call.
+     * Visited instruction are marked as active and aren't inspected again. When all code paths have reached an
+     * end or an already visited instruction, the analysis stops and all unvisited instructions are removed.
+     * Only one iteration is performed.
+     * @return
+     */
+    public BitSet getUnreachableInstructions() {
+        BitSet unreachable = new BitSet(program.size());
+        // Also serves as a data stop for reaching the end of instruction list naturally.
+        unreachable.set(0, program.size());
+        Queue<Integer> heads = new ArrayDeque<>();
+        heads.offer(0);
+
+MainLoop:
+        while (!heads.isEmpty()) {
+            int index = heads.poll();
+            while (unreachable.get(index)) {
+                unreachable.clear(index);
+                switch (program.get(index)) {
+                    case EndInstruction end -> {
+                        continue MainLoop;
+                    }
+                    case ReturnInstruction ret -> {
+                        continue MainLoop;
+                    }
+                    case JumpInstruction jump -> {
+                        heads.offer(findLabelIndex(jump.getTarget()));
+                        if (jump.isUnconditional()) {
+                            continue MainLoop;
+                        }
+                    }
+                    case CallInstruction call -> {
+                        heads.offer(findLabelIndex(call.getCallAddr()));
+                    }
+                    case CallRecInstruction call -> {
+                        heads.offer(findLabelIndex(call.getCallAddr()));
+                        heads.offer(findLabelIndex(call.getRetAddr()));
+                        continue MainLoop;
+                    }
+                    case GotoInstruction gotoIx -> {
+                        for (int i = 0; i < program.size(); i++) {
+                            if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                heads.offer(i);
+                            }
+                        }
+                        continue MainLoop;
+                    }
+                    case GotoOffsetInstruction gotoIx -> {
+                        for (int i = 0; i < program.size(); i++) {
+                            if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                heads.offer(i);
+                            }
+                        }
+                        continue MainLoop;
+                    }
+                    default -> {}
+                }
+
+                index++;
+            }
+        }
+
+        return unreachable;
+    }
+
+    private int findLabelIndex(LogicLabel label) {
+        return firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
     }
 
     //<editor-fold desc="Label & variable tracking">

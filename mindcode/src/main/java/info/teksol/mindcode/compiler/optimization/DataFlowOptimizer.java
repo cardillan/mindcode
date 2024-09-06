@@ -106,6 +106,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         analyzeFunctionVariables();
 
+        unreachables = optimizationContext.getUnreachableInstructions();
+
         getRootContext().children().forEach(this::processTopContext);
 
         // Keep defining instructions for orphaned, uninitialized variables.
@@ -306,6 +308,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
             emitMessage(MessageLevel.WARNING, "       List of uninitialized variables: %s.", uninitializedList);
         }
     }
+
+    private BitSet unreachables;
 
     /** Iterator pointing at the processed instruction */
     private LogicIterator iterator;
@@ -580,7 +584,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                         throw new MindcodeInternalError("Expected FLOW_CONTROL, found BODY subcontext in IF context %s", localContext);
                     }
                     if (process[body]) {
-                        branchedStates.newBranch();
+                        branchedStates.newBranch(false);
                         branchedStates.processContext(localContext, child, modifyInstructions);
                     } else {
                         skipContext(child);
@@ -602,7 +606,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         // There was only one body, no else branch. Create a new branch to represent the missing else branch.
         if (body == 1) {
-            branchedStates.newBranch();
+            branchedStates.newBranch(false);
         }
 
         return branchedStates.getFinalStates();
@@ -634,7 +638,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 switch (child.subcontextType()) {
                     case BODY -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
-                        branchedStates.newBranch();
+                        branchedStates.newBranch(false);
                     }
                     case ELSE -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
@@ -654,14 +658,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
                         branchedStates.mergeWithInitialState(localContext, child, modifyInstructions);
                     }
                     case BODY -> {
-                        branchedStates.newBranch();
+                        branchedStates.newBranch(true);
                         branchedStates.processContext(localContext, child, modifyInstructions);
                     }
                     case FLOW_CONTROL -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
                     }
                     case ELSE -> {
-                        branchedStates.newBranch();
+                        branchedStates.newBranch(true);
                         branchedStates.processContext(localContext, child, modifyInstructions);
                         hasElse = true;
                     }
@@ -672,7 +676,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         // If there's no else branch, start a new, empty branch representing the missing else.
         if (!hasElse) {
-            branchedStates.newBranch();
+            branchedStates.newBranch(false);
         }
 
         return branchedStates.getFinalStates();
@@ -715,8 +719,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
 
             if (instruction.getAstContext() == context) {
+                boolean reachable = !unreachables.get(iterator.nextIndex());
                 iterator.next();
-                variableStates = processInstruction(variableStates, instruction, modifyInstructions);
+                variableStates = processInstruction(variableStates, instruction, modifyInstructions, reachable);
                 variableStates.print("  after processing instruction");
             } else {
                 AstContext childContext = context.findDirectChild(instruction.getAstContext());
@@ -755,9 +760,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
      * @param variableStates        variable states before executing the instruction
      * @param instruction           instruction to process
      * @param modifyInstructions    true if instructions may be modified in this run based on known variable states
+     * @param reachable             true if the instruction being processed is reachable
      * @return variable states after executing the instruction
      */
-    private VariableStates processInstruction(VariableStates variableStates, LogicInstruction instruction, boolean modifyInstructions) {
+    private VariableStates processInstruction(VariableStates variableStates, LogicInstruction instruction,
+            boolean modifyInstructions, boolean reachable) {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
@@ -771,6 +778,12 @@ public class DataFlowOptimizer extends BaseOptimizer {
             case LabeledInstruction ix:     return resolveLabel(variableStates, ix.getLabel());
             case EndInstruction ix:         return variableStates.setDead(true);
             default:                        break;
+        }
+
+        if (reachable) {
+            variableStates.setReachable();
+        } else if (TRACE) {
+            System.out.println("UNREACHABLE");
         }
 
         // Process inputs first, to handle instructions reading and writing the same variable
@@ -934,11 +947,14 @@ public class DataFlowOptimizer extends BaseOptimizer {
          * Called when a body of a new branch is encountered. Closes the previous branch (if any) by merging it into
          * the final states, and then creates variable states for the new branch by copying the initial state.
          */
-        public void newBranch() {
+        public void newBranch(boolean startUnreachable) {
             if (current != null) {
                 merged = merged == null ? current : merged.merge(current, true, " old branch before starting new branch");
             }
             current = initial.copy("new conditional branch");
+            if (startUnreachable) {
+                current.setUnreachable();
+            }
         }
 
         /**
@@ -975,7 +991,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
          * @return final variable states of the branched expression
          */
         public VariableStates getFinalStates() {
-            newBranch();        // Force merging the previous branch
+            trace(() -> "Getting final states");
+            newBranch(false);        // Force merging the previous branch
             return merged == null ? initial : merged;
         }
 

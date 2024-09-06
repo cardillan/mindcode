@@ -430,6 +430,18 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void handlesConstantCaseExpressions() {
+        assertCompilesTo("""
+                        n = 1
+                        sort = case n when 1 sorter1 end
+                        print(sort)
+                        """,
+                createInstruction(PRINT, "sorter1"),
+                createInstruction(END)
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Loops">

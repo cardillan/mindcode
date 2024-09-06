@@ -106,6 +106,9 @@ public class CaseSwitcher extends BaseOptimizer {
             }
         }
 
+        // Degenerate case expressions: no branches
+        if (targets.isEmpty()) return null;
+
         // Cost calculation:
         // Adding fixed three instructions: op min, op max, goto offset
         // Adding one jump for each value between min and max (the jump table)
