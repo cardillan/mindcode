@@ -3,7 +3,7 @@
      1 instructions eliminated by Dead Code Elimination (3 iterations).
     16 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions modified by If Expression Optimization (3 iterations).
-    40 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+    40 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
      2 instructions eliminated by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
    219 instructions added by Loop Unrolling (5 iterations).
@@ -1187,10 +1187,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 +  299 read __tmp9 BITMAP __tmp3
    300 op mod __tmp11 14 BITS
 -    * op shl __tmp12 1 __tmp11
+-    * op and __tmp8 __tmp9 __tmp12
 +  301 op shl __tmp12 1 __tmp4
-   302 op and __tmp8 __tmp9 __tmp12
++  302 op and __tmp8 __tmp9 __tmp5
    303 label __label120
    304 jump __label121 equal __tmp8 false
+   305 set __tmp14 1
  
    307 label __label121
    308 print __tmp14
@@ -1207,7 +1209,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    325 label __label7
    326 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3 instructions):
  
    295 label __label118
    296 set __tmp14 0
@@ -1215,18 +1217,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2
 -    * op idiv __tmp10 14 BITS
    298 read __tmp9 BITMAP __tmp3
 -    * op mod __tmp11 14 BITS
-   299 op shl __tmp12 1 __tmp4
--    * op and __tmp8 __tmp9 __tmp12
-+  300 op and __tmp8 __tmp9 __tmp5
-   301 label __label120
-   302 jump __label121 equal __tmp8 false
-   303 set __tmp14 1
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
- 
-   296 set __tmp14 0
-   297 label __label119
-   298 read __tmp9 BITMAP __tmp3
 -    * op shl __tmp12 1 __tmp4
    299 op and __tmp8 __tmp9 __tmp5
    300 label __label120

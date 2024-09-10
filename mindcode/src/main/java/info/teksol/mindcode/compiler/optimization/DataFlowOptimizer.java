@@ -8,6 +8,7 @@ import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
+import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.*;
 
@@ -168,7 +169,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         } else if (instruction instanceof SetInstruction set) {
             // Specific optimization to streamline self-modifying statements in recursive calls
             if (canEliminate(set, set.getResult()) && set.getValue().isTemporaryVariable()) {
-                VariableStates.VariableValue val = variableStates.findVariableValue(set.getValue());
+                VariableValue val = variableStates.findVariableValue(set.getValue());
                 if (val != null && val.isExpression() && val.getInstruction() instanceof OpInstruction op) {
                     if (op.inputArgumentsStream().anyMatch(set.getResult()::equals)) {
                         OpInstruction newInstruction = op.withContext(set.getAstContext()).withResult(set.getResult());
@@ -754,6 +755,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         return variableStates;
     }
 
+    private int counter = 0;
+
     /**
      * Processes a single instruction.
      *
@@ -768,7 +771,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
-        trace(() -> "Processing instruction #" + instructionIndex(instruction) +
+        counter++;
+        trace(() -> "*" + counter + " Processing instruction #" + instructionIndex(instruction) +
                 ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
         switch (instruction) {

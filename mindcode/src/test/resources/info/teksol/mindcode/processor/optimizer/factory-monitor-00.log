@@ -5,7 +5,7 @@
     15 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      8 instructions eliminated by If Expression Optimization (3 iterations).
-    16 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
+    16 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      4 instructions added by Loop Optimization (3 iterations).
      4 loops improved by Loop Optimization.
     11 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
@@ -1476,30 +1476,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    174 op equal __tmp0 DISPLAY null
    175 op equal __tmp1 TYPE null
 -    * op or __tmp2 __tmp0 __tmp1
+-    * jump __label86 notEqual __tmp2 false
 +  176 op or __tmp2 __tmp25 __tmp26
-   177 jump __label86 notEqual __tmp2 false
++  177 jump __label86 notEqual __tmp27 false
    178 label __label2
    179 sensor __tmp29 DISPLAY @type
+   180 jump __label29 notEqual __tmp29 @logic-display
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
    171 label __label28
    172 printflush MESSAGE
    173 label __label1
 -    * op equal __tmp0 DISPLAY null
 -    * op equal __tmp1 TYPE null
-   174 op or __tmp2 __tmp25 __tmp26
--    * jump __label86 notEqual __tmp2 false
-+  175 jump __label86 notEqual __tmp27 false
-   176 label __label2
-   177 sensor __tmp29 DISPLAY @type
-   178 jump __label29 notEqual __tmp29 @logic-display
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
- 
-   171 label __label28
-   172 printflush MESSAGE
-   173 label __label1
 -    * op or __tmp2 __tmp25 __tmp26
    174 jump __label86 notEqual __tmp27 false
    175 label __label2

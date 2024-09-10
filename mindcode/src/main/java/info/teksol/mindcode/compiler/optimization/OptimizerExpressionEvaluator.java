@@ -4,7 +4,7 @@ import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.OpInstruction;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
-import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates.VariableValue;
+import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.processor.ExpressionEvaluator;
 import info.teksol.mindcode.processor.MindustryValue;

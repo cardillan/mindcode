@@ -3,7 +3,7 @@
      8 instructions eliminated by Dead Code Elimination (3 iterations).
      4 instructions eliminated by Jump Optimization (3 iterations).
      2 instructions eliminated by Single Step Elimination (4 iterations).
-     3 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
+     3 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      3 instructions added by Loop Optimization (2 iterations).
      5 loops improved by Loop Optimization.
      5 instructions eliminated by Jump Straightening (3 iterations).
@@ -463,30 +463,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     72 op equal __tmp7 MEMORY null
     73 op equal __tmp8 DISPLAY null
 -    * op or __tmp9 __tmp7 __tmp8
+-    * jump __label32 notEqual __tmp9 false
 +   74 op or __tmp9 __tmp16 __tmp17
-    75 jump __label32 notEqual __tmp9 false
++   75 jump __label32 notEqual __tmp18 false
     76 label __label2
     77 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
+    78 read R0 MEMORY M_R0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
     69 label __label18
     70 printflush MESSAGE
     71 label __label1
 -    * op equal __tmp7 MEMORY null
 -    * op equal __tmp8 DISPLAY null
-    72 op or __tmp9 __tmp16 __tmp17
--    * jump __label32 notEqual __tmp9 false
-+   73 jump __label32 notEqual __tmp18 false
-    74 label __label2
-    75 read CURRENT_INDEX MEMORY M_CURRENT_INDEX
-    76 read R0 MEMORY M_R0
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
- 
-    69 label __label18
-    70 printflush MESSAGE
-    71 label __label1
 -    * op or __tmp9 __tmp16 __tmp17
     72 jump __label32 notEqual __tmp18 false
     73 label __label2

@@ -46,8 +46,8 @@ public class DataFlowVariableStates {
         private final int id;
 
         /**
-         *  Maps variables to their known values, which might be a constant represented by a literal,
-         *  or an expression represented by an instruction.
+         * Maps variables to their known values, which might be a constant represented by a literal,
+         * or an expression represented by an instruction.
          */
         private final Map<LogicVariable, VariableValue> values;
 
@@ -58,8 +58,8 @@ public class DataFlowVariableStates {
         private final Map<LogicVariable, List<LogicInstruction>> definitions;
 
         /**
-         *  Identifies instructions that do not have to be kept, because they set value the variable already had.
-         *  Organized by variable for easier housekeeping.
+         * Identifies instructions that do not have to be kept, because they set value the variable already had.
+         * Organized by variable for easier housekeeping.
          */
         private final Map<LogicVariable, LogicInstruction> useless;
 
@@ -165,8 +165,8 @@ public class DataFlowVariableStates {
          * a copy of this context must have been created to be joined at the target label.
          *
          * @param markRead when set to true, all active definitions of user defined variables will be preserved.
-         *                To be used with the END instruction to make sure the assignments to user defined variables
-         *                won't be removed.
+         *                 To be used with the END instruction to make sure the assignments to user defined variables
+         *                 won't be removed.
          * @return this instance marked as dead.
          */
         public VariableStates setDead(boolean markRead) {
@@ -204,15 +204,27 @@ public class DataFlowVariableStates {
             if (stored.contains(variable)) {
                 trace(() -> "    Not invalidating variable " + variable.toMlog() + ", because it is stored on stack.");
             } else {
+                Set<LogicVariable> invalids = new HashSet<>();
+                invalids.add(variable);
+
+                while (true) {
+                    Set<LogicVariable> dependants = values.values().stream()
+                            .filter(exp -> exp.dependsOn(invalids))
+                            .map(VariableValue::getVariable)
+                            .collect(Collectors.toSet());
+                    if (!invalids.addAll(dependants)) break;
+                }
+
                 if (BaseOptimizer.TRACE) {
-                    values.values().stream().filter(exp -> exp.dependsOn(variable))
+                    values.values().stream().filter(exp -> exp.dependsOn(invalids))
                             .forEach(exp -> System.out.println("   Invalidating expression: " + exp.variable.toMlog() + ": " + exp.instruction));
-                    equivalences.entrySet().stream().filter(e -> e.getValue().equals(variable))
+                    equivalences.entrySet().stream().filter(e -> invalids.contains(e.getKey()) || invalids.contains(e.getValue()))
                             .forEach(e -> System.out.println("   Invalidating equivalence: " + e.getKey().toMlog() + ": " + e.getValue().toMlog()));
                 }
-                values.values().removeIf(exp -> exp.dependsOn(variable));
-                equivalences.keySet().removeIf(var -> var.equals(variable));
-                equivalences.values().removeIf(var -> var.equals(variable));
+
+                values.values().removeIf(exp -> exp.dependsOn(invalids));
+                equivalences.keySet().removeIf(invalids::contains);
+                equivalences.values().removeIf(invalids::contains);
             }
         }
 
@@ -296,7 +308,7 @@ public class DataFlowVariableStates {
                 // Recognizes that in "c = a + b; d = a + b" c and d is the same.
                 if (reuseValue) {
                     for (VariableValue expression : values.values()) {
-                        if (expression.isExpression() && expression.isEqual(instruction)) {
+                        if (expression.isExpression() && expression.isEqual(this, instruction)) {
                             if (BaseOptimizer.TRACE) {
                                 System.out.println("    Adding inferred equivalence " + variable.toMlog() + " == " + expression.variable.toMlog());
                             }
@@ -350,7 +362,7 @@ public class DataFlowVariableStates {
         /**
          * Updates states of variables when a function call occurs.
          *
-         * @param function function to process
+         * @param function    function to process
          * @param instruction instruction that caused the call
          */
         public void updateAfterFunctionCall(CallGraph.Function function, LogicInstruction instruction) {
@@ -386,8 +398,8 @@ public class DataFlowVariableStates {
          * doesn't come from a specific instruction. Returns the value of the variable, if it is known the variable
          * has a constant value. Reports uninitialized variables.
          *
-         * @param variable            variable to be marked
-         * @param instruction         instruction that reads the variable, may be null
+         * @param variable    variable to be marked
+         * @param instruction instruction that reads the variable, may be null
          * @return constant value of the variable, or null if there isn't a known constant value of the variable
          */
         public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction) {
@@ -405,7 +417,7 @@ public class DataFlowVariableStates {
          * @return constant value of the variable, or null if there isn't a known constant value of the variable
          */
         public LogicValue valueRead(LogicVariable variable, LogicInstruction instruction, boolean reportUninitialized) {
-            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!" : "" ) + (reachable ? "" : " UNREACHABLE!" ) + ")");
+            trace(() -> "Value read: " + variable + " (instance #" + id + (dead ? " DEAD!" : "") + (reachable ? "" : " UNREACHABLE!") + ")");
 
             if (reportUninitialized && !initialized.contains(variable) && !isolated && variable.getType() != ArgumentType.BLOCK) {
                 trace(() -> "*** Detected uninitialized read of " + variable.toMlog());
@@ -473,7 +485,7 @@ public class DataFlowVariableStates {
                 return other;
             }
 
-            merge(definitions,other.definitions);
+            merge(definitions, other.definitions);
 
             // Only keep values that are the same in both instances
             values.keySet().retainAll(other.values.keySet());
@@ -569,170 +581,189 @@ public class DataFlowVariableStates {
                 System.out.println("    Initialized: " + initialized.stream().map(LogicVariable::toMlog).collect(Collectors.joining(", ")));
             }
         }
+    }
 
-        class VariableValue {
-            /** Variable containing the result of the expression. */
-            private final LogicVariable variable;
+    class VariableValue {
+        /** Variable containing the result of the expression. */
+        private final LogicVariable variable;
 
-            /** Constant value of the variable, if known */
-            private final LogicValue constantValue;
+        /** Constant value of the variable, if known */
+        private final LogicValue constantValue;
 
-            /** The instruction producing the expression. */
-            private final LogicInstruction instruction;
+        /** The instruction producing the expression. */
+        private final LogicInstruction instruction;
 
-            public VariableValue(LogicVariable variable, LogicValue constantValue) {
-                if (!constantValue.isConstant()) {
-                    throw new IllegalArgumentException("Non-constant value " + constantValue);
-                }
-                this.variable = Objects.requireNonNull(variable);
-                this.constantValue = Objects.requireNonNull(constantValue);
-                this.instruction = null;
+        public VariableValue(LogicVariable variable, LogicValue constantValue) {
+            if (!constantValue.isConstant()) {
+                throw new IllegalArgumentException("Non-constant value " + constantValue);
             }
+            this.variable = Objects.requireNonNull(variable);
+            this.constantValue = Objects.requireNonNull(constantValue);
+            this.instruction = null;
+        }
 
-            public VariableValue(LogicVariable variable, LogicInstruction instruction) {
-                this.variable = Objects.requireNonNull(variable);
-                this.constantValue = null;
-                this.instruction = Objects.requireNonNull(instruction);
-            }
+        public VariableValue(LogicVariable variable, LogicInstruction instruction) {
+            this.variable = Objects.requireNonNull(variable);
+            this.constantValue = null;
+            this.instruction = Objects.requireNonNull(instruction);
+        }
 
-            public LogicInstruction getInstruction() {
-                return instruction;
-            }
+        public LogicInstruction getInstruction() {
+            return instruction;
+        }
 
-            public LogicValue getConstantValue() {
-                return constantValue;
-            }
+        public LogicValue getConstantValue() {
+            return constantValue;
+        }
 
-            public boolean isExpression() {
-                return constantValue == null;
-            }
+        public LogicVariable getVariable() {
+            return variable;
+        }
 
-            /**
-             * Determines whether the expression depends on the given variable.
-             *
-             * @param variable variable to inspect
-             * @return true if the expression reads the value of given variable
-             */
-            public boolean dependsOn(LogicVariable variable) {
-                return isExpression() && instruction.inputArgumentsStream().anyMatch(variable::equals);
-            }
+        public boolean isExpression() {
+            return constantValue == null;
+        }
 
-            /**
-             * Determines whether this expression is equivalent to the one produced by the given instruction.
-             *
-             * @param instruction instruction defining the second expression
-             * @return true if the two expressions are equal
-             */
-            public boolean isEqual(LogicInstruction instruction) {
-                if (!isExpression() || this.instruction.getOpcode() != instruction.getOpcode()) {
-                    return false;
-                }
+        /**
+         * Determines whether the expression depends on the given variable.
+         *
+         * @param variable variable to inspect
+         * @return true if the expression reads the value of given variable
+         */
+        public boolean dependsOn(LogicVariable variable) {
+            return isExpression() && instruction.inputArgumentsStream().anyMatch(variable::equals);
+        }
 
-                // Equivalence for SENSOR instruction is not supported. Sensed values are considered volatile.
-                // TODO define which sensed values aren't volatile (e.g. type, x) and process them
-                // TODO read instructions will depend on memory model
-                return switch (instruction) {
-                    case OpInstruction op && op.getOperation().isDeterministic()
-                            -> isOpEqual((OpInstruction) this.instruction, op);
-                    case PackColorInstruction ix    -> isInstructionEqual(this.instruction, ix);
-                    //case ReadInstruction ix         -> isInstructionEqual(this.instruction, ix);
-                    default                         -> false;
-                };
-            }
+        /**
+         * Determines whether the expression depends on any of the given variables.
+         *
+         * @param variables variables to inspect
+         * @return true if the expression reads the value of some of the variables
+         */
+        public boolean dependsOn(Set<LogicVariable> variables) {
+            return isExpression() && instruction.inputArgumentsStream()
+                    .anyMatch(arg -> arg instanceof LogicVariable v && variables.contains(v));
+        }
 
-            private boolean isVolatile(LogicInstruction instruction) {
-                return isExpression() && instruction.inputArgumentsStream().anyMatch(LogicArgument::isVolatile);
-            }
-
-            /**
-             * If the passed in value is a variable and there exists a preexisting variable holding the same value,
-             * returns the preexisting variable.
-             *
-             * @param value value to remap
-             * @return an equivalent variable if it exists, otherwise the original value
-             */
-            public LogicArgument remap(LogicArgument value) {
-                return value instanceof LogicVariable var && equivalences.containsKey(var) ? equivalences.get(var) : value;
-            }
-
-            /**
-             * Determines whether the two instructions are equal. Both instructions need to have the same opcode
-             * (the opcode is not checked).
-             *
-             * @param first  instruction to compare
-             * @param second instruction to compare
-             * @return true if the two instructions are equal
-             */
-            private boolean isInstructionEqual(LogicInstruction first, LogicInstruction second) {
-                List<LogicArgument> args1 = first.getArgs();
-                List<LogicArgument> args2 = second.getArgs();
-
-                if (isVolatile(first) || args1.size() != args2.size()) {
-                    return false;
-                }
-
-                for (int i = 0; i < args1.size(); i++) {
-                    if (!first.getParam(i).isOutput() && !Objects.equals(remap(args1.get(i)), remap(args2.get(i)))) {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            /**
-             * Determines whether two OP instructions produce the same expression. It is already known at least one
-             * of the instructions has a deterministic operation. The obvious case is when the two instructions have
-             * equivalent operations and inputs. Additionally, commutative and inverse operations are handled.
-             *
-             * @param first first instruction to compare
-             * @param second second instruction to compare
-             * @return true if the two instructions produce the same expression
-             */
-            private boolean isOpEqual(OpInstruction first, OpInstruction second) {
-                if (isVolatile(first)) {
-                    return false;
-                }
-
-                LogicArgument x1 = remap(first.getX());
-                LogicArgument x2 = remap(second.getX());
-                LogicArgument y1 = first.hasSecondOperand() ? remap(first.getY()) : null;
-                LogicArgument y2 = second.hasSecondOperand() ? remap(second.getY()) : null;
-
-                if (first.getOperation() == second.getOperation() && Objects.equals(x1, x2) && Objects.equals(y1, y2)) {
-                    return true;
-                }
-
-                // For commutative operations, swapped arguments are equal
-                // For inverted operations, swapped arguments are also equal
-                if (first.getOperation() == second.getOperation() && first.getOperation().isCommutative()
-                        || first.getOperation().hasInverse() && first.getOperation().inverse() == second.getOperation()) {
-                    return Objects.equals(x1, y2) && Objects.equals(y1, x2);
-                }
-
+        /**
+         * Determines whether this expression is equivalent to the one produced by the given instruction.
+         *
+         * @param instruction instruction defining the second expression
+         * @return true if the two expressions are equal
+         */
+        public boolean isEqual(VariableStates variableStates, LogicInstruction instruction) {
+            if (!isExpression() || this.instruction.getOpcode() != instruction.getOpcode()) {
                 return false;
             }
 
-            @Override
-            public boolean equals(Object o) {
-                if (this == o) return true;
-                if (o == null || getClass() != o.getClass()) return false;
-                VariableValue that = (VariableValue) o;
-                return this.variable.equals(that.variable) && this.instruction == that.instruction
-                        && Objects.equals(this.constantValue, that.constantValue);
+            // Equivalence for SENSOR instruction is not supported. Sensed values are considered volatile.
+            // TODO define which sensed values aren't volatile (e.g. type, x) and process them
+            // TODO read instructions will depend on memory model
+            return switch (instruction) {
+                case OpInstruction op && op.getOperation().isDeterministic()
+                        -> isOpEqual(variableStates, (OpInstruction) this.instruction, op);
+                case PackColorInstruction ix    -> isInstructionEqual(variableStates, this.instruction, ix);
+                //case ReadInstruction ix         -> isInstructionEqual(this.instruction, ix);
+                default                         -> false;
+            };
+        }
+
+        private boolean isVolatile(LogicInstruction instruction) {
+            return isExpression() && instruction.inputArgumentsStream().anyMatch(LogicArgument::isVolatile);
+        }
+
+        /**
+         * If the passed in value is a variable and there exists a preexisting variable holding the same value,
+         * returns the preexisting variable.
+         *
+         * @param value value to remap
+         * @return an equivalent variable if it exists, otherwise the original value
+         */
+        public LogicArgument remap(VariableStates variableStates, LogicArgument value) {
+            return value instanceof LogicVariable var && variableStates.equivalences.containsKey(var)
+                    ? variableStates.equivalences.get(var) : value;
+        }
+
+        /**
+         * Determines whether the two instructions are equal. Both instructions need to have the same opcode
+         * (the opcode is not checked).
+         *
+         * @param first  instruction to compare
+         * @param second instruction to compare
+         * @return true if the two instructions are equal
+         */
+        private boolean isInstructionEqual(VariableStates variableStates, LogicInstruction first, LogicInstruction second) {
+            List<LogicArgument> args1 = first.getArgs();
+            List<LogicArgument> args2 = second.getArgs();
+
+            if (isVolatile(first) || args1.size() != args2.size()) {
+                return false;
             }
 
-            @Override
-            public int hashCode() {
-                return Objects.hash(variable, constantValue, instruction);
+            for (int i = 0; i < args1.size(); i++) {
+                if (!first.getParam(i).isOutput() && !Objects.equals(
+                        remap(variableStates, args1.get(i)),
+                        remap(variableStates, args2.get(i))
+                )) {
+                    return false;
+                }
             }
 
-            @Override
-            public String toString() {
-                return "variable " + variable.toMlog() + ": " + (isExpression()
-                        ? " expression " + LogicInstructionPrinter.toString(instructionProcessor, instruction)
-                        : " constant " + constantValue);
+            return true;
+        }
+
+        /**
+         * Determines whether two OP instructions produce the same expression. It is already known at least one
+         * of the instructions has a deterministic operation. The obvious case is when the two instructions have
+         * equivalent operations and inputs. Additionally, commutative and inverse operations are handled.
+         *
+         * @param first first instruction to compare
+         * @param second second instruction to compare
+         * @return true if the two instructions produce the same expression
+         */
+        private boolean isOpEqual(VariableStates variableStates, OpInstruction first, OpInstruction second) {
+            if (isVolatile(first)) {
+                return false;
             }
+
+            LogicArgument x1 = remap(variableStates, first.getX());
+            LogicArgument x2 = remap(variableStates, second.getX());
+            LogicArgument y1 = first.hasSecondOperand() ? remap(variableStates, first.getY()) : null;
+            LogicArgument y2 = second.hasSecondOperand() ? remap(variableStates, second.getY()) : null;
+
+            if (first.getOperation() == second.getOperation() && Objects.equals(x1, x2) && Objects.equals(y1, y2)) {
+                return true;
+            }
+
+            // For commutative operations, swapped arguments are equal
+            // For inverted operations, swapped arguments are also equal
+            if (first.getOperation() == second.getOperation() && first.getOperation().isCommutative()
+                    || first.getOperation().hasInverse() && first.getOperation().inverse() == second.getOperation()) {
+                return Objects.equals(x1, y2) && Objects.equals(y1, x2);
+            }
+
+            return false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            VariableValue that = (VariableValue) o;
+            return this.variable.equals(that.variable) && this.instruction == that.instruction
+                    && Objects.equals(this.constantValue, that.constantValue);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(variable, constantValue, instruction);
+        }
+
+        @Override
+        public String toString() {
+            return "variable " + variable.toMlog() + ": " + (isExpression()
+                    ? " expression " + LogicInstructionPrinter.toString(instructionProcessor, instruction)
+                    : " constant " + constantValue);
         }
     }
 

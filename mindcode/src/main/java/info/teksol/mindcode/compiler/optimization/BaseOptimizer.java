@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  */
 abstract class BaseOptimizer extends AbstractOptimizer {
     protected static final boolean TRACE = false;
-    protected static final boolean DEBUG_PRINT = TRACE;
+    protected static final boolean DEBUG_PRINT = false;
 
     protected int modifications = 0;
     protected int insertions = 0;

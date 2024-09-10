@@ -677,6 +677,38 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(JUMP, var(1000), "always")
         );
     }
+
+    @Test
+    void properlyInvalidatesExpressions() {
+        assertCompilesTo("""
+                        a = rand(10) > 5
+                        b = a > 5
+                        c = b or a < 5
+                        d = a
+
+                        while true
+                            if c
+                                d += 1
+                                c = b or d < 5
+                            end
+                        end
+                        """,
+                createInstruction(OP, "rand", var(0), "10"),
+                createInstruction(OP, "greaterThan", "a", var(0), "5"),
+                createInstruction(OP, "greaterThan", "b", "a", "5"),
+                createInstruction(OP, "lessThan", var(3), "a", "5"),
+                createInstruction(OP, "or", "c", "b", var(3)),
+                createInstruction(SET, "d", "a"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(JUMP, var(1000), "equal", "c", "false"),
+                createInstruction(OP, "add", "d", "d", "1"),
+                createInstruction(OP, "lessThan", var(4), "d", "5"),
+                createInstruction(OP, "or", "c", "b", var(4)),
+                createInstruction(JUMP, var(1000), "always")
+
+
+        );
+    }
     //</editor-fold>
 
     //<editor-fold desc="Exit points">
