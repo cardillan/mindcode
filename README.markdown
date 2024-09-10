@@ -13,10 +13,6 @@ Mindcode focuses of the following priorities:
   and limited instruction space of Mindustry processors.
 * Employing various [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) to produce efficient code. 
 
-> [!NOTE]
-> Please have a look at a poll about introducing compulsory semicolons to the Mindcode syntax
-> [here](https://github.com/cardillan/mindcode/discussions/120).
-
 **Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text 
 file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into 
 Mindustry schematics, either as a binary `.msch` file, or as a text. Processors can be included in these schematics, 
@@ -39,9 +35,26 @@ then press the **Compile** button. The _Mindustry Logic_ text area will contain 
 Copy the compiled version. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. 
 Select **Import from Clipboard**. Mindustry is now ready to execute your code. 
 
-It is also possible to build Mindcode locally (see the [Development](#development) section), and use the
-[command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying the compiled code into 
-the clipboard automatically if desired.
+It is also possible use the [command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying 
+the compiled code into the clipboard automatically if desired. The command line compiler can be set up in the 
+following way:
+
+1. Download and install [Eclipse Temurin version 17](https://adoptium.net/temurin/releases/?version=17).
+2. Download `mindcode.jar` from the [releases page](https://github.com/cardillan/mindcode/releases) and place it in 
+   a directory on your computer.
+3. To run the command line compiler, use `java.exe --enable-preview -jar mindcode.jar <arguments>`. Provide full 
+   paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the 
+   `mindcode.jar` file downloaded in the second step. `<arguments>` are the command line arguments passed to the 
+   mindcode compiler.
+
+For example, the following command compiles `program.mnd` into `program.mlog` and copies the resulting mlog code 
+into the clipboard:
+
+```
+java.exe --enable-preview -jar mindcode.jar cm program.mnd program.mlog -c
+```
+
+Documentation for the command line tool is available [here](doc/syntax/TOOLS-CMDLINE.markdown).
 
 ### Mindcode Syntax
 

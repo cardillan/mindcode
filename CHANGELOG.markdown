@@ -2,12 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2024-09-10
+
+### Fixed
+
+* Fixed wrong expression handling in loops by Data Flow Optimizer
+  ([issue #131](https://github.com/cardillan/mindcode/issues/131)).
+* Fixed Data Flow Optimizer not removing some superfluous variables when using `case` expressions
+  ([issue #133](https://github.com/cardillan/mindcode/issues/133)).
+* Fixed Data Flow Optimizer incorrectly applying common subexpression optimization in some cases
+  ([issue #133](https://github.com/cardillan/mindcode/issues/133)).
 
 ### Added
 
 * Added support for specifying processor code (both Mindcode and mlog) as a concatenation of multiple code snippets
   from various sources (string literal, string constant or external file). 
+* Added new Mandelbrot Generator schematics example.
+
+### Miscellaneous
+
+* Starting from this release, releases will be [published in GitHub](https://github.com/cardillan/mindcode/releases) 
+  including the Mindcode compiler provided as a `.jar` (binary) file. 
 
 ## 2024-03-12
 
