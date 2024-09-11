@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+* Fixed slightly wrong (too low) cost estimation in the
+  [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization.
+
+### Changed
+
+* Slightly improved the [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization - 
+  instead of expanding the jump table range by one on each side and limiting the input value using the `op min` and 
+  `op max` instructions, the jump table covers only the existing `when` branches and values outside the supported 
+  range are handled using conditional jumps. This change saves two instructions and potentially speeds up the 
+  execution for input values lying outside the jump table.
+
 ## 2024-09-10
 
 ### Fixed

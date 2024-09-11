@@ -6,7 +6,10 @@ import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.Condition;
+import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicNumber;
+import info.teksol.mindcode.logic.LogicVariable;
 
 import java.util.List;
 import java.util.NavigableMap;
@@ -110,16 +113,16 @@ public class CaseSwitcher extends BaseOptimizer {
         if (targets.isEmpty()) return null;
 
         // Cost calculation:
-        // Adding fixed three instructions: op min, op max, goto offset
-        // Adding one jump for each value between min and max (the jump table)
+        // Adding three fixed instructions: jump lessThan, jump greaterThan, goto offset
+        // Adding one jump for each value between min and max inclusive (the jump table)
         // Saving one jump per each jump instruction
         int min = targets.firstEntry().getKey();
         int max = targets.lastEntry().getKey();
-        int cost = max - min + 3 - removed;
+        int cost = 3 + (max - min + 1) - removed;
 
-        // New sequence of executed instructions will be: op min / op max / goto offset / jump
+        // New sequence of executed instructions will be: jump lessThan / jump greaterThan / goto offset / jump to branch
         // We save half of the switch jumps on average
-        double benefit = (targets.size() / 2.0 - 4) * context.totalWeight();
+        double benefit = (removed / 2.0 - 4) * context.totalWeight();
 
         return benefit <= 0 || cost > costLimit ? null
                 : new ConvertCaseExpressionAction(context, cost, benefit, variable, targets);
@@ -135,19 +138,18 @@ public class CaseSwitcher extends BaseOptimizer {
         LogicLabel finalLabel = obtainContextLabel(finalContext);
         AstContext newContext = context.createSubcontext(FLOW_CONTROL, 1.0);
         LogicVariable jumpValue = instructionProcessor.nextTemp();
-        int min = targets.firstEntry().getKey() - 1;
-        int max = targets.lastEntry().getKey() + 1;
+        int min = targets.firstEntry().getKey();
+        int max = targets.lastEntry().getKey();
 
         LogicLabel marker = instructionProcessor.nextLabel();
         List<LogicLabel> labels = IntStream.rangeClosed(min, max).mapToObj(i -> instructionProcessor.nextLabel()).toList();
 
         if (RANGE_LIMITING) {
-            insertInstruction(index++, createOp(newContext, Operation.MIN, jumpValue, action.variable, LogicNumber.get(max)));
-            insertInstruction(index++, createOp(newContext, Operation.MAX, jumpValue, jumpValue, LogicNumber.get(min)));
-            insertInstruction(index++, createGotoOffset(newContext, labels.get(0), jumpValue, LogicNumber.get(min), marker));
-        } else {
-            insertInstruction(index++, createGotoOffset(newContext, labels.get(0), action.variable, LogicNumber.get(min), marker));
+            insertInstruction(index++, createJump(newContext, finalLabel, Condition.LESS_THAN, action.variable, LogicNumber.get(min)));
+            insertInstruction(index++, createJump(newContext, finalLabel, Condition.GREATER_THAN, action.variable, LogicNumber.get(max)));
         }
+        insertInstruction(index++, createGotoOffset(newContext, labels.get(0), action.variable, LogicNumber.get(min), marker));
+
         for (int i = 0; i < labels.size(); i++) {
             insertInstruction(index++, createGotoLabel(newContext, labels.get(i), marker));
             insertInstruction(index++, createJumpUnconditional(newContext, targets.getOrDefault(min + i, finalLabel)));

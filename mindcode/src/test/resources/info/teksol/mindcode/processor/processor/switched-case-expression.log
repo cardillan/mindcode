@@ -7,13 +7,13 @@
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
-     5 instructions added by Case Switching (3 iterations).
+     3 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
     10 instructions eliminated by Jump Straightening (3 iterations).
-    63 instructions after optimizations.
+    61 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 942):
-  * Case Switching: convert case at line 16                      cost     2, benefit      625,0, efficiency      312,5 (+5 instructions)
+  * Case Switching: convert case at line 16                      cost     3, benefit      625,0, efficiency      208,3 (+3 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
  
@@ -497,91 +497,87 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     80 print S0
     81 print S1
 
-Modifications by Case Switching: convert case at line 16 (+5 instructions):
+Modifications by Case Switching: convert case at line 16 (+3 instructions):
  
     17 label __label32
     18 op mod __tmp2 __fn0_n 10
     19 label __label8
 -    * jump __label11 notEqual __tmp2 0
-+   20 op min __tmp16 __tmp2 10
-+   21 op max __tmp16 __tmp16 -1
-+   22 gotooffset __label35 __tmp16 -1 __label34
++   20 jump __label33 lessThan __tmp2 0
++   21 jump __label33 greaterThan __tmp2 9
++   22 gotooffset __label35 __tmp2 0 __label34
 +   23 gotolabel __label35 __label34
-+   24 jump __label33 always
++   24 jump __label12 always
 +   25 gotolabel __label36 __label34
-+   26 jump __label12 always
++   26 jump __label14 always
 +   27 gotolabel __label37 __label34
-+   28 jump __label14 always
++   28 jump __label16 always
 +   29 gotolabel __label38 __label34
-+   30 jump __label16 always
++   30 jump __label18 always
 +   31 gotolabel __label39 __label34
-+   32 jump __label18 always
++   32 jump __label20 always
 +   33 gotolabel __label40 __label34
-+   34 jump __label20 always
++   34 jump __label22 always
 +   35 gotolabel __label41 __label34
-+   36 jump __label22 always
++   36 jump __label24 always
 +   37 gotolabel __label42 __label34
-+   38 jump __label24 always
++   38 jump __label26 always
 +   39 gotolabel __label43 __label34
-+   40 jump __label26 always
++   40 jump __label28 always
 +   41 gotolabel __label44 __label34
-+   42 jump __label28 always
-+   43 gotolabel __label45 __label34
-+   44 jump __label30 always
-+   45 gotolabel __label46 __label34
-+   46 jump __label33 always
-    47 label __label12
-    48 op add S0 S0 1
-    49 jump __label10 always
-    50 label __label11
++   42 jump __label30 always
+    43 label __label12
+    44 op add S0 S0 1
+    45 jump __label10 always
+    46 label __label11
 -    * jump __label13 notEqual __tmp2 1
-    51 label __label14
-    52 op add S1 S1 1
-    53 jump __label10 always
-    54 label __label13
+    47 label __label14
+    48 op add S1 S1 1
+    49 jump __label10 always
+    50 label __label13
 -    * jump __label15 notEqual __tmp2 2
-    55 label __label16
-    56 op add S2 S2 1
-    57 jump __label10 always
-    58 label __label15
+    51 label __label16
+    52 op add S2 S2 1
+    53 jump __label10 always
+    54 label __label15
 -    * jump __label17 notEqual __tmp2 3
-    59 label __label18
-    60 op add S3 S3 1
-    61 jump __label10 always
-    62 label __label17
+    55 label __label18
+    56 op add S3 S3 1
+    57 jump __label10 always
+    58 label __label17
 -    * jump __label19 notEqual __tmp2 4
-    63 label __label20
-    64 op add S4 S4 1
-    65 jump __label10 always
-    66 label __label19
+    59 label __label20
+    60 op add S4 S4 1
+    61 jump __label10 always
+    62 label __label19
 -    * jump __label21 notEqual __tmp2 5
-    67 label __label22
-    68 op add S5 S5 1
-    69 jump __label10 always
-    70 label __label21
+    63 label __label22
+    64 op add S5 S5 1
+    65 jump __label10 always
+    66 label __label21
 -    * jump __label23 notEqual __tmp2 6
-    71 label __label24
-    72 op add S6 S6 1
-    73 jump __label10 always
-    74 label __label23
+    67 label __label24
+    68 op add S6 S6 1
+    69 jump __label10 always
+    70 label __label23
 -    * jump __label25 notEqual __tmp2 7
-    75 label __label26
-    76 op add S7 S7 1
-    77 jump __label10 always
-    78 label __label25
+    71 label __label26
+    72 op add S7 S7 1
+    73 jump __label10 always
+    74 label __label25
 -    * jump __label27 notEqual __tmp2 8
-    79 label __label28
-    80 op add S8 S8 1
-    81 jump __label10 always
-    82 label __label27
+    75 label __label28
+    76 op add S8 S8 1
+    77 jump __label10 always
+    78 label __label27
 -    * jump __label29 notEqual __tmp2 9
-    83 label __label30
-    84 op add S9 S9 1
-    85 label __label29
-+   86 label __label33
-    87 label __label10
-    88 label __label9
-    89 op idiv __fn0_n __fn0_n 10
+    79 label __label30
+    80 op add S9 S9 1
+    81 label __label29
++   82 label __label33
+    83 label __label10
+    84 label __label9
+    85 op idiv __fn0_n __fn0_n 10
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -596,45 +592,45 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1:
  
-    47 label __label12
-    48 op add S0 S0 1
-    49 jump __label10 always
+    43 label __label12
+    44 op add S0 S0 1
+    45 jump __label10 always
 -    * label __label11
-    50 label __label14
-    51 op add S1 S1 1
-    52 jump __label10 always
+    46 label __label14
+    47 op add S1 S1 1
+    48 jump __label10 always
 -    * label __label13
-    53 label __label16
-    54 op add S2 S2 1
-    55 jump __label10 always
+    49 label __label16
+    50 op add S2 S2 1
+    51 jump __label10 always
 -    * label __label15
-    56 label __label18
-    57 op add S3 S3 1
-    58 jump __label10 always
+    52 label __label18
+    53 op add S3 S3 1
+    54 jump __label10 always
 -    * label __label17
-    59 label __label20
-    60 op add S4 S4 1
-    61 jump __label10 always
+    55 label __label20
+    56 op add S4 S4 1
+    57 jump __label10 always
 -    * label __label19
-    62 label __label22
-    63 op add S5 S5 1
-    64 jump __label10 always
+    58 label __label22
+    59 op add S5 S5 1
+    60 jump __label10 always
 -    * label __label21
-    65 label __label24
-    66 op add S6 S6 1
-    67 jump __label10 always
+    61 label __label24
+    62 op add S6 S6 1
+    63 jump __label10 always
 -    * label __label23
-    68 label __label26
-    69 op add S7 S7 1
-    70 jump __label10 always
+    64 label __label26
+    65 op add S7 S7 1
+    66 jump __label10 always
 -    * label __label25
-    71 label __label28
-    72 op add S8 S8 1
-    73 jump __label10 always
+    67 label __label28
+    68 op add S8 S8 1
+    69 jump __label10 always
 -    * label __label27
-    74 label __label30
-    75 op add S9 S9 1
-    76 label __label29
+    70 label __label30
+    71 op add S9 S9 1
+    72 label __label29
 
 Final code before resolving virtual instructions:
 
@@ -654,33 +650,29 @@ set __fn0_n i
 jump __label7 lessThanEq i 0
 label __label32
 op mod __tmp2 __fn0_n 10
-op min __tmp16 __tmp2 10
-op max __tmp16 __tmp16 -1
-gotooffset __label35 __tmp16 -1 __label34
+jump __label33 lessThan __tmp2 0
+jump __label33 greaterThan __tmp2 9
+gotooffset __label35 __tmp2 0 __label34
 gotolabel __label35 __label34
-jump __label33 always 0 0
-gotolabel __label36 __label34
 jump __label12 always 0 0
-gotolabel __label37 __label34
+gotolabel __label36 __label34
 jump __label14 always 0 0
-gotolabel __label38 __label34
+gotolabel __label37 __label34
 jump __label16 always 0 0
-gotolabel __label39 __label34
+gotolabel __label38 __label34
 jump __label18 always 0 0
-gotolabel __label40 __label34
+gotolabel __label39 __label34
 jump __label20 always 0 0
-gotolabel __label41 __label34
+gotolabel __label40 __label34
 jump __label22 always 0 0
-gotolabel __label42 __label34
+gotolabel __label41 __label34
 jump __label24 always 0 0
-gotolabel __label43 __label34
+gotolabel __label42 __label34
 jump __label26 always 0 0
-gotolabel __label44 __label34
+gotolabel __label43 __label34
 jump __label28 always 0 0
-gotolabel __label45 __label34
+gotolabel __label44 __label34
 jump __label30 always 0 0
-gotolabel __label46 __label34
-jump __label33 always 0 0
 label __label12
 op add S0 S0 1
 jump __label10 always 0 0

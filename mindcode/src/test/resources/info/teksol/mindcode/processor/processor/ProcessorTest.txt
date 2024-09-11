@@ -13,5 +13,5 @@ loops-in-conditions.mnd:                    5 instructions,      5 steps, 100.0%
 printsNumbersStringsObjects:                8 instructions,      8 steps, 100.0% coverage, source CRC 63491E3F92B00BE0, compiled CRC B86FB7060C9C2C43
 ranged-for-loop-break-continue.mnd:        33 instructions,    141 steps, 100.0% coverage, source CRC CDE7E7ECEE7861C9, compiled CRC 3120D49AFFB2CC4D
 recursive-function-condition.mnd:          16 instructions,     21 steps, 100.0% coverage, source CRC 4A7419D96E03E135, compiled CRC 5864DBE2693BE92C
-switched-case-expression.mnd:              63 instructions,   2130 steps,  96.8% coverage, source CRC DA65B97C18FA3EEE, compiled CRC 5308BF8E895B9B30
+switched-case-expression.mnd:              61 instructions,   2130 steps, 100.0% coverage, source CRC DA65B97C18FA3EEE, compiled CRC E11049E9ACF253EA
 while-loop.mnd:                            27 instructions,     63 steps,  81.4% coverage, source CRC D8B7A4A4650E159C, compiled CRC D1CB3B8263EFF292

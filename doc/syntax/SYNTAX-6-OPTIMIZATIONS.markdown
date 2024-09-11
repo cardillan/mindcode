@@ -1137,17 +1137,15 @@ The sequence of conditional jumps in such statements is replaced by a _jump tabl
 direct jumps to the corresponding `when` branch. The actual instructions used to build a jump table are
 
 ```
-op min offset value maximal_when_value + 1
-op max offset offset minimal_when_value - 1
-op add @counter <start_of_jump_table - minimal_when_value - 1> offset
+jump <else branch address> lessThan value minimal_when_value
+jump <else branch address> greaterThan value maximal_when_value
+op add @counter <start_of_jump_table - minimal_when_value> value
 start_of_jump_table:
-jump <else branch address>
 jump <when branch for minimal when value address>
 jump <when branch for minimal when value + 1 address>
 jump <when branch for minimal when value + 2 address>
 ...
 jump <when branch for maximal when value address>
-jump <else branch address>
 ```
 
 The jump table is put in front of the `when` branches. Original conditions in front of each processed `when` branch 
@@ -1158,14 +1156,14 @@ outside this range are handled by the `else` branch (if there isn't an explicit 
 the `else` branch just jumps to the end of the case expression). Values inside this range are mapped to a particular 
 `when` branch, or, if the value doesn't correspond to any of the `when` branches, to the `else` branch. 
 
-The first two instructions in the example above (`op min`, `op max`) serve to limit the possible range of the input 
-values to the range supported by the jump table. The jump table range is expanded by one on both ends, to catch values 
-outside the original range and redirect them to the `else` branch. The `op add @counter` instruction then transfers 
+The first two instructions in the example above (`jump lessThan`, `jump greaterThan`) handle the cases where the 
+input value lies outside the range supported by the jump table. The `op add @counter` instruction then transfers
 the control to the corresponding specific jump in the jump table and consequently to the proper `when` branch.
 
-The jump table executes four instructions on each case expression execution. We've mentioned above that the original 
-case statement executes half of the conditional jumps on average. This means that converting the case expression to 
-a jump table only makes sense when there's more than 8 conditional jumps in the case expression.
+The jump table executes at most four instructions on each case expression execution (less if the input value lies 
+outside the supported range). We've mentioned above that the original case statement executes half of the 
+conditional jumps on average. This means that converting the case expression to a jump table only makes sense when 
+there's more than 8 conditional jumps in the case expression.
 
 Notes:
 
@@ -1174,13 +1172,13 @@ Notes:
   no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching 
   optimization for your program.
 * If the input value of the case expression could be determined by Mindcode to already lie in a specific range, 
-  it would be possible to avoid the `op min` and/or `op max` instructions at the beginning of the jump table, as 
-  their function is to ensure the value lies in a proper range. This would provide a potentially significant 
-  additional speedup and is planned for some future version.  
+  it would be possible to avoid the `jump lessThan` and/or `jump greaterThan` instructions at the beginning of the 
+  jump table, as their function is to ensure the value lies in a proper range. This would provide a potentially 
+  significant additional speedup and is planned for some future version.  
 * Currently, there's no limit on the size of the jump table. For a case expression handling values 1 to 10 and 
-  then a value of 100, the jump table would have 100 entries (actually 102 due to the range expansion). This 
-  affects computation of the optimization's benefit, and might make the optimization less favorable compared to 
-  other optimizations; however if available space permits it, such a jump table would be created.   
+  then a value of 100, the jump table would have 100 entries. This affects computation of the optimization's benefit,
+  and might make the optimization less favorable compared to other optimizations; however if available space permits 
+  it, such a jump table would be created.   
   
 ### Preconditions
 
