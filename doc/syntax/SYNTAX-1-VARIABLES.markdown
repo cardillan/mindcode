@@ -18,7 +18,7 @@ is modified or the processor is destroyed.
 # Main variables
 
 Main variables are variables used in the main body of the program. The name of the variable in Mindcode is used as-is 
-in Mindustry code.
+in the compiled mlog code.
 
 Mindcode is also aware of the actual values you assign to variables. In some cases, knowing the actual value allows 
 Mindcode to perform specific code optimizations that are only valid for the value you've assigned to the variable in 

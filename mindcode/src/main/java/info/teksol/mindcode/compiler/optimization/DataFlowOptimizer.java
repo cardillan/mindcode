@@ -105,9 +105,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         clearVariableStates();
 
-        analyzeFunctionVariables();
-
         unreachables = optimizationContext.getUnreachableInstructions();
+
+        analyzeFunctionVariables();
 
         getRootContext().children().forEach(this::processTopContext);
 
@@ -239,9 +239,11 @@ public class DataFlowOptimizer extends BaseOptimizer {
         Set<LogicVariable> reads = new HashSet<>();
         Set<LogicVariable> writes = new HashSet<>();
 
-        contextStream(context)
-                .filter(ix -> !(ix instanceof PushOrPopInstruction))
-                .forEach(ix -> {
+        try (LogicIterator it = createIteratorAtContext(context)) {
+            while (it.hasNext()) {
+                int index = it.nextIndex();
+                LogicInstruction ix = it.next();
+                if (!(ix instanceof PushOrPopInstruction) && !unreachables.get(index)) {
                     ix.inputArgumentsStream()
                             .filter(LogicVariable.class::isInstance)
                             .map(LogicVariable.class::cast)
@@ -255,7 +257,9 @@ public class DataFlowOptimizer extends BaseOptimizer {
                     if (ix instanceof EndInstruction) {
                         functionEnds.add(context.function());
                     }
-                });
+                }
+            }
+        }
 
         functionReads.put(context.function(), reads);
         functionWrites.put(context.function(), writes);
@@ -277,7 +281,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 function.getCalls().keySet().stream()
                         .filter(callGraph::containsFunction)            // Filter out built-in functions
                         .map(callGraph::getFunction)
-                        .filter(f -> !f.isInline() && !f.isMain())      // Filter out functions inlined by optimizer and main function
+                        .filter(f -> !f.isInline() && !f.isMain())
                         .forEachOrdered(callee -> {
                             reads.addAll(functionReads.get(callee));
                             writes.addAll(functionWrites.get(callee));
@@ -369,10 +373,10 @@ public class DataFlowOptimizer extends BaseOptimizer {
     }
 
     /**
-     * Recursively processes contexts and their instructions. Jump outside local context are specifically handled.
+     * Recursively processes contexts and their instructions. Jumps outside local context are specifically handled.
      * Context to be processed is either the same as the local context, or a direct child of the local context.
      *
-     * @param localContext       context which is considered local
+     * @param localContext       context which is considered local (jumps outside local context handling)
      * @param context            context to be processed
      * @param variableStates     variable states at the beginning of the context
      * @param modifyInstructions true if instructions may be modified in this run based on known variable states
@@ -402,7 +406,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
      *
      * @param localContext       context to process (must be a LOOP context)
      * @param variableStates     variable states at the beginning of the context
-     * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+     * @param modifyInstructions true if instructions may be modified in this run based on known variable states.
+     *                           Set to true when doing the second pass through current loop
      * @return the resulting variable states
      */
     private VariableStates processLoopContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
@@ -499,6 +504,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
         // The remaining CONDITION and BODY contexts are processed here.
         // We'll visit the entire loop twice. Second pass will generate reaches to values generated in first pass.
         // Only perform the two-pass analysis when the outer loop is also doing the second pass
+        // This reduces the number of passes through the innermost loop from 2**n to n**2+1, where n is the nesting
+        // level of the innermost loop
         for (int pass = 0; pass < (modifyInstructions ? 2 : 1); pass++) {
             iterator.setNextIndex(startIndex);
 
@@ -541,7 +548,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        // We got a degenerated If context - the condition might have been removed by constant expression optimization.
+        // We got a degenerate If context - the condition might have been removed by constant expression optimization.
         if (condition == null) {
             return variableStates;
         }
@@ -555,6 +562,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
         boolean avoidMerge;
 
         // TODO Will need better condition processing after implementing short-circuit boolean eval
+        //      Maybe could just process the contexts based on unreachable code information like the case expression.
         LogicBoolean jumpResult = (lastInstruction(condition) instanceof JumpInstruction jump)
                 ? evaluateJumpInstruction(jump)
                 : LogicBoolean.FALSE;

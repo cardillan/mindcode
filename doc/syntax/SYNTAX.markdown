@@ -180,7 +180,7 @@ Mindustry also supports hexadecimal and binary representation for integers:
 * `0xf1`
 * `0b010001101`
 
-These literals are written into mlog code exactly as they appear in Mindustry. If the value of the literal exceeds 
+These literals are written into the mlog code exactly as they appear in Mindcode. If the value of the literal exceeds 
 the maximum allowed range for a 64-bit signed integer, a compilation error occurs.    
 
 ### Boolean literals

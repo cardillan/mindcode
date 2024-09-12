@@ -68,7 +68,7 @@ None planned.
     
 ## New and extended keywords
 
-* `allocate`
+* `allocate`:
   * Allow specifying concrete index for external variables
     * `allocate $STATE in cell1[7]`
     * The index must be a constant integer expression
@@ -77,42 +77,59 @@ None planned.
     * `allocate array $ARRAY in cell1[32 ... 64]`
     * Has the `$` prefix as an external variable (which it is), and to differentiate it from future in-memory arrays.
     * Mindcode adds the offset whenever the array is accessed (less efficient code if the offset is not zero).
-    * No out-of-bounds checks.
-* `array`
+    * Possible out-of-bounds checks.
+* `aliased`: used to declare an external variable as aliased, e.g. `declare cell1, $STATE aliased` (see [External 
+  variable optimization](#external-variable-optimizations)).
+* `array`:
   * Used in `allocate array`
   * Reserved for future use in declaring in-memory arrays
-* `declare`, `var`: reserved for possible future use in declaring typed variables.
-* `enum`
+* `begin`:
+  * Marks the beginning of a code block.
+  * Used mainly to apply a compiler setting to a code block, e.g. `#use (goal = size) begin a = b; c = d; end;`. 
+* `declare`:
+  * Used to apply modifiers to a variable 
+* `enum`:
   * Possible syntax:
     * `enum name(id1, id2, id3)`
     * `enum name: id1, id2, id3 end`
   * Mindcode assigns values to the enums as it sees fit. There are no guarantees on the numbers whatsoever, except 
     preserving the declaration order. They could be instruction addresses inside a case expression, for example, if 
     there's just one case expression.
-  * Mindcode provides functions to access enum properties (e.g. enum.name, enum.next, enum.previous).
+  * Mindcode provides functions to access enum properties (e.g. `enum.name`, `enum.next`, `enum.previous`).
     * Implemented as inline library functions. Using them might be costly.
   * Support for enums in list iteration Loops: `for i in enum_name`.
   * Enum will internally be a new type of LogicLiteral.
-* `fallthrough`
-  * Used in case expression to skip to the next `when` branch
-* `in`  
+* `fallthrough`: used in case expression to skip to the next `when` branch
+* `in`:  
   * New use as a boolean operator:
     * Tests number is in range: `n in min .. max`
     * Tests value is in enumerated set: `type in (@sorter, @inverted-sorter)`
-* `noinline` - prevent function inlining
+  * Marks the parameter to a function as input, possible use with `out`, for example in
+    `def foo(a, in b, out c, in out d)`, `a` and `b` are input parameters, `c` is an output parameter and `d` is 
+    both input/output parameter.  
+* `linked`:  used to declare a variable as a linked block to cover cases where Mindcode doesn't recognize a name of 
+  a linked block for some reason (e.g. `declare message1 linked`).
+* `noinline`: prevent function inlining
+* `restricted`: used to declare an external variable as aliased, e.g. `declare cell1, $STATE restricted` (see [External
+  variable optimization](#external-variable-optimizations)).
+* `out`:
+  * Output function parameters - see `in`
+    * Not passed by reference - Mindustry doesn't allow that.
+    * On function return, the output value will be copied to the variable passed in as the argument.
+  * Marks the control variable in a for-each loop as output one. Any changes to the control variable will be 
+    transferred to the variable in the list when the loop ends  
 * `param` or `parameter`: explicit support for code parametrization
   * Defines a new read-only variable and assigns a value to it.
   * Compiler will assume the value assigned to this variable can be changed in compiled code.
   * Subsequently, the special protection of global variables will be removed.
-* `out`
-  * Output function parameters
-    * Not passed by reference - Mindustry doesn't allow that.
-    * On function return, the output value will be copied to the variable passed in as the argument.
-* `yield`
-  * Assigns values to list variables in list iteration loops; compile error if some of the expressions in the list 
-    isn't a variable.
+* `var`: reserved for possible future use in declaring typed variables (maybe we'll use `declare` instead).
+* `volatile`:
+  * Used to declare an external variable as aliased, e.g. `declare cell1, $STATE volatile` (see [External
+    variable optimization](#external-variable-optimizations)).
+  * A variable used as an argument to the `sync()` function will be made volatile automatically, no need to declare.
+* `yield`:
   * Used in when branch of case expression to set resulting value of the branch and exit the case expression.
-
+  
 # Additional syntax enhancements
 
 * Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
@@ -125,12 +142,11 @@ None planned.
 ## #use compiler directive/statement
 
 ```
-#use compiler-option = value, compiler-option = value, ...
-  [code]
-end   // or #end??
+#use (compiler-option = value, compiler-option = value, ...)
+[code-block, e.g. function declaration, while loop or begin ... end] 
 ```
 
-Compiles code within the code block applying certain compiler options (e.g. `goal`) to it. Some compiler options
+Compiles the next code block applying certain compiler options (e.g. `goal`) to it. Some compiler options
 (`target`, `optimization`) will remain global and won't be available in `#use`. The intended purpose is to provide
 means to compile different parts of code for size or speed.
 

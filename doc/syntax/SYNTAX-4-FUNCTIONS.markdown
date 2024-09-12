@@ -61,7 +61,7 @@ The disparity between those two kinds of functions is a consequence of keeping M
 There are a few issues with these rules:
 * Both `ucontrol stop` and `stop` would map to the `stop()` function. The `stop` instruction is instead mapped to the `stopProcessor()` function.
 * `ucontrol getBlock` is similar to the new `getblock` World Processor instruction. The resulting functions only differ in case.
-* The `status` World Processor instruction distinguishes clearing and applying the status by a boolean value
+* The `status` World Processor instruction distinguishes clearing and applying the status by an enumerated parameter 
   (`true` or `false`), which is not very readable. Mindcode instead creates separate functions,
   `applyStatus()` and `clearStatus()`.
 
@@ -315,7 +315,9 @@ Large inline functions called multiple times can generate lots of instructions a
 If this happens, remove the `inline` keyword from some function definitions to generate less code.
 
 The compiler will automatically make a function inline when it is called just once in the entire program.
-This is safe, as in this case the program will always be both smaller and faster.
+This is safe, as in this case the program will always be both smaller and faster. if a function is called more than 
+once, it can still be inlined by the
+[Function Inlining optimization](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining).  
 
 ## Recursive functions
 
