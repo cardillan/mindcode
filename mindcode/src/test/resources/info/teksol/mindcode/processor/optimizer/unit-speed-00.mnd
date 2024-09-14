@@ -1,66 +1,66 @@
 // Unit speed measurement
-UNIT = @flare
+UNIT = @flare;
 
-SX = 10
-SY = 10
-DX = 10
-DY = @maph - 10
-distance = floor(100 * len(DX - SX, DY - SY) + 0.5) / 100 - 2
+SX = 10;
+SY = 10;
+DX = 10;
+DY = @maph - 10;
+distance = floor(100 * len(DX - SX, DY - SY) + 0.5) / 100 - 2;
 
-ubind(UNIT)
+ubind(UNIT);
 while @unit == null
-	print(UNIT, ": no active unit found.")
-	printflush(message1)
-	ubind(UNIT)
-end
+	print(UNIT, ": no active unit found.");
+	printflush(message1);
+	ubind(UNIT);
+end;
 
 while switch1.enabled == false
-	print("Press button to start measuring ", UNIT, " speed.")
-	printflush(message1)
-end
+	print("Press button to start measuring ", UNIT, " speed.");
+	printflush(message1);
+end;
 
-switch1.enabled = false
+switch1.enabled = false;
 
 while @unit.controlled != 0
-	print("Searching free ", UNIT)
-	printflush(message1)
-	ubind(UNIT)
-end
+	print("Searching free ", UNIT);
+	printflush(message1);
+	ubind(UNIT);
+end;
 
-flag(1)
+flag(1);
 
 while within(SX, SY, 1) == false
-	print("Moving to start")
-	printflush(message1)
-	move(SX, SY)
-end
+	print("Moving to start");
+	printflush(message1);
+	move(SX, SY);
+end;
 
 // We're at start location
-print("Moving to destination")
-printflush(message1)
+print("Moving to destination");
+printflush(message1);
 
-start = @time
-move(DX, DY)
+start = @time;
+move(DX, DY);
 
 while within(DX, DY, 1) == false
-	move(DX, DY)
-end
+	move(DX, DY);
+end;
 
-finish = @time
+finish = @time;
 
 // We're done with the unit
-move(abs(SX - DX) / 2, abs(SY - DY) / 2)
-flag(0)
+move(abs(SX - DX) / 2, abs(SY - DY) / 2);
+flag(0);
 
-elapsed = finish - start
-speed = floor((distance / elapsed) * 100000) / 100
+elapsed = finish - start;
+speed = floor((distance / elapsed) * 100000) / 100;
 
 while switch1.enabled == false
-	print("Measurement results (", UNIT, "):")
-	print("\nMap dimensions: ", @mapw, "x", @maph)
-	print("\nElapsed time: ", elapsed, "ms")
-	print("\nDistance travelled: ", distance)
-	print("\nSpeed: ", speed, "tiles/s")
-	print("\nPress button to repeat")
-	printflush(message1)
-end	
+	print("Measurement results (", UNIT, "):");
+	print("\nMap dimensions: ", @mapw, "x", @maph);
+	print("\nElapsed time: ", elapsed, "ms");
+	print("\nDistance travelled: ", distance);
+	print("\nSpeed: ", speed, "tiles/s");
+	print("\nPress button to repeat");
+	printflush(message1);
+end;

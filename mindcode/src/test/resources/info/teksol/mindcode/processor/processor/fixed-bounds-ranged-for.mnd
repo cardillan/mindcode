@@ -1,6 +1,6 @@
-a = 10
-b = 20
+a = 10;
+b = 20;
 for i in a ... b
-    b = b - 1
-end
-print(b)
+    b = b - 1;
+end;
+print(b);

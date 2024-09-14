@@ -1,66 +1,66 @@
-allocate stack in bank1[0...512]
-ARRAY = bank2
+allocate stack in bank1[0...512];
+ARRAY = bank2;
 
 inline def output(size)
     for i in 0 .. size
-        print(ARRAY[i], " ")
-    end
-    print("\n")    
-end
+        print(ARRAY[i], " ");
+    end;
+    print("\n");
+end;
 
 def up(index)
     while index > 0
-        parent = (index - 1) \ 2
-        iv = ARRAY[index]
-        pv = ARRAY[parent]
-        //print("Parent: ", parent, ", index: ", index, ", pv: ", pv, ", iv: ", iv, "\n")
+        parent = (index - 1) \ 2;
+        iv = ARRAY[index];
+        pv = ARRAY[parent];
+        //print("Parent: ", parent, ", index: ", index, ", pv: ", pv, ", iv: ", iv, "\n");
         if pv < iv
-            ARRAY[index] = pv
-            ARRAY[parent] = iv
-            index = parent
+            ARRAY[index] = pv;
+            ARRAY[parent] = iv;
+            index = parent;
         else
-            break
-        end
-    end
-end
+            break;
+        end;
+    end;
+end;
 
 def down(index)
-    parent = 0
+    parent = 0;
     while (child = parent * 2 + 1) <= index
-        cv = ARRAY[child]
+        cv = ARRAY[child];
         if child < index
             if cv < ARRAY[child + 1]
-                child += 1
-                cv = ARRAY[child]
-            end
-        end
-        pv = ARRAY[parent]
+                child += 1;
+                cv = ARRAY[child];
+            end;
+        end;
+        pv = ARRAY[parent];
         if pv < cv
-            ARRAY[parent] = cv
-            ARRAY[child] = pv
-            parent = child
+            ARRAY[parent] = cv;
+            ARRAY[child] = pv;
+            parent = child;
         else
-            break
-        end
-    end
-end
+            break;
+        end;
+    end;
+end;
 
 // Build a heap
 for i in 1 ... SIZE
-    up(i)
-    //output(i)
-end
+    up(i);
+    //output(i);
+end;
 
 // Repeatedly use the heap's greatest value to sort the array
-index = SIZE - 1
+index = SIZE - 1;
 while index > 0
-    x = ARRAY[0]
-    ARRAY[0] = ARRAY[index]
-    ARRAY[index] = x
-    index -= 1
-    down(index)
-end
+    x = ARRAY[0];
+    ARRAY[0] = ARRAY[index];
+    ARRAY[index] = x;
+    index -= 1;
+    down(index);
+end;
 
 for i in 0 ... SIZE
-    print(ARRAY[i])
-end
+    print(ARRAY[i]);
+end;

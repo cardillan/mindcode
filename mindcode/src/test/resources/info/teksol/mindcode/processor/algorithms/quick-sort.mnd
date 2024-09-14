@@ -1,41 +1,41 @@
-allocate stack in bank1[0...512]
-ARRAY = bank2
+allocate stack in bank1[0...512];
+ARRAY = bank2;
 
 def quicksort(left, right) 
     if right > left
-        pivot_index = left + (right - left) \ 2
-        new_pivot_index = partition(left, right, pivot_index)
-        quicksort(left, new_pivot_index - 1)
-        quicksort(new_pivot_index + 1, right)
-    end
-end
+        pivot_index = left + (right - left) \ 2;
+        new_pivot_index = partition(left, right, pivot_index);
+        quicksort(left, new_pivot_index - 1);
+        quicksort(new_pivot_index + 1, right);
+    end;
+end;
 
 inline def partition(left, right, pivot_index)
-    pivot = ARRAY[pivot_index]
+    pivot = ARRAY[pivot_index];
     if pivot_index != right
-        ARRAY[pivot_index] = ARRAY[right]
-        ARRAY[right] = pivot
-    end
-    index = left
+        ARRAY[pivot_index] = ARRAY[right];
+        ARRAY[right] = pivot;
+    end;
+    index = left;
     for i in left ... right
-        curr = ARRAY[i]
+        curr = ARRAY[i];
         if curr < pivot
             if i != index
-                ARRAY[i] = ARRAY[index]
-                ARRAY[index] = curr
-            end
-            index += 1
-        end
-    end
+                ARRAY[i] = ARRAY[index];
+                ARRAY[index] = curr;
+            end;
+            index += 1;
+        end;
+    end;
     if index != right
-        ARRAY[right] = ARRAY[index]
-        ARRAY[index] = pivot
-    end
-    return index
-end
+        ARRAY[right] = ARRAY[index];
+        ARRAY[index] = pivot;
+    end;
+    return index;
+end;
 
-quicksort(0, SIZE - 1)
+quicksort(0, SIZE - 1);
 
 for i in 0 ... SIZE
-    print(ARRAY[i])
-end
+    print(ARRAY[i]);
+end;

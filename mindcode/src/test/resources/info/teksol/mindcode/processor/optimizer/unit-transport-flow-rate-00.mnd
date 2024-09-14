@@ -1,83 +1,83 @@
-DELAY = 1000
-SAMPLES = 10
+DELAY = 1000;
+SAMPLES = 10;
 
-IND_SHIPPED			= 511				// Total items loaded/dropped
-IND_MULTIPLIER		= 510				// Multiplier (1 or -1)
-IND_SESSION_KEY		= 509				// When this changes, reset!
-IND_TIME			= 508				// We write time here to track activity
-IND_FLOW_RATE		= 507
+IND_SHIPPED			= 511;				// Total items loaded/dropped
+IND_MULTIPLIER		= 510;				// Multiplier (1 or -1)
+IND_SESSION_KEY		= 509;				// When this changes, reset!
+IND_TIME			= 508;				// We write time here to track activity
+IND_FLOW_RATE		= 507;
 
-TOTAL_MILLIS = DELAY * SAMPLES
+TOTAL_MILLIS = DELAY * SAMPLES;
 
-SORTER = sorter1
-VAULT = vault1
-BANK = bank1
+SORTER = sorter1;
+VAULT = vault1;
+BANK = bank1;
 
 while (SORTER == null) or (VAULT == null)  or (BANK == null)
-	print("Missing sorter, vault or memory bank.")
-	printflush(message1)
-	SORTER = sorter1
-	VAULT = vault1
-	BANK = bank1
-end
+	print("Missing sorter, vault or memory bank.");
+	printflush(message1);
+	SORTER = sorter1;
+	VAULT = vault1;
+	BANK = bank1;
+end;
 
-shipped = BANK[IND_SHIPPED]
-MULTIPLIER = BANK[IND_MULTIPLIER]
-SESSION_KEY = BANK[IND_SESSION_KEY]
-item = SORTER.config
-//last_total = VAULT.sensor(item) + shipped
-last_total = shipped
+shipped = BANK[IND_SHIPPED];
+MULTIPLIER = BANK[IND_MULTIPLIER];
+SESSION_KEY = BANK[IND_SESSION_KEY];
+item = SORTER.config;
+//last_total = VAULT.sensor(item) + shipped;
+last_total = shipped;
 
-index = 0
-MILLIS = 0
+index = 0;
+MILLIS = 0;
 
-level = 0
-wait = 0
+level = 0;
+wait = 0;
 
 while (SORTER.dead === 0) and (VAULT.dead === 0) and (SESSION_KEY === BANK[IND_SESSION_KEY])
-	start = @time
-	wait = wait + DELAY
+	start = @time;
+	wait = wait + DELAY;
 	if start > wait
-		print("Wait reset\n")		
-		wait = start + DELAY
-	end
+		print("Wait reset\n");
+		wait = start + DELAY;
+	end;
 
-	shipped = BANK[IND_SHIPPED]
-	item = SORTER.config
-//	level = VAULT.sensor(item)
-	total = level + shipped
+	shipped = BANK[IND_SHIPPED];
+	item = SORTER.config;
+//	level = VAULT.sensor(item);
+	total = level + shipped;
 
 	if MILLIS < TOTAL_MILLIS
-		MILLIS += DELAY
-		SIGN_MILLIS = MULTIPLIER * MILLIS
+		MILLIS += DELAY;
+		SIGN_MILLIS = MULTIPLIER * MILLIS;
 	else
-		last_total = BANK[index]
-	end
-	BANK[index] = total
+		last_total = BANK[index];
+	end;
+	BANK[index] = total;
 	
-	flow_rate = (total - last_total) / SIGN_MILLIS
-	BANK[IND_FLOW_RATE] = flow_rate
-	BANK[IND_TIME] = @time
+	flow_rate = (total - last_total) / SIGN_MILLIS;
+	BANK[IND_FLOW_RATE] = flow_rate;
+	BANK[IND_TIME] = @time;
 
-	index = (index + 1) % SAMPLES
+	index = (index + 1) % SAMPLES;
 
-	flow_rate_str = floor(60000 * flow_rate)
-	seconds = MILLIS / 1000
+	flow_rate_str = floor(60000 * flow_rate);
+	seconds = MILLIS / 1000;
 
-	elapsed = @time - start
-	print("Measured interval: ", seconds, " sec")
-	print("\nItem: ", item)
-	print("\nItems shipped: ", shipped)
-	print("\nContainer level: ", level)
-	print("\nFlow rate: ", flow_rate_str)
-	print("\nTotal: ", total)
-	print("\nLast total: ", last_total)
-	print("\nIndex: ", index)
-	print("\nElapsed: ", elapsed, " ms")
-	printflush(message1)
+	elapsed = @time - start;
+	print("Measured interval: ", seconds, " sec");
+	print("\nItem: ", item);
+	print("\nItems shipped: ", shipped);
+	print("\nContainer level: ", level);
+	print("\nFlow rate: ", flow_rate_str);
+	print("\nTotal: ", total);
+	print("\nLast total: ", last_total);
+	print("\nIndex: ", index);
+	print("\nElapsed: ", elapsed, " ms");
+	printflush(message1);
 
-	loops = 0
+	loops = 0;
 	while @time < wait
-		loops += 1
-	end
-end
+		loops += 1;
+	end;
+end;

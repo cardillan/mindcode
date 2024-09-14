@@ -1,7 +1,7 @@
-allocate stack in bank1[0...512]
-def d(n) n > 0 ? -d(-n) : n end
+allocate stack in bank1[0...512];
+def d(n) n > 0 ? -d(-n) : n; end;
 for i in d(1) ... d(10)
-    if i == 3 continue end
-    print(i)
-    if i == d(5) break end
-end
+    if i == 3 continue; end;
+    print(i);
+    if i == d(5) break; end;
+end;

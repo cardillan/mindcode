@@ -1,19 +1,19 @@
-allocate stack in bank1[0...512]
-ARRAY = bank2
+allocate stack in bank1[0...512];
+ARRAY = bank2;
 
 for i in 1 ... SIZE
-    item = ARRAY[i]
-    j = i - 1
+    item = ARRAY[i];
+    j = i - 1;
     while j >= 0
         if (a = ARRAY[j]) <= item
-            break
-        end
-        ARRAY[j + 1] = a
-        j -= 1
-    end
-    ARRAY[j + 1] = item
-end
+            break;
+        end;
+        ARRAY[j + 1] = a;
+        j -= 1;
+    end;
+    ARRAY[j + 1] = item;
+end;
 
 for i in 0 ... SIZE
-    print(ARRAY[i])
-end
+    print(ARRAY[i]);
+end;

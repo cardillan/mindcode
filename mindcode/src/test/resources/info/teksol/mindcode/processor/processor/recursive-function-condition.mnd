@@ -1,10 +1,9 @@
-allocate stack in bank1[0...512]
+allocate stack in bank1[0...512];
 
 def foo(n)
     if n > 0
-        foo(n - 1)
-    end
+        foo(n - 1);
+    end;
+end;
 
-end
-
-print(foo(1))
+print(foo(1));

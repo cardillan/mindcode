@@ -1,32 +1,32 @@
-LINK_ID = 1
-const QUERY_BASE = 99999900
-QUERY_FLAG = QUERY_BASE + LINK_ID
-position = 100 * (vault1.x + @mapw * vault1.y)
-ANSWER_FLAG = position + LINK_ID
-SERVICED = 0
+LINK_ID = 1;
+const QUERY_BASE = 99999900;
+QUERY_FLAG = QUERY_BASE + LINK_ID;
+position = 100 * (vault1.x + @mapw * vault1.y);
+ANSWER_FLAG = position + LINK_ID;
+SERVICED = 0;
 
 while true
-    start = @time
-    procesUnit(@mono)
-    procesUnit(@poly)
-    procesUnit(@mega)
-    procesUnit(@quad)
-    procesUnit(@oct)
-    procesUnit(@flare)
-    procesUnit(@horizon)
-    procesUnit(@zenith)
-    procesUnit(@antumbra)
-    procesUnit(@eclipse)
-    printf("Remote vault [gold]#$LINK_ID[]\n")
-    printf("Queries serviced: [green]$SERVICED[]\n")
-    printf("[lightgray]Loop time: $ ms", floor(@time - start))
-    printflush(message1)
-end
+    start = @time;
+    procesUnit(@mono);
+    procesUnit(@poly);
+    procesUnit(@mega);
+    procesUnit(@quad);
+    procesUnit(@oct);
+    procesUnit(@flare);
+    procesUnit(@horizon);
+    procesUnit(@zenith);
+    procesUnit(@antumbra);
+    procesUnit(@eclipse);
+    printf("Remote vault [gold]#$LINK_ID[]\n");
+    printf("Queries serviced: [green]$SERVICED[]\n");
+    printf("[lightgray]Loop time: $ ms", floor(@time - start));
+    printflush(message1);
+end;
 
 inline def procesUnit(unit)
-    ubind(unit)
+    ubind(unit);
     if @unit.flag == QUERY_FLAG
-        flag(ANSWER_FLAG)
-        SERVICED += 1
-    end
-end
+        flag(ANSWER_FLAG);
+        SERVICED += 1;
+    end;
+end;

@@ -1,256 +1,256 @@
-FROM_INDEX = 0
-TO_INDEX = 8
-EXPECTED_BOOST = 1.5
+FROM_INDEX = 0;
+TO_INDEX = 8;
+EXPECTED_BOOST = 1.5;
 
-const OFFSET_X = 5
-const OFFSET_Y = 4
-const BAR_WIDTH = 14
-const BAR_GAP = 22
-const CAPACITY1 = 30
-const CAPACITY2 = 10
+const OFFSET_X = 5;
+const OFFSET_Y = 4;
+const BAR_WIDTH = 14;
+const BAR_GAP = 22;
+const CAPACITY1 = 30;
+const CAPACITY2 = 10;
 
-const RATE_INDEX = 511
+const RATE_INDEX = 511;
 
-clear(0, 0, 80)
+clear(0, 0, 80);
 
 if bank1 != null
-    BAR_LENGTH = 53
-    BAR_SPACE = 74
+    BAR_LENGTH = 53;
+    BAR_SPACE = 74;
 else
-    BAR_LENGTH = 61
-    BAR_SPACE = 88
-end
+    BAR_LENGTH = 61;
+    BAR_SPACE = 88;
+end;
 
-clx = 0
-clw = bank1 != null ? 156 : 176
-cly = FROM_INDEX == 0 ? 0 : OFFSET_Y + FROM_INDEX * BAR_GAP
-clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly
+clx = 0;
+clw = bank1 != null ? 156 : 176;
+cly = FROM_INDEX == 0 ? 0 : OFFSET_Y + FROM_INDEX * BAR_GAP;
+clh = (TO_INDEX < 8 ? OFFSET_Y + TO_INDEX * BAR_GAP : 176) - cly;
 
 // TODO: Prevents uninitialized variable warning; improve detection and remove
-icon = expected_flow_str = flow_str = lastRate = showa = null
+icon = expected_flow_str = flow_str = lastRate = showa = null;
 
-switch1.enabled = 0
+switch1.enabled = 0;
 while switch1.enabled == 0
-	start = @time
-	print("Silicon Factory Monitor")
+	start = @time;
+	print("Silicon Factory Monitor");
 
-	factories = 0
+	factories = 0;
 
-    color(0, 0, 80, 255)
-    rect(clx, cly, clw, clh)
+    color(0, 0, 80, 255);
+    rect(clx, cly, clw, clh);
 
-	stroke(2)
+	stroke(2);
 
-	index = FROM_INDEX
+	index = FROM_INDEX;
 	for n = 0; n < @links; n = n + 1
-		smelter = getlink(n)
+		smelter = getlink(n);
 		if smelter.type == @silicon-crucible
-			minimum = CAPACITY1 + 1
-			s = smelter.sand
-			c = smelter.coal
-			p = smelter.pyratite
-			a = min(smelter.silicon, CAPACITY1)
-			e = smelter.enabled
-			power = smelter.totalPower
-			boost = smelter.timescale
-			if s < minimum minimum = s icon = @sand end
-			if c < minimum minimum = c icon = @coal end
-			if p < minimum minimum = p icon = @pyratite end
-			showa = a > 10 && 31 - a < minimum
-			if showa icon = @silicon end
+			minimum = CAPACITY1 + 1;
+			s = smelter.sand;
+			c = smelter.coal;
+			p = smelter.pyratite;
+			a = min(smelter.silicon, CAPACITY1);
+			e = smelter.enabled;
+			power = smelter.totalPower;
+			boost = smelter.timescale;
+			if s < minimum minimum = s icon = @sand; end;
+			if c < minimum minimum = c icon = @coal; end;
+			if p < minimum minimum = p icon = @pyratite; end;
+			showa = a > 10 && 31 - a < minimum;
+			if showa icon = @silicon; end;
 
 			// Compute bar position
-			column = 0
-			row = index
+			column = 0;
+			row = index;
 
-			x = OFFSET_X + column * BAR_SPACE
-			y = OFFSET_Y + row * BAR_GAP
-			color(0, 0, 80, 255)
-			rect(x - 1, y - 1, BAR_SPACE, 16)
+			x = OFFSET_X + column * BAR_SPACE;
+			y = OFFSET_Y + row * BAR_GAP;
+			color(0, 0, 80, 255);
+			rect(x - 1, y - 1, BAR_SPACE, 16);
 
 			if minimum > 26 && showa == 0
-				icon = @silicon-crucible
-			end
+				icon = @silicon-crucible;
+			end;
 			
-			color(255, 255, 255, 255)
+			color(255, 255, 255, 255);
 			if e
 				if power > 0
-					image(x + 7, y + 7, icon, 16, 0)
+					image(x + 7, y + 7, icon, 16, 0);
 				else
-					color(255,80,80,255)
-					rect(x, y + 3, 14, 8)
-					color(0,0,0,255)
-					rect(x + 2, y + 5, 8, 4)
-					rect(x + 12, y + 3, 2, 2)
-					rect(x + 12, y + 9, 2, 2)
-					color(255,80,80,255)
-					rect(x + 4, y + 6, 2, 2)
-				end
+					color(255,80,80,255);
+					rect(x, y + 3, 14, 8);
+					color(0,0,0,255);
+					rect(x + 2, y + 5, 8, 4);
+					rect(x + 12, y + 3, 2, 2);
+					rect(x + 12, y + 9, 2, 2);
+					color(255,80,80,255);
+					rect(x + 4, y + 6, 2, 2);
+				end;
 			else
-				color(255,80,80,255)
-				stroke(3)
-				line(x + 2, y + 12, x + 12, y + 2)
-				line(x + 2, y + 2, x + 12, y + 12)
-				color(0,0,0,255)
-				lineRect(x - 1, y - 1, 16, 16)
-				stroke(2)
-			end
+				color(255,80,80,255);
+				stroke(3);
+				line(x + 2, y + 12, x + 12, y + 2);
+				line(x + 2, y + 2, x + 12, y + 12);
+				color(0,0,0,255);
+				lineRect(x - 1, y - 1, 16, 16);
+				stroke(2);
+			end;
 
-			x = x + 16
+			x = x + 16;
 
 			if power * e == 0
-				red = 255
-				green = 0
-				blue = 0
+				red = 255;
+				green = 0;
+				blue = 0;
 			elsif showa 
-				red = 255 
-				green = 0
-				blue = 255
-				minimum = a
+				red = 255;
+				green = 0;
+				blue = 255;
+				minimum = a;
 			else
-				red = (minimum > 20 && boost >= EXPECTED_BOOST) ? 0 : 255
-				green = (minimum > 10) ? 255 : 0
-				blue = 0
-			end
+				red = (minimum > 20 && boost >= EXPECTED_BOOST) ? 0 : 255;
+				green = (minimum > 10) ? 255 : 0;
+				blue = 0;
+			end;
 			
 			if boost > EXPECTED_BOOST
-				red = max(192, red)
-				green = max(192, green)
-				blue = max(192, blue)
-				boost = EXPECTED_BOOST
-			end
-			length = (BAR_LENGTH * boost) \ EXPECTED_BOOST
+				red = max(192, red);
+				green = max(192, green);
+				blue = max(192, blue);
+				boost = EXPECTED_BOOST;
+			end;
+			length = (BAR_LENGTH * boost) \ EXPECTED_BOOST;
 
-			color(red,green,blue,128)
-			rect(x, y, (minimum * length) \ CAPACITY1, BAR_WIDTH)
-			color(red,green,blue,255)
-			lineRect(x, y, length, BAR_WIDTH)
-			index = index + 1
-			factories = factories + 1
-		end
-	end
+			color(red,green,blue,128);
+			rect(x, y, (minimum * length) \ CAPACITY1, BAR_WIDTH);
+			color(red,green,blue,255);
+			lineRect(x, y, length, BAR_WIDTH);
+			index = index + 1;
+			factories = factories + 1;
+		end;
+	end;
 
-	index = FROM_INDEX
+	index = FROM_INDEX;
 	for n = 0; n < @links; n = n + 1
-		smelter = getlink(n)
+		smelter = getlink(n);
 		if smelter.type == @pyratite-mixer
-			minimum = CAPACITY2 + 1
-			s = smelter.sand
-			c = smelter.coal
-			l = smelter.lead
-			a = smelter.pyratite
-			e = smelter.enabled
-			power = smelter.totalPower
-			boost = smelter.timescale
-			if s < minimum minimum = s icon = @sand end
-			if c < minimum minimum = c icon = @coal end
-			if l < minimum minimum = l icon = @lead end
+			minimum = CAPACITY2 + 1;
+			s = smelter.sand;
+			c = smelter.coal;
+			l = smelter.lead;
+			a = smelter.pyratite;
+			e = smelter.enabled;
+			power = smelter.totalPower;
+			boost = smelter.timescale;
+			if s < minimum minimum = s icon = @sand; end;
+			if c < minimum minimum = c icon = @coal; end;
+			if l < minimum minimum = l icon = @lead; end;
 
 			// Compute bar position
-			column = 1
-			row = index
+			column = 1;
+			row = index;
 
-			x = OFFSET_X + column * BAR_SPACE
-			y = OFFSET_Y + row * BAR_GAP
-			color(0, 0, 80, 255)
-			rect(x - 1, y - 1, BAR_SPACE, 16)
+			x = OFFSET_X + column * BAR_SPACE;
+			y = OFFSET_Y + row * BAR_GAP;
+			color(0, 0, 80, 255);
+			rect(x - 1, y - 1, BAR_SPACE, 16);
 
 			if minimum > 6 && showa == 0
-				icon = @pyratite-mixer
-			end
+				icon = @pyratite-mixer;
+			end;
 			
-			color(255, 255, 255, 255)
+			color(255, 255, 255, 255);
 			if e
 				if power > 0
-					image(x + 7, y + 7, icon, 16, 0)
+					image(x + 7, y + 7, icon, 16, 0);
 				else
-					color(255,80,80,255)
-					rect(x, y + 3, 14, 8)
-					color(0,0,0,255)
-					rect(x + 2, y + 5, 8, 4)
-					rect(x + 12, y + 3, 2, 2)
-					rect(x + 12, y + 9, 2, 2)
-					color(255,80,80,255)
-					rect(x + 4, y + 6, 2, 2)
-				end
+					color(255,80,80,255);
+					rect(x, y + 3, 14, 8);
+					color(0,0,0,255);
+					rect(x + 2, y + 5, 8, 4);
+					rect(x + 12, y + 3, 2, 2);
+					rect(x + 12, y + 9, 2, 2);
+					color(255,80,80,255);
+					rect(x + 4, y + 6, 2, 2);
+				end;
 			else
-				color(255,80,80,255)
-				stroke(3)
-				line(x + 2, y + 12, x + 12, y + 2)
-				line(x + 2, y + 2, x + 12, y + 12)
-				color(0,0,0,255)
-				lineRect(x - 1, y - 1, 16, 16)
-				stroke(2)
-			end
+				color(255,80,80,255);
+				stroke(3);
+				line(x + 2, y + 12, x + 12, y + 2);
+				line(x + 2, y + 2, x + 12, y + 12);
+				color(0,0,0,255);
+				lineRect(x - 1, y - 1, 16, 16);
+				stroke(2);
+			end;
 
-			x = x + 16
+			x = x + 16;
 
 			if power * e == 0
-				red = 255
-				green = 0
-				blue = 0
+				red = 255;
+				green = 0;
+				blue = 0;
 			else
-				red = (minimum > 6 && boost >= EXPECTED_BOOST) ? 0 : 255
-				green = (minimum > 3) ? 255 : 0
-				blue = 0
-			end
+				red = (minimum > 6 && boost >= EXPECTED_BOOST) ? 0 : 255;
+				green = (minimum > 3) ? 255 : 0;
+				blue = 0;
+			end;
 			
 			if boost > EXPECTED_BOOST
-				red = max(192, red)
-				green = max(192, green)
-				blue = max(192, blue)
-				boost = EXPECTED_BOOST
-			end
-			length = (BAR_LENGTH * boost) \ EXPECTED_BOOST
+				red = max(192, red);
+				green = max(192, green);
+				blue = max(192, blue);
+				boost = EXPECTED_BOOST;
+			end;
+			length = (BAR_LENGTH * boost) \ EXPECTED_BOOST;
 
-			color(red,green,blue,128)
-			rect(x, y, (minimum * length) \ CAPACITY2, BAR_WIDTH)
-			color(red,green,blue,255)
-			lineRect(x, y, length, BAR_WIDTH)
-			index = index + 1
-		end
-	end
+			color(red,green,blue,128);
+			rect(x, y, (minimum * length) \ CAPACITY2, BAR_WIDTH);
+			color(red,green,blue,255);
+			lineRect(x, y, length, BAR_WIDTH);
+			index = index + 1;
+		end;
+	end;
 
 	if bank1 != null 
 		if FROM_INDEX == 0
-			rate = bank1[RATE_INDEX]
+			rate = bank1[RATE_INDEX];
 			if lastRate != rate
-				expected_flow = EXPECTED_BOOST * factories / 11.25
-				expected_flow_str = floor(expected_flow * 3600)
+				expected_flow = EXPECTED_BOOST * factories / 11.25;
+				expected_flow_str = floor(expected_flow * 3600);
 
-				lastRate = rate
-				color(0, 0, 80, 255)
-				rect(156, 0, 16, 176)
+				lastRate = rate;
+				color(0, 0, 80, 255);
+				rect(156, 0, 16, 176);
 				
-				color(255,128,128,255)
-				rect(164,4,8,84)
-				color(128,255,128,255)
-				rect(164,89,8,84)
+				color(255,128,128,255);
+				rect(164,4,8,84);
+				color(128,255,128,255);
+				rect(164,89,8,84);
 
-				stroke(1)
-				color(255,0,0,255)
-				lineRect(164,4,8,84)
-				color(0,255,0,255)
-				lineRect(164,89,8,84)
+				stroke(1);
+				color(255,0,0,255);
+				lineRect(164,4,8,84);
+				color(0,255,0,255);
+				lineRect(164,89,8,84);
 
-				color(0,0,80,255)
-				rect(164,4,2,170)
+				color(0,0,80,255);
+				rect(164,4,2,170);
 
-				pos = 88 + 84 * (rate - expected_flow) / expected_flow
-				pos = min(max(pos, 4), 170)
-				pos1 = pos + 7
-				pos2 = pos - 7
-				color(255,255,16,255)
-				triangle(156, pos1, 164, pos, 156, pos2)
-				flow_str = floor(3600 * rate)
-			end
-		end
-		print("\nNominal production: ", expected_flow_str, "/min")
-		print("\nActual production: ", flow_str, "/min")
-	end
+				pos = 88 + 84 * (rate - expected_flow) / expected_flow;
+				pos = min(max(pos, 4), 170);
+				pos1 = pos + 7;
+				pos2 = pos - 7;
+				color(255,255,16,255);
+				triangle(156, pos1, 164, pos, 156, pos2);
+				flow_str = floor(3600 * rate);
+			end;
+		end;
+		print("\nNominal production: ", expected_flow_str, "/min");
+		print("\nActual production: ", flow_str, "/min");
+	end;
 
-	drawflush(display1)
+	drawflush(display1);
 
-	print("\nUpdate time: ", floor(@time - start), " ms")
-	printflush(message1)
-end
+	print("\nUpdate time: ", floor(@time - start), " ms");
+	printflush(message1);
+end;

@@ -1,20 +1,20 @@
 def foo(n)
-    sum = 0
-    r = rand(10)        // Prevents compile-time evaluation
+    sum = 0;
+    r = rand(10);        // Prevents compile-time evaluation
     for i in 0 ... 50
-        sum += n + r
-    end
-    print(floor(sum - 50 * r + 0.5))
-end
+        sum += n + r;
+    end;
+    print(floor(sum - 50 * r + 0.5));
+end;
 
 def bar(s)
-    foo(10 + s)
-    foo(20 + s)
-    foo(30 + s)
-    foo(40 + s)
-end
+    foo(10 + s);
+    foo(20 + s);
+    foo(30 + s);
+    foo(40 + s);
+end;
 
-bar(1)
-bar(2)
-bar(3)
-bar(4)
+bar(1);
+bar(2);
+bar(3);
+bar(4);

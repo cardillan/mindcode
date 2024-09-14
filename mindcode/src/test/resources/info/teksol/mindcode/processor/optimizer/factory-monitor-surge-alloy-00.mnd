@@ -1,174 +1,173 @@
-FROM_INDEX = 0
-EXPECTED_BOOST = 1.5
-OFFSET_X = 5
-OFFSET_Y = 4
-BAR_WIDTH = 14
-BAR_GAP = 22
-CAPACITY = 20
+FROM_INDEX = 0;
+EXPECTED_BOOST = 1.5;
+OFFSET_X = 5;
+OFFSET_Y = 4;
+BAR_WIDTH = 14;
+BAR_GAP = 22;
+CAPACITY = 20;
 
-EXPECTED_FLOW = EXPECTED_BOOST * 16 / 75
-EXPECTED_FLOW_STR = floor(EXPECTED_FLOW * 3600)
+EXPECTED_FLOW = EXPECTED_BOOST * 16 / 75;
+EXPECTED_FLOW_STR = floor(EXPECTED_FLOW * 3600);
 
-RATE_INDEX = 511
+RATE_INDEX = 511;
 
 if bank1 != null
-    BAR_LENGTH = 53
-    BAR_SPACE = 74
+    BAR_LENGTH = 53;
+    BAR_SPACE = 74;
 else
-    BAR_LENGTH = 61
-    BAR_SPACE = 88
+    BAR_LENGTH = 61;
+    BAR_SPACE = 88;
 end
 
-flow_str = icon = lastRate = null
+flow_str = icon = lastRate = null;
 
-switch1.enabled = 0
+switch1.enabled = 0;
 
 while switch1.enabled == 0
-    print("Surge Alloy Factory Monitor")
+    print("Surge Alloy Factory Monitor");
     
     if bank1 != null
         if FROM_INDEX == 0
-            rate = bank1[RATE_INDEX]
+            rate = bank1[RATE_INDEX];
             if lastRate != rate
-                clear(0, 0, 80)
-                lastRate = rate
-                color(0, 0, 80, 255)
-                rect(156, 0, 16, 176)
+                clear(0, 0, 80);
+                lastRate = rate;
+                color(0, 0, 80, 255);
+                rect(156, 0, 16, 176);
 
-                color(255,128,128,255)
-                rect(164,4,8,84)
-                color(128,255,128,255)
-                rect(164,89,8,84)
+                color(255,128,128,255);
+                rect(164,4,8,84);
+                color(128,255,128,255);
+                rect(164,89,8,84);
 
-                stroke(1)
-                color(255,0,0,255)
-                lineRect(164,4,8,84)
-                color(0,255,0,255)
-                lineRect(164,89,8,84)
+                stroke(1);
+                color(255,0,0,255);
+                lineRect(164,4,8,84);
+                color(0,255,0,255);
+                lineRect(164,89,8,84);
 
-                color(0,0,80,255)
-                rect(164,4,2,170)
+                color(0,0,80,255);
+                rect(164,4,2,170);
 
-                pos = 88 + 84 * (rate - EXPECTED_FLOW) / EXPECTED_FLOW
-                pos = min(max(pos, 4), 170)
-                pos1 = pos + 7
-                pos2 = pos - 7
-                color(255,255,16,255)
-                triangle(156, pos1, 164, pos, 156, pos2)
-                flow_str = floor(3600 * rate)
+                pos = 88 + 84 * (rate - EXPECTED_FLOW) / EXPECTED_FLOW;
+                pos = min(max(pos, 4), 170);
+                pos1 = pos + 7;
+                pos2 = pos - 7;
+                color(255,255,16,255);
+                triangle(156, pos1, 164, pos, 156, pos2);
+                flow_str = floor(3600 * rate);
             else
-                color(0, 0, 80, 255)
-                rect(0, 0, 156, 176)
+                color(0, 0, 80, 255);
+                rect(0, 0, 156, 176);
             end
         end
-        printf("\nNominal production: $EXPECTED_FLOW_STR/min")
-        printf("\nActual production: $flow_str/min")
-    end
+        printf("\nNominal production: $EXPECTED_FLOW_STR/min");
+        printf("\nActual production: $flow_str/min");
+    end;
 
-    start = @time
-    stroke(2)
+    start = @time;
+    stroke(2);
 
-    index = FROM_INDEX
+    index = FROM_INDEX;
     for n = 0; n < @links; n = n + 1
-        smelter = getlink(n)
+        smelter = getlink(n);
         if smelter.type == @surge-smelter
-            minimum = CAPACITY + 1
-            t = smelter.titanium
-            c = smelter.copper
-            l = smelter.lead
-            s = smelter.silicon
-            a = smelter.surge-alloy
-            e = smelter.enabled
-            power = smelter.totalPower
-            boost = smelter.timescale
-            if l < minimum minimum = l icon = @lead end
-            if s < minimum minimum = s icon = @silicon end
-            if c < minimum minimum = c icon = @copper end
-            if t < minimum minimum = t icon = @titanium end
-            showa = a > 5 && 21 - a < minimum
-            if showa icon = @surge-alloy end
+            minimum = CAPACITY + 1;
+            t = smelter.titanium;
+            c = smelter.copper;
+            l = smelter.lead;
+            s = smelter.silicon;
+            a = smelter.surge-alloy;
+            e = smelter.enabled;
+            power = smelter.totalPower;
+            boost = smelter.timescale;
+            if l < minimum minimum = l icon = @lead; end;
+            if s < minimum minimum = s icon = @silicon; end;
+            if c < minimum minimum = c icon = @copper; end;
+            if t < minimum minimum = t icon = @titanium; end;
+            showa = a > 5 && 21 - a < minimum;
+            if showa icon = @surge-alloy; end;
 
             // Compute bar position
-            column = index % 2
-            row = index \ 2
+            column = index % 2;
+            row = index \ 2;
 
-            x = OFFSET_X + column * BAR_SPACE
-            y = OFFSET_Y + row * BAR_GAP
-            xm1 = x - 1
-            ym1 = y - 1
-            color(0, 0, 80, 255)
-            rect(xm1, ym1, BAR_SPACE, 16)
+            x = OFFSET_X + column * BAR_SPACE;
+            y = OFFSET_Y + row * BAR_GAP;
+            xm1 = x - 1;
+            ym1 = y - 1;
+            color(0, 0, 80, 255);
+            rect(xm1, ym1, BAR_SPACE, 16);
 
             if minimum > 16 && showa == 0
-                icon = @surge-smelter
-            end
+                icon = @surge-smelter;
+            end;
             
-            color(255, 255, 255, 255)
+            color(255, 255, 255, 255);
             if e
                 if power > 0
-                    image(x + 7, y + 7, icon, 16, 0)
+                    image(x + 7, y + 7, icon, 16, 0);
                 else
-                    x12 = x + 12
-                    y3 = y + 3
-                    color(255,80,80,255)
-                    rect(x, y3, 14, 8)
-                    color(0,0,0,255)
-                    rect(x + 2, y + 5, 8, 4)
-                    rect(x12, y3, 2, 2)
-                    rect(x12, y + 9, 2, 2)
-                    color(255,80,80,255)
-                    rect(x + 4, y + 6, 2, 2)
-                end
+                    x12 = x + 12;
+                    y3 = y + 3;
+                    color(255,80,80,255);
+                    rect(x, y3, 14, 8);
+                    color(0,0,0,255);
+                    rect(x + 2, y + 5, 8, 4);
+                    rect(x12, y3, 2, 2);
+                    rect(x12, y + 9, 2, 2);
+                    color(255,80,80,255);
+                    rect(x + 4, y + 6, 2, 2);
+                end;
             else
-                x2 = x + 2
-                y2 = y + 2
-                x12 = x + 12
-                y12 = y + 12
-                color(255,80,80,255)
-                stroke(3)
-                line(x2, y12, x12, y2)
-                line(x2, y2, x12, y12)
-                color(0,0,0,255)
-                lineRect(xm1, ym1, 16, 16)
-                stroke(2)
-            end
+                x2 = x + 2;
+                y2 = y + 2;
+                x12 = x + 12;
+                y12 = y + 12;
+                color(255,80,80,255);
+                stroke(3);
+                line(x2, y12, x12, y2);
+                line(x2, y2, x12, y12);
+                color(0,0,0,255);
+                lineRect(xm1, ym1, 16, 16);
+                stroke(2);
+            end;
 
-            x = x + 16
+            x = x + 16;
 
             if power * e == 0
-                red = 255
-                green = 0
-                blue = 0
+                red = 255;
+                green = 0;
+                blue = 0;
             elsif showa 
-                red = 255 
-                green = 0
-                blue = 255
-                minimum = a
+                red = 255;
+                green = 0;
+                blue = 255;
+                minimum = a;
             else
-                red = (minimum > 14 && boost >= EXPECTED_BOOST) ? 0 : 255
-                green = (minimum > 7) ? 255 : 0
-                blue = 0
-            end
+                red = (minimum > 14 && boost >= EXPECTED_BOOST) ? 0 : 255;
+                green = (minimum > 7) ? 255 : 0;
+                blue = 0;
+            end;
             
             if boost > EXPECTED_BOOST
-                red = max(192, red)
-                green = max(192, green)
-                blue = max(192, blue)
-                boost = EXPECTED_BOOST
-            end
-            length = (BAR_LENGTH * boost) \ EXPECTED_BOOST
+                red = max(192, red);
+                green = max(192, green);
+                blue = max(192, blue);
+                boost = EXPECTED_BOOST;
+            end;
+            length = (BAR_LENGTH * boost) \ EXPECTED_BOOST;
 
-            color(red,green,blue,128)
-            rect(x, y, (minimum * length) \ CAPACITY, BAR_WIDTH)
-            color(red,green,blue,255)
-            lineRect(x, y, length, BAR_WIDTH)
-            index = index + 1
-        end
-    end
+            color(red,green,blue,128);
+            rect(x, y, (minimum * length) \ CAPACITY, BAR_WIDTH);
+            color(red,green,blue,255);
+            lineRect(x, y, length, BAR_WIDTH);
+            index = index + 1;
+        end;
+    end;
 
+    drawflush(display1);
 
-    drawflush(display1)
-
-    printf("\nUpdate time: $ ms", floor(@time - start))
-    printflush(message1)
-end
+    printf("\nUpdate time: $ ms", floor(@time - start));
+    printflush(message1);
+end;

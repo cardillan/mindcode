@@ -1,104 +1,104 @@
-MEMORY = bank1
-COORD = cell1
-SMOOTH = 3
-POSITION = 0
-TOTAL = 1
-FREQ = 1000
+MEMORY = bank1;
+COORD = cell1;
+SMOOTH = 3;
+POSITION = 0;
+TOTAL = 1;
+FREQ = 1000;
 
-printflush(message1)
-println("Item Rate Display")
-println("[gold]Initializing...[]")
-printflush(message1)
+printflush(message1);
+println("Item Rate Display");
+println("[gold]Initializing...[]");
+printflush(message1);
 
-stroke(1)
+stroke(1);
 
-INDEX = 256
-SIZE = 511
+INDEX = 256;
+SIZE = 511;
 
-SKIP_SIZE = SIZE - INDEX - 1
-SHIFT = POSITION * 30
+SKIP_SIZE = SIZE - INDEX - 1;
+SHIFT = POSITION * 30;
 
-ptr = MEMORY[INDEX] - SHIFT
-if ptr < INDEX ptr += SKIP_SIZE end
-maximum = MEMORY[ptr]
+ptr = MEMORY[INDEX] - SHIFT;
+if ptr < INDEX ptr += SKIP_SIZE; end;
+maximum = MEMORY[ptr];
 for n in 0 ... 29
-	ptr = ptr - 1
-	if ptr <= INDEX ptr = SIZE - 1 end
-	maximum = max(maximum, MEMORY[ptr])
-end
+	ptr = ptr - 1;
+	if ptr <= INDEX ptr = SIZE - 1; end;
+	maximum = max(maximum, MEMORY[ptr]);
+end;
 
-maximum = maximum * SMOOTH
+maximum = maximum * SMOOTH;
 
 while switch1.enabled == 0
-	print("Item Rate Display")
-	start = @time
+	print("Item Rate Display");
+	start = @time;
 	if COORD.dead === 0
         for n = 0; n < TOTAL; n += 1
-            m = COORD[n]
-            printf("\nCoord: [gold]$m[]")
-            maximum = max(maximum, m)
-        end
-    end
-	scale = 150 / maximum
+            m = COORD[n];
+            printf("\nCoord: [gold]$m[]");
+            maximum = max(maximum, m);
+        end;
+    end;
+	scale = 150 / maximum;
 
-	printf("\nMaximum: [green]$[]", ceil(maximum))
-	printf("\nScale: [green]$[]", floor(scale))
+	printf("\nMaximum: [green]$[]", ceil(maximum));
+	printf("\nScale: [green]$[]", floor(scale));
 	
-	clear(0,0,80)
-	color(0,80,0,255)
-	rect(10,10,156,156)
+	clear(0,0,80);
+	color(0,80,0,255);
+	rect(10,10,156,156);
 
-	head = MEMORY[INDEX] - SHIFT
-	if head < INDEX head += SKIP_SIZE end
-	tail = head
-	value = 0
+	head = MEMORY[INDEX] - SHIFT;
+	if head < INDEX head += SKIP_SIZE; end;
+	tail = head;
+	value = 0;
 	for i = 0; i < SMOOTH; i += 1
-		value += MEMORY[head]
-		head -= 1
-		if head <= INDEX head = SIZE - 1 end
-	end
-	last = 10 + value * scale
-	newMax = value
+		value += MEMORY[head];
+		head -= 1;
+		if head <= INDEX head = SIZE - 1; end;
+	end;
+	last = 10 + value * scale;
+	newMax = value;
 	
-	color(80,255,80,255)
-	x = 159
+	color(80,255,80,255);
+	x = 159;
 	for n in 0 ... 29
-		t = MEMORY[tail]
-		h = MEMORY[head]
-		value = value - t + h
-		head -= 1
-		if head <= INDEX head = SIZE - 1 end
-		tail -= 1
-		if tail <= INDEX tail = SIZE - 1 end
-		y = 10 + value * scale
-		x1 = x - 5
-		line(x, last, x1, y)
-		x = x1
-		last = y
-		newMax = max(newMax, value)
-	end	
+		t = MEMORY[tail];
+		h = MEMORY[head];
+		value = value - t + h;
+		head -= 1;
+		if head <= INDEX head = SIZE - 1; end;
+		tail -= 1;
+		if tail <= INDEX tail = SIZE - 1; end;
+		y = 10 + value * scale;
+		x1 = x - 5;
+		line(x, last, x1, y);
+		x = x1;
+		last = y;
+		newMax = max(newMax, value);
+	end;
 	
-	color(255,255,255,255)
-	lineRect(10,10,156,156)
+	color(255,255,255,255);
+	lineRect(10,10,156,156);
 	
-	maximum = max(newMax, maximum)
+	maximum = max(newMax, maximum);
 	if 3 * newMax < maximum
-		maximum = 1.5 * newMax
-	end
-	COORD[POSITION] = maximum
+		maximum = 1.5 * newMax;
+	end;
+	COORD[POSITION] = maximum;
 	
-	printf("\n[lightgray]Loop time: $ ms", floor(@time - start))
+	printf("\n[lightgray]Loop time: $ ms", floor(@time - start));
 
-	wait = FREQ * ceil(@time / FREQ)
-	loops = 0
+	wait = FREQ * ceil(@time / FREQ);
+	loops = 0;
 	while @time < wait
-		loops += 1
-	end
+		loops += 1;
+	end;
 	
-	drawflush(display1)
+	drawflush(display1);
 	
-	print("\nLoops: ", loops)
-	printflush(message1)
-end
+	print("\nLoops: ", loops);
+	printflush(message1);
+end;
 
-switch1.enabled = 0
+switch1.enabled = 0;

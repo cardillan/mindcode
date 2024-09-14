@@ -1,324 +1,324 @@
-printflush(message1)
+printflush(message1);
 
-FUEL = @blast-compound
-FUEL_OFF = @scrap
-MIXER_IN = @pyratite
+FUEL = @blast-compound;
+FUEL_OFF = @scrap;
+MIXER_IN = @pyratite;
 
-PWR_REQ = 23000
-FLOW_REQ = 2000
-PWR_ABANDON = 2000   // Below this, assume something is horribly wrong and always shut down.
-PWR_ABORT = 5000
-PWR_RESERVE = 0.6    // Only plan on using 60% of battery capacity currently available.
-FLOW_ABORT = -500
-FUEL_REQ = 10        // In generator
-FUEL_TOT_REQ = 45    // In box (45 is enough for 60 seconds of running)
-FUEL_LIMIT_LOW = 150     // Max fuel when no reactors running
-FUEL_LIMIT = 800         // Max fuel generally
-FUEL_TOT_ABORT = 15 // 20 seconds supply per reactor. Turn off reactors 2..5 as we start to run low for graceful
+PWR_REQ = 23000;
+FLOW_REQ = 2000;
+PWR_ABANDON = 2000;   // Below this, assume something is horribly wrong and always shut down.
+PWR_ABORT = 5000;
+PWR_RESERVE = 0.6;    // Only plan on using 60% of battery capacity currently available.
+FLOW_ABORT = -500;
+FUEL_REQ = 10;        // In generator
+FUEL_TOT_REQ = 45;    // In box (45 is enough for 60 seconds of running)
+FUEL_LIMIT_LOW = 150;     // Max fuel when no reactors running
+FUEL_LIMIT = 800;         // Max fuel generally
+FUEL_TOT_ABORT = 15; // 20 seconds supply per reactor. Turn off reactors 2..5 as we start to run low for graceful
                          // power reduction (better than all at once)
-GENERATOR_OUTPUT = 6500
-GOAL_BUFFER = 10000
-CRYO_REQ = 3 // This is a count out of 30 (3 is 10% full)
-CRYO_REQ_EA = 2 // Each reactor needs a little more to start.
-CRYO_ABORT = 1 // Note that this drastic low amount is balanced by many tanks around the generator
-// NEGATIVE_TICKS = 1800 // 30 seconds (60 ticks times 30 seconds)
-//                       // Rough time to become net-positive.
-// STARTUP_TICKS = 3600 // 30 seconds (60 ticks times 30 seconds)
-//                      // Rough time to be a serious generator
-fuel_1 = false
-fuel_2 = false
-fuel_3 = false
-fuel_4 = false
-fuel_5 = false
+GENERATOR_OUTPUT = 6500;
+GOAL_BUFFER = 10000;
+CRYO_REQ = 3; // This is a count out of 30 (3 is 10% full)
+CRYO_REQ_EA = 2; // Each reactor needs a little more to start.
+CRYO_ABORT = 1; // Note that this drastic low amount is balanced by many tanks around the generator
+// NEGATIVE_TICKS = 1800; // 30 seconds (60 ticks times 30 seconds)
+//                        // Rough time to become net-positive.
+// STARTUP_TICKS = 3600; // 30 seconds (60 ticks times 30 seconds)
+//                       // Rough time to be a serious generator
+fuel_1 = false;
+fuel_2 = false;
+fuel_3 = false;
+fuel_4 = false;
+fuel_5 = false;
 
-surplus = floor(node1.powerNetIn - node1.powerNetOut) // Watts of excess generation
+surplus = floor(node1.powerNetIn - node1.powerNetOut); // Watts of excess generation
 
 start_time = if surplus > 10000
     // assume generators running OK
-    @tick - 3600
+    @tick - 3600;
 else
-    @tick
-end
+    @tick;
+end;
 
-t_startup1 = start_time
-t_startup2 = start_time
-t_startup3 = start_time
-t_startup4 = start_time
-t_startup5 = start_time
+t_startup1 = start_time;
+t_startup2 = start_time;
+t_startup3 = start_time;
+t_startup4 = start_time;
+t_startup5 = start_time;
 
-RET_T_STARTUP = t_startup1
-REACTORS_DESIRED = 5 // Updates based on power fluctuations
-AVG_SURPLUS = 500
+RET_T_STARTUP = t_startup1;
+REACTORS_DESIRED = 5; // Updates based on power fluctuations
+AVG_SURPLUS = 500;
 
 while true
     // Feed (IN) or empty (OUT) various reactors
-    ULD_IN_1 = unloader1
-    ULD_OUT_1 = unloader2
-    ULD_IN_2 = unloader3
-    ULD_OUT_2 = unloader4
-    ULD_IN_MANY = unloader5
-    ULD_OUT_MANY = unloader6
+    ULD_IN_1 = unloader1;
+    ULD_OUT_1 = unloader2;
+    ULD_IN_2 = unloader3;
+    ULD_OUT_2 = unloader4;
+    ULD_IN_MANY = unloader5;
+    ULD_OUT_MANY = unloader6;
 
     // Feed the mixers with Pyro so they can make blast
-    ULD_MIXER = unloader7
+    ULD_MIXER = unloader7;
 
-    TOWER = cyclone1
-    CONTAINER = vault1
-    NODE = node1
+    TOWER = cyclone1;
+    CONTAINER = vault1;
+    NODE = node1;
 
-    emerg_shutdown = check_radar(TOWER)
-    emerg_shutdown |= check_manual_shutdown()
+    emerg_shutdown = check_radar(TOWER);
+    emerg_shutdown |= check_manual_shutdown();
 
     // Accumulate how much power is still required to start reactors
-    START_POWER_REQ = calc_charge_req(reactor1, t_startup1)
-    START_POWER_REQ += calc_charge_req(reactor2, t_startup2)
-    START_POWER_REQ += calc_charge_req(reactor3, t_startup3)
-    START_POWER_REQ += calc_charge_req(reactor4, t_startup4)
-    START_POWER_REQ += calc_charge_req(reactor5, t_startup5)
+    START_POWER_REQ = calc_charge_req(reactor1, t_startup1);
+    START_POWER_REQ += calc_charge_req(reactor2, t_startup2);
+    START_POWER_REQ += calc_charge_req(reactor3, t_startup3);
+    START_POWER_REQ += calc_charge_req(reactor4, t_startup4);
+    START_POWER_REQ += calc_charge_req(reactor5, t_startup5);
     // Potentially code here to find last reactor to start up and shut it back down.
 
-    fuel_1 = start_reactor(reactor1, 1, emerg_shutdown, fuel_1, t_startup1)
-    t_startup1 = RET_T_STARTUP
-    update_fuel(fuel_1, ULD_IN_1, ULD_OUT_1)
+    fuel_1 = start_reactor(reactor1, 1, emerg_shutdown, fuel_1, t_startup1);
+    t_startup1 = RET_T_STARTUP;
+    update_fuel(fuel_1, ULD_IN_1, ULD_OUT_1);
 
-    fuel_2 = start_reactor(reactor2, 2, emerg_shutdown, fuel_2, t_startup2)
-    t_startup2 = RET_T_STARTUP
-    update_fuel(fuel_2, ULD_IN_2, ULD_OUT_2)
+    fuel_2 = start_reactor(reactor2, 2, emerg_shutdown, fuel_2, t_startup2);
+    t_startup2 = RET_T_STARTUP;
+    update_fuel(fuel_2, ULD_IN_2, ULD_OUT_2);
 
-    emerg_shutdown |= check_radar(TOWER)
-    fuel_3 = start_reactor(reactor3, 3, emerg_shutdown, fuel_3, t_startup3)
-    t_startup3 = RET_T_STARTUP
-    fuel_4 = start_reactor(reactor4, 4, emerg_shutdown, fuel_4, t_startup4)
-    t_startup4 = RET_T_STARTUP
-    fuel_5 = start_reactor(reactor5, 5, emerg_shutdown, fuel_5, t_startup5)
-    t_startup5 = RET_T_STARTUP
-    fuel_many = fuel_3 or fuel_4 or fuel_5
-    update_fuel(fuel_many, ULD_IN_MANY, ULD_OUT_MANY)
+    emerg_shutdown |= check_radar(TOWER);
+    fuel_3 = start_reactor(reactor3, 3, emerg_shutdown, fuel_3, t_startup3);
+    t_startup3 = RET_T_STARTUP;
+    fuel_4 = start_reactor(reactor4, 4, emerg_shutdown, fuel_4, t_startup4);
+    t_startup4 = RET_T_STARTUP;
+    fuel_5 = start_reactor(reactor5, 5, emerg_shutdown, fuel_5, t_startup5);
+    t_startup5 = RET_T_STARTUP;
+    fuel_many = fuel_3 or fuel_4 or fuel_5;
+    update_fuel(fuel_many, ULD_IN_MANY, ULD_OUT_MANY);
 
-    feed_mixers = throttle_blast(fuel_1 or fuel_2 or fuel_many, emerg_shutdown)
-    ULD_MIXER.config = feed_mixers?MIXER_IN:FUEL_OFF
+    feed_mixers = throttle_blast(fuel_1 or fuel_2 or fuel_many, emerg_shutdown);
+    ULD_MIXER.config = feed_mixers?MIXER_IN:FUEL_OFF;
 
-    diff_generators()
-    surplus = kilo(AVG_SURPLUS)
-    charge = kilo(NODE.powerNetStored)
+    diff_generators();
+    surplus = kilo(AVG_SURPLUS);
+    charge = kilo(NODE.powerNetStored);
     if START_POWER_REQ > 0
-        req = kilo(START_POWER_REQ)
-        printf("Req ${req}kJ / ${charge}kJ. ${surplus}kW flow.\n")
+        req = kilo(START_POWER_REQ);
+        printf("Req ${req}kJ / ${charge}kJ. ${surplus}kW flow.\n");
     else
-        printf("Power ${surplus}kW, ${charge}kJ\n")
-        update_reactors_desired()
-    end
+        printf("Power ${surplus}kW, ${charge}kJ\n");
+        update_reactors_desired();
+    end;
     if REACTORS_DESIRED != 5
-        printf("Require only ${REACTORS_DESIRED}/5 reactors.\n")
-    end
-    printflush(message1)
-end
+        printf("Require only ${REACTORS_DESIRED}/5 reactors.\n");
+    end;
+    printflush(message1);
+end;
 
 def kilo(val)
-    return (val \ 100) / 10
-end
+    return (val \ 100) / 10;
+end;
 
 def update_fuel(fuel, uld_in, uld_out)
-    uld_in.config = fuel?FUEL:FUEL_OFF
-    uld_out.config = !fuel?FUEL:FUEL_OFF
-end
+    uld_in.config = fuel?FUEL:FUEL_OFF;
+    uld_out.config = !fuel?FUEL:FUEL_OFF;
+end;
 
 def calc_charge_req(reactor, time)
-    secs = (@tick - time) \ 60
+    secs = (@tick - time) \ 60;
     if secs > 30 or !reactor.enabled
-        return 0
-    end
+        return 0;
+    end;
 
-    time_left = 30 - secs
+    time_left = 30 - secs;
     // Estimate of time left is 30 - secs
     // Linear estimate of impact reactor power draw is (1500 / 30 * time_left) * (0.5 * time left)
     // that simplifes to:
-    charge_req = floor(time_left * time_left * 25)
-    return charge_req
-end
+    charge_req = floor(time_left * time_left * 25);
+    return charge_req;
+end;
 
 def start_reactor(reactor, reactor_num, emerg_shutdown, fuel_on, t_startup)
-    RET_T_STARTUP = t_startup // return startup time unchanged by default
-    secs = (@tick - t_startup) \ 60
-    fuel = reactor.blast-compound
-    supply_fuel = true
-    fuel_stored = CONTAINER.blast-compound
-    cryo = reactor.cryofluid
-    charge = floor(NODE.powerNetStored)
-    surplus = floor(NODE.powerNetIn - NODE.powerNetOut) // Watts of excess generation
-    AVG_SURPLUS = AVG_SURPLUS * 0.8 + surplus * 0.2
-    enabled = reactor.enabled
+    RET_T_STARTUP = t_startup; // return startup time unchanged by default
+    secs = (@tick - t_startup) \ 60;
+    fuel = reactor.blast-compound;
+    supply_fuel = true;
+    fuel_stored = CONTAINER.blast-compound;
+    cryo = reactor.cryofluid;
+    charge = floor(NODE.powerNetStored);
+    surplus = floor(NODE.powerNetIn - NODE.powerNetOut); // Watts of excess generation
+    AVG_SURPLUS = AVG_SURPLUS * 0.8 + surplus * 0.2;
+    enabled = reactor.enabled;
 
-    printf("#$reactor_num - ")
+    printf("#$reactor_num - ");
     if emerg_shutdown
-        reactor.enabled = false
-        printf("emergency mode\n")
-        supply_fuel = false
+        reactor.enabled = false;
+        printf("emergency mode\n");
+        supply_fuel = false;
     elsif enabled
         if REACTORS_DESIRED < reactor_num
-            reactor.enabled = false
-            printf("STOP unwanted\n")
+            reactor.enabled = false;
+            printf("STOP unwanted\n");
         elsif reactor_num > 1 and fuel_stored < FUEL_TOT_ABORT * reactor_num
-            reactor.enabled = false
-            printf("STOP system fuel low\n")
+            reactor.enabled = false;
+            printf("STOP system fuel low\n");
         elsif fuel <= 1
             // Not enough fuel to run
-            reactor.enabled = false
-            printf("STOP fuel low\n")
+            reactor.enabled = false;
+            printf("STOP fuel low\n");
         elsif cryo <= CRYO_ABORT
-            reactor.enabled = false
-            printf("STOP out of cryo\n")
+            reactor.enabled = false;
+            printf("STOP out of cryo\n");
         elsif secs < 30
             // Reactor still in startup
-            charge_req = calc_charge_req(reactor, t_startup)
+            charge_req = calc_charge_req(reactor, t_startup);
 
             if charge - charge_req < PWR_ABORT and surplus < FLOW_ABORT
-                reactor.enabled = false
-                printf("START FAIL battery\n")
-                supply_fuel = false
+                reactor.enabled = false;
+                printf("START FAIL battery\n");
+                supply_fuel = false;
             else
-                time_left = 30 - secs
-                printf("Starting $time_left secs, req ${charge_req}J\n")
-            end
+                time_left = 30 - secs;
+                printf("Starting $time_left secs, req ${charge_req}J\n");
+            end;
         elsif charge < PWR_ABANDON and surplus < FLOW_ABORT
-            reactor.enabled = false
-            printf("ABANDON - battery crit\n")
-            supply_fuel = false
+            reactor.enabled = false;
+            printf("ABANDON - battery crit\n");
+            supply_fuel = false;
         else
             // Running, generating power
             // Round to 1 dp
-            mins = secs \ 6
-            mins = mins / 10
-            printf("RUN $mins mins\n")
-        end
+            mins = secs \ 6;
+            mins = mins / 10;
+            printf("RUN $mins mins\n");
+        end;
     else
         // Not running
         // 1 charge_units of charge if there is enough in battery to start other generators +
-        charge_units = (charge - START_POWER_REQ - PWR_ABORT) / PWR_REQ * PWR_RESERVE
-        flow_units = max(-0.1, surplus / FLOW_REQ)
-        cryo_req = CRYO_REQ + CRYO_REQ_EA * reactor_num
+        charge_units = (charge - START_POWER_REQ - PWR_ABORT) / PWR_REQ * PWR_RESERVE;
+        flow_units = max(-0.1, surplus / FLOW_REQ);
+        cryo_req = CRYO_REQ + CRYO_REQ_EA * reactor_num;
 
         if REACTORS_DESIRED < reactor_num
-            printf("IDLE\n")
-            supply_fuel = false
+            printf("IDLE\n");
+            supply_fuel = false;
         elsif flow_units + charge_units < 1
-            flow = floor(flow_units * 1000) / 10
-            charge = floor(charge_units * 1000) / 10
-            printf("WAIT power. (%${charge}J + %${flow}W)\n")
-            supply_fuel = false
+            flow = floor(flow_units * 1000) / 10;
+            charge = floor(charge_units * 1000) / 10;
+            printf("WAIT power. (%${charge}J + %${flow}W)\n");
+            supply_fuel = false;
         elsif fuel_on and fuel < FUEL_REQ
             if fuel + fuel_stored > FUEL_REQ
                 // Start or continue fueling (note fuel on conveyor is not counted)
-                printf("WAIT fuel\n")
+                printf("WAIT fuel\n");
             else
-                printf("WAIT system fuel\n")
-            end
+                printf("WAIT system fuel\n");
+            end;
         elsif fuel_stored < FUEL_TOT_REQ * reactor_num
             // Keep waiting until enough fuel accumulates
-            printf("WAIT buffer fuel\n")
+            printf("WAIT buffer fuel\n");
         elsif cryo < cryo_req
             // Keep waiting for cryo to be made
-            printf("WAIT cryo\n")
+            printf("WAIT cryo\n");
         else
             // Ready to startup!
-            printf("STARTUP\n")
-            START_POWER_REQ += PWR_REQ
-            reactor.enabled = true
-        end
-    end
+            printf("STARTUP\n");
+            START_POWER_REQ += PWR_REQ;
+            reactor.enabled = true;
+        end;
+    end;
     if enabled != reactor.enabled
         // Reactor changed state.
-        RET_T_STARTUP = @tick
-    end
-    return supply_fuel
-end
+        RET_T_STARTUP = @tick;
+    end;
+    return supply_fuel;
+end;
 
 def throttle_blast(reactors_fueled, emerg_shutdown)
-    charge = floor(NODE.powerNetStored)
-    surplus = floor(NODE.powerNetIn - NODE.powerNetOut) // Watts of excess generation
-    fuel_stored = CONTAINER.blast-compound
+    charge = floor(NODE.powerNetStored);
+    surplus = floor(NODE.powerNetIn - NODE.powerNetOut); // Watts of excess generation
+    fuel_stored = CONTAINER.blast-compound;
     if (charge < PWR_ABORT and surplus < FLOW_ABORT) or emerg_shutdown
-        limit = 0 // Don't produce any
-        printf("Central Fuel at $fuel_stored / $limit - ")
+        limit = 0; // Don't produce any
+        printf("Central Fuel at $fuel_stored / $limit - ");
         if emerg_shutdown
-            printf(" Enemies detected.\n")
+            printf(" Enemies detected.\n");
         else
-            printf(" Critical power.\n")
-        end
+            printf(" Critical power.\n");
+        end;
     elsif !reactors_fueled
-        limit = FUEL_LIMIT_LOW
-        printf("Fuel $fuel_stored / $limit (due to emergency)\n")
+        limit = FUEL_LIMIT_LOW;
+        printf("Fuel $fuel_stored / $limit (due to emergency)\n");
     else
-        limit = FUEL_LIMIT
-        printf("Fuel $fuel_stored / $limit\n")
-    end
+        limit = FUEL_LIMIT;
+        printf("Fuel $fuel_stored / $limit\n");
+    end;
 
-    return fuel_stored < limit
-end
+    return fuel_stored < limit;
+end;
 
 def check_radar(unit)
-    enemy_found = unit.radar(enemy, any, any, health, 1)
+    enemy_found = unit.radar(enemy, any, any, health, 1);
     if enemy_found != null
-        projector1.enabled = true
-        projector2.enabled = true
+        projector1.enabled = true;
+        projector2.enabled = true;
 
         // For now, panic when this happens (might get smarter later.)
         // Make fuel flow out of reactors
-        ULD_IN_1.config = FUEL_OFF
-        ULD_OUT_1.config = FUEL
-        ULD_IN_2.config = FUEL_OFF
-        ULD_OUT_2.config = FUEL
-        ULD_IN_MANY.config = FUEL_OFF
-        ULD_OUT_MANY.config = FUEL
-        ULD_MIXER.config = FUEL_OFF
+        ULD_IN_1.config = FUEL_OFF;
+        ULD_OUT_1.config = FUEL;
+        ULD_IN_2.config = FUEL_OFF;
+        ULD_OUT_2.config = FUEL;
+        ULD_IN_MANY.config = FUEL_OFF;
+        ULD_OUT_MANY.config = FUEL;
+        ULD_MIXER.config = FUEL_OFF;
 
-        reactor1.enabled = false
-        reactor2.enabled = false
-        reactor3.enabled = false
-        reactor4.enabled = false
-        reactor5.enabled = false
+        reactor1.enabled = false;
+        reactor2.enabled = false;
+        reactor3.enabled = false;
+        reactor4.enabled = false;
+        reactor5.enabled = false;
 
-        return true // Shutdown
+        return true; // Shutdown
     else
-        projector1.enabled = false
-        projector2.enabled = false
-        return false // All clear
-    end
-end
+        projector1.enabled = false;
+        projector2.enabled = false;
+        return false; // All clear
+    end;
+end;
 
 def check_manual_shutdown()
     if switch1 != null and !switch1.enabled
-        println("User has disabled emergency switch")
-        return true // user can force a shutdown
-    end
-    return false
-end
+        println("User has disabled emergency switch");
+        return true; // user can force a shutdown
+    end;
+    return false;
+end;
 
 def diff_generators()
-    stored_pc = NODE.powerNetStored / NODE.powerNetCapacity
+    stored_pc = NODE.powerNetStored / NODE.powerNetCapacity;
     if stored_pc > 0.90 and START_POWER_REQ < 10
         // We don't need the differential reactors now
-        printf("Differential now idle.\n")
-        generator1.enabled = false
-        generator2.enabled = false
+        printf("Differential now idle.\n");
+        generator1.enabled = false;
+        generator2.enabled = false;
     else
-        generator1.enabled = true
-        generator2.enabled = true
-    end
-end
+        generator1.enabled = true;
+        generator2.enabled = true;
+    end;
+end;
 
 def update_reactors_desired()
-    stored = NODE.powerNetStored / NODE.powerNetCapacity
+    stored = NODE.powerNetStored / NODE.powerNetCapacity;
     if stored > 0.98 and AVG_SURPLUS > GENERATOR_OUTPUT + GOAL_BUFFER
         if REACTORS_DESIRED > 2
-            REACTORS_DESIRED -= 1
-            AVG_SURPLUS -= GENERATOR_OUTPUT
-        end
-    end
+            REACTORS_DESIRED -= 1;
+            AVG_SURPLUS -= GENERATOR_OUTPUT;
+        end;
+    end;
 
     if stored < 0.80 and AVG_SURPLUS < GOAL_BUFFER * 0.8
-        needed = max(1, (AVG_SURPLUS - GOAL_BUFFER) \ GENERATOR_OUTPUT)
+        needed = max(1, (AVG_SURPLUS - GOAL_BUFFER) \ GENERATOR_OUTPUT);
 
-        REACTORS_DESIRED = min(5, needed + REACTORS_DESIRED)
-    end
-end
+        REACTORS_DESIRED = min(5, needed + REACTORS_DESIRED);
+    end;
+end;

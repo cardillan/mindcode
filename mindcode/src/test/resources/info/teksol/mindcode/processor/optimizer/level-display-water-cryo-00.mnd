@@ -1,73 +1,73 @@
-TANK_WATER = null
-TANK_CRYO = null
-MESSAGE = null
-SWITCH = null
-DISPLAY = null
+TANK_WATER = null;
+TANK_CRYO = null;
+MESSAGE = null;
+SWITCH = null;
+DISPLAY = null;
 
 while TANK_CRYO == null || TANK_WATER == null || DISPLAY == null
-	print("Water and Cryofluid Level Meter")
-	n = @links
+	print("Water and Cryofluid Level Meter");
+	n = @links;
 	while n > 0
-		n = n - 1
-		block = getlink(n)
-		print("\nFound: ", block)
+		n = n - 1;
+		block = getlink(n);
+		print("\nFound: ", block);
 		case block.type
-			when @message
-				MESSAGE = block
-			when @switch
-				SWITCH = block
-			when @liquid-tank
-				TANK_CRYO = TANK_WATER
-				TANK_WATER = block
-			when @logic-display
-				DISPLAY = block
-		end
-	end
+			when @message then
+				MESSAGE = block;
+			when @switch then
+				SWITCH = block;
+			when @liquid-tank then
+				TANK_CRYO = TANK_WATER;
+				TANK_WATER = block;
+			when @logic-display then
+				DISPLAY = block;
+		end;
+	end;
 	
-	print("\nMessage: ", MESSAGE)
-	print("\nSwitch: ", SWITCH)
-	print("\nWater tank: ", TANK_WATER)
-	print("\nCryo tank: ", TANK_CRYO)
+	print("\nMessage: ", MESSAGE);
+	print("\nSwitch: ", SWITCH);
+	print("\nWater tank: ", TANK_WATER);
+	print("\nCryo tank: ", TANK_CRYO);
 	if TANK_CRYO == null
-		print("\nNo cryofluid or water tank.")
-	end
+		print("\nNo cryofluid or water tank.");
+	end;
 	if DISPLAY == null
-		print("\nNo display.")
-	end
-	printflush(MESSAGE)
-end
+		print("\nNo display.");
+	end;
+	printflush(MESSAGE);
+end;
 
-MULTIPLIER = 55 / 1500
+MULTIPLIER = 55 / 1500;
 
-SWITCH.enabled = 0
+SWITCH.enabled = 0;
 while SWITCH.enabled == 0
-	start_time = @time
-	clear(0,0,0)
-	color(255,255,255,255)
-	image(20, 10, @water, 16, 0)
-	image(60, 10, @cryofluid, 16, 0)
+	start_time = @time;
+	clear(0,0,0);
+	color(255,255,255,255);
+	image(20, 10, @water, 16, 0);
+	image(60, 10, @cryofluid, 16, 0);
 
-	color(90, 100, 170, 255)
-	rect(14, 20, 12, 55)
-	color(255,255,16,255)
-	water = TANK_WATER.totalLiquids
-	pos = water * MULTIPLIER + 20
-	triangle(6, pos + 7, 14, pos, 6, pos - 7)
-	triangle(34, pos + 7, 26, pos, 34, pos - 7)
+	color(90, 100, 170, 255);
+	rect(14, 20, 12, 55);
+	color(255,255,16,255);
+	water = TANK_WATER.totalLiquids;
+	pos = water * MULTIPLIER + 20;
+	triangle(6, pos + 7, 14, pos, 6, pos - 7);
+	triangle(34, pos + 7, 26, pos, 34, pos - 7);
 
-	color(110, 200, 230, 255)
-	rect(54, 20, 12, 55)
-	color(255,255,16,255)
-	cryo = TANK_CRYO.totalLiquids
-	pos = cryo * MULTIPLIER + 20
-	triangle(46, pos + 7, 54, pos, 46, pos - 7)
-	triangle(74, pos + 7, 66, pos, 74, pos - 7)
+	color(110, 200, 230, 255);
+	rect(54, 20, 12, 55);
+	color(255,255,16,255);
+	cryo = TANK_CRYO.totalLiquids;
+	pos = cryo * MULTIPLIER + 20;
+	triangle(46, pos + 7, 54, pos, 46, pos - 7);
+	triangle(74, pos + 7, 66, pos, 74, pos - 7);
 
-	drawflush(DISPLAY)
+	drawflush(DISPLAY);
 
-	print("Water and Cryofluid Level Meter")
-	print("\nWater level: ", (100 * water) \ 100)
-	print("\nCryofluid level: ", (100 * cryo) \ 100)
-	print("\nElapsed: ", @time - start_time)
-	printflush(MESSAGE)
-end
+	print("Water and Cryofluid Level Meter");
+	print("\nWater level: ", (100 * water) \ 100);
+	print("\nCryofluid level: ", (100 * cryo) \ 100);
+	print("\nElapsed: ", @time - start_time);
+	printflush(MESSAGE);
+end;

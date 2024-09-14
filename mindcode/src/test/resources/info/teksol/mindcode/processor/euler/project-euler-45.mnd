@@ -1,24 +1,24 @@
-p = 165
-h = 143
-p += 1
+p = 165;
+h = 143;
+p += 1;
 
-pn = p * (3 * p - 1) \ 2
-hn = h * (2 * h - 1)
+pn = p * (3 * p - 1) \ 2;
+hn = h * (2 * h - 1);
 
-p = 3 * p + 1
-h = 4 * h + 1
+p = 3 * p + 1;
+h = 4 * h + 1;
 
 while true
     if pn < hn
-        pn += p
-        p += 3
+        pn += p;
+        p += 3;
     elsif hn < pn
-        hn += h
-        h += 4
+        hn += h;
+        h += 4;
     else
-        break
-    end
-end
+        break;
+    end;
+end;
 
-expect(1533776805)
-actual(hn)
+expect(1533776805);
+actual(hn);

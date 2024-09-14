@@ -1,3 +1,3 @@
-allocate heap in bank1[0...512]
-$A = 10
-print($A)
+allocate heap in bank1[0...512];
+$A = 10;
+print($A);

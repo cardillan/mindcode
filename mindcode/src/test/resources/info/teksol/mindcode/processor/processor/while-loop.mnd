@@ -1,7 +1,7 @@
-allocate stack in bank1[0...512]
-def d(n) n > 0 ? -d(-n) : n end
-i = d(j = d(0))
+allocate stack in bank1[0...512];
+def d(n) n > 0 ? -d(-n) : n; end;
+i = d(j = d(0));
 while i < 10
-    print(j += i)
-    i += 1
-end
+    print(j += i);
+    i += 1;
+end;

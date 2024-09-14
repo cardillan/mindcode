@@ -1,105 +1,105 @@
-TICKS = 60
-SOURCE_MEMORY = null
-TARGET_MEMORY = null
+TICKS = 60;
+SOURCE_MEMORY = null;
+TARGET_MEMORY = null;
 
 while SOURCE_MEMORY == null 
-	print("Item Rate Meter")
-	n = @links
+	print("Item Rate Meter");
+	n = @links;
 	while n > 0
-		n = n - 1
-		block = getlink(n)
-		print("\nFound: ", block)
+		n = n - 1;
+		block = getlink(n);
+		print("\nFound: ", block);
 		case block.type
-			when @message
-				MESSAGE = block
+			when @message then
+				MESSAGE = block;
 			when @switch
-				SWITCH = block
-			when @memory-bank, @memory-cell
-				TARGET_MEMORY = SOURCE_MEMORY
-				SOURCE_MEMORY = block
-		end
-	end
+				SWITCH = block;
+			when @memory-bank, @memory-cell then
+				TARGET_MEMORY = SOURCE_MEMORY;
+				SOURCE_MEMORY = block;
+		end;
+	end;
 	
-	print("\nMessage: ", MESSAGE)
-	print("\nSwitch: ", SWITCH)
-	print("\nSource memory: ", SOURCE_MEMORY)
-	print("\nTarget memory: ", TARGET_MEMORY)
+	print("\nMessage: ", MESSAGE);
+	print("\nSwitch: ", SWITCH);
+	print("\nSource memory: ", SOURCE_MEMORY);
+	print("\nTarget memory: ", TARGET_MEMORY);
 	if SOURCE_MEMORY == null
-		print("\nNo memory.")
-	end
-	printflush(MESSAGE)
-end
+		print("\nNo memory.");
+	end;
+	printflush(MESSAGE);
+end;
 
 if TARGET_MEMORY == null
-	TARGET_MEMORY = SOURCE_MEMORY
-end
+	TARGET_MEMORY = SOURCE_MEMORY;
+end;
 
-startIndex = 0
+startIndex = 0;
 memSize = case TARGET_MEMORY.type
-	when @memory-cell 64
-	when @memory-bank 512
-	else 0
-end
+	when @memory-cell then 64;
+	when @memory-bank  then 512;
+	else 0;
+end;
 
 if SOURCE_MEMORY == TARGET_MEMORY
-	startIndex = memSize \ 2
-	memSize -= 1
-end
+	startIndex = memSize \ 2;
+	memSize -= 1;
+end;
 
-prevTick = @tick
-prev = SOURCE_MEMORY[0]
-currTick = prevTick
-curr = prev
-index = max(startIndex, TARGET_MEMORY[startIndex])
-nextTick = prevTick
+prevTick = @tick;
+prev = SOURCE_MEMORY[0];
+currTick = prevTick;
+curr = prev;
+index = max(startIndex, TARGET_MEMORY[startIndex]);
+nextTick = prevTick;
 
 while switch1.enabled == 0
-	nextTick = nextTick + TICKS
+	nextTick = nextTick + TICKS;
 	
 	if @tick > nextTick + TICKS 
 		// @tick has jumped too far to the future, reset it
-		prevTick = @tick
-		nextTick = prevTick + TICKS
-		currTick = prevTick
-	end
+		prevTick = @tick;
+		nextTick = prevTick + TICKS;
+		currTick = prevTick;
+	end;
 	
 	while @tick < nextTick
 		if @tick < prevTick
-			end()
+			end();
 		else
-			value = SOURCE_MEMORY[0]
+			value = SOURCE_MEMORY[0];
 			if value != curr
-				currTick = @tick
-				curr = value
-			end
-		end
-	end
+				currTick = @tick;
+				curr = value;
+			end;
+		end;
+	end;
 	
-	amount = curr - prev
-	time = currTick - prevTick
+	amount = curr - prev;
+	time = currTick - prevTick;
 	if amount == 0 
-		rate = 0
+		rate = 0;
 	else
-		rate = max(amount / time, 0)	// Items per tick
-	end
+		rate = max(amount / time, 0);	// Items per tick
+	end;
 	
-	index += 1
+	index += 1;
 	if index >= memSize
-		index = startIndex + 1
-	end
-	TARGET_MEMORY[startIndex] = index
-	TARGET_MEMORY[index] = rate
+		index = startIndex + 1;
+	end;
+	TARGET_MEMORY[startIndex] = index;
+	TARGET_MEMORY[index] = rate;
 	
-	println("Item Rate Meter")
-	printf("Total items: [gold]$curr[]\n")
-	printf("Current rate [green]$[]/min\n", floor(rate * 3600))
-	printf("  memory start: [gold]$startIndex[]\n")
-	printf("  memory index: [gold]$index[]\n")
-	printf("[lightgray]Loop time: $ ms", floor(time))
-	printflush(message1)
+	println("Item Rate Meter");
+	printf("Total items: [gold]$curr[]\n");
+	printf("Current rate [green]$[]/min\n", floor(rate * 3600));
+	printf("  memory start: [gold]$startIndex[]\n");
+	printf("  memory index: [gold]$index[]\n");
+	printf("[lightgray]Loop time: $ ms", floor(time));
+	printflush(message1);
 	
-	prevTick = currTick
-	prev = curr
-end
+	prevTick = currTick;
+	prev = curr;
+end;
 
-switch1.enabled = 0
+switch1.enabled = 0;

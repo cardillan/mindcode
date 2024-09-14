@@ -9,112 +9,112 @@
 // devices are activated when the level is high and deactivated when it is low.
 // Level is measured as a percentage of total capacity filled by materials.
 
-PCT_LOW = 60
-PCT_HIGH = 80
-CONTAINER = null
-SORTER = null
+PCT_LOW = 60;
+PCT_HIGH = 80;
+CONTAINER = null;
+SORTER = null;
 
 do
-	println("Configuring regulator...")
-	n = @links
+	println("Configuring regulator...");
+	n = @links;
 	while n > 0
-		n = n - 1
-		block = getlink(n)
-		println("Found: ", block)
+		n = n - 1;
+		block = getlink(n);
+		println("Found: ", block);
 		case block.type
-			when @message
-				MESSAGE = block
-			when @switch
-				SWITCH = block
-			when @sorter, @inverted-sorter, @unloader
-				SORTER = block
-			when @vault, @container, @core-shard, @core-foundation, @core-nucleus
-				CONTAINER = block
-				SENSOR = @totalItems
-				MAXIMUM = @itemCapacity
-				START = n + 1
-			when @liquid-tank, @liquid-container, @liquid-router
-				CONTAINER = block
-				SENSOR = @totalLiquids
-				MAXIMUM = @liquidCapacity
-				START = n + 1
-			when @battery, @battery-large
-				CONTAINER = block
-				SENSOR = @totalPower
-				MAXIMUM = @powerCapacity
-				START = n + 1
-			when @power-node, @power-node-large, @surge-tower
-				CONTAINER = block
-				SENSOR = @powerNetStored
-				MAXIMUM = @powerNetCapacity
-				START = n + 1
-		end
-	end
+			when @message then
+				MESSAGE = block;
+			when @switch then
+				SWITCH = block;
+			when @sorter, @inverted-sorter, @unloader then
+				SORTER = block;
+			when @vault, @container, @core-shard, @core-foundation, @core-nucleus then
+				CONTAINER = block;
+				SENSOR = @totalItems;
+				MAXIMUM = @itemCapacity;
+				START = n + 1;
+			when @liquid-tank, @liquid-container, @liquid-router then
+				CONTAINER = block;
+				SENSOR = @totalLiquids;
+				MAXIMUM = @liquidCapacity;
+				START = n + 1;
+			when @battery, @battery-large then
+				CONTAINER = block;
+				SENSOR = @totalPower;
+				MAXIMUM = @powerCapacity;
+				START = n + 1;
+			when @power-node, @power-node-large, @surge-tower then
+				CONTAINER = block;
+				SENSOR = @powerNetStored;
+				MAXIMUM = @powerNetCapacity;
+				START = n + 1;
+		end;
+	end;
 
-	println("Message: ", MESSAGE)
-	println("Switch: ", SWITCH)
-	println("Sorter: ", SORTER)
-	println("Container: ", CONTAINER)
+	println("Message: ", MESSAGE);
+	println("Switch: ", SWITCH);
+	println("Sorter: ", SORTER);
+	println("Container: ", CONTAINER);
 	if CONTAINER == null
-		println("No container.")
-	end
+		println("No container.");
+	end;
 
-    printflush(MESSAGE)
-loop while CONTAINER == null
+    printflush(MESSAGE);
+loop while CONTAINER == null;
 
-INVERTED = SORTER.type === @inverted-sorter
-setState(true)
-CYCLES = 0
+INVERTED = SORTER.type === @inverted-sorter;
+setState(true);
+CYCLES = 0;
 
-SWITCH.enabled = 0
+SWITCH.enabled = 0;
 while SWITCH.enabled == 0
-	start = @time
-	item = SORTER.config
+	start = @time;
+	item = SORTER.config;
 	if item == null || SENSOR != @totalItems
-		item = SENSOR
-		printf("Measuring [gold]total[] in $CONTAINER")
+		item = SENSOR;
+		printf("Measuring [gold]total[] in $CONTAINER");
 	else
-		printf("Measuring [gold]$item[] in $CONTAINER")
-	end
-	max = CONTAINER.sensor(MAXIMUM)
-	amount = CONTAINER.sensor(item)
-	pct = (100 * amount) \ max
+		printf("Measuring [gold]$item[] in $CONTAINER");
+	end;
+	max = CONTAINER.sensor(MAXIMUM);
+	amount = CONTAINER.sensor(item);
+	pct = (100 * amount) \ max;
 	
 	if pct <= PCT_LOW
-		setState(true)
+		setState(true);
 	elsif pct >= PCT_HIGH
-        setState(false)
-	end
+        setState(false);
+	end;
 	
-	printf("\nLevel: [gold]$pct%[]")
+	printf("\nLevel: [gold]$pct%[]");
 	if INVERTED 
-		printf("\nActivate above [green]$PCT_HIGH%[]")
-		printf("\nDeactivate below [salmon]$PCT_LOW%[]")
+		printf("\nActivate above [green]$PCT_HIGH%[]");
+		printf("\nDeactivate below [salmon]$PCT_LOW%[]");
 	else
-		printf("\nActivate below [green]$PCT_LOW%[]")
-		printf("\nDeactivate above [salmon]$PCT_HIGH%[]")
-	end
+		printf("\nActivate below [green]$PCT_LOW%[]");
+		printf("\nDeactivate above [salmon]$PCT_HIGH%[]");
+	end;
 
-    print(ACTIVE_TEXT)
+    print(ACTIVE_TEXT);
 
-	n = START
+	n = START;
 	while n < @links
-		block = getlink(n)
-		block.enabled = ON
-		print("\n    ", block)
-		n += 1
-	end
+		block = getlink(n);
+		block.enabled = ON;
+		print("\n    ", block);
+		n += 1;
+	end;
 
-	printf("[]\n# of cycles: $CYCLES")
-	printf("\n[lightgray]Loop: $ ms", floor(@time - start))
-	printflush(MESSAGE)
-end
+	printf("[]\n# of cycles: $CYCLES");
+	printf("\n[lightgray]Loop: $ ms", floor(@time - start));
+	printflush(MESSAGE);
+end;
 
 inline def setState(newState)
     if STATE != newState
-		STATE = newState
-		CYCLES += 1
-    	ON = INVERTED ^ STATE
-    	ACTIVE_TEXT = ON ? "\nCurrently active:[green]" : "\nCurrently inactive:[salmon]"
-    end
-end
+		STATE = newState;
+		CYCLES += 1;
+    	ON = INVERTED ^ STATE;
+    	ACTIVE_TEXT = ON ? "\nCurrently active:[green]" : "\nCurrently inactive:[salmon]";
+    end;
+end;

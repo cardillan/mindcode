@@ -1,12 +1,11 @@
-allocate stack in bank1[16 ... 512]
-const AMOUNT = 200
-bank2[0] = 1
+allocate stack in bank1[16 ... 512];
+const AMOUNT = 200;
+bank2[0] = 1;
 for i in (1, 2, 5, 10, 20, 50, 100, 200)
-    // TODO Optimization should remove the initial loop condition
     for j in i .. AMOUNT
-        bank2[j] += bank2[j - i]
-    end
-end
+        bank2[j] += bank2[j - i];
+    end;
+end;
 
-expect(73682)
-actual(bank2[AMOUNT])
+expect(73682);
+actual(bank2[AMOUNT]);
