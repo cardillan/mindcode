@@ -35,7 +35,7 @@ of the `remarks` option are:
 * `none`: remarks are suppressed in the compiled code - they do not appear there at all.
 * `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous 
   remarks, so that the print statement themselves aren't executed. This is the default value.
-* `active`: remarks are included in the compiled code can be executed, producing actual output to the text buffer.
+* `active`: remarks are included in the compiled code and are executed, producing actual output to the text buffer.
 
 Passive remarks can be used for putting instructions or comments in the compiled code, or to mark a specific portion 
 of the code. Remarks in a loop may help identifying individual iterations when the loop is unrolled, for example.

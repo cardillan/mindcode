@@ -15,9 +15,9 @@ Mindcode focuses of the following priorities:
 * Employing various [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) to produce efficient code. 
 
 > [!NOTE]
-> Please have a look at planned upcoming changes to Mindcode
-> [here](https://github.com/cardillan/mindcode/discussions/142). The changes will be substantial, and any comments 
-> and suggestions are welcome now while the changes are still being discussed.
+> Please have a look at planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142).
+> These changes will be substantial, and any comments and suggestions are welcome now while the changes are still 
+> being deliberated.
 
 **Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text 
 file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into 
