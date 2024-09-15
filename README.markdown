@@ -4,7 +4,8 @@
 
 Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a 
 game in the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to 
-assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone.
+assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone
+(see [the documentation](doc/syntax/SYNTAX.markdown)).
 
 Mindcode focuses of the following priorities:
 
@@ -12,6 +13,11 @@ Mindcode focuses of the following priorities:
 * Providing language constructs that are not prohibitively expensive given the astonishingly slow speeds
   and limited instruction space of Mindustry processors.
 * Employing various [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) to produce efficient code. 
+
+> [!NOTE]
+> Please have a look at planned upcoming changes to Mindcode
+> [here](https://github.com/cardillan/mindcode/discussions/142). The changes will be substantial, and any comments 
+> and suggestions are welcome now while the changes are still being discussed.
 
 **Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text 
 file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into 
@@ -22,6 +28,7 @@ complete with the code (specified in Mindcode or Mindustry Logic language) and l
 
 Some of the latest enhancements to Mindcode are:
 
+* [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remark) can be now included in the compiled code.
 * [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting), a new optimization designed to pull 
   invariant code out of loops to avoid repeated execution where possible.
 * All instructions added in Mindustry 7 build 146 are now supported.  

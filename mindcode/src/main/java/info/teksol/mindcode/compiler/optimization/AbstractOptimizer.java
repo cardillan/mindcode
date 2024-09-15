@@ -158,6 +158,10 @@ public abstract class AbstractOptimizer implements Optimizer {
         return instructionProcessor.createRead(astContext, result, memory, index);
     }
 
+    protected RemarkInstruction createRemark(AstContext astContext, LogicValue what) {
+        return instructionProcessor.createRemark(astContext, what);
+    }
+
     protected ReturnInstruction createReturn(AstContext astContext, LogicVariable stack) {
         return instructionProcessor.createReturn(astContext, stack);
     }

@@ -269,6 +269,7 @@ public class MindustryOpcodeVariants {
         add(list, V6, V7A, S, NONE, Opcode.GOTO,        in("address"), label("marker"));
         add(list, V6, V7A, S, NONE, Opcode.GOTOOFFSET,  label("address"), in("value"), in("offset"), label("marker"));
         add(list, V6, V7A, S, NONE, Opcode.SETADDR,     out("result"),   in("address"));
+        add(list, V6, V7A, S, NONE, Opcode.REMARK,      in("remark"));
 
         return List.copyOf(list);
     }

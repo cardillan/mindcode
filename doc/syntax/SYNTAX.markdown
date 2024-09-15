@@ -54,6 +54,9 @@ is not and could be used as a variable or function name).
 
 Anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
 
+You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remark) to place comments or notes directly to the 
+compiled code.   
+
 ## Keywords
 
 This is a list of Mindcode keywords:
@@ -144,7 +147,7 @@ To find a way around these constraints, Mindcode always reads the value of the n
 to Mindustry Logic compatible literal using these rules (first applicable rule is used): 
 
 1. If the value is zero, it is encoded as `0`.
-2. If the value is between 1<sup>-20</sup> and 2<sup>63</sup>-1, the number is converted to standard decimal 
+2. If the value is between 10<sup>-20</sup> and 2<sup>63</sup>-1, the number is converted to standard decimal 
    notation using 20 digits precision.
 3. If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation 
    without using a decimal separator, using `float` precision (which will be used by Mindustry processor when 

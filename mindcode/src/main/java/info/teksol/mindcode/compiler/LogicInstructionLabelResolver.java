@@ -1,10 +1,7 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.MindcodeInternalError;
-import info.teksol.mindcode.compiler.instructions.GotoOffsetInstruction;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 
 import java.util.ArrayList;
@@ -15,23 +12,69 @@ import java.util.Map;
 import static info.teksol.mindcode.logic.Opcode.OP;
 
 public class LogicInstructionLabelResolver {
+    private final CompilerProfile profile;
     private final InstructionProcessor instructionProcessor;
 
     private final Map<LogicLabel, LogicLabel> addresses = new HashMap<>();
 
-    public LogicInstructionLabelResolver(InstructionProcessor instructionProcessor) {
+    public LogicInstructionLabelResolver(InstructionProcessor instructionProcessor, CompilerProfile profile) {
         this.instructionProcessor = instructionProcessor;
+        this.profile = profile;
     }
     
-    public static List<LogicInstruction> resolve(InstructionProcessor instructionProcessor, List<LogicInstruction> program) {
-        return new LogicInstructionLabelResolver(instructionProcessor).resolve(program);
+    public static List<LogicInstruction> resolve(InstructionProcessor instructionProcessor, CompilerProfile profile,
+            List<LogicInstruction> program) {
+        return new LogicInstructionLabelResolver(instructionProcessor, profile).resolve(program);
     }
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
+        program = resolveRemarks(program);
         calculateAddresses(program);
         return resolveAddresses(resolveVirtualInstructions(program));
     }
 
+    private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
+        return switch (profile.getRemarks()) {
+            case ACTIVE     -> resolveRemarksActive(program);
+            case NONE       -> resolveRemarksNone(program);
+            case PASSIVE    -> resolveRemarksPassive(program);
+        };
+    }
+
+    private List<LogicInstruction> resolveRemarksActive(List<LogicInstruction> program) {
+        return program.stream()
+                .map(ix -> ix instanceof RemarkInstruction r ? instructionProcessor.createPrint(r.getAstContext(), r.getValue()) : ix)
+                .toList();
+    }
+
+    private List<LogicInstruction> resolveRemarksNone(List<LogicInstruction> program) {
+        return program.stream()
+                .filter(ix -> !(ix instanceof RemarkInstruction))
+                .toList();
+    }
+
+    private List<LogicInstruction> resolveRemarksPassive(List<LogicInstruction> program) {
+        List<LogicInstruction> result = new ArrayList<>();
+        LabelInstruction activeLabel = null;
+        for (LogicInstruction ix : program) {
+            if (ix instanceof RemarkInstruction) {
+                if (activeLabel == null) {
+                    LogicLabel label = instructionProcessor.nextLabel();
+                    activeLabel = instructionProcessor.createLabel(ix.getAstContext(),label);
+                    result.add(instructionProcessor.createJumpUnconditional(ix.getAstContext(), label));
+                }
+                result.add(instructionProcessor.createPrint(ix.getAstContext(), ((RemarkInstruction) ix).getValue()));
+            } else {
+                if (activeLabel != null) {
+                    result.add(activeLabel);
+                    activeLabel = null;
+                }
+                result.add(ix);
+            }
+        }
+
+        return result;
+    }
 
     private void calculateAddresses(List<LogicInstruction> program) {
         int instructionPointer = 0;

@@ -2,12 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2024-09-15
 
 ### Fixed
 
 * Fixed slightly wrong (too low) cost estimation in the
   [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization.
+
+### Added
+
+* New [`remark()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remark), as described
+  [here](https://github.com/cardillan/mindcode/issues/140).
 
 ### Changed
 
@@ -16,6 +21,11 @@ All notable changes to this project will be documented in this file.
   `op max` instructions, the jump table covers only the existing `when` branches and values outside the supported 
   range are handled using conditional jumps. This change saves two instructions and potentially speeds up the 
   execution for input values lying outside the jump table.
+
+### Miscellaneous
+
+* Some of the Mindcode samples used during unit tests were updated to use semicolons in anticipation to planned 
+  Mindcode changes.  
 
 ## 2024-09-10
 

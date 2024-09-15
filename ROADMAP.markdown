@@ -2,15 +2,16 @@
 
 This documents servers as a scratch pad to track ideas and possible enhancements to Mindcode.
 
+A significant update is planned. Planned changes are described 
+[here](https://github.com/cardillan/mindcode/discussions/142). Comments and suggestions are welcome.
+
 # Current priorities
 
 * Bug fixes and [incremental improvements](#incremental-improvements)
-* [Updating ANTLR grammar](#updating-antlr-grammar)
 * [Inferring invariants of variables](#inferring-invariants-of-variables)
 * [Speculative optimization for speed](#speculative-optimization-for-speed)
 * [External variable optimizations](#external-variable-optimizations)
 * [Function pointers](#function-pointers)
-* [Processor-variables backed arrays](#processor-variables-backed-arrays)
 
 # Incremental improvements
 
@@ -51,84 +52,6 @@ None planned.
 * Warn when the generated code goes over 1000 Mindustry instructions.
 * Warn when potentially non-numeric value is being pushed on the stack.
 
-# Updating ANTLR grammar
-
-* Rewrite the syntax using lists of elements instead of chained elements where possible.
-* Allow empty bodies of ifs, loops, functions etc.
-* Allow properties to be invoked on expressions. The nature of the call will be determined by the property name.
-  * Use mimex to obtain all metadata needed to recognize all valid properties.
-  * Unknown properties will be delegated to the `sensor` instruction.
-* Allow empty optional arguments in function calls. At this moment, optional arguments can only be omitted at the
-  end of the argument list.
-* Block comments `/* this is a block comment that can span several lines */`.
-* Text block string literals
-* Only allow dashes in REF identifiers (e.g. `@battery-large`) and property names (e.g. `vault.blast-compound`), and 
-  only in the middle of the identifier. Then add support for `++` and `--` operators. `a-b` will become an 
-  expression equivalent to `a - b`.
-    
-## New and extended keywords
-
-* `allocate`:
-  * Allow specifying concrete index for external variables
-    * `allocate $STATE in cell1[7]`
-    * The index must be a constant integer expression
-    * Must not overlap with heap. Can use a memory cell/bank different from heap.
-  * Support for external arrays:
-    * `allocate array $ARRAY in cell1[32 ... 64]`
-    * Has the `$` prefix as an external variable (which it is), and to differentiate it from future in-memory arrays.
-    * Mindcode adds the offset whenever the array is accessed (less efficient code if the offset is not zero).
-    * Possible out-of-bounds checks.
-* `aliased`: used to declare an external variable as aliased, e.g. `declare cell1, $STATE aliased` (see [External 
-  variable optimization](#external-variable-optimizations)).
-* `array`:
-  * Used in `allocate array`
-  * Reserved for future use in declaring in-memory arrays
-* `begin`:
-  * Marks the beginning of a code block.
-  * Used mainly to apply a compiler setting to a code block, e.g. `#use (goal = size) begin a = b; c = d; end;`. 
-* `declare`:
-  * Used to apply modifiers to a variable 
-* `enum`:
-  * Possible syntax:
-    * `enum name(id1, id2, id3)`
-    * `enum name: id1, id2, id3 end`
-  * Mindcode assigns values to the enums as it sees fit. There are no guarantees on the numbers whatsoever, except 
-    preserving the declaration order. They could be instruction addresses inside a case expression, for example, if 
-    there's just one case expression.
-  * Mindcode provides functions to access enum properties (e.g. `enum.name`, `enum.next`, `enum.previous`).
-    * Implemented as inline library functions. Using them might be costly.
-  * Support for enums in list iteration Loops: `for i in enum_name`.
-  * Enum will internally be a new type of LogicLiteral.
-* `fallthrough`: used in case expression to skip to the next `when` branch
-* `in`:  
-  * New use as a boolean operator:
-    * Tests number is in range: `n in min .. max`
-    * Tests value is in enumerated set: `type in (@sorter, @inverted-sorter)`
-  * Marks the parameter to a function as input, possible use with `out`, for example in
-    `def foo(a, in b, out c, in out d)`, `a` and `b` are input parameters, `c` is an output parameter and `d` is 
-    both input/output parameter.  
-* `linked`:  used to declare a variable as a linked block to cover cases where Mindcode doesn't recognize a name of 
-  a linked block for some reason (e.g. `declare message1 linked`).
-* `noinline`: prevent function inlining
-* `restricted`: used to declare an external variable as aliased, e.g. `declare cell1, $STATE restricted` (see [External
-  variable optimization](#external-variable-optimizations)).
-* `out`:
-  * Output function parameters - see `in`
-    * Not passed by reference - Mindustry doesn't allow that.
-    * On function return, the output value will be copied to the variable passed in as the argument.
-  * Marks the control variable in a for-each loop as output one. Any changes to the control variable will be 
-    transferred to the variable in the list when the loop ends  
-* `param` or `parameter`: explicit support for code parametrization
-  * Defines a new read-only variable and assigns a value to it.
-  * Compiler will assume the value assigned to this variable can be changed in compiled code.
-  * Subsequently, the special protection of global variables will be removed.
-* `var`: reserved for possible future use in declaring typed variables (maybe we'll use `declare` instead).
-* `volatile`:
-  * Used to declare an external variable as aliased, e.g. `declare cell1, $STATE volatile` (see [External
-    variable optimization](#external-variable-optimizations)).
-  * A variable used as an argument to the `sync()` function will be made volatile automatically, no need to declare.
-* `yield`:
-  * Used in when branch of case expression to set resulting value of the branch and exit the case expression.
   
 # Additional syntax enhancements
 
@@ -139,16 +62,15 @@ None planned.
   * The vararg can be processed using list iteration loop, or maybe passed to another vararg function:
     `def foo(arg...) for a in arg print(a) end end def bar(arg...) foo(arg) end`
     
-## #use compiler directive/statement
+## #set local compiler directive/statement
 
 ```
-#use (compiler-option = value, compiler-option = value, ...)
-[code-block, e.g. function declaration, while loop or begin ... end] 
+#set local compiler-option = value, compiler-option = value, ...;
 ```
 
-Compiles the next code block applying certain compiler options (e.g. `goal`) to it. Some compiler options
-(`target`, `optimization`) will remain global and won't be available in `#use`. The intended purpose is to provide
-means to compile different parts of code for size or speed.
+Compiles the next statement/expression applying certain compiler options (e.g. `goal`) to it. Some compiler options
+(`target`, `optimization`) will remain global and won't be available in `#set local`. The intended purpose is to 
+provide means to compile different parts of code for size or speed.
 
 The specific options would probably have to be stored in AST contexts.
 
@@ -245,12 +167,12 @@ Typed variables, parameters and function return values.
   * Null function pointer corresponds to a special function that indicates an error and stops the program
     execution. The same prerequisites as above. Ask Anuken for an extension to the stop instruction.
     
-# Processor-variables backed arrays
+# Internal arrays
 
-Processor-variables backed arrays will always have a horrible performance, but when used together with loop 
+Individual elements of internal arrays will be stored in processor variables. Accessing the elements via a dynamic 
+index will be realized through compiler-defined functions. When used together with loop 
 unrolling or data flow optimization, they might be very useful - and as fast as regular variables.
 
-* Declared at fixed size: `array A[] = (1, 2, 3)` or `array A[4]`
 * Array name is not a variable - neither an l-value nor an r-value.
   * No pointers to arrays
 * Arrays, not lists - no add/remove, no inherent size
@@ -263,17 +185,17 @@ unrolling or data flow optimization, they might be very useful - and as fast as 
 * Alternative: virtual instructions. Might allow better loop optimization without inlining.
 * Maybe array assignments, esp. for same sized arrays
 * Out-of-bound access checks: compiler directive
-* For each syntax over arrays - support modification of the underlying array through specific syntax (`yield exp`)
+* For each syntax over arrays - support modification of the underlying array through `out` control loop variables
 
 ## Further developments
 
-* Pointers to processor-variables backed arrays:
+* Pointers to internal arrays:
   * Might require typed variables.
   * Would allow passing arrays to out-of-line functions.
 
-# Processor-variables backed stack
+# Internal stack
 
-TODO: add description
+Stack stored in processor variables, similar to internal arrays.
 
 # Code generation improvements
 
@@ -388,8 +310,6 @@ Two basic approaches
 * Only perform the optimization when the input value is a known integer
 * Support ranges in when branches
 * Omit range checking where possible (requires invariant inferring)
-* Support for selecting a subset of existing `when` branches to handle, the jump table `else` entries would then
-  jump to the remaining branches of the original switch.
 * Cases with sparse sets of when branches: convert the largest segment from case values with a density
   higher than 0.5, leave other values to conditional jumps
 * On `aggressive` level, convert switches that have overlapping values.

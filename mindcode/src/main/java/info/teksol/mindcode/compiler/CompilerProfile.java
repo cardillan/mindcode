@@ -29,6 +29,7 @@ public class CompilerProfile {
     private int instructionLimit = 1000;
     private int optimizationPasses = DEFAULT_WEBAPP_PASSES;
     private GenerationGoal goal = GenerationGoal.AUTO;
+    private Remarks remarks = Remarks.PASSIVE;
     private MemoryModel memoryModel = MemoryModel.VOLATILE;
     private boolean shortCircuitEval = false;
     private FinalCodeOutput finalCodeOutput = null;
@@ -136,6 +137,14 @@ public class CompilerProfile {
     public CompilerProfile setGoal(GenerationGoal goal) {
         this.goal = goal;
         return this;
+    }
+
+    public Remarks getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(Remarks remarks) {
+        this.remarks = remarks;
     }
 
     public MemoryModel getMemoryModel() {

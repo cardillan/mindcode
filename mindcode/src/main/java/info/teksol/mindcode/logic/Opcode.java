@@ -56,6 +56,7 @@ public enum Opcode {
     GOTO            ("goto",            1),
     GOTOOFFSET      ("gotooffset",      1),
     SETADDR         ("setaddr",         1),
+    REMARK          ("remark",          2),
     ;
     
     private final String opcode;

@@ -74,7 +74,7 @@ public class MindcodeCompiler implements Compiler<String> {
 
             info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
 
-            result = LogicInstructionLabelResolver.resolve(instructionProcessor, result);
+            result = LogicInstructionLabelResolver.resolve(instructionProcessor, profile,result);
 
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
         } catch (Exception e) {

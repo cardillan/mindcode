@@ -129,6 +129,16 @@ public class DirectiveProcessor {
         error("Invalid value '%s' of compiler directive 'goal'.", strGoal);
     }
 
+    private void setRemarks(CompilerProfile compilerProfile, String strRemarks) {
+        for (Remarks value : Remarks.values()) {
+            if (value.name().equalsIgnoreCase(strRemarks)) {
+                compilerProfile.setRemarks(value);
+                return;
+            }
+        }
+        error("Invalid value '%s' of compiler directive 'remarks'.", strRemarks);
+    }
+
     private void setMemoryModel(CompilerProfile compilerProfile, String strModel) {
         for (MemoryModel memoryModel : MemoryModel.values()) {
             if (memoryModel.name().equalsIgnoreCase(strModel)) {
@@ -149,6 +159,7 @@ public class DirectiveProcessor {
         map.put("instruction-limit", this::setInstructionLimit);
         map.put("passes", this::setOptimizationPasses);
         map.put("goal", this::setGenerationGoal);
+        map.put("remarks", this::setRemarks);
         map.put("memory-model", this::setMemoryModel);
         for (Optimization opt : Optimization.values()) {
             map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));

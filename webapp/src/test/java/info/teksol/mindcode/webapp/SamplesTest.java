@@ -116,7 +116,8 @@ class SamplesTest {
                 .redirectOutput(diffTarget)
                 .start();
 
-        final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(instructionProcessor, optimized);
+        final List<LogicInstruction> result = LogicInstructionLabelResolver.resolve(instructionProcessor,
+                CompilerProfile.standardOptimizations(false), optimized);
 
         final String opcodes = LogicInstructionPrinter.toString(instructionProcessor, result);
         assertFalse(opcodes.isEmpty(), "Failed to generateUnoptimized a Logic program out of:\n" + source);

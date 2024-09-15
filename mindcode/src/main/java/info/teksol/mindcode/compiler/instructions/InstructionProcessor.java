@@ -47,6 +47,7 @@ public interface InstructionProcessor {
     PrintflushInstruction createPrintflush(AstContext astContext, LogicVariable messageBlock);
     PushInstruction createPush(AstContext astContext, LogicVariable memory, LogicVariable value);
     ReadInstruction createRead(AstContext astContext, LogicVariable result, LogicVariable memory, LogicValue index);
+    RemarkInstruction createRemark(AstContext astContext, LogicValue what);
     ReturnInstruction createReturn(AstContext astContext, LogicVariable stack);
     SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property);
     SetInstruction createSet(AstContext astContext, LogicVariable target, LogicValue value);

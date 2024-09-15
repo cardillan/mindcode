@@ -2,7 +2,6 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
-import info.teksol.mindcode.logic.LogicLabel;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
 
@@ -38,7 +37,7 @@ class PrintMerger extends BaseOptimizer {
         super(Optimization.PRINT_TEXT_MERGING, optimizationContext);
     }
 
-    private PrintInstruction previous;
+    private LogicInstruction previous;
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
@@ -48,6 +47,7 @@ class PrintMerger extends BaseOptimizer {
             while (iterator.hasNext()) {
                 switch (iterator.next()) {
                     case PrintInstruction current -> tryMerge(iterator, current);
+                    case RemarkInstruction current -> tryMerge(iterator, current);
 
                     // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
@@ -65,16 +65,16 @@ class PrintMerger extends BaseOptimizer {
         return false;
     }
 
-    // Tries to merge previous and current.
+    // Tries to merge previous and current prints.
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
     private void tryMerge(LogicIterator iterator, PrintInstruction current) {
-        if (previous != null && previous.getValue() instanceof LogicLiteral lit1 && current.getValue() instanceof LogicLiteral lit2) {
-            if (aggressive() || (lit1.getType() == STRING_LITERAL && lit2.getType() == STRING_LITERAL)) {
+        if (previous instanceof PrintInstruction p && p.getValue() instanceof LogicLiteral lit1 && current.getValue() instanceof LogicLiteral lit2) {
+            if (aggressive() || lit1.getType() == STRING_LITERAL && lit2.getType() == STRING_LITERAL) {
                 String str1 = lit1.format();
                 String str2 = lit2.format();
                 // Do not merge strings if the combined length is over 34, unless aggressive
-                if (str1.length() + str2.length() <= 34 || aggressive()) {
+                if (aggressive() || str1.length() + str2.length() <= 34) {
                     PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
                     removeInstruction(previous);
                     iterator.set(merged);
@@ -87,10 +87,23 @@ class PrintMerger extends BaseOptimizer {
         previous = current;
     }
 
-    // TODO find or create a function for this in OptimizationContext
-    //      This might miss some active labels
+    // Tries to merge previous and current remarks.
+    // When successful, updates instructions and sets previous to the newly merged instruction.
+    // If the merge is not possible, sets previous to current
+    private void tryMerge(LogicIterator iterator, RemarkInstruction current) {
+        if (previous instanceof RemarkInstruction r && r.getAstContext() == current.getAstContext() &&
+                r.getValue() instanceof LogicLiteral lit1 && current.getValue() instanceof LogicLiteral lit2) {
+            RemarkInstruction merged = createRemark(current.getAstContext(), LogicString.create(lit1.format() + lit2.format()));
+            removeInstruction(previous);
+            iterator.set(merged);
+            previous = merged;
+            return;
+        }
+
+        previous = current;
+    }
+
     private boolean isActive(LabelInstruction ix) {
-        return firstInstructionIndex(ixx -> ixx != ix && ixx.getArgs().stream()
-                .anyMatch(a -> a instanceof LogicLabel la && la.equals(ix.getLabel()))) >= 0;
+        return optimizationContext.isActive(ix.getLabel());
     }
 }

@@ -58,6 +58,15 @@ class DirectiveProcessorTest {
     }
 
     @Test
+    void processesDirectiveRemarks() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setRemarks(Remarks.NONE);
+        Seq seq = new Seq(null, new Directive(null, "remarks", "active"));
+        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        assertEquals(Remarks.ACTIVE, profile.getRemarks());
+    }
+
+    @Test
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         Seq seq = new Seq(null, new Directive(null, "fluffyBunny", "basic"));

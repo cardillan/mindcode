@@ -1,9 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.FinalCodeOutput;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.MemoryModel;
+import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -75,6 +72,12 @@ abstract class ActionHandler {
                 .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class))
                 .setDefault(defaults.getGoal());
 
+        subparser.addArgument("-r", "--remarks")
+                .help("controls remarks propagation to the compiled code: none (remarks are removed), " +
+                        "passive (remarks are not executed), or active (remarks are printed)")
+                .type(Arguments.caseInsensitiveEnumType(Remarks.class))
+                .setDefault(defaults.getRemarks());
+
         subparser.addArgument("-m", "--memory-model")
                 .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
                         "aliased (a memory block may be accessed through different variables), or restricted " +
@@ -130,6 +133,7 @@ abstract class ActionHandler {
         profile.setInstructionLimit(arguments.get("instruction_limit"));
         profile.setOptimizationPasses(arguments.get("passes"));
         profile.setGoal(arguments.get("goal"));
+        profile.setRemarks(arguments.get("remarks"));
         profile.setMemoryModel(arguments.get("memory_model"));
         profile.setFinalCodeOutput(arguments.get("print_unresolved"));
         profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));

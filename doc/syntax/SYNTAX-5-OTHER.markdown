@@ -26,6 +26,23 @@ Possible values for this option are:
 * `ML7AS`: compile for Mindcode Logic version 7 (revision A) standard processors
 * `ML7AW`: compile for Mindcode Logic version 7 (revision A) world processor
 
+## Option `remarks`
+
+This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remark), 
+are propagated to the compiled code. Remarks are written into the compiled code as `print` instructions. Possible values 
+of the `remarks` option are:
+
+* `none`: remarks are suppressed in the compiled code - they do not appear there at all.
+* `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous 
+  remarks, so that the print statement themselves aren't executed. This is the default value.
+* `active`: remarks are included in the compiled code can be executed, producing actual output to the text buffer.
+
+Passive remarks can be used for putting instructions or comments in the compiled code, or to mark a specific portion 
+of the code. Remarks in a loop may help identifying individual iterations when the loop is unrolled, for example.
+
+Active remarks can be used to easily add debugging output to a program that can be deactivated using a compiler 
+option (potentially through a command line switch without modifying the source code).
+
 ## Option `goal`
 
 Use the `goal` option to specify whether Mindcode should prefer to generate smaller code, or faster code. 

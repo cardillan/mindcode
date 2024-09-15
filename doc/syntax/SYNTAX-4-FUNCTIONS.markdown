@@ -241,6 +241,100 @@ const fmt = "Position: $, $\n"
 printf(fmt, x, y)                   // Allowed - fmt is a string constant
 ```
 
+## remark
+
+The `remark` function has the same syntax as the `printf` function. It produces print instructions similarly to the 
+`printf` function, but the way these instructions are generated into the code can be controlled using the [`remarks` 
+option](SYNTAX-5-OTHER.markdown#option-remarks).
+
+Example:
+
+```
+remark("Configurable options:");
+MIN = 10;
+MAX = 100;
+
+remark("Don't modify anything below this line.");
+for i in MIN .. MAX
+    print("Here is some actual code");
+end
+```
+
+produces
+
+```
+jump 2 always 0 0
+print "Configurable options:"
+set MIN 10
+set MAX 100
+jump 6 always 0 0
+print "Don't modify anything below this line."
+set i MIN
+jump 0 greaterThan MIN MAX
+print "Here is some actual code"
+op add i i 1
+jump 8 lessThanEq i MAX
+end
+```
+
+Note that remarks are preceded by a jump that skips their execution - this is the default behavior. Remarks can also 
+be made active, which removes the jumps, or not included in the compiled code at all, depending on the `remarks` 
+compiler option. 
+
+Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get 
+fully evaluated when possible:
+
+```
+for i in 1 .. 3
+    remark("Iteration $i:");
+    remark("Setting cell1[$i] to $", i * i);
+    cell1[i] = i * i;
+end;
+```
+
+compiles into
+
+```
+jump 3 always 0 0
+print "Iteration 1:"
+print "Setting cell1[1] to 1"
+write 1 cell1 1
+jump 7 always 0 0
+print "Iteration 2:"
+print "Setting cell1[2] to 4"
+write 4 cell1 2
+jump 11 always 0 0
+print "Iteration 3:"
+print "Setting cell1[3] to 9"
+write 9 cell1 3
+end
+```
+
+As you can see, remarks produced by two different `remark()` function calls are not merged together.
+
+If a region of code is unreachable and is optimized away, the remarks are also stripped:
+
+```
+const DEBUG = false;
+
+if DEBUG
+    remark("Compiled for DEBUG");
+else
+    remark("Compiled for RELEASE");
+end;
+
+print("Hello");
+```
+
+produces
+
+```
+jump 2 always 0 0
+print "Compiled for RELEASE"
+print "Hello"
+end
+```
+
 # User-defined Functions
 
 You may declare your own functions using the `def` keyword:
@@ -314,10 +408,9 @@ printtext("Speed", speed, minSpeed, maxSpeed)
 Large inline functions called multiple times can generate lots of instructions and make the compiled code too long.
 If this happens, remove the `inline` keyword from some function definitions to generate less code.
 
-The compiler will automatically make a function inline when it is called just once in the entire program.
-This is safe, as in this case the program will always be both smaller and faster. if a function is called more than 
-once, it can still be inlined by the
-[Function Inlining optimization](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining).  
+The compiler will automatically make a function inline when it is called just once in the entire program. This
+is safe, as in this case the program will always be both smaller and faster. if a function is called more than once, 
+it can still be inlined by the [Function Inlining optimization](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining).  
 
 ## Recursive functions
 

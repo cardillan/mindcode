@@ -178,6 +178,11 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     }
 
     @Override
+    public RemarkInstruction createRemark(AstContext astContext, LogicValue what) {
+        return (RemarkInstruction) createInstruction(astContext, REMARK, what);
+    }
+
+    @Override
     public ReturnInstruction createReturn(AstContext astContext, LogicVariable stack) {
         return (ReturnInstruction) createInstruction(astContext, RETURN, stack);
     }
@@ -239,6 +244,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
             case PRINTFLUSH -> new PrintflushInstruction(astContext, arguments, params);
             case PUSH       -> new PushInstruction(astContext, arguments, params);
             case READ       -> new ReadInstruction(astContext, arguments, params);
+            case REMARK     -> new RemarkInstruction(astContext, arguments, params);
             case RETURN     -> new ReturnInstruction(astContext, arguments, params);
             case SENSOR     -> new SensorInstruction(astContext, arguments, params);
             case SET        -> new SetInstruction(astContext, arguments, params);

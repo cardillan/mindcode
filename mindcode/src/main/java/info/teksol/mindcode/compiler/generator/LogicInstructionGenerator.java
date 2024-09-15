@@ -13,6 +13,7 @@ import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.mimex.Icons;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -234,6 +235,10 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return instructionProcessor.createRead(astContext, result, memory, index);
     }
 
+    public RemarkInstruction createRemark(LogicValue what) {
+        return instructionProcessor.createRemark(astContext, what);
+    }
+
     public ReturnInstruction createReturn(LogicVariable memory) {
         return instructionProcessor.createReturn(astContext, memory);
     }
@@ -384,6 +389,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         // Special cases
         LogicValue returnValue = switch (node.getFunctionName()) {
             case "printf"   -> handlePrintf(node, arguments);
+            case "remark"   -> handleRemark(node, arguments);
             default         -> handleFunctionCall(node.getFunctionName(), arguments);
         };
 
@@ -1200,23 +1206,48 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         return value;
     }
 
+    enum Formatter {
+        PRINTF("printf", LogicInstructionGenerator::createPrint),
+        REMARK("remark", LogicInstructionGenerator::createRemark);
+
+        final String function;
+        final BiFunction<LogicInstructionGenerator, LogicValue, LogicInstruction> creator;
+
+        Formatter(String function, BiFunction<LogicInstructionGenerator, LogicValue, LogicInstruction> creator) {
+            this.function = function;
+            this.creator = creator;
+        }
+
+        LogicInstruction createInstruction(LogicInstructionGenerator generator, LogicValue value) {
+            return creator.apply(generator, value);
+        }
+    }
+
     private LogicValue handlePrintf(FunctionCall node, List<LogicValue> params) {
+        return handleFormattedOutput(Formatter.PRINTF, node, params);
+    }
+
+    private LogicValue handleRemark(FunctionCall node, List<LogicValue> params) {
+        return handleFormattedOutput(Formatter.REMARK, node, params);
+    }
+
+    private LogicValue handleFormattedOutput(Formatter formatter, FunctionCall node, List<LogicValue> params) {
         // Printf format string may contain references to variables, which is practically a code
         // Must be therefore handled here and not by the FunctionMapper
-        
+
         if (params.isEmpty()) {
-            throw new MindcodeException(node.startToken(), "first parameter of printf() function must be a constant string value.");
+            throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a constant string value.", formatter.function);
         }
 
         AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
         if (astFormat instanceof StringLiteral format) {
-            return handlePrintf(node, format.getText(), params);
+            return handleFormattedOutput(formatter, node, format.getText(), params);
         } else {
-            throw new MindcodeException(node.startToken(), "first parameter of printf() function must be a constant string value.");
+            throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a constant string value.", formatter.function);
         }
     }
 
-    private LogicValue handlePrintf(FunctionCall node, String format, List<LogicValue> params) {
+    private LogicValue handleFormattedOutput(Formatter formatter, FunctionCall node, String format, List<LogicValue> params) {
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
         int position = 1;       // Skipping the 1st param, which is the format string
@@ -1235,7 +1266,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                     // Found a variable or argument reference
                     // Emit accumulator
                     if (accumulator.length() > 0) {
-                        emit(createPrint(LogicString.create(accumulator.toString())));
+                        emit(formatter.createInstruction(this, LogicString.create(accumulator.toString())));
                         accumulator.setLength(0);
                     }
 
@@ -1243,16 +1274,16 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
                     if (variable.isEmpty()) {
                         // No variable, emit next argument
                         if (position < params.size()) {
-                            emit(createPrint(params.get(position++)));
+                            emit(formatter.createInstruction(this,params.get(position++)));
                         } else {
-                            throw new MindcodeException(node.startToken(), "not enough arguments for printf format string.");
+                            throw new MindcodeException(node.startToken(), "not enough arguments for %s() format string.", formatter.function);
                         }
                     } else {
-                        // Going through createVariable ensures proper handling and registering of local variables
+                        // Going through createValue ensures proper handling and registering of local variables
                         LogicValue eval = variable.startsWith("@")
                                 ? LogicBuiltIn.create(variable.substring(1))
                                 : createValue(variable);
-                        emit(createPrint(eval));
+                        emit(formatter.createInstruction(this,eval));
                     }
 
                     if (i + 1 < format.length() && format.charAt(i + 1) == '{') {
@@ -1278,11 +1309,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
 
         if (accumulator.length() > 0) {
-            emit(createPrint(LogicString.create(accumulator.toString())));
+            emit(formatter.createInstruction(this,LogicString.create(accumulator.toString())));
         }
 
         if (position < params.size()) {
-            throw new MindcodeException(node.startToken(), "too many arguments for printf format string.");
+            throw new MindcodeException(node.startToken(), "too many arguments for %s() format string.", formatter.function);
         }
 
         return NULL;

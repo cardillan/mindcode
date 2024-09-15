@@ -151,7 +151,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     protected void compileAndOutputCode(TestCompiler compiler, String title, String code, Path logFile) {
         List<LogicInstruction> unresolved = generateInstructions(compiler, code).instructions();
         assertNoUnexpectedMessages(compiler, s -> false);
-        List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, unresolved);
+        List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, unresolved);
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
         logTiming(title, compiler.getMessages());
         logCompilation(title, code, compiled, instructions.size());
@@ -170,7 +170,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         processor.addBlock(MindustryMemory.createMemoryBank("bank2"));
         blocks.forEach(processor::addBlock);
         List<LogicInstruction> unresolved = generateInstructions(compiler, code).instructions();
-        List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, unresolved);
+        List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, unresolved);
         writeLogFile(logFile, compiler, unresolved);
         //System.out.println(prettyPrint(instructions));
         processor.run(instructions, MAX_STEPS);

@@ -181,4 +181,30 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
         );
     }
 
+    @Test
+    void generatesRemarks() {
+        assertCompilesTo("""
+                        remark("foo")
+                        remark("bar")
+                        """,
+                createInstruction(REMARK, q("foo")),
+                createInstruction(REMARK, q("bar")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void generatesRemarksWithFormatting() {
+        assertCompilesTo("""
+                        x = 10; y = 15;
+                        remark("Position: $x, $y");
+                        """,
+                createInstruction(SET, "x", "10"),
+                createInstruction(SET, "y", "15"),
+                createInstruction(REMARK, q("Position: ")),
+                createInstruction(REMARK, "x"),
+                createInstruction(REMARK, q(", ")),
+                createInstruction(REMARK, "y"),
+                createInstruction(END)        );
+    }
 }

@@ -12,6 +12,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                 LogicInstructionPrinter.toString(ip,
                         LogicInstructionLabelResolver.resolve(
                                 ip,
+                                profile,
                                 generateInstructions("""
                                         target = uradar(enemy, ground, any, health, MIN_TO_MAX)
                                         if target != null
@@ -33,6 +34,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                 LogicInstructionPrinter.toString(ip,
                         LogicInstructionLabelResolver.resolve(
                                 ip,
+                                profile,
                                 generateInstructions("""
                                         ulocate(ore, @surge-alloy, outx, outy)
                                         ulocate(building, core, ENEMY, outx, outy, outbuilding)
@@ -53,6 +55,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                 LogicInstructionPrinter.toString(compiler.processor,
                         LogicInstructionLabelResolver.resolve(
                                 compiler.processor,
+                                compiler.profile,
                                 generateInstructions(compiler,
                                         "itemDrop(found, @silicon, @unit.totalItems)"
                                 ).instructions()
@@ -68,6 +71,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                 LogicInstructionPrinter.toString(compiler.processor,
                         LogicInstructionLabelResolver.resolve(
                                 compiler.processor,
+                                compiler.profile,
                                 generateInstructions("""
                                         leader = getlink(0)
                                         count = 1
@@ -99,6 +103,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                 LogicInstructionPrinter.toString(compiler.processor,
                         LogicInstructionLabelResolver.resolve(
                                 compiler.processor,
+                                compiler.profile,
                                 generateInstructions("""
                                         triangle(x - 20, y - 20, x + 20, y - 20, x + 20, y - 20)
                                         """).instructions()
@@ -160,6 +165,7 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                 LogicInstructionPrinter.toString(compiler.processor,
                         LogicInstructionLabelResolver.resolve(
                                 compiler.processor,
+                                compiler.profile,
                                 generateInstructions("""
                                         STORAGE = nucleus1
                                         MSG = message1

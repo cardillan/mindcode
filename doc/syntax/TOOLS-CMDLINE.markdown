@@ -81,8 +81,8 @@ usage: mindcode cm [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination
                 [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s]
-                [input] [output]
+                [-r {NONE,PASSIVE,ACTIVE}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
+                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a mindcode source file into text mlog file.
 
@@ -99,6 +99,9 @@ named arguments:
   -g, --goal {SIZE,SPEED,AUTO}
                          sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
                          automatically
+  -r, --remarks {NONE,PASSIVE,ACTIVE}
+                         controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
+                         (remarks are not executed), or active (remarks are printed)
   -m, --memory-model {VOLATILE,ALIASED,RESTRICTED}
                          sets model for handling  linked  memory  blocks:  volatile  (shared  with different processor),
                          aliased (a memory block may be accessed  through  different variables), or restricted (a memory
@@ -183,8 +186,8 @@ usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination
                 [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s]
-                [-a TAG [TAG ...]] [input] [output]
+                [-r {NONE,PASSIVE,ACTIVE}] [-m {VOLATILE,ALIASED,RESTRICTED}] [-p {0..2}] [-d {0..3}]
+                [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [-a TAG [TAG ...]] [input] [output]
 
 Compile a schema definition file into binary msch file.
 
@@ -201,6 +204,9 @@ named arguments:
   -g, --goal {SIZE,SPEED,AUTO}
                          sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
                          automatically
+  -r, --remarks {NONE,PASSIVE,ACTIVE}
+                         controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
+                         (remarks are not executed), or active (remarks are printed)
   -m, --memory-model {VOLATILE,ALIASED,RESTRICTED}
                          sets model for handling  linked  memory  blocks:  volatile  (shared  with different processor),
                          aliased (a memory block may be accessed  through  different variables), or restricted (a memory

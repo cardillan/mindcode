@@ -115,4 +115,16 @@ public class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
         );
     }
 
+
+    @Test
+    void mergesRemarks() {
+        assertCompilesTo("""
+                        remark("Iteration: ${}", 1); 
+                        remark("bar"); 
+                        """,
+                createInstruction(REMARK, q("Iteration: 1")),
+                createInstruction(REMARK, q("bar")),
+                createInstruction(END)
+        );
+    }
 }

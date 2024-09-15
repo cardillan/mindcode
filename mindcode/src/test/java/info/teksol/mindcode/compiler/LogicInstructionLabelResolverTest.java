@@ -21,6 +21,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,
+                        compiler.profile,
                         generateInstructions("while true n = n + 1 end").instructions()
                 )
         );
@@ -46,6 +47,7 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,
+                        compiler.profile,
                         List.of(
                                 createInstruction(JUMP, label0, Condition.ALWAYS),
                                 createInstruction(PUSH, cell1, a),
@@ -57,6 +59,72 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                                 createInstruction(LABEL, label0),
                                 createInstruction(END)
                         )
+                )
+        );
+    }
+
+    @Test
+    void resolvesDisabledRemarks() {
+        TestCompiler compiler = createTestCompiler();
+        compiler.profile.setRemarks(Remarks.NONE);
+        assertLogicInstructionsMatch(compiler,
+                List.of(
+                        createInstruction(PRINT, q("Hello")),
+                        createInstruction(END)
+                ),
+                LogicInstructionLabelResolver.resolve(
+                        compiler.processor,
+                        compiler.profile,
+                        generateInstructions("""
+                                remark("This is a remark");
+                                print("Hello");
+                                """
+                        ).instructions()
+                )
+        );
+    }
+
+    @Test
+    void resolvesPassiveRemarks() {
+        TestCompiler compiler = createTestCompiler();
+        compiler.profile.setRemarks(Remarks.PASSIVE);
+        assertLogicInstructionsMatch(compiler,
+                List.of(
+                        createInstruction(JUMP, "2", "always"),
+                        createInstruction(PRINT, q("This is a remark")),
+                        createInstruction(PRINT, q("Hello")),
+                        createInstruction(END)
+                ),
+                LogicInstructionLabelResolver.resolve(
+                        compiler.processor,
+                        compiler.profile,
+                        generateInstructions("""
+                                remark("This is a remark");
+                                print("Hello");
+                                """
+                        ).instructions()
+                )
+        );
+    }
+
+    @Test
+    void resolvesActiveRemarks() {
+        TestCompiler compiler = createTestCompiler();
+        compiler.profile.setRemarks(Remarks.ACTIVE);
+        assertLogicInstructionsMatch(compiler,
+                List.of(
+                        createInstruction(PRINT, q("This is a remark")),
+                        createInstruction(PRINT, q("Hello")),
+                        createInstruction(END)
+                ),
+                LogicInstructionLabelResolver.resolve(
+                        compiler.processor,
+                        compiler.profile,
+                        generateInstructions("""
+                                remark("This is a remark");
+                                print("Hello");
+                                """
+                        ).instructions()
                 )
         );
     }

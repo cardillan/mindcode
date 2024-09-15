@@ -2,10 +2,7 @@ package info.teksol.mindcode.cmdline;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.FinalCodeOutput;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.MemoryModel;
+import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -140,6 +137,12 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     }
 
     @Test
+    public void remarksArgument() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -r active");
+        assertEquals(Remarks.ACTIVE, arguments.get("remarks"));
+    }
+
+    @Test
     public void memoryModelArgument() throws ArgumentParserException {
         Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -m restricted");
         assertEquals(MemoryModel.RESTRICTED, arguments.get("memory_model"));
@@ -147,7 +150,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o off -p 1 -d 3 -u source -s -g size -e 100 -m restricted");
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o off -p 1 -d 3 -u source -s -g size -r active -e 100 -m restricted");
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
@@ -157,6 +160,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(3, actual.getDebugLevel());
         assertEquals(100, actual.getOptimizationPasses());
         assertEquals(GenerationGoal.SIZE, actual.getGoal());
+        assertEquals(Remarks.ACTIVE, actual.getRemarks());
         assertEquals(MemoryModel.RESTRICTED, actual.getMemoryModel());
         assertEquals(FinalCodeOutput.SOURCE, actual.getFinalCodeOutput());
         assertTrue(actual.isPrintStackTrace());
@@ -176,6 +180,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(CompilerProfile.DEFAULT_INSTRUCTIONS, actual.getInstructionLimit());
         assertEquals(CompilerProfile.DEFAULT_CMDLINE_PASSES, actual.getOptimizationPasses());
         assertEquals(expected.getGoal(), actual.getGoal());
+        assertEquals(expected.getRemarks(), actual.getRemarks());
         assertEquals(expected.getMemoryModel(), actual.getMemoryModel());
         assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());
         assertEquals(expected.isPrintStackTrace(), actual.isPrintStackTrace());
