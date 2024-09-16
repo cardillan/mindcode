@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.CompilerMessage;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.MindcodeMessage;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
@@ -82,7 +83,9 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return opcodeVariants;
     }
 
-    private static final AstContext sampleContext = AstContext.createRootNode();
+    private static final AstContext sampleContext = AstContext.createRootNode(
+            CompilerProfile.standardOptimizations(false));
+
     @Override
     public LogicInstruction fromOpcodeVariant(OpcodeVariant opcodeVariant) {
         return createInstruction(sampleContext, opcodeVariant.opcode(),

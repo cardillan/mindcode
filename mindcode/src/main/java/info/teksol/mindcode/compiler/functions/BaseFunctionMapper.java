@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BaseFunctionMapper implements FunctionMapper {
-    private final AstContext staticAstContext = AstContext.createRootNode();
+    private final AstContext staticAstContext = AstContext.createStaticRootNode();
     private final Supplier<AstContext> astContextSupplier;
     private final InstructionProcessor instructionProcessor;
     private final Consumer<CompilerMessage> messageConsumer;

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.AstNode;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
@@ -12,6 +13,7 @@ public final class AstContext {
     private static final AtomicInteger counter = new AtomicInteger();
     public final int id;
 
+    private final CompilerProfile profile;
     private final Function function;
     private final int level;
     private final AstNode node;
@@ -21,9 +23,10 @@ public final class AstContext {
     private double weight;
     private final List<AstContext> children;
 
-    private AstContext(Function function, int level, AstNode node, AstContextType contextType,
+    private AstContext(CompilerProfile profile, Function function, int level, AstNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight, List<AstContext> children) {
         this.id = counter.getAndIncrement();
+        this.profile = profile;
         this.function = function;
         this.level = level;
         this.node = node;
@@ -34,39 +37,45 @@ public final class AstContext {
         this.children = children;
     }
 
-    public AstContext(Function function, int level, AstNode node, AstContextType contextType,
+    public AstContext(CompilerProfile profile, Function function, int level, AstNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight) {
-        this(function, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
+        this(profile, function, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
     }
 
-    public static AstContext createRootNode() {
-        return new AstContext(null, 0, null, AstContextType.ROOT,
+    public static AstContext createRootNode(CompilerProfile profile) {
+        return new AstContext(profile, null, 0, null, AstContextType.ROOT,
                 AstSubcontextType.BASIC, null, 1.0);
     }
 
-    public AstContext createChild(AstNode node, AstContextType contextType) {
-        AstContext child = new AstContext(function, level + 1, node, contextType, node.getSubcontextType(),
+    public static AstContext createStaticRootNode() {
+        return createRootNode(CompilerProfile.standardOptimizations(false));
+    }
+
+    public AstContext createChild(CompilerProfile profile, AstNode node, AstContextType contextType) {
+        AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, 1.0);
         children.add(child);
 
         return child;
     }
 
-    public AstContext createFunctionDeclaration(Function function, AstNode node, AstContextType contextType, double weight) {
-        AstContext child = new AstContext(function, level + 1, node, contextType, node.getSubcontextType(),
+    public AstContext createFunctionDeclaration(CompilerProfile profile, Function function, AstNode node, AstContextType contextType, double weight) {
+        AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);
         return child;
     }
 
     public AstContext createSubcontext(AstSubcontextType subcontextType, double weight) {
-        AstContext child = new AstContext(function, level, node, contextType, subcontextType, this, weight);
+        // Subcontext always inherits compiler profile from parent context
+        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType, this, weight);
         children.add(child);
         return child;
     }
 
     public AstContext createSubcontext(Function function, AstSubcontextType subcontextType, double weight) {
-        AstContext child = new AstContext(function, level, node, contextType, subcontextType, this, weight);
+        // Subcontext always inherits compiler profile from parent context
+        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType, this, weight);
         children.add(child);
         return child;
     }
@@ -78,7 +87,7 @@ public final class AstContext {
     }
 
     private AstContext createDeepCopy(Map<AstContext, AstContext> map, AstContext parent) {
-        AstContext copy = new AstContext(function, level, node, contextType, subcontextType, parent, weight);
+        AstContext copy = new AstContext(profile, function, level, node, contextType, subcontextType, parent, weight);
         children.stream()
                 .map(c -> c.createDeepCopy(map, copy))
                 .forEachOrdered(copy.children::add);
@@ -93,6 +102,10 @@ public final class AstContext {
                 .forEachOrdered(newParent.children::add);
         map.put(this, newParent);
         return map;
+    }
+
+    public CompilerProfile getProfile() {
+        return profile;
     }
 
     /**

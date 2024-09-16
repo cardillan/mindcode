@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class InstructionSamplesTest {
 
-    private static final AstContext STATIC_AST_CONTEXT = AstContext.createRootNode();
+    private static final AstContext STATIC_AST_CONTEXT = AstContext.createStaticRootNode();
 
     @Test
     void createInstructionSamplesForV6() throws IOException {

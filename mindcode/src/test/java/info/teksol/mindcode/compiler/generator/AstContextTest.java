@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.generator;
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.NoOp;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.CallGraph.Function;
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AstContextTest {
-    private final AstContext root = AstContext.createRootNode();
+    private final CompilerProfile profile = CompilerProfile.standardOptimizations(false);
+    private final AstContext root = AstContext.createRootNode(profile);
     private final CallGraph callGraph = CallGraph.createEmpty();
     private final FunctionDeclaration functionDeclaration1 = new FunctionDeclaration(null, false, "test1",List.of(), new NoOp());
     private final FunctionDeclaration functionDeclaration2 = new FunctionDeclaration(null, false, "test2",List.of(), new NoOp());
@@ -29,7 +31,7 @@ class AstContextTest {
         function2 = callGraph.getFunction(functionDeclaration2.getName());
 
         AstNode node = new TestNode(AstContextType.FUNCTION, AstSubcontextType.BODY);
-        context = root.createFunctionDeclaration(function1, node, node.getContextType(),1.0);
+        context = root.createFunctionDeclaration(profile, function1, node, node.getContextType(),1.0);
     }
 
     @Test
@@ -46,7 +48,7 @@ class AstContextTest {
     @Test
     void createChild() {
         AstNode node = new TestNode(AstContextType.IF, AstSubcontextType.CONDITION);
-        AstContext child = context.createChild(node, node.getContextType());
+        AstContext child = context.createChild(profile, node, node.getContextType());
 
         assertEquals(context.function(), child.function());
         assertEquals(context.level() + 1, child.level());
@@ -59,7 +61,7 @@ class AstContextTest {
     @Test
     void createFunctionDeclaration() {
         AstNode node = new TestNode(AstContextType.FUNCTION, AstSubcontextType.BODY);
-        AstContext child = context.createFunctionDeclaration(function2, node, node.getContextType(),2.0);
+        AstContext child = context.createFunctionDeclaration(profile, function2, node, node.getContextType(),2.0);
 
         assertEquals(function2, child.function());
         assertEquals(context.level() + 1, child.level());
@@ -149,7 +151,7 @@ class AstContextTest {
     @Test
     void findTopContextOfType() {
         AstNode node = new TestNode(root.contextType(), root.subcontextType());
-        AstContext child = context.createChild(node, root.contextType());
+        AstContext child = context.createChild(profile, node, root.contextType());
 
         assertEquals(root, child.findTopContextOfType(root.contextType()));
         assertEquals(context, child.findTopContextOfType(context.contextType()));
@@ -159,7 +161,7 @@ class AstContextTest {
     @Test
     void findDirectChild() {
         AstNode node = new TestNode(root.contextType(), root.subcontextType());
-        AstContext child = context.createChild(node, root.contextType());
+        AstContext child = context.createChild(profile, node, root.contextType());
 
         assertEquals(context, root.findDirectChild(child));
         assertEquals(context, root.findDirectChild(context));

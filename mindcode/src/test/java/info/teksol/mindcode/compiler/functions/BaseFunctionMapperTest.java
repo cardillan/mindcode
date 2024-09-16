@@ -26,7 +26,7 @@ public class BaseFunctionMapperTest {
         InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6,
                 ProcessorEdition.STANDARD_PROCESSOR, opcodeVariants);
 
-        AstContext staticAstContext = AstContext.createRootNode();
+        AstContext staticAstContext = AstContext.createStaticRootNode();
         return new BaseFunctionMapper(instructionProcessor, () -> staticAstContext, s -> {});
     }
 

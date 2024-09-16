@@ -31,4 +31,13 @@ public class RemarkInstruction extends BaseInstruction {
     public final LogicValue getValue() {
         return (LogicValue) getArg(0);
     }
+
+    @Override
+    public int getRealSize() {
+        return switch (astContext.getProfile().getRemarks()) {
+            case NONE -> 0;
+            case ACTIVE -> 1;
+            case PASSIVE -> 2;
+        };
+    }
 }

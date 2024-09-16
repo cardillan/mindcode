@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+* Computing code size for remarks did not take into account the [`remarks`
+  option](doc/syntax/SYNTAX-5-OTHER.markdown#option-remarks), causing incorrect code size computation in `none` and `active` 
+  settings.
+
 ## 2024-09-15
 
 ### Fixed

@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.functions;
 
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.functions.FunctionMapper.FunctionSample;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessorFactory;
 import info.teksol.mindcode.logic.Opcode;
@@ -49,6 +50,8 @@ public class FunctionReferenceGeneratorTest {
             "Schemacode", "SCHEMACODE.markdown",
     };
 
+    private static final AstContext STATIC_AST_CONTEXT = AstContext.createStaticRootNode();
+
     @Test
     void createFunctionReferenceForV6() throws IOException {
         createFunctionReference(ProcessorVersion.V6);
@@ -67,7 +70,7 @@ public class FunctionReferenceGeneratorTest {
     private void createFunctionReference(ProcessorVersion version) throws IOException {
         assertTrue(new File(SYNTAX_REL_PATH + "SYNTAX.markdown").isFile());
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
-        FunctionMapper mapper = FunctionMapperFactory.getStaticFunctionMapper(processor, s -> {});
+        FunctionMapper mapper = FunctionMapperFactory.getFunctionMapper(processor, () -> STATIC_AST_CONTEXT, s -> {});
         List<FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 
         try (final PrintWriter w = new PrintWriter(SYNTAX_REL_PATH + "FUNCTIONS_" + version + ".markdown", StandardCharsets.UTF_8)) {

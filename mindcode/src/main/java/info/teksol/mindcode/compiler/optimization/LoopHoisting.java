@@ -98,7 +98,7 @@ public class LoopHoisting extends BaseOptimizer {
 
             for (AstContext invariant : invariantIfs) {
                 if (!contextStream(invariant).allMatch(NoOpInstruction.class::isInstance)) {
-                    AstContext bodyContext = getInitContext(loop).createChild(invariant.node(), invariant.contextType());
+                    AstContext bodyContext = getInitContext(loop).createChild(invariant.getProfile(), invariant.node(), invariant.contextType());
                     LogicList original = contextInstructions(invariant);
                     LogicList duplicated = original.duplicateToContext(bodyContext);
                     int index = firstInstructionIndex(anchor);
@@ -119,6 +119,7 @@ public class LoopHoisting extends BaseOptimizer {
                 .flatMap(LogicList::stream)
                 .forEachOrdered(ix -> addDependencies(loop, inspectedContext, dependencies, ix));
 
+        //noinspection StatementWithEmptyBody
         while (propagateDependencies(dependencies));
 
         // If there are function calls, all global variables are unsafe

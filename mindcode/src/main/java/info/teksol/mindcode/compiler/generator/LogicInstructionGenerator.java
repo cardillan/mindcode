@@ -78,7 +78,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private final List<LogicInstruction> instructions = new ArrayList<>();
 
-    private AstContext astContext = AstContext.createRootNode();
+    private AstContext astContext;
 
     public LogicInstructionGenerator(CompilerProfile profile, InstructionProcessor instructionProcessor,
             Consumer<CompilerMessage> messageConsumer) {
@@ -87,6 +87,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         this.functionMapper = FunctionMapperFactory.getFunctionMapper( instructionProcessor,
                 () -> astContext, messageConsumer);
         this.profile = profile;
+        this.astContext = AstContext.createRootNode(profile);
         this.expressionEvaluator = new ConstantExpressionEvaluator(instructionProcessor);
     }
 
@@ -111,12 +112,12 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     private void enterAstNode(AstNode node, AstContextType contextType) {
         if (node.getContextType() != AstContextType.NONE) {
-            astContext = astContext.createChild(node, contextType);
+            astContext = astContext.createChild(profile, node, contextType);
         }
     }
 
     private void enterFunctionAstNode(Function function, AstNode node, double weight) {
-        astContext = astContext.createFunctionDeclaration(function, node, node.getContextType(), weight);
+        astContext = astContext.createFunctionDeclaration(profile, function, node, node.getContextType(), weight);
     }
 
     private void exitAstNode(AstNode node) {
@@ -376,7 +377,6 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         emit(createGoto(LogicVariable.fnRetAddr(functionPrefix), LogicLabel.symbolic(functionPrefix)));
     }
 
-    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     public LogicValue visitFunctionCall(FunctionCall node) {
         setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);

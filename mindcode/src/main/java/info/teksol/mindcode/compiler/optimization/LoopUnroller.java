@@ -338,7 +338,7 @@ public class LoopUnroller extends BaseOptimizer {
         List<LogicList> iterationContexts = iterationInstructionContexts(loop);
 
         // Create a new, non-loop context for unrolled instructions
-        AstContext newContext = loop.parent().createChild(loop.node(), AstContextType.BODY);
+        AstContext newContext = loop.parent().createChild(loop.getProfile(), loop.node(), AstContextType.BODY);
         int insertionPoint = firstInstructionIndex(loop);
         for (LogicList list : initContexts) {
             insertInstructions(insertionPoint, list.duplicateToContext(newContext));
@@ -362,7 +362,7 @@ public class LoopUnroller extends BaseOptimizer {
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
         // Create a new, non-loop context for unrolled instructions
-        AstContext newContext = loop.parent().createChild(loop.node(), AstContextType.BODY);
+        AstContext newContext = loop.parent().createChild(loop.getProfile(), loop.node(), AstContextType.BODY);
         int insertionPoint = firstInstructionIndex(loop);
         for (AstContext iteration : iterations) {
             LogicList list = removeIteratorInstructions(contextInstructions(iteration));

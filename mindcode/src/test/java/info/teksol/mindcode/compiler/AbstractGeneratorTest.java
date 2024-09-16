@@ -206,11 +206,11 @@ public class AbstractGeneratorTest extends AbstractAstTest {
 
     // Instruction creation
 
-    protected final AstContext mockAstRootContext = AstContext.createRootNode();
-    protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
-
     protected final CompilerProfile profile = createCompilerProfile();
     protected final InstructionProcessor ip = createInstructionProcessor(profile, s ->{});
+
+    protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
+    protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
 
     protected final LogicInstruction createInstruction(Opcode opcode) {
         return ip.createInstruction(mockAstContext, opcode);

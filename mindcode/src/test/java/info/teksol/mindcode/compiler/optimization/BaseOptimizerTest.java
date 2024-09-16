@@ -2,6 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.ast.NoOp;
+import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
@@ -31,14 +32,15 @@ class BaseOptimizerTest extends AbstractOptimizerTest<DummyOptimizer> {
         return Optimization.LIST;
     }
 
-    private final AstContext testContext = mockAstContext.createChild(new NoOp(), AstContextType.NONE);
+    private final CompilerProfile profile = CompilerProfile.standardOptimizations(false);
+    private final AstContext testContext = mockAstContext.createChild(profile, new NoOp(), AstContextType.NONE);
     private final LogicInstruction ix0 = ip.createInstruction(testContext, Opcode.SET, a, P0);
     private final LogicInstruction ix1 = ip.createInstruction(testContext, Opcode.LABEL, label0);
     private final LogicInstruction ix2 = ip.createInstruction(testContext, Opcode.SET, c, P0);
     private final LogicInstruction ix3 = ip.createInstruction(testContext, Opcode.SET, d, P0);
     private final List<LogicInstruction> instructions = new ArrayList<>(List.of(ix0, ix1, ix2));
     private final OptimizationContext oc = new OptimizationContext(ip, instructions,
-            CallGraph.createEmpty(), AstContext.createRootNode());
+            CallGraph.createEmpty(), AstContext.createRootNode(profile));
     private final DummyOptimizer test = new DummyOptimizer(oc);
 
     @Test
