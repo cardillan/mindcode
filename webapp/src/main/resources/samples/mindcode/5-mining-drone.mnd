@@ -1,38 +1,37 @@
-CONTAINER = vault1
-PATCH_X = 16
-PATCH_Y = 17
-
-CONTAINER_X = CONTAINER.x
-CONTAINER_Y = CONTAINER.y
+// These assignments will be compiled into the output code as-is.
+// It is possible to change them in the compiled code.
+CONTAINER = vault1;
+PATCH_X = 16;
+PATCH_Y = 17;
 
 // Find a live unit (@unit.dead === 0) that is not controlled
 // by a player or processor (@unit.controlled == 0)
 do
-    print("Searching available unit...")
-	printflush(message1)
-    ubind(@poly)
-loop while (@unit.dead !== 0) or (@unit.controlled != 0)
+    print("Searching available unit...");
+	printflush(message1);
+    ubind(@poly);
+loop while (@unit.dead !== 0) or (@unit.controlled != 0);
 
 // Some Mindustry code on the internet relies on nonzero flag
 // marking used units. Assign non-zero flag to protect our unit
 // from such code run by other processors.
-flag(12)
+flag(rand(1000));
 
 // Mine until the unit is lost or killed
 // Then the program restarts, acquiring another unit
-while (@unit.controller == @this) and (@unit.dead === 0)
-	if @unit.totalItems < @unit.itemCapacity
-		println("state: mining")
-		approach(PATCH_X, PATCH_Y, 3)
-		mine(PATCH_X, PATCH_Y)
+while (@unit.controller == @this) and (@unit.dead === 0) do
+	if @unit.totalItems < @unit.itemCapacity then
+		println("State: mining");
+		approach(PATCH_X, PATCH_Y, 3);
+		mine(PATCH_X, PATCH_Y);
 	else
-		println("state: dropping")
-		approach(CONTAINER_X, CONTAINER_Y, 3)
-		itemDrop(CONTAINER, @unit.totalItems)
-	end
+		println("State: dropping");
+		approach(CONTAINER.x, CONTAINER.y, 3);
+		itemDrop(CONTAINER, @unit.totalItems);
+	end;
 
-	println("item capacity: ", @unit.itemCapacity)
-	println("total items: ", @unit.totalItems)
-	println("first item: ", @unit.firstItem)
-	printflush(message1)
-end
+	println("item capacity: ", @unit.itemCapacity);
+	println("total items: ", @unit.totalItems);
+	println("first item: ", @unit.firstItem);
+	printflush(message1);
+end;

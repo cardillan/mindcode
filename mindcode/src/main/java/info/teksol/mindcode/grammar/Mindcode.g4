@@ -82,15 +82,15 @@ arg_decl_list : var_ref
               | arg_decl_list COMMA var_ref
               ;
 
-while_expression : ( label=loop_label COLON )? WHILE cond=expression loop_body END;
+while_expression : ( label=loop_label COLON )? WHILE cond=expression DO? loop_body END;
 
 do_while_expression : ( label=loop_label COLON )? DO loop_body LOOP WHILE cond=expression;
 
-for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression loop_body END       # ranged_for
+for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression DO? loop_body END       # ranged_for
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
-                            SEMICOLON increment=incr_list loop_body END                         # iterated_for
+                            SEMICOLON increment=incr_list DO? loop_body END                         # iterated_for
                | ( label=loop_label COLON )? FOR lvalue IN      
-                            LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET loop_body END   # for_each
+                            LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET DO? loop_body END   # for_each
                ;
 
 loop_body : loop_body expression_list
@@ -131,10 +131,10 @@ arg_list : arg
 
 arg : expression;
 
-if_expr : IF cond=expression true_branch=expression_list? if_trailer? END;
+if_expr : IF cond=expression THEN? true_branch=expression_list? if_trailer? END;
 
 if_trailer : ELSE false_branch=expression_list?
-           | ELSIF cond=expression true_branch=expression_list? if_trailer?
+           | ELSIF cond=expression THEN? true_branch=expression_list? if_trailer?
            ;
 
 case_expr : CASE cond=expression alternative_list? ( ELSE else_branch=expression_list )? END;

@@ -13,7 +13,7 @@
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">
         <ul class="flex space-around">
-            <@com.sample name="bind-single-unit"        >Bind a single poly and move it around</@com.sample>
+            <@com.sample name="control-two-units"       >Control two different units using variables</@com.sample>
             <@com.sample name="one-thorium"             >Prevent Thorium reactor blowup when out of cryo</@com.sample>
             <@com.sample name="heal-damaged-building"   >Patrol around a building and heal damaged ones</@com.sample>
             <@com.sample name="many-thorium"            >Prevent MULTIPLE Thorium reactors from blowing up when any runs out of cryo</@com.sample>
@@ -32,7 +32,7 @@
             <@com.codeareas sourceTitle="Mindcode Source Code:" targetTitle="Mindustry Logic:" sourceLines="Y" targetLines="Y" />
             <div>
                 <div class="flex items-center space-x-3">
-                    <select name="optimizationLevel" id="optimization" class="border-2 border-black p-2 rounded">
+                    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black p-2 rounded">
                         <option value="OFF"          <#if model.optimizationLevel == "OFF"       >selected</#if>>No optimization</option>
                         <option value="BASIC"        <#if model.optimizationLevel == "BASIC"     >selected</#if>>Basic optimization</option>
                         <option value="AGGRESSIVE"   <#if model.optimizationLevel == "AGGRESSIVE">selected</#if>>Advanced optimization</option>

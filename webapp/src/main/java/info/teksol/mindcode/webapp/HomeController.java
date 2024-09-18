@@ -32,7 +32,7 @@ public class HomeController {
     static {
         final Map<String, String> theSamples = new HashMap<>();
         final List<String> sampleNames = List.of(
-                "bind-single-unit",
+                "control-two-units",
                 "one-thorium",
                 "heal-damaged-building",
                 "many-thorium",
@@ -41,7 +41,7 @@ public class HomeController {
         );
 
         final List<String> sources = Stream.of(
-                "1-bind-poly-move-to-core.mnd",
+                "1-control-units-using-variables.mnd",
                 "2-thorium-reactor-stopper.mnd",
                 "8-heal-damaged-building.mnd",
                 "3-multi-thorium-reactor.mnd",

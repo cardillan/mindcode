@@ -15,12 +15,12 @@ switch1:
             switch1 as switch1
         end
         mindcode = """
-            on = switch1.enabled
+            on = switch1.enabled;
             // Starting at 1, we want to skip the switch
-            for link in 1 ... @links
-                device = getlink(link)
-                device.enabled = on
-            end
+            for link in 1 ... @links do
+                device = getlink(link);
+                device.enabled = on;
+            end;
             """
     end
 end

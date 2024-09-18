@@ -1,0 +1,24 @@
+// Binds two different units, stores them in a variable
+// and controls both them (moves them around in a pattern)
+
+// These are local variables
+poly = ubind(@poly);     // We just assume the units exist
+mega = ubind(@mega);
+
+// This is a global variable
+ANGLE = 0;
+
+while true do
+    controlUnit(poly);
+    controlUnit(mega);
+end;
+
+def controlUnit(my_unit)
+    // Binds the unit stored in a variable
+    ubind(my_unit);
+    move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
+    printf("Currently bound unit is ${@unit}.");
+    printflush(message1);
+    wait(0.8);
+    ANGLE += 45;
+end;

@@ -1,126 +1,132 @@
-#set target = ML7A      // Using revised syntax for getBlock here
+// Setting to use non-standard function mapping as described here:
+// github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#mindustry-logic-functions
+#set target = ML7A;
 
-// Initialize variables first; these can be changed in the compiled code
-MEMORY = cell1
-UNIT = @poly
+// These global variables can be changed in the compiled code
+remark("Configurable options:");
+MEMORY = cell1;
+UNIT = @poly;
 
 // Coordinates of the map area to process
 // By default an entire map is converted
-SW_X = 0
-SW_Y = 0
-NE_X = @mapw
-NE_Y = @maph
+SW_X = 0;
+SW_Y = 0;
+NE_X = @mapw;
+NE_Y = @maph;
 
 // Setting to true restores copper conveyors (useful for testing)
-DOWNGRADE = false
+DOWNGRADE = false;
 
 // Upgrading in stripes of given width -- faster processing
 // (Could be even wider, the build radius is ~20 blocks or so)
-WIDTH = 10
+WIDTH = 10;
 
 // How close unit needs to get to the block being upgraded
-RADIUS = 10
+RADIUS = 10;
+
+remark("Don't modify anything below this line.");
 
 // Count the total number of upgraded blocks
-TOTAL = 0
+TOTAL = 0;
 
-allocate heap in MEMORY[0 ... 16]
+allocate heap in MEMORY[0 ... 16];
 
 // If a memory cell is attached, the progress can be stored there
-if $INITIALIZED 
-    x = limit($X, SW_X, NE_X)
-    y = limit($Y, SW_Y, NE_Y)
-    dx = $DX == 1 ? 1 : -1
-    dy = $DY > 0 ? WIDTH : -WIDTH
-    TOTAL = $TOTAL
+if $INITIALIZED then
+    x = limit($X, SW_X, NE_X);
+    y = limit($Y, SW_Y, NE_Y);
+    dx = $DX == 1 ? 1 : -1;
+    dy = $DY > 0 ? WIDTH : -WIDTH;
+    TOTAL = $TOTAL;
 else
-    $INITIALIZED = true
-    x = $X = SW_X
-    y = $Y = SW_Y
-    dx = 1
-    dy = WIDTH
-end
+    $INITIALIZED = true;
+    x = $X = SW_X;
+    y = $Y = SW_Y;
+    dx = 1;
+    dy = WIDTH;
+end;
 
-oldType = DOWNGRADE ? @titanium-conveyor : @conveyor
-newType = DOWNGRADE ? @conveyor : @titanium-conveyor
+oldType = DOWNGRADE ? @titanium-conveyor : @conveyor;
+newType = DOWNGRADE ? @conveyor : @titanium-conveyor;
 
-// It is possible to pause/stop the processing
-// by attaching a switch and activating it
-while switch1.enabled == false
+// It is possible to pause/stop the processing by attaching a switch and activating it
+// When the switch is active, the program renitializes and without attached memory,
+// the progress is lost.
+while switch1.enabled == false do
 
     // If we don't have an active unit, summon a new one
-    if @unit.dead !== 0 or @unit.controller != @this
-        findUnit()
-    end
-    
+    if @unit.dead !== 0 or @unit.controller != @this then
+        findUnit();
+    end;
+
     // Position the unit to the middle of the band
-    ypos = limit(y + WIDTH \ 2, SW_Y, NE_Y)
-    do 
-        move(x, ypos)
-    loop while not within(x, ypos, RADIUS)
+    ypos = limit(y + WIDTH \ 2, SW_Y, NE_Y);
+    while not within(x, ypos, RADIUS) do
+        move(x, ypos);
+    end;
 
     // Upgrade all blocks in the band
-    for yrep in y .. min(NE_Y, y + WIDTH - 1)
-        replace(x, yrep, oldType, newType)
-    end
-    $TOTAL = TOTAL
-    
-    printf("Position: $x, $ypos\n")
-    printf("Upgrades: $TOTAL")
-    printflush(message1)
-    
-    // Move to next position
-    x += dx
-    if x > NE_X || x < SW_X
-        dx *= -1
-        y += dy
-        x = limit(x, SW_X, NE_X)
-        $DX = dx
+    for yrep in y .. min(NE_Y, y + WIDTH - 1) do
+        replace(x, yrep, oldType, newType);
+    end;
+    $TOTAL = TOTAL;
 
-        if y > NE_Y || y < SW_Y
-            dy *= -1
-            y = limit(y, SW_Y, NE_Y)
-            $DY = dy
-        end
-        $Y = y
-    end
-    
-    $X = x
-end
+    printf("Position: $x, $ypos\n");
+    printf("Upgrades: $TOTAL");
+    printflush(message1);
+
+    // Move to next position
+    x += dx;
+    if x > NE_X || x < SW_X then
+        dx *= -1;
+        y += dy;
+        x = limit(x, SW_X, NE_X);
+        $DX = dx;
+
+        if y > NE_Y || y < SW_Y then
+            dy *= -1;
+            y = limit(y, SW_Y, NE_Y);
+            $DY = dy;
+        end;
+        $Y = y;
+    end;
+
+    $X = x;
+end;
 
 inline def findUnit()
     // Keep looking for unit until one is found
-    while true
-        ubind(UNIT)
-        if @unit == null
-            printf("No unit of type $UNIT found.")
-        elsif @unit.controlled != 0
-            printf("Looking for a free $UNIT...")
+    while true do
+        ubind(UNIT);
+        if @unit == null then
+            printf("No unit of type $UNIT found.");
+        elsif @unit.controlled != 0 then
+            printf("Looking for a free $UNIT...");
         else
-            flag(1)		// Mark unit as active
-            break
-        end
-        printflush(message1)
-    end
-end
+            flag(rand(1000));		// Mark unit as active for other, non-cooperating processors
+            break;
+        end;
+        printflush(message1);
+    end;
+end;
 
 // Returns value of n limited to range min .. max
 inline def limit(n, min, max)
-    min(max(n, min), max)
-end
+    min(max(n, min), max);
+end;
 
 // If a block of type oldType is found at position,
 // replaces it with newType
 inline def replace(x, y, oldType, newType)
-    b_building = getBlock(x, y, b_type)
-    
-    if b_type == oldType
-        build(x, y, newType, b_building.rotation, 0)
+    b_building = getBlock(x, y, b_type);
+
+    if b_type == oldType then
+        build(x, y, newType, b_building.rotation, 0);
         // If the processor is too fast, we need to wait
         // for the unit to finish building the block
         do
-            getBlock(x, y, b_type)
-        loop while b_type != newType
-        TOTAL += 1
-    end
-end
+            getBlock(x, y, b_type);
+        loop while b_type != newType;
+        TOTAL += 1;
+    end;
+end;

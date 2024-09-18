@@ -57,26 +57,26 @@ message1:
 end
 
 program = """
-    liquid = floor(router1.totalLiquids)
-    if liquid < 12
-        melter1.enabled = true
-    elsif liquid > 16
-        melter1.enabled = false
-    end
-    sand = kiln1.sand
-    if sand < 6
-        pulverizer1.enabled = true
-    elsif sand >= 10
-        pulverizer1.enabled = false
-    end
-    items = conveyor1.totalItems
-    if items < 5
-        separator1.enabled = true
-    elsif items > 8
-        separator1.enabled = false
-    end
-    printf("$LIQUID-SLAG $liquid\n")
-    printf("$ITEM-SAND $sand\n")
-    printf("$BLOCK-BRIDGE-CONVEYOR $items")
-    printflush(message1)
+    liquid = floor(router1.totalLiquids);
+    if liquid < 12 then
+        melter1.enabled = true;
+    elsif liquid > 16 then
+        melter1.enabled = false;
+    end;
+    sand = kiln1.sand;
+    if sand < 6 then
+        pulverizer1.enabled = true;
+    elsif sand >= 10 then
+        pulverizer1.enabled = false;
+    end;
+    items = conveyor1.totalItems;
+    if items < 5 then
+        separator1.enabled = true;
+    elsif items > 8 then
+        separator1.enabled = false;
+    end;
+    printf("$LIQUID-SLAG $liquid\n");
+    printf("$ITEM-SAND $sand\n");
+    printf("$BLOCK-BRIDGE-CONVEYOR $items");
+    printflush(message1);
     """

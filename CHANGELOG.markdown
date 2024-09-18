@@ -10,6 +10,14 @@ All notable changes to this project will be documented in this file.
   option](doc/syntax/SYNTAX-5-OTHER.markdown#option-remarks), causing incorrect code size computation in `none` and `active` 
   settings.
 
+### Changed
+
+* A button was added do the web app to copy the output code to the clipboard with a single click.
+* All Mindcode and Schemacode samples were revised and updated to adapt for upcoming changes in syntax (semicolons 
+  and optional keywords were added). Some samples were reworked. 
+* Optional `do` keyword is now supported in all `for` and `while` loops, and optional `then` keyword is supported in 
+  all `if` and `elsif` statements.
+
 ## 2024-09-15
 
 ### Fixed

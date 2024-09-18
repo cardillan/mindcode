@@ -56,7 +56,7 @@ class SamplesTest {
     List<DynamicTest> validateSamples() {
         final List<DynamicTest> result = new ArrayList<>();
         final String dirname = "src/main/resources/samples/mindcode";
-        final File[] files = new File(dirname).listFiles();
+        final File[] files = new File(dirname).listFiles((d, f) -> f.toLowerCase().endsWith(".mnd"));
         assertNotNull(files);
         assertTrue(files.length > 0, "Expected to find at least one template; found none");
         Arrays.sort(files);

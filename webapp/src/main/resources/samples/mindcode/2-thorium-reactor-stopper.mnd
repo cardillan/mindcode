@@ -1,2 +1,2 @@
-REACTOR = reactor1
-REACTOR.enabled = (REACTOR.cryofluid / REACTOR.liquidCapacity) >= 0.25
+// reactor1 is the default name of the first thorium reactor linked to the processor
+reactor1.enabled = 4 * reactor1.cryofluid >= reactor1.liquidCapacity;

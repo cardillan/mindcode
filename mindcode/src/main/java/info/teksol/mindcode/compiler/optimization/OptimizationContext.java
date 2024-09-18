@@ -142,12 +142,12 @@ public class OptimizationContext {
     //<editor-fold desc="Common optimizer functionality">
 
     /**
-     * Returns a BitSet whose bits are The optimizer analyses the control flow of the program. It starts at the first instruction and visits
+     * This method analyses the control flow of the program. It starts at the first instruction and visits
      * every instruction reachable from there, either by advancing to the next instruction, or by a jump/goto/call.
-     * Visited instruction are marked as active and aren't inspected again. When all code paths have reached an
-     * end or an already visited instruction, the analysis stops and all unvisited instructions are removed.
-     * Only one iteration is performed.
-     * @return
+     * Bits of visited instruction are cleared and aren't inspected again. When all code paths have reached an
+     * end or an already visited instruction, the analysis stops and what is left are all unreachable instructions.
+     *
+     * @return a BitSet containing positions of unreachable instructions
      */
     public BitSet getUnreachableInstructions() {
         BitSet unreachable = new BitSet(program.size());
@@ -1053,6 +1053,9 @@ MainLoop:
 
         private LogicIterator(int cursor) {
             this.cursor = cursor;
+            if (cursor < 0 || cursor >= program.size()) {
+                throw new NoSuchElementException();
+            }
         }
 
         @Override
@@ -1063,6 +1066,9 @@ MainLoop:
 
         public void setNextIndex(int index) {
             checkClosed();
+            if (cursor < 0 || cursor >= program.size()) {
+                throw new NoSuchElementException();
+            }
             cursor = index;
         }
 

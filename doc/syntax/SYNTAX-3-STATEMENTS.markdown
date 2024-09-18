@@ -4,6 +4,9 @@ Control flow statements are statements that alter the flow of code.
 They either branch, i.e. execute one of several possible alternatives,
 or they loop, i.e. repeat part of the code (zero,) one or more times.
 
+The `do` and `then` keywords in control statements are optional. It is recommended to always use them, as it may 
+help reveal some errors in the structure of the program.   
+
 # Loops
 
 There are several types of loops:
@@ -15,10 +18,11 @@ There are several types of loops:
 
 ## While Loops
 
-The `while` loop gets repeated as long as the condition remains `true`:
+The `while` loop gets repeated as long as the condition remains `true` (the `do` keyword separating the condition 
+from the loop body is optional):
 
 ```
-while @unit == null
+while @unit == null do
     ubind(@poly)
 end
 ```
@@ -36,10 +40,10 @@ loop while @unit == null
 ## Range Iteration Loops
 
 Loop over a range of values, in an inclusive or exclusive fashion. The `..` range operator indicates an
-inclusive range:
+inclusive range (the `do` keyword separating the condition from the loop body is optional):
 
 ```
-for n in 14 .. 18
+for n in 14 .. 18 do
   println(n)
 end
 printflush(message1)
@@ -77,10 +81,11 @@ a [C-style loop](#c-style-loops) or a [while loop](#while-loops).
 
 ## List Iteration Loops
 
-Loop over a fixed collection of values or expressions:
+Loop over a fixed collection of values or expressions (the `do` keyword separating the condition from the loop body 
+is optional):
 
 ```
-for u in (@mono, @poly, @mega)
+for u in (@mono, @poly, @mega) do
     ubind(u)
     if @unit != null
         break
@@ -92,7 +97,9 @@ printflush(message1)
 
 Tries to bind a mono, poly or mega, in this order, ending the loop when successfully binding one.
 
-The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic doesn't support arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated right before the loop utilizing the expression is executed. This loop
+The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic doesn't support 
+arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is 
+evaluated right before the loop utilizing the expression is executed. This loop
 
 ```
 a = 0
@@ -102,17 +109,18 @@ end
 printflush(message1)
 ```
 
-prints values 1, 2, 3 (at the beginning of each iteration the loop variable -- `a` in this case -- is set to the value of the next expression in the list).
+prints values 1, 2, 3 (at the beginning of each iteration the loop variable -- `a` in this case -- is set to the 
+value of the next expression in the list).
 
 ## C-Style Loops
 
-The syntax is similar to C's, except for the absence of parenthesis:
+The syntax is similar to C's, except for the absence of parenthesis and the optional `do` keyword:
 
 ```
 // Visit every block in a given region, one at a time, starting from the bottom
 // left and ending at the upper right
 dx = 1
-for x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx
+for x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx do
     // do something with this block
     if x == NE_X
         dx *= -1
@@ -138,8 +146,9 @@ end
 
 ### Using labels with break or continue
 
-An unlabeled `break` statement exits the innermost `for` or `while` statement, however a labeled `break` can exit from an outer statement.
-It is necessary to mark the outer statement with a label, and then use the `break <label>` syntax, as shown here:
+An unlabeled `break` statement exits the innermost `for` or `while` statement, however a labeled `break` can exit 
+from an outer statement. It is necessary to mark the outer statement with a label, and then use the `break <label>` 
+syntax, as shown here:
 
 ```
 MainLoop:
@@ -151,6 +160,7 @@ for i in 1 .. 10
     end
 end
 ```
+
 Similarly, `continue MainLoop` skips the rest of the current iteration of both the inner loop and the main loop.
 Every loop in Mindcode can be marked with a label,
 and the break or continue statements can use those labels to specify which of the currently active loops they operate on.
@@ -189,10 +199,10 @@ Mindcode offers 3 types of conditionals: if/else expressions, the ternary operat
 ## If/Else Expressions
 
 In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For
-example:
+example (the `then` keyword after both `if` and `elsif` is optional):
 
 ```
-result = if n == 0
+result = if n == 0 then
     "ready"
 else
     "pending"
@@ -204,9 +214,9 @@ Depending on the value of `n`, `result` will contain the one of `ready` or `pend
 To handle more than two alternatives, you can use `elsif` as an alternative to nested `if` statements:
 
 ```
-text = if n > 0
+text = if n > 0 then
     "positive"
-elsif n < 0
+elsif n < 0 then
     "negative"
 else
     "zero"
@@ -215,10 +225,10 @@ end
 is equivalent to
 
 ```
-text = if n > 0
+text = if n > 0 then
     "positive"
 else
-    if n < 0
+    if n < 0 then
         "negative"
     else
         "zero"
