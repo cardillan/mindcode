@@ -15,57 +15,15 @@
             <input type="hidden" name="id" value="${model.id}">
         </#if>
         <div class="grid grid-cols-2 gap-2">
-            <label class="block font-bold" for="source">Encoded schematics:</label>
-            <label class="block font-bold">Decompiled schemacode:</label>
+            <@com.codeareas sourceTitle="Encoded schematics:" targetTitle="Decompiled schemacode:" sourceLines="N" targetLines="Y" />
             <div>
-                <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.source}</textarea>
-            </div>
-            <div>
-                <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.compiled}</textarea>
-                <p class="text-center">${model.compiledLoc} lines of code</p>
-            </div>
-            <div>
-                <div>
-                    <input type="submit" value="Decompile" class="px-4 py-2 bg-gray-600 text-white my-4"/>
+                <div class="flex items-center space-x-3">
+                    <input type="submit" value="Decompile" class="px-4 py-2 bg-gray-600 text-white my-4 rounded "/>
                     <@com.link href="/decomnpiler/?s=clean">Erase schematics</@com.link>
                 </div>
-                <div style="margin-top:1cm;text-align:center;">
-                    <nav>
-                        <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown">Schemacode syntax</a>
-                        | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/README.markdown">Readme</a>
-                        | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown">Changelog</a>
-                    </nav>
-                    <p>Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode">project page</a>.<p>
-                </div>
+                <@com.footerLinks mindcode="N" />
             </div>
-            <div>
-                <#if model.hasErrors>
-                    <#list model.errors>
-                        <label class="mt-4 block font-bold">Syntax Errors:</label>
-                        <ul class="list-disc list-inside">
-                            <#items as message>
-                                <li class="text-red-700">${message}</li>
-                            </#items>
-                        </ul>
-                    </#list>
-                <#elseif model.hasMessages>
-                    <label class="mt-4 block font-bold">Decompiler messages:</label>
-                    <#list model.warnings>
-                        <ul class="list-disc list-inside">
-                            <#items as message>
-                                <li class="text-red-700">${message}</li>
-                            </#items>
-                        </ul>
-                    </#list>
-                    <#list model.messages>
-                        <ul class="list-disc list-inside">
-                            <#items as message>
-                                <li>${message}</li>
-                            </#items>
-                        </ul>
-                    </#list>
-                </#if>
-            </div>
+            <@com.compilerMessages messageTitle="Decompiler messages:" />
         </div>
     </form>
 </div>

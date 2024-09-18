@@ -66,7 +66,7 @@ public class DirectiveProcessor {
     }
 
     private void setOptimizationLevel(Optimization optimization, CompilerProfile profile, String level) {
-        OptimizationLevel optLevel = OptimizationLevel.VALUE_MAP.get(level);
+        OptimizationLevel optLevel = OptimizationLevel.byName(level);
         if (optLevel == null) {
             error("Invalid value '%s' of compiler directive '%s'.", level, optimization.getOptionName());
         } else {
@@ -75,7 +75,7 @@ public class DirectiveProcessor {
     }
 
     private void setAllOptimizationsLevel(CompilerProfile profile, String level) {
-        OptimizationLevel optLevel = OptimizationLevel.VALUE_MAP.get(level);
+        OptimizationLevel optLevel = OptimizationLevel.byName(level);
         if (optLevel == null) {
             error("Invalid value '%s' of compiler directive 'optimization'.", level);
         } else {

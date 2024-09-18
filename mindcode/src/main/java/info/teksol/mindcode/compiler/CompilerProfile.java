@@ -41,7 +41,7 @@ public class CompilerProfile {
 
     private List<String> additionalTags = List.of();
 
-    private CompilerProfile(boolean webApplication, OptimizationLevel level) {
+    public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }

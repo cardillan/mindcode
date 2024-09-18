@@ -13,9 +13,11 @@ public class HomePageData {
     private final List<String> warnings;
     private final List<String> messages;
     private final boolean enableOptimization;
+    private final String optimizationLevel;
 
     HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc,
-            List<String> errors, List<String> warnings, List<String> messages, boolean enableOptimization) {
+            List<String> errors, List<String> warnings, List<String> messages, boolean enableOptimization,
+            String optimizationLevel) {
         this.id = id;
         this.sample = sample;
         this.source = source;
@@ -26,6 +28,7 @@ public class HomePageData {
         this.warnings = warnings;
         this.messages = messages;
         this.enableOptimization = enableOptimization;
+        this.optimizationLevel = optimizationLevel;
     }
 
     public String getId() {
@@ -78,5 +81,9 @@ public class HomePageData {
 
     public boolean isLoggedIn() {
         return false;
+    }
+
+    public String getOptimizationLevel() {
+        return optimizationLevel;
     }
 }

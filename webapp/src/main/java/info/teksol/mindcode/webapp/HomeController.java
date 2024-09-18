@@ -1,6 +1,7 @@
 package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.compiler.CompilerOutput;
+import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,7 @@ public class HomeController {
     @PostMapping("/compile")
     public String postCompile(@RequestParam(required = false) String id,
                               @RequestParam String source,
-                              @RequestParam(required = false) boolean enableOptimization) {
+                              @RequestParam(required = false) String optimizationLevel) {
         Source sourceDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -83,14 +84,16 @@ public class HomeController {
             sourceDto = sourceRepository.save(new Source(source, Instant.now()));
         }
 
-        return "redirect:/?optimization=" + enableOptimization + "&s=" + sourceDto.getId().toString();
+        return "redirect:/?optimizationLevel=" + optimizationLevel + "&s=" + sourceDto.getId().toString();
     }
 
     @GetMapping
     public ModelAndView getHomePage(
         @RequestParam(name = "s", defaultValue = "") String id,
-        @RequestParam(name = "optimization", defaultValue = "true") boolean enableOptimization
+        @RequestParam(name = "optimizationLevel", defaultValue = "BASIC") String optimizationLevel
     ) {
+        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.BASIC);
+        final boolean enableOptimization = level != OptimizationLevel.OFF;
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {
@@ -114,7 +117,7 @@ public class HomeController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = compile(true, sourceCode, enableOptimization);
+        final CompilerOutput<String> result = compile(true, sourceCode, level);
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
@@ -132,7 +135,8 @@ public class HomeController {
                         result.errors(),
                         result.warnings(),
                         result.infos(),
-                        enableOptimization)
+                        enableOptimization,
+                        optimizationLevel)
         );
     }
 

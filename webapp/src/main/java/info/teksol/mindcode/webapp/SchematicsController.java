@@ -2,6 +2,7 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.schemacode.SchemacodeCompiler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,7 +125,8 @@ public class SchematicsController {
                         result.errors(),
                         result.warnings(),
                         result.infos(),
-                        false)
+                        false,
+                        OptimizationLevel.BASIC.name())
         );
     }
 

@@ -11,13 +11,13 @@
     <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
     <nav class="my-2">
         <ul class="flex space-around">
-            <li><a href="?s=detector"               class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "detector"             >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Property Detector</a>
-            <li><a href="?s=healing-center"         class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "healing-center"       >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Healing Center</a>
-            <li><a href="?s=on-off-switch"          class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "on-off-switch"        >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">On/off Switch</a>
-            <li><a href="?s=regulator"              class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "regulator"            >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Regulator</a>
-            <li><a href="?s=worker-recall-station"  class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "worker-recall-station">font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Unit Recall Station</a>
-            <li><a href="?s=scrap-to-metaglass-2"   class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "scrap-to-metaglass-2" >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Scrap to Metaglass</a>
-            <li><a href="?s=mandelbrot-generator"   class="block text-center py-2 px-4 mx-2 underline <#if model.sample == "mandelbrot-generator" >font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>">Mandelbrot Generator</a>
+            <@com.sample name="detector"                >Property Detector</@com.sample>
+            <@com.sample name="healing-center"          >Healing Center</@com.sample>
+            <@com.sample name="on-off-switch"           >On/off Switch</@com.sample>
+            <@com.sample name="regulator"               >Regulator</@com.sample>
+            <@com.sample name="worker-recall-station"   >Unit Recall Station</@com.sample>
+            <@com.sample name="scrap-to-metaglass-2"    >Scrap to Metaglass</@com.sample>
+            <@com.sample name="mandelbrot-generator"    >Mandelbrot Generator</@com.sample>
         </ul>
     </nav>
 </#if>
@@ -28,57 +28,15 @@
             <input type="hidden" name="id" value="${model.id}">
         </#if>
         <div class="grid grid-cols-2 gap-2">
-            <label class="block font-bold" for="source">Schemacode definition:</label>
-            <label class="block font-bold">Encoded schematics:</label>
+            <@com.codeareas sourceTitle="Schemacode definition:" targetTitle="Encoded schematics:" sourceLines="Y" targetLines="N" />
             <div>
-                <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.source}</textarea>
-                <p class="text-center">${model.sourceLoc} lines of code</p>
-            </div>
-            <div>
-                <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.compiled}</textarea>
-            </div>
-            <div>
-                <div>
-                    <input type="submit" value="Build" class="px-4 py-2 bg-gray-600 text-white my-4"/>
+                <div class="flex items-center space-x-3">
+                    <input type="submit" value="Build" class="px-4 py-2 bg-gray-600 text-white my-4 rounded"/>
                     <@com.link href="/schematics/?s=clean">Start with a new schematics</@com.link>
                 </div>
-                <div style="margin-top:1cm;text-align:center;">
-                    <nav>
-                        <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/doc/syntax/SCHEMACODE.markdown">Schemacode syntax</a>
-                        | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/README.markdown">Readme</a>
-                        | <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown">Changelog</a>
-                    </nav>
-                    <p>Bug reports, suggestions and questions are welcome at the <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode">project page</a>.<p>
-                </div>
+                <@com.footerLinks mindcode="N" />
             </div>
-            <div>
-                <#if model.hasErrors>
-                    <#list model.errors>
-                        <label class="mt-4 block font-bold">Syntax Errors:</label>
-                        <ul class="list-disc list-inside">
-                            <#items as message>
-                                <li class="text-red-700">${message}</li>
-                            </#items>
-                        </ul>
-                    </#list>
-                <#elseif model.hasMessages>
-                    <label class="mt-4 block font-bold">Build messages:</label>
-                    <#list model.warnings>
-                        <ul class="list-disc list-inside">
-                            <#items as message>
-                                <li class="text-red-700">${message}</li>
-                            </#items>
-                        </ul>
-                    </#list>
-                    <#list model.messages>
-                        <ul class="list-disc list-inside">
-                            <#items as message>
-                                <li>${message}</li>
-                            </#items>
-                        </ul>
-                    </#list>
-                </#if>
-            </div>
+            <@com.compilerMessages messageTitle="Build messages:" />
         </div>
     </form>
 </div>
