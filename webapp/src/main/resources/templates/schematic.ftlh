@@ -15,6 +15,7 @@
             <@com.sample name="healing-center"          >Healing Center</@com.sample>
             <@com.sample name="on-off-switch"           >On/off Switch</@com.sample>
             <@com.sample name="regulator"               >Regulator</@com.sample>
+            <@com.sample name="overdrive-dome-supply"   >Supplying Overdrive Dome with Units</@com.sample>
             <@com.sample name="worker-recall-station"   >Unit Recall Station</@com.sample>
             <@com.sample name="scrap-to-metaglass-2"    >Scrap to Metaglass</@com.sample>
             <@com.sample name="mandelbrot-generator"    >Mandelbrot Generator</@com.sample>

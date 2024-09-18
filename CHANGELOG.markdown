@@ -10,6 +10,14 @@ All notable changes to this project will be documented in this file.
   option](doc/syntax/SYNTAX-5-OTHER.markdown#option-remarks), causing incorrect code size computation in `none` and `active` 
   settings.
 
+### Added
+
+* A schematics with quite a sophisticated code was added as a new sample
+  [on the Schematics page](http://mindcode.herokuapp.com/?s=overdrive-dome-supply). It consists of an overdrive dome 
+  supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of 
+  supported types, switches to the preferred unit type when it becomes available, and rebinds units (possibly 
+  switching the type again) if units in use are destroyed or taken over by the player or a rogue processor.  
+
 ### Changed
 
 * A button was added do the web app to copy the output code to the clipboard with a single click.

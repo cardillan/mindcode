@@ -35,6 +35,7 @@ public class SchematicsController {
                 "healing-center",
                 "on-off-switch",
                 "regulator",
+                "overdrive-dome-supply",
                 "worker-recall-station",
                 "scrap-to-metaglass-2",
                 "mandelbrot-generator"

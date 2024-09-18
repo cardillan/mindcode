@@ -1,0 +1,400 @@
+schematic
+    name = "Instant Overdrive Dome"
+    description = """
+        Uses units to supply the projector with silicone and phase fabric from the core.
+        The preferred unit type can be set in the UNIT_TYPE.
+        If units of this type are  not available, the processor tries to use
+        flare, poly, mega or mono (in this order) until a suitable unit is found.
+
+        Once the preferred unit becomes available, the processor switches to that unit.
+
+        If units used by the processor are lost (either stolen by another processor or by player,
+        or destroyed), the program is restarted and new units, possibly of different type again,
+        are acquired.
+
+        If the type of servicing units is too slow to travel back and forth before the overdrive dome
+        consumes all its items, two pairs of units are used to ensure continuous operation.
+
+        Use switch to activate/deactivate supply.
+        """
+
+dome1:
+    @overdrive-dome      at ( 0,  0)
+    @micro-processor     at ( 0,  3) processor
+        links
+            dome1 as dome1
+            message1 as message1
+            switch1 as switch1
+        end
+        mindcode = program
+    end
+message1:
+    @message             at ( 1,  3)
+switch1:
+    @switch              at ( 2,  3) enabled
+end
+
+program = """
+    // Instant Overdrive Dome
+    // Unit transport of silicon or phase fabric to overdrive dome using two (or four) units
+
+    #set instruction-limit = 1100;      // We're hitting instruction limit otherwise
+    #set target = ML7A;                 // Using revised syntax for ulocate
+
+    remark("This is the preferred unit type to use for bringing in supplies.");
+    remark("If no units of this type exist, we'll try using other types.");
+    UNIT_TYPE                = @flare;  // Which unit to use
+
+    remark("Do not modify anything below this line.");
+
+    // BASIC INITIALIZATION
+    /////////////////////////////////////////////////////////
+    const RADIUS_WITHIN     = 8;
+    const RADIUS_APPROACH   = 6;
+
+    const S_UNUSED          = 0;        // Unit is not used.
+    const S_INIT            = 1;        // Unloading wrong items held by unit/initializing unit
+    const S_APPROACH_SRC    = 2;        // Approaching source block
+    const S_APPROACH_DST    = 3;        // Approaching destination block
+
+    // How long it takes for Overdrive Dome to use up all supplies (sec). Subtract three for safety.
+    const SUPPLY_INTERVAL   = 50 - 3;
+
+    // Interval to check for the availability of the optimal unit type if not used
+    const UNIT_CHECK_TIME   = 5000;
+
+    // FIND DOME
+    // Now this is funny: the processor might get built way
+    // earlier than the dome and miss it in initialization
+    /////////////////////////////////////////////////////////
+    DOME = dome1;
+    while DOME == null do
+        print("[gold]Waiting for an overdrive dome to be connected...");
+        printflush(message1);
+        DOME = dome1;
+    end;
+
+    // ACTIVATION SWITCH
+    /////////////////////////////////////////////////////////
+    while not switch1.enabled do
+        println("[coral]Activate switch to begin supplying overdrive dome...");
+        printflush(message1);
+    end;
+
+    // FIND AVAILABLE UNIT TYPE
+    /////////////////////////////////////////////////////////
+    TYPE = chooseUnitType();
+
+    // BASIC INITIALIZATION - REBINDING UNIT
+    /////////////////////////////////////////////////////////
+    printf("[gold]Binding units...");
+    printflush(message1);
+    rebindUnits();
+
+    // First set of units is always needed
+    UNIT_S1 = acquireUnit(UNIT_S1);
+    UNIT_P1 = acquireUnit(UNIT_P1);
+
+    if UNIT_S1.firstItem == @phase-fabric or UNIT_P1.firstItem == @silicon then
+        // At least one of our units holds wrong item. Swapping them fixes at least one
+        u = UNIT_S1;
+        UNIT_S1 = UNIT_P1;
+        UNIT_P1 = u;
+    end;
+
+    // GATHERING STATISTICS
+    /////////////////////////////////////////////////////////
+    UNIT_CAPACITY = UNIT_S1.itemCapacity;
+    SPEED = UNIT_S1.speed;
+    SPEED_TENTHS = SPEED / 10;
+
+    if SPEED === null then
+        stopProcessor();
+    end;
+
+    print("[gold]Locating core...");
+    printflush(message1);
+    do
+        CORE = ulocate(building, core, false);
+    loop while CORE == null;
+
+    CORE_X = CORE.x;
+    CORE_Y = CORE.y;
+    DOME_X = DOME.x;
+    DOME_Y = DOME.y;
+
+    FOUR_UNITS = needsFourUnits(UNIT_S1);
+
+    if FOUR_UNITS then
+        UNIT_S2 = acquireUnit(UNIT_S2);
+        UNIT_P2 = acquireUnit(UNIT_P2);
+
+        if UNIT_S1.firstItem == @phase-fabric and UNIT_P2.firstItem != @phase-fabric then
+            // At least one of our units holds wrong item. Swapping them fixes at least one
+            u = UNIT_S1;
+            UNIT_S1 = UNIT_P2;
+            UNIT_P2 = u;
+        end;
+
+        if UNIT_S2.firstItem == @phase-fabric or UNIT_P2.firstItem == @silicon then
+            // At least one of our units holds wrong item. Swapping them fixes at least one
+            u = UNIT_S2;
+            UNIT_S2 = UNIT_P2;
+            UNIT_P2 = u;
+        end;
+
+        GROUP1 = "  1";
+        GROUP2 = " 2";
+    else
+        ubind(UNIT_S2); unbind(); UNIT_S2 = null;
+        ubind(UNIT_P2); unbind(); UNIT_P2 = null;
+        GROUP1 = "";
+    end;
+
+    SUPPLY_S_FIRST = not FOUR_UNITS or UNIT_S1.totalItems < UNIT_S2.totalItems;
+    SUPPLY_P_FIRST = not FOUR_UNITS or UNIT_P1.totalItems < UNIT_P2.totalItems;
+
+    unitCheck = @time + UNIT_CHECK_TIME;
+
+    // MAIN LOOP
+    /////////////////////////////////////////////////////////
+    while switch1.enabled do
+        start = @time;
+        println(" === [gold]Supplying Overdrive Dome[] === ");
+
+        // Note: processUnit rebinds a unit if it is lost. Store it back
+        printDomeStatus(@silicon, "\n[green]Silicon[] status:\n");
+        UNIT_S1 = processUnit(UNIT_S1, @silicon, GROUP1, SUPPLY_S_FIRST);
+        if FOUR_UNITS
+            UNIT_S2 = processUnit(UNIT_S2, @silicon, GROUP2, not SUPPLY_S_FIRST);
+            SUPPLY_S_FIRST = SUPPLY_S_FIRST ? UNIT_S1.totalItems > 0 : UNIT_S2.totalItems == 0;
+        end
+
+        printDomeStatus(@phase-fabric, "\n[green]Phase fabric[] status:\n");
+        UNIT_P1 = processUnit(UNIT_P1, @phase-fabric, GROUP1, SUPPLY_P_FIRST);
+        if FOUR_UNITS
+            UNIT_P2 = processUnit(UNIT_P2, @phase-fabric, GROUP2, not SUPPLY_P_FIRST);
+            SUPPLY_P_FIRST = SUPPLY_P_FIRST ? UNIT_P1.totalItems > 0 : UNIT_P2.totalItems == 0;
+        end
+
+        printf("\n[lightgray]Loop time: $ ms", floor(@time - start));
+        printflush(message1);
+
+        if TYPE != UNIT_TYPE and unitCheck > @time then
+            if areUnitsAvailable(UNIT_TYPE, false) then
+                end();
+            end;
+            unitCheck = @time + UNIT_CHECK_TIME;
+        end;
+    end;
+
+    // Determines how many units of given type are needed to service this dome
+    inline def needsFourUnits(unit)
+        // Compute the time it takes to travel to the core and back
+        travel_time = 2 * len(DOME_X - CORE_X, DOME_Y - CORE_Y) / unit.speed;
+
+        // Do we need a backup set of units?
+        return travel_time >= SUPPLY_INTERVAL;
+    end;
+
+    // Chooses a type of units to use - the first type of which there are enough free units
+    inline def chooseUnitType()
+        while true do
+            println("[salmon]Looking for suitable unit type:");
+            if areUnitsAvailable(UNIT_TYPE, true) then
+                return UNIT_TYPE;
+            end;
+
+            for type in (@flare, @poly, @mega, @mono) do
+                if type != UNIT_TYPE then
+                    if areUnitsAvailable(type, true) then
+                        printflush(null);
+                        return type;
+                    end;
+                end;
+            end;
+        end;
+    end;
+
+    // This method determines whether there are enough free units of given type to use
+    // We may need two or four of them, depending on unit speed and the distance to the core
+    inline def areUnitsAvailable(type, output)
+        free = occupied = needed = 0;
+        firstUnit = ubind(type);
+        if firstUnit != null then
+            needed = needsFourUnits(@unit) ? 4 : 2;
+            do
+                if @unit.controlled == 0 || @unit.controller == @this then
+                    if (free += 1) >= needed then
+                        return true;
+                    end;
+                else
+                    occupied += 1;
+                end;
+                ubind(type);
+            loop while @unit != firstUnit and firstUnit.dead == 0;
+        end;
+
+        if output then
+            printf("$type: occupied: $occupied, free: $free");
+            if needed > 0 then printf(", needed: $needed"); end;
+            println();
+            printflush(message1);
+        end;
+
+        return false;
+    end
+
+    // Tries to bind again units which have been controlled by this processor recently
+    // If the switch is turned off and then on again quickly, we might find our last
+    // units still having the supplies on them
+    inline def rebindUnits()
+        UNIT_S1 = UNIT_P1 = UNIT_S2 = UNIT_P2 = null;
+        count = 0;
+
+        firstUnit = ubind(TYPE);
+        if firstUnit == null then
+            // We had at least one unit of this type, but it got lost.
+            // Reinitialize all to determine available unit type
+            end();
+        end;
+
+        // We have a unit as a reference. Try to find unit owned by us
+        do
+            if @unit.controller == @this then
+                count += 1;
+                flag(S_INIT);
+                UNIT_S2 = UNIT_P2;
+                UNIT_P2 = UNIT_S1;
+                UNIT_S1 = UNIT_P1;
+                UNIT_P1 = @unit;
+                if UNIT_S2 != null then
+                    break;
+                end;
+            end;
+            ubind(TYPE);
+        loop while @unit != firstUnit and firstUnit.dead == 0;
+        return count;
+    end;
+
+    // Rebinds a unit that was in use, or acquires a new one
+    // If no unit can be acquired, reinitializes everything to get units of different type
+    inline def rebindUnit(currentUnit)
+        if currentUnit != null then
+            ubind(currentUnit);
+            if @unit.dead === 0 && @unit.controller == @this
+                // Current unit is valid, no need to rebind
+                return currentUnit;
+            end;
+        end;
+
+        // We need to find an uncontrolled unit - either we're initializing, or lost one
+        firstUnit = ubind(TYPE);
+        if firstUnit != null then
+            do
+                if @unit.controlled == 0 then
+                    return @unit;
+                end;
+                ubind(TYPE);
+            loop while @unit != firstUnit and firstUnit.dead == 0;
+        end;
+
+        // No additional unit of this type is available - reinitialize
+        end();
+    end
+
+    inline def acquireUnit(currentUnit)
+        rebindUnit(currentUnit);
+        flag(S_INIT);
+        return @unit;
+    end;
+
+    // Controls one unit
+    inline def processUnit(unit, item, group, supply)
+        rebindUnit(unit);
+
+        // We have a bound, functioning unit
+        state = @unit.flag;
+        distance = -1;
+        color = "gold";
+
+        // Initializes the unit if not in a known state
+        if state < S_APPROACH_SRC or state > S_APPROACH_DST then
+            if @unit.firstItem == item then
+                // We've got what we need, bring the supplies in!
+                // Jump threading optimization here...
+                state = S_APPROACH_DST;
+            elsif @unit.totalItems == 0 then
+                // We're empty, resupply
+                // Jump threading optimization here...
+                state = S_APPROACH_SRC;
+            else
+                // Get rid of whatever we might be carrying right now
+                MSG = ", initializing\n";
+                approach(CORE_X, CORE_Y, RADIUS_APPROACH);
+                if within(CORE_X, CORE_Y, RADIUS_WITHIN) then
+                    itemDrop(CORE, UNIT_CAPACITY);
+                end;
+            end;
+        end;
+
+        if state == S_APPROACH_SRC then
+            if within(CORE_X, CORE_Y, RADIUS_WITHIN) then
+                itemTake(CORE, item, UNIT_CAPACITY);
+                if @unit.totalItems >= UNIT_CAPACITY then
+                    approach(DOME_X, DOME_Y, RADIUS_APPROACH);
+                    // Jump threading optimization here...
+                    state = S_APPROACH_DST;
+                else
+                    MSG = ", loading\n";
+                end;
+            else
+                approach(CORE_X, CORE_Y, RADIUS_APPROACH);
+                MSG = ", fetching in [gold]";
+                distance = len(CORE_X - @unit.x, CORE_Y - @unit.y) \ SPEED_TENTHS / 10;
+            end;
+        end;
+
+        if state == S_APPROACH_DST then
+            if within(DOME_X, DOME_Y, RADIUS_WITHIN) then
+                if supply then
+                    itemDrop(DOME, UNIT_CAPACITY);
+                    MSG = ", supplying\n";
+                    //color = "green";
+                else
+                    approach(DOME_X, DOME_Y, RADIUS_APPROACH);   // Keep the unit active
+                    MSG = ", waiting\n";
+                end;
+                if @unit.totalItems <= 0 then
+                    approach(CORE_X, CORE_Y, RADIUS_APPROACH);
+                    state = S_APPROACH_SRC;
+                end;
+            else
+                approach(DOME_X, DOME_Y, RADIUS_APPROACH);
+                MSG = ", returning in [gold]";
+                distance = len(DOME_X - @unit.x, DOME_Y - @unit.y) \ SPEED_TENTHS / 10;
+            end;
+        end;
+
+        flag(state);
+
+        printf("  $TYPE$group: [$color]$[]", @unit.totalItems);
+        if distance >= 0 then
+            printf("$MSG$distance[] sec\n");
+        else
+            print(MSG);
+        end;
+
+        return @unit;
+    end
+
+    inline def printDomeStatus(item, text)
+        print(text);
+        level = DOME.sensor(item);
+        if level > 3 then
+            printf("  dome:  [green]$[]\n", level);
+        else
+            printf("  dome:  [coral]$[]\n", level);
+        end;
+    end;
+    """
