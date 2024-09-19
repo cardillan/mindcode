@@ -69,7 +69,7 @@ public class InstructionSamplesTest {
         List<List<String>> combinations = new ArrayList<>();
 
         for (NamedParameter arg : opcodeVariant.namedParameters()) {
-            if (arg.type() == LogicParameter.LABEL) {
+            if (arg.type() == InstructionParameterType.LABEL) {
                 combinations.add(List.of("0"));
             } else if (arg.type().isKeyword()) {
                 combinations.add(arg.type().getAllowedValues().stream()

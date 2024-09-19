@@ -8,7 +8,7 @@ import java.util.List;
 
 public class JumpInstruction extends BaseInstruction {
 
-    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    JumpInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.JUMP, args, params);
     }
 

@@ -1,8 +1,8 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicParameter;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.Opcode;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RemarkInstruction extends BaseInstruction {
 
-    RemarkInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    RemarkInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.REMARK, args, params);
     }
 

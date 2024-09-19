@@ -7,7 +7,7 @@ import java.util.List;
 
 public class CallRecInstruction extends BaseInstruction implements CallingInstruction {
 
-    CallRecInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    CallRecInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.CALLREC, args, params);
     }
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GotoOffsetInstruction extends BaseInstruction {
 
-    GotoOffsetInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    GotoOffsetInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.GOTOOFFSET, args, params);
     }
 

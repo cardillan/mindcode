@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SetInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    SetInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    SetInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.SET, args, params);
     }
 

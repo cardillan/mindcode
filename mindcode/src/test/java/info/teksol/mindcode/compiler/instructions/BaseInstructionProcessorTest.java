@@ -3,7 +3,7 @@ package info.teksol.mindcode.compiler.instructions;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.logic.BaseArgument;
-import info.teksol.mindcode.logic.LogicParameter;
+import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.ParameterAssignment;
 import org.junit.jupiter.api.Test;
 
@@ -70,14 +70,14 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
         LogicInstruction ix = createInstruction(ULOCATE, "ore", "core", "true", "@lead", "outx", "outy", "found", "building");
         assertEquals(
                 List.of(
-                        new ParameterAssignment(LogicParameter.LOCATE, new BaseArgument("ore")),
-                        new ParameterAssignment(LogicParameter.UNUSED, new BaseArgument("core")),
-                        new ParameterAssignment(LogicParameter.UNUSED, new BaseArgument("true")),
-                        new ParameterAssignment(LogicParameter.ORE, new BaseArgument("@lead")),
-                        new ParameterAssignment(LogicParameter.OUTPUT, new BaseArgument("outx")),
-                        new ParameterAssignment(LogicParameter.OUTPUT, new BaseArgument("outy")),
-                        new ParameterAssignment(LogicParameter.RESULT, new BaseArgument("found")),
-                        new ParameterAssignment(LogicParameter.UNUSED_OUTPUT, new BaseArgument("building"))
+                        new ParameterAssignment(InstructionParameterType.LOCATE, new BaseArgument("ore")),
+                        new ParameterAssignment(InstructionParameterType.UNUSED, new BaseArgument("core")),
+                        new ParameterAssignment(InstructionParameterType.UNUSED, new BaseArgument("true")),
+                        new ParameterAssignment(InstructionParameterType.ORE, new BaseArgument("@lead")),
+                        new ParameterAssignment(InstructionParameterType.OUTPUT, new BaseArgument("outx")),
+                        new ParameterAssignment(InstructionParameterType.OUTPUT, new BaseArgument("outy")),
+                        new ParameterAssignment(InstructionParameterType.RESULT, new BaseArgument("found")),
+                        new ParameterAssignment(InstructionParameterType.UNUSED_OUTPUT, new BaseArgument("building"))
                 ),
                 ix.getAssignments()
         );

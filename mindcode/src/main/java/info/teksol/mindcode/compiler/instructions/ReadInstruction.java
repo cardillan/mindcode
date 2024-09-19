@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ReadInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    ReadInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    ReadInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.READ, args, params);
     }
 

@@ -275,121 +275,121 @@ public class MindustryOpcodeVariants {
     }
 
     public static NamedParameter bctrl(String name) {
-        return new NamedParameter(LogicParameter.BLOCK_CONTROL, name);
+        return new NamedParameter(InstructionParameterType.BLOCK_CONTROL, name);
     }
 
     public static NamedParameter block(String name) {
-        return new NamedParameter(LogicParameter.BLOCK, name);
+        return new NamedParameter(InstructionParameterType.BLOCK, name);
     }
 
     public static NamedParameter clear(String name) {
-        return new NamedParameter(LogicParameter.CLEAR, name);
+        return new NamedParameter(InstructionParameterType.CLEAR, name);
     }
 
     public static NamedParameter cond(String name) {
-        return new NamedParameter(LogicParameter.CONDITION, name);
+        return new NamedParameter(InstructionParameterType.CONDITION, name);
     }
 
     public static NamedParameter cutscene(String name) {
-        return new NamedParameter(LogicParameter.CUTSCENE, name);
+        return new NamedParameter(InstructionParameterType.CUTSCENE, name);
     }
 
     public static NamedParameter draw(String name) {
-        return new NamedParameter(LogicParameter.DRAW, name);
+        return new NamedParameter(InstructionParameterType.DRAW, name);
     }
 
     public static NamedParameter effect(String name) {
-        return new NamedParameter(LogicParameter.EFFECT, name);
+        return new NamedParameter(InstructionParameterType.EFFECT, name);
     }
 
     public static NamedParameter fetch(String name) {
-        return new NamedParameter(LogicParameter.FETCH, name);
+        return new NamedParameter(InstructionParameterType.FETCH, name);
     }
 
     public static NamedParameter glob(String name) {
-        return new NamedParameter(LogicParameter.GLOBAL, name);
+        return new NamedParameter(InstructionParameterType.GLOBAL, name);
     }
     public static NamedParameter group(String name) {
-        return new NamedParameter(LogicParameter.GROUP, name);
+        return new NamedParameter(InstructionParameterType.GROUP, name);
     }
 
     public static NamedParameter in(String name) {
-        return new NamedParameter(LogicParameter.INPUT, name);
+        return new NamedParameter(InstructionParameterType.INPUT, name);
     }
 
     public static NamedParameter label(String name) {
-        return new NamedParameter(LogicParameter.LABEL, name);
+        return new NamedParameter(InstructionParameterType.LABEL, name);
     }
 
     public static NamedParameter layer(String name) {
-        return new NamedParameter(LogicParameter.LAYER, name);
+        return new NamedParameter(InstructionParameterType.LAYER, name);
     }
 
     public static NamedParameter layerset(String name) {
-        return new NamedParameter(LogicParameter.SETTABLE_LAYER, name);
+        return new NamedParameter(InstructionParameterType.SETTABLE_LAYER, name);
     }
 
     public static NamedParameter locate(String name) {
-        return new NamedParameter(LogicParameter.LOCATE, name);
+        return new NamedParameter(InstructionParameterType.LOCATE, name);
     }
 
     public static NamedParameter lookup(String name) {
-        return new NamedParameter(LogicParameter.LOOKUP, name);
+        return new NamedParameter(InstructionParameterType.LOOKUP, name);
     }
 
     public static NamedParameter message(String name) {
-        return new NamedParameter(LogicParameter.MESSAGE, name);
+        return new NamedParameter(InstructionParameterType.MESSAGE, name);
     }
 
     public static NamedParameter op(String name) {
-        return new NamedParameter(LogicParameter.OPERATION, name);
+        return new NamedParameter(InstructionParameterType.OPERATION, name);
     }
 
     public static NamedParameter ore(String name) {
-        return new NamedParameter(LogicParameter.ORE, name);
+        return new NamedParameter(InstructionParameterType.ORE, name);
     }
 
     public static NamedParameter out(String name) {
-        return new NamedParameter(LogicParameter.OUTPUT, name);
+        return new NamedParameter(InstructionParameterType.OUTPUT, name);
     }
 
     public static NamedParameter radar(String name) {
-        return new NamedParameter(LogicParameter.RADAR, name);
+        return new NamedParameter(InstructionParameterType.RADAR, name);
     }
 
     public static NamedParameter res(String name) {
-        return new NamedParameter(LogicParameter.RESULT, name);
+        return new NamedParameter(InstructionParameterType.RESULT, name);
     }
 
     public static NamedParameter rule(String name) {
-        return new NamedParameter(LogicParameter.RULE, name);
+        return new NamedParameter(InstructionParameterType.RULE, name);
     }
 
     public static NamedParameter sensor(String name) {
-        return new NamedParameter(LogicParameter.SENSOR, name);
+        return new NamedParameter(InstructionParameterType.SENSOR, name);
     }
 
     public static NamedParameter sort(String name) {
-        return new NamedParameter(LogicParameter.SORT, name);
+        return new NamedParameter(InstructionParameterType.SORT, name);
     }
 
     public static NamedParameter status(String name) {
-        return new NamedParameter(LogicParameter.STATUS, name);
+        return new NamedParameter(InstructionParameterType.STATUS, name);
     }
 
     public static NamedParameter uctrl(String name) {
-        return new NamedParameter(LogicParameter.UNIT_CONTROL, name);
+        return new NamedParameter(InstructionParameterType.UNIT_CONTROL, name);
     }
 
     public static NamedParameter unit(String name) {
-        return new NamedParameter(LogicParameter.UNIT, name);
+        return new NamedParameter(InstructionParameterType.UNIT, name);
     }
 
     public static NamedParameter unused(String name) {
-        return new NamedParameter(LogicParameter.UNUSED, name);
+        return new NamedParameter(InstructionParameterType.UNUSED, name);
     }
 
     public static NamedParameter unusedOut(String name) {
-        return new NamedParameter(LogicParameter.UNUSED_OUTPUT, name);
+        return new NamedParameter(InstructionParameterType.UNUSED_OUTPUT, name);
     }
 }

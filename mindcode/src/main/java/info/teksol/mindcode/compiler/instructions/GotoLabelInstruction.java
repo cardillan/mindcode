@@ -1,16 +1,16 @@
 package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.compiler.generator.AstContext;
+import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicLabel;
-import info.teksol.mindcode.logic.LogicParameter;
 import info.teksol.mindcode.logic.Opcode;
 
 import java.util.List;
 
 public class GotoLabelInstruction extends BaseInstruction implements LabeledInstruction {
 
-    GotoLabelInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    GotoLabelInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.GOTOLABEL, args, params);
     }
 

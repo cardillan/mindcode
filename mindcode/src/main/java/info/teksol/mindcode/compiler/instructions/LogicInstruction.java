@@ -17,9 +17,9 @@ public interface LogicInstruction {
 
     LogicArgument getArg(int index);
 
-    List<LogicParameter> getParams();
+    List<InstructionParameterType> getParams();
 
-    LogicParameter getParam(int index);
+    InstructionParameterType getParam(int index);
 
     List<ParameterAssignment> getAssignments();
 

@@ -6,7 +6,7 @@ import java.util.Set;
 
 import static info.teksol.mindcode.logic.ProcessorVersion.*;
 
-public enum LogicParameter {
+public enum InstructionParameterType {
     /** Non-specific input parameter. Accepts literals and variables */
     INPUT           (Flags.INPUT),
 
@@ -152,17 +152,17 @@ public enum LogicParameter {
     private final int flags;
     private final List<ParameterValues> allowedValues;
 
-    LogicParameter(int flags) {
+    InstructionParameterType(int flags) {
         this.flags = flags;
         this.allowedValues = List.of();
     }
 
-    LogicParameter(int flags, String... keywords) {
+    InstructionParameterType(int flags, String... keywords) {
         this.flags = flags;
         this.allowedValues = List.of(allVersions(keywords));
     }
     
-    LogicParameter(int flags, ParameterValues... keywords) {
+    InstructionParameterType(int flags, ParameterValues... keywords) {
         this.flags = flags;
         this.allowedValues = List.of(keywords);
     }

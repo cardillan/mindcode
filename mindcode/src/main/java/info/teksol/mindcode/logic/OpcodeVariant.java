@@ -10,7 +10,7 @@ public record OpcodeVariant(
         FunctionMapping functionMapping,
         Opcode opcode,
         List<NamedParameter> namedParameters,
-        List<LogicParameter> parameterTypes) {
+        List<InstructionParameterType> parameterTypes) {
 
     public OpcodeVariant(ProcessorVersion versionFrom, ProcessorVersion versionTo, ProcessorEdition edition,
             FunctionMapping functionMapping, Opcode opcode, NamedParameter... namedParameters) {

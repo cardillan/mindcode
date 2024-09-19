@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SetAddressInstruction extends BaseInstruction {
 
-    SetAddressInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    SetAddressInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.SETADDR, args, params);
     }
 

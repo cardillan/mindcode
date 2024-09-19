@@ -8,7 +8,7 @@ import java.util.List;
 
 public class OpInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    OpInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    OpInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.OP, args, params);
     }
 

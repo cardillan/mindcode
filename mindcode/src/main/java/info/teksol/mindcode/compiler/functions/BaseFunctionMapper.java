@@ -181,9 +181,9 @@ public class BaseFunctionMapper implements FunctionMapper {
     private PropertyHandler createPropertyHandler(OpcodeVariant opcodeVariant) {
         List<NamedParameter> arguments = opcodeVariant.namedParameters();
         Optional<NamedParameter> selector = arguments.stream().filter(a -> a.type().isFunctionName()).findFirst();
-        final int outputs = (int) arguments.stream().map(NamedParameter::type).filter(LogicParameter::isOutput).count();
-        final int results = (int) arguments.stream().map(NamedParameter::type).filter(a -> a == LogicParameter.RESULT).count();
-        final int unused  = (int) arguments.stream().map(NamedParameter::type).filter(LogicParameter::isUnused).count();
+        final int outputs = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType::isOutput).count();
+        final int results = (int) arguments.stream().map(NamedParameter::type).filter(a -> a == InstructionParameterType.RESULT).count();
+        final int unused  = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType::isUnused).count();
 
         if (results > 1) {
             throw new InvalidMetadataException("More than one RESULT arguments in opcode " + opcodeVariant);
@@ -259,9 +259,9 @@ public class BaseFunctionMapper implements FunctionMapper {
                             + "' not allowed (a global variable is required)");
                 }
 
-                if (a.type() == LogicParameter.RESULT) {
+                if (a.type() == InstructionParameterType.RESULT) {
                     ixArgs.add(tmp);
-                } else if (a.type() == LogicParameter.BLOCK) {
+                } else if (a.type() == InstructionParameterType.BLOCK) {
                     ixArgs.add(target);
                 } else if (a.type().isSelector()  && !a.type().isFunctionName()) {
                     // Selector that IS NOT a function name is taken from the argument list
@@ -302,12 +302,12 @@ public class BaseFunctionMapper implements FunctionMapper {
         public String generateSampleCall() {
             StringBuilder str = new StringBuilder();
             List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == LogicParameter.RESULT);
+            NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
             if (result != null) {
                 str.append(result.name()).append(" = ");
             }
 
-            NamedParameter block = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == LogicParameter.BLOCK);
+            NamedParameter block = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.BLOCK);
             str.append(block.name()).append('.');
 
             List<String> strArguments = arguments.stream()
@@ -322,9 +322,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public String generateSecondarySampleCall() {
             List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == LogicParameter.BLOCK);
+            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
             CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
-            if (args.size() == 1 && args.get(0).type() == LogicParameter.INPUT) {
+            if (args.size() == 1 && args.get(0).type() == InstructionParameterType.INPUT) {
                 return blockArgument.name() + "." + getName() + " = " + args.get(0).name();
             } else {
                 return null;
@@ -336,7 +336,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             AtomicInteger counter = new AtomicInteger();
             String tmpPrefix = instructionProcessor.getTempPrefix();
             List<LogicArgument> arguments = getOpcodeVariant().namedParameters().stream()
-                    .map(a -> a.type() == LogicParameter.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
+                    .map(a -> a.type() == InstructionParameterType.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
             return instructionProcessor.createInstructionUnchecked(staticAstContext, getOpcode(), arguments);
@@ -366,7 +366,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public String generateSampleCall() {
             List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == LogicParameter.BLOCK);
+            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.BLOCK);
             CollectionUtils.removeFirstMatching(arguments, a -> a.type().isSelector());
             return blockArgument.name() + "." + deprecated + "(" + joinNamedArguments(arguments) + ")";
         }
@@ -374,9 +374,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         @Override
         public String generateSecondarySampleCall() {
             List<NamedParameter> args = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == LogicParameter.BLOCK);
+            NamedParameter blockArgument = CollectionUtils.removeFirstMatching(args, a -> a.type() == InstructionParameterType.BLOCK);
             CollectionUtils.removeFirstMatching(args, a -> a.type().isSelector());
-            if (args.size() == 1 && args.get(0).type() == LogicParameter.INPUT) {
+            if (args.size() == 1 && args.get(0).type() == InstructionParameterType.INPUT) {
                 return blockArgument.name() + "." + deprecated + " = " + args.get(0).name();
             } else {
                 return null;
@@ -435,9 +435,9 @@ public class BaseFunctionMapper implements FunctionMapper {
         List<NamedParameter> arguments = opcodeVariant.namedParameters();
         Optional<NamedParameter> selector = arguments.stream().filter(a -> a.type().isFunctionName()).findFirst();
         String name = functionName(opcodeVariant, selector.orElse(null));
-        final int outputs = (int) arguments.stream().map(NamedParameter::type).filter(LogicParameter::isOutput).count();
-        final int results = (int) arguments.stream().map(NamedParameter::type).filter(LogicParameter.RESULT::equals).count();
-        final int unused  = (int) arguments.stream().map(NamedParameter::type).filter(LogicParameter::isUnused).count();
+        final int outputs = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType::isOutput).count();
+        final int results = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType.RESULT::equals).count();
+        final int unused  = (int) arguments.stream().map(NamedParameter::type).filter(InstructionParameterType::isUnused).count();
 
         if (results > 1) {
             throw new InvalidMetadataException("More than one RESULT arguments in opcode " + opcodeVariant);
@@ -452,12 +452,12 @@ public class BaseFunctionMapper implements FunctionMapper {
         // Optional parameters are output arguments at the end of the argument list
         int optional = 0;
         for (int i = arguments.size() - 1; i >= 0; i--) {
-            LogicParameter type = arguments.get(i).type();
+            InstructionParameterType type = arguments.get(i).type();
             if (!type.isOutput() && !type.isUnused()) {
                 break;
             }
             // Result and unused do not count, as they're not in the parameter list.
-            if (type.isOutput() && type != LogicParameter.RESULT && !type.isUnused()) {
+            if (type.isOutput() && type != InstructionParameterType.RESULT && !type.isUnused()) {
                 optional++;
             }
         }
@@ -580,7 +580,7 @@ public class BaseFunctionMapper implements FunctionMapper {
                             + "' not allowed (a global variable is required)");
                 }
 
-                if (a.type() == LogicParameter.RESULT) {
+                if (a.type() == InstructionParameterType.RESULT) {
                     ixArgs.add(tmp);
                 } else if (a.type().isSelector() && !a.type().isFunctionName()) {
                     // Selector that IS NOT a function name is taken from the argument list
@@ -622,7 +622,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         public String generateSampleCall() {
             StringBuilder str = new StringBuilder();
             List<NamedParameter> arguments = new ArrayList<>(getOpcodeVariant().namedParameters());
-            NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == LogicParameter.RESULT);
+            NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
             if (result != null) {
                 str.append(result.name()).append(" = ");
             }
@@ -643,7 +643,7 @@ public class BaseFunctionMapper implements FunctionMapper {
             AtomicInteger counter = new AtomicInteger();
             String tmpPrefix = instructionProcessor.getTempPrefix();
             List<LogicArgument> arguments = getOpcodeVariant().namedParameters().stream()
-                    .map(a -> a.type() == LogicParameter.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
+                    .map(a -> a.type() == InstructionParameterType.UNUSED_OUTPUT ? tmpPrefix + counter.getAndIncrement() : a.name())
                     .map(BaseArgument::new)
                     .collect(Collectors.toList());
             return instructionProcessor.createInstructionUnchecked(staticAstContext, getOpcode(), arguments);

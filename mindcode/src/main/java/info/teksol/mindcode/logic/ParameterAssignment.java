@@ -2,7 +2,7 @@ package info.teksol.mindcode.logic;
 
 import java.util.Objects;
 
-public record ParameterAssignment(LogicParameter parameter, LogicArgument argument) {
+public record ParameterAssignment(InstructionParameterType parameter, LogicArgument argument) {
     public ParameterAssignment {
         Objects.requireNonNull(parameter);
         Objects.requireNonNull(argument);

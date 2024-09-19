@@ -2,8 +2,8 @@ package info.teksol.mindcode.compiler.instructions;
 
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicParameter;
 import info.teksol.mindcode.logic.Opcode;
 import info.teksol.mindcode.logic.ParameterAssignment;
 
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public class BaseInstruction implements LogicInstruction {
     private final Opcode opcode;
     private final List<LogicArgument> args;
-    private final List<LogicParameter> params;
+    private final List<InstructionParameterType> params;
     private final List<ParameterAssignment> assignments;
     private final int inputs;
     private final int outputs;
@@ -24,7 +24,7 @@ public class BaseInstruction implements LogicInstruction {
     // AstContext and marker are not considered by hashCode or equals!
     protected final AstContext astContext;
 
-    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<LogicParameter> params) {
+    BaseInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
         this.astContext = Objects.requireNonNull(astContext);
         this.opcode = Objects.requireNonNull(opcode);
         this.args = List.copyOf(args);
@@ -36,8 +36,8 @@ public class BaseInstruction implements LogicInstruction {
         } else {
             int count = Math.min(params.size(), args.size());
             assignments = IntStream.range(0, count).mapToObj(i -> new ParameterAssignment(params.get(i), args.get(i))).toList();
-            inputs = (int) params.stream().filter(LogicParameter::isInput).count();
-            outputs = (int) params.stream().filter(LogicParameter::isOutput).count();
+            inputs = (int) params.stream().filter(InstructionParameterType::isInput).count();
+            outputs = (int) params.stream().filter(InstructionParameterType::isOutput).count();
         }
     }
 
@@ -81,12 +81,12 @@ public class BaseInstruction implements LogicInstruction {
     }
 
     @Override
-    public List<LogicParameter> getParams() {
+    public List<InstructionParameterType> getParams() {
         return params;
     }
 
     @Override
-    public LogicParameter getParam(int index) {
+    public InstructionParameterType getParam(int index) {
         return params.get(index);
     }
 

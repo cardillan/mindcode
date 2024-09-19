@@ -31,7 +31,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
-    private final Map<LogicParameter, Set<String>> validArgumentValues;
+    private final Map<InstructionParameterType, Set<String>> validArgumentValues;
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int functionIndex = 0;
@@ -228,7 +228,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
 
     @Override
     public LogicInstruction createInstructionUnchecked(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
-        List<LogicParameter> params = getParameters(opcode, arguments);
+        List<InstructionParameterType> params = getParameters(opcode, arguments);
 
         return switch (opcode) {
             case CALL       -> new CallInstruction(astContext, arguments, params);
@@ -365,7 +365,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
      * @param value value assigned to the argument
      * @return true if the value is valid for given argument type
      */
-    private boolean isValid(LogicParameter type, LogicArgument value) {
+    private boolean isValid(InstructionParameterType type, LogicArgument value) {
         if (type.restrictValues()) {
             Set<String> values = validArgumentValues.get(type);
             return values.contains(value.toMlog());
@@ -397,7 +397,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
      * @param arguments arguments to the instruction
      * @return list of types of given arguments
      */
-    protected List<LogicParameter> getParameters(Opcode opcode, List<LogicArgument> arguments) {
+    protected List<InstructionParameterType> getParameters(Opcode opcode, List<LogicArgument> arguments) {
         OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, arguments);
         return opcodeVariant == null ? null : opcodeVariant.parameterTypes();
     }
@@ -416,7 +416,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         for (int i = 0; i < instruction.getArgs().size(); i++) {
             NamedParameter namedParameter = opcodeVariant.namedParameters().get(i);
             LogicArgument argument = instruction.getArgs().get(i);
-            LogicParameter type = namedParameter.type();
+            InstructionParameterType type = namedParameter.type();
             if (!isValid(type, argument)) {
                 throw new MindcodeInternalError("Argument " + argument + " for parameter '" + namedParameter.name()
                         + "' not compatible with argument type " + type + ". " + instruction);
@@ -456,9 +456,9 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         }
     }
 
-    private Map<LogicParameter, Set<String>> createAllowedArgumentValuesMap() {
-        Map<LogicParameter, Set<String>> map = new HashMap<>();
-        for (LogicParameter type : LogicParameter.values()) {
+    private Map<InstructionParameterType, Set<String>> createAllowedArgumentValuesMap() {
+        Map<InstructionParameterType, Set<String>> map = new HashMap<>();
+        for (InstructionParameterType type : InstructionParameterType.values()) {
             Set<String> allowedValues = createAllowedValues(type);
             if (!allowedValues.isEmpty()) {
                 map.put(type, allowedValues);
@@ -468,7 +468,7 @@ public class BaseInstructionProcessor implements InstructionProcessor {
         return Map.copyOf(map);
     }
 
-    private Set<String> createAllowedValues(LogicParameter type) {
+    private Set<String> createAllowedValues(InstructionParameterType type) {
         if (type.isSelector()) {
             return opcodeVariants.stream()
                     .flatMap(v -> v.namedParameters().stream())

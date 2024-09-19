@@ -7,7 +7,7 @@ import java.util.List;
 
 public class GotoInstruction extends BaseInstruction {
 
-    GotoInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    GotoInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.GOTO, args, params);
     }
 

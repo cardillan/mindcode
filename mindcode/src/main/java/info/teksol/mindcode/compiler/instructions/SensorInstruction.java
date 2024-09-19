@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SensorInstruction extends BaseInstruction implements LogicResultInstruction {
 
-    SensorInstruction(AstContext astContext, List<LogicArgument> args, List<LogicParameter> params) {
+    SensorInstruction(AstContext astContext, List<LogicArgument> args, List<InstructionParameterType> params) {
         super(astContext, Opcode.SENSOR, args, params);
     }
 
