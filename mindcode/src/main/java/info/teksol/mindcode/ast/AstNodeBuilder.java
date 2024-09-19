@@ -597,8 +597,11 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
 
         final List<AstNode> params = new ArrayList<>();
         gatherArgs(args, params);
+        String strInline = ctx.fundecl().inline == null ? null : ctx.fundecl().inline.getText();
+
         return new FunctionDeclaration(ctx.getStart(),
-                ctx.fundecl().inline != null,
+                "inline".equals(strInline),
+                "noinline".equals(strInline),
                 ctx.fundecl().name.getText(),
                 params.stream().map(VarRef.class::cast).toList(),
                 visit(ctx.fundecl().body)

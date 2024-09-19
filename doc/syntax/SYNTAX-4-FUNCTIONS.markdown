@@ -147,12 +147,11 @@ end
 Storing the initial value of `A` into the `before` variable is eliminated, as the optimizer doesn't know the value 
 of `A` might have changed in the meantime.
 
-At this moment, a possible workaround is to encapsulate reading of `A` into a function, but unfortunately the 
-function must not be inlined and corresponding optimization needs to be switched off:
+At this moment, a possible workaround is to encapsulate reading of `A` into a function declared `noinline`, to 
+prevent its inlining:
 
 ```
-#set function-inlining = off
-def readA()
+noinline def readA()
     A
 end
 
@@ -410,7 +409,18 @@ If this happens, remove the `inline` keyword from some function definitions to g
 
 The compiler will automatically make a function inline when it is called just once in the entire program. This
 is safe, as in this case the program will always be both smaller and faster. if a function is called more than once, 
-it can still be inlined by the [Function Inlining optimization](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining).  
+it can still be inlined by the [Function Inlining optimization](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining).
+
+To prevent inlining of a particular function, either directly by the compiler or later on by the optimizer, use the 
+`noinline` keyword:
+
+```
+noinline def foo()
+    print("This function is not inlined.");
+end;
+
+foo();
+```
 
 ## Recursive functions
 

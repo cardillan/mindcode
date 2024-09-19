@@ -881,7 +881,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
         assertEquals(
                 prettyPrint(
                         new Seq(null,
-                                new FunctionDeclaration(null, false,
+                                new FunctionDeclaration(null, false, false,
                                         "delay",
                                         List.of(),
                                         new Seq(null,
@@ -942,7 +942,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false,
+                                        new FunctionDeclaration(null, false, false,
                                                 "foo",
                                                 List.of(),
                                                 new Seq(null,
@@ -973,7 +973,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false,
+                                        new FunctionDeclaration(null, false, false,
                                                 "foo",
                                                 List.of(new VarRef(null, "s")),
                                                 new Seq(null,
@@ -1002,7 +1002,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 prettyPrint(
                         new Seq(null,
                                 new Seq(null,
-                                        new FunctionDeclaration(null, false,
+                                        new FunctionDeclaration(null, false, false,
                                                 "foo",
                                                 List.of(new VarRef(null, "s"), new VarRef(null, "r")),
                                                 new Seq(null,

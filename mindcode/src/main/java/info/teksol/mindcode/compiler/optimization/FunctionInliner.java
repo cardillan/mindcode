@@ -60,7 +60,7 @@ public class FunctionInliner extends BaseOptimizer {
             return null;
         }
         CallGraph.Function function = context.function();
-        if (function.isRecursive() || function.isInline()) {
+        if (function.isRecursive() || function.isInline() || function.isNoinline()) {
             return null;
         }
 
@@ -151,7 +151,7 @@ public class FunctionInliner extends BaseOptimizer {
             return null;
         }
         CallGraph.Function function = call.function();
-        if (function.isRecursive() || function.isInline()) {
+        if (function.isRecursive() || function.isInline() || function.isNoinline()) {
             return null;
         }
 

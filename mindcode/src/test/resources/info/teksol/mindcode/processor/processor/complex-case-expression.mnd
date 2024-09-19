@@ -1,5 +1,4 @@
-allocate stack in bank1[0...512];
-def d(n) n > 0 ? -d(-n) : n; end;
+noinline def d(n) n; end;
 for i in d(1) .. d(10)
     str = case i
         when d(1) then "A";

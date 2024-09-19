@@ -73,9 +73,9 @@ alloc_range : LEFT_SBRACKET range_expression RIGHT_SBRACKET;
 
 const_decl : CONST name=id ASSIGN value=expression;
 
-fundecl : ( inline = INLINE)? DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
-        | ( inline = INLINE)? DEF name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
-        | ( inline = INLINE)? DEF name=id body=expression_list END
+fundecl : ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
+        | ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
+        | ( inline = (INLINE | NOINLINE))? DEF name=id body=expression_list END
         ;
 
 arg_decl_list : var_ref
@@ -211,6 +211,7 @@ IF : 'if';
 IN : 'in';
 INLINE : 'inline';
 LOOP : 'loop';
+NOINLINE : 'noinline';
 NULL : 'null';
 RETURN : 'return';
 SENSOR : 'sensor';

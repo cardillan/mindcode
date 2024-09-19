@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+* Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by 
+  the [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) optimization. The keyword 
+  can only be used when declaring a function.
 * A schematics with quite a sophisticated code was added as a new sample
   [on the Schematics page](http://mindcode.herokuapp.com/?s=overdrive-dome-supply). It consists of an overdrive dome 
   supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of 

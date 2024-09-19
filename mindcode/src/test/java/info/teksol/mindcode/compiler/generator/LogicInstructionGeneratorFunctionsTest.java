@@ -35,6 +35,28 @@ public class LogicInstructionGeneratorFunctionsTest extends AbstractGeneratorTes
     }
 
     @Test
+    void respectsNoinlineFunctions() {
+        assertCompilesTo("""
+                        noinline def foo(n)
+                            n
+                        end
+                        print(foo(3))
+                        """,
+                createInstruction(SET, "__fn0_n", "3"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1001)),
+                createInstruction(CALL, var(1000), "__fn0retval"),
+                createInstruction(GOTOLABEL, var(1001), "__fn0"),
+                createInstruction(PRINT, "__fn0retval"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(SET, "__fn0retval", "__fn0_n"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void generatesStacklessFunctions() {
         assertCompilesTo("""
                         def foo(n)

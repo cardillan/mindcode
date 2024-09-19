@@ -9,14 +9,19 @@ import java.util.Objects;
 
 public class FunctionDeclaration extends BaseAstNode {
     private final boolean inline;
+    private final boolean noinline;
     private final String name;
 
     private final List<VarRef> params;
     private final AstNode body;
 
-    public FunctionDeclaration(Token startToken, boolean inline, String name, List<VarRef> params, AstNode body) {
+    public FunctionDeclaration(Token startToken, boolean inline, boolean noinline, String name, List<VarRef> params, AstNode body) {
         super(startToken, body);
+        if (inline && noinline) {
+            throw new IllegalArgumentException("Both inline and noinline specified.");
+        }
         this.inline = inline;
+        this.noinline = noinline;
         this.name = name;
         this.params = params;
         this.body = body;
@@ -24,6 +29,10 @@ public class FunctionDeclaration extends BaseAstNode {
 
     public boolean isInline() {
         return inline;
+    }
+
+    public boolean isNoinline() {
+        return noinline;
     }
 
     public String getName() {

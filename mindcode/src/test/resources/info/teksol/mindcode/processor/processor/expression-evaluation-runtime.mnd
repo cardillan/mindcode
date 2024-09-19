@@ -1,6 +1,6 @@
 // Make sure possible future optimizations won't use constant expression evaluation 
 // and remove instructions we want to test
-def d(n) n; end;
+noinline def d(n) n; end;
 
 // There's no 1000 instruction limit on processor emulator
 inline def eval(actual, expected, operation)
