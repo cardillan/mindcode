@@ -197,6 +197,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterParameter(MindcodeParser.ParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParameter(MindcodeParser.ParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLiteral_minus(MindcodeParser.Literal_minusContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -588,6 +600,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitConst_decl(MindcodeParser.Const_declContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParam_decl(MindcodeParser.Param_declContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParam_decl(MindcodeParser.Param_declContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

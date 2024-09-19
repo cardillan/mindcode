@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+* Support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new 
+  `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be 
+  used instead. Support for program parametrization through global variables will be removed in a future release.     
 * Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by 
   the [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) optimization. The keyword 
   can only be used when declaring a function.
@@ -23,7 +26,10 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 
-* A button was added do the web app to copy the output code to the clipboard with a single click.
+* Changes to the web app
+    * A button was added do the web app to copy the output code to the clipboard with a single click.
+    * It is now possible to select optimization level directly in the web app user interface. The default 
+      optimization level is still `basic`.
 * All Mindcode and Schemacode samples were revised and updated to adapt for upcoming changes in syntax (semicolons 
   and optional keywords were added). Some samples were reworked. 
 * Optional `do` keyword is now supported in all `for` and `while` loops, and optional `then` keyword is supported in 

@@ -275,6 +275,14 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
         visit(node.getLast()); newLine(",");
     }
 
+    @Override
+    public String visitParameter(Parameter node) {
+        open("Parameter{");
+        print("name="); visit(node.getName()); newLine(",");
+        print("value="); visit(node.getValue());
+        close("}");
+        return null;
+    }
 
     @Override
     public String visitPropertyAccess(PropertyAccess node) {

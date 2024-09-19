@@ -1,4 +1,4 @@
-   313 instructions before optimizations.
+   312 instructions before optimizations.
     37 instructions eliminated by Temp Variables Elimination.
     25 instructions eliminated by Dead Code Elimination (5 iterations).
     22 instructions eliminated by Jump Optimization (4 iterations).
@@ -10,1158 +10,1157 @@
      5 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (4 iterations).
      6 instructions eliminated by Print Merging.
-   197 instructions after optimizations.
+   196 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 794):
+Pass 1: speed optimization selection (cost limit 795):
   * Loop Optimization: replicate condition at line 90            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-37 instructions):
  
-     8 jump __label2 equal __tmp0 false
-     9 print "Mass Driver Monitor"
-    10 print "\n"
+     7 jump __label2 equal __tmp0 false
+     8 print "Mass Driver Monitor"
+     9 print "\n"
 -    * set __tmp1 @links
 -    * set n __tmp1
-+   11 set n @links
-    12 label __label3
-    13 op greaterThan __tmp2 n 0
-    14 jump __label5 equal __tmp2 false
++   10 set n @links
+    11 label __label3
+    12 op greaterThan __tmp2 n 0
+    13 jump __label5 equal __tmp2 false
 -    * op sub __tmp3 n 1
 -    * set n __tmp3
 -    * getlink __tmp4 n
 -    * set block __tmp4
-+   15 op sub n n 1
-+   16 getlink block n
-    17 print "Found: "
-    18 print block
-    19 print "\n"
++   14 op sub n n 1
++   15 getlink block n
+    16 print "Found: "
+    17 print block
+    18 print "\n"
 -    * sensor __tmp5 block @type
 -    * set __ast0 __tmp5
-+   20 sensor __ast0 block @type
-    21 jump __label8 equal __ast0 @message
-    22 jump __label7 always
-    23 label __label8
++   19 sensor __ast0 block @type
+    20 jump __label8 equal __ast0 @message
+    21 jump __label7 always
+    22 label __label8
  
-    90 set clx 0
-    91 set crx clx
-    92 op add __tmp12 OFFSET_X BAR_SPACE
+    89 set clx 0
+    90 set crx clx
+    91 op add __tmp12 OFFSET_X BAR_SPACE
 -    * op sub __tmp13 __tmp12 2
 -    * set clw __tmp13
-+   93 op sub clw __tmp12 2
-    94 set crw clw
-    95 op equal __tmp14 FROM_INDEX 0
-    96 jump __label19 equal __tmp14 false
++   92 op sub clw __tmp12 2
+    93 set crw clw
+    94 op equal __tmp14 FROM_INDEX 0
+    95 jump __label19 equal __tmp14 false
  
-    98 jump __label20 always
-    99 label __label19
-   100 op mul __tmp16 FROM_INDEX BAR_GAP
+    97 jump __label20 always
+    98 label __label19
+    99 op mul __tmp16 FROM_INDEX BAR_GAP
 -    * op add __tmp17 OFFSET_Y __tmp16
 -    * set __tmp15 __tmp17
-+  101 op add __tmp15 OFFSET_Y __tmp16
-   102 label __label20
-   103 set cly __tmp15
-   104 set cry cly
-   105 op lessThan __tmp18 TO_INDEX 8
-   106 jump __label21 equal __tmp18 false
-   107 op mul __tmp20 TO_INDEX BAR_GAP
++  100 op add __tmp15 OFFSET_Y __tmp16
+   101 label __label20
+   102 set cly __tmp15
+   103 set cry cly
+   104 op lessThan __tmp18 TO_INDEX 8
+   105 jump __label21 equal __tmp18 false
+   106 op mul __tmp20 TO_INDEX BAR_GAP
 -    * op add __tmp21 OFFSET_Y __tmp20
 -    * set __tmp19 __tmp21
-+  108 op add __tmp19 OFFSET_Y __tmp20
-   109 jump __label22 always
-   110 label __label21
-   111 set __tmp19 176
-   112 label __label22
++  107 op add __tmp19 OFFSET_Y __tmp20
+   108 jump __label22 always
+   109 label __label21
+   110 set __tmp19 176
+   111 label __label22
 -    * op sub __tmp22 __tmp19 cly
 -    * set clh __tmp22
-+  113 op sub clh __tmp19 cly
-   114 set crh clh
-   115 set __tmp11 crh
-   116 jump __label18 always
++  112 op sub clh __tmp19 cly
+   113 set crh clh
+   114 set __tmp11 crh
+   115 jump __label18 always
  
-   124 op greaterThanEq __tmp23 FROM_INDEX 8
-   125 jump __label23 equal __tmp23 false
-   126 op add __tmp25 OFFSET_X BAR_SPACE
+   123 op greaterThanEq __tmp23 FROM_INDEX 8
+   124 jump __label23 equal __tmp23 false
+   125 op add __tmp25 OFFSET_X BAR_SPACE
 -    * op sub __tmp26 __tmp25 2
 -    * set clx __tmp26
-+  127 op sub clx __tmp25 2
-   128 set crx clx
-   129 op add __tmp27 OFFSET_X BAR_SPACE
-   130 op sub __tmp28 176 __tmp27
++  126 op sub clx __tmp25 2
+   127 set crx clx
+   128 op add __tmp27 OFFSET_X BAR_SPACE
+   129 op sub __tmp28 176 __tmp27
 -    * op add __tmp29 __tmp28 1
 -    * set clw __tmp29
-+  131 op add clw __tmp28 1
-   132 set crw clw
-   133 op mod __tmp30 FROM_INDEX 8
-   134 op equal __tmp31 __tmp30 0
++  130 op add clw __tmp28 1
+   131 set crw clw
+   132 op mod __tmp30 FROM_INDEX 8
+   133 op equal __tmp31 __tmp30 0
  
-   138 label __label25
-   139 op mod __tmp33 FROM_INDEX 8
-   140 op mul __tmp34 __tmp33 BAR_GAP
+   137 label __label25
+   138 op mod __tmp33 FROM_INDEX 8
+   139 op mul __tmp34 __tmp33 BAR_GAP
 -    * op add __tmp35 OFFSET_Y __tmp34
 -    * set __tmp32 __tmp35
-+  141 op add __tmp32 OFFSET_Y __tmp34
-   142 label __label26
-   143 set cly __tmp32
-   144 set cry cly
++  140 op add __tmp32 OFFSET_Y __tmp34
+   141 label __label26
+   142 set cly __tmp32
+   143 set cry cly
  
-   146 jump __label27 equal __tmp36 false
-   147 op mod __tmp38 TO_INDEX 8
-   148 op mul __tmp39 __tmp38 BAR_GAP
+   145 jump __label27 equal __tmp36 false
+   146 op mod __tmp38 TO_INDEX 8
+   147 op mul __tmp39 __tmp38 BAR_GAP
 -    * op add __tmp40 OFFSET_Y __tmp39
 -    * set __tmp37 __tmp40
-+  149 op add __tmp37 OFFSET_Y __tmp39
-   150 jump __label28 always
-   151 label __label27
-   152 set __tmp37 176
-   153 label __label28
++  148 op add __tmp37 OFFSET_Y __tmp39
+   149 jump __label28 always
+   150 label __label27
+   151 set __tmp37 176
+   152 label __label28
 -    * op sub __tmp41 __tmp37 cry
 -    * set clh __tmp41
-+  154 op sub clh __tmp37 cry
-   155 set crh clh
-   156 set __tmp24 crh
-   157 jump __label24 always
++  153 op sub clh __tmp37 cry
+   154 set crh clh
+   155 set __tmp24 crh
+   156 jump __label24 always
  
-   159 set clx 0
-   160 set crx clx
-   161 op add __tmp42 OFFSET_X BAR_SPACE
+   158 set clx 0
+   159 set crx clx
+   160 op add __tmp42 OFFSET_X BAR_SPACE
 -    * op sub __tmp43 __tmp42 2
 -    * set clw __tmp43
-+  162 op sub clw __tmp42 2
-   163 set crw clw
-   164 op equal __tmp44 FROM_INDEX 0
-   165 jump __label29 equal __tmp44 false
++  161 op sub clw __tmp42 2
+   162 set crw clw
+   163 op equal __tmp44 FROM_INDEX 0
+   164 jump __label29 equal __tmp44 false
  
-   167 jump __label30 always
-   168 label __label29
-   169 op mul __tmp46 FROM_INDEX BAR_GAP
+   166 jump __label30 always
+   167 label __label29
+   168 op mul __tmp46 FROM_INDEX BAR_GAP
 -    * op add __tmp47 OFFSET_Y __tmp46
 -    * set __tmp45 __tmp47
-+  170 op add __tmp45 OFFSET_Y __tmp46
-   171 label __label30
-   172 set cly __tmp45
-   173 set cry cly
-   174 op lessThan __tmp48 TO_INDEX 8
-   175 jump __label31 equal __tmp48 false
-   176 op mul __tmp50 TO_INDEX BAR_GAP
++  169 op add __tmp45 OFFSET_Y __tmp46
+   170 label __label30
+   171 set cly __tmp45
+   172 set cry cly
+   173 op lessThan __tmp48 TO_INDEX 8
+   174 jump __label31 equal __tmp48 false
+   175 op mul __tmp50 TO_INDEX BAR_GAP
 -    * op add __tmp51 OFFSET_Y __tmp50
 -    * set __tmp49 __tmp51
-+  177 op add __tmp49 OFFSET_Y __tmp50
-   178 jump __label32 always
-   179 label __label31
-   180 set __tmp49 176
-   181 label __label32
++  176 op add __tmp49 OFFSET_Y __tmp50
+   177 jump __label32 always
+   178 label __label31
+   179 set __tmp49 176
+   180 label __label32
 -    * op sub __tmp52 __tmp49 cly
 -    * set clh __tmp52
-+  182 op sub clh __tmp49 cly
-   183 set crh clh
-   184 op greaterThanEq __tmp53 TO_INDEX 8
-   185 jump __label33 equal __tmp53 false
-   186 op add __tmp55 OFFSET_X BAR_SPACE
++  181 op sub clh __tmp49 cly
+   182 set crh clh
+   183 op greaterThanEq __tmp53 TO_INDEX 8
+   184 jump __label33 equal __tmp53 false
+   185 op add __tmp55 OFFSET_X BAR_SPACE
 -    * op sub __tmp56 __tmp55 2
 -    * set crx __tmp56
-+  187 op sub crx __tmp55 2
-   188 op add __tmp57 OFFSET_X BAR_SPACE
-   189 op sub __tmp58 176 __tmp57
++  186 op sub crx __tmp55 2
+   187 op add __tmp57 OFFSET_X BAR_SPACE
+   188 op sub __tmp58 176 __tmp57
 -    * op add __tmp59 __tmp58 1
 -    * set crw __tmp59
-+  190 op add crw __tmp58 1
-   191 set cry 0
-   192 op lessThan __tmp60 TO_INDEX 16
-   193 jump __label35 equal __tmp60 false
-   194 op mod __tmp62 TO_INDEX 8
-   195 op mul __tmp63 __tmp62 BAR_GAP
++  189 op add crw __tmp58 1
+   190 set cry 0
+   191 op lessThan __tmp60 TO_INDEX 16
+   192 jump __label35 equal __tmp60 false
+   193 op mod __tmp62 TO_INDEX 8
+   194 op mul __tmp63 __tmp62 BAR_GAP
 -    * op add __tmp64 OFFSET_Y __tmp63
 -    * set __tmp61 __tmp64
-+  196 op add __tmp61 OFFSET_Y __tmp63
-   197 jump __label36 always
-   198 label __label35
-   199 set __tmp61 176
-   200 label __label36
++  195 op add __tmp61 OFFSET_Y __tmp63
+   196 jump __label36 always
+   197 label __label35
+   198 set __tmp61 176
+   199 label __label36
 -    * op sub __tmp65 __tmp61 cry
 -    * set crh __tmp65
-+  201 op sub crh __tmp61 cry
-   202 set __tmp54 crh
-   203 jump __label34 always
-   204 label __label33
++  200 op sub crh __tmp61 cry
+   201 set __tmp54 crh
+   202 jump __label34 always
+   203 label __label33
  
-   208 label __label24
-   209 set __tmp11 __tmp24
-   210 label __label18
+   207 label __label24
+   208 set __tmp11 __tmp24
+   209 label __label18
 -    * op idiv __tmp66 BAR_LENGTH 2
 -    * set HALF_BAR __tmp66
-+  211 op idiv HALF_BAR BAR_LENGTH 2
-   212 set MAX CAPACITY
++  210 op idiv HALF_BAR BAR_LENGTH 2
+   211 set MAX CAPACITY
 -    * op div __tmp67 BAR_LENGTH MAX
 -    * set MUL __tmp67
-+  213 op div MUL BAR_LENGTH MAX
-   214 op notEqual __tmp68 MEMORY null
-   215 jump __label37 equal __tmp68 false
-   216 set n 0
++  212 op div MUL BAR_LENGTH MAX
+   213 op notEqual __tmp68 MEMORY null
+   214 jump __label37 equal __tmp68 false
+   215 set n 0
  
-   219 jump __label41 equal __tmp70 false
-   220 write 0 MEMORY n
-   221 label __label40
+   218 jump __label41 equal __tmp70 false
+   219 write 0 MEMORY n
+   220 label __label40
 -    * op add __tmp71 n 1
 -    * set n __tmp71
-+  222 op add n n 1
-   223 jump __label39 always
-   224 label __label41
-   225 set __tmp69 null
++  221 op add n n 1
+   222 jump __label39 always
+   223 label __label41
+   224 set __tmp69 null
  
-   232 sensor __tmp72 SWITCH @enabled
-   233 op equal __tmp73 __tmp72 0
-   234 jump __label44 equal __tmp73 false
+   231 sensor __tmp72 SWITCH @enabled
+   232 op equal __tmp73 __tmp72 0
+   233 jump __label44 equal __tmp73 false
 -    * set __tmp74 @time
 -    * set start __tmp74
-+  235 set start @time
-   236 draw color 0 0 80 255
-   237 draw rect clx cly clw clh
-   238 draw rect crx cry crw crh
++  234 set start @time
+   235 draw color 0 0 80 255
+   236 draw rect clx cly clw clh
+   237 draw rect crx cry crw crh
  
-   242 label __label45
-   243 op lessThan __tmp75 n @links
-   244 jump __label47 equal __tmp75 false
+   241 label __label45
+   242 op lessThan __tmp75 n @links
+   243 jump __label47 equal __tmp75 false
 -    * getlink __tmp76 n
 -    * set driver __tmp76
-+  245 getlink driver n
-   246 sensor __tmp77 driver @type
-   247 op equal __tmp78 __tmp77 @mass-driver
-   248 jump __label48 equal __tmp78 false
--    * op idiv __tmp80 index COLUMN_SIZE
++  244 getlink driver n
+   245 sensor __tmp77 driver @type
+   246 op equal __tmp78 __tmp77 @mass-driver
+   247 jump __label48 equal __tmp78 false
+-    * op idiv __tmp80 index 8
 -    * set column __tmp80
--    * op mod __tmp81 index COLUMN_SIZE
+-    * op mod __tmp81 index 8
 -    * set row __tmp81
-+  249 op idiv column index COLUMN_SIZE
-+  250 op mod row index COLUMN_SIZE
-   251 op mul __tmp82 column BAR_SPACE
++  248 op idiv column index 8
++  249 op mod row index 8
+   250 op mul __tmp82 column BAR_SPACE
 -    * op add __tmp83 OFFSET_X __tmp82
 -    * set x __tmp83
-+  252 op add x OFFSET_X __tmp82
-   253 op mul __tmp84 row BAR_GAP
++  251 op add x OFFSET_X __tmp82
+   252 op mul __tmp84 row BAR_GAP
 -    * op add __tmp85 OFFSET_Y __tmp84
 -    * set y __tmp85
-+  254 op add y OFFSET_Y __tmp84
-   255 draw color 0 0 80 255
-   256 op sub __tmp86 x 1
-   257 op sub __tmp87 y 1
++  253 op add y OFFSET_Y __tmp84
+   254 draw color 0 0 80 255
+   255 op sub __tmp86 x 1
+   256 op sub __tmp87 y 1
  
-   260 op add __tmp88 x 7
-   261 op add __tmp89 y 7
-   262 draw image __tmp88 __tmp89 @mass-driver 16 0
+   259 op add __tmp88 x 7
+   260 op add __tmp89 y 7
+   261 draw image __tmp88 __tmp89 @mass-driver 16 0
 -    * op add __tmp90 x 16
 -    * set x __tmp90
 -    * sensor __tmp91 driver @totalItems
 -    * set items __tmp91
-+  263 op add x x 16
-+  264 sensor items driver @totalItems
-   265 read __tmp92 MEMORY n
++  262 op add x x 16
++  263 sensor items driver @totalItems
+   264 read __tmp92 MEMORY n
 -    * op max __tmp93 __tmp92 items
 -    * set maxx __tmp93
-+  266 op max maxx __tmp92 items
-   267 write maxx MEMORY n
-   268 op greaterThan __tmp94 maxx MAX
-   269 jump __label50 equal __tmp94 false
++  265 op max maxx __tmp92 items
+   266 write maxx MEMORY n
+   267 op greaterThan __tmp94 maxx MAX
+   268 jump __label50 equal __tmp94 false
 -    * op mul __tmp96 2 CAPACITY
 -    * set MAX __tmp96
 -    * op div __tmp97 BAR_LENGTH MAX
 -    * set MUL __tmp97
-+  270 op mul MAX 2 CAPACITY
-+  271 op div MUL BAR_LENGTH MAX
-   272 set __tmp95 MUL
-   273 jump __label51 always
-   274 label __label50
++  269 op mul MAX 2 CAPACITY
++  270 op div MUL BAR_LENGTH MAX
+   271 set __tmp95 MUL
+   272 jump __label51 always
+   273 label __label50
  
-   308 draw lineRect __tmp106 y HALF_BAR BAR_WIDTH
-   309 set __tmp105 null
-   310 label __label57
+   307 draw lineRect __tmp106 y HALF_BAR BAR_WIDTH
+   308 set __tmp105 null
+   309 label __label57
 -    * op add __tmp107 index 1
 -    * set index __tmp107
-+  311 op add index index 1
-   312 set __tmp79 index
-   313 jump __label49 always
-   314 label __label48
-   315 set __tmp79 null
-   316 label __label49
-   317 label __label46
++  310 op add index index 1
+   311 set __tmp79 index
+   312 jump __label49 always
+   313 label __label48
+   314 set __tmp79 null
+   315 label __label49
+   316 label __label46
 -    * op add __tmp108 n 1
 -    * set n __tmp108
-+  318 op add n n 1
-   319 jump __label45 always
-   320 label __label47
-   321 drawflush DISPLAY
++  317 op add n n 1
+   318 jump __label45 always
+   319 label __label47
+   320 drawflush DISPLAY
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-21 instructions):
  
-    22 jump __label7 always
-    23 label __label8
-    24 set MESSAGE block
+    21 jump __label7 always
+    22 label __label8
+    23 set MESSAGE block
 -    * set __tmp6 MESSAGE
-    25 jump __label6 always
-    26 label __label7
-    27 jump __label10 equal __ast0 @switch
-    28 jump __label9 always
-    29 label __label10
-    30 set SWITCH block
+    24 jump __label6 always
+    25 label __label7
+    26 jump __label10 equal __ast0 @switch
+    27 jump __label9 always
+    28 label __label10
+    29 set SWITCH block
 -    * set __tmp6 SWITCH
-    31 jump __label6 always
-    32 label __label9
-    33 jump __label12 equal __ast0 @logic-display
+    30 jump __label6 always
+    31 label __label9
+    32 jump __label12 equal __ast0 @logic-display
  
-    35 jump __label11 always
-    36 label __label12
-    37 set DISPLAY block
+    34 jump __label11 always
+    35 label __label12
+    36 set DISPLAY block
 -    * set __tmp6 DISPLAY
-    38 jump __label6 always
-    39 label __label11
-    40 jump __label14 equal __ast0 @memory-bank
+    37 jump __label6 always
+    38 label __label11
+    39 jump __label14 equal __ast0 @memory-bank
  
-    42 jump __label13 always
-    43 label __label14
-    44 set MEMORY block
+    41 jump __label13 always
+    42 label __label14
+    43 set MEMORY block
 -    * set __tmp6 MEMORY
-    45 jump __label6 always
-    46 label __label13
+    44 jump __label6 always
+    45 label __label13
 -    * set __tmp6 null
-    47 label __label6
-    48 label __label4
-    49 jump __label3 always
+    46 label __label6
+    47 label __label4
+    48 jump __label3 always
  
-    64 jump __label15 equal __tmp7 false
-    65 print "No display."
-    66 print "\n"
+    63 jump __label15 equal __tmp7 false
+    64 print "No display."
+    65 print "\n"
 -    * set __tmp8 "No display."
-    67 jump __label16 always
-    68 label __label15
+    66 jump __label16 always
+    67 label __label15
 -    * set __tmp8 null
-    69 label __label16
-    70 printflush MESSAGE
-    71 label __label1
+    68 label __label16
+    69 printflush MESSAGE
+    70 label __label1
  
-   105 label __label22
-   106 op sub clh __tmp19 cly
-   107 set crh clh
+   104 label __label22
+   105 op sub clh __tmp19 cly
+   106 set crh clh
 -    * set __tmp11 crh
-   108 jump __label18 always
-   109 label __label17
-   110 set OFFSET_X 5
+   107 jump __label18 always
+   108 label __label17
+   109 set OFFSET_X 5
  
-   198 label __label34
-   199 set __tmp24 __tmp54
-   200 label __label24
+   197 label __label34
+   198 set __tmp24 __tmp54
+   199 label __label24
 -    * set __tmp11 __tmp24
-   201 label __label18
-   202 op idiv HALF_BAR BAR_LENGTH 2
-   203 set MAX CAPACITY
+   200 label __label18
+   201 op idiv HALF_BAR BAR_LENGTH 2
+   202 set MAX CAPACITY
  
-   213 op add n n 1
-   214 jump __label39 always
-   215 label __label41
+   212 op add n n 1
+   213 jump __label39 always
+   214 label __label41
 -    * set __tmp69 null
-   216 jump __label38 always
-   217 label __label37
+   215 jump __label38 always
+   216 label __label37
 -    * set __tmp69 null
-   218 label __label38
-   219 control enabled SWITCH 0
-   220 label __label42
+   217 label __label38
+   218 control enabled SWITCH 0
+   219 label __label42
  
-   258 jump __label50 equal __tmp94 false
-   259 op mul MAX 2 CAPACITY
-   260 op div MUL BAR_LENGTH MAX
+   257 jump __label50 equal __tmp94 false
+   258 op mul MAX 2 CAPACITY
+   259 op div MUL BAR_LENGTH MAX
 -    * set __tmp95 MUL
-   261 jump __label51 always
-   262 label __label50
+   260 jump __label51 always
+   261 label __label50
 -    * set __tmp95 null
-   263 label __label51
-   264 op lessThanEq __tmp98 MAX CAPACITY
-   265 jump __label52 equal __tmp98 false
-   266 draw color 0 128 0 255
+   262 label __label51
+   263 op lessThanEq __tmp98 MAX CAPACITY
+   264 jump __label52 equal __tmp98 false
+   265 draw color 0 128 0 255
 -    * set __tmp99 null
-   267 jump __label53 always
-   268 label __label52
-   269 draw color 128 128 0 255
+   266 jump __label53 always
+   267 label __label52
+   268 draw color 128 128 0 255
 -    * set __tmp99 null
-   270 label __label53
-   271 op mul __tmp100 items MUL
-   272 draw rect x y __tmp100 BAR_WIDTH
+   269 label __label53
+   270 op mul __tmp100 items MUL
+   271 draw rect x y __tmp100 BAR_WIDTH
  
-   275 draw color 220 220 220 255
-   276 op mul __tmp103 maxx MUL
-   277 draw lineRect x y __tmp103 BAR_WIDTH
+   274 draw color 220 220 220 255
+   275 op mul __tmp103 maxx MUL
+   276 draw lineRect x y __tmp103 BAR_WIDTH
 -    * set __tmp102 null
-   278 jump __label55 always
-   279 label __label54
+   277 jump __label55 always
+   278 label __label54
 -    * set __tmp102 null
-   280 label __label55
-   281 op lessThanEq __tmp104 MAX CAPACITY
-   282 jump __label56 equal __tmp104 false
-   283 draw color 0 255 0 255
-   284 draw lineRect x y BAR_LENGTH BAR_WIDTH
+   279 label __label55
+   280 op lessThanEq __tmp104 MAX CAPACITY
+   281 jump __label56 equal __tmp104 false
+   282 draw color 0 255 0 255
+   283 draw lineRect x y BAR_LENGTH BAR_WIDTH
 -    * set __tmp105 null
-   285 jump __label57 always
-   286 label __label56
-   287 draw color 255 255 0 255
-   288 draw lineRect x y HALF_BAR BAR_WIDTH
-   289 op add __tmp106 x HALF_BAR
-   290 draw lineRect __tmp106 y HALF_BAR BAR_WIDTH
+   284 jump __label57 always
+   285 label __label56
+   286 draw color 255 255 0 255
+   287 draw lineRect x y HALF_BAR BAR_WIDTH
+   288 op add __tmp106 x HALF_BAR
+   289 draw lineRect __tmp106 y HALF_BAR BAR_WIDTH
 -    * set __tmp105 null
-   291 label __label57
-   292 op add index index 1
+   290 label __label57
+   291 op add index index 1
 -    * set __tmp79 index
-   293 jump __label49 always
-   294 label __label48
+   292 jump __label49 always
+   293 label __label48
 -    * set __tmp79 null
-   295 label __label49
-   296 label __label46
-   297 op add n n 1
+   294 label __label49
+   295 label __label46
+   296 op add n n 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
-   145 label __label28
-   146 op sub clh __tmp37 cry
-   147 set crh clh
+   144 label __label28
+   145 op sub clh __tmp37 cry
+   146 set crh clh
 -    * set __tmp24 crh
-   148 jump __label24 always
-   149 label __label23
-   150 set clx 0
+   147 jump __label24 always
+   148 label __label23
+   149 set clx 0
  
-   195 label __label33
-   196 set __tmp54 null
-   197 label __label34
+   194 label __label33
+   195 set __tmp54 null
+   196 label __label34
 -    * set __tmp24 __tmp54
-   198 label __label24
-   199 label __label18
-   200 op idiv HALF_BAR BAR_LENGTH 2
+   197 label __label24
+   198 label __label18
+   199 op idiv HALF_BAR BAR_LENGTH 2
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructions):
  
-   190 set __tmp61 176
-   191 label __label36
-   192 op sub crh __tmp61 cry
+   189 set __tmp61 176
+   190 label __label36
+   191 op sub crh __tmp61 cry
 -    * set __tmp54 crh
-   193 jump __label34 always
-   194 label __label33
+   192 jump __label34 always
+   193 label __label33
 -    * set __tmp54 null
-   195 label __label34
-   196 label __label24
-   197 label __label18
+   194 label __label34
+   195 label __label24
+   196 label __label18
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-4 instructions):
  
-    18 print block
-    19 print "\n"
-    20 sensor __ast0 block @type
+    17 print block
+    18 print "\n"
+    19 sensor __ast0 block @type
 -    * jump __label8 equal __ast0 @message
 -    * jump __label7 always
-+   21 jump __label7 notEqual __ast0 @message
-    22 label __label8
-    23 set MESSAGE block
-    24 jump __label6 always
-    25 label __label7
++   20 jump __label7 notEqual __ast0 @message
+    21 label __label8
+    22 set MESSAGE block
+    23 jump __label6 always
+    24 label __label7
 -    * jump __label10 equal __ast0 @switch
 -    * jump __label9 always
-+   26 jump __label9 notEqual __ast0 @switch
-    27 label __label10
-    28 set SWITCH block
-    29 jump __label6 always
-    30 label __label9
-    31 jump __label12 equal __ast0 @logic-display
++   25 jump __label9 notEqual __ast0 @switch
+    26 label __label10
+    27 set SWITCH block
+    28 jump __label6 always
+    29 label __label9
+    30 jump __label12 equal __ast0 @logic-display
 -    * jump __label12 equal __ast0 @large-logic-display
 -    * jump __label11 always
-+   32 jump __label11 notEqual __ast0 @large-logic-display
-    33 label __label12
-    34 set DISPLAY block
-    35 jump __label6 always
-    36 label __label11
-    37 jump __label14 equal __ast0 @memory-bank
++   31 jump __label11 notEqual __ast0 @large-logic-display
+    32 label __label12
+    33 set DISPLAY block
+    34 jump __label6 always
+    35 label __label11
+    36 jump __label14 equal __ast0 @memory-bank
 -    * jump __label14 equal __ast0 @memory-cell
 -    * jump __label13 always
-+   38 jump __label13 notEqual __ast0 @memory-cell
-    39 label __label14
-    40 set MEMORY block
-    41 jump __label6 always
++   37 jump __label13 notEqual __ast0 @memory-cell
+    38 label __label14
+    39 set MEMORY block
+    40 jump __label6 always
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-22 instructions):
  
-     4 set DISPLAY null
-     5 set MEMORY null
-     6 label __label0
+     3 set DISPLAY null
+     4 set MEMORY null
+     5 label __label0
 -    * op equal __tmp0 DISPLAY null
 -    * jump __label2 equal __tmp0 false
-+    7 jump __label2 notEqual DISPLAY null
-     8 print "Mass Driver Monitor"
-     9 print "\n"
-    10 set n @links
-    11 label __label3
++    6 jump __label2 notEqual DISPLAY null
+     7 print "Mass Driver Monitor"
+     8 print "\n"
+     9 set n @links
+    10 label __label3
 -    * op greaterThan __tmp2 n 0
 -    * jump __label5 equal __tmp2 false
-+   12 jump __label5 lessThanEq n 0
-    13 op sub n n 1
-    14 getlink block n
-    15 print "Found: "
++   11 jump __label5 lessThanEq n 0
+    12 op sub n n 1
+    13 getlink block n
+    14 print "Found: "
  
-    54 print "Display: "
-    55 print DISPLAY
-    56 print "\n"
+    53 print "Display: "
+    54 print DISPLAY
+    55 print "\n"
 -    * op equal __tmp7 DISPLAY null
 -    * jump __label15 equal __tmp7 false
-+   57 jump __label15 notEqual DISPLAY null
-    58 print "No display."
-    59 print "\n"
-    60 jump __label16 always
++   56 jump __label15 notEqual DISPLAY null
+    57 print "No display."
+    58 print "\n"
+    59 jump __label16 always
  
-    65 jump __label0 always
-    66 label __label2
-    67 sensor __tmp9 DISPLAY @type
+    64 jump __label0 always
+    65 label __label2
+    66 sensor __tmp9 DISPLAY @type
 -    * op equal __tmp10 __tmp9 @logic-display
 -    * jump __label17 equal __tmp10 false
-+   68 jump __label17 notEqual __tmp9 @logic-display
-    69 set OFFSET_X 2
-    70 set OFFSET_Y 2
-    71 set BAR_WIDTH 14
++   67 jump __label17 notEqual __tmp9 @logic-display
+    68 set OFFSET_X 2
+    69 set OFFSET_Y 2
+    70 set BAR_WIDTH 14
  
-    77 op add __tmp12 OFFSET_X BAR_SPACE
-    78 op sub clw __tmp12 2
-    79 set crw clw
+    76 op add __tmp12 OFFSET_X BAR_SPACE
+    77 op sub clw __tmp12 2
+    78 set crw clw
 -    * op equal __tmp14 FROM_INDEX 0
 -    * jump __label19 equal __tmp14 false
-+   80 jump __label19 notEqual FROM_INDEX 0
-    81 set __tmp15 0
-    82 jump __label20 always
-    83 label __label19
++   79 jump __label19 notEqual FROM_INDEX 0
+    80 set __tmp15 0
+    81 jump __label20 always
+    82 label __label19
  
-    86 label __label20
-    87 set cly __tmp15
-    88 set cry cly
+    85 label __label20
+    86 set cly __tmp15
+    87 set cry cly
 -    * op lessThan __tmp18 TO_INDEX 8
 -    * jump __label21 equal __tmp18 false
-+   89 jump __label21 greaterThanEq TO_INDEX 8
-    90 op mul __tmp20 TO_INDEX BAR_GAP
-    91 op add __tmp19 OFFSET_Y __tmp20
-    92 jump __label22 always
++   88 jump __label21 greaterThanEq TO_INDEX 8
+    89 op mul __tmp20 TO_INDEX BAR_GAP
+    90 op add __tmp19 OFFSET_Y __tmp20
+    91 jump __label22 always
  
-   103 set BAR_LENGTH 60
-   104 set BAR_SPACE 88
-   105 set BAR_GAP 22
+   102 set BAR_LENGTH 60
+   103 set BAR_SPACE 88
+   104 set BAR_GAP 22
 -    * op greaterThanEq __tmp23 FROM_INDEX 8
 -    * jump __label23 equal __tmp23 false
-+  106 jump __label23 lessThan FROM_INDEX 8
-   107 op add __tmp25 OFFSET_X BAR_SPACE
-   108 op sub clx __tmp25 2
-   109 set crx clx
++  105 jump __label23 lessThan FROM_INDEX 8
+   106 op add __tmp25 OFFSET_X BAR_SPACE
+   107 op sub clx __tmp25 2
+   108 set crx clx
  
-   112 op add clw __tmp28 1
-   113 set crw clw
-   114 op mod __tmp30 FROM_INDEX 8
+   111 op add clw __tmp28 1
+   112 set crw clw
+   113 op mod __tmp30 FROM_INDEX 8
 -    * op equal __tmp31 __tmp30 0
 -    * jump __label25 equal __tmp31 false
-+  115 jump __label25 notEqual __tmp30 0
-   116 set __tmp32 0
-   117 jump __label26 always
-   118 label __label25
++  114 jump __label25 notEqual __tmp30 0
+   115 set __tmp32 0
+   116 jump __label26 always
+   117 label __label25
  
-   122 label __label26
-   123 set cly __tmp32
-   124 set cry cly
+   121 label __label26
+   122 set cly __tmp32
+   123 set cry cly
 -    * op lessThan __tmp36 TO_INDEX 16
 -    * jump __label27 equal __tmp36 false
-+  125 jump __label27 greaterThanEq TO_INDEX 16
-   126 op mod __tmp38 TO_INDEX 8
-   127 op mul __tmp39 __tmp38 BAR_GAP
-   128 op add __tmp37 OFFSET_Y __tmp39
++  124 jump __label27 greaterThanEq TO_INDEX 16
+   125 op mod __tmp38 TO_INDEX 8
+   126 op mul __tmp39 __tmp38 BAR_GAP
+   127 op add __tmp37 OFFSET_Y __tmp39
  
-   139 op add __tmp42 OFFSET_X BAR_SPACE
-   140 op sub clw __tmp42 2
-   141 set crw clw
+   138 op add __tmp42 OFFSET_X BAR_SPACE
+   139 op sub clw __tmp42 2
+   140 set crw clw
 -    * op equal __tmp44 FROM_INDEX 0
 -    * jump __label29 equal __tmp44 false
-+  142 jump __label29 notEqual FROM_INDEX 0
-   143 set __tmp45 0
-   144 jump __label30 always
-   145 label __label29
++  141 jump __label29 notEqual FROM_INDEX 0
+   142 set __tmp45 0
+   143 jump __label30 always
+   144 label __label29
  
-   148 label __label30
-   149 set cly __tmp45
-   150 set cry cly
+   147 label __label30
+   148 set cly __tmp45
+   149 set cry cly
 -    * op lessThan __tmp48 TO_INDEX 8
 -    * jump __label31 equal __tmp48 false
-+  151 jump __label31 greaterThanEq TO_INDEX 8
-   152 op mul __tmp50 TO_INDEX BAR_GAP
-   153 op add __tmp49 OFFSET_Y __tmp50
-   154 jump __label32 always
++  150 jump __label31 greaterThanEq TO_INDEX 8
+   151 op mul __tmp50 TO_INDEX BAR_GAP
+   152 op add __tmp49 OFFSET_Y __tmp50
+   153 jump __label32 always
  
-   157 label __label32
-   158 op sub clh __tmp49 cly
-   159 set crh clh
+   156 label __label32
+   157 op sub clh __tmp49 cly
+   158 set crh clh
 -    * op greaterThanEq __tmp53 TO_INDEX 8
 -    * jump __label33 equal __tmp53 false
-+  160 jump __label33 lessThan TO_INDEX 8
-   161 op add __tmp55 OFFSET_X BAR_SPACE
-   162 op sub crx __tmp55 2
-   163 op add __tmp57 OFFSET_X BAR_SPACE
-   164 op sub __tmp58 176 __tmp57
-   165 op add crw __tmp58 1
-   166 set cry 0
++  159 jump __label33 lessThan TO_INDEX 8
+   160 op add __tmp55 OFFSET_X BAR_SPACE
+   161 op sub crx __tmp55 2
+   162 op add __tmp57 OFFSET_X BAR_SPACE
+   163 op sub __tmp58 176 __tmp57
+   164 op add crw __tmp58 1
+   165 set cry 0
 -    * op lessThan __tmp60 TO_INDEX 16
 -    * jump __label35 equal __tmp60 false
-+  167 jump __label35 greaterThanEq TO_INDEX 16
-   168 op mod __tmp62 TO_INDEX 8
-   169 op mul __tmp63 __tmp62 BAR_GAP
-   170 op add __tmp61 OFFSET_Y __tmp63
++  166 jump __label35 greaterThanEq TO_INDEX 16
+   167 op mod __tmp62 TO_INDEX 8
+   168 op mul __tmp63 __tmp62 BAR_GAP
+   169 op add __tmp61 OFFSET_Y __tmp63
  
-   181 op idiv HALF_BAR BAR_LENGTH 2
-   182 set MAX CAPACITY
-   183 op div MUL BAR_LENGTH MAX
+   180 op idiv HALF_BAR BAR_LENGTH 2
+   181 set MAX CAPACITY
+   182 op div MUL BAR_LENGTH MAX
 -    * op notEqual __tmp68 MEMORY null
 -    * jump __label37 equal __tmp68 false
-+  184 jump __label37 equal MEMORY null
-   185 set n 0
-   186 label __label39
++  183 jump __label37 equal MEMORY null
+   184 set n 0
+   185 label __label39
 -    * op lessThan __tmp70 n @links
 -    * jump __label41 equal __tmp70 false
-+  187 jump __label41 greaterThanEq n @links
-   188 write 0 MEMORY n
-   189 label __label40
-   190 op add n n 1
++  186 jump __label41 greaterThanEq n @links
+   187 write 0 MEMORY n
+   188 label __label40
+   189 op add n n 1
  
-   196 control enabled SWITCH 0
-   197 label __label42
-   198 sensor __tmp72 SWITCH @enabled
+   195 control enabled SWITCH 0
+   196 label __label42
+   197 sensor __tmp72 SWITCH @enabled
 -    * op equal __tmp73 __tmp72 0
 -    * jump __label44 equal __tmp73 false
-+  199 jump __label44 notEqual __tmp72 0
-   200 set start @time
-   201 draw color 0 0 80 255
-   202 draw rect clx cly clw clh
++  198 jump __label44 notEqual __tmp72 0
+   199 set start @time
+   200 draw color 0 0 80 255
+   201 draw rect clx cly clw clh
  
-   205 set index FROM_INDEX
-   206 set n 0
-   207 label __label45
+   204 set index FROM_INDEX
+   205 set n 0
+   206 label __label45
 -    * op lessThan __tmp75 n @links
 -    * jump __label47 equal __tmp75 false
-+  208 jump __label47 greaterThanEq n @links
-   209 getlink driver n
-   210 sensor __tmp77 driver @type
++  207 jump __label47 greaterThanEq n @links
+   208 getlink driver n
+   209 sensor __tmp77 driver @type
 -    * op equal __tmp78 __tmp77 @mass-driver
 -    * jump __label48 equal __tmp78 false
-+  211 jump __label48 notEqual __tmp77 @mass-driver
-   212 op idiv column index COLUMN_SIZE
-   213 op mod row index COLUMN_SIZE
-   214 op mul __tmp82 column BAR_SPACE
++  210 jump __label48 notEqual __tmp77 @mass-driver
+   211 op idiv column index 8
+   212 op mod row index 8
+   213 op mul __tmp82 column BAR_SPACE
  
-   228 read __tmp92 MEMORY n
-   229 op max maxx __tmp92 items
-   230 write maxx MEMORY n
+   227 read __tmp92 MEMORY n
+   228 op max maxx __tmp92 items
+   229 write maxx MEMORY n
 -    * op greaterThan __tmp94 maxx MAX
 -    * jump __label50 equal __tmp94 false
-+  231 jump __label50 lessThanEq maxx MAX
-   232 op mul MAX 2 CAPACITY
-   233 op div MUL BAR_LENGTH MAX
-   234 jump __label51 always
-   235 label __label50
-   236 label __label51
++  230 jump __label50 lessThanEq maxx MAX
+   231 op mul MAX 2 CAPACITY
+   232 op div MUL BAR_LENGTH MAX
+   233 jump __label51 always
+   234 label __label50
+   235 label __label51
 -    * op lessThanEq __tmp98 MAX CAPACITY
 -    * jump __label52 equal __tmp98 false
-+  237 jump __label52 greaterThan MAX CAPACITY
-   238 draw color 0 128 0 255
-   239 jump __label53 always
-   240 label __label52
++  236 jump __label52 greaterThan MAX CAPACITY
+   237 draw color 0 128 0 255
+   238 jump __label53 always
+   239 label __label52
  
-   242 label __label53
-   243 op mul __tmp100 items MUL
-   244 draw rect x y __tmp100 BAR_WIDTH
+   241 label __label53
+   242 op mul __tmp100 items MUL
+   243 draw rect x y __tmp100 BAR_WIDTH
 -    * op notEqual __tmp101 MEMORY null
 -    * jump __label54 equal __tmp101 false
-+  245 jump __label54 equal MEMORY null
-   246 draw color 220 220 220 255
-   247 op mul __tmp103 maxx MUL
-   248 draw lineRect x y __tmp103 BAR_WIDTH
-   249 jump __label55 always
-   250 label __label54
-   251 label __label55
++  244 jump __label54 equal MEMORY null
+   245 draw color 220 220 220 255
+   246 op mul __tmp103 maxx MUL
+   247 draw lineRect x y __tmp103 BAR_WIDTH
+   248 jump __label55 always
+   249 label __label54
+   250 label __label55
 -    * op lessThanEq __tmp104 MAX CAPACITY
 -    * jump __label56 equal __tmp104 false
-+  252 jump __label56 greaterThan MAX CAPACITY
-   253 draw color 0 255 0 255
-   254 draw lineRect x y BAR_LENGTH BAR_WIDTH
-   255 jump __label57 always
++  251 jump __label56 greaterThan MAX CAPACITY
+   252 draw color 0 255 0 255
+   253 draw lineRect x y BAR_LENGTH BAR_WIDTH
+   254 jump __label57 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-7 instructions):
  
-    36 jump __label13 notEqual __ast0 @memory-cell
-    37 label __label14
-    38 set MEMORY block
+    35 jump __label13 notEqual __ast0 @memory-cell
+    36 label __label14
+    37 set MEMORY block
 -    * jump __label6 always
-    39 label __label13
-    40 label __label6
-    41 label __label4
+    38 label __label13
+    39 label __label6
+    40 label __label4
  
-    56 jump __label15 notEqual DISPLAY null
-    57 print "No display."
-    58 print "\n"
+    55 jump __label15 notEqual DISPLAY null
+    56 print "No display."
+    57 print "\n"
 -    * jump __label16 always
-    59 label __label15
-    60 label __label16
-    61 printflush MESSAGE
+    58 label __label15
+    59 label __label16
+    60 printflush MESSAGE
  
-   171 set __tmp61 176
-   172 label __label36
-   173 op sub crh __tmp61 cry
+   170 set __tmp61 176
+   171 label __label36
+   172 op sub crh __tmp61 cry
 -    * jump __label34 always
-   174 label __label33
-   175 label __label34
-   176 label __label24
+   173 label __label33
+   174 label __label34
+   175 label __label24
  
-   187 op add n n 1
-   188 jump __label39 always
-   189 label __label41
+   186 op add n n 1
+   187 jump __label39 always
+   188 label __label41
 -    * jump __label38 always
-   190 label __label37
-   191 label __label38
-   192 control enabled SWITCH 0
+   189 label __label37
+   190 label __label38
+   191 control enabled SWITCH 0
  
-   227 jump __label50 lessThanEq maxx MAX
-   228 op mul MAX 2 CAPACITY
-   229 op div MUL BAR_LENGTH MAX
+   226 jump __label50 lessThanEq maxx MAX
+   227 op mul MAX 2 CAPACITY
+   228 op div MUL BAR_LENGTH MAX
 -    * jump __label51 always
-   230 label __label50
-   231 label __label51
-   232 jump __label52 greaterThan MAX CAPACITY
+   229 label __label50
+   230 label __label51
+   231 jump __label52 greaterThan MAX CAPACITY
  
-   241 draw color 220 220 220 255
-   242 op mul __tmp103 maxx MUL
-   243 draw lineRect x y __tmp103 BAR_WIDTH
+   240 draw color 220 220 220 255
+   241 op mul __tmp103 maxx MUL
+   242 draw lineRect x y __tmp103 BAR_WIDTH
 -    * jump __label55 always
-   244 label __label54
-   245 label __label55
-   246 jump __label56 greaterThan MAX CAPACITY
+   243 label __label54
+   244 label __label55
+   245 jump __label56 greaterThan MAX CAPACITY
  
-   254 draw lineRect __tmp106 y HALF_BAR BAR_WIDTH
-   255 label __label57
-   256 op add index index 1
+   253 draw lineRect __tmp106 y HALF_BAR BAR_WIDTH
+   254 label __label57
+   255 op add index index 1
 -    * jump __label49 always
-   257 label __label48
-   258 label __label49
-   259 label __label46
+   256 label __label48
+   257 label __label49
+   258 label __label46
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-6 instructions):
  
-    75 op add __tmp12 OFFSET_X BAR_SPACE
-    76 op sub clw __tmp12 2
-    77 set crw clw
+    74 op add __tmp12 OFFSET_X BAR_SPACE
+    75 op sub clw __tmp12 2
+    76 set crw clw
 -    * jump __label19 notEqual FROM_INDEX 0
 -    * set __tmp15 0
 -    * jump __label20 always
-+   78 set cly 0
-+   79 jump __label20 equal FROM_INDEX 0
-    80 label __label19
-    81 op mul __tmp16 FROM_INDEX BAR_GAP
++   77 set cly 0
++   78 jump __label20 equal FROM_INDEX 0
+    79 label __label19
+    80 op mul __tmp16 FROM_INDEX BAR_GAP
 -    * op add __tmp15 OFFSET_Y __tmp16
-+   82 op add cly OFFSET_Y __tmp16
-    83 label __label20
++   81 op add cly OFFSET_Y __tmp16
+    82 label __label20
 -    * set cly __tmp15
-    84 set cry cly
+    83 set cry cly
 -    * jump __label21 greaterThanEq TO_INDEX 8
-+   85 set __tmp19 176
-+   86 jump __label22 greaterThanEq TO_INDEX 8
-    87 op mul __tmp20 TO_INDEX BAR_GAP
-    88 op add __tmp19 OFFSET_Y __tmp20
-    89 jump __label22 always
++   84 set __tmp19 176
++   85 jump __label22 greaterThanEq TO_INDEX 8
+    86 op mul __tmp20 TO_INDEX BAR_GAP
+    87 op add __tmp19 OFFSET_Y __tmp20
+    88 jump __label22 always
 -    * label __label21
 -    * set __tmp19 176
-    90 label __label22
-    91 op sub clh __tmp19 cly
-    92 set crh clh
+    89 label __label22
+    90 op sub clh __tmp19 cly
+    91 set crh clh
  
-   106 op sub __tmp28 176 __tmp27
-   107 op add clw __tmp28 1
-   108 set crw clw
-+  109 set cly 0
-   110 op mod __tmp30 FROM_INDEX 8
+   105 op sub __tmp28 176 __tmp27
+   106 op add clw __tmp28 1
+   107 set crw clw
++  108 set cly 0
+   109 op mod __tmp30 FROM_INDEX 8
 -    * jump __label25 notEqual __tmp30 0
 -    * set __tmp32 0
 -    * jump __label26 always
-+  111 jump __label26 equal __tmp30 0
-   112 label __label25
-   113 op mod __tmp33 FROM_INDEX 8
-   114 op mul __tmp34 __tmp33 BAR_GAP
++  110 jump __label26 equal __tmp30 0
+   111 label __label25
+   112 op mod __tmp33 FROM_INDEX 8
+   113 op mul __tmp34 __tmp33 BAR_GAP
 -    * op add __tmp32 OFFSET_Y __tmp34
-+  115 op add cly OFFSET_Y __tmp34
-   116 label __label26
++  114 op add cly OFFSET_Y __tmp34
+   115 label __label26
 -    * set cly __tmp32
-   117 set cry cly
+   116 set cry cly
 -    * jump __label27 greaterThanEq TO_INDEX 16
-+  118 set __tmp37 176
-+  119 jump __label28 greaterThanEq TO_INDEX 16
-   120 op mod __tmp38 TO_INDEX 8
-   121 op mul __tmp39 __tmp38 BAR_GAP
-   122 op add __tmp37 OFFSET_Y __tmp39
-   123 jump __label28 always
++  117 set __tmp37 176
++  118 jump __label28 greaterThanEq TO_INDEX 16
+   119 op mod __tmp38 TO_INDEX 8
+   120 op mul __tmp39 __tmp38 BAR_GAP
+   121 op add __tmp37 OFFSET_Y __tmp39
+   122 jump __label28 always
 -    * label __label27
 -    * set __tmp37 176
-   124 label __label28
-   125 op sub clh __tmp37 cry
-   126 set crh clh
+   123 label __label28
+   124 op sub clh __tmp37 cry
+   125 set crh clh
  
-   131 op add __tmp42 OFFSET_X BAR_SPACE
-   132 op sub clw __tmp42 2
-   133 set crw clw
+   130 op add __tmp42 OFFSET_X BAR_SPACE
+   131 op sub clw __tmp42 2
+   132 set crw clw
 -    * jump __label29 notEqual FROM_INDEX 0
 -    * set __tmp45 0
 -    * jump __label30 always
-+  134 set cly 0
-+  135 jump __label30 equal FROM_INDEX 0
-   136 label __label29
-   137 op mul __tmp46 FROM_INDEX BAR_GAP
++  133 set cly 0
++  134 jump __label30 equal FROM_INDEX 0
+   135 label __label29
+   136 op mul __tmp46 FROM_INDEX BAR_GAP
 -    * op add __tmp45 OFFSET_Y __tmp46
-+  138 op add cly OFFSET_Y __tmp46
-   139 label __label30
++  137 op add cly OFFSET_Y __tmp46
+   138 label __label30
 -    * set cly __tmp45
-   140 set cry cly
+   139 set cry cly
 -    * jump __label31 greaterThanEq TO_INDEX 8
-+  141 set __tmp49 176
-+  142 jump __label32 greaterThanEq TO_INDEX 8
-   143 op mul __tmp50 TO_INDEX BAR_GAP
-   144 op add __tmp49 OFFSET_Y __tmp50
-   145 jump __label32 always
++  140 set __tmp49 176
++  141 jump __label32 greaterThanEq TO_INDEX 8
+   142 op mul __tmp50 TO_INDEX BAR_GAP
+   143 op add __tmp49 OFFSET_Y __tmp50
+   144 jump __label32 always
 -    * label __label31
 -    * set __tmp49 176
-   146 label __label32
-   147 op sub clh __tmp49 cly
-   148 set crh clh
+   145 label __label32
+   146 op sub clh __tmp49 cly
+   147 set crh clh
  
-   153 op sub __tmp58 176 __tmp57
-   154 op add crw __tmp58 1
-   155 set cry 0
+   152 op sub __tmp58 176 __tmp57
+   153 op add crw __tmp58 1
+   154 set cry 0
 -    * jump __label35 greaterThanEq TO_INDEX 16
-+  156 set __tmp61 176
-+  157 jump __label36 greaterThanEq TO_INDEX 16
-   158 op mod __tmp62 TO_INDEX 8
-   159 op mul __tmp63 __tmp62 BAR_GAP
-   160 op add __tmp61 OFFSET_Y __tmp63
-   161 jump __label36 always
++  155 set __tmp61 176
++  156 jump __label36 greaterThanEq TO_INDEX 16
+   157 op mod __tmp62 TO_INDEX 8
+   158 op mul __tmp63 __tmp62 BAR_GAP
+   159 op add __tmp61 OFFSET_Y __tmp63
+   160 jump __label36 always
 -    * label __label35
 -    * set __tmp61 176
-   162 label __label36
-   163 op sub crh __tmp61 cry
-   164 label __label33
+   161 label __label36
+   162 op sub crh __tmp61 cry
+   163 label __label33
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    71 set BAR_SPACE 80
-    72 set BAR_GAP 20
-    73 set clx 0
+    70 set BAR_SPACE 80
+    71 set BAR_GAP 20
+    72 set clx 0
 -    * set crx clx
-+   74 set crx 0
-    75 op add __tmp12 OFFSET_X BAR_SPACE
-    76 op sub clw __tmp12 2
-    77 set crw clw
++   73 set crx 0
+    74 op add __tmp12 OFFSET_X BAR_SPACE
+    75 op sub clw __tmp12 2
+    76 set crw clw
  
-   103 op sub clx __tmp25 2
-   104 set crx clx
-   105 op add __tmp27 OFFSET_X BAR_SPACE
+   102 op sub clx __tmp25 2
+   103 set crx clx
+   104 op add __tmp27 OFFSET_X BAR_SPACE
 -    * op sub __tmp28 176 __tmp27
 -    * op add clw __tmp28 1
-+  106 op sub __tmp28 176 __tmp25
-+  107 op sub clw 177 __tmp27
-   108 set crw clw
-   109 set cly 0
-   110 op mod __tmp30 FROM_INDEX 8
-   111 jump __label26 equal __tmp30 0
-   112 label __label25
-   113 op mod __tmp33 FROM_INDEX 8
--    * op mul __tmp34 __tmp33 BAR_GAP
-+  114 op mul __tmp34 __tmp30 BAR_GAP
-   115 op add cly OFFSET_Y __tmp34
-   116 label __label26
-   117 set cry cly
- 
-   122 op add __tmp37 OFFSET_Y __tmp39
-   123 jump __label28 always
-   124 label __label28
--    * op sub clh __tmp37 cry
-+  125 op sub clh __tmp37 cly
-   126 set crh clh
-   127 jump __label24 always
-   128 label __label23
-   129 set clx 0
--    * set crx clx
-+  130 set crx 0
-   131 op add __tmp42 OFFSET_X BAR_SPACE
-   132 op sub clw __tmp42 2
-   133 set crw clw
- 
-   148 set crh clh
-   149 jump __label33 lessThan TO_INDEX 8
-   150 op add __tmp55 OFFSET_X BAR_SPACE
--    * op sub crx __tmp55 2
-+  151 op sub crx __tmp42 2
-   152 op add __tmp57 OFFSET_X BAR_SPACE
--    * op sub __tmp58 176 __tmp57
--    * op add crw __tmp58 1
-+  153 op sub __tmp58 176 __tmp42
-+  154 op sub crw 177 __tmp57
-   155 set cry 0
-   156 set __tmp61 176
-   157 jump __label36 greaterThanEq TO_INDEX 16
- 
-   160 op add __tmp61 OFFSET_Y __tmp63
-   161 jump __label36 always
-   162 label __label36
--    * op sub crh __tmp61 cry
-+  163 op sub crh __tmp61 0
-   164 label __label33
-   165 label __label34
-   166 label __label24
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
- 
-   103 op sub clx __tmp25 2
-   104 set crx clx
-   105 op add __tmp27 OFFSET_X BAR_SPACE
--    * op sub __tmp28 176 __tmp25
--    * op sub clw 177 __tmp27
-+  106 op sub clw 177 __tmp25
++  105 op sub __tmp28 176 __tmp25
++  106 op sub clw 177 __tmp27
    107 set crw clw
    108 set cly 0
    109 op mod __tmp30 FROM_INDEX 8
    110 jump __label26 equal __tmp30 0
    111 label __label25
--    * op mod __tmp33 FROM_INDEX 8
-   112 op mul __tmp34 __tmp30 BAR_GAP
-   113 op add cly OFFSET_Y __tmp34
-   114 label __label26
+   112 op mod __tmp33 FROM_INDEX 8
+-    * op mul __tmp34 __tmp33 BAR_GAP
++  113 op mul __tmp34 __tmp30 BAR_GAP
+   114 op add cly OFFSET_Y __tmp34
+   115 label __label26
+   116 set cry cly
  
-   145 op sub clh __tmp49 cly
-   146 set crh clh
-   147 jump __label33 lessThan TO_INDEX 8
+   121 op add __tmp37 OFFSET_Y __tmp39
+   122 jump __label28 always
+   123 label __label28
+-    * op sub clh __tmp37 cry
++  124 op sub clh __tmp37 cly
+   125 set crh clh
+   126 jump __label24 always
+   127 label __label23
+   128 set clx 0
+-    * set crx clx
++  129 set crx 0
+   130 op add __tmp42 OFFSET_X BAR_SPACE
+   131 op sub clw __tmp42 2
+   132 set crw clw
+ 
+   147 set crh clh
+   148 jump __label33 lessThan TO_INDEX 8
+   149 op add __tmp55 OFFSET_X BAR_SPACE
+-    * op sub crx __tmp55 2
++  150 op sub crx __tmp42 2
+   151 op add __tmp57 OFFSET_X BAR_SPACE
+-    * op sub __tmp58 176 __tmp57
+-    * op add crw __tmp58 1
++  152 op sub __tmp58 176 __tmp42
++  153 op sub crw 177 __tmp57
+   154 set cry 0
+   155 set __tmp61 176
+   156 jump __label36 greaterThanEq TO_INDEX 16
+ 
+   159 op add __tmp61 OFFSET_Y __tmp63
+   160 jump __label36 always
+   161 label __label36
+-    * op sub crh __tmp61 cry
++  162 op sub crh __tmp61 0
+   163 label __label33
+   164 label __label34
+   165 label __label24
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
+ 
+   102 op sub clx __tmp25 2
+   103 set crx clx
+   104 op add __tmp27 OFFSET_X BAR_SPACE
+-    * op sub __tmp28 176 __tmp25
+-    * op sub clw 177 __tmp27
++  105 op sub clw 177 __tmp25
+   106 set crw clw
+   107 set cly 0
+   108 op mod __tmp30 FROM_INDEX 8
+   109 jump __label26 equal __tmp30 0
+   110 label __label25
+-    * op mod __tmp33 FROM_INDEX 8
+   111 op mul __tmp34 __tmp30 BAR_GAP
+   112 op add cly OFFSET_Y __tmp34
+   113 label __label26
+ 
+   144 op sub clh __tmp49 cly
+   145 set crh clh
+   146 jump __label33 lessThan TO_INDEX 8
 -    * op add __tmp55 OFFSET_X BAR_SPACE
-   148 op sub crx __tmp42 2
-   149 op add __tmp57 OFFSET_X BAR_SPACE
+   147 op sub crx __tmp42 2
+   148 op add __tmp57 OFFSET_X BAR_SPACE
 -    * op sub __tmp58 176 __tmp42
 -    * op sub crw 177 __tmp57
-+  150 op sub crw 177 __tmp42
-   151 set cry 0
-   152 set __tmp61 176
-   153 jump __label36 greaterThanEq TO_INDEX 16
++  149 op sub crw 177 __tmp42
+   150 set cry 0
+   151 set __tmp61 176
+   152 jump __label36 greaterThanEq TO_INDEX 16
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
  
-   102 op add __tmp25 OFFSET_X BAR_SPACE
-   103 op sub clx __tmp25 2
-   104 set crx clx
+   101 op add __tmp25 OFFSET_X BAR_SPACE
+   102 op sub clx __tmp25 2
+   103 set crx clx
 -    * op add __tmp27 OFFSET_X BAR_SPACE
-   105 op sub clw 177 __tmp25
-   106 set crw clw
-   107 set cly 0
+   104 op sub clw 177 __tmp25
+   105 set crw clw
+   106 set cly 0
  
-   145 set crh clh
-   146 jump __label33 lessThan TO_INDEX 8
-   147 op sub crx __tmp42 2
+   144 set crh clh
+   145 jump __label33 lessThan TO_INDEX 8
+   146 op sub crx __tmp42 2
 -    * op add __tmp57 OFFSET_X BAR_SPACE
-   148 op sub crw 177 __tmp42
-   149 set cry 0
-   150 set __tmp61 176
+   147 op sub crw 177 __tmp42
+   148 set cry 0
+   149 set __tmp61 176
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-     5 set MEMORY null
-     6 label __label0
-     7 jump __label2 notEqual DISPLAY null
-+    8 label __label58
-     9 print "Mass Driver Monitor"
-    10 print "\n"
-    11 set n @links
-    12 label __label3
-    13 jump __label5 lessThanEq n 0
-+   14 label __label59
-    15 op sub n n 1
-    16 getlink block n
-    17 print "Found: "
- 
-    41 label __label13
-    42 label __label6
-    43 label __label4
--    * jump __label3 always
-+   44 jump __label59 greaterThan n 0
-    45 label __label5
-    46 print "Message: "
-    47 print MESSAGE
- 
-    62 label __label16
-    63 printflush MESSAGE
-    64 label __label1
--    * jump __label0 always
-+   65 jump __label58 equal DISPLAY null
-    66 label __label2
-    67 sensor __tmp9 DISPLAY @type
-    68 jump __label17 notEqual __tmp9 @logic-display
- 
-   168 set n 0
-   169 label __label39
-   170 jump __label41 greaterThanEq n @links
-+  171 label __label60
-   172 write 0 MEMORY n
-   173 label __label40
-   174 op add n n 1
--    * jump __label39 always
-+  175 jump __label60 lessThan n @links
-   176 label __label41
-   177 label __label37
-   178 label __label38
- 
-   189 set n 0
-   190 label __label45
-   191 jump __label47 greaterThanEq n @links
-+  192 label __label61
-   193 getlink driver n
-   194 sensor __tmp77 driver @type
-   195 jump __label48 notEqual __tmp77 @mass-driver
- 
-   246 label __label49
-   247 label __label46
-   248 op add n n 1
--    * jump __label45 always
-+  249 jump __label61 lessThan n @links
-   250 label __label47
-   251 drawflush DISPLAY
-   252 print "Mass Driver Monitor"
-
-Modifications by Loop Optimization: replicate condition at line 90 (+1 instructions):
- 
-   180 label __label42
-   181 sensor __tmp72 SWITCH @enabled
-   182 jump __label44 notEqual __tmp72 0
-+  183 label __label62
-   184 set start @time
-   185 draw color 0 0 80 255
-   186 draw rect clx cly clw clh
- 
-   259 print " ms"
-   260 printflush MESSAGE
-   261 label __label43
--    * jump __label42 always
-+  262 sensor __tmp72 SWITCH @enabled
-+  263 jump __label62 equal __tmp72 0
-   264 label __label44
-   265 end
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-   167 jump __label37 equal MEMORY null
-   168 set n 0
-   169 label __label39
--    * jump __label41 greaterThanEq n @links
-+  170 jump __label41 greaterThanEq 0 @links
-   171 label __label60
-   172 write 0 MEMORY n
-   173 label __label40
- 
-   189 set index FROM_INDEX
-   190 set n 0
-   191 label __label45
--    * jump __label47 greaterThanEq n @links
-+  192 jump __label47 greaterThanEq 0 @links
-   193 label __label61
-   194 getlink driver n
-   195 sensor __tmp77 driver @type
-
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-4 instructions):
- 
-    88 jump __label22 greaterThanEq TO_INDEX 8
-    89 op mul __tmp20 TO_INDEX BAR_GAP
-    90 op add __tmp19 OFFSET_Y __tmp20
--    * jump __label22 always
-    91 label __label22
-    92 op sub clh __tmp19 cly
-    93 set crh clh
- 
-   118 op mod __tmp38 TO_INDEX 8
-   119 op mul __tmp39 __tmp38 BAR_GAP
-   120 op add __tmp37 OFFSET_Y __tmp39
--    * jump __label28 always
-   121 label __label28
-   122 op sub clh __tmp37 cly
-   123 set crh clh
- 
-   139 jump __label32 greaterThanEq TO_INDEX 8
-   140 op mul __tmp50 TO_INDEX BAR_GAP
-   141 op add __tmp49 OFFSET_Y __tmp50
--    * jump __label32 always
-   142 label __label32
-   143 op sub clh __tmp49 cly
-   144 set crh clh
- 
-   151 op mod __tmp62 TO_INDEX 8
-   152 op mul __tmp63 __tmp62 BAR_GAP
-   153 op add __tmp61 OFFSET_Y __tmp63
--    * jump __label36 always
-   154 label __label36
-   155 op sub crh __tmp61 0
-   156 label __label33
-
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
- 
-   152 op mul __tmp63 __tmp62 BAR_GAP
-   153 op add __tmp61 OFFSET_Y __tmp63
-   154 label __label36
--    * op sub crh __tmp61 0
-+  155 set crh __tmp61
-   156 label __label33
-   157 label __label34
-   158 label __label24
-
-Modifications by Final phase, Print Merging, iteration 1 (-6 instructions):
- 
-     6 label __label0
-     7 jump __label2 notEqual DISPLAY null
-     8 label __label58
--    * print "Mass Driver Monitor"
--    * print "\n"
-+    9 print "Mass Driver Monitor\n"
+     4 set MEMORY null
+     5 label __label0
+     6 jump __label2 notEqual DISPLAY null
++    7 label __label58
+     8 print "Mass Driver Monitor"
+     9 print "\n"
     10 set n @links
     11 label __label3
     12 jump __label5 lessThanEq n 0
++   13 label __label59
+    14 op sub n n 1
+    15 getlink block n
+    16 print "Found: "
  
+    40 label __label13
+    41 label __label6
+    42 label __label4
+-    * jump __label3 always
++   43 jump __label59 greaterThan n 0
     44 label __label5
     45 print "Message: "
     46 print MESSAGE
--    * print "\n"
--    * print "Switch: "
-+   47 print "\nSwitch: "
-    48 print SWITCH
--    * print "\n"
--    * print "Memory: "
-+   49 print "\nMemory: "
-    50 print MEMORY
--    * print "\n"
--    * print "Display: "
-+   51 print "\nDisplay: "
-    52 print DISPLAY
-    53 print "\n"
-    54 jump __label15 notEqual DISPLAY null
--    * print "No display."
--    * print "\n"
-+   55 print "No display.\n"
-    56 label __label15
-    57 label __label16
-    58 printflush MESSAGE
  
-   241 jump __label61 lessThan n @links
-   242 label __label47
-   243 drawflush DISPLAY
+    61 label __label16
+    62 printflush MESSAGE
+    63 label __label1
+-    * jump __label0 always
++   64 jump __label58 equal DISPLAY null
+    65 label __label2
+    66 sensor __tmp9 DISPLAY @type
+    67 jump __label17 notEqual __tmp9 @logic-display
+ 
+   167 set n 0
+   168 label __label39
+   169 jump __label41 greaterThanEq n @links
++  170 label __label60
+   171 write 0 MEMORY n
+   172 label __label40
+   173 op add n n 1
+-    * jump __label39 always
++  174 jump __label60 lessThan n @links
+   175 label __label41
+   176 label __label37
+   177 label __label38
+ 
+   188 set n 0
+   189 label __label45
+   190 jump __label47 greaterThanEq n @links
++  191 label __label61
+   192 getlink driver n
+   193 sensor __tmp77 driver @type
+   194 jump __label48 notEqual __tmp77 @mass-driver
+ 
+   245 label __label49
+   246 label __label46
+   247 op add n n 1
+-    * jump __label45 always
++  248 jump __label61 lessThan n @links
+   249 label __label47
+   250 drawflush DISPLAY
+   251 print "Mass Driver Monitor"
+
+Modifications by Loop Optimization: replicate condition at line 90 (+1 instructions):
+ 
+   179 label __label42
+   180 sensor __tmp72 SWITCH @enabled
+   181 jump __label44 notEqual __tmp72 0
++  182 label __label62
+   183 set start @time
+   184 draw color 0 0 80 255
+   185 draw rect clx cly clw clh
+ 
+   258 print " ms"
+   259 printflush MESSAGE
+   260 label __label43
+-    * jump __label42 always
++  261 sensor __tmp72 SWITCH @enabled
++  262 jump __label62 equal __tmp72 0
+   263 label __label44
+   264 end
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+   166 jump __label37 equal MEMORY null
+   167 set n 0
+   168 label __label39
+-    * jump __label41 greaterThanEq n @links
++  169 jump __label41 greaterThanEq 0 @links
+   170 label __label60
+   171 write 0 MEMORY n
+   172 label __label40
+ 
+   188 set index FROM_INDEX
+   189 set n 0
+   190 label __label45
+-    * jump __label47 greaterThanEq n @links
++  191 jump __label47 greaterThanEq 0 @links
+   192 label __label61
+   193 getlink driver n
+   194 sensor __tmp77 driver @type
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-4 instructions):
+ 
+    87 jump __label22 greaterThanEq TO_INDEX 8
+    88 op mul __tmp20 TO_INDEX BAR_GAP
+    89 op add __tmp19 OFFSET_Y __tmp20
+-    * jump __label22 always
+    90 label __label22
+    91 op sub clh __tmp19 cly
+    92 set crh clh
+ 
+   117 op mod __tmp38 TO_INDEX 8
+   118 op mul __tmp39 __tmp38 BAR_GAP
+   119 op add __tmp37 OFFSET_Y __tmp39
+-    * jump __label28 always
+   120 label __label28
+   121 op sub clh __tmp37 cly
+   122 set crh clh
+ 
+   138 jump __label32 greaterThanEq TO_INDEX 8
+   139 op mul __tmp50 TO_INDEX BAR_GAP
+   140 op add __tmp49 OFFSET_Y __tmp50
+-    * jump __label32 always
+   141 label __label32
+   142 op sub clh __tmp49 cly
+   143 set crh clh
+ 
+   150 op mod __tmp62 TO_INDEX 8
+   151 op mul __tmp63 __tmp62 BAR_GAP
+   152 op add __tmp61 OFFSET_Y __tmp63
+-    * jump __label36 always
+   153 label __label36
+   154 op sub crh __tmp61 0
+   155 label __label33
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+   151 op mul __tmp63 __tmp62 BAR_GAP
+   152 op add __tmp61 OFFSET_Y __tmp63
+   153 label __label36
+-    * op sub crh __tmp61 0
++  154 set crh __tmp61
+   155 label __label33
+   156 label __label34
+   157 label __label24
+
+Modifications by Final phase, Print Merging, iteration 1 (-6 instructions):
+ 
+     5 label __label0
+     6 jump __label2 notEqual DISPLAY null
+     7 label __label58
 -    * print "Mass Driver Monitor"
 -    * print "\n"
-+  244 print "Mass Driver Monitor\n"
-   245 op sub __tmp109 @time start
-   246 op floor __tmp110 __tmp109
-   247 print "[lightgray]Draw time: "
++    8 print "Mass Driver Monitor\n"
+     9 set n @links
+    10 label __label3
+    11 jump __label5 lessThanEq n 0
+ 
+    43 label __label5
+    44 print "Message: "
+    45 print MESSAGE
+-    * print "\n"
+-    * print "Switch: "
++   46 print "\nSwitch: "
+    47 print SWITCH
+-    * print "\n"
+-    * print "Memory: "
++   48 print "\nMemory: "
+    49 print MEMORY
+-    * print "\n"
+-    * print "Display: "
++   50 print "\nDisplay: "
+    51 print DISPLAY
+    52 print "\n"
+    53 jump __label15 notEqual DISPLAY null
+-    * print "No display."
+-    * print "\n"
++   54 print "No display.\n"
+    55 label __label15
+    56 label __label16
+    57 printflush MESSAGE
+ 
+   240 jump __label61 lessThan n @links
+   241 label __label47
+   242 drawflush DISPLAY
+-    * print "Mass Driver Monitor"
+-    * print "\n"
++  243 print "Mass Driver Monitor\n"
+   244 op sub __tmp109 @time start
+   245 op floor __tmp110 __tmp109
+   246 print "[lightgray]Draw time: "
 
 Final code before resolving virtual instructions:
 
 set FROM_INDEX 0
 set TO_INDEX 16
 set CAPACITY 120
-set COLUMN_SIZE 8
 set DISPLAY null
 set MEMORY null
 jump __label2 notEqual DISPLAY null
@@ -1330,8 +1329,8 @@ label __label61
 getlink driver n
 sensor __tmp77 driver @type
 jump __label48 notEqual __tmp77 @mass-driver
-op idiv column index COLUMN_SIZE
-op mod row index COLUMN_SIZE
+op idiv column index 8
+op mod row index 8
 op mul __tmp82 column BAR_SPACE
 op add x OFFSET_X __tmp82
 op mul __tmp84 row BAR_GAP

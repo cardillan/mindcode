@@ -211,7 +211,7 @@ public class SchematicsBuilder {
                         e -> resolveConstant(astConstants, new HashSet<>(), e.getValue())));
 
         // Add all icon constants
-        Icons.getIcons().forEach((k, v) -> constants.put(k, v.format()));
+        Icons.forEachIcon((k, v) -> constants.put(k, v.format()));
     }
 
     private String resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {

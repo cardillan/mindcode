@@ -184,6 +184,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitCompiler_directive(MindcodeParser.Compiler_directiveContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code parameter}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameter(MindcodeParser.ParameterContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parameter}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameter(MindcodeParser.ParameterContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code literal_minus}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -565,6 +577,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitConst_decl(MindcodeParser.Const_declContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#param_decl}.
+	 * @param ctx the parse tree
+	 */
+	void enterParam_decl(MindcodeParser.Param_declContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#param_decl}.
+	 * @param ctx the parse tree
+	 */
+	void exitParam_decl(MindcodeParser.Param_declContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#fundecl}.
 	 * @param ctx the parse tree

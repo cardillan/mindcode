@@ -5,9 +5,11 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import info.teksol.mindcode.logic.BaseArgument;
 import info.teksol.mindcode.logic.InstructionParameterType;
 import info.teksol.mindcode.logic.ParameterAssignment;
+import info.teksol.mindcode.mimex.BlockType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -126,5 +128,16 @@ public class BaseInstructionProcessorTest extends AbstractGeneratorTest {
     private void checkLong(String value) {
         assertEquals(Long.parseLong(value),
                 Long.parseLong(ip.mlogRewrite(value).orElse("NaN")));
+    }
+
+    //@Test
+    public void printLinkedBlockNames() {
+        BlockType.getBaseLinkNames().stream().sorted().forEach(System.out::println);
+    }
+
+    //@Test
+    public void printLinkedBlockNamesN() {
+        BlockType.getBaseLinkNames().stream().sorted()
+                .forEach(name -> IntStream.range(1, 10).forEach(i -> System.out.println(name + i)));
     }
 }

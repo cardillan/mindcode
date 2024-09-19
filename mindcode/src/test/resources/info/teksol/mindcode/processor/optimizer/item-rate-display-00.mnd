@@ -1,9 +1,9 @@
-MEMORY = bank1;
-COORD = cell1;
-SMOOTH = 3;
-POSITION = 0;
-TOTAL = 1;
-FREQ = 1000;
+param MEMORY = bank1;
+param COORD = cell1;
+param SMOOTH = 3;
+param POSITION = 0;
+param TOTAL = 1;
+param FREQ = 1000;
 
 printflush(message1);
 println("Item Rate Display");

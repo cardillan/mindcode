@@ -15,16 +15,55 @@ is modified or the processor is destroyed.
 > is assigned to a `double` again. As a consequence, for bitwise operations the variables are able to hold only 
 > about 52 bits or so.
 
+Mindcode is aware of the actual values you assign to variables. In some cases, knowing the actual value allows 
+specific code optimizations to be performed, which are only valid for the value you've assigned to the variable in
+the source code (see [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)). Therefore, 
+changing a value assigned to a variable in the compiled code might not produce the same results as changing the 
+assigned value in the source code. For example, the following code:
+
+```
+min = 0;
+max = 10;
+
+func(min, max);
+
+while min < max do
+    println(min);
+    min += 1;
+    max -= 1;
+end;
+
+def func(min, max)
+    println(max - min > 5 ? "High" : "Low");
+end;
+```
+
+compiles into 
+
+```
+set min 0
+set max 10
+print "High\n"
+print min
+print "\n"
+op add min min 1
+op sub max max 1
+jump 3 lessThan min max
+end
+```
+
+Setting min to 10 in the source code would cause the function to output "Low" instead of "High". However, as is obvious 
+from the compiled code, the function has been optimized in such a way that it always prints "High", based on the 
+values of the `min` and `max` variables present in the source code.    
+
+Mindcode has a specific mechanism for allowing _program parametrization_, that is changing some values assigned to 
+variables in the compiled code. Such values must be declared as [program parameters](#program-parameters), as 
+described below.
+
 # Main variables
 
 Main variables are variables used in the main body of the program. The name of the variable in Mindcode is used as-is 
 in the compiled mlog code.
-
-Mindcode is also aware of the actual values you assign to variables. In some cases, knowing the actual value allows 
-Mindcode to perform specific code optimizations that are only valid for the value you've assigned to the variable in 
-the source code (see [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization)). It also means that 
-if you change a value assigned to a main variable in the compiled code, the modified code might not behave correctly.
-Only changes to values assigned to [global variables](#global-variables) are supported in the compiled code.
 
 # Local variables
 
@@ -47,32 +86,6 @@ Global variables are common to all user functions and the main program body. Use
 lowercase letters, such as `MAIN` or `_9` (this is actually not a particularly good name for a variable), to create 
 global variables. Variables whose name contains at least one lowercase letter are not global.
 
-The name of global variables in Mindcode are used as-is in Mindustry code. It might be therefore useful to put 
-assignments to important variables at the beginning of the program, so that it can be easily modified in compiled code 
-without the need of recompilation:
-
-```
-COUNT = 10
-WARNING = false
-ITEM = @coal
-print(COUNT, WARNING, ITEM)
-```
-
-produces
-
-```
-set COUNT 10
-set WARNING false
-set ITEM @coal
-print COUNT
-print WARNING
-print ITEM
-```
-
-Unlike main variables, global variables are never optimized away from the code. This also means that their use makes
-the code a bit less suitable for optimization, and you should limit their use to situations where they're really
-needed (i.e. for variables accessed from different functions, or for compile-in parameters).
-
 For example, the following code
 
 ```
@@ -93,6 +106,66 @@ examples), since both `x` and `local` in the `foo` function are local variables 
 `local` in the main program body.
 
 Using global variables as function parameters (e.g. `def foo(Z) ... end`) is not allowed.
+
+> [!NOTE]
+> In previous versions of Mindcode, global variables also served as program parameters described below. This usage 
+> of global variables will cease to be supported be removed in a future release. Please modify your programs to use 
+> program parameters instead.
+
+# Program parameters
+
+One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change crucial 
+parameters without having to recompile entire program. To this end, it is possible to declare _program parameters_,
+a special type of variable, using the `param` keyword: 
+
+```
+param UNIT_TYPE = @flare;
+param MAX_UNITS = 10;
+param MEMORY = cell1;
+param USER_NAME = "Pete"; 
+```
+
+This code, when compiled, produces the following instructions:
+
+```
+set UNIT_TYPE @flare
+set MAX_UNITS 10
+set MEMORY cell1
+set USER_NAME "Pete"
+```
+
+Names of the mlog variables representing the program parameters are always the same as the names used in the source 
+code. Values assigned through these instructions can be changed in the compiled code. When modifying values assigned 
+to program parameters in the compiled code, the program behaves as if these values were specified in the source code 
+itself. This is not guaranteed when changing values assigned to any other variables in the compiled mlog code.
+
+The following values may be used when declaring program parameters:
+
+* String or numeric literals, such as `5` or `"some text"`.
+* Names of linked blocks, such as `message1` or `switch5`.
+* Mindustry logic values and constant (or effectively constant) variables, such as `@flare`, `@coal` or `@mapw`.
+
+Other values, including compile-time constant expressions (e.g. `5 * 3`) and non-constant mlog values (e.g. `@links`)
+are not allowed.
+
+> [!NOTE]
+> Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled 
+> code is constant. When assigning a non-constant value (for example `@links`) to a program parameter, the behavior 
+> of the program is generally undefined.   
+
+In Mindcode, program parameters are global (can be accessed from main code and all functions) even when their names 
+contain lower case letters, and once declared, are read-only. It is not allowed to assign a new value to them:
+
+```
+param parameter = 10; // lower-case names are ok
+parameter = 20;       // error, cannot assign another value to parameter.
+```
+
+This means there's always exactly one `set` instruction assigning a value to the program parameter, making the 
+purpose of the mlog variable in the compiled code clearer. 
+
+Unlike other types of variables, program parameters are never optimized away from the code. Only when the program 
+parameter is not used at all in the program, it may be removed by the Dead Code optimization.
 
 # External memory
 
@@ -214,12 +287,12 @@ functions not supporting non-numeric variables or parameters.
 
 When you build your Mindcode scripts, the actual Memory Cell and Memory Bank that you use may be different from the 
 ones you use when playing the game. To that end, you also have the option of referencing your heap and stack through 
-the use of a variable, like this:
+the use of a program parameter, like this:
 
 ```
-HEAPPTR = cell3
-allocate heap in HEAPPTR
-$dx = 0
+param HEAPPTR = cell3;
+allocate heap in HEAPPTR;
+$dx = 0;
 ```
 
 This will translate to:
@@ -229,15 +302,15 @@ set HEAPPTR cell3
 write 0 HEAPPTR 0
 ```
 
-Since the very first instruction of the compiled code will be the global variable assignment, you can easily change the
-actual cell or bank your will use, without having to do a global search & replace within the compiled code. This 
-introduces more avenues for code sharing.
+Since the very first instruction of the compiled code will be the program parameter assignment, you can easily 
+change the actual cell or bank your will use, without having to do a global search & replace within the compiled 
+code. This introduces more avenues for code sharing.
 
 It is possible to allocate stack and heap in the same memory block, and/or in one statement:
 
 ```
-MEMORY = bank1
-allocate stack in MEMORY[0 .. 480], heap in MEMORY[481 ... 512]
+param MEMORY = bank1;
+allocate stack in MEMORY[0 ... 480], heap in MEMORY[480 ... 512];
 ```
 
 # Built-in variables
@@ -297,48 +370,78 @@ The list of possible block names is quite exhaustive.
 
 <details><summary>Show full list of Mindustry block names.</summary>
 
+* `acropolis`
+* `afflict`
 * `arc`
+* `assembler`
 * `bank`
+* `bastion`
 * `battery`
+* `bore`
+* `breach`
+* `bridge`
+* `canvas`
 * `cell`
-* `center`
 * `centrifuge`
+* `chamber`
+* `citadel`
 * `compressor`
+* `concentrator`
+* `condenser`
 * `conduit`
+* `constructor`
 * `container`
 * `conveyor`
 * `crucible`
+* `crusher`
 * `cultivator`
 * `cyclone`
+* `deconstructor`
+* `diffuse`
 * `diode`
 * `disassembler`
+* `disperse`
 * `display`
 * `distributor`
 * `dome`
 * `door`
 * `drill`
 * `driver`
+* `duct`
 * `duo`
+* `electrolyzer`
 * `extractor`
+* `fabricator`
 * `factory`
 * `foreshadow`
 * `foundation`
+* `furnace`
 * `fuse`
 * `gate`
 * `generator`
+* `gigantic`
 * `hail`
+* `heater`
+* `huge`
+* `illuminator`
 * `incinerator`
 * `junction`
 * `kiln`
 * `lancer`
+* `link`
+* `loader`
+* `lustre`
+* `malign`
 * `meltdown`
 * `melter`
 * `mender`
 * `message`
 * `mine`
 * `mixer`
+* `module`
 * `node`
 * `nucleus`
+* `pad`
 * `panel`
 * `parallax`
 * `point`
@@ -346,26 +449,39 @@ The list of possible block names is quite exhaustive.
 * `processor`
 * `projector`
 * `pulverizer`
+* `pump`
+* `radar`
 * `reactor`
 * `reconstructor`
+* `redirector`
+* `refabricator`
 * `ripple`
 * `router`
 * `salvo`
+* `scathe`
 * `scatter`
 * `scorch`
 * `segment`
 * `separator`
 * `shard`
 * `smelter`
+* `smite`
 * `sorter`
+* `source`
 * `spectre`
+* `sublimate`
 * `swarmer`
 * `switch`
+* `synthesizer`
 * `tank`
+* `thruster`
+* `titan`
 * `tower`
 * `tsunami`
+* `turret`
 * `unloader`
 * `vault`
+* `void`
 * `wall`
 * `wave`
 * `weaver`

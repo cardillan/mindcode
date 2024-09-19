@@ -13,7 +13,7 @@
    153 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 838):
-  * Loop Optimization: replicate condition at line 70            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
+  * Loop Optimization: replicate condition at line 71            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-22 instructions):
  
@@ -720,7 +720,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    204 print "[]\n# of cycles: "
    205 print CYCLES
 
-Modifications by Loop Optimization: replicate condition at line 70 (+1 instructions):
+Modifications by Loop Optimization: replicate condition at line 71 (+1 instructions):
  
    116 label __label29
    117 sensor __tmp21 SWITCH @enabled

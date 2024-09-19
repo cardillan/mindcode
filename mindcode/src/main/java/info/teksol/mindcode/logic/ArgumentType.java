@@ -12,6 +12,7 @@ public enum ArgumentType {
 
     // Variables
     BLOCK,
+    PARAMETER,
     GLOBAL_VARIABLE,
     LOCAL_VARIABLE,
     TMP_VARIABLE,

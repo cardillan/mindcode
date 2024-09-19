@@ -1,15 +1,15 @@
-FREQ = 100;
+param FREQ = 100;
 DISPLAY = null;
 MEMORY = null;
 
-M_START_INDEX = 0;
-M_CURRENT_INDEX = M_START_INDEX + 1;
-M_R0 = M_CURRENT_INDEX + 2;
-M_G0 = M_R0 + 1;
-M_B0 = M_G0 + 1;
-M_R1 = M_B0 + 1;
-M_G1 = M_R1 + 1;
-M_B1 = M_G1 + 1;
+const M_START_INDEX = 0;
+const M_CURRENT_INDEX = M_START_INDEX + 1;
+const M_R0 = M_CURRENT_INDEX + 2;
+const M_G0 = M_R0 + 1;
+const M_B0 = M_G0 + 1;
+const M_R1 = M_B0 + 1;
+const M_G1 = M_R1 + 1;
+const M_B1 = M_G1 + 1;
 
 while MEMORY == null || DISPLAY == null
 	print("Item/Liquid/Energy Level Display");

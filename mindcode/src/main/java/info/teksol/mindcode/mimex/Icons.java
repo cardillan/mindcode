@@ -2,6 +2,7 @@ package info.teksol.mindcode.mimex;
 
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
+import info.teksol.mindcode.logic.LogicValue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,12 +11,21 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public class Icons {
 
-    public static Map<String, LogicLiteral> getIcons() {
+    public static Map<String, LogicValue> createIconMap() {
         return new HashMap<>(ICON_MAP);
+    }
+
+    public static boolean isIconName(String name) {
+        return ICON_MAP.containsKey(name);
+    }
+
+    public static LogicLiteral getIconValue(String name) {
+        return ICON_MAP.get(name);
     }
 
     public static String translateIcon(String text) {
@@ -23,8 +33,12 @@ public class Icons {
         return literal == null ? text : literal.format();
     }
 
-    public static boolean isIcon(String text) {
+    public static boolean isIconValue(String text) {
         return REVERSE_MAP.containsKey(text);
+    }
+
+    public static void forEachIcon(BiConsumer<String, LogicLiteral> action) {
+        ICON_MAP.forEach(action);
     }
 
     public static String decodeIcon(String text) {

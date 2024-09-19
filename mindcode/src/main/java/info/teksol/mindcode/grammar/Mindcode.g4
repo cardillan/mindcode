@@ -39,6 +39,7 @@ expression : directive                                                          
                                 (true_branch=expression COLON false_branch=expression)          # ternary_op
            | assign                                                                             # assignment
            | const_decl                                                                         # constant
+           | param_decl                                                                         # parameter
            | literal_t                                                                          # literal_string
            | numeric_t                                                                          # literal_numeric
            | bool_t                                                                             # literal_bool
@@ -72,6 +73,8 @@ alloc_list : type=(HEAP | STACK) IN id alloc_range?
 alloc_range : LEFT_SBRACKET range_expression RIGHT_SBRACKET;
 
 const_decl : CONST name=id ASSIGN value=expression;
+
+param_decl : PARAM name=id ASSIGN value=expression;
 
 fundecl : ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET args=arg_decl_list RIGHT_RBRACKET body=expression_list END
         | ( inline = (INLINE | NOINLINE))? DEF name=id LEFT_RBRACKET RIGHT_RBRACKET body=expression_list END
@@ -199,10 +202,10 @@ CONST : 'const';
 CONTINUE : 'continue';
 DEF : 'def';
 DO : 'do';
-ELSE : 'else';
-ELSIF : 'elsif';
-ELSEIF : 'elseif';
 ELIF : 'elif';
+ELSE : 'else';
+ELSEIF : 'elseif';
+ELSIF : 'elsif';
 END : 'end';
 FALSE : 'false';
 FOR : 'for';
@@ -213,6 +216,7 @@ INLINE : 'inline';
 LOOP : 'loop';
 NOINLINE : 'noinline';
 NULL : 'null';
+PARAM : 'param';
 RETURN : 'return';
 SENSOR : 'sensor';
 STACK : 'stack';

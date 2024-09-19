@@ -887,7 +887,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
      */
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
         return switch (variable.getType()) {
-            case COMPILER, FUNCTION_RETADDR, GLOBAL_VARIABLE -> false;
+            case COMPILER, FUNCTION_RETADDR, PARAMETER, GLOBAL_VARIABLE -> false;
             case FUNCTION_RETVAL -> {
                 // Function return values cannot be eliminated inside their functions - at this point we have no
                 // information whether they're read somewhere. Outside their functions they're processed normally

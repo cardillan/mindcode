@@ -1,7 +1,7 @@
-FROM_INDEX = 0;
-TO_INDEX = 16;
-CAPACITY = 120;
-COLUMN_SIZE = 8;
+param FROM_INDEX = 0;
+param TO_INDEX = 16;
+param CAPACITY = 120;
+const COLUMN_SIZE = 8;
 
 DISPLAY = null;
 MEMORY = null;

@@ -9,6 +9,7 @@ public record BlockType(
         String baseName,
         String name,
         int id,
+        String visibility,
         String implementation,
         int size,
         boolean hasPower,
@@ -52,6 +53,7 @@ public record BlockType(
 
     public static Set<String> getBaseLinkNames() {
         return NAME_MAP.values().stream()
+                .filter(b -> !b.visibility.equals("hidden"))
                 .map(BlockType::getBaseLinkName)
                 .collect(Collectors.toSet());
     }

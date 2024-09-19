@@ -184,8 +184,8 @@ public class ConstantExpressionEvaluator {
             case NumericValue n     -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
             case StringLiteral n    -> StringVariable.newStringValue(false, name, n.getText());
             case ConstantAstNode n  -> throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
-            case VarRef n           -> Icons.getIcons().containsKey(n.getName())
-                    ? StringVariable.newStringValue(false, n.getName(), Icons.getIcons().get(n.getName()).format())
+            case VarRef n           -> Icons.isIconName(n.getName())
+                    ? StringVariable.newStringValue(false, n.getName(), Icons.getIconValue(n.getName()).format())
                     : null;
             default                 -> null;
         };

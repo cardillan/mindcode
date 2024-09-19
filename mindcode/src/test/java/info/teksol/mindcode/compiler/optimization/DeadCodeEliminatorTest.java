@@ -234,4 +234,19 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                 createInstruction(END)
         );
     }
+
+    @Test
+    void removesUnusedGlobalParameters() {
+        assertCompilesToWithMessages(ignore("List of unused variables: a."),
+                """
+                        param a = 1;
+                        param b = 2;
+                        
+                        print(b);
+                        """,
+                createInstruction(SET, "b", "2"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
 }

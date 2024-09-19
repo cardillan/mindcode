@@ -5,6 +5,7 @@ import info.teksol.mindcode.compiler.AbstractGeneratorTest;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mindcode.logic.Opcode.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
@@ -1193,4 +1194,110 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz"));
     }
+
+    @Test
+    void compilesConstant() {
+        assertCompilesTo(
+                "const a = 10; print(a);",
+                createInstruction(PRINT, "10"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void refusesConflictingConstants() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; const a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingConstantAndVariable() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; a = 20;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("a = 10; const a = 20;"));
+    }
+
+    @Test
+    void compilesParameter() {
+        assertCompilesTo("""
+                        param a = 10;
+                        print(a);
+                        """,
+                createInstruction(SET, "a", "10"),
+                createInstruction(PRINT, "a"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void refusesNonConstantParameters() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 2 * 4;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = @unit;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = rand(5);"));
+    }
+
+    @Test
+    void refusesConflictingParameters() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; param a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingParameterAndConstant() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; const a = 20;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; param a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingParameterAndVariable() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; a = 20;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("a = 10; param a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingFunctionParameter() {
+        assertDoesNotThrow(
+                () -> generateInstructions("a = 10; def foo(a) print(a); end; foo(5);"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; def foo(a) print(a); end; foo(5);"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; def foo(a) print(a); end; foo(5);"));
+    }
+
+    @Test
+    void compilesParameterWithBuiltInValueOrBLock() {
+        assertCompilesTo("""
+                        param a = @flare;
+                        param b = message1;
+                        
+                        print(a, b);
+                        """,
+                createInstruction(SET, "a", "@flare"),
+                createInstruction(SET, "b", "message1"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesMemoryAccessThroughParameter() {
+        assertCompilesTo("""
+                        param mem = bank1;
+                        mem[0] = 5;
+                        """,
+                createInstruction(SET, "mem", "bank1"),
+                createInstruction(WRITE, "5", "mem", "0"),
+                createInstruction(END)
+        );
+    }
+
 }

@@ -1,4 +1,4 @@
-LINK_ID = 1;
+param LINK_ID = 1;
 const QUERY_BASE = 99999900;
 QUERY_FLAG = QUERY_BASE + LINK_ID;
 position = 100 * (vault1.x + @mapw * vault1.y);

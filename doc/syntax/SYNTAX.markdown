@@ -78,7 +78,9 @@ This is a list of Mindcode keywords:
 * `in`
 * `inline`
 * `loop`
+* `noinline`
 * `null`
+* `param`
 * `return`
 * `sensor`
 * `stack`

@@ -1,5 +1,5 @@
 // Unit speed measurement
-UNIT = @flare;
+param UNIT = @flare;
 
 SX = 10;
 SY = 10;

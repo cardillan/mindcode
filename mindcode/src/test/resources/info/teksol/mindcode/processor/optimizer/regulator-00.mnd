@@ -9,8 +9,8 @@
 // devices are activated when the level is high and deactivated when it is low.
 // Level is measured as a percentage of total capacity filled by materials.
 
-PCT_LOW = 60;
-PCT_HIGH = 80;
+param PCT_LOW = 60;
+param PCT_HIGH = 80;
 CONTAINER = null;
 SORTER = null;
 
@@ -50,6 +50,7 @@ do
 				START = n + 1;
 		end;
 	end;
+
 
 	println("Message: ", MESSAGE);
 	println("Switch: ", SWITCH);

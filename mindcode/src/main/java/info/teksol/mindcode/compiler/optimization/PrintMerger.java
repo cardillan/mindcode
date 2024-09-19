@@ -2,7 +2,6 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
-import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
 
 import static info.teksol.mindcode.logic.ArgumentType.STRING_LITERAL;
@@ -69,16 +68,16 @@ class PrintMerger extends BaseOptimizer {
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
     private void tryMerge(LogicIterator iterator, PrintInstruction current) {
-        if (previous instanceof PrintInstruction p && p.getValue() instanceof LogicLiteral lit1 && current.getValue() instanceof LogicLiteral lit2) {
-            if (aggressive() || lit1.getType() == STRING_LITERAL && lit2.getType() == STRING_LITERAL) {
-                String str1 = lit1.format();
-                String str2 = lit2.format();
+        if (previous instanceof PrintInstruction previous && previous.getValue().isConstant() && current.getValue().isConstant()) {
+            if (aggressive() || previous.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
+                String str1 = previous.getValue().format();
+                String str2 = current.getValue().format();
                 // Do not merge strings if the combined length is over 34, unless aggressive
                 if (aggressive() || str1.length() + str2.length() <= 34) {
                     PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
-                    removeInstruction(previous);
+                    removeInstruction(this.previous);
                     iterator.set(merged);
-                    previous = merged;
+                    this.previous = merged;
                     return;
                 }
             }
@@ -91,12 +90,13 @@ class PrintMerger extends BaseOptimizer {
     // When successful, updates instructions and sets previous to the newly merged instruction.
     // If the merge is not possible, sets previous to current
     private void tryMerge(LogicIterator iterator, RemarkInstruction current) {
-        if (previous instanceof RemarkInstruction r && r.getAstContext() == current.getAstContext() &&
-                r.getValue() instanceof LogicLiteral lit1 && current.getValue() instanceof LogicLiteral lit2) {
-            RemarkInstruction merged = createRemark(current.getAstContext(), LogicString.create(lit1.format() + lit2.format()));
-            removeInstruction(previous);
+        if (previous instanceof RemarkInstruction previous && previous.getAstContext() == current.getAstContext() &&
+                previous.getValue().isConstant() && current.getValue().isConstant()) {
+            RemarkInstruction merged = createRemark(current.getAstContext(),
+                    LogicString.create(previous.getValue().format() + current.getValue().format()));
+            removeInstruction(this.previous);
             iterator.set(merged);
-            previous = merged;
+            this.previous = merged;
             return;
         }
 

@@ -114,6 +114,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompiler_directive(MindcodeParser.Compiler_directiveContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code parameter}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter(MindcodeParser.ParameterContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code literal_minus}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -337,6 +344,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitConst_decl(MindcodeParser.Const_declContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#param_decl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParam_decl(MindcodeParser.Param_declContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#fundecl}.
 	 * @param ctx the parse tree

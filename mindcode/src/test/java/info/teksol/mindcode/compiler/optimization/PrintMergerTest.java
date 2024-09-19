@@ -46,18 +46,19 @@ public class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void mergesAllLiterals() {
         assertCompilesTo("""
-                        const MAX = 3 * 333
-                            print(15.79684)
-                            print("A")
-                            print(true)
-                            print("B")
-                            print(700)
-                            print("C")
-                            print(null)
-                            print("D")
-                            print(MAX)
-                            """,
-                createInstruction(PRINT, "\"15.79684A1B700CnullD999\""),
+                        const MAX = 3 * 333;
+                        print(15.79684);
+                        print("A");
+                        print(true);
+                        print("B");
+                        print(700);
+                        print("C");
+                        print(null);
+                        print(@flare);
+                        print("D");
+                        print(MAX);
+                        """,
+                createInstruction(PRINT, "\"15.79684A1B700CnullflareD999\""),
                 createInstruction(END)
         );
     }
@@ -119,10 +120,10 @@ public class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     @Test
     void mergesRemarks() {
         assertCompilesTo("""
-                        remark("Iteration: ${}", 1); 
+                        remark("Processing: ${}", @mono); 
                         remark("bar"); 
                         """,
-                createInstruction(REMARK, q("Iteration: 1")),
+                createInstruction(REMARK, q("Processing: mono")),
                 createInstruction(REMARK, q("bar")),
                 createInstruction(END)
         );

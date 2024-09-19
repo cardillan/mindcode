@@ -7,11 +7,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     private static final String RETURN_VALUE = "retval";
     private static final String RETURN_ADDRESS = "retaddr";
 
-    private final String functionPrefix;
-    private final String name;
-    private final String fullName;
+    protected final String functionPrefix;
+    protected final String name;
+    protected final String fullName;
 
-    private LogicVariable(ArgumentType argumentType, String name) {
+    protected LogicVariable(ArgumentType argumentType, String name) {
         super(argumentType);
         this.functionPrefix = null;
         this.name = Objects.requireNonNull(name);
@@ -44,13 +44,18 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
+    public String format() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public boolean isUserVariable() {
-        return getType() == ArgumentType.GLOBAL_VARIABLE || getType() == ArgumentType.LOCAL_VARIABLE;
+        return getType() == ArgumentType.PARAMETER || getType() == ArgumentType.GLOBAL_VARIABLE || getType() == ArgumentType.LOCAL_VARIABLE;
     }
 
     @Override
     public boolean isGlobalVariable() {
-        return getType() == ArgumentType.GLOBAL_VARIABLE;
+        return getType() == ArgumentType.PARAMETER || getType() == ArgumentType.GLOBAL_VARIABLE;
     }
 
     @Override

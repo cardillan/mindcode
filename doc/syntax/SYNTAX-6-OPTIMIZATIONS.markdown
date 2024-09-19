@@ -299,27 +299,32 @@ avoid variable replacements that do not lead to instruction elimination - this w
 understandable, but the optimizer would have to be more complex and therefore more prone to errors.
 
 > [!NOTE]
-> One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change 
+> One of Mindcode goals is to facilitate making small changes to the compiled code, allowing users to change
 > crucial parameters in the compiled code without a need to recompile entire program. To this end, assignments to
-> [global variables](SYNTAX-1-VARIABLES.markdown#global-variables) are never removed. Any changes to `set`
-> instructions in the compiled code assigning value to global variables are fully supported and the resulting program
-> is fully functional, as if the value was assigned to the global variable in the source code itself.
->
+> [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters) are never removed. Any changes to `set`
+> instructions in the compiled code assigning value to program parameters are fully supported and the resulting 
+> program is fully functional, as if the value was assigned to the program parameter in the source code itself.
+> 
 > All other variables, including [main variables](SYNTAX-1-VARIABLES.markdown#main-variables) and
 > [local variables](SYNTAX-1-VARIABLES.markdown#local-variables), can be completely removed by this optimization.
 > Even if they stay in the compiled code, changing the value assigned to a main variable may not produce the same
-> effect as compiling the program with the other value. In other words, **changing a value assigned to main variable
+> effect as compiling the program with the changed value. In other words, **changing a value assigned to main variable
 > in the compiled code may break the compiled program.**
 >
 > If you wish to create a parametrized code, follow these rules for best results:
 >
-> * Use global variables as placeholders for the parametrized values.
-> * Assign the parameter values at the very beginning of the program (this way the parameters will be easy to find in
+> * Use program parameters as placeholders for the parametrized values.
+> * Declare the parameters at the very beginning of the program (this way the parameters will be easy to find in
 >   the compiled code).
 > * If you sanitize or otherwise modify the parameter value before being used by the program, store the results
->   of these operations in non-global variables, unless you need them to be global (accessible from multiple
->   functions).
-> * Do not modify instructions other than `set` instructions assigning values to global variables in the compiled code.
+>   of these operations in another variable. Program parameters are read-only in Mindcode and cannot be modified 
+>   once set.
+> * Do not modify instructions other than `set` instructions assigning values to program parameters in the compiled 
+>   code.
+>
+> **At this moment, global variables are handled in the same way as program parameters. In future versions, global
+> variables will be processed by the Data Flow Optimization too. Always program parameters for allowing program
+> parametrization.**
 
 ### Optimization levels
 

@@ -1,8 +1,8 @@
 // Adapted from https://github.com/mlogjs/mlogjs/blob/main/compiler/test/examples/breakout.js
 #set optimization = aggressive;
 
-BRICKS = bank1;
-DISPLAY = display1;
+param BRICKS = bank1;
+param DISPLAY = display1;
 
 const size = 176;
 
@@ -19,7 +19,7 @@ const brickTotal = brickCols * brickRows;
 const paddleHeight = 5;
 const paddleY = 10;
 const paddleSpeed = 3;
-PADDLECONTROLLER = switch1;
+param PADDLECONTROLLER = switch1;
 
 // ball
 const ballMaxStartSpeed = 5;

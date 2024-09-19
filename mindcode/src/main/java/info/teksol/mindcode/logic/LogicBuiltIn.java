@@ -29,6 +29,15 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
         return !isVolatile();
     }
 
+    @Override
+    public String format() {
+        if (isConstant()) {
+            return name;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
     /**
      * Determines whether the identifier is a volatile variable, i.e. a variable whose value can change
      * independently of the program.

@@ -1,9 +1,9 @@
-FROM_INDEX = 0;
-TO_INDEX = 16;
-EXPECTED_BOOST = 1.5;
+param FROM_INDEX = 0;
+param TO_INDEX = 16;
+param EXPECTED_BOOST = 1.5;
 
-LIM1 = 33;
-LIM2 = 66;
+const LIM1 = 33;
+const LIM2 = 66;
 
 DISPLAY = null;
 TYPE = null;

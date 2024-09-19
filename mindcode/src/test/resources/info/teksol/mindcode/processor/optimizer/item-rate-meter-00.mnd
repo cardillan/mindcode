@@ -1,4 +1,4 @@
-TICKS = 60;
+param TICKS = 60;
 SOURCE_MEMORY = null;
 TARGET_MEMORY = null;
 

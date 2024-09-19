@@ -15,6 +15,4 @@ public interface LogicLiteral extends LogicValue, MindustryValue {
     boolean isNull();
 
     double getDoubleValue();
-
-    String format();
 }

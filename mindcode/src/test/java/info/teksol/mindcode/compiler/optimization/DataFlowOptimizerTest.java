@@ -144,6 +144,23 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
     //</editor-fold>
 
+    //<editor-fold desc="Global parameters">
+    @Test
+    void leavesGlobalParameters() {
+        assertCompilesTo("""
+                        param a = 1;
+                        b = 2;
+                        print(a * b);
+                        """,
+                createInstruction(SET, "a", "1"),
+                createInstruction(OP, "mul", var(0), "a", "2"),
+                createInstruction(PRINT, var(0)),
+                createInstruction(END)
+        );
+    }
+    //</editor-fold>
+
+
     //<editor-fold desc="Main variables">
     @Test
     void removesUnneededVariables() {

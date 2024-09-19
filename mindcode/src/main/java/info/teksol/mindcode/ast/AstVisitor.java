@@ -47,6 +47,8 @@ public interface AstVisitor<T> {
 
     T visitNumericValue(NumericValue node);
 
+    T visitParameter(Parameter node);
+
     T visitPropertyAccess(PropertyAccess node);
 
     T visitRange(Range node);

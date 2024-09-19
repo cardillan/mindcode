@@ -147,7 +147,7 @@ public class Decompiler {
             char ch = label.charAt(i);
             if (ch >= 32768) {
                 String icon = String.valueOf(ch);
-                if (Icons.isIcon(icon)) {
+                if (Icons.isIconValue(icon)) {
                     consumer.accept(icon);
                 }
             }

@@ -49,9 +49,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     
     // Constants and global variables
     // Key is the name of variable/constant
-    // Value is either an ConstantAstNode (for constant) or null (for variable)
+    // Value is either an LogicLiteral (for a constant), LogicVariable (for a parameter) or null (for a variable)
     // Initialized to contain icon constants
-    private final Map<String, LogicLiteral> constants = Icons.getIcons();
+    private final Map<String, LogicValue> identifiers = Icons.createIconMap();
 
     // Tracks all local function variables, including function parameters - once accessed, they have to be preserved.
     private LocalContext functionContext = new LocalContext();
@@ -300,23 +300,35 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         }
     }
 
-    private LogicLiteral queryConstantName(String name) {
-        if (constants.get(name) != null) {
-            return constants.get(name);
+    private LogicValue queryConstantName(String name) {
+        if (identifiers.get(name) != null) {
+            return identifiers.get(name);
         } else {
             // Register the identifier as a variable name
-            constants.put(name, null);
+            identifiers.put(name, null);
             return null;
         }
     }
 
     private void registerConstant(String name, ConstantAstNode value) {
-        if (constants.get(name) != null) {
-            throw new MindcodeException(value.startToken(), "multiple declarations of constant '%s'.", name);
-        } else if (constants.containsKey(name)) {
+        if (identifiers.get(name) != null) {
+            throw new MindcodeException(value.startToken(), "multiple declarations of '%s'.", name);
+        } else if (identifiers.containsKey(name)) {
             throw new MindcodeException(value.startToken(), "cannot redefine variable or function parameter '%s' as a constant.", name);
         }
-        constants.put(name, value.toLogicLiteral(instructionProcessor));
+        identifiers.put(name, value.toLogicLiteral(instructionProcessor));
+    }
+
+    private LogicParameter registerParameter(Parameter parameter, LogicValue logicValue) {
+        final String name = parameter.getName();;
+        if (identifiers.get(name) != null) {
+            throw new MindcodeException(parameter.startToken(), "multiple declarations of '%s'.", name);
+        } else if (identifiers.containsKey(name)) {
+            throw new MindcodeException(parameter.startToken(), "cannot redefine variable or function parameter '%s' as a global parameter.", name);
+        }
+        LogicParameter logicParameter = LogicParameter.parameter(name, logicValue);
+        identifiers.put(name, logicParameter);
+        return logicParameter;
     }
 
     private void emitEnd() {
@@ -526,7 +538,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             // paramValues were visited in caller's context
             VarRef varRef = paramsRefs.get(i);
             LogicVariable argument = visitVariableVarRef(varRef, "Function '" + function.getName() +
-                    "': parameter name '" + varRef.getName() + "' clashes with existing constant.");
+                    "': parameter name '" + varRef.getName() + "' conflicts with existing constant or global parameter.");
 
             emit(createSet(argument, arguments.get(i)));
         }
@@ -576,7 +588,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     public LogicValue visitHeapAccess(HeapAccess node) {
         final LogicVariable tmp = nextNodeResult();
         final LogicValue index = resolveHeapIndex(node);
-        emit(createRead(tmp, createVariable(node.getCellName()), index));
+        emit(createRead(tmp, createMemoryVariable(node.getCellName()), index));
         return tmp;
     }
 
@@ -658,6 +670,39 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
+    public LogicParameter visitParameter(Parameter node) {
+        if (!functionPrefix.isEmpty()) {
+            throw new MindcodeException(node.startToken(), "parameter declaration not allowed in user function '%s'.", node.getName());
+        }
+        LogicValue logicValue = extractParameterValue(node);    // throws exception if not permissible
+        LogicParameter parameter = registerParameter(node, logicValue);
+        emit(createSet(parameter, logicValue));
+        return parameter;
+    }
+
+    public LogicValue extractParameterValue(Parameter node) {
+        switch(node.getValue()) {
+            case ConstantAstNode v:
+                return v.toLogicLiteral(instructionProcessor);
+
+            case Ref r:
+                LogicValue value = visitRef(r);
+                if (value.isConstant()) return value;
+                break;
+
+            case VarRef r:
+                if (instructionProcessor.isBlockName(r.getName())) {
+                    return LogicVariable.block(r.getName());
+                }
+
+            default:
+                // Do nothing - error
+        }
+
+        throw new MindcodeException(node.startToken(), "Parameter declaration of '%s' does not use a constant expression, linked block name or constant mlog variable.", node.getName());
+    }
+
+    @Override
     public LogicValue visitDirective(Directive node) {
         // Do nothing - directives are preprocessed
         return null;
@@ -680,7 +725,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         switch (node.getVar()) {
             case HeapAccess heapAccess -> {
                 final LogicValue address = resolveHeapIndex(heapAccess);
-                emit(createWrite(rvalue, createVariable(heapAccess.getCellName()), address));
+                emit(createWrite(rvalue, createMemoryVariable(heapAccess.getCellName()), address));
             }
 
             case PropertyAccess propertyAccess -> {
@@ -694,8 +739,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
             case VarRef varRef -> {
                 String name = varRef.getName();
-                if (constants.get(name) != null) {
-                    throw new MindcodeException(node.startToken(), "assignment to constant '%s' not allowed.", name);
+                if (identifiers.get(name) != null) {
+                    throw new MindcodeException(node.startToken(), "assignment to constant or parameter '%s' not allowed.", name);
                 }
 
                 final LogicValue target = visit(node.getVar());
@@ -960,13 +1005,13 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     private LogicValue createVariableOrConstant(String identifier, boolean requireVariable, String errorMessage) {
-        // If the name refers to a constant, use it.
+        // If the name refers to a constant/parameter, use it.
         // If it wasn't a constant already, the name will be reserved for a variable
         LogicValue constant = queryConstantName(identifier);
         if (constant != null) {
             if (requireVariable) {
                 throw new MindcodeException(errorMessage != null ? errorMessage
-                        : '\'' + identifier + "' is a constant; variable is expected here.");
+                        : '\'' + identifier + "' is a constant or parameter; a variable is expected here.");
             }
             return constant;
         }
@@ -987,6 +1032,20 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return functionContext.registerVariable(
                     LogicVariable.local(currentFunction.getName(), functionPrefix, identifier));
         }
+    }
+
+    // A variable is required here
+    private LogicVariable createMemoryVariable(String identifier) {
+        LogicValue constant = queryConstantName(identifier);
+        if (constant != null) {
+            if (constant instanceof LogicParameter p && p.getValue().getType() == ArgumentType.BLOCK) {
+                return p;
+            } else {
+                throw new MindcodeException("'" + identifier + "' cannot be used for external memory access.");
+            }
+        }
+
+        return (LogicVariable) createVariableOrConstant(identifier, true, null);
     }
 
     @Override

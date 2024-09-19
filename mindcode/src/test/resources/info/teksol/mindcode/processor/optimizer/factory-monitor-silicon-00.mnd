@@ -1,6 +1,6 @@
-FROM_INDEX = 0;
-TO_INDEX = 8;
-EXPECTED_BOOST = 1.5;
+param FROM_INDEX = 0;
+param TO_INDEX = 8;
+param EXPECTED_BOOST = 1.5;
 
 const OFFSET_X = 5;
 const OFFSET_Y = 4;
