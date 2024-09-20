@@ -129,48 +129,53 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     }
 
     @Test
-    void ignoresGlobalVariablesOnFunctionCall() {
+    void recognizesGlobalVariablesModifiedByFunctions() {
         assertCompilesTo("""
-                        allocate stack in cell1
+                        A = 10;
+                        B = rand(20);
+                        for i = 0; i < A; i += 1 do
+                            x = 2 * A;
+                            y = 2 * B;
+                            foo(10);
+                            print(x, y);
+                        end;
                                                 
-                        A = 10
-                        for i = 0; i < A; i += 1
-                            x = 2 * A
-                            foo(10)
-                            print(x)
+                        noinline def foo(n)
+                            print(n);
+                            bar(n);
                         end
-                                                
-                        def foo(n)
-                            print(n)
-                            A = 20
-                            if n > 0
-                                foo(n - 1)
-                            end
-                        end
+                        
+                        noinline def bar(x)
+                            A = x - B;
+                        end;
                         """,
                 createInstruction(LABEL, "__start__"),
-                createInstruction(SET, "__sp", "0"),
                 createInstruction(SET, "A", "10"),
+                createInstruction(OP, "rand", "B", "20"),
                 createInstruction(SET, "i", "0"),
+                createInstruction(OP, "mul", "y", "2", "B"),
                 createInstruction(JUMP, "__start__", "greaterThanEq", "0", "A"),
                 createInstruction(LABEL, var(1009)),
                 createInstruction(OP, "mul", "x", "2", "A"),
-                createInstruction(SET, "__fn0_n", "10"),
-                createInstruction(CALLREC, "cell1", var(1000), var(1004), "__fn0retval"),
-                createInstruction(LABEL, var(1004)),
+                createInstruction(SET, "__fn1_n", "10"),
+                createInstruction(SETADDR, "__fn1retaddr", var(1005)),
+                createInstruction(CALL, var(1001), "__fn1retval"),
+                createInstruction(GOTOLABEL, var(1005), "__fn1"),
                 createInstruction(PRINT, "x"),
+                createInstruction(PRINT, "y"),
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(JUMP, var(1009), "lessThan", "i", "A"),
                 createInstruction(END),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(PRINT, "__fn0_n"),
-                createInstruction(SET, "A", "20"),
-                createInstruction(JUMP, var(1007), "lessThanEq", "__fn0_n", "0"),
-                createInstruction(OP, "sub", "__fn0_n", "__fn0_n", "1"),
-                createInstruction(CALLREC, "cell1", var(1000), var(1008), "__fn0retval"),
-                createInstruction(LABEL, var(1008)),
-                createInstruction(LABEL, var(1007)),
-                createInstruction(RETURN, "cell1")
+                createInstruction(OP, "sub", "A", "__fn0_x", "B"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "__fn1_n"),
+                createInstruction(SET, "__fn0_x", "__fn1_n"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1008)),
+                createInstruction(CALL, var(1000), "__fn0retval"),
+                createInstruction(GOTOLABEL, var(1008), "__fn0"),
+                createInstruction(GOTO, "__fn1retaddr", "__fn1")
         );
     }
 
@@ -390,6 +395,54 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(LABEL, var(1002)),
                 createInstruction(PRINT, q("finish")),
                 createInstruction(END)
+        );
+    }
+
+    @Test
+    void doesNotBlockVariablesModifiedByOwnFunction() {
+        assertCompilesTo("""
+                        noinline def foo(n)
+                            sum = 0;
+                            r = rand(10);        // Prevents compile-time evaluation
+                            for i in 0 ... 50
+                                sum += n + r;
+                            end;
+                            print(floor(sum - 50 * r + 0.5));
+                        end;
+                        
+                        noinline def bar(s)
+                            foo(10 + s);
+                        end;
+                        
+                        bar(1);
+                        """,
+                createInstruction(SET, "__fn0_s", "1"),
+                createInstruction(SETADDR, "__fn0retaddr", var(1002)),
+                createInstruction(CALL, var(1000), "__fn0retval"),
+                createInstruction(GOTOLABEL, var(1002), "__fn0"),
+                createInstruction(END),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(OP, "add", "__fn1_n", "10", "__fn0_s"),
+                createInstruction(SETADDR, "__fn1retaddr", var(1004)),
+                createInstruction(CALL, var(1001), "__fn1retval"),
+                createInstruction(GOTOLABEL, var(1004), "__fn1"),
+                createInstruction(GOTO, "__fn0retaddr", "__fn0"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(SET, "__fn1_sum", "0"),
+                createInstruction(OP, "rand", "__fn1_r", "10"),
+                createInstruction(SET, "__fn1_i", "0"),
+                createInstruction(OP, "add", var(2), "__fn1_n", "__fn1_r"),
+                createInstruction(LABEL, var(1009)),
+                createInstruction(OP, "add", "__fn1_sum", "__fn1_sum", var(2)),
+                createInstruction(OP, "add", "__fn1_i", "__fn1_i", "1"),
+                createInstruction(JUMP, var(1009), "lessThan", "__fn1_i", "50"),
+                createInstruction(OP, "mul", var(4), "50", "__fn1_r"),
+                createInstruction(OP, "sub", var(5), "__fn1_sum", var(4)),
+                createInstruction(OP, "add", var(6), var(5), "0.5"),
+                createInstruction(OP, "floor", var(7), var(6)),
+                createInstruction(PRINT, var(7)),
+                createInstruction(GOTO, "__fn1retaddr", "__fn1")
+
         );
     }
 }

@@ -334,7 +334,7 @@ print "Hello"
 end
 ```
 
-# User-defined Functions
+# User-defined functions
 
 You may declare your own functions using the `def` keyword:
 

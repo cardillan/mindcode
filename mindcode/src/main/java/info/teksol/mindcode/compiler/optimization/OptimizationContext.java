@@ -6,6 +6,7 @@ import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
+import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 import info.teksol.mindcode.processor.MindustryValue;
@@ -27,6 +28,9 @@ public class OptimizationContext {
     private final List<LogicInstruction> program;
     private final CallGraph callGraph;
     private final AstContext rootContext;
+
+    private FunctionDataFlow functionDataFlow;
+    private BitSet unreachableInstructions;
 
     /**
      * Maps instructions to variable states at the moment of finishing the execution of the instruction.
@@ -125,6 +129,8 @@ public class OptimizationContext {
      */
     public void prepare() {
         if (updated) {
+            unreachableInstructions = null;
+            functionDataFlow = null;
             rebuildAstContextTree();
         }
         modifications = 0;
@@ -140,6 +146,16 @@ public class OptimizationContext {
     }
 
     //<editor-fold desc="Common optimizer functionality">
+    private static class FunctionDataFlow {
+        /** Maps function prefix to a list of variables directly or indirectly read by the function */
+        private final Map<LogicFunction, Set<LogicVariable>> functionReads = new HashMap<>();
+
+        /** Maps function prefix to a list of variables directly or indirectly written by the function */
+        private final Map<LogicFunction, Set<LogicVariable>> functionWrites = new HashMap<>();
+
+        /** Contains function prefix of functions that may directly or indirectly call the end() instruction. */
+        private final Set<LogicFunction> endingFunctions = new HashSet<>();
+    }
 
     /**
      * This method analyses the control flow of the program. It starts at the first instruction and visits
@@ -150,67 +166,178 @@ public class OptimizationContext {
      * @return a BitSet containing positions of unreachable instructions
      */
     public BitSet getUnreachableInstructions() {
-        BitSet unreachable = new BitSet(program.size());
-        // Also serves as a data stop for reaching the end of instruction list naturally.
-        unreachable.set(0, program.size());
-        Queue<Integer> heads = new ArrayDeque<>();
-        heads.offer(0);
+        if (unreachableInstructions == null) {
+            unreachableInstructions = new BitSet(program.size());
+            // Also serves as a data stop for reaching the end of instruction list naturally.
+            unreachableInstructions.set(0, program.size());
+            Queue<Integer> heads = new ArrayDeque<>();
+            heads.offer(0);
 
-MainLoop:
-        while (!heads.isEmpty()) {
-            int index = heads.poll();
-            while (unreachable.get(index)) {
-                unreachable.clear(index);
-                switch (program.get(index)) {
-                    case EndInstruction end -> {
-                        continue MainLoop;
-                    }
-                    case ReturnInstruction ret -> {
-                        continue MainLoop;
-                    }
-                    case JumpInstruction jump -> {
-                        heads.offer(findLabelIndex(jump.getTarget()));
-                        if (jump.isUnconditional()) {
+            MainLoop:
+            while (!heads.isEmpty()) {
+                int index = heads.poll();
+                while (unreachableInstructions.get(index)) {
+                    unreachableInstructions.clear(index);
+                    switch (program.get(index)) {
+                        case EndInstruction end -> {
                             continue MainLoop;
                         }
-                    }
-                    case CallInstruction call -> {
-                        heads.offer(findLabelIndex(call.getCallAddr()));
-                    }
-                    case CallRecInstruction call -> {
-                        heads.offer(findLabelIndex(call.getCallAddr()));
-                        heads.offer(findLabelIndex(call.getRetAddr()));
-                        continue MainLoop;
-                    }
-                    case GotoInstruction gotoIx -> {
-                        for (int i = 0; i < program.size(); i++) {
-                            if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
-                                heads.offer(i);
+                        case ReturnInstruction ret -> {
+                            continue MainLoop;
+                        }
+                        case JumpInstruction jump -> {
+                            heads.offer(findLabelIndex(jump.getTarget()));
+                            if (jump.isUnconditional()) {
+                                continue MainLoop;
                             }
                         }
-                        continue MainLoop;
-                    }
-                    case GotoOffsetInstruction gotoIx -> {
-                        for (int i = 0; i < program.size(); i++) {
-                            if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
-                                heads.offer(i);
-                            }
+                        case CallInstruction call -> {
+                            heads.offer(findLabelIndex(call.getCallAddr()));
                         }
-                        continue MainLoop;
+                        case CallRecInstruction call -> {
+                            heads.offer(findLabelIndex(call.getCallAddr()));
+                            heads.offer(findLabelIndex(call.getRetAddr()));
+                            continue MainLoop;
+                        }
+                        case GotoInstruction gotoIx -> {
+                            for (int i = 0; i < program.size(); i++) {
+                                if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                    heads.offer(i);
+                                }
+                            }
+                            continue MainLoop;
+                        }
+                        case GotoOffsetInstruction gotoIx -> {
+                            for (int i = 0; i < program.size(); i++) {
+                                if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                    heads.offer(i);
+                                }
+                            }
+                            continue MainLoop;
+                        }
+                        default -> {
+                        }
                     }
-                    default -> {}
-                }
 
-                index++;
+                    index++;
+                }
             }
         }
 
-        return unreachable;
+        return unreachableInstructions;
     }
 
     private int findLabelIndex(LogicLabel label) {
         return firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
     }
+
+    /**
+     * Creates lists of variables directly or indirectly read/written by each function, and a list of functions
+     * directly or indirectly calling end()
+     */
+    private FunctionDataFlow getFunctionDataFlow() {
+        if (functionDataFlow == null) {
+            getUnreachableInstructions();               // Make sure they're initialized
+            functionDataFlow = new FunctionDataFlow();
+
+            getRootContext().children().stream()
+                    .filter(AstContext::isFunction)
+                    .forEachOrdered(this::analyzeFunctionVariables);
+
+            while (propagateFunctionReadsAndWrites()) ;
+        }
+
+        return functionDataFlow;
+    }
+
+    public Map<LogicFunction, Set<LogicVariable>> getAllFunctionReads() {
+        return getFunctionDataFlow().functionReads;
+    }
+
+    public Set<LogicVariable> getFunctionReads(LogicFunction function) {
+        return getFunctionDataFlow().functionReads.getOrDefault(function, Set.of());
+    }
+
+    public Map<LogicFunction, Set<LogicVariable>> getAllFunctionWrites() {
+        return getFunctionDataFlow().functionWrites;
+    }
+
+    public Set<LogicVariable> getFunctionWrites(LogicFunction function) {
+        return getFunctionDataFlow().functionWrites.getOrDefault(function, Set.of());
+    }
+
+    public Set<LogicFunction> getEndingFunctions() {
+        return getFunctionDataFlow().endingFunctions;
+    }
+
+    /**
+     * Analyzes reads, writes and end() calls by a single function.
+     *
+     * @param context context of the function to analyze
+     */
+    private void analyzeFunctionVariables(AstContext context) {
+        Set<LogicVariable> reads = new HashSet<>();
+        Set<LogicVariable> writes = new HashSet<>();
+
+        try (LogicIterator it = createIteratorAtContext(context)) {
+            while (it.hasNext()) {
+                int index = it.nextIndex();
+                LogicInstruction ix = it.next();
+                if (!(ix instanceof PushOrPopInstruction) && !unreachableInstructions.get(index)) {
+                    ix.inputArgumentsStream()
+                            .filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast)
+                            .forEachOrdered(reads::add);
+
+                    ix.outputArgumentsStream()
+                            .filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast)
+                            .forEachOrdered(writes::add);
+
+                    if (ix instanceof EndInstruction) {
+                        functionDataFlow.endingFunctions.add(context.function());
+                    }
+                }
+            }
+        }
+
+        functionDataFlow.functionReads.put(context.function(), reads);
+        functionDataFlow.functionWrites.put(context.function(), writes);
+    }
+
+    /**
+     * Propagates variable reads/writes and end() calls to calling functions.
+     *
+     * @return true if the propagation lead to some modifications
+     */
+    private boolean propagateFunctionReadsAndWrites() {
+        CallGraph callGraph = getCallGraph();
+        boolean modified = false;
+        for (LogicFunction function : callGraph.getFunctions()) {
+            if (!function.isInline()) {
+                Set<LogicVariable> reads = functionDataFlow.functionReads.computeIfAbsent(function, f -> new HashSet<>());
+                Set<LogicVariable> writes = functionDataFlow.functionWrites.computeIfAbsent(function, f -> new HashSet<>());
+                int size = reads.size() + writes.size() + functionDataFlow.endingFunctions.size();
+                function.getCalls().keySet().stream()
+                        .filter(callGraph::containsFunction)            // Filter out built-in functions
+                        .map(callGraph::getFunction)
+                        .filter(f -> !f.isInline() && !f.isMain())
+                        .forEachOrdered(callee -> {
+                            reads.addAll(functionDataFlow.functionReads.get(callee));
+                            writes.addAll(functionDataFlow.functionWrites.get(callee));
+                            if (functionDataFlow.endingFunctions.contains(callee)) {
+                                functionDataFlow.endingFunctions.add(function);
+                            }
+                        });
+
+                // Repeat if there are changes
+                modified |= size != reads.size() + writes.size() + functionDataFlow.endingFunctions.size();
+            }
+        }
+
+        return modified;
+    }
+    //</editor-fold>
 
     //<editor-fold desc="Label & variable tracking">
     public void putVariableStates(LogicInstruction instruction, DataFlowVariableStates.VariableStates variableStates) {
@@ -426,7 +553,7 @@ MainLoop:
         boolean modified = false;
         for (AstContext topContext : getRootContext().children()) {
             if (topContext.function() != null) {
-                CallGraph.LogicFunction function = topContext.function();
+                LogicFunction function = topContext.function();
                 if (function.isRecursive() == recursive) {
                     Double weight = updatedWeights.get(function.getLabel());
                     if (weight != null && topContext.weight() != weight) {
@@ -460,7 +587,7 @@ MainLoop:
                 for (AstContext ctx : children) {
                     if (context == ctx) {
                         // Some optimization moved instructions in such a way that
-                        // instructions in this context do not form continuous region.
+                        // instructions in this context do not form a continuous region.
                         throw new MindcodeInternalError("Discontinuous AST context " + context);
                     }
                 }
@@ -1295,6 +1422,12 @@ MainLoop:
     protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
             Function<AstContext, T> action) {
         return forEachContext(rootContext, c -> c.matches(contextType, subcontextType), action);
+    }
+
+    protected List<AstContext> contexts(AstContext astContext, Predicate<AstContext> matcher) {
+        List<AstContext> contexts = new ArrayList<>();
+        forEachContext(astContext, matcher, contexts::add);
+        return List.copyOf(contexts);
     }
 
     protected List<AstContext> contexts(Predicate<AstContext> matcher) {

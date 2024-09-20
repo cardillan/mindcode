@@ -71,15 +71,6 @@ public class DataFlowOptimizer extends BaseOptimizer {
      */
     private final Map<LogicLabel, List<VariableStates>> labelStates = new HashMap<>();
 
-    /** Maps function prefix to a list of variables directly or indirectly read by the function */
-    Map<CallGraph.LogicFunction, Set<LogicVariable>> functionReads;
-
-    /** Maps function prefix to a list of variables directly or indirectly written by the function */
-    Map<CallGraph.LogicFunction, Set<LogicVariable>> functionWrites;
-
-    /** Contains function prefix of functions that may directly or indirectly call the end() instruction. */
-    private Set<CallGraph.LogicFunction> functionEnds;
-
     /** List of variable states at each point of a call to a function that may invoke an end instruction. */
     private final List<VariableStates> functionEndStates = new ArrayList<>();
 
@@ -106,8 +97,6 @@ public class DataFlowOptimizer extends BaseOptimizer {
         clearVariableStates();
 
         unreachables = optimizationContext.getUnreachableInstructions();
-
-        analyzeFunctionVariables();
 
         getRootContext().children().forEach(this::processTopContext);
 
@@ -212,90 +201,6 @@ public class DataFlowOptimizer extends BaseOptimizer {
                 .max().orElse(0);
 
         return maxReplacement >= maxOriginal || maxOriginal < 2;
-    }
-
-    /**
-     * Creates lists of variables directly or indirectly read/written by each function, and a list of functions
-     * directly or indirectly calling end()
-     */
-    private void analyzeFunctionVariables() {
-        functionReads = new HashMap<>();
-        functionWrites = new HashMap<>();
-        functionEnds = new HashSet<>();
-
-        getRootContext().children().stream()
-                .filter(AstContext::isFunction)
-                .forEachOrdered(this::analyzeFunctionVariables);
-
-        while (propagateFunctionReadsAndWrites()) ;
-    }
-
-    /**
-     * Analyzes reads, writes and end() calls by a single function.
-     *
-     * @param context context of the function to analyze
-     */
-    private void analyzeFunctionVariables(AstContext context) {
-        Set<LogicVariable> reads = new HashSet<>();
-        Set<LogicVariable> writes = new HashSet<>();
-
-        try (LogicIterator it = createIteratorAtContext(context)) {
-            while (it.hasNext()) {
-                int index = it.nextIndex();
-                LogicInstruction ix = it.next();
-                if (!(ix instanceof PushOrPopInstruction) && !unreachables.get(index)) {
-                    ix.inputArgumentsStream()
-                            .filter(LogicVariable.class::isInstance)
-                            .map(LogicVariable.class::cast)
-                            .forEachOrdered(reads::add);
-
-                    ix.outputArgumentsStream()
-                            .filter(LogicVariable.class::isInstance)
-                            .map(LogicVariable.class::cast)
-                            .forEachOrdered(writes::add);
-
-                    if (ix instanceof EndInstruction) {
-                        functionEnds.add(context.function());
-                    }
-                }
-            }
-        }
-
-        functionReads.put(context.function(), reads);
-        functionWrites.put(context.function(), writes);
-    }
-
-    /**
-     * Propagates variable reads/writes and end() calls to calling functions.
-     *
-     * @return true if the propagation lead to some modifications
-     */
-    private boolean propagateFunctionReadsAndWrites() {
-        CallGraph callGraph = getCallGraph();
-        boolean modified = false;
-        for (CallGraph.LogicFunction function : callGraph.getFunctions()) {
-            if (!function.isInline()) {
-                Set<LogicVariable> reads = functionReads.computeIfAbsent(function, f -> new HashSet<>());
-                Set<LogicVariable> writes = functionWrites.computeIfAbsent(function, f -> new HashSet<>());
-                int size = reads.size() + writes.size() + functionEnds.size();
-                function.getCalls().keySet().stream()
-                        .filter(callGraph::containsFunction)            // Filter out built-in functions
-                        .map(callGraph::getFunction)
-                        .filter(f -> !f.isInline() && !f.isMain())
-                        .forEachOrdered(callee -> {
-                            reads.addAll(functionReads.get(callee));
-                            writes.addAll(functionWrites.get(callee));
-                            if (functionEnds.contains(callee)) {
-                                functionEnds.add(function);
-                            }
-                        });
-
-                // Repeat if there are changes
-                modified |= size != reads.size() + writes.size() + functionEnds.size();
-            }
-        }
-
-        return modified;
     }
 
     public void generateFinalMessages() {
@@ -853,7 +758,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
             case CALL, CALLREC -> {
                 CallGraph.LogicFunction function = instruction.getAstContext().function();
                 variableStates.updateAfterFunctionCall(function, instruction);
-                if (modifyInstructions && functionEnds.contains(function)) {
+                if (modifyInstructions && optimizationContext.getEndingFunctions().contains(function)) {
                     functionEndStates.add(variableStates.copy("function end handling"));
                 }
             }

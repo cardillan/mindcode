@@ -23,10 +23,12 @@ public class DataFlowVariableStates {
     private final DataFlowOptimizer optimizer;
 
     private final InstructionProcessor instructionProcessor;
+    private final OptimizationContext optimizationContext;
 
     public DataFlowVariableStates(DataFlowOptimizer optimizer) {
         this.optimizer = optimizer;
         instructionProcessor = optimizer.instructionProcessor;
+        optimizationContext = optimizer.optimizationContext;
     }
 
     VariableStates createVariableStates() {
@@ -366,8 +368,8 @@ public class DataFlowVariableStates {
          * @param instruction instruction that caused the call
          */
         public void updateAfterFunctionCall(CallGraph.LogicFunction function, LogicInstruction instruction) {
-            optimizer.functionReads.get(function).forEach(variable -> valueRead(variable, instruction, false));
-            optimizer.functionWrites.get(function).forEach(this::valueReset);
+            optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false));
+            optimizationContext.getFunctionWrites(function).forEach(this::valueReset);
             initialized.add(LogicVariable.fnRetVal(function.getPrefix()));
         }
 

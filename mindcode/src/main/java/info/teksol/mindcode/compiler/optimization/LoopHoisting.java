@@ -3,6 +3,7 @@ package info.teksol.mindcode.compiler.optimization;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
+import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.JumpInstruction;
 import info.teksol.mindcode.compiler.instructions.LabelInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
@@ -122,18 +123,19 @@ public class LoopHoisting extends BaseOptimizer {
         //noinspection StatementWithEmptyBody
         while (propagateDependencies(dependencies));
 
-        // If there are function calls, all global variables are unsafe
-        final boolean hasFunctionCalls = loop.containsChildContext(ctx ->
-                ctx.subcontextType() == OUT_OF_LINE_CALL || ctx.subcontextType() == RECURSIVE_CALL);
+        // Handle variables modified by functions called from this loop
+        Map<LogicFunction, Set<LogicVariable>> functionWrites = optimizationContext.getAllFunctionWrites();
+        Set<LogicVariable> modifiedVariables = optimizationContext
+                .contexts(loop,   ctx -> ctx.subcontextType() == OUT_OF_LINE_CALL || ctx.subcontextType() == RECURSIVE_CALL)
+                .stream()
+                .map(AstContext::function)
+                .filter(f -> !f.equals(loop.function()))
+                .filter(functionWrites::containsKey)
+                .flatMap(f -> functionWrites.get(f).stream())
+                .collect(Collectors.toSet());
 
-        if (hasFunctionCalls) {
-            List<LogicVariable> globalVariables = dependencies.values().stream()
-                    .flatMap(Set::stream)
-                    .filter(LogicVariable::isGlobalVariable)
-                    .toList();
+        modifiedVariables.forEach(v -> dependencies.computeIfAbsent(v, w -> new HashSet<>()).add(v));
 
-            globalVariables.forEach(v -> dependencies.computeIfAbsent(v, w -> new HashSet<>()).add(v));
-        }
 
         // All variables generated in ITERATOR contexts are loop variables
         List<LogicVariable> iteratorVariables = loop.children().stream()
