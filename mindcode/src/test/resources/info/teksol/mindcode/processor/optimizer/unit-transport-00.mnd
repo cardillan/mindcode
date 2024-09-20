@@ -710,21 +710,21 @@ switch2.enabled = false;
 
 def itemTypeToIcon(itemType)
     case itemType
-        when @blast-compound   then "[]" + ITEM-BLAST-COMPOUND;
-        when @coal             then "[]" + ITEM-COAL;
-        when @copper           then "[]" + ITEM-COPPER;
-        when @graphite         then "[]" + ITEM-GRAPHITE;
-        when @lead             then "[]" + ITEM-LEAD;
-        when @metaglass        then "[]" + ITEM-METAGLASS;
-        when @phase-fabric     then "[]" + ITEM-PHASE-FABRIC;
-        when @plastanium       then "[]" + ITEM-PLASTANIUM;
-        when @pyratite         then "[]" + ITEM-PYRATITE;
-        when @sand             then "[]" + ITEM-SAND;
-        when @scrap            then "[]" + ITEM-SCRAP;
-        when @silicon          then "[]" + ITEM-SILICON;
-        when @spore-pod        then "[]" + ITEM-SPORE-POD;
-        when @surge-alloy      then "[]" + ITEM-SURGE-ALLOY;
-        when @thorium          then "[]" + ITEM-THORIUM;
-        when @titanium         then "[]" + ITEM-TITANIUM;
+        when @blast-compound   then "[]" + ITEM_BLAST_COMPOUND;
+        when @coal             then "[]" + ITEM_COAL;
+        when @copper           then "[]" + ITEM_COPPER;
+        when @graphite         then "[]" + ITEM_GRAPHITE;
+        when @lead             then "[]" + ITEM_LEAD;
+        when @metaglass        then "[]" + ITEM_METAGLASS;
+        when @phase-fabric     then "[]" + ITEM_PHASE_FABRIC;
+        when @plastanium       then "[]" + ITEM_PLASTANIUM;
+        when @pyratite         then "[]" + ITEM_PYRATITE;
+        when @sand             then "[]" + ITEM_SAND;
+        when @scrap            then "[]" + ITEM_SCRAP;
+        when @silicon          then "[]" + ITEM_SILICON;
+        when @spore-pod        then "[]" + ITEM_SPORE_POD;
+        when @surge-alloy      then "[]" + ITEM_SURGE_ALLOY;
+        when @thorium          then "[]" + ITEM_THORIUM;
+        when @titanium         then "[]" + ITEM_TITANIUM;
     end;
 end;

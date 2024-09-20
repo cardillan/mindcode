@@ -111,10 +111,10 @@ public class ConstantExpressionEvaluatorTest extends AbstractGeneratorTest {
     @Test
     void evaluatesStringConcatenationWithIcon() {
         assertCompilesTo("""
-                        a = "[]" + ITEM-COAL
+                        a = "[]" + ITEM_COAL
                         print(a)
                         """,
-                createInstruction(SET, "a", q("[]" + Icons.getIconValue("ITEM-COAL").format())),
+                createInstruction(SET, "a", q("[]" + Icons.getIconValue("ITEM_COAL").format())),
                 createInstruction(PRINT, "a"),
                 createInstruction(END)
         );

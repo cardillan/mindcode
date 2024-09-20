@@ -219,9 +219,9 @@ def displayLevel(container, title, item)
     println(title, container.sensor(item));
 end ;
 
-displayLevel(vault1, ICON-COAL + " level: ", @coal);
-displayLevel(vault1, ICON-LEAD + " level: ", @lead);
-displayLevel(vault1, ICON-SAND + " level: ", @sand);
+displayLevel(vault1, ITEM_COAL + " level: ", @coal);
+displayLevel(vault1, ITEM_LEAD + " level: ", @lead);
+displayLevel(vault1, ITEM_SAND + " level: ", @sand);
 ```
 
 Additionally, it is possible to use compile-time concatenation of a string and a non-string value, if both are 

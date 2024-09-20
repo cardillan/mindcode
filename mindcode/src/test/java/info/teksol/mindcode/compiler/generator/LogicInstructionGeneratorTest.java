@@ -1300,4 +1300,13 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         );
     }
 
+    @Test
+    void recognizesIconConstants() {
+        assertCompilesTo("""
+                        print(ITEM_COAL + "X");
+                        """,
+                createInstruction(PRINT, q("\uF833X")),
+                createInstruction(END)
+        );
+    }
 }

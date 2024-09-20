@@ -17,15 +17,15 @@ import java.util.stream.Collectors;
 public class Icons {
 
     public static Map<String, LogicValue> createIconMap() {
-        return new HashMap<>(ICON_MAP);
+        return new HashMap<>(COMBINED_MAP);
     }
 
     public static boolean isIconName(String name) {
-        return ICON_MAP.containsKey(name);
+        return COMBINED_MAP.containsKey(name);
     }
 
     public static LogicLiteral getIconValue(String name) {
-        return ICON_MAP.get(name);
+        return COMBINED_MAP.get(name);
     }
 
     public static String translateIcon(String text) {
@@ -38,7 +38,7 @@ public class Icons {
     }
 
     public static void forEachIcon(BiConsumer<String, LogicLiteral> action) {
-        ICON_MAP.forEach(action);
+        COMBINED_MAP.forEach(action);
     }
 
     public static String decodeIcon(String text) {
@@ -66,8 +66,16 @@ public class Icons {
                 .collect(Collectors.toMap(e->e.getValue().format(), Entry::getKey));
     }
 
+    public static Map<String, LogicLiteral> initializeCombinedIconMap() {
+        Map<String, LogicLiteral> result = ICON_MAP.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey().replace("-", "_"), Entry::getValue));
+        result.putAll(ICON_MAP);
+        return result;
+    }
+
     private static final String RESOURCE_NAME = "mimex-icons.txt";
 
     private static final Map<String, LogicLiteral> ICON_MAP = initializeIconMap();
+    private static final Map<String, LogicLiteral> COMBINED_MAP = initializeCombinedIconMap();
     private static final Map<String, String> REVERSE_MAP = initializeReverseMap();
 }
