@@ -332,14 +332,14 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-56 ins
 +  364 op mul r3 MUL3 __tmp100
    365 sensor __tmp102 factory OUTPUT
 -    * op mul __tmp103 MUL1 __tmp102
--    * set out __tmp103
+-    * set output __tmp103
 -    * sensor __tmp104 factory @enabled
 -    * set e __tmp104
 -    * sensor __tmp105 factory @totalPower
 -    * set power __tmp105
 -    * sensor __tmp106 factory @timescale
 -    * set boost __tmp106
-+  366 op mul out MUL1 __tmp102
++  366 op mul output MUL1 __tmp102
 +  367 sensor e factory @enabled
 +  368 sensor power factory @totalPower
 +  369 sensor boost factory @timescale
@@ -347,8 +347,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-56 ins
    371 jump __label59 equal __tmp107 false
    372 set minimum r1
  
-   397 op greaterThan __tmp113 out 33
-   398 op sub __tmp114 100 out
+   397 op greaterThan __tmp113 output 33
+   398 op sub __tmp114 100 output
    399 op lessThan __tmp115 __tmp114 minimum
 -    * op land __tmp116 __tmp113 __tmp115
 -    * set showout __tmp116
@@ -574,8 +574,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-35 instruct
    372 label __label63
 -    * set __tmp112 null
    373 label __label64
-   374 op greaterThan __tmp113 out 33
-   375 op sub __tmp114 100 out
+   374 op greaterThan __tmp113 output 33
+   375 op sub __tmp114 100 output
  
    377 op land showout __tmp113 __tmp115
    378 jump __label65 equal showout false
@@ -689,7 +689,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructi
  
    454 set green 0
    455 set blue 255
-   456 set minimum out
+   456 set minimum output
 -    * set __tmp157 minimum
    457 jump __label76 always
    458 label __label75
@@ -1045,7 +1045,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 -    * jump __label64 always
    336 label __label63
    337 label __label64
-   338 op greaterThan __tmp113 out 33
+   338 op greaterThan __tmp113 output 33
  
    341 op land showout __tmp113 __tmp115
    342 jump __label65 equal showout false
@@ -1179,7 +1179,7 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    266 op sub crh __tmp81 cry
    267 jump __label46 always
  
-   409 set minimum out
+   409 set minimum output
    410 jump __label76 always
    411 label __label75
 +  412 set red 255
@@ -1909,7 +1909,7 @@ op mul r2 MUL2 __tmp98
 sensor __tmp100 factory RES3
 op mul r3 MUL3 __tmp100
 sensor __tmp102 factory OUTPUT
-op mul out MUL1 __tmp102
+op mul output MUL1 __tmp102
 sensor e factory @enabled
 sensor power factory @totalPower
 sensor boost factory @timescale
@@ -1925,8 +1925,8 @@ jump __label63 greaterThanEq r3 minimum
 set minimum r3
 set icon RES3
 label __label63
-op greaterThan __tmp113 out 33
-op sub __tmp114 100 out
+op greaterThan __tmp113 output 33
+op sub __tmp114 100 output
 op lessThan __tmp115 __tmp114 minimum
 op land showout __tmp113 __tmp115
 jump __label65 equal showout false
@@ -1997,7 +1997,7 @@ jump __label75 equal showout false
 set red 255
 set green 0
 set blue 255
-set minimum out
+set minimum output
 jump __label76 always 0 0
 label __label75
 set red 255

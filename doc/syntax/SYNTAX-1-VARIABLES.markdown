@@ -71,8 +71,8 @@ Local variables are function parameters or variables used in a user-defined func
 
 ```
 def foo(x)
-    y = x ** 2
-end
+    y = x ** 2;
+end;
 ```
 
 both `x` and `y` are local variables, not accessible outside the function `foo`.
@@ -90,15 +90,15 @@ For example, the following code
 
 ```
 def foo(x)
-    MAIN = x + 10
-    local = 10
-end
-MAIN = 5
-local = 5
-x = 0
-foo(10)
-print(MAIN, ", ", local)
-printflush(message1)
+    MAIN = x + 10;
+    local = 10;
+end;
+MAIN = 5;
+local = 5;
+x = 0;
+foo(10);
+print(MAIN, ", ", local);
+printflush(message1);
 ```
 
 displays `20, 5` on the `message1` block in Mindustry world (from now on, we'll omit the `printflush(message1)` in 
@@ -182,9 +182,9 @@ imposed by Mindustry Logic itself.
 You can use external variables using the array access syntax:
 
 ```
-for i in 0 .. 63
-    cell2[i] = cell1[i]
-end
+for i in 0 .. 63 do
+    cell2[i] = cell1[i];
+end;
 ```
 
 This code copies the entire contents of memory cell `cell1` to `cell2`.
@@ -193,11 +193,11 @@ It is also possible to reference external memory indirectly:
 
 ```
 def copy(source, target, size)
-    for i in 0 ... size
-        target[i] = source[i]
-    end
-end
-copy(bank1, bank2, 512)
+    for i in 0 ... size do
+        target[i] = source[i];
+    end;
+end;
+copy(bank1, bank2, 512);
 ```
 
 ## External variables
@@ -207,7 +207,7 @@ Memory Cell or a Memory Bank. This allocation tells the Mindcode compiler where 
 heap is simply a region of external memory. The heap is allocated using the following Mindcode:
 
 ```
-allocate heap in cell4[50 ... 64]
+allocate heap in cell4[50 ... 64];
 ```
 
 This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 (note the
@@ -219,14 +219,14 @@ Once the heap is allocated, you can use external variables. External variables a
 (dollar-sign) prefix: 
 
 ```
-allocate heap in cell4[32 ... 64]
+allocate heap in cell4[32 ... 64];
 
-$dx = 1 // this is an external variable assignment
-$dy = 1
-$ne_x = 90
-$ne_y = 90
-$target_y = $sw_x = 50
-$target_x = $sw_y = 50
+$dx = 1; // this is an external variable assignment
+$dy = 1;
+$ne_x = 90;
+$ne_y = 90;
+$target_y = $sw_x = 50;
+$target_x = $sw_y = 50;
 ```
 
 The above will compile to:
@@ -244,21 +244,21 @@ cell4[38] = cell4[39] = 50
 > External variables are allocated on a first-come, first-served basis. If you had the following code:
 
 ```
-allocate heap in cell2[61 .. 63]
+allocate heap in cell2[61 .. 63];
 
-$flag = rand(10000)
-$targetx = 80
-$targety = 80
+$flag = rand(10000);
+$targetx = 80;
+$targety = 80;
 ```
 
 and changed it to:
 
 ```
-allocate heap in cell2[61 .. 63]
+allocate heap in cell2[61 .. 63];
 
-$targetx = 80
-$targety = 80
-$flag = rand(10000)
+$targetx = 80;
+$targety = 80;
+$flag = rand(10000);
 ```
 
 then all addresses in the heap would be reallocated. `$targetx` would be stored in memory cell 61, rather than `$flag`.
@@ -275,7 +275,7 @@ values are supported).
 Stack needs to be allocated similarly to heap:
 
 ```
-allocate stack in bank1[256...512]
+allocate stack in bank1[256...512];
 ```
 
 When a function is not recursive, it won't store anything on a stack, even when it is called from or it itself calls 
@@ -359,8 +359,8 @@ The second point means that in the following code
 
 ```
 def foo()
-    print("In function foo")
-    printflush(message1)
+    print("In function foo");
+    printflush(message1);
 end
 ```
 
@@ -498,11 +498,11 @@ Any variable name consisting of one of these prefixes and a positive integer is 
 Mindcode supports declaring and using constants throughout your code. Constants are declared using the `const` keyword:
 
 ```
-const DEBUG = true
-const HIGH_SPEED = 50
-const LOW_SPEED = HIGH_SPEED / 2
-const RATIO = sqrt(2)
-const message = DEBUG ? "Debug" : "Release"
+const DEBUG = true;
+const HIGH_SPEED = 50;
+const LOW_SPEED = HIGH_SPEED / 2;
+const RATIO = sqrt(2);
+const message = DEBUG ? "Debug" : "Release";
 ```
 
 Constants are global, even if their names contain lower-case characters. The value assigned to them must be either a 
@@ -520,12 +520,12 @@ Unlike variables, constants aren't kept in processor variables, and their values
 compiled code. It also means that in the following code
 
 ```
-const DEBUG = false
+const DEBUG = false;
 ...
 if DEBUG
-    println("State: ", state)
-    println("Item count: ", @unit.totalItems)
-end
+    println("State: ", state);
+    println("Item count: ", @unit.totalItems);
+end;
 ```
 
 the entire `if DEBUG ... end` statement will be skipped and not included in the compiled code.
@@ -541,10 +541,10 @@ onto a String literal containing their corresponding Unicode character.
 Printing an icon is as easy as this:
 
 ```
-print(ITEM-LEAD, " ", vault1.lead, "\n")
-print(ITEM-COAL, " ", vault1.coal, "\n")
-print(ITEM-BLAST-COMPOUND, " ", vault1.blast-compound)
-printflush(message1)
+print(ITEM-LEAD, " ", vault1.lead, "\n");
+print(ITEM-COAL, " ", vault1.coal, "\n");
+print(ITEM-BLAST-COMPOUND, " ", vault1.blast-compound);
+printflush(message1);
 ```
 
 As has already been mentioned, names of the icons are constants and cannot therefore be used for user-defined 

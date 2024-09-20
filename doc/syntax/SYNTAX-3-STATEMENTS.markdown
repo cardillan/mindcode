@@ -23,8 +23,8 @@ from the loop body is optional):
 
 ```
 while @unit == null do
-    ubind(@poly)
-end
+    ubind(@poly);
+end;
 ```
 
 ## Do-While Loops
@@ -33,8 +33,8 @@ Similar to while loops, except the condition is placed at the end of the loop. D
 
 ```
 do
-    ubind(@poly)
-loop while @unit == null
+    ubind(@poly);
+loop while @unit == null;
 ```
 
 ## Range Iteration Loops
@@ -44,9 +44,9 @@ inclusive range (the `do` keyword separating the condition from the loop body is
 
 ```
 for n in 14 .. 18 do
-  println(n)
-end
-printflush(message1)
+  println(n);
+end;
+printflush(message1);
 
 // prints 14, 15, 16, 17 and 18 on separate lines
 ```
@@ -54,11 +54,11 @@ printflush(message1)
 The `...` range operator indicates an exclusive range:
 
 ```
-sum = 0
-for addr in 0 ... 64
-  sum += cell1[addr]
-end
-avg = sum / 64
+sum = 0;
+for addr in 0 ... 64 do
+  sum += cell1[addr];
+end;
+avg = sum / 64;
 ```
 
 This loop will calculate the average of all 64 cells (0-based index) of `cell1`.
@@ -66,9 +66,9 @@ This loop will calculate the average of all 64 cells (0-based index) of `cell1`.
 It is also possible to use expressions to specify the ranges:
 
 ```
-for n in firstIndex + 1 .. lastIndex - 1
-  sum += cell1[n]
-end
+for n in firstIndex + 1 .. lastIndex - 1 do
+  sum += cell1[n];
+end;
 ```
 
 The range is evaluated before the loop begins. If the value of the upper bound changes while the loop executes, it 
@@ -81,18 +81,17 @@ a [C-style loop](#c-style-loops) or a [while loop](#while-loops).
 
 ## List Iteration Loops
 
-Loop over a fixed collection of values or expressions (the `do` keyword separating the condition from the loop body 
-is optional):
+Loop over a fixed collection of values or expressions:
 
 ```
-for u in (@mono, @poly, @mega) do
-    ubind(u)
-    if @unit != null
-        break
-    end
-end
-print(u)
-printflush(message1)
+for u in @mono, @poly, @mega do
+    ubind(u);
+    if @unit != null then
+        break;
+    end;
+end;
+print(u);
+printflush(message1);
 ```
 
 Tries to bind a mono, poly or mega, in this order, ending the loop when successfully binding one.
@@ -102,15 +101,26 @@ arrays or collections. It is possible to specify an expression in the list of va
 evaluated right before the loop utilizing the expression is executed. This loop
 
 ```
-a = 0
-for a in (a + 1, a + 1, a + 1)
-    print(a, "\n")
-end
-printflush(message1)
+a = 0;
+for a in a + 1, a + 1, a + 1 do
+    print(a, "\n");
+end;
+printflush(message1);
 ```
 
 prints values 1, 2, 3 (at the beginning of each iteration the loop variable -- `a` in this case -- is set to the 
 value of the next expression in the list).
+
+Alternative syntax of list iteration loop doesn't use the `do` keyword, but enclosed the list of variables in 
+parentheses:
+
+```
+for a in (1, 2, 5, 10)
+    print(a, "\n");
+end;
+```
+
+Support for this version of the statement will be removed in a future release. 
 
 ## C-Style Loops
 
@@ -119,14 +129,14 @@ The syntax is similar to C's, except for the absence of parenthesis and the opti
 ```
 // Visit every block in a given region, one at a time, starting from the bottom
 // left and ending at the upper right
-dx = 1
+dx = 1;
 for x = SW_X, y = SW_Y; x < NE_X && j < NE_Y ; x += dx do
     // do something with this block
-    if x == NE_X
-        dx *= -1
-        y += dy
-    end
-end
+    if x == NE_X then
+        dx *= -1;
+        y += dy;
+    end;
+end;
 ```
 
 ## Break and continue
@@ -135,13 +145,13 @@ You can use a `break` or `continue` statement inside a loop in the usual sense (
 `continue` skips the rest of the current iteration):
 
 ```
-while not within(x, y, 6)
-    approach(x, y, 4)
-    if @unit.dead == 1
-        break
-    end
+while not within(x, y, 6) do
+    approach(x, y, 4);
+    if @unit.dead == 1 then
+        break;
+    end;
     ...
-end
+end;
 ```
 
 ### Using labels with break or continue
@@ -152,13 +162,13 @@ syntax, as shown here:
 
 ```
 MainLoop:
-for i in 1 .. 10
-    for j in 5 .. 20
-        if i > j
-            break MainLoop
-        end
-    end
-end
+for i in 1 .. 10 do
+    for j in 5 .. 20 do
+        if i > j then
+            break MainLoop;
+        end;
+    end;
+end;
 ```
 
 Similarly, `continue MainLoop` skips the rest of the current iteration of both the inner loop and the main loop.
@@ -170,10 +180,10 @@ and the break or continue statements can use those labels to specify which of th
 > `case` statement). It doesn't make sense to put additional statements or expressions after a `break` or `continue`,
 > since that code would never get executed and will be removed by the optimizer.
 
-If you do put additional statements after a `break` or `continue`, the compiler will mistake them for a label:
+If you do put additional statements after a `break` or `continue` without a semicolon, the compiler will mistake them for a label:
 
 ```
-while true
+while true do
     break
     print("This never gets printed")
 end
@@ -203,10 +213,10 @@ example (the `then` keyword after both `if` and `elsif` is optional):
 
 ```
 result = if n == 0 then
-    "ready"
+    "ready";
 else
-    "pending"
-end
+    "pending";
+end;
 ```
 
 Depending on the value of `n`, `result` will contain the one of `ready` or `pending`.
@@ -215,25 +225,25 @@ To handle more than two alternatives, you can use `elsif` as an alternative to n
 
 ```
 text = if n > 0 then
-    "positive"
+    "positive";
 elsif n < 0 then
-    "negative"
+    "negative";
 else
-    "zero"
-end
+    "zero";
+end;
 ```
 is equivalent to
 
 ```
 text = if n > 0 then
-    "positive"
+    "positive";
 else
     if n < 0 then
-        "negative"
+        "negative";
     else
-        "zero"
-    end
-end
+        "zero";
+    end;
+end;
 ```
 
 ## Ternary Operator
@@ -242,7 +252,7 @@ The ternary operator (`?:`) is exactly like an if/else expression, except it is 
 Use it when you need a conditional but want to save some space:
 
 ```
-result = n == 0 ? "ready" : "pending"
+result = n == 0 ? "ready" : "pending";
 ```
 
 This is the exact same conditional expression as the first `if` statement above, written on one line.
@@ -254,15 +264,15 @@ multiple different alternatives:
 
 ```
 next_action = case num_enemies
-    when 0
-        "chill"
-    when 1, 2
-        "alert"
-    when 3, 4, 5
-        "vigilant"
+    when 0 then
+        "chill";
+    when 1, 2 then
+        "alert";
+    when 3, 4, 5 then
+        "vigilant";
     else
-        "nuke-the-place"
-end
+        "nuke-the-place";
+end;
 ```
 
 Multiple comma-separated expressions can be listed after each `when` keyword.
@@ -271,12 +281,12 @@ It is also possible to use range expressions, and even mix them with normal expr
 ```
 text = case number
     when 0, 1, 2**3 .. 2**5, 42, -115 then
-        "A number I like"
+        "A number I like";
     when 10**5 .. 10**9 then
-        "A very big number"
+        "A very big number";
     else
-        "An ugly number"
-end
+        "An ugly number";
+end;
 ```
 
 **Then keyword**
@@ -287,10 +297,10 @@ Using it helps to avoid a bug that can happen when you put a superfluous comma a
 ```
 case block.type
     when @conduit, @pulse-conduit, @plated-conduit,
-        block.enabled = intake
+        block.enabled = intake;
     when @overdrive-projector, @overdrive-dome
-        block.enabled = boost
-end
+        block.enabled = boost;
+end;
 ```
 
 The comma after the `@plated-conduit` is not meant to be there.
@@ -302,8 +312,8 @@ case block.type
     when @conduit, @pulse-conduit, @plated-conduit, block.enabled = intake
         // Do nothing
     when @overdrive-projector, @overdrive-dome
-        block.enabled = boost
-end
+        block.enabled = boost;
+end;
 ```
 
 The resulting effect is that when the block is some kind of conduit, nothing happens.
@@ -315,10 +325,10 @@ If the keyword `then` is used, the compiler will complain about the superfluous 
 ```
 case block.type
     when @conduit, @pulse-conduit, @plated-conduit, then
-        block.enabled = intake
+        block.enabled = intake;
     when @overdrive-projector, @overdrive-dome then
-        block.enabled = boost
-end
+        block.enabled = boost;
+end;
 ```
 
 **Additional considerations:**

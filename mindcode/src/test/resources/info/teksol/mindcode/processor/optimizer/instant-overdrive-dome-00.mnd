@@ -171,7 +171,7 @@ inline def chooseUnitType()
             return UNIT_TYPE;
         end;
 
-        for type in (@flare, @poly, @mega, @mono) do
+        for type in @flare, @poly, @mega, @mono do
             remark("chooseUnitType: $type");
             if type != UNIT_TYPE then
                 if areUnitsAvailable(type, true) then

@@ -213,7 +213,7 @@ program = """
                 return UNIT_TYPE;
             end;
 
-            for type in (@flare, @poly, @mega, @mono) do
+            for type in @flare, @poly, @mega, @mono do
                 if type != UNIT_TYPE then
                     if areUnitsAvailable(type, true) then
                         printflush(null);

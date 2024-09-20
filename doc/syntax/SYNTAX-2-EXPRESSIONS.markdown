@@ -14,8 +14,8 @@ Most operators do the expected: `+`, `-`, `*`, `/`, and they respect precedence 
 divide, then add and subtract. Add to this operator `\`, which stands for integer division. For example:
 
 ```
-3 / 2 // returns 1.5
-3 \ 2 // returns 1
+3 / 2; // returns 1.5
+3 \ 2; // returns 1
 ```
 
 Almost every operator maps directly to Mindustry Logic ones, but several are Mindcode-specific enhancements. These 
@@ -49,12 +49,12 @@ The compound assignment operators combine arithmetic operation with an assignmen
 Assignment operators are evaluated from right to left:
 
 ```
-x += y *= 2
+x += y *= 2;
 ```
 is the same as
 ```
-y = y * 2
-x = x + y
+y = y * 2;
+x = x + y;
 ```
 
 ## Boolean operators
@@ -72,10 +72,10 @@ when their operands aren't boolean themselves. They're identical with the bitwis
 It works as expected with control statements, e.g.
 
 ```
-items = vault1.totalItems
-while items or alive
+items = vault1.totalItems;
+while items or alive do
     ...
-end
+end;
 ```
 
 Conditional expressions in control statements are considered true if they evaluate to a nonzero value.
@@ -111,26 +111,26 @@ In that scenario, the values are considered equal in these cases:
 
 ```
 inline def eval(b)
-    b ? "true" : "false"
-end
+    b ? "true" : "false";
+end;
 
 inline def compare(a, b)
-    printf("|$a|$b|$|$|$|$|\n", eval(a == b), eval(a != b), eval(a === b), eval(a !== b))
-end
+    printf("|$a|$b|$|$|$|$|\n", eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
+end;
 
-compare(null, 0)
-compare(null, 1)
-compare(null, 2)
-compare(@coal, 0)
-compare(@coal, 1)
-compare(@coal, 2)
-compare(@coal, @lead)
-compare("A", 0)
-compare("A", 1)
-compare("A", 2)
-compare("A", "B")
-compare("A", "A")
-printflush(message1)
+compare(null, 0);
+compare(null, 1);
+compare(null, 2);
+compare(@coal, 0);
+compare(@coal, 1);
+compare(@coal, 2);
+compare(@coal, @lead);
+compare("A", 0);
+compare("A", 1);
+compare("A", 2);
+compare("A", "B");
+compare("A", "A");
+printflush(message1);
 ```
 
 </details>
@@ -155,15 +155,15 @@ If the result of a constant expression is a value which
 evaluated at compile time, but rather computed at runtime. Expressions are evaluated to the maximum extent possible,
 and it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
 
-```mindcode
-print(10 ** 50)             // Cannot be evaluated
-print(10 ** (2 * 25))       // Multiplication can be evaluated, exponentiation cannot
-print(sqrt(10 ** 50))       // Can be evaluated even though 10 ** 50 cannot
+```
+print(10 ** 50);            // Cannot be evaluated
+print(10 ** (2 * 25));      // Multiplication can be evaluated, exponentiation cannot
+print(sqrt(10 ** 50));      // Can be evaluated even though 10 ** 50 cannot
 ```
 
 produces
 
-```mlog
+```
 op pow __tmp0 10 50
 print __tmp0
 op pow __tmp1 10 50
@@ -189,17 +189,17 @@ Because string operations do not work anyway, the Mindcode compiler produces a c
 string-based runtime expression:
 
 ```
-x = "A"
-y = x + "B"
-print(y)
+x = "A";
+y = x + "B";
+print(y);
 ```
 
 Not all such situations are recognized, for example
 
 ```
-x = "A"
-y = "B"
-print(x + y)
+x = "A";
+y = "B";
+print(x + y);
 ```
 
 compiles, but produces `2`, as Mindustry Logic converts all string values to a numerical `1` for all operations.
@@ -207,32 +207,32 @@ compiles, but produces `2`, as Mindustry Logic converts all string values to a n
 The only supported operation is concatenation of string constants and literals using the `+` operator, such as: 
 
 ```
-const NAME = "John"
-message = formalGreeting ? "Hey " + NAME + "!" : "Good day, " + NAME
-print(message) 
+const NAME = "John";
+message = formalGreeting ? "Hey " + NAME + "!" : "Good day, " + NAME;
+print(message);
 ```
 
 It is most useful to embed icon string constants into larger strings, which would otherwise be impossible:
 
 ```
 def displayLevel(container, title, item)
-    println(title, container.sensor(item))
-end 
+    println(title, container.sensor(item));
+end ;
 
-displayLevel(vault1, ICON-COAL + " level: ", @coal)
-displayLevel(vault1, ICON-LEAD + " level: ", @lead)
-displayLevel(vault1, ICON-SAND + " level: ", @sand)
+displayLevel(vault1, ICON-COAL + " level: ", @coal);
+displayLevel(vault1, ICON-LEAD + " level: ", @lead);
+displayLevel(vault1, ICON-SAND + " level: ", @sand);
 ```
 
 Additionally, it is possible to use compile-time concatenation of a string and a non-string value, if both are 
 constant:
 
 ```
-const TOTAL = 10
-const MESSAGE = " out of " + TOTAL
-for i in 1 .. TOTAL
-    print("Step ", i, MESSAGE)
-end
+const TOTAL = 10;
+const MESSAGE = " out of " + TOTAL;
+for i 1 .. TOTAL do
+    println("Step ", i, MESSAGE);
+end;
 ```
 
 # Range expressions
@@ -262,16 +262,16 @@ In these cases the statements get evaluated to `null`:
 
 ```
 value = def foo()
-    return 5
-end
-print(value)    // Outputs "null"
+    return 5;
+end;
+print(value);    // Outputs "null"
 ```
 
 Perhaps somewhat surprisingly, constant declarations are statements too:
 
 ```
-x = const VALUE = 5
-print(x)        // "null" again
+x = const VALUE = 5;
+print(x);        // "null" again
 ```
 
 ---

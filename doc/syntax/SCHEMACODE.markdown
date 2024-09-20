@@ -964,7 +964,7 @@ A string literal is only useful for very small snippets of code:
 schematic
     @micro-processor at (0, 0) processor
         links * end
-        mindcode = "print(switch1.enabled); printflush(message1)"
+        mindcode = "print(switch1.enabled); printflush(message1);"
     end
     switch1:  @switch  at (1, 0)
     message1: @message at (2, 0)
@@ -1000,12 +1000,12 @@ schematic
 end
 
 source-code = """
-    on = switch1.enabled
+    on = switch1.enabled;
     // Starting at 1, we want to skip the switch
-    for link in 1 ... @links
-        device = getlink(link)
-        device.enabled = on
-    end
+    for link in 1 ... @links do
+        device = getlink(link);
+        device.enabled = on;
+    end;
     """
 ```
 
@@ -1037,10 +1037,10 @@ parametrize a common code shared between multiple processors, for example:
 ```
 schematic
     @micro-processor at (0, 0) processor
-        mindcode = "pos_x = 0; pos_y = 0;" + file "fractal.mnd"
+        mindcode = "pos_x = 0; pos_y = 0; " + file "fractal.mnd"
     end
     @micro-processor at (0, 1) processor
-        mindcode = "pos_x = 100; pos_y = 100;" + file "fractal.mnd"
+        mindcode = "pos_x = 100; pos_y = 100; " + file "fractal.mnd"
     end
 end
 ```

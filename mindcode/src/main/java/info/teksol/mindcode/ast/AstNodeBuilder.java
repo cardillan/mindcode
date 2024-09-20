@@ -371,7 +371,14 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
-    public AstNode visitFor_each(MindcodeParser.For_eachContext ctx) {
+    public AstNode visitFor_each_1(MindcodeParser.For_each_1Context ctx) {
+        String label = ctx.label == null ? null : ctx.label.getText();
+        return new ForEachExpression(ctx.getStart(), label, visit(ctx.lvalue()),
+                createListOfLoopValues(ctx.values), visit(ctx.loop_body()));
+    }
+
+    @Override
+    public AstNode visitFor_each_2(MindcodeParser.For_each_2Context ctx) {
         String label = ctx.label == null ? null : ctx.label.getText();
         return new ForEachExpression(ctx.getStart(), label, visit(ctx.lvalue()),
                 createListOfLoopValues(ctx.values), visit(ctx.loop_body()));

@@ -93,7 +93,8 @@ for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression DO? 
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
                             SEMICOLON increment=incr_list DO? loop_body END                         # iterated_for
                | ( label=loop_label COLON )? FOR lvalue IN      
-                            LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET DO? loop_body END   # for_each
+                            LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET loop_body END       # for_each_1
+               | ( label=loop_label COLON )? FOR lvalue IN values=loop_value_list DO loop_body END  # for_each_2
                ;
 
 loop_body : loop_body expression_list
@@ -216,6 +217,7 @@ INLINE : 'inline';
 LOOP : 'loop';
 NOINLINE : 'noinline';
 NULL : 'null';
+OUT : 'out';
 PARAM : 'param';
 RETURN : 'return';
 SENSOR : 'sensor';

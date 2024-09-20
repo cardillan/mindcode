@@ -98,18 +98,18 @@ class StandardFunctionsTest extends AbstractGeneratorTest {
     @Test
     void generatesRadar() {
         assertCompilesTo("""
-                        out = radar(enemy, any, any, distance, salvo1, 1)
-                        out = radar(ally, flying, any, health, lancer1, 1)
-                        src = salvo1
-                        out = radar(enemy, any, any, distance, src, 1)
+                        block = radar(enemy, any, any, distance, salvo1, 1);
+                        block = radar(ally, flying, any, health, lancer1, 1);
+                        src = salvo1;
+                        block = radar(enemy, any, any, distance, src, 1);
                         """,
                 createInstruction(RADAR, "enemy", "any", "any", "distance", "salvo1", "1", var(0)),
-                createInstruction(SET, "out", var(0)),
+                createInstruction(SET, "block", var(0)),
                 createInstruction(RADAR, "ally", "flying", "any", "health", "lancer1", "1", var(1)),
-                createInstruction(SET, "out", var(1)),
+                createInstruction(SET, "block", var(1)),
                 createInstruction(SET, "src", "salvo1"),
                 createInstruction(RADAR, "enemy", "any", "any", "distance", "src", "1", var(2)),
-                createInstruction(SET, "out", var(2)),
+                createInstruction(SET, "block", var(2)),
                 createInstruction(END)
         );
     }

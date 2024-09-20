@@ -20,8 +20,8 @@ When the `\n` sequence of characters is found in the string being printed, the `
 break. For example:
 
 ```
-print("One\nTwo")
-printflush(message1)
+print("One\nTwo");
+printflush(message1);
 ```
 
 produces the following output:
@@ -36,8 +36,8 @@ handled. Specifically, it is not possible to encode it as `\\`, unlike many othe
 the following code snippet
 
 ```
-print("One\\Two\\nThree")
-printflush(message1)
+print("One\\Two\\nThree");
+printflush(message1);
 ```
 
 produces the following output:
@@ -50,8 +50,8 @@ Three
 If you really want to output `\n` in the message block for whatever reason, you can use this trick:
 
 ```
-print("One\[red][]nTwo")
-printflush(message1)
+print("One\[red][]nTwo");
+printflush(message1);
 ```
 
 which finally produces
@@ -70,10 +70,10 @@ predefined color names (in uppercase or lowercase, but not mixed-case), or by en
 or `#RRGGBBAA` form. The `[]` sequence then restores the previous color. It is therefore possible to use
 
 ```
-println("[red]This is red")
-println("[green]This is green")
-println("[]This is red again")
-printflush(message1)
+println("[red]This is red");
+println("[green]This is green");
+println("[]This is red again");
+printflush(message1);
 ```
 
 to print colored texts in the colors indicated in the example.
@@ -127,9 +127,9 @@ When a color name or color code is not recognized in square brackets, the text i
 A sequence of two left square brackets, i.e. `[[`, is always printed as `[` e.g.:
 
 ```
-println("The color is [[red]")
-println("The state is [[alarm]")
-printflush(message1)
+println("The color is [[red]");
+println("The state is [[alarm]");
+printflush(message1);
 ```
 
 produces
@@ -146,12 +146,12 @@ color name.
 
 It is also possible to use built-in Mindustry icons in the `print` instruction, for example
 
-```mindcode
-println(ITEM-COAL, ": ", vault1.coal)
-println(ITEM-LEAD, ": ", vault1.lead)
-println(ITEM-SAND, ": ", vault1.sand)
+```
+println(ITEM-COAL, ": ", vault1.coal);
+println(ITEM-LEAD, ": ", vault1.lead);
+println(ITEM-SAND, ": ", vault1.sand);
 
-printf("Using $UNIT-MEGA to transport items...\n") 
+printf("Using $UNIT-MEGA to transport items...\n"); 
 ```
 
 Supported Mindustry icons are available through built-in String constants containing them. For a complete list of
@@ -164,16 +164,16 @@ When printing numbers, Mindustry prints the full representation of a number. It 
 as fractions can produce a lot of digits. To avoid this, use the `floor` or `ceil` function:
 
 ```
-start_time = @time
-do_some_stuff()
-duration = @time - start_time
-println("Elapsed: ", floor(duration), " ms")
+start_time = @time;
+do_some_stuff();
+duration = @time - start_time;
+println("Elapsed: ", floor(duration), " ms");
 ```
 
 When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead.
 The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI. There isn't a way 
 to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't 
-necessarily have a zero value.
+necessarily equal to zero.
 
 ## Using units
 
@@ -201,18 +201,18 @@ value in another variable. One possible reason to do that is that you can use su
 already encountered all existing units:
 
 ```
-first_unit = ubind(@poly)
-if first_unit != null
-    count = 1
-    while ubind(@poly) != first_unit
-        count += 1
-    end 
+first_unit = ubind(@poly);
+if first_unit != null then
+    count = 1;
+    while ubind(@poly) != first_unit do
+        count += 1;
+    end;
 else
-    count = 0
-end
+    count = 0;
+end;
 
-printf("There are $count active poly(s).")
-printflush(message1)
+printf("There are $count active poly(s).");
+printflush(message1);
 ```
 
 This code counts the current number of active polys by binding all of them; as soon as the first one is encountered 
@@ -224,23 +224,23 @@ There's one additional, very important thing you can do with a unit stored in a 
 that unit again. For example:
 
 ```
-poly = ubind(@poly)     // We just assume the units exist
-mega = ubind(@mega)
+poly = ubind(@poly);     // We just assume the units exist
+mega = ubind(@mega);
 
-ANGLE = 0
+ANGLE = 0;
 while true
-    controlUnit(poly)
-    controlUnit(mega)
-end
+    controlUnit(poly);
+    controlUnit(mega);
+end;
 
 def controlUnit(my_unit)
-    ubind(my_unit)
-    move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE))  // Do *something* with the unit
-    printf("Currently bound unit is ${@unit}.")
-    printflush(message1)
-    wait(0.8)
-    ANGLE += 45
-end
+    ubind(my_unit);
+    move(@thisx + 10 * sin(ANGLE), @thisy + 10 * cos(ANGLE));
+    printf("Currently bound unit is ${@unit}.");
+    printflush(message1);
+    wait(0.8);
+    ANGLE += 45;
+end;
 ```
 
 ### Flagging units
@@ -252,18 +252,18 @@ processors know to avoid them. Typical code might look like this:
 ```
 def findFreeUnit(unit_type, mark_flag)
     do
-        ubind(unit_type)
-    loop while @unit.flag !== 0      
+        ubind(unit_type);
+    loop while @unit.flag !== 0;      
 
     // If no unit was found, @unit would be null and so would be @unit.flag. 
     // The strict comparison (!==) ensures the loop will only end when a live unit with zero flag is found  
 
-    flag(mark_flag)
-    return @unit
-end
+    flag(mark_flag);
+    return @unit;
+end;
 
-flag = rand(10**10)
-my_unit = findFreeUnit(@mono, flag)
+flag = rand(10**10);
+my_unit = findFreeUnit(@mono, flag);
 ```
 
 Later on, you might loop through all units and use the particular value of the flag to recognize those you acquired.
@@ -289,19 +289,19 @@ A wee bit enhanced `findFreeUnit()` function using the `controlled` property mig
 ```
 def findFreeUnit(unit_type, initial_flag)
     // Keep looking for unit until one is found
-    while true
-        ubind(unit_type)
-        if @unit == null
-            printf("No unit of type $unit_type found.")
-        elsif @unit.controlled != 0
-            printf("Looking for a free $unit_type...")
+    while true do
+        ubind(unit_type);
+        if @unit == null then
+            printf("No unit of type $unit_type found.");
+        elsif @unit.controlled != 0 then
+            printf("Looking for a free $unit_type...");
         else
-            flag(initial_flag)		// Mark unit as active
-            return @unit
-        end
-        printflush(message1)
-    end
-end
+            flag(initial_flag);		// Mark unit as active
+            return @unit;
+        end;
+        printflush(message1);
+    end;
+end;
 ```
 
 We're still flagging the unit. First of all, it assigns the initial state to it right off the bat, and secondly, it 
@@ -311,10 +311,10 @@ The other property is `@unit.controller`. This returns the processor that is act
 `null` if no processor controls that unit. Use this property to detect that your unit was lost:
 
 ```
-if @unit.controller != @this
+if @unit.controller != @this then
     // We lost our unit. Immediatelly get a new one.
-    findFreeUnit(@mega, STATE_INIT)
-end
+    findFreeUnit(@mega, STATE_INIT);
+end;
 ```
 
 Unit can become lost if a player or another rogue processor takes over it, so it is definitely useful to guard 
@@ -328,15 +328,15 @@ If a unit is not issued commands from a processor for some time, it becomes free
 `controller` properties are cleared. My tests show it takes about 10 seconds:
 
 ```
-loops = 0
-ubind(@poly)
-start = @time
-flag(10)
-while @unit.controller == @this
-    loops += 1      // while loop doesn't allow empty body as of now 
-end
-printf("Unit was controlled for $ ms", floor(@time - start))
-printflush(message1)
+loops = 0;
+ubind(@poly);
+start = @time;
+flag(10);
+while @unit.controller == @this do
+    loops += 1;      // while loop doesn't allow empty body as of now 
+end;
+printf("Unit was controlled for $ ms", floor(@time - start));
+printflush(message1);
 ```
 
 ### Detecting destroyed units
@@ -354,10 +354,10 @@ A single strict comparison (`===` or `!==`) can be used to recognize live unit f
 An improved way to detect units no longer available to processor therefore is:
 
 ```
-if @unit.controller != @this or @unit.dead !== 0
+if @unit.controller != @this or @unit.dead !== 0 then
     // We lost our unit. Immediatelly get a new one.
-    findFreeUnit(@mega, STATE_INIT)
-end
+    findFreeUnit(@mega, STATE_INIT);
+end;
 ```
 
 ### Discarding unwanted items
@@ -366,7 +366,7 @@ Units can carry only one type of items at a time. It might therefore be sometime
 are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
 
 ```
-itemDrop(@air, @unit.totalItems)
+itemDrop(@air, @unit.totalItems);
 ```
 
 In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still 
@@ -386,7 +386,7 @@ the game. Doing so without a processor placed next to the core requires a unit. 
 issue this command:
 
 ```
-found = ulocate(building, core, false, core_x, core_y, core)
+found = ulocate(building, core, false, core_x, core_y, core);
 ```
 
 Let's look at each argument here: 
@@ -403,10 +403,10 @@ wasn't.  If you don't need it, use just `ulocate(building, core, false, core_x, 
 * `core` is the building itself, and it can be used to query its state:
 
 ```
-findFreeUnit(@poly, 1)
-ulocate(building, core, false, core_x, core_y, core)
-println("Silicon status: ", core.silicon)
-printflush(message1) 
+findFreeUnit(@poly, 1);
+ulocate(building, core, false, core_x, core_y, core);
+println("Silicon status: ", core.silicon);
+printflush(message1) ;
 ```
 
 will tell you how bad your silicone situation is.
@@ -416,7 +416,7 @@ will tell you how bad your silicone situation is.
 You can obtain building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! `getBlock` retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
 
 ```
-getBlock(x, y, type, building, floor)
+getBlock(x, y, type, building, floor);
 ```
 
 Let's look at each argument here:
@@ -431,33 +431,33 @@ If you don't need some arguments, just leave them with 0: `getBlock(x, y, 0, 0, 
 In the example code below Flare finds the nearest enemy turret and approach to it. If the unit is within of the turret, checks the building variable. If it's null, turret has been destroyed, if not, it's still exists. If ulocate return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
 
 ```
-findFreeUnit(@flare, 1)
-unitRange = @unit.range
-enTurr = ulocate(building, turret, true, outx, outy)        // Locating nearest enemy turret. If found, enTurr == 1 and (outx, ouy)- it's coordinates, else enTurr == 0.
-while @unit.controlled == 1        // If the unit still controlled by this proc
-    if enTurr == 0
-        println("There are no more turrets")
-        printflush(message1)
-        wait(3)
-        end()
-    end
-    approach(outx, outy, unitRange)
-    inNear = within(outx, outy, unitRange)
-    if inNear == 1
-        getBlock(outx, outy, 0, block, 0)       // We don't need a block type or floor type, only a building
-        if block === null
-            printf("Enemy turrer at ${outx}, ${outy} has been destroyed!\n")
-            printflush(message1)
-            wait(3)
-            enTurr = ulocate(building, turret, true, outx, outy)        // Finding the next enemy turret
+findFreeUnit(@flare, 1);
+unitRange = @unit.range;
+enTurr = ulocate(building, turret, true, outx, outy);       // Locating nearest enemy turret. If found, enTurr == 1 and (outx, ouy)- it's coordinates, else enTurr == 0.
+while @unit.controlled == 1 do      // If the unit still controlled by this proc
+    if enTurr == 0 then
+        println("There are no more turrets");
+        printflush(message1);
+        wait(3);
+        end();
+    end;
+    approach(outx, outy, unitRange);
+    inNear = within(outx, outy, unitRange);
+    if inNear == 1 then
+        getBlock(outx, outy, 0, block, 0);       // We don't need a block type or floor type, only a building
+        if block === null then
+            printf("Enemy turrer at ${outx}, ${outy} has been destroyed!\n");
+            printflush(message1);
+            wait(3);
+            enTurr = ulocate(building, turret, true, outx, outy);        // Finding the next enemy turret
         else
-            printf("Enemy turrer at ${outx}, ${outy} still exists\n")
-        end
+            printf("Enemy turrer at ${outx}, ${outy} still exists\n");
+        end;
     else
-        printf("Searching for enemy turrer at ${outx}, ${outy}...\n")
-    end
-    printflush(message1)
-end
+        printf("Searching for enemy turrer at ${outx}, ${outy}...\n");
+    end;
+    printflush(message1);
+end;
 ```
 
 ---

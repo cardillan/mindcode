@@ -689,13 +689,25 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFor_each(MindcodeParser.For_eachContext ctx) { }
+	@Override public void enterFor_each_1(MindcodeParser.For_each_1Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFor_each(MindcodeParser.For_eachContext ctx) { }
+	@Override public void exitFor_each_1(MindcodeParser.For_each_1Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFor_each_2(MindcodeParser.For_each_2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFor_each_2(MindcodeParser.For_each_2Context ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

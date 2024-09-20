@@ -1,4 +1,5 @@
 assignments-in-expressions.mnd:         : parse:          0 ms, compile:          0 ms, optimize:          0 ms
+compilesProperComparison:               : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 complex-case-expression.mnd:            : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 computesPackColor:                      : parse:          0 ms, compile:          0 ms, optimize:          0 ms
 expression-evaluation-compile-time.mnd: : parse:          0 ms, compile:          0 ms, optimize:          0 ms

@@ -4,7 +4,7 @@ Mindcode allows you to alter some compiler options in the source code using spec
 The basic syntax is: 
 
 ```
-#set option = value
+#set option = value;
 ```
 
 Some of these options can be alternatively specified as parameters of the command line compiler.
@@ -16,7 +16,7 @@ Supported compiler options are described below.
 Use the `target` option to specify the Mindcode version:
 
 ```
-#set target = ML6
+#set target = ML6;
 ```
 
 Possible values for this option are:
@@ -87,7 +87,7 @@ to 100,000 for the command-line tool, and 1 to 1,500 for the web application.
 Use the `optimization` option to set the optimization level of the compiler:
 
 ```
-#set optimization = basic
+#set optimization = basic;
 ```
 
 Possible values for this option are:
@@ -108,7 +108,7 @@ The default optimization level for the web application compiler is `basic`, for 
 Use the `passes` option to set the maximum number of optimization passes to be done:
 
 ```
-#set passes = 10
+#set passes = 10;
 ```
 
 The default value is 3 for the web application and 25 for the command line tool. The number of optimization passes
@@ -124,7 +124,7 @@ It is possible to set the level of individual optimization tasks. Every optimiza
 and this name can be used in the compiler directive like this:
 
 ```
-#set dead-code-elimination = aggressive
+#set dead-code-elimination = aggressive;
 ```
 
 Not all optimizations support the `aggressive` level. For those the level `aggressive` is the same as `basic`.

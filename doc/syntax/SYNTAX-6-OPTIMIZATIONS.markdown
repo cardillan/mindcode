@@ -144,13 +144,13 @@ is then assigned to the user variable. This optimization detects these situation
 final value to the user variable directly in the true/false branches:
 
 ```
-abs = if x < 0
-    negative += 1;  // The semicolon is needed to separate the two statements
-    -x
+abs = if x < 0 then
+    negative += 1;  // The semicolon cannot be omitted here as it to separates the two statements
+    -x;
 else
-    positive += 1
-    x
-end
+    positive += 1;
+    x;
+end;
 ```
 
 produces this code:
@@ -179,7 +179,7 @@ producing a single value are handled, specifically:
 Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
 
 ```
-print(x < 0 ? "negative" : "positive")
+print(x < 0 ? "negative" : "positive");
 ```
 
 Without If Expression Optimization, the produced code is
@@ -196,7 +196,7 @@ Execution speed:
 * x is negative: 4 instructions (0, 1, 2, 4) are executed,
 * x is positive: 3 instructions (0, 3, 4) are executed.
 
-The if expression optimization turns the code into this:
+The If Expression Optimization turns the code into this:
 
 ```
 set __tmp1 "positive"
@@ -227,14 +227,14 @@ The additional instruction can be avoided when the true and false branches in th
 optimizer detects such a situation, it does exactly that:
 
 ```
-if @unit.dead === 0
-    print("alive")
+if @unit.dead === 0 then
+    print("alive");
 else
-    print("dead")
-end
+    print("dead");
+end;
 ```
 
-Notice the `print("dead")` occurs before `print("alive")` now:
+Notice the `print "dead"` occurs before `print "alive"` now:
 
 ```
 sensor __tmp0 @unit @dead
@@ -251,13 +251,13 @@ The `elsif` statements are equivalent to nesting the elsif part in the `else` br
 Optimizations of these nested statements work as expected:
 
 ```
-y = if x < 0
-    "negative"
-elsif x > 0
-    "positive"
+y = if x < 0 then
+    "negative";
+elsif x > 0 then
+    "positive";
 else
-    "zero"
-end
+    "zero";
+end;
 ```
 
 produces
@@ -335,11 +335,11 @@ without the optimizer eliminating most or all of the compiled code due to it not
 world.
 
 ```
-#set optimization = basic
-x0 = 0.001
-y0 = 0.002
-x1 = x0 * x0 + y0 * y0
-y1 = 2 * x0 * y0
+#set optimization = basic;
+x0 = 0.001;
+y0 = 0.002;
+x1 = x0 * x0 + y0 * y0;
+y1 = 2 * x0 * y0;
 ```
 
 produces
@@ -356,11 +356,11 @@ On `aggressive` optimization level, no special protection to main variables is a
 removed from the resulting code:
 
 ```
-#set optimization = aggressive
-x0 = 0.001
-y0 = 0.002
-x1 = x0 * x0 + y0 * y0
-y1 = 2 * x0 * y0
+#set optimization = aggressive;
+x0 = 0.001;
+y0 = 0.002;
+x1 = x0 * x0 + y0 * y0;
+y1 = 2 * x0 * y0;
 ```
 
 produces
@@ -384,20 +384,20 @@ beginning. If you intentionally leave a variable uninitialized, you may just ign
 warning, move the entire code into an infinite loop and initialize the variables before that loop. For example:
 
 ```
-count += 1
-print(count)
-printflush(message1)
+count += 1;
+print(count);
+printflush(message1);
 ```
 
 can be rewritten as
 
 ```
-count = 0
-while true
-    count += 1
-    print(count)
-    printflush(message1)
-end
+count = 0;
+while true do
+    count += 1;
+    print(count);
+    printflush(message1);
+end;
 ```
 
 Data Flow Optimization assumes that values assigned to uninitialized variables might be reused on the next program
@@ -405,17 +405,17 @@ execution. Assignments to uninitialized variables before calling the `end()` fun
 assignments to initialized variables aren't - they will be overwritten on the next program execution anyway:
 
 ```
-foo = rand(10)
-if initialized == 0
-    print("Initializing...")
+foo = rand(10);
+if initialized == 0 then
+    print("Initializing...");
     // Do some initialization
-    initialized = 1
-    foo = 1
-    end()
-end
-print("Doing actual work")
-print(initialized)
-print(foo)
+    initialized = 1;
+    foo = 1;
+    end();
+end;
+print("Doing actual work");
+print(initialized);
+print(foo);
 ```
 
 produces this code:
@@ -435,18 +435,18 @@ end
 Notice the `initialized = 1` statement is preserved, while `foo = 1` is not.
 
 This protection is also applied to assignment to uninitialized variables made before calling a user function which,
-directly or indirectly, calls the `end()` function:
+directly or indirectly, calls or may call the `end()` function:
 
 ```
-print(foo)
-foo = 5
-bar()
-foo = 6
-bar()
+print(foo);
+foo = 5;
+bar();
+foo = 6;
+bar();
 
 def bar()
-    end()
-end
+    end();
+end;
 ```
 
 preserves both assignments to `foo`:
@@ -470,10 +470,10 @@ assignment is unnecessary if the variable is not read after being assigned, or i
 assignment to the variable is made:
 
 ```
-a = rand(10)
-a = rand(20)
-print(a)
-a = rand(30)
+a = rand(10);
+a = rand(20);
+print(a);
+a = rand(30);
 ```
 
 compiles to:
@@ -497,11 +497,11 @@ When a variable is used in an instruction and the value of the variable is known
 itself is replaced by the constant value. This can in turn make the original assignment unnecessary. See for example:
 
 ```
-#set optimization = aggressive
-a = 10
-b = 20
-c = @tick + b
-printf("$a, $b, $c.")
+#set optimization = aggressive;
+a = 10;
+b = 20;
+c = @tick + b;
+printf("$a, $b, $c.");
 ```
 
 produces
@@ -522,11 +522,11 @@ folding evaluates the expression and replaces the operation with the resulting v
 For example:
 
 ```
-#set optimization = aggressive
-a = 10
-b = 20
-c = a + b
-printf("$a, $b, $c.")
+#set optimization = aggressive;
+a = 10;
+b = 20;
+c = a + b;
+printf("$a, $b, $c.");
 ```
 
 produces
@@ -557,11 +557,11 @@ for a second (third, fourth, ...) time, the result of the last computation is re
 expression again. In the following code:
 
 ```
-a = rand(10)
-b = a + 1
-c = 2 * (a + 1)
-d = 3 * (a + 1)
-print(a, b, c, d)
+a = rand(10);
+b = a + 1;
+c = 2 * (a + 1);
+d = 3 * (a + 1);
+print(a, b, c, d);
 ```
 
 the optimizer notices that the value `a + 1` was assigned to `b` after it was computed for the first time
@@ -585,11 +585,11 @@ allow more evaluations to be reused.
 On the other hand, entire complex expressions are reused if they're identical. In the following code
 
 ```
-a = rand(10)
-b = rand(10)
-x = 1 + sqrt(a * a + b * b)
-y = 2 + sqrt(a * a + b * b)
-print(x, y)
+a = rand(10);
+b = rand(10);
+x = 1 + sqrt(a * a + b * b);
+y = 2 + sqrt(a * a + b * b);
+print(x, y);
 ```
 
 the entire square root is evaluated only once:
@@ -638,10 +638,10 @@ once, instead of on each loop iteration.
 Fo example, in the following code
 
 ```
-A = 10
-for i = 0; i < A; i += 1
-    print(2 * A)
-end
+A = 10;
+for i = 0; i < A; i += 1 do
+    print(2 * A);
+end;
 ```
 
 the evaluation of `2 * A` is moved in front of the loop in the compiled code (changes highlighted):
@@ -663,14 +663,14 @@ A loop condition is processed as well as a loop body, and invariant code in nest
 the top when possible: 
 
 ```
-A = 10
-for j in 0 ... A
-    i = 0
-    while i < A + 10
-        i = i + 1
-        print(i)
-    end
-end
+A = 10;
+for j in 0 ... A do
+    i = 0;
+    while i < A + 10 do
+        i = i + 1;
+        print(i);
+    end;
+end;
 ```
 
 compiles into
@@ -697,13 +697,13 @@ compiles into
 On `aggressive` optimization level, Loop Hoisting is capable of handling some `if` expressions as well:
 
 ```
-#set loop-hoisting = aggressive
-A = 10
-for i in 1 ... A
-    k = (A % 2 == 0) ? "Even" : "Odd"
-    print(i, k)
-end
-print("end")
+#set loop-hoisting = aggressive;
+A = 10;
+for i in 1 ... A do;
+    k = (A % 2 == 0) ? "Even" : "Odd";
+    print(i, k);
+end;
+print("end");
 ```
 
 produces
@@ -756,11 +756,11 @@ The loop optimization improves loops with the condition at the beginning by perf
 The result of the first two optimizations in the list can be seen here:
 
 ```
-LIMIT = 10
-for i in 0 ... LIMIT
-    cell1[i] = 1
-end
-print("Done.")
+LIMIT = 10;
+for i in 0 ... LIMIT do
+    cell1[i] = 1;
+end;
+print("Done.");
 ```
 
 produces 
@@ -782,10 +782,10 @@ would require 43 steps. That's quite significant difference, especially for smal
 The third modification is demonstrated here:
 
 ```
-while switch1.enabled and switch2.enabled
-    print("Doing something.")
-end
-print("A switch has been reset.")
+while switch1.enabled and switch2.enabled do
+    print("Doing something.");
+end;
+print("A switch has been reset.");
 ```
 
 which produces:
@@ -821,10 +821,10 @@ the loop remain. The optimization is most efficient on loops that are very "tigh
 instructions apart from the loop itself. The most dramatic practical example is probably something like this:
 
 ```
-#set loop-unrolling = off
-for i in 0 ... 10
-    cell1[i] = 0
-end
+#set loop-unrolling = off;
+for i in 0 ... 10 do
+    cell1[i] = 0;
+end;
 ```
 
 This code clears the first ten slots of a memory cell. Without loop unrolling, the code would look like this:
@@ -864,11 +864,11 @@ A not particularly practical, but nonetheless striking example is this program w
 0 to 100:
 
 ```
-sum = 0
-for i in 0 .. 100
-    sum += i
-end
-print(sum)
+sum = 0;
+for i in 0 .. 100;
+    sum += i;
+end;
+print(sum);
 ```
 
 which compiles to (drumroll, please):
@@ -932,74 +932,74 @@ Examples of loops that can be unrolled on `basic` optimization level:
 
 ```
 // Basic case
-for i in 0 .. 10
-    cell1[i] = cell1[i + 1]
-end
+for i in 0 .. 10 do
+    cell1[i] = cell1[i + 1];
+end;
 
 // Two separate increments of the loop control variable
-j = 0
-while j < 20
-    println(j)
-    j += 1
-    println(j)
-    j += 2
-end
+j = 0;
+while j < 20 do
+    println(j);
+    j += 1;
+    println(j);
+    j += 2;
+end;
 
 // The loop control variable can be used in further expressions
-for k in 0 ... 10
-    cell1[k] = cell1[2 * k]
-end
+for k in 0 ... 10 do
+    cell1[k] = cell1[2 * k];
+end;
 
-for l in 0 ... 10
-    println(l % 2 ? "Odd" : "Even")
-end
+for l in 0 ... 10 do
+    println(l % 2 ? "Odd" : "Even");
+end;
 
 // Loop inside an inline function: can be unrolled if a constant value is passed into the size parameter
 inline def copy(src, dst, size)
-    for i in 0 ... size
-        dst[i] = src[i]
-    end
-end
+    for i in 0 ... size do
+        dst[i] = src[i];
+    end;
+end;
 
 // This will produce a loop that can be unrolled
-copy(cell1, cell2, 10)
+copy(cell1, cell2, 10);
 
 // This produces a loop that CANNOT be unrolled: SIZE is not a constant value
-SIZE = 10
-copy(cell1, cell2, SIZE)
+SIZE = 10;
+copy(cell1, cell2, SIZE);
 
 // Some loops containing expressions in the condition can still be unrolled,
 // but it strongly depends on the structure of the expression
-i = 0
-while i += 1 < 10
-    print(i)
-end 
+i = 0;
+while i += 1 < 10 do
+    print(i);
+end ;
 ```
 
 Examples of loops that can be unrolled on `aggressive` optimization level:
 
 ```
 // An operation different from add and sub is supported
-for i = 1; i < 100000; i <<= 1
-    println(i)
-end
+for i = 1; i < 100000; i <<= 1 do
+    println(i);
+end;
 
 // This loop can be unrolled, because it terminates
 // (if the condition was j > 0, it would never terminate)
-j = 10
-while j > 1
-    j += 1
-    println(i)
-    j \= 2
-    println(i)
-end
+j = 10;
+while j > 1 do
+    j += 1;
+    println(i);
+    j \= 2;
+    println(i);
+end;
 
 // This loop is unrolled, but the number of iterations is 11!
 // The code produces the same output as if it wasn't unrolled.
 // This is because of rounding errors when evaluating floating-point expressions 
-for k = 0; k < 1; k += 0.1
-    println(k)
-end
+for k = 0; k < 1; k += 0.1 do
+    println(k);
+end;
 ```
 
 Examples of loops that **cannot** be unrolled:
@@ -1007,41 +1007,41 @@ Examples of loops that **cannot** be unrolled:
 ```
 // LIMIT is a global variable and as such the value assigned to it isn't considered constant
 // (see Data Flow Optimization)
-LIMIT = 10
-for i in 0 ... LIMIT
-    cell1[i] = 0
-end
+LIMIT = 10;
+for i in 0 ... LIMIT do
+    cell1[i] = 0;
+end;
 
 // The loop control variable is changed inside an if
-i = 0
-while i < 10
-    i += 1
-    print(i)
-    if i % 5 == 0
-        i += 1
-        print("Five")
-    end
-end
+i = 0;
+while i < 10 do
+    i += 1;
+    print(i);
+    if i % 5 == 0 then
+        i += 1;
+        print("Five");
+    end;
+end;
 
 // There isn't a single loop control variable - loop condition depens on both i and j
-for i = 0, j = 10; i < j; i += 1, j -= 1
-    print(i)
-end
+for i = 0, j = 10; i < j; i += 1, j -= 1 do
+    print(i);
+end;
 
 // The expression changing the loop control variable is too complex.
-// (Rewriting the assignment to i *= 2, i += 1 would allow unrolling) 
-i = 0
-while i < 1000
-  i = 2 * i + 1
-  print(i)
-end
+// (Rewriting the assignment to i *= 2; i += 1; would allow unrolling) 
+i = 0;
+while i < 1000 do
+  i = 2 * i + 1;
+  print(i);
+end;
 
 // This loop won't be unrolled. We know it ends after 5 iterations due to the break statement,
 // but Mindcode assumes 2000 iterations, always reaching the instruction limit.  
-for i in 0 ... 2000
-    if i > 5 break end
-    print(i)
-end
+for i in 0 ... 2000 do
+    if i > 5 break; end;
+    print(i);
+end;
 ```
 
 ### Unrolling nested loops
@@ -1049,12 +1049,12 @@ end
 Nested loops can also be unrolled, and the optimizer prefers unrolling the inner loop:
 
 ```
-k = 0
-for i in 0 ... 100
-    for j in 0 ... 100
-        k = k + rand(j) // Prevents collapsing the loop by Data Flow Optimization 
-    end
-end
+k = 0;
+for i in 0 ... 100 do
+    for j in 0 ... 100 do
+        k = k + rand(j); // Prevents collapsing the loop by Data Flow Optimization 
+    end;
+end;
 ```
 
 Both loops are eligible for unrolling at the beginning, and the inner one is chosen. After that the outer loop can 
@@ -1064,18 +1064,18 @@ Sometimes unrolling an outer loop can make the inner loop eligible for unrolling
 cannot be unrolled first, as it is not constant:
 
 ```
-#set optimization = aggressive
-first = true
-for i in 1 .. 5
-    for j in i .. 5
-        if first
-            first = false
+#set optimization = aggressive;
+first = true;
+for i in 1 .. 5 do
+    for j in i .. 5 do
+        if first then
+            first = false;
         else
-            print(" ")
-        end
-        print(10 * i + j)
-    end
-end
+            print(" ");
+        end;
+        print(10 * i + j);
+    end;
+end;
 ```
 
 In this example, the outer loop is unrolled first, after which each copy of the inner loop can be unrolled 
@@ -1197,16 +1197,16 @@ The following conditions must be met for a case expression to be processed by th
 ### Example
 
 ```
-value = floor(rand(20))
+value = floor(rand(20));
 text = case value
-    when 0 then "None"
-    when 1 then "One"
-    when 2, 3, 4 then "A few"
-    when 5, 6, 7, 8 then "Many"
-    when 10 then "Ten"
-    else "I don't known this number!"
-end
-print(text)
+    when 0 then "None";
+    when 1 then "One";
+    when 2, 3, 4 then "A few";
+    when 5, 6, 7, 8 then "Many";
+    when 10 then "Ten";
+    else "I don't known this number!";
+end;
+print(text);
 ```
 
 The above case expression is transformed to this:
@@ -1279,12 +1279,12 @@ Optimization won't be done if the condition does not have an inverse (`strictEqu
 These sequences of instructions may arise when using the `break` or `continue` statements:
 
 ```
-while true
+while true do
     ...
-    if not_alive
-        break
-    end
-end
+    if not_alive then
+        break;
+    end;
+end;
 ```
 
 ## Jump Threading
@@ -1340,22 +1340,22 @@ that could break the print sequence (`jump`, `label` or `print <variable>`).
 Effectively, this optimization eliminates a `print` instruction by turning this
 
 ```
-println("Items: ", items)
-println("Time: " @time)
+println("Items: ", items);
+println("Time: " @time);
 ```
 into this:
 
 ```
-print("Items: ", items)
-print("\nTime: ", @time "\n")
+print("Items: ", items);
+print("\nTime: ", @time "\n");
 ```
 
 On `aggressive` level, all constant values - not just string constants - are merged. For example:
 
 ```
-#set optimization = aggressive
-const MAX_VALUE = 10
-printf("Step $i of $MAX_VALUE\n")
+#set optimization = aggressive;
+const MAX_VALUE = 10;
+printf("Step $i of $MAX_VALUE\n");
 ```
 
 produces

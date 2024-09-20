@@ -180,14 +180,14 @@ while SWITCH.enabled == 0
 			r1 = MUL1 * factory.sensor(RES1);
 			r2 = MUL2 * factory.sensor(RES2);
 			r3 = MUL3 * factory.sensor(RES3);
-			out = MUL1 * factory.sensor(OUTPUT);
+			output = MUL1 * factory.sensor(OUTPUT);
 			e = factory.enabled;
 			power = factory.totalPower;
 			boost = factory.timescale;
 			if r1 < minimum minimum = r1; icon = RES1; end;
 			if r2 < minimum minimum = r2; icon = RES2; end;
 			if r3 < minimum minimum = r3; icon = RES3; end;
-			showout = out > LIM1 && 100 - out < minimum;
+			showout = output > LIM1 && 100 - output < minimum;
 			if showout icon = OUTPUT; end;
 
 			// Compute bar position
@@ -235,7 +235,7 @@ while SWITCH.enabled == 0
 				red = 255;
 				green = 0;
 				blue = 255;
-				minimum = out;
+				minimum = output;
 			else
 				red = (minimum > LIM2 && boost >= EXPECTED_BOOST) ? 0 : 255;
 				green = (minimum > LIM1) ? 255 : 0;

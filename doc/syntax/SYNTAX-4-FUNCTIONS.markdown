@@ -5,8 +5,8 @@ Functions are called by specifying a function name and placing parameters in par
 The parenthesis must be used even if the function has no parameters.
 
 ```
-foo(x)     // Calling function with a single argument
-bar()      // Calling function with no arguments
+foo(x);    // Calling function with a single argument
+bar();     // Calling function with no arguments
 ```
 
 # Mindustry Logic functions
@@ -91,7 +91,7 @@ instruction. Looking for ways to support this syntax in the future.
 The `sensor` method accepts an expression, not just constant property name, as an argument:
 
 ```
-amount = vault1.sensor(use_titanium ? @titanium : @copper)
+amount = vault1.sensor(use_titanium ? @titanium : @copper);
 ```
 
 If the property you're trying to obtain is hard-coded, you can again use an alternate syntax:
@@ -125,11 +125,11 @@ in this place doesn't therefore make sense.
 Currently, a value of a  global variable might not be re-read on every access, for example:
 
 ```
-sync(A)
-before = A
-wait(1000)
-after = A
-print(after - before)
+sync(A);
+before = A;
+wait(1000);
+after = A;
+print(after - before);
 ```
 
 This snippet of code is meant to compute a difference in the value of `A` caused by external synchronization. 
@@ -152,15 +152,15 @@ prevent its inlining:
 
 ```
 noinline def readA()
-    A
-end
+    A;
+end;
 
-A = rand(10)
-sync(A)
-before = readA()
-wait(1000)
-after = readA()
-print(after - before)
+A = rand(10);
+sync(A);
+before = readA();
+wait(1000);
+after = readA();
+print(after - before);
 ```
 
 The resulting code now is 
@@ -199,10 +199,10 @@ The `println` function prints all its arguments and adds a newline ("\n") at the
 The returned value is that of the last argument, or `null` if no argument was passed:
 
 ```
-println("Position: ", x, ", ", y)
-println()
-println("Elapsed time: ", elapsed, " sec")
-printflush(message1)
+println("Position: ", x, ", ", y);
+println();
+println("Elapsed time: ", elapsed, " sec");
+printflush(message1);
 ```
 
 ## printf
@@ -230,14 +230,14 @@ Firstly, the first argument to `printf` must be a string constant, as the format
 no expressions:
 
 ```
-x = 5
-y = 10
-format = "Position: $, $\n"
-printf(format, x, y)                // Not allowed - format must be a string constant
-printf("Distance: ${len(x, y)}")    // No expressions allowed
+x = 5;
+y = 10;
+format = "Position: $, $\n";
+printf(format, x, y);               // Not allowed - format must be a string constant
+printf("Distance: ${len(x, y)}");   // No expressions allowed
 
-const fmt = "Position: $, $\n"
-printf(fmt, x, y)                   // Allowed - fmt is a string constant
+const fmt = "Position: $, $\n";
+printf(fmt, x, y);                  // Allowed - fmt is a string constant
 ```
 
 ## remark
@@ -316,7 +316,7 @@ If a region of code is unreachable and is optimized away, the remarks are also s
 ```
 const DEBUG = false;
 
-if DEBUG
+if DEBUG then
     remark("Compiled for DEBUG");
 else
     remark("Compiled for RELEASE");
@@ -340,17 +340,17 @@ You may declare your own functions using the `def` keyword:
 
 ```
 def update(message, status)
-    println("Status: ", status)
-    printf("Game time: $ sec", floor(@time) / 1000)
-    printflush(message)
-end
+    println("Status: ", status);
+    printf("Game time: $ sec", floor(@time) / 1000);
+    printflush(message);
+end;
 ```
 
 This function will print the status and flush it to given message block.
 Calling your own functions is done in the same way as any other function:
 
 ```
-update(message1, "The core is on fire!!!")
+update(message1, "The core is on fire!!!");
 ```
 
 You can pass any variable or value assignable to a variable as an argument to the function. A function may call other functions.
@@ -371,14 +371,14 @@ statement doesn't specify a return value:
 ```
 def foo(n)
     case n
-        when 1      return
-        when 2      return "Two"
-    end
-    n
-end
+        when 1 then return;
+        when 2 then return "Two";
+    end;
+    n;
+end;
 
-printf("$:$:$", foo(1), foo(2), foo(3))
-printflush(message1)
+printf("$:$:$", foo(1), foo(2), foo(3));
+printflush(message1);
 ```
 
 The output of this program is `null:Two:3`.
@@ -393,15 +393,15 @@ To create an inline function, use `inline` keyword:
 
 ```
 inline def printtext(name, value, min, max)
-    if value < min
-        println(name, " too low")
-    elsif value > max
-        println(name, " too high")
-    end
-end
+    if value < min then
+        println(name, " too low");
+    elsif value > max then
+        println(name, " too high");
+    end;
+end;
 
-printtext("Health", health, minHealth, maxHealth)
-printtext("Speed", speed, minSpeed, maxSpeed)
+printtext("Health", health, minHealth, maxHealth);
+printtext("Speed", speed, minSpeed, maxSpeed);
 ```
 
 Large inline functions called multiple times can generate lots of instructions and make the compiled code too long.
@@ -429,21 +429,21 @@ Recursive functions require a stack to keep track of the calls in progress
 and for storing local variables from different invocations of the function.
 
 ```
-allocate stack in bank1
+allocate stack in bank1;
 
 def fib(n)
-    return n < 2 ? max(n, 0) : fib(n - 1) + fib(n - 2)
+    return n < 2 ? max(n, 0) : fib(n - 1) + fib(n - 2);
 end
 
-fib(0) // 0
-fib(1) // 0
-fib(2) // 1
-fib(3) // 1
-fib(4) // 2
-fib(5) // 3
-fib(6) // 5
-fib(7) // 8
-fib(8) // 13
+fib(0); // 0
+fib(1); // 0
+fib(2); // 1
+fib(3); // 1
+fib(4); // 2
+fib(5); // 3
+fib(6); // 5
+fib(7); // 8
+fib(8); // 13
 // and so on...
 ```
 

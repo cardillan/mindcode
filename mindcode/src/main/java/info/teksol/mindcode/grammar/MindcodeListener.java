@@ -652,17 +652,29 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitIterated_for(MindcodeParser.Iterated_forContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code for_each}
+	 * Enter a parse tree produced by the {@code for_each_1}
 	 * labeled alternative in {@link MindcodeParser#for_expression}.
 	 * @param ctx the parse tree
 	 */
-	void enterFor_each(MindcodeParser.For_eachContext ctx);
+	void enterFor_each_1(MindcodeParser.For_each_1Context ctx);
 	/**
-	 * Exit a parse tree produced by the {@code for_each}
+	 * Exit a parse tree produced by the {@code for_each_1}
 	 * labeled alternative in {@link MindcodeParser#for_expression}.
 	 * @param ctx the parse tree
 	 */
-	void exitFor_each(MindcodeParser.For_eachContext ctx);
+	void exitFor_each_1(MindcodeParser.For_each_1Context ctx);
+	/**
+	 * Enter a parse tree produced by the {@code for_each_2}
+	 * labeled alternative in {@link MindcodeParser#for_expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterFor_each_2(MindcodeParser.For_each_2Context ctx);
+	/**
+	 * Exit a parse tree produced by the {@code for_each_2}
+	 * labeled alternative in {@link MindcodeParser#for_expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitFor_each_2(MindcodeParser.For_each_2Context ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#loop_body}.
 	 * @param ctx the parse tree
