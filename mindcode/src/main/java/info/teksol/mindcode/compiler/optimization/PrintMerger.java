@@ -1,6 +1,9 @@
 package info.teksol.mindcode.compiler.optimization;
 
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.LabelInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.PrintInstruction;
+import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mindcode.logic.LogicString;
 
@@ -44,19 +47,19 @@ class PrintMerger extends BaseOptimizer {
 
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
-                switch (iterator.next()) {
-                    case PrintInstruction current -> tryMerge(iterator, current);
-                    case RemarkInstruction current -> tryMerge(iterator, current);
+                LogicInstruction current = iterator.next();
+                switch (current.getOpcode()) {
+                    case PRINT  -> tryMerge(iterator, (PrintInstruction) current);
+                    case REMARK -> tryMerge(iterator, (RemarkInstruction) current);
 
                     // Do not merge across jump, (active) label and printflush instructions
                     // Function calls generate a label, so they prevent merging as well
-                    case JumpInstruction ix -> previous = null;
-                    case GotoLabelInstruction ix -> previous = null;
-                    case LabelInstruction ix && isActive(ix) -> previous = null;
-                    case PrintflushInstruction ix -> previous = null;
-
-                    default -> {
-                    } // Do nothing
+                    case LABEL  -> {
+                        if (isActive((LabelInstruction) current)) {
+                            previous = null;
+                        }
+                    }
+                    case JUMP, GOTOLABEL, PRINTFLUSH -> previous = null;
                 }
             }
         }

@@ -49,7 +49,7 @@ following way:
 1. Download and install [Eclipse Temurin version 17](https://adoptium.net/temurin/releases/?version=17).
 2. Download `mindcode.jar` from the [releases page](https://github.com/cardillan/mindcode/releases) and place it in 
    a directory on your computer.
-3. To run the command line compiler, use `java.exe --enable-preview -jar mindcode.jar <arguments>`. Provide full 
+3. To run the command line compiler, use `java.exe -jar mindcode.jar <arguments>`. Provide full 
    paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the 
    `mindcode.jar` file downloaded in the second step. `<arguments>` are the command line arguments passed to the 
    mindcode compiler.
@@ -58,7 +58,7 @@ For example, the following command compiles `program.mnd` into `program.mlog` an
 into the clipboard:
 
 ```
-java.exe --enable-preview -jar mindcode.jar cm program.mnd program.mlog -c
+java.exe -jar mindcode.jar cm program.mnd program.mlog -c
 ```
 
 Documentation for the command line tool is available [here](doc/syntax/TOOLS-CMDLINE.markdown).

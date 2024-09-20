@@ -688,14 +688,12 @@ public class DataFlowOptimizer extends BaseOptimizer {
         trace(() -> "*" + counter + " Processing instruction #" + instructionIndex(instruction) +
                 ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
-        switch (instruction) {
-            case NoOpInstruction ix:        return variableStates;
-            case PushInstruction ix:        return variableStates.pushVariable(ix.getVariable());
-            case PopInstruction ix:         return variableStates.popVariable(ix.getVariable());
-            case LabeledInstruction ix:     return resolveLabel(variableStates, ix.getLabel());
-            case EndInstruction ix:         return variableStates.setDead(true);
-            default:                        break;
-        }
+        // Handle special cases
+        if (instruction instanceof NoOpInstruction ix)      return variableStates;
+        if (instruction instanceof PushInstruction ix)      return variableStates.pushVariable(ix.getVariable());
+        if (instruction instanceof PopInstruction ix)       return variableStates.popVariable(ix.getVariable());
+        if (instruction instanceof LabeledInstruction ix)   return resolveLabel(variableStates, ix.getLabel());
+        if (instruction instanceof EndInstruction ix)       return variableStates.setDead(true);
 
         if (reachable) {
             variableStates.setReachable();
@@ -734,15 +732,8 @@ public class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        // Try to evaluate the instruction
-        // We're not evaluating PackColor, because the result can never be converted to mlog representation.
-        LogicValue value = switch (instruction) {
-            case SetInstruction set && set.getValue() instanceof LogicLiteral literal -> literal;
-            case SetInstruction set && set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile() -> builtIn;
-            case OpInstruction op && op.getOperation().isDeterministic() -> evaluateOpInstruction(op,
-                    modifyInstructions || variableStates.isIsolated() ? valueReplacements : Map.of());
-            default -> null;
-        };
+        LogicValue value = evaluateInstruction(instruction,
+                modifyInstructions || variableStates.isIsolated() ? valueReplacements : Map.of());
 
         // The instruction sets all its output values. Instructions not processed above will set all their output
         // variables to an unknown state (represented by null - actual null value in mlog would be represented by
@@ -769,6 +760,22 @@ public class DataFlowOptimizer extends BaseOptimizer {
         }
 
         return variableStates;
+    }
+
+    // Try to evaluate the instruction
+    // We're not evaluating PackColor, because the result can never be converted to mlog representation.
+    private LogicValue evaluateInstruction(LogicInstruction instruction, Map<LogicVariable, LogicValue> valueReplacements) {
+        if (instruction instanceof SetInstruction set && set.getValue() instanceof LogicLiteral literal) {
+            return literal;
+        }
+        if (instruction instanceof SetInstruction set && set.getValue() instanceof LogicBuiltIn builtIn && !builtIn.isVolatile()) {
+            return builtIn;
+        }
+        if (instruction instanceof OpInstruction op && op.getOperation().isDeterministic()) {
+            return evaluateOpInstruction(op, valueReplacements);
+        }
+
+        return null;
     }
 
     /**

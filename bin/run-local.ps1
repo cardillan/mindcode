@@ -62,4 +62,4 @@ If ($LastExitCode -eq 1) {
 }
 
 # Start the Web Application
-java --enable-preview -classpath "$((Get-ChildItem .\webapp\ *.jar -Recurse | select -ExpandProperty FullName) -join ';')" info.teksol.mindcode.webapp.WebappApplication
+java -classpath "$((Get-ChildItem .\webapp\ *.jar -Recurse | select -ExpandProperty FullName) -join ';')" info.teksol.mindcode.webapp.WebappApplication

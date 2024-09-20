@@ -178,44 +178,45 @@ public class OptimizationContext {
                 int index = heads.poll();
                 while (unreachableInstructions.get(index)) {
                     unreachableInstructions.clear(index);
-                    switch (program.get(index)) {
-                        case EndInstruction end -> {
+                    LogicInstruction ix = program.get(index);
+                    switch (ix.getOpcode()) {
+                        case END, RETURN -> {
                             continue MainLoop;
                         }
-                        case ReturnInstruction ret -> {
-                            continue MainLoop;
-                        }
-                        case JumpInstruction jump -> {
+                        case JUMP -> {
+                            JumpInstruction jump = (JumpInstruction) ix;
                             heads.offer(findLabelIndex(jump.getTarget()));
                             if (jump.isUnconditional()) {
                                 continue MainLoop;
                             }
                         }
-                        case CallInstruction call -> {
+                        case CALL -> {
+                            CallInstruction call = (CallInstruction) ix;
                             heads.offer(findLabelIndex(call.getCallAddr()));
                         }
-                        case CallRecInstruction call -> {
+                        case CALLREC -> {
+                            CallRecInstruction call = (CallRecInstruction) ix;
                             heads.offer(findLabelIndex(call.getCallAddr()));
                             heads.offer(findLabelIndex(call.getRetAddr()));
                             continue MainLoop;
                         }
-                        case GotoInstruction gotoIx -> {
+                        case GOTO -> {
+                             GotoInstruction gotoIx = (GotoInstruction) ix;
                             for (int i = 0; i < program.size(); i++) {
-                                if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(gotoIx.getMarker())) {
                                     heads.offer(i);
                                 }
                             }
                             continue MainLoop;
                         }
-                        case GotoOffsetInstruction gotoIx -> {
+                        case GOTOOFFSET -> {
+                            GotoOffsetInstruction gotoIx = (GotoOffsetInstruction) ix;
                             for (int i = 0; i < program.size(); i++) {
-                                if (program.get(i) instanceof GotoLabelInstruction ix && ix.getMarker().equals(gotoIx.getMarker())) {
+                                if (program.get(i) instanceof GotoLabelInstruction gli && gli.getMarker().equals(gotoIx.getMarker())) {
                                     heads.offer(i);
                                 }
                             }
                             continue MainLoop;
-                        }
-                        default -> {
                         }
                     }
 
@@ -394,38 +395,48 @@ public class OptimizationContext {
     }
 
     private void addLabelReferences(LogicInstruction instruction) {
-        switch (instruction) {
-            case JumpInstruction ix         -> labelReferences.computeIfAbsent(ix.getTarget(), v -> new ArrayList<>()).add(ix);
-            case SetAddressInstruction ix   -> labelReferences.computeIfAbsent(ix.getLabel(), v -> new ArrayList<>()).add(ix);
-            case GotoInstruction ix         -> labelReferences.computeIfAbsent(ix.getMarker(), v -> new ArrayList<>()).add(ix);
-            case GotoOffsetInstruction ix   -> {
-                labelReferences.computeIfAbsent(ix.getTarget(), v -> new ArrayList<>()).add(ix);
-                labelReferences.computeIfAbsent(ix.getMarker(), v -> new ArrayList<>()).add(ix);
-            }
-            case CallInstruction ix         -> labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
-            case CallRecInstruction ix      -> {
-                labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
-                labelReferences.computeIfAbsent(ix.getRetAddr(), v -> new ArrayList<>()).add(ix);
-            }
-            default -> {}
+        if (instruction instanceof JumpInstruction ix) {
+            labelReferences.computeIfAbsent(ix.getTarget(), v -> new ArrayList<>()).add(ix);
+        }
+        if (instruction instanceof SetAddressInstruction ix) {
+            labelReferences.computeIfAbsent(ix.getLabel(), v -> new ArrayList<>()).add(ix);
+        }
+        if (instruction instanceof GotoInstruction ix) {
+            labelReferences.computeIfAbsent(ix.getMarker(), v -> new ArrayList<>()).add(ix);
+        }
+        if (instruction instanceof GotoOffsetInstruction ix)      {
+            labelReferences.computeIfAbsent(ix.getTarget(), v -> new ArrayList<>()).add(ix);
+            labelReferences.computeIfAbsent(ix.getMarker(), v -> new ArrayList<>()).add(ix);
+        }
+        if (instruction instanceof CallInstruction ix) {
+            labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
+        }
+        if (instruction instanceof CallRecInstruction ix)         {
+            labelReferences.computeIfAbsent(ix.getCallAddr(), v -> new ArrayList<>()).add(ix);
+            labelReferences.computeIfAbsent(ix.getRetAddr(), v -> new ArrayList<>()).add(ix);
         }
     }
 
     private void removeLabelReferences(LogicInstruction instruction) {
-        switch (instruction) {
-            case JumpInstruction ix         -> clearReferences(ix.getTarget(), ix);
-            case SetAddressInstruction ix   -> clearReferences(ix.getLabel(), ix);
-            case GotoInstruction ix         -> clearReferences(ix.getMarker(), ix);
-            case GotoOffsetInstruction ix   -> {
-                clearReferences(ix.getTarget(), ix);
-                clearReferences(ix.getMarker(), ix);
-            }
-            case CallInstruction ix         -> clearReferences(ix.getCallAddr(), ix);
-            case CallRecInstruction ix      -> {
-                clearReferences(ix.getCallAddr(), ix);
-                clearReferences(ix.getRetAddr(), ix);
-            }
-            default -> {}
+        if (instruction instanceof JumpInstruction ix) {
+            clearReferences(ix.getTarget(), ix);
+        }
+        if (instruction instanceof SetAddressInstruction ix) {
+            clearReferences(ix.getLabel(), ix);
+        }
+        if (instruction instanceof GotoInstruction ix) {
+            clearReferences(ix.getMarker(), ix);
+        }
+        if (instruction instanceof GotoOffsetInstruction ix) {
+            clearReferences(ix.getTarget(), ix);
+            clearReferences(ix.getMarker(), ix);
+        }
+        if (instruction instanceof CallInstruction ix) {
+            clearReferences(ix.getCallAddr(), ix);
+        }
+        if (instruction instanceof CallRecInstruction ix)         {
+            clearReferences(ix.getCallAddr(), ix);
+            clearReferences(ix.getRetAddr(), ix);
         }
     }
 
@@ -437,20 +448,15 @@ public class OptimizationContext {
     public void removeInactiveInstructions() {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
-                switch (it.next()) {
-                    case LabelInstruction label -> {
-                        if (hasNoReferences(label.getLabel())) {
-                            it.remove();
-                        }
-                    }
-                    case GotoLabelInstruction gotoLabel -> {
-                        if (hasNoReferences(gotoLabel.getLabel()) && hasNoReferences(gotoLabel.getMarker())) {
-                            it.remove();
-                        }
-                    }
-                    case NoOpInstruction noop -> it.remove();
-                    default -> {
-                    }
+                LogicInstruction ix = it.next();
+                if (ix instanceof LabelInstruction l && hasNoReferences(l.getLabel())) {
+                    it.remove();
+                }
+                if (ix instanceof GotoLabelInstruction g && hasNoReferences(g.getLabel()) && hasNoReferences(g.getMarker())) {
+                    it.remove();
+                }
+                if (ix instanceof NoOpInstruction noop)  {
+                    it.remove();
                 }
             }
         }
@@ -872,12 +878,10 @@ public class OptimizationContext {
     }
 
     private Stream<LogicLabel> getPossibleTargetLabels(LogicInstruction instruction) {
-        return switch (instruction) {
-            case JumpInstruction ix -> Stream.of(ix.getTarget());
-            case GotoInstruction ix -> markedLabels(ix);
-            case GotoOffsetInstruction ix -> markedLabels(ix);
-            default -> Stream.empty();
-        };
+        if (instruction instanceof JumpInstruction ix)          return Stream.of(ix.getTarget());
+        if (instruction instanceof GotoInstruction ix)          return markedLabels(ix);
+        if (instruction instanceof GotoOffsetInstruction ix)    return markedLabels(ix);
+        return Stream.empty();
     }
 
     private Stream<LogicLabel> markedLabels(LogicInstruction instruction) {

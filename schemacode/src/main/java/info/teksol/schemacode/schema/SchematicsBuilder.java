@@ -215,43 +215,30 @@ public class SchematicsBuilder {
     }
 
     private String resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {
-        return switch (value.value()) {
-            case null -> throw new SchematicsInternalError("Identifier '%s': unexpected null value.", value.name());
-            case AstStringRef ref -> {
-                if (!visited.add(ref.reference())) {
-                    error("Circular definition of identifier '%s'.", ref.reference());
-                    yield "";
-                } else if (!constantLists.containsKey(ref.reference())) {
-                    error("Undefined identifier '%s'.", ref.reference());
-                    yield "";
-                }
-
-                yield resolveConstant(constantLists, visited, constantLists.get(ref.reference()));
+        AstText ast = value.value();
+        if (ast == null) {
+            throw new SchematicsInternalError("Identifier '%s': unexpected null value.", value.name());
+        } else if (ast instanceof AstStringRef ref) {
+            if (!visited.add(ref.reference())) {
+                error("Circular definition of identifier '%s'.", ref.reference());
+                return "";
+            } else if (!constantLists.containsKey(ref.reference())) {
+                error("Undefined identifier '%s'.", ref.reference());
+                return "";
             }
-            case AstStringBlock block -> block.getValue();
-            case AstStringLiteral lit -> lit.getValue();
-            default -> throw new SchematicsInternalError("Identifier '%s': unexpected class '%s': %s",
-                    value.name(), value.value().getClass(), value.value());
-        };
+            return resolveConstant(constantLists, visited, constantLists.get(ref.reference()));
+        } else if (ast instanceof AstStringBlock block) {
+            return block.getValue();
+        } else if (ast instanceof AstStringLiteral lit) {
+            return lit.getValue();
+        } else {
+            throw new SchematicsInternalError("Identifier '%s': unexpected class '%s': %s", value.name(), ast.getClass(), ast);
+        }
     }
 
     @SuppressWarnings("DuplicateBranchesInSwitch")
     private Configuration convertAstConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
-        Configuration configuration = switch (astConfiguration) {
-            case null                       -> EmptyConfiguration.EMPTY;
-            case AstBlockReference r        -> verifyValue(blockPos, BlockConfiguration.forName(r.item()), r.item(), "block");
-            case AstBoolean b               -> BooleanConfiguration.of(b.value());
-            case AstConnection c            -> c.evaluate(this, blockPos.position());
-            case AstConnections c           -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
-            case AstItemReference r         -> verifyValue(blockPos, ItemConfiguration.forName(r.item()), r.item(), "item");
-            case AstLiquidReference r       -> verifyValue(blockPos, LiquidConfiguration.forName(r.liquid()), r.liquid(), "liquid");
-            case AstProcessor p             -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
-            case AstRgbaValue rgb           -> convertToRgbValue(blockPos, rgb);
-            case AstText t                  -> new TextConfiguration(t.getText(this));
-            case AstUnitCommandReference r  -> verifyValue(blockPos, UnitCommandConfiguration.forName(r.item()), r.item(), "command");
-            case AstUnitReference r         -> decodeUnitConfiguration(blockPos, r);
-            default                         -> EmptyConfiguration.EMPTY;
-        };
+        Configuration configuration = getConfiguration(blockPos, astConfiguration);
 
         if (!blockPos.configurationType().isCompatible(configuration)) {
             error("Unexpected configuration type for block '%s' at %s: expected %s, found %s.",
@@ -261,6 +248,22 @@ public class SchematicsBuilder {
         } else {
             return configuration;
         }
+    }
+
+    private Configuration getConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
+        if (astConfiguration == null)                                 return  EmptyConfiguration.EMPTY;
+        if (astConfiguration instanceof AstBlockReference r)          return  verifyValue(blockPos, BlockConfiguration.forName(r.item()), r.item(), "block");
+        if (astConfiguration instanceof AstBoolean b)                 return  BooleanConfiguration.of(b.value());
+        if (astConfiguration instanceof AstConnection c)              return  c.evaluate(this, blockPos.position());
+        if (astConfiguration instanceof AstConnections c)             return  new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
+        if (astConfiguration instanceof AstItemReference r)           return  verifyValue(blockPos, ItemConfiguration.forName(r.item()), r.item(), "item");
+        if (astConfiguration instanceof AstLiquidReference r)         return  verifyValue(blockPos, LiquidConfiguration.forName(r.liquid()), r.liquid(), "liquid");
+        if (astConfiguration instanceof AstProcessor p)               return  ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
+        if (astConfiguration instanceof AstRgbaValue rgb)             return  convertToRgbValue(blockPos, rgb);
+        if (astConfiguration instanceof AstText t)                    return  new TextConfiguration(t.getText(this));
+        if (astConfiguration instanceof AstUnitCommandReference r)    return  verifyValue(blockPos, UnitCommandConfiguration.forName(r.item()), r.item(), "command");
+        if (astConfiguration instanceof AstUnitReference r)           return  decodeUnitConfiguration(blockPos, r);
+        return EmptyConfiguration.EMPTY;
     }
 
     private Color convertToRgbValue(BlockPosition blockPos, AstRgbaValue rgb) {

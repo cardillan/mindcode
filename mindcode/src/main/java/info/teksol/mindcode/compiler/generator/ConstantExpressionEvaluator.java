@@ -42,15 +42,13 @@ public class ConstantExpressionEvaluator {
     }
 
     private AstNode evaluateInner(AstNode node) {
-        return switch (node) {
-            case BinaryOp n         -> evaluateBinaryOp(n);
-            case Constant n         -> evaluateConstant(n);
-            case FunctionCall n     -> evaluateFunctionCall(n);
-            case IfExpression n     -> evaluateIfExpression(n);
-            case UnaryOp n          -> evaluateUnaryOp(n);
-            case VarRef n           -> evaluateVarRef(n);
-            default                 -> node;
-        };
+        if (node instanceof BinaryOp n)       return evaluateBinaryOp(n);
+        if (node instanceof Constant n)       return evaluateConstant(n);
+        if (node instanceof FunctionCall n)   return evaluateFunctionCall(n);
+        if (node instanceof IfExpression n)   return evaluateIfExpression(n);
+        if (node instanceof UnaryOp n)        return evaluateUnaryOp(n);
+        if (node instanceof VarRef n)         return evaluateVarRef(n);
+        return node;
     }
 
     private AstNode evaluateBinaryOp(BinaryOp node) {
@@ -177,17 +175,17 @@ public class ConstantExpressionEvaluator {
     }
 
     private static Variable variableFromNode(String name, AstNode exp) {
-        return switch (exp) {
-            case NullLiteral n      -> DoubleVariable.newNullValue(false, name);
-            case BooleanLiteral n   -> DoubleVariable.newBooleanValue(false, name, n.getValue());
-            case NumericLiteral n   -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
-            case NumericValue n     -> DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
-            case StringLiteral n    -> StringVariable.newStringValue(false, name, n.getText());
-            case ConstantAstNode n  -> throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
-            case VarRef n           -> Icons.isIconName(n.getName())
+        if (exp instanceof NullLiteral n)        return DoubleVariable.newNullValue(false, name);
+        if (exp instanceof BooleanLiteral n)     return DoubleVariable.newBooleanValue(false, name, n.getValue());
+        if (exp instanceof NumericLiteral n)     return DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
+        if (exp instanceof NumericValue n)       return DoubleVariable.newDoubleValue(false, name, n.getAsDouble());
+        if (exp instanceof StringLiteral n)      return StringVariable.newStringValue(false, name, n.getText());
+        if (exp instanceof ConstantAstNode n)    throw new UnsupportedOperationException("Unhandled constant node " + exp.getClass().getSimpleName());
+        if (exp instanceof VarRef n) {
+            return Icons.isIconName(n.getName())
                     ? StringVariable.newStringValue(false, n.getName(), Icons.getIconValue(n.getName()).format())
                     : null;
-            default                 -> null;
-        };
+        }
+        return null;
     }
 }

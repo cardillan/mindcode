@@ -26,4 +26,4 @@ echo "*****      webapp/src/main/resources/application.properties"
 echo "*****      webapp/src/test/resources/application.properties"
 echo "*****"
 
-exec java --enable-preview -classpath $( find webapp -type f -name '*.jar' | tr '\n' ':' ) info.teksol.mindcode.webapp.WebappApplication
+exec java -classpath $( find webapp -type f -name '*.jar' | tr '\n' ':' ) info.teksol.mindcode.webapp.WebappApplication

@@ -36,10 +36,11 @@ public class ExpressionOptimizer extends BaseOptimizer {
         // Cannot use for-each due to modifications of the underlying list in the loop
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
-                switch (it.next()) {
-                    case OpInstruction ix       -> processOpInstruction(it, ix);
-                    case SetInstruction ix      -> processSetInstruction(it, ix);
-                    case SensorInstruction ix   -> processSensorInstruction(it, ix);
+                LogicInstruction ix = it.next();
+                switch (ix.getOpcode()) {
+                    case OP       -> processOpInstruction(it, (OpInstruction) ix);
+                    case SET      -> processSetInstruction(it, (SetInstruction) ix);
+                    case SENSOR   -> processSensorInstruction(it, (SensorInstruction) ix);
                     default -> {}
                 }
             }

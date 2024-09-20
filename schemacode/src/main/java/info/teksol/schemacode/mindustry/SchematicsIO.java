@@ -231,39 +231,91 @@ public class SchematicsIO {
         };
     }
 
-    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     public static void writeObject(DataOutputStream s, Configuration configuration) throws IOException {
-        switch (configuration) {
-            case EmptyConfiguration c       -> { s.writeByte(0); }
-            case IntConfiguration c         -> { s.writeByte(1); s.writeInt(c.value()); }
-            case LongConfiguration c        -> { s.writeByte(2); s.writeLong(c.value()); }
-            case FloatConfiguration c       -> { s.writeByte(3); s.writeFloat(c.value()); }
-            case TextConfiguration c        -> { s.writeByte(4); s.writeByte(c.value() == null ? 0 : 1);
-                if (c.value() != null) {
-                    s.writeUTF(c.value());
-                }
+        if (configuration instanceof EmptyConfiguration c) {
+            s.writeByte(0);
+        } else if (configuration instanceof IntConfiguration c) {
+            s.writeByte(1);
+            s.writeInt(c.value());
+        } else if (configuration instanceof LongConfiguration c) {
+            s.writeByte(2);
+            s.writeLong(c.value());
+        } else if (configuration instanceof FloatConfiguration c) {
+            s.writeByte(3);
+            s.writeFloat(c.value());
+        } else if (configuration instanceof TextConfiguration c) {
+            s.writeByte(4);
+            s.writeByte(c.value() == null ? 0 : 1);
+            if (c.value() != null) {
+                s.writeUTF(c.value());
             }
-            case ItemConfiguration c        -> { s.writeByte(5); s.writeByte(0); s.writeShort(c.getId()); }
-            case BlockConfiguration c       -> { s.writeByte(5); s.writeByte(1); s.writeShort(c.getId()); }
-            case LiquidConfiguration c      -> { s.writeByte(5); s.writeByte(4); s.writeShort(c.getId()); }
-            case UnitConfiguration c        -> { s.writeByte(5); s.writeByte(6); s.writeShort(c.getId()); }
-            case Array<?> a                 -> { switch (a.dataClass().getSimpleName()) {
-                case "Integer"  -> { s.writeByte(6); s.writeShort(a.size()); a.store(i -> s.writeInt((Integer) i)); }
-                case "Boolean"  -> { s.writeByte(16); s.writeInt(a.size()); a.store(b -> s.writeBoolean((Boolean) b)); }
-                case "Vector"   -> { s.writeByte(18); s.writeShort(a.size());
-                    a.store(v -> { Vector vector = (Vector) v; s.writeFloat(vector.x()); s.writeFloat(vector.y()); } );
+        } else if (configuration instanceof ItemConfiguration c) {
+            s.writeByte(5);
+            s.writeByte(0);
+            s.writeShort(c.getId());
+        } else if (configuration instanceof BlockConfiguration c) {
+            s.writeByte(5);
+            s.writeByte(1);
+            s.writeShort(c.getId());
+        } else if (configuration instanceof LiquidConfiguration c) {
+            s.writeByte(5);
+            s.writeByte(4);
+            s.writeShort(c.getId());
+        } else if (configuration instanceof UnitConfiguration c) {
+            s.writeByte(5);
+            s.writeByte(6);
+            s.writeShort(c.getId());
+        } else if (configuration instanceof Array a) {
+            switch (a.dataClass().getSimpleName()) {
+                case "Integer" -> {
+                    s.writeByte(6);
+                    s.writeShort(a.size());
+                    a.store(i -> s.writeInt((Integer) i));
                 }
-                default -> throw new SchematicsInternalError("Cannot store unhandled array of %s", a.dataClass().getSimpleName());
-            }}
-            case Position c                 -> { s.writeByte(7); s.writeInt(c.x()); s.writeInt(c.y()); }
-            case PositionArray a            -> { s.writeByte(8); s.writeByte(a.size()); a.store(p -> s.writeInt(p.pack())); }
-            case BooleanConfiguration c     -> { s.writeByte(10); s.writeBoolean(c.value()); }
-            case DoubleConfiguration c      -> { s.writeByte(11); s.writeDouble(c.value()); }
-            case ByteArray a                -> { s.writeByte(14); s.writeInt(a.size()); s.write(a.bytes());}
-            case Vector c                   -> { s.writeByte(19); s.writeFloat(c.x()); s.writeFloat(c.y()); }
-            case UnitCommandConfiguration c -> { s.writeByte(23); s.writeShort(c.getId()); }
-
-            default -> throw new SchematicsInternalError("Cannot store unhandled item %s", configuration);
+                case "Boolean" -> {
+                    s.writeByte(16);
+                    s.writeInt(a.size());
+                    a.store(b -> s.writeBoolean((Boolean) b));
+                }
+                case "Vector" -> {
+                    s.writeByte(18);
+                    s.writeShort(a.size());
+                    a.store(v -> {
+                        Vector vector = (Vector) v;
+                        s.writeFloat(vector.x());
+                        s.writeFloat(vector.y());
+                    });
+                }
+                default ->
+                        throw new SchematicsInternalError("Cannot store unhandled array of %s", a.dataClass().getSimpleName());
+            }
+        } else if (configuration instanceof Position c) {
+            s.writeByte(7);
+            s.writeInt(c.x());
+            s.writeInt(c.y());
+        } else if (configuration instanceof PositionArray a) {
+            s.writeByte(8);
+            s.writeByte(a.size());
+            a.store(p -> s.writeInt(p.pack()));
+        } else if (configuration instanceof BooleanConfiguration c) {
+            s.writeByte(10);
+            s.writeBoolean(c.value());
+        } else if (configuration instanceof DoubleConfiguration c) {
+            s.writeByte(11);
+            s.writeDouble(c.value());
+        } else if (configuration instanceof ByteArray a) {
+            s.writeByte(14);
+            s.writeInt(a.size());
+            s.write(a.bytes());
+        } else if (configuration instanceof Vector c) {
+            s.writeByte(19);
+            s.writeFloat(c.x());
+            s.writeFloat(c.y());
+        } else if (configuration instanceof UnitCommandConfiguration c) {
+            s.writeByte(23);
+            s.writeShort(c.getId());
+        } else {
+            throw new SchematicsInternalError("Cannot store unhandled item %s", configuration);
         }
     }
 

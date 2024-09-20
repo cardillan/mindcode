@@ -681,25 +681,17 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     public LogicValue extractParameterValue(Parameter node) {
-        switch(node.getValue()) {
-            case ConstantAstNode v:
-                return v.toLogicLiteral(instructionProcessor);
-
-            case Ref r:
-                LogicValue value = visitRef(r);
-                if (value.isConstant()) return value;
-                break;
-
-            case VarRef r:
-                if (instructionProcessor.isBlockName(r.getName())) {
-                    return LogicVariable.block(r.getName());
-                }
-
-            default:
-                // Do nothing - error
+        if (node.getValue() instanceof ConstantAstNode v){
+            return v.toLogicLiteral(instructionProcessor);
+        } else if (node.getValue() instanceof Ref r) {
+            LogicValue value = visitRef(r);
+            if (value.isConstant()) return value;
+        } else if (node.getValue() instanceof VarRef r && instructionProcessor.isBlockName(r.getName())) {
+            return LogicVariable.block(r.getName());
         }
 
-        throw new MindcodeException(node.startToken(), "Parameter declaration of '%s' does not use a constant expression, linked block name or constant mlog variable.", node.getName());
+        throw new MindcodeException(node.startToken(),
+                "Parameter declaration of '%s' does not use a constant expression, linked block name or constant mlog variable.", node.getName());
     }
 
     @Override
@@ -722,41 +714,35 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             rvalue = eval;
         }
 
-        switch (node.getVar()) {
-            case HeapAccess heapAccess -> {
-                final LogicValue address = resolveHeapIndex(heapAccess);
-                emit(createWrite(rvalue, createMemoryVariable(heapAccess.getCellName()), address));
+        if (node.getVar() instanceof HeapAccess heapAccess) {
+            final LogicValue address = resolveHeapIndex(heapAccess);
+            emit(createWrite(rvalue, createMemoryVariable(heapAccess.getCellName()), address));
+        } else if (node.getVar() instanceof PropertyAccess propertyAccess) {
+            LogicValue propTarget = visit(propertyAccess.getTarget());
+            LogicArgument prop = visit(propertyAccess.getProperty());
+            String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
+            if (functionMapper.handleProperty(instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
+                throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", propTarget, prop);
+            }
+        } else if (node.getVar() instanceof VarRef varRef) {
+            String name = varRef.getName();
+            if (identifiers.get(name) != null) {
+                throw new MindcodeException(node.startToken(), "assignment to constant or parameter '%s' not allowed.", name);
             }
 
-            case PropertyAccess propertyAccess -> {
-                LogicValue propTarget = visit(propertyAccess.getTarget());
-                LogicArgument prop = visit(propertyAccess.getProperty());
-                String propertyName = prop instanceof LogicBuiltIn lb ? lb.getName() : prop.toMlog();
-                if (functionMapper.handleProperty(instructions::add, propertyName, propTarget, List.of(rvalue)) == null) {
-                    throw new MindcodeException(node.startToken(), "undefined property '%s.%s'.", propTarget, prop);
-                }
-            }
-
-            case VarRef varRef -> {
-                String name = varRef.getName();
-                if (identifiers.get(name) != null) {
-                    throw new MindcodeException(node.startToken(), "assignment to constant or parameter '%s' not allowed.", name);
-                }
-
-                final LogicValue target = visit(node.getVar());
-                if (target instanceof LogicVariable variable) {
-                    if (target.getType() != ArgumentType.BLOCK) {
-                        emit(createSet(variable, rvalue));
-                        return target;
-                    } else {
-                        throw new MindcodeException(node.startToken(), "assignment to variable '%s' not allowed (name reserved for linked blocks).", target);
-                    }
+            final LogicValue target = visit(node.getVar());
+            if (target instanceof LogicVariable variable) {
+                if (target.getType() != ArgumentType.BLOCK) {
+                    emit(createSet(variable, rvalue));
+                    return target;
                 } else {
-                    throw new MindcodeInternalError("Unsupported assignment target '" + target + "'.");
+                    throw new MindcodeException(node.startToken(), "assignment to variable '%s' not allowed (name reserved for linked blocks).", target);
                 }
+            } else {
+                throw new MindcodeInternalError("Unsupported assignment target '" + target + "'.");
             }
-
-            default -> throw new MindcodeInternalError("Unhandled assignment target in " + node);
+        } else {
+            throw new MindcodeInternalError("Unhandled assignment target in " + node);
         }
 
         if (rvalue instanceof LogicVariable variable) {

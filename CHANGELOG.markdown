@@ -32,10 +32,15 @@ All notable changes to this project will be documented in this file.
     * A button was added do the web app to copy the output code to the clipboard with a single click.
     * It is now possible to select optimization level directly in the web app user interface. The default 
       optimization level is still `basic`.
-* Changed existing Mindcode and Schemacode samples to adapt for upcoming changes in syntax (semicolons and optional 
-  keywords were added). Some samples were reworked. 
 * Expanded the syntax to allow optional `do` keyword in all `for` and `while` loops, and optional `then` keyword in 
   all `if` and `elsif` statements.
+
+### Miscellaneous
+
+* Replaced pattern matching in switch cases (JDK17 preview feature) with `if` and other constructs to remove 
+  dependency on the `--enable-preview` switch.
+* Updated existing Mindcode and Schemacode samples further to adapt for upcoming changes in syntax (optional keywords 
+  were added). Some samples were reworked.
 
 ## 2024-09-15
 

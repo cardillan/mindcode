@@ -50,11 +50,12 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
         final List<AstBlock> blocks = new ArrayList<>();
         for (SchemacodeParser.SchematicItemContext item : ctx.schematicItem()) {
             AstSchemaItem schemaItem = visit(item);
-            switch (schemaItem) {
-                case AstSchemaAttribute a  -> attributes.add(a);
-                case AstBlock b            -> blocks.add(b);
-                case null               -> {}
-                default                 -> throw new SchematicsInternalError("Unexpected item " + schemaItem);
+            if (schemaItem instanceof AstSchemaAttribute a) {
+                attributes.add(a);
+            } else if (schemaItem instanceof AstBlock b) {
+                blocks.add(b);
+            } else if (schemaItem != null) {
+                throw new SchematicsInternalError("Unexpected item " + schemaItem);
             }
         }
 

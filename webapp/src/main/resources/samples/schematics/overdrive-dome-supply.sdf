@@ -12,8 +12,8 @@ schematic
         or destroyed), the program is restarted and new units, possibly of different type again,
         are acquired.
 
-        If the type of servicing units is too slow to travel back and forth before the overdrive dome
-        consumes all its items, two pairs of units are used to ensure continuous operation.
+        If the type of servicing units is too slow to travel to the core and back before the overdrive
+        dome consumes all its items, two pairs of units are used to ensure continuous operation.
 
         Use switch to activate/deactivate supply.
         """

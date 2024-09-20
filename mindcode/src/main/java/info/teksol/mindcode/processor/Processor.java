@@ -127,21 +127,19 @@ public class Processor {
     }
 
     private boolean execute(LogicInstruction instruction) {
-        return switch(instruction) {
-            case EndInstruction ix      -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
-            case JumpInstruction ix     -> executeJump(ix);
-            case OpInstruction ix       -> executeOp(ix);
-            case PackColorInstruction ix-> executePackColor(ix);
-            case PrintInstruction ix    -> executePrint(ix);
-            case ReadInstruction ix     -> executeRead(ix);
-            case SetInstruction ix      -> executeSet(ix);
-            case StopInstruction ix     -> false;
-            case WriteInstruction ix    -> executeWrite(ix);
-            default                     ->
-                switch (instruction.getOpcode()) {
-                    case DRAW, DRAWFLUSH -> true;
-                    default             -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction " + instruction);
-                };
+        return switch(instruction.getOpcode()) {
+            case END       -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
+            case JUMP      -> executeJump((JumpInstruction) instruction);
+            case OP        -> executeOp((OpInstruction) instruction);
+            case PACKCOLOR -> executePackColor((PackColorInstruction) instruction);
+            case PRINT     -> executePrint((PrintInstruction) instruction);
+            case READ      -> executeRead((ReadInstruction) instruction);
+            case SET       -> executeSet((SetInstruction) instruction);
+            case STOP      -> false;
+            case WRITE     -> executeWrite((WriteInstruction) instruction);
+            case DRAW      -> true;
+            case DRAWFLUSH -> true;
+            default        -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction " + instruction);
         };
     }
 

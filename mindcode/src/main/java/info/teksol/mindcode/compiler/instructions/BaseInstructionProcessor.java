@@ -262,41 +262,48 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     public void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
         AstContext astContext = instruction.getAstContext();
 
-        switch (instruction) {
-            case NoOpInstruction ix -> {}           // Do nothing
-            case GotoLabelInstruction ix -> {}      // Do nothing
-            case LabelInstruction ix -> {}          // Do nothing
-
-            case PushInstruction ix -> {
-                consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
-                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
-            }
-
-            case PopInstruction ix -> {
-                consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
-            }
-
-            case CallRecInstruction ix -> {
-                consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
-                consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
-            }
-
-            case ReturnInstruction ix -> {
-                LogicVariable retAddr = nextTemp();
-                consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
-                consumer.accept(createRead(astContext, retAddr, ix.getStack(), stackPointer()));
-                consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, retAddr));
-            }
-
-            case CallInstruction ix       -> consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
-            case SetAddressInstruction ix -> consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()));
-            case GotoInstruction ix       -> consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
-
-            // Note: GotoOffsetInstruction is handled by LabelResolver, as the actual label value needs to be known
-            default                       -> consumer.accept(instruction);
+        if (instruction instanceof NoOpInstruction || instruction instanceof GotoLabelInstruction || instruction instanceof LabelInstruction) {
+            return;
         }
+
+        if (instruction instanceof PushInstruction ix) {
+            consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
+            consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+            return;
+        }
+        if (instruction instanceof PopInstruction ix) {
+            consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
+            consumer.accept(createRead(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
+            return;
+        }
+        if (instruction instanceof CallRecInstruction ix) {
+            consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
+            consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
+            consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getCallAddr()));
+            return;
+        }
+        if (instruction instanceof ReturnInstruction ix) {
+            LogicVariable retAddr = nextTemp();
+            consumer.accept(createOp(astContext, Operation.SUB, stackPointer(), stackPointer(), LogicNumber.ONE));
+            consumer.accept(createRead(astContext, retAddr, ix.getStack(), stackPointer()));
+            consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, retAddr));
+            return;
+        }
+        if (instruction instanceof CallInstruction ix) {
+            consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
+            return;
+        }
+        if (instruction instanceof SetAddressInstruction ix) {
+            consumer.accept(createInstruction(astContext, SET, ix.getResult(), ix.getLabel()));
+            return;
+        }
+        if (instruction instanceof GotoInstruction ix) {
+            consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
+            return;
+        }
+
+        // Note: GotoOffsetInstruction is handled by LabelResolver, as the actual label value needs to be known
+        consumer.accept(instruction);
     }
 
     @Override
@@ -332,12 +339,13 @@ public class BaseInstructionProcessor implements InstructionProcessor {
     @Override
     public boolean isDeterministic(LogicInstruction instruction) {
         // TODO Make sensor deterministic depending on the property being sensed
-        // TODO Add lookup instruction
-        return switch (instruction) {
-            case SetInstruction ix -> nonvolatileArguments(ix);
-            case OpInstruction ix -> ix.getOperation().isDeterministic() && nonvolatileArguments(ix);
-            case PackColorInstruction ix -> nonvolatileArguments(ix);
-            case NoOpInstruction ix -> true;
+        return switch (instruction.getOpcode()) {
+            case OP -> {
+                OpInstruction ix = (OpInstruction) instruction;
+                yield ix.getOperation().isDeterministic() && nonvolatileArguments(ix);
+            }
+            case SET, PACKCOLOR, LOOKUP -> nonvolatileArguments(instruction);
+            case NOOP -> true;
             default -> false;
         };
     }

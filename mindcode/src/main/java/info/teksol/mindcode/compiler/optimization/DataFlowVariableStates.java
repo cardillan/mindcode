@@ -658,16 +658,19 @@ public class DataFlowVariableStates {
                 return false;
             }
 
-            // Equivalence for SENSOR instruction is not supported. Sensed values are considered volatile.
-            // TODO define which sensed values aren't volatile (e.g. type, x) and process them
-            // TODO read instructions will depend on memory model
-            return switch (instruction) {
-                case OpInstruction op && op.getOperation().isDeterministic()
-                        -> isOpEqual(variableStates, (OpInstruction) this.instruction, op);
-                case PackColorInstruction ix    -> isInstructionEqual(variableStates, this.instruction, ix);
-                //case ReadInstruction ix         -> isInstructionEqual(this.instruction, ix);
-                default                         -> false;
-            };
+            // TODO Equivalence for SENSOR instruction is not supported. Sensed values are considered volatile.
+            //      Define which sensed values aren't volatile (e.g. type, x) and process them
+            if (instruction instanceof OpInstruction op && op.getOperation().isDeterministic()) {
+                return isOpEqual(variableStates, (OpInstruction) this.instruction, op);
+            } else if (instruction instanceof PackColorInstruction ix) {
+                return isInstructionEqual(variableStates, this.instruction, ix);
+            } else if (instruction instanceof ReadInstruction ix) {
+                // TODO read instructions will depend on memory model
+                // return isInstructionEqual(variableStates, this.instruction, ix);
+                return false;
+            }
+
+            return false;
         }
 
         private boolean isVolatile(LogicInstruction instruction) {

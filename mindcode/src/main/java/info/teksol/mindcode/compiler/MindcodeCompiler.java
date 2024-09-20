@@ -81,9 +81,10 @@ public class MindcodeCompiler implements Compiler<String> {
             if (profile.isPrintStackTrace()) {
                 e.printStackTrace();
             }
-            switch (e) {
-                case MindcodeException ex -> messages.add(MindcodeMessage.error("Error while compiling source code: " + e.getMessage()));
-                default -> messages.add(MindcodeMessage.error("Internal error: " + e.getMessage()));
+            if (e instanceof MindcodeException ex) {
+                messages.add(MindcodeMessage.error("Error while compiling source code: " + e.getMessage()));
+            } else {
+                messages.add(MindcodeMessage.error("Internal error: " + e.getMessage()));
             }
         }
 
