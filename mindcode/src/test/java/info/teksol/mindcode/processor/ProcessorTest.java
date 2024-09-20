@@ -94,6 +94,45 @@ public class ProcessorTest extends AbstractProcessorTest {
         executeMindcodeUnitTests(createTestCompiler(), "expression-evaluation-compile-time.mnd");
     }
 
+    @Test
+    void compilesProperComparison() {
+        testCode("""
+                        inline def eval(b)
+                            b ? "T" : "F";
+                        end;
+
+                        inline def compare(n, a, b)
+                            print(n, eval(a == b), eval(a != b), eval(a === b), eval(a !== b));
+                        end;
+
+                        compare( 1, null, 0);
+                        compare( 2, null, 1);
+                        compare( 3, null, 2);
+                        compare( 4, @coal, 0);
+                        compare( 5, @coal, 1);
+                        compare( 6, @coal, 2);
+                        compare( 7, @coal, @lead);
+                        compare( 8, "A", 0);
+                        compare( 9, "A", 1);
+                        compare(10, "A", 2);
+                        compare(11, "A", "B");
+                        compare(12, "A", "A");
+                        """,
+                "1", "T", "F", "F", "T",
+                "2", "F", "T", "F", "T",
+                "3", "F", "T", "F", "T",
+                "4", "F", "T", "F", "T",
+                "5", "T", "F", "F", "T",
+                "6", "F", "T", "F", "T",
+                "7", "F", "T", "F", "T",
+                "8", "F", "T", "F", "T",
+                "9", "T", "F", "F", "T",
+                "10", "F", "T", "F", "T",
+                "11", "F", "T", "F", "T",
+                "12", "T", "F", "T", "F"
+        );
+    }
+
     void executeMindcodeUnitTests(TestCompiler compiler, String fileName) throws IOException {
         testAndEvaluateFile(compiler,
                 fileName,

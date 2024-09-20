@@ -6,13 +6,38 @@ import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
-import info.teksol.mindcode.compiler.instructions.*;
+import info.teksol.mindcode.compiler.instructions.EndInstruction;
+import info.teksol.mindcode.compiler.instructions.JumpInstruction;
+import info.teksol.mindcode.compiler.instructions.LabeledInstruction;
+import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
+import info.teksol.mindcode.compiler.instructions.OpInstruction;
+import info.teksol.mindcode.compiler.instructions.PopInstruction;
+import info.teksol.mindcode.compiler.instructions.PushInstruction;
+import info.teksol.mindcode.compiler.instructions.SetInstruction;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
-import info.teksol.mindcode.logic.*;
+import info.teksol.mindcode.logic.ArgumentType;
+import info.teksol.mindcode.logic.LogicArgument;
+import info.teksol.mindcode.logic.LogicBoolean;
+import info.teksol.mindcode.logic.LogicBuiltIn;
+import info.teksol.mindcode.logic.LogicLabel;
+import info.teksol.mindcode.logic.LogicLiteral;
+import info.teksol.mindcode.logic.LogicValue;
+import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -684,9 +709,15 @@ public class DataFlowOptimizer extends BaseOptimizer {
         Objects.requireNonNull(variableStates);
         Objects.requireNonNull(instruction);
 
-        counter++;
-        trace(() -> "*" + counter + " Processing instruction #" + instructionIndex(instruction) +
-                ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
+        if (TRACE) {
+            counter++;
+            System.out.println("*" + counter + " Processing instruction #" + instructionIndex(instruction) +
+                    ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
+
+            if (counter == 39) {
+                System.out.println("Breakpoint");
+            }
+        }
 
         // Handle special cases
         if (instruction instanceof NoOpInstruction ix)      return variableStates;

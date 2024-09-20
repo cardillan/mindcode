@@ -137,6 +137,13 @@ public enum Operation implements LogicArgument {
         return ordinal() < STRICT_EQUAL.ordinal();
     }
 
+    public boolean isInequalityOperator() {
+        return switch(this) {
+            case LESS_THAN, LESS_THAN_EQ, GREATER_THAN, GREATER_THAN_EQ -> true;
+            default -> false;
+        };
+    }
+
     public Operation inverse() {
         return switch (this) {
             case EQUAL -> NOT_EQUAL;

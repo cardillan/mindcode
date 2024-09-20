@@ -1,5 +1,5 @@
 assignments-in-expressions.mnd:             9 instructions,      9 steps, 100.0% coverage, source CRC C2D76B32EFE41A2A, compiled CRC EE19E2B732636F69
-compilesProperComparison:                  20 instructions,     19 steps,  95.0% coverage, source CRC 6A0A7D24E3A9E628, compiled CRC A9959F2D545FECCC
+compilesProperComparison:                 205 instructions,    187 steps,  91.2% coverage, source CRC DE32E1F0B3E8AB1E, compiled CRC 40E4765AFDC0EEFF
 complex-case-expression.mnd:               49 instructions,    297 steps, 100.0% coverage, source CRC 866074324995752C, compiled CRC BD5DB148425EE646
 computesPackColor:                          3 instructions,      3 steps, 100.0% coverage, source CRC 4E502A534EB95B4B, compiled CRC DD8E792C3BF61545
 expression-evaluation-compile-time.mnd:    64 instructions,     64 steps, 100.0% coverage, source CRC 2578184206F2586E, compiled CRC A948C0E6E9D303F9

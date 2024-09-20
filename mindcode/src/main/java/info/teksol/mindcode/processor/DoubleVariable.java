@@ -25,11 +25,11 @@ public class DoubleVariable extends AbstractVariable {
     }
 
     public static DoubleVariable newStringValue(boolean fixed, String name, String value) {
-        return new DoubleVariable(fixed, name, new MindustryObject(value, value), MindustryValueType.OBJECT, 0.0);
+        return new DoubleVariable(fixed, name, new MindustryObject(value, value), MindustryValueType.OBJECT, 1.0);
     }
 
     public static DoubleVariable newObjectValue(boolean fixed, String name, MindustryObject value) {
-        return new DoubleVariable(fixed, name, value, MindustryValueType.OBJECT, 0.0);
+        return new DoubleVariable(fixed, name, value, MindustryValueType.OBJECT, 1.0);
     }
 
     @Override
