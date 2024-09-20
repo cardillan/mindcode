@@ -365,7 +365,7 @@ public class DataFlowVariableStates {
          * @param function    function to process
          * @param instruction instruction that caused the call
          */
-        public void updateAfterFunctionCall(CallGraph.Function function, LogicInstruction instruction) {
+        public void updateAfterFunctionCall(CallGraph.LogicFunction function, LogicInstruction instruction) {
             optimizer.functionReads.get(function).forEach(variable -> valueRead(variable, instruction, false));
             optimizer.functionWrites.get(function).forEach(this::valueReset);
             initialized.add(LogicVariable.fnRetVal(function.getPrefix()));

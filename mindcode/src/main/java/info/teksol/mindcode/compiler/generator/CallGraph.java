@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public final class CallGraph {
     public static final String MAIN = "";
 
-    private final Map<String, Function> functions = new HashMap<>();
+    private final Map<String, LogicFunction> functions = new HashMap<>();
     private final StackAllocation allocatedStack;
 
     CallGraph(StackAllocation allocatedStack) {
@@ -34,7 +34,7 @@ public final class CallGraph {
     /**
      * @return list of all existing functions
      */
-    public List<Function> getFunctions() {
+    public List<LogicFunction> getFunctions() {
         return List.copyOf(functions.values());
     }
 
@@ -53,7 +53,7 @@ public final class CallGraph {
      *
      * @return instance representing main body
      */
-    public Function getMain() {
+    public LogicFunction getMain() {
         return Objects.requireNonNull(functions.get(MAIN));
     }
 
@@ -64,7 +64,7 @@ public final class CallGraph {
      * @return instance representing requested function.
      * @throws NullPointerException if the function doesn't exist
      */
-    public Function getFunction(String name) {
+    public LogicFunction getFunction(String name) {
         return Objects.requireNonNull(functions.get(name),
                 () -> "Requested nonexistent function " + name);
     }
@@ -86,7 +86,7 @@ public final class CallGraph {
      * @return true if there's a recursive function
      */
     public boolean containsRecursiveFunction() {
-        return functions.values().stream().filter(Function::isUsed).anyMatch(Function::isRecursive);
+        return functions.values().stream().filter(LogicFunction::isUsed).anyMatch(LogicFunction::isRecursive);
     }
 
     /**
@@ -95,7 +95,7 @@ public final class CallGraph {
      * @param declaration function declaration to add
      */
     void addFunction(FunctionDeclaration declaration) {
-        functions.put(declaration.getName(), new Function(declaration));
+        functions.put(declaration.getName(), new LogicFunction(declaration));
     }
 
     /**
@@ -107,7 +107,7 @@ public final class CallGraph {
      * @param functionCalls list of names of called functions
      */
     void addFunctionCalls(String caller, List<String> functionCalls) {
-        Function function = Objects.requireNonNull(functions.get(caller));
+        LogicFunction function = Objects.requireNonNull(functions.get(caller));
         function.setCalls(functionCalls.stream().collect(Collectors.groupingBy(s -> s, Collectors.counting())));
     }
 
@@ -148,7 +148,7 @@ public final class CallGraph {
                 ).sum() > 0;    // sum to force visiting all items in the stream
     }
 
-    private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, Function function) {
+    private void setupOutOfLineFunction(InstructionProcessor instructionProcessor, LogicFunction function) {
         function.setLabel(instructionProcessor.nextLabel());
         function.setPrefix(instructionProcessor.nextFunctionPrefix());
         function.createParameters();
@@ -157,7 +157,7 @@ public final class CallGraph {
     private final List<String> callStack = new ArrayList<>();
 
     private void visitFunction(String callee, long count) {
-        Function function = functions.get(callee);
+        LogicFunction function = functions.get(callee);
         if (function == null) {
             // Unknown function. Maybe a built-in one.
             return;
@@ -184,7 +184,8 @@ public final class CallGraph {
 
     private static final AtomicInteger functionIds = new AtomicInteger();
 
-    public static class Function {
+    // Just "Function" would be preferred, but that conflicts with java.util.function.Function
+    public static class LogicFunction {
         private final int id = functionIds.getAndIncrement();
         private final FunctionDeclaration declaration;
         private final Set<String> recursiveCalls = new HashSet<>();
@@ -196,7 +197,7 @@ public final class CallGraph {
         private List<LogicVariable> parameters;
         private boolean inlined = false;
 
-        private Function(FunctionDeclaration declaration) {
+        private LogicFunction(FunctionDeclaration declaration) {
             this.declaration = declaration;
         }
 
@@ -340,7 +341,7 @@ public final class CallGraph {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            Function function = (Function) o;
+            LogicFunction function = (LogicFunction) o;
             return id == function.id;
         }
 

@@ -4,7 +4,7 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.CallGraph.Function;
+import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +19,8 @@ class AstContextTest {
     private final CallGraph callGraph = CallGraph.createEmpty();
     private final FunctionDeclaration functionDeclaration1 = new FunctionDeclaration(null, false, false, "test1",List.of(), new NoOp());
     private final FunctionDeclaration functionDeclaration2 = new FunctionDeclaration(null, false, false, "test2",List.of(), new NoOp());
-    private Function function1;
-    private Function function2;
+    private LogicFunction function1;
+    private LogicFunction function2;
     private AstContext context;
 
     @BeforeEach

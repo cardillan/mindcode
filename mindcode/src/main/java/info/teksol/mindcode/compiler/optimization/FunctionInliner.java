@@ -59,7 +59,7 @@ public class FunctionInliner extends BaseOptimizer {
             // The function is declared, but not used.
             return null;
         }
-        CallGraph.Function function = context.function();
+        CallGraph.LogicFunction function = context.function();
         if (function.isRecursive() || function.isInline() || function.isNoinline()) {
             return null;
         }
@@ -94,7 +94,7 @@ public class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunction(AstContext context, int costLimit) {
-        CallGraph.Function function = context.function();
+        CallGraph.LogicFunction function = context.function();
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
@@ -150,7 +150,7 @@ public class FunctionInliner extends BaseOptimizer {
             // Shouldn't happen here
             return null;
         }
-        CallGraph.Function function = call.function();
+        CallGraph.LogicFunction function = call.function();
         if (function.isRecursive() || function.isInline() || function.isNoinline()) {
             return null;
         }
@@ -175,7 +175,7 @@ public class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
-        CallGraph.Function function = call.function();
+        CallGraph.LogicFunction function = call.function();
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }

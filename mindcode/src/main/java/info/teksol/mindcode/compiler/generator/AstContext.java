@@ -2,7 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.generator.CallGraph.Function;
+import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
 
 import java.util.*;
@@ -14,7 +14,7 @@ public final class AstContext {
     public final int id;
 
     private final CompilerProfile profile;
-    private final Function function;
+    private final LogicFunction function;
     private final int level;
     private final AstNode node;
     private final AstContextType contextType;
@@ -23,7 +23,7 @@ public final class AstContext {
     private double weight;
     private final List<AstContext> children;
 
-    private AstContext(CompilerProfile profile, Function function, int level, AstNode node, AstContextType contextType,
+    private AstContext(CompilerProfile profile, LogicFunction function, int level, AstNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight, List<AstContext> children) {
         this.id = counter.getAndIncrement();
         this.profile = profile;
@@ -37,7 +37,7 @@ public final class AstContext {
         this.children = children;
     }
 
-    public AstContext(CompilerProfile profile, Function function, int level, AstNode node, AstContextType contextType,
+    public AstContext(CompilerProfile profile, LogicFunction function, int level, AstNode node, AstContextType contextType,
             AstSubcontextType subcontextType, AstContext parent, double weight) {
         this(profile, function, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
     }
@@ -59,7 +59,7 @@ public final class AstContext {
         return child;
     }
 
-    public AstContext createFunctionDeclaration(CompilerProfile profile, Function function, AstNode node, AstContextType contextType, double weight) {
+    public AstContext createFunctionDeclaration(CompilerProfile profile, LogicFunction function, AstNode node, AstContextType contextType, double weight) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);
         children.add(child);
@@ -73,7 +73,7 @@ public final class AstContext {
         return child;
     }
 
-    public AstContext createSubcontext(Function function, AstSubcontextType subcontextType, double weight) {
+    public AstContext createSubcontext(LogicFunction function, AstSubcontextType subcontextType, double weight) {
         // Subcontext always inherits compiler profile from parent context
         AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType, this, weight);
         children.add(child);
@@ -287,7 +287,7 @@ public final class AstContext {
         return function == null ? null : function.getPrefix();
     }
 
-    public Function function() {
+    public LogicFunction function() {
         return function;
     }
 

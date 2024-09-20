@@ -2,7 +2,7 @@ package info.teksol.mindcode.compiler.generator;
 
 import info.teksol.mindcode.MindcodeException;
 import info.teksol.mindcode.ast.*;
-import info.teksol.mindcode.compiler.generator.CallGraph.Function;
+import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
 import java.util.*;
@@ -42,7 +42,7 @@ public class CallGraphCreator  {
         return graph;
     }
 
-    private void validateFunction(InstructionProcessor instructionProcessor, Function function) {
+    private void validateFunction(InstructionProcessor instructionProcessor, LogicFunction function) {
         if (function.isInline() && function.isRecursive()) {
             throw new MindcodeException("Recursive function declared inline: " + function.getName());
         }

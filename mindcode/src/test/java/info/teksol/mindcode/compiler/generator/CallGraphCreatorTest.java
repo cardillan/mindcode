@@ -38,7 +38,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.Function function = graph.getFunction("a");
+        CallGraph.LogicFunction function = graph.getFunction("a");
 
         Assertions.assertTrue(function.isUsed());
         Assertions.assertTrue(function.isRecursive());
@@ -57,12 +57,12 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.Function funA = graph.getFunction("a");
+        CallGraph.LogicFunction funA = graph.getFunction("a");
         Assertions.assertTrue(funA.isUsed());
         Assertions.assertTrue(funA.isRecursive());
         Assertions.assertTrue(funA.isRecursiveCall("b"));
 
-        CallGraph.Function funB = graph.getFunction("b");
+        CallGraph.LogicFunction funB = graph.getFunction("b");
         Assertions.assertTrue(funB.isUsed());
         Assertions.assertTrue(funB.isRecursive());
         Assertions.assertTrue(funB.isRecursiveCall("a"));
@@ -81,12 +81,12 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.Function funA = graph.getFunction("a");
+        CallGraph.LogicFunction funA = graph.getFunction("a");
         Assertions.assertTrue(funA.isRecursive());
         Assertions.assertFalse(funA.isRecursiveCall("b"));
         Assertions.assertFalse(funA.isRecursiveCall("c"));
 
-        CallGraph.Function funB = graph.getFunction("b");
+        CallGraph.LogicFunction funB = graph.getFunction("b");
         Assertions.assertTrue(funB.isUsed());
         Assertions.assertTrue(funB.isRecursive());
     }
@@ -104,7 +104,7 @@ public class CallGraphCreatorTest extends AbstractGeneratorTest {
                 createTestCompiler().processor
         );
 
-        CallGraph.Function funC = graph.getFunction("c");
+        CallGraph.LogicFunction funC = graph.getFunction("c");
         Assertions.assertFalse(funC.isRecursive());
         Assertions.assertTrue(funC.isRepeatedCall("a"));
         Assertions.assertFalse(funC.isRepeatedCall("b"));

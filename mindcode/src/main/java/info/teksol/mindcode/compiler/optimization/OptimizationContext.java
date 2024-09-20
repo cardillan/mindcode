@@ -426,7 +426,7 @@ MainLoop:
         boolean modified = false;
         for (AstContext topContext : getRootContext().children()) {
             if (topContext.function() != null) {
-                CallGraph.Function function = topContext.function();
+                CallGraph.LogicFunction function = topContext.function();
                 if (function.isRecursive() == recursive) {
                     Double weight = updatedWeights.get(function.getLabel());
                     if (weight != null && topContext.weight() != weight) {

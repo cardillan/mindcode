@@ -72,13 +72,13 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private final Map<LogicLabel, List<VariableStates>> labelStates = new HashMap<>();
 
     /** Maps function prefix to a list of variables directly or indirectly read by the function */
-    Map<CallGraph.Function, Set<LogicVariable>> functionReads;
+    Map<CallGraph.LogicFunction, Set<LogicVariable>> functionReads;
 
     /** Maps function prefix to a list of variables directly or indirectly written by the function */
-    Map<CallGraph.Function, Set<LogicVariable>> functionWrites;
+    Map<CallGraph.LogicFunction, Set<LogicVariable>> functionWrites;
 
     /** Contains function prefix of functions that may directly or indirectly call the end() instruction. */
-    private Set<CallGraph.Function> functionEnds;
+    private Set<CallGraph.LogicFunction> functionEnds;
 
     /** List of variable states at each point of a call to a function that may invoke an end instruction. */
     private final List<VariableStates> functionEndStates = new ArrayList<>();
@@ -273,7 +273,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
     private boolean propagateFunctionReadsAndWrites() {
         CallGraph callGraph = getCallGraph();
         boolean modified = false;
-        for (CallGraph.Function function : callGraph.getFunctions()) {
+        for (CallGraph.LogicFunction function : callGraph.getFunctions()) {
             if (!function.isInline()) {
                 Set<LogicVariable> reads = functionReads.computeIfAbsent(function, f -> new HashSet<>());
                 Set<LogicVariable> writes = functionWrites.computeIfAbsent(function, f -> new HashSet<>());
@@ -851,7 +851,7 @@ public class DataFlowOptimizer extends BaseOptimizer {
 
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {
-                CallGraph.Function function = instruction.getAstContext().function();
+                CallGraph.LogicFunction function = instruction.getAstContext().function();
                 variableStates.updateAfterFunctionCall(function, instruction);
                 if (modifyInstructions && functionEnds.contains(function)) {
                     functionEndStates.add(variableStates.copy("function end handling"));

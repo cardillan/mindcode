@@ -68,7 +68,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
                 System.out.printf("%n*** %s: PASS %d, ITERATION %d ***%n%n", getName().toUpperCase(), pass, iteration);
             }
             if (DEBUG_PRINT) {
-                System.out.println("Program at the beginnig of the optimization phase:");
+                System.out.println("Program at the beginning of the optimization phase:");
                 optimizationContext.debugPrintProgram();
                 System.out.println();
             }
