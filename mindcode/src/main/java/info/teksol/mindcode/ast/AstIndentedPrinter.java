@@ -159,6 +159,12 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitIterator(Iterator node) {
+        print(node);
+        return null;
+    }
+
+    @Override
     public String visitVarRef(VarRef node) {
         print(node);
         return null;

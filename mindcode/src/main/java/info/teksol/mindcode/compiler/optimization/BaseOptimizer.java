@@ -439,7 +439,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
      * @throws MindcodeInternalError when the new instruction is already present elsewhere in the program
      */
     protected void insertInstruction(int index, LogicInstruction instruction) {
-        optimizationContext.insertInstruction(index,instruction);
+        optimizationContext.insertInstruction(index, instruction);
     }
 
     /**

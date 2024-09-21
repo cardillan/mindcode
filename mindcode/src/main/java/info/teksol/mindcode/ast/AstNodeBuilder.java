@@ -57,27 +57,15 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     private List<AstNode> createListOfIterators(MindcodeParser.Iterator_listContext values) {
-        return values.lvalue().stream()
+        return values.iterator().stream()
                 .map(this::visit)
                 .toList();
     }
 
-
-    private List<AstNode> createListOfLoopValues(MindcodeParser.Loop_value_listContext values) {
-        final List<AstNode> result = new ArrayList<>();
-
-        if (values != null) {
-            final AstNode nodes;
-            if (values.loop_value_list() != null) {
-                nodes = visit(values.loop_value_list());
-            } else {
-                nodes = new NoOp();
-            }
-
-            gatherValues(new Seq(values.getStart(), nodes, visit(values.expression())), result);
-        }
-
-        return result;
+    private List<AstNode> createListOfValues(MindcodeParser.Value_listContext values) {
+        return values.expression().stream()
+                .map(this::visit)
+                .toList();
     }
 
     private List<AstNode> createListOfValues(MindcodeParser.When_value_listContext values) {
@@ -382,7 +370,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         String label = ctx.label == null ? null : ctx.label.getText();
         return new ForEachExpression(ctx.getStart(), label,
                 createListOfIterators(ctx.iterators),
-                createListOfLoopValues(ctx.values),
+                createListOfValues(ctx.values),
                 visit(ctx.loop_body()));
     }
 
@@ -391,7 +379,7 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         String label = ctx.label == null ? null : ctx.label.getText();
         return new ForEachExpression(ctx.getStart(), label,
                 createListOfIterators(ctx.iterators),
-                createListOfLoopValues(ctx.values),
+                createListOfValues(ctx.values),
                 visit(ctx.loop_body()));
     }
 
@@ -568,6 +556,14 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitIterator(MindcodeParser.IteratorContext ctx) {
+        // At this point, no other modifier is allowed by the syntax
+        boolean outModifier = ctx.modifier != null;
+        final VarRef varRef = (VarRef) visit(ctx.lvalue());
+        return new Iterator(ctx.getStart(), true, outModifier, varRef);
+    }
+
+    @Override
     public AstNode visitLiteral_minus(MindcodeParser.Literal_minusContext ctx) {
         return new NumericLiteral(ctx.getStart(), ctx.getText());
     }
@@ -581,16 +577,6 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     public AstNode visitLiteral_string(MindcodeParser.Literal_stringContext ctx) {
         final String str = ctx.getText();
         return new StringLiteral(ctx.getStart(), str.substring(1, str.length() - 1).replaceAll("\\\\\"", "\""));
-    }
-
-    @Override
-    public AstNode visitLoop_value_list(MindcodeParser.Loop_value_listContext ctx) {
-        if (ctx.loop_value_list()!= null) {
-            return new Seq(ctx.getStart(), visit(ctx.loop_value_list()), visit(ctx.expression()));
-        } else {
-            final AstNode last = visit(ctx.expression());
-            return new Seq(ctx.getStart(), last);
-        }
     }
 
     @Override

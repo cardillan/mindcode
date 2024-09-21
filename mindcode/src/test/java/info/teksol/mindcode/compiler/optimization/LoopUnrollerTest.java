@@ -328,6 +328,25 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
     }
 
     @Test
+    void unrollsListIterationLoopsWithModifications() {
+        assertCompilesTo(ix -> !(ix instanceof LabelInstruction),
+                """
+                        n = 0;
+                        for out i, out j in a, b, c, d, e, f do
+                            i = n += 1;
+                            j = 2 * n;
+                        end;
+
+                        for i in a, b, c, d, e, f do
+                            print(i);
+                        end;
+                        """,
+                createInstruction(PRINT, q("122436")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void unrollsLoopsWithBreak() {
         assertCompilesTo(ix -> !(ix instanceof LabelInstruction),
                 """

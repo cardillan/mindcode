@@ -593,7 +593,7 @@ class AstNodeBuilderTest extends AbstractAstTest {
                         new ForEachExpression(null,
                                 null,
                                 List.of(
-                                        new VarRef(null, "a")
+                                        new Iterator(null, true, false, new VarRef(null, "a"))
                                 ),
                                 List.of(
                                         new Ref(null, "mono"),

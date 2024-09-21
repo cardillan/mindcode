@@ -93,23 +93,27 @@ for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression DO? 
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
                             SEMICOLON increment=incr_list DO? loop_body END                         # iterated_for
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET loop_body END       # for_each_1
+                            LEFT_RBRACKET values=value_list RIGHT_RBRACKET loop_body END            # for_each_1
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            values=loop_value_list DO loop_body END                                 # for_each_2
+                            values=value_list DO loop_body END                                      # for_each_2
                ;
 
+iterator
+    : ( modifier = OUT )? lvalue
+    ;
+
 iterator_list
-    : lvalue ( COMMA lvalue)*
+    : iterator ( COMMA iterator )*
+    ;
+
+value_list
+    : expression ( COMMA expression )*
     ;
 
 loop_body : loop_body expression_list
           | expression_list
           ;
 
-loop_value_list : expression
-                | loop_value_list COMMA expression
-                ;
-				
 continue_st : CONTINUE ( label=loop_label )? ;
 
 break_st : BREAK ( label=loop_label )? ;

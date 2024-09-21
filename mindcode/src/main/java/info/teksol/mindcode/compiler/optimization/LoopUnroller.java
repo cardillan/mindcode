@@ -57,7 +57,8 @@ class LoopUnroller extends BaseOptimizer {
             BODY, "b",
             UPDATE, "u",
             FLOW_CONTROL, "f",
-            ITERATOR, "t"
+            ITR_LEADING, "l",
+            ITR_TRAILING, "t"
     );
 
     private boolean hasSupportedStructure(AstContext loop) {
@@ -67,7 +68,7 @@ class LoopUnroller extends BaseOptimizer {
 
     private boolean hasSupportedIterationStructure(AstContext loop) {
         String structure = loop.children().stream().map(c -> SYMBOL_MAP.get(c.subcontextType())).collect(Collectors.joining());
-        return structure.matches("t+bf");
+        return structure.matches("l(tl)*bft");
     }
 
     private boolean hasConditionAtFront(AstContext loop) {
@@ -124,7 +125,7 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     private OptimizationAction findPossibleUnrolling(AstContext loop, int costLimit) {
-        if (loop.findSubcontext(ITERATOR) != null) {
+        if (loop.findSubcontext(ITR_LEADING) != null) {
             return findPossibleIterationUnrolling(loop, costLimit);
         }
 
@@ -315,10 +316,10 @@ class LoopUnroller extends BaseOptimizer {
             return null;
         }
 
-        List<AstContext> iterations = loop.findSubcontexts(ITERATOR);
+        List<AstContext> leading = loop.findSubcontexts(ITR_LEADING);
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
-        int loops = iterations.size();
+        int loops = leading.size();
         // Instructions saved per loop:
         // Set address
         // Jump to body (except the last iteration)
@@ -358,29 +359,55 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     private OptimizationResult unrollListLoop(AstContext loop, int costLimit) {
-        List<AstContext> iterations = loop.findSubcontexts(ITERATOR);
+        List<AstContext> leading = loop.findSubcontexts(ITR_LEADING);
+        List<AstContext> trailing = loop.findSubcontexts(ITR_TRAILING);
+        if (leading.size() != trailing.size()) {
+            throw new MindcodeInternalError("Invalid loop structure.");
+        }
+
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
         // Create a new, non-loop context for unrolled instructions
         AstContext newContext = loop.parent().createChild(loop.getProfile(), loop.node(), AstContextType.BODY);
         int insertionPoint = firstInstructionIndex(loop);
-        for (AstContext iteration : iterations) {
-            LogicList list = removeIteratorInstructions(contextInstructions(iteration));
-            insertInstructions(insertionPoint, list.duplicateToContext(newContext));
-            insertionPoint += list.size();
+        for (int i = 0; i < leading.size(); i++) {
+            LogicList leadingCtx = removeLeadingIteratorInstructions(contextInstructions(leading.get(i)));
+            insertInstructions(insertionPoint, leadingCtx.duplicateToContext(newContext));
+            insertionPoint += leadingCtx.size();
 
             insertInstructions(insertionPoint, body.duplicateToContext(newContext));
             insertionPoint += body.size();
+
+            LogicList trailingCtx = contextInstructions(trailing.get(i));
+            if (!trailingCtx.isEmpty()) {
+                LogicList copy = trailingCtx.duplicateToContext(newContext,
+                        ix -> !(ix instanceof LabelInstruction) && !(ix instanceof GotoLabelInstruction) && !(ix instanceof GotoInstruction));
+                insertInstructions(insertionPoint, copy);
+                insertionPoint += copy.size();
+            }
         }
 
-        // Save it before the original loop is erased
-        unrollFlowControlContext(loop, newContext, insertionPoint);
+        // Get a copy of the context before removing it
+        LogicList labels = contextInstructions(trailing.get(trailing.size() - 1));
+
+        // Remove all loop instructions
+        removeMatchingInstructions(ix -> ix.belongsTo(loop));
+
+        // Put back labels in the last trailing subcontext (contains break label)
+        for (LogicInstruction ix : labels) {
+            if (ix instanceof LabelInstruction) {
+                insertInstruction(insertionPoint++, ix.withContext(newContext));
+            }
+        }
+
+        count++;
+
         return OptimizationResult.REALIZED;
     }
 
-    private LogicList removeIteratorInstructions(LogicList list) {
+    private LogicList removeLeadingIteratorInstructions(LogicList list) {
         int begin = list.getFirst() instanceof SetAddressInstruction ? 1 : 0;
-        int end = list.getLast() instanceof GotoLabelInstruction && list.getFromEnd(1) instanceof JumpInstruction ? 2 : 0;
+        int end = list.getLast() instanceof JumpInstruction ? 1 : 0;
         return list.subList(begin, list.size() - end);
     }
 

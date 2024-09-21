@@ -29,8 +29,11 @@ public enum AstSubcontextType {
     /** Update code (setting up next iteration) in a loop. */
     UPDATE          ("UPDT"),
 
-    /** For-each iterator code. No further structure at the moment. */
-    ITERATOR        ("ITER"),
+    /** Part of list iterator loop executed before each iteration */
+    ITR_LEADING     ("ITRL"),
+
+    /** Part of list iterator loop executed after each iteration */
+    ITR_TRAILING    ("ITRT"),
 
     /** Code setting up arguments before a function call. */
     ARGUMENTS       ("ARGS"),

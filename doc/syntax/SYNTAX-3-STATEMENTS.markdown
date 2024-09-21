@@ -151,7 +151,61 @@ for count, value in (3, 1, 7, 2, 4, 5, 1, 10)
 end;
 ```
 
-This syntax will be desupported in some future release. 
+This syntax will be desupported in some future release.
+
+### Modifications of values in the list
+
+If the elements of the list being iterated over are variables, it is possible to change their value by declaring the loop control variable with the `out` modifier:
+
+```
+a = 1; b = 2; c = 3; d = 4;
+for out i in a, b, c, d do
+    print(i);
+    i = i * 2;
+end;
+
+println();
+print(a, b, c, d);
+```
+
+This code will print  "1234" on one line, followed by "2468" on the second line.
+
+It is possible to declare more than one variable in the loop as output:
+
+```
+a = 1; b = 2; c = 3; d = 4;
+for out i, out j in a, b, c, d do
+    tmp = i;
+    i = j;
+    j = tmp;
+end;
+
+print(a, b, c, d);
+```
+
+This code swaps values of `a` and `c` with `b` and `d`, producing "2143" on output.
+
+It is also possible to use list iteration loop to initialize variables:
+
+```
+index = 0;
+for out i in a, b, c, d do
+    index += 1;
+    i = index;
+end;
+
+print(a, b, c, d);
+```
+
+This code initializes values `a`, `b`, `c` and `d` to `1`, `2`, `3` and `4` respectively. No warning about these variables not being initialized is made, because their initial values aren't used inside the loop body.
+
+If at least one element in the list cannot be modified, it is an error if it is assigned to an `out` loop control variable:
+
+```
+for out i in a, b, c + 1, d do
+    i = rand(10);
+end;
+```
 
 ## C-Style Loops
 

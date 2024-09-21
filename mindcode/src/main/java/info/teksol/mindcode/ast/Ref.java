@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.Token;
 import java.util.Objects;
 
 public class Ref extends BaseAstNode {
-    private final String name;
+    protected final String name;
 
     Ref(Token startToken, String name) {
         super(startToken);

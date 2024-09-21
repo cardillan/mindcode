@@ -36,6 +36,10 @@ public interface LogicArgument {
         return false;
     }
 
+    default boolean isUserWritable() {
+        return false;
+    }
+
     default boolean isGlobalVariable() {
         return false;
     }

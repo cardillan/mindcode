@@ -680,6 +680,38 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         );
     }
 
+
+    @Test
+    void compilesListIterationLoopWithModifications() {
+        assertCompilesTo("""
+                        for out i, out j in a, b, c, d do
+                            i = 1;
+                            j = 2;
+                        end;
+                        """,
+                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(SET, "i", "a"),
+                createInstruction(SET, "j", "b"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
+                createInstruction(SET, "a", "i"),
+                createInstruction(SET, "b", "j"),
+                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SET, "i", "c"),
+                createInstruction(SET, "j", "d"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(SET, "i", "1"),
+                createInstruction(SET, "j", "2"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
+                createInstruction(SET, "c", "i"),
+                createInstruction(SET, "d", "j"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
+
     @Test
     void compilesMainMemoryVariable() {
         assertCompilesTo(

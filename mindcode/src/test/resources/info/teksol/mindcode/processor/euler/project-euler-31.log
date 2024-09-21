@@ -283,40 +283,40 @@ Modifications by Loop Unrolling: unroll iteration loop at line 4 (-2 instruction
 +    5 op add index index 1
 +    6 label __label28
 +    7 set value 100
-+    8 label __label29
++    8 label __label31
 +    9 write value bank1 index
 +   10 op add index index 1
-+   11 label __label30
++   11 label __label32
 +   12 set value 50
-+   13 label __label31
++   13 label __label35
 +   14 write value bank1 index
 +   15 op add index index 1
-+   16 label __label32
++   16 label __label36
 +   17 set value 20
-+   18 label __label33
++   18 label __label39
 +   19 write value bank1 index
 +   20 op add index index 1
-+   21 label __label34
++   21 label __label40
 +   22 set value 10
-+   23 label __label35
++   23 label __label43
 +   24 write value bank1 index
 +   25 op add index index 1
-+   26 label __label36
++   26 label __label44
 +   27 set value 5
-+   28 label __label37
++   28 label __label47
 +   29 write value bank1 index
 +   30 op add index index 1
-+   31 label __label38
++   31 label __label48
 +   32 set value 2
-+   33 label __label39
++   33 label __label51
 +   34 write value bank1 index
 +   35 op add index index 1
-+   36 label __label40
++   36 label __label52
 +   37 set value 1
-+   38 label __label41
++   38 label __label55
 +   39 write value bank1 index
 +   40 op add index index 1
-+   41 label __label42
++   41 label __label56
 +   42 label __label3
     43 label __label12
     44 print 41
@@ -333,54 +333,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +    5 op add index 0 1
      6 label __label28
      7 set value 100
-     8 label __label29
+     8 label __label31
 -    * write value bank1 index
 -    * op add index index 1
 +    9 write 100 bank1 1
 +   10 op add index 1 1
-    11 label __label30
+    11 label __label32
     12 set value 50
-    13 label __label31
+    13 label __label35
 -    * write value bank1 index
 -    * op add index index 1
 +   14 write 50 bank1 2
 +   15 op add index 2 1
-    16 label __label32
+    16 label __label36
     17 set value 20
-    18 label __label33
+    18 label __label39
 -    * write value bank1 index
 -    * op add index index 1
 +   19 write 20 bank1 3
 +   20 op add index 3 1
-    21 label __label34
+    21 label __label40
     22 set value 10
-    23 label __label35
+    23 label __label43
 -    * write value bank1 index
 -    * op add index index 1
 +   24 write 10 bank1 4
 +   25 op add index 4 1
-    26 label __label36
+    26 label __label44
     27 set value 5
-    28 label __label37
+    28 label __label47
 -    * write value bank1 index
 -    * op add index index 1
 +   29 write 5 bank1 5
 +   30 op add index 5 1
-    31 label __label38
+    31 label __label48
     32 set value 2
-    33 label __label39
+    33 label __label51
 -    * write value bank1 index
 -    * op add index index 1
 +   34 write 2 bank1 6
 +   35 op add index 6 1
-    36 label __label40
+    36 label __label52
     37 set value 1
-    38 label __label41
+    38 label __label55
 -    * write value bank1 index
 -    * op add index index 1
 +   39 write 1 bank1 7
 +   40 op add index 7 1
-    41 label __label42
+    41 label __label56
     42 label __label3
     43 label __label12
  
@@ -402,40 +402,40 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op add index 0 1
      3 label __label28
 -    * set value 100
-     4 label __label29
+     4 label __label31
      5 write 100 bank1 1
 -    * op add index 1 1
-     6 label __label30
+     6 label __label32
 -    * set value 50
-     7 label __label31
+     7 label __label35
      8 write 50 bank1 2
 -    * op add index 2 1
-     9 label __label32
+     9 label __label36
 -    * set value 20
-    10 label __label33
+    10 label __label39
     11 write 20 bank1 3
 -    * op add index 3 1
-    12 label __label34
+    12 label __label40
 -    * set value 10
-    13 label __label35
+    13 label __label43
     14 write 10 bank1 4
 -    * op add index 4 1
-    15 label __label36
+    15 label __label44
 -    * set value 5
-    16 label __label37
+    16 label __label47
     17 write 5 bank1 5
 -    * op add index 5 1
-    18 label __label38
+    18 label __label48
 -    * set value 2
-    19 label __label39
+    19 label __label51
     20 write 2 bank1 6
 -    * op add index 6 1
-    21 label __label40
+    21 label __label52
 -    * set value 1
-    22 label __label41
+    22 label __label55
     23 write 1 bank1 7
 -    * op add index 7 1
-    24 label __label42
+    24 label __label56
     25 label __label3
     26 label __label12
 

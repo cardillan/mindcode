@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+* Added support for output loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).   
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.    
 * Added secondary set of string constants representing icons with dashes in identifiers replaced by underscores (e.g. `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will no longer be supported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)     
 * Added support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be used instead. Support for program parametrization through global variables will be removed in a future release.     
@@ -646,7 +647,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Changed
 
 * Enhanced [print merging optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) to merge non-string 
-  literals (eg. numeric constants) on aggressive optimization level. 
+  literals (e.g. numeric constants) on aggressive optimization level. 
 * Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside valid 
   range (signed 64-bit integer; note that [Mindustry Logic variables](doc/syntax/SYNTAX-1-VARIABLES.markdown) cannot 
   represent full range of possible values without loss of precision).   

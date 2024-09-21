@@ -38,6 +38,15 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitIterator(Iterator node) {
+        if (node.isOutModifier()) {
+            buffer.append("out ");
+        }
+        visit(node.getVarRef());
+        return null;
+    }
+
+    @Override
     public String visitHeapAccess(HeapAccess node) {
         buffer.append(node.getCellName());
         buffer.append("[");

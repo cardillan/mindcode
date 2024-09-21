@@ -21,6 +21,7 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
         if (node instanceof HeapAccess n)               return visitHeapAccess(n);
         if (node instanceof HeapAllocation n)           return visitHeapAllocation(n);
         if (node instanceof IfExpression n)             return visitIfExpression(n);
+        if (node instanceof Iterator n)                 return visitIterator(n);
         if (node instanceof NoOp n)                     return visitNoOp(n);
         if (node instanceof NullLiteral n)              return visitNullLiteral(n);
         if (node instanceof NumericLiteral n)           return visitNumericLiteral(n);

@@ -58,9 +58,9 @@ class LoopHoisting extends BaseOptimizer {
 
         int conditions = (int) parts.stream().filter(c -> c.matches(CONDITION)).count();
         if (conditions == 0) {
-            // This looks like a list iteration loop. Remove all ITERATOR contexts; if none found, it wasn't
+            // This looks like a list iteration loop. Remove all ITR_LEADING and ITR_TRAILING contexts; if none found, it wasn't
             // a list iterator loop, we quit as we don't understand the structure.
-            if (!parts.removeIf(c -> c.matches(ITERATOR))) {
+            if (!parts.removeIf(c -> c.matches(ITR_LEADING, ITR_TRAILING))) {
                 return;
             }
         } else if (conditions == 2) {
@@ -137,9 +137,9 @@ class LoopHoisting extends BaseOptimizer {
         modifiedVariables.forEach(v -> dependencies.computeIfAbsent(v, w -> new HashSet<>()).add(v));
 
 
-        // All variables generated in ITERATOR contexts are loop variables
+        // All variables generated in ITR_LEADING contexts are loop variables
         List<LogicVariable> iteratorVariables = loop.children().stream()
-                .filter(ctx -> ctx.matches(ITERATOR))
+                .filter(ctx -> ctx.matches(ITR_LEADING))
                 .flatMap(this::contextStream)
                 .flatMap(LogicInstruction::outputArgumentsStream)
                 .map(LogicVariable.class::cast)

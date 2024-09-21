@@ -256,9 +256,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     void evaluatesConstantIfsInLoopFully() {
         assertCompilesTo("""
                         def getBit(bitIndex)
-                          bitIndex % 2
+                            bitIndex % 2
                         end
-                                                
+
                         for i in 1 ... 2
                             print(getBit(i) ? 1 : 0)
                         end
@@ -503,6 +503,39 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, "i"),
                 createInstruction(GOTO, var(0), "marker0"),
                 createInstruction(GOTOLABEL, var(1005), "marker0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesForEachLoopsWithModifications() {
+        assertCompilesTo(createTestCompiler(
+                createCompilerProfile().setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.OFF)),
+                        """
+                        for out i, out j in a, b, c, d do
+                            i = rand(10);
+                            j = 2 * i;
+                        end;
+
+                        print(a, b, c, d);
+                        """,
+                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
+                createInstruction(SET, "a", "i"),
+                createInstruction(SET, "b", "j"),
+                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "rand", "i", "10"),
+                createInstruction(OP, "mul", "j", "2", "i"),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
+                createInstruction(SET, "c", "i"),
+                createInstruction(SET, "d", "j"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "b"),
+                createInstruction(PRINT, "c"),
+                createInstruction(PRINT, "d"),
                 createInstruction(END)
         );
     }

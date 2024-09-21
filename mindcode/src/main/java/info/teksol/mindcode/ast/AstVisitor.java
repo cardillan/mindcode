@@ -39,6 +39,8 @@ public interface AstVisitor<T> {
 
     T visitIfExpression(IfExpression node);
 
+    T visitIterator(Iterator node);
+
     T visitNoOp(NoOp node);
 
     T visitNullLiteral(NullLiteral node);

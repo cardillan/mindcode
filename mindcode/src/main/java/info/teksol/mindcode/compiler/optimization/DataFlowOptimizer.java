@@ -322,25 +322,35 @@ class DataFlowOptimizer extends BaseOptimizer {
         int currentContext = 0;
         boolean propagateUninitialized = false;
 
-        if (children.stream().anyMatch(ctx -> ctx.matches(ITERATOR))) {
+        List<AstContext> leadingContexts = localContext.findSubcontexts(ITR_LEADING);
+        List<AstContext> trailingContexts = localContext.findSubcontexts(ITR_TRAILING);
+
+        if (!leadingContexts.isEmpty()) {
             if (children.get(currentContext).matches(INIT)) {
                 variableStates = processContext(localContext, children.get(0), variableStates, modifyInstructions);
                 currentContext++;
             }
 
-            if (!children.get(currentContext).matches(ITERATOR)) {
+            if (!children.get(currentContext).matches(ITR_LEADING)) {
                 // We can't just ignore code we don't understand
-                throw new MindcodeInternalError("Unexpected structure of for-each loop");
+                throw new MindcodeInternalError("Unexpected structure of list iteration loop");
             }
 
-            // Merge all final states of iterator subcontexts together: the loop body is processed with the final
-            // value of every iterator subcontext.
+            // Merge all final states of leading list iterator subcontexts together: the loop body is processed
+            // with the final value of every iterator subcontext.
             // First context is without merging to the previous one
-            variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
-            while (currentContext < children.size() && children.get(currentContext).matches(ITERATOR)) {
-                VariableStates copy = variableStates.copy("loop iterator");
-                variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
-                variableStates = variableStates.merge(copy, true, "loop iterator");
+            variableStates = processContext(localContext, leadingContexts.get(0), variableStates, modifyInstructions);
+            for (int index = 1; index < leadingContexts.size(); ) {
+                AstContext context = leadingContexts.get(index++);
+                iterator.setNextIndex(firstInstructionIndex(context));
+                VariableStates copy = variableStates.copy("leading loop iterator");
+                variableStates = processContext(localContext, context, variableStates, true);
+                variableStates = variableStates.merge(copy, true, "leading loop iterator");
+            }
+
+            // Skip iterator contexts
+            while (children.get(currentContext).matches(ITR_LEADING, ITR_TRAILING)) {
+                currentContext++;
             }
         } else {
             if (!children.isEmpty() && children.get(0).matches(INIT)) {
@@ -419,8 +429,31 @@ class DataFlowOptimizer extends BaseOptimizer {
             trace(() -> "=== Processing loop " + localContext.id + " - iteration " + iteration + ": position " + iterator.nextIndex());
 
             for (int j = loopStart; j < children.size(); j++) {
-                // Do not modify instructions on the first iteration
-                variableStates = processContext(localContext, children.get(j), variableStates, pass > 0);
+                if (!children.get(j).matches(ITR_TRAILING)) {
+                    // Do not modify instructions on the first iteration
+                    variableStates = processContext(localContext, children.get(j), variableStates, pass > 0);
+                }
+            }
+
+            if (!trailingContexts.isEmpty()) {
+                if (false) {
+                    // First context is without merging to the previous one
+                    iterator.setNextIndex(firstInstructionIndex(trailingContexts.get(0)));
+                    variableStates = processContext(localContext, trailingContexts.get(0), variableStates, modifyInstructions);
+                    for (int index = 1; index < trailingContexts.size(); index++) {
+                        AstContext context = trailingContexts.get(index);
+                        iterator.setNextIndex(firstInstructionIndex(context));
+                        VariableStates copy = variableStates.copy("trailing loop iterator");
+                        variableStates = processContext(localContext, context, variableStates, true);
+                        variableStates = variableStates.merge(copy, true, "trailing loop iterator");
+                    }
+                } else {
+                    // First context is without merging to the previous one
+                    for (AstContext context : trailingContexts) {
+                        iterator.setNextIndex(firstInstructionIndex(context));
+                        variableStates = processContext(localContext, context, variableStates, modifyInstructions);
+                    }
+                }
             }
 
             variableStates = variableStates.merge(initial, propagateUninitialized, "inside loop");

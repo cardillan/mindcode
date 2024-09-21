@@ -229,7 +229,11 @@ class OptimizationContext {
     }
 
     private int findLabelIndex(LogicLabel label) {
-        return firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
+        int index = firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label));
+        if (index < 0) {
+            throw new IllegalArgumentException("Illegal label: " + label);
+        }
+        return index;
     }
 
     /**
@@ -1617,7 +1621,7 @@ class OptimizationContext {
          */
         public LogicList duplicate() {
             if (astContext == null) {
-                return this;
+                throw new MindcodeInternalError("No astContext");
             }
 
             // Duplicate labels
@@ -1630,8 +1634,12 @@ class OptimizationContext {
         }
 
         public LogicList duplicateToContext(AstContext newContext) {
+            return duplicateToContext(newContext, ix -> true);
+        }
+
+        public LogicList duplicateToContext(AstContext newContext, Predicate<LogicInstruction> matcher) {
             if (astContext == null) {
-                return this;
+                throw new MindcodeInternalError("No astContext");
             }
 
             // Duplicate labels
@@ -1639,6 +1647,7 @@ class OptimizationContext {
 
             Map<AstContext, AstContext> contextMap = astContext.copyChildrenTo(newContext);
             return new LogicList(contextMap.get(astContext), stream()
+                    .filter(matcher)
                     .map(ix -> remapContextAndLabels(labelMap, contextMap, ix))
                     .toList());
         }
