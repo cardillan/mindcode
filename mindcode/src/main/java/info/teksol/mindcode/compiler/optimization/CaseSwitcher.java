@@ -18,10 +18,7 @@ import java.util.stream.IntStream;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 
-/**
- * Inlines functions
- */
-public class CaseSwitcher extends BaseOptimizer {
+class CaseSwitcher extends BaseOptimizer {
     // Activates generating range limiting instructions for case switching.
     // Only set to false for the purposes of benchmarking.
     private static final boolean RANGE_LIMITING = true;

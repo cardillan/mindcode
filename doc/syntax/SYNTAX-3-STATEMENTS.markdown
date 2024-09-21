@@ -98,29 +98,60 @@ Tries to bind a mono, poly or mega, in this order, ending the loop when successf
 
 The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic doesn't support 
 arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is 
-evaluated right before the loop utilizing the expression is executed. This loop
+evaluated at the beginning of the iteration utilizing the expression. This loop
 
 ```
-a = 0;
-for a in a + 1, a + 1, a + 1 do
+N = 0;
+for a in foo(), foo(), foo() do
     print(a, "\n");
+end;
+def foo()
+    N += 1;
 end;
 printflush(message1);
 ```
 
-prints values 1, 2, 3 (at the beginning of each iteration the loop variable -- `a` in this case -- is set to the 
-value of the next expression in the list).
+prints values 1, 2, 3, as the `foo()` function call is evaluated at the beginning of each iteration.
+
+The list iterator loop can use more loop variables to process several items from the list at once:
+
+```
+for unit, count in
+    @mono, 5, 
+    @poly, 4,
+    @mega, 2
+do
+    print("$unit: $count\n");
+end;
+printflush(message1);
+```
+
+This code will print out  "mono: 5", "poly: 4" and "mega: 2" on separate lines.
+
+The values in the list aren't organized into tuples. You can put them on separate lines, as shown in the example, to keep them organized. The number of values in the list must be a multiple of the number of loop control variables.
+
+If you use expressions based on the values of the loop control variables in the list, the results are generally undefined. Example:
+
+```
+a = 1
+b = 2;
+for a, b in b, a do
+    print(a, b);
+end;
+```
+
+This code prints out "22" and not "21", as might be expected.
 
 Alternative syntax of list iteration loop doesn't use the `do` keyword, but enclosed the list of variables in 
 parentheses:
 
 ```
-for a in (1, 2, 5, 10)
-    print(a, "\n");
+for count, value in (3, 1, 7, 2, 4, 5, 1, 10)
+    print(a * b, "\n");
 end;
 ```
 
-Support for this version of the statement will be removed in a future release. 
+This syntax will be desupported in some future release. 
 
 ## C-Style Loops
 

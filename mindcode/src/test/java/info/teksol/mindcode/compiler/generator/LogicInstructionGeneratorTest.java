@@ -348,6 +348,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void compilesConstant() {
+        assertCompilesTo(
+                "const a = 10; print(a);",
+                createInstruction(PRINT, "10"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void compilesControlStatements() {
         assertCompilesTo(
                 "conveyor1.enabled = foundation1.copper === tank1.water",
@@ -649,12 +658,47 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void compilesListIterationLoop() {
+        assertCompilesTo(
+                "for i, j in 1, 2, 3, 4 do print(i, j); end;",
+                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(SET, "i", "1"),
+                createInstruction(SET, "j", "2"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
+                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SET, "i", "3"),
+                createInstruction(SET, "j", "4"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(PRINT, "i"),
+                createInstruction(PRINT, "j"),
+                createInstruction(LABEL, var(1000)),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
+                createInstruction(LABEL, var(1002)),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void compilesMainMemoryVariable() {
         assertCompilesTo(
                 "memory = cell1 memory[0] = rand(9**9)",
                 createInstruction(SET, "memory", "cell1"),
                 createInstruction(OP, "rand", var(0), "387420489"),
                 createInstruction(WRITE, var(0), "memory", "0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesMemoryAccessThroughParameter() {
+        assertCompilesTo("""
+                        param mem = bank1;
+                        mem[0] = 5;
+                        """,
+                createInstruction(SET, "mem", "bank1"),
+                createInstruction(WRITE, "5", "mem", "0"),
                 createInstruction(END)
         );
     }
@@ -828,6 +872,34 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void compilesParameter() {
+        assertCompilesTo("""
+                        param a = 10;
+                        print(a);
+                        """,
+                createInstruction(SET, "a", "10"),
+                createInstruction(PRINT, "a"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void compilesParameterWithBuiltInValueOrBLock() {
+        assertCompilesTo("""
+                        param a = @flare;
+                        param b = message1;
+                        
+                        print(a, b);
+                        """,
+                createInstruction(SET, "a", "@flare"),
+                createInstruction(SET, "b", "message1"),
+                createInstruction(PRINT, "a"),
+                createInstruction(PRINT, "b"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void compilesRangeExpressionLoop() {
         assertCompilesTo(
                 "for n in a ... b print(n) end",
@@ -843,7 +915,6 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                 createInstruction(END)
         );
     }
-
 
     @Test
     void compilesRangeExpressionLoopWithDo() {
@@ -1096,6 +1167,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void recognizesIconConstants() {
+        assertCompilesTo("""
+                        print(ITEM_COAL + "X");
+                        """,
+                createInstruction(PRINT, q("\uF833X")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
     void recognizesTurretAsBLockName() {
         assertCompilesTo("""
                         def foo()
@@ -1141,6 +1222,68 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
                         """
                 )
         );
+    }
+
+    @Test
+    void refusesConflictingConstantAndVariable() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; a = 20;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("a = 10; const a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingConstants() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; const a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingFunctionParameter() {
+        assertDoesNotThrow(
+                () -> generateInstructions("a = 10; def foo(a) print(a); end; foo(5);"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; def foo(a) print(a); end; foo(5);"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; def foo(a) print(a); end; foo(5);"));
+    }
+
+    @Test
+    void refusesConflictingParameterAndConstant() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; const a = 20;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("const a = 10; param a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingParameterAndVariable() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; a = 20;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("a = 10; param a = 20;"));
+    }
+
+    @Test
+    void refusesConflictingParameters() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 10; param a = 20;"));
+    }
+
+    @Test
+    void refusesNonConstantParameters() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = 2 * 4;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = @unit;"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("param a = rand(5);"));
+    }
+
+    @Test
+    void refusesIterationListsWithWrongSize() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("for i, j in 1, 2, 3 do print(i, j); end;"));
     }
 
     @Test
@@ -1193,120 +1336,5 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     void throwsAnOutOfHeapSpaceExceptionWhenUsingMoreHeapSpaceThanAllocated() {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz"));
-    }
-
-    @Test
-    void compilesConstant() {
-        assertCompilesTo(
-                "const a = 10; print(a);",
-                createInstruction(PRINT, "10"),
-                createInstruction(END)
-        );
-    }
-
-    @Test
-    void refusesConflictingConstants() {
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("const a = 10; const a = 20;"));
-    }
-
-    @Test
-    void refusesConflictingConstantAndVariable() {
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("const a = 10; a = 20;"));
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("a = 10; const a = 20;"));
-    }
-
-    @Test
-    void compilesParameter() {
-        assertCompilesTo("""
-                        param a = 10;
-                        print(a);
-                        """,
-                createInstruction(SET, "a", "10"),
-                createInstruction(PRINT, "a"),
-                createInstruction(END)
-        );
-    }
-
-    @Test
-    void refusesNonConstantParameters() {
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("param a = 2 * 4;"));
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("param a = @unit;"));
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("param a = rand(5);"));
-    }
-
-    @Test
-    void refusesConflictingParameters() {
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("param a = 10; param a = 20;"));
-    }
-
-    @Test
-    void refusesConflictingParameterAndConstant() {
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("param a = 10; const a = 20;"));
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("const a = 10; param a = 20;"));
-    }
-
-    @Test
-    void refusesConflictingParameterAndVariable() {
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("param a = 10; a = 20;"));
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("a = 10; param a = 20;"));
-    }
-
-    @Test
-    void refusesConflictingFunctionParameter() {
-        assertDoesNotThrow(
-                () -> generateInstructions("a = 10; def foo(a) print(a); end; foo(5);"));
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("const a = 10; def foo(a) print(a); end; foo(5);"));
-        assertThrows(MindcodeException.class,
-                () -> generateInstructions("param a = 10; def foo(a) print(a); end; foo(5);"));
-    }
-
-    @Test
-    void compilesParameterWithBuiltInValueOrBLock() {
-        assertCompilesTo("""
-                        param a = @flare;
-                        param b = message1;
-                        
-                        print(a, b);
-                        """,
-                createInstruction(SET, "a", "@flare"),
-                createInstruction(SET, "b", "message1"),
-                createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "b"),
-                createInstruction(END)
-        );
-    }
-
-    @Test
-    void compilesMemoryAccessThroughParameter() {
-        assertCompilesTo("""
-                        param mem = bank1;
-                        mem[0] = 5;
-                        """,
-                createInstruction(SET, "mem", "bank1"),
-                createInstruction(WRITE, "5", "mem", "0"),
-                createInstruction(END)
-        );
-    }
-
-    @Test
-    void recognizesIconConstants() {
-        assertCompilesTo("""
-                        print(ITEM_COAL + "X");
-                        """,
-                createInstruction(PRINT, q("\uF833X")),
-                createInstruction(END)
-        );
     }
 }

@@ -11,7 +11,7 @@ import info.teksol.mindcode.processor.MindustryValue;
 
 import static info.teksol.mindcode.logic.Operation.*;
 
-public class OptimizerExpressionEvaluator {
+class OptimizerExpressionEvaluator {
 
     private final InstructionProcessor ixProcessor;
 

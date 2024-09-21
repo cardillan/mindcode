@@ -19,6 +19,10 @@ public abstract class ControlBlockAstNode extends BaseAstNode {
         super(startToken, children);
     }
 
+    public ControlBlockAstNode(Token startToken, List<? extends AstNode> children1, List<? extends AstNode> children2, AstNode... other) {
+        super(startToken, children1, children2, other);
+    }
+
     public ControlBlockAstNode(Token startToken, List<? extends AstNode> children, AstNode... other) {
         super(startToken, children, other);
     }

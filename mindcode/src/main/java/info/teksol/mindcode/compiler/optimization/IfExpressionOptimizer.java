@@ -12,7 +12,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 
-public class IfExpressionOptimizer extends BaseOptimizer {
+class IfExpressionOptimizer extends BaseOptimizer {
 
     public IfExpressionOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.IF_EXPRESSION_OPTIMIZATION, optimizationContext);

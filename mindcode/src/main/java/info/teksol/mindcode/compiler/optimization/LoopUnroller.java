@@ -22,7 +22,7 @@ import static info.teksol.util.CollectionUtils.resultIn;
 /**
  * Unrolls loops
  */
-public class LoopUnroller extends BaseOptimizer {
+class LoopUnroller extends BaseOptimizer {
     public LoopUnroller(OptimizationContext optimizationContext) {
         super(Optimization.LOOP_UNROLLING, optimizationContext);
     }

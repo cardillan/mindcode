@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * Eliminates push/pop instruction for variables that are not modified at all by the function.
  * </li></ul>
  */
-public class StackUsageOptimizer extends BaseOptimizer {
+class StackUsageOptimizer extends BaseOptimizer {
 
     StackUsageOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.STACK_USAGE_OPTIMIZATION, optimizationContext);

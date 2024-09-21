@@ -27,6 +27,14 @@ public abstract class BaseAstNode implements AstNode {
         this.children = List.copyOf(children);
     }
 
+    protected BaseAstNode(Token startToken, List<? extends AstNode> children1, List<? extends AstNode> children2, AstNode... other) {
+        this.startToken = startToken;
+        List<AstNode> tmp = new ArrayList<>(children1);
+        tmp.addAll(children2);
+        tmp.addAll(Arrays.asList(other));
+        this.children = List.copyOf(tmp);
+    }
+
     protected BaseAstNode(Token startToken, List<? extends AstNode> children, AstNode... other) {
         this.startToken = startToken;
         List<AstNode> tmp = new ArrayList<>(children);

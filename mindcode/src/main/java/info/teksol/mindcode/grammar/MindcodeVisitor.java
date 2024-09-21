@@ -403,6 +403,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFor_each_2(MindcodeParser.For_each_2Context ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#iterator_list}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIterator_list(MindcodeParser.Iterator_listContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#loop_body}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

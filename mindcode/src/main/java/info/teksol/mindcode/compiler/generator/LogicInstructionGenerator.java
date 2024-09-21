@@ -772,17 +772,23 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             return NULL;
         }
 
-        final LogicVariable variable = visitVariable(node.getVariable());
+        final List<LogicVariable> iterators = node.getIterators().stream().map(this::visitVariable).toList();
         final LogicLabel contLabel = nextLabel();
         final LogicLabel bodyLabel = nextLabel();
         final LogicLabel exitLabel = nextLabel();
         final LogicVariable iterator = nextTemp();        // Holds instruction address of the next iteration
         final LogicLabel marker = nextMarker();
 
+        if (values.size() % iterators.size() != 0) {
+            throw new MindcodeException("Number of values in the list must be an integer multiple of the number of iterators.");
+        }
+
         loopStack.enterLoop(node.getLabel(), exitLabel, contLabel);
 
         // All but the last value
-        for (int i = 0; i < values.size() - 1; i++) {
+        int limit = values.size() - iterators.size();
+        int index = 0;
+        while (index < limit) {
             // Multiplier is set to 1: all instructions execute exactly once
             setSubcontextType(AstSubcontextType.ITERATOR, 1.0);
             LogicLabel nextValueLabel = nextLabel();
@@ -790,7 +796,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             // Setting the iterator first. It is possible to use continue in the value expression,
             // in which case the next iteration is performed.
             emit(createSetAddress(iterator, nextValueLabel));
-            emit(createSet(variable, visit(values.get(i))));
+            for (LogicVariable variable : iterators) {
+                emit(createSet(variable, visit(values.get(index++))));
+            }
             emit(createJumpUnconditional(bodyLabel));
             emit(createGotoLabel(nextValueLabel, marker));
         }
@@ -799,7 +807,9 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         setSubcontextType(AstSubcontextType.ITERATOR, 1.0);
         LogicLabel lastValueLabel = nextLabel();
         emit(createSetAddress(iterator, lastValueLabel));
-        emit(createSet(variable, visit(values.get(values.size() - 1))));
+        for (LogicVariable variable : iterators) {
+            emit(createSet(variable, visit(values.get(index++))));
+        }
 
         setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
         emit(createLabel(bodyLabel));
@@ -1310,7 +1320,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
                     // Found a variable or argument reference
                     // Emit accumulator
-                    if (accumulator.length() > 0) {
+                    if (!accumulator.isEmpty()) {
                         emit(formatter.createInstruction(this, LogicString.create(accumulator.toString())));
                         accumulator.setLength(0);
                     }
@@ -1353,7 +1363,7 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             }
         }
 
-        if (accumulator.length() > 0) {
+        if (!accumulator.isEmpty()) {
             emit(formatter.createInstruction(this,LogicString.create(accumulator.toString())));
         }
 

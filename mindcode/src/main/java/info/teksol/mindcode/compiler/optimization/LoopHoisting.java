@@ -20,7 +20,7 @@ import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 /**
  * This optimizer moves loop invariant code in front of given loop.
  */
-public class LoopHoisting extends BaseOptimizer {
+class LoopHoisting extends BaseOptimizer {
     public LoopHoisting(OptimizationContext optimizationContext) {
         super(Optimization.LOOP_HOISTING, optimizationContext);
     }

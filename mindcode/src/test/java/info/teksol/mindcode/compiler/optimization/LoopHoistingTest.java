@@ -139,7 +139,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                             foo(10);
                             print(x, y);
                         end;
-                                                
+
                         noinline def foo(n)
                             print(n);
                             bar(n);
@@ -261,11 +261,10 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void handlesListIteratorLoops() {
         assertCompilesTo("""
-                        A = 10
-                        i = 0
-                        for i in (1, A)
-                            print(i, 2 * A)
-                        end
+                        param A = 10;
+                        for i in 1, A do
+                            print(i, 2 * A);
+                        end;
                         """,
                 createInstruction(SET, "A", "10"),
                 createInstruction(OP, "mul", var(1), "2", "A"),
@@ -278,6 +277,36 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(LABEL, var(1001)),
                 createInstruction(PRINT, "i"),
                 createInstruction(PRINT, var(1)),
+                createInstruction(GOTO, var(0), "marker0"),
+                createInstruction(GOTOLABEL, var(1004), "marker0"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void handlesListIteratorLoopsWithMultipleIterators() {
+        assertCompilesTo("""
+                        param A = 10;
+                        for i, j in 1, 2, 2*A, 4*A do
+                            print(2 * i, 2 * j, 2 * A);
+                        end;
+                        """,
+                createInstruction(SET, "A", "10"),
+                createInstruction(OP, "mul", var(5), "2", "A"),
+                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(SET, "i", "1"),
+                createInstruction(SET, "j", "2"),
+                createInstruction(JUMP, var(1001), "always"),
+                createInstruction(GOTOLABEL, var(1003), "marker0"),
+                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(OP, "mul", "i", "2", "A"),
+                createInstruction(OP, "mul", "j", "4", "A"),
+                createInstruction(LABEL, var(1001)),
+                createInstruction(OP, "mul", var(3), "2", "i"),
+                createInstruction(OP, "mul", var(4), "2", "j"),
+                createInstruction(PRINT, var(3)),
+                createInstruction(PRINT, var(4)),
+                createInstruction(PRINT, var(5)),
                 createInstruction(GOTO, var(0), "marker0"),
                 createInstruction(GOTOLABEL, var(1004), "marker0"),
                 createInstruction(END)

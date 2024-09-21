@@ -26,7 +26,7 @@ import java.util.Optional;
  * All instructions setting the variable to itself (e.g. `set x x`) are removed.
  * </li></ul>
  */
-public class ExpressionOptimizer extends BaseOptimizer {
+class ExpressionOptimizer extends BaseOptimizer {
     public ExpressionOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.EXPRESSION_OPTIMIZATION, optimizationContext);
     }

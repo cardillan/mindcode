@@ -592,7 +592,9 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 new Seq(null, 
                         new ForEachExpression(null,
                                 null,
-                                new VarRef(null, "a"),
+                                List.of(
+                                        new VarRef(null, "a")
+                                ),
                                 List.of(
                                         new Ref(null, "mono"),
                                         new Ref(null, "poly"),

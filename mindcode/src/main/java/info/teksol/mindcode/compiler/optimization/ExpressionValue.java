@@ -8,7 +8,7 @@ import info.teksol.mindcode.processor.MindustryResult;
 
 import java.util.Optional;
 
-public class ExpressionValue implements MindustryResult {
+class ExpressionValue implements MindustryResult {
     private final InstructionProcessor instructionProcessor;
 
     private LogicLiteral literal;

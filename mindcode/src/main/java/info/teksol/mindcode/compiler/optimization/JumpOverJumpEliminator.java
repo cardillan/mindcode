@@ -30,7 +30,7 @@ import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicItera
  * end
  * }</pre>
  */
-public class JumpOverJumpEliminator extends BaseOptimizer {
+class JumpOverJumpEliminator extends BaseOptimizer {
 
     public JumpOverJumpEliminator(OptimizationContext optimizationContext) {
         super(Optimization.JUMP_OVER_JUMP_ELIMINATION, optimizationContext);

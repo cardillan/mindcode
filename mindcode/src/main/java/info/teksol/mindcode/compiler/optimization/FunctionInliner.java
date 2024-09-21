@@ -17,7 +17,7 @@ import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
 /**
  * Inlines functions
  */
-public class FunctionInliner extends BaseOptimizer {
+class FunctionInliner extends BaseOptimizer {
     public FunctionInliner(OptimizationContext optimizationContext) {
         super(Optimization.FUNCTION_INLINING, optimizationContext);
     }

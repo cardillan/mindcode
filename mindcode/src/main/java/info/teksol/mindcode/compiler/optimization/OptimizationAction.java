@@ -2,7 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.generator.AstContext;
 
-public interface OptimizationAction {
+interface OptimizationAction {
 
     /**
      * AST context being processed by this optimization. On any given AST context, only one optimization may be

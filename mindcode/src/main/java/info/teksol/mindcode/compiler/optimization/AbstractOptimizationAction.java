@@ -2,7 +2,7 @@ package info.teksol.mindcode.compiler.optimization;
 
 import info.teksol.mindcode.compiler.generator.AstContext;
 
-public abstract class AbstractOptimizationAction implements OptimizationAction {
+abstract class AbstractOptimizationAction implements OptimizationAction {
     protected final AstContext astContext;
     protected final int cost;
     protected final double benefit;

@@ -129,7 +129,7 @@ public class AstIndentedPrinter extends BaseAstVisitor<String> {
     public String visitForEachStatement(ForEachExpression node) {
         open("ForEachExpression{");
         print("label="); visit(node.getLabel()); newLine(",");
-        print("variable="); visit(node.getVariable()); newLine(",");
+        print("iterators="); visitList(node.getIterators()); newLine(",");
         print("values="); visitList(node.getValues()); newLine(",");
         print("body="); visit(node.getBody());
         close("}");

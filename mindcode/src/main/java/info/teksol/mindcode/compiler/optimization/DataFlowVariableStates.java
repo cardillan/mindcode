@@ -4,27 +4,13 @@ import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.generator.CallGraph;
-import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
-import info.teksol.mindcode.compiler.instructions.LogicInstruction;
-import info.teksol.mindcode.compiler.instructions.OpInstruction;
-import info.teksol.mindcode.compiler.instructions.PackColorInstruction;
-import info.teksol.mindcode.compiler.instructions.ReadInstruction;
-import info.teksol.mindcode.compiler.instructions.SetInstruction;
+import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.ArgumentType;
 import info.teksol.mindcode.logic.LogicArgument;
 import info.teksol.mindcode.logic.LogicValue;
 import info.teksol.mindcode.logic.LogicVariable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -32,7 +18,7 @@ import java.util.stream.Collectors;
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.PARAMETERS;
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.RECURSIVE_CALL;
 
-public class DataFlowVariableStates {
+class DataFlowVariableStates {
 
     private final DataFlowOptimizer optimizer;
 

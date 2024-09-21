@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 import static info.teksol.util.CollectionUtils.findFirstIndex;
 import static info.teksol.util.CollectionUtils.findLastIndex;
 
-public class OptimizationContext {
+class OptimizationContext {
     private final OptimizerExpressionEvaluator expressionEvaluator;
     private final InstructionProcessor instructionProcessor;
     private final List<LogicInstruction> program;
@@ -1538,6 +1538,7 @@ public class OptimizationContext {
             return instructions.isEmpty();
         }
 
+        @NotNull
         public Iterator<LogicInstruction> iterator() {
             return instructions.iterator();
         }

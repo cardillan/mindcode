@@ -3,6 +3,8 @@ package info.teksol.mindcode.ast;
 import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 
+import java.util.stream.Collectors;
+
 public class AstPrettyPrinter extends BaseAstVisitor<String> {
     private final InstructionProcessor instructionProcessor;
     private final StringBuilder buffer = new StringBuilder();
@@ -95,7 +97,9 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
         if (node.getLabel() != null) {
             buffer.append(node.getLabel()).append(": ");
         }
-        buffer.append("for ").append(node.getVariable()).append(" in (");
+        buffer.append("for ").append(
+                node.getIterators().stream().map(Object::toString).collect(Collectors.joining(", "))
+        ).append(" in (");
         if (!node.getValues().isEmpty()) {
             visit(node.getValues().get(0));
             for (int i = 1; i < node.getValues().size(); i++) {

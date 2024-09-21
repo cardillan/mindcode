@@ -1,6 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
-public enum OptimizationResult {
+enum OptimizationResult {
     /** The optimization was done as planned. */
     REALIZED,
 

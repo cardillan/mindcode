@@ -92,10 +92,15 @@ do_while_expression : ( label=loop_label COLON )? DO loop_body LOOP WHILE cond=e
 for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression DO? loop_body END       # ranged_for
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
                             SEMICOLON increment=incr_list DO? loop_body END                         # iterated_for
-               | ( label=loop_label COLON )? FOR lvalue IN      
+               | ( label=loop_label COLON )? FOR iterators=iterator_list IN
                             LEFT_RBRACKET values=loop_value_list RIGHT_RBRACKET loop_body END       # for_each_1
-               | ( label=loop_label COLON )? FOR lvalue IN values=loop_value_list DO loop_body END  # for_each_2
+               | ( label=loop_label COLON )? FOR iterators=iterator_list IN
+                            values=loop_value_list DO loop_body END                                 # for_each_2
                ;
+
+iterator_list
+    : lvalue ( COMMA lvalue)*
+    ;
 
 loop_body : loop_body expression_list
           | expression_list

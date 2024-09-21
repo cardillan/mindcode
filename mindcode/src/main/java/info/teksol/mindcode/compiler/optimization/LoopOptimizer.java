@@ -32,7 +32,7 @@ import static info.teksol.mindcode.compiler.generator.AstSubcontextType.*;
  * If the opening jump has a form of op followed by negation jump, the condition is still replicated at the end
  * of the body as a jump having the op condition. In this case, execution of two instructions per loop is avoided.
  */
-public class LoopOptimizer extends BaseOptimizer {
+class LoopOptimizer extends BaseOptimizer {
     public LoopOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.LOOP_OPTIMIZATION, optimizationContext);
     }

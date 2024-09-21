@@ -13,10 +13,7 @@ import java.util.List;
 
 import static info.teksol.mindcode.compiler.generator.AstSubcontextType.BODY;
 
-/**
- * Inlines functions
- */
-public class ReturnOptimizer extends BaseOptimizer {
+class ReturnOptimizer extends BaseOptimizer {
     public ReturnOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.RETURN_OPTIMIZATION, optimizationContext);
     }

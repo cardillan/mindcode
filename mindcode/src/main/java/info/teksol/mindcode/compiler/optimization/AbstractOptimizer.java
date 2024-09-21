@@ -9,7 +9,7 @@ import org.intellij.lang.annotations.PrintFormat;
 import java.util.List;
 import java.util.function.Consumer;
 
-public abstract class AbstractOptimizer implements Optimizer {
+abstract class AbstractOptimizer implements Optimizer {
     protected final Optimization optimization;
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
