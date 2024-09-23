@@ -67,7 +67,8 @@ public class SchematicsController {
 
     @PostMapping("/compile")
     public String postCompile(@RequestParam(required = false) String id,
-                              @RequestParam String source) {
+                              @RequestParam String source,
+                              @RequestParam(required = false) String optimizationLevel) {
         Source schematicDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -79,11 +80,13 @@ public class SchematicsController {
             schematicDto = sourceRepository.save(new Source(source, Instant.now()));
         }
 
-        return "redirect:/schematics?s=" + schematicDto.getId().toString();
+        return "redirect:/schematics?optimizationLevel=" + optimizationLevel + "&s=" + schematicDto.getId().toString();
     }
 
     @GetMapping
-    public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id) {
+    public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id,
+                                    @RequestParam(name = "optimizationLevel", defaultValue = "AGGRESSIVE") String optimizationLevel) {
+        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.AGGRESSIVE);
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {
@@ -108,7 +111,7 @@ public class SchematicsController {
 
         final long start = System.nanoTime();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(sourceCode,
-                CompilerProfile.standardOptimizations(true), null);
+                new CompilerProfile(true, level), null);
         final long end = System.nanoTime();
         logger.info("performance built_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
@@ -126,8 +129,8 @@ public class SchematicsController {
                         result.errors(),
                         result.warnings(),
                         result.infos(),
-                        false,
-                        OptimizationLevel.BASIC.name())
+                        optimizationLevel,
+                        null)
         );
     }
 

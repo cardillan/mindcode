@@ -18,11 +18,13 @@ public class Processor {
     private final Set<ProcessorFlag> flags;
     private final Map<String, Variable> variables = new TreeMap<>();
     private final List<MindustryObject> blocks = new ArrayList<>();
-    private final List<String> textBuffer = new ArrayList<>();
     private final Variable counter = IntVariable.newIntValue(false,"@counter", 0);
     private int steps = 0;
     private int instructions = 0;
     private final BitSet coverage = new BitSet();
+
+    private static final int TEXT_BUFFER_LIMIT = 10000;
+    private OutputBuffer outputBuffer;
 
     public Processor() {
         flags = EnumSet.allOf(ProcessorFlag.class);
@@ -42,7 +44,11 @@ public class Processor {
     }
 
     public List<String> getTextBuffer() {
-        return textBuffer;
+        return outputBuffer.getOutput();
+    }
+
+    public String getTextOutput() {
+        return outputBuffer.getJoinedOutput();
     }
 
     public int getSteps() {
@@ -69,33 +75,35 @@ public class Processor {
         }
     }
 
-    public void run(List<LogicInstruction> program, int stepLimit) {
+    public void run(List<LogicInstruction> program, int stepLimit) throws ExecutionException {
         if (!getFlag(STOP_PROCESSOR_OPTIONAL) && program.stream().noneMatch(StopInstruction.class::isInstance)) {
             throw new ExecutionException(STOP_PROCESSOR_OPTIONAL, "A stop instruction not present in given program.");            
         }
 
+        if (program.isEmpty()) {
+            throw new ExecutionException(ERR_INVALID_COUNTER, "No program to run.");
+        }
+
         steps = 0;
-        textBuffer.clear();
+        outputBuffer = new OutputBuffer(TEXT_BUFFER_LIMIT);
+
         counter.setIntValue(0);
         variables.put("@links", IntVariable.newIntValue(true, "@links", blocks.size()));
         instructions = program.size();
 
+        int index = -1;
+        LogicInstruction instruction = null;
         while (steps < stepLimit) {
             try {
-                int index = counter.getIntValue();
+                index = counter.getIntValue();
                 if (index == program.size()) {
                     index = 0;
                     if (getFlag(ProcessorFlag.STOP_ON_PROGRAM_END)) {
                         break;
                     }
                 }
-                if (index < 0 || index > program.size()) {
-                    counter.setIntValue(0);
-                    throw new ExecutionException(ERR_INVALID_COUNTER, "Value of @counter (" + index + ") outside valid range (0 to " + program.size() + ")");
-                }
-
                 coverage.set(index);
-                LogicInstruction instruction = program.get(index);
+                instruction = program.get(index);
 
                 if (false) {
                     System.out.printf("Step: %d, counter: %d, instruction: %s%n", steps, index, instruction);
@@ -114,32 +122,44 @@ public class Processor {
                 if (!execute(instruction)) {
                     break;
                 }
+
+                // Report possible wrong @counter assignments at the errant instruction
+                int newIndex = counter.getIntValue();
+                if (newIndex < 0 || newIndex > program.size()) {
+                    counter.setIntValue(0);
+                    throw new ExecutionException(ERR_INVALID_COUNTER,
+                            "Value of '@counter' (%d) outside valid range (0 to %d).".formatted(newIndex, program.size()));
+                }
             } catch (ExecutionException ex) {
                 if (getFlag(ex.getFlag())) {
+                    ex.setInstructionIndex(index);
+                    ex.setInstruction(instruction);
                     throw ex;
                 }
             }
         }
 
         if (steps >= stepLimit) {
-            throw new ExecutionException(ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of " + stepLimit + " exceeded");
+            throw new ExecutionException(ERR_EXECUTION_LIMIT_EXCEEDED, "Execution step limit of %,d exceeded.".formatted(stepLimit));
         }
     }
 
     private boolean execute(LogicInstruction instruction) {
         return switch(instruction.getOpcode()) {
-            case END       -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
-            case JUMP      -> executeJump((JumpInstruction) instruction);
-            case OP        -> executeOp((OpInstruction) instruction);
-            case PACKCOLOR -> executePackColor((PackColorInstruction) instruction);
-            case PRINT     -> executePrint((PrintInstruction) instruction);
-            case READ      -> executeRead((ReadInstruction) instruction);
-            case SET       -> executeSet((SetInstruction) instruction);
-            case STOP      -> false;
-            case WRITE     -> executeWrite((WriteInstruction) instruction);
-            case DRAW      -> true;
-            case DRAWFLUSH -> true;
-            default        -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction " + instruction);
+            case END        -> { counter.setIntValue(0); yield !getFlag(ProcessorFlag.STOP_ON_END_INSTRUCTION); }
+            case JUMP       -> executeJump((JumpInstruction) instruction);
+            case OP         -> executeOp((OpInstruction) instruction);
+            case PACKCOLOR  -> executePackColor((PackColorInstruction) instruction);
+            case PRINT      -> executePrint((PrintInstruction) instruction);
+            case READ       -> executeRead((ReadInstruction) instruction);
+            case SET        -> executeSet((SetInstruction) instruction);
+            case STOP       -> false;
+            case WAIT       -> throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction.");
+            case WRITE      -> executeWrite((WriteInstruction) instruction);
+            default         -> {
+                if (instruction.getOutputs() == 0) yield true;
+                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Unsupported instruction.");
+            }
         };
     }
 
@@ -156,7 +176,7 @@ public class Processor {
         Variable b = getExistingVariable(ix.hasSecondOperand() ? ix.getY() : LogicNumber.ZERO);
         OperationEval op = ExpressionEvaluator.getOperation(ix.getOperation());
         if (op == null) {
-            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation " + ix.getOperation());
+            throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid op operation '" + ix.getOperation() + "'.");
         }
         op.execute(target, a, b);
         return true;
@@ -171,7 +191,7 @@ public class Processor {
             Variable b = getExistingVariable(ix.getY());
             ConditionEval conditionEval = CONDITIONS.get(ix.getCondition());
             if (conditionEval == null) {
-                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition " + ix.getCondition());
+                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '" + ix.getCondition() + "'.");
             }
             if (conditionEval.evaluate(a, b)) {
                 counter.setIntValue(address);
@@ -193,7 +213,7 @@ public class Processor {
 
     private boolean executePrint(PrintInstruction ix) {
         Variable var = getExistingVariable(ix.getValue());
-        textBuffer.add(var.toString());
+        outputBuffer.append(var.toString());
         return true;
     }
 
@@ -227,7 +247,7 @@ public class Processor {
         if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
             return DoubleVariable.newNullValue(false, value);
         } else {
-            throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid identifier " + value);
+            throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid identifier '" + value + "'.");
         }
     }
 
@@ -247,9 +267,13 @@ public class Processor {
                     DoubleVariable.newDoubleValue(true, value, Double.parseDouble(value));
         } catch (NumberFormatException ex) {
             if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
-                throw new ExecutionException(ERR_UNINITIALIZED_VAR, "Uninitialized variable " + value);
+                if (getFlag(ERR_UNINITIALIZED_VAR)) {
+                    throw new ExecutionException(ERR_UNINITIALIZED_VAR, "Uninitialized variable '" + value + "'.");
+                } else {
+                    return createVariable(value);
+                }
             } else {
-                throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid number or identifier " + value);
+                throw new ExecutionException(ERR_INVALID_IDENTIFIER, "Invalid number or identifier '" + value + "'.");
             }
         }
     }

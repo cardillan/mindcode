@@ -11,11 +11,7 @@ import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
 import info.teksol.schemacode.mindustry.SchematicsIO;
 import info.teksol.schemacode.schema.Schematic;
 import info.teksol.schemacode.schema.SchematicsBuilder;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -60,23 +56,23 @@ public class SchemacodeCompiler {
 
     public static CompilerOutput<byte[]> compile(String definition, CompilerProfile compilerProfile, Path basePath) {
         if (definition.isBlank()) {
-            return new CompilerOutput<>(new byte[0], List.of());
+            return new CompilerOutput<>(new byte[0], List.of(), null);
         }
 
         List<CompilerMessage> messages = new ArrayList<>();
         DefinitionsContext parseTree = parseSchematics(definition, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
+        if (hasErrors(messages)) return new CompilerOutput<>(null, messages, null);
 
         AstDefinitions astDefinitions = createDefinitions(parseTree, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
+        if (hasErrors(messages)) return new CompilerOutput<>(null, messages, null);
 
         Schematic schematic = buildSchematic(astDefinitions, compilerProfile, messages::add, basePath);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
+        if (hasErrors(messages)) return new CompilerOutput<>(null, messages, null);
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             SchematicsIO.write(schematic, output);
-            return new CompilerOutput<>(output.toByteArray(), messages);
+            return new CompilerOutput<>(output.toByteArray(), messages, null);
         } catch (IOException e) {
             throw new SchematicsInternalError(e, "Error converting schematics to binary representation.");
         }

@@ -15,6 +15,10 @@ import info.teksol.mindcode.compiler.optimization.NullDebugPrinter;
 import info.teksol.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.grammar.MindcodeLexer;
 import info.teksol.mindcode.grammar.MindcodeParser;
+import info.teksol.mindcode.processor.ExecutionException;
+import info.teksol.mindcode.processor.MindustryMemory;
+import info.teksol.mindcode.processor.Processor;
+import info.teksol.mindcode.processor.ProcessorFlag;
 import org.antlr.v4.runtime.*;
 
 import java.util.ArrayList;
@@ -36,12 +40,13 @@ public class MindcodeCompiler implements Compiler<String> {
     @Override
     public CompilerOutput<String> compile(String sourceCode) {
         String instructions = "";
+        String textBuffer = null;
 
         try {
             long parseStart = System.nanoTime();
             final Seq program = parse(sourceCode);
             if (messages.stream().anyMatch(CompilerMessage::isError)) {
-                return new CompilerOutput<>("", messages);
+                return new CompilerOutput<>("", messages, null);
             }
             printParseTree(program);
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
@@ -64,7 +69,7 @@ public class MindcodeCompiler implements Compiler<String> {
             if (profile.getFinalCodeOutput() != null) {
                 debug("\nFinal code before resolving virtual instructions:\n");
                 String output = switch (profile.getFinalCodeOutput()) {
-                    case PLAIN      -> LogicInstructionPrinter.toString(instructionProcessor, result);
+                    case PLAIN      -> LogicInstructionPrinter.toStringWithLineNumbers(instructionProcessor, result);
                     case FLAT_AST   -> LogicInstructionPrinter.toStringWithContextsShort(instructionProcessor, result);
                     case DEEP_AST   -> LogicInstructionPrinter.toStringWithContextsFull(instructionProcessor, result);
                     case SOURCE     -> LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, result, sourceCode);
@@ -72,9 +77,16 @@ public class MindcodeCompiler implements Compiler<String> {
                 debug(output);
             }
 
-            info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
-
             result = LogicInstructionLabelResolver.resolve(instructionProcessor, profile,result);
+
+            if (profile.isRun()) {
+                long runStart = System.nanoTime();
+                textBuffer = run(result);
+                long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
+                info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.".formatted(parseTime, compileTime, optimizeTime, runTime));
+            } else {
+                info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.".formatted(parseTime, compileTime, optimizeTime));
+            }
 
             instructions = LogicInstructionPrinter.toString(instructionProcessor, result);
         } catch (Exception e) {
@@ -88,7 +100,7 @@ public class MindcodeCompiler implements Compiler<String> {
             }
         }
 
-        return new CompilerOutput<>(instructions, messages);
+        return new CompilerOutput<>(instructions, messages, textBuffer);
     }
 
     /**
@@ -137,6 +149,24 @@ public class MindcodeCompiler implements Compiler<String> {
         List<LogicInstruction> result = optimizer.optimize(generatorOutput);
         debugPrinter.print(this::debug);
         return result;
+    }
+
+    private String run(List<LogicInstruction> program) {
+        // All flags are already set as we want them to be
+        Processor processor = new Processor();
+        processor.setFlag(ProcessorFlag.ERR_UNINITIALIZED_VAR, false);
+        for (int i = 1; i < 10; i++) {
+            processor.addBlock(MindustryMemory.createMemoryCell("cell" + i));
+            processor.addBlock(MindustryMemory.createMemoryBank("bank" + i));
+        }
+
+        try {
+            processor.run(program, profile.getStepLimit());
+            return processor.getTextOutput();
+        } catch (ExecutionException e) {
+            String output = processor.getTextOutput();
+            return output.isEmpty() ? e.getMessage() : output + "\n" + e.getMessage();
+        }
     }
 
     private void info(String message) {

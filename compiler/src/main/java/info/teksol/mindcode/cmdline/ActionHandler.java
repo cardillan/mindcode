@@ -1,6 +1,9 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.compiler.*;
+import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.FinalCodeOutput;
+import info.teksol.mindcode.compiler.GenerationGoal;
+import info.teksol.mindcode.compiler.Remarks;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -23,12 +26,11 @@ import java.util.stream.Collectors;
 
 abstract class ActionHandler {
 
-    abstract Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType);
+    abstract Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults);
 
     abstract void handle(Namespace arguments);
 
-    void configureMindcodeCompiler(Subparser subparser) {
-        CompilerProfile defaults = CompilerProfile.fullOptimizations(false);
+    void configureMindcodeCompiler(Subparser subparser, CompilerProfile defaults) {
 
         ArgumentGroup optimizations = subparser.addArgumentGroup("optimization levels")
                 .description("Options to specify global and individual optimization levels. " +
@@ -78,12 +80,14 @@ abstract class ActionHandler {
                 .type(Arguments.caseInsensitiveEnumType(Remarks.class))
                 .setDefault(defaults.getRemarks());
 
+        /*
         subparser.addArgument("-m", "--memory-model")
                 .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
                         "aliased (a memory block may be accessed through different variables), or restricted " +
                         "(a memory block will never be accessed through different variables)")
                 .type(Arguments.caseInsensitiveEnumType(MemoryModel.class))
                 .setDefault(defaults.getMemoryModel());
+        */
 
         ArgumentGroup debug = subparser.addArgumentGroup("debug output options");
 
@@ -100,7 +104,8 @@ abstract class ActionHandler {
                 .setDefault(defaults.getDebugLevel());
 
         debug.addArgument("-u", "--print-unresolved")
-                .help("activates output of the unresolved code (before virtual instructions resolution) of given type")
+                .help("activates output of the unresolved code (before virtual instructions resolution) of given type" +
+                        " (instruction numbers are included in the output)")
                 .type(Arguments.caseInsensitiveEnumType(FinalCodeOutput.class))
                 .nargs("?")
                 .setConst(FinalCodeOutput.PLAIN)
@@ -134,9 +139,14 @@ abstract class ActionHandler {
         profile.setOptimizationPasses(arguments.get("passes"));
         profile.setGoal(arguments.get("goal"));
         profile.setRemarks(arguments.get("remarks"));
-        profile.setMemoryModel(arguments.get("memory_model"));
+        //profile.setMemoryModel(arguments.get("memory_model"));
         profile.setFinalCodeOutput(arguments.get("print_unresolved"));
         profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
+
+        if (arguments.get("run") != null) {
+            profile.setRun(arguments.getBoolean("run"));
+            profile.setStepLimit(arguments.getInt("run_steps"));
+        }
 
         return profile;
     }

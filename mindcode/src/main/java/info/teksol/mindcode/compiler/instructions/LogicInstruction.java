@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.instructions;
 
+import info.teksol.mindcode.compiler.LogicInstructionPrinter;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import info.teksol.mindcode.logic.*;
@@ -66,5 +67,9 @@ public interface LogicInstruction {
 
     default LogicLabel getMarker() {
         return null;
+    }
+
+    default String toMlog() {
+        return LogicInstructionPrinter.toStringSimple(this);
     }
 }

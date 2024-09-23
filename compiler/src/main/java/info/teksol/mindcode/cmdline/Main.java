@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.compiler.CompilerProfile;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.DefaultSettings;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -12,6 +13,8 @@ import java.util.Map;
 public class Main {
 
     public static final Map<Action, Subparser> ACTION_PARSERS = new EnumMap<>(Action.class);
+
+    private static final CompilerProfile defaults = CompilerProfile.fullOptimizations(false);
 
     public static void main(String[] args) {
         ArgumentParser parser = createArgumentParser(Arguments.fileType().verifyCanRead(), 79);
@@ -34,7 +37,7 @@ public class Main {
                 .dest("action");
 
         for (Action action : Action.values()) {
-            Main.ACTION_PARSERS.put(action, action.appendSubparser(subparsers, inputFileType));
+            Main.ACTION_PARSERS.put(action, action.appendSubparser(subparsers, inputFileType, defaults));
         }
 
         return parser;
@@ -66,8 +69,8 @@ public class Main {
             this.handler = handler;
         }
 
-        public Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
-            return handler.appendSubparser(subparsers, inputFileType);
+        public Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
+            return handler.appendSubparser(subparsers, inputFileType, defaults);
         }
 
         public String getShortcut() {

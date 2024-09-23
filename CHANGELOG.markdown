@@ -11,12 +11,19 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-* Added support for output loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).   
-* Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.    
-* Added secondary set of string constants representing icons with dashes in identifiers replaced by underscores (e.g. `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will no longer be supported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)     
+* Added secondary set of icons representing constants with dashes in identifiers replaced by underscores (e.g. `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will be desupported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)
 * Added support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be used instead. Support for program parametrization through global variables will be removed in a future release.     
 * Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by the [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) optimization. The keyword can only be used when declaring a function.
 * Added a new schematics sample with quite a sophisticated code [on the Schematics page](http://mindcode.herokuapp.com/?s=overdrive-dome-supply). It consists of an overdrive dome supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of supported types, switches to the preferred unit type when it becomes available, and rebinds units (possibly switching the type again) if units in use are destroyed or taken over by the player or a rogue processor.  
+
+#### Experimental features
+
+Experimental features may contain bugs or produce suboptimal code, and are subject to change (especially to a change in syntax).
+
+* Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
+* Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
+* Added a new GUI option to choose optimization level in the web app when compiling Mindcode or building Schemacode.
+* Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](/doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app, or written to the log when using the command line tool. 
 
 ### Changed
 
@@ -24,7 +31,8 @@ All notable changes to this project will be documented in this file.
 * Changes to the web app
     * A button was added do the web app to copy the output code to the clipboard with a single click.
     * It is now possible to select optimization level directly in the web app user interface. The default optimization level is still `basic`.
-* Expanded the syntax to allow an optional `do` keyword in all `for` and `while` loops, and optional `then` keyword in all `if` and `elsif` statements.
+* Changed the syntax to allow an optional `do` keyword in all `for` and `while` loops, and optional `then` keyword in all `if` and `elsif` statements.
+* Changed the command line tool to output instruction numbers when printing out the unresolved code.
 
 ### Miscellaneous
 

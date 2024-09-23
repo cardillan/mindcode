@@ -12,12 +12,12 @@ public class HomePageData {
     private final List<String> errors;
     private final List<String> warnings;
     private final List<String> messages;
-    private final boolean enableOptimization;
     private final String optimizationLevel;
+    private final String runOutput;
 
     HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc,
-            List<String> errors, List<String> warnings, List<String> messages, boolean enableOptimization,
-            String optimizationLevel) {
+                 List<String> errors, List<String> warnings, List<String> messages,
+                 String optimizationLevel, String runOutput) {
         this.id = id;
         this.sample = sample;
         this.source = source;
@@ -27,8 +27,8 @@ public class HomePageData {
         this.errors = errors;
         this.warnings = warnings;
         this.messages = messages;
-        this.enableOptimization = enableOptimization;
         this.optimizationLevel = optimizationLevel;
+        this.runOutput = runOutput;
     }
 
     public String getId() {
@@ -53,10 +53,6 @@ public class HomePageData {
 
     public int getCompiledLoc() {
         return compiledLoc;
-    }
-
-    public boolean getEnableOptimization() {
-        return enableOptimization;
     }
 
     public List<String> getErrors() {
@@ -85,5 +81,9 @@ public class HomePageData {
 
     public String getOptimizationLevel() {
         return optimizationLevel;
+    }
+
+    public String getRunOutput() {
+        return runOutput == null ? "" : runOutput;
     }
 }

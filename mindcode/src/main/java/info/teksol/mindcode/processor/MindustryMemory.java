@@ -29,7 +29,7 @@ public class MindustryMemory extends MindustryObject {
 
     private int checkIndex(int index) {
         if (index < 0 || index >= memory.length) {
-            throw new ExecutionException(ERR_MEMORY_ACCESS, "Memory access out of bounds: index " + index + ", memory size " + memory.length);
+            throw new ExecutionException(ERR_MEMORY_ACCESS, "Memory access out of bounds: index " + index + ", memory size " + memory.length + ".");
         }
         return index;
     }

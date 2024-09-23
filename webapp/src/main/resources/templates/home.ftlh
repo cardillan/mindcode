@@ -19,6 +19,7 @@
             <@com.sample name="many-thorium"            >Prevent MULTIPLE Thorium reactors from blowing up when any runs out of cryo</@com.sample>
             <@com.sample name="mine-coord"              >Mine a specific coordinate and drop into a container</@com.sample>
             <@com.sample name="upgrade-conveyors"       >Upgrade copper conveyors to titanium, over a specific area</@com.sample>
+            <@com.sample name="sum-of-primes"           >Compute sum of prime numbers up to 5000</@com.sample>
         </ul>
     </nav>
 </#if>
@@ -38,11 +39,19 @@
                         <option value="AGGRESSIVE"   <#if model.optimizationLevel == "AGGRESSIVE">selected</#if>>Advanced optimization</option>
                     </select>
                     <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4 rounded"/>
+                    <input type="submit" value="Compile and Run" class="px-4 py-2 bg-gray-600 text-white my-4 rounded" formaction="/compileandrun"/>
                     <@com.link href="/?s=clean">Start with a new script</@com.link>
                 </div>
                 <@com.footerLinks mindcode="Y" />
             </div>
-            <@com.compilerMessages messageTitle="Compiler messages:" />
+            <div>
+                <#if model.runOutput != "">
+                    <label class="block font-bold" for="output">Program output:</label>
+                    <textarea rows="4" id="output" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.runOutput}</textarea>
+                </#if>
+
+                <@com.compilerMessages messageTitle="Compiler messages:" />
+            </div>
         </div>
     </form>
 </div>

@@ -19,7 +19,7 @@ import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 public class CompileMindcodeAction extends ActionHandler {
 
     @Override
-    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
+    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Subparser subparser = subparsers.addParser(Action.COMPILE_MINDCODE.getShortcut())
                 .aliases("compile-mindcode")
                 .description("Compile a mindcode source file into text mlog file.")
@@ -49,7 +49,25 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("?")
                 .setDefault(new File("-"));
 
-        configureMindcodeCompiler(subparser);
+        ArgumentGroup runOptions = subparser.addArgumentGroup("run options")
+                .description("""
+                        Options to specify if and how to run the compiled code on an emulated processor. The emulated \
+                        processor is much faster than Mindustry processors, but can't run instructions which obtain information \
+                        from the Mindustry World. Sole exceptions are memory cells (cell1 to cell9) and memory banks \
+                        (bank1 to bank9), which can be read and written.
+                        """);
+
+        runOptions.addArgument("--run")
+                .help("run the compiled code on an emulated processor.")
+                .action(Arguments.storeTrue());
+
+        runOptions.addArgument("--run-steps")
+                .help("the maximum number of instruction executions to emulate, the execution stops when this limit is reached.")
+                .choices(Arguments.range(1, 1_000_000_000))
+                .type(Integer.class)
+                .setDefault(defaults.getStepLimit());
+
+        configureMindcodeCompiler(subparser, defaults);
 
         return subparser;
     }
@@ -73,6 +91,18 @@ public class CompileMindcodeAction extends ActionHandler {
                 writeToClipboard(result.output());
                 allTexts.add("");
                 allTexts.add("Compiled code was copied to the clipboard.");
+            }
+
+            if (compilerProfile.isRun()) {
+                allTexts.add("");
+                allTexts.add("Program output:");
+                if (result.textBuffer() == null) {
+                    allTexts.add("Couldn't obtain program output.");
+                } else if (result.textBuffer().isEmpty()) {
+                    allTexts.add("The program didn't generate any output.");
+                } else {
+                    allTexts.add(result.textBuffer());
+                }
             }
 
             // If mlog gets written to stdout, write log to stderr

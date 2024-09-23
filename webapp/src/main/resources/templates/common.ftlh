@@ -61,7 +61,7 @@
 
 <#macro codeareas sourceTitle targetTitle sourceLines targetLines>
     <label class="block font-bold" for="source">${sourceTitle}</label>
-    <label class="block font-bold">${targetTitle}</label>
+    <label class="block font-bold" for="target">${targetTitle}</label>
     <div>
         <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.source}</textarea>
         <#if sourceLines == "Y"><p class="text-center">${model.sourceLoc} lines of code</p></#if>
@@ -76,7 +76,7 @@
 </#macro>
 
 <#macro link href title="">
-<a class="underline text-blue-500" title="${title}" href="${href}"><#nested></a>
+<a class="underline text-blue-500" title="${title}" href="${href}" style="appearance: button"><#nested></a>
 </#macro>
 
 <#macro submit name="" value="" class="" title="">

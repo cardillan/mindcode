@@ -25,10 +25,10 @@ public class MindustryObject {
     }
 
     public double read(int index) {
-        throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION, "Unsupported operation read on " + name + " (class " + getClass().getSimpleName() + ")");
+        throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION, "Unsupported operation 'read' on '" + name + "' (class " + getClass().getSimpleName() + ").");
     }
 
     public void write(int index, double value) {
-        throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION, "Unsupported operation write on " + name + " (class " + getClass().getSimpleName() + ")");
+        throw new ExecutionException(ERR_UNSUPPORTED_BLOCK_OPERATION, "Unsupported operation 'write' on '" + name + "' (class " + getClass().getSimpleName() + ").");
     }
 }

@@ -1,11 +1,6 @@
 package info.teksol.mindcode.processor;
 
-import info.teksol.mindcode.ast.AstNode;
-import info.teksol.mindcode.ast.BooleanLiteral;
-import info.teksol.mindcode.ast.NullLiteral;
-import info.teksol.mindcode.ast.NumericLiteral;
-import info.teksol.mindcode.ast.NumericValue;
-import info.teksol.mindcode.ast.StringLiteral;
+import info.teksol.mindcode.ast.*;
 
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_ASSIGNMENT_TO_FIXED_VAR;
 import static info.teksol.mindcode.processor.ProcessorFlag.ERR_NOT_AN_OBJECT;
@@ -32,7 +27,7 @@ public abstract class AbstractVariable implements Variable {
 
     protected void setType(MindustryValueType type) {
         if (fixed) {
-            throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot assign to fixed variable " + getName());
+            throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot modify a value of '" + getName() + "'.");
         }
         this.type = type;
         if (type != MindustryValueType.OBJECT) {
@@ -53,7 +48,7 @@ public abstract class AbstractVariable implements Variable {
     @Override
     public MindustryObject getExistingObject() {
         if (!isObject() || object == null) {
-            throw new ExecutionException(ERR_NOT_AN_OBJECT, "Variable " + getName() + " is not an object");
+            throw new ExecutionException(ERR_NOT_AN_OBJECT, "Variable '" + getName() + "' is not an object.");
         }
         return object;
     }
@@ -61,7 +56,7 @@ public abstract class AbstractVariable implements Variable {
     @Override
     public void setObject(MindustryObject object) {
         if (fixed) {
-            throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot assign to fixed variable " + getName());
+            throw new ExecutionException(ERR_ASSIGNMENT_TO_FIXED_VAR, "Cannot modify a value of '" + getName() + "'.");
         }
         setLongValue(0);
         this.object = object;

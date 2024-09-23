@@ -3,10 +3,10 @@ package info.teksol.mindcode.compiler;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record CompilerOutput<T>(T output, List<CompilerMessage> messages) {
+public record CompilerOutput<T>(T output, List<CompilerMessage> messages, String textBuffer) {
 
     public <R> CompilerOutput<R> withOutput(R output) {
-        return new CompilerOutput<>(output, messages);
+        return new CompilerOutput<>(output, messages, textBuffer);
     }
 
     public List<String> texts() {

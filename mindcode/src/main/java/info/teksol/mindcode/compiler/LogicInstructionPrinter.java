@@ -4,12 +4,14 @@ import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstSubcontextType;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class LogicInstructionPrinter {
@@ -24,16 +26,57 @@ public class LogicInstructionPrinter {
         return buffer.toString();
     }
 
+    private static class LineNumberGenerator {
+        private final StringBuilder buffer;
+        private int lineNumber = 0;
+        private boolean lastRemark = false;
+
+        LineNumberGenerator(StringBuilder buffer) {
+            this.buffer = buffer;
+        }
+
+        void printLineNumber(LogicInstruction instruction) {
+            if (instruction.getRealSize() == 0) {
+                buffer.append("        ");
+                lastRemark = false;
+            } else {
+                buffer.append("%5d:  ".formatted(lineNumber));
+                if (instruction instanceof RemarkInstruction && instruction.getRealSize() == 2) {
+                    lineNumber += lastRemark ? 1 : 2;
+                    lastRemark = true;
+                } else {
+                    lineNumber += instruction.getRealSize();
+                    lastRemark = false;
+                }
+            }
+        }
+    }
+
+    public static String toStringWithLineNumbers(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
+        final StringBuilder buffer = new StringBuilder();
+        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
+        instructions.forEach(instruction -> {
+            lineNumberGenerator.printLineNumber(instruction);
+            buffer.append(instruction.getOpcode().getOpcode());
+            addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+            buffer.append("\n");
+        });
+
+        return buffer.toString();
+    }
+
     public static String toStringWithContextsFull(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         DecimalFormat format = new DecimalFormat("0.0E00");
         format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
         format.setMaximumFractionDigits(2);
 
         final StringBuilder buffer = new StringBuilder();
-        instructions.forEach((instruction) -> {
+        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
+        instructions.forEach(instruction -> {
+            lineNumberGenerator.printLineNumber(instruction);
             LinkedList<AstContext> unroll = new LinkedList<>();
             for (AstContext ctx = instruction.getAstContext(); ctx != null; ctx = ctx.parent()) {
-                if (ctx.subcontextType() == (ctx.node() == null ?  AstSubcontextType.BASIC : ctx.node().getSubcontextType())) {
+                if (ctx.subcontextType() == (ctx.node() == null ? AstSubcontextType.BASIC : ctx.node().getSubcontextType())) {
                     unroll.addFirst(ctx);
                 }
             }
@@ -50,12 +93,15 @@ public class LogicInstructionPrinter {
     }
 
     public static String toStringWithContextsShort(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
+        AtomicInteger lineNumber = new AtomicInteger(0);;
         DecimalFormat format = new DecimalFormat("0.0E00");
         format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
         format.setMaximumFractionDigits(2);
 
         final StringBuilder buffer = new StringBuilder();
-        instructions.forEach((instruction) -> {
+        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
+        instructions.forEach(instruction -> {
+            lineNumberGenerator.printLineNumber(instruction);
             AstContext ctx = instruction.getAstContext();
             buffer.append("%3d:%s  %s %8s ".formatted(ctx.level(), ctx.contextType().text,
                     ctx.subcontextType().text, format.format(ctx.totalWeight())));
@@ -68,13 +114,16 @@ public class LogicInstructionPrinter {
     }
 
     public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions, String sourceCode) {
+        AtomicInteger lineNumber = new AtomicInteger(0);;
         final List<String> lines = sourceCode.lines().toList();
         int prevLine = -1;
 
         final StringBuilder buffer = new StringBuilder();
         final StringBuilder lineBuffer = new StringBuilder();
+        LineNumberGenerator lineNumberGenerator = new LineNumberGenerator(buffer);
 
         for (LogicInstruction instruction : instructions) {
+            lineNumberGenerator.printLineNumber(instruction);
             lineBuffer.setLength(0);
             lineBuffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), lineBuffer, instruction);
@@ -102,6 +151,13 @@ public class LogicInstructionPrinter {
             buffer.append(lineBuffer).append("\n");
         }
 
+        return buffer.toString();
+    }
+
+    public static String toStringSimple(LogicInstruction instruction) {
+        final StringBuilder buffer = new StringBuilder();
+        buffer.append(instruction.getOpcode().getOpcode());
+        addArgs(instruction.getArgs().size(), buffer, instruction);
         return buffer.toString();
     }
 

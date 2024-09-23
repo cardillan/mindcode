@@ -37,17 +37,19 @@ public class HomeController {
                 "heal-damaged-building",
                 "many-thorium",
                 "mine-coord",
-                "upgrade-conveyors"
+                "upgrade-conveyors",
+                "sum-of-primes"
         );
 
         final List<String> sources = Stream.of(
                 "1-control-units-using-variables.mnd",
-                "2-thorium-reactor-stopper.mnd",
-                "8-heal-damaged-building.mnd",
-                "3-multi-thorium-reactor.mnd",
-                "5-mining-drone.mnd",
-                "6-upgrade-copper-conveyors-to-titanium.mnd")
-                .map((filename) -> {
+                        "2-thorium-reactor-stopper.mnd",
+                        "8-heal-damaged-building.mnd",
+                        "3-multi-thorium-reactor.mnd",
+                        "5-mining-drone.mnd",
+                        "6-upgrade-copper-conveyors-to-titanium.mnd",
+                        "compute-sum-of-primes.mnd"
+                ).map((filename) -> {
                     try (final BufferedReader reader = new BufferedReader(new InputStreamReader(HomeController.class.getClassLoader().getResourceAsStream("samples/mindcode/" + filename)))) {
                         final StringWriter out = new StringWriter();
                         reader.transferTo(out);
@@ -87,13 +89,32 @@ public class HomeController {
         return "redirect:/?optimizationLevel=" + optimizationLevel + "&s=" + sourceDto.getId().toString();
     }
 
+    @PostMapping("/compileandrun")
+    public String postCompileAndRun(@RequestParam(required = false) String id,
+                              @RequestParam String source,
+                              @RequestParam(required = false) String optimizationLevel) {
+        Source sourceDto;
+        if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
+            final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
+            final Source newSource = dto
+                    .map(sdto -> sdto.withSource(source))
+                    .orElseGet(() -> new Source(source, Instant.now()));
+            sourceDto = sourceRepository.save(newSource);
+        } else {
+            sourceDto = sourceRepository.save(new Source(source, Instant.now()));
+        }
+
+        return "redirect:/?optimizationLevel=" + optimizationLevel + "&s=" + sourceDto.getId().toString() + "&run=true";
+    }
+
     @GetMapping
     public ModelAndView getHomePage(
         @RequestParam(name = "s", defaultValue = "") String id,
-        @RequestParam(name = "optimizationLevel", defaultValue = "BASIC") String optimizationLevel
+        @RequestParam(name = "optimizationLevel", defaultValue = "BASIC") String optimizationLevel,
+        @RequestParam(name = "run", defaultValue = "false") String compileAndRun
     ) {
         OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.BASIC);
-        final boolean enableOptimization = level != OptimizationLevel.OFF;
+        final boolean run = "true".equals(compileAndRun);
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {
@@ -117,7 +138,7 @@ public class HomeController {
         }
 
         final long start = System.nanoTime();
-        final CompilerOutput<String> result = compile(true, sourceCode, level);
+        final CompilerOutput<String> result = compile(true, sourceCode, level, run);
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 
@@ -135,8 +156,8 @@ public class HomeController {
                         result.errors(),
                         result.warnings(),
                         result.infos(),
-                        enableOptimization,
-                        optimizationLevel)
+                        optimizationLevel,
+                        run ? result.textBuffer() : null)
         );
     }
 

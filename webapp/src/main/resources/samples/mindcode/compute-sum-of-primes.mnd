@@ -1,0 +1,102 @@
+// This script computes sum of prime numbers up to the given value
+// Press "Compile and Run" to see the results of the computation
+//
+// An optimized version of the Sieve of Eratosthenes is used to identify
+// and sum the prime numbers.
+//
+// The code will run on a Mindustry processor too, albeit quite slowly.
+
+// Program parametrization
+param memory = bank1;
+param value = 5000;             // Use a value between 0 and 49150
+
+// Number of bits to store in a single memory slot
+// Since Mindustry Logic stores the values as double,
+// all 64 bits cannot be used.
+const MOD = 48;
+
+// Need to clear the bank at the beginning
+for i in 0 ... 512 do memory[i] = 0; end;
+
+result = sumPrimesUpTo(value);
+print("The sum of all primes between 0 and ");
+printNumber(value);
+print(" is ");
+printNumber(result);
+print(".");
+printflush(message1);
+
+def setBit(bitIndex)
+  memory[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
+end;
+
+def getBit(bitIndex)
+  memory[bitIndex \ MOD] & (1 << (bitIndex % MOD));
+end;
+
+def testAndSetMultiples(n, maximum)
+    if result = !getBit(n \ 2) then
+        max = maximum \ 2;
+        for i = n * n \ 2 ; i <= max ; i += n do
+            setBit(i);
+        end;
+    end;
+    result;
+end;
+
+def sumPrimesUpTo(maximum)
+    if maximum < 3 then return maximum & 2; end;
+
+    sum = 2 + 3;
+    i = 5;
+    sqrtMax = ceil(sqrt(maximum));
+
+    while i <= sqrtMax do
+        if testAndSetMultiples(i, maximum) then
+            sum += i;
+        end;
+        i += 2;
+        if testAndSetMultiples(i, maximum) then
+            sum += i;
+        end;
+        i += 4;
+    end;
+
+    while i <= maximum do
+        if !getBit(i \ 2) then
+            sum += i;
+        end;
+        i += 2;
+        if !getBit(i \ 2) then
+            if i <= maximum
+                sum += i;
+            end;
+        end;
+        i += 4;
+    end;
+
+    sum;
+end;
+
+// Prints the number using a comma as a thousands separator
+// Uses the memory to split the number into individual digits
+def printNumber(n)
+    index = 0;
+    decimal = 0;
+    while true do
+        memory[index] = n % 10;
+        n \= 10;
+        index += 1;
+        decimal += 1;
+        if n <= 0 then break; end;
+        if decimal % 3 == 0 then
+            memory[index] = 10;     // represents the comma
+            index += 1;
+        end;
+    end;
+
+    while index > 0 do
+        index -= 1;
+        print(memory[index] == 10 ? "," : memory[index]);
+    end;
+end;

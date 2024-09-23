@@ -16,11 +16,13 @@ import java.util.stream.Collectors;
  */
 public class CompilerProfile {
     public static final int MAX_PASSES = 1000;
-    public static final int MAX_INSTRUCTIONS = 100000;
+    public static final int MAX_INSTRUCTIONS = 100_000;
     public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
     public static final int DEFAULT_INSTRUCTIONS = 1000;
     public static final int DEFAULT_WEBAPP_PASSES = 3;
     public static final int DEFAULT_CMDLINE_PASSES = 25;
+    public static final int DEFAULT_STEP_LIMIT_WEBAPP = 1_000_000;
+    public static final int DEFAULT_STEP_LIMIT_CMDLINE = 10_000_000;
 
     private final Map<Optimization, OptimizationLevel> levels;
     private final boolean webApplication;
@@ -37,17 +39,23 @@ public class CompilerProfile {
     private int debugLevel = 0;
     private boolean printStackTrace = false;
 
+    // Compile and run
+    private boolean run = false;
+    private int stepLimit = DEFAULT_STEP_LIMIT_WEBAPP;
+
     // Schematics Builder
 
     private List<String> additionalTags = List.of();
 
     public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
+        this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }
 
     public CompilerProfile(boolean webApplication, Optimization... optimizations) {
         this.webApplication = webApplication;
+        this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         Set<Optimization> optimSet = Set.of(optimizations);
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
                 o -> optimSet.contains(o) ? OptimizationLevel.AGGRESSIVE : OptimizationLevel.OFF));
@@ -143,16 +151,18 @@ public class CompilerProfile {
         return remarks;
     }
 
-    public void setRemarks(Remarks remarks) {
+    public CompilerProfile setRemarks(Remarks remarks) {
         this.remarks = remarks;
+        return this;
     }
 
     public MemoryModel getMemoryModel() {
         return memoryModel;
     }
 
-    public void setMemoryModel(MemoryModel memoryModel) {
+    public CompilerProfile setMemoryModel(MemoryModel memoryModel) {
         this.memoryModel = memoryModel;
+        return this;
     }
 
     public boolean isShortCircuitEval() {
@@ -164,8 +174,9 @@ public class CompilerProfile {
         return this;
     }
 
-    public void setFinalCodeOutput(FinalCodeOutput finalCodeOutput) {
+    public CompilerProfile setFinalCodeOutput(FinalCodeOutput finalCodeOutput) {
         this.finalCodeOutput = finalCodeOutput;
+        return this;
     }
 
     public FinalCodeOutput getFinalCodeOutput() {
@@ -205,6 +216,24 @@ public class CompilerProfile {
 
     public CompilerProfile setAdditionalTags(List<String> additionalTags) {
         this.additionalTags = Objects.requireNonNull(additionalTags);
+        return this;
+    }
+
+    public boolean isRun() {
+        return run;
+    }
+
+    public CompilerProfile setRun(boolean run) {
+        this.run = run;
+        return this;
+    }
+
+    public int getStepLimit() {
+        return stepLimit;
+    }
+
+    public CompilerProfile setStepLimit(int stepLimit) {
+        this.stepLimit = stepLimit;
         return this;
     }
 }

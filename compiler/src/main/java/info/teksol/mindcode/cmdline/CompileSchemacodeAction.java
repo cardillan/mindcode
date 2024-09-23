@@ -21,7 +21,7 @@ import java.util.List;
 public class CompileSchemacodeAction extends ActionHandler {
 
     @Override
-    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType) {
+    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Subparser subparser = subparsers.addParser(Action.COMPILE_SCHEMA.getShortcut())
                 .aliases("compile-schema")
                 .description("Compile a schema definition file into binary msch file.")
@@ -50,7 +50,7 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .type(Arguments.fileType().verifyCanCreate())
                 .setDefault(new File("-"));
 
-        configureMindcodeCompiler(subparser);
+        configureMindcodeCompiler(subparser, defaults);
 
         files.addArgument("-a", "--add-tag")
                 .help("defines additional tag(s) to add to the schematics, plain text and symbolic icon names are supported")
