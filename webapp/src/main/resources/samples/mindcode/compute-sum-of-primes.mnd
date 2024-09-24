@@ -1,18 +1,16 @@
 // This script computes sum of prime numbers up to the given value
 // Press "Compile and Run" to see the results of the computation
 //
-// An optimized version of the Sieve of Eratosthenes is used to identify
-// and sum the prime numbers.
+// An optimized version of the Sieve of Eratosthenes is used to identify and sum the prime numbers.
 //
 // The code will run on a Mindustry processor too, albeit quite slowly.
 
 // Program parametrization
-param memory = bank1;
+param memory = bank1;           // Available in emulated environment
 param value = 5000;             // Use a value between 0 and 49150
 
 // Number of bits to store in a single memory slot
-// Since Mindustry Logic stores the values as double,
-// all 64 bits cannot be used.
+// Since Mindustry Logic stores the values as double, not all 64 bits can be used.
 const MOD = 48;
 
 // Need to clear the bank at the beginning
@@ -80,6 +78,8 @@ end;
 
 // Prints the number using a comma as a thousands separator
 // Uses the memory to split the number into individual digits
+// It prints the number instead of returning the generated string,
+// because Mindustry Logic doesn't support string operations.
 def printNumber(n)
     index = 0;
     decimal = 0;

@@ -142,17 +142,6 @@ end;
 
 This code prints out "22" and not "21", as might be expected.
 
-Alternative syntax of list iteration loop doesn't use the `do` keyword, but enclosed the list of variables in 
-parentheses:
-
-```
-for count, value in (3, 1, 7, 2, 4, 5, 1, 10)
-    print(a * b, "\n");
-end;
-```
-
-This syntax will be desupported in some future release.
-
 ### Modifications of values in the list
 
 If the elements of the list being iterated over are variables, it is possible to change their value by declaring the loop control variable with the `out` modifier:
@@ -204,6 +193,18 @@ If at least one element in the list cannot be modified, it is an error if it is 
 ```
 for out i in a, b, c + 1, d do
     i = rand(10);
+end;
+```
+
+The `do` keyword is, as always, optional. Furthermore, it is possible to enclose the list of elements in parentheses, either with the `do` keyword, or without:
+
+```
+for i in (1, 2, 3) 
+    print(i);
+end;
+
+for j in (11, 22, 33) do
+    print(j);
 end;
 ```
 

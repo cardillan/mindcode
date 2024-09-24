@@ -76,7 +76,7 @@
 </#macro>
 
 <#macro link href title="">
-<a class="underline text-blue-500" title="${title}" href="${href}" style="appearance: button"><#nested></a>
+<a class="underline text-blue-500" title="${title}" href="${href}"><#nested></a>
 </#macro>
 
 <#macro submit name="" value="" class="" title="">

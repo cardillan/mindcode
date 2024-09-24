@@ -114,7 +114,7 @@ public class HomeController {
         @RequestParam(name = "run", defaultValue = "false") String compileAndRun
     ) {
         OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.BASIC);
-        final boolean run = "true".equals(compileAndRun);
+        boolean run = "true".equals(compileAndRun);
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {
@@ -135,6 +135,10 @@ public class HomeController {
             final int skipCount = random.nextInt(samples.size());
             sampleName = samples.keySet().stream().skip(skipCount).findFirst().get();
             sourceCode = samples.get(sampleName);
+        }
+
+        if ("sum-of-primes".equals(sampleName)) {
+            run = true;
         }
 
         final long start = System.nanoTime();

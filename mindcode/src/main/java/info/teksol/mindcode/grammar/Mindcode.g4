@@ -93,9 +93,9 @@ for_expression : ( label=loop_label COLON )? FOR lvalue IN range_expression DO? 
                | ( label=loop_label COLON )? FOR init=init_list SEMICOLON cond=expression
                             SEMICOLON increment=incr_list DO? loop_body END                         # iterated_for
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            LEFT_RBRACKET values=value_list RIGHT_RBRACKET loop_body END            # for_each_1
+                            LEFT_RBRACKET values=value_list RIGHT_RBRACKET DO? loop_body END        # for_each_1
                | ( label=loop_label COLON )? FOR iterators=iterator_list IN
-                            values=value_list DO loop_body END                                      # for_each_2
+                            values=value_list DO? loop_body END                                     # for_each_2
                ;
 
 iterator
