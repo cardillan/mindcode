@@ -119,8 +119,11 @@ class OptimizationContext {
     }
 
     void debugPrintProgram() {
+        BitSet unreachables = getUnreachableInstructions();
         for (int i = 0; i < program.size(); i++) {
-            System.out.printf("%4d:  %s%n", i, LogicInstructionPrinter.toString(instructionProcessor, program.get(i)));
+            System.out.printf("%4d[%s]:  %s%n", i,
+                    unreachables.get(i) ? " " : "x",
+                    LogicInstructionPrinter.toString(instructionProcessor, program.get(i)));
         }
     }
 

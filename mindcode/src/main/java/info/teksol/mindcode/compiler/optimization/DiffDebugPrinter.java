@@ -35,7 +35,7 @@ public class DiffDebugPrinter implements DebugPrinter {
 
     @Override
     public void registerIteration(Optimizer optimizer, String title, List<LogicInstruction> program) {
-        versions.add(new ProgramVersion(optimizer, title, List.copyOf(program)));
+        versions.add(new ProgramVersion(optimizer, title, program));
     }
 
     public int getDiffMargin() {
@@ -197,14 +197,14 @@ public class DiffDebugPrinter implements DebugPrinter {
         public ProgramVersion(Optimizer optimizer, String title, List<LogicInstruction> program) {
             this.optimizerClass = optimizer == null ? null : optimizer.getClass();
             this.title = title;
-            this.program = program;
+            this.program = List.copyOf(program);
         }
 
         public Class<? extends Optimizer> getOptimizerClass() {
             return optimizerClass;
         }
 
-        List<LogicInstruction> getProgram() {
+        public List<LogicInstruction> getProgram() {
             return program;
         }
 
@@ -212,7 +212,7 @@ public class DiffDebugPrinter implements DebugPrinter {
             this.title = title;
         }
 
-        String getTitle() {
+        public String getTitle() {
             return title;
         }
 

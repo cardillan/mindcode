@@ -531,7 +531,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                         throw new MindcodeInternalError("Expected FLOW_CONTROL, found BODY subcontext in IF context %s", localContext);
                     }
                     if (process[body]) {
-                        branchedStates.newBranch(false);
+                        branchedStates.newBranch();
                         branchedStates.processContext(localContext, child, modifyInstructions);
                     } else {
                         skipContext(child);
@@ -553,7 +553,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         // There was only one body, no else branch. Create a new branch to represent the missing else branch.
         if (body == 1) {
-            branchedStates.newBranch(false);
+            branchedStates.newBranch();
         }
 
         return branchedStates.getFinalStates();
@@ -575,17 +575,17 @@ class DataFlowOptimizer extends BaseOptimizer {
             variableStates = processContext(localContext, child, variableStates, modifyInstructions);
         }
 
-        BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
-        boolean hasElse = false;
-
         if (localContext.findSubcontext(CONDITION) == null) {
+            BranchedVariableStates branchedStates = new BranchedVariableStates(variableStates);
+            boolean hasElse = false;
+
             // The context has been optimized by CaseSwitcher
             while (iterator.hasNext()) {
                 AstContext child = iterator.next();
                 switch (child.subcontextType()) {
                     case BODY -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
-                        branchedStates.newBranch(false);
+                        branchedStates.newBranch();
                     }
                     case ELSE -> {
                         branchedStates.processContext(localContext, child, modifyInstructions);
@@ -597,36 +597,21 @@ class DataFlowOptimizer extends BaseOptimizer {
                     default -> throw new MindcodeInternalError("Unexpected subcontext %s in CASE context", child);
                 }
             }
+
+            // If there's no else branch, start a new, empty branch representing the missing else.
+            if (!hasElse) {
+                branchedStates.newBranch();
+            }
+
+            return branchedStates.getFinalStates();
         } else {
+            CasedVariableStates casedStates = new CasedVariableStates(variableStates);
             while (iterator.hasNext()) {
-                AstContext child = iterator.next();
-                switch (child.subcontextType()) {
-                    case CONDITION -> {
-                        branchedStates.mergeWithInitialState(localContext, child, modifyInstructions);
-                    }
-                    case BODY -> {
-                        branchedStates.newBranch(true);
-                        branchedStates.processContext(localContext, child, modifyInstructions);
-                    }
-                    case FLOW_CONTROL -> {
-                        branchedStates.processContext(localContext, child, modifyInstructions);
-                    }
-                    case ELSE -> {
-                        branchedStates.newBranch(true);
-                        branchedStates.processContext(localContext, child, modifyInstructions);
-                        hasElse = true;
-                    }
-                    default -> throw new MindcodeInternalError("Unexpected subcontext %s in CASE context", child);
-                }
+                casedStates.processContext(localContext, iterator.next(), modifyInstructions);
             }
-        }
 
-        // If there's no else branch, start a new, empty branch representing the missing else.
-        if (!hasElse) {
-            branchedStates.newBranch(false);
+            return casedStates.getOutgoingStates();
         }
-
-        return branchedStates.getFinalStates();
     }
 
     /**
@@ -722,7 +707,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             System.out.println("*" + counter + " Processing instruction #" + instructionIndex(instruction) +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
-            if (counter == 39) {
+            if (counter == -1) {
                 System.out.println("Breakpoint");
             }
         }
@@ -890,7 +875,7 @@ class DataFlowOptimizer extends BaseOptimizer {
     }
 
     /**
-     * Helper class to manage variable states of branching statements (if, case).
+     * Helper class to manage variable states of branching statements (if, switched case).
      */
     private class BranchedVariableStates {
         /** The initial state of the statement, before branching. Set by constructor. */
@@ -902,7 +887,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         /** Final states of all branches merged together. */
         private VariableStates merged;
 
-        public BranchedVariableStates(VariableStates initial) {
+        private BranchedVariableStates(VariableStates initial) {
             this.initial = initial;
         }
 
@@ -910,30 +895,11 @@ class DataFlowOptimizer extends BaseOptimizer {
          * Called when a body of a new branch is encountered. Closes the previous branch (if any) by merging it into
          * the final states, and then creates variable states for the new branch by copying the initial state.
          */
-        public void newBranch(boolean startUnreachable) {
+        private void newBranch() {
             if (current != null) {
                 merged = merged == null ? current : merged.merge(current, true, " old branch before starting new branch");
             }
             current = initial.copy("new conditional branch");
-            if (startUnreachable) {
-                current.setUnreachable();
-            }
-        }
-
-        /**
-         * TODO review javadoc
-         * Processes the given context and appends the results into the initial state. Used to process conditions of
-         * individual branches of case expressions, which are all being processed until a match is found; the executed
-         * branch therefore contains the results of all conditions evaluated before it.
-         *
-         * @param localContext       context which is considered local
-         * @param context            context to be processed
-         * @param modifyInstructions true if instructions may be modified in this run based on known variable states
-         */
-        public void mergeWithInitialState(AstContext localContext, AstContext context, boolean modifyInstructions) {
-//            initial = DataFlowOptimizer.this.processContext(localContext, context, initial, modifyInstructions);
-            VariableStates processed = DataFlowOptimizer.this.processContext(localContext, context, initial.copy("new when condition"), modifyInstructions);
-            initial.merge(processed, true, "processed condition to initial state");
         }
 
         /**
@@ -943,7 +909,7 @@ class DataFlowOptimizer extends BaseOptimizer {
          * @param context            context to be processed
          * @param modifyInstructions true if instructions may be modified in this run based on known variable states
          */
-        public void processContext(AstContext localContext, AstContext context, boolean modifyInstructions) {
+        private void processContext(AstContext localContext, AstContext context, boolean modifyInstructions) {
             current = DataFlowOptimizer.this.processContext(localContext, context,
                     current == null ? initial.copy("new conditional branch") : current, modifyInstructions);
         }
@@ -953,9 +919,9 @@ class DataFlowOptimizer extends BaseOptimizer {
          *
          * @return final variable states of the branched expression
          */
-        public VariableStates getFinalStates() {
+        private VariableStates getFinalStates() {
             trace(() -> "Getting final states");
-            newBranch(false);        // Force merging the previous branch
+            newBranch();        // Force merging the previous branch
             return merged == null ? initial : merged;
         }
 
@@ -964,8 +930,97 @@ class DataFlowOptimizer extends BaseOptimizer {
          *
          * @return final variable states of the branch that was just processed
          */
-        public VariableStates getCurrentStates() {
+        private VariableStates getCurrentStates() {
             return current == null ? initial : current;
+        }
+    }
+
+    /**
+     * Helper class to manage variable states of branching case statements.
+     */
+    private class CasedVariableStates {
+        /**
+         * Variable state matching the flow that enters the case expression. Each condition is processed on this flow.
+         */
+        private VariableStates incoming;
+
+        /**
+         * Variable state which accumulates all the conditions that occur before a body, and then it processes
+         * the body and flow contexts. ELSE context also creates a body. A separate instance is created before
+         * each body by combining the exit states of conditions leading to that body.
+         */
+        private VariableStates body;
+
+        /**
+         * Variable state which combines all the exit states of individual bodies. Represents the final state
+         * of the entire case statement.
+         */
+        private VariableStates outgoing;
+
+        private CasedVariableStates(VariableStates incoming) {
+            this.incoming = incoming;
+        }
+
+        /**
+         * Processes the given case statement subcontext.
+         *
+         * @param localContext       context which is considered local
+         * @param context            context to be processed
+         * @param modifyInstructions true if instructions may be modified in this run based on known variable states
+         */
+        private void processContext(AstContext localContext, AstContext context, boolean modifyInstructions) {
+            switch (context.subcontextType()) {
+                case CONDITION -> {
+                    incoming = DataFlowOptimizer.this.processContext(localContext, context, incoming, modifyInstructions);
+                    if (body == null) {
+                        body = incoming.copy("case statement body");
+                    } else {
+                        body = body.merge(incoming, true, "merging case condition");
+                    }
+                }
+
+                case ELSE -> {
+                    if (body != null) {
+                        throw new MindcodeInternalError("Unexpected case statement structure (CONDITION before ELSE)");
+                    }
+                    body = DataFlowOptimizer.this.processContext(localContext, context, incoming, modifyInstructions);
+                }
+
+                case BODY -> {
+                    if (body == null) {
+                        throw new MindcodeInternalError("Unexpected case statement structure (BODY without CONDITION)");
+                    }
+                    body = DataFlowOptimizer.this.processContext(localContext, context, body, modifyInstructions);
+                }
+
+                case FLOW_CONTROL -> {
+                    if (body == null) {
+                        throw new MindcodeInternalError("Unexpected case statement structure (BODY without CONDITION)");
+                    }
+                    body = DataFlowOptimizer.this.processContext(localContext, context, body, modifyInstructions);
+                    if (outgoing == null) {
+                        outgoing = body;
+                    } else {
+                        outgoing = outgoing.merge(body, true, "merging body");
+                    }
+                    body = null;
+                }
+
+                default -> {
+                    throw new MindcodeInternalError("Unexpected subcontext type: " + context.subcontextType());
+                }
+            }
+        }
+
+        /**
+         * @return outgoing variable states of the case expression
+         */
+        private VariableStates getOutgoingStates() {
+            trace(() -> "Getting final states");
+            if (outgoing == null || body != null) {
+                throw new MindcodeInternalError("Unexpected case statement structure (missing FLOW)");
+            }
+            return outgoing;
         }
     }
 }

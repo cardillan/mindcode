@@ -81,10 +81,6 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 "select-sort.mnd", 128
         );
 
-//        Map<String, Integer> definitions = Map.of(
-//                "heap-sort.mnd", 512
-//        );
-
         for (final String script : definitions.keySet()) {
             result.add(DynamicTest.dynamicTest(script, null,
                     () -> executeSortingAlgorithmTest(script, definitions.get(script))));
@@ -168,7 +164,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
                 number + ", " + name,
                 "AMOUNT = " + number + "\n" + code,
                 List.of(),
-                dummy -> {},
+                (useAsserts, expectedOutput) -> true,
                 Path.of(getScriptsDirectory(), "storage-display.log")
         )));
     }

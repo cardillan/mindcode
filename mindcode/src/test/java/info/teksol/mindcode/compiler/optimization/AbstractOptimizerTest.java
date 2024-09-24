@@ -17,7 +17,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
 
     protected abstract List<Optimization> getAllOptimizations();
 
-    protected DebugPrinter createDebugPrinter() {
+    protected DebugPrinter getDebugPrinter() {
         return new FilteredDiffDebugPrinter();
     }
 
@@ -70,7 +70,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     }
 
     protected List<LogicInstruction> optimizeInstructions(TestCompiler compiler, GeneratorOutput generatorOutput) {
-        final DebugPrinter debugPrinter = createDebugPrinter();
+        final DebugPrinter debugPrinter = getDebugPrinter();
         final List<LogicInstruction> result;
         final OptimizationCoordinator optimizer = createMindcodeOptimizer(compiler);
         optimizer.setDebugPrinter(debugPrinter);
@@ -83,8 +83,6 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     protected GeneratorOutput generateInstructions(TestCompiler compiler, String code) {
         GeneratorOutput generatorOutput = super.generateInstructions(compiler, code);
         long optimize = System.nanoTime();
-//        compiler.messages.add(MindcodeMessage.info("\nCode before optimizations:\n"));
-//        compiler.messages.add(MindcodeMessage.info(LogicInstructionPrinter.toString(compiler.processor, generatorOutput.instructions())));
         List<LogicInstruction> instructions = optimizeInstructions(compiler, generatorOutput);
         compiler.addMessage(new TimingMessage("Optimize", ((System.nanoTime() - optimize) / 1_000_000L)));
         return new GeneratorOutput(generatorOutput.callGraph(), instructions, generatorOutput.rootAstContext());

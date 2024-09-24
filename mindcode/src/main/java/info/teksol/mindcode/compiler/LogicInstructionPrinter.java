@@ -83,7 +83,7 @@ public class LogicInstructionPrinter {
 
             String hierarchy = unroll.stream().limit(10).map(c -> c.contextType().text).collect(Collectors.joining(" "));
             AstContext ctx = instruction.getAstContext();
-            buffer.append("%-50s  %s  %10s ".formatted(hierarchy, ctx.subcontextType().text, format.format(ctx.totalWeight())));
+            buffer.append("%-50s  %s (%3d)  %10s  ".formatted(hierarchy, ctx.subcontextType().text, ctx.id, format.format(ctx.totalWeight())));
             buffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             buffer.append("\n");
@@ -93,7 +93,7 @@ public class LogicInstructionPrinter {
     }
 
     public static String toStringWithContextsShort(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
-        AtomicInteger lineNumber = new AtomicInteger(0);;
+        AtomicInteger lineNumber = new AtomicInteger(0);
         DecimalFormat format = new DecimalFormat("0.0E00");
         format.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.US));
         format.setMaximumFractionDigits(2);
@@ -114,7 +114,7 @@ public class LogicInstructionPrinter {
     }
 
     public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions, String sourceCode) {
-        AtomicInteger lineNumber = new AtomicInteger(0);;
+        AtomicInteger lineNumber = new AtomicInteger(0);
         final List<String> lines = sourceCode.lines().toList();
         int prevLine = -1;
 

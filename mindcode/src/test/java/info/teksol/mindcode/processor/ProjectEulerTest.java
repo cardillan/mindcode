@@ -53,9 +53,12 @@ public class ProjectEulerTest extends AbstractProcessorTest {
                 fileName,
                 s -> s + "\ndef expect(v) print(v) end def actual(v) print(v) end",
                 List.of(MindustryMemory.createMemoryBank("bank2")),
-                output -> {
-                    assertEquals(2, output.size(), "Expected the script to generate two output values: expected and actual.");
-                    assertEquals(output.get(0), output.get(1));
+                (useAsserts, actualOutput) -> {
+                    if (useAsserts) {
+                        assertEquals(2, actualOutput.size(), "Expected the script to generate two output values: expected and actual.");
+                        assertEquals(actualOutput.get(0), actualOutput.get(1));
+                    }
+                    return actualOutput.size() == 2 && actualOutput.get(0).equals(actualOutput.get(1));
                 })));
     }
 }

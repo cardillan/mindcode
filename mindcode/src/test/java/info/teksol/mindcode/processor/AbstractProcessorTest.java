@@ -10,11 +10,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,6 +30,19 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     static void init() {
         performance.clear();
         timing.clear();
+    }
+
+    // Lambda interface
+    // Handles evaluating of expected vs. actual program output
+    protected interface OutputEvaluator {
+        /**
+         * Called to compare the actual output with an (implicit) expected one.
+         * @param useAsserts if true, the evaluator should explicitly assert the equality, otherwise it just reports
+         *                   the result. Each evaluator will be called at lest once with useAsserts set to true.
+         * @param output     the actual output produced by the tested code
+         * @return true if the actual output matches the expected one
+         */
+        boolean compare(boolean useAsserts, List<String> actualOutput);
     }
 
     static void done(String scriptsDirectory, String className) throws IOException {
@@ -122,7 +131,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         return profile;
     }
 
-    protected DebugPrinter createDebugPrinter() {
+    protected DebugPrinter getDebugPrinter() {
         return new DiffDebugPrinter(3);
     }
 
@@ -164,7 +173,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     }
 
     protected void testAndEvaluateCode(TestCompiler compiler, String title, String code, List<MindustryObject> blocks,
-            Consumer<List<String>> evaluator, Path logFile) {
+            OutputEvaluator evaluator, Path logFile) {
         Processor processor = new Processor();
         processor.addBlock(MindustryMemory.createMemoryBank("bank1"));
         processor.addBlock(MindustryMemory.createMemoryBank("bank2"));
@@ -172,27 +181,31 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
         List<LogicInstruction> unresolved = generateInstructions(compiler, code).instructions();
         List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.processor, compiler.profile, unresolved);
         writeLogFile(logFile, compiler, unresolved);
-        //System.out.println(prettyPrint(instructions));
         processor.run(instructions, MAX_STEPS);
         String compiled = LogicInstructionPrinter.toString(compiler.processor, instructions);
         logTiming(title, compiler.getMessages());
         logPerformance(title, code, compiled, processor);
-        //System.out.println(String.join("", processor.getTextBuffer()));
 
         assertAll(
-                () -> evaluator.accept(processor.getTextBuffer()),
+                () -> evaluator.compare(true, processor.getTextBuffer()),
                 () -> assertNoUnexpectedMessages(compiler, s -> false)
         );
     }
 
-    protected Consumer<List<String>> createEvaluator(TestCompiler compiler, List<String> expectedOutput) {
-        return (List<String> outputs) -> assertEquals(expectedOutput, outputs,
-                () -> compiler.getMessages().stream().map(CompilerMessage::message)
-                        .collect(Collectors.joining("\n", "\n", "\n")));
+    protected OutputEvaluator createEvaluator(TestCompiler compiler, List<String> expectedOutput) {
+        return (useAsserts, actualOutput) -> {
+            boolean matches = Objects.equals(expectedOutput, actualOutput);
+            if (useAsserts) {
+                assertEquals(expectedOutput, actualOutput,
+                        () -> compiler.getMessages().stream().map(CompilerMessage::message)
+                                .collect(Collectors.joining("\n", "\n", "\n")));
+            }
+            return matches;
+        };
     }
 
     protected void testAndEvaluateFile(TestCompiler compiler, String fileName, Function<String, String> codeDecorator,
-            List<MindustryObject> blocks, Consumer<List<String>> evaluator) throws IOException {
+            List<MindustryObject> blocks, OutputEvaluator evaluator) throws IOException {
         Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
         testAndEvaluateCode(compiler, fileName, codeDecorator.apply(readFile(fileName)),
                 blocks, evaluator, logFile);

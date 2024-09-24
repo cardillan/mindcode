@@ -94,6 +94,24 @@ public class ProcessorTest extends AbstractProcessorTest {
         executeMindcodeUnitTests(createTestCompiler(), "expression-evaluation-compile-time.mnd");
     }
 
+    void executeMindcodeUnitTests(TestCompiler compiler, String fileName) throws IOException {
+        testAndEvaluateFile(compiler,
+                fileName,
+                s -> s,
+                List.of(),
+                (useAsserts, actualOutput) -> {
+                    String messages = actualOutput.stream().filter(s -> !"ok".equals(s)).collect(Collectors.joining());
+
+                    if (useAsserts) {
+                        assertFalse(actualOutput.isEmpty(), "Test didn't produce any output values.");
+                        System.out.print(messages);
+                        assertTrue(messages.isEmpty(), "Some of the tests have failed. See output for details.");
+                    }
+                    return !actualOutput.isEmpty() && messages.isEmpty();
+                }
+        );
+    }
+
     @Test
     void compilesProperComparison() {
         testCode("""
@@ -130,20 +148,6 @@ public class ProcessorTest extends AbstractProcessorTest {
                 "10", "F", "T", "F", "T",
                 "11", "F", "T", "F", "T",
                 "12", "T", "F", "T", "F"
-        );
-    }
-
-    void executeMindcodeUnitTests(TestCompiler compiler, String fileName) throws IOException {
-        testAndEvaluateFile(compiler,
-                fileName,
-                s -> s,
-                List.of(),
-                output -> {
-                    assertFalse(output.isEmpty(), "Test didn't produce any output values.");
-                    String messages = output.stream().filter(s -> !"ok".equals(s)).collect(Collectors.joining());
-                    System.out.print(messages);
-                    assertTrue(messages.isEmpty(), "Some of the tests have failed. See output for details.");
-                }
         );
     }
 

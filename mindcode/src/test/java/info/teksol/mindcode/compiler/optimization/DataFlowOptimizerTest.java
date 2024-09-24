@@ -455,7 +455,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         sort = case n when 1 sorter1 end
                         print(sort)
                         """,
-                createInstruction(PRINT, "sorter1"),
+                createInstruction(SET, var(0), "sorter1"),
+                createInstruction(PRINT, var(0)),
                 createInstruction(END)
         );
     }
@@ -768,7 +769,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         inline def foo(n)
                           return n
                         end
-                                        
+
                         print(foo(4))
                         """,
                 createInstruction(PRINT, "4"),
@@ -1003,7 +1004,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         def getBit(bitIndex)
                           bitIndex * 2
                         end
-                                                
+                       
                         for n in 1 .. 1000
                             print(getBit(n \\ 2))
                         end
