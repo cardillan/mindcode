@@ -348,8 +348,8 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     void computesFunctionWeights() {
         TestCompiler compiler = createTestCompiler(createCompilerProfile()
                 .setGoal(GenerationGoal.SIZE)
-                .setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.OFF)
-                .setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.OFF)
+                .setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.NONE)
+                .setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.NONE)
         );
 
         assertCompilesTo(compiler,

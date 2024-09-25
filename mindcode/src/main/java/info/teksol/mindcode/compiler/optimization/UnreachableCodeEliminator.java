@@ -29,7 +29,7 @@ class UnreachableCodeEliminator extends BaseOptimizer {
 
         List<LogicInstruction> program = optimizationContext.getProgram();
         for (int index = program.size() - 1; index >= 0; index--) {
-            if (unused.get(index) && (aggressive() || !(program.get(index) instanceof EndInstruction))) {
+            if (unused.get(index) && (advanced() || !(program.get(index) instanceof EndInstruction))) {
                 removeInstruction(index);
             }
         }

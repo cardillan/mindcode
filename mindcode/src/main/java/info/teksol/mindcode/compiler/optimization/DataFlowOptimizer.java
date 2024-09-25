@@ -249,7 +249,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             List.copyOf(uninitialized).forEach(variableStates::valueRead);
             functionEndStates.forEach(vs -> List.copyOf(uninitialized).forEach(vs::valueRead));
 
-            if (!aggressive()) {
+            if (!advanced()) {
                 // On basic optimization level, provide limited protection to main variables.
                 // Specifically, latest values assigned to main variables are preserved.
                 // Variables that were part of unrolled loops are NOT preserved, regardless of their other use.

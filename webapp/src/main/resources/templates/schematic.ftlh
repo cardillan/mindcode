@@ -33,9 +33,9 @@
             <div>
                 <div class="flex items-center space-x-3">
                     <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black p-2 rounded">
-                        <option value="OFF"          <#if model.optimizationLevel == "OFF"       >selected</#if>>No optimization</option>
-                        <option value="BASIC"        <#if model.optimizationLevel == "BASIC"     >selected</#if>>Basic optimization</option>
-                        <option value="AGGRESSIVE"   <#if model.optimizationLevel == "AGGRESSIVE">selected</#if>>Advanced optimization</option>
+                        <option value="OFF"      <#if model.optimizationLevel == "OFF"     >selected</#if>>No optimization</option>
+                        <option value="BASIC"    <#if model.optimizationLevel == "BASIC"   >selected</#if>>Basic optimization</option>
+                        <option value="ADVANCED" <#if model.optimizationLevel == "ADVANCED">selected</#if>>Advanced optimization</option>
                     </select>
                     <input type="submit" value="Build" class="px-4 py-2 bg-gray-600 text-white my-4 rounded"/>
                     <@com.link href="/schematics/?s=clean">Start with a new schematics</@com.link>

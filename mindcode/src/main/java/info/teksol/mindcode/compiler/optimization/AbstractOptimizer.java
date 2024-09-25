@@ -13,7 +13,7 @@ abstract class AbstractOptimizer implements Optimizer {
     protected final Optimization optimization;
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
-    protected OptimizationLevel level = OptimizationLevel.AGGRESSIVE;
+    protected OptimizationLevel level = OptimizationLevel.ADVANCED;
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
@@ -66,8 +66,8 @@ abstract class AbstractOptimizer implements Optimizer {
         this.messageRecipient = messageRecipient;
     }
 
-    protected boolean aggressive() {
-        return level == OptimizationLevel.AGGRESSIVE;
+    protected boolean advanced() {
+        return level == OptimizationLevel.ADVANCED;
     }
 
     protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {

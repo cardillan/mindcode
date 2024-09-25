@@ -147,7 +147,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(),
                             LogicBuiltIn.create(object.getName() + property.getName())));
                 }
-            } else if (aggressive() && property.getName().equals("id")) {
+            } else if (advanced() && property.getName().equals("id")) {
                 int id = NumberedConstants.getId(object.getName());
                 if (id != -1) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicNumber.get(id)));

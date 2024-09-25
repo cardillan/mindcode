@@ -38,7 +38,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Override
     protected CompilerProfile createCompilerProfile() {
         return super.createCompilerProfile()
-                .setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.OFF);
+                .setOptimizationLevel(Optimization.PRINT_TEXT_MERGING, OptimizationLevel.NONE);
     }
 
     @Test
@@ -85,7 +85,7 @@ public class ProcessorTest extends AbstractProcessorTest {
     @Test
     void expressionEvaluationRuntime() throws IOException {
         executeMindcodeUnitTests(createTestCompiler(
-                createCompilerProfile().setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.OFF)),
+                createCompilerProfile().setOptimizationLevel(Optimization.FUNCTION_INLINING, OptimizationLevel.NONE)),
                 "expression-evaluation-runtime.mnd");
     }
 

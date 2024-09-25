@@ -72,11 +72,11 @@ class PrintMerger extends BaseOptimizer {
     // If the merge is not possible, sets previous to current
     private void tryMerge(LogicIterator iterator, PrintInstruction current) {
         if (previous instanceof PrintInstruction previous && previous.getValue().isConstant() && current.getValue().isConstant()) {
-            if (aggressive() || previous.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
+            if (advanced() || previous.getValue().getType() == STRING_LITERAL && current.getValue().getType() == STRING_LITERAL) {
                 String str1 = previous.getValue().format();
                 String str2 = current.getValue().format();
-                // Do not merge strings if the combined length is over 34, unless aggressive
-                if (aggressive() || str1.length() + str2.length() <= 34) {
+                // Do not merge strings if the combined length is over 34, unless advanced
+                if (advanced() || str1.length() + str2.length() <= 34) {
                     PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
                     removeInstruction(this.previous);
                     iterator.set(merged);

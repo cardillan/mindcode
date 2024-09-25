@@ -1,5 +1,5 @@
 // Adapted from https://github.com/mlogjs/mlogjs/blob/main/compiler/test/examples/breakout.js
-#set optimization = aggressive;
+#set optimization = advanced;
 
 param BRICKS = bank1;
 param DISPLAY = display1;

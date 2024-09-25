@@ -58,11 +58,11 @@ public class CompilerProfile {
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         Set<Optimization> optimSet = Set.of(optimizations);
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
-                o -> optimSet.contains(o) ? OptimizationLevel.AGGRESSIVE : OptimizationLevel.OFF));
+                o -> optimSet.contains(o) ? OptimizationLevel.ADVANCED : OptimizationLevel.NONE));
     }
 
     public static CompilerProfile fullOptimizations(boolean webApplication) {
-        return new CompilerProfile(webApplication, OptimizationLevel.AGGRESSIVE);
+        return new CompilerProfile(webApplication, OptimizationLevel.ADVANCED);
     }
 
     public static CompilerProfile standardOptimizations(boolean webApplication) {
@@ -70,7 +70,7 @@ public class CompilerProfile {
     }
 
     public static CompilerProfile noOptimizations(boolean webApplication) {
-        return new CompilerProfile(webApplication, OptimizationLevel.OFF);
+        return new CompilerProfile(webApplication, OptimizationLevel.NONE);
     }
 
     public ProcessorVersion getProcessorVersion() {
@@ -98,7 +98,7 @@ public class CompilerProfile {
     }
 
     public OptimizationLevel getOptimizationLevel(Optimization optimization) {
-        return levels.getOrDefault(optimization, OptimizationLevel.OFF);
+        return levels.getOrDefault(optimization, OptimizationLevel.NONE);
     }
 
     public CompilerProfile setOptimizationLevel(Optimization optimization, OptimizationLevel level) {
@@ -116,7 +116,7 @@ public class CompilerProfile {
     }
 
     public boolean optimizationsActive() {
-        return levels.values().stream().anyMatch(l -> l != OptimizationLevel.OFF);
+        return levels.values().stream().anyMatch(l -> l != OptimizationLevel.NONE);
     }
 
     public int getInstructionLimit() {

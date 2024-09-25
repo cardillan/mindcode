@@ -178,8 +178,8 @@ class LoopUnroller extends BaseOptimizer {
             LogicLiteral initLiteral, List<LogicInstruction> controlIxs, int loopLimit) {
 
         int result = findLoopCountBasic(loop, jump, loopControl, initLiteral, controlIxs);
-        return (result <= 0 && aggressive())
-                ? findLoopCountAggressive(loop, jump, loopControl, initLiteral, controlIxs, loopLimit)
+        return (result <= 0 && advanced())
+                ? findLoopCountAdvanced(loop, jump, loopControl, initLiteral, controlIxs, loopLimit)
                 : result;
     }
 
@@ -236,7 +236,7 @@ class LoopUnroller extends BaseOptimizer {
         return value == (int) value;
     }
 
-    private int findLoopCountAggressive(AstContext loop, JumpInstruction jump, LogicVariable loopControl,
+    private int findLoopCountAdvanced(AstContext loop, JumpInstruction jump, LogicVariable loopControl,
             LogicLiteral initLiteral, List<LogicInstruction> controlIxs, int loopLimit) {
         DoubleVariable controlVariable = DoubleVariable.newDoubleValue(false, loopControl.toMlog(),
                 initLiteral.getDoubleValue());

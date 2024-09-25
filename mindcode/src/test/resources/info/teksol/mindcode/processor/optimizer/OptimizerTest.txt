@@ -1,4 +1,4 @@
-breakout-00.mnd:                          184 instructions, source CRC 563DD3869639B977, compiled CRC DC846E05178DF416
+breakout-00.mnd:                          184 instructions, source CRC 468B147FDB0A34FC, compiled CRC DC846E05178DF416
 detector-00.mnd:                          173 instructions, source CRC 3EF7D0F1FFC5E73A, compiled CRC 966A0E6E27A86341
 factory-monitor-00.mnd:                   355 instructions, source CRC 3C9B4A9AFDD714A3, compiled CRC BD7054649633538D
 factory-monitor-silicon-00.mnd:           291 instructions, source CRC FC129504D3157D9F, compiled CRC E7389555BDC3125C

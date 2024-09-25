@@ -37,7 +37,7 @@ public class OptimizationCoordinator {
         Map<Optimization, Optimizer> result = new LinkedHashMap<>();
         for (Optimization optimization : Optimization.LIST) {
             OptimizationLevel level = profile.getOptimizationLevel(optimization);
-            if (level != OptimizationLevel.OFF) {
+            if (level != OptimizationLevel.NONE) {
                 Optimizer optimizer = optimization.getInstanceCreator().apply(optimizationContext);
                 optimizer.setMessageRecipient(messageRecipient);
                 optimizer.setDebugPrinter(debugPrinter);

@@ -312,7 +312,7 @@ Two basic approaches
 * Omit range checking where possible (requires invariant inferring)
 * Cases with sparse sets of when branches: convert the largest segment from case values with a density
   higher than 0.5, leave other values to conditional jumps
-* On `aggressive` level, convert switches that have overlapping values.
+* On `advanced` level, convert switches that have overlapping values.
 
 ### Case switching over built-in constants
 

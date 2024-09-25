@@ -92,16 +92,16 @@ Use the `optimization` option to set the optimization level of the compiler:
 
 Possible values for this option are:
 
-* `off`
+* `none`
 * `basic`
-* `aggressive`
+* `advanced`
 
-The `off` setting deactivates all optimizations. The `basic` setting performs most of the available optimizations.
-The `aggressive` optimizations performs all the available optimizations, even those that might take more time, or 
+The `none` setting deactivates all optimizations. The `basic` setting performs most of the available optimizations.
+The `advanced` optimizations performs all the available optimizations, even those that might take more time, or 
 which make changes that are potentially risky or make understanding of the resulting mlog code more difficult.
 
 The default optimization level for the web application compiler is `basic`, for the command line compiler it is 
-`aggressive`.
+`advanced`.
 
 ## Option `passes`
 
@@ -124,14 +124,14 @@ It is possible to set the level of individual optimization tasks. Every optimiza
 and this name can be used in the compiler directive like this:
 
 ```
-#set dead-code-elimination = aggressive;
+#set dead-code-elimination = advanced;
 ```
 
-Not all optimizations support the `aggressive` level. For those the level `aggressive` is the same as `basic`.
+Not all optimizations support the `advanced` level. For those the level `advanced` is the same as `basic`.
 The complete list of available optimizations, including the option name for setting the level of given optimization
-and availability of the aggressive optimization level is:
+and availability of the advanced optimization level is:
 
-| Optimization                                                                                       | Option name                  | Aggressive |
+| Optimization                                                                                       | Option name                  | Advanced |
 |----------------------------------------------------------------------------------------------------|------------------------------|:----------:|
 | [Temporary Variables Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) | temp-variables-elimination   |     N      |
 | [Case Expression Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#case-expression-optimization)       | case-expression-optimization |     N      |

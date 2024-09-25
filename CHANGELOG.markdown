@@ -28,6 +28,7 @@ Experimental features may contain bugs or produce suboptimal code, and are subje
 
 ### Changed
 
+* Changed the names of optimization levels from `off` and `aggressive` to `none` and `advanced`. The old names are still supported in the `#set` compiler directive, but not in the command-line options. 
 * Changed the [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization to analyze functions modifying variables inside loop instead of blanket assumption that all global variables may be changed by a function.
 * Changes to the web app
     * A button was added do the web app to copy the output code to the clipboard with a single click.

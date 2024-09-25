@@ -484,7 +484,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesForEachLoops() {
         assertCompilesTo(createTestCompiler(
-                createCompilerProfile().setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.OFF)),
+                createCompilerProfile().setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.NONE)),
                         """
                         for i in (1, 2, 3)
                             print(i)
@@ -511,7 +511,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesForEachLoopsWithModifications() {
         assertCompilesTo(createTestCompiler(
-                createCompilerProfile().setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.OFF)),
+                createCompilerProfile().setOptimizationLevel(Optimization.LOOP_UNROLLING, OptimizationLevel.NONE)),
                         """
                         for out i, out j in a, b, c, d do
                             i = rand(10);
@@ -780,7 +780,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesConditionalReturnStatements() {
         assertCompilesTo("""
-                        #set optimization = aggressive
+                        #set optimization = advanced
 
                         print(foo(rand(10)))
                         def foo(d)
@@ -948,7 +948,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
     @Test
     void passesParameterToFunctionRegressionTest() {
-        assertCompilesTo(createTestCompiler(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.AGGRESSIVE)),
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setAllOptimizationLevels(OptimizationLevel.ADVANCED)),
                 """
                         inline def d(n)
                             n

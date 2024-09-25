@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MindcodeCompilerTest {
 
     MindcodeCompiler compiler = new MindcodeCompiler(
-            new CompilerProfile(false, OptimizationLevel.AGGRESSIVE)
+            new CompilerProfile(false, OptimizationLevel.ADVANCED)
                     .setFinalCodeOutput(FinalCodeOutput.PLAIN)
                     .setRun(true)
     );

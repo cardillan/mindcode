@@ -70,7 +70,7 @@ Mindcode/Schemacode command-line compiler.
 
 named arguments:
   -h, --help             show this help message and exit
-  -v, --version          show Mindcode's version number and exit
+  -v, --version          show program's version number and exit
 
 Actions:
   Specifies the type of processing to be performed
@@ -136,7 +136,7 @@ run options:
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
-  explicitly set. Available optimization levels are {off,basic,aggressive}.
+  explicitly set. Available optimization levels are {none,basic,advanced}.
 
   -o, --optimization LEVEL
                          sets global optimization level for all optimizers
@@ -239,7 +239,7 @@ input/output files:
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
-  explicitly set. Available optimization levels are {off,basic,aggressive}.
+  explicitly set. Available optimization levels are {none,basic,advanced}.
 
   -o, --optimization LEVEL
                          sets global optimization level for all optimizers

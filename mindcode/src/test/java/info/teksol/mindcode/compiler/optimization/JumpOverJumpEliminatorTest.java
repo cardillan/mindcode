@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.compiler.optimization.Optimization.*;
-import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.AGGRESSIVE;
+import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.ADVANCED;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJumpEliminator> {
@@ -25,10 +25,10 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
     void optimizesBreakInWhileLoop() {
         assertCompilesTo(createTestCompiler(
                 createCompilerProfile()
-                        .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(SINGLE_STEP_JUMP_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(CONDITIONAL_JUMPS_OPTIMIZATION, AGGRESSIVE)
-                        .setOptimizationLevel(JUMP_OVER_JUMP_ELIMINATION, AGGRESSIVE)
+                        .setOptimizationLevel(DEAD_CODE_ELIMINATION, ADVANCED)
+                        .setOptimizationLevel(SINGLE_STEP_JUMP_ELIMINATION, ADVANCED)
+                        .setOptimizationLevel(CONDITIONAL_JUMPS_OPTIMIZATION, ADVANCED)
+                        .setOptimizationLevel(JUMP_OVER_JUMP_ELIMINATION, ADVANCED)
                 ),
                 """
                         while true
@@ -53,7 +53,7 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
 
     @Test
     void optimizesFunctionReturn() {
-        assertCompilesTo(createTestCompiler(createCompilerProfile().setAllOptimizationLevels(AGGRESSIVE)),
+        assertCompilesTo(createTestCompiler(createCompilerProfile().setAllOptimizationLevels(ADVANCED)),
                 """
                         displayItem()
                         

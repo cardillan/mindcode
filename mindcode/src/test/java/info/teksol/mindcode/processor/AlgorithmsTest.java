@@ -146,10 +146,10 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         for (int number : numbers) {
             for (int index = 0; index <= optimizations.size(); index++) {
                 CompilerProfile compilerProfile = createCompilerProfile()
-                        .setAllOptimizationLevels(OptimizationLevel.OFF)
+                        .setAllOptimizationLevels(OptimizationLevel.NONE)
                         .setInstructionLimit(1100);
                 for (int i = 0; i < index; i++) {
-                    compilerProfile.setOptimizationLevel(optimizations.get(i), OptimizationLevel.AGGRESSIVE);
+                    compilerProfile.setOptimizationLevel(optimizations.get(i), OptimizationLevel.ADVANCED);
                 }
                 processDrawingCode(result, index == 0 ? "None" : "+ " + optimizations.get(index - 1).getName(),
                         compilerProfile, code, number);

@@ -90,7 +90,7 @@ class LoopHoisting extends BaseOptimizer {
             improved = true;
         }
 
-        if (aggressive()) {
+        if (advanced()) {
             // Try to find invariant Ifs
             List<AstContext> invariantIfs = parts.stream()
                     .flatMap(c -> c.children().stream())

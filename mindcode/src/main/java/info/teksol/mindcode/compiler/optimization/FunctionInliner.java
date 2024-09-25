@@ -45,7 +45,7 @@ class FunctionInliner extends BaseOptimizer {
         List<OptimizationAction> actions = new ArrayList<>();
         actions.addAll(forEachContext(AstContextType.FUNCTION, BODY,
                 context -> findPossibleInlining(context, costLimit)));
-        if (aggressive()) {
+        if (advanced()) {
             actions.addAll(forEachContext(c -> c.matches(OUT_OF_LINE_CALL),
                     context -> findPossibleCallInlining(context, costLimit)));
         }

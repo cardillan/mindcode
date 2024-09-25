@@ -87,10 +87,10 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     @Test
     public void specificOptimizationArguments() throws ArgumentParserException {
         @SuppressWarnings("unchecked")
-        List<String> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.OFF.name());
+        List<String> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.NONE.name());
         List<String> actual = new ArrayList<>();
         for (Optimization optimization : Optimization.LIST) {
-            String cmdLine = Action.COMPILE_MINDCODE.getShortcut() + " --" + optimization.getOptionName() + " off";
+            String cmdLine = Action.COMPILE_MINDCODE.getShortcut() + " --" + optimization.getOptionName() + " none";
             Namespace arguments = parseCommandLine(cmdLine);
             actual.add(arguments.<OptimizationLevel>get(optimization.name()).name());
         }
@@ -155,12 +155,12 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o off -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100");  //  -m restricted
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100");  //  -m restricted
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
         assertEquals(ProcessorVersion.V6, actual.getProcessorVersion());
-        assertEquals(OptimizationLevel.OFF, actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
+        assertEquals(OptimizationLevel.NONE, actual.getOptimizationLevel(Optimization.DATA_FLOW_OPTIMIZATION));
         assertEquals(1, actual.getParseTreeLevel());
         assertEquals(3, actual.getDebugLevel());
         assertEquals(100, actual.getOptimizationPasses());

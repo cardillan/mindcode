@@ -28,7 +28,7 @@ class PropagateJumpTargets extends BaseOptimizer {
                 LogicInstruction instruction = it.next();
                 if (instruction instanceof JumpInstruction jump) {
                     LogicLabel label = findJumpRedirection(jump);
-                    GotoInstruction labeledGoto = aggressive() && labeledInstruction(label) instanceof GotoInstruction ix ? ix : null;
+                    GotoInstruction labeledGoto = advanced() && labeledInstruction(label) instanceof GotoInstruction ix ? ix : null;
                     if (jump.isUnconditional() && labeledGoto != null || !label.equals(jump.getTarget())) {
                         if (labeledGoto != null) {
                             // An unconditional jump targets a goto: replace it with the goto itself
@@ -88,8 +88,8 @@ class PropagateJumpTargets extends BaseOptimizer {
             return ix.getTarget();
         } 
 
-        // Handle end instruction only in aggressive mode
-        if (next instanceof EndInstruction && aggressive()) {
+        // Handle end instruction only in advanced mode
+        if (next instanceof EndInstruction && advanced()) {
             return FIRST_LABEL;
         }
 
@@ -99,7 +99,7 @@ class PropagateJumpTargets extends BaseOptimizer {
     
     // Returns true if the next jump is semantically identical to the first jump
     private boolean isIdenticalJump(JumpInstruction firstJump, JumpInstruction nextJump) {
-        if (aggressive()) {
+        if (advanced()) {
             List<LogicArgument> args1 = firstJump.getArgs();
             List<LogicArgument> args2 = nextJump.getArgs();
 

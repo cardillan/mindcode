@@ -85,8 +85,8 @@ public class SchematicsController {
 
     @GetMapping
     public ModelAndView getHomePage(@RequestParam(name = "s", defaultValue = "") String id,
-                                    @RequestParam(name = "optimizationLevel", defaultValue = "AGGRESSIVE") String optimizationLevel) {
-        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.AGGRESSIVE);
+                                    @RequestParam(name = "optimizationLevel", defaultValue = "ADVANCED") String optimizationLevel) {
+        OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.ADVANCED);
         final String sampleName;
         final String sourceCode;
         if (samples.containsKey(id)) {

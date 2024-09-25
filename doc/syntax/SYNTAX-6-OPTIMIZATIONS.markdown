@@ -49,7 +49,7 @@ are removed by the stack usage optimization down the line.
 This optimization inspects the entire code and removes all instructions that write to variables,
 if none of the variables written to are actually read anywhere in the code.
 
-This optimization support `basic` and `aggressive` levels of optimization. On the `aggressive` level,
+This optimization support `basic` and `advanced` levels of optimization. On the `advanced` level,
 the optimization removes all dead assignments, even assignments to unused global and main variables.
 
 Dead Code Elimination also inspects your code and prints out suspicious variables:
@@ -122,7 +122,7 @@ optimizations are available:
   target variable to the other operand.  
 * All set instructions assigning a variable to itself (e.g. `set x x`) are removed.
 
-If the optimization level is `aggressive`, the following additional expressions are handled:
+If the optimization level is `advanced`, the following additional expressions are handled:
 
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, 
   the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where ID is a 
@@ -352,11 +352,11 @@ op mul y1 0.002 0.002
 end
 ```
 
-On `aggressive` optimization level, no special protection to main variables is awarded, and they can be completely
+On `advanced` optimization level, no special protection to main variables is awarded, and they can be completely
 removed from the resulting code:
 
 ```
-#set optimization = aggressive;
+#set optimization = advanced;
 x0 = 0.001;
 y0 = 0.002;
 x1 = x0 * x0 + y0 * y0;
@@ -487,7 +487,7 @@ end
 
 The first assignment to `a` is removed, because `a` is not read before another value is assigned to it. The last
 assignment to `a` is [preserved on `basic` optimization level](#optimization-levels), but would be removed on
-`aggressive` level, because `a` is not read after that assignment at all.
+`advanced` level, because `a` is not read after that assignment at all.
 
 An assignment can also become unnecessary due to other optimizations carried by this optimizer.
 
@@ -497,7 +497,7 @@ When a variable is used in an instruction and the value of the variable is known
 itself is replaced by the constant value. This can in turn make the original assignment unnecessary. See for example:
 
 ```
-#set optimization = aggressive;
+#set optimization = advanced;
 a = 10;
 b = 20;
 c = @tick + b;
@@ -522,7 +522,7 @@ folding evaluates the expression and replaces the operation with the resulting v
 For example:
 
 ```
-#set optimization = aggressive;
+#set optimization = advanced;
 a = 10;
 b = 20;
 c = a + b;
@@ -541,7 +541,7 @@ Looks quite spectacular, doesn't it? Here's what happened:
 * The optimizer figured out that variables `a` and `b` are not needed, because they only hold a constant value.
 * Then it found out the `c = a + b` expression has a constant value too.
 * What was left was a sequence of print statements, each printing a constant value.
-  [Print Merging optimization](#print-merging) on `aggressive` level then merged it all together.
+  [Print Merging optimization](#print-merging) on `advanced` level then merged it all together.
 
 Not every opportunity for constant folding is detected at this moment. While `x = 1 + y + 2` is optimized to
 `op add x y 3`, `x = 1 + y + z + 2` it too complex to process as this moment and the constant values of `1` and `2`
@@ -694,10 +694,10 @@ compiles into
    11  end
 ```
 
-On `aggressive` optimization level, Loop Hoisting is capable of handling some `if` expressions as well:
+On `advanced` optimization level, Loop Hoisting is capable of handling some `if` expressions as well:
 
 ```
-#set loop-hoisting = aggressive;
+#set loop-hoisting = advanced;
 A = 10;
 for i in 1 ... A do;
     k = (A % 2 == 0) ? "Even" : "Odd";
@@ -821,7 +821,7 @@ the loop remain. The optimization is most efficient on loops that are very "tigh
 instructions apart from the loop itself. The most dramatic practical example is probably something like this:
 
 ```
-#set loop-unrolling = off;
+#set loop-unrolling = none;
 for i in 0 ... 10 do
     cell1[i] = 0;
 end;
@@ -921,7 +921,7 @@ Furthermore:
   condition must be expressed using one of these operators: `>`, `<`, `>=` or `<=`. In this mode, the total number 
   of iterations is computed using the starting and ending value of the variable and the change in each iteration 
   (resulting in a fast computation).
-* If the optimization level is `aggressive`, every deterministic update of loop control variable by a constant value 
+* If the optimization level is `advanced`, every deterministic update of loop control variable by a constant value 
   and every form of loop condition is allowed. In this case, Mindcode determines the total number of iterations by 
   emulating the entire execution of the loop, until the loop exits or the maximum possible number of iterations 
   allowed by available instruction space is reached (meaning the loop cannot be unrolled).   
@@ -976,7 +976,7 @@ while i += 1 < 10 do
 end ;
 ```
 
-Examples of loops that can be unrolled on `aggressive` optimization level:
+Examples of loops that can be unrolled on `advanced` optimization level:
 
 ```
 // An operation different from add and sub is supported
@@ -1064,7 +1064,7 @@ Sometimes unrolling an outer loop can make the inner loop eligible for unrolling
 cannot be unrolled first, as it is not constant:
 
 ```
-#set optimization = aggressive;
+#set optimization = advanced;
 first = true;
 for i in 1 .. 5 do
     for j in i .. 5 do
@@ -1110,7 +1110,7 @@ This optimization can inline additional functions that aren't recursive and also
 source code. If there's enough instruction space, all function calls may be inlined and the original function body 
 removed from the program. 
 
-When the optimization level is set to `aggressive` and there isn't enough instruction space, only a single one or 
+When the optimization level is set to `advanced` and there isn't enough instruction space, only a single one or 
 several specific function calls may be inlined; in such case the original function body remains in the program and 
 is used by the function calls that weren't inlined. If there are only last two function calls remaining, either both 
 of them, or none of them, will be inlined.    
@@ -1292,7 +1292,7 @@ end;
 If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected
 to the target of the second jump, repeated until the end of jump chain is reached. Moreover:
 
-* on `aggressive` level, `end` instruction is handled identically to `jump 0 always`,
+* on `advanced` level, `end` instruction is handled identically to `jump 0 always`,
 * conditional jumps in the jump chain are followed if:
   * their condition is identical to the condition of the first jump, and
   * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.).
@@ -1313,7 +1313,7 @@ Instruction removal is done by analyzing the control flow of the program and rem
 executed. When [Jump Normalization](#jump-normalization) is not active, some section of unreachable code may not be 
 recognized.
 
-The `end` instruction, even when not reachable, is not removed unless the optimization level is `aggressive`.
+The `end` instruction, even when not reachable, is not removed unless the optimization level is `advanced`.
 Main body program and function definitions are each terminated by the `end` instruction and removing it
 might make the produced code somewhat less readable.
 
@@ -1350,10 +1350,10 @@ print("Items: ", items);
 print("\nTime: ", @time "\n");
 ```
 
-On `aggressive` level, all constant values - not just string constants - are merged. For example:
+On `advanced` level, all constant values - not just string constants - are merged. For example:
 
 ```
-#set optimization = aggressive;
+#set optimization = advanced;
 const MAX_VALUE = 10;
 printf("Step $i of $MAX_VALUE\n");
 ```
@@ -1377,7 +1377,7 @@ print "\n"
 ### String length limit
 
 On `basic` level, the optimization won't merge print instructions if the merge would produce a string
-longer than 34 characters (36 when counting the double quotes). On `aggressive` level, such instructions
+longer than 34 characters (36 when counting the double quotes). On `advanced` level, such instructions
 will be merged regardless. This can create long string constants, but according to our tests these can be pasted
 into Mindustry processors even if they're longer than what the Mindustry GUI allows to enter.
 

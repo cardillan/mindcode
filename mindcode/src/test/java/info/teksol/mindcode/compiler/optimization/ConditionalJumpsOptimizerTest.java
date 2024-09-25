@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mindcode.compiler.optimization.Optimization.*;
-import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.AGGRESSIVE;
+import static info.teksol.mindcode.compiler.optimization.OptimizationLevel.ADVANCED;
 import static info.teksol.mindcode.logic.Opcode.*;
 
 class ConditionalJumpsOptimizerTest extends AbstractOptimizerTest<ConditionalJumpsOptimizer> {
@@ -78,8 +78,8 @@ class ConditionalJumpsOptimizerTest extends AbstractOptimizerTest<ConditionalJum
     void preservesUserVariables() {
         assertCompilesTo(createTestCompiler(
                 createCompilerProfile()
-                        .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, AGGRESSIVE)
+                        .setOptimizationLevel(DEAD_CODE_ELIMINATION, ADVANCED)
+                        .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, ADVANCED)
                 ),
                 """
                         alive = @unit.dead === 0
@@ -102,8 +102,8 @@ class ConditionalJumpsOptimizerTest extends AbstractOptimizerTest<ConditionalJum
     void preservesStrictEqualConditions() {
         assertCompilesTo(createTestCompiler(
                 createCompilerProfile()
-                        .setOptimizationLevel(DEAD_CODE_ELIMINATION, AGGRESSIVE)
-                        .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, AGGRESSIVE)
+                        .setOptimizationLevel(DEAD_CODE_ELIMINATION, ADVANCED)
+                        .setOptimizationLevel(TEMP_VARIABLES_ELIMINATION, ADVANCED)
                 ),
                 """
                         if @unit.dead === 0

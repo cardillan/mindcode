@@ -35,13 +35,13 @@ abstract class ActionHandler {
         ArgumentGroup optimizations = subparser.addArgumentGroup("optimization levels")
                 .description("Options to specify global and individual optimization levels. " +
                         "Individual optimizers use global level when not explicitly set. Available optimization levels " +
-                        "are {off,basic,aggressive}.");
+                        "are {none,basic,advanced}.");
 
         optimizations.addArgument("-o", "--optimization")
                 .help("sets global optimization level for all optimizers")
                 .type(Arguments.caseInsensitiveEnumType(OptimizationLevel.class))
                 .metavar("LEVEL")
-                .setDefault(OptimizationLevel.AGGRESSIVE);
+                .setDefault(OptimizationLevel.ADVANCED);
 
         for (Optimization optimization : Optimization.LIST) {
             optimizations.addArgument("--" + optimization.getOptionName())

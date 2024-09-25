@@ -57,9 +57,9 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
     @Override
     protected CompilerProfile createCompilerProfile() {
         CompilerProfile profile = super.createCompilerProfile();
-        profile.setAllOptimizationLevels(OptimizationLevel.OFF);
+        profile.setAllOptimizationLevels(OptimizationLevel.NONE);
         for (Optimization optimization : getAllOptimizations()) {
-            profile.setOptimizationLevel(optimization, OptimizationLevel.AGGRESSIVE);
+            profile.setOptimizationLevel(optimization, OptimizationLevel.ADVANCED);
         }
         profile.setOptimizationPasses(100);
         return profile;
