@@ -1,8 +1,11 @@
 package info.teksol.mindcode.webapp;
 
+import info.teksol.mindcode.Version;
+
 import java.util.List;
 
 public class HomePageData {
+    private final String version = Version.getVersion();
     private final String id;
     private final String sample;
     private final String source;
@@ -29,6 +32,10 @@ public class HomePageData {
         this.messages = messages;
         this.optimizationLevel = optimizationLevel;
         this.runOutput = runOutput;
+    }
+
+    public String getVersion() {
+        return version;
     }
 
     public String getId() {

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 2.2.0
 
 ### Fixed
 
@@ -37,6 +37,7 @@ Experimental features may contain bugs or produce suboptimal code, and are subje
 
 ### Miscellaneous
 
+* From this version on, Mindcode will use semantic versioning. Major version will be increased for major changes to the syntax. 
 * Replaced pattern matching in switch cases (JDK17 preview feature) with `if` and other constructs to remove the dependency on the `--enable-preview` switch.
 * Updated existing Mindcode and Schemacode samples further to adapt for upcoming changes in syntax (optional keywords were added). Some samples were reworked.
 

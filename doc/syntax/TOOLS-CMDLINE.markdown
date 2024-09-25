@@ -64,12 +64,13 @@ the command line help is included here.
 ## General help
 
 ```
-usage: mindcode [-h] ACTION ...
+usage: mindcode [-h] [-v] ACTION ...
 
 Mindcode/Schemacode command-line compiler.
 
 named arguments:
   -h, --help             show this help message and exit
+  -v, --version          show Mindcode's version number and exit
 
 Actions:
   Specifies the type of processing to be performed

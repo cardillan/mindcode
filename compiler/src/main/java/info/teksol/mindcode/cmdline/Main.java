@@ -1,5 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
+import info.teksol.mindcode.Version;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.DefaultSettings;
@@ -27,7 +28,12 @@ public class Main {
                 .defaultFormatWidth(defaultFormatWidth)
                 .terminalWidthDetection(true)
                 .build()
+                .version("Mindcode/Schemacode command-line compiler, version " + Version.getVersion())
                 .description("Mindcode/Schemacode command-line compiler.");
+
+        parser.addArgument("-v", "--version")
+                .action(Arguments.version()) // Use the version action
+                .help("show program's version number and exit");
 
         Subparsers subparsers = parser.addSubparsers()
                 .title("Actions")
