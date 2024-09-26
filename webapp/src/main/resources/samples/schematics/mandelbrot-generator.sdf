@@ -51,30 +51,30 @@ schematic
     @liquid-source       at (17,  5) liquid @cryofluid
     @liquid-source       at (19,  3) liquid @cryofluid
 
-    @hyper-processor     at ( 0,  0) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 0,  3) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 0,  6) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 0,  9) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 0, 12) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 4,  0) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 4,  3) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 4,  6) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 4,  9) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 4, 12) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 7,  0) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 7,  3) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 7,  6) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 7,  9) processor links a-* end mlog = compute end
-    @hyper-processor     at ( 7, 12) processor links a-* end mlog = compute end
-    @hyper-processor     at (11,  0) processor links a-* end mlog = compute end
-    @hyper-processor     at (11,  3) processor links a-* end mlog = compute end
-    @hyper-processor     at (11,  6) processor links a-* end mlog = compute end
-    @hyper-processor     at (11,  9) processor links a-* end mlog = compute end
-    @hyper-processor     at (11, 12) processor links a-* end mlog = compute end
-    @hyper-processor     at (14,  0) processor links a-* end mlog = compute end
-    @hyper-processor     at (14,  6) processor links a-* end mlog = compute end
-    @hyper-processor     at (17,  0) processor links a-* end mlog = compute end
-    @hyper-processor     at (17,  6) processor links a-* end mlog = compute end
+    @hyper-processor     at ( 0,  0) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 0,  3) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 0,  6) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 0,  9) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 0, 12) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 4,  0) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 4,  3) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 4,  6) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 4,  9) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 4, 12) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 7,  0) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 7,  3) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 7,  6) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 7,  9) processor links a-* end mindcode = compute end
+    @hyper-processor     at ( 7, 12) processor links a-* end mindcode = compute end
+    @hyper-processor     at (11,  0) processor links a-* end mindcode = compute end
+    @hyper-processor     at (11,  3) processor links a-* end mindcode = compute end
+    @hyper-processor     at (11,  6) processor links a-* end mindcode = compute end
+    @hyper-processor     at (11,  9) processor links a-* end mindcode = compute end
+    @hyper-processor     at (11, 12) processor links a-* end mindcode = compute end
+    @hyper-processor     at (14,  0) processor links a-* end mindcode = compute end
+    @hyper-processor     at (14,  6) processor links a-* end mindcode = compute end
+    @hyper-processor     at (17,  0) processor links a-* end mindcode = compute end
+    @hyper-processor     at (17,  6) processor links a-* end mindcode = compute end
 
 a-display1:
     @large-logic-display at (14,  9)
@@ -124,1563 +124,511 @@ message3:
     c-switch57: @switch  at (18, 15)
     c-switch58: @switch  at (19, 15)
 
-    @logic-processor     at (18,  4) processor links * end mlog = control end
+    @logic-processor     at (18,  4) processor links * end mindcode = control end
 end
 
 // Note: using compiled mlog code to avoid delays while compiling mindcode in the web app
 
 control = """
-    jump 0 equal bank1 null
-    jump 1 equal message1 null
-    jump 2 equal message2 null
-    jump 3 equal message3 null
-    print "Initializing..."
-    printflush message1
-    set text0 "Rendering...\n-------------------------\n"
-    set text1 ""
-    set text2 ""
-    set X -0.8
-    set Y 0
-    set ZOOM 50
-    set JULIA false
-    set JULIA_X 0
-    set JULIA_Y 0
-    write -0.8 bank1 80
-    write 0 bank1 81
-    write 50 bank1 82
-    write false bank1 83
-    write -0.14375 bank1 86
-    write 1 bank1 87
-    write 1600 bank1 88
-    write false bank1 89
-    write -1.675 bank1 92
-    write 0 bank1 93
-    write 25600 bank1 94
-    write false bank1 95
-    write -1.413547 bank1 98
-    write -0.03234831 bank1 99
-    write 2500 bank1 100
-    write false bank1 101
-    write -1.373547 bank1 104
-    write -0.01234831 bank1 105
-    write 5000 bank1 106
-    write false bank1 107
-    write -1.408547 bank1 110
-    write -0.03734831 bank1 111
-    write 10000 bank1 112
-    write false bank1 113
-    write 0.371875 bank1 116
-    write 0.078125 bank1 117
-    write 3200 bank1 118
-    write false bank1 119
-    write -1.382347 bank1 122
-    write -0.02114831 bank1 123
-    write 5000 bank1 124
-    write false bank1 125
-    write 0.355 bank1 128
-    write 0.66 bank1 129
-    write 3200 bank1 130
-    write false bank1 131
-    write 0.018125 bank1 134
-    write -0.818125 bank1 135
-    write 6400 bank1 136
-    write false bank1 137
-    write 0 bank1 140
-    write 0 bank1 141
-    write 50 bank1 142
-    write true bank1 143
-    write -0.8 bank1 144
-    write 0 bank1 145
-    write -0.14375 bank1 146
-    write 1.03125 bank1 147
-    write 3200 bank1 148
-    write true bank1 149
-    write -0.14375 bank1 150
-    write 1 bank1 151
-    write -1.403547 bank1 152
-    write -0.02734831 bank1 153
-    write 5000 bank1 154
-    write true bank1 155
-    write -1.408547 bank1 156
-    write -0.03734831 bank1 157
-    set i 158
-    write 0 bank1 64
-    write 1 bank1 65
-    write X bank1 66
-    write Y bank1 67
-    write ZOOM bank1 68
-    write JULIA bank1 69
-    write JULIA_X bank1 70
-    write JULIA_Y bank1 71
-    write PALETTE bank1 72
-    control enabled switch7 JULIA 0 0 0
-    set r 128
-    set g 192
-    set b 64
-    set i 0
-    op div __tmp92 r 256
-    op div __tmp93 g 256
-    op div __tmp94 b 256
-    packcolor __tmp95 __tmp92 __tmp93 __tmp94 255
-    write __tmp95 bank1 i
-    op add __tmp96 r 147
-    op mod r __tmp96 256
-    op add __tmp98 g 87
-    op mod g __tmp98 256
-    op add __tmp100 b 59
-    op mod b __tmp100 256
-    op add i i 1
-    jump 88 lessThan i 63
-    packcolor __tmp102 0 0 0 1
-    write __tmp102 bank1 63
-    sensor bookmark_x message2 @x
-    sensor bookmark_y message2 @y
-    op add bookmark_xmax bookmark_x 13
-    set bookmark 1
-    set bookmark_clr -1
-    op add position 80 0
-    sensor palette_x message3 @x
-    set PALETTE 1
-    set palette_clr -1
-    set __tmp110 @links
-    set first_link 0
-    jump 120 greaterThanEq 0 __tmp110
-    getlink switch first_link
-    sensor __tmp112 switch @y
-    jump 120 equal __tmp112 bookmark_y
-    op add first_link first_link 1
-    jump 115 lessThan first_link __tmp110
-    set checking 999
-    set CHANGE false
-    set update_bookmarks true
-    write 1 bank1 64
-    print "Mandelbrot Mania! v3.0\n"
-    print text0
-    jump 133 equal JULIA false
-    print "Julia set of Mandelbrot\nfractal at coordinates\n   X: "
-    print JULIA_X
-    print "\n   Y: "
-    print JULIA_Y
-    print "\n"
-    jump 134 always 0 0
-    print "Mandelbrot set\n"
-    print "-------------------------\nX: "
-    print X
-    print "\nY: "
-    print Y
-    print "\nZoom: "
-    print ZOOM
-    print "\n"
-    print text1
-    print text2
-    print "\n"
-    printflush message1
-    sensor __tmp117 switch1 @enabled
-    jump 151 equal __tmp117 false
-    set CHANGE true
-    op div __tmp127 44 ZOOM
-    op add Y Y __tmp127
-    control enabled switch1 false 0 0 0
-    sensor __tmp133 switch2 @enabled
-    jump 157 equal __tmp133 false
-    set CHANGE true
-    op div __tmp138 -44 ZOOM
-    op add X X __tmp138
-    control enabled switch2 false 0 0 0
-    sensor __tmp149 switch3 @enabled
-    jump 163 equal __tmp149 false
-    set CHANGE true
-    op div __tmp154 44 ZOOM
-    op add X X __tmp154
-    control enabled switch3 false 0 0 0
-    sensor __tmp165 switch4 @enabled
-    jump 169 equal __tmp165 false
-    set CHANGE true
-    op div __tmp175 -44 ZOOM
-    op add Y Y __tmp175
-    control enabled switch4 false 0 0 0
-    sensor __tmp181 switch5 @enabled
-    jump 174 equal __tmp181 false
-    set CHANGE true
-    op mul ZOOM ZOOM 2
-    control enabled switch5 false 0 0 0
-    sensor __tmp197 switch6 @enabled
-    jump 179 equal __tmp197 false
-    set CHANGE true
-    op mul ZOOM ZOOM 0.5
-    control enabled switch6 false 0 0 0
-    sensor __tmp212 switch7 @enabled
-    jump 186 equal __tmp212 JULIA
-    set CHANGE true
-    sensor JULIA switch7 @enabled
-    jump 186 equal JULIA false
-    set JULIA_X X
-    set JULIA_Y Y
-    jump 189 equal CHANGE false
-    set text2 ""
-    set text1 ""
-    sensor __tmp218 switch8 @enabled
-    jump 207 equal __tmp218 false
-    read X bank1 position
-    op add __tmp222 position 1
-    read Y bank1 __tmp222
-    op add __tmp224 position 2
-    read ZOOM bank1 __tmp224
-    op add __tmp226 position 3
-    read JULIA bank1 __tmp226
-    op add __tmp228 position 4
-    read JULIA_X bank1 __tmp228
-    op add __tmp230 position 5
-    read JULIA_Y bank1 __tmp230
-    control enabled switch7 JULIA 0 0 0
-    control enabled switch8 false 0 0 0
-    set text1 "\nLoaded from #"
-    set text2 bookmark
-    set CHANGE true
-    sensor __tmp231 switch9 @enabled
-    jump 224 equal __tmp231 false
-    write X bank1 position
-    op add __tmp233 position 1
-    write Y bank1 __tmp233
-    op add __tmp234 position 2
-    write ZOOM bank1 __tmp234
-    op add __tmp235 position 3
-    write JULIA bank1 __tmp235
-    op add __tmp236 position 4
-    write JULIA_X bank1 __tmp236
-    op add __tmp237 position 5
-    write JULIA_Y bank1 __tmp237
-    control enabled switch9 false 0 0 0
-    set text1 "\nSaved to #"
-    set text2 bookmark
-    set update_bookmarks true
-    set __tmp238 @links
-    set n first_link
-    jump 269 greaterThanEq first_link __tmp238
-    getlink switch n
-    sensor __tmp240 switch @type
-    op equal __tmp241 __tmp240 @switch
-    sensor __tmp242 switch @y
-    op equal __tmp243 __tmp242 bookmark_y
-    op land __tmp244 __tmp241 __tmp243
-    jump 267 equal __tmp244 false
-    sensor button_x switch @x
-    jump 250 lessThan button_x palette_x
-    op sub index button_x palette_x
-    jump 240 notEqual index PALETTE
-    control enabled switch true 0 0 0
-    jump 267 always 0 0
-    jump 244 notEqual index palette_clr
-    control enabled switch false 0 0 0
-    set palette_clr -1
-    jump 267 always 0 0
-    sensor __tmp254 switch @enabled
-    jump 267 equal __tmp254 false
-    set palette_clr PALETTE
-    set PALETTE index
-    set CHANGE true
-    jump 267 always 0 0
-    jump 267 greaterThan button_x bookmark_xmax
-    op sub index button_x bookmark_x
-    jump 255 notEqual index bookmark
-    control enabled switch true 0 0 0
-    jump 267 always 0 0
-    jump 259 notEqual index bookmark_clr
-    control enabled switch false 0 0 0
-    set bookmark_clr -1
-    jump 267 always 0 0
-    sensor __tmp263 switch @enabled
-    jump 267 equal __tmp263 false
-    set bookmark_clr bookmark
-    set bookmark index
-    op sub __tmp265 index 1
-    op mul __tmp266 6 __tmp265
-    op add position 80 __tmp266
-    set update_bookmarks true
-    op add n n 1
-    jump 227 lessThan n __tmp238
-    jump 301 equal update_bookmarks false
-    print "BOOKMARKS\n[o] [o] [o] [o] ...\n      [o] Load\n      [o] Save\n-------------------------\nSelected bookmark #"
-    print bookmark
-    print ":\n"
-    op add __tmp270 position 3
-    read __tmp269 bank1 __tmp270
-    jump 286 equal __tmp269 false
-    op add __tmp273 position 4
-    read __tmp272 bank1 __tmp273
-    print "Julia set of Mandelbrot\nfractal at coordinates\n   X: "
-    print __tmp272
-    op add __tmp275 position 5
-    read __tmp274 bank1 __tmp275
-    print "\n   Y: "
-    print __tmp274
-    print "\n"
-    jump 287 always 0 0
-    print "Mandelbrot set\n"
-    read __tmp276 bank1 position
-    print "-------------------------\nX: "
-    print __tmp276
-    op add __tmp278 position 1
-    read __tmp277 bank1 __tmp278
-    print "\nY: "
-    print __tmp277
-    op add __tmp280 position 2
-    read __tmp279 bank1 __tmp280
-    print "\nZoom: "
-    print __tmp279
-    print "\n"
-    printflush message2
-    set update_bookmarks false
-    print "Palette #"
-    print PALETTE
-    printflush message3
-    read __tmp281 bank1 checking
-    jump 309 notEqual __tmp281 0
-    op sub checking checking 2
-    jump 309 greaterThan checking 334
-    set text0 "Finished.\n-------------------------\n"
-    jump 124 equal CHANGE false
-    print "Initializing..."
-    printflush message1
-    read __tmp288 bank1 65
-    op add __tmp289 __tmp288 1
-    write __tmp289 bank1 65
-    set CHANGE false
-    read __tmp291 bank1 511
-    jump 316 greaterThan __tmp291 0
-    read __tmp291 bank1 509
-    jump 318 greaterThan __tmp291 0
-    read __tmp291 bank1 507
-    jump 320 greaterThan __tmp291 0
-    read __tmp291 bank1 505
-    jump 322 greaterThan __tmp291 0
-    read __tmp291 bank1 503
-    jump 324 greaterThan __tmp291 0
-    read __tmp291 bank1 501
-    jump 326 greaterThan __tmp291 0
-    read __tmp291 bank1 499
-    jump 328 greaterThan __tmp291 0
-    read __tmp291 bank1 497
-    jump 330 greaterThan __tmp291 0
-    read __tmp291 bank1 495
-    jump 332 greaterThan __tmp291 0
-    read __tmp291 bank1 493
-    jump 334 greaterThan __tmp291 0
-    read __tmp291 bank1 491
-    jump 336 greaterThan __tmp291 0
-    read __tmp291 bank1 489
-    jump 338 greaterThan __tmp291 0
-    read __tmp291 bank1 487
-    jump 340 greaterThan __tmp291 0
-    read __tmp291 bank1 485
-    jump 342 greaterThan __tmp291 0
-    read __tmp291 bank1 483
-    jump 344 greaterThan __tmp291 0
-    read __tmp291 bank1 481
-    jump 346 greaterThan __tmp291 0
-    read __tmp291 bank1 479
-    jump 348 greaterThan __tmp291 0
-    read __tmp291 bank1 477
-    jump 350 greaterThan __tmp291 0
-    read __tmp291 bank1 475
-    jump 352 greaterThan __tmp291 0
-    read __tmp291 bank1 473
-    jump 354 greaterThan __tmp291 0
-    read __tmp291 bank1 471
-    jump 356 greaterThan __tmp291 0
-    read __tmp291 bank1 469
-    jump 358 greaterThan __tmp291 0
-    read __tmp291 bank1 467
-    jump 360 greaterThan __tmp291 0
-    read __tmp291 bank1 465
-    jump 362 greaterThan __tmp291 0
-    read __tmp291 bank1 463
-    jump 364 greaterThan __tmp291 0
-    read __tmp291 bank1 461
-    jump 366 greaterThan __tmp291 0
-    read __tmp291 bank1 459
-    jump 368 greaterThan __tmp291 0
-    read __tmp291 bank1 457
-    jump 370 greaterThan __tmp291 0
-    read __tmp291 bank1 455
-    jump 372 greaterThan __tmp291 0
-    read __tmp291 bank1 453
-    jump 374 greaterThan __tmp291 0
-    read __tmp291 bank1 451
-    jump 376 greaterThan __tmp291 0
-    read __tmp291 bank1 449
-    jump 378 greaterThan __tmp291 0
-    read __tmp291 bank1 447
-    jump 380 greaterThan __tmp291 0
-    read __tmp291 bank1 445
-    jump 382 greaterThan __tmp291 0
-    read __tmp291 bank1 443
-    jump 384 greaterThan __tmp291 0
-    read __tmp291 bank1 441
-    jump 386 greaterThan __tmp291 0
-    read __tmp291 bank1 439
-    jump 388 greaterThan __tmp291 0
-    read __tmp291 bank1 437
-    jump 390 greaterThan __tmp291 0
-    read __tmp291 bank1 435
-    jump 392 greaterThan __tmp291 0
-    read __tmp291 bank1 433
-    jump 394 greaterThan __tmp291 0
-    read __tmp291 bank1 431
-    jump 396 greaterThan __tmp291 0
-    read __tmp291 bank1 429
-    jump 398 greaterThan __tmp291 0
-    read __tmp291 bank1 427
-    jump 400 greaterThan __tmp291 0
-    read __tmp291 bank1 425
-    jump 402 greaterThan __tmp291 0
-    read __tmp291 bank1 423
-    jump 404 greaterThan __tmp291 0
-    read __tmp291 bank1 421
-    jump 406 greaterThan __tmp291 0
-    read __tmp291 bank1 419
-    jump 408 greaterThan __tmp291 0
-    read __tmp291 bank1 417
-    jump 410 greaterThan __tmp291 0
-    read __tmp291 bank1 415
-    jump 412 greaterThan __tmp291 0
-    read __tmp291 bank1 413
-    jump 414 greaterThan __tmp291 0
-    read __tmp291 bank1 411
-    jump 416 greaterThan __tmp291 0
-    read __tmp291 bank1 409
-    jump 418 greaterThan __tmp291 0
-    read __tmp291 bank1 407
-    jump 420 greaterThan __tmp291 0
-    read __tmp291 bank1 405
-    jump 422 greaterThan __tmp291 0
-    read __tmp291 bank1 403
-    jump 424 greaterThan __tmp291 0
-    read __tmp291 bank1 401
-    jump 426 greaterThan __tmp291 0
-    read __tmp291 bank1 399
-    jump 428 greaterThan __tmp291 0
-    read __tmp291 bank1 397
-    jump 430 greaterThan __tmp291 0
-    read __tmp291 bank1 395
-    jump 432 greaterThan __tmp291 0
-    read __tmp291 bank1 393
-    jump 434 greaterThan __tmp291 0
-    read __tmp291 bank1 391
-    jump 436 greaterThan __tmp291 0
-    read __tmp291 bank1 389
-    jump 438 greaterThan __tmp291 0
-    read __tmp291 bank1 387
-    jump 440 greaterThan __tmp291 0
-    read __tmp291 bank1 385
-    jump 442 greaterThan __tmp291 0
-    read __tmp291 bank1 383
-    jump 444 greaterThan __tmp291 0
-    read __tmp291 bank1 381
-    jump 446 greaterThan __tmp291 0
-    read __tmp291 bank1 379
-    jump 448 greaterThan __tmp291 0
-    read __tmp291 bank1 377
-    jump 450 greaterThan __tmp291 0
-    read __tmp291 bank1 375
-    jump 452 greaterThan __tmp291 0
-    read __tmp291 bank1 373
-    jump 454 greaterThan __tmp291 0
-    read __tmp291 bank1 371
-    jump 456 greaterThan __tmp291 0
-    read __tmp291 bank1 369
-    jump 458 greaterThan __tmp291 0
-    read __tmp291 bank1 367
-    jump 460 greaterThan __tmp291 0
-    read __tmp291 bank1 365
-    jump 462 greaterThan __tmp291 0
-    read __tmp291 bank1 363
-    jump 464 greaterThan __tmp291 0
-    read __tmp291 bank1 361
-    jump 466 greaterThan __tmp291 0
-    read __tmp291 bank1 359
-    jump 468 greaterThan __tmp291 0
-    read __tmp291 bank1 357
-    jump 470 greaterThan __tmp291 0
-    read __tmp291 bank1 355
-    jump 472 greaterThan __tmp291 0
-    read __tmp291 bank1 353
-    jump 474 greaterThan __tmp291 0
-    read __tmp291 bank1 351
-    jump 476 greaterThan __tmp291 0
-    read __tmp291 bank1 349
-    jump 478 greaterThan __tmp291 0
-    read __tmp291 bank1 347
-    jump 480 greaterThan __tmp291 0
-    read __tmp291 bank1 345
-    jump 482 greaterThan __tmp291 0
-    read __tmp291 bank1 343
-    jump 484 greaterThan __tmp291 0
-    read __tmp291 bank1 341
-    jump 486 greaterThan __tmp291 0
-    read __tmp291 bank1 339
-    jump 488 greaterThan __tmp291 0
-    read __tmp291 bank1 337
-    jump 490 greaterThan __tmp291 0
-    read __tmp291 bank1 335
-    jump 492 greaterThan __tmp291 0
-    set CHANGE false
-    write 0 bank1 158
-    write 0 bank1 159
-    write 0 bank1 160
-    write 0 bank1 161
-    write 0 bank1 162
-    write 0 bank1 163
-    write 0 bank1 164
-    write 0 bank1 165
-    write 0 bank1 166
-    write 0 bank1 167
-    write 0 bank1 168
-    write 0 bank1 169
-    write 0 bank1 170
-    write 0 bank1 171
-    write 0 bank1 172
-    write 0 bank1 173
-    write 0 bank1 174
-    write 0 bank1 175
-    write 0 bank1 176
-    write 0 bank1 177
-    write 0 bank1 178
-    write 0 bank1 179
-    write 0 bank1 180
-    write 0 bank1 181
-    write 0 bank1 182
-    write 0 bank1 183
-    write 0 bank1 184
-    write 0 bank1 185
-    write 0 bank1 186
-    write 0 bank1 187
-    write 0 bank1 188
-    write 0 bank1 189
-    write 0 bank1 190
-    write 0 bank1 191
-    write 0 bank1 192
-    write 0 bank1 193
-    write 0 bank1 194
-    write 0 bank1 195
-    write 0 bank1 196
-    write 0 bank1 197
-    write 0 bank1 198
-    write 0 bank1 199
-    write 0 bank1 200
-    write 0 bank1 201
-    write 0 bank1 202
-    write 0 bank1 203
-    write 0 bank1 204
-    write 0 bank1 205
-    write 0 bank1 206
-    write 0 bank1 207
-    write 0 bank1 208
-    write 0 bank1 209
-    write 0 bank1 210
-    write 0 bank1 211
-    write 0 bank1 212
-    write 0 bank1 213
-    write 0 bank1 214
-    write 0 bank1 215
-    write 0 bank1 216
-    write 0 bank1 217
-    write 0 bank1 218
-    write 0 bank1 219
-    write 0 bank1 220
-    write 0 bank1 221
-    write 0 bank1 222
-    write 0 bank1 223
-    write 0 bank1 224
-    write 0 bank1 225
-    write 0 bank1 226
-    write 0 bank1 227
-    write 0 bank1 228
-    write 0 bank1 229
-    write 0 bank1 230
-    write 0 bank1 231
-    write 0 bank1 232
-    write 0 bank1 233
-    write 0 bank1 234
-    write 0 bank1 235
-    write 0 bank1 236
-    write 0 bank1 237
-    write 0 bank1 238
-    write 0 bank1 239
-    write 0 bank1 240
-    write 0 bank1 241
-    write 0 bank1 242
-    write 0 bank1 243
-    write 0 bank1 244
-    write 0 bank1 245
-    write 0 bank1 246
-    write 0 bank1 247
-    write 0 bank1 248
-    write 0 bank1 249
-    write 0 bank1 250
-    write 0 bank1 251
-    write 0 bank1 252
-    write 0 bank1 253
-    write 0 bank1 254
-    write 0 bank1 255
-    write 0 bank1 256
-    write 0 bank1 257
-    write 0 bank1 258
-    write 0 bank1 259
-    write 0 bank1 260
-    write 0 bank1 261
-    write 0 bank1 262
-    write 0 bank1 263
-    write 0 bank1 264
-    write 0 bank1 265
-    write 0 bank1 266
-    write 0 bank1 267
-    write 0 bank1 268
-    write 0 bank1 269
-    write 0 bank1 270
-    write 0 bank1 271
-    write 0 bank1 272
-    write 0 bank1 273
-    write 0 bank1 274
-    write 0 bank1 275
-    write 0 bank1 276
-    write 0 bank1 277
-    write 0 bank1 278
-    write 0 bank1 279
-    write 0 bank1 280
-    write 0 bank1 281
-    write 0 bank1 282
-    write 0 bank1 283
-    write 0 bank1 284
-    write 0 bank1 285
-    write 0 bank1 286
-    write 0 bank1 287
-    write 0 bank1 288
-    write 0 bank1 289
-    write 0 bank1 290
-    write 0 bank1 291
-    write 0 bank1 292
-    write 0 bank1 293
-    write 0 bank1 294
-    write 0 bank1 295
-    write 0 bank1 296
-    write 0 bank1 297
-    write 0 bank1 298
-    write 0 bank1 299
-    write 0 bank1 300
-    write 0 bank1 301
-    write 0 bank1 302
-    write 0 bank1 303
-    write 0 bank1 304
-    write 0 bank1 305
-    write 0 bank1 306
-    write 0 bank1 307
-    write 0 bank1 308
-    write 0 bank1 309
-    write 0 bank1 310
-    write 0 bank1 311
-    write 0 bank1 312
-    write 0 bank1 313
-    write 0 bank1 314
-    write 0 bank1 315
-    write 0 bank1 316
-    write 0 bank1 317
-    write 0 bank1 318
-    write 0 bank1 319
-    write 0 bank1 320
-    write 0 bank1 321
-    write 0 bank1 322
-    write 0 bank1 323
-    write 0 bank1 324
-    write 0 bank1 325
-    write 0 bank1 326
-    write 0 bank1 327
-    write 0 bank1 328
-    write 0 bank1 329
-    write 0 bank1 330
-    write 0 bank1 331
-    write 0 bank1 332
-    write 0 bank1 333
-    draw color 86 86 102 192 0 0
-    draw rect 0 0 176 176 0 0
-    drawflush display1
-    write X bank1 66
-    write Y bank1 67
-    write ZOOM bank1 68
-    write JULIA bank1 69
-    write JULIA_X bank1 70
-    write JULIA_Y bank1 71
-    write PALETTE bank1 72
-    read __tmp294 bank1 64
-    op add __tmp295 __tmp294 1
-    write __tmp295 bank1 64
-    set checking 999
-    set text0 "Rendering...\n-------------------------\n"
-    jump 124 always 0 0
+    const DISPLAY_SIZE = 176
+    const HALF_SIZE = DISPLAY_SIZE / 2
+    const MAX_DEPTH = 63
+    const SKIP = 17
+
+    const VARIABLES = MAX_DEPTH + 1
+    const BOOKMARKS = VARIABLES + 16
+    const BOOKMARK_COUNT = 13
+    const BOOKMARK_SIZE = 6
+    const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE
+    const PROCESSORS = SLOTS + DISPLAY_SIZE
+
+    allocate heap in memory[VARIABLES ... BOOKMARKS]
+
+    // Amount of pixels to move the center when direction button is clicked
+    const SHIFT = 44
+
+    const RUNNING_TEXT = "Rendering...\n-------------------------\n"
+    const FINISHED_TEXT = "Finished.\n-------------------------\n"
+
+    do text1 = "" loop while bank1 == null
+    do text1 = "" loop while message1 == null
+    do text1 = "" loop while message2 == null
+    do text1 = "" loop while message3 == null
+
+    memory = bank1
+
+    print("Initializing...")
+    printflush(message1)
+
+    text0 = RUNNING_TEXT
+    text1 = ""
+    text2 = ""
+
+    X = -0.8
+    Y = 0
+    ZOOM = 50
+    JULIA = false
+    JULIA_X = 0
+    JULIA_Y = 0
+
+    i = BOOKMARKS
+    i = bookmark(memory, i, -0.8,           0,           50)
+    i = bookmark(memory, i, -0.14375,     1.0,         1600)
+    i = bookmark(memory, i, -1.675,       0.0,        25600)
+    i = bookmark(memory, i, -1.413547,   -0.03234831,  2500)
+    i = bookmark(memory, i,  0.37359375,  0.09015625, 12800)
+    i = bookmark(memory, i, -1.408547,   -0.03734831, 10000)
+    i = bookmark(memory, i,  0.371875,    0.078125,    3200)
+    i = bookmark(memory, i, -1.382347,   -0.02114831,  5000)
+    i = bookmark(memory, i,  0.355,       0.66,        3200)
+    i = bookmark(memory, i,  0.018125,   -0.818125,    6400)
+
+    i = bookmark_julia(memory, i,  0.0,        0.0,           50,  -0.8,       0.0)
+    i = bookmark_julia(memory, i, -0.14375,    1.03125,     3200,  -0.14375,   1.0)
+    i = bookmark_julia(memory, i, -1.403547,   -0.02734831, 5000,  -1.408547, -0.03734831)
+
+    while i < SLOTS
+        i = bookmark(memory, i, X, Y, ZOOM)
+    end
+
+    $STATE = 0
+    $STOP = 1
+    $X = X
+    $Y = Y
+    $ZOOM = ZOOM
+    $JULIA = JULIA
+    $JULIA_X = JULIA_X
+    $JULIA_Y = JULIA_Y
+    $PALETTE = PALETTE
+
+    switch7.enabled = JULIA
+
+    // Palette creation
+    r = 128; g = 192; b = 64
+
+    for i in 0 ... MAX_DEPTH
+        memory[i] = packcolor(r / 256, g / 256, b / 256, 255)
+        r = (r + 147) % 256
+        g = (g +  87) % 256
+        b = (b +  59) % 256
+    end
+
+    memory[MAX_DEPTH] = packcolor(0, 0, 0, 1)
+
+    bookmark_x = message2.x
+    bookmark_y = message2.y
+    bookmark = 1
+    bookmark_clr = -1
+    position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1)
+
+    palette_x = message3.x
+    PALETTE = 1
+    palette_clr = -1
+
+    // Skip first n blocks that are not on the bookmark/palette bar
+    for first_link in 0 ... @links
+        switch = getlink(first_link)
+        if switch.y == bookmark_y break end
+    end
+
+    checking = 999
+    CHANGE = false
+    update_bookmarks = true
+
+    // Initialization complete
+    $STATE = 1
+
+    while true
+        println("Mandelbrot Mania! v3.0")
+        print(text0)
+        if JULIA
+            println("Julia set of Mandelbrot")
+            println("fractal at coordinates")
+            printf("   X: $JULIA_X\n")
+            printf("   Y: $JULIA_Y\n")
+        else
+            println("Mandelbrot set")
+        end
+        println("-------------------------")
+        printf("X: $X\n")
+        printf("Y: $Y\n")
+        printf("Zoom: $ZOOM\n")
+        println(text1, text2)
+        printflush(message1)
+
+        handle_move(switch1,  0,  1, 1)   // up
+        handle_move(switch2, -1,  0, 1)   // left
+        handle_move(switch3,  1,  0, 1)   // right
+        handle_move(switch4,  0, -1, 1)   // down
+        handle_move(switch5,  0,  0, 2)   // zoom in
+        handle_move(switch6,  0,  0, 0.5) // zoom out
+
+        if switch7.enabled != JULIA
+            CHANGE = true
+            JULIA = switch7.enabled
+            if JULIA
+                JULIA_X = X
+                JULIA_Y = Y
+            end
+        end
+
+        if CHANGE
+            text1 = text2 = ""
+        end
+
+        if switch8.enabled
+            // Load bookmark
+            X = memory[position]
+            Y = memory[position + 1]
+            ZOOM = memory[position + 2]
+            JULIA = memory[position + 3]
+            JULIA_X = memory[position + 4]
+            JULIA_Y = memory[position + 5]
+            switch7.enabled = JULIA
+            switch8.enabled = false
+            text1 = "\nLoaded from #"
+            text2 = bookmark
+            CHANGE = true
+        end
+
+        if switch9.enabled
+            // Store bookmark
+            memory[position] = X
+            memory[position + 1] = Y
+            memory[position + 2] = ZOOM
+            memory[position + 3] = JULIA
+            memory[position + 4] = JULIA_X
+            memory[position + 5] = JULIA_Y
+            switch9.enabled = false
+            text1 = "\nSaved to #"
+            text2 = bookmark
+            update_bookmarks = true
+        end
+
+        for n in first_link ... @links
+            switch = getlink(n)
+            if switch.type == @switch and switch.y == bookmark_y
+                button_x = switch.x
+                if button_x >= palette_x
+                    index = button_x - palette_x
+                    if index == PALETTE
+                        switch.enabled = true
+                    elsif index == palette_clr
+                        switch.enabled = false
+                        palette_clr = -1
+                    elsif switch.enabled
+                        palette_clr = PALETTE
+                        PALETTE = index
+                        CHANGE = true
+                    end
+                else
+                    index = button_x - bookmark_x
+                    if index == bookmark
+                        switch.enabled = true
+                    elsif index == bookmark_clr
+                        switch.enabled = false
+                        bookmark_clr = -1
+                    elsif switch.enabled
+                        bookmark_clr = bookmark
+                        bookmark = index
+                        position = BOOKMARKS + BOOKMARK_SIZE * (bookmark - 1)
+                        update_bookmarks = true
+                    end
+                end
+            end
+        end
+
+        if update_bookmarks
+            println("BOOKMARKS")
+            println("[o] [o] [o] [o] ...")
+            println("      [o] Load")
+            println("      [o] Save")
+            println("-------------------------")
+            printf("Selected bookmark #$bookmark:\n")
+            if memory[position + 3]
+                println("Julia set of Mandelbrot")
+                println("fractal at coordinates")
+                printf("   X: $\n", memory[position + 4])
+                printf("   Y: $\n", memory[position + 5])
+            else
+                println("Mandelbrot set")
+            end
+            println("-------------------------")
+            printf("X: $\n", memory[position])
+            printf("Y: $\n", memory[position + 1])
+            printf("Zoom: $\n", memory[position + 2])
+            printflush(message2)
+
+            update_bookmarks = false
+        end
+
+        print("Palette #", PALETTE)
+        printflush(message3)
+
+        if memory[checking] == 0
+            checking -= 2
+            if checking <= PROCESSORS
+                text0 = FINISHED_TEXT
+            end
+        end
+
+        if CHANGE
+            print("Initializing...")
+            printflush(message1)
+
+            // Sent signal to stop all processors
+            $STOP += 1
+
+            // Waiting for all processors to actually stop
+            for i = 511; i > PROCESSORS; i -= 2
+                do
+                    // Mindcode doesn't allow empty loop body
+                    // This assignment is a noop, as it is dead and will be optimized away
+                    CHANGE = false
+                loop while memory[i] > 0
+            end
+
+            CHANGE = false
+
+            for i in SLOTS ... PROCESSORS
+                memory[i] = 0
+            end
+            color(86, 86, 102, 192)
+            rect(0, 0, 176, 176)
+            drawflush(display1)
+            $X = X
+            $Y = Y
+            $ZOOM = ZOOM
+            $JULIA = JULIA
+            $JULIA_X = JULIA_X
+            $JULIA_Y = JULIA_Y
+            $PALETTE = PALETTE
+            $STATE += 1
+
+            checking = 999
+            text0 = RUNNING_TEXT
+        end
+    end
+
+    inline def handle_move(switch, x, y, z)
+        if switch.enabled
+            CHANGE = true
+            if x != 0
+                X = X + x * SHIFT / ZOOM
+            end
+            if y != 0
+                Y = Y + y * SHIFT / ZOOM
+            end
+            if z != 1
+                ZOOM = ZOOM * z
+            end
+            switch.enabled = false
+        end
+    end
+
+    inline def bookmark(memory, position, x, y, zoom)
+        memory[position] = x;       position = position + 1
+        memory[position] = y;       position = position + 1
+        memory[position] = zoom;    position = position + 1
+        memory[position] = false;   position = position + 1
+        position + 2
+    end
+
+    inline def bookmark_julia(memory, position, x, y, zoom, julia_x, julia_y)
+        memory[position] = x;       position = position + 1
+        memory[position] = y;       position = position + 1
+        memory[position] = zoom;    position = position + 1
+        memory[position] = true;    position = position + 1
+        memory[position] = julia_x; position = position + 1
+        memory[position] = julia_y; position = position + 1
+    end
     """
 
 compute = """
-    set display null
-    set memory null
-    set __tmp3 @links
-    set n 0
-    jump 14 greaterThanEq 0 __tmp3
-    getlink block n
-    sensor __ast0 block @type
-    jump 10 notEqual __ast0 @large-logic-display
-    set display block
-    jump 12 always 0 0
-    jump 12 notEqual __ast0 @memory-bank
-    set memory block
-    op add n n 1
-    jump 5 lessThan n __tmp3
-    op equal __tmp0 display null
-    op equal __tmp1 memory null
-    op or __tmp2 __tmp0 __tmp1
-    jump 2 notEqual __tmp2 false
-    set control 0
-    op mul __tmp9 10000 @thisy
-    op add ID @thisx __tmp9
-    set PROC_ID 334
-    set PROC_STATE 335
-    read __tmp11 memory 64
-    jump 40 notEqual control __tmp11
-    jump 38 greaterThanEq PROC_STATE 512
-    read __tmp123 memory PROC_ID
-    jump 30 notEqual __tmp123 ID
-    write 0 memory PROC_STATE
-    jump 38 always 0 0
-    read __tmp126 memory PROC_ID
-    jump 35 notEqual __tmp126 0
-    write ID memory PROC_ID
-    write 0 memory PROC_STATE
-    jump 38 always 0 0
-    op add PROC_ID PROC_ID 2
-    op add PROC_STATE PROC_STATE 2
-    jump 26 lessThan PROC_STATE 512
-    read __tmp11 memory 64
-    jump 25 equal control __tmp11
-    read control memory 64
-    read stop memory 65
-    read X memory 66
-    read Y memory 67
-    read ZOOM memory 68
-    read JULIA memory 69
-    read JULIA_X memory 70
-    read JULIA_Y memory 71
-    read PALETTE memory 72
-    op greaterThan SMOOTH PALETTE 1
-    jump 63 greaterThanEq PROC_STATE 512
-    read __tmp123 memory PROC_ID
-    jump 55 notEqual __tmp123 ID
-    write control memory PROC_STATE
-    jump 63 always 0 0
-    read __tmp126 memory PROC_ID
-    jump 60 notEqual __tmp126 0
-    write ID memory PROC_ID
-    write control memory PROC_STATE
-    jump 63 always 0 0
-    op add PROC_ID PROC_ID 2
-    op add PROC_STATE PROC_STATE 2
-    jump 51 lessThan PROC_STATE 512
-    op div __tmp25 -88 ZOOM
-    op add OFFSET_X __tmp25 X
-    op add OFFSET_Y __tmp25 Y
-    set line 8
-    set increment 8
-    set next_increment 16
-    op rand __tmp29 0.1 0
-    wait __tmp29
-    set lines 0
-    op mul __tmp30 17 line
-    op mod x __tmp30 176
-    op add position x 158
-    read __tmp33 memory position
-    jump 855 notEqual __tmp33 0
-    write ID memory position
-    set y 0
-    op div __tmp37 x ZOOM
-    op add __fn1_zx __tmp37 OFFSET_X
-    op div __tmp39 y ZOOM
-    op add __fn1_zy __tmp39 OFFSET_Y
-    jump 87 equal JULIA false
-    set __fn1_cx JULIA_X
-    set __fn1_cy JULIA_Y
-    jump 103 always 0 0
-    op add __fn1_cx __tmp37 OFFSET_X
-    op add __fn1_cy __tmp39 OFFSET_Y
-    op sub __tmp46 __fn1_zx 0.25
-    op len __fn1_p __tmp46 __fn1_zy
-    op mul __tmp48 2 __fn1_p
-    op mul __tmp49 __tmp48 __fn1_p
-    op sub __tmp50 __fn1_p __tmp49
-    op add __tmp51 __tmp50 0.25
-    jump 98 greaterThan __fn1_zx __tmp51
-    set __tmp36 63
-    jump 806 always 0 0
-    op add __tmp54 __fn1_zx 1
-    op len __tmp55 __tmp54 __fn1_zy
-    jump 103 greaterThan __tmp55 0.25
-    set __tmp36 63
-    jump 806 always 0 0
-    set __fn1_i 0
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    set __fn1_i 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 1 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 2 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 3 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 4 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 5 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 6 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 7 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 8 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 9 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 10 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 11 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 12 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 13 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 14 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 15 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 16 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 17 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 18 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 19 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 20 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 21 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 22 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 23 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 24 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 25 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 26 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 27 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 28 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 29 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 30 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 31 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 32 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 33 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 34 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 35 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 36 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 37 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 38 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 39 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 40 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 41 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 42 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 43 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 44 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 45 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 46 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 47 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 48 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 49 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 50 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 51 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 52 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 53 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 54 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 55 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 56 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 57 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 58 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 59 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 60 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 61 1
-    set __fn1_x1 __fn1_zx
-    op mul __tmp58 __fn1_zx __fn1_zx
-    op mul __tmp59 __fn1_zy __fn1_zy
-    op sub __tmp60 __tmp58 __tmp59
-    op add __fn1_zx __tmp60 __fn1_cx
-    op mul __tmp62 2 __fn1_x1
-    op mul __tmp63 __tmp62 __fn1_zy
-    op add __fn1_zy __tmp63 __fn1_cy
-    op len __fn1_dist __fn1_zx __fn1_zy
-    jump 797 greaterThanEq __fn1_dist 64
-    op add __fn1_i 62 1
-    op mul __tmp68 SMOOTH 63
-    jump 805 greaterThanEq __fn1_i __tmp68
-    op log __tmp71 __fn1_dist 0
-    op mul __tmp72 __tmp71 0.36067376022224085
-    op log __tmp73 __tmp72 0
-    op mul __tmp74 __tmp73 1.4426950408889634
-    op sub __fn1_correction 4 __tmp74
-    op add __fn1_i __fn1_i __fn1_correction
-    set __tmp36 __fn1_i
-    jump 845 equal SMOOTH false
-    jump 810 notEqual __tmp36 63
-    draw color 0 0 0 255 0 0
-    jump 847 always 0 0
-    jump 823 notEqual PALETTE 2
-    op sub __tmp81 32 __tmp36
-    op abs __tmp82 __tmp81 0
-    op mul __tmp83 7 __tmp82
-    op sub r 255 __tmp83
-    op sub __tmp85 __tmp36 32
-    op abs __tmp86 __tmp85 0
-    op mul __tmp87 6 __tmp86
-    op sub g 240 __tmp87
-    op mul __tmp91 4 __tmp82
-    op add b 120 __tmp91
-    draw color r g b 255 0 0
-    jump 847 always 0 0
-    jump 835 notEqual PALETTE 3
-    op div __tmp94 __tmp36 0.175
-    op sin __tmp95 __tmp94 0
-    op mul r 255 __tmp95
-    op cos __tmp99 __tmp94 0
-    op mul g 255 __tmp99
-    op sub __tmp101 __tmp36 32
-    op abs __tmp102 __tmp101 0
-    op mul __tmp103 4 __tmp102
-    op add b 100 __tmp103
-    draw color r g b 255 0 0
-    jump 847 always 0 0
-    jump 841 notEqual PALETTE 4
-    op mul r 4 __tmp36
-    op mul __tmp106 1.5 __tmp36
-    op add g 96 __tmp106
-    draw color r g 0 255 0 0
-    jump 847 always 0 0
-    op mul __tmp108 4 __tmp36
-    op sub r 255 __tmp108
-    draw color r r 0 255 0 0
-    jump 847 always 0 0
-    read clr memory __tmp36
-    draw col clr 0 0 0 0 0
-    draw rect x y 1 1 0 0
-    drawflush display
-    read __tmp111 memory position
-    jump 855 notEqual __tmp111 ID
-    read __tmp114 memory 65
-    jump 23 notEqual stop __tmp114
-    op add y y 1
-    jump 79 lessThan y 176
-    op add line line increment
-    jump 860 lessThanEq line 176
-    op div next_increment next_increment 2
-    set increment next_increment
-    op div line next_increment 2
-    op add lines lines 1
-    jump 72 lessThan lines 176
-    jump 23 always 0 0
+    const DISPLAY_SIZE = 176
+    const HALF_SIZE = DISPLAY_SIZE / 2
+    const MAX_DEPTH = 63
+    const SKIP = 17
+
+    const VARIABLES = MAX_DEPTH + 1
+    const BOOKMARKS = VARIABLES + 16
+    const BOOKMARK_COUNT = 13
+    const BOOKMARK_SIZE = 6
+    const SLOTS = BOOKMARKS + BOOKMARK_COUNT * BOOKMARK_SIZE
+    const PROCESSORS = SLOTS + DISPLAY_SIZE
+
+    allocate heap in memory[VARIABLES ... BOOKMARKS]
+
+    const ONE_TO_LOG = 1 / log(2)
+    const QUARTER_TO_LOG = 0.25 / log(2)
+
+    display = null
+    memory = null
+
+    while display == null || memory == null
+        for n in 0 ... @links
+            block = getlink(n)
+            case block.type
+                when @large-logic-display   then display = block
+                when @memory-bank           then memory = block
+            end
+        end
+    end
+
+    control = 0
+
+    ID = @this.x + 10000 * @this.y
+
+    PROC_ID = PROCESSORS
+    PROC_STATE = PROCESSORS + 1
+
+    while true
+        // Waiting for state to change
+        while control == $STATE
+            storeState(memory, 0)
+        end
+
+        control = $STATE
+        stop = $STOP
+        X = $X
+        Y = $Y
+        ZOOM = $ZOOM
+        JULIA = $JULIA
+        JULIA_X = $JULIA_X
+        JULIA_Y = $JULIA_Y
+        PALETTE = $PALETTE
+
+        SMOOTH = PALETTE > 1
+
+        storeState(memory, control)
+
+        OFFSET_X = -HALF_SIZE / ZOOM + X
+        OFFSET_Y = -HALF_SIZE / ZOOM + Y
+
+        line = 8
+        increment = 8
+        next_increment = 16
+        wait(rand(0.1))
+
+    MasterLoop:
+        for lines in 0 ... DISPLAY_SIZE
+            // Find a line
+            x = (SKIP * line) % DISPLAY_SIZE
+            position = x + SLOTS
+
+            if memory[position] == 0
+                memory[position] = ID
+
+                for y in 0 ... DISPLAY_SIZE
+                    iterations = compute(x, y)
+                    if SMOOTH
+                        if iterations == MAX_DEPTH
+                            color(0, 0, 0, 255)
+                        else
+                            case PALETTE
+                                when 2 then
+                                    r = 255 - 7 * abs(32 - iterations)
+                                    g = 240 - 6 * abs(iterations - 32)
+                                    b = 120 + 4 * abs(32 - iterations)
+                                    color(r, g, b, 255)
+
+                                when 3 then
+                                    r = 255 * sin(iterations / MAX_DEPTH * 360)
+                                    g = 255 * cos(iterations / MAX_DEPTH * 360)
+                                    b = 100 + 4 * abs(iterations - 32)
+                                    color(r, g, b, 255)
+
+                                when 4 then
+                                    r = 4 * iterations
+                                    g = 96 + 1.5 * iterations
+                                    color(r, g, 0, 255)
+
+                                else
+                                    r = 255 - 4 * iterations
+                                    color(r, r, 0, 255)
+                            end
+                        end
+                    else
+                        clr = memory[iterations]
+                        col(clr)
+                    end
+                    rect(x, y, 1, 1)
+                    drawflush(display)
+
+                    if memory[position] != ID
+                        break   // Another processor took over this line
+                    end
+
+                    if stop != $STOP
+                        break MasterLoop        // Break is signalled
+                    end
+                end
+            end
+
+            line = line + increment
+            if line > DISPLAY_SIZE
+                next_increment /= 2
+                increment = next_increment
+                line = increment / 2
+            end
+        end
+    end
+
+    def compute(x, y)
+        zx = x / ZOOM + OFFSET_X
+        zy = y / ZOOM + OFFSET_Y
+
+        if JULIA
+            cx = JULIA_X
+            cy = JULIA_Y
+        else
+            cx = x / ZOOM + OFFSET_X
+            cy = y / ZOOM + OFFSET_Y
+
+            // Cardioid test
+            p = len(cx - 0.25, cy)
+            if cx <= p - 2 * p * p + 0.25
+                return MAX_DEPTH
+            end
+
+            // Bulb test
+            if len(cx + 1, cy) <= 0.25
+                return MAX_DEPTH
+            end
+        end
+
+        for i in 0 ... MAX_DEPTH
+            x1 = zx
+            y1 = zy
+            zx = x1 * x1 - y1 * y1 + cx
+            zy = 2 * x1 * y1 + cy
+            dist = len(zx, zy)
+            if dist >= 64
+                break
+            end
+        end
+
+        if i < SMOOTH * MAX_DEPTH
+            correction = 4 - log(log(dist) * QUARTER_TO_LOG) * ONE_TO_LOG;
+            i += correction
+        end
+
+        return i
+    end
+
+    def storeState(memory, state)
+        while PROC_STATE < 512
+            if memory[PROC_ID] == ID
+                memory[PROC_STATE] = state
+                break
+            elsif memory[PROC_ID] == 0
+                memory[PROC_ID] = ID
+                memory[PROC_STATE] = state
+                break
+            else
+                PROC_ID += 2
+                PROC_STATE += 2
+            end
+        end
+    end
     """

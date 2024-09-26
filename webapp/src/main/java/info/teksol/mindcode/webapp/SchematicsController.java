@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class SchematicsController {
     private static final Logger logger = LoggerFactory.getLogger(SchematicsController.class);
     private static final Map<String, String> samples;
+    private static final List<String> quickSamples;
 
     static {
         final Map<String, String> theSamples = new HashMap<>();
@@ -35,13 +36,14 @@ public class SchematicsController {
                 "healing-center",
                 "on-off-switch",
                 "regulator",
-                "overdrive-dome-supply",
+                "slow:overdrive-dome-supply",
                 "worker-recall-station",
                 "scrap-to-metaglass-2",
-                "mandelbrot-generator"
+                "slow:mandelbrot-generator"
         );
 
         final List<String> sources = sampleNames.stream()
+                .map(s -> s.replace("slow:", ""))
                 .map(s -> s.concat(".sdf"))
                 .map((filename) -> {
                     try (final BufferedReader reader = new BufferedReader(new InputStreamReader(SchematicsController.class.getClassLoader().getResourceAsStream("samples/schematics/" + filename)))) {
@@ -55,10 +57,11 @@ public class SchematicsController {
                 .toList();
 
         for (int i = 0; i < sampleNames.size(); i++) {
-            theSamples.put(sampleNames.get(i), sources.get(i));
+            theSamples.put(sampleNames.get(i).replace("slow:", ""), sources.get(i));
         }
 
         samples = theSamples;
+        quickSamples = sampleNames.stream().filter(s -> !s.startsWith("slow:")).toList();
     }
 
     private final Random random = new Random();
@@ -104,8 +107,8 @@ public class SchematicsController {
                 sourceCode = "// 404 Not Found";
             }
         } else {
-            final int skipCount = random.nextInt(samples.size() - 1);
-            sampleName = samples.keySet().stream().skip(skipCount).findFirst().get();
+            final int skipCount = random.nextInt(quickSamples.size());
+            sampleName = quickSamples.get(skipCount);
             sourceCode = samples.get(sampleName);
         }
 
