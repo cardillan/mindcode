@@ -19,8 +19,9 @@ All notable changes to this project will be documented in this file.
 
 #### Experimental features
 
-Experimental features may contain bugs or produce suboptimal code, and are subject to change (especially to a change in syntax).
+Experimental features may contain bugs or produce suboptimal code, and are subject to change.
 
+* Added [enhanced comments](SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks. 
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
 * Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
 * Added a new GUI option to choose optimization level in the web app when compiling Mindcode or building Schemacode.
@@ -28,17 +29,17 @@ Experimental features may contain bugs or produce suboptimal code, and are subje
 
 ### Changed
 
-* Changed the names of optimization levels from `off` and `aggressive` to `none` and `advanced`. The old names are still supported in the `#set` compiler directive, but not in the command-line options. 
+* Changed the names of optimization levels from `off` and `aggressive` to `none` and `advanced`. The former names are still supported in the `#set` compiler directive, but not in the command-line options. 
 * Changed the [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization to analyze functions modifying variables inside loop instead of blanket assumption that all global variables may be changed by a function.
 * Changes to the web app
     * A button was added do the web app to copy the output code to the clipboard with a single click.
-    * It is now possible to select optimization level directly in the web app user interface. The default optimization level is still `basic`.
-* Changed the syntax to allow an optional `do` keyword in all `for` and `while` loops, and optional `then` keyword in all `if` and `elsif` statements.
-* Changed the command line tool to output instruction numbers when printing out the unresolved code.
+    * It is now possible to select the optimization level directly in the web app user interface. The default optimization level is now `basic` for Mindcode compiler and `advanced` for Schemacode builder.
+* Changed the syntax to allow an optional `do` keyword in all `for` and `while` loops, and optional `then` keyword in `if` and `elsif` statements.
+* Changed the command line tool to output final instruction numbers when printing out the unresolved code, for easier localization of errors reported when running the compiled code on an emulated processor.  
 
 ### Miscellaneous
 
-* From this version on, Mindcode will use semantic versioning. Major version will be increased for major changes to the syntax. 
+* From this version (`2.2.0`) on, Mindcode will use semantic versioning (major version will be increased for significant changes to the syntax). The command-line tool now reports the version when passed in `-v` or `--version` as a parameter.  
 * Replaced pattern matching in switch cases (JDK17 preview feature) with `if` and other constructs to remove the dependency on the `--enable-preview` switch.
 * Updated existing Mindcode and Schemacode samples further to adapt for upcoming changes in syntax (optional keywords were added). Some samples were reworked.
 

@@ -139,4 +139,14 @@ class MindcodeParserTest extends AbstractParserTest {
                 )
         );
     }
+
+    @Test
+    void parsesRemarkComments() {
+        assertDoesNotThrow(() -> parse("""
+                        // This is a comment
+                        /// This is a remark
+                        """
+                )
+        );
+    }
 }

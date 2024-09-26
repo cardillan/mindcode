@@ -1369,4 +1369,15 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
         assertThrows(MindcodeException.class,
                 () -> generateInstructions("allocate heap in cell1[0 .. 1]\n$dx = $dy = $dz"));
     }
+
+    @Test
+    void recogizesRemarks() {
+        assertCompilesTo("""
+                        // This is a comment
+                        /// This is a remark
+                        """,
+                createInstruction(REMARK, q("This is a remark")),
+                createInstruction(END)
+        );
+    }
 }

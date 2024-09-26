@@ -160,6 +160,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitNot_expr(MindcodeParser.Not_exprContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code rem_comment}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterRem_comment(MindcodeParser.Rem_commentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code rem_comment}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitRem_comment(MindcodeParser.Rem_commentContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code literal_null}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

@@ -1,11 +1,12 @@
 // Patrols around a building and heals any damaged building
 // Since the patrolling ship is close by, repairing
 // will happen faster than usual
-remark("Configurable options:");
+
+/// Configurable options:
 CENTER = foundation1;
 UNIT = @poly;
 
-remark("Don't modify anything below this line.");
+/// Don't modify anything below this line.
 
 // Find a unit if we don't have one
 if @unit.dead !== 0 or @unit.controller != @this then

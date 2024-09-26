@@ -47,11 +47,11 @@ program = """
     #set instruction-limit  = 1100;     // We're hitting instruction limit otherwise
     #set target = ML7A;                 // Using revised syntax for ulocate
 
-    remark("This is the preferred unit type to use for bringing in supplies.");
-    remark("If no units of this type exist, we'll try using other types.");
+    /// This is the preferred unit type to use for bringing in supplies.
+    /// If no units of this type exist, we'll try using other types.
     param UNIT_TYPE         = @flare;  // Which unit to use
 
-    remark("Do not modify anything below this line.");
+    /// Do not modify anything below this line.
 
     // BASIC INITIALIZATION
     /////////////////////////////////////////////////////////

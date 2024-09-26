@@ -4,11 +4,11 @@
 #set instruction-limit  = 1100;
 #set target = ML7A;                 // Using revised syntax for ulocate
 
-remark("This is the preferred unit type to use for bringing in supplies.");
-remark("If no units of this type exist, we'll try using other types.");
+/// This is the preferred unit type to use for bringing in supplies.
+/// If no units of this type exist, we'll try using other types.
 param UNIT_TYPE         = @flare;  // Which unit to use
 
-remark("Do not modify anything below this line.");
+/// Do not modify anything below this line.
 
 // BASIC INITIALIZATION
 /////////////////////////////////////////////////////////
@@ -166,14 +166,14 @@ inline def chooseUnitType()
     while true do
         printflush(null);       // empty text buffer
         println("[gold]Looking for suitable unit type:[]");
-        remark("chooseUnitType: UNIT_TYPE");
+        remark("chooseUnitType: $UNIT_TYPE");
         if areUnitsAvailable(UNIT_TYPE, true) then
             return UNIT_TYPE;
         end;
 
         for type in @flare, @poly, @mega, @mono do
-            remark("chooseUnitType: $type");
             if type != UNIT_TYPE then
+                remark("chooseUnitType: $type");
                 if areUnitsAvailable(type, true) then
                     printflush(null);
                     return type;

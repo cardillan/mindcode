@@ -4,7 +4,7 @@ factory-monitor-00.mnd:                   355 instructions, source CRC 3C9B4A9AF
 factory-monitor-silicon-00.mnd:           291 instructions, source CRC FC129504D3157D9F, compiled CRC E7389555BDC3125C
 factory-monitor-surge-alloy-00.mnd:       188 instructions, source CRC 836177228E5C9E00, compiled CRC A8450233764934BF
 impact-reactor-logic-00.mnd:              882 instructions, source CRC A6C20A2EC2A907A5, compiled CRC 764C0E3D998F1DC1
-instant-overdrive-dome-00.mnd:            802 instructions, source CRC A6FFE0891760F081, compiled CRC E171D7BDCC49D8B0
+instant-overdrive-dome-00.mnd:            803 instructions, source CRC 936268E8D3E7DA17, compiled CRC E0D29B6DF2908C2B
 item-counter-00.mnd:                       99 instructions, source CRC 91250F3A0C82B78D, compiled CRC 102983144F395C25
 item-counter-micro-00.mnd:                143 instructions, source CRC F684AD984490E59E, compiled CRC 390700627A884E47
 item-rate-display-00.mnd:                 668 instructions, source CRC 80F12B8301CD82C7, compiled CRC C4363A7CA6C5C080

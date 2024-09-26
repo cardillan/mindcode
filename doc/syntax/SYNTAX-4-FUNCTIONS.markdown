@@ -227,7 +227,7 @@ This is not necessary if the next character cannot be part of a variable name.
 The function was inspired by string interpolation in Ruby, but there are differences.
 Firstly, the first argument to `printf` must be a string constant, as the formatting takes place at compile time
 (Mindustry Logic doesn't provide means to do it at runtime). Secondly, only variables are allowed in curly braces,
-no expressions:
+not expressions:
 
 ```
 x = 5;
@@ -333,6 +333,16 @@ print "Compiled for RELEASE"
 print "Hello"
 end
 ```
+
+### Enhanced comments
+
+An alternative way to create remarks is the enhanced comment:
+
+```
+/// This is an enhanced comment
+```
+
+which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment support string interpolation just as the `remark` function does (`/// Iteration: $i` is the same as `remark("Iteration: $i"")`), but there is no way to pass in additional parameters (`remark("Iteration: $", i + 1)`) cannot be expressed using an enhanced comment.       
 
 # User-defined functions
 

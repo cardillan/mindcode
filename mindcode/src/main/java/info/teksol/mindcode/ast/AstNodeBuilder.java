@@ -695,4 +695,13 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
         return new WhileExpression(ctx.getStart(),label, new NoOp(),
                 visit(ctx.cond), visit(ctx.loop_body()), new NoOp());
     }
+
+
+    @Override
+    public AstNode visitRem_comment(MindcodeParser.Rem_commentContext ctx) {
+        String str = ctx.getText().substring(3).strip();
+        StringLiteral text = new StringLiteral(ctx.getStart(), str);
+        List<AstNode> params = List.of(text);
+        return new FunctionCall(ctx.getStart(), "remark", params);
+    }
 }

@@ -52,10 +52,11 @@ value is `3`.
 Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second 
 is not and could be used as a variable or function name).
 
-Anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
+You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remark) to place comments or notes directly to the compiled code.
 
-You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remark) to place comments or notes directly to the 
-compiled code.   
+A text enclosed between `/*` and `*/` is a comment that can span several lines. Additionally, anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
+
+An enhanced comment is a comment which starts with `///` (three slashes instead of two). This is an [alternative way to enter remarks](SYNTAX-4-FUNCTIONS.markdown#enhanced-comments) into the compiled code. 
 
 ## Keywords
 

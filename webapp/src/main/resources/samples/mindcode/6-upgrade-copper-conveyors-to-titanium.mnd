@@ -3,7 +3,7 @@
 #set target = ML7A;
 
 // These global variables can be changed in the compiled code
-remark("Configurable options:");
+/// Configurable options:
 MEMORY = cell1;
 UNIT = @poly;
 
@@ -24,7 +24,7 @@ WIDTH = 10;
 // How close unit needs to get to the block being upgraded
 RADIUS = 10;
 
-remark("Don't modify anything below this line.");
+/// Don't modify anything below this line.
 
 // Count the total number of upgraded blocks
 TOTAL = 0;

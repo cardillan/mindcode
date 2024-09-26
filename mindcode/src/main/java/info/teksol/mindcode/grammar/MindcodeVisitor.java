@@ -100,6 +100,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNot_expr(MindcodeParser.Not_exprContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code rem_comment}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRem_comment(MindcodeParser.Rem_commentContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code literal_null}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

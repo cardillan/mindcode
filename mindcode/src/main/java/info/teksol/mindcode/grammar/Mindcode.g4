@@ -48,6 +48,7 @@ expression : directive                                                          
            | break_st                                                                           # break_exp
            | continue_st                                                                        # continue_exp
            | return_st                                                                          # return_exp
+           | REM_COMMENT                                                                        # rem_comment
            ;
 
 directive : HASHSET option=ID ASSIGN value=INT      # numeric_directive
@@ -319,6 +320,10 @@ HEXINT : Hexadecimal;
 BININT : Binary;
 
 ID : [_a-zA-Z][-a-zA-Z_0-9]*;
-SL_COMMENT : ('//' ~('\r' | '\n')*) -> skip;
+
+REM_COMMENT: '///' ~[/\r\n] ~[\r\n]*;
+
+COMMENT: '/*' .*? '*/' -> skip;
+SL_COMMENT : '//' ~[\r\n]* -> skip;
 WS : (' ' | '\t' | '\r' | '\n')+ -> skip;
 
