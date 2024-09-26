@@ -1,5 +1,5 @@
 allocate stack in bank1[0...512];
-ARRAY = bank2;
+param ARRAY = bank2;
 
 for i in 0 ... SIZE - 1
     min = ARRAY[i];

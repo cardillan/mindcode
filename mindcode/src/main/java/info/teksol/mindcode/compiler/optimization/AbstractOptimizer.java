@@ -67,7 +67,11 @@ abstract class AbstractOptimizer implements Optimizer {
     }
 
     protected boolean advanced() {
-        return level == OptimizationLevel.ADVANCED;
+        return level == OptimizationLevel.ADVANCED || level == OptimizationLevel.EXPERIMENTAL;
+    }
+
+    protected boolean experimental() {
+        return level == OptimizationLevel.EXPERIMENTAL;
     }
 
     protected void emitMessage(MessageLevel level, @PrintFormat String format, Object... args) {

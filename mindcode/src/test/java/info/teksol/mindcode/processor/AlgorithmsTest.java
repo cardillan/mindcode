@@ -63,7 +63,7 @@ public class AlgorithmsTest extends AbstractProcessorTest {
         testAndEvaluateCode(
                 compiler,
                 "sorting with " + fileName,
-                "SIZE = " + arrayLength + "\n" + readFile(fileName),
+                "param SIZE = " + arrayLength + "\n" + readFile(fileName),
                 List.of(MindustryMemory.createMemoryBank("bank2", array)),
                 createEvaluator(compiler, expectedOutput),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log")

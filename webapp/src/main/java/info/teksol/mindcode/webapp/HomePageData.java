@@ -17,10 +17,11 @@ public class HomePageData {
     private final List<String> messages;
     private final String optimizationLevel;
     private final String runOutput;
+    private final int runSteps;
 
     HomePageData(String id, String sample, String source, int sourceLoc, String compiled, int compiledLoc,
                  List<String> errors, List<String> warnings, List<String> messages,
-                 String optimizationLevel, String runOutput) {
+                 String optimizationLevel, String runOutput, int runSteps) {
         this.id = id;
         this.sample = sample;
         this.source = source;
@@ -32,6 +33,7 @@ public class HomePageData {
         this.messages = messages;
         this.optimizationLevel = optimizationLevel;
         this.runOutput = runOutput;
+        this.runSteps = runSteps;
     }
 
     public String getVersion() {
@@ -92,5 +94,9 @@ public class HomePageData {
 
     public String getRunOutput() {
         return runOutput == null ? "" : runOutput;
+    }
+
+    public int getRunSteps() {
+        return runSteps;
     }
 }

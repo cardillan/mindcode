@@ -165,7 +165,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
         // https://github.com/francois/mindcode/issues/13
         assertCompilesTo("""
                         // Source
-                        HEAPPTR = cell3
+                        param HEAPPTR = cell3
                         allocate heap in HEAPPTR
                         $a = 1
                         $b = 2
@@ -183,7 +183,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     void regressionTest2() {
         // https://github.com/francois/mindcode/issues/13
         assertCompilesTo("""
-                        HEAPPTR = cell3
+                        param HEAPPTR = cell3
                         allocate heap in HEAPPTR
                         print($a)
                         $a = 1

@@ -144,7 +144,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     }
     //</editor-fold>
 
-    //<editor-fold desc="Global parameters">
+    //<editor-fold desc="Global variables/parameters">
     @Test
     void leavesGlobalParameters() {
         assertCompilesTo("""
@@ -157,6 +157,27 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                 createInstruction(PRINT, var(0)),
                 createInstruction(END)
         );
+    }
+
+    @Test
+    void correctlyProcessesFunctions() {
+        assertGeneratesWarnings("""
+                        #set optimization = experimental;
+                        A = 10;
+                        for i = 0; i < A; i += 1 do
+                            foo(2);
+                        end;
+
+                        noinline def foo(n)
+                            println(n);
+                            bar(n);
+                        end
+
+                        noinline def bar(x)
+                            A = x;
+                        end;
+                                        """,
+                "");
     }
     //</editor-fold>
 
@@ -566,6 +587,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         // min is uninitialized because we do not know the loop body will execute
         assertCompilesToWithMessages(
                 ignore(
+                        "List of uninitialized variables: SIZE, min.",
                         "List of uninitialized variables: SIZE.",
                         "List of uninitialized variables: min."
                 ),
@@ -863,10 +885,10 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         inline def bar(n)
                             print(n)
                         end
-                        X = 5
+                        X = rand(1000);
                         bar(X)
                         """,
-                createInstruction(SET, "X", "5"),
+                createInstruction(OP, "rand", "X", "1000"),
                 createInstruction(PRINT, "X"),
                 createInstruction(END)
         );
@@ -1099,13 +1121,13 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                         def foo(n)
                             print(n)
                         end
-                        X = 5
-                        Y = 6
+                        X = rand(1000);
+                        Y = rand(1000);
                         foo(X)
                         bar(Y)
                         """,
-                createInstruction(SET, "X", "5"),
-                createInstruction(SET, "Y", "6"),
+                createInstruction(OP, "rand", "X", "1000"),
+                createInstruction(OP, "rand", "Y", "1000"),
                 createInstruction(SET, "__fn0_n", "X"),
                 createInstruction(SETADDR, "__fn0retaddr", var(1001)),
                 createInstruction(CALL, var(1000), "__fn0retval"),
@@ -1514,7 +1536,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesSelfReference() {
         assertCompilesTo("""
-                        TICKS = 100
+                        param TICKS = 100
                         nextTick = @tick
                         prevTick = @tick
                         currTick = @tick
@@ -1548,8 +1570,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
     @Test
     void handlesChainAssignment() {
         assertCompilesTo("""
-                        FROM_INDEX = 0
-                        OFFSET_Y = 2
+                        param FROM_INDEX = 0
+                        param OFFSET_Y = 2
                         cry = cly = FROM_INDEX == 0 ? 0 : OFFSET_Y
                         print(cry, cly)
                         """,

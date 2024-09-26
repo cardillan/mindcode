@@ -1,6 +1,7 @@
 param TICKS = 60;
 SOURCE_MEMORY = null;
 TARGET_MEMORY = null;
+MESSAGE = SWITCH = null;
 
 while SOURCE_MEMORY == null 
 	print("Item Rate Meter");

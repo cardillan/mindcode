@@ -1,5 +1,5 @@
 allocate stack in bank1[0...512];
-ARRAY = bank2;
+param ARRAY = bank2;
 
 inline def output(size)
     for i in 0 .. size

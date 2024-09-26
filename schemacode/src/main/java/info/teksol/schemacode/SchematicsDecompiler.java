@@ -14,7 +14,7 @@ public class SchematicsDecompiler {
 
     public static CompilerOutput<String> decompile(String encodedSchematics) {
         if (encodedSchematics.isBlank()) {
-            return new CompilerOutput<>("", List.of(), null);
+            return new CompilerOutput<>("", List.of());
         }
 
         byte[] binary = Base64.getDecoder().decode(encodedSchematics);
@@ -26,9 +26,9 @@ public class SchematicsDecompiler {
             decompiler.setRelativeConnections(true);
             decompiler.setRelativeLinks(true);
             String schemaDefinition = decompiler.buildCode();
-            return new CompilerOutput<>(schemaDefinition, List.of(), null);
+            return new CompilerOutput<>(schemaDefinition, List.of());
         } catch (Exception e) {
-            return new CompilerOutput<>("", List.of(SchemacodeMessage.error(e.toString())), null);
+            return new CompilerOutput<>("", List.of(SchemacodeMessage.error(e.toString())));
         }
     }
 }

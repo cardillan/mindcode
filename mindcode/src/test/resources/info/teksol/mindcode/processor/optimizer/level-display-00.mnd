@@ -1,6 +1,7 @@
 param FREQ = 100;
 DISPLAY = null;
 MEMORY = null;
+MESSAGE = SWITCH = null;
 
 const M_START_INDEX = 0;
 const M_CURRENT_INDEX = M_START_INDEX + 1;

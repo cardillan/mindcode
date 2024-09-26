@@ -122,7 +122,7 @@ public abstract class AbstractProcessorTest extends AbstractOptimizerTest<Optimi
     @Override
     protected CompilerProfile createCompilerProfile() {
         CompilerProfile profile = super.createCompilerProfile();
-        profile.setAllOptimizationLevels(OptimizationLevel.ADVANCED);
+        profile.setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL);
         profile.setDebugLevel(3);
         // Do not remove end instructions
         profile.setOptimizationLevel(Optimization.JUMP_TARGET_PROPAGATION, OptimizationLevel.BASIC);

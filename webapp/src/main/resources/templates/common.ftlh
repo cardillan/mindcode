@@ -85,6 +85,15 @@
 </button>
 </#macro>
 
+<#macro optimizationSettings >
+    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black p-2 rounded">
+        <option value="OFF"          <#if model.optimizationLevel == "OFF"          >selected</#if>>No optimization</option>
+        <option value="BASIC"        <#if model.optimizationLevel == "BASIC"        >selected</#if>>Basic optimization</option>
+        <option value="ADVANCED"     <#if model.optimizationLevel == "ADVANCED"     >selected</#if>>Advanced optimization</option>
+        <option value="EXPERIMENTAL" <#if model.optimizationLevel == "EXPERIMENTAL" >selected</#if>>Experimental optimization</option>
+    </select>
+</#macro>
+
 <#macro compilerMessages messageTitle>
 <div>
     <#if model.hasErrors>

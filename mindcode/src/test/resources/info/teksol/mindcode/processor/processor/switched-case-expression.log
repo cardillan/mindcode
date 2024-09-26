@@ -4,7 +4,7 @@
     13 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Optimization (3 iterations).
      1 instructions eliminated by Single Step Elimination (4 iterations).
-     1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
+     1 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
      3 instructions added by Case Switching (3 iterations).
@@ -392,6 +392,28 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     70 label __label9
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set S9 0
+-    * set S8 S9
+-    * set S7 S8
+-    * set S6 S7
+-    * set S5 S6
+-    * set S4 S5
+-    * set S3 S4
+-    * set S2 S3
+-    * set S1 S2
+-    * set S0 S1
++    1 set S8 0
++    2 set S7 S9
++    3 set S6 S8
++    4 set S5 S7
++    5 set S4 S6
++    6 set S3 S5
++    7 set S2 S4
++    8 set S1 S3
++    9 set S0 S2
+    10 set i 1
+    11 label __label0
+    12 jump __label2 greaterThan i 100
  
     17 op mod __tmp2 __fn0_n 10
     18 label __label8
@@ -457,6 +479,27 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     68 label __label29
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+     0 set S9 0
+     1 set S8 0
+-    * set S7 S9
+-    * set S6 S8
+-    * set S5 S7
+-    * set S4 S6
+-    * set S3 S5
+-    * set S2 S4
+-    * set S1 S3
+-    * set S0 S2
++    2 set S7 0
++    3 set S6 0
++    4 set S5 S9
++    5 set S4 S8
++    6 set S3 S7
++    7 set S2 S6
++    8 set S1 S5
++    9 set S0 S4
+    10 set i 1
+    11 label __label0
+    12 jump __label2 greaterThan i 100
  
     16 jump __label7 lessThanEq __fn0_n 0
     17 op mod __tmp2 __fn0_n 10
@@ -466,9 +509,43 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     20 label __label12
     21 op add S0 S0 1
 
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
+ 
+     1 set S8 0
+     2 set S7 0
+     3 set S6 0
+-    * set S5 S9
+-    * set S4 S8
+-    * set S3 S7
+-    * set S2 S6
+-    * set S1 S5
+-    * set S0 S4
++    4 set S5 0
++    5 set S4 0
++    6 set S3 0
++    7 set S2 0
++    8 set S1 S9
++    9 set S0 S8
+    10 set i 1
+    11 label __label0
+    12 jump __label2 greaterThan i 100
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4:
+ 
+     5 set S4 0
+     6 set S3 0
+     7 set S2 0
+-    * set S1 S9
+-    * set S0 S8
++    8 set S1 0
++    9 set S0 0
+    10 set i 1
+    11 label __label0
+    12 jump __label2 greaterThan i 100
+
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
-     9 set S0 S1
+     9 set S0 0
     10 set i 1
     11 label __label0
 -    * jump __label2 greaterThan i 100
@@ -635,15 +712,15 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1:
 Final code before resolving virtual instructions:
 
 set S9 0
-set S8 S9
-set S7 S8
-set S6 S7
-set S5 S6
-set S4 S5
-set S3 S4
-set S2 S3
-set S1 S2
-set S0 S1
+set S8 0
+set S7 0
+set S6 0
+set S5 0
+set S4 0
+set S3 0
+set S2 0
+set S1 0
+set S0 0
 set i 1
 label __label31
 set __fn0_n i

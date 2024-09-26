@@ -53,6 +53,7 @@ MIN_BATCH = max(MIN_BATCH \ 10, 1);         // Sanitize MIN_BATCH and MAX_BATCH
 MAX_BATCH = max(MAX_BATCH \ 10, MIN_BATCH); // Also, we measure batches in tens of items
 BATCH_STEP = 1;                             // Batch size increase
 BATCH = MIN_BATCH;                          // Current batch size
+BATCH_TXT = BATCH * 10;
 
 // Progress init
 total = MEMORY[0];                          // Restore totals from memory (dubious - will be reset when switch is activated anyway)
@@ -113,9 +114,9 @@ while switch1.enabled == 0
 		startTime = @time;
 	end;
 
-	printf("Batch size: [green]$BATCH_TXT[]\n");
-	printf("Batch time: [gold]$elapsed[] ms\n");
-	printf("[lightgray]Loop time: $ ms", floor((@time - start) / 2));
+	println($"Batch size: [green]$BATCH_TXT[]");
+	println($"Batch time: [gold]$elapsed[] ms");
+	print($"[lightgray]Loop time: $ ms", floor((@time - start) / 2));
 	printflush(message1);
 
 	if LINKS != @links

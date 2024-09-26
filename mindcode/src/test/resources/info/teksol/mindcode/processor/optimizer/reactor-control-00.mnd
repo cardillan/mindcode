@@ -109,6 +109,7 @@ RAMP_TIME			= 70;		// It takes this many additional seconds for the reactor to r
 
 COEF_A1 = 0 - STARTUP_TIME;
 COEF_A2 = RAMP_TIME / (MAX_PRODUCTION * 2);
+COOLANT_FLAG = FUEL_FLAG = START = 0;
 
 reactors = 0;
 while reactors == 0

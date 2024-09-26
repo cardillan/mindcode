@@ -161,7 +161,8 @@ public class HomeController {
                         result.warnings(),
                         result.infos(),
                         optimizationLevel,
-                        run ? result.textBuffer() : null)
+                        run ? result.textBuffer() : null,
+                        result.steps())
         );
     }
 

@@ -1,336 +1,332 @@
-   530 instructions before optimizations.
+   540 instructions before optimizations.
     56 instructions eliminated by Temp Variables Elimination.
     43 instructions eliminated by Dead Code Elimination (5 iterations).
     20 instructions eliminated by Jump Optimization (4 iterations).
     15 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      8 instructions eliminated by If Expression Optimization (3 iterations).
-    16 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
-     4 instructions added by Loop Optimization (3 iterations).
+    26 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     3 instructions added by Loop Optimization (3 iterations).
      4 loops improved by Loop Optimization.
     11 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
      1 instructions updated by PropagateJumpTargets.
     10 instructions eliminated by Print Merging.
-   355 instructions after optimizations.
+   354 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 629):
-    Loop Optimization: replicate condition at line 14            cost     3, benefit       25,0, efficiency        8,3
-  * Loop Optimization: replicate condition at line 160           cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
-
-Pass 1: speed optimization selection (cost limit 628):
-  * Loop Optimization: replicate condition at line 14            cost     3, benefit       25,0, efficiency        8,3 (+0 instructions)
+Pass 1: speed optimization selection (cost limit 624):
+  * Loop Optimization: replicate condition at line 160           cost     1, benefit       25,0, efficiency       25,0 (-5 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-56 instructions):
  
-    10 jump __label2 equal __tmp2 false
-    11 print "Universal Factory Monitor"
-    12 print "\n"
+    20 jump __label2 equal __tmp2 false
+    21 print "Universal Factory Monitor"
+    22 print "\n"
 -    * set __tmp3 @links
 -    * set n __tmp3
-+   13 set n @links
-    14 label __label3
-    15 op greaterThan __tmp4 n 0
-    16 jump __label5 equal __tmp4 false
++   23 set n @links
+    24 label __label3
+    25 op greaterThan __tmp4 n 0
+    26 jump __label5 equal __tmp4 false
 -    * op sub __tmp5 n 1
 -    * set n __tmp5
 -    * getlink __tmp6 n
 -    * set block __tmp6
 -    * sensor __tmp7 block @type
 -    * set __ast0 __tmp7
-+   17 op sub n n 1
-+   18 getlink block n
-+   19 sensor __ast0 block @type
-    20 jump __label8 equal __ast0 @message
-    21 jump __label7 always
-    22 label __label8
++   27 op sub n n 1
++   28 getlink block n
++   29 sensor __ast0 block @type
+    30 jump __label8 equal __ast0 @message
+    31 jump __label7 always
+    32 label __label8
  
-    43 jump __label13 always
-    44 label __label14
-    45 set TYPE @silicon-factory
+    53 jump __label13 always
+    54 label __label14
+    55 set TYPE @silicon-factory
 -    * sensor __tmp9 block @itemCapacity
 -    * set CAPACITY __tmp9
-+   46 sensor CAPACITY block @itemCapacity
-    47 set RES1 @sand
-    48 set RES2 @coal
-    49 set RES3 @itemCapacity
++   56 sensor CAPACITY block @itemCapacity
+    57 set RES1 @sand
+    58 set RES2 @coal
+    59 set RES3 @itemCapacity
 -    * op div __tmp10 100 CAPACITY
 -    * set MUL3 __tmp10
-+   50 op div MUL3 100 CAPACITY
-    51 set MUL2 MUL3
-    52 set MUL1 MUL2
-    53 set OUTPUT @silicon
++   60 op div MUL3 100 CAPACITY
+    61 set MUL2 MUL3
+    62 set MUL1 MUL2
+    63 set OUTPUT @silicon
  
-    58 jump __label15 always
-    59 label __label16
-    60 set TYPE @silicon-crucible
+    68 jump __label15 always
+    69 label __label16
+    70 set TYPE @silicon-crucible
 -    * sensor __tmp11 block @itemCapacity
 -    * set CAPACITY __tmp11
-+   61 sensor CAPACITY block @itemCapacity
-    62 set RES1 @sand
-    63 set RES2 @coal
-    64 set RES3 @pyratite
++   71 sensor CAPACITY block @itemCapacity
+    72 set RES1 @sand
+    73 set RES2 @coal
+    74 set RES3 @pyratite
 -    * op div __tmp12 100 CAPACITY
 -    * set MUL3 __tmp12
-+   65 op div MUL3 100 CAPACITY
-    66 set MUL2 MUL3
-    67 set MUL1 MUL2
-    68 set OUTPUT @silicon
++   75 op div MUL3 100 CAPACITY
+    76 set MUL2 MUL3
+    77 set MUL1 MUL2
+    78 set OUTPUT @silicon
  
-    73 jump __label17 always
-    74 label __label18
-    75 set TYPE @kiln
+    83 jump __label17 always
+    84 label __label18
+    85 set TYPE @kiln
 -    * sensor __tmp13 block @itemCapacity
 -    * set CAPACITY __tmp13
-+   76 sensor CAPACITY block @itemCapacity
-    77 set RES1 @sand
-    78 set RES2 @lead
-    79 set RES3 @itemCapacity
++   86 sensor CAPACITY block @itemCapacity
+    87 set RES1 @sand
+    88 set RES2 @lead
+    89 set RES3 @itemCapacity
 -    * op div __tmp14 100 CAPACITY
 -    * set MUL3 __tmp14
-+   80 op div MUL3 100 CAPACITY
-    81 set MUL2 MUL3
-    82 set MUL1 MUL2
-    83 set OUTPUT @metaglass
++   90 op div MUL3 100 CAPACITY
+    91 set MUL2 MUL3
+    92 set MUL1 MUL2
+    93 set OUTPUT @metaglass
  
-    88 jump __label19 always
-    89 label __label20
-    90 set TYPE @phase-weaver
+    98 jump __label19 always
+    99 label __label20
+   100 set TYPE @phase-weaver
 -    * sensor __tmp15 block @itemCapacity
 -    * set CAPACITY __tmp15
-+   91 sensor CAPACITY block @itemCapacity
-    92 set RES1 @sand
-    93 set RES2 @thorium
-    94 set RES3 @itemCapacity
++  101 sensor CAPACITY block @itemCapacity
+   102 set RES1 @sand
+   103 set RES2 @thorium
+   104 set RES3 @itemCapacity
 -    * op div __tmp16 100 CAPACITY
 -    * set MUL3 __tmp16
-+   95 op div MUL3 100 CAPACITY
-    96 set MUL2 MUL3
-    97 set MUL1 MUL2
-    98 set OUTPUT @phase-fabric
++  105 op div MUL3 100 CAPACITY
+   106 set MUL2 MUL3
+   107 set MUL1 MUL2
+   108 set OUTPUT @phase-fabric
  
-   103 jump __label21 always
-   104 label __label22
-   105 set TYPE @pyratite-mixer
+   113 jump __label21 always
+   114 label __label22
+   115 set TYPE @pyratite-mixer
 -    * sensor __tmp17 block @itemCapacity
 -    * set CAPACITY __tmp17
-+  106 sensor CAPACITY block @itemCapacity
-   107 set RES1 @sand
-   108 set RES2 @coal
-   109 set RES3 @lead
++  116 sensor CAPACITY block @itemCapacity
+   117 set RES1 @sand
+   118 set RES2 @coal
+   119 set RES3 @lead
 -    * op div __tmp18 100 CAPACITY
 -    * set MUL3 __tmp18
-+  110 op div MUL3 100 CAPACITY
-   111 set MUL2 MUL3
-   112 set MUL1 MUL2
-   113 set OUTPUT @pyratite
++  120 op div MUL3 100 CAPACITY
+   121 set MUL2 MUL3
+   122 set MUL1 MUL2
+   123 set OUTPUT @pyratite
  
-   118 jump __label23 always
-   119 label __label24
-   120 set TYPE @blast-mixer
+   128 jump __label23 always
+   129 label __label24
+   130 set TYPE @blast-mixer
 -    * sensor __tmp19 block @itemCapacity
 -    * set CAPACITY __tmp19
-+  121 sensor CAPACITY block @itemCapacity
-   122 set RES1 @pyratite
-   123 set RES2 @spore-pod
-   124 set RES3 @itemCapacity
++  131 sensor CAPACITY block @itemCapacity
+   132 set RES1 @pyratite
+   133 set RES2 @spore-pod
+   134 set RES3 @itemCapacity
 -    * op div __tmp20 100 CAPACITY
 -    * set MUL3 __tmp20
-+  125 op div MUL3 100 CAPACITY
-   126 set MUL2 MUL3
-   127 set MUL1 MUL2
-   128 set OUTPUT @blast-compound
++  135 op div MUL3 100 CAPACITY
+   136 set MUL2 MUL3
+   137 set MUL1 MUL2
+   138 set OUTPUT @blast-compound
  
-   133 jump __label25 always
-   134 label __label26
-   135 set TYPE @plastanium-compressor
+   143 jump __label25 always
+   144 label __label26
+   145 set TYPE @plastanium-compressor
 -    * sensor __tmp21 block @itemCapacity
 -    * set CAPACITY __tmp21
-+  136 sensor CAPACITY block @itemCapacity
-   137 set RES1 @titanium
-   138 set RES2 @oil
-   139 set RES3 @itemCapacity
++  146 sensor CAPACITY block @itemCapacity
+   147 set RES1 @titanium
+   148 set RES2 @oil
+   149 set RES3 @itemCapacity
 -    * op div __tmp22 100 CAPACITY
 -    * set MUL3 __tmp22
-+  140 op div MUL3 100 CAPACITY
-   141 set MUL1 MUL3
-   142 sensor __tmp23 block @liquidCapacity
++  150 op div MUL3 100 CAPACITY
+   151 set MUL1 MUL3
+   152 sensor __tmp23 block @liquidCapacity
 -    * op div __tmp24 250 __tmp23
 -    * set MUL2 __tmp24
-+  143 op div MUL2 250 __tmp23
-   144 set OUTPUT @plastanium
-   145 set __tmp8 OUTPUT
-   146 jump __label6 always
++  153 op div MUL2 250 __tmp23
+   154 set OUTPUT @plastanium
+   155 set __tmp8 OUTPUT
+   156 jump __label6 always
  
-   206 set clx 0
-   207 set crx clx
-   208 op add __tmp32 OFFSET_X BAR_SPACE
+   216 set clx 0
+   217 set crx clx
+   218 op add __tmp32 OFFSET_X BAR_SPACE
 -    * op sub __tmp33 __tmp32 2
 -    * set clw __tmp33
-+  209 op sub clw __tmp32 2
-   210 set crw clw
-   211 op equal __tmp34 FROM_INDEX 0
-   212 jump __label31 equal __tmp34 false
++  219 op sub clw __tmp32 2
+   220 set crw clw
+   221 op equal __tmp34 FROM_INDEX 0
+   222 jump __label31 equal __tmp34 false
  
-   214 jump __label32 always
-   215 label __label31
-   216 op mul __tmp36 FROM_INDEX BAR_GAP
+   224 jump __label32 always
+   225 label __label31
+   226 op mul __tmp36 FROM_INDEX BAR_GAP
 -    * op add __tmp37 OFFSET_Y __tmp36
 -    * set __tmp35 __tmp37
-+  217 op add __tmp35 OFFSET_Y __tmp36
-   218 label __label32
-   219 set cly __tmp35
-   220 set cry cly
-   221 op lessThan __tmp38 TO_INDEX 8
-   222 jump __label33 equal __tmp38 false
-   223 op mul __tmp40 TO_INDEX BAR_GAP
++  227 op add __tmp35 OFFSET_Y __tmp36
+   228 label __label32
+   229 set cly __tmp35
+   230 set cry cly
+   231 op lessThan __tmp38 TO_INDEX 8
+   232 jump __label33 equal __tmp38 false
+   233 op mul __tmp40 TO_INDEX BAR_GAP
 -    * op add __tmp41 OFFSET_Y __tmp40
 -    * set __tmp39 __tmp41
-+  224 op add __tmp39 OFFSET_Y __tmp40
-   225 jump __label34 always
-   226 label __label33
-   227 set __tmp39 176
-   228 label __label34
++  234 op add __tmp39 OFFSET_Y __tmp40
+   235 jump __label34 always
+   236 label __label33
+   237 set __tmp39 176
+   238 label __label34
 -    * op sub __tmp42 __tmp39 cly
 -    * set clh __tmp42
-+  229 op sub clh __tmp39 cly
-   230 set crh clh
-   231 set __tmp31 crh
-   232 jump __label30 always
++  239 op sub clh __tmp39 cly
+   240 set crh clh
+   241 set __tmp31 crh
+   242 jump __label30 always
  
-   240 op greaterThanEq __tmp43 FROM_INDEX 8
-   241 jump __label35 equal __tmp43 false
-   242 op add __tmp45 OFFSET_X BAR_SPACE
+   250 op greaterThanEq __tmp43 FROM_INDEX 8
+   251 jump __label35 equal __tmp43 false
+   252 op add __tmp45 OFFSET_X BAR_SPACE
 -    * op sub __tmp46 __tmp45 2
 -    * set crx __tmp46
-+  243 op sub crx __tmp45 2
-   244 op add __tmp47 OFFSET_X BAR_SPACE
-   245 op sub __tmp48 176 __tmp47
++  253 op sub crx __tmp45 2
+   254 op add __tmp47 OFFSET_X BAR_SPACE
+   255 op sub __tmp48 176 __tmp47
 -    * op add __tmp49 __tmp48 1
 -    * set crw __tmp49
-+  246 op add crw __tmp48 1
-   247 op mod __tmp50 FROM_INDEX 8
-   248 op equal __tmp51 __tmp50 0
-   249 jump __label37 equal __tmp51 false
++  256 op add crw __tmp48 1
+   257 op mod __tmp50 FROM_INDEX 8
+   258 op equal __tmp51 __tmp50 0
+   259 jump __label37 equal __tmp51 false
  
-   252 label __label37
-   253 op mod __tmp53 FROM_INDEX 8
-   254 op mul __tmp54 __tmp53 BAR_GAP
+   262 label __label37
+   263 op mod __tmp53 FROM_INDEX 8
+   264 op mul __tmp54 __tmp53 BAR_GAP
 -    * op add __tmp55 OFFSET_Y __tmp54
 -    * set __tmp52 __tmp55
-+  255 op add __tmp52 OFFSET_Y __tmp54
-   256 label __label38
-   257 set cry __tmp52
-   258 op lessThan __tmp56 TO_INDEX 16
-   259 jump __label39 equal __tmp56 false
-   260 op mod __tmp58 TO_INDEX 8
-   261 op mul __tmp59 __tmp58 BAR_GAP
++  265 op add __tmp52 OFFSET_Y __tmp54
+   266 label __label38
+   267 set cry __tmp52
+   268 op lessThan __tmp56 TO_INDEX 16
+   269 jump __label39 equal __tmp56 false
+   270 op mod __tmp58 TO_INDEX 8
+   271 op mul __tmp59 __tmp58 BAR_GAP
 -    * op add __tmp60 OFFSET_Y __tmp59
 -    * set __tmp57 __tmp60
-+  262 op add __tmp57 OFFSET_Y __tmp59
-   263 jump __label40 always
-   264 label __label39
-   265 set __tmp57 176
-   266 label __label40
++  272 op add __tmp57 OFFSET_Y __tmp59
+   273 jump __label40 always
+   274 label __label39
+   275 set __tmp57 176
+   276 label __label40
 -    * op sub __tmp61 __tmp57 cry
 -    * set crh __tmp61
-+  267 op sub crh __tmp57 cry
-   268 set clx crx
-   269 set clw crw
-   270 set cly cry
++  277 op sub crh __tmp57 cry
+   278 set clx crx
+   279 set clw crw
+   280 set cly cry
  
-   274 label __label35
-   275 set clx 0
-   276 op add __tmp62 OFFSET_X BAR_SPACE
+   284 label __label35
+   285 set clx 0
+   286 op add __tmp62 OFFSET_X BAR_SPACE
 -    * op sub __tmp63 __tmp62 2
 -    * set clw __tmp63
-+  277 op sub clw __tmp62 2
-   278 op equal __tmp64 FROM_INDEX 0
-   279 jump __label41 equal __tmp64 false
-   280 set __tmp65 0
-   281 jump __label42 always
-   282 label __label41
-   283 op mul __tmp66 FROM_INDEX BAR_GAP
++  287 op sub clw __tmp62 2
+   288 op equal __tmp64 FROM_INDEX 0
+   289 jump __label41 equal __tmp64 false
+   290 set __tmp65 0
+   291 jump __label42 always
+   292 label __label41
+   293 op mul __tmp66 FROM_INDEX BAR_GAP
 -    * op add __tmp67 OFFSET_Y __tmp66
 -    * set __tmp65 __tmp67
-+  284 op add __tmp65 OFFSET_Y __tmp66
-   285 label __label42
-   286 set cly __tmp65
-   287 op lessThan __tmp68 TO_INDEX 8
-   288 jump __label43 equal __tmp68 false
-   289 op mul __tmp70 TO_INDEX BAR_GAP
++  294 op add __tmp65 OFFSET_Y __tmp66
+   295 label __label42
+   296 set cly __tmp65
+   297 op lessThan __tmp68 TO_INDEX 8
+   298 jump __label43 equal __tmp68 false
+   299 op mul __tmp70 TO_INDEX BAR_GAP
 -    * op add __tmp71 OFFSET_Y __tmp70
 -    * set __tmp69 __tmp71
-+  290 op add __tmp69 OFFSET_Y __tmp70
-   291 jump __label44 always
-   292 label __label43
-   293 set __tmp69 176
-   294 label __label44
++  300 op add __tmp69 OFFSET_Y __tmp70
+   301 jump __label44 always
+   302 label __label43
+   303 set __tmp69 176
+   304 label __label44
 -    * op sub __tmp72 __tmp69 cly
 -    * set clh __tmp72
-+  295 op sub clh __tmp69 cly
-   296 op greaterThanEq __tmp73 TO_INDEX 8
-   297 jump __label45 equal __tmp73 false
-   298 op add __tmp75 OFFSET_X BAR_SPACE
++  305 op sub clh __tmp69 cly
+   306 op greaterThanEq __tmp73 TO_INDEX 8
+   307 jump __label45 equal __tmp73 false
+   308 op add __tmp75 OFFSET_X BAR_SPACE
 -    * op sub __tmp76 __tmp75 2
 -    * set crx __tmp76
-+  299 op sub crx __tmp75 2
-   300 op add __tmp77 OFFSET_X BAR_SPACE
-   301 op sub __tmp78 176 __tmp77
++  309 op sub crx __tmp75 2
+   310 op add __tmp77 OFFSET_X BAR_SPACE
+   311 op sub __tmp78 176 __tmp77
 -    * op add __tmp79 __tmp78 1
 -    * set crw __tmp79
-+  302 op add crw __tmp78 1
-   303 set cry 0
-   304 op lessThan __tmp80 TO_INDEX 16
-   305 jump __label47 equal __tmp80 false
-   306 op mod __tmp82 TO_INDEX 8
-   307 op mul __tmp83 __tmp82 BAR_GAP
++  312 op add crw __tmp78 1
+   313 set cry 0
+   314 op lessThan __tmp80 TO_INDEX 16
+   315 jump __label47 equal __tmp80 false
+   316 op mod __tmp82 TO_INDEX 8
+   317 op mul __tmp83 __tmp82 BAR_GAP
 -    * op add __tmp84 OFFSET_Y __tmp83
 -    * set __tmp81 __tmp84
-+  308 op add __tmp81 OFFSET_Y __tmp83
-   309 jump __label48 always
-   310 label __label47
-   311 set __tmp81 176
-   312 label __label48
++  318 op add __tmp81 OFFSET_Y __tmp83
+   319 jump __label48 always
+   320 label __label47
+   321 set __tmp81 176
+   322 label __label48
 -    * op sub __tmp85 __tmp81 cry
 -    * set crh __tmp85
-+  313 op sub crh __tmp81 cry
-   314 set __tmp74 crh
-   315 jump __label46 always
-   316 label __label45
++  323 op sub crh __tmp81 cry
+   324 set __tmp74 crh
+   325 jump __label46 always
+   326 label __label45
  
-   329 sensor __tmp86 SWITCH @enabled
-   330 op equal __tmp87 __tmp86 0
-   331 jump __label51 equal __tmp87 false
+   339 sensor __tmp86 SWITCH @enabled
+   340 op equal __tmp87 __tmp86 0
+   341 jump __label51 equal __tmp87 false
 -    * set __tmp88 @time
 -    * set start __tmp88
-+  332 set start @time
-   333 print "Universal Factory Monitor"
-   334 print "\n"
-   335 print "Monitoring: "
++  342 set start @time
+   343 print "Universal Factory Monitor"
+   344 print "\n"
+   345 print "Monitoring: "
  
-   351 label __label55
-   352 set __tmp91 null
-   353 label __label56
+   361 label __label55
+   362 set __tmp91 null
+   363 label __label56
 -    * getlink __tmp92 n
 -    * set factory __tmp92
-+  354 getlink factory n
-   355 sensor __tmp93 factory @type
-   356 op equal __tmp94 __tmp93 TYPE
-   357 jump __label57 equal __tmp94 false
-   358 set minimum 101
-   359 sensor __tmp96 factory RES1
++  364 getlink factory n
+   365 sensor __tmp93 factory @type
+   366 op equal __tmp94 __tmp93 TYPE
+   367 jump __label57 equal __tmp94 false
+   368 set minimum 101
+   369 sensor __tmp96 factory RES1
 -    * op mul __tmp97 MUL1 __tmp96
 -    * set r1 __tmp97
-+  360 op mul r1 MUL1 __tmp96
-   361 sensor __tmp98 factory RES2
++  370 op mul r1 MUL1 __tmp96
+   371 sensor __tmp98 factory RES2
 -    * op mul __tmp99 MUL2 __tmp98
 -    * set r2 __tmp99
-+  362 op mul r2 MUL2 __tmp98
-   363 sensor __tmp100 factory RES3
++  372 op mul r2 MUL2 __tmp98
+   373 sensor __tmp100 factory RES3
 -    * op mul __tmp101 MUL3 __tmp100
 -    * set r3 __tmp101
-+  364 op mul r3 MUL3 __tmp100
-   365 sensor __tmp102 factory OUTPUT
++  374 op mul r3 MUL3 __tmp100
+   375 sensor __tmp102 factory OUTPUT
 -    * op mul __tmp103 MUL1 __tmp102
 -    * set output __tmp103
 -    * sensor __tmp104 factory @enabled
@@ -339,1320 +335,1567 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-56 ins
 -    * set power __tmp105
 -    * sensor __tmp106 factory @timescale
 -    * set boost __tmp106
-+  366 op mul output MUL1 __tmp102
-+  367 sensor e factory @enabled
-+  368 sensor power factory @totalPower
-+  369 sensor boost factory @timescale
-   370 op lessThan __tmp107 r1 minimum
-   371 jump __label59 equal __tmp107 false
-   372 set minimum r1
++  376 op mul output MUL1 __tmp102
++  377 sensor e factory @enabled
++  378 sensor power factory @totalPower
++  379 sensor boost factory @timescale
+   380 op lessThan __tmp107 r1 minimum
+   381 jump __label59 equal __tmp107 false
+   382 set minimum r1
  
-   397 op greaterThan __tmp113 output 33
-   398 op sub __tmp114 100 output
-   399 op lessThan __tmp115 __tmp114 minimum
+   407 op greaterThan __tmp113 output 33
+   408 op sub __tmp114 100 output
+   409 op lessThan __tmp115 __tmp114 minimum
 -    * op land __tmp116 __tmp113 __tmp115
 -    * set showout __tmp116
-+  400 op land showout __tmp113 __tmp115
-   401 jump __label65 equal showout false
-   402 set icon OUTPUT
-   403 set __tmp117 icon
++  410 op land showout __tmp113 __tmp115
+   411 jump __label65 equal showout false
+   412 set icon OUTPUT
+   413 set __tmp117 icon
  
-   405 label __label65
-   406 set __tmp117 null
-   407 label __label66
+   415 label __label65
+   416 set __tmp117 null
+   417 label __label66
 -    * op idiv __tmp118 index 8
 -    * set column __tmp118
 -    * op mod __tmp119 index 8
 -    * set row __tmp119
-+  408 op idiv column index 8
-+  409 op mod row index 8
-   410 op mul __tmp120 column BAR_SPACE
++  418 op idiv column index 8
++  419 op mod row index 8
+   420 op mul __tmp120 column BAR_SPACE
 -    * op add __tmp121 OFFSET_X __tmp120
 -    * set x __tmp121
-+  411 op add x OFFSET_X __tmp120
-   412 op mul __tmp122 row BAR_GAP
++  421 op add x OFFSET_X __tmp120
+   422 op mul __tmp122 row BAR_GAP
 -    * op add __tmp123 OFFSET_Y __tmp122
 -    * set y __tmp123
-+  413 op add y OFFSET_Y __tmp122
-   414 op greaterThan __tmp124 minimum 66
-   415 op equal __tmp125 showout false
-   416 op land __tmp126 __tmp124 __tmp125
++  423 op add y OFFSET_Y __tmp122
+   424 op greaterThan __tmp124 minimum 66
+   425 op equal __tmp125 showout false
+   426 op land __tmp126 __tmp124 __tmp125
  
-   472 draw stroke 2
-   473 set __tmp128 null
-   474 label __label70
+   482 draw stroke 2
+   483 set __tmp128 null
+   484 label __label70
 -    * op add __tmp152 x 16
 -    * set x __tmp152
-+  475 op add x x 16
-   476 op equal __tmp153 power 0
-   477 op equal __tmp154 e 0
-   478 op land __tmp155 __tmp153 __tmp154
++  485 op add x x 16
+   486 op equal __tmp153 power 0
+   487 op equal __tmp154 e 0
+   488 op land __tmp155 __tmp153 __tmp154
  
-   516 label __label74
-   517 op greaterThan __tmp164 boost EXPECTED_BOOST
-   518 jump __label81 equal __tmp164 false
+   526 label __label74
+   527 op greaterThan __tmp164 boost EXPECTED_BOOST
+   528 jump __label81 equal __tmp164 false
 -    * op max __tmp166 192 red
 -    * set red __tmp166
 -    * op max __tmp167 192 green
 -    * set green __tmp167
 -    * op max __tmp168 192 blue
 -    * set blue __tmp168
-+  519 op max red 192 red
-+  520 op max green 192 green
-+  521 op max blue 192 blue
-   522 set boost EXPECTED_BOOST
-   523 set __tmp165 boost
-   524 jump __label82 always
++  529 op max red 192 red
++  530 op max green 192 green
++  531 op max blue 192 blue
+   532 set boost EXPECTED_BOOST
+   533 set __tmp165 boost
+   534 jump __label82 always
  
-   526 set __tmp165 null
-   527 label __label82
-   528 op mul __tmp169 BAR_LENGTH boost
+   536 set __tmp165 null
+   537 label __label82
+   538 op mul __tmp169 BAR_LENGTH boost
 -    * op idiv __tmp170 __tmp169 EXPECTED_BOOST
 -    * set length __tmp170
-+  529 op idiv length __tmp169 EXPECTED_BOOST
-   530 draw color red green blue 128
-   531 op mul __tmp171 minimum length
-   532 op idiv __tmp172 __tmp171 100
-   533 draw rect x y __tmp172 BAR_WIDTH
-   534 draw color red green blue 255
-   535 draw lineRect x y length BAR_WIDTH
++  539 op idiv length __tmp169 EXPECTED_BOOST
+   540 draw color red green blue 128
+   541 op mul __tmp171 minimum length
+   542 op idiv __tmp172 __tmp171 100
+   543 draw rect x y __tmp172 BAR_WIDTH
+   544 draw color red green blue 255
+   545 draw lineRect x y length BAR_WIDTH
 -    * op add __tmp173 index 1
 -    * set index __tmp173
-+  536 op add index index 1
-   537 set __tmp95 index
-   538 jump __label58 always
-   539 label __label57
++  546 op add index index 1
+   547 set __tmp95 index
+   548 jump __label58 always
+   549 label __label57
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-35 instructions):
  
-    21 jump __label7 always
-    22 label __label8
-    23 set MESSAGE block
+    31 jump __label7 always
+    32 label __label8
+    33 set MESSAGE block
 -    * set __tmp8 MESSAGE
-    24 jump __label6 always
-    25 label __label7
-    26 jump __label10 equal __ast0 @switch
-    27 jump __label9 always
-    28 label __label10
-    29 set SWITCH block
+    34 jump __label6 always
+    35 label __label7
+    36 jump __label10 equal __ast0 @switch
+    37 jump __label9 always
+    38 label __label10
+    39 set SWITCH block
 -    * set __tmp8 SWITCH
-    30 jump __label6 always
-    31 label __label9
-    32 jump __label12 equal __ast0 @logic-display
+    40 jump __label6 always
+    41 label __label9
+    42 jump __label12 equal __ast0 @logic-display
  
-    34 jump __label11 always
-    35 label __label12
-    36 set DISPLAY block
+    44 jump __label11 always
+    45 label __label12
+    46 set DISPLAY block
 -    * set __tmp8 DISPLAY
-    37 jump __label6 always
-    38 label __label11
-    39 jump __label14 equal __ast0 @silicon-factory
+    47 jump __label6 always
+    48 label __label11
+    49 jump __label14 equal __ast0 @silicon-factory
  
-    48 set MUL2 MUL3
-    49 set MUL1 MUL2
-    50 set OUTPUT @silicon
+    58 set MUL2 MUL3
+    59 set MUL1 MUL2
+    60 set OUTPUT @silicon
 -    * set __tmp8 OUTPUT
-    51 jump __label6 always
-    52 label __label13
-    53 jump __label16 equal __ast0 @silicon-crucible
+    61 jump __label6 always
+    62 label __label13
+    63 jump __label16 equal __ast0 @silicon-crucible
  
-    62 set MUL2 MUL3
-    63 set MUL1 MUL2
-    64 set OUTPUT @silicon
+    72 set MUL2 MUL3
+    73 set MUL1 MUL2
+    74 set OUTPUT @silicon
 -    * set __tmp8 OUTPUT
-    65 jump __label6 always
-    66 label __label15
-    67 jump __label18 equal __ast0 @kiln
+    75 jump __label6 always
+    76 label __label15
+    77 jump __label18 equal __ast0 @kiln
  
-    76 set MUL2 MUL3
-    77 set MUL1 MUL2
-    78 set OUTPUT @metaglass
+    86 set MUL2 MUL3
+    87 set MUL1 MUL2
+    88 set OUTPUT @metaglass
 -    * set __tmp8 OUTPUT
-    79 jump __label6 always
-    80 label __label17
-    81 jump __label20 equal __ast0 @phase-weaver
+    89 jump __label6 always
+    90 label __label17
+    91 jump __label20 equal __ast0 @phase-weaver
  
-    90 set MUL2 MUL3
-    91 set MUL1 MUL2
-    92 set OUTPUT @phase-fabric
+   100 set MUL2 MUL3
+   101 set MUL1 MUL2
+   102 set OUTPUT @phase-fabric
 -    * set __tmp8 OUTPUT
-    93 jump __label6 always
-    94 label __label19
-    95 jump __label22 equal __ast0 @pyratite-mixer
+   103 jump __label6 always
+   104 label __label19
+   105 jump __label22 equal __ast0 @pyratite-mixer
  
-   104 set MUL2 MUL3
-   105 set MUL1 MUL2
-   106 set OUTPUT @pyratite
+   114 set MUL2 MUL3
+   115 set MUL1 MUL2
+   116 set OUTPUT @pyratite
 -    * set __tmp8 OUTPUT
-   107 jump __label6 always
-   108 label __label21
-   109 jump __label24 equal __ast0 @blast-mixer
+   117 jump __label6 always
+   118 label __label21
+   119 jump __label24 equal __ast0 @blast-mixer
  
-   118 set MUL2 MUL3
-   119 set MUL1 MUL2
-   120 set OUTPUT @blast-compound
+   128 set MUL2 MUL3
+   129 set MUL1 MUL2
+   130 set OUTPUT @blast-compound
 -    * set __tmp8 OUTPUT
-   121 jump __label6 always
-   122 label __label23
-   123 jump __label26 equal __ast0 @plastanium-compressor
+   131 jump __label6 always
+   132 label __label23
+   133 jump __label26 equal __ast0 @plastanium-compressor
  
-   133 sensor __tmp23 block @liquidCapacity
-   134 op div MUL2 250 __tmp23
-   135 set OUTPUT @plastanium
+   143 sensor __tmp23 block @liquidCapacity
+   144 op div MUL2 250 __tmp23
+   145 set OUTPUT @plastanium
 -    * set __tmp8 OUTPUT
-   136 jump __label6 always
-   137 label __label25
-   138 print "\n  "
-   139 print block
-   140 print " not supported"
+   146 jump __label6 always
+   147 label __label25
+   148 print "\n  "
+   149 print block
+   150 print " not supported"
 -    * set __tmp8 " not supported"
-   141 label __label6
-   142 label __label4
-   143 jump __label3 always
+   151 label __label6
+   152 label __label4
+   153 jump __label3 always
  
-   174 op or __tmp27 __tmp25 __tmp26
-   175 jump __label27 equal __tmp27 false
-   176 print "No block to monitor or display."
+   184 op or __tmp27 __tmp25 __tmp26
+   185 jump __label27 equal __tmp27 false
+   186 print "No block to monitor or display."
 -    * set __tmp28 "No block to monitor or display."
-   177 jump __label28 always
-   178 label __label27
+   187 jump __label28 always
+   188 label __label27
 -    * set __tmp28 null
-   179 label __label28
-   180 printflush MESSAGE
-   181 label __label1
+   189 label __label28
+   190 printflush MESSAGE
+   191 label __label1
  
-   215 label __label34
-   216 op sub clh __tmp39 cly
-   217 set crh clh
+   225 label __label34
+   226 op sub clh __tmp39 cly
+   227 set crh clh
 -    * set __tmp31 crh
-   218 jump __label30 always
-   219 label __label29
-   220 set OFFSET_X 5
+   228 jump __label30 always
+   229 label __label29
+   230 set OFFSET_X 5
  
-   308 label __label46
-   309 set __tmp44 __tmp74
-   310 label __label36
+   318 label __label46
+   319 set __tmp44 __tmp74
+   320 label __label36
 -    * set __tmp31 __tmp44
-   311 label __label30
-   312 control enabled SWITCH 0
-   313 label __label49
+   321 label __label30
+   322 control enabled SWITCH 0
+   323 label __label49
  
-   331 op greaterThanEq __tmp90 index TO_INDEX
-   332 jump __label55 equal __tmp90 false
-   333 jump __label54 always
+   341 op greaterThanEq __tmp90 index TO_INDEX
+   342 jump __label55 equal __tmp90 false
+   343 jump __label54 always
 -    * set __tmp91 null
-   334 jump __label56 always
-   335 label __label55
+   344 jump __label56 always
+   345 label __label55
 -    * set __tmp91 null
-   336 label __label56
-   337 getlink factory n
-   338 sensor __tmp93 factory @type
+   346 label __label56
+   347 getlink factory n
+   348 sensor __tmp93 factory @type
  
-   354 jump __label59 equal __tmp107 false
-   355 set minimum r1
-   356 set icon RES1
+   364 jump __label59 equal __tmp107 false
+   365 set minimum r1
+   366 set icon RES1
 -    * set __tmp108 icon
-   357 jump __label60 always
-   358 label __label59
+   367 jump __label60 always
+   368 label __label59
 -    * set __tmp108 null
-   359 label __label60
-   360 op lessThan __tmp109 r2 minimum
-   361 jump __label61 equal __tmp109 false
-   362 set minimum r2
-   363 set icon RES2
+   369 label __label60
+   370 op lessThan __tmp109 r2 minimum
+   371 jump __label61 equal __tmp109 false
+   372 set minimum r2
+   373 set icon RES2
 -    * set __tmp110 icon
-   364 jump __label62 always
-   365 label __label61
+   374 jump __label62 always
+   375 label __label61
 -    * set __tmp110 null
-   366 label __label62
-   367 op lessThan __tmp111 r3 minimum
-   368 jump __label63 equal __tmp111 false
-   369 set minimum r3
-   370 set icon RES3
+   376 label __label62
+   377 op lessThan __tmp111 r3 minimum
+   378 jump __label63 equal __tmp111 false
+   379 set minimum r3
+   380 set icon RES3
 -    * set __tmp112 icon
-   371 jump __label64 always
-   372 label __label63
+   381 jump __label64 always
+   382 label __label63
 -    * set __tmp112 null
-   373 label __label64
-   374 op greaterThan __tmp113 output 33
-   375 op sub __tmp114 100 output
+   383 label __label64
+   384 op greaterThan __tmp113 output 33
+   385 op sub __tmp114 100 output
  
-   377 op land showout __tmp113 __tmp115
-   378 jump __label65 equal showout false
-   379 set icon OUTPUT
+   387 op land showout __tmp113 __tmp115
+   388 jump __label65 equal showout false
+   389 set icon OUTPUT
 -    * set __tmp117 icon
-   380 jump __label66 always
-   381 label __label65
+   390 jump __label66 always
+   391 label __label65
 -    * set __tmp117 null
-   382 label __label66
-   383 op idiv column index 8
-   384 op mod row index 8
+   392 label __label66
+   393 op idiv column index 8
+   394 op mod row index 8
  
-   391 op land __tmp126 __tmp124 __tmp125
-   392 jump __label67 equal __tmp126 false
-   393 set icon TYPE
+   401 op land __tmp126 __tmp124 __tmp125
+   402 jump __label67 equal __tmp126 false
+   403 set icon TYPE
 -    * set __tmp127 icon
-   394 jump __label68 always
-   395 label __label67
+   404 jump __label68 always
+   405 label __label67
 -    * set __tmp127 null
-   396 label __label68
-   397 draw color 255 255 255 255
-   398 jump __label69 equal e false
+   406 label __label68
+   407 draw color 255 255 255 255
+   408 jump __label69 equal e false
  
-   423 draw rect __tmp140 __tmp141 2 2
-   424 set __tmp130 null
-   425 label __label72
+   433 draw rect __tmp140 __tmp141 2 2
+   434 set __tmp130 null
+   435 label __label72
 -    * set __tmp128 __tmp130
-   426 jump __label70 always
-   427 label __label69
-   428 draw color 255 80 80 255
+   436 jump __label70 always
+   437 label __label69
+   438 draw color 255 80 80 255
  
-   442 op sub __tmp151 y 1
-   443 draw lineRect __tmp150 __tmp151 16 16
-   444 draw stroke 2
+   452 op sub __tmp151 y 1
+   453 draw lineRect __tmp150 __tmp151 16 16
+   454 draw stroke 2
 -    * set __tmp128 null
-   445 label __label70
-   446 op add x x 16
-   447 op equal __tmp153 power 0
+   455 label __label70
+   456 op add x x 16
+   457 op equal __tmp153 power 0
  
-   451 set red 255
-   452 set green 0
-   453 set blue 0
+   461 set red 255
+   462 set green 0
+   463 set blue 0
 -    * set __tmp156 blue
-   454 jump __label74 always
-   455 label __label73
-   456 jump __label75 equal showout false
+   464 jump __label74 always
+   465 label __label73
+   466 jump __label75 equal showout false
  
-   482 set blue 0
-   483 set __tmp157 blue
-   484 label __label76
+   492 set blue 0
+   493 set __tmp157 blue
+   494 label __label76
 -    * set __tmp156 __tmp157
-   485 label __label74
-   486 op greaterThan __tmp164 boost EXPECTED_BOOST
-   487 jump __label81 equal __tmp164 false
+   495 label __label74
+   496 op greaterThan __tmp164 boost EXPECTED_BOOST
+   497 jump __label81 equal __tmp164 false
  
-   489 op max green 192 green
-   490 op max blue 192 blue
-   491 set boost EXPECTED_BOOST
+   499 op max green 192 green
+   500 op max blue 192 blue
+   501 set boost EXPECTED_BOOST
 -    * set __tmp165 boost
-   492 jump __label82 always
-   493 label __label81
+   502 jump __label82 always
+   503 label __label81
 -    * set __tmp165 null
-   494 label __label82
-   495 op mul __tmp169 BAR_LENGTH boost
-   496 op idiv length __tmp169 EXPECTED_BOOST
+   504 label __label82
+   505 op mul __tmp169 BAR_LENGTH boost
+   506 op idiv length __tmp169 EXPECTED_BOOST
  
-   501 draw color red green blue 255
-   502 draw lineRect x y length BAR_WIDTH
-   503 op add index index 1
+   511 draw color red green blue 255
+   512 draw lineRect x y length BAR_WIDTH
+   513 op add index index 1
 -    * set __tmp95 index
-   504 jump __label58 always
-   505 label __label57
+   514 jump __label58 always
+   515 label __label57
 -    * set __tmp95 null
-   506 label __label58
-   507 label __label53
-   508 op add n n 1
+   516 label __label58
+   517 label __label53
+   518 op add n n 1
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-6 instructions):
  
-   255 set clw crw
-   256 set cly cry
-   257 set clh crh
+   265 set clw crw
+   266 set cly cry
+   267 set clh crh
 -    * set __tmp44 clh
-   258 jump __label36 always
-   259 label __label35
-   260 set clx 0
+   268 jump __label36 always
+   269 label __label35
+   270 set clx 0
  
-   305 set crh clh
-   306 set __tmp74 crh
-   307 label __label46
+   315 set crh clh
+   316 set __tmp74 crh
+   317 label __label46
 -    * set __tmp44 __tmp74
-   308 label __label36
-   309 label __label30
-   310 control enabled SWITCH 0
+   318 label __label36
+   319 label __label30
+   320 control enabled SWITCH 0
  
-   399 op add __tmp131 x 7
-   400 op add __tmp132 y 7
-   401 draw image __tmp131 __tmp132 icon 16 0
+   409 op add __tmp131 x 7
+   410 op add __tmp132 y 7
+   411 draw image __tmp131 __tmp132 icon 16 0
 -    * set __tmp130 null
-   402 jump __label72 always
-   403 label __label71
-   404 draw color 255 80 80 255
+   412 jump __label72 always
+   413 label __label71
+   414 draw color 255 80 80 255
  
-   418 op add __tmp140 x 4
-   419 op add __tmp141 y 6
-   420 draw rect __tmp140 __tmp141 2 2
+   428 op add __tmp140 x 4
+   429 op add __tmp141 y 6
+   430 draw rect __tmp140 __tmp141 2 2
 -    * set __tmp130 null
-   421 label __label72
-   422 jump __label70 always
-   423 label __label69
+   431 label __label72
+   432 jump __label70 always
+   433 label __label69
  
-   454 set green 0
-   455 set blue 255
-   456 set minimum output
+   464 set green 0
+   465 set blue 255
+   466 set minimum output
 -    * set __tmp157 minimum
-   457 jump __label76 always
-   458 label __label75
-   459 op greaterThan __tmp158 minimum 66
+   467 jump __label76 always
+   468 label __label75
+   469 op greaterThan __tmp158 minimum 66
  
-   475 label __label80
-   476 set green __tmp163
-   477 set blue 0
+   485 label __label80
+   486 set green __tmp163
+   487 set blue 0
 -    * set __tmp157 blue
-   478 label __label76
-   479 label __label74
-   480 op greaterThan __tmp164 boost EXPECTED_BOOST
+   488 label __label76
+   489 label __label74
+   490 op greaterThan __tmp164 boost EXPECTED_BOOST
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructions):
  
-   296 set __tmp81 176
-   297 label __label48
-   298 op sub crh __tmp81 cry
+   306 set __tmp81 176
+   307 label __label48
+   308 op sub crh __tmp81 cry
 -    * set __tmp74 crh
-   299 jump __label46 always
-   300 label __label45
-   301 set crx clx
-   302 set crw clw
-   303 set cry cly
-   304 set crh clh
+   309 jump __label46 always
+   310 label __label45
+   311 set crx clx
+   312 set crw clw
+   313 set cry cly
+   314 set crh clh
 -    * set __tmp74 crh
-   305 label __label46
-   306 label __label36
-   307 label __label30
+   315 label __label46
+   316 label __label36
+   317 label __label30
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 instructions):
  
-    17 op sub n n 1
-    18 getlink block n
-    19 sensor __ast0 block @type
+    27 op sub n n 1
+    28 getlink block n
+    29 sensor __ast0 block @type
 -    * jump __label8 equal __ast0 @message
 -    * jump __label7 always
-+   20 jump __label7 notEqual __ast0 @message
-    21 label __label8
-    22 set MESSAGE block
-    23 jump __label6 always
-    24 label __label7
++   30 jump __label7 notEqual __ast0 @message
+    31 label __label8
+    32 set MESSAGE block
+    33 jump __label6 always
+    34 label __label7
 -    * jump __label10 equal __ast0 @switch
 -    * jump __label9 always
-+   25 jump __label9 notEqual __ast0 @switch
-    26 label __label10
-    27 set SWITCH block
-    28 jump __label6 always
-    29 label __label9
-    30 jump __label12 equal __ast0 @logic-display
++   35 jump __label9 notEqual __ast0 @switch
+    36 label __label10
+    37 set SWITCH block
+    38 jump __label6 always
+    39 label __label9
+    40 jump __label12 equal __ast0 @logic-display
 -    * jump __label12 equal __ast0 @large-logic-display
 -    * jump __label11 always
-+   31 jump __label11 notEqual __ast0 @large-logic-display
-    32 label __label12
-    33 set DISPLAY block
-    34 jump __label6 always
-    35 label __label11
++   41 jump __label11 notEqual __ast0 @large-logic-display
+    42 label __label12
+    43 set DISPLAY block
+    44 jump __label6 always
+    45 label __label11
 -    * jump __label14 equal __ast0 @silicon-factory
 -    * jump __label13 always
-+   36 jump __label13 notEqual __ast0 @silicon-factory
-    37 label __label14
-    38 set TYPE @silicon-factory
-    39 sensor CAPACITY block @itemCapacity
++   46 jump __label13 notEqual __ast0 @silicon-factory
+    47 label __label14
+    48 set TYPE @silicon-factory
+    49 sensor CAPACITY block @itemCapacity
  
-    46 set OUTPUT @silicon
-    47 jump __label6 always
-    48 label __label13
+    56 set OUTPUT @silicon
+    57 jump __label6 always
+    58 label __label13
 -    * jump __label16 equal __ast0 @silicon-crucible
 -    * jump __label15 always
-+   49 jump __label15 notEqual __ast0 @silicon-crucible
-    50 label __label16
-    51 set TYPE @silicon-crucible
-    52 sensor CAPACITY block @itemCapacity
++   59 jump __label15 notEqual __ast0 @silicon-crucible
+    60 label __label16
+    61 set TYPE @silicon-crucible
+    62 sensor CAPACITY block @itemCapacity
  
-    59 set OUTPUT @silicon
-    60 jump __label6 always
-    61 label __label15
+    69 set OUTPUT @silicon
+    70 jump __label6 always
+    71 label __label15
 -    * jump __label18 equal __ast0 @kiln
 -    * jump __label17 always
-+   62 jump __label17 notEqual __ast0 @kiln
-    63 label __label18
-    64 set TYPE @kiln
-    65 sensor CAPACITY block @itemCapacity
++   72 jump __label17 notEqual __ast0 @kiln
+    73 label __label18
+    74 set TYPE @kiln
+    75 sensor CAPACITY block @itemCapacity
  
-    72 set OUTPUT @metaglass
-    73 jump __label6 always
-    74 label __label17
+    82 set OUTPUT @metaglass
+    83 jump __label6 always
+    84 label __label17
 -    * jump __label20 equal __ast0 @phase-weaver
 -    * jump __label19 always
-+   75 jump __label19 notEqual __ast0 @phase-weaver
-    76 label __label20
-    77 set TYPE @phase-weaver
-    78 sensor CAPACITY block @itemCapacity
++   85 jump __label19 notEqual __ast0 @phase-weaver
+    86 label __label20
+    87 set TYPE @phase-weaver
+    88 sensor CAPACITY block @itemCapacity
  
-    85 set OUTPUT @phase-fabric
-    86 jump __label6 always
-    87 label __label19
+    95 set OUTPUT @phase-fabric
+    96 jump __label6 always
+    97 label __label19
 -    * jump __label22 equal __ast0 @pyratite-mixer
 -    * jump __label21 always
-+   88 jump __label21 notEqual __ast0 @pyratite-mixer
-    89 label __label22
-    90 set TYPE @pyratite-mixer
-    91 sensor CAPACITY block @itemCapacity
++   98 jump __label21 notEqual __ast0 @pyratite-mixer
+    99 label __label22
+   100 set TYPE @pyratite-mixer
+   101 sensor CAPACITY block @itemCapacity
  
-    98 set OUTPUT @pyratite
-    99 jump __label6 always
-   100 label __label21
+   108 set OUTPUT @pyratite
+   109 jump __label6 always
+   110 label __label21
 -    * jump __label24 equal __ast0 @blast-mixer
 -    * jump __label23 always
-+  101 jump __label23 notEqual __ast0 @blast-mixer
-   102 label __label24
-   103 set TYPE @blast-mixer
-   104 sensor CAPACITY block @itemCapacity
++  111 jump __label23 notEqual __ast0 @blast-mixer
+   112 label __label24
+   113 set TYPE @blast-mixer
+   114 sensor CAPACITY block @itemCapacity
  
-   111 set OUTPUT @blast-compound
-   112 jump __label6 always
-   113 label __label23
+   121 set OUTPUT @blast-compound
+   122 jump __label6 always
+   123 label __label23
 -    * jump __label26 equal __ast0 @plastanium-compressor
 -    * jump __label25 always
-+  114 jump __label25 notEqual __ast0 @plastanium-compressor
-   115 label __label26
-   116 set TYPE @plastanium-compressor
-   117 sensor CAPACITY block @itemCapacity
++  124 jump __label25 notEqual __ast0 @plastanium-compressor
+   125 label __label26
+   126 set TYPE @plastanium-compressor
+   127 sensor CAPACITY block @itemCapacity
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-20 instructions):
  
-    12 print "\n"
-    13 set n @links
-    14 label __label3
+    22 print "\n"
+    23 set n @links
+    24 label __label3
 -    * op greaterThan __tmp4 n 0
 -    * jump __label5 equal __tmp4 false
-+   15 jump __label5 lessThanEq n 0
-    16 op sub n n 1
-    17 getlink block n
-    18 sensor __ast0 block @type
++   25 jump __label5 lessThanEq n 0
+    26 op sub n n 1
+    27 getlink block n
+    28 sensor __ast0 block @type
  
-   171 jump __label0 always
-   172 label __label2
-   173 sensor __tmp29 DISPLAY @type
+   181 jump __label0 always
+   182 label __label2
+   183 sensor __tmp29 DISPLAY @type
 -    * op equal __tmp30 __tmp29 @logic-display
 -    * jump __label29 equal __tmp30 false
-+  174 jump __label29 notEqual __tmp29 @logic-display
-   175 set OFFSET_X 2
-   176 set OFFSET_Y 2
-   177 set BAR_WIDTH 14
++  184 jump __label29 notEqual __tmp29 @logic-display
+   185 set OFFSET_X 2
+   186 set OFFSET_Y 2
+   187 set BAR_WIDTH 14
  
-   183 op add __tmp32 OFFSET_X BAR_SPACE
-   184 op sub clw __tmp32 2
-   185 set crw clw
+   193 op add __tmp32 OFFSET_X BAR_SPACE
+   194 op sub clw __tmp32 2
+   195 set crw clw
 -    * op equal __tmp34 FROM_INDEX 0
 -    * jump __label31 equal __tmp34 false
-+  186 jump __label31 notEqual FROM_INDEX 0
-   187 set __tmp35 0
-   188 jump __label32 always
-   189 label __label31
++  196 jump __label31 notEqual FROM_INDEX 0
+   197 set __tmp35 0
+   198 jump __label32 always
+   199 label __label31
  
-   192 label __label32
-   193 set cly __tmp35
-   194 set cry cly
+   202 label __label32
+   203 set cly __tmp35
+   204 set cry cly
 -    * op lessThan __tmp38 TO_INDEX 8
 -    * jump __label33 equal __tmp38 false
-+  195 jump __label33 greaterThanEq TO_INDEX 8
-   196 op mul __tmp40 TO_INDEX BAR_GAP
-   197 op add __tmp39 OFFSET_Y __tmp40
-   198 jump __label34 always
++  205 jump __label33 greaterThanEq TO_INDEX 8
+   206 op mul __tmp40 TO_INDEX BAR_GAP
+   207 op add __tmp39 OFFSET_Y __tmp40
+   208 jump __label34 always
  
-   209 set BAR_LENGTH 61
-   210 set BAR_SPACE 88
-   211 set BAR_GAP 22
+   219 set BAR_LENGTH 61
+   220 set BAR_SPACE 88
+   221 set BAR_GAP 22
 -    * op greaterThanEq __tmp43 FROM_INDEX 8
 -    * jump __label35 equal __tmp43 false
-+  212 jump __label35 lessThan FROM_INDEX 8
-   213 op add __tmp45 OFFSET_X BAR_SPACE
-   214 op sub crx __tmp45 2
-   215 op add __tmp47 OFFSET_X BAR_SPACE
-   216 op sub __tmp48 176 __tmp47
-   217 op add crw __tmp48 1
-   218 op mod __tmp50 FROM_INDEX 8
++  222 jump __label35 lessThan FROM_INDEX 8
+   223 op add __tmp45 OFFSET_X BAR_SPACE
+   224 op sub crx __tmp45 2
+   225 op add __tmp47 OFFSET_X BAR_SPACE
+   226 op sub __tmp48 176 __tmp47
+   227 op add crw __tmp48 1
+   228 op mod __tmp50 FROM_INDEX 8
 -    * op equal __tmp51 __tmp50 0
 -    * jump __label37 equal __tmp51 false
-+  219 jump __label37 notEqual __tmp50 0
-   220 set __tmp52 0
-   221 jump __label38 always
-   222 label __label37
++  229 jump __label37 notEqual __tmp50 0
+   230 set __tmp52 0
+   231 jump __label38 always
+   232 label __label37
  
-   225 op add __tmp52 OFFSET_Y __tmp54
-   226 label __label38
-   227 set cry __tmp52
+   235 op add __tmp52 OFFSET_Y __tmp54
+   236 label __label38
+   237 set cry __tmp52
 -    * op lessThan __tmp56 TO_INDEX 16
 -    * jump __label39 equal __tmp56 false
-+  228 jump __label39 greaterThanEq TO_INDEX 16
-   229 op mod __tmp58 TO_INDEX 8
-   230 op mul __tmp59 __tmp58 BAR_GAP
-   231 op add __tmp57 OFFSET_Y __tmp59
++  238 jump __label39 greaterThanEq TO_INDEX 16
+   239 op mod __tmp58 TO_INDEX 8
+   240 op mul __tmp59 __tmp58 BAR_GAP
+   241 op add __tmp57 OFFSET_Y __tmp59
  
-   243 set clx 0
-   244 op add __tmp62 OFFSET_X BAR_SPACE
-   245 op sub clw __tmp62 2
+   253 set clx 0
+   254 op add __tmp62 OFFSET_X BAR_SPACE
+   255 op sub clw __tmp62 2
 -    * op equal __tmp64 FROM_INDEX 0
 -    * jump __label41 equal __tmp64 false
-+  246 jump __label41 notEqual FROM_INDEX 0
-   247 set __tmp65 0
-   248 jump __label42 always
-   249 label __label41
++  256 jump __label41 notEqual FROM_INDEX 0
+   257 set __tmp65 0
+   258 jump __label42 always
+   259 label __label41
  
-   251 op add __tmp65 OFFSET_Y __tmp66
-   252 label __label42
-   253 set cly __tmp65
+   261 op add __tmp65 OFFSET_Y __tmp66
+   262 label __label42
+   263 set cly __tmp65
 -    * op lessThan __tmp68 TO_INDEX 8
 -    * jump __label43 equal __tmp68 false
-+  254 jump __label43 greaterThanEq TO_INDEX 8
-   255 op mul __tmp70 TO_INDEX BAR_GAP
-   256 op add __tmp69 OFFSET_Y __tmp70
-   257 jump __label44 always
++  264 jump __label43 greaterThanEq TO_INDEX 8
+   265 op mul __tmp70 TO_INDEX BAR_GAP
+   266 op add __tmp69 OFFSET_Y __tmp70
+   267 jump __label44 always
  
-   259 set __tmp69 176
-   260 label __label44
-   261 op sub clh __tmp69 cly
+   269 set __tmp69 176
+   270 label __label44
+   271 op sub clh __tmp69 cly
 -    * op greaterThanEq __tmp73 TO_INDEX 8
 -    * jump __label45 equal __tmp73 false
-+  262 jump __label45 lessThan TO_INDEX 8
-   263 op add __tmp75 OFFSET_X BAR_SPACE
-   264 op sub crx __tmp75 2
-   265 op add __tmp77 OFFSET_X BAR_SPACE
-   266 op sub __tmp78 176 __tmp77
-   267 op add crw __tmp78 1
-   268 set cry 0
++  272 jump __label45 lessThan TO_INDEX 8
+   273 op add __tmp75 OFFSET_X BAR_SPACE
+   274 op sub crx __tmp75 2
+   275 op add __tmp77 OFFSET_X BAR_SPACE
+   276 op sub __tmp78 176 __tmp77
+   277 op add crw __tmp78 1
+   278 set cry 0
 -    * op lessThan __tmp80 TO_INDEX 16
 -    * jump __label47 equal __tmp80 false
-+  269 jump __label47 greaterThanEq TO_INDEX 16
-   270 op mod __tmp82 TO_INDEX 8
-   271 op mul __tmp83 __tmp82 BAR_GAP
-   272 op add __tmp81 OFFSET_Y __tmp83
++  279 jump __label47 greaterThanEq TO_INDEX 16
+   280 op mod __tmp82 TO_INDEX 8
+   281 op mul __tmp83 __tmp82 BAR_GAP
+   282 op add __tmp81 OFFSET_Y __tmp83
  
-   287 control enabled SWITCH 0
-   288 label __label49
-   289 sensor __tmp86 SWITCH @enabled
+   297 control enabled SWITCH 0
+   298 label __label49
+   299 sensor __tmp86 SWITCH @enabled
 -    * op equal __tmp87 __tmp86 0
 -    * jump __label51 equal __tmp87 false
-+  290 jump __label51 notEqual __tmp86 0
-   291 set start @time
-   292 print "Universal Factory Monitor"
-   293 print "\n"
++  300 jump __label51 notEqual __tmp86 0
+   301 set start @time
+   302 print "Universal Factory Monitor"
+   303 print "\n"
  
-   302 set n 0
-   303 label __label52
-   304 jump __label54 greaterThanEq n __tmp89
+   312 set n 0
+   313 label __label52
+   314 jump __label54 greaterThanEq n __tmp89
 -    * op greaterThanEq __tmp90 index TO_INDEX
 -    * jump __label55 equal __tmp90 false
-+  305 jump __label55 lessThan index TO_INDEX
-   306 jump __label54 always
-   307 jump __label56 always
-   308 label __label55
-   309 label __label56
-   310 getlink factory n
-   311 sensor __tmp93 factory @type
++  315 jump __label55 lessThan index TO_INDEX
+   316 jump __label54 always
+   317 jump __label56 always
+   318 label __label55
+   319 label __label56
+   320 getlink factory n
+   321 sensor __tmp93 factory @type
 -    * op equal __tmp94 __tmp93 TYPE
 -    * jump __label57 equal __tmp94 false
-+  312 jump __label57 notEqual __tmp93 TYPE
-   313 set minimum 101
-   314 sensor __tmp96 factory RES1
-   315 op mul r1 MUL1 __tmp96
++  322 jump __label57 notEqual __tmp93 TYPE
+   323 set minimum 101
+   324 sensor __tmp96 factory RES1
+   325 op mul r1 MUL1 __tmp96
  
-   322 sensor e factory @enabled
-   323 sensor power factory @totalPower
-   324 sensor boost factory @timescale
+   332 sensor e factory @enabled
+   333 sensor power factory @totalPower
+   334 sensor boost factory @timescale
 -    * op lessThan __tmp107 r1 minimum
 -    * jump __label59 equal __tmp107 false
-+  325 jump __label59 greaterThanEq r1 minimum
-   326 set minimum r1
-   327 set icon RES1
-   328 jump __label60 always
-   329 label __label59
-   330 label __label60
++  335 jump __label59 greaterThanEq r1 minimum
+   336 set minimum r1
+   337 set icon RES1
+   338 jump __label60 always
+   339 label __label59
+   340 label __label60
 -    * op lessThan __tmp109 r2 minimum
 -    * jump __label61 equal __tmp109 false
-+  331 jump __label61 greaterThanEq r2 minimum
-   332 set minimum r2
-   333 set icon RES2
-   334 jump __label62 always
-   335 label __label61
-   336 label __label62
++  341 jump __label61 greaterThanEq r2 minimum
+   342 set minimum r2
+   343 set icon RES2
+   344 jump __label62 always
+   345 label __label61
+   346 label __label62
 -    * op lessThan __tmp111 r3 minimum
 -    * jump __label63 equal __tmp111 false
-+  337 jump __label63 greaterThanEq r3 minimum
-   338 set minimum r3
-   339 set icon RES3
-   340 jump __label64 always
++  347 jump __label63 greaterThanEq r3 minimum
+   348 set minimum r3
+   349 set icon RES3
+   350 jump __label64 always
  
-   365 label __label68
-   366 draw color 255 255 255 255
-   367 jump __label69 equal e false
+   375 label __label68
+   376 draw color 255 255 255 255
+   377 jump __label69 equal e false
 -    * op greaterThan __tmp129 power 0
 -    * jump __label71 equal __tmp129 false
-+  368 jump __label71 lessThanEq power 0
-   369 op add __tmp131 x 7
-   370 op add __tmp132 y 7
-   371 draw image __tmp131 __tmp132 icon 16 0
++  378 jump __label71 lessThanEq power 0
+   379 op add __tmp131 x 7
+   380 op add __tmp132 y 7
+   381 draw image __tmp131 __tmp132 icon 16 0
  
-   436 set __tmp161 255
-   437 label __label78
-   438 set red __tmp161
+   446 set __tmp161 255
+   447 label __label78
+   448 set red __tmp161
 -    * op greaterThan __tmp162 minimum 33
 -    * jump __label79 equal __tmp162 false
-+  439 jump __label79 lessThanEq minimum 33
-   440 set __tmp163 255
-   441 jump __label80 always
-   442 label __label79
++  449 jump __label79 lessThanEq minimum 33
+   450 set __tmp163 255
+   451 jump __label80 always
+   452 label __label79
  
-   446 set blue 0
-   447 label __label76
-   448 label __label74
+   456 set blue 0
+   457 label __label76
+   458 label __label74
 -    * op greaterThan __tmp164 boost EXPECTED_BOOST
 -    * jump __label81 equal __tmp164 false
-+  449 jump __label81 lessThanEq boost EXPECTED_BOOST
-   450 op max red 192 red
-   451 op max green 192 green
-   452 op max blue 192 blue
++  459 jump __label81 lessThanEq boost EXPECTED_BOOST
+   460 op max red 192 red
+   461 op max green 192 green
+   462 op max blue 192 blue
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-9 instructions):
  
-   163 op or __tmp27 __tmp25 __tmp26
-   164 jump __label27 equal __tmp27 false
-   165 print "No block to monitor or display."
+   173 op or __tmp27 __tmp25 __tmp26
+   174 jump __label27 equal __tmp27 false
+   175 print "No block to monitor or display."
 -    * jump __label28 always
-   166 label __label27
-   167 label __label28
-   168 printflush MESSAGE
+   176 label __label27
+   177 label __label28
+   178 printflush MESSAGE
  
-   303 jump __label54 greaterThanEq n __tmp89
-   304 jump __label55 lessThan index TO_INDEX
-   305 jump __label54 always
+   313 jump __label54 greaterThanEq n __tmp89
+   314 jump __label55 lessThan index TO_INDEX
+   315 jump __label54 always
 -    * jump __label56 always
-   306 label __label55
-   307 label __label56
-   308 getlink factory n
+   316 label __label55
+   317 label __label56
+   318 getlink factory n
  
-   323 jump __label59 greaterThanEq r1 minimum
-   324 set minimum r1
-   325 set icon RES1
+   333 jump __label59 greaterThanEq r1 minimum
+   334 set minimum r1
+   335 set icon RES1
 -    * jump __label60 always
-   326 label __label59
-   327 label __label60
-   328 jump __label61 greaterThanEq r2 minimum
-   329 set minimum r2
-   330 set icon RES2
+   336 label __label59
+   337 label __label60
+   338 jump __label61 greaterThanEq r2 minimum
+   339 set minimum r2
+   340 set icon RES2
 -    * jump __label62 always
-   331 label __label61
-   332 label __label62
-   333 jump __label63 greaterThanEq r3 minimum
-   334 set minimum r3
-   335 set icon RES3
+   341 label __label61
+   342 label __label62
+   343 jump __label63 greaterThanEq r3 minimum
+   344 set minimum r3
+   345 set icon RES3
 -    * jump __label64 always
-   336 label __label63
-   337 label __label64
-   338 op greaterThan __tmp113 output 33
+   346 label __label63
+   347 label __label64
+   348 op greaterThan __tmp113 output 33
  
-   341 op land showout __tmp113 __tmp115
-   342 jump __label65 equal showout false
-   343 set icon OUTPUT
+   351 op land showout __tmp113 __tmp115
+   352 jump __label65 equal showout false
+   353 set icon OUTPUT
 -    * jump __label66 always
-   344 label __label65
-   345 label __label66
-   346 op idiv column index 8
+   354 label __label65
+   355 label __label66
+   356 op idiv column index 8
  
-   354 op land __tmp126 __tmp124 __tmp125
-   355 jump __label67 equal __tmp126 false
-   356 set icon TYPE
+   364 op land __tmp126 __tmp124 __tmp125
+   365 jump __label67 equal __tmp126 false
+   366 set icon TYPE
 -    * jump __label68 always
-   357 label __label67
-   358 label __label68
-   359 draw color 255 255 255 255
+   367 label __label67
+   368 label __label68
+   369 draw color 255 255 255 255
  
-   444 op max green 192 green
-   445 op max blue 192 blue
-   446 set boost EXPECTED_BOOST
+   454 op max green 192 green
+   455 op max blue 192 blue
+   456 set boost EXPECTED_BOOST
 -    * jump __label82 always
-   447 label __label81
-   448 label __label82
-   449 op mul __tmp169 BAR_LENGTH boost
+   457 label __label81
+   458 label __label82
+   459 op mul __tmp169 BAR_LENGTH boost
  
-   455 draw color red green blue 255
-   456 draw lineRect x y length BAR_WIDTH
-   457 op add index index 1
+   465 draw color red green blue 255
+   466 draw lineRect x y length BAR_WIDTH
+   467 op add index index 1
 -    * jump __label58 always
-   458 label __label57
-   459 label __label58
-   460 label __label53
+   468 label __label57
+   469 label __label58
+   470 label __label53
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-8 instructions):
  
-   182 op add __tmp32 OFFSET_X BAR_SPACE
-   183 op sub clw __tmp32 2
-   184 set crw clw
+   192 op add __tmp32 OFFSET_X BAR_SPACE
+   193 op sub clw __tmp32 2
+   194 set crw clw
 -    * jump __label31 notEqual FROM_INDEX 0
 -    * set __tmp35 0
 -    * jump __label32 always
-+  185 set cly 0
-+  186 jump __label32 equal FROM_INDEX 0
-   187 label __label31
-   188 op mul __tmp36 FROM_INDEX BAR_GAP
++  195 set cly 0
++  196 jump __label32 equal FROM_INDEX 0
+   197 label __label31
+   198 op mul __tmp36 FROM_INDEX BAR_GAP
 -    * op add __tmp35 OFFSET_Y __tmp36
-+  189 op add cly OFFSET_Y __tmp36
-   190 label __label32
++  199 op add cly OFFSET_Y __tmp36
+   200 label __label32
 -    * set cly __tmp35
-   191 set cry cly
+   201 set cry cly
 -    * jump __label33 greaterThanEq TO_INDEX 8
-+  192 set __tmp39 176
-+  193 jump __label34 greaterThanEq TO_INDEX 8
-   194 op mul __tmp40 TO_INDEX BAR_GAP
-   195 op add __tmp39 OFFSET_Y __tmp40
-   196 jump __label34 always
++  202 set __tmp39 176
++  203 jump __label34 greaterThanEq TO_INDEX 8
+   204 op mul __tmp40 TO_INDEX BAR_GAP
+   205 op add __tmp39 OFFSET_Y __tmp40
+   206 jump __label34 always
 -    * label __label33
 -    * set __tmp39 176
-   197 label __label34
-   198 op sub clh __tmp39 cly
-   199 set crh clh
+   207 label __label34
+   208 op sub clh __tmp39 cly
+   209 set crh clh
  
-   211 op add __tmp47 OFFSET_X BAR_SPACE
-   212 op sub __tmp48 176 __tmp47
-   213 op add crw __tmp48 1
-+  214 set cry 0
-   215 op mod __tmp50 FROM_INDEX 8
+   221 op add __tmp47 OFFSET_X BAR_SPACE
+   222 op sub __tmp48 176 __tmp47
+   223 op add crw __tmp48 1
++  224 set cry 0
+   225 op mod __tmp50 FROM_INDEX 8
 -    * jump __label37 notEqual __tmp50 0
 -    * set __tmp52 0
 -    * jump __label38 always
-+  216 jump __label38 equal __tmp50 0
-   217 label __label37
-   218 op mod __tmp53 FROM_INDEX 8
-   219 op mul __tmp54 __tmp53 BAR_GAP
++  226 jump __label38 equal __tmp50 0
+   227 label __label37
+   228 op mod __tmp53 FROM_INDEX 8
+   229 op mul __tmp54 __tmp53 BAR_GAP
 -    * op add __tmp52 OFFSET_Y __tmp54
-+  220 op add cry OFFSET_Y __tmp54
-   221 label __label38
++  230 op add cry OFFSET_Y __tmp54
+   231 label __label38
 -    * set cry __tmp52
 -    * jump __label39 greaterThanEq TO_INDEX 16
-+  222 set __tmp57 176
-+  223 jump __label40 greaterThanEq TO_INDEX 16
-   224 op mod __tmp58 TO_INDEX 8
-   225 op mul __tmp59 __tmp58 BAR_GAP
-   226 op add __tmp57 OFFSET_Y __tmp59
-   227 jump __label40 always
++  232 set __tmp57 176
++  233 jump __label40 greaterThanEq TO_INDEX 16
+   234 op mod __tmp58 TO_INDEX 8
+   235 op mul __tmp59 __tmp58 BAR_GAP
+   236 op add __tmp57 OFFSET_Y __tmp59
+   237 jump __label40 always
 -    * label __label39
 -    * set __tmp57 176
-   228 label __label40
-   229 op sub crh __tmp57 cry
-   230 set clx crx
+   238 label __label40
+   239 op sub crh __tmp57 cry
+   240 set clx crx
  
-   236 set clx 0
-   237 op add __tmp62 OFFSET_X BAR_SPACE
-   238 op sub clw __tmp62 2
+   246 set clx 0
+   247 op add __tmp62 OFFSET_X BAR_SPACE
+   248 op sub clw __tmp62 2
 -    * jump __label41 notEqual FROM_INDEX 0
 -    * set __tmp65 0
 -    * jump __label42 always
-+  239 set cly 0
-+  240 jump __label42 equal FROM_INDEX 0
-   241 label __label41
-   242 op mul __tmp66 FROM_INDEX BAR_GAP
++  249 set cly 0
++  250 jump __label42 equal FROM_INDEX 0
+   251 label __label41
+   252 op mul __tmp66 FROM_INDEX BAR_GAP
 -    * op add __tmp65 OFFSET_Y __tmp66
-+  243 op add cly OFFSET_Y __tmp66
-   244 label __label42
++  253 op add cly OFFSET_Y __tmp66
+   254 label __label42
 -    * set cly __tmp65
 -    * jump __label43 greaterThanEq TO_INDEX 8
-+  245 set __tmp69 176
-+  246 jump __label44 greaterThanEq TO_INDEX 8
-   247 op mul __tmp70 TO_INDEX BAR_GAP
-   248 op add __tmp69 OFFSET_Y __tmp70
-   249 jump __label44 always
++  255 set __tmp69 176
++  256 jump __label44 greaterThanEq TO_INDEX 8
+   257 op mul __tmp70 TO_INDEX BAR_GAP
+   258 op add __tmp69 OFFSET_Y __tmp70
+   259 jump __label44 always
 -    * label __label43
 -    * set __tmp69 176
-   250 label __label44
-   251 op sub clh __tmp69 cly
-   252 jump __label45 lessThan TO_INDEX 8
+   260 label __label44
+   261 op sub clh __tmp69 cly
+   262 jump __label45 lessThan TO_INDEX 8
  
-   256 op sub __tmp78 176 __tmp77
-   257 op add crw __tmp78 1
-   258 set cry 0
+   266 op sub __tmp78 176 __tmp77
+   267 op add crw __tmp78 1
+   268 set cry 0
 -    * jump __label47 greaterThanEq TO_INDEX 16
-+  259 set __tmp81 176
-+  260 jump __label48 greaterThanEq TO_INDEX 16
-   261 op mod __tmp82 TO_INDEX 8
-   262 op mul __tmp83 __tmp82 BAR_GAP
-   263 op add __tmp81 OFFSET_Y __tmp83
-   264 jump __label48 always
++  269 set __tmp81 176
++  270 jump __label48 greaterThanEq TO_INDEX 16
+   271 op mod __tmp82 TO_INDEX 8
+   272 op mul __tmp83 __tmp82 BAR_GAP
+   273 op add __tmp81 OFFSET_Y __tmp83
+   274 jump __label48 always
 -    * label __label47
 -    * set __tmp81 176
-   265 label __label48
-   266 op sub crh __tmp81 cry
-   267 jump __label46 always
+   275 label __label48
+   276 op sub crh __tmp81 cry
+   277 jump __label46 always
  
-   409 set minimum output
-   410 jump __label76 always
-   411 label __label75
-+  412 set red 255
-   413 op greaterThan __tmp158 minimum 66
-   414 op greaterThanEq __tmp159 boost EXPECTED_BOOST
-   415 op land __tmp160 __tmp158 __tmp159
+   419 set minimum output
+   420 jump __label76 always
+   421 label __label75
++  422 set red 255
+   423 op greaterThan __tmp158 minimum 66
+   424 op greaterThanEq __tmp159 boost EXPECTED_BOOST
+   425 op land __tmp160 __tmp158 __tmp159
 -    * jump __label77 equal __tmp160 false
 -    * set __tmp161 0
-+  416 jump __label78 equal __tmp160 false
-+  417 set red 0
-   418 jump __label78 always
++  426 jump __label78 equal __tmp160 false
++  427 set red 0
+   428 jump __label78 always
 -    * label __label77
 -    * set __tmp161 255
-   419 label __label78
+   429 label __label78
 -    * set red __tmp161
 -    * jump __label79 lessThanEq minimum 33
 -    * set __tmp163 255
-+  420 set green 0
-+  421 jump __label80 lessThanEq minimum 33
-+  422 set green 255
-   423 jump __label80 always
++  430 set green 0
++  431 jump __label80 lessThanEq minimum 33
++  432 set green 255
+   433 jump __label80 always
 -    * label __label79
 -    * set __tmp163 0
-   424 label __label80
+   434 label __label80
 -    * set green __tmp163
-   425 set blue 0
-   426 label __label76
-   427 label __label74
+   435 set blue 0
+   436 label __label76
+   437 label __label74
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   178 set BAR_SPACE 80
-   179 set BAR_GAP 20
-   180 set clx 0
--    * set crx clx
-+  181 set crx 0
-   182 op add __tmp32 OFFSET_X BAR_SPACE
-   183 op sub clw __tmp32 2
-   184 set crw clw
+     1 set TO_INDEX 16
+     2 set EXPECTED_BOOST 1.5
+     3 set TYPE null
+-    * set DISPLAY TYPE
+-    * set SWITCH DISPLAY
+-    * set MESSAGE SWITCH
++    4 set DISPLAY null
++    5 set SWITCH TYPE
++    6 set MESSAGE DISPLAY
+     7 set CAPACITY null
+-    * set OUTPUT CAPACITY
+-    * set RES3 OUTPUT
+-    * set RES2 RES3
+-    * set RES1 RES2
+-    * set MUL3 RES1
+-    * set MUL2 MUL3
+-    * set MUL1 MUL2
++    8 set OUTPUT null
++    9 set RES3 CAPACITY
++   10 set RES2 OUTPUT
++   11 set RES1 RES3
++   12 set MUL3 RES2
++   13 set MUL2 RES1
++   14 set MUL1 MUL3
+    15 set icon null
+    16 label __label0
+    17 op equal __tmp0 DISPLAY null
  
-   209 op add __tmp45 OFFSET_X BAR_SPACE
-   210 op sub crx __tmp45 2
-   211 op add __tmp47 OFFSET_X BAR_SPACE
+    51 set RES3 @itemCapacity
+    52 op div MUL3 100 CAPACITY
+    53 set MUL2 MUL3
+-    * set MUL1 MUL2
++   54 set MUL1 MUL3
+    55 set OUTPUT @silicon
+    56 jump __label6 always
+    57 label __label13
+ 
+    64 set RES3 @pyratite
+    65 op div MUL3 100 CAPACITY
+    66 set MUL2 MUL3
+-    * set MUL1 MUL2
++   67 set MUL1 MUL3
+    68 set OUTPUT @silicon
+    69 jump __label6 always
+    70 label __label15
+ 
+    77 set RES3 @itemCapacity
+    78 op div MUL3 100 CAPACITY
+    79 set MUL2 MUL3
+-    * set MUL1 MUL2
++   80 set MUL1 MUL3
+    81 set OUTPUT @metaglass
+    82 jump __label6 always
+    83 label __label17
+ 
+    90 set RES3 @itemCapacity
+    91 op div MUL3 100 CAPACITY
+    92 set MUL2 MUL3
+-    * set MUL1 MUL2
++   93 set MUL1 MUL3
+    94 set OUTPUT @phase-fabric
+    95 jump __label6 always
+    96 label __label19
+ 
+   103 set RES3 @lead
+   104 op div MUL3 100 CAPACITY
+   105 set MUL2 MUL3
+-    * set MUL1 MUL2
++  106 set MUL1 MUL3
+   107 set OUTPUT @pyratite
+   108 jump __label6 always
+   109 label __label21
+ 
+   116 set RES3 @itemCapacity
+   117 op div MUL3 100 CAPACITY
+   118 set MUL2 MUL3
+-    * set MUL1 MUL2
++  119 set MUL1 MUL3
+   120 set OUTPUT @blast-compound
+   121 jump __label6 always
+   122 label __label23
+ 
+   188 set BAR_SPACE 80
+   189 set BAR_GAP 20
+   190 set clx 0
+-    * set crx clx
+-    * op add __tmp32 OFFSET_X BAR_SPACE
+-    * op sub clw __tmp32 2
+-    * set crw clw
++  191 set crx 0
++  192 op add __tmp32 2 80
++  193 op sub clw 82 2
++  194 set crw 80
+   195 set cly 0
+   196 jump __label32 equal FROM_INDEX 0
+   197 label __label31
+-    * op mul __tmp36 FROM_INDEX BAR_GAP
+-    * op add cly OFFSET_Y __tmp36
++  198 op mul __tmp36 FROM_INDEX 20
++  199 op add cly 2 __tmp36
+   200 label __label32
+   201 set cry cly
+   202 set __tmp39 176
+   203 jump __label34 greaterThanEq TO_INDEX 8
+-    * op mul __tmp40 TO_INDEX BAR_GAP
+-    * op add __tmp39 OFFSET_Y __tmp40
++  204 op mul __tmp40 TO_INDEX 20
++  205 op add __tmp39 2 __tmp40
+   206 jump __label34 always
+   207 label __label34
+   208 op sub clh __tmp39 cly
+ 
+   216 set BAR_SPACE 88
+   217 set BAR_GAP 22
+   218 jump __label35 lessThan FROM_INDEX 8
+-    * op add __tmp45 OFFSET_X BAR_SPACE
+-    * op sub crx __tmp45 2
+-    * op add __tmp47 OFFSET_X BAR_SPACE
 -    * op sub __tmp48 176 __tmp47
 -    * op add crw __tmp48 1
-+  212 op sub __tmp48 176 __tmp45
-+  213 op sub crw 177 __tmp47
-   214 set cry 0
-   215 op mod __tmp50 FROM_INDEX 8
-   216 jump __label38 equal __tmp50 0
-   217 label __label37
-   218 op mod __tmp53 FROM_INDEX 8
++  219 op add __tmp45 5 88
++  220 op sub crx 93 2
++  221 op add __tmp47 5 88
++  222 op sub __tmp48 176 93
++  223 op add crw 83 1
+   224 set cry 0
+   225 op mod __tmp50 FROM_INDEX 8
+   226 jump __label38 equal __tmp50 0
+   227 label __label37
+   228 op mod __tmp53 FROM_INDEX 8
 -    * op mul __tmp54 __tmp53 BAR_GAP
-+  219 op mul __tmp54 __tmp50 BAR_GAP
-   220 op add cry OFFSET_Y __tmp54
-   221 label __label38
-   222 set __tmp57 176
- 
-   251 op sub clh __tmp69 cly
-   252 jump __label45 lessThan TO_INDEX 8
-   253 op add __tmp75 OFFSET_X BAR_SPACE
+-    * op add cry OFFSET_Y __tmp54
++  229 op mul __tmp54 __tmp50 22
++  230 op add cry 4 __tmp54
+   231 label __label38
+   232 set __tmp57 176
+   233 jump __label40 greaterThanEq TO_INDEX 16
+   234 op mod __tmp58 TO_INDEX 8
+-    * op mul __tmp59 __tmp58 BAR_GAP
+-    * op add __tmp57 OFFSET_Y __tmp59
++  235 op mul __tmp59 __tmp58 22
++  236 op add __tmp57 4 __tmp59
+   237 jump __label40 always
+   238 label __label40
+   239 op sub crh __tmp57 cry
+-    * set clx crx
+-    * set clw crw
++  240 set clx 91
++  241 set clw 84
+   242 set cly cry
+   243 set clh crh
+   244 jump __label36 always
+   245 label __label35
+   246 set clx 0
+-    * op add __tmp62 OFFSET_X BAR_SPACE
+-    * op sub clw __tmp62 2
++  247 op add __tmp62 5 88
++  248 op sub clw 93 2
+   249 set cly 0
+   250 jump __label42 equal FROM_INDEX 0
+   251 label __label41
+-    * op mul __tmp66 FROM_INDEX BAR_GAP
+-    * op add cly OFFSET_Y __tmp66
++  252 op mul __tmp66 FROM_INDEX 22
++  253 op add cly 4 __tmp66
+   254 label __label42
+   255 set __tmp69 176
+   256 jump __label44 greaterThanEq TO_INDEX 8
+-    * op mul __tmp70 TO_INDEX BAR_GAP
+-    * op add __tmp69 OFFSET_Y __tmp70
++  257 op mul __tmp70 TO_INDEX 22
++  258 op add __tmp69 4 __tmp70
+   259 jump __label44 always
+   260 label __label44
+   261 op sub clh __tmp69 cly
+   262 jump __label45 lessThan TO_INDEX 8
+-    * op add __tmp75 OFFSET_X BAR_SPACE
 -    * op sub crx __tmp75 2
-+  254 op sub crx __tmp62 2
-   255 op add __tmp77 OFFSET_X BAR_SPACE
+-    * op add __tmp77 OFFSET_X BAR_SPACE
 -    * op sub __tmp78 176 __tmp77
 -    * op add crw __tmp78 1
-+  256 op sub __tmp78 176 __tmp62
-+  257 op sub crw 177 __tmp77
-   258 set cry 0
-   259 set __tmp81 176
-   260 jump __label48 greaterThanEq TO_INDEX 16
- 
-   263 op add __tmp81 OFFSET_Y __tmp83
-   264 jump __label48 always
-   265 label __label48
++  263 op add __tmp75 5 88
++  264 op sub crx 93 2
++  265 op add __tmp77 5 88
++  266 op sub __tmp78 176 93
++  267 op add crw 83 1
+   268 set cry 0
+   269 set __tmp81 176
+   270 jump __label48 greaterThanEq TO_INDEX 16
+   271 op mod __tmp82 TO_INDEX 8
+-    * op mul __tmp83 __tmp82 BAR_GAP
+-    * op add __tmp81 OFFSET_Y __tmp83
++  272 op mul __tmp83 __tmp82 22
++  273 op add __tmp81 4 __tmp83
+   274 jump __label48 always
+   275 label __label48
 -    * op sub crh __tmp81 cry
-+  266 op sub crh __tmp81 0
-   267 jump __label46 always
-   268 label __label45
++  276 op sub crh __tmp81 0
+   277 jump __label46 always
+   278 label __label45
 -    * set crx clx
-+  269 set crx 0
-   270 set crw clw
-   271 set cry cly
-   272 set crh clh
+-    * set crw clw
++  279 set crx 0
++  280 set crw 91
+   281 set cry cly
+   282 set crh clh
+   283 label __label46
  
-   310 sensor e factory @enabled
-   311 sensor power factory @totalPower
-   312 sensor boost factory @timescale
+   320 sensor e factory @enabled
+   321 sensor power factory @totalPower
+   322 sensor boost factory @timescale
 -    * jump __label59 greaterThanEq r1 minimum
-+  313 jump __label59 greaterThanEq r1 101
-   314 set minimum r1
-   315 set icon RES1
-   316 label __label59
++  323 jump __label59 greaterThanEq r1 101
+   324 set minimum r1
+   325 set icon RES1
+   326 label __label59
  
-   363 draw rect __tmp134 __tmp135 8 4
-   364 op add __tmp136 x 12
-   365 op add __tmp137 y 3
+   373 draw rect __tmp134 __tmp135 8 4
+   374 op add __tmp136 x 12
+   375 op add __tmp137 y 3
 -    * draw rect __tmp136 __tmp137 2 2
-+  366 draw rect __tmp136 __tmp133 2 2
-   367 op add __tmp138 x 12
-   368 op add __tmp139 y 9
++  376 draw rect __tmp136 __tmp133 2 2
+   377 op add __tmp138 x 12
+   378 op add __tmp139 y 9
 -    * draw rect __tmp138 __tmp139 2 2
-+  369 draw rect __tmp136 __tmp139 2 2
-   370 draw color 255 80 80 255
-   371 op add __tmp140 x 4
-   372 op add __tmp141 y 6
++  379 draw rect __tmp136 __tmp139 2 2
+   380 draw color 255 80 80 255
+   381 op add __tmp140 x 4
+   382 op add __tmp141 y 6
  
-   385 op add __tmp147 y 2
-   386 op add __tmp148 x 12
-   387 op add __tmp149 y 12
+   395 op add __tmp147 y 2
+   396 op add __tmp148 x 12
+   397 op add __tmp149 y 12
 -    * draw line __tmp146 __tmp147 __tmp148 __tmp149
-+  388 draw line __tmp142 __tmp145 __tmp144 __tmp143
-   389 draw color 0 0 0 255
-   390 op sub __tmp150 x 1
-   391 op sub __tmp151 y 1
++  398 draw line __tmp142 __tmp145 __tmp144 __tmp143
+   399 draw color 0 0 0 255
+   400 op sub __tmp150 x 1
+   401 op sub __tmp151 y 1
  
-   412 set red 255
-   413 op greaterThan __tmp158 minimum 66
-   414 op greaterThanEq __tmp159 boost EXPECTED_BOOST
+   422 set red 255
+   423 op greaterThan __tmp158 minimum 66
+   424 op greaterThanEq __tmp159 boost EXPECTED_BOOST
 -    * op land __tmp160 __tmp158 __tmp159
-+  415 op land __tmp160 __tmp124 __tmp159
-   416 jump __label78 equal __tmp160 false
-   417 set red 0
-   418 jump __label78 always
++  425 op land __tmp160 __tmp124 __tmp159
+   426 jump __label78 equal __tmp160 false
+   427 set red 0
+   428 jump __label78 always
+ 
+   442 set boost EXPECTED_BOOST
+   443 label __label81
+   444 label __label82
+-    * op mul __tmp169 BAR_LENGTH boost
++  445 op mul __tmp169 61 boost
+   446 op idiv length __tmp169 EXPECTED_BOOST
+   447 draw color red green blue 128
+   448 op mul __tmp171 minimum length
+   449 op idiv __tmp172 __tmp171 100
+-    * draw rect x y __tmp172 BAR_WIDTH
++  450 draw rect x y __tmp172 14
+   451 draw color red green blue 255
+-    * draw lineRect x y length BAR_WIDTH
++  452 draw lineRect x y length 14
+   453 op add index index 1
+   454 label __label57
+   455 label __label58
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-11 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-20 instructions):
  
-   209 op add __tmp45 OFFSET_X BAR_SPACE
-   210 op sub crx __tmp45 2
-   211 op add __tmp47 OFFSET_X BAR_SPACE
--    * op sub __tmp48 176 __tmp45
--    * op sub crw 177 __tmp47
-+  212 op sub crw 177 __tmp45
-   213 set cry 0
-   214 op mod __tmp50 FROM_INDEX 8
-   215 jump __label38 equal __tmp50 0
-   216 label __label37
+     2 set EXPECTED_BOOST 1.5
+     3 set TYPE null
+     4 set DISPLAY null
+-    * set SWITCH TYPE
+-    * set MESSAGE DISPLAY
++    5 set SWITCH null
++    6 set MESSAGE null
+     7 set CAPACITY null
+     8 set OUTPUT null
+-    * set RES3 CAPACITY
+-    * set RES2 OUTPUT
+-    * set RES1 RES3
+-    * set MUL3 RES2
+-    * set MUL2 RES1
+-    * set MUL1 MUL3
++    9 set RES3 null
++   10 set RES2 null
++   11 set RES1 CAPACITY
++   12 set MUL3 OUTPUT
++   13 set MUL2 RES3
++   14 set MUL1 RES2
+    15 set icon null
+    16 label __label0
+    17 op equal __tmp0 DISPLAY null
+ 
+   183 jump __label29 notEqual __tmp29 @logic-display
+   184 set OFFSET_X 2
+   185 set OFFSET_Y 2
+-    * set BAR_WIDTH 14
+-    * set BAR_LENGTH 61
+   186 set BAR_SPACE 80
+   187 set BAR_GAP 20
+   188 set clx 0
+   189 set crx 0
+-    * op add __tmp32 2 80
+   190 op sub clw 82 2
+   191 set crw 80
+   192 set cly 0
+ 
+   208 label __label29
+   209 set OFFSET_X 5
+   210 set OFFSET_Y 4
+-    * set BAR_WIDTH 14
+-    * set BAR_LENGTH 61
+   211 set BAR_SPACE 88
+   212 set BAR_GAP 22
+   213 jump __label35 lessThan FROM_INDEX 8
+-    * op add __tmp45 5 88
+   214 op sub crx 93 2
+-    * op add __tmp47 5 88
+-    * op sub __tmp48 176 93
+   215 op add crw 83 1
+   216 set cry 0
+   217 op mod __tmp50 FROM_INDEX 8
+   218 jump __label38 equal __tmp50 0
+   219 label __label37
 -    * op mod __tmp53 FROM_INDEX 8
-   217 op mul __tmp54 __tmp50 BAR_GAP
-   218 op add cry OFFSET_Y __tmp54
-   219 label __label38
+   220 op mul __tmp54 __tmp50 22
+   221 op add cry 4 __tmp54
+   222 label __label38
  
-   248 label __label44
-   249 op sub clh __tmp69 cly
-   250 jump __label45 lessThan TO_INDEX 8
--    * op add __tmp75 OFFSET_X BAR_SPACE
-   251 op sub crx __tmp62 2
-   252 op add __tmp77 OFFSET_X BAR_SPACE
--    * op sub __tmp78 176 __tmp62
--    * op sub crw 177 __tmp77
-+  253 op sub crw 177 __tmp62
-   254 set cry 0
-   255 set __tmp81 176
-   256 jump __label48 greaterThanEq TO_INDEX 16
+   235 jump __label36 always
+   236 label __label35
+   237 set clx 0
+-    * op add __tmp62 5 88
+   238 op sub clw 93 2
+   239 set cly 0
+   240 jump __label42 equal FROM_INDEX 0
  
-   358 op add __tmp135 y 5
-   359 draw rect __tmp134 __tmp135 8 4
-   360 op add __tmp136 x 12
+   250 label __label44
+   251 op sub clh __tmp69 cly
+   252 jump __label45 lessThan TO_INDEX 8
+-    * op add __tmp75 5 88
+   253 op sub crx 93 2
+-    * op add __tmp77 5 88
+-    * op sub __tmp78 176 93
+   254 op add crw 83 1
+   255 set cry 0
+   256 set __tmp81 176
+ 
+   359 op add __tmp135 y 5
+   360 draw rect __tmp134 __tmp135 8 4
+   361 op add __tmp136 x 12
 -    * op add __tmp137 y 3
-   361 draw rect __tmp136 __tmp133 2 2
+   362 draw rect __tmp136 __tmp133 2 2
 -    * op add __tmp138 x 12
-   362 op add __tmp139 y 9
-   363 draw rect __tmp136 __tmp139 2 2
-   364 draw color 255 80 80 255
+   363 op add __tmp139 y 9
+   364 draw rect __tmp136 __tmp139 2 2
+   365 draw color 255 80 80 255
  
-   375 op add __tmp144 x 12
-   376 op add __tmp145 y 2
-   377 draw line __tmp142 __tmp143 __tmp144 __tmp145
+   376 op add __tmp144 x 12
+   377 op add __tmp145 y 2
+   378 draw line __tmp142 __tmp143 __tmp144 __tmp145
 -    * op add __tmp146 x 2
 -    * op add __tmp147 y 2
 -    * op add __tmp148 x 12
 -    * op add __tmp149 y 12
-   378 draw line __tmp142 __tmp145 __tmp144 __tmp143
-   379 draw color 0 0 0 255
-   380 op sub __tmp150 x 1
+   379 draw line __tmp142 __tmp145 __tmp144 __tmp143
+   380 draw color 0 0 0 255
+   381 op sub __tmp150 x 1
  
-   400 jump __label76 always
-   401 label __label75
-   402 set red 255
+   401 jump __label76 always
+   402 label __label75
+   403 set red 255
 -    * op greaterThan __tmp158 minimum 66
-   403 op greaterThanEq __tmp159 boost EXPECTED_BOOST
-   404 op land __tmp160 __tmp124 __tmp159
-   405 jump __label78 equal __tmp160 false
+   404 op greaterThanEq __tmp159 boost EXPECTED_BOOST
+   405 op land __tmp160 __tmp124 __tmp159
+   406 jump __label78 equal __tmp160 false
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  
-   208 jump __label35 lessThan FROM_INDEX 8
-   209 op add __tmp45 OFFSET_X BAR_SPACE
-   210 op sub crx __tmp45 2
--    * op add __tmp47 OFFSET_X BAR_SPACE
-   211 op sub crw 177 __tmp45
-   212 set cry 0
-   213 op mod __tmp50 FROM_INDEX 8
- 
-   248 op sub clh __tmp69 cly
-   249 jump __label45 lessThan TO_INDEX 8
-   250 op sub crx __tmp62 2
--    * op add __tmp77 OFFSET_X BAR_SPACE
-   251 op sub crw 177 __tmp62
-   252 set cry 0
-   253 set __tmp81 176
+     8 set OUTPUT null
+     9 set RES3 null
+    10 set RES2 null
+-    * set RES1 CAPACITY
+-    * set MUL3 OUTPUT
+-    * set MUL2 RES3
+-    * set MUL1 RES2
++   11 set RES1 null
++   12 set MUL3 null
++   13 set MUL2 null
++   14 set MUL1 null
+    15 set icon null
+    16 label __label0
+    17 op equal __tmp0 DISPLAY null
 
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (+2 instructions):
  
-    13 set n @links
-    14 label __label3
-    15 jump __label5 lessThanEq n 0
-+   16 label __label83
-    17 op sub n n 1
-    18 getlink block n
-    19 sensor __ast0 block @type
+    17 op equal __tmp0 DISPLAY null
+    18 op equal __tmp1 TYPE null
+    19 op or __tmp2 __tmp0 __tmp1
+-    * jump __label2 equal __tmp2 false
++   20 label __label83
+    21 print "Universal Factory Monitor"
+    22 print "\n"
+    23 set n @links
+    24 label __label3
+    25 jump __label5 lessThanEq n 0
++   26 label __label84
+    27 op sub n n 1
+    28 getlink block n
+    29 sensor __ast0 block @type
  
-   130 print " not supported"
-   131 label __label6
-   132 label __label4
+   140 print " not supported"
+   141 label __label6
+   142 label __label4
 -    * jump __label3 always
-+  133 jump __label83 greaterThan n 0
-   134 label __label5
-   135 print "Message: "
-   136 print MESSAGE
++  143 jump __label84 greaterThan n 0
+   144 label __label5
+   145 print "Message: "
+   146 print MESSAGE
  
-   286 set n 0
-   287 label __label52
-   288 jump __label54 greaterThanEq n __tmp89
-+  289 label __label84
-   290 jump __label55 lessThan index TO_INDEX
-   291 jump __label54 always
-   292 label __label55
+   178 label __label28
+   179 printflush MESSAGE
+   180 label __label1
+-    * jump __label0 always
++  181 op equal __tmp0 DISPLAY null
++  182 op equal __tmp1 TYPE null
++  183 op or __tmp2 __tmp0 __tmp1
++  184 jump __label83 notEqual __tmp2 false
+   185 label __label2
+   186 sensor __tmp29 DISPLAY @type
+   187 jump __label29 notEqual __tmp29 @logic-display
  
-   434 label __label58
-   435 label __label53
-   436 op add n n 1
+   292 set n 0
+   293 label __label52
+   294 jump __label54 greaterThanEq n __tmp89
++  295 label __label85
+   296 jump __label55 lessThan index TO_INDEX
+   297 jump __label54 always
+   298 label __label55
+ 
+   440 label __label58
+   441 label __label53
+   442 op add n n 1
 -    * jump __label52 always
-+  437 jump __label84 lessThan n __tmp89
-   438 label __label54
-   439 drawflush DISPLAY
-   440 op sub __tmp174 @time start
++  443 jump __label85 lessThan n __tmp89
+   444 label __label54
+   445 drawflush DISPLAY
+   446 op sub __tmp174 @time start
 
 Modifications by Loop Optimization: replicate condition at line 160 (+1 instructions):
  
-   272 label __label49
-   273 sensor __tmp86 SWITCH @enabled
-   274 jump __label51 notEqual __tmp86 0
-+  275 label __label85
-   276 set start @time
-   277 print "Universal Factory Monitor"
-   278 print "\n"
+   278 label __label49
+   279 sensor __tmp86 SWITCH @enabled
+   280 jump __label51 notEqual __tmp86 0
++  281 label __label86
+   282 set start @time
+   283 print "Universal Factory Monitor"
+   284 print "\n"
  
-   445 print " ms"
-   446 printflush MESSAGE
-   447 label __label50
+   451 print " ms"
+   452 printflush MESSAGE
+   453 label __label50
 -    * jump __label49 always
-+  448 sensor __tmp86 SWITCH @enabled
-+  449 jump __label85 equal __tmp86 0
-   450 label __label51
-   451 end
++  454 sensor __tmp86 SWITCH @enabled
++  455 jump __label86 equal __tmp86 0
+   456 label __label51
+   457 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   286 set __tmp89 @links
-   287 set n 0
-   288 label __label52
--    * jump __label54 greaterThanEq n __tmp89
-+  289 jump __label54 greaterThanEq 0 __tmp89
-   290 label __label84
-   291 jump __label55 lessThan index TO_INDEX
-   292 jump __label54 always
-
-Modifications by Loop Optimization: replicate condition at line 14 (+3 instructions):
- 
-     8 op equal __tmp1 TYPE null
-     9 op or __tmp2 __tmp0 __tmp1
-    10 jump __label2 equal __tmp2 false
-+   11 label __label86
-    12 print "Universal Factory Monitor"
-    13 print "\n"
-    14 set n @links
- 
-   169 label __label28
-   170 printflush MESSAGE
-   171 label __label1
--    * jump __label0 always
-+  172 op equal __tmp0 DISPLAY null
-+  173 op equal __tmp1 TYPE null
-+  174 op or __tmp2 __tmp0 __tmp1
-+  175 jump __label86 notEqual __tmp2 false
-   176 label __label2
-   177 sensor __tmp29 DISPLAY @type
-   178 jump __label29 notEqual __tmp29 @logic-display
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-   171 label __label1
-   172 op equal __tmp0 DISPLAY null
-   173 op equal __tmp1 TYPE null
+    14 set MUL1 null
+    15 set icon null
+    16 label __label0
+-    * op equal __tmp0 DISPLAY null
+-    * op equal __tmp1 TYPE null
 -    * op or __tmp2 __tmp0 __tmp1
--    * jump __label86 notEqual __tmp2 false
-+  174 op or __tmp2 __tmp25 __tmp26
-+  175 jump __label86 notEqual __tmp27 false
-   176 label __label2
-   177 sensor __tmp29 DISPLAY @type
-   178 jump __label29 notEqual __tmp29 @logic-display
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
++   17 op equal __tmp0 null null
++   18 op equal __tmp1 null null
++   19 op or __tmp2 true true
+    20 label __label83
+    21 print "Universal Factory Monitor"
+    22 print "\n"
  
-   169 label __label28
-   170 printflush MESSAGE
-   171 label __label1
+   180 label __label1
+   181 op equal __tmp0 DISPLAY null
+   182 op equal __tmp1 TYPE null
+-    * op or __tmp2 __tmp0 __tmp1
+-    * jump __label83 notEqual __tmp2 false
++  183 op or __tmp2 __tmp25 __tmp26
++  184 jump __label83 notEqual __tmp27 false
+   185 label __label2
+   186 sensor __tmp29 DISPLAY @type
+   187 jump __label29 notEqual __tmp29 @logic-display
+ 
+   292 set __tmp89 @links
+   293 set n 0
+   294 label __label52
+-    * jump __label54 greaterThanEq n __tmp89
++  295 jump __label54 greaterThanEq 0 __tmp89
+   296 label __label85
+   297 jump __label55 lessThan index TO_INDEX
+   298 jump __label54 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6 instructions):
+ 
+    14 set MUL1 null
+    15 set icon null
+    16 label __label0
+-    * op equal __tmp0 null null
+-    * op equal __tmp1 null null
+-    * op or __tmp2 true true
+    17 label __label83
+    18 print "Universal Factory Monitor"
+    19 print "\n"
+ 
+   175 label __label28
+   176 printflush MESSAGE
+   177 label __label1
 -    * op equal __tmp0 DISPLAY null
 -    * op equal __tmp1 TYPE null
 -    * op or __tmp2 __tmp25 __tmp26
-   172 jump __label86 notEqual __tmp27 false
-   173 label __label2
-   174 sensor __tmp29 DISPLAY @type
+   178 jump __label83 notEqual __tmp27 false
+   179 label __label2
+   180 sensor __tmp29 DISPLAY @type
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-6 instructions):
  
-   195 jump __label34 greaterThanEq TO_INDEX 8
-   196 op mul __tmp40 TO_INDEX BAR_GAP
-   197 op add __tmp39 OFFSET_Y __tmp40
+   198 jump __label34 greaterThanEq TO_INDEX 8
+   199 op mul __tmp40 TO_INDEX 20
+   200 op add __tmp39 2 __tmp40
 -    * jump __label34 always
-   198 label __label34
-   199 op sub clh __tmp39 cly
-   200 set crh clh
+   201 label __label34
+   202 op sub clh __tmp39 cly
+   203 set crh clh
  
    222 op mod __tmp58 TO_INDEX 8
-   223 op mul __tmp59 __tmp58 BAR_GAP
-   224 op add __tmp57 OFFSET_Y __tmp59
+   223 op mul __tmp59 __tmp58 22
+   224 op add __tmp57 4 __tmp59
 -    * jump __label40 always
    225 label __label40
    226 op sub crh __tmp57 cry
-   227 set clx crx
+   227 set clx 91
  
-   243 jump __label44 greaterThanEq TO_INDEX 8
-   244 op mul __tmp70 TO_INDEX BAR_GAP
-   245 op add __tmp69 OFFSET_Y __tmp70
+   242 jump __label44 greaterThanEq TO_INDEX 8
+   243 op mul __tmp70 TO_INDEX 22
+   244 op add __tmp69 4 __tmp70
 -    * jump __label44 always
-   246 label __label44
-   247 op sub clh __tmp69 cly
-   248 jump __label45 lessThan TO_INDEX 8
+   245 label __label44
+   246 op sub clh __tmp69 cly
+   247 jump __label45 lessThan TO_INDEX 8
  
-   254 op mod __tmp82 TO_INDEX 8
-   255 op mul __tmp83 __tmp82 BAR_GAP
-   256 op add __tmp81 OFFSET_Y __tmp83
+   253 op mod __tmp82 TO_INDEX 8
+   254 op mul __tmp83 __tmp82 22
+   255 op add __tmp81 4 __tmp83
 -    * jump __label48 always
-   257 label __label48
-   258 op sub crh __tmp81 0
-   259 jump __label46 always
+   256 label __label48
+   257 op sub crh __tmp81 0
+   258 jump __label46 always
  
-   402 op land __tmp160 __tmp124 __tmp159
-   403 jump __label78 equal __tmp160 false
-   404 set red 0
+   401 op land __tmp160 __tmp124 __tmp159
+   402 jump __label78 equal __tmp160 false
+   403 set red 0
 -    * jump __label78 always
-   405 label __label78
-   406 set green 0
-   407 jump __label80 lessThanEq minimum 33
-   408 set green 255
+   404 label __label78
+   405 set green 0
+   406 jump __label80 lessThanEq minimum 33
+   407 set green 255
 -    * jump __label80 always
-   409 label __label80
-   410 set blue 0
-   411 label __label76
+   408 label __label80
+   409 set blue 0
+   410 label __label76
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-   255 op mul __tmp83 __tmp82 BAR_GAP
-   256 op add __tmp81 OFFSET_Y __tmp83
-   257 label __label48
+   254 op mul __tmp83 __tmp82 22
+   255 op add __tmp81 4 __tmp83
+   256 label __label48
 -    * op sub crh __tmp81 0
-+  258 set crh __tmp81
-   259 jump __label46 always
-   260 label __label45
-   261 set crx 0
++  257 set crh __tmp81
+   258 jump __label46 always
+   259 label __label45
+   260 set crx 0
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
  
-   285 label __label52
-   286 jump __label54 greaterThanEq 0 __tmp89
-   287 label __label84
+   284 label __label52
+   285 jump __label54 greaterThanEq 0 __tmp89
+   286 label __label85
 -    * jump __label55 lessThan index TO_INDEX
 -    * jump __label54 always
-+  288 jump __label54 greaterThanEq index TO_INDEX
-   289 label __label55
-   290 label __label56
-   291 getlink factory n
++  287 jump __label54 greaterThanEq index TO_INDEX
+   288 label __label55
+   289 label __label56
+   290 getlink factory n
 
 Modifications by Final phase, Jump Threading, iteration 1:
  
-   345 op add __tmp131 x 7
-   346 op add __tmp132 y 7
-   347 draw image __tmp131 __tmp132 icon 16 0
+   344 op add __tmp131 x 7
+   345 op add __tmp132 y 7
+   346 draw image __tmp131 __tmp132 icon 16 0
 -    * jump __label72 always
-+  348 jump __label70 always
-   349 label __label71
-   350 draw color 255 80 80 255
-   351 op add __tmp133 y 3
++  347 jump __label70 always
+   348 label __label71
+   349 draw color 255 80 80 255
+   350 op add __tmp133 y 3
 
 Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
-     9 op or __tmp2 __tmp0 __tmp1
-    10 jump __label2 equal __tmp2 false
-    11 label __label86
+    15 set icon null
+    16 label __label0
+    17 label __label83
 -    * print "Universal Factory Monitor"
 -    * print "\n"
-+   12 print "Universal Factory Monitor\n"
-    13 set n @links
-    14 label __label3
-    15 jump __label5 lessThanEq n 0
++   18 print "Universal Factory Monitor\n"
+    19 set n @links
+    20 label __label3
+    21 jump __label5 lessThanEq n 0
  
-   134 label __label5
-   135 print "Message: "
-   136 print MESSAGE
+   140 label __label5
+   141 print "Message: "
+   142 print MESSAGE
 -    * print "\n"
 -    * print "Switch: "
-+  137 print "\nSwitch: "
-   138 print SWITCH
++  143 print "\nSwitch: "
+   144 print SWITCH
 -    * print "\n"
 -    * print "Display: "
-+  139 print "\nDisplay: "
-   140 print DISPLAY
++  145 print "\nDisplay: "
+   146 print DISPLAY
 -    * print "\n"
 -    * print "Monitoring: "
-+  141 print "\nMonitoring: "
-   142 print TYPE
++  147 print "\nMonitoring: "
+   148 print TYPE
 -    * print "\n"
 -    * print "Capacity: "
-+  143 print "\nCapacity: "
-   144 print CAPACITY
++  149 print "\nCapacity: "
+   150 print CAPACITY
 -    * print "\n"
 -    * print "Resource 1: "
-+  145 print "\nResource 1: "
-   146 print RES1
++  151 print "\nResource 1: "
+   152 print RES1
 -    * print "\n"
 -    * print "Resource 2: "
-+  147 print "\nResource 2: "
-   148 print RES2
++  153 print "\nResource 2: "
+   154 print RES2
 -    * print "\n"
 -    * print "Resource 3: "
-+  149 print "\nResource 3: "
-   150 print RES3
++  155 print "\nResource 3: "
+   156 print RES3
 -    * print "\n"
 -    * print "Output: "
-+  151 print "\nOutput: "
-   152 print OUTPUT
-   153 print "\n"
-   154 op equal __tmp25 DISPLAY null
++  157 print "\nOutput: "
+   158 print OUTPUT
+   159 print "\n"
+   160 op equal __tmp25 DISPLAY null
  
-   262 jump __label51 notEqual __tmp86 0
-   263 label __label85
-   264 set start @time
+   261 jump __label51 notEqual __tmp86 0
+   262 label __label86
+   263 set start @time
 -    * print "Universal Factory Monitor"
 -    * print "\n"
-+  265 print "Universal Factory Monitor\n"
-   266 print "Monitoring: "
-   267 print TYPE
-   268 draw color 0 0 80 255
++  264 print "Universal Factory Monitor\n"
+   265 print "Monitoring: "
+   266 print TYPE
+   267 draw color 0 0 80 255
 
 Final code before resolving virtual instructions:
 
 set FROM_INDEX 0
 set TO_INDEX 16
 set EXPECTED_BOOST 1.5
-set DISPLAY null
 set TYPE null
+set DISPLAY null
+set SWITCH null
+set MESSAGE null
+set CAPACITY null
+set OUTPUT null
+set RES3 null
+set RES2 null
+set RES1 null
+set MUL3 null
+set MUL2 null
+set MUL1 null
 set icon null
-op equal __tmp0 DISPLAY null
-op equal __tmp1 TYPE null
-op or __tmp2 __tmp0 __tmp1
-jump __label2 equal __tmp2 false
-label __label86
+label __label83
 print "Universal Factory Monitor\n"
 set n @links
 jump __label5 lessThanEq n 0
-label __label83
+label __label84
 op sub n n 1
 getlink block n
 sensor __ast0 block @type
@@ -1678,7 +1921,7 @@ set RES2 @coal
 set RES3 @itemCapacity
 op div MUL3 100 CAPACITY
 set MUL2 MUL3
-set MUL1 MUL2
+set MUL1 MUL3
 set OUTPUT @silicon
 jump __label6 always 0 0
 label __label13
@@ -1690,7 +1933,7 @@ set RES2 @coal
 set RES3 @pyratite
 op div MUL3 100 CAPACITY
 set MUL2 MUL3
-set MUL1 MUL2
+set MUL1 MUL3
 set OUTPUT @silicon
 jump __label6 always 0 0
 label __label15
@@ -1702,7 +1945,7 @@ set RES2 @lead
 set RES3 @itemCapacity
 op div MUL3 100 CAPACITY
 set MUL2 MUL3
-set MUL1 MUL2
+set MUL1 MUL3
 set OUTPUT @metaglass
 jump __label6 always 0 0
 label __label17
@@ -1714,7 +1957,7 @@ set RES2 @thorium
 set RES3 @itemCapacity
 op div MUL3 100 CAPACITY
 set MUL2 MUL3
-set MUL1 MUL2
+set MUL1 MUL3
 set OUTPUT @phase-fabric
 jump __label6 always 0 0
 label __label19
@@ -1726,7 +1969,7 @@ set RES2 @coal
 set RES3 @lead
 op div MUL3 100 CAPACITY
 set MUL2 MUL3
-set MUL1 MUL2
+set MUL1 MUL3
 set OUTPUT @pyratite
 jump __label6 always 0 0
 label __label21
@@ -1738,7 +1981,7 @@ set RES2 @spore-pod
 set RES3 @itemCapacity
 op div MUL3 100 CAPACITY
 set MUL2 MUL3
-set MUL1 MUL2
+set MUL1 MUL3
 set OUTPUT @blast-compound
 jump __label6 always 0 0
 label __label23
@@ -1759,7 +2002,7 @@ print "\n  "
 print block
 print " not supported"
 label __label6
-jump __label83 greaterThan n 0
+jump __label84 greaterThan n 0
 label __label5
 print "Message: "
 print MESSAGE
@@ -1787,31 +2030,27 @@ jump __label27 equal __tmp27 false
 print "No block to monitor or display."
 label __label27
 printflush MESSAGE
-jump __label86 notEqual __tmp27 false
-label __label2
+jump __label83 notEqual __tmp27 false
 sensor __tmp29 DISPLAY @type
 jump __label29 notEqual __tmp29 @logic-display
 set OFFSET_X 2
 set OFFSET_Y 2
-set BAR_WIDTH 14
-set BAR_LENGTH 61
 set BAR_SPACE 80
 set BAR_GAP 20
 set clx 0
 set crx 0
-op add __tmp32 OFFSET_X BAR_SPACE
-op sub clw __tmp32 2
-set crw clw
+op sub clw 82 2
+set crw 80
 set cly 0
 jump __label32 equal FROM_INDEX 0
-op mul __tmp36 FROM_INDEX BAR_GAP
-op add cly OFFSET_Y __tmp36
+op mul __tmp36 FROM_INDEX 20
+op add cly 2 __tmp36
 label __label32
 set cry cly
 set __tmp39 176
 jump __label34 greaterThanEq TO_INDEX 8
-op mul __tmp40 TO_INDEX BAR_GAP
-op add __tmp39 OFFSET_Y __tmp40
+op mul __tmp40 TO_INDEX 20
+op add __tmp39 2 __tmp40
 label __label34
 op sub clh __tmp39 cly
 set crh clh
@@ -1819,62 +2058,58 @@ jump __label30 always 0 0
 label __label29
 set OFFSET_X 5
 set OFFSET_Y 4
-set BAR_WIDTH 14
-set BAR_LENGTH 61
 set BAR_SPACE 88
 set BAR_GAP 22
 jump __label35 lessThan FROM_INDEX 8
-op add __tmp45 OFFSET_X BAR_SPACE
-op sub crx __tmp45 2
-op sub crw 177 __tmp45
+op sub crx 93 2
+op add crw 83 1
 set cry 0
 op mod __tmp50 FROM_INDEX 8
 jump __label38 equal __tmp50 0
-op mul __tmp54 __tmp50 BAR_GAP
-op add cry OFFSET_Y __tmp54
+op mul __tmp54 __tmp50 22
+op add cry 4 __tmp54
 label __label38
 set __tmp57 176
 jump __label40 greaterThanEq TO_INDEX 16
 op mod __tmp58 TO_INDEX 8
-op mul __tmp59 __tmp58 BAR_GAP
-op add __tmp57 OFFSET_Y __tmp59
+op mul __tmp59 __tmp58 22
+op add __tmp57 4 __tmp59
 label __label40
 op sub crh __tmp57 cry
-set clx crx
-set clw crw
+set clx 91
+set clw 84
 set cly cry
 set clh crh
 jump __label36 always 0 0
 label __label35
 set clx 0
-op add __tmp62 OFFSET_X BAR_SPACE
-op sub clw __tmp62 2
+op sub clw 93 2
 set cly 0
 jump __label42 equal FROM_INDEX 0
-op mul __tmp66 FROM_INDEX BAR_GAP
-op add cly OFFSET_Y __tmp66
+op mul __tmp66 FROM_INDEX 22
+op add cly 4 __tmp66
 label __label42
 set __tmp69 176
 jump __label44 greaterThanEq TO_INDEX 8
-op mul __tmp70 TO_INDEX BAR_GAP
-op add __tmp69 OFFSET_Y __tmp70
+op mul __tmp70 TO_INDEX 22
+op add __tmp69 4 __tmp70
 label __label44
 op sub clh __tmp69 cly
 jump __label45 lessThan TO_INDEX 8
-op sub crx __tmp62 2
-op sub crw 177 __tmp62
+op sub crx 93 2
+op add crw 83 1
 set cry 0
 set __tmp81 176
 jump __label48 greaterThanEq TO_INDEX 16
 op mod __tmp82 TO_INDEX 8
-op mul __tmp83 __tmp82 BAR_GAP
-op add __tmp81 OFFSET_Y __tmp83
+op mul __tmp83 __tmp82 22
+op add __tmp81 4 __tmp83
 label __label48
 set crh __tmp81
 jump __label46 always 0 0
 label __label45
 set crx 0
-set crw clw
+set crw 91
 set cry cly
 set crh clh
 label __label46
@@ -1883,7 +2118,7 @@ label __label30
 control enabled SWITCH 0 0 0 0
 sensor __tmp86 SWITCH @enabled
 jump __label51 notEqual __tmp86 0
-label __label85
+label __label86
 set start @time
 print "Universal Factory Monitor\n"
 print "Monitoring: "
@@ -1896,7 +2131,7 @@ set index FROM_INDEX
 set __tmp89 @links
 set n 0
 jump __label54 greaterThanEq 0 __tmp89
-label __label84
+label __label85
 jump __label54 greaterThanEq index TO_INDEX
 getlink factory n
 sensor __tmp93 factory @type
@@ -2019,18 +2254,18 @@ op max green 192 green
 op max blue 192 blue
 set boost EXPECTED_BOOST
 label __label81
-op mul __tmp169 BAR_LENGTH boost
+op mul __tmp169 61 boost
 op idiv length __tmp169 EXPECTED_BOOST
 draw color red green blue 128 0 0
 op mul __tmp171 minimum length
 op idiv __tmp172 __tmp171 100
-draw rect x y __tmp172 BAR_WIDTH 0 0
+draw rect x y __tmp172 14 0 0
 draw color red green blue 255 0 0
-draw lineRect x y length BAR_WIDTH 0 0
+draw lineRect x y length 14 0 0
 op add index index 1
 label __label57
 op add n n 1
-jump __label84 lessThan n __tmp89
+jump __label85 lessThan n __tmp89
 label __label54
 drawflush DISPLAY
 op sub __tmp174 @time start
@@ -2040,6 +2275,6 @@ print __tmp175
 print " ms"
 printflush MESSAGE
 sensor __tmp86 SWITCH @enabled
-jump __label85 equal __tmp86 0
+jump __label86 equal __tmp86 0
 label __label51
 end

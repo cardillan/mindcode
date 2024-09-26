@@ -33,11 +33,7 @@
             <@com.codeareas sourceTitle="Mindcode Source Code:" targetTitle="Mindustry Logic:" sourceLines="Y" targetLines="Y" />
             <div>
                 <div class="flex items-center space-x-3">
-                    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black p-2 rounded">
-                        <option value="OFF"      <#if model.optimizationLevel == "OFF"     >selected</#if>>No optimization</option>
-                        <option value="BASIC"    <#if model.optimizationLevel == "BASIC"   >selected</#if>>Basic optimization</option>
-                        <option value="ADVANCED" <#if model.optimizationLevel == "ADVANCED">selected</#if>>Advanced optimization</option>
-                    </select>
+                    <@com.optimizationSettings />
                     <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4 rounded"/>
                     <input type="submit" value="Compile and Run" class="px-4 py-2 bg-gray-600 text-white my-4 rounded" formaction="/compileandrun"/>
                     <@com.link href="/?s=clean">Start with a new script</@com.link>
@@ -46,7 +42,7 @@
             </div>
             <div>
                 <#if model.runOutput != "">
-                    <label class="block font-bold" for="output">Program output:</label>
+                    <label class="block font-bold" for="output">Program output (${model.runSteps} steps):</label>
                     <textarea rows="4" id="output" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.runOutput}</textarea>
                 </#if>
 

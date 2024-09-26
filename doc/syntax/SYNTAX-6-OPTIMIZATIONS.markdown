@@ -322,8 +322,8 @@ understandable, but the optimizer would have to be more complex and therefore mo
 > * Do not modify instructions other than `set` instructions assigning values to program parameters in the compiled 
 >   code.
 >
-> **At this moment, global variables are handled in the same way as program parameters. In future versions, global
-> variables will be processed by the Data Flow Optimization too. Always program parameters for allowing program
+> **On basic and advanced optimization levels, global variables are handled in the same way as program parameters. On the experimental level, global
+> variables are fully optimized in a way similar to main or local variables. Always use program parameters for allowing program
 > parametrization.**
 
 ### Optimization levels

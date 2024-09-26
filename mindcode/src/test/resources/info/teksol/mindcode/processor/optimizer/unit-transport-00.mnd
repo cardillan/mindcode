@@ -27,6 +27,8 @@ OVERALLOCATION_HIGH     = 0.75;     // Allocate at most this much more units tha
 
 STABILIZATION           = false;    // Use average of last three flow rate values for better unit auto allocation stability
 
+CONTAINER_INDEX = CORE_X = CORE_Y = ITEM = ITEM_ICON = STATE_LIMIT = null;
+
 //  SETTINGS LOAD/SAVE
 /////////////////////////////////////////////////////////
 MESSAGE = "";

@@ -6,10 +6,11 @@
      6 instructions eliminated by Jump Optimization (3 iterations).
     10 instructions eliminated by Single Step Elimination (4 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
+     2 instructions eliminated by Data Flow Optimization (4 iterations).
      7 instructions eliminated by Jump Straightening (3 iterations).
      2 instructions updated by PropagateJumpTargets.
      1 instructions eliminated by Unreachable Code Elimination.
-   105 instructions after optimizations.
+   103 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-12 instructions):
      0 set UNIT @mega
@@ -537,39 +538,71 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
      4 set index 1
      5 label __label0
 
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    30 set UNIT __tmp4
+    31 set first_unit null
+    32 control enabled switch2 false
+-    * print UNIT
++   33 print __tmp4
+    34 print ": gathering information..."
+    35 label __label3
+    36 label __label4
+ 
+   130 jump __label38 always
+   131 label __label37
+   132 jump __label41 equal flag 0
+-    * ucontrol within THIS_X THIS_Y 8 __tmp52
++  133 ucontrol within @thisx @thisy 8 __tmp52
+   134 jump __label43 equal __tmp52 false
+   135 ucontrol flag 0
+   136 jump __label44 always
+   137 label __label43
+-    * ucontrol approach THIS_X THIS_Y 4
++  138 ucontrol approach @thisx @thisy 4
+   139 label __label44
+   140 label __label41
+   141 label __label42
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+     0 set UNIT @mega
+-    * set THIS_X @thisx
+-    * set THIS_Y @thisy
+     1 set first_unit null
+     2 set index 1
+     3 label __label0
+
 Modifications by Final phase, Jump Threading, iteration 1:
  
-    39 print UNIT
-    40 print ": no active unit found."
-    41 printflush message1
+    37 print UNIT
+    38 print ": no active unit found."
+    39 printflush message1
 -    * jump __label15 always
-+   42 jump __label0 always
-    43 label __label14
-    44 op strictEqual __tmp7 @unit first_unit
-    45 op strictEqual __tmp8 first_unit null
++   40 jump __label0 always
+    41 label __label14
+    42 op strictEqual __tmp7 @unit first_unit
+    43 op strictEqual __tmp8 first_unit null
  
-   123 ucontrol within CORE_X CORE_Y 8 __tmp48
-   124 jump __label39 equal __tmp48 false
-   125 ucontrol itemDrop CORE items
+   121 ucontrol within CORE_X CORE_Y 8 __tmp48
+   122 jump __label39 equal __tmp48 false
+   123 ucontrol itemDrop CORE items
 -    * jump __label40 always
-+  126 jump __label38 always
-   127 label __label39
-   128 ucontrol approach CORE_X CORE_Y 4
-   129 label __label40
++  124 jump __label38 always
+   125 label __label39
+   126 ucontrol approach CORE_X CORE_Y 4
+   127 label __label40
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   146 label __label15
-   147 label __label1
-   148 jump __label0 always
+   144 label __label15
+   145 label __label1
+   146 jump __label0 always
 -    * label __label2
 -    * end
 
 Final code before resolving virtual instructions:
 
 set UNIT @mega
-set THIS_X @thisx
-set THIS_Y @thisy
 set first_unit null
 set index 1
 label __label0
@@ -596,7 +629,7 @@ label __label5
 set UNIT __tmp4
 set first_unit null
 control enabled switch2 false 0 0 0
-print UNIT
+print __tmp4
 print ": gathering information..."
 label __label3
 ubind UNIT
@@ -685,12 +718,12 @@ ucontrol approach CORE_X CORE_Y 4 0 0
 jump __label38 always 0 0
 label __label37
 jump __label41 equal flag 0
-ucontrol within THIS_X THIS_Y 8 __tmp52 0
+ucontrol within @thisx @thisy 8 __tmp52 0
 jump __label43 equal __tmp52 false
 ucontrol flag 0 0 0 0 0
 jump __label44 always 0 0
 label __label43
-ucontrol approach THIS_X THIS_Y 4 0 0
+ucontrol approach @thisx @thisy 4 0 0
 label __label44
 label __label41
 label __label38

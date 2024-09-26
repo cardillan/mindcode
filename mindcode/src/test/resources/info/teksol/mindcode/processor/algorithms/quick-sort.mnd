@@ -1,5 +1,5 @@
 allocate stack in bank1[0...512];
-ARRAY = bank2;
+param ARRAY = bank2;
 
 def quicksort(left, right) 
     if right > left

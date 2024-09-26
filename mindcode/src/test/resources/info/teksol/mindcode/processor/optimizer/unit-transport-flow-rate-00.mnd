@@ -8,6 +8,7 @@ IND_TIME			= 508;				// We write time here to track activity
 IND_FLOW_RATE		= 507;
 
 TOTAL_MILLIS = DELAY * SAMPLES;
+SIGN_MILLIS = null;
 
 SORTER = sorter1;
 VAULT = vault1;

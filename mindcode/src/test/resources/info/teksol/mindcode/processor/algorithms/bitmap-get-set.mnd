@@ -1,6 +1,6 @@
 // How many bits per variable are stored
-BITS = 32;
-BITMAP = bank1;
+param BITS = 32;
+param BITMAP = bank1;
 
 def setBit(bitIndex)
   BITMAP[bitIndex \ BITS] |= (1 << (bitIndex % BITS));

@@ -28,6 +28,7 @@ REMOTE_LIMIT            = 100;          // How much of local container capacity 
 
 LOCAL_LIMIT = max(LOCAL_LIMIT, 20);
 REMOTE_LIMIT = max(REMOTE_LIMIT, 20);
+MSG = null;
 
 //  BASIC INITIALIZATION
 /////////////////////////////////////////////////////////

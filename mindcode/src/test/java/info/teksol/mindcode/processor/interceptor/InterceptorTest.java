@@ -39,4 +39,19 @@ public class InterceptorTest extends AbstractInterceptorTest {
         );
     }
 
+    @Test
+    void preservesLastGlobalInFunctionOnExperimental() {
+        testCode("""
+                        #set optimization = experimental;
+                        A = 0;
+                        foo();
+                        print(A);
+                        
+                        noinline def foo()
+                            A = 1;
+                        end;
+                        """,
+                "1"
+        );
+    }
 }

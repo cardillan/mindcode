@@ -26,6 +26,9 @@ const SUPPLY_INTERVAL   = 50 - 3;
 // Interval to check for the availability of the optimal unit type if not used
 const UNIT_CHECK_TIME   = 5000;
 
+// TODO these variables are reported as uninitialized, why?
+CORE_X = CORE_Y = DOME_X = DOME_Y = null;
+
 // FIND DOME
 // Now this is funny: the processor might get built way
 // earlier than the dome and miss it in initialization
@@ -112,6 +115,7 @@ else
     ubind(UNIT_S2); unbind(); UNIT_S2 = null;
     ubind(UNIT_P2); unbind(); UNIT_P2 = null;
     GROUP1 = "unit";
+    GROUP2 = "";
 end;
 
 SUPPLY_S_FIRST = not FOUR_UNITS or UNIT_S1.totalItems < UNIT_S2.totalItems;
@@ -279,6 +283,7 @@ end;
 // Controls one unit
 inline def processUnit(unit, item, group, supply)
     rebindUnit(unit);
+    msg = "";
 
     // We have a bound, functioning unit
     state = @unit.flag;
@@ -297,7 +302,7 @@ inline def processUnit(unit, item, group, supply)
             state = S_APPROACH_SRC;
         else
             // Get rid of whatever we might be carrying right now
-            MSG = ", initializing\n";
+            msg = ", initializing\n";
             approach(CORE_X, CORE_Y, RADIUS_APPROACH);
             if within(CORE_X, CORE_Y, RADIUS_WITHIN) then
                 itemDrop(CORE, UNIT_CAPACITY);
@@ -313,11 +318,11 @@ inline def processUnit(unit, item, group, supply)
                 // Jump threading optimization here...
                 state = S_APPROACH_DST;
             else
-                MSG = ", loading\n";
+                msg = ", loading\n";
             end;
         else
             approach(CORE_X, CORE_Y, RADIUS_APPROACH);
-            MSG = ", fetching in [gold]";
+            msg = ", fetching in [gold]";
             distance = len(CORE_X - @unit.x, CORE_Y - @unit.y) \ SPEED_TENTHS / 10;
         end;
     end;
@@ -326,11 +331,11 @@ inline def processUnit(unit, item, group, supply)
         if within(DOME_X, DOME_Y, RADIUS_WITHIN) then
             if supply then
                 itemDrop(DOME, UNIT_CAPACITY);
-                MSG = ", supplying\n";
+                msg = ", supplying\n";
                 //color = "green";
             else
                 approach(DOME_X, DOME_Y, RADIUS_APPROACH);   // Keep the unit active
-                MSG = ", waiting\n";
+                msg = ", waiting\n";
             end;
             if @unit.totalItems <= 0 then
                 approach(CORE_X, CORE_Y, RADIUS_APPROACH);
@@ -338,7 +343,7 @@ inline def processUnit(unit, item, group, supply)
             end;
         else
             approach(DOME_X, DOME_Y, RADIUS_APPROACH);
-            MSG = ", returning in [gold]";
+            msg = ", returning in [gold]";
             distance = len(DOME_X - @unit.x, DOME_Y - @unit.y) \ SPEED_TENTHS / 10;
         end;
     end;
@@ -347,9 +352,9 @@ inline def processUnit(unit, item, group, supply)
 
     printf("  $group: [$color]$[]", @unit.totalItems);
     if distance >= 0 then
-        printf("$MSG$distance[] sec\n");
+        printf("$msg$distance[] sec\n");
     else
-        print(MSG);
+        print(msg);
     end;
 
     return @unit;

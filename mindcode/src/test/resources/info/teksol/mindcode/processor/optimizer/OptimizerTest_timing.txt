@@ -7,14 +7,14 @@ impact-reactor-logic-00.mnd:            : parse:        600 ms, compile:        
 instant-overdrive-dome-00.mnd:          : parse:        200 ms, compile:          0 ms, optimize:        400 ms
 item-counter-00.mnd:                    : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 item-counter-micro-00.mnd:              : parse:        200 ms, compile:          0 ms, optimize:          0 ms
-item-rate-display-00.mnd:               : parse:        600 ms, compile:          0 ms, optimize:        200 ms
+item-rate-display-00.mnd:               : parse:        400 ms, compile:          0 ms, optimize:        200 ms
 item-rate-meter-00.mnd:                 : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 level-display-00.mnd:                   : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 level-display-water-cryo-00.mnd:        : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 level-meter-00.mnd:                     : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 mass-driver-monitor-00.mnd:             : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 mass-driver-monitor-surge-alloy-00.mnd: : parse:        200 ms, compile:          0 ms, optimize:          0 ms
-reactor-control-00.mnd:                 : parse:      1,600 ms, compile:          0 ms, optimize:        200 ms
+reactor-control-00.mnd:                 : parse:      1,400 ms, compile:          0 ms, optimize:        200 ms
 reactor-control-battery-level-00.mnd:   : parse:        400 ms, compile:          0 ms, optimize:          0 ms
 regulator-00.mnd:                       : parse:        200 ms, compile:          0 ms, optimize:          0 ms
 remote-vault-00.mnd:                    : parse:          0 ms, compile:          0 ms, optimize:          0 ms

@@ -16,6 +16,12 @@ const M_R1 = M_B0 + 1;
 const M_G1 = M_R1 + 1;
 const M_B1 = M_G1 + 1;
 
+MESSAGE = SWITCH = MEMORY = null;
+START_INDEX = END_INDEX = SIZE = null;
+CONTAINER = MAXIMUM = SENSOR = null;
+R0 = G0 = B0 = R1 = G1 = B1 = null;
+
+
 while true
 	print("Item/Liquid/Energy Level Meter");
 	CONTAINER = null;

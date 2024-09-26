@@ -56,23 +56,23 @@ public class SchemacodeCompiler {
 
     public static CompilerOutput<byte[]> compile(String definition, CompilerProfile compilerProfile, Path basePath) {
         if (definition.isBlank()) {
-            return new CompilerOutput<>(new byte[0], List.of(), null);
+            return new CompilerOutput<>(new byte[0], List.of());
         }
 
         List<CompilerMessage> messages = new ArrayList<>();
         DefinitionsContext parseTree = parseSchematics(definition, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages, null);
+        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
         AstDefinitions astDefinitions = createDefinitions(parseTree, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages, null);
+        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
         Schematic schematic = buildSchematic(astDefinitions, compilerProfile, messages::add, basePath);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages, null);
+        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             SchematicsIO.write(schematic, output);
-            return new CompilerOutput<>(output.toByteArray(), messages, null);
+            return new CompilerOutput<>(output.toByteArray(), messages);
         } catch (IOException e) {
             throw new SchematicsInternalError(e, "Error converting schematics to binary representation.");
         }

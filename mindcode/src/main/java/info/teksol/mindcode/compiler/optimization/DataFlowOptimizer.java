@@ -208,7 +208,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         String uninitializedList = uninitialized.stream()
                 .filter(v -> v.getType() != ArgumentType.BLOCK)
-                .filter(v -> !v.isGlobalVariable())
+                .filter(v -> experimental() || !v.isGlobalVariable())
                 .map(LogicVariable::getFullName)
                 .distinct()
                 .sorted()
@@ -232,8 +232,11 @@ class DataFlowOptimizer extends BaseOptimizer {
     private void processTopContext(AstContext context) {
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
         if (context.isFunction()) {
-            // All parameters of a function are initialized when the function is called.
+            // All global variables and all parameters of a function are initialized when the function is called.
             context.function().getLogicParameters().forEach(variableStates::markInitialized);
+            optimizationContext.getFunctionReads(context.function()).stream()
+                    .filter(LogicVariable::isGlobalVariable)
+                    .forEach(variableStates::markInitialized);
         }
 
         iterator = createIteratorAtContext(context);
@@ -267,7 +270,17 @@ class DataFlowOptimizer extends BaseOptimizer {
             }
         }
 
-        variableStates.print("Final states after processing top level context");
+        final VariableStates finalVariableStates = variableStates;
+
+        if (context.isFunction()) {
+            // Changes to global variables outside of function are needed
+            optimizationContext.getFunctionWrites(context.function()).stream()
+                    .filter(LogicVariable::isGlobalVariable)
+                    .forEach(v -> finalVariableStates.valueRead(v, null, false));
+        }
+
+
+        finalVariableStates.print("Final states after processing top level context");
 
         if (!labelStates.isEmpty()) {
             // There was a jump to a label, but this label hasn't been processed.
@@ -823,7 +836,8 @@ class DataFlowOptimizer extends BaseOptimizer {
      */
     boolean canEliminate(LogicInstruction instruction, LogicVariable variable) {
         return switch (variable.getType()) {
-            case COMPILER, FUNCTION_RETADDR, PARAMETER, GLOBAL_VARIABLE -> false;
+            case COMPILER, FUNCTION_RETADDR, PARAMETER -> false;
+            case GLOBAL_VARIABLE -> experimental();
             case FUNCTION_RETVAL -> {
                 // Function return values cannot be eliminated inside their functions - at this point we have no
                 // information whether they're read somewhere. Outside their functions they're processed normally

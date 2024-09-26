@@ -7,6 +7,7 @@ public enum OptimizationLevel {
     NONE,
     BASIC,
     ADVANCED,
+    EXPERIMENTAL,
     ;
 
     private static final Map<String, OptimizationLevel> VALUE_MAP = createValueMap();

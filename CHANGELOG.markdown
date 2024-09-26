@@ -25,12 +25,13 @@ Experimental features may contain bugs or produce suboptimal code, and are subje
 * Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
 * Added a new GUI option to choose optimization level in the web app when compiling Mindcode or building Schemacode.
 * Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](/doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app, or written to the log when using the command line tool. 
+* Added new optimization level, `experimental`. On this setting, the Data Flow optimizer doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing to perform more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.  
 * Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does. 
 * Added [enhanced comments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks.
 
 ### Changed
 
-* Changed the names of optimization levels from `off` and `aggressive` to `none` and `advanced`. The former names are still supported in the `#set` compiler directive, but not in the command-line options. 
+* Changed the names of [optimization levels](doc/syntax/SYNTAX-5-OTHER.markdown#option-optimization) from `off` and `aggressive` to `none` and `advanced`. The former names are still supported in the `#set` compiler directive, but not in the command-line options. 
 * Changed the [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization to analyze functions modifying variables inside loop instead of blanket assumption that all global variables may be changed by a function.
 * Changes to the web app
     * A button was added do the web app to copy the output code to the clipboard with a single click.

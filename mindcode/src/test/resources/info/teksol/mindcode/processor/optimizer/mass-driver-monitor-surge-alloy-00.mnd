@@ -1,5 +1,6 @@
 EXPECTED_FLOW_STR = null;
 flow_str = null;
+MESSAGE = DISPLAY = SWITCH = null;
 
 do
 	TITANIUM = null;

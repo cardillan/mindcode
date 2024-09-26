@@ -40,13 +40,13 @@ public class MindcodeCompiler implements Compiler<String> {
     @Override
     public CompilerOutput<String> compile(String sourceCode) {
         String instructions = "";
-        String textBuffer = null;
+        RunResults runResults = new RunResults(null,0);
 
         try {
             long parseStart = System.nanoTime();
             final Seq program = parse(sourceCode);
             if (messages.stream().anyMatch(CompilerMessage::isError)) {
-                return new CompilerOutput<>("", messages, null);
+                return new CompilerOutput<>("", messages, null, 0);
             }
             printParseTree(program);
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
@@ -81,7 +81,7 @@ public class MindcodeCompiler implements Compiler<String> {
 
             if (profile.isRun()) {
                 long runStart = System.nanoTime();
-                textBuffer = run(result);
+                runResults = run(result);
                 long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
                 info("Performance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.".formatted(parseTime, compileTime, optimizeTime, runTime));
             } else {
@@ -100,7 +100,7 @@ public class MindcodeCompiler implements Compiler<String> {
             }
         }
 
-        return new CompilerOutput<>(instructions, messages, textBuffer);
+        return new CompilerOutput<>(instructions, messages, runResults.textBuffer(), runResults.steps());
     }
 
     /**
@@ -151,7 +151,9 @@ public class MindcodeCompiler implements Compiler<String> {
         return result;
     }
 
-    private String run(List<LogicInstruction> program) {
+    private record RunResults(String textBuffer, int steps) { }
+
+    private RunResults run(List<LogicInstruction> program) {
         // All flags are already set as we want them to be
         Processor processor = new Processor();
         processor.setFlag(ProcessorFlag.ERR_UNINITIALIZED_VAR, false);
@@ -162,10 +164,10 @@ public class MindcodeCompiler implements Compiler<String> {
 
         try {
             processor.run(program, profile.getStepLimit());
-            return processor.getTextOutput();
+            return new RunResults(processor.getTextOutput(), processor.getSteps());
         } catch (ExecutionException e) {
             String output = processor.getTextOutput();
-            return output.isEmpty() ? e.getMessage() : output + "\n" + e.getMessage();
+            return new RunResults(output.isEmpty() ? e.getMessage() : output + "\n" + e.getMessage(), processor.getSteps());
         }
     }
 

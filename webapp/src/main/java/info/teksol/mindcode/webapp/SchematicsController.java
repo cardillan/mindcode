@@ -130,7 +130,8 @@ public class SchematicsController {
                         result.warnings(),
                         result.infos(),
                         optimizationLevel,
-                        null)
+                        null,
+                        0)
         );
     }
 

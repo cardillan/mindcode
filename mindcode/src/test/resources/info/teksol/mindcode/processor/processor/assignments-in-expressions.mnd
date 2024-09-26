@@ -1,4 +1,5 @@
-A = 1;
+param value = 1;
+A = value;
 B = A;
 print(A + (A += 1));
 print((B += 1) + B);

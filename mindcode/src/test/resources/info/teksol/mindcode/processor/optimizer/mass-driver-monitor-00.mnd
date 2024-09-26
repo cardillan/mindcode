@@ -5,6 +5,7 @@ const COLUMN_SIZE = 8;
 
 DISPLAY = null;
 MEMORY = null;
+MESSAGE = SWITCH = null;
 
 while DISPLAY == null
 	println("Mass Driver Monitor");

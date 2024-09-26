@@ -83,7 +83,8 @@ public class DecompilerController {
                         result.warnings(),
                         result.infos(),
                         OptimizationLevel.BASIC.name(),
-                        null)
+                        null,
+                        0)
         );
     }
 

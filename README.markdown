@@ -28,10 +28,11 @@ complete with the code (specified in Mindcode or Mindustry Logic language) and l
 
 Some of the latest enhancements to Mindcode are:
 
+* Program parametrization should now be done using [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) instead of global variables.
+* [List iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops) can now use more than one loop variable to iterate over the values in the list, and if the list consist of Mindcode variables, these variables can be modified by assigning a new value to the loop variable inside the loop.   
 * [Remarks](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remark) can be now included in the compiled code.
-* [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting), a new optimization designed to pull 
-  invariant code out of loops to avoid repeated execution where possible.
-* All instructions added in Mindustry 7 build 146 are now supported.  
+* If your Mindcode program prints some output and doesn't otherwise interact with the Mindustry World, it can be run after compilation using the **Compile and Run** button and its output is shown together with the compiled program on the web page.
+* A button to copy the resulting program or schematics to clipboard is available in the web app.
 
 A [changelog](CHANGELOG.markdown) is now maintained for releases.
 

@@ -5,8 +5,8 @@ param EXPECTED_BOOST = 1.5;
 const LIM1 = 33;
 const LIM2 = 66;
 
-DISPLAY = null;
-TYPE = null;
+MESSAGE = SWITCH = DISPLAY = TYPE = null;
+MUL1 = MUL2 = MUL3 = RES1 = RES2 = RES3 = OUTPUT = CAPACITY = null;
 
 // TODO: Prevents uninitialized variable warning; improve detection and remove
 icon = null;

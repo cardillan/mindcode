@@ -95,7 +95,7 @@ public class CompileMindcodeAction extends ActionHandler {
 
             if (compilerProfile.isRun()) {
                 allTexts.add("");
-                allTexts.add("Program output:");
+                allTexts.add("Program output (%,d steps):".formatted(result.steps()));
                 if (result.textBuffer() == null) {
                     allTexts.add("Couldn't obtain program output.");
                 } else if (result.textBuffer().isEmpty()) {

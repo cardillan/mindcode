@@ -13,6 +13,7 @@ param PCT_LOW = 60;
 param PCT_HIGH = 80;
 CONTAINER = null;
 SORTER = null;
+ACTIVE_TEXT = MAXIMUM = MESSAGE = ON = SENSOR = START = STATE = SWITCH = null;
 
 do
 	println("Configuring regulator...");
