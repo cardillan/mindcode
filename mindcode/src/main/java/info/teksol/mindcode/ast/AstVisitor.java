@@ -29,6 +29,8 @@ public interface AstVisitor<T> {
 
     T visitForEachStatement(ForEachExpression node);
 
+    T visitFormattableLiteral(FormattableLiteral node);
+
     T visitFunctionCall(FunctionCall node);
 
     T visitFunctionDeclaration(FunctionDeclaration node);

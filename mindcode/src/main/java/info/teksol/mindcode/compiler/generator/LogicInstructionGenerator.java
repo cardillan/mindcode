@@ -322,6 +322,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
             throw new MindcodeException(value.startToken(), "multiple declarations of '%s'.", name);
         } else if (identifiers.containsKey(name)) {
             throw new MindcodeException(value.startToken(), "cannot redefine variable or function parameter '%s' as a constant.", name);
+        } else if (value instanceof FormattableLiteral) {
+            throw new MindcodeException(value.startToken(), "formattable literals can only be used with function calls.", name);
         }
         identifiers.put(name, value.toLogicLiteral(instructionProcessor));
     }
@@ -398,34 +400,39 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
 
     @Override
     public LogicValue visitFunctionCall(FunctionCall node) {
-        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        // Do not track temporary variables created by evaluating function parameter expressions.
-        // They'll be used solely to pass values to actual function parameters and won't be used subsequently
-        final List<LogicValue> arguments = nodeContext.encapsulate(
-                () -> node.getParams().stream().map(this::visit).collect(Collectors.toList()));
-
-        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-        // Special cases
-        LogicValue returnValue = switch (node.getFunctionName()) {
-            case "printf"   -> handlePrintf(node, arguments);
-            case "remark"   -> handleRemark(node, arguments);
-            default         -> handleFunctionCall(node.getFunctionName(), arguments);
+        // Solve special cases
+        return switch (node.getFunctionName()) {
+            case "print"    -> handleFormattedOutput(node, Formatter.PRINT);
+            case "println"  -> handleFormattedOutput(node, Formatter.PRINTLN);
+            case "printf"   -> handleFormattedOutput(node, Formatter.PRINTF);
+            case "remark"   -> handleFormattedOutput(node, Formatter.REMARK);
+            default         -> handleFunctionCall(node.getFunctionName(), node.getParams());
         };
-
-        clearSubcontextType();
-
-        return returnValue;
     }
 
-    private LogicValue handleFunctionCall(String functionName, List<LogicValue> arguments) {
+    private List<LogicValue> processArguments(List<AstNode> params) {
+        // Do not track temporary variables created by evaluating function parameter expressions.
+        // They'll be used solely to pass values to actual function parameters and won't be used subsequently
+        return nodeContext.encapsulate(() -> params.stream().map(this::visit).collect(Collectors.toList()));
+    }
+
+    private LogicValue handleFunctionCall(String functionName, List<AstNode> params) {
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<LogicValue> arguments = processArguments(params);
+
+        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         LogicValue output = functionMapper.handleFunction(instructions::add, functionName, arguments);
-        if (output != null) {
-            return output;
-        } else if (callGraph.containsFunction(functionName)) {
-            return handleUserFunctionCall(functionName, arguments);
-        } else {
-            throw new MindcodeException("Undefined function '" + functionName + "'");
+
+        if (output == null) {
+            if (callGraph.containsFunction(functionName)) {
+                output = handleUserFunctionCall(functionName, arguments);
+            } else {
+                throw new MindcodeException("Undefined function '" + functionName + "'");
+            }
         }
+
+        clearSubcontextType();
+        return output;
     }
 
     private LogicValue handleUserFunctionCall(String functionName, List<LogicValue> arguments) {
@@ -1118,6 +1125,11 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     @Override
+    public LogicValue visitFormattableLiteral(FormattableLiteral node) {
+        throw new MindcodeException(node.startToken(), "Formattable string not allowed here.");
+    }
+
+    @Override
     public LogicValue visitNumericLiteral(NumericLiteral node) {
         return node.toLogicLiteral(instructionProcessor);
     }
@@ -1320,6 +1332,8 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
     }
 
     enum Formatter {
+        PRINT("print", LogicInstructionGenerator::createPrint),
+        PRINTLN("println", LogicInstructionGenerator::createPrint),
         PRINTF("printf", LogicInstructionGenerator::createPrint),
         REMARK("remark", LogicInstructionGenerator::createRemark);
 
@@ -1334,36 +1348,74 @@ public class LogicInstructionGenerator extends BaseAstVisitor<LogicValue> {
         LogicInstruction createInstruction(LogicInstructionGenerator generator, LogicValue value) {
             return creator.apply(generator, value);
         }
-    }
 
-    private LogicValue handlePrintf(FunctionCall node, List<LogicValue> params) {
-        return handleFormattedOutput(Formatter.PRINTF, node, params);
-    }
-
-    private LogicValue handleRemark(FunctionCall node, List<LogicValue> params) {
-        return handleFormattedOutput(Formatter.REMARK, node, params);
-    }
-
-    private LogicValue handleFormattedOutput(Formatter formatter, FunctionCall node, List<LogicValue> params) {
-        // Printf format string may contain references to variables, which is practically a code
-        // Must be therefore handled here and not by the FunctionMapper
-
-        if (params.isEmpty()) {
-            throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a constant string value.", formatter.function);
+        boolean createsNewLine() {
+            return this == PRINTLN;
         }
 
-        AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
-        if (astFormat instanceof StringLiteral format) {
-            return handleFormattedOutput(formatter, node, format.getText(), params);
+        boolean formatVariantOnly() {
+            return this == PRINTF || this == REMARK;
+        }
+
+        boolean requiresParameter() {
+            return this == PRINTF || this == REMARK;
+        }
+    }
+
+    private LogicValue handleFormattedOutput(FunctionCall node, Formatter formatter) {
+        if (node.getParams().isEmpty()) {
+            if (formatter.requiresParameter()) {
+                throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a formattable string or constant string value.", formatter.function);
+            }
+            if (formatter.createsNewLine()) {
+                emit(formatter.createInstruction(this,LogicString.NEW_LINE));
+            }
+            return NULL;
+        }
+
+        boolean formatting = node.getParams().get(0) instanceof FormattableLiteral || formatter.formatVariantOnly();
+        String pattern = null;
+        if (formatting) {
+            // Processing the first argument
+            if (node.getParams().get(0) instanceof FormattableLiteral fmt) {
+                // Supported in all cases
+                pattern = fmt.getText();
+            } else {
+                // The printf variant
+                AstNode astFormat = expressionEvaluator.evaluate(node.getParams().get(0));
+                if (!(astFormat instanceof StringLiteral format)) {
+                    throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a formattable string or constant string value.", formatter.function);
+                }
+                pattern = format.getText();
+            }
+        }
+
+        // Process arguments except the format string, if any
+        List<AstNode> params = node.getParams().subList(formatting ? 1 : 0, node.getParams().size());
+        setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        final List<LogicValue> inputs = processArguments(params);
+        setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+
+        LogicValue returnValue;
+        if (formatting) {
+            returnValue = handleFormattedOutput(formatter, node, pattern, inputs);
         } else {
-            throw new MindcodeException(node.startToken(), "first parameter of %s() function must be a constant string value.", formatter.function);
+            // Only create instruction for each argument
+            inputs.forEach(value -> emit(formatter.createInstruction(this, value)));
+            returnValue = inputs.get(inputs.size() - 1);
         }
+
+        if (formatter.createsNewLine()) {
+            emit(formatter.createInstruction(this,LogicString.NEW_LINE));
+        }
+        clearSubcontextType();
+        return returnValue;
     }
 
     private LogicValue handleFormattedOutput(Formatter formatter, FunctionCall node, String format, List<LogicValue> params) {
         boolean escape = false;
         StringBuilder accumulator = new StringBuilder();
-        int position = 1;       // Skipping the 1st param, which is the format string
+        int position = 0;
 
         // Skip leading and trailing quotes
         for (int i = 0; i < format.length(); i++) {

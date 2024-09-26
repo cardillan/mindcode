@@ -27,7 +27,6 @@ public class BaseFunctionMapper implements FunctionMapper {
     private final Map<String, PropertyHandler> propertyMap;
     private final Map<String, FunctionHandler> functionMap;
     private final List<SampleGenerator> sampleGenerators;
-    private final Map<String, BuiltInFunctionHandler> builtInFunctionMap;
 
     BaseFunctionMapper(InstructionProcessor InstructionProcessor, Supplier<AstContext> astContextSupplier,
             Consumer<CompilerMessage> messageConsumer) {
@@ -39,8 +38,7 @@ public class BaseFunctionMapper implements FunctionMapper {
         processorEdition = instructionProcessor.getProcessorEdition();
         propertyMap = createPropertyMap();
         functionMap = createFunctionMap();
-        builtInFunctionMap = createBuiltInFunctionMap();
-        
+
         sampleGenerators = new ArrayList<>();
         propertyMap.values().forEach(p -> p.register(sampleGenerators::add));
         functionMap.values().forEach(f -> f.register(sampleGenerators::add));
@@ -57,10 +55,7 @@ public class BaseFunctionMapper implements FunctionMapper {
     @Override
     public LogicValue handleFunction(Consumer<LogicInstruction> program, String functionName, List<LogicValue> arguments) {
         FunctionHandler handler = functionMap.get(functionName);
-        BuiltInFunctionHandler builtInHandler = builtInFunctionMap.get(functionName);
-        return handler == null
-                ? builtInHandler == null ? null : builtInHandler.handleFunction(program, arguments)
-                : handler.handleFunction(program, arguments);
+        return handler == null ? null : handler.handleFunction(program, arguments);
     }
 
     @Override
@@ -152,10 +147,6 @@ public class BaseFunctionMapper implements FunctionMapper {
 
     private interface SelectorFunction extends FunctionHandler {
         String getKeyword();
-    }
-
-    private interface BuiltInFunctionHandler {
-        LogicValue handleFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments);
     }
 
     //
@@ -714,17 +705,5 @@ public class BaseFunctionMapper implements FunctionMapper {
         public String generateSampleCall() {
             return "unit = " + getName() + "(" + joinNamedArguments(getOpcodeVariant().namedParameters()) + ")";
         }
-    }
-
-    private Map<String, BuiltInFunctionHandler> createBuiltInFunctionMap() {
-        Map<String, BuiltInFunctionHandler> map = new HashMap<>();
-        map.put("println", this::handlePrintlnFunction);
-        return map;
-    }
-    
-    private LogicValue handlePrintlnFunction(Consumer<LogicInstruction> program, List<LogicValue> arguments) {
-        arguments.forEach(arg -> program.accept(createInstruction(Opcode.PRINT, arg)));
-        program.accept(createInstruction(Opcode.PRINT, LogicString.NEW_LINE));
-        return arguments.isEmpty() ? LogicNull.NULL : arguments.get(arguments.size() - 1);
     }
 }

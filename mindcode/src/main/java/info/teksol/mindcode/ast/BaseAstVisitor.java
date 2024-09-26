@@ -16,6 +16,7 @@ public abstract class BaseAstVisitor<T> implements AstVisitor<T> {
         if (node instanceof Directive n)                return visitDirective(n);
         if (node instanceof DoWhileExpression n)        return visitDoWhileStatement(n);
         if (node instanceof ForEachExpression n)        return visitForEachStatement(n);
+        if (node instanceof FormattableLiteral n)       return visitFormattableLiteral(n);
         if (node instanceof FunctionCall n)             return visitFunctionCall(n);
         if (node instanceof FunctionDeclaration n)      return visitFunctionDeclaration(n);
         if (node instanceof HeapAccess n)               return visitHeapAccess(n);

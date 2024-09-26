@@ -205,6 +205,61 @@ class BuiltInFunctionsTest extends AbstractGeneratorTest {
                 createInstruction(REMARK, "x"),
                 createInstruction(REMARK, q(", ")),
                 createInstruction(REMARK, "y"),
-                createInstruction(END)        );
+                createInstruction(END)
+        );
     }
+    @Test
+    void printHandlesFormattableStringLiterals() {
+        assertCompilesTo("""
+                        x = 10;
+                        print($"Position: $x");
+                        """,
+                createInstruction(SET, "x", "10"),
+                createInstruction(PRINT, q("Position: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void printlnHandlesFormattableStringLiterals() {
+        assertCompilesTo("""
+                        x = 10;
+                        println($"Position: $x");
+                        """,
+                createInstruction(SET, "x", "10"),
+                createInstruction(PRINT, q("Position: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(PRINT, q("\n")),
+                createInstruction(END)
+        );
+    }
+
+    @Test
+    void printfHandlesFormattableStringLiterals() {
+        assertCompilesTo("""
+                        x = 10;
+                        printf($"Position: $x");
+                        """,
+                createInstruction(SET, "x", "10"),
+                createInstruction(PRINT, q("Position: ")),
+                createInstruction(PRINT, "x"),
+                createInstruction(END)
+        );
+    }
+
+
+    @Test
+    void remarkHandlesFormattableStringLiterals() {
+        assertCompilesTo("""
+                        x = 10;
+                        remark($"Position: $x");
+                        """,
+                createInstruction(SET, "x", "10"),
+                createInstruction(REMARK, q("Position: ")),
+                createInstruction(REMARK, "x"),
+                createInstruction(END)
+        );
+    }
+
 }

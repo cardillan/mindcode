@@ -41,6 +41,7 @@ expression : directive                                                          
            | const_decl                                                                         # constant
            | param_decl                                                                         # parameter
            | literal_t                                                                          # literal_string
+           | formattable_t                                                                      # literal_formattable
            | numeric_t                                                                          # literal_numeric
            | bool_t                                                                             # literal_bool
            | null_t                                                                             # literal_null
@@ -194,6 +195,7 @@ ref : ID;
 int_t : decimal_int | hex_int | binary_int;
 float_t : FLOAT;
 literal_t : LITERAL;
+formattable_t : FORMATTABLE;
 null_t : NULL;
 bool_t : true_t  # true_bool_literal
        | false_t # false_bool_literal
@@ -295,6 +297,8 @@ LEFT_RBRACKET : '(';
 RIGHT_RBRACKET : ')';
 LEFT_CBRACKET : '{';
 RIGHT_CBRACKET : '}';
+
+FORMATTABLE : '$"' ~[\n\r]* '"' ;
 
 fragment ESCAPED_QUOTE : '\\"';
 LITERAL : '"' ( ESCAPED_QUOTE | ~('\n'|'\r') )*? '"';

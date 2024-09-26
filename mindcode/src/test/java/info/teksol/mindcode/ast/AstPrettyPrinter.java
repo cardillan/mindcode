@@ -190,6 +190,14 @@ public class AstPrettyPrinter extends BaseAstVisitor<String> {
     }
 
     @Override
+    public String visitFormattableLiteral(FormattableLiteral node) {
+        buffer.append('$').append('"');
+        buffer.append(node.getText());
+        buffer.append('"');
+        return null;
+    }
+
+    @Override
     public String visitNumericLiteral(NumericLiteral node) {
         buffer.append(node.toLogicLiteral(instructionProcessor).toMlog());
         return null;

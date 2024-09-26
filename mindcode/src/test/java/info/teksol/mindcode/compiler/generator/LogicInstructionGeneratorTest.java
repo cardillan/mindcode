@@ -1319,6 +1319,16 @@ class LogicInstructionGeneratorTest extends AbstractGeneratorTest {
     }
 
     @Test
+    void refusesMisplacedFormattableLiterals() {
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("i = $\"Formattable\""));
+        assertDoesNotThrow(
+                () -> generateInstructions("inline def foo(x) print(x); end; foo(\"Formattable\")"));
+        assertThrows(MindcodeException.class,
+                () -> generateInstructions("inline def foo(x) print(x); end; foo($\"Formattable\")"));
+    }
+
+    @Test
     void removesCommentsFromLogicInstructions() {
         assertCompilesTo("""
                         // Remember that we initialized ourselves

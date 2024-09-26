@@ -204,9 +204,17 @@ Finally, there are string literals, a sequence of characters enclosed in double 
 
 `"A string literal."`
 
-Double quotes in string literals aren't supported in Mindustry. Mindcode only allows them if they are properly
+Double quotes in string literals aren't supported in Mindustry Logic at all. Mindcode only allows them if they are properly
 escaped, i.e. `\"`, and even then they're replaced by single quotes in the compiled code (`"Hello, \"friend\"!"`
 --> `"Hello, 'friend'!"`). Support for escaped double quotes might be completely removed in some future release.
+
+#### Formattable string literals
+
+Formattable string literals are a special case of string literals which can only be used with [`printf`, `print`, `println`, and `remark` functions](SYNTAX-4-FUNCTIONS.markdown#printf). They are prepended by the `$` character: 
+
+`$"A formattable string literal."`
+
+Double quotes aren't supported in formattable string literal, even if they're escaped. No other operations are allowed on them.
 
 ---
 

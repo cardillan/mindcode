@@ -187,33 +187,15 @@ This is a viable workaround if you run into the described problem, until a bette
 
 Mindcode now defines a few library functions that enhance plain Mindustry Logic.
 
-## print
-
-The `print` function corresponds to the `print` instruction, but accepts more than one argument.
-All arguments passed to the function are printed using individual `print` instructions.
-The returned value is the value of the last argument.
-
-## println
-
-The `println` function prints all its arguments and adds a newline ("\n") at the end.
-The returned value is that of the last argument, or `null` if no argument was passed:
-
-```
-println("Position: ", x, ", ", y);
-println();
-println("Elapsed time: ", elapsed, " sec");
-printflush(message1);
-```
-
 ## printf
 
-The `printf` function takes a string literal or string constant as its first argument.
+The `printf` function takes a formattable string literal, a string literal or a string constant as its first argument.
 It then looks for the `$` characters and replaces them with values like this:
 * If the `$` character is followed by a variable name, the variable is printed (external variables, e.g. `$X`, aren't supported).
 * If the `$` is not followed by a variable name, next argument from the argument list is printed.
 * To separate the variable name from the rest of the text, enclose the name in curly braces: `${name}`.
-This is not necessary if the next character cannot be part of a variable name.
-`${}` can be used to place an argument from the argument list immediately followed by some text.
+  This is not necessary if the next character cannot be part of a variable name.
+  `${}` can be used to place an argument from the argument list immediately followed by some text.
 * To print the `$` character, use `\$`.
 
 | `printf()` call                                                         | is the same as                                                           |
@@ -223,9 +205,10 @@ This is not necessary if the next character cannot be part of a variable name.
 | `printf("Coordinates: ${real}+${imag}i")`                               | `print("Coordinates: ", real, "+", imag, "i")`                           |
 | `printf("Price: \$$price")`                                             | `print("Price: $", price)`                                               |
 | `printf("Speed: ${}m/s", distance / time)`                              | `print("Speed: ", distance / time, "m/s")`                               |
+| `printf($"Speed: ${}m/s", distance / time)`                             | same as above, only using the formattable string literal.                |
 
 The function was inspired by string interpolation in Ruby, but there are differences.
-Firstly, the first argument to `printf` must be a string constant, as the formatting takes place at compile time
+Firstly, the first argument to `printf` must be a formattable string literal or a constant string expression, as the formatting takes place at compile time
 (Mindustry Logic doesn't provide means to do it at runtime). Secondly, only variables are allowed in curly braces,
 not expressions:
 
@@ -238,6 +221,43 @@ printf("Distance: ${len(x, y)}");   // No expressions allowed
 
 const fmt = "Position: $, $\n";
 printf(fmt, x, y);                  // Allowed - fmt is a string constant
+```
+
+The value returned by this function is always `NULL`. 
+
+## print
+
+The `print` function corresponds to the `print` instruction, but accepts more than one argument. All arguments passed to the function are printed using individual `print` instructions. The returned value is the value of the last argument.
+
+If the first argument passed to the print function is a formattable string literal, the function uses it to format its subsequent arguments in the same way as the `printf` function described above. In this case, the value returned by `print` is also `NULL`:
+
+```
+x = 5;
+y = 10;
+print($"Position: $, $\n", x, y);
+```
+
+## println
+
+The `println` function prints all its arguments and adds a newline (`"\n"`) at the end.
+The returned value is that of the last argument, or `null` if no argument was passed:
+
+```
+println("Position: ", x, ", ", y);
+println();
+println("Elapsed time: ", elapsed, " sec");
+printflush(message1);
+```
+
+If the first argument passed to the print function is a formattable string literal, the function uses it to format its subsequent arguments in the same way as the `printf` function described above, appending a newline after printing out the formatted string. In this case, the value returned by `println` is also `NULL`:
+
+```
+x = 5;
+y = 10;
+// All these function calls are equivalent
+println($"Position: $, $", x, y);
+print($"Position: $, $\n", x, y);
+printf("Position: $, $\n", x, y);
 ```
 
 ## remark
@@ -336,13 +356,13 @@ end
 
 ### Enhanced comments
 
-An alternative way to create remarks is the enhanced comment:
+An alternative way to create a remark is the enhanced comment:
 
 ```
 /// This is an enhanced comment
 ```
 
-which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment support string interpolation just as the `remark` function does (`/// Iteration: $i` is the same as `remark("Iteration: $i"")`), but there is no way to pass in additional parameters (`remark("Iteration: $", i + 1)`) cannot be expressed using an enhanced comment.       
+which produces the same result as `remark("This is an enhanced comment")`. The text of the remark is taken from the comment, with any leading and trailing whitespace trimmed. The enhanced comment supports string interpolation just as the `remark` function does (`/// Iteration: $i` is the same as `remark("Iteration: $i"")`), but there is no way to pass in additional parameters (`remark("Iteration: $", i + 1)`) cannot be expressed using an enhanced comment.       
 
 # User-defined functions
 

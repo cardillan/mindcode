@@ -135,6 +135,13 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitLiteral_minus(MindcodeParser.Literal_minusContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code literal_formattable}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLiteral_formattable(MindcodeParser.Literal_formattableContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code for_loop}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -611,6 +618,12 @@ public interface MindcodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLiteral_t(MindcodeParser.Literal_tContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#formattable_t}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFormattable_t(MindcodeParser.Formattable_tContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#null_t}.
 	 * @param ctx the parse tree

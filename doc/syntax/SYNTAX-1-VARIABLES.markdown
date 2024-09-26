@@ -530,6 +530,13 @@ end;
 
 the entire `if DEBUG ... end` statement will be skipped and not included in the compiled code.
 
+> [!NOTE]
+> It is not possible to define a constant for a formattable string literal. The following declaration isn't allowed:
+> 
+> `const FMT = $"Position: ($x, $y)";
+> 
+> The formattable string literal must be passed directly into the `print` or `println` functions.
+
 ## Built-in icons
 
 Mindustry has a set of built-in icons that are represented by specific Unicode characters and are properly rendered 

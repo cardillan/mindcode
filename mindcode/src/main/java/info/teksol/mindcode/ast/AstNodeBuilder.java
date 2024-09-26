@@ -580,6 +580,12 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitLiteral_formattable(MindcodeParser.Literal_formattableContext ctx) {
+        final String str = ctx.getText();
+        return new FormattableLiteral(ctx.getStart(), str.substring(2, str.length() - 1));
+    }
+
+    @Override
     public AstNode visitNot_expr(MindcodeParser.Not_exprContext ctx) {
         return new BinaryOp(ctx.getStart(),
                 visit(ctx.expression()),

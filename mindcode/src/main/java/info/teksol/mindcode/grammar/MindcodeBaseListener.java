@@ -233,6 +233,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLiteral_formattable(MindcodeParser.Literal_formattableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLiteral_formattable(MindcodeParser.Literal_formattableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterFor_loop(MindcodeParser.For_loopContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1116,6 +1128,18 @@ public class MindcodeBaseListener implements MindcodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLiteral_t(MindcodeParser.Literal_tContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFormattable_t(MindcodeParser.Formattable_tContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFormattable_t(MindcodeParser.Formattable_tContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

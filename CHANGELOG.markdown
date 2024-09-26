@@ -21,11 +21,12 @@ All notable changes to this project will be documented in this file.
 
 Experimental features may contain bugs or produce suboptimal code, and are subject to change.
 
-* Added [enhanced comments](SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks. 
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
 * Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](/doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-values-in-the-list).
 * Added a new GUI option to choose optimization level in the web app when compiling Mindcode or building Schemacode.
 * Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](/doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app, or written to the log when using the command line tool. 
+* Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does. 
+* Added [enhanced comments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks.
 
 ### Changed
 

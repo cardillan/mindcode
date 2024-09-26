@@ -220,6 +220,18 @@ public interface MindcodeListener extends ParseTreeListener {
 	 */
 	void exitLiteral_minus(MindcodeParser.Literal_minusContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code literal_formattable}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterLiteral_formattable(MindcodeParser.Literal_formattableContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code literal_formattable}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitLiteral_formattable(MindcodeParser.Literal_formattableContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code for_loop}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree
@@ -1025,6 +1037,16 @@ public interface MindcodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLiteral_t(MindcodeParser.Literal_tContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#formattable_t}.
+	 * @param ctx the parse tree
+	 */
+	void enterFormattable_t(MindcodeParser.Formattable_tContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#formattable_t}.
+	 * @param ctx the parse tree
+	 */
+	void exitFormattable_t(MindcodeParser.Formattable_tContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#null_t}.
 	 * @param ctx the parse tree

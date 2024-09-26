@@ -235,6 +235,8 @@ for i 1 .. TOTAL do
 end;
 ```
 
+Compile-time string concatenation isn't supported for [formattable string literals](SYNTAX.markdown#formattable-string-literals). 
+
 # Range expressions
 
 A special class of expressions are **range expressions**.
