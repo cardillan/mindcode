@@ -148,11 +148,6 @@ The following values may be used when declaring program parameters:
 Other values, including compile-time constant expressions (e.g. `5 * 3`) and non-constant mlog values (e.g. `@links`)
 are not allowed.
 
-> [!NOTE]
-> Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled 
-> code is constant. When assigning a non-constant value (for example `@links`) to a program parameter, the behavior 
-> of the program is generally undefined.   
-
 In Mindcode, program parameters are global (can be accessed from main code and all functions) even when their names 
 contain lower case letters, and once declared, are read-only. It is not allowed to assign a new value to them:
 
@@ -162,10 +157,13 @@ parameter = 20;       // error, cannot assign another value to parameter.
 ```
 
 This means there's always exactly one `set` instruction assigning a value to the program parameter, making the 
-purpose of the mlog variable in the compiled code clearer. 
+purpose of the mlog variable in the compiled code clearer.
 
-Unlike other types of variables, program parameters are never optimized away from the code. Only when the program 
+Unlike other types of variables, program parameters are never optimized away from the code. Only when the program
 parameter is not used at all in the program, it may be removed by the Dead Code optimization.
+
+> [!NOTE]
+> Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled code is constant. When assigning a non-constant value (for example `@links`) to a program parameter, or when the value of the parameter may be read before being initialized, the behavior of the resulting code is generally undefined.
 
 # External memory
 

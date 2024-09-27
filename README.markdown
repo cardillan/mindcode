@@ -2,26 +2,18 @@
 
 # Mindcode & Schemacode
 
-Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a 
-game in the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to 
-assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone
-(see [the documentation](doc/syntax/SYNTAX.markdown)).
+Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a game in the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
 Mindcode focuses of the following priorities:
 
-* Keeping terminology and naming convention close to Mindustry Logic.
-* Providing language constructs that are not prohibitively expensive given the astonishingly slow speeds
-  and limited instruction space of Mindustry processors.
-* Employing various [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) to produce efficient code. 
+* Simplicity: support for easy creation of short scripts as well as larger projects. Names and identifiers for Mindustry Logic objects and functions are derived from Mindustry Logic itself with minimal alterations.
+* Efficiency: mlog code produced by Mindcode is one of the fastest among comparable mlog compilers, thanks to many different [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown).
+* Reliability: the project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they often pertain to new functionality and get usually resolved quickly. 
 
 > [!NOTE]
-> Please have a look at planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142).
-> These changes will be substantial, and any comments and suggestions are welcome now while the changes are still 
-> being deliberated.
+> Please have a look at planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142). These changes will be substantial, and any comments and suggestions are welcome now while the changes are still being deliberated.
 
-**Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text 
-file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into 
-Mindustry schematics, either as a binary `.msch` file, or as a text. Processors can be included in these schematics, 
+**Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into Mindustry schematics, either as a binary `.msch` file, or as a text. Processors can be included in these schematics, 
 complete with the code (specified in Mindcode or Mindustry Logic language) and linked blocks.
 
 ## Latest development
@@ -38,25 +30,18 @@ A [changelog](CHANGELOG.markdown) is now maintained for releases.
 
 ## Using Mindcode
 
-Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area,
-then press the **Compile** button. The _Mindustry Logic_ text area will contain the Logic version of your Mindcode. 
-Copy the compiled version. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. 
-Select **Import from Clipboard**. Mindustry is now ready to execute your code. 
+Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mindustry Logic_ text area will contain the Logic version of your Mindcode. Copy the compiled version. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. 
+Select **Import from Clipboard**. Mindustry is now ready to execute your code.
 
-It is also possible use the [command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying 
-the compiled code into the clipboard automatically if desired. The command line compiler can be set up in the 
-following way:
+You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. If your code doesn't interact with a contents of the Mindustry world, the output produced by your code will be displayed.   
+
+It is also possible use the [command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying the compiled code into the clipboard automatically if desired. The command line compiler can be set up in the following way:
 
 1. Download and install [Eclipse Temurin version 17](https://adoptium.net/temurin/releases/?version=17).
-2. Download `mindcode.jar` from the [releases page](https://github.com/cardillan/mindcode/releases) and place it in 
-   a directory on your computer.
-3. To run the command line compiler, use `java.exe -jar mindcode.jar <arguments>`. Provide full 
-   paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the 
-   `mindcode.jar` file downloaded in the second step. `<arguments>` are the command line arguments passed to the 
-   mindcode compiler.
+2. Download `mindcode.jar` from the [releases page](https://github.com/cardillan/mindcode/releases) and place it in a directory on your computer.
+3. To run the command line compiler, use `java.exe -jar mindcode.jar <arguments>`. Provide full paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the `mindcode.jar` file downloaded in the second step. `<arguments>` are the command line arguments passed to the Mindcode compiler.
 
-For example, the following command compiles `program.mnd` into `program.mlog` and copies the resulting mlog code 
-into the clipboard:
+For example, the following command compiles `program.mnd` into `program.mlog` and copies the resulting mlog code into the clipboard:
 
 ```
 java.exe -jar mindcode.jar cm program.mnd program.mlog -c
@@ -66,10 +51,7 @@ Documentation for the command line tool is available [here](doc/syntax/TOOLS-CMD
 
 ### Mindcode Syntax
 
-Please read the [syntax](doc/syntax/SYNTAX.markdown) document for a complete description of Mindcode syntax.
-The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus
-always up-to-date with the most-recent version of Mindcode. If you programmed in any high-level language, you should
-feel right at home.
+Please read the [syntax](doc/syntax/SYNTAX.markdown) document for a complete description of Mindcode syntax. The samples in the `src/main/resources/samples` directory are compiled on every test run and are thus always up-to-date with the most-recent version of Mindcode. If you programmed in any high-level language, you should feel right at home.
 
 ### VS Code syntax highlighting
 
@@ -664,6 +646,7 @@ while
 
 If you don't know much about Mindustry Logic, you can read more information about them here:
 
+* [Mlog Documentation](https://yrueii.github.io/Mlog%20Documentation/) <small>Sep 2024</small>
 * [Logic in 6.0](https://www.reddit.com/r/Mindustry/comments/ic9wrm/logic_in_60/) <small>Aug 2020</small>
 * [How To Use Processors in 6.0](https://steamcommunity.com/sharedfiles/filedetails/?id=2268059244) <small>Nov 2020</small>
 * [An Overly In-Depth Logic Guide](https://www.reddit.com/r/Mindustry/comments/kfea1e/an_overly_indepth_logic_guide/) <small>Dec 2020</small>
@@ -680,8 +663,7 @@ There are two options for getting Mindcode up and running on your own machine. U
 docker-compose up --build
 ```
 
-It can take a few minutes to download and compile all the required parts the first time you run this, but subsequent
-runs will be a lot faster.
+It can take a few minutes to download and compile all the required parts the first time you run this, but subsequent runs will be a lot faster.
 
 The Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
 
@@ -690,13 +672,11 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 1. Install Java 17+, Maven 3.6, and PostgreSQL
 2. Create a database in PostgreSQL named `mindcode_development`
 
-Note: Docker configuration has been updated to allow running Mindcode in Docker alongside a local PostgreSQL 
-installation.  
+Note: Docker configuration has been updated to allow running Mindcode in Docker alongside a local PostgreSQL installation.  
 
 #### Windows 
 
-Set environment variables with the PostgreSQL connection parameters. You can set them by running the following 
-commands in the console: 
+Set environment variables with the PostgreSQL connection parameters. You can set them by running the following commands in the console: 
 
 ```
 SET SPRING_DATASOURCE_URL=jdbc:postgresql://localhost/mindcode_development
@@ -704,15 +684,13 @@ SET SPRING_DATASOURCE_USERNAME=postgres_username
 SET SPRING_DATASOURCE_PASSWORD=postgres_password
 ```
 
-You also need to set a `JAVA_HOME` variable pointing to the directory containing your Java 17 installation, for 
-example (the exact path depends on the distribution and version of Java you've installed):
+You also need to set a `JAVA_HOME` variable pointing to the directory containing your Java 17 installation, for example (the exact path depends on the distribution and version of Java you've installed):
 
 ```
 SET JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-17.0.6.10-hotspot
 ```
 
-(You can also set all these variables permanently in the _System Properties_ dialog, in the _Advanced_ tab, after 
-pressing the _Environment Variables..._ button.)
+(You can also set all these variables permanently in the _System Properties_ dialog, in the _Advanced_ tab, after pressing the _Environment Variables..._ button.)
 
 Then, using the same console window, run:
 
@@ -754,22 +732,13 @@ The Mindcode UI will now be running on localhost, port 8080. Visit http://localh
 
 #### IDE
 
-To run the application for your IDE, set the environment variables as described above (some IDEs allow to set them 
-just in the IDE) and set the startup class to `info.teksol.mindcode.webapp.WebappApplication`. When you run or debug 
-the project, the Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact 
-with it.
+To run the application for your IDE, set the environment variables as described above (some IDEs allow to set them just in the IDE) and set the startup class to `info.teksol.mindcode.webapp.WebappApplication`. When you run or debug the project, the Mindcode UI will now be running on localhost, port 8080. Visit http://localhost:8080/ to interact with it.
 
 ### Contributing 
 
-The compiler was written in a Test-Driven Development fashion. If you can, please look in `src/main/test` and attempt to
-emulate an existing test, so that we can prove that your proposal works as intended.
+The compiler was written in a Test-Driven Development fashion. If you can, please look in `src/main/test` and attempt to emulate an existing test, so that we can prove that your proposal works as intended.
 
-Tests in the `info.teksol.mindcode.processor` package are particularly useful. They compile a script and run it
-on an emulated processor, comparing values produced by `print` instructions with expected ones. The processor emulator
-cannot execute instructions interfacing with the Mindustry world - except Memory Bank and MemoryCell - but it can
-process all kinds of Mindcode control elements. Implementing some more complicated algorithms using loops, 
-conditional statements and/or function helps tremendously. (The emulated processor runs much faster than Mindcode
-processors, so even more complicated algorithms are feasible to run.)
+Tests in the `info.teksol.mindcode.processor` package are particularly useful. They compile a script and run it on an emulated processor, comparing values produced by `print` instructions with expected ones. The processor emulator cannot execute instructions interfacing with the Mindustry world - except Memory Bank and MemoryCell - but it can process all kinds of Mindcode control elements. Implementing some more complicated algorithms using loops, conditional statements and/or function helps tremendously. (The emulated processor runs much faster than Mindcode processors, so even more complicated algorithms are feasible to run.)
 
 ## Roadmap
 
@@ -777,4 +746,4 @@ Or perhaps a wish-list, can be found [here](ROADMAP.markdown).
 
 # License
 
-MIT. See LICENSE for the full text of the license.
+MIT. See [LICENSE](LICENSE) for the full text of the license.
