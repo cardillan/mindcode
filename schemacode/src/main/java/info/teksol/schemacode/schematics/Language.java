@@ -1,4 +1,4 @@
-package info.teksol.schemacode.schema;
+package info.teksol.schemacode.schematics;
 
 public enum Language {
     NONE,

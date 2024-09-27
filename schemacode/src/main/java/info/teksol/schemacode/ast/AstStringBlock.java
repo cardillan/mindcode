@@ -1,7 +1,7 @@
 package info.teksol.schemacode.ast;
 
 import info.teksol.schemacode.SchematicsInternalError;
-import info.teksol.schemacode.schema.SchematicsBuilder;
+import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 public record AstStringBlock(String literal) implements AstText {
 

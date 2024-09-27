@@ -49,6 +49,15 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("?")
                 .setDefault(new File("-"));
 
+        addCompilerOptions(subparser, defaults);
+        addRunOptions(subparser, defaults);
+        addOptimizationOptions(subparser, defaults);
+        addDebugOptions(subparser, defaults);
+
+        return subparser;
+    }
+
+    void addRunOptions(Subparser subparser, CompilerProfile defaults) {
         ArgumentGroup runOptions = subparser.addArgumentGroup("run options")
                 .description("""
                         Options to specify if and how to run the compiled code on an emulated processor. The emulated \
@@ -66,10 +75,6 @@ public class CompileMindcodeAction extends ActionHandler {
                 .choices(Arguments.range(1, 1_000_000_000))
                 .type(Integer.class)
                 .setDefault(defaults.getStepLimit());
-
-        configureMindcodeCompiler(subparser, defaults);
-
-        return subparser;
     }
 
     @Override

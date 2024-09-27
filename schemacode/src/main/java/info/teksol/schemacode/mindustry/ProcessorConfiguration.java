@@ -7,9 +7,9 @@ import info.teksol.schemacode.ast.AstLink;
 import info.teksol.schemacode.ast.AstProcessor;
 import info.teksol.schemacode.config.ByteArray;
 import info.teksol.schemacode.config.Configuration;
-import info.teksol.schemacode.schema.Block;
-import info.teksol.schemacode.schema.BlockPosition;
-import info.teksol.schemacode.schema.SchematicsBuilder;
+import info.teksol.schemacode.schematics.Block;
+import info.teksol.schemacode.schematics.BlockPosition;
+import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.io.*;
 import java.nio.charset.Charset;

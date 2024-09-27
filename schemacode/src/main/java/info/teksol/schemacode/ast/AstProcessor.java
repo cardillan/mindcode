@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.schemacode.schema.Language;
+import info.teksol.schemacode.schematics.Language;
 
 import java.util.List;
 

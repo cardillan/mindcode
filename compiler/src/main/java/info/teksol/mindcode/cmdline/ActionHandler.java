@@ -30,8 +30,55 @@ abstract class ActionHandler {
 
     abstract void handle(Namespace arguments);
 
-    void configureMindcodeCompiler(Subparser subparser, CompilerProfile defaults) {
+    void addAllCompilerOptions(Subparser subparser, CompilerProfile defaults) {
+        addCompilerOptions(subparser, defaults);
+        addOptimizationOptions(subparser, defaults);
+        addDebugOptions(subparser, defaults);
+    }
 
+    void addCompilerOptions(Subparser subparser, CompilerProfile defaults) {
+        ArgumentGroup compiler = subparser.addArgumentGroup("compiler options");
+
+        compiler.addArgument("-t", "--target")
+                .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor," +
+                        " version 7 rev. A with standard processor or world processor)")
+                .choices("6", "7s", "7w", "7as", "7aw")
+                .setDefault("7w");
+
+        compiler.addArgument("-i", "--instruction-limit")
+                .help("sets the maximal number of instructions for the speed optimizations")
+                .choices(Arguments.range(1, CompilerProfile.MAX_INSTRUCTIONS))
+                .type(Integer.class)
+                .setDefault(CompilerProfile.DEFAULT_INSTRUCTIONS);
+
+        compiler.addArgument("-e", "--passes")
+                .help("sets maximal number of optimization passes to be made")
+                .choices(Arguments.range(1, CompilerProfile.MAX_PASSES))
+                .type(Integer.class)
+                .setDefault(CompilerProfile.DEFAULT_CMDLINE_PASSES);
+
+        compiler.addArgument("-g", "--goal")
+                .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
+                .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class))
+                .setDefault(defaults.getGoal());
+
+        compiler.addArgument("-r", "--remarks")
+                .help("controls remarks propagation to the compiled code: none (remarks are removed), " +
+                        "passive (remarks are not executed), or active (remarks are printed)")
+                .type(Arguments.caseInsensitiveEnumType(Remarks.class))
+                .setDefault(defaults.getRemarks());
+
+        /*
+        compiler.addArgument("-m", "--memory-model")
+                .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
+                        "aliased (a memory block may be accessed through different variables), or restricted " +
+                        "(a memory block will never be accessed through different variables)")
+                .type(Arguments.caseInsensitiveEnumType(MemoryModel.class))
+                .setDefault(defaults.getMemoryModel());
+        */
+    }
+
+    void addOptimizationOptions(Subparser subparser, CompilerProfile defaults) {
         ArgumentGroup optimizations = subparser.addArgumentGroup("optimization levels")
                 .description("Options to specify global and individual optimization levels. " +
                         "Individual optimizers use global level when not explicitly set. Available optimization levels " +
@@ -50,45 +97,9 @@ abstract class ActionHandler {
                     .dest(optimization.name())
                     .metavar("LEVEL");
         }
+    }
 
-        subparser.addArgument("-t", "--target")
-                .help("selects target processor version and edition (version 6, version 7 with standard processor or world processor," +
-                        " version 7 rev. A with standard processor or world processor)")
-                .choices("6", "7s", "7w", "7as", "7aw")
-                .setDefault("7w");
-
-        subparser.addArgument("-i", "--instruction-limit")
-                .help("sets the maximal number of instructions for the speed optimizations")
-                .choices(Arguments.range(1, CompilerProfile.MAX_INSTRUCTIONS))
-                .type(Integer.class)
-                .setDefault(CompilerProfile.DEFAULT_INSTRUCTIONS);
-
-        subparser.addArgument("-e", "--passes")
-                .help("sets maximal number of optimization passes to be made")
-                .choices(Arguments.range(1, CompilerProfile.MAX_PASSES))
-                .type(Integer.class)
-                .setDefault(CompilerProfile.DEFAULT_CMDLINE_PASSES);
-
-        subparser.addArgument("-g", "--goal")
-                .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
-                .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class))
-                .setDefault(defaults.getGoal());
-
-        subparser.addArgument("-r", "--remarks")
-                .help("controls remarks propagation to the compiled code: none (remarks are removed), " +
-                        "passive (remarks are not executed), or active (remarks are printed)")
-                .type(Arguments.caseInsensitiveEnumType(Remarks.class))
-                .setDefault(defaults.getRemarks());
-
-        /*
-        subparser.addArgument("-m", "--memory-model")
-                .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
-                        "aliased (a memory block may be accessed through different variables), or restricted " +
-                        "(a memory block will never be accessed through different variables)")
-                .type(Arguments.caseInsensitiveEnumType(MemoryModel.class))
-                .setDefault(defaults.getMemoryModel());
-        */
-
+    void addDebugOptions(Subparser subparser, CompilerProfile defaults) {
         ArgumentGroup debug = subparser.addArgumentGroup("debug output options");
 
         debug.addArgument("-p", "--parse-tree")

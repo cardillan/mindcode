@@ -3,7 +3,7 @@ package info.teksol.schemacode.mindustry;
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.IntConfiguration;
-import info.teksol.schemacode.schema.Block;
+import info.teksol.schemacode.schematics.Block;
 
 public record UnitPlan(String unitName) implements Configuration {
 

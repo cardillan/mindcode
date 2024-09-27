@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.schemacode.schema.SchematicsBuilder;
+import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;

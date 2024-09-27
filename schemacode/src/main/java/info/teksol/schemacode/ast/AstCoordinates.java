@@ -1,7 +1,7 @@
 package info.teksol.schemacode.ast;
 
 import info.teksol.schemacode.mindustry.Position;
-import info.teksol.schemacode.schema.SchematicsBuilder;
+import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 public record AstCoordinates(Position coordinates, boolean relative, String relativeTo) implements AstSchemaItem {
 

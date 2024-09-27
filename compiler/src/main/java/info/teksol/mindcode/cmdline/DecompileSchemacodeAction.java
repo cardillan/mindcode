@@ -3,10 +3,10 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.schemacode.mindustry.SchematicsIO;
-import info.teksol.schemacode.schema.BlockOrder;
-import info.teksol.schemacode.schema.Decompiler;
-import info.teksol.schemacode.schema.DirectionLevel;
-import info.teksol.schemacode.schema.Schematic;
+import info.teksol.schemacode.schematics.BlockOrder;
+import info.teksol.schemacode.schematics.Decompiler;
+import info.teksol.schemacode.schematics.DirectionLevel;
+import info.teksol.schemacode.schematics.Schematic;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -22,12 +22,12 @@ public class DecompileSchemacodeAction extends ActionHandler {
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Subparser subparser = subparsers.addParser(Action.DECOMPILE_SCHEMA.getShortcut())
-                .aliases("decompile-schema")
-                .description("Decompile a binary msch file into schema definition file.")
-                .help("Decompile a binary msch file into schema definition file.");
+                .aliases("decompile-schema", "decompile-schematic")
+                .description("Decompile a binary msch file into schematic definition file.")
+                .help("Decompile a binary msch file into schematic definition file.");
 
         subparser.addArgument("input")
-                .help("Mindustry schema file to be decompiled into Schema Definition File.")
+                .help("Mindustry schematic file to be decompiled into Schematic Definition File.")
                 .type(inputFileType);
 
         subparser.addArgument("output")
@@ -72,12 +72,12 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .setDefault(false);
 
         subparser.addArgument("-s", "--sort-order")
-                .help("specifies how to order blocks in the decompiled schema definition file")
+                .help("specifies how to order blocks in the decompiled schematic definition file")
                 .type(Arguments.caseInsensitiveEnumType(BlockOrder.class))
                 .setDefault(BlockOrder.ORIGINAL);
 
         subparser.addArgument("-d", "--direction")
-                .help("specifies when to include direction clause in decompiled schema definition file: " +
+                .help("specifies when to include direction clause in decompiled schematic definition file: " +
                         "only for blocks affected by rotation, only for block with non-default direction, " +
                         "or for all blocks")
                 .type(Arguments.caseInsensitiveEnumType(DirectionLevel.class))

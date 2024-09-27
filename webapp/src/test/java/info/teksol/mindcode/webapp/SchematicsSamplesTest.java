@@ -36,10 +36,10 @@ class SchematicsSamplesTest {
 
     private void evaluateSample(File file) throws IOException {
         String sample = Files.readString(file.toPath());
-        buildSchematics(sample, file);
+        buildSchematic(sample, file);
     }
 
-    private void buildSchematics(String sample, File file) {
+    private void buildSchematic(String sample, File file) {
         CompilerOutput<byte[]> output = SchemacodeCompiler.compile(sample, CompilerProfile.fullOptimizations(true), null);
         output.errors().forEach(Assertions::fail);
         assertFalse(output.hasErrors(), "Failed to compile sample " + file.getPath());

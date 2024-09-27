@@ -1,15 +1,11 @@
-package info.teksol.schemacode.schema;
+package info.teksol.schemacode.schematics;
 
 import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.schemacode.SchemacodeMessage;
 import info.teksol.schemacode.mindustry.Position;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 

@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 * Added secondary set of icons representing constants with dashes in identifiers replaced by underscores (e.g. `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will be desupported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)
 * Added support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be used instead. Support for program parametrization through global variables will be removed in a future release.     
 * Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by the [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) optimization. The keyword can only be used when declaring a function.
-* Added a new schematics sample with quite a sophisticated code [on the Schematics page](http://mindcode.herokuapp.com/?s=overdrive-dome-supply). It consists of an overdrive dome supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of supported types, switches to the preferred unit type when it becomes available, and rebinds units (possibly switching the type again) if units in use are destroyed or taken over by the player or a rogue processor.  
+* Added a new schematic sample with quite a sophisticated code [on the Schematics page](http://mindcode.herokuapp.com/?s=overdrive-dome-supply). It consists of an overdrive dome supplied by units controlled by a microprocessor. The microprocessor searches for available units among a list of supported types, switches to the preferred unit type when it becomes available, and rebinds units (possibly switching the type again) if units in use are destroyed or taken over by the player or a rogue processor.  
 
 #### Experimental features
 
@@ -85,7 +85,7 @@ Experimental features may contain bugs or produce suboptimal code, and are subje
 
 * Added support for specifying processor code (both Mindcode and mlog) as a concatenation of multiple code snippets
   from various sources (string literal, string constant or external file). 
-* Added new Mandelbrot Generator schematics example.
+* Added new Mandelbrot Generator schematic example.
 
 ### Miscellaneous
 
@@ -564,7 +564,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Fixed
 
-* Fixed the command line tool application crashing when decompiling a schematics.  
+* Fixed the command line tool application crashing when decompiling a schematic.  
 
 ## 2023-05-20
 
@@ -577,8 +577,8 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   and in the command line tool, so the change doesn't break existing code.
 * Added support for the reintroduced `ucontrol pathfind` instruction. When issued, navigates current unit to given 
   location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS_V7A.markdown#instruction-ucontrol). 
-* Added command line options for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schema-action-help)
-  to specify order in which blocks are written to the schema definition file and when to generate the `facing` 
+* Added command line options for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schematic-action-help)
+  to specify order in which blocks are written to the schematic definition file and when to generate the `facing` 
   directive.
 * Added support for [color configuration](doc/syntax/SCHEMACODE.markdown#color-configuration) and 
   [unit configuration](doc/syntax/SCHEMACODE.markdown#unit-configuration) in Schemacode. 

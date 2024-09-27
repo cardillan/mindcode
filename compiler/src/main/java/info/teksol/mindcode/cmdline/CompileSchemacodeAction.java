@@ -23,24 +23,24 @@ public class CompileSchemacodeAction extends ActionHandler {
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
         Subparser subparser = subparsers.addParser(Action.COMPILE_SCHEMA.getShortcut())
-                .aliases("compile-schema")
-                .description("Compile a schema definition file into binary msch file.")
-                .help("Compile a schema definition file into binary msch file.");
+                .aliases("compile-schema", "compile-schematic")
+                .description("Compile a schematic definition file into binary msch file.")
+                .help("Compile a schematic definition file into binary msch file.");
 
         subparser.addArgument("-c", "--clipboard")
-                .help("encode schematics into text representation and paste into clipboard")
+                .help("encode the created schematic into text representation and paste into clipboard")
                 .action(Arguments.storeTrue());
 
         ArgumentGroup files = subparser.addArgumentGroup("input/output files");
 
         files.addArgument("input")
-                .help("Schema definition file to be compiled into a binary msch file.")
+                .help("Schematic definition file to be compiled into a binary msch file.")
                 .nargs("?")
                 .type(inputFileType.acceptSystemIn())
                 .setDefault(new File("-"));
 
         files.addArgument("output")
-                .help("Output file to receive binary Mindustry schema (msch).")
+                .help("Output file to receive the resulting binary Mindustry schematic file (.msch).")
                 .nargs("?")
                 .type(Arguments.fileType().verifyCanCreate());
 
@@ -50,14 +50,16 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .type(Arguments.fileType().verifyCanCreate())
                 .setDefault(new File("-"));
 
-        configureMindcodeCompiler(subparser, defaults);
+        ArgumentGroup schematics = subparser.addArgumentGroup("schematic creation");
 
-        files.addArgument("-a", "--add-tag")
-                .help("defines additional tag(s) to add to the schematics, plain text and symbolic icon names are supported")
+        schematics.addArgument("-a", "--add-tag")
+                .help("defines additional tag(s) to add to the schematic, plain text and symbolic icon names are supported")
                 .metavar("TAG")
                 .type(String.class)
                 .nargs("+")
                 .setDefault(List.of());
+
+        addAllCompilerOptions(subparser, defaults);
 
         return subparser;
     }

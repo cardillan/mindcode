@@ -1,7 +1,7 @@
-package info.teksol.schemacode.schema;
+package info.teksol.schemacode.schematics;
 
-import info.teksol.schemacode.config.Configuration;
 import info.teksol.mindcode.mimex.BlockType;
+import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.mindustry.ConfigurationType;
 import info.teksol.schemacode.mindustry.Implementation;
 import info.teksol.schemacode.mindustry.Position;

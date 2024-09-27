@@ -9,8 +9,8 @@ import info.teksol.schemacode.grammar.SchemacodeLexer;
 import info.teksol.schemacode.grammar.SchemacodeParser;
 import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
 import info.teksol.schemacode.mindustry.SchematicsIO;
-import info.teksol.schemacode.schema.Schematic;
-import info.teksol.schemacode.schema.SchematicsBuilder;
+import info.teksol.schemacode.schematics.Schematic;
+import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.antlr.v4.runtime.*;
 
 import java.io.ByteArrayOutputStream;

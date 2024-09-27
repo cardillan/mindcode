@@ -29,12 +29,12 @@
             <input type="hidden" name="id" value="${model.id}">
         </#if>
         <div class="grid grid-cols-2 gap-2">
-            <@com.codeareas sourceTitle="Schemacode definition:" targetTitle="Encoded schematics:" sourceLines="Y" targetLines="N" />
+            <@com.codeareas sourceTitle="Schemacode definition:" targetTitle="Encoded schematic:" sourceLines="Y" targetLines="N" />
             <div>
                 <div class="flex items-center space-x-3">
                     <@com.optimizationSettings />
                     <input type="submit" value="Build" class="px-4 py-2 bg-gray-600 text-white my-4 rounded"/>
-                    <@com.link href="/schematics/?s=clean">Start with a new schematics</@com.link>
+                    <@com.link href="/schematics/?s=clean">Start with a new schematic</@com.link>
                 </div>
                 <@com.footerLinks mindcode="N" />
             </div>

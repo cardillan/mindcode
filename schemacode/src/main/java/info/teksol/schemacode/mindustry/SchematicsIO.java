@@ -4,9 +4,9 @@ import info.teksol.mindcode.Tuple2;
 import info.teksol.mindcode.mimex.BlockType;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.config.*;
-import info.teksol.schemacode.schema.Block;
-import info.teksol.schemacode.schema.BlockPositionMap;
-import info.teksol.schemacode.schema.Schematic;
+import info.teksol.schemacode.schematics.Block;
+import info.teksol.schemacode.schematics.BlockPositionMap;
+import info.teksol.schemacode.schematics.Schematic;
 
 import java.io.*;
 import java.util.*;

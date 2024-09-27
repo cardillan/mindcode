@@ -22,7 +22,7 @@ Function reference for individual compiler versions:
 * [Function reference for Mindustry Logic 7](FUNCTIONS_V7.markdown)
 * [Function reference for Mindustry Logic 7A](FUNCTIONS_V7A.markdown)
 
-Schemacode, a schematics definition language, is covered here:
+Schemacode, a schematic definition language, is covered here:
 
 * [Schemacode](SCHEMACODE.markdown)
 

@@ -51,7 +51,7 @@ public class SchematicsController {
                         reader.transferTo(out);
                         return out.toString();
                     } catch (IOException e) {
-                        throw new RuntimeException("Failed to read schematics sample: " + filename);
+                        throw new RuntimeException("Failed to read schematic sample: " + filename);
                     }
                 })
                 .toList();

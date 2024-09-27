@@ -13,8 +13,8 @@ The command line tool supports three different actions. The action is specified 
 which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
-* `cs` or `compile-schema`: builds a schematic from Schemacode source into a binary `.msch` file.
-* `ds` or `decompile-schema`: decompiles a binary `.msch` file to Schemacode source.
+* `cs` or `compile-schematic`: builds a schematic from Schemacode source into a binary `.msch` file.
+* `ds` or `decompile-schematic`: decompiles a binary `.msch` file to Schemacode source.
 
 ## Input/output files
 
@@ -36,11 +36,11 @@ action was successful, the output is copied to the clipboard and can be pasted d
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the 
   processor configuration screen, by using **Edit/Import from clipboard** command.
 * _Compile schema_ action: clipboard contains schematic encoded into mindustry compatible string, which can be pasted 
-  as new schematics on the Schematics screen, by using **Import schematics/Import from clipboard** command. 
+  as new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
 ## Running the compiled code
 
-When compiling a Mindcode source, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but only supports those operations that do not interact with the Mindustry World (specifically, operations that do not input information from the Mindustry World). The exception to this rule is access to external memory cells and memory banks. The emulated processor is equipped with nine memory cells and nine memory banks accessible under the names of `cell1` to `cell9` and `bank1` to `bank9` (they cannot be accessed using the `getlink` instruction). At the beginning of the executions all these memory cells and banks are empty.
+When performing the _Compile Mindcode_ action, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but only supports those operations that do not interact with the Mindustry World (specifically, operations that do not input information from the Mindustry World). The exception to this rule is access to external memory cells and memory banks. The emulated processor is equipped with nine memory cells and nine memory banks accessible under the names of `cell1` to `cell9` and `bank1` to `bank9` (they cannot be accessed using the `getlink` instruction). At the beginning of the executions all these memory cells and banks are empty.
 
 The execution of the code ends when one of the following conditions is encountered:
 * end of the instruction list is reached,
@@ -48,7 +48,7 @@ The execution of the code ends when one of the following conditions is encounter
 * execution step limits is exceeded,
 * an unsupported operation is attempted.
 
-When the execution ends, the contents of the print buffer is written to the output.
+When the execution ends, the contents of the print buffer is written to the log file.
 
 ## Compiler options
 
@@ -73,13 +73,13 @@ the command line help is included here.
 #generate:COMPILE_MINDCODE
 ```
 
-## Compile Schema action help
+## Compile Schematic action help
 
 ```
 #generate:COMPILE_SCHEMA
 ```
 
-## Decompile Schema action help
+## Decompile Schematic action help
 
 ```
 #generate:DECOMPILE_SCHEMA

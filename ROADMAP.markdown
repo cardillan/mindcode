@@ -437,7 +437,7 @@ doing them isn't clear yet.
 * Function libraries. Now that inline and stackless functions are really useful, libraries might make sense.
 * Multiprocessing support - some kind of library or framework (probably) that could be used to
   provide high-level support for inter-processor communication using either memory cells/banks,
-  or even unit flags. Schemacode would be used to produce a schematics with several processors.
+  or even unit flags. Schemacode would be used to produce a schematic with several processors.
 
 ### Parallel comparison
 

@@ -3,7 +3,7 @@ package info.teksol.schemacode.config;
 import info.teksol.schemacode.IOConsumer;
 import info.teksol.schemacode.IOSupplier;
 import info.teksol.schemacode.mindustry.Position;
-import info.teksol.schemacode.schema.Block;
+import info.teksol.schemacode.schematics.Block;
 
 import java.io.IOException;
 import java.util.ArrayList;

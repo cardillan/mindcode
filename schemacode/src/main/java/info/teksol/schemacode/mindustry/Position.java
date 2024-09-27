@@ -2,7 +2,7 @@ package info.teksol.schemacode.mindustry;
 
 import info.teksol.schemacode.config.Configuration;
 import info.teksol.schemacode.config.PositionArray;
-import info.teksol.schemacode.schema.Block;
+import info.teksol.schemacode.schematics.Block;
 
 import java.util.function.UnaryOperator;
 

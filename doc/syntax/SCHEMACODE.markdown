@@ -495,7 +495,7 @@ facing <orientation>
 
 e.g. `@conveyor at (2, 4) facing west`.
 
-The cardinal directions are related to the coordinate system of the schematics, i.e. conveyor facing east is moving 
+The cardinal directions are related to the coordinate system of the schematic, i.e. conveyor facing east is moving 
 items from left to right.
 
 ## Block configuration

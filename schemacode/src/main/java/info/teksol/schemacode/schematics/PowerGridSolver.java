@@ -1,4 +1,4 @@
-package info.teksol.schemacode.schema;
+package info.teksol.schemacode.schematics;
 
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.config.PositionArray;

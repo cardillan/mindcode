@@ -1,4 +1,4 @@
-package info.teksol.schemacode.schema;
+package info.teksol.schemacode.schematics;
 
 import java.util.List;
 

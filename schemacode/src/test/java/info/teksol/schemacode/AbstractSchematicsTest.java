@@ -10,8 +10,8 @@ import info.teksol.schemacode.config.PositionArray;
 import info.teksol.schemacode.grammar.SchemacodeParser.DefinitionsContext;
 import info.teksol.schemacode.mindustry.Direction;
 import info.teksol.schemacode.mindustry.Position;
-import info.teksol.schemacode.schema.Block;
-import info.teksol.schemacode.schema.Schematic;
+import info.teksol.schemacode.schematics.Block;
+import info.teksol.schemacode.schematics.Schematic;
 import org.intellij.lang.annotations.Language;
 
 import java.util.ArrayList;

@@ -2,7 +2,7 @@ package info.teksol.schemacode.ast;
 
 import info.teksol.schemacode.AbstractSchematicsTest;
 import info.teksol.schemacode.mindustry.Position;
-import info.teksol.schemacode.schema.Language;
+import info.teksol.schemacode.schematics.Language;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

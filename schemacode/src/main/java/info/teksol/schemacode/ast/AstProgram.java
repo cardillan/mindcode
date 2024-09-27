@@ -1,6 +1,6 @@
 package info.teksol.schemacode.ast;
 
-import info.teksol.schemacode.schema.SchematicsBuilder;
+import info.teksol.schemacode.schematics.SchematicsBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -13,8 +13,8 @@ The command line tool supports three different actions. The action is specified 
 which must be one of the following:
 
 * `cm` or `compile-mindcode`: compiles a Mindcode source to mlog.
-* `cs` or `compile-schema`: builds a schematic from Schemacode source into a binary `.msch` file.
-* `ds` or `decompile-schema`: decompiles a binary `.msch` file to Schemacode source.
+* `cs` or `compile-schematic`: builds a schematic from Schemacode source into a binary `.msch` file.
+* `ds` or `decompile-schematic`: decompiles a binary `.msch` file to Schemacode source.
 
 ## Input/output files
 
@@ -36,11 +36,11 @@ action was successful, the output is copied to the clipboard and can be pasted d
 * _Compile Mindcode_ action: clipboard contains mlog instructions which can be pasted into a processor on the 
   processor configuration screen, by using **Edit/Import from clipboard** command.
 * _Compile schema_ action: clipboard contains schematic encoded into mindustry compatible string, which can be pasted 
-  as new schematics on the Schematics screen, by using **Import schematics/Import from clipboard** command. 
+  as new schematic on the Schematics screen, by using **Import schematic.../Import from clipboard** command. 
 
 ## Running the compiled code
 
-When compiling a Mindcode source, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but only supports those operations that do not interact with the Mindustry World (specifically, operations that do not input information from the Mindustry World). The exception to this rule is access to external memory cells and memory banks. The emulated processor is equipped with nine memory cells and nine memory banks accessible under the names of `cell1` to `cell9` and `bank1` to `bank9` (they cannot be accessed using the `getlink` instruction). At the beginning of the executions all these memory cells and banks are empty.
+When performing the _Compile Mindcode_ action, it is possible to use the `--run` command line option to run the resulting mlog code on an emulated processor. The processor is much faster than Mindustry Logic processors, but only supports those operations that do not interact with the Mindustry World (specifically, operations that do not input information from the Mindustry World). The exception to this rule is access to external memory cells and memory banks. The emulated processor is equipped with nine memory cells and nine memory banks accessible under the names of `cell1` to `cell9` and `bank1` to `bank9` (they cannot be accessed using the `getlink` instruction). At the beginning of the executions all these memory cells and banks are empty.
 
 The execution of the code ends when one of the following conditions is encountered:
 * end of the instruction list is reached,
@@ -48,7 +48,7 @@ The execution of the code ends when one of the following conditions is encounter
 * execution step limits is exceeded,
 * an unsupported operation is attempted.
 
-When the execution ends, the contents of the print buffer is written to the output.
+When the execution ends, the contents of the print buffer is written to the log file.
 
 ## Compiler options
 
@@ -78,30 +78,40 @@ Actions:
   ACTION                 Type of processing
     cm (compile-mindcode)
                          Compile a mindcode source file into text mlog file.
-    cs (compile-schema)  Compile a schema definition file into binary msch file.
-    ds (decompile-schema)
-                         Decompile a binary msch file into schema definition file.
+    cs (compile-schema,compile-schematic)
+                         Compile a schematic definition file into binary msch file.
+    ds (decompile-schema,decompile-schematic)
+                         Decompile a binary msch file into schematic definition file.
 ```
 
 ## Compile Mindcode action help
 
 ```
-usage: mindcode cm [-h] [-c] [-l [LOG]] [--run] [--run-steps {1..1000000000}] [-o LEVEL]
+usage: mindcode cm [-h] [-c] [-l [LOG]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
+                [-r {NONE,PASSIVE,ACTIVE}] [--run] [--run-steps {1..1000000000}] [-o LEVEL]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
                 [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
                 [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
                 [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL]
-                [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}]
-                [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}]
+                [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a mindcode source file into text mlog file.
 
 named arguments:
   -h, --help             show this help message and exit
   -c, --clipboard        copy compiled mlog code to clipboard
+
+input/output files:
+  input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified.
+  output                 Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
+                         specified, or stdout when input is stdin. Use "-" to force stdout output.
+  -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
+                         specified.
+
+compiler options:
   -t, --target {6,7s,7w,7as,7aw}
                          selects target processor version and edition (version  6,  version 7 with standard processor or
                          world processor, version 7 rev. A with standard processor or world processor)
@@ -115,13 +125,6 @@ named arguments:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
-
-input/output files:
-  input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified.
-  output                 Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
-                         specified, or stdout when input is stdin. Use "-" to force stdout output.
-  -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
-                         specified.
 
 run options:
   Options to specify if and how to  run  the  compiled  code  on  an  emulated processor. The emulated processor is much
@@ -196,25 +199,37 @@ debug output options:
   -s, --stacktrace       prints stack trace into stderr when an exception occurs
 ```
 
-## Compile Schema action help
+## Compile Schematic action help
 
 ```
-usage: mindcode cs [-h] [-c] [-l [LOG]] [-o LEVEL] [--temp-variables-elimination LEVEL]
+usage: mindcode cs [-h] [-c] [-l [LOG]] [-a TAG [TAG ...]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}]
+                [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
                 [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
                 [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-r {NONE,PASSIVE,ACTIVE}] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s]
-                [-a TAG [TAG ...]] [input] [output]
+                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input]
+                [output]
 
-Compile a schema definition file into binary msch file.
+Compile a schematic definition file into binary msch file.
 
 named arguments:
   -h, --help             show this help message and exit
-  -c, --clipboard        encode schematics into text representation and paste into clipboard
+  -c, --clipboard        encode the created schematic into text representation and paste into clipboard
+
+input/output files:
+  input                  Schematic definition file to be compiled into a binary msch file.
+  output                 Output file to receive the resulting binary Mindustry schematic file (.msch).
+  -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
+
+schematic creation:
+  -a, --add-tag TAG [TAG ...]
+                         defines additional tag(s) to add  to  the  schematic,  plain  text  and symbolic icon names are
+                         supported
+
+compiler options:
   -t, --target {6,7s,7w,7as,7aw}
                          selects target processor version and edition (version  6,  version 7 with standard processor or
                          world processor, version 7 rev. A with standard processor or world processor)
@@ -228,14 +243,6 @@ named arguments:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
-
-input/output files:
-  input                  Schema definition file to be compiled into a binary msch file.
-  output                 Output file to receive binary Mindustry schema (msch).
-  -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
-  -a, --add-tag TAG [TAG ...]
-                         defines additional tag(s) to add to  the  schematics,  plain  text  and symbolic icon names are
-                         supported
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
@@ -299,16 +306,16 @@ debug output options:
   -s, --stacktrace       prints stack trace into stderr when an exception occurs
 ```
 
-## Decompile Schema action help
+## Decompile Schematic action help
 
 ```
 usage: mindcode ds [-h] [-p] [-P] [-c] [-C] [-l] [-L] [-s {ORIGINAL,HORIZONTAL,VERTICAL}]
                 [-d {ROTATABLE,NON_DEFAULT,ALL}] input [output]
 
-Decompile a binary msch file into schema definition file.
+Decompile a binary msch file into schematic definition file.
 
 positional arguments:
-  input                  Mindustry schema file to be decompiled into Schema Definition File.
+  input                  Mindustry schematic file to be decompiled into Schematic Definition File.
   output                 Output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
                          specified.
 
@@ -325,9 +332,9 @@ named arguments:
   -l, --relative-links   use relative coordinates for processor links
   -L, --absolute-links   use absolute coordinates for processor links
   -s, --sort-order {ORIGINAL,HORIZONTAL,VERTICAL}
-                         specifies how to order blocks in the decompiled schema definition file
+                         specifies how to order blocks in the decompiled schematic definition file
   -d, --direction {ROTATABLE,NON_DEFAULT,ALL}
-                         specifies when to include  direction  clause  in  decompiled  schema  definition file: only for
+                         specifies when to include direction clause  in  decompiled  schematic definition file: only for
                          blocks affected by rotation, only for block with non-default direction, or for all blocks
 ```
 

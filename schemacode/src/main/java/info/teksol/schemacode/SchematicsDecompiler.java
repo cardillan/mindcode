@@ -2,8 +2,8 @@ package info.teksol.schemacode;
 
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.schemacode.mindustry.SchematicsIO;
-import info.teksol.schemacode.schema.Decompiler;
-import info.teksol.schemacode.schema.Schematic;
+import info.teksol.schemacode.schematics.Decompiler;
+import info.teksol.schemacode.schematics.Schematic;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

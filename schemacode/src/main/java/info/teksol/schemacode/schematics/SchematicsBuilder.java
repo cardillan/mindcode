@@ -1,4 +1,4 @@
-package info.teksol.schemacode.schema;
+package info.teksol.schemacode.schematics;
 
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerProfile;
@@ -9,7 +9,7 @@ import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
-import info.teksol.schemacode.schema.BlockPositionResolver.AstBlockPosition;
+import info.teksol.schemacode.schematics.BlockPositionResolver.AstBlockPosition;
 import org.intellij.lang.annotations.PrintFormat;
 
 import java.nio.file.Path;
