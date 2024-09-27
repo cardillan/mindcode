@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.4.2</version>
+            <version>3.7.0</version>
             <type>maven-plugin</type>
         </dependency>
 
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.0-M1</version>
+            <version>5.10.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.8.0-M1</version>
+            <version>5.10.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -115,5 +115,12 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>maven_central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+    </repositories>
 
 </project>
