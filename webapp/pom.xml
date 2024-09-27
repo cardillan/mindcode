@@ -6,11 +6,11 @@
     <parent>
         <groupId>info.teksol.mindcode</groupId>
         <artifactId>mindcode</artifactId>
-        <version>2.2.0</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>mindcode-webapp</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>mindcode-webapp</name>
@@ -40,13 +40,13 @@
         <dependency>
             <groupId>info.teksol.mindcode</groupId>
             <artifactId>mindcode-mindcode</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>
             <groupId>info.teksol.mindcode</groupId>
             <artifactId>mindcode-schemacode</artifactId>
-            <version>2.2.0</version>
+            <version>${revision}</version>
         </dependency>
 
         <dependency>

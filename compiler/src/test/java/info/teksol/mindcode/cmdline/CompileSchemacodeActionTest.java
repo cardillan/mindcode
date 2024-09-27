@@ -1,6 +1,5 @@
 package info.teksol.mindcode.cmdline;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerProfile;
 import info.teksol.mindcode.compiler.FinalCodeOutput;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
