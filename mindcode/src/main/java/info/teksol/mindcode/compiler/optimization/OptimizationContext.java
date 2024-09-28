@@ -51,6 +51,11 @@ class OptimizationContext {
     private final Set<LogicVariable> unrolledVariables = new HashSet<>();
 
     /**
+     * Set of variables which were detected as uninitialized.
+     */
+    private final Set<LogicVariable> uninitializedVariables = new HashSet<>();
+
+    /**
      * Maps labels to their respective instructions. Built once and then updated after each modification
      * of the program.
      */
@@ -485,6 +490,18 @@ class OptimizationContext {
 
     public void addUnrolledVariable(LogicVariable variable) {
         unrolledVariables.add(variable);
+    }
+
+    public Set<LogicVariable> getUninitializedVariables() {
+        return uninitializedVariables;
+    }
+
+    public void addUninitializedVariable(LogicVariable variable) {
+        uninitializedVariables.add(variable);
+    }
+
+    public void addUninitializedVariables(Collection<LogicVariable> variables) {
+        uninitializedVariables.addAll(variables);
     }
 
     //</editor-fold>

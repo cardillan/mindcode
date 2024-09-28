@@ -1,9 +1,12 @@
 package info.teksol.mindcode.compiler;
 
-import info.teksol.mindcode.logic.Condition;
+import info.teksol.mindcode.logic.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static info.teksol.mindcode.logic.Opcode.*;
 
@@ -127,5 +130,49 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         ).instructions()
                 )
         );
+    }
+
+    @Test
+    void processesSortVariables() {
+        TestCompiler compiler = createTestCompiler();
+        compiler.profile.setSortVariables(List.of(SortCategory.PARAMS, SortCategory.GLOBALS));
+        assertLogicInstructionsMatch(compiler,
+                List.of(
+                        createInstruction(PACKCOLOR, "null", "MAX", "A", "null", "null"),
+                        createInstruction(SET, "MAX", "10"),
+                        createInstruction(SET, "A", "20"),
+                        createInstruction(SET, "i", "3"),
+                        createInstruction(PRINT, "MAX"),
+                        createInstruction(PRINT, "A"),
+                        createInstruction(PRINT, "i"),
+                        createInstruction(END)
+                ),
+                LogicInstructionLabelResolver.resolve(
+                        compiler.processor,
+                        compiler.profile,
+                        generateInstructions("""
+                                param MAX = 10;
+                                A = 20;
+                                i = 3;
+                                print(MAX, A, i);
+                                """
+                        ).instructions()
+                )
+        );
+    }
+
+    @Test
+    void sortsCategories() {
+        LogicArgument global1 = LogicVariable.global("b1");
+        LogicArgument global2 = LogicVariable.global("b2");
+        LogicArgument main1 = LogicVariable.global("a1");
+        LogicArgument main2 = LogicVariable.global("a2");
+        LogicArgument param = LogicParameter.parameter("p", LogicString.create("x"));
+        Set<LogicArgument> variables = new HashSet<>(List.of(global1, global2, main1, main2, param));
+
+        List<LogicArgument> expected = List.of(main1, main2, global1, global2, param);
+        List<LogicArgument> actual = LogicInstructionLabelResolver.orderVariables(variables, List.of(SortCategory.ALL, SortCategory.PARAMS));
+
+        Assertions.assertEquals(expected, actual);
     }
 }

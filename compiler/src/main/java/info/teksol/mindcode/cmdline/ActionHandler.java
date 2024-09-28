@@ -1,9 +1,6 @@
 package info.teksol.mindcode.cmdline;
 
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.FinalCodeOutput;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.Remarks;
+import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -68,6 +65,14 @@ abstract class ActionHandler {
                 .type(Arguments.caseInsensitiveEnumType(Remarks.class))
                 .setDefault(defaults.getRemarks());
 
+        compiler.addArgument("--sort-variables")
+                .help("prepends the final code with instructions which ensure variables are created inside the processor" +
+                        " in a defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
+                        " Category ALL represents all remaining, not-yet processed variables. When --sort-variables is given without" +
+                        " specifying any category, " + SortCategory.usefulCategories()  + " are used.")
+                .type(Arguments.caseInsensitiveEnumType(SortCategory.class))
+                .nargs("*")
+                .setDefault(List.of(SortCategory.NONE));
         /*
         compiler.addArgument("-m", "--memory-model")
                 .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
@@ -137,11 +142,11 @@ abstract class ActionHandler {
                 .forEachOrdered(opt -> profile.setOptimizationLevel(opt, arguments.get(opt.name())));
 
         switch (arguments.getString("target")) {
-            case "6"    -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.S);
-            case "7s"   -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.S);
-            case "7w"   -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.W);
-            case "7as"  -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.S);
-            case "7aw"  -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.W);
+            case "6" -> profile.setProcessorVersionEdition(ProcessorVersion.V6, ProcessorEdition.S);
+            case "7s" -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.S);
+            case "7w" -> profile.setProcessorVersionEdition(ProcessorVersion.V7, ProcessorEdition.W);
+            case "7as" -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.S);
+            case "7aw" -> profile.setProcessorVersionEdition(ProcessorVersion.V7A, ProcessorEdition.W);
         }
 
         profile.setParseTreeLevel(arguments.getInt("parse_tree"));
@@ -153,6 +158,15 @@ abstract class ActionHandler {
         //profile.setMemoryModel(arguments.get("memory_model"));
         profile.setFinalCodeOutput(arguments.get("print_unresolved"));
         profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
+
+        List<SortCategory> sortVariables = arguments.get("sort_variables");
+        if (sortVariables == null || sortVariables.isEmpty()) {
+            profile.setSortVariables(SortCategory.getAllCategories());
+        } else if (sortVariables.equals(List.of(SortCategory.NONE))) {
+            profile.setSortVariables(List.of());
+        } else {
+            profile.setSortVariables(sortVariables);
+        }
 
         if (arguments.get("run") != null) {
             profile.setRun(arguments.getBoolean("run"));

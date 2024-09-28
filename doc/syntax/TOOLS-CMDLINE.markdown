@@ -88,15 +88,17 @@ Actions:
 
 ```
 usage: mindcode cm [-h] [-c] [-l [LOG]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-r {NONE,PASSIVE,ACTIVE}] [--run] [--run-steps {1..1000000000}] [-o LEVEL]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
-                [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}]
-                [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
+                [-r {NONE,PASSIVE,ACTIVE}]
+                [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
+                [--run] [--run-steps {1..1000000000}] [-o LEVEL] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input]
+                [output]
 
 Compile a mindcode source file into text mlog file.
 
@@ -125,6 +127,12 @@ compiler options:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
+  --sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]
+                         prepends the final  code  with  instructions  which  ensure  variables  are  created inside the
+                         processor in a defined order. The variables are  sorted according to their categories in order,
+                         and then alphabetically.  Category ALL  represents  all remaining, not-yet processed variables.
+                         When --sort-variables is given  without  specifying  any  category,  LINKED PARAMS GLOBALS MAIN
+                         LOCALS are used.
 
 run options:
   Options to specify if and how to  run  the  compiled  code  on  an  emulated processor. The emulated processor is much
@@ -203,15 +211,16 @@ debug output options:
 
 ```
 usage: mindcode cs [-h] [-c] [-l [LOG]] [-a TAG [TAG ...]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}]
-                [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}] [-o LEVEL] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input]
-                [output]
+                [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}]
+                [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
+                [-o LEVEL] [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
+                [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
+                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}]
+                [-d {0..3}] [-u [{PLAIN,FLAT_AST,DEEP_AST,SOURCE}]] [-s] [input] [output]
 
 Compile a schematic definition file into binary msch file.
 
@@ -243,6 +252,12 @@ compiler options:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
+  --sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]
+                         prepends the final  code  with  instructions  which  ensure  variables  are  created inside the
+                         processor in a defined order. The variables are  sorted according to their categories in order,
+                         and then alphabetically.  Category ALL  represents  all remaining, not-yet processed variables.
+                         When --sort-variables is given  without  specifying  any  category,  LINKED PARAMS GLOBALS MAIN
+                         LOCALS are used.
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not

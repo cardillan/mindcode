@@ -217,6 +217,10 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (!uninitializedList.isEmpty()) {
             emitMessage(MessageLevel.WARNING, "       List of uninitialized variables: %s.", uninitializedList);
         }
+
+        uninitialized.stream()
+                .filter(v -> v.getType() != ArgumentType.BLOCK)
+                .forEach(optimizationContext::addUninitializedVariable);
     }
 
     private BitSet unreachables;

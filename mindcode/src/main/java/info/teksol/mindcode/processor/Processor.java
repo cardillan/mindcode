@@ -1,10 +1,7 @@
 package info.teksol.mindcode.processor;
 
 import info.teksol.mindcode.compiler.instructions.*;
-import info.teksol.mindcode.logic.Condition;
-import info.teksol.mindcode.logic.LogicArgument;
-import info.teksol.mindcode.logic.LogicNumber;
-import info.teksol.mindcode.logic.LogicVariable;
+import info.teksol.mindcode.logic.*;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -202,6 +199,10 @@ public class Processor {
     }
 
     private boolean executePackColor(PackColorInstruction ix) {
+        if (ix.getArg(0) == LogicNull.NULL) {
+            return true;
+        }
+
         Variable target = getOrCreateVariable(ix.getResult());
         Variable r = getExistingVariable(ix.getR());
         Variable g = getExistingVariable(ix.getG());

@@ -19,4 +19,4 @@ installing the mod - or ask a question here on GitHub.
 ---
 
 [« Previous: Command line tool](TOOLS-CMDLINE.markdown) &nbsp; | &nbsp;
-[Next: Mindustry Tips and Tricks »](MINDUSTRY-TIPS-N-TRICKS.markdown)
+[Next: Troubleshooting Mindcode »](TROUBLESHOOTING.markdown)

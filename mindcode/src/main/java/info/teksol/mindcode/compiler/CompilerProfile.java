@@ -39,6 +39,8 @@ public class CompilerProfile {
     private int debugLevel = 0;
     private boolean printStackTrace = false;
 
+    private List<SortCategory> sortVariables = List.of();
+
     // Compile and run
     private boolean run = false;
     private int stepLimit = DEFAULT_STEP_LIMIT_WEBAPP;
@@ -207,6 +209,15 @@ public class CompilerProfile {
 
     public CompilerProfile setPrintStackTrace(boolean printStackTrace) {
         this.printStackTrace = printStackTrace;
+        return this;
+    }
+
+    public List<SortCategory> getSortVariables() {
+        return sortVariables;
+    }
+
+    public CompilerProfile setSortVariables(List<SortCategory> sortVariables) {
+        this.sortVariables = sortVariables;
         return this;
     }
 

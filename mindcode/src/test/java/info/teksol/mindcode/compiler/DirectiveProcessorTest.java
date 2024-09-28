@@ -67,6 +67,14 @@ class DirectiveProcessorTest {
     }
 
     @Test
+    void processesDirectiveSortVariables() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        Seq seq = new Seq(null, new Directive(null, "sort-variables", "params,globals"));
+        DirectiveProcessor.processDirectives(seq, profile, m -> {});
+        assertEquals(List.of(SortCategory.PARAMS, SortCategory.GLOBALS), profile.getSortVariables());
+    }
+
+    @Test
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         Seq seq = new Seq(null, new Directive(null, "fluffyBunny", "basic"));

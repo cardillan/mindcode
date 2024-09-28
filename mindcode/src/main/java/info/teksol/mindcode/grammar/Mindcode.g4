@@ -52,9 +52,14 @@ expression : directive                                                          
            | REM_COMMENT                                                                        # rem_comment
            ;
 
-directive : HASHSET option=ID ASSIGN value=INT      # numeric_directive
-          | HASHSET option=ID ASSIGN value=ID       # string_directive
+directive : HASHSET option=ID ASSIGN value=INT                  # numeric_directive
+          | HASHSET option=ID ASSIGN value=ID                   # string_directive
+          | HASHSET option=ID ( ASSIGN value=directive_list )?  # list_directive
           ;
+
+directive_list
+    : ID ( COMMA ID)*
+    ;
 
 indirectpropaccess : target=var_ref DOT SENSOR LEFT_RBRACKET expr=expression RIGHT_RBRACKET;
 

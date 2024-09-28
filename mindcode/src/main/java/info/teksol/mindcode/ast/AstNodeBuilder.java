@@ -580,6 +580,15 @@ public class AstNodeBuilder extends MindcodeBaseVisitor<AstNode> {
     }
 
     @Override
+    public AstNode visitList_directive(MindcodeParser.List_directiveContext ctx) {
+        if (ctx.directive_list() == null) {
+            return new Directive(ctx.getStart(), ctx.option.getText(), "");
+        } else {
+            return new Directive(ctx.getStart(), ctx.option.getText(), ctx.directive_list().getText());
+        }
+    }
+
+    @Override
     public AstNode visitLiteral_formattable(MindcodeParser.Literal_formattableContext ctx) {
         final String str = ctx.getText();
         return new FormattableLiteral(ctx.getStart(), str.substring(2, str.length() - 1));

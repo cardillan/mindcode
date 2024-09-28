@@ -66,6 +66,10 @@ public class MindcodeCompiler implements Compiler<String> {
             }
             long optimizeTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - optimizeStart);
 
+            // Sort variables before final code printout
+            LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(instructionProcessor, profile);
+            result = resolver.sortVariables(result);
+
             if (profile.getFinalCodeOutput() != null) {
                 debug("\nFinal code before resolving virtual instructions:\n");
                 String output = switch (profile.getFinalCodeOutput()) {
@@ -77,7 +81,7 @@ public class MindcodeCompiler implements Compiler<String> {
                 debug(output);
             }
 
-            result = LogicInstructionLabelResolver.resolve(instructionProcessor, profile,result);
+            result = resolver.resolveLabels(result);
 
             if (profile.isRun()) {
                 long runStart = System.nanoTime();

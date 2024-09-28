@@ -1,16 +1,17 @@
 package info.teksol.mindcode.compiler;
 
 import info.teksol.mindcode.MindcodeInternalError;
+import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.instructions.*;
 import info.teksol.mindcode.logic.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.logic.Opcode.OP;
+import static info.teksol.mindcode.logic.Opcode.PACKCOLOR;
 
+// TODO Rename class
 public class LogicInstructionLabelResolver {
     private final CompilerProfile profile;
     private final InstructionProcessor instructionProcessor;
@@ -28,6 +29,86 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
+        return sortVariables(resolveLabels(program));
+    }
+
+    public List<LogicInstruction> sortVariables(List<LogicInstruction> program) {
+        if (profile.getSortVariables().isEmpty() || program.isEmpty()) {
+            return program;
+        }
+
+        HashSet<LogicArgument> allVariables = program.stream()
+                .flatMap(LogicInstruction::inputOutputArgumentsStream)
+                .filter(a -> a.isUserVariable() || a.getType() == ArgumentType.BLOCK)
+                .collect(Collectors.toCollection(HashSet::new));
+
+        List<LogicArgument> order = orderVariables(allVariables, profile.getSortVariables());
+
+        while (order.size() % 4 > 0) {
+            order.add(LogicNull.NULL);
+        }
+
+        int limit = profile.getInstructionLimit() - program.stream().mapToInt(LogicInstruction::getRealSize).sum();
+        if (limit <= 0) {
+            return program;
+        }
+
+        int instructions = Math.min(limit, order.size() / 4);
+
+        List<LogicInstruction> result = new ArrayList<>();
+        AstContext astContext = program.get(0).getAstContext();
+        for (int index = 0, i = 0; i++ < instructions; index += 5) {
+            order.add(index, LogicNull.NULL);
+            result.add(instructionProcessor.createInstruction(astContext,  PACKCOLOR, order.subList(index, index + 5)));
+        }
+
+        result.addAll(program);
+        return result;
+    }
+
+    static List<LogicArgument> orderVariables(Set<LogicArgument> allVariables, List<SortCategory> categories) {
+        // Sort all categories except ALL
+        Map<SortCategory, List<LogicArgument>> sorted = new EnumMap<>(SortCategory.class);
+        for (SortCategory category : categories) {
+            if (category != SortCategory.ALL) {
+                List<LogicArgument> selected = allVariables.stream()
+                        .filter(v -> matches(v, category))
+                        .sorted(Comparator.comparing(LogicArgument::toMlog))
+                        .toList();
+
+                sorted.put(category, selected);
+                selected.forEach(allVariables::remove);
+            }
+        }
+
+        // What remains is ALL
+        sorted.put(SortCategory.ALL, allVariables.stream().sorted(Comparator.comparing(LogicArgument::toMlog)).toList());
+
+        // Now put categories in the proper order
+        List<LogicArgument> order = new ArrayList<>();
+        for (SortCategory category : categories) {
+            List<LogicArgument> variables = sorted.remove(category);
+            if (variables != null) {
+                order.addAll(variables);
+            }
+        }
+
+        return order;
+    }
+
+    private static boolean matches(LogicArgument logicVariable, SortCategory category) {
+        return switch (category) {
+            case LINKED     -> logicVariable.getType() == ArgumentType.BLOCK;
+            case PARAMS -> logicVariable.getType() == ArgumentType.PARAMETER;
+            case GLOBALS    -> logicVariable.getType() == ArgumentType.GLOBAL_VARIABLE;
+            case MAIN       -> logicVariable.isMainVariable();
+            case LOCALS     -> logicVariable.isFunctionVariable();
+            case NONE       -> false;
+            case ALL        -> true;
+        };
+    }
+
+    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program) {
         program = resolveRemarks(program);
         calculateAddresses(program);
         return resolveAddresses(resolveVirtualInstructions(program));

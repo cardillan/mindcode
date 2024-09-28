@@ -35,7 +35,7 @@ Supporting tools:
 
 Additional information on Mindcode and Mindustry Logic:
 
-* [Dealing with syntax errors](SYNTAX-ERRORS.markdown)
+* [Troubleshooting Mindcode](TROUBLESHOOTING.markdown))
 * [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown)
 
 ---

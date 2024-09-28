@@ -462,4 +462,4 @@ end;
 
 ---
 
-[« Previous: Dealing with syntax errors](SYNTAX-ERRORS.markdown)
+[« Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown)

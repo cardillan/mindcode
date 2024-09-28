@@ -55,6 +55,30 @@ Possible values are:
   reached. 
 * `auto`: the default value. At this moment the setting is identical to `speed`.
 
+## Option `sort-variables`
+
+The **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in sufficiently large programs.
+
+This option can be used to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `packcolor` instruction is used, which can read - and therefore create - up to four variables per instruction. The result is not stored anywhere so that the variable-ordering code block doesn't change values of any variables, and therefore the behavior of the program remains unaltered, except for possible difference in timing.)
+
+The value assigned to the sort-variables directive is a list of variable categories:
+
+* `linked`: variables representing [linked blocks](SYNTAX-1-VARIABLES.markdown#linked-blocks), 
+* `params`: variables representing [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), 
+* `globals`: [global variables](SYNTAX-1-VARIABLES.markdown#global-variables),
+* `main`: [main variables](SYNTAX-1-VARIABLES.markdown#main-variables),
+* `locals`: [local variables](SYNTAX-1-VARIABLES.markdown#local-variables),
+* `all`: user variables that aren't matched by any other specified category,
+* `none`: no variables at all. Can be used as a `#set sort-variables=none;`, ensuring that no variable ordering will be performed.  
+
+It is possible to use the directive without specifying any value at all (`#set sort-variables;`). In this case, the categories will be processed in the order above.
+
+When processing the directive, the categories are processed in the given order, with all variables in a category sorted alphabetically. This defines the resulting order of variables.
+
+Note on the `linked` category: when a block is linked into the processor, a variable of that name is removed from the variable list. By putting the `linked` variables first, it is very easy to see which linked blocks used by the program are not linked under their proper names.
+
+The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceeds the instruction limit, some or all variables will remain unordered.  
+
 ## Option `memory-model`
 
 This option has been added to support future enhancements of Mindcode. Setting the option doesn't have any effect at 

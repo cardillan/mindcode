@@ -1216,4 +1216,26 @@ class AstNodeBuilderTest extends AbstractAstTest {
                 )
         );
     }
+
+    @Test
+    void parsesListDirective() {
+        assertEquals(
+                new Seq(null,
+                        new Directive(null, "sort-variables", "PARAMS,GLOBALS")
+                ),
+                translateToAst("#set sort-variables = PARAMS, GLOBALS;")
+
+        );
+    }
+
+    @Test
+    void parsesEmptyListDirective() {
+        assertEquals(
+                new Seq(null,
+                        new Directive(null, "sort-variables", "")
+                ),
+                translateToAst("#set sort-variables;")
+
+        );
+    }
 }

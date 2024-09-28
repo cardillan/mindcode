@@ -7,7 +7,7 @@ Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.co
 Mindcode focuses of the following priorities:
 
 * Simplicity: support for easy creation of short scripts as well as larger projects. Names and identifiers for Mindustry Logic objects and functions are derived from Mindustry Logic itself with minimal alterations.
-* Efficiency: mlog code produced by Mindcode is one of the fastest among comparable mlog compilers, thanks to many different [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown).
+* Efficiency: while there's still a lot of room for improvement, the mlog code produced by Mindcode is remarkably efficient thanks to many different [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown). Especially optimizations which [reduce runtime by increasing code size](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed) are quite unique among mlog compilers. 
 * Reliability: the project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they often pertain to new functionality and get usually resolved quickly. 
 
 > [!NOTE]

@@ -9,7 +9,9 @@ import info.teksol.mindcode.logic.ProcessorEdition;
 import info.teksol.mindcode.logic.ProcessorVersion;
 import org.intellij.lang.annotations.PrintFormat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -149,6 +151,30 @@ public class DirectiveProcessor {
         error("Invalid value '%s' of compiler directive 'memory-model'.", strModel);
     }
 
+    private void setSortVariables(CompilerProfile compilerProfile, String strModel) {
+        List<SortCategory> sortCategories = new ArrayList<>();
+        if (!strModel.isEmpty()) {
+            String[] values = strModel.split(",");
+
+            for (String value : values) {
+                SortCategory sortCategory = SortCategory.byName(value);
+                if (sortCategory == null) {
+                    error("Invalid value '%s' of compiler directive 'sort-variables'.", value);
+                } else {
+                    sortCategories.add(sortCategory);
+                }
+            }
+        }
+
+        if (sortCategories.isEmpty()) {
+            compilerProfile.setSortVariables(SortCategory.getAllCategories());
+        } else if (sortCategories.equals(List.of(SortCategory.NONE))) {
+            compilerProfile.setSortVariables(List.of());
+        } else {
+            compilerProfile.setSortVariables(sortCategories);
+        }
+    }
+
     private final Map<String, BiConsumer<CompilerProfile, String>> OPTION_HANDLERS = createOptionHandlers();
 
     private Map<String, BiConsumer<CompilerProfile,String>> createOptionHandlers() {
@@ -161,6 +187,7 @@ public class DirectiveProcessor {
         map.put("goal", this::setGenerationGoal);
         map.put("remarks", this::setRemarks);
         map.put("memory-model", this::setMemoryModel);
+        map.put("sort-variables", this::setSortVariables);
         for (Optimization opt : Optimization.values()) {
             map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
         }

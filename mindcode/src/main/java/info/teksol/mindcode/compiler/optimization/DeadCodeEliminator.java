@@ -55,6 +55,8 @@ class DeadCodeEliminator extends BaseOptimizer {
     @Override
     public void generateFinalMessages() {
         super.generateFinalMessages();
+
+        optimizationContext.addUninitializedVariables(uninitialized);
         
         if (!unused.isEmpty()) {
             emitMessage(MessageLevel.WARNING, "       List of unused variables: %s.",

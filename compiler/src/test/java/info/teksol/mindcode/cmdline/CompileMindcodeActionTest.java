@@ -1,10 +1,7 @@
 package info.teksol.mindcode.cmdline;
 
 import info.teksol.mindcode.cmdline.Main.Action;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.FinalCodeOutput;
-import info.teksol.mindcode.compiler.GenerationGoal;
-import info.teksol.mindcode.compiler.Remarks;
+import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.optimization.Optimization;
 import info.teksol.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mindcode.logic.ProcessorEdition;
@@ -145,6 +142,27 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(Remarks.ACTIVE, arguments.get("remarks"));
     }
 
+    @Test
+    public void sortVariablesArgumentMissing() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut());
+        CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
+        assertEquals(List.of(), actual.getSortVariables());
+    }
+
+    @Test
+    public void sortVariablesArgumentEmpty() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " --sort-variables");
+        CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
+        assertEquals(List.of(SortCategory.values()), actual.getSortVariables());
+    }
+
+    @Test
+    public void sortVariablesArgumentSpecific() throws ArgumentParserException {
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " --sort-variables PARAMS GLOBALS");
+        CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
+        assertEquals(List.of(SortCategory.PARAMS, SortCategory.GLOBALS), actual.getSortVariables());
+    }
+
     /*
     @Test
     public void memoryModelArgument() throws ArgumentParserException {
@@ -155,7 +173,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100");  //  -m restricted
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100 --sort-variables ALL");  //  -m restricted
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
@@ -166,6 +184,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(100, actual.getOptimizationPasses());
         assertEquals(GenerationGoal.SIZE, actual.getGoal());
         assertEquals(Remarks.ACTIVE, actual.getRemarks());
+        assertEquals(List.of(SortCategory.ALL), actual.getSortVariables());
         //assertEquals(MemoryModel.RESTRICTED, actual.getMemoryModel());
         assertEquals(FinalCodeOutput.SOURCE, actual.getFinalCodeOutput());
         assertTrue(actual.isPrintStackTrace());
@@ -188,6 +207,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(CompilerProfile.DEFAULT_CMDLINE_PASSES, actual.getOptimizationPasses());
         assertEquals(expected.getGoal(), actual.getGoal());
         assertEquals(expected.getRemarks(), actual.getRemarks());
+        assertEquals(expected.getSortVariables(), actual.getSortVariables());
         //assertEquals(expected.getMemoryModel(), actual.getMemoryModel());
         assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());
         assertEquals(expected.isPrintStackTrace(), actual.isPrintStackTrace());
