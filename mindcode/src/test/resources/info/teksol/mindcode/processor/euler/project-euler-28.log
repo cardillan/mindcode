@@ -2,11 +2,11 @@
      4 instructions eliminated by Temp Variables Elimination.
      4 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Jump Optimization (3 iterations).
-     1 instructions eliminated by Single Step Elimination (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      2 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
-    14 instructions after optimizations.
+    13 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 instructions):
  
@@ -133,6 +133,13 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     17 label __label5
     18 print 669171001
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    20 label __label7
+    21 print sum
+    22 label __label8
+-    * end
+
 Final code before resolving virtual instructions:
 
 set sum 1
@@ -150,4 +157,3 @@ label __label3
 jump __label9 lessThanEq current 1002001
 print 669171001
 print sum
-end

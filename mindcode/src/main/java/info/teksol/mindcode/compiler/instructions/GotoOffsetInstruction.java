@@ -40,4 +40,9 @@ public class GotoOffsetInstruction extends BaseInstruction {
     public final LogicLabel getMarker() {
         return (LogicLabel) getArg(3);
     }
+
+    @Override
+    public boolean endsCodePath() {
+        return true;
+    }
 }

@@ -15,7 +15,7 @@ class SingleStepJumpEliminator extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        List<JumpInstruction> removableJumps = new ArrayList<>();
+        List<LogicInstruction> removableJumps = new ArrayList<>();
 
         try (LogicIterator iterator = createIterator()) {
             JumpInstruction lastJump = null;
@@ -25,6 +25,10 @@ class SingleStepJumpEliminator extends BaseOptimizer {
 
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
+                if (phase == OptimizationPhase.FINAL && !iterator.hasNext() && advanced() && ix instanceof EndInstruction) {
+                    removableJumps.add(ix);
+                    continue;
+                }
 
                 if (ix instanceof LabeledInstruction il) {
                     isJumpToNext |= il.getLabel().equals(targetLabel);

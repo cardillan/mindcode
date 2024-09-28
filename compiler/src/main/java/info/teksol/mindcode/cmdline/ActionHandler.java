@@ -81,6 +81,10 @@ abstract class ActionHandler {
                 .type(Arguments.caseInsensitiveEnumType(MemoryModel.class))
                 .setDefault(defaults.getMemoryModel());
         */
+
+        compiler.addArgument("--no-signature")
+                .help("prevents appending a signature \"" + CompilerProfile.SIGNATURE + "\" at the end of the final code")
+                .action(Arguments.storeTrue());
     }
 
     void addOptimizationOptions(Subparser subparser, CompilerProfile defaults) {
@@ -166,6 +170,10 @@ abstract class ActionHandler {
             profile.setSortVariables(List.of());
         } else {
             profile.setSortVariables(sortVariables);
+        }
+
+        if (arguments.getBoolean("no_signature")) {
+            profile.setSignature(false);
         }
 
         if (arguments.get("run") != null) {

@@ -24,4 +24,9 @@ public class StopInstruction extends BaseInstruction {
     public StopInstruction withContext(AstContext astContext) {
         return new StopInstruction(this, astContext);
     }
+
+    @Override
+    public boolean endsCodePath() {
+        return true;
+    }
 }

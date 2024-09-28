@@ -72,4 +72,8 @@ public interface LogicInstruction {
     default String toMlog() {
         return LogicInstructionPrinter.toStringSimple(this);
     }
+
+    default boolean endsCodePath() {
+        return false;
+    }
 }

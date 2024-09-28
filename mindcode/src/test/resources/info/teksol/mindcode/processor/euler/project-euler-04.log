@@ -2,11 +2,11 @@
      3 instructions eliminated by Temp Variables Elimination.
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      3 instructions eliminated by Jump Optimization (4 iterations).
-     2 instructions eliminated by Single Step Elimination (5 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-    23 instructions after optimizations.
+    22 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 977):
   ! Loop Unrolling: unroll loop at line 4                        cost  1421, benefit     4500,0, efficiency        3,2
@@ -231,6 +231,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     16 op mul __tmp5 10 __fn0_res
     17 op mod __tmp6 __fn0_num 10
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    41 label __label17
+    42 print max
+    43 label __label18
+-    * end
+
 Final code before resolving virtual instructions:
 
 set max 0
@@ -262,4 +269,3 @@ op add i i 1
 jump __label19 lessThan i 100
 print 9009
 print max
-end

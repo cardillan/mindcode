@@ -2,12 +2,12 @@
     19 instructions eliminated by Temp Variables Elimination.
      8 instructions eliminated by Dead Code Elimination (3 iterations).
      4 instructions eliminated by Jump Optimization (3 iterations).
-     2 instructions eliminated by Single Step Elimination (4 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      2 instructions added by Loop Optimization (2 iterations).
      5 loops improved by Loop Optimization.
      5 instructions eliminated by Jump Straightening (3 iterations).
-    93 instructions after optimizations.
+    92 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 902):
   * Loop Optimization: replicate condition at line 56            cost     1, benefit       25,0, efficiency       25,0 (-5 instructions)
@@ -424,6 +424,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
     63 label __label2
     64 read CURRENT_INDEX MEMORY 1
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   122 jump __label32 equal __tmp20 0
+   123 label __label21
+   124 control enabled switch1 0
+-    * end
+
 Final code before resolving virtual instructions:
 
 set FREQ 100
@@ -533,4 +540,3 @@ sensor __tmp20 SWITCH @enabled
 jump __label32 equal __tmp20 0
 label __label21
 control enabled switch1 0 0 0 0
-end

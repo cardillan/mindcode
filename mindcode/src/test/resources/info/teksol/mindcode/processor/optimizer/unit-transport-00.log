@@ -4,7 +4,7 @@
    126 instructions eliminated by Dead Code Elimination (5 iterations).
      2 instructions eliminated by Jump Normalization (4 iterations).
     62 instructions eliminated by Jump Optimization (4 iterations).
-    51 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+    52 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
      2 instructions eliminated by Expression Optimization (3 iterations).
      4 instructions eliminated by If Expression Optimization (3 iterations).
     20 instructions eliminated by Data Flow Optimization (4 passes, 17 iterations).
@@ -15,7 +15,7 @@
      7 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Unreachable Code Elimination.
      1 instructions eliminated by Print Merging.
-   729 instructions after optimizations.
+   728 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 274):
   * Loop Optimization: replicate condition at line 173           cost     1, benefit      312,5, efficiency      312,5 (+0 instructions)
@@ -3720,6 +3720,13 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
    118 set CORE null
    119 jump __label23 notEqual LINK_ID 0
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   949 label __label215
+   950 control enabled switch1 false
+   951 control enabled switch2 false
+-    * end
+
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
    692 jump __label153 equal AUTO_ALLOCATION false
@@ -4583,4 +4590,3 @@ label __label218
 label __label214
 control enabled switch1 false 0 0 0
 control enabled switch2 false 0 0 0
-end

@@ -90,7 +90,7 @@ Actions:
 usage: mindcode cm [-h] [-c] [-l [LOG]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
                 [-r {NONE,PASSIVE,ACTIVE}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
-                [--run] [--run-steps {1..1000000000}] [-o LEVEL] [--temp-variables-elimination LEVEL]
+                [--no-signature] [--run] [--run-steps {1..1000000000}] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
                 [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
                 [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
@@ -133,6 +133,8 @@ compiler options:
                          and then alphabetically.  Category ALL  represents  all remaining, not-yet processed variables.
                          When --sort-variables is given  without  specifying  any  category,  LINKED PARAMS GLOBALS MAIN
                          LOCALS are used.
+  --no-signature         prevents appending a signature "Compiled  by  Mindcode  - github.com/cardillan/mindcode" at the
+                         end of the final code
 
 run options:
   Options to specify if and how to  run  the  compiled  code  on  an  emulated processor. The emulated processor is much
@@ -213,7 +215,7 @@ debug output options:
 usage: mindcode cs [-h] [-c] [-l [LOG]] [-a TAG [TAG ...]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}]
                 [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
-                [-o LEVEL] [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--no-signature] [-o LEVEL] [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
                 [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
@@ -258,6 +260,8 @@ compiler options:
                          and then alphabetically.  Category ALL  represents  all remaining, not-yet processed variables.
                          When --sort-variables is given  without  specifying  any  category,  LINKED PARAMS GLOBALS MAIN
                          LOCALS are used.
+  --no-signature         prevents appending a signature "Compiled  by  Mindcode  - github.com/cardillan/mindcode" at the
+                         end of the final code
 
 optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not

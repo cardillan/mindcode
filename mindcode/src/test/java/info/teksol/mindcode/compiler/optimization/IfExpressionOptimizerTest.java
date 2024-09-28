@@ -36,8 +36,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(JUMP, var(1001), "lessThanEq", "x", "0"),
                 createInstruction(SET, "str", q("positive")),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "str"),
-                createInstruction(END)
+                createInstruction(PRINT, "str")
         );
     }
 
@@ -52,8 +51,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(JUMP, var(1001), "strictEqual", var(0), "0"),
                 createInstruction(SET, "str", q("dead")),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "str"),
-                createInstruction(END)
+                createInstruction(PRINT, "str")
         );
     }
 
@@ -73,8 +71,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(OP, "mul", "x", "-1", "x"),
                 createInstruction(SET, "str", q("negative")),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "str"),
-                createInstruction(END)
+                createInstruction(PRINT, "str")
         );
     }
 
@@ -92,8 +89,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(JUMP, var(1001), "always"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, q("negative")),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(END)
+                createInstruction(LABEL, var(1001))
         );
     }
 
@@ -117,8 +113,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(PRINT, q("negative")),
                 createInstruction(OP, "mul", "y", "-1", "x"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "y"),
-                createInstruction(END)
+                createInstruction(PRINT, "y")
         );
     }
 
@@ -134,8 +129,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(JUMP, var(1001), "notEqual", var(0), "1"),
                 createInstruction(READ, "value", "cell1", "1"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "value"),
-                createInstruction(END)
+                createInstruction(PRINT, "value")
         );
     }
 
@@ -154,8 +148,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(JUMP, var(1001), "always"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, q("alive")),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(END)
+                createInstruction(LABEL, var(1001))
         );
     }
 
@@ -182,8 +175,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(LABEL, var(1004)),
                 createInstruction(SET, "y", var(2)),
                 createInstruction(JUMP, var(1000), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(END)
+                createInstruction(LABEL, var(1002))
         );
     }
 
@@ -206,8 +198,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(SET, "y", q("positive")),
                 createInstruction(LABEL, var(1003)),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "y"),
-                createInstruction(END)
+                createInstruction(PRINT, "y")
         );
     }
 
@@ -224,8 +215,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(LABEL, var(1001)),
                 createInstruction(SET, "a", "b"),
                 createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "b"),
-                createInstruction(END)
+                createInstruction(PRINT, "b")
         );
     }
 
@@ -243,8 +233,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(PRINT, "b"),
                 createInstruction(SET, "a", "b"),
                 createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "b"),
-                createInstruction(END)
+                createInstruction(PRINT, "b")
         );
     }
 
@@ -263,8 +252,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(LABEL, var(1000)),
                 createInstruction(SET, "i", "6"),
                 createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "i"),
-                createInstruction(END)
+                createInstruction(PRINT, "i")
         );
     }
 }

@@ -4,7 +4,7 @@
     48 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Jump Normalization (4 iterations).
      9 instructions eliminated by Jump Optimization (4 iterations).
-    27 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+    28 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
    170 instructions eliminated by Data Flow Optimization (5 passes, 16 iterations).
      6 instructions added by Loop Optimization (3 iterations).
@@ -17,7 +17,7 @@
      2 instructions updated by PropagateJumpTargets.
     49 instructions eliminated by Unreachable Code Elimination.
      5 instructions eliminated by Print Merging.
-   610 instructions after optimizations.
+   609 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 680):
     Loop Optimization: replicate condition at line 56            cost     7, benefit       25,0, efficiency        3,6
@@ -4538,7 +4538,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-49 ins
    888 draw rect 109 0 176 176
    889 label __label117
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-19 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-20 instructions):
  
     84 label __label20
     85 draw color 0 0 80 255
@@ -4662,6 +4662,11 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-19 instruct
    868 label __label116
    869 draw rect 109 0 176 176
    870 label __label117
+ 
+   892 op land __tmp17 __tmp15 __tmp16
+   893 jump __label425 notEqual __tmp17 false
+   894 label __label19
+-    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
  
@@ -5463,4 +5468,3 @@ op equal __tmp16 LINKS @links
 op land __tmp17 __tmp15 __tmp16
 jump __label425 notEqual __tmp17 false
 label __label19
-end

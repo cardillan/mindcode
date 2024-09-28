@@ -3,7 +3,7 @@
     34 instructions eliminated by Dead Code Elimination (5 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
     17 instructions eliminated by Jump Optimization (4 iterations).
-    13 instructions eliminated by Single Step Elimination (5 iterations).
+    14 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
     12 instructions eliminated by Data Flow Optimization (8 iterations).
      1 instructions added by Loop Optimization (3 iterations).
@@ -12,7 +12,7 @@
      4 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Unreachable Code Elimination.
      6 instructions eliminated by Print Merging.
-   136 instructions after optimizations.
+   135 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 857):
   * Loop Optimization: replicate condition at line 69            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
@@ -1008,6 +1008,13 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
     61 set BATCH 1
     62 set BATCH_TXT 10
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   180 control enabled switch1 0
+   181 write 0 MEMORY lastCell
+   182 write 0 MEMORY 0
+-    * end
+
 Modifications by Final phase, Print Merging, iteration 1 (-6 instructions):
  
    116 print "Item Counter                  \n"
@@ -1202,4 +1209,3 @@ label __label21
 control enabled switch1 0 0 0 0
 write 0 MEMORY lastCell
 write 0 MEMORY 0
-end

@@ -2,14 +2,14 @@
     11 instructions eliminated by Temp Variables Elimination.
     10 instructions eliminated by Dead Code Elimination (4 iterations).
      7 instructions eliminated by Jump Optimization (4 iterations).
-     4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     5 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      4 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      2 instructions added by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      2 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Unreachable Code Elimination.
-    50 instructions after optimizations.
+    49 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 947):
   * Loop Optimization: replicate condition at line 30            cost     2, benefit      625,0, efficiency      312,5 (+1 instructions)
@@ -469,7 +469,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
     62 label __label16
     63 op mul __tmp15 __fn1_child 2
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-3 instructions):
  
     16 write __fn0_pv ARRAY __fn0_index
     17 write __fn0_iv ARRAY __fn0_parent
@@ -486,6 +486,11 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructi
     59 label __label23
     60 label __label16
     61 op mul __tmp15 __fn1_child 2
+ 
+    76 op add i i 1
+    77 jump __label30 lessThan i SIZE
+    78 label __label26
+-    * end
 
 Final code before resolving virtual instructions:
 
@@ -550,4 +555,3 @@ print __tmp31
 op add i i 1
 jump __label30 lessThan i SIZE
 label __label26
-end

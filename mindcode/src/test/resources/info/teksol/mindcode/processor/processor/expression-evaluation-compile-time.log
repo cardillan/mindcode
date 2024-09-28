@@ -5592,11 +5592,11 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-63 instruct
    246 label __label247
    247 label __label245
    248 label __label248
-   249 print "ok"
--    * jump __label251 always
-   250 label __label251
-   251 label __label249
-   252 end
+ 
+   250 jump __label251 always
+   251 label __label251
+   252 label __label249
+-    * end
 
 Final code before resolving virtual instructions:
 
@@ -5663,4 +5663,5 @@ print "ok"
 print "ok"
 print "ok"
 print "ok"
-end
+jump __label251 always 0 0
+label __label251

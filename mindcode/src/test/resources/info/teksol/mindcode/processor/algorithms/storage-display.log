@@ -4,7 +4,7 @@
     34 instructions eliminated by Dead Code Elimination (6 iterations).
     21 instructions eliminated by Jump Normalization (4 iterations).
      5 instructions eliminated by Jump Optimization (4 iterations).
-    32 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+    33 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
    297 instructions eliminated by Data Flow Optimization (6 passes, 22 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
@@ -17,7 +17,7 @@
     10 instructions eliminated by Jump Straightening (4 iterations).
     77 instructions updated by PropagateJumpTargets.
     76 instructions eliminated by Unreachable Code Elimination.
-   654 instructions after optimizations.
+   653 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 737):
     Loop Unrolling: unroll iteration loop at line 29             cost    97, benefit       47,0, efficiency        0,5
@@ -8871,7 +8871,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-76 ins
   1016 draw rect 109 0 176 176
   1017 label __label268
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-28 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-29 instructions):
  
      1 label __label270
      2 draw color 0 0 80 255
@@ -9067,6 +9067,11 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-28 instruct
    987 label __label267
    988 draw rect 109 0 176 176
    989 label __label268
+ 
+   995 gotolabel __label45 marker1
+   996 label __label29
+   997 drawflush display1
+-    * end
 
 Final code before resolving virtual instructions:
 
@@ -9911,4 +9916,3 @@ label __label50
 goto __tmp12 marker1
 gotolabel __label45 marker1
 drawflush display1
-end

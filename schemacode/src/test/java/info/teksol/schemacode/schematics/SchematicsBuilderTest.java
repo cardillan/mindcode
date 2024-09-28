@@ -783,7 +783,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                         block("@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(
                                         List.of(),
-                                        "print @this\nend\n"
+                                        "print @this\n"
                                 )
                         )
                 )

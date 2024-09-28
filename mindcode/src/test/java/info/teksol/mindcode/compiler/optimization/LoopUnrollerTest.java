@@ -56,8 +56,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(PRINT, "i"),
                 createInstruction(OP, "add", "i", "i", "0.1"),
-                createInstruction(JUMP, var(1003), "lessThanEq", "i", "1"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1003), "lessThanEq", "i", "1")
         );
     }
 
@@ -74,8 +73,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                 createInstruction(PRINT, q(" ")),
                 createInstruction(PRINT, "k"),
                 createInstruction(OP, "shl", "k", "k", "1"),
-                createInstruction(JUMP, var(1003), "lessThan", "k", "100000"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1003), "lessThan", "k", "100000")
         );
     }
 
@@ -97,8 +95,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                 createInstruction(LABEL, var(1004)),
                 createInstruction(OP, "add", "i", "i", var(2)),
                 createInstruction(PRINT, "i"),
-                createInstruction(JUMP, var(1005), "lessThan", "i", "10"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1005), "lessThan", "i", "10")
         );
     }
 
@@ -133,8 +130,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                 createInstruction(JUMP, var(1007), "lessThan", "i", "5"),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(PRINT, "i"),
-                createInstruction(JUMP, var(1006), "lessThan", "i", "10"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1006), "lessThan", "i", "10")
         );
     }
 
@@ -146,8 +142,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("0123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("0123456789"))
         );
     }
 
@@ -163,8 +158,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("213243546576")),
-                createInstruction(END)
+                createInstruction(PRINT, q("213243546576"))
         );
     }
 
@@ -181,8 +175,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("213243546576")),
-                createInstruction(END)
+                createInstruction(PRINT, q("213243546576"))
         );
     }
 
@@ -195,8 +188,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("9876543")),
-                createInstruction(END)
+                createInstruction(PRINT, q("9876543"))
         );
     }
 
@@ -209,8 +201,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("9876543210")),
-                createInstruction(END)
+                createInstruction(PRINT, q("9876543210"))
         );
     }
 
@@ -224,8 +215,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             i += 1
                         loop while i < 10
                         """,
-                createInstruction(PRINT, q("0123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("0123456789"))
         );
     }
 
@@ -240,8 +230,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             i += 1
                         loop while i < 10
                         """,
-                createInstruction(PRINT, q("0123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("0123456789"))
         );
     }
 
@@ -254,8 +243,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("0123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("0123456789"))
         );
     }
 
@@ -268,8 +256,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("0123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("0123456789"))
         );
     }
 
@@ -296,8 +283,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("13")),
-                createInstruction(END)
+                createInstruction(PRINT, q("13"))
         );
     }
 
@@ -309,8 +295,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("123")),
-                createInstruction(END)
+                createInstruction(PRINT, q("123"))
         );
     }
 
@@ -322,8 +307,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i, j, k);
                         end;
                         """,
-                createInstruction(PRINT, q("123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("123456789"))
         );
     }
 
@@ -341,8 +325,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i);
                         end;
                         """,
-                createInstruction(PRINT, q("122436")),
-                createInstruction(END)
+                createInstruction(PRINT, q("122436"))
         );
     }
 
@@ -356,8 +339,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         end
                         print(".")
                         """,
-                createInstruction(PRINT, q("012345.")),
-                createInstruction(END)
+                createInstruction(PRINT, q("012345."))
         );
     }
 
@@ -372,8 +354,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         end
                         print(".")
                         """,
-                createInstruction(PRINT, q("012345.")),
-                createInstruction(END)
+                createInstruction(PRINT, q("012345."))
         );
     }
 
@@ -387,8 +368,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         end
                         print(".")
                         """,
-                createInstruction(PRINT, q("02468.")),
-                createInstruction(END)
+                createInstruction(PRINT, q("02468."))
         );
     }
 
@@ -403,8 +383,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         end
                         print(".")
                         """,
-                createInstruction(PRINT, q("02468.")),
-                createInstruction(END)
+                createInstruction(PRINT, q("02468."))
         );
     }
 
@@ -417,8 +396,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("-5-6-7-8-9")),
-                createInstruction(END)
+                createInstruction(PRINT, q("-5-6-7-8-9"))
         );
     }
 
@@ -431,8 +409,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("-9-8-7-6-5")),
-                createInstruction(END)
+                createInstruction(PRINT, q("-9-8-7-6-5"))
         );
     }
 
@@ -445,8 +422,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("543210-1-2-3-4-5")),
-                createInstruction(END)
+                createInstruction(PRINT, q("543210-1-2-3-4-5"))
         );
     }
 
@@ -460,8 +436,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             end
                         end
                         """,
-                createInstruction(PRINT, q(" 11 12 13 14 15 22 23 24 25 33 34 35 44 45 55")),
-                createInstruction(END)
+                createInstruction(PRINT, q(" 11 12 13 14 15 22 23 24 25 33 34 35 44 45 55"))
         );
     }
 
@@ -480,8 +455,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         end
                         print(".")
                         """,
-                createInstruction(PRINT, q("01201234567.")),
-                createInstruction(END)
+                createInstruction(PRINT, q("01201234567."))
         );
     }
 
@@ -496,8 +470,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             end
                         end
                         """,
-                createInstruction(PRINT, q(" 11 12 13 14 15 22 23 24 25 33 34 35 44 45 55")),
-                createInstruction(END)
+                createInstruction(PRINT, q(" 11 12 13 14 15 22 23 24 25 33 34 35 44 45 55"))
         );
     }
 
@@ -509,8 +482,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("0123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("0123456789"))
         );
     }
 
@@ -522,8 +494,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             printf(" $k")
                         end
                         """,
-                createInstruction(PRINT, q(" 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536")),
-                createInstruction(END)
+                createInstruction(PRINT, q(" 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768 65536"))
         );
     }
 
@@ -536,8 +507,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, "1"),
-                createInstruction(END)
+                createInstruction(PRINT, "1")
         );
     }
 
@@ -550,8 +520,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("02")),
-                createInstruction(END)
+                createInstruction(PRINT, q("02"))
         );
     }
 
@@ -564,8 +533,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("02")),
-                createInstruction(END)
+                createInstruction(PRINT, q("02"))
         );
     }
 
@@ -578,8 +546,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("024")),
-                createInstruction(END)
+                createInstruction(PRINT, q("024"))
         );
     }
 
@@ -592,8 +559,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("123456789"))
         );
     }
     
@@ -607,8 +573,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(PRINT, q("123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("123456789"))
         );
     }
 
@@ -622,8 +587,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             i += 1
                         end
                         """,
-                createInstruction(PRINT, q("0123456789")),
-                createInstruction(END)
+                createInstruction(PRINT, q("0123456789"))
         );
     }
 }

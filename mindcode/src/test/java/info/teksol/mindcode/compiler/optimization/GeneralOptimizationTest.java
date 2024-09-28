@@ -55,8 +55,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(LABEL, var(1001)),
                 createInstruction(JUMP, var(1000), "greaterThan", "n", "0"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(PRINTFLUSH, "message1"),
-                createInstruction(END)
+                createInstruction(PRINTFLUSH, "message1")
         );
     }
 
@@ -106,9 +105,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         pos = x + y
                         move(40, pos)
                         """,
-                createInstruction(UCONTROL, "move", "40", "113"),
-                createInstruction(END)
-
+                createInstruction(UCONTROL, "move", "40", "113")
         );
     }
 
@@ -120,8 +117,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         """,
                 createInstruction(READ, var(0), "cell1", "0"),
                 createInstruction(OP, "equal", var(1), var(0), "0"),
-                createInstruction(CONTROL, "enabled", "conveyor1", var(1)),
-                createInstruction(END)
+                createInstruction(CONTROL, "enabled", "conveyor1", var(1))
         );
     }
 
@@ -140,8 +136,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(OP, "lessThan", var(4), "graphite", "capacity"),
                 createInstruction(OP, "or", var(5), var(3), var(4)),
                 createInstruction(OP, "equal", var(6), var(5), "false"),
-                createInstruction(CONTROL, "enabled", "conveyor1", var(6)),
-                createInstruction(END)
+                createInstruction(CONTROL, "enabled", "conveyor1", var(6))
         );
     }
 
@@ -155,8 +150,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(SENSOR, "level", "nucleus1", "@resource"),
                 createInstruction(PRINT, "level"),
                 createInstruction(OP, "lessThan", var(0), "level", "10"),
-                createInstruction(CONTROL, "enabled", "conveyor1", var(0)),
-                createInstruction(END)
+                createInstruction(CONTROL, "enabled", "conveyor1", var(0))
         );
     }
 
@@ -174,8 +168,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(SET, "HEAPPTR", "cell3"),
                 createInstruction(WRITE, "1", "HEAPPTR", "0"),
                 createInstruction(WRITE, "2", "HEAPPTR", "1"),
-                createInstruction(WRITE, "3", "HEAPPTR", "2"),
-                createInstruction(END)
+                createInstruction(WRITE, "3", "HEAPPTR", "2")
         );
     }
 
@@ -195,8 +188,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(PRINT, var(0)),
                 createInstruction(WRITE, "1", "HEAPPTR", "0"),
                 createInstruction(WRITE, "2", "HEAPPTR", "1"),
-                createInstruction(WRITE, "3", "HEAPPTR", "2"),
-                createInstruction(END)
+                createInstruction(WRITE, "3", "HEAPPTR", "2")
         );
     }
 
@@ -216,8 +208,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(UCONTROL, "payDrop"),
                 createInstruction(UCONTROL, "boost", "false"),
                 createInstruction(UCONTROL, "idle"),
-                createInstruction(UCONTROL, "stop"),
-                createInstruction(END)
+                createInstruction(UCONTROL, "stop")
         );
     }
 
@@ -229,8 +220,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         print("\\nx: ", x)
                         print("\\nx+x: ", x+x)
                         """,
-                createInstruction(PRINT, q("\nx: 1\nx+x: 2")),
-                createInstruction(END)
+                createInstruction(PRINT, q("\nx: 1\nx+x: 2"))
         );
     }
 
@@ -283,8 +273,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         Result = ~TestVar
                         print(TestVar, "\\n", Result)
                         """,
-                createInstruction(PRINT, q("15\n-16")),
-                createInstruction(END)
+                createInstruction(PRINT, q("15\n-16"))
         );
     }
 
@@ -326,8 +315,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(PRINT, q("Less")),
                 createInstruction(SET, "result", "0"),
                 createInstruction(LABEL, var(1011)),
-                createInstruction(PRINT, "result"),
-                createInstruction(END)
+                createInstruction(PRINT, "result")
         );
     }
 
@@ -339,8 +327,7 @@ public class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         end
                         print(0)
                         """,
-                createInstruction(PRINT, "0"),
-                createInstruction(END)
+                createInstruction(PRINT, "0")
         );
     }
 

@@ -42,8 +42,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(PRINT, var(2)),
-                createInstruction(JUMP, var(1003), "lessThan", "i", "1000"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1003), "lessThan", "i", "1000")
         );
     }
 
@@ -65,8 +64,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(LABEL, var(1003)),
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(PRINT, "i"),
-                createInstruction(JUMP, var(1003), "lessThan", "i", var(0)),
-                createInstruction(END)
+                createInstruction(JUMP, var(1003), "lessThan", "i", var(0))
         );
     }
 
@@ -96,8 +94,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, "i"),
                 createInstruction(PRINT, var(4)),
                 createInstruction(PRINT, "k"),
-                createInstruction(JUMP, var(1003), "lessThan", "i", "A"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1003), "lessThan", "i", "A")
         );
     }
 
@@ -123,8 +120,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, "i"),
                 createInstruction(PRINT, "k"),
                 createInstruction(GOTO, var(0), "marker0"),
-                createInstruction(GOTOLABEL, var(1004), "marker0"),
-                createInstruction(END)
+                createInstruction(GOTOLABEL, var(1004), "marker0")
         );
     }
 
@@ -199,8 +195,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, "i"),
                 createInstruction(PRINT, "k"),
                 createInstruction(OP, "add", "k", "i", "10"),
-                createInstruction(JUMP, var(1003), "lessThan", "k", "A"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1003), "lessThan", "k", "A")
         );
     }
 
@@ -253,8 +248,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(JUMP, var(1007), "lessThan", "i", var(1)),
                 createInstruction(LABEL, var(1005)),
                 createInstruction(OP, "add", "j", "j", "1"),
-                createInstruction(JUMP, var(1006), "lessThan", "j", "A"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1006), "lessThan", "j", "A")
         );
     }
 
@@ -278,8 +272,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, "i"),
                 createInstruction(PRINT, var(1)),
                 createInstruction(GOTO, var(0), "marker0"),
-                createInstruction(GOTOLABEL, var(1004), "marker0"),
-                createInstruction(END)
+                createInstruction(GOTOLABEL, var(1004), "marker0")
         );
     }
 
@@ -308,8 +301,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, var(4)),
                 createInstruction(PRINT, var(5)),
                 createInstruction(GOTO, var(0), "marker0"),
-                createInstruction(GOTOLABEL, var(1004), "marker0"),
-                createInstruction(END)
+                createInstruction(GOTOLABEL, var(1004), "marker0")
         );
     }
 
@@ -332,8 +324,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SET, var(2), q("1")),
                 createInstruction(LABEL, var(1004)),
                 createInstruction(PRINT, var(2)),
-                createInstruction(JUMP, var(1005), "lessThan", "i", "1000"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1005), "lessThan", "i", "1000")
         );
     }
 
@@ -367,8 +358,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "add", "j", "j", "1"),
                 createInstruction(JUMP, var(1010), "lessThan", "j", "1000"),
                 createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1009), "lessThan", "i", "1000"),
-                createInstruction(END)
+                createInstruction(JUMP, var(1009), "lessThan", "i", "1000")
         );
     }
 
@@ -394,8 +384,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(JUMP, var(1006), "lessThan", "i", "A"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(PRINT, q("finish")),
-                createInstruction(END)
+                createInstruction(PRINT, q("finish"))
         );
     }
 
@@ -422,8 +411,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "add", "i", "i", "1"),
                 createInstruction(JUMP, var(1006), "lessThan", "i", "A"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(PRINT, q("finish")),
-                createInstruction(END)
+                createInstruction(PRINT, q("finish"))
         );
     }
 

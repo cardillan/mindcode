@@ -2,13 +2,13 @@
      3 instructions eliminated by Temp Variables Elimination.
      8 instructions eliminated by Dead Code Elimination (3 iterations).
      5 instructions eliminated by Jump Optimization (3 iterations).
-     3 instructions eliminated by Single Step Elimination (4 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
    107 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
    587 instructions added by Loop Unrolling (5 iterations).
      1 loops unrolled by Loop Unrolling.
-   521 instructions after optimizations.
+   520 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 966):
   * Loop Optimization: replicate condition at line 17            cost     1, benefit      625,0, efficiency      625,0 (+1 instructions)
@@ -3342,6 +3342,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    922 print "Power of ten limit reached."
    923 end
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   937 label __label22
+   938 print maxnum
+   939 label __label23
+-    * end
+
 Final code before resolving virtual instructions:
 
 set maxlen 0
@@ -3971,4 +3978,3 @@ op add d d 1
 jump __label24 lessThanEq d 100
 print 97
 print maxnum
-end

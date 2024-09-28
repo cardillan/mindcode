@@ -99,7 +99,8 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         op sub __tmp5 y 20
                         draw triangle __tmp0 __tmp1 __tmp2 __tmp3 __tmp4 __tmp5
                         end
-                        """,
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE),
                 LogicInstructionPrinter.toString(compiler.processor,
                         LogicInstructionLabelResolver.resolve(
                                 compiler.processor,
@@ -161,7 +162,8 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                         jump 8 always 0 0
                         printflush MSG
                         end
-                        """,
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE),
                 LogicInstructionPrinter.toString(compiler.processor,
                         LogicInstructionLabelResolver.resolve(
                                 compiler.processor,
@@ -170,9 +172,9 @@ class LogicInstructionPrinterTest extends AbstractGeneratorTest {
                                         STORAGE = nucleus1
                                         MSG = message1
                                         capacity = STORAGE.itemCapacity
-                                                                                        
+
                                         print("capacity: ", capacity, "\\n")
-                                                                                        
+
                                         for n = 0 ; n < @links ; n += 1
                                             building = getlink(n)
                                             type = building.type

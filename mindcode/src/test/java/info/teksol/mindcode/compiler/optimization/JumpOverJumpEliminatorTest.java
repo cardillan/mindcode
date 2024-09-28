@@ -46,8 +46,7 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
                 createInstruction(JUMP, var(1002), "strictEqual", var(0), "0"),
                 createInstruction(JUMP, var(1000), "always"),
                 createInstruction(LABEL, var(1002)),
-                createInstruction(PRINT, q("Out of loop")),
-                createInstruction(END)
+                createInstruction(PRINT, q("Out of loop"))
         );
     }
 
@@ -67,8 +66,7 @@ public class JumpOverJumpEliminatorTest extends AbstractOptimizerTest<JumpOverJu
                 createInstruction(SENSOR, "__fn0_amount", "vault1", "@coal"),
                 createInstruction(JUMP, "__start__", "equal", "__fn0_amount", "0"),
                 createInstruction(OP, "mod", var(4), "__fn0_amount", "10"),
-                createInstruction(PRINT, var(4)),
-                createInstruction(END)
+                createInstruction(PRINT, var(4))
         );
     }
 

@@ -1,9 +1,15 @@
      4 instructions before optimizations.
-     4 instructions after optimizations.
+     1 instructions eliminated by Single Step Elimination (3 iterations).
+     3 instructions after optimizations.
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+     0 write 10 bank1 0
+     1 read __tmp0 bank1 0
+     2 print __tmp0
+-    * end
 
 Final code before resolving virtual instructions:
 
 write 10 bank1 0
 read __tmp0 bank1 0
 print __tmp0
-end

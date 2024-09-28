@@ -1,7 +1,8 @@
     12 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Single Step Elimination (4 iterations).
      4 instructions eliminated by Data Flow Optimization (6 iterations).
-     6 instructions after optimizations.
+     5 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
      0 set value 1
@@ -66,6 +67,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2
      4 print __tmp1
      5 end
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+     2 op add __tmp1 A A
+     3 print __tmp1
+     4 print __tmp1
+-    * end
+
 Final code before resolving virtual instructions:
 
 set value 1
@@ -73,4 +81,3 @@ op add A value 1
 op add __tmp1 A A
 print __tmp1
 print __tmp1
-end

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.compiler.optimization;
 
+import info.teksol.mindcode.MindcodeInternalError;
 import info.teksol.mindcode.compiler.MessageLevel;
 import info.teksol.mindcode.compiler.generator.AstContext;
 import info.teksol.mindcode.compiler.generator.AstContextType;
@@ -7,6 +8,7 @@ import info.teksol.mindcode.compiler.generator.CallGraph;
 import info.teksol.mindcode.compiler.instructions.EndInstruction;
 import info.teksol.mindcode.compiler.instructions.GotoInstruction;
 import info.teksol.mindcode.compiler.instructions.LogicInstruction;
+import info.teksol.mindcode.compiler.instructions.NoOpInstruction;
 import info.teksol.mindcode.compiler.optimization.OptimizationContext.LogicList;
 
 import java.util.ArrayList;
@@ -87,10 +89,18 @@ class FunctionInliner extends BaseOptimizer {
             return null;
         }
 
-        int size = body.getLast() instanceof EndInstruction
-                ? body.getFromEnd(1) instanceof GotoInstruction ? body.size() - 2 : -1
-                : body.getLast() instanceof GotoInstruction ? body.size() - 1 : -1;
-        return size < 0 ? null : body.subList(0, size);
+        int index = body.size() - 1;
+        while (index > 0 && (body.get(index) instanceof EndInstruction || body.get(index) instanceof NoOpInstruction)) {
+            index--;
+        }
+
+        if (index <= 0) {
+            return null;
+        } else if (!(body.get(index) instanceof GotoInstruction)) {
+            throw new MindcodeInternalError("Unexpected function body structure.");
+        }
+
+        return body.subList(0, index);
     }
 
     private OptimizationResult inlineFunction(AstContext context, int costLimit) {

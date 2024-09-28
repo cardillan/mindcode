@@ -54,8 +54,7 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                         print(c)
                         """,
                 createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "c"),
-                createInstruction(END)
+                createInstruction(PRINT, "c")
         );
     }
 
@@ -71,8 +70,7 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                         end
                         print("Done")
                         """,
-                createInstruction(PRINT, q("Done")),
-                createInstruction(END)
+                createInstruction(PRINT, q("Done"))
         );
     }
 

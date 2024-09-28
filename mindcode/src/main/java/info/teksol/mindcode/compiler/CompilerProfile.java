@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
  * Holds parameters pertaining to both Mindustry Compiler and Schematics Builder in one place.
  */
 public class CompilerProfile {
+    public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
+
     public static final int MAX_PASSES = 1000;
     public static final int MAX_INSTRUCTIONS = 100_000;
     public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
@@ -40,6 +42,7 @@ public class CompilerProfile {
     private boolean printStackTrace = false;
 
     private List<SortCategory> sortVariables = List.of();
+    private boolean signature = true;
 
     // Compile and run
     private boolean run = false;
@@ -218,6 +221,15 @@ public class CompilerProfile {
 
     public CompilerProfile setSortVariables(List<SortCategory> sortVariables) {
         this.sortVariables = sortVariables;
+        return this;
+    }
+
+    public boolean isSignature() {
+        return signature;
+    }
+
+    public CompilerProfile setSignature(boolean signature) {
+        this.signature = signature;
         return this;
     }
 

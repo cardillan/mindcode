@@ -3,14 +3,14 @@
      1 instructions eliminated by Case Expression Optimization.
     13 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Optimization (3 iterations).
-     1 instructions eliminated by Single Step Elimination (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
      3 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
     10 instructions eliminated by Jump Straightening (3 iterations).
-    61 instructions after optimizations.
+    60 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 942):
   * Case Switching: convert case at line 16                      cost     3, benefit      625,0, efficiency      208,3 (+3 instructions)
@@ -709,6 +709,13 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1:
     71 op add S9 S9 1
     72 label __label29
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    92 print S7
+    93 print S8
+    94 print S9
+-    * end
+
 Final code before resolving virtual instructions:
 
 set S9 0
@@ -796,4 +803,3 @@ print S6
 print S7
 print S8
 print S9
-end

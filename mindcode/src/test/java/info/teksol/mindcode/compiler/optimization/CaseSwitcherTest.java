@@ -101,8 +101,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                 createInstruction(LABEL, var(1021)),
                 createInstruction(PRINT, q("oh no!")),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(PRINT, q("end")),
-                createInstruction(END)
+                createInstruction(PRINT, q("end"))
         );
     }
 
@@ -179,8 +178,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                 createInstruction(PRINT, "9"),
                 createInstruction(LABEL, var(1021)),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(PRINT, q("end")),
-                createInstruction(END)
+                createInstruction(PRINT, q("end"))
         );
     }
 
@@ -243,8 +241,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                 createInstruction(LABEL, var(1011)),
                 createInstruction(SET, var(2), q("I don't known this number!")),
                 createInstruction(LABEL, var(1000)),
-                createInstruction(PRINT, var(2)),
-                createInstruction(END)
+                createInstruction(PRINT, var(2))
         );
     }
 }

@@ -2,13 +2,13 @@
     20 instructions eliminated by Temp Variables Elimination.
      4 instructions eliminated by Dead Code Elimination (3 iterations).
      3 instructions eliminated by Jump Optimization (4 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
     10 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
     13 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
      1 instructions eliminated by Print Merging.
-    95 instructions after optimizations.
+    94 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 916):
   * Loop Optimization: replicate condition at line 17            cost     5, benefit       25,0, efficiency        5,0 (+5 instructions)
@@ -443,6 +443,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     54 op add MILLIS MILLIS 1000
     55 op mul SIGN_MILLIS MULTIPLIER MILLIS
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   108 op land __tmp17 __tmp14 __tmp16
+   109 jump __label15 notEqual __tmp17 false
+   110 label __label5
+-    * end
+
 Modifications by Final phase, Print Merging, iteration 1 (-1 instructions):
  
     70 op sub elapsed @time start
@@ -560,4 +567,3 @@ op strictEqual __tmp16 SESSION_KEY __tmp15
 op land __tmp17 __tmp14 __tmp16
 jump __label15 notEqual __tmp17 false
 label __label5
-end

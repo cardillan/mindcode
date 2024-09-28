@@ -2,12 +2,12 @@
      9 instructions eliminated by Temp Variables Elimination.
      9 instructions eliminated by Dead Code Elimination (3 iterations).
      4 instructions eliminated by Jump Optimization (3 iterations).
-     3 instructions eliminated by Single Step Elimination (4 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
     10 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      5 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (3 iterations).
-    90 instructions after optimizations.
+    89 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 906):
   * Loop Optimization: replicate condition at line 43            cost     1, benefit       25,0, efficiency       25,0 (-4 instructions)
@@ -378,6 +378,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
      7 print "Water and Cryofluid Level Meter"
      8 set n @links
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   111 sensor __tmp15 SWITCH @enabled
+   112 jump __label24 equal __tmp15 0
+   113 label __label21
+-    * end
+
 Final code before resolving virtual instructions:
 
 set TANK_WATER null
@@ -481,4 +488,3 @@ printflush MESSAGE
 sensor __tmp15 SWITCH @enabled
 jump __label24 equal __tmp15 0
 label __label21
-end

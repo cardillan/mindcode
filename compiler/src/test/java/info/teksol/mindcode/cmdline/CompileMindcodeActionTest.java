@@ -173,7 +173,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     @Test
     public void createsCompilerProfile() throws ArgumentParserException {
-        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100 --sort-variables ALL");  //  -m restricted
+        Namespace arguments = parseCommandLine(Action.COMPILE_MINDCODE.getShortcut() + " -t 6 -o none -p 1 -d 3 -u source -s -g size -r active -e 100 --run --run-steps 100 --sort-variables ALL --no-signature");  //  -m restricted
         CompilerProfile actual = ActionHandler.createCompilerProfile(arguments);
 
         assertEquals(ProcessorEdition.STANDARD_PROCESSOR, actual.getProcessorEdition());
@@ -185,6 +185,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(GenerationGoal.SIZE, actual.getGoal());
         assertEquals(Remarks.ACTIVE, actual.getRemarks());
         assertEquals(List.of(SortCategory.ALL), actual.getSortVariables());
+        assertEquals(false, actual.isSignature());
         //assertEquals(MemoryModel.RESTRICTED, actual.getMemoryModel());
         assertEquals(FinalCodeOutput.SOURCE, actual.getFinalCodeOutput());
         assertTrue(actual.isPrintStackTrace());
@@ -208,6 +209,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(expected.getGoal(), actual.getGoal());
         assertEquals(expected.getRemarks(), actual.getRemarks());
         assertEquals(expected.getSortVariables(), actual.getSortVariables());
+        assertEquals(expected.isSignature(), actual.isSignature());
         //assertEquals(expected.getMemoryModel(), actual.getMemoryModel());
         assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());
         assertEquals(expected.isPrintStackTrace(), actual.isPrintStackTrace());

@@ -2,14 +2,14 @@
     26 instructions eliminated by Temp Variables Elimination.
     14 instructions eliminated by Dead Code Elimination (6 iterations).
     10 instructions eliminated by Jump Optimization (3 iterations).
-     6 instructions eliminated by Single Step Elimination (4 iterations).
+     7 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
     10 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
      3 instructions eliminated by Jump Straightening (3 iterations).
      4 instructions eliminated by Print Merging.
-    89 instructions after optimizations.
+    88 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 908):
   * Loop Optimization: replicate condition at line 39            cost     1, benefit       25,0, efficiency       25,0 (+1 instructions)
@@ -587,6 +587,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    123 write 0 MEMORY n
    124 op add n n 1
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   125 label __label30
+   126 jump __label34 lessThan n @links
+   127 label __label31
+-    * end
+
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
     94 print "Item Counter                  \n"
@@ -721,4 +728,3 @@ write 0 MEMORY n
 op add n n 1
 jump __label34 lessThan n @links
 label __label31
-end

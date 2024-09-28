@@ -31,4 +31,9 @@ public class ReturnInstruction extends BaseInstruction {
     public final LogicVariable getStack() {
         return (LogicVariable) getArg(0);
     }
+
+    @Override
+    public boolean endsCodePath() {
+        return true;
+    }
 }

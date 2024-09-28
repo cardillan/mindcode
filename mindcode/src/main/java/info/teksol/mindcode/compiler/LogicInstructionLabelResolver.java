@@ -109,9 +109,23 @@ public class LogicInstructionLabelResolver {
     }
 
     public List<LogicInstruction> resolveLabels(List<LogicInstruction> program) {
+        if (program.isEmpty()) {
+            return program;
+        }
+
+        // Save the last instruction before it is resolved
+        LogicInstruction last = program.get(program.size() - 1);
+
         program = resolveRemarks(program);
         calculateAddresses(program);
-        return resolveAddresses(resolveVirtualInstructions(program));
+        program = resolveAddresses(resolveVirtualInstructions(program));
+
+        if (last.endsCodePath() && profile.isSignature() && program.size() < profile.getInstructionLimit()) {
+            program.add(instructionProcessor.createPrint(last.getAstContext(),
+                    LogicString.create(CompilerProfile.SIGNATURE)));
+        }
+
+        return program;
     }
 
     private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {

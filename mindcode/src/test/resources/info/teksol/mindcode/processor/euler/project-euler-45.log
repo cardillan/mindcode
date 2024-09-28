@@ -3,10 +3,11 @@
      6 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (3 iterations).
      2 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by Single Step Elimination (4 iterations).
     12 instructions eliminated by Data Flow Optimization (4 iterations).
      3 instructions updated by PropagateJumpTargets.
      2 instructions eliminated by Unreachable Code Elimination.
-    15 instructions after optimizations.
+    14 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-9 instructions):
      0 set p 165
@@ -238,6 +239,13 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
     15 label __label7
     16 print 1533776805
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    18 label __label9
+    19 print hn
+    20 label __label10
+-    * end
+
 Final code before resolving virtual instructions:
 
 op idiv pn 82502 2
@@ -257,4 +265,3 @@ jump __label0 always 0 0
 label __label2
 print 1533776805
 print hn
-end

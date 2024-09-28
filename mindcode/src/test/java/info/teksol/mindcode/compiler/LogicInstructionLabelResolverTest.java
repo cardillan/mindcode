@@ -20,7 +20,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(OP, "add", var(0), "n", "1"),
                         createInstruction(SET, "n", var(0)),
                         createInstruction(JUMP, "0", "always"),
-                        createInstruction(END)
+                        createInstruction(END),
+                        createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,
@@ -46,7 +47,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(OP, "sub", "__sp", "__sp", "1"),
                         createInstruction(READ, "__tmp0", "cell1", "__sp"),
                         createInstruction(SET, "@counter", "__tmp0"),
-                        createInstruction(END)
+                        createInstruction(END),
+                        createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,
@@ -73,7 +75,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
         assertLogicInstructionsMatch(compiler,
                 List.of(
                         createInstruction(PRINT, q("Hello")),
-                        createInstruction(END)
+                        createInstruction(END),
+                        createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,
@@ -96,7 +99,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(JUMP, "2", "always"),
                         createInstruction(PRINT, q("This is a remark")),
                         createInstruction(PRINT, q("Hello")),
-                        createInstruction(END)
+                        createInstruction(END),
+                        createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,
@@ -118,7 +122,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                 List.of(
                         createInstruction(PRINT, q("This is a remark")),
                         createInstruction(PRINT, q("Hello")),
-                        createInstruction(END)
+                        createInstruction(END),
+                        createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,
@@ -145,7 +150,8 @@ class LogicInstructionLabelResolverTest extends AbstractGeneratorTest {
                         createInstruction(PRINT, "MAX"),
                         createInstruction(PRINT, "A"),
                         createInstruction(PRINT, "i"),
-                        createInstruction(END)
+                        createInstruction(END),
+                        createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
                 ),
                 LogicInstructionLabelResolver.resolve(
                         compiler.processor,

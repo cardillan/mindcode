@@ -40,6 +40,11 @@ public class JumpInstruction extends BaseInstruction {
                 List.of(getTarget(), getCondition().inverse(), getX(), getY()), getParams());
     }
 
+    @Override
+    public boolean endsCodePath() {
+        return isUnconditional();
+    }
+
     public boolean isConditional() {
         return getCondition() != Condition.ALWAYS;
     }

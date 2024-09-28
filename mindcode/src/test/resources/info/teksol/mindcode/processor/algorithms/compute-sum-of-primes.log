@@ -3,7 +3,7 @@
     15 instructions eliminated by Dead Code Elimination (2 passes, 5 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
      6 instructions eliminated by Jump Optimization (4 iterations).
-    10 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+    11 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
    564 instructions eliminated by Data Flow Optimization (9 passes, 30 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -12,7 +12,7 @@
     17 instructions added by Function Inlining (12 iterations).
      5 function calls inlined by Function Inlining.
     16 instructions eliminated by Unreachable Code Elimination.
-   440 instructions after optimizations.
+   439 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 938):
     Loop Unrolling: unroll loop at line 29                       cost    33, benefit      300,0, efficiency        9,1
@@ -7134,7 +7134,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-2 instruction
    993 jump __label181 always
    994 label __label181
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-3 instructions):
  
    973 op equal __fn0_result __fn1retval false
    974 jump __label168 equal __fn0_result false
@@ -7151,6 +7151,11 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-2 instructi
    992 label __label181
    993 label __label182
    994 label __label183
+ 
+  1036 label __label15
+  1037 label __label3
+  1038 print __fn2_sum
+-    * end
 
 Modifications by Final phase, Single Step Elimination, iteration 2 (-2 instructions):
  
@@ -7629,4 +7634,3 @@ label __label20
 op add __fn2_i __fn2_i 4
 jump __label35 lessThanEq __fn2_i 500
 print __fn2_sum
-end

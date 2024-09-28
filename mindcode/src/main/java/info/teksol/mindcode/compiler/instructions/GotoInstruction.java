@@ -32,4 +32,9 @@ public class GotoInstruction extends BaseInstruction {
     public final LogicLabel getMarker() {
         return (LogicLabel) getArg(1);
     }
+
+    @Override
+    public boolean endsCodePath() {
+        return true;
+    }
 }

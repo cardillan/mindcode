@@ -24,4 +24,9 @@ public class EndInstruction extends BaseInstruction {
     public EndInstruction withContext(AstContext astContext) {
         return new EndInstruction(this, astContext);
     }
+
+    @Override
+    public boolean endsCodePath() {
+        return true;
+    }
 }

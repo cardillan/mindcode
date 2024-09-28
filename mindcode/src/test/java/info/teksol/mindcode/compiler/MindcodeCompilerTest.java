@@ -31,8 +31,8 @@ class MindcodeCompilerTest {
                 set value true
                 jump 0 equal value false
                 print "Hello"
-                end
-                """, result.output());
+                """,
+                result.output());
 
         assertEquals("Hello", result.textBuffer());
 
@@ -49,7 +49,6 @@ class MindcodeCompilerTest {
                     2:  set value true
                     3:  jump __start__ equal value false
                     4:  print "Hello"
-                    5:  end
                 """, message.message());
     }
 }

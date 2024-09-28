@@ -2,7 +2,7 @@
     56 instructions eliminated by Temp Variables Elimination.
     43 instructions eliminated by Dead Code Elimination (5 iterations).
     20 instructions eliminated by Jump Optimization (4 iterations).
-    15 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+    16 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      8 instructions eliminated by If Expression Optimization (3 iterations).
     26 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
@@ -11,7 +11,7 @@
     11 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
      1 instructions updated by PropagateJumpTargets.
     10 instructions eliminated by Print Merging.
-   354 instructions after optimizations.
+   353 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 624):
   * Loop Optimization: replicate condition at line 160           cost     1, benefit       25,0, efficiency       25,0 (-5 instructions)
@@ -1813,6 +1813,13 @@ Modifications by Final phase, Jump Threading, iteration 1:
    349 draw color 255 80 80 255
    350 op add __tmp133 y 3
 
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   441 sensor __tmp86 SWITCH @enabled
+   442 jump __label86 equal __tmp86 0
+   443 label __label51
+-    * end
+
 Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
     15 set icon null
@@ -2277,4 +2284,3 @@ printflush MESSAGE
 sensor __tmp86 SWITCH @enabled
 jump __label86 equal __tmp86 0
 label __label51
-end
