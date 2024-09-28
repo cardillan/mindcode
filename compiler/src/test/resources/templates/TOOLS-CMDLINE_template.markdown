@@ -20,7 +20,13 @@ which must be one of the following:
 
 All actions take the name of input file and the name of output file as an argument. When the given input or output is 
 a text file, the argument is optional and when not specified, the standard input/output is used. Use `-` to explicitly 
-specify standard input or output for input or output file.  
+specify standard input or output for input or output file.
+
+### Additional input files
+
+When performing the _Compile Mindcode_ action, it is possible to use the `-a` or `--append` command line parameter to specify additional source files to be compiled along with the input file. The source files are parsed separately and error messages that may be generated during the compilation include the name of the file where the error occurred.
+
+This feature is experimental and will be ultimately replaced by [support for modules](https://github.com/cardillan/mindcode/issues/149).
 
 ## Log file
 

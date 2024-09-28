@@ -4,6 +4,7 @@ import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.mindcode.compiler.CompilerMessage;
 import info.teksol.mindcode.compiler.CompilerOutput;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.SourceFile;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.ArgumentGroup;
@@ -12,6 +13,7 @@ import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import static info.teksol.mindcode.compiler.CompilerFacade.compile;
@@ -49,6 +51,12 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("?")
                 .setDefault(new File("-"));
 
+        files.addArgument("-a", "--append")
+                .help("Additional Mindcode source file to be compiled along with the input file. Such additional files may " +
+                        "contain common functions. More than one file may be added this way.")
+                .type(Arguments.fileType().verifyCanRead())
+                .nargs("*");
+
         addCompilerOptions(subparser, defaults);
         addRunOptions(subparser, defaults);
         addOptimizationOptions(subparser, defaults);
@@ -77,12 +85,23 @@ public class CompileMindcodeAction extends ActionHandler {
                 .setDefault(defaults.getStepLimit());
     }
 
+    private SourceFile readFile(File file, boolean multiple) {
+        return new SourceFile(isStdInOut(file) || !multiple ? "" : file.getPath(), readInput(file));
+    }
+
     @Override
     void handle(Namespace arguments) {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);
-        String sourceCode = readInput(arguments.get("input"));
+        List<File> inputs = new ArrayList<>();
+        inputs.add(arguments.get("input"));
+        List<File> others = arguments.get("append");
+        if (others != null) {
+            inputs.addAll(others);
+        }
 
-        final CompilerOutput<String> result = compile(sourceCode, compilerProfile);
+        List<SourceFile> sourceFiles = inputs.stream().map(f -> readFile(f, inputs.size() >1)).toList();
+
+        final CompilerOutput<String> result = compile(sourceFiles, compilerProfile);
 
         File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
         File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");

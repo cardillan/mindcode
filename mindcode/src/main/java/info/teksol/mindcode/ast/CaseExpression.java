@@ -1,5 +1,6 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -11,8 +12,8 @@ public class CaseExpression extends ControlBlockAstNode {
     private final List<CaseAlternative> alternatives;
     private final AstNode elseBranch;
 
-    CaseExpression(Token startToken, AstNode condition, List<CaseAlternative> alternatives, AstNode elseBranch) {
-        super(startToken, alternatives, condition, elseBranch);
+    CaseExpression(Token startToken, SourceFile sourceFile, AstNode condition, List<CaseAlternative> alternatives, AstNode elseBranch) {
+        super(startToken, sourceFile, alternatives, condition, elseBranch);
         this.condition = condition;
         this.alternatives = alternatives;
         this.elseBranch = elseBranch;

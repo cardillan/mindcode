@@ -61,7 +61,7 @@ public class ConstantExpressionEvaluator {
                 if (a != null && b != null) {
                     if (operation == Operation.ADD && (a instanceof StringVariable || b instanceof StringVariable)) {
                         String concat = a.toString().concat(b.toString());
-                        return new StringLiteral(node.startToken(), concat);
+                        return new StringLiteral(node.startToken(), node.sourceFile(), concat);
                     } else {
                         Variable result = DoubleVariable.newNullValue(false, "result");
                         eval.execute(result, a, b);
@@ -86,15 +86,15 @@ public class ConstantExpressionEvaluator {
             case "|" -> fixed.getDoubleValue() == 0 ? exp : node;
 
             // If the fixed value is zero, evaluates to zero
-            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral(node.startToken(), "0") : node;
+            case "&" -> fixed.getDoubleValue() == 0 ? new NumericLiteral(node.startToken(), node.sourceFile(), "0") : node;
 
             // If the fixed value is zero (= false), evaluates to false
             // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(node.startToken(), true) : node;
+            case "or", "||" -> fixed.getDoubleValue() != 0 ? new BooleanLiteral(node.startToken(), node.sourceFile(), true) : node;
 
             // If the fixed value is zero (= false), evaluates to false
             // TODO: return exp instead of node if exp is known to be a boolean expression
-            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(node.startToken(), false) : node;
+            case "and", "&&" -> fixed.getDoubleValue() == 0 ? new BooleanLiteral(node.startToken(), node.sourceFile(), false) : node;
             default -> node;
         };
     }

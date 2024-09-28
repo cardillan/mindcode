@@ -1,5 +1,6 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.SourceFile;
 import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
@@ -8,8 +9,8 @@ public class Parameter extends BaseAstNode {
     private final String name;
     private final AstNode value;
 
-    public Parameter(Token startToken, String name, AstNode value) {
-        super(startToken);
+    public Parameter(Token startToken, SourceFile sourceFile, String name, AstNode value) {
+        super(startToken, sourceFile);
         this.name = name;
         this.value = value;
     }

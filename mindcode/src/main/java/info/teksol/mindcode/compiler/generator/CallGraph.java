@@ -24,7 +24,7 @@ public final class CallGraph {
         this.allocatedStack = allocatedStack;
 
         // Create mock function declaration representing main program body.
-        addFunction(new FunctionDeclaration(null, true, false, MAIN, List.of(), new NoOp()));
+        addFunction(new FunctionDeclaration(null, null,true, false, MAIN, List.of(), new NoOp()));
     }
 
     public static CallGraph createEmpty() {

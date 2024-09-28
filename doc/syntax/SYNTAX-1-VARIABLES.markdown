@@ -533,7 +533,7 @@ the entire `if DEBUG ... end` statement will be skipped and not included in the 
 > 
 > `const FMT = $"Position: ($x, $y)";
 > 
-> The formattable string literal must be passed directly into the `print` or `println` functions.
+> The formattable string literal must be passed directly into the `print`, `println`, `printf` or `remark` functions.
 
 ## Built-in icons
 

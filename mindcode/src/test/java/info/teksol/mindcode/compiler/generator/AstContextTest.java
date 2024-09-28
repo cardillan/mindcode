@@ -4,6 +4,7 @@ import info.teksol.mindcode.ast.AstNode;
 import info.teksol.mindcode.ast.FunctionDeclaration;
 import info.teksol.mindcode.ast.NoOp;
 import info.teksol.mindcode.compiler.CompilerProfile;
+import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.generator.CallGraph.LogicFunction;
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +18,8 @@ class AstContextTest {
     private final CompilerProfile profile = CompilerProfile.standardOptimizations(false);
     private final AstContext root = AstContext.createRootNode(profile);
     private final CallGraph callGraph = CallGraph.createEmpty();
-    private final FunctionDeclaration functionDeclaration1 = new FunctionDeclaration(null, false, false, "test1",List.of(), new NoOp());
-    private final FunctionDeclaration functionDeclaration2 = new FunctionDeclaration(null, false, false, "test2",List.of(), new NoOp());
+    private final FunctionDeclaration functionDeclaration1 = new FunctionDeclaration(null, null, false, false, "test1",List.of(), new NoOp());
+    private final FunctionDeclaration functionDeclaration2 = new FunctionDeclaration(null, null, false, false, "test2",List.of(), new NoOp());
     private LogicFunction function1;
     private LogicFunction function2;
     private AstContext context;
@@ -251,6 +252,11 @@ class AstContextTest {
 
         @Override
         public Token startToken() {
+            return null;
+        }
+
+        @Override
+        public SourceFile sourceFile() {
             return null;
         }
 

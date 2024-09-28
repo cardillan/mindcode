@@ -32,21 +32,25 @@ public class MindcodeCompiler implements Compiler<String> {
     private InstructionProcessor instructionProcessor;
 
     private final List<CompilerMessage> messages = new ArrayList<>();
-    private final ANTLRErrorListener errorListener = new ErrorListener(messages);
+    private final ErrorListener errorListener = new ErrorListener(messages);
     public MindcodeCompiler(CompilerProfile profile) {
         this.profile = profile;
     }
 
     @Override
-    public CompilerOutput<String> compile(String sourceCode) {
+    public CompilerOutput<String> compile(List<SourceFile> sourceFiles) {
         String instructions = "";
         RunResults runResults = new RunResults(null,0);
 
         try {
             long parseStart = System.nanoTime();
-            final Seq program = parse(sourceCode);
-            if (messages.stream().anyMatch(CompilerMessage::isError)) {
-                return new CompilerOutput<>("", messages, null, 0);
+            Seq program = null;
+            for (SourceFile sourceFile : sourceFiles) {
+                final Seq next = parse(sourceFile);
+                program = Seq.append(program, next);
+                if (messages.stream().anyMatch(CompilerMessage::isError)) {
+                    return new CompilerOutput<>("", messages, null, 0);
+                }
             }
             printParseTree(program);
             long parseTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
@@ -76,7 +80,7 @@ public class MindcodeCompiler implements Compiler<String> {
                     case PLAIN      -> LogicInstructionPrinter.toStringWithLineNumbers(instructionProcessor, result);
                     case FLAT_AST   -> LogicInstructionPrinter.toStringWithContextsShort(instructionProcessor, result);
                     case DEEP_AST   -> LogicInstructionPrinter.toStringWithContextsFull(instructionProcessor, result);
-                    case SOURCE     -> LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, result, sourceCode);
+                    case SOURCE     -> LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, result);
                 };
                 debug(output);
             }
@@ -110,15 +114,16 @@ public class MindcodeCompiler implements Compiler<String> {
     /**
      * Parses the source code using ANTLR generated parser.
      */
-    private Seq parse(String sourceCode) {
-        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceCode));
+    private Seq parse(SourceFile sourceFile) {
+        errorListener.setFileName(sourceFile.fileName());
+        final MindcodeLexer lexer = new MindcodeLexer(CharStreams.fromString(sourceFile.code()));
         lexer.removeErrorListeners();
         lexer.addErrorListener(errorListener);
         final MindcodeParser parser = new MindcodeParser(new BufferedTokenStream(lexer));
         parser.removeErrorListeners();
         parser.addErrorListener(errorListener);
         final MindcodeParser.ProgramContext context = parser.program();
-        return AstNodeBuilder.generate(context);
+        return AstNodeBuilder.generate(sourceFile, context);
     }
 
     /** Prints the parse tree according to level */
@@ -185,18 +190,23 @@ public class MindcodeCompiler implements Compiler<String> {
 
     private static class ErrorListener extends BaseErrorListener {
         private final List<CompilerMessage> errors;
+        private String fileNameText;
 
         public ErrorListener(List<CompilerMessage> errors) {
             this.errors = errors;
+        }
+
+        public void setFileName(String fileName) {
+            this.fileNameText = fileName.isEmpty() ? "" : " in " + fileName;
         }
 
         @Override
         public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
                 String msg, RecognitionException e) {
             if (offendingSymbol == null) {
-                errors.add(MindcodeMessage.error("Syntax error on line " + line + ":" + charPositionInLine + ": " + msg));
+                errors.add(MindcodeMessage.error("Syntax error%s on line %d:%d: %s", fileNameText, line, charPositionInLine, msg));
             } else {
-                errors.add(MindcodeMessage.error("Syntax error: " + offendingSymbol + " on line " + line + ":" + charPositionInLine + ": " + msg));
+                errors.add(MindcodeMessage.error("Syntax error: %s%s on line %d:%d: %s", offendingSymbol, fileNameText, line, charPositionInLine, msg));
             }
         }
     }

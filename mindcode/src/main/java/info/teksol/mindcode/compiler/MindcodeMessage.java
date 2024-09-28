@@ -16,6 +16,10 @@ public record MindcodeMessage(MessageLevel level, String message) implements Com
         return new MindcodeMessage(MessageLevel.ERROR, message);
     }
 
+    public static MindcodeMessage error(@PrintFormat String format, Object... args) {
+        return new MindcodeMessage(MessageLevel.ERROR, String.format(Locale.US, format, args));
+    }
+
     public static MindcodeMessage warn(String message) {
         return new MindcodeMessage(MessageLevel.WARNING, message);
     }

@@ -17,7 +17,7 @@ class DirectiveProcessorTest {
     @Test
     void processesDirectiveTarget() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, new Directive(null, "target", "ML6"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "target", "ML6"));
         DirectiveProcessor.processDirectives(seq, profile, m -> {});
         assertEquals(ProcessorVersion.V6, profile.getProcessorVersion());
     }
@@ -25,7 +25,7 @@ class DirectiveProcessorTest {
     @Test
     void processesDirectiveOptimization() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, new Directive(null, "optimization", "basic"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "optimization", "basic"));
         DirectiveProcessor.processDirectives(seq, profile, m -> {});
         assertTrue(profile.getOptimizationLevels().values().stream().allMatch(l -> l == OptimizationLevel.BASIC));
     }
@@ -34,7 +34,7 @@ class DirectiveProcessorTest {
     void processesDirectiveInstructionLimit() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setInstructionLimit(1);
-        Seq seq = new Seq(null, new Directive(null, "instruction-limit", "900"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "instruction-limit", "900"));
         DirectiveProcessor.processDirectives(seq, profile, m -> {});
         assertEquals(900, profile.getInstructionLimit());
     }
@@ -43,7 +43,7 @@ class DirectiveProcessorTest {
     void processesDirectivePasses() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setOptimizationPasses(1);
-        Seq seq = new Seq(null, new Directive(null, "passes", "10"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "passes", "10"));
         DirectiveProcessor.processDirectives(seq, profile, m -> {});
         assertEquals(10, profile.getOptimizationPasses());
     }
@@ -52,7 +52,7 @@ class DirectiveProcessorTest {
     void processesDirectiveGoal() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setGoal(GenerationGoal.SIZE);
-        Seq seq = new Seq(null, new Directive(null, "goal", "speed"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "goal", "speed"));
         DirectiveProcessor.processDirectives(seq, profile, m -> {});
         assertEquals(GenerationGoal.SPEED, profile.getGoal());
     }
@@ -61,7 +61,7 @@ class DirectiveProcessorTest {
     void processesDirectiveRemarks() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setRemarks(Remarks.NONE);
-        Seq seq = new Seq(null, new Directive(null, "remarks", "active"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "remarks", "active"));
         DirectiveProcessor.processDirectives(seq, profile, m -> {});
         assertEquals(Remarks.ACTIVE, profile.getRemarks());
     }
@@ -69,7 +69,7 @@ class DirectiveProcessorTest {
     @Test
     void processesDirectiveSortVariables() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, new Directive(null, "sort-variables", "params,globals"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "sort-variables", "params,globals"));
         DirectiveProcessor.processDirectives(seq, profile, m -> {});
         assertEquals(List.of(SortCategory.PARAMS, SortCategory.GLOBALS), profile.getSortVariables());
     }
@@ -77,7 +77,7 @@ class DirectiveProcessorTest {
     @Test
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, new Directive(null, "fluffyBunny", "basic"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "fluffyBunny", "basic"));
         List<CompilerMessage> messages = new ArrayList<>();
         DirectiveProcessor.processDirectives(seq, profile, messages::add);
         assertEquals(List.of(MindcodeMessage.error("Unknown compiler directive 'fluffyBunny'.")), messages);
@@ -86,7 +86,7 @@ class DirectiveProcessorTest {
     @Test
     void refusesInvalidValue() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        Seq seq = new Seq(null, new Directive(null, "target", "fluffyBunny"));
+        Seq seq = new Seq(null, null, new Directive(null, null, "target", "fluffyBunny"));
         List<CompilerMessage> messages = new ArrayList<>();
         DirectiveProcessor.processDirectives(seq, profile, messages::add);
         assertEquals(List.of(MindcodeMessage.error("Invalid value 'fluffyBunny' of compiler directive 'target'.")), messages);

@@ -1,5 +1,6 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
 import info.teksol.mindcode.logic.LogicLiteral;
 import info.teksol.mindcode.logic.LogicString;
@@ -10,8 +11,8 @@ import java.util.Objects;
 public class StringLiteral extends ConstantAstNode {
     protected final String text;
 
-    public StringLiteral(Token startToken, String text) {
-        super(startToken);
+    public StringLiteral(Token startToken, SourceFile sourceFile, String text) {
+        super(startToken, sourceFile);
         this.text = text;
     }
 

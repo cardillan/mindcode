@@ -1,5 +1,6 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -9,8 +10,8 @@ public class Assignment extends BaseAstNode {
     private final AstNode var;
     private final AstNode value;
 
-    public Assignment(Token startToken, AstNode var, AstNode value) {
-        super(startToken, var, value);
+    public Assignment(Token startToken, SourceFile sourceFile, AstNode var, AstNode value) {
+        super(startToken, sourceFile, var, value);
         this.var = var;
         this.value = value;
     }

@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
 
+import info.teksol.mindcode.compiler.SourceFile;
 import org.antlr.v4.runtime.Token;
 
 import java.util.Objects;
@@ -8,8 +9,8 @@ import java.util.Objects;
 public class VarRef extends BaseAstNode {
     private final String name;
 
-    public VarRef(Token startToken, String name) {
-        super(startToken);
+    public VarRef(Token startToken, SourceFile sourceFile, String name) {
+        super(startToken, sourceFile);
         this.name = name;
     }
 

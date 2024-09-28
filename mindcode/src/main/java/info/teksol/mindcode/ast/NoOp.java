@@ -3,7 +3,7 @@ package info.teksol.mindcode.ast;
 public class NoOp extends BaseAstNode {
 
     public NoOp() {
-        super(null);
+        super(null, null);
     }
 
     @Override

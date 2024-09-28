@@ -8,9 +8,7 @@ import info.teksol.mindcode.compiler.instructions.RemarkInstruction;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -113,9 +111,9 @@ public class LogicInstructionPrinter {
         return buffer.toString();
     }
 
-    public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions, String sourceCode) {
+    public static String toStringWithSourceCode(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         AtomicInteger lineNumber = new AtomicInteger(0);
-        final List<String> lines = sourceCode.lines().toList();
+        final Map<SourceFile, List<String>> allLines = new HashMap<>();
         int prevLine = -1;
 
         final StringBuilder buffer = new StringBuilder();
@@ -128,13 +126,21 @@ public class LogicInstructionPrinter {
             lineBuffer.append(instruction.getOpcode().getOpcode());
             addArgs(instructionProcessor.getPrintArgumentCount(instruction), lineBuffer, instruction);
 
-            if (instruction.getAstContext().node() != null && instruction.getAstContext().node().startToken() != null) {
+            AstContext astContext = instruction.getAstContext();
+            if (astContext.node() != null && astContext.node().startToken() != null && astContext.node().sourceFile() != null) {
+                SourceFile file = astContext.node().sourceFile();
                 String srcLine = "** Corresponding source code line not found! **";
-                int line = instruction.getAstContext().node().startToken().getLine() - 1;
+                List<String> lines = allLines.get(file);
+                if (lines == null) {
+                    lines = file.code().lines().toList();
+                    allLines.put(file, lines);
+                }
+
+                int line = astContext.node().startToken().getLine() - 1;
                 if (line == prevLine) {
                     srcLine = "...";
                 } else if (line >= 0 && line < lines.size()) {
-                    srcLine = lines.get(line).trim();
+                    srcLine = (file.fileName().isEmpty() ? "" : file.fileName() + ": ") + lines.get(line).trim();
                     prevLine = line;
                 }
 

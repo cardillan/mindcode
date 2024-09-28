@@ -25,7 +25,7 @@ The main advantage is that the entire output of the program can be displayed and
 
 The other option to debug a Mindcode program is to examine its behavior in actual Mindustry World. Mindustry provides a way to inspect the program's variables in the **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in sufficiently large programs.
 
-It is possible to use the [`sort-variables`](SYNTAX-5-OTHER.markdown#option-sort-variables) compiler directive, or the `--sort-variables` command-line option, to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `packcolor` instruction is used, which can read - and therefore create - up to four variables per instruction. The result is not stored anywhere so that the variable-ordering code block doesn't change values of any variables, and therefore the behavior of the program remains unaltered, except for possible difference in timing.)
+It is possible to use the [`sort-variables`](SYNTAX-5-OTHER.markdown#option-sort-variables) compiler directive, or the `--sort-variables` command-line option, to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `packcolor` instruction is used, which can read - and therefore create - up to four variables per instruction, without any side effects. The result is not stored anywhere so that the variable-ordering code block doesn't change values of any variables, and therefore the behavior of the program remains unaltered, except for an unavoidable difference in total runtime of the program.)
 
 An example of a program created with sorting variables:
 
@@ -78,7 +78,7 @@ print "\n"
 end
 ```
 
-The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceeds the instruction limit, some or all variables will remain unordered.
+The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.
 
 ---
 

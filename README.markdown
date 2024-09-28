@@ -4,11 +4,10 @@
 
 Welcome to **Mindcode**, a high-level language for [Mindustry](https://github.com/Anuken/Mindustry). Mindustry is a game in the tower-defense genre. Mindustry added Logic in late 2020. Logic is a programming language, closer to assembly than a high-level language. Mindcode aims to make Mindustry programming easier for everyone.
 
-Mindcode focuses of the following priorities:
+The perils of using a high-level language for Mindustry code are inefficient code generation and the possibility of compiler bugs. Mindcode strives to address both of these issues:
 
-* Simplicity: support for easy creation of short scripts as well as larger projects. Names and identifiers for Mindustry Logic objects and functions are derived from Mindustry Logic itself with minimal alterations.
-* Efficiency: while there's still a lot of room for improvement, the mlog code produced by Mindcode is remarkably efficient thanks to many different [optimizations](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown). Especially optimizations which [reduce runtime by increasing code size](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed) are quite unique among mlog compilers. 
-* Reliability: the project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they often pertain to new functionality and get usually resolved quickly. 
+* Efficiency: while there's still a lot of room for improvement, the mlog code produced by Mindcode is quite efficient today. Mindcode is capable of simplifying expressions, removing unnecessary or unreachable code and using available instruction space to produce faster code by unrolling loops or inlining functions automatically. 
+* Reliability: this project uses a battery of automated tests, including running the compiled code on an emulated processor, to ensure the compiled code works as expected. While [bugs do occur](https://github.com/cardillan/mindcode/issues?q=label%3Abug+), they usually get resolved quickly. 
 
 > [!NOTE]
 > Please have a look at planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142). These changes will be substantial, and any comments and suggestions are welcome now while the changes are still being deliberated.
@@ -33,7 +32,7 @@ A [changelog](CHANGELOG.markdown) is now maintained for releases.
 Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in the _Mindcode Source Code_ text area, then press the **Compile** button. The _Mindustry Logic_ text area will contain the Logic version of your Mindcode. Copy the compiled version. Back in Mindustry, edit your processor, then use the **Edit** button in the Logic UI. 
 Select **Import from Clipboard**. Mindustry is now ready to execute your code.
 
-You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. If your code doesn't interact with a contents of the Mindustry world, the output produced by your code will be displayed.   
+You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. If your code doesn't interact with a contents of the Mindustry world, the output produced by `print` statements in your code will be displayed.   
 
 It is also possible use the [command line tool](doc/syntax/TOOLS-CMDLINE.markdown) to compile your files, even copying the compiled code into the clipboard automatically if desired. The command line compiler can be set up in the following way:
 

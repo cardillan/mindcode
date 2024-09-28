@@ -1,5 +1,6 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -8,8 +9,8 @@ import java.util.Objects;
 public class ReturnStatement extends ControlBlockAstNode {
     private final AstNode retval;
 
-    ReturnStatement(Token startToken, AstNode expression) {
-        super(startToken, expression);
+    ReturnStatement(Token startToken, SourceFile sourceFile, AstNode expression) {
+        super(startToken, sourceFile, expression);
         this.retval = expression;
     }
 

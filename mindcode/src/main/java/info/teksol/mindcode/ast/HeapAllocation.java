@@ -1,6 +1,7 @@
 package info.teksol.mindcode.ast;
 
 
+import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -10,15 +11,16 @@ public class HeapAllocation extends BaseAstNode {
     private final String name;
     private final Range range;
 
-    HeapAllocation(Token startToken, String name, Range range) {
-        super(startToken, range);
+    HeapAllocation(Token startToken, SourceFile sourceFile, String name, Range range) {
+        super(startToken, sourceFile, range);
         this.name = name;
         this.range = range;
     }
 
-    public HeapAllocation(Token startToken, String name, int first, int last) {
-        this(startToken, name, new InclusiveRange(startToken,
-                new NumericLiteral(startToken,first), new NumericLiteral(startToken, last)));
+    public HeapAllocation(Token startToken, SourceFile sourceFile, String name, int first, int last) {
+        this(startToken, sourceFile, name, new InclusiveRange(startToken, sourceFile,
+                new NumericLiteral(startToken, sourceFile, first),
+                new NumericLiteral(startToken, sourceFile, last)));
     }
 
     public String getName() {

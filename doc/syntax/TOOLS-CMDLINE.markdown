@@ -20,7 +20,13 @@ which must be one of the following:
 
 All actions take the name of input file and the name of output file as an argument. When the given input or output is 
 a text file, the argument is optional and when not specified, the standard input/output is used. Use `-` to explicitly 
-specify standard input or output for input or output file.  
+specify standard input or output for input or output file.
+
+### Additional input files
+
+When performing the _Compile Mindcode_ action, it is possible to use the `-a` or `--append` command line parameter to specify additional source files to be compiled along with the input file. The source files are parsed separately and error messages that may be generated during the compilation include the name of the file where the error occurred.
+
+This feature is provisional and will be ultimately replaced by [Mindcode modules](https://github.com/cardillan/mindcode/issues/149).
 
 ## Log file
 
@@ -87,8 +93,8 @@ Actions:
 ## Compile Mindcode action help
 
 ```
-usage: mindcode cm [-h] [-c] [-l [LOG]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-r {NONE,PASSIVE,ACTIVE}]
+usage: mindcode cm [-h] [-c] [-l [LOG]] [-a [APPEND [APPEND ...]]] [-t {6,7s,7w,7as,7aw}] [-i {1..100000}]
+                [-e {1..1000}] [-g {SIZE,SPEED,AUTO}] [-r {NONE,PASSIVE,ACTIVE}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
                 [--no-signature] [--run] [--run-steps {1..1000000000}] [-o LEVEL] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
@@ -112,6 +118,9 @@ input/output files:
                          specified, or stdout when input is stdin. Use "-" to force stdout output.
   -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
                          specified.
+  -a, --append [APPEND [APPEND ...]]
+                         Additional Mindcode source file to  be  compiled  along  with  the  input file. Such additional
+                         files may contain common functions. More than one file may be added this way.
 
 compiler options:
   -t, --target {6,7s,7w,7as,7aw}

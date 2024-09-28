@@ -1,5 +1,6 @@
 package info.teksol.mindcode.ast;
 
+import info.teksol.mindcode.compiler.SourceFile;
 import info.teksol.mindcode.compiler.generator.AstContextType;
 import org.antlr.v4.runtime.Token;
 
@@ -10,8 +11,8 @@ public class IfExpression extends ControlBlockAstNode {
     private final AstNode trueBranch;
     private final AstNode falseBranch;
 
-    IfExpression(Token startToken, AstNode condition, AstNode trueBranch, AstNode falseBranch) {
-        super(startToken, condition, trueBranch, falseBranch);
+    IfExpression(Token startToken, SourceFile sourceFile, AstNode condition, AstNode trueBranch, AstNode falseBranch) {
+        super(startToken, sourceFile, condition, trueBranch, falseBranch);
         this.condition = condition;
         this.trueBranch = trueBranch;
         this.falseBranch = falseBranch;

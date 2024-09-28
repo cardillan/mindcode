@@ -2,10 +2,7 @@ package info.teksol.mindcode.webapp;
 
 import info.teksol.mindcode.ast.AstNodeBuilder;
 import info.teksol.mindcode.ast.Seq;
-import info.teksol.mindcode.compiler.CompilerMessage;
-import info.teksol.mindcode.compiler.CompilerProfile;
-import info.teksol.mindcode.compiler.LogicInstructionLabelResolver;
-import info.teksol.mindcode.compiler.LogicInstructionPrinter;
+import info.teksol.mindcode.compiler.*;
 import info.teksol.mindcode.compiler.generator.GeneratorOutput;
 import info.teksol.mindcode.compiler.generator.LogicInstructionGenerator;
 import info.teksol.mindcode.compiler.instructions.InstructionProcessor;
@@ -89,7 +86,7 @@ class SamplesTest {
         parser.addErrorListener(errorListener);
 
         final MindcodeParser.ProgramContext context = parser.program();
-        final Seq program = AstNodeBuilder.generate(context);
+        final Seq program = AstNodeBuilder.generate(new SourceFile(file.getPath(), source),context);
         List<LogicInstruction> unoptimized = generateUnoptimized(program);
         List<LogicInstruction> optimized = generateAndOptimize(program);
 
