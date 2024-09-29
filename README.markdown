@@ -11,6 +11,8 @@ The perils of using a high-level language for Mindustry code are inefficient cod
 
 > [!NOTE]
 > Please have a look at planned [upcoming changes to Mindcode](https://github.com/cardillan/mindcode/discussions/142). These changes will be substantial, and any comments and suggestions are welcome now while the changes are still being deliberated.
+> 
+> Most importantly, semicolons separating statements and expressions will become compulsory in Mindcode. As they are optional at this moment, you can start adding them to your code now to prepare for the change.  
 
 **Schemacode** is a specialized definition language designed for creating a complete Mindustry schematic as a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) can be used to turn these definition files directly into Mindustry schematics, either as a binary `.msch` file, or as a text. Processors can be included in these schematics, 
 complete with the code (specified in Mindcode or Mindustry Logic language) and linked blocks.

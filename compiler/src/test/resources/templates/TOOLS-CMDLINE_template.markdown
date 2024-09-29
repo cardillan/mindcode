@@ -26,7 +26,7 @@ specify standard input or output for input or output file.
 
 When performing the _Compile Mindcode_ action, it is possible to use the `-a` or `--append` command line parameter to specify additional source files to be compiled along with the input file. The source files are parsed separately and error messages that may be generated during the compilation include the name of the file where the error occurred.
 
-This feature is experimental and will be ultimately replaced by [support for modules](https://github.com/cardillan/mindcode/issues/149).
+This feature is provisional and will be ultimately replaced by [Mindcode modules](https://github.com/cardillan/mindcode/issues/149).
 
 ## Log file
 
