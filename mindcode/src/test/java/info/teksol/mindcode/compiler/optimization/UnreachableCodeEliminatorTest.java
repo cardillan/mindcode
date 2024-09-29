@@ -136,10 +136,8 @@ public class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<Unreach
                         end
                         print("WooHoo!")
                         """,
-                createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, q("foo")),
-                createInstruction(PRINTFLUSH, "message1"),
-                createInstruction(JUMP, var(1000), "always")
+                createInstruction(PRINTFLUSH, "message1")
         );
     }
 }

@@ -38,9 +38,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             print(i)
                         end
                         """,
-                createInstruction(LABEL, var(1003)),
-                createInstruction(PRINT, "0"),
-                createInstruction(JUMP, var(1003), "always")
+                createInstruction(PRINT, "0")
         );
     }
 
@@ -105,9 +103,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                         for i = -5; i < -10; i += 1
                             print("a")
                         end
-                        """,
-                createInstruction(LABEL, "__start__"),
-                createInstruction(JUMP, "__start__", "always")
+                        """
         );
     }
 
@@ -269,8 +265,7 @@ class LoopUnrollerTest extends AbstractOptimizerTest<LoopUnroller> {
                             if i == 2 break end
                         end
                         """,
-                createInstruction(PRINT, q("12")),
-                createInstruction(JUMP, "__start__", "always")
+                createInstruction(PRINT, q("12"))
         );
     }
 

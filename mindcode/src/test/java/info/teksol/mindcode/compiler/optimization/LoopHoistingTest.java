@@ -212,13 +212,11 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                             rand(10)
                         end
                         """,
-                createInstruction(LABEL, var(1001)),
                 createInstruction(OP, "rand", "__fn0retval", "10"),
                 createInstruction(SET, "a", "__fn0retval"),
                 createInstruction(OP, "rand", "__fn0retval", "10"),
                 createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "__fn0retval"),
-                createInstruction(JUMP, var(1001), "always")
+                createInstruction(PRINT, "__fn0retval")
         );
     }
 

@@ -25,7 +25,7 @@ class SingleStepJumpEliminator extends BaseOptimizer {
 
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
-                if (phase == OptimizationPhase.FINAL && !iterator.hasNext() && advanced() && ix instanceof EndInstruction) {
+                if (phase == OptimizationPhase.FINAL && !iterator.hasNext() && advanced() && isJumpToStart(ix)) {
                     removableJumps.add(ix);
                     continue;
                 }
@@ -56,5 +56,15 @@ class SingleStepJumpEliminator extends BaseOptimizer {
 
         removableJumps.forEach(this::invalidateInstruction);
         return wasUpdated();
+    }
+
+    private boolean isJumpToStart(LogicInstruction instruction) {
+        if (instruction instanceof JumpInstruction jump && jump.isUnconditional()) {
+            int firstIndex = optimizationContext.firstInstructionIndex(ix -> !(ix instanceof LabeledInstruction));
+            int targetIndex = optimizationContext.getLabelInstructionIndex(jump.getTarget());
+            return targetIndex <= firstIndex;
+        }
+
+        return instruction instanceof EndInstruction;
     }
 }

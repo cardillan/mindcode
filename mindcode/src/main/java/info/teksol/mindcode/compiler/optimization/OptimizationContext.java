@@ -393,6 +393,11 @@ class OptimizationContext {
         return labelInstruction;
     }
 
+    public int getLabelInstructionIndex(LogicLabel label) {
+        LabelInstruction labelInstruction = getLabelInstruction(label);
+        return firstInstructionIndex(ix -> ix == labelInstruction);
+    }
+
     private void addLabelInstruction(LabelInstruction instruction) {
         if (labels.containsKey(instruction.getLabel())) {
             throw new MindcodeInternalError("Adding duplicate label %s.", instruction.getLabel());
