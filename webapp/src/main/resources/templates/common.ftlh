@@ -44,7 +44,7 @@
 </#macro>
 
 <#macro navigation selection>
-<h1 class="my-2 text-2xl font-bold">
+<h1 class="my-4 text-2xl font-bold">
     <nav class="my-2">
         <ul class="flex space-around">
             <li><a href="/"            class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mindcode"  >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Mindcode compiler</a>
@@ -76,7 +76,7 @@
 </#macro>
 
 <#macro link href title="">
-<a class="underline text-blue-500" title="${title}" href="${href}"><#nested></a>
+<a title="${title}" href="${href}"><button type="button" class="px-4 bg-gray-600 text-white py-2 my-2 rounded"><#nested></button></a>
 </#macro>
 
 <#macro submit name="" value="" class="" title="">
@@ -86,7 +86,7 @@
 </#macro>
 
 <#macro optimizationSettings >
-    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black p-2 rounded">
+    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black p-2 my-2 rounded">
         <option value="OFF"          <#if model.optimizationLevel == "OFF"          >selected</#if>>No optimization</option>
         <option value="BASIC"        <#if model.optimizationLevel == "BASIC"        >selected</#if>>Basic optimization</option>
         <option value="ADVANCED"     <#if model.optimizationLevel == "ADVANCED"     >selected</#if>>Advanced optimization</option>

@@ -43,8 +43,7 @@ program = """
     // Furthermore the instruction limit is raised to allow all loops to get unrolled.
     // Optimization then brings the number of instruction back under 1000.
 
-
-    #set instruction-limit  = 1100;     // We're hitting instruction limit otherwise
+    #set instruction-limit  = 1100;
     #set target = ML7A;                 // Using revised syntax for ulocate
 
     /// This is the preferred unit type to use for bringing in supplies.

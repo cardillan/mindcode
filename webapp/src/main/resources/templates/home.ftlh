@@ -3,23 +3,21 @@
 <@com.header/>
 <@com.navigation selection="mindcode"/>
 
-<p class="my-2 text-lg"><a href="https://mindustrygame.github.io/">Mindustry</a> is a tower-defense type of game, now with added Logic.
- Logic is a programming language, but it is very low-level. It is more akin to assembly than high-level language.</p>
-<p class="my-2 text-lg"><strong>Mindcode</strong> is a high-level language that compiles down to Mindustry Logic.
- Mindcode includes higher-level constructs, such as expressions, user-defined functions, control statements, or "direct" memory access.<p>
 <#if model.sample != "">
-    <p class="my-2 text-lg">Mindcode now comes with <strong>significantly improved code generation</strong>, including <strong>data flow analysis</strong>, <strong>loop unrolling</strong> and  <strong>function inlining</strong>;
-     for a list of recent changes, see <a class="underline text-blue-500" href="https://github.com/cardillan/mindcode/blob/main/CHANGELOG.markdown">changelog</a>.<p>
-    <p class="my-2 text-lg">Go ahead and try the following samples, then write your own!<p>
-    <nav class="my-2">
+    <p class="my-2 text-lg">
+        <strong>Mindcode</strong> is a high-level language that compiles down to Mindustry Logic - <strong>mlog</strong>.
+        Mindcode includes higher-level constructs, such as expressions, user-defined functions and control statements.
+        Here are some examples to give you an idea how to use Mindcode:
+    <p>
+    <nav class="my-4">
         <ul class="flex space-around">
-            <@com.sample name="control-two-units"       >Control two different units using variables</@com.sample>
-            <@com.sample name="one-thorium"             >Prevent Thorium reactor blowup when out of cryo</@com.sample>
-            <@com.sample name="heal-damaged-building"   >Patrol around a building and heal damaged ones</@com.sample>
-            <@com.sample name="many-thorium"            >Prevent MULTIPLE Thorium reactors from blowing up when any runs out of cryo</@com.sample>
-            <@com.sample name="mine-coord"              >Mine a specific coordinate and drop into a container</@com.sample>
-            <@com.sample name="upgrade-conveyors"       >Upgrade copper conveyors to titanium, over a specific area</@com.sample>
-            <@com.sample name="sum-of-primes"           >Compute sum of prime numbers up to 5000</@com.sample>
+            <@com.sample name="control-two-units"       >Controlling units</@com.sample>
+            <@com.sample name="one-thorium"             >Controlling a block</@com.sample>
+            <@com.sample name="many-thorium"            >Controlling more&nbsp;blocks</@com.sample>
+            <@com.sample name="heal-damaged-building"   >Healing buildings</@com.sample>
+            <@com.sample name="mining-drone"            >Mining drone</@com.sample>
+            <@com.sample name="upgrade-conveyors"       >Building</@com.sample>
+            <@com.sample name="sum-of-primes"           >Computing</@com.sample>
         </ul>
     </nav>
 </#if>
@@ -32,10 +30,10 @@
         <div class="grid grid-cols-2 gap-2">
             <@com.codeareas sourceTitle="Mindcode Source Code:" targetTitle="Mindustry Logic:" sourceLines="Y" targetLines="Y" />
             <div>
-                <div class="flex items-center space-x-3">
+                <div class="flex-wrap items-center space-x-2">
                     <@com.optimizationSettings />
-                    <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-4 rounded"/>
-                    <input type="submit" value="Compile and Run" class="px-4 py-2 bg-gray-600 text-white my-4 rounded" formaction="/compileandrun"/>
+                    <input type="submit" value="Compile" class="px-4 py-2 bg-gray-600 text-white my-2 rounded"/>
+                    <input type="submit" value="Compile and Run" class="px-4 py-2 bg-gray-600 text-white my-2 rounded" formaction="/compileandrun"/>
                     <@com.link href="/?s=clean">Start with a new script</@com.link>
                 </div>
                 <@com.footerLinks mindcode="Y" />

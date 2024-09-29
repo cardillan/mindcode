@@ -8,99 +8,100 @@ schematic
     tag = BLOCK-MICRO-PROCESSOR
 
 switch1:
-    @switch              at ( 0,  0) facing north disabled
+    @switch              at ( 0,  0) disabled
 message1:
-    @message             at ( 1,  0) facing north text ""
-    @micro-processor     at ( 2,  0) facing east  processor
+    @message             at ( 1,  0) text ""
+    @micro-processor     at ( 2,  0) processor
         links
-            switch1 as switch1
-            message1 as message1
+            switch1
+            message1
         end
         mindcode = mindcode_source
     end
 end
 
 mindcode_source = """
-    BLOCK = getlink(2);  // First two links are a switch and a message
+    page = 1;
     const NUM_PAGES = 7;
-    page = max(page, 1);
+    while true
+        block = getlink(2);  // First two links are a switch and a message
+        println($"Property detector - page $page/$NUM_PAGES");
 
-    if switch1.enabled then
-        page = (page % NUM_PAGES) + 1;
-        switch1.enabled = false;
-    end;
+        if block.dead === 0
+            print(block.type, " - ");
+            case page
+                when 1 then
+                    println("contents:");
+                    println("totalItems: ",         block.totalItems);
+                    println("firstItem: ",          block.firstItem);
+                    println("itemCapacity: ",       block.itemCapacity);
+                    println("totalLiquids: ",       floor(block.totalLiquids));
+                    println("liquidCapacity: ",     block.liquidCapacity);
 
-    printf("Property detector - page $page/$NUM_PAGES\n");
+                when 2 then
+                    println("power:");
+                    println("totalPower: ",         floor(block.totalPower));
+                    println("powerCapacity: ",      block.powerCapacity);
+                    println("powerNetStored: ",     floor(block.powerNetStored));
+                    println("powerNetCapacity: ",   block.powerNetCapacity);
+                    println("powerNetIn: ",         floor(block.powerNetIn));
+                    println("powerNetOut: ",        floor(block.powerNetOut));
 
-    if BLOCK.dead === 0 then
-        print(BLOCK.type, " - ");
-        case page
-            when 1 then
-                println("contents:");
-                println("totalItems: ",         BLOCK.totalItems);
-                println("firstItem: ",          BLOCK.firstItem);
-                println("itemCapacity: ",       BLOCK.itemCapacity);
-                println("totalLiquids: ",       floor(BLOCK.totalLiquids));
-                println("liquidCapacity: ",     BLOCK.liquidCapacity);
+                when 3 then
+                    println("combat:");
+                    println("ammo: ",               block.ammo);
+                    println("ammoCapacity: ",       block.ammoCapacity);
+                    println("health: ",             block.health);
+                    println("maxHealth: ",          block.maxHealth);
 
-            when 2 then
-                println("power:");
-                println("totalPower: ",         floor(BLOCK.totalPower));
-                println("powerCapacity: ",      BLOCK.powerCapacity);
-                println("powerNetStored: ",     floor(BLOCK.powerNetStored));
-                println("powerNetCapacity: ",   BLOCK.powerNetCapacity);
-                println("powerNetIn: ",         floor(BLOCK.powerNetIn));
-                println("powerNetOut: ",        floor(BLOCK.powerNetOut));
+                when 4 then
+                    println("status:");
+                    println("heat: ",               block.heat);
+                    println("efficiency: ",         block.efficiency);
+                    println("timescale: ",          block.timescale);
+                    println("dead: ",               block.dead);
+                    println("range: ",              block.range);
 
-            when 3 then
-                println("combat:");
-                println("ammo: ",               BLOCK.ammo);
-                println("ammoCapacity: ",       BLOCK.ammoCapacity);
-                println("health: ",             BLOCK.health);
-                println("maxHealth: ",          BLOCK.maxHealth);
+                when 5 then
+                    println("position:");
+                    println("rotation: ",           block.rotation);
+                    println("x: ",                  block.x);
+                    println("y: ",                  block.y);
+                    println("size: ",               block.size);
 
-            when 4 then
-                println("status:");
-                println("heat: ",               BLOCK.heat);
-                println("efficiency: ",         BLOCK.efficiency);
-                println("timescale: ",          BLOCK.timescale);
-                println("dead: ",               BLOCK.dead);
-                println("range: ",              BLOCK.range);
+                when 6 then
+                    println("unit:");
+                    println("shootX: ",             block.shootX);
+                    println("shootY: ",             block.shootY);
+                    println("shooting: ",           block.shooting);
+                    println("boosting: ",           block.boosting);
+                    println("mineX: ",              block.mineX);
+                    println("mineY: ",              block.mineY);
+                    println("mining: ",             block.mining);
+                    println("payloadCount: ",       block.payloadCount);
+                    println("payloadType: ",        block.payloadType);
+                    println("controlled: ",         block.controlled);
+                    println("controller: ",         block.controller);
 
-            when 5 then
-                println("position:");
-                println("rotation: ",           BLOCK.rotation);
-                println("x: ",                  BLOCK.x);
-                println("y: ",                  BLOCK.y);
-                println("size: ",               BLOCK.size);
-
-            when 6 then
-                println("unit:");
-                println("shootX: ",             BLOCK.shootX);
-                println("shootY: ",             BLOCK.shootY);
-                println("shooting: ",           BLOCK.shooting);
-                println("boosting: ",           BLOCK.boosting);
-                println("mineX: ",              BLOCK.mineX);
-                println("mineY: ",              BLOCK.mineY);
-                println("mining: ",             BLOCK.mining);
-                println("payloadCount: ",       BLOCK.payloadCount);
-                println("payloadType: ",        BLOCK.payloadType);
-                println("controlled: ",         BLOCK.controlled);
-                println("controller: ",         BLOCK.controller);
-
-            when 7 then
-                println("other:");
-                println("team: ",               BLOCK.team);
-                println("type: ",               BLOCK.type);
-                println("flag: ",               BLOCK.flag);
-                println("name: ",               BLOCK.name);
-                println("config: ",             BLOCK.config);
-                println("enabled: ",            BLOCK.enabled);
-                println("configure: ",          BLOCK.configure);
+                when 7 then
+                    println("other:");
+                    println("team: ",               block.team);
+                    println("type: ",               block.type);
+                    println("flag: ",               block.flag);
+                    println("name: ",               block.name);
+                    println("config: ",             block.config);
+                    println("enabled: ",            block.enabled);
+                    println("configure: ",          block.configure);
+            end;
+        else
+            println("No linked block found.");
         end;
-    else
-        println("No linked block found.");
-    end;
 
-    printflush(message1);
+        printflush(message1);
+
+        if switch1.enabled then
+            page = page == NUM_PAGES ? 1 : page + 1;
+            switch1.enabled = false;
+        end;
+    end;
     """

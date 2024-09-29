@@ -1,0 +1,50 @@
+// Patrols around a building and heals any damaged building
+// Since the patrolling ship is close by, repairing will happen faster than usual
+
+// This part of the script will create an mlog variable, which can be modified
+// in the compiled code to change which unit to use and which building to circle around
+// The following line is a special comment which will be written to the mlog code as well.
+
+/// Configurable options:
+param CENTER = foundation1;
+param UNIT = @poly;
+
+/// Don't modify anything below this line.
+
+// Find a unit if we don't have one
+if @unit.dead !== 0 or @unit.controller != @this then
+    findUnit();
+end
+
+if ulocate(damaged, dmgx, dmgy) then
+    println($"Found damaged block at $dmgx, $dmgy");
+    approach(dmgx, dmgy, 5);
+    target(dmgx, dmgy, true);
+else
+    println("Patrolling");
+    approach(CENTER.x + 10 * sin(@tick), CENTER.y + 10 * cos(@tick), 2);
+end;
+
+printflush(message1);
+
+// A separate function which will find an unused unit we can use
+def findUnit()
+    // Keep looking for unit until one is found
+    while true do
+        ubind(UNIT);
+        if @unit == null then
+            // There's no unit of the requested type
+            print($"No unit of type $UNIT found.");
+        elsif @unit.controlled != 0 then
+            // This unit is controlled by another processor or the player
+            print($"Looking for a free $UNIT...");
+        else
+            // This unit is free.
+            // Some processors assume that a unit without a flag is free
+            // Mark it so that they won't steal it from us
+            flag(rand(1000));
+            return;
+        end;
+        printflush(message1);
+    end;
+end;

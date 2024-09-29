@@ -1,0 +1,17 @@
+// To use this script, build several thorium reactors and attach them to a processor
+// with this code.
+
+// This script loops through all blocks linked to the processor
+// If a thorium reactor is found, it is disabled if it doesn't have enough cryofluid
+
+// @links is the number of blocks lined to the processor
+// We iterate through indexes 0 to @links - 1
+for n in 0 ... @links do
+    // Obtain n-th block linked to the processor
+    reactor = getlink(n);
+
+    // Only process thorium reactors. If a different block got linked by mistake, it might become disabled
+    if reactor.type == @thorium-reactor then
+        reactor.enabled = reactor.cryofluid >= 0.25 * reactor.liquidCapacity;
+    end;
+end;

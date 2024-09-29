@@ -1,8 +1,8 @@
 // These assignments will be compiled into the output code as-is.
 // It is possible to change them in the compiled code.
-CONTAINER = vault1;
-PATCH_X = 16;
-PATCH_Y = 17;
+param CONTAINER = vault1;
+param PATCH_X = 16;
+param PATCH_Y = 17;
 
 // Find a live unit (@unit.dead === 0) that is not controlled
 // by a player or processor (@unit.controlled == 0)
@@ -30,8 +30,8 @@ while (@unit.controller == @this) and (@unit.dead === 0) do
 		itemDrop(CONTAINER, @unit.totalItems);
 	end;
 
-	println("item capacity: ", @unit.itemCapacity);
-	println("total items: ", @unit.totalItems);
-	println("first item: ", @unit.firstItem);
+	println("Unit capacity: ", @unit.itemCapacity);
+	println("Total items: ", @unit.totalItems);
+	println("First item: ", @unit.firstItem);
 	printflush(message1);
 end;

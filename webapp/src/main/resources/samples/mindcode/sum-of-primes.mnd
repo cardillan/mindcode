@@ -6,30 +6,30 @@
 // The code will run on a Mindustry processor too, albeit quite slowly.
 
 // Program parametrization
-param memory = bank1;           // Available in emulated environment
-param value = 5000;             // Use a value between 0 and 49150
+param MEMORY = bank1;           // Available in emulated environment
+param VALUE = 5000;             // Use a value between 0 and 49150
 
 // Number of bits to store in a single memory slot
 // Since Mindustry Logic stores the values as double, not all 64 bits can be used.
 const MOD = 48;
 
 // Need to clear the bank at the beginning
-for i in 0 ... 512 do memory[i] = 0; end;
+for i in 0 ... 512 do MEMORY[i] = 0; end;
 
-result = sumPrimesUpTo(value);
+result = sumPrimesUpTo(VALUE);
 print("The sum of all primes between 0 and ");
-printNumber(value);
+printNumber(VALUE);
 print(" is ");
 printNumber(result);
 print(".");
 printflush(message1);
 
 def setBit(bitIndex)
-  memory[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
+  MEMORY[bitIndex \ MOD] |= (1 << (bitIndex % MOD));
 end;
 
 def getBit(bitIndex)
-  memory[bitIndex \ MOD] & (1 << (bitIndex % MOD));
+  MEMORY[bitIndex \ MOD] & (1 << (bitIndex % MOD));
 end;
 
 def testAndSetMultiples(n, maximum)
@@ -84,19 +84,19 @@ def printNumber(n)
     index = 0;
     decimal = 0;
     while true do
-        memory[index] = n % 10;
+        MEMORY[index] = n % 10;
         n \= 10;
         index += 1;
         decimal += 1;
         if n <= 0 then break; end;
         if decimal % 3 == 0 then
-            memory[index] = 10;     // represents the comma
+            MEMORY[index] = 10;     // represents the comma
             index += 1;
         end;
     end;
 
     while index > 0 do
         index -= 1;
-        print(memory[index] == 10 ? "," : memory[index]);
+        print(MEMORY[index] == 10 ? "," : MEMORY[index]);
     end;
 end;

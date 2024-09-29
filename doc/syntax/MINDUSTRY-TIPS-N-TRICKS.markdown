@@ -346,15 +346,11 @@ destroyed unit (as well as a destroyed building, actually) by querying the `dead
 `false`) means the unit is alive, a value of `1` (or `true`) means it is, well, dead as a parrot.
 
 When querying the `@unit.dead` property, you can possibly obtain three values
-* `null` when no unit is actually bound,
 * `0` when a unit is bound and alive,
-* `1` when a unit is bound, but dead.
-
-A single strict comparison (`===` or `!==`) can be used to recognize live unit from the other two alternatives. 
-An improved way to detect units no longer available to processor therefore is:
+* `1` when a unit is not bound, or is dead.
 
 ```
-if @unit.controller != @this or @unit.dead !== 0 then
+if @unit.controller != @this or @unit.dead == 1 then
     // We lost our unit. Immediatelly get a new one.
     findFreeUnit(@mega, STATE_INIT);
 end;

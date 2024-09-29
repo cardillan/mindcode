@@ -2,12 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## 2.3.0 - unreleased
+## 2.2.1 - 2024-09-30
+
+### Fixed
+
+* Fixed the layout of the web page not rendering well on smaller screens and mobile devices.
 
 ### Changed
 
 * Changed the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to remove the last instruction if it jumps to the start of the program (not just `end`, but also unconditional jump) on `advanced` optimization level.
-
 
 ## 2.2.0 - 2024-09-29
 

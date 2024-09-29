@@ -2,27 +2,27 @@
 // github.com/cardillan/mindcode/blob/main/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#mindustry-logic-functions
 #set target = ML7A;
 
-// These global variables can be changed in the compiled code
+// These parameters can be changed in the compiled code
 /// Configurable options:
-MEMORY = cell1;
-UNIT = @poly;
+param MEMORY = cell1;
+param UNIT = @poly;
 
 // Coordinates of the map area to process
 // By default an entire map is converted
-SW_X = 0;
-SW_Y = 0;
-NE_X = @mapw;
-NE_Y = @maph;
+param SW_X = 0;
+param SW_Y = 0;
+param NE_X = @mapw;
+param NE_Y = @maph;
 
 // Setting to true restores copper conveyors (useful for testing)
-DOWNGRADE = false;
+param DOWNGRADE = false;
 
 // Upgrading in stripes of given width -- faster processing
 // (Could be even wider, the build radius is ~20 blocks or so)
-WIDTH = 10;
+param WIDTH = 10;
 
 // How close unit needs to get to the block being upgraded
-RADIUS = 10;
+param RADIUS = 10;
 
 /// Don't modify anything below this line.
 
@@ -32,6 +32,8 @@ TOTAL = 0;
 allocate heap in MEMORY[0 ... 16];
 
 // If a memory cell is attached, the progress can be stored there
+// After resetting the processor, e.g. by modifying the unit type,
+// we'll be able to pick up where we were stopped.
 if $INITIALIZED then
     x = limit($X, SW_X, NE_X);
     y = limit($Y, SW_Y, NE_Y);
@@ -52,14 +54,14 @@ newType = DOWNGRADE ? @conveyor : @titanium-conveyor;
 // It is possible to pause/stop the processing by attaching a switch and activating it
 // When the switch is active, the program renitializes and without attached memory,
 // the progress is lost.
-while switch1.enabled == false do
+while !switch1.enabled do
 
     // If we don't have an active unit, summon a new one
     if @unit.dead !== 0 or @unit.controller != @this then
         findUnit();
     end;
 
-    // Position the unit to the middle of the band
+    // Position the unit to the middle of the band inside the building area
     ypos = limit(y + WIDTH \ 2, SW_Y, NE_Y);
     while not within(x, ypos, RADIUS) do
         move(x, ypos);
@@ -71,20 +73,21 @@ while switch1.enabled == false do
     end;
     $TOTAL = TOTAL;
 
-    printf("Position: $x, $ypos\n");
-    printf("Upgrades: $TOTAL");
+    println($"Position: $x, $ypos");
+    println($"Upgrades: $TOTAL");
     printflush(message1);
 
     // Move to next position
     x += dx;
     if x > NE_X || x < SW_X then
-        dx *= -1;
+        // Reached end, reverse the direction and move to the next strip
+        dx = -dx;
         y += dy;
         x = limit(x, SW_X, NE_X);
         $DX = dx;
 
         if y > NE_Y || y < SW_Y then
-            dy *= -1;
+            dy = -dy;
             y = limit(y, SW_Y, NE_Y);
             $DY = dy;
         end;
@@ -94,16 +97,22 @@ while switch1.enabled == false do
     $X = x;
 end;
 
-inline def findUnit()
+// A separate function which will find an unused unit we can use
+def findUnit()
     // Keep looking for unit until one is found
     while true do
         ubind(UNIT);
         if @unit == null then
-            printf("No unit of type $UNIT found.");
+            // There's no unit of the requested type
+            print($"No unit of type $UNIT found.");
         elsif @unit.controlled != 0 then
-            printf("Looking for a free $UNIT...");
+            // This unit is controlled by another processor or the player
+            print($"Looking for a free $UNIT...");
         else
-            flag(rand(1000));		// Mark unit as active for other, non-cooperating processors
+            // This unit is free.
+            // Some processors assume that a unit without a flag is free
+            // Mark it so that they won't steal it from us
+            flag(rand(1000));
             break;
         end;
         printflush(message1);
@@ -111,22 +120,22 @@ inline def findUnit()
 end;
 
 // Returns value of n limited to range min .. max
-inline def limit(n, min, max)
+def limit(n, min, max)
     min(max(n, min), max);
 end;
 
 // If a block of type oldType is found at position,
 // replaces it with newType
-inline def replace(x, y, oldType, newType)
-    b_building = getBlock(x, y, b_type);
+def replace(x, y, oldType, newType)
+    building = getBlock(x, y, type);
 
-    if b_type == oldType then
-        build(x, y, newType, b_building.rotation, 0);
+    if type == oldType then
+        build(x, y, newType, building.rotation, 0);
         // If the processor is too fast, we need to wait
         // for the unit to finish building the block
         do
-            getBlock(x, y, b_type);
-        loop while b_type != newType;
+            getBlock(x, y, type);
+        loop while type != newType;
         TOTAL += 1;
     end;
 end;

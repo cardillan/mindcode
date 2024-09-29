@@ -21,6 +21,7 @@ import java.io.StringWriter;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/schematics")
@@ -30,7 +31,6 @@ public class SchematicsController {
     private static final List<String> quickSamples;
 
     static {
-        final Map<String, String> theSamples = new HashMap<>();
         final List<String> sampleNames = List.of(
                 "detector",
                 "healing-center",
@@ -42,26 +42,21 @@ public class SchematicsController {
                 "slow:mandelbrot-generator"
         );
 
-        final List<String> sources = sampleNames.stream()
+        samples = sampleNames.stream()
                 .map(s -> s.replace("slow:", ""))
-                .map(s -> s.concat(".sdf"))
-                .map((filename) -> {
-                    try (final BufferedReader reader = new BufferedReader(new InputStreamReader(SchematicsController.class.getClassLoader().getResourceAsStream("samples/schematics/" + filename)))) {
-                        final StringWriter out = new StringWriter();
-                        reader.transferTo(out);
-                        return out.toString();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to read schematic sample: " + filename);
-                    }
-                })
-                .toList();
-
-        for (int i = 0; i < sampleNames.size(); i++) {
-            theSamples.put(sampleNames.get(i).replace("slow:", ""), sources.get(i));
-        }
-
-        samples = theSamples;
+                .collect(Collectors.toMap(s -> s, SchematicsController::loadSample));
         quickSamples = sampleNames.stream().filter(s -> !s.startsWith("slow:")).toList();
+    }
+
+    private static String loadSample(String sampleName) {
+        try (final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(SchematicsController.class.getClassLoader().getResourceAsStream("samples/schematics/" + sampleName + ".sdf")))) {
+            final StringWriter out = new StringWriter();
+            reader.transferTo(out);
+            return out.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read sample: " + sampleName);
+        }
     }
 
     private final Random random = new Random();

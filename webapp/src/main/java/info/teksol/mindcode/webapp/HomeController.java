@@ -19,7 +19,7 @@ import java.io.StringWriter;
 import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import static info.teksol.mindcode.compiler.CompilerFacade.compile;
 
@@ -30,41 +30,28 @@ public class HomeController {
     private static final Map<String, String> samples;
 
     static {
-        final Map<String, String> theSamples = new HashMap<>();
         final List<String> sampleNames = List.of(
                 "control-two-units",
                 "one-thorium",
-                "heal-damaged-building",
                 "many-thorium",
-                "mine-coord",
+                "heal-damaged-building",
+                "mining-drone",
                 "upgrade-conveyors",
                 "sum-of-primes"
         );
 
-        final List<String> sources = Stream.of(
-                "1-control-units-using-variables.mnd",
-                        "2-thorium-reactor-stopper.mnd",
-                        "8-heal-damaged-building.mnd",
-                        "3-multi-thorium-reactor.mnd",
-                        "5-mining-drone.mnd",
-                        "6-upgrade-copper-conveyors-to-titanium.mnd",
-                        "compute-sum-of-primes.mnd"
-                ).map((filename) -> {
-                    try (final BufferedReader reader = new BufferedReader(new InputStreamReader(HomeController.class.getClassLoader().getResourceAsStream("samples/mindcode/" + filename)))) {
-                        final StringWriter out = new StringWriter();
-                        reader.transferTo(out);
-                        return out.toString();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to read sample: " + filename);
-                    }
-                })
-                .toList();
+        samples = sampleNames.stream().collect(Collectors.toMap(s -> s, HomeController::loadSample));
+    }
 
-        for (int i = 0; i < sampleNames.size(); i++) {
-            theSamples.put(sampleNames.get(i), sources.get(i));
+    private static String loadSample(String sampleName) {
+        try (final BufferedReader reader = new BufferedReader(
+                new InputStreamReader(HomeController.class.getClassLoader().getResourceAsStream("samples/mindcode/" + sampleName + ".mnd")))) {
+            final StringWriter out = new StringWriter();
+            reader.transferTo(out);
+            return out.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read sample: " + sampleName);
         }
-
-        samples = theSamples;
     }
 
     private final Random random = new Random();

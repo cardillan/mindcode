@@ -1,9 +1,9 @@
-// Binds two different units, stores them in a variable
-// and controls both them (moves them around in a pattern)
+// Binds two different units, stores them in variables and controls
+// both them simultaneously by moving them around in a pattern
 
 // These are local variables
-poly = ubind(@poly);     // We just assume the units exist
-mega = ubind(@mega);
+poly = ubind(@poly);        // We just assume the unit exists
+mega = ubind(@mega);        // dtto
 
 // This is a global variable
 ANGLE = 0;

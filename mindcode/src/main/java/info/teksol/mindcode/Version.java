@@ -1,10 +1,19 @@
 package info.teksol.mindcode;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class Version {
 
-    private static final String VERSION = "2.2.0";
-
     public static String getVersion() {
-        return VERSION;
+        try (InputStream in = Version.class.getResourceAsStream("mindcode.properties")) {
+            final Properties properties = new Properties();
+            properties.load(in);
+            return properties.getProperty("mindcode.version");
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Error obtaining version information", e);
+        }
     }
 }

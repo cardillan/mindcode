@@ -102,7 +102,7 @@ This optimizer simplifies the following sequences of jump that are a result of c
 
 * A conditional or unconditional jump targeting the next instruction (such a jump is obviously unnecessary).
 * A conditional or unconditional jump identical to the next instruction (unconditional jumps would be also eliminated by Unreachable Code Elimination, but that isn't true for conditional jumps).
-* On the `advanced` level, the `end` instruction at the very end of the program is removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway.  
+* On the `advanced` level, the `end` and `jump 0 always` instructions at the very end of the program are removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway, saving one instruction.  
 
 ## Expression Optimization
 
